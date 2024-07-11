@@ -37,6 +37,7 @@ const index = ({
             </div>
           </div>
         </div>
+
         {loaderButton && totalCodesLoader ? (
           <div>
             <Skeleton.Input
@@ -58,11 +59,13 @@ const index = ({
               isHcc={true}
               selectedValue={selectedValue}
               selectedOrganization={selectedOrganization}
+              className="codesGraphStyle3"
             />
           </div>
         ) : (
           <Empty className="mt-3" />
         )}
+
       </div>
       <div
         className="remianingAreaGraph"
@@ -113,6 +116,7 @@ const index = ({
           isHcc={true}
           hccColor="#02BBDE"
           selectedValue={selectedValue}
+          className="revenueCharts2" 
         />
       </div>
     </div>

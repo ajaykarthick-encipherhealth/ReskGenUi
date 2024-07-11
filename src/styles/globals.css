@@ -14822,20 +14822,20 @@ input::-webkit-inner-spin-button {
     left: -80px !important;
     top: 0px !important;
   }
-  .revenueChart > div:nth-child(2) > div > canvas {
+  /* .revenueChart > div:nth-child(2) > div > canvas {
     height: 280px !important;
     width: 100% !important;
     top: -35px !important;
     left: -50px !important;
-  }
-  .remianingLineGraph > div:nth-child(2) > div:nth-child(1) > canvas {
+  } */
+  /* .remianingLineGraph > div:nth-child(2) > div:nth-child(1) > canvas {
     height: 380px !important;
     top: -35px !important;
   }
   .remianingAreaGraph > div:nth-child(2) > div:nth-child(1) > canvas {
     height: 305px !important;
     top: -35px !important;
-  }
+  } */
 }
 @media only screen and (min-width: 600px) {
   .speedometerChart > div:nth-child(2) > div:nth-child(1) > canvas {
@@ -14844,12 +14844,12 @@ input::-webkit-inner-spin-button {
     left: 0px !important;
     top: 0px !important;
   }
-  .revenueChart > div:nth-child(2) > div > canvas {
+  /* .revenueChart > div:nth-child(2) > div > canvas {
     height: 280px !important;
     width: 100% !important;
     top: -35px !important;
     left: -30px !important;
-  }
+  } */
   .remianingLineGraph > div:nth-child(2) > div:nth-child(1) > canvas {
     height: 400px !important;
     top: -35px !important;
@@ -14979,6 +14979,92 @@ text-align: start;
   margin: 0px;
   border-width: 0px;
 }
+.revenueCharts3 >div >div>canvas{
+  position: absolute;
+  left: 0px;
+  top: 13px !important;
+  width: 592px;
+  height: 294px !important;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
+}
+
+
+/* .careCapsPieChart  >div >div>canvas {
+  
+  position: absolute;
+    left: 0px;
+    top: -35px !important;
+    width: 592px;
+    height: 390px !important;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    padding: 0px;
+    margin: 0px;
+    border-width: 0px;
+
+} */
+
+.codesGraphStyle1   >div >div>canvas {
+  
+  position: absolute;
+    left: 0px;
+    top: -5px !important;
+    width: 592px;
+    height: 380px !important;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    padding: 0px;
+    margin: 0px;
+    border-width: 0px;
+
+}
+.codesGraphStyle2   >div >div>canvas {
+  
+  position: absolute;
+    left: 0px;
+    top: -35px !important;
+    width: 592px;
+    height: 395px !important;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    padding: 0px;
+    margin: 0px;
+    border-width: 0px;
+
+}
+.codesGraphStyle3   >div >div>canvas {
+  
+  position: absolute;
+    left: 0px;
+    top: -5px !important;
+    width: 592px;
+    height: 370px !important;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    padding: 0px;
+    margin: 0px;
+    border-width: 0px;
+
+}
+
+  .revenueDollar >div >div>canvas{
+ position: absolute;
+    left: -46px !important;
+    top: -45px !important;
+    width: 903px !important;
+    height: 300px !important;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    padding: 0px;
+    margin: 0px;
+    border-width: 0px;
+}
+
+
 .skeleton-shadow {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 20px;

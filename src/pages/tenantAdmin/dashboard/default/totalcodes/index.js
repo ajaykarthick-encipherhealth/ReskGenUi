@@ -25,6 +25,7 @@ const index = ({
   getAllRafData,
   selectedOrganization,
   selectedValue,
+ 
 }) => {
   useEffect(() => {
     getAllHccCodesData(
@@ -178,9 +179,11 @@ const index = ({
           </div>
        ) :hccDiseaseCountValues?.length >0? (
           <div className="totalCodesPies">
-          <CodesGraph options={options} isRadio={true} />
+          <CodesGraph options={options} isRadio={true}  className="codesGraphStyle2"/>
+
           </div>
         ):<Empty className="mt-3"/>} 
+
       </div>
       <div
         className="remianingAreaGraph"
@@ -227,13 +230,16 @@ const index = ({
             </div>
           </div>
         </div>
+
         <div className="totalCodesPies2">
           <RevenueGraph
             selectedOrganization={selectedOrganization}
             isMultiple={true}
             selectedValue={selectedValue}
+            className="revenueCharts1"
           />
         </div>
+
       </div>
     </div>
   );

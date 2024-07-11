@@ -25,7 +25,6 @@ const RafGraph = ({
     endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
   });
 
-
   useEffect(() => {
     getAllRafScore(
       dateRange.startDate,
@@ -123,7 +122,12 @@ const RafGraph = ({
       },
     ],
   };
-  return <ReactECharts option={option} />;
+  return (
+    <div className="carecapRAF">
+    
+      <ReactECharts option={option} />
+    </div>
+  );
 };
 
 const enhancer = connect(

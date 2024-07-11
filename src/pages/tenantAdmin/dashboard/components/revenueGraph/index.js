@@ -17,6 +17,7 @@ const RevenueGraph = ({
   rafColor2,
   rafColor3,
   isMultiple,
+  className,
   selectedOrganization,
 }) => {
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
@@ -88,7 +89,11 @@ const RevenueGraph = ({
     ],
   };
 
-  return <ReactECharts option={option} />;
+  return (
+    <div className={`${className}`}>
+      <ReactECharts option={option} />{" "}
+    </div>
+  );
 };
 
 const enhancer = connect(
