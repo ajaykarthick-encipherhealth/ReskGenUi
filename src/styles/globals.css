@@ -15034,3 +15034,8 @@ text-align: start;
   height: 200px;
   line-height: 40px;
 }
+
+::-webkit-scrollbar {
+  width: 5px !important;
+  height: 15px !important;
+}

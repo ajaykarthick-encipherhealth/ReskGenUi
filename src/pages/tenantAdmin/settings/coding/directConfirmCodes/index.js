@@ -21,6 +21,7 @@ const DirectConfirmCodes = ({
   updateDirectCode,
   getCodingDetails,
   list,
+  uploadfile,
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
@@ -120,25 +121,38 @@ const DirectConfirmCodes = ({
 
   const submitPatientFile = async () => {
     const formData = new FormData();
-    formData.append("file", selectFile);
-    formData.append("target", "DIRECT_CONFIRM_CODES");
-    formData.append("isDefaultYear", false);
+    formData.append("file", selectFile.originFileObj);
+    formData.append("target", "INSULIN_MEDICATIONS");
+    formData.append("isDefaultYear", isChecked);
     const headers = {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     };
+
+    console.log(formData);
     setSelectFile(formData);
-    const response = await axios.post(
+    const res = await axios.post(
       ENDPOINTS.apiEndoint +
         `management/tenantAdmin/codes/upload
       `,
       formData,
       headers
     );
+    if (res.status == "SUCCESS") {
+      getResponePopup(res);
+    } else if (res.status == "USER_DEFINED_ERROR") {
+      getResponePopup(res);
+    }
+    // try {
+    //   const res = await uploadfile(formData);
+      // if (res.status == "SUCCESS") {
+      //   getResponePopup(res);
+      // } else if (res.status == "USER_DEFINED_ERROR") {
+      //   getResponePopup(res);
+      // }
+    // } catch (error) {}
   };
-
-  console.log(selectFile, "testing");
 
   return (
     <>
@@ -164,6 +178,7 @@ const DirectConfirmCodes = ({
                 <FileUpload
                   allowedFormat={"File must be in xlsx or CSV"}
                   onChange={(e) => setSelectFile(e.file)}
+                  accept={".xlsx, .csv"}
                 />
               </div>
               <div>
@@ -212,10 +227,7 @@ const DirectConfirmCodes = ({
           name={"Restore Changes"}
           onClick={() => console.log("Restore Changes")}
         />
-        <RegularButton
-          name={"Save Changes"}
-          onClick={submitPatientFile}
-        />
+        <RegularButton name={"Save Changes"} onClick={submitPatientFile} />
       </div>
       <ModalPop
         openModal={openModal}
@@ -241,6 +253,7 @@ const enhancer = connect(
   {
     updateSettings: settingActions.updateSettingsAction,
     updateDirectCode: settingActions.updateDirectCode,
+    uploadfile: settingActions.uploadFiles,
     getCodingDetails: settingActions.codingGuidelinesAction,
   }
 );

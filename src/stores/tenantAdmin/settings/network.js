@@ -1,4 +1,4 @@
-import { requestPortal } from "../../../utils/network";
+import { requestPortal, requestPortalFiles } from "../../../utils/network";
 
 export async function batchUploadCall({ obj }) {
   const options = {
@@ -271,6 +271,17 @@ export async function updateRafConfig(obj) {
   };
   const data = await requestPortal(
     `management/tenantAdmin/medicalCodingGuidelines/updateRaf`,
+    options
+  );
+  return data;
+}
+export async function uploadFile(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortalFiles(
+    `management/tenantAdmin/codes/upload`,
     options
   );
   return data;
