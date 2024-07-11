@@ -65,7 +65,8 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data: [],
+        data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 120, 130],
+        color: "#E88D67",
         type: "line",
         lineStyle: { color: "#E88D67" },
         smooth: true,
@@ -94,7 +95,7 @@ const index = ({
         },
       },
       {
-        name: "Car Gap Codes",
+        name: "Care Gap Codes",
         data: suggestedHccDiseaseCountMap,
         type: "line",
         lineStyle: { color: "#FF9209" },
@@ -120,7 +121,7 @@ const index = ({
       color: "#04B700",
     },
     {
-      title: "Car Gap Codes",
+      title: "Care Gap Codes",
       color: "#FF9209",
     },
   ];
@@ -131,7 +132,6 @@ const index = ({
   const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf;
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf;
   const totalScoreTwo = hccDiseaseCountMap + suggestedCount;
-
 
   return (
     <div className="d-flex justify-content-between">
@@ -172,15 +172,17 @@ const index = ({
               active
             />
           </div>
-         ) : totalCodesLoader ? (
+        ) : totalCodesLoader ? (
           <div className="d-flex justify-content-center align-items-center h-75 ">
-            <Spin  size="large" />
+            <Spin size="large" />
           </div>
-       ) :hccDiseaseCountValues?.length >0? (
+        ) : hccDiseaseCountValues?.length > 0 ? (
           <div className="totalCodesPies">
-          <CodesGraph options={options} isRadio={true} />
+            <CodesGraph options={options} isRadio={true} />
           </div>
-        ):<Empty className="mt-3"/>} 
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         className="remianingAreaGraph"

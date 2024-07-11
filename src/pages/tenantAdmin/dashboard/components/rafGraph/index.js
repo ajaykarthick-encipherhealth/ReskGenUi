@@ -25,15 +25,13 @@ const RafGraph = ({
     endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
   });
 
-
   useEffect(() => {
     getAllRafScore(
       dateRange.startDate,
       dateRange.endDate,
-      selectedOrganization,
+      selectedOrganization
     );
   }, [dateRange, selectedOrganization]);
-
 
   const rafScoreByDateForSuggested =
     getAllRafScoreData?.rafScoreByDateForSuggested
@@ -75,7 +73,11 @@ const RafGraph = ({
     ],
     series: [
       {
-        name: isCargaps ? "Car gap Codes" : isHcc ? "HCC Codes" : "Total Codes",
+        name: isCargaps
+          ? "Care Gap Codes"
+          : isHcc
+          ? "HCC Codes"
+          : "Total Codes",
         type: "line",
         itemStyle: {
           color: rafColor,
@@ -90,7 +92,7 @@ const RafGraph = ({
           ? rafScoreByDateForSuggested
           : isCargaps
           ? rafScoreByDateForHcc
-          : "",
+          : [100, 200, 300, 400, 10, 50, 100], //Total Codes
       },
 
       {

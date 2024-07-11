@@ -60,7 +60,10 @@ const RevenueGraph = ({
           ? premiumByDateForHcc
           : isCargaps
           ? premiumByDateForSuggested
-          : "",
+          : [100, 240, 310, 140, 250, 760, 740, 180, 90, 100], //Total Codes
+        itemStyle: {
+          color: isHcc ? "#02BBDE" : isCargaps ? "#5A75F2" : "#E88D67",
+        },
       },
       {
         name: "HCC Codes",
@@ -77,7 +80,7 @@ const RevenueGraph = ({
         },
       },
       {
-        name: "Car gap Codes",
+        name: "Care Gap Codes",
         type: "line",
         step: "end",
         data: isMultiple ? premiumByDateForSuggested : [],
