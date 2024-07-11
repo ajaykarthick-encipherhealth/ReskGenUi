@@ -8,14 +8,16 @@ import CodesGraph from "../../components/codeGraph";
 import { Skeleton, Spin } from "antd";
 import CodeGraphRevenue from "../../components/codeGraphRevenue/index.js";
 
-
-const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrganization,}) => {
-
+const index = ({
+  rafScoreData,
+  overAllRafScore,
+  rafLoader,
+  dateRange,
+  selectedOrganization,
+}) => {
   useEffect(() => {
-    rafScoreData( dateRange.startDate,
-      dateRange.endDate,
-      selectedOrganization);
-  }, [dateRange,selectedOrganization]);
+    rafScoreData(dateRange.startDate, dateRange.endDate, selectedOrganization);
+  }, [dateRange, selectedOrganization]);
 
   const speedometerOptions = {
     tooltip: {
@@ -82,6 +84,19 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrg
     ],
   };
 
+  //FUTURE REVENUE VALUE ENHANCEMENT P1 TASK
+  function formatNumber(num) {
+    if (num >= 1000000) {
+      return Math.floor(num / 1000000) + "M";
+    } else if (num >= 1000) {
+      return Math.floor(num / 1000) + "K";
+    } else {
+      return num.toString();
+    }
+  }
+  //donot remove future need
+  const price = 34212312;  //Pass API REVENUE COUNT RESPONSE
+
   return (
     <div style={{ display: "flex", width: "100%" }}>
       <div
@@ -100,7 +115,7 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrg
       <div className="revenueChart" style={{ width: "65%" }}>
         <div className={styles.header}>
           <div className="py-1">Revenue</div>
-          <div className={styles.price}>$ 3189k</div>
+          <div className={styles.price}>{formatNumber(price)}</div>
           <div className={styles.revenue}>$ 3.1k Increase</div>
         </div>
         <CodeGraphRevenue
