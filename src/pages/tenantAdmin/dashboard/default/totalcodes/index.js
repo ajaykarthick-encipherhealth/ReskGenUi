@@ -239,7 +239,7 @@ const index = ({
           </div>
         </div>
 
-        {loaderButton && revenueChartLoader ? (
+        { revenueChartLoader ? (
           <div>
             <Skeleton.Input
               className="w-100"
@@ -247,11 +247,7 @@ const index = ({
               active
             />
           </div>
-        ) : revenueChartLoader ? (
-          <div className="d-flex justify-content-center align-items-center h-75 ">
-            <Spin size="large" />
-          </div>
-        ) : premiumByDateForHcc?.length > 0 ? (
+        )  : premiumByDateForHcc?.length > 0 ? (
             <div className="totalCodesPies2">
               <RevenueGraph
                 selectedOrganization={selectedOrganization}
