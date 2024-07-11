@@ -39,3 +39,11 @@
   margin:auto;
   margin-top: 10px;
 }
+
+.centered_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 250px; 
+  margin-top: 25px; 
+}

@@ -74,10 +74,10 @@ const HeadTitle = ({
       )}
       <Modal
         open={openPicker}
-        mask={false}
+        mask={true}
         width="34.5%"
         closable={false}
-        style={{ left: "-20%", top: "18%" }}
+        style={{ left: "-20%", top: "14%" }}
         onOk={() => {
           dispatch(getDateRange(dateValues));
           setOpenPicker(false);

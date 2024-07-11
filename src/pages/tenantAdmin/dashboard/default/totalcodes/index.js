@@ -20,7 +20,6 @@ const index = ({
   getAllRaf,
   getAllRafScoreData,
   dateRange,
-  loaderButton,
   totalCodesLoader,
   getAllRafData,
   selectedOrganization,
@@ -167,7 +166,7 @@ const index = ({
           </div>
         </div>
 
-        {loaderButton && totalCodesLoader ? (
+        {totalCodesLoader ? (
           <div>
             <Skeleton.Input
               className="w-100"
@@ -175,11 +174,7 @@ const index = ({
               active
             />
           </div>
-        ) : totalCodesLoader ? (
-          <div className="d-flex justify-content-center align-items-center h-75 ">
-            <Spin size="large" />
-          </div>
-        ) : hccDiseaseCountValues?.length > 0 ? (
+        ) :  hccDiseaseCountValues?.length > 0 ? (
           <div className="totalCodesPies">
           <CodesGraph options={options} isRadio={true}  className="codesGraphStyle2"/>
 

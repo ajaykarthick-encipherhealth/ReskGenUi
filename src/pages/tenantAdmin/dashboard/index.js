@@ -44,6 +44,7 @@ const Index = ({
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
   const [loaderButton, setLoaderButton] = useState(true);
+
   const [selectedValue, setSelectedValue] = useState(null);
   const [dateRange, setDateRange] = useState({
     startDate:
@@ -209,8 +210,8 @@ const Index = ({
             handleOrganizationChange={handleOrganizationChange}
             setSelectedOrganization={setSelectedOrganization}
             selectedOrganization={selectedOrganization}
-            loaderButton={loaderButton}
-            setLoaderButton={setLoaderButton}
+       
+         
             setSelectedValue={setSelectedValue}
           />
           {activeBtn === "default" ? (
@@ -230,7 +231,7 @@ const Index = ({
                     <RafAndRevenue
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                      loaderButton={loaderButton}
+                   
                     />
                   </Card>
                 </div>
@@ -288,6 +289,7 @@ const Index = ({
                       selectedOrganization={selectedOrganization}
                       loaderButton={loaderButton}
                       selectedValue={selectedValue}
+                      classNames="workflowChart"
                     />
                   </Card>
                 </div>
@@ -299,7 +301,7 @@ const Index = ({
                     <Top10Diseases
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                      loaderButton={loaderButton}
+                  
                     />
                   </Card>
                 </div>
@@ -308,7 +310,7 @@ const Index = ({
                     <TopOIGCodes
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                      loaderButton={loaderButton}
+                   
                     />
                   </Card>
                 </div>
@@ -324,7 +326,7 @@ const Index = ({
                     <OrgPieChartInfo
                       data={orgData}
                       header="Allocated"
-                      loaderButton={loaderButton}
+                  
                       orgLoader={orgLoader}
                     />
                   </Card>
@@ -337,6 +339,7 @@ const Index = ({
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
                       loaderButton={loaderButton}
+                      classNames="workflowChart1"
                     />
                   </Card>
                 </div>
@@ -347,12 +350,13 @@ const Index = ({
                   <Card padding="10px" borderRadius={"10px"} height="265px">
                     <HeadTitle header="Allocated Status" fontSize="20px" />
 
-                    {loaderButton && allocatedLoader ? (
+                    {allocatedLoader ? (
                       <div>{renderCardSkeleton()}</div>
                     ) : allocatedLoader ? (
                       <div className="d-flex justify-content-center align-items-center">
                         <Spin size="large" />
                       </div>
+
                     ) : (
                       <PieChartInfo data={allocatedData} header="Allocated" />
                     )}
@@ -361,12 +365,8 @@ const Index = ({
                 <div className={`col-lg-3`}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
                     <HeadTitle header="Reviewer Status" fontSize="20px" />
-                    {loaderButton && reviewerLoader ? (
+                    {reviewerLoader ? (
                       <div>{renderCardSkeleton()}</div>
-                    ) : reviewerLoader ? (
-                      <div className="d-flex justify-content-center align-items-center">
-                        <Spin size="large" />
-                      </div>
                     ) : (
                       <PieChartInfo data={reviewerData} header="Reviewer" />
                     )}
@@ -376,13 +376,9 @@ const Index = ({
                   <Card padding="10px" borderRadius={"10px"} height="265px">
                     <HeadTitle header="Auditor Status" fontSize="20px" />
 
-                    {loaderButton && auditorLoader ? (
+                    {auditorLoader ? (
                       <div>{renderCardSkeleton()}</div>
-                    ) : auditorLoader ? (
-                      <div className="d-flex justify-content-center align-items-center">
-                        <Spin size="large" />
-                      </div>
-                    ) : (
+                    ) :  (
                       <PieChartInfo data={auditorData} header="Auditor" />
                     )}
                   </Card>
@@ -391,12 +387,8 @@ const Index = ({
                   <Card padding="10px" borderRadius={"10px"} height="265px">
                     <HeadTitle header="Users" fontSize="20px" />
 
-                    {loaderButton && userLoader ? (
+                    {userLoader ? (
                       <div>{renderCardSkeleton()}</div>
-                    ) : userLoader ? (
-                      <div className="d-flex justify-content-center align-items-center">
-                        <Spin size="large" />
-                      </div>
                     ) : (
                       <PieChartInfo data={usersData} header="Users" />
                     )}

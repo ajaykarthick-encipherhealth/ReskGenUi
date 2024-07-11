@@ -10,7 +10,7 @@ const index = ({
   dateRange,
   selectedOrganization,
   top10DisesesLoader,
-  loaderButton,
+
 }) => {
   useEffect(() => {
     getTop10DiseasesData(
@@ -39,7 +39,7 @@ const index = ({
           {top10DiseasesData?.response?.totalCount}
         </span>
       </div>
-      {loaderButton && top10DisesesLoader ? (
+      {top10DisesesLoader ? (
         <div>
           <Skeleton.Input
             className="w-100"
@@ -47,12 +47,7 @@ const index = ({
             active
           />
         </div>
-      ) : top10DisesesLoader ? (
-        <div className="d-flex justify-content-center align-items-center">
-          {" "}
-          <Spin size="large" />
-        </div>
-      ) : (
+      ) :  (
         <ReusableTable items={top10DiseasesData?.response?.topDiseaseDTOList} />
       )}
     </>
@@ -64,7 +59,8 @@ const enhancer = connect(
     top10DiseasesData:
       state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data,
     top10DisesesLoader:
-      state?.tenantAdmin?.dashboard?.default?.topTenDiseasesLoader,
+      state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.loading
+      ,
   }),
   {
     getTop10DiseasesData: allActions?.top10Diseases,
