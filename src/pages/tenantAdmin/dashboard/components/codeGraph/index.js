@@ -51,7 +51,7 @@ const CodesGraph = ({
     series: [
       {
         name: isCargaps
-          ? "Car Gap Codes"
+          ? "Care Gap Codes"
           : isHcc
           ? "HCC Codes"
           : isRevenue
