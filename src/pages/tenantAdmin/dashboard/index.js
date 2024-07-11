@@ -43,7 +43,7 @@ const Index = ({
   getTop10DiseasesData,
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
-  const [loaderButton, setLoaderButton] = useState(true);
+ 
 
   const [selectedValue, setSelectedValue] = useState(null);
   const [dateRange, setDateRange] = useState({
@@ -222,7 +222,7 @@ const Index = ({
                     <TotalCounts
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                      loaderButton={loaderButton}
+                  
                     />
                   </Card>
                 </div>
@@ -243,7 +243,8 @@ const Index = ({
                     <TotalCodes
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                      loaderButton={loaderButton}
+                      selectedValue={selectedValue}
+                     
                     />
                   </Card>
                 </div>
@@ -255,7 +256,8 @@ const Index = ({
                     <HccCodes
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                      loaderButton={loaderButton}
+                      selectedValue={selectedValue}
+                      
                     />
                   </Card>
                 </div>
@@ -267,6 +269,8 @@ const Index = ({
                     <CaregapCodes
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
+                      selectedValue={selectedValue}
+
                     />
                   </Card>
                 </div>
@@ -287,7 +291,6 @@ const Index = ({
                       activeBtn={activeBtn}
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                      loaderButton={loaderButton}
                       selectedValue={selectedValue}
                       classNames="workflowChart"
                     />
@@ -338,7 +341,6 @@ const Index = ({
                     <WorkFlowFiles
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                      loaderButton={loaderButton}
                       classNames="workflowChart1"
                     />
                   </Card>
