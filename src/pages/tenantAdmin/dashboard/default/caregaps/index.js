@@ -19,6 +19,7 @@ const index = ({
   selectedValue,
   totalCodesLoader,
   revenueChartLoader,
+  rafScorechartLoader,
 }) => {
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap
@@ -28,6 +29,13 @@ const index = ({
   const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested
     ? Object.values(getAllRaf.premiumByDateForSuggested)
     : [];
+
+  const rafScoreByDateForSuggested =
+    getAllRafScoreData?.rafScoreByDateForSuggested
+      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
+      : [];
+
+  console.log(getAllRafScoreData?.rafScoreByDateForSuggested, "SELVA");
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
@@ -51,7 +59,7 @@ const index = ({
               active
             />
           </div>
-        ) :  suggestedHccDiseaseCountMap?.length > 0 ? (
+        ) : suggestedHccDiseaseCountMap?.length > 0 ? (
           <div className="totalCodesPies">
             <CodesGraph
               gradientColor1={"#FF9209"}
@@ -85,11 +93,25 @@ const index = ({
             </div>
           </div>
         </div>
-        <RafGraph
-          rafColor={"#4AA1AB"}
-          isCargaps={true}
-          selectedValue={selectedValue}
-        />
+        {rafScorechartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : rafScoreByDateForSuggested?.length > 0 ? (
+          <div>
+            <RafGraph
+              rafColor={"#4AA1AB"}
+              isCargaps={true}
+              selectedValue={selectedValue}
+            />
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         style={{
@@ -144,9 +166,12 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
+    rafScorechartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
-      totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
+    totalCodesLoader:
+      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
     revenueChartLoader:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.loading,
   }),
