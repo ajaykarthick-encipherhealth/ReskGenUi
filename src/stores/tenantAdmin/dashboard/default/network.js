@@ -33,8 +33,7 @@ export async function getAllRafScore(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
-  const formattedStartDate = startDate ? new Date(startDate).toISOString() : "";
-  const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
+
 
   const data = await requestPortal(
     `dbservice/tenantadmin/dashboard/raf/score/chart?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId?organizationId:""}`,

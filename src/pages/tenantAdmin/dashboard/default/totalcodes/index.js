@@ -5,13 +5,12 @@ import styles from "../../styles.module.css";
 import * as echarts from "echarts";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
-import { Empty } from "antd";
+import { Empty, Spin } from "antd";
 import {
   HccCodes,
   RafCounts,
   RafCountScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import moment from "moment";
 import { Skeleton } from "antd";
 import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
 
@@ -165,7 +164,7 @@ const index = ({
           </div>
         </div>
 
-        {/* {loaderButton && totalCodesLoader ? (
+        {loaderButton && totalCodesLoader ? (
           <div>
             <Skeleton.Input
               className="w-100"
@@ -174,17 +173,14 @@ const index = ({
             />
           </div>
         ) : totalCodesLoader ? (
-          <div className="d-flex justify-content-center align-items-center">
-            {" "}
-            <Spin size="large" />
+          <div className="d-flex justify-content-center align-items-center h-75 ">
+            <Spin  size="large" />
           </div>
-        ) : (
+       ) :hccDiseaseCountValues?.length >0? (
+          <div className="totalCodesPies">
           <CodesGraph options={options} isRadio={true} />
-        )} */}
-
-        <div className="totalCodesPies">
-          <CodesGraph options={options} isRadio={true} />
-        </div>
+          </div>
+        ):<Empty className="mt-3"/>} 
       </div>
       <div
         className="remianingAreaGraph"
