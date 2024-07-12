@@ -15066,9 +15066,9 @@ text-align: start;
 
 .workflowChart >div >div>canvas{
   position: absolute;
-  left: -51px !important;
+  left: 0px !important;
   top: 0px;
-  width: 100px !important;
+  width: 100% !important;
   height: 350px !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -15079,9 +15079,9 @@ text-align: start;
 
 .workflowChart1 >div >div>canvas{
   position: absolute;
-  left: -53px !important;
+  left: 0px !important;
   top: -23px !important;
-  width: 100px !important;
+  width: 100% !important;
   height: 446px !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
