@@ -43,7 +43,9 @@ const index = ({
         },
         detail: {
           show: true,
-          formatter: "{value}",
+          formatter: function (value) {
+            return value.toFixed(2); 
+          },
           fontSize: 20,
           offsetCenter: [0, "10%"],
         },
@@ -66,7 +68,6 @@ const index = ({
           show: true,
           distance: -40,
           formatter: function (value) {
-            // Only show the min and max labels
             if (value === 0 || value === 1000) {
               return value.toString();
             }
@@ -76,7 +77,7 @@ const index = ({
         },
         data: [
           {
-            value: overAllRafScore?.response,
+            value: parseFloat(overAllRafScore?.response?.toFixed(2)),
             name: "",
           },
         ],
