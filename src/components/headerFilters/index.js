@@ -18,6 +18,7 @@ import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../stores/authflow/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import {PlusCircleFilled, InfoCircleFilled, FilterFilled} from "@ant-design/icons"
 const { RangePicker } = DatePicker;
 
 const HeaderFilters = ({
@@ -427,7 +428,7 @@ const HeaderFilters = ({
               onClick={() => setShowFilters(!showFilters)}
             >
               <button className={styles.filterBtn}>
-                <Image src={filter} /> {showFilters ? "Hide" : "Filter"}
+                <FilterFilled  src={filter} style={{color:"#04306f", fontSize:"15px"}}/> {showFilters ? "Hide" : "Filter"}
               </button>
             </div>
           )}
@@ -458,11 +459,12 @@ const HeaderFilters = ({
                 trigger={["click"]}
                 placement="bottom"
               >
-                <Image
+                {/* <Image
                   src={warning}
                   className="mt-[10px]"
                   style={{ cursor: "pointer" }}
-                />
+                /> */}
+                <InfoCircleFilled style={{fontSize:"27px", marginTop:"10px", cursor: "pointer", color:"#04306f"}}/>
               </Popover>
             </div>
           )}
@@ -478,7 +480,7 @@ const HeaderFilters = ({
                 style={{ background: "#04306f" }}
                 className="btn btn-sm ms-2 flr width-max-content"
               >
-                <FontAwesomeIcon icon={faPlus} /> {btnTitle}
+                <PlusCircleFilled /> {btnTitle}
               </Button>
             </div>
           )}

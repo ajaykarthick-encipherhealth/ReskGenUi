@@ -356,7 +356,7 @@ const AllocateModal = ({
             }}
             className={`btn btn-outline-primary btn-sm ms-2 ${modalStyle.modalBtn}`}
           >
-            Add User
+            Add User jii
           </button>
         </div>
       )}

@@ -6,7 +6,7 @@ import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faFileArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { Spin, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import visitStyles from "../../../styles/visitdata.module.css";
@@ -412,11 +412,12 @@ const Patient = ({ getPatients, loader, response }) => {
           className="btn hegiht10 shadow  sharp me-1 action-btn"
           style={{ background: "#04306f" }}
         >
-          <FontAwesomeIcon
+          {/* <FontAwesomeIcon
             icon={faUpload}
             fontSize={11}
             style={{ color: "#ffff" }}
-          />
+          /> */}
+          <FontAwesomeIcon icon={faFileArrowUp} style={{color:"#ffff"}}/>
         </button>
       </div>
     );
