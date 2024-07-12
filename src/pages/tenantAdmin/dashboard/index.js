@@ -91,22 +91,22 @@ const Index = ({
   const auditorData = [
     {
       value: auditorStatusData?.response?.auditedStatus?.AUDITED,
-      name: " Sample Audit Completed",
+      name: " Audit Completed",
       itemStyle: { color: "#4AA1AB" },
     },
     {
       value: auditorStatusData?.response?.auditedStatus?.AUDIT_PENDING,
-      name: " Sample Audit Pending",
+      name: " Audit Pending",
       itemStyle: { color: "#BD3A79" },
     },
     {
       value: auditorStatusData?.response?.auditedStatus?.AUDITHOLD,
-      name: "Sample Audit Hold",
+      name: "Audit Hold",
       itemStyle: { color: "#EBAE00" },
     },
     {
       value: auditorStatusData?.response?.auditedStatus?.DECLINED,
-      name: "Sample Audit Declined",
+      name: "Audit Declined",
       itemStyle: { color: "#C21807" },
     },
   ];
@@ -376,7 +376,7 @@ const Index = ({
                 </div>
                 <div className={`col-lg-3`}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
-                    <HeadTitle header="Auditor Status" fontSize="20px" />
+                    <HeadTitle header="Sample Auditor Status" fontSize="20px" />
 
                     {auditorLoader ? (
                       <div>{renderCardSkeleton()}</div>
