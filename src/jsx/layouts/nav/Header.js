@@ -478,7 +478,7 @@ const Header = ({
             {stateActive != "/reviewer/home" ? (
               <div>
                 <ul className="metismenu header-menu d-flex" id="menu">
-                  {menuList.map((data, index) => {
+                  {menuList?.map((data, index) => {
                     const queryString = window.location.search;
                     const urlParams = new URLSearchParams(queryString);
                     let encodedParams = null;
@@ -511,10 +511,10 @@ const Header = ({
                         <Link href={data.to} className="d-flex">
                           <div
                             className="menu-icon"
-                            style={{ paddingRight: "5px" }}
+                            style={{ paddingRight: "5px" , color:"#04306f" }}
                           >
                             {data.iconStyle}
-                          </div>{" "}
+                          </div>
                           <span className={`nav-text header-nav-text`}>
                             {data.title}
                           </span>

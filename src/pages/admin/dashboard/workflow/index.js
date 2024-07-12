@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Image from "next/image";
 import dayjs from "dayjs";
+import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+// import { faClockRotateLeft  } from "@fortawesome/free-regular-svg-icons";
+ import { faCircleCheck ,faClockRotateLeft,faFileCircleCheck,faFileCircleExclamation,faCirclePause,faCircleXmark,faUsers,faFile} from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { Col, Empty, Row, Spin } from "antd";
 import { useRouter } from "next/router";
@@ -82,7 +85,7 @@ const WorkFlow = () => {
     // },
     {
       id: 2,
-      icon: allocated,
+      icon:<FontAwesomeIcon icon={faUsers} /> ,
       title: "Allocated",
       charts: chartValue.totalPatientsAllocated
         ? chartValue.totalPatientsAllocated
@@ -95,7 +98,7 @@ const WorkFlow = () => {
 
     {
       id: 3,
-      icon: completed,
+      icon:<FontAwesomeIcon icon={faCircleCheck} />,
       title: "Completed",
       charts: dateRange.processedStatus
         ? dateRange.processedStatus.COMPLETED
@@ -107,7 +110,7 @@ const WorkFlow = () => {
     },
     {
       id: 4,
-      icon: pendingIcon,
+      icon:  <FontAwesomeIcon icon={faClockRotateLeft} />,
       title: "Pending",
       charts: dateRange.processedStatus
         ? dateRange.processedStatus.PENDING
@@ -129,7 +132,7 @@ const WorkFlow = () => {
     // },
     {
       id: 5,
-      icon: declineIcon,
+      icon: <FontAwesomeIcon icon={faCircleXmark} />,
       title: "Declined",
       charts: dateRange.processedStatus
         ? dateRange.processedStatus.DECLINED
@@ -141,7 +144,7 @@ const WorkFlow = () => {
     },
     {
       id: 6,
-      icon: auditedIcon,
+       icon:<FontAwesomeIcon icon={faFileCircleCheck} />,
       title: "Audited",
       charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITED : "0",
       days: `${
@@ -151,7 +154,7 @@ const WorkFlow = () => {
     },
     {
       id: 7,
-      icon: reAuditIcon,
+       icon:  <FontAwesomeIcon icon={faFileCircleExclamation} />,
       title: "Audit Pending",
       charts: dateRange.auditedStatus
         ? dateRange.auditedStatus.AUDIT_PENDING
@@ -163,7 +166,7 @@ const WorkFlow = () => {
     },
     {
       id: 8,
-      icon: auditHoldIcon,
+      icon: <FontAwesomeIcon icon={faCirclePause} />,
       title: "Audit Hold",
       charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITHOLD : "0",
       days: `${
@@ -174,7 +177,7 @@ const WorkFlow = () => {
 
     {
       id: 9,
-      icon: AuditedDecline,
+       icon: <FontAwesomeIcon icon={faCircleXmark} />,
       title: "Audit Declined",
       charts: dateRange.auditedStatus
         ? dateRange.auditedStatus.AUDIT_DECLINED
@@ -188,7 +191,7 @@ const WorkFlow = () => {
   const card2Data = [
     {
       id: 1,
-      icon: tci,
+     icon: <FontAwesomeIcon icon={faFile} />,
       title: "Total charts",
       charts: chartValue.totalPatients ? chartValue.totalPatients : "0",
       days: `${
@@ -254,7 +257,8 @@ const WorkFlow = () => {
                     >
                       <div className={styles.totalChartDiv}>
                         <div className={styles.header}>
-                          <Image src={data?.icon} className={styles.Img} />
+                          <div className="mt-1">{data?.icon}</div>
+                          {/* <Image src={data?.icon} className={styles.Img} /> */}
                           <div className={styles.heading}>{data.title}</div>
                         </div>
                         <div
@@ -284,7 +288,8 @@ const WorkFlow = () => {
                     >
                       <div className={styles.subCardDiv}>
                         <div className={styles.header}>
-                          <Image src={data?.icon} className={styles.Img} />
+                          <div className="mt-1">{data?.icon}</div>
+                          {/* <Image src={data?.icon} className={styles.Img} />  */}
                           <div className={styles.heading}>{data.title}</div>
                         </div>
                         <div className={styles.charts}>{`${
