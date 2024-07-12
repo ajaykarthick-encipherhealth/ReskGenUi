@@ -11,6 +11,7 @@ import {
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import { formatNumber } from "../../../../../utils/reusable.js";
 
 const index = ({
   getAllHccCodes,
@@ -35,7 +36,9 @@ const index = ({
       ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
       : [];
 
-  console.log(getAllRafScoreData?.rafScoreByDateForSuggested, "SELVA");
+  formatNumber();
+  const TotalCareGapsRevenue = getAllRaf?.totalSuggestedRafScore;
+
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
@@ -127,7 +130,7 @@ const index = ({
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
               <div className={styles.price}>
-                {`$ ${getAllRaf?.totalSuggestedRafScore || 0} `}
+                {`$ ${formatNumber(TotalCareGapsRevenue) || 0} `}
               </div>
             </div>
           </div>
