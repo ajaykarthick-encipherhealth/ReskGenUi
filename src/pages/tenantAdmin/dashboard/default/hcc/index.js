@@ -16,7 +16,6 @@ const index = ({
   getAllHccCodes,
   getAllRafScoreData,
   getAllRaf,
-
   selectedOrganization,
   selectedValue,
   totalCodesLoader,
@@ -34,9 +33,6 @@ const index = ({
   const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
     ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
     : [];
-
-
-
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
@@ -58,7 +54,7 @@ const index = ({
               active
             />
           </div>
-        )  : hccDiseaseCountValues?.length > 0 ? (
+        ) : hccDiseaseCountValues?.length > 0 ? (
           <div className="totalCodesPies">
             <CodesGraph
               gradientColor1={"#04B700"}
@@ -73,7 +69,6 @@ const index = ({
         ) : (
           <Empty className="mt-3" />
         )}
-
       </div>
       <div
         className="remianingAreaGraph"
@@ -96,7 +91,7 @@ const index = ({
           </div>
         </div>
 
-        {/* {loaderButton && rafScorechartLoader ? (
+        {rafScorechartLoader ? (
           <div>
             <Skeleton.Input
               className="w-100"
@@ -104,22 +99,17 @@ const index = ({
               active
             />
           </div>
-        ) : rafScorechartLoader ? (
-          <div className="d-flex justify-content-center align-items-center h-75 ">
-            <Spin size="large" />
+        ) : rafScoreByDateForHcc?.length > 0 ? (
+          <div className="totalCodesPies2">
+            <RafGraph
+              rafColor={"#8E68F7"}
+              isHcc={true}
+              selectedValue={selectedValue}
+            />
           </div>
-        ) : rafScoreByDateForHcc?.length > 0 ? ( */}
-            <div className="totalCodesPies2">
-              <RafGraph
-                rafColor={"#8E68F7"}
-                isHcc={true}
-                selectedValue={selectedValue}
-              />
-            </div>
-{/*         
         ) : (
           <Empty className="mt-3" />
-        )} */}
+        )}
       </div>
       <div
         style={{
@@ -156,7 +146,7 @@ const index = ({
                 isHcc={true}
                 hccColor="#02BBDE"
                 selectedValue={selectedValue}
-                className="revenueCharts2" 
+                className="revenueCharts2"
               />
             </div>
           </div>
@@ -179,8 +169,10 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     revenueChartLoader:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.loading,
-      totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
-     rafScorechartLoader:state?.tenantAdmin?.dashboard?.default?.rafScorechartLoader,
+    totalCodesLoader:
+      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
+    rafScorechartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
   }),
   {
     getAllHccCodesData: HccCodes,

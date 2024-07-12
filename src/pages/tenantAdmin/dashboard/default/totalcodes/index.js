@@ -9,7 +9,7 @@ import { Empty, Spin } from "antd";
 import {
   HccCodes,
   RafCounts,
-  RafCountScore,
+  getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import { Skeleton } from "antd";
 import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
@@ -22,19 +22,13 @@ const index = ({
   dateRange,
   totalCodesLoader,
   getAllRafData,
+  getAllRafScore,
   selectedOrganization,
   selectedValue,
-  rafScorechartLoader,
   revenueChartLoader,
+  rafScorechartLoader,
+  combinedData,
 }) => {
-  useEffect(() => {
-    getAllHccCodesData(
-      dateRange?.startDate,
-      dateRange?.endDate,
-      selectedOrganization
-    );
-  }, [dateRange, selectedOrganization]);
-
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
     : [];
@@ -43,11 +37,43 @@ const index = ({
     getAllHccCodes?.suggestedHccDiseaseCountMap
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
+
+  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
+    ? Object.values(getAllRaf.premiumByDateForHcc)
+    : [];
+
+  const rafScoreByDateForSuggested =
+    getAllRafScoreData?.rafScoreByDateForSuggested
+      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
+      : [];
+
+  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
+    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
+    : [];
+
+  let combinedRafData = rafScoreByDateForSuggested.map(
+    (value, index) => value + rafScoreByDateForHcc[index]
+  );
+
+  useEffect(() => {
+    getAllHccCodesData(
+      dateRange?.startDate,
+      dateRange?.endDate,
+      selectedOrganization
+    );
+  }, [dateRange, selectedOrganization]);
+
+  useEffect(() => {
+    getAllRafScore(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
+  }, [dateRange, selectedOrganization]);
+
   useEffect(() => {
     getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization);
   }, [dateRange, selectedOrganization]);
-  let combinedData = suggestedHccDiseaseCountMap.map((value, index) => value + hccDiseaseCountValues[index]);
-
 
   const options = {
     xAxis: {
@@ -68,7 +94,7 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data:  combinedData ? combinedData : [],
+        data: combinedData ? combinedData : [],
         color: "#E88D67",
         type: "line",
         lineStyle: { color: "#E88D67" },
@@ -135,14 +161,8 @@ const index = ({
   const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
   const totalScoreTwo = hccDiseaseCountMap + suggestedCount;
-console.log(totalScoreTwo,"totalScoreTwo")
-  const rafScoreByDateForSuggested =
-    getAllRafScoreData?.rafScoreByDateForSuggested
-      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
-      : [];
-  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
-    ? Object.values(getAllRaf.premiumByDateForHcc)
-    : [];
+
+
 
   return (
     <div className="d-flex justify-content-between">
@@ -183,9 +203,13 @@ console.log(totalScoreTwo,"totalScoreTwo")
               active
             />
           </div>
-        ) :  hccDiseaseCountValues?.length > 0 ? (
+        ) : hccDiseaseCountValues?.length > 0 ? (
           <div className="totalCodesPies">
-            <CodesGraph options={options} isRadio={true} className="codesGraphStyle2"/>
+            <CodesGraph
+              options={options}
+              isRadio={true}
+              className="codesGraphStyle2"
+            />
           </div>
         ) : (
           <Empty className="mt-3" />
@@ -209,17 +233,29 @@ console.log(totalScoreTwo,"totalScoreTwo")
             </div>
           </div>
         </div>
-        <div className="totalCodesPies2">
+        {rafScorechartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : combinedRafData?.length > 0 ? (
+          <div className="totalCodesPies2">
             <RafGraph
-          overallData={true}
-          rafColor={"#E88D67"}
-          rafColor3={"#FF9209"}
-          rafColor2={"#00BC13"}
-          selectedValue={selectedValue}
-          dateRange={dateRange}
-          selectedOrganization={selectedOrganization}
-        />   
-      </div>
+              overallData={true}
+              rafColor={"#E88D67"}
+              rafColor3={"#FF9209"}
+              rafColor2={"#00BC13"}
+              selectedValue={selectedValue}
+              dateRange={dateRange}
+              selectedOrganization={selectedOrganization}
+            />
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         style={{
@@ -239,7 +275,7 @@ console.log(totalScoreTwo,"totalScoreTwo")
           </div>
         </div>
 
-        { revenueChartLoader ? (
+        {revenueChartLoader ? (
           <div>
             <Skeleton.Input
               className="w-100"
@@ -247,15 +283,15 @@ console.log(totalScoreTwo,"totalScoreTwo")
               active
             />
           </div>
-        )  : premiumByDateForHcc?.length > 0 ? (
-            <div className="totalCodesPies2">
-              <RevenueGraph
-                selectedOrganization={selectedOrganization}
-                isMultiple={true}
-                selectedValue={selectedValue}
-               className="revenueCharts1"
-              />
-            </div>
+        ) : premiumByDateForHcc?.length > 0 ? (
+          <div className="totalCodesPies2">
+            <RevenueGraph
+              selectedOrganization={selectedOrganization}
+              isMultiple={true}
+              selectedValue={selectedValue}
+              className="revenueCharts1"
+            />
+          </div>
         ) : (
           <Empty className="mt-3" />
         )}
@@ -264,23 +300,26 @@ console.log(totalScoreTwo,"totalScoreTwo")
   );
 };
 
-
 const enhancer = connect(
   (state) => ({
     getAllHccCodes:
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
+    rafScorechartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
-    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
+
+    totalCodesLoader:
+      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
     revenueChartLoader:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.loading,
   }),
   {
     getAllHccCodesData: HccCodes,
     getAllRafData: RafCounts,
-    getAllRafScore: RafCountScore,
+    getAllRafScore: getAllRafScore,
   }
 );
 export default enhancer(index);
