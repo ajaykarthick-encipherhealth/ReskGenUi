@@ -791,7 +791,6 @@ export const handleSubmitValidNotes = async ({
   setFileLoading(true);
   setConfirmNotesModalValid(false);
   handleCloseModal();
-  console.log(isValidAction)
   var apiURL = "";
   if (
     isValidAction.name == "Move to Suggested" &&
