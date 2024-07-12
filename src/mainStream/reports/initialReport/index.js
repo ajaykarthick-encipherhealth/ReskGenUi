@@ -283,182 +283,178 @@ const InitialCard = ({
           {loader && !selectAll ? (
             <SpinnerDots />
           ) : (
-          <div className={`container-fluid py-4 px-2`}>
-            <div
-              style={{
-                display: "flex",
-                marginLeft: "10px",
-                paddingBottom: "10px",
-              }}
-            >
-              {" "}
-              {
-                reportListAll?.response?.data?.length > 0 && (
-                  // (isLoading ? (
-                  //   <Spin />
-                  // ) : (
-                  <>
-                    <div className="col-xl-1 d-flex">
-                      <div>
-                        <input
-                          type="checkbox"
-                          onChange={handleHeaderCheckboxChange}
-                          className={
-                            styles.checkAlign +
-                            (selectAll ? " " + TableStyle.customChecked : "")
-                          }
-                          checked={selectAll}
-                        />
+            <div className={`container-fluid py-4 px-2`}>
+              <div
+                style={{
+                  display: "flex",
+                  marginLeft: "10px",
+                  paddingBottom: "10px",
+                }}
+              >
+                {" "}
+                {
+                  reportListAll?.response?.data?.length > 0 && (
+                    // (isLoading ? (
+                    //   <Spin />
+                    // ) : (
+                    <>
+                      <div className="col-xl-1 d-flex">
+                        <div>
+                          <input
+                            type="checkbox"
+                            onChange={handleHeaderCheckboxChange}
+                            className={
+                              styles.checkAlign +
+                              (selectAll ? " " + TableStyle.customChecked : "")
+                            }
+                            checked={selectAll}
+                          />
+                        </div>
+                        <span className={`pl-4 text-center ${styles.pName}`}>
+                          All
+                        </span>
                       </div>
-                      <span className={`pl-4 text-center ${styles.pName}`}>
-                        All
-                      </span>
-                    </div>
 
-                    <div className="col-xl-1 d-flex">
-                      <div>
-                        <input
-                          type="checkbox"
-                          onChange={handleHeaderCheckbox}
-                          className={
-                            styles.checkAlign +
-                            (selectAllFlags
-                              ? " " + TableStyle.customChecked
-                              : "")
-                          }
-                          checked={selectAllFlags}
-                        />
+                      <div className="col-xl-1 d-flex">
+                        <div>
+                          <input
+                            type="checkbox"
+                            onChange={handleHeaderCheckbox}
+                            className={
+                              styles.checkAlign +
+                              (selectAllFlags
+                                ? " " + TableStyle.customChecked
+                                : "")
+                            }
+                            checked={selectAllFlags}
+                          />
+                        </div>
+                        <span className={`pl-4 text-center ${styles.pName}`}>
+                          All Flags
+                        </span>
                       </div>
-                      <span className={`pl-4 text-center ${styles.pName}`}>
-                        All Flags
-                      </span>
-                    </div>
-                  </>
-                )
-                // ))
-              }
-            </div>
-            <div className="row">
-              <div>
-                <div className=" col-xl-12 d-flex">
-                  {reportListAll?.response?.data?.length === 0 ? (
-                    <div
-                      className={`col-xl-6 ${styles.card}`}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Empty />
-                    </div>
-                  ) : (
-                    <div className={`col-xl-6 ${styles.cardDiv}`}>
+                    </>
+                  )
+                  // ))
+                }
+              </div>
+              <div className="row">
+                <div>
+                  <div className=" col-xl-12 d-flex">
+                    {reportListAll?.response?.data?.length === 0 ? (
+                      <div className={`col-xl-12 ${styles.emptyCard}`}>
+                        <Empty />
+                      </div>
+                    ) : (
+                      <div className={`col-xl-6 ${styles.cardDiv}`}>
+                        <div className={styles.cardContainer}>
+                          {reportListAll?.response?.data?.map((item, id) => (
+                            <ContentGroupCard
+                              content={reportListAll?.response?.data}
+                              key={item?.id}
+                              item={item}
+                              flag={item?.patientFlagResponseDTOs}
+                              page={page}
+                              handleRowCheckboxChange={handleRowCheckboxChange}
+                              selectedRows={selectedRows}
+                              handleTableRowClick={handleTableRowClick}
+                              auditstatusBodyTemplate={auditstatusBodyTemplate(
+                                item
+                              )}
+                              processstatusBodyTemplate={processstatusBodyTemplate(
+                                item
+                              )}
+                              rafSum={item.rafSum}
+                              patientName={item.patientName}
+                              processedDate={item?.processedDate}
+                              patientId={item?.patientId}
+                              validDiseaseCount={item?.validDiseaseCount}
+                              auditedByFirstName={item?.auditedByFirstName}
+                              auditedByLastName={item?.auditedByLastName}
+                              auditedByProfileImage={
+                                item?.auditedByProfileImage
+                              }
+                              patientAllocatedFirstName={
+                                item?.patientAllocatedFirstName
+                              }
+                              patientAllocatedLastName={
+                                item?.patientAllocatedLastName
+                              }
+                              patientAllocatedProfileImage={
+                                item?.patientAllocatedProfileImage
+                              }
+                              loading={isLoading}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className={`col-xl-6 ${styles.cardSeperation}`}>
                       <div className={styles.cardContainer}>
-                        {reportListAll?.response?.data?.map((item, id) => (
-                          <ContentGroupCard
-                            content={reportListAll?.response?.data}
-                            key={item?.id}
-                            item={item}
-                            flag={item?.patientFlagResponseDTOs}
-                            page={page}
-                            handleRowCheckboxChange={handleRowCheckboxChange}
-                            selectedRows={selectedRows}
-                            handleTableRowClick={handleTableRowClick}
-                            auditstatusBodyTemplate={auditstatusBodyTemplate(
-                              item
-                            )}
-                            processstatusBodyTemplate={processstatusBodyTemplate(
-                              item
-                            )}
-                            rafSum={item.rafSum}
-                            patientName={item.patientName}
-                            processedDate={item?.processedDate}
-                            patientId={item?.patientId}
-                            validDiseaseCount={item?.validDiseaseCount}
-                            auditedByFirstName={item?.auditedByFirstName}
-                            auditedByLastName={item?.auditedByLastName}
-                            auditedByProfileImage={item?.auditedByProfileImage}
-                            patientAllocatedFirstName={
-                              item?.patientAllocatedFirstName
-                            }
-                            patientAllocatedLastName={
-                              item?.patientAllocatedLastName
-                            }
-                            patientAllocatedProfileImage={
-                              item?.patientAllocatedProfileImage
-                            }
-                            loading={isLoading}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                        <div className={styles.card1}>
+                          <div className={styles.summaryText}>Summary</div>
+                          <div className="col-xl-12 d-flex mt-0">
+                            {subCardData.map((card, index) => (
+                              <SubCard
+                                key={card?.id}
+                                title={card.title}
+                                value={card.value}
+                              />
+                            ))}
+                          </div>
+                          <div className={` pt-2 ${styles.summaryText}`}>
+                            Production Status
+                          </div>
+                          <div className="row g-3">
+                            {card1Data?.map((data) => (
+                              <MiniCards
+                                key={data?.id}
+                                backgroundColor={data.bg}
+                                icon={data?.icon}
+                                title={data.title}
+                                charts={data.charts}
+                                styles={styles}
+                                activeTab={activeTab}
+                              />
+                            ))}
+                          </div>
+                          <div className={` pt-2 ${styles.summaryText}`}>
+                            Audit Status
+                          </div>
 
-                  <div className={`col-xl-6 ${styles.cardSeperation}`}>
-                    <div className={styles.cardContainer}>
-                      <div className={styles.card1}>
-                        <div className={styles.summaryText}>Summary</div>
-                        <div className="col-xl-12 d-flex mt-0">
-                          {subCardData.map((card, index) => (
-                            <SubCard
-                              key={card?.id}
-                              title={card.title}
-                              value={card.value}
-                            />
-                          ))}
-                        </div>
-                        <div className={` pt-2 ${styles.summaryText}`}>
-                          Production Status
-                        </div>
-                        <div className="row g-3">
-                          {card1Data?.map((data) => (
-                            <MiniCards
-                              key={data?.id}
-                              backgroundColor={data.bg}
-                              icon={data?.icon}
-                              title={data.title}
-                              charts={data.charts}
+                          <div className="row g-3">
+                            {accuracyStatus?.map((data) => (
+                              <MiniCards
+                                key={data?.id}
+                                backgroundColor={data.bg}
+                                icon={data?.icon}
+                                title={data.title}
+                                charts={data.charts}
+                                styles={styles}
+                                activeTab={activeTab}
+                              />
+                            ))}
+                          </div>
+                          <div className="col-xl-12  d-flex mt-3">
+                            <Flags
+                              reportListAll={reportListAll}
                               styles={styles}
-                              activeTab={activeTab}
                             />
-                          ))}
-                        </div>
-                        <div className={` pt-2 ${styles.summaryText}`}>
-                          Audit Status
-                        </div>
-
-                        <div className="row g-3">
-                          {accuracyStatus?.map((data) => (
-                            <MiniCards
-                              key={data?.id}
-                              backgroundColor={data.bg}
-                              icon={data?.icon}
-                              title={data.title}
-                              charts={data.charts}
-                              styles={styles}
-                              activeTab={activeTab}
-                            />
-                          ))}
-                        </div>
-                        <div className="col-xl-12  d-flex mt-3">
-                          <Flags
-                            reportListAll={reportListAll}
-                            styles={styles}
-                          />
-                          {activeTab === "Reviewer"
-                            ? ""
-                            : allocationCountData.map((item, index) => (
-                                <AllocationCount
-                                  key={item?.id}
-                                  title={item?.title}
-                                  allocationCount={item?.allocationCount}
-                                  renderUserPrfoileAvatar={
-                                    renderUserPrfoileAvatar
-                                  }
-                                  styles={styles}
-                                />
-                              ))}
+                            {activeTab === "Reviewer"
+                              ? ""
+                              : allocationCountData.map((item, index) => (
+                                  <AllocationCount
+                                    key={item?.id}
+                                    title={item?.title}
+                                    allocationCount={item?.allocationCount}
+                                    renderUserPrfoileAvatar={
+                                      renderUserPrfoileAvatar
+                                    }
+                                    styles={styles}
+                                  />
+                                ))}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -466,8 +462,7 @@ const InitialCard = ({
                 </div>
               </div>
             </div>
-          </div>
-           )} 
+          )}
         </div>
       </div>
       {reportListAll?.response?.data?.length > 0 ? (

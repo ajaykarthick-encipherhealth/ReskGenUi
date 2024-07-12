@@ -45,7 +45,7 @@ const ReportReducer = combineReducers({
   reviewer: createReducer(reviewerReport),
   reviewerLoader: getReportLoading(reviewerReport),
   sent: createReducer(sentReport),
-  senntLoader: getReportLoading(sentReport),
+  sentLoader: getReportLoading(sentReport),
   received: createReducer(receivedReport),
   receivedLoader: getReportLoading(receivedReport)
 
