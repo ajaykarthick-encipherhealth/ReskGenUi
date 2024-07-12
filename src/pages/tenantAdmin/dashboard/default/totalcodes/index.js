@@ -31,7 +31,6 @@ const index = ({
   selectedValue,
   revenueChartLoader,
   rafScorechartLoader,
-  combinedData,
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
@@ -79,6 +78,8 @@ const index = ({
     getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization);
   }, [dateRange, selectedOrganization]);
 
+  let combinedHccData = suggestedHccDiseaseCountMap.map((value, index) => value + hccDiseaseCountValues[index]);
+
   const options = {
     xAxis: {
       type: "category",
@@ -98,7 +99,7 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data: combinedData ? combinedData : [],
+        data: combinedHccData ? combinedHccData : [],
         color: "#E88D67",
         type: "line",
         lineStyle: { color: "#E88D67" },

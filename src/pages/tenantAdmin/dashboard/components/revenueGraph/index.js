@@ -52,7 +52,7 @@ const RevenueGraph = ({
     },
     series: [
       {
-        name: isHcc ? "Hcc Codes" : isCargaps ? "Car Gap Codes" : "Total Codes",
+        name: isHcc ? "Hcc Codes" : isCargaps ? "Care Gap Codes" : "Total Codes",
         type: "line",
         step: "start",
         data: isHcc
