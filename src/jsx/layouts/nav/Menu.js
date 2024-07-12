@@ -1,4 +1,13 @@
 import { SVGICON } from "../../constant/theme";
+import {
+  DashboardFilled,
+  DashboardOutlined,
+  FileFilled,
+  FileOutlined,
+} from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBarsStaggered, faUser } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/router";
 
 export const MenuList = [
   {
@@ -133,44 +142,74 @@ export const PhysicanMenu = [
     title: "Dashboard",
     iconStyle: SVGICON.dashboardIcon,
     to: "/physicians/dashboard",
-  }
-];
-export const L2AuditorMenuList = [
-  {
-    title: "Dashboard",
-    iconStyle: SVGICON.dashboardIcon,
-    to: "/supervisor/dashboard",
-  },
-  {
-    title: "User Queue",
-    iconStyle: SVGICON.adminUser,
-    to: "/supervisor/user",
-    childRoute: "/supervisor/user/userQueue",
-    childRoute2: "/supervisor/user/details",
-  },
-  {
-    title: "Audited Queue",
-    iconStyle: SVGICON.patientListIcon,
-    to: "/supervisor/auditing",
-    childRoute: "/supervisor/patients/details",
-  },
-  // {
-  //   title: "FeedBack",
-  //   iconStyle: SVGICON.ReportIcon,
-  //   to: "/supervisor/feedback",
-  // },
-  // {
-  //   title: "Org",
-  //   iconStyle: SVGICON.ReportIcon,
-  //   to: "/supervisor/org",
-  // },
-  {
-    title: "Report",
-    iconStyle: SVGICON.ReportIcon,
-    to: "/supervisor/report",
-    childRoute: "/supervisor/report/individualreport",
   },
 ];
+export const L2AuditorMenuList = () => {
+  const router = useRouter();
+  return [
+    {
+      title: "Dashboard",
+      iconStyle:
+        router?.pathname == "/supervisor/dashboard" ? (
+          <DashboardFilled style={{ color: "#04306f" }} />
+        ) : (
+          <DashboardOutlined />
+        ),
+      to: "/supervisor/dashboard",
+    },
+
+    {
+      title: "User Queue",
+      iconStyle:
+        router?.pathname == "/supervisor/user" ? (
+          <FontAwesomeIcon icon={faUser} style={{ color: "#04306f" }} />
+        ) : (
+          <FontAwesomeIcon icon={faUser} />
+        ),
+      to: "/supervisor/user",
+      childRoute: "/supervisor/user/userQueue",
+      childRoute2: "/supervisor/user/details",
+    },
+    {
+      title: "Audited Queue",
+      iconStyle:
+        router?.pathname == "/supervisor/auditing" ? (
+          <FontAwesomeIcon
+            icon={faBarsStaggered}
+            style={{ color: "#04306f" }}
+          />
+        ) : (
+          <FontAwesomeIcon icon={faBarsStaggered} />
+        ),
+
+      to: "/supervisor/auditing",
+      childRoute: "/supervisor/patients/details",
+    },
+    {
+      title: "Report",
+      iconStyle:
+        router?.pathname == "/supervisor/report" ? (
+          <FileFilled style={{ color: "#04306f" }} />
+        ) : (
+          <FileOutlined />
+        ),
+      to: "/supervisor/report",
+      childRoute: "/supervisor/report/individualreport",
+    },
+  ];
+};
+
+// {
+//   title: "FeedBack",
+//   iconStyle: SVGICON.ReportIcon,
+//   to: "/supervisor/feedback",
+// },
+// {
+//   title: "Org",
+//   iconStyle: SVGICON.ReportIcon,
+//   to: "/supervisor/org",
+// },
+
 export const ProviderMenuList = [
   {
     title: "Dashboard",
@@ -200,7 +239,7 @@ export const ProviderMenuList = [
     iconStyle: SVGICON.adminUser,
     to: "/tenantAdmin/fhirTable",
     // childRoute: "/fhirTable/details",
-    childRoute:'/tenantAdmin/fhirTable/pdfTable'
+    childRoute: "/tenantAdmin/fhirTable/pdfTable",
   },
   {
     title: "File Processing",
