@@ -23,7 +23,7 @@ export const getEncounterDateBackground = ({
   patientDocumentResult,
   selectMeatResult,
   datas,
-  popup
+  popup,
 }) => {
   return value?.map((res, index) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -69,7 +69,9 @@ export const getEncounterDateBackground = ({
     } else if (value.length - 1 == index) {
       var sectionMapArr = (
         <Popover
-        overlayStyle={{ zIndex: !popup && 999 }}
+          trigger={["hover"]}
+          placement="bottom"
+          overlayStyle={{ zIndex: 1000 }}
           content={
             <>
               {value?.map((item, i) =>
@@ -110,8 +112,6 @@ export const getEncounterDateBackground = ({
               )}
             </>
           }
-          trigger={["hover"]}
-          placement="bottom"
         >
           <span
             style={{
