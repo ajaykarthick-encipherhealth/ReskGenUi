@@ -8,7 +8,7 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import LoadingSpinner from "../../../../../components/loadingSpinner";
 import MyWorkQueueFilter from "../MyWorkQueueFilter";
 
-const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
+const ReviwerWorkList = ({ localUserId, setWorkListPatientId,setIsModalComments }) => {
   const [patientList, setPatientList] = useState([]);
   const [processedStatus, setProcessedStatus] = useState("ALL");
   const [searchtext, setSearchtext] = useState("");
@@ -22,6 +22,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
   const [filterDataLoading, setFilterDataLoading] = useState(true);
   const [selectCompletedPicker, setSelectCompletedPicker] = useState("");
   const [selectComputedPicker, setSelectComputedPicker] = useState("");
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   const getWorkList = async () => {
     var result = await patientListFilter(
@@ -45,9 +46,12 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
   const onPageChange = async (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
+    setFilterModalOpen(false)
   };
   const getPatientListToDetails = (id) => {
     setWorkListPatientId(id);
+    setFilterModalOpen(false)
+    setIsModalComments(false)
   };
   const statuses = [
     { label: "ALL", value: "ALL" },
@@ -139,6 +143,8 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
               setSelectComputedPicker={setSelectComputedPicker}
               datePicker1Lable="Due Date"
               datePicker2Lable="Completed Date"
+              filterModalOpen={filterModalOpen}
+              setFilterModalOpen={setFilterModalOpen}
             />
           </div>
         </div>
