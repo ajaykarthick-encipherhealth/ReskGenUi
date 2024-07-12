@@ -12,7 +12,11 @@ import {
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import { Skeleton } from "antd";
-import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
+import {
+  getLast30Days,
+  getLast7Days,
+  formatNumber,
+} from "../../../../../utils/reusable.js";
 
 const index = ({
   getAllHccCodesData,
@@ -162,7 +166,9 @@ const index = ({
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
   const totalScoreTwo = hccDiseaseCountMap + suggestedCount;
 
+  formatNumber();
 
+  const OverAllRevenue = totalScore;
 
   return (
     <div className="d-flex justify-content-between">
@@ -270,7 +276,9 @@ const index = ({
             <div className={`${styles.header} p-1`}>Revenue</div>
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
-              <div className={styles.price}>{`$ ${totalScore}`}</div>
+              <div className={styles.price}>{`$ ${
+                formatNumber(OverAllRevenue) || 0
+              }`}</div>
             </div>
           </div>
         </div>

@@ -11,6 +11,7 @@ import {
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import { Empty, Spin } from "antd";
 import { Skeleton } from "antd";
+import { formatNumber } from "../../../../../utils/reusable.js";
 
 const index = ({
   getAllHccCodes,
@@ -33,6 +34,10 @@ const index = ({
   const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
     ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
     : [];
+
+  formatNumber();
+  const TotalHccRevenue = getAllRaf?.totalHccRafScore;
+
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
@@ -41,7 +46,9 @@ const index = ({
             <div className={styles.header}>HCC Codes</div>
             <div>
               <div className={styles.header}>Total Codes</div>
-              <div className={styles.price}>{getAllHccCodes?.hccCount || 0}</div>
+              <div className={styles.price}>
+                {getAllHccCodes?.hccCount || 0}
+              </div>
             </div>
           </div>
         </div>
@@ -124,9 +131,9 @@ const index = ({
             <div className={`${styles.header} p-1`}>Revenue</div>
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
-              <div
-                className={styles.price}
-              >{`$ ${getAllRaf?.totalHccRafScore || 0}`}</div>
+              <div className={styles.price}>{`$ ${
+                formatNumber(TotalHccRevenue) || 0
+              }`}</div>
             </div>
           </div>
         </div>
