@@ -32,6 +32,7 @@ const RevenueGraph = ({
 
   const option = {
     tooltip: {
+      show: true,
       trigger: 'axis',
       axisPointer: {
         type: 'cross',

@@ -44,6 +44,7 @@ const CodesGraph = ({
       show: true,
     },
     tooltip: {
+      show: true,
       trigger: "axis",
       axisPointer: {
         type: "cross",
