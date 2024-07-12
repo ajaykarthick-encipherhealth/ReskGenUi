@@ -45,7 +45,7 @@ const index = ({
             <div className={styles.header}>HCC Codes</div>
             <div>
               <div className={styles.header}>Total Codes</div>
-              <div className={styles.price}>{getAllHccCodes?.hccCount}</div>
+              <div className={styles.price}>{getAllHccCodes?.hccCount || 0}</div>
             </div>
           </div>
         </div>
@@ -90,7 +90,7 @@ const index = ({
             <div className="p-1">
               <div className={styles.header}>Overall RAF</div>
               <div className={styles.price}>
-                {getAllRafScoreData?.totalHccRaf}
+                {getAllRafScoreData?.totalHccRaf || 0}
               </div>
             </div>
           </div>
@@ -136,7 +136,7 @@ const index = ({
               <div className={styles.header}>Overall Revenue</div>
               <div
                 className={styles.price}
-              >{`$ ${getAllRaf?.totalHccRafScore}`}</div>
+              >{`$ ${getAllRaf?.totalHccRafScore || 0}`}</div>
             </div>
           </div>
         </div>
