@@ -330,20 +330,20 @@ const File = ({
             </div>
           </div>
           {isFileFormShow ? (
-            <div className="col-xl-5">
+            <div className="col-xl-5" style={{ height: "74.5vh", overflowY: "scroll"}}>
               {/* <AddHccForm
                 handleCloseModal={handleCloseModal}
                 isAddHccForm={isAddHccForm}
                 setIsAddHccForm={setIsAddHccForm}
                 isMeatNew={true}
               /> */}
-              <div style={{ height: "100%", overflowY: "scroll" }}>
+              
                 <ManuallyAdd
                   handleCloseModal={handleCloseModal}
                   setIsFileFormShow={setIsFileFormShow}
                   year={year}
                 />
-              </div>
+             
             </div>
           ) : null}
           {!isFileFormShow ? (

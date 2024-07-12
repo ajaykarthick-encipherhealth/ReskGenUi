@@ -761,7 +761,7 @@ const VisitData = ({
         show={isModalOpenValid}
         className="offcanvas-end"
         placement="end"
-        style={{width: "80vw"}}
+        style={{width: "80vw",height:"100%"}}
       >
        
        <div className="row p-4" style={{overflow: "hidden", height: '100%'}}>
@@ -775,21 +775,21 @@ const VisitData = ({
                     pageNumber={search?.page ? search?.page : 1}
                     headers={search?.headers}
                     height="100vh"
-                    heightFrame='900'
+                    // heightFrame='100vh'
                   />
                 )}
               </>
             ) : null}
           </div>
-          <div className="col-4">
-            <div className="px-4" style={{height: "90vh", overflowY: "scroll" }}>
+          <div className="col-4"  style={{ height: "100vh", overflowY: "scroll"}}>
+            
               <ManuallyAdd
                 handleCloseModal={handleCloseModal}
                 setIsFileFormShow={setIsModalOpenValid}
                 year={year}
                 reset={isModalOpenValid}
               />
-            </div>
+           
           </div>
         </div>
       </Offcanvas>
