@@ -155,12 +155,14 @@ const index = ({
     },
   ];
 
-  const totalHccRafScore = getAllRaf?.totalHccRafScore;
-  const totalSuggestedRafScore = getAllRaf?.totalSuggestedRafScore;
+  const totalHccRafScore = getAllRaf?.totalHccRafScore || 0;
+  const totalSuggestedRafScore = getAllRaf?.totalSuggestedRafScore || 0;
   const totalScore = totalHccRafScore + totalSuggestedRafScore;
-  const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf;
-  const suggestedCount = getAllRafScoreData?.totalSuggestedRaf;
+  const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
+  const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
   const totalScoreTwo = hccDiseaseCountMap + suggestedCount;
+
+
 
   return (
     <div className="d-flex justify-content-between">
