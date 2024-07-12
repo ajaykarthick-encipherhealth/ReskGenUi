@@ -8,9 +8,10 @@ import CompletedStatus from "./completedStatus";
 import { getWorkFlow } from "../../../store/actions/adminAction/DashboardAction";
 import WorkFlow from "./workflow";
 import DailyTask from "./dailytask";
-import Accuracy from "./accuracy";
+// import Accuracy from "./accuracy";
 import BarChart from "./teamChart/Index";
 import Notifications from "./notifications";
+import MachineAccuracy from "./machineAccuracy";
 
 const Index = () => {
   const router = useRouter();
@@ -48,7 +49,7 @@ const Index = () => {
 
               <Row>
                 <Col span={23}>
-                  <Accuracy />
+                  <MachineAccuracy />
                 </Col>
               </Row>
             </Col>
