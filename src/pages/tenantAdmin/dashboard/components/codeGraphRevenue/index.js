@@ -42,11 +42,17 @@ const codeGraphRevenue = ({
       type: "value",
       show: true,
     },
+   
     tooltip: {
       show: true,
-      trigger: "axis",
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        label: {
+          backgroundColor: '#6a7985'
+        }
+      }
     },
-
     series: [
       {
         name: isCargaps
