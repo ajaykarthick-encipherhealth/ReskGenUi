@@ -112,7 +112,7 @@ const RafGraph = ({
         data: rafColor2 && rafScoreByDateForHcc,
       },
       {
-        name: "Car gaps Codes",
+        name: "Care Gaps Codes",
         type: "line",
         itemStyle: {
           color: rafColor3,

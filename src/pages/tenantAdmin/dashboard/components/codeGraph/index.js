@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import {
   HccCodes,
   RafCounts,
-  RafCountScore,
+  getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
 
@@ -109,7 +109,7 @@ const enhancer = connect(
   {
     getAllHccCodesData: HccCodes,
     getAllRafData: RafCounts,
-    getAllRafScore: RafCountScore,
+    getAllRafScoreData: getAllRafScore,
   }
 );
 
