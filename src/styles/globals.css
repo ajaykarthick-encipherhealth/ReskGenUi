@@ -14982,9 +14982,9 @@ text-align: start;
 .revenueCharts3 >div >div>canvas{
   position: absolute;
   left: 0px;
-  top: 13px !important;
+  top: -26px !important;
   width: 592px;
-  height: 294px !important;
+  height: 300px !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   padding: 0px;
@@ -15012,9 +15012,9 @@ text-align: start;
   
   position: absolute;
     left: 0px;
-    top: -5px !important;
+    top: 25px !important;
     width: 592px;
-    height: 380px !important;
+    height: 300px !important;
     user-select: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     padding: 0px;
@@ -15026,9 +15026,9 @@ text-align: start;
   
   position: absolute;
     left: 0px;
-    top: -35px !important;
+    top: 4px !important;
     width: 592px;
-    height: 395px !important;
+    height: 300px !important;
     user-select: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     padding: 0px;
@@ -15036,13 +15036,51 @@ text-align: start;
     border-width: 0px;
 
 }
+
+.carecapRAF >div >div>canvas{
+  position: absolute;
+  left: 0px;
+  top: -34px !important;
+  width: 592px;
+  height: 300px;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
+}
+
+.revenueCharts1 >div >div>canvas{
+  position: absolute;
+  left: 0px;
+  top: -34px !important;
+  width: 592px;
+  height: 300px;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
+}
+.revenueCharts2 >div >div>canvas{
+  position: absolute;
+  left: 0px;
+  top: -34px !important;
+  width: 592px;
+  height: 300px;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
+}
 .codesGraphStyle3   >div >div>canvas {
   
   position: absolute;
     left: 0px;
-    top: -5px !important;
+    top: 18px !important;
     width: 592px;
-    height: 370px !important;
+    height: 300px !important;
     user-select: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     padding: 0px;
@@ -15067,9 +15105,9 @@ text-align: start;
 .workflowChart >div >div>canvas{
   position: absolute;
   left: 0px !important;
-  top: 0px;
+  top: 10px !important;
   width: 100% !important;
-  height: 350px !important;
+  height: 300px !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   padding: 0px;
@@ -15080,9 +15118,9 @@ text-align: start;
 .workflowChart1 >div >div>canvas{
   position: absolute;
   left: 0px !important;
-  top: -23px !important;
-  width: 100% !important;
-  height: 446px !important;
+  top: 53px !important;
+  
+  height: 300px !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   padding: 0px;

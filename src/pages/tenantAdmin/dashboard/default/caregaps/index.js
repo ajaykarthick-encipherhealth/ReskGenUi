@@ -35,7 +35,7 @@ const index = ({
       ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
       : [];
 
-  console.log(getAllRafScoreData?.rafScoreByDateForSuggested, "SELVA");
+ 
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
