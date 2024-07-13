@@ -10,6 +10,7 @@ import {
   computingTileStatus,
   rafScore,
   RafCounts,
+  accuracyScore,
 } from "./action";
 
 const initialState = {
@@ -59,6 +60,7 @@ const tenantAdminDefault = combineReducers({
   allRafScoreData: createReducer(getAllRafScore),
   allTop10Diseases: createReducer(top10Diseases),
   allTopOigCodes: createReducer(topOigCodes),
+  accuracyScores: createReducer(accuracyScore),
   allComputingTileStatus: createReducer(computingTileStatus),
   allRafScore: createReducer(rafScore),
   totalCountsLoader:getReportLoading(FilesCount),

@@ -124,3 +124,17 @@ export async function getRafScore(startDate, endDate, organizationId) {
   );
   return data;
 }
+
+export async function accuracyScores(startDate, endDate, organizationId) {
+  const options = {
+    method: "GET",
+  };
+
+  const data = await requestPortal(
+    `dbservice/tenantadmin/dashboard/gettophcccodes?startDate=${startDate}&endDate=${endDate}&organizationId=${
+      organizationId ? organizationId : ""
+    }`,
+    options
+  );
+  return data;
+}
