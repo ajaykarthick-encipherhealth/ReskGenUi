@@ -168,7 +168,7 @@ const Patient = ({
   };
 
   const onPageChange = (e) => {
-    setIsLoading(true);
+    setIsLoading(false);
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageSize(e.rows);
