@@ -7,7 +7,6 @@ import {
 } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBarsStaggered, faUser } from "@fortawesome/free-solid-svg-icons";
-import { useRouter } from "next/router";
 import styles from "../nav/styles.module.css";
 
 export const MenuList = [
@@ -146,54 +145,33 @@ export const PhysicanMenu = [
   },
 ];
 export const L2AuditorMenuList = () => {
-  const router = useRouter();
   return [
     {
       title: "Dashboard",
-      iconStyle:
-        router?.pathname == "/supervisor/dashboard" ? (
-          <DashboardFilled />
-        ) : (
-          <DashboardOutlined />
-        ),
+      iconStyle:  <DashboardOutlined />,
+      activeIcon: <DashboardFilled />,
       to: "/supervisor/dashboard",
     },
 
     {
       title: "User Queue",
-      iconStyle:
-        router?.pathname == "/supervisor/user" ? (
-          <FontAwesomeIcon icon={faUser} className={`${styles.filledColor}`} />
-        ) : (
-          <FontAwesomeIcon icon={faUser} />
-        ),
+      iconStyle: <FontAwesomeIcon icon={faUser} />,
+      activeIcon: <FontAwesomeIcon icon={faUser} className={"filledColor"}/>,
       to: "/supervisor/user",
       childRoute: "/supervisor/user/userQueue",
       childRoute2: "/supervisor/user/details",
     },
     {
       title: "Audited Queue",
-      iconStyle:
-        router?.pathname == "/supervisor/auditing" ? (
-          <FontAwesomeIcon
-            icon={faBarsStaggered}
-            className={`${styles.filledColor}`}
-          />
-        ) : (
-          <FontAwesomeIcon icon={faBarsStaggered} />
-        ),
-
+      iconStyle: <FontAwesomeIcon icon={faBarsStaggered} />,
+      activeIcon: <FontAwesomeIcon icon={faBarsStaggered} className={"filledColor"}/>,
       to: "/supervisor/auditing",
       childRoute: "/supervisor/patients/details",
     },
     {
       title: "Report",
-      iconStyle:
-        router?.pathname == "/supervisor/report" ? (
-          <FileFilled />
-        ) : (
-          <FileOutlined />
-        ),
+      iconStyle: <FileOutlined />,
+      activeIcon: <FileFilled />,
       to: "/supervisor/report",
       childRoute: "/supervisor/report/individualreport",
     },
