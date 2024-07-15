@@ -548,6 +548,10 @@ export const getSelectedDaysCount = (DateRanges) => {
 export const disableFutureDate = (current) => {
   return current && current.isAfter(moment());
 };
+export const disableFutureDates = (current) => {
+  const oneYearFromNow = moment().add(1, 'year');
+  return current && (current.isAfter(oneYearFromNow) || current.isAfter(moment()));
+};
 
 export const disablePastDate = (current) => {
   return current && current.isBefore(moment().subtract(1, "day"));
