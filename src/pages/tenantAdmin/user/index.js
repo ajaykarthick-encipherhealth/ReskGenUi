@@ -16,7 +16,6 @@ import {
   getValidatePassword,
 } from "../../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
-import UsersList from "../../../components/table/tenantTable/usersList/usersList";
 import SpinnerDots from "../../../components/spinner";
 
 const { Option } = Select;
@@ -204,6 +203,7 @@ const UserList = ({
       status,
       role,
       orgId: selectOrgList?.value,
+      sort:sort
     });
   }, [
     pageCount,

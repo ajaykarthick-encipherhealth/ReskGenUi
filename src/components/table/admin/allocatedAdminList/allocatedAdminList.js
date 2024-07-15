@@ -146,7 +146,7 @@ function AllocatedAdminList({
                 )}
               </span>
             </th>
-            <th style={{ paddingLeft: "22px" }}>PRIORITY</th>
+            <th style={{ paddingLeft: "0px" }}>PRIORITY</th>
             <th>
               <div
                 style={{
