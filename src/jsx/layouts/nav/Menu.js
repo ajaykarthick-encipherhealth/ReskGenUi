@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHospital } from "@fortawesome/free-regular-svg-icons";
-import { faUser, faHospitalAlt } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faBarsStaggered,faHospitalAlt } from "@fortawesome/free-solid-svg-icons";
 import {
   DashboardOutlined,
   BellOutlined,
@@ -21,14 +21,6 @@ import {
   ContactsFilled,
 } from "@ant-design/icons";
 import { SVGICON } from "../../constant/theme";
-import {
-  DashboardFilled,
-  DashboardOutlined,
-  FileFilled,
-  FileOutlined,
-} from "@ant-design/icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBarsStaggered, faUser } from "@fortawesome/free-solid-svg-icons";
 import styles from "../nav/styles.module.css";
 
 export const MenuList = [
