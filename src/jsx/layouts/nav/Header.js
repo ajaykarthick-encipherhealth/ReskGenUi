@@ -513,7 +513,7 @@ const Header = ({
                             className="menu-icon"
                             style={{ paddingRight: "5px" , color:"#04306f" }}
                           >
-                            {data.iconStyle}
+                           {stateActive === data.to ? data.activeIcon :data.iconStyle}
                           </div>
                           <span className={`nav-text header-nav-text`}>
                             {data.title}

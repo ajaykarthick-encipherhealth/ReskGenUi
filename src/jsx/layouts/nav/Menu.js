@@ -1,4 +1,4 @@
-import { SVGICON } from "../../constant/theme";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHospital } from "@fortawesome/free-regular-svg-icons";
 import {
@@ -21,7 +21,7 @@ import {
   FileTextFilled,
   FileTextOutlined,
 } from "@ant-design/icons";
-import { useRouter } from "next/router";
+import { SVGICON } from "../../constant/theme";
 
 export const MenuList = [
   {
@@ -45,148 +45,104 @@ export const MenuList = [
     to: "/admin/file-view",
   },
 ];
+export const PhysicanMenuList = [
+  {
+    title: "Dashboard",
+    iconStyle:  <DashboardOutlined />,
+    activeIcon:  <DashboardFilled />,
+    to: "/reviewer/dashboard",
+  },
 
-// {
-//   title: "Report",
-//   iconStyle: SVGICON.ReportIcon,
-//   to: "/reviewer/reports",
-//   childRoute: "/reviewer/report/individualreport",
-// },
-// {
-//   title: "FeedBack",
-//   iconStyle: SVGICON.ReportIcon,
-//   to: "/reviewer/feedback",
-// },
+  {
+    title: "My Work Queue",
+    iconStyle: <ProfileOutlined />,
+    activeIcon:   <ProfileFilled />,
+    to: "/reviewer/patients",
+    childRoute: "/reviewer/patients/details",
+  },
+  {
+    title: "Report",
+    iconStyle: <FileOutlined />,
+    activeIcon:   <FileFilled />,
+    to: "/reviewer/report",
+    childRoute: "/reviewer/report/individualreport",
+  },
+  // {
+  //   title: "Report",
+  //   iconStyle: SVGICON.ReportIcon,
+  //   to: "/reviewer/reports",
+  //   childRoute: "/reviewer/report/individualreport",
+  // },
+  // {
+  //   title: "FeedBack",
+  //   iconStyle: SVGICON.ReportIcon,
+  //   to: "/reviewer/feedback",
+  // },
+];
+export const AdminMenuList = [
+  {
+    title: "Dashboard",
+    iconStyle:  <DashboardOutlined />,
+    activeIcon:  <DashboardFilled />,
+    to: "/admin/dashboard",
+  },
+  {
+    title: "Users",
+    iconStyle:  <UserOutlined />,
+    activeIcon:   <FontAwesomeIcon icon={faUser} />,
+    to: "/admin/user",
+  },
 
-export const PhysicanMenuList = () => {
-  const router = useRouter();
-  return [
-    {
-      title: "Dashboard",
-      iconStyle:
-        router?.pathname == "/reviewer/dashboard" ? (
-          <DashboardFilled />
-        ) : (
-          <DashboardOutlined />
-        ),
-      to: "/reviewer/dashboard",
-    },
-    {
-      title: "My Work Queue",
-      iconStyle:
-        router?.pathname == "/reviewer/patients" ? (
-          <ProfileFilled />
-        ) : (
-          <ProfileOutlined />
-        ),
-      to: "/reviewer/patients",
-      childRoute: "/reviewer/patients/details",
-    },
-
-    {
-      title: "Report",
-      iconStyle:
-        router?.pathname == "/reviewer/report" ? (
-          <FileFilled />
-        ) : (
-          <FileOutlined />
-        ),
-      to: "/reviewer/report",
-      childRoute: "/reviewer/report/individualreport",
-    },
-  ];
-};
-
-export const AdminMenuList = () => {
-  const router = useRouter();
-  return [
-    {
-      title: "Dashboard",
-      iconStyle:
-        router?.pathname == "/admin/dashboard" ? (
-          <DashboardFilled />
-        ) : (
-          <DashboardOutlined />
-        ),
-      to: "/admin/dashboard",
-    },
-    {
-      title: "Users",
-      iconStyle:
-        router?.pathname == "/admin/user" ? (
-          <FontAwesomeIcon icon={faUser} />
-        ) : (
-          <UserOutlined />
-        ),
-      to: "/admin/user",
-    },
-
-    {
-      title: "Patients",
-      iconStyle: <FontAwesomeIcon icon={faHospital} />,
-      to: "/admin/patients",
-      childRoute: "/admin/patients/details",
-    },
-    {
-      title: "File Processing",
-      iconStyle:
-        router?.pathname == "/admin/fileprocessing" ? (
-          <FilePptFilled />
-        ) : (
-          <FilePptOutlined />
-        ),
-      to: "/admin/fileprocessing",
-    },
-    {
-      title: "Patient Allocation",
-      iconStyle: <FontAwesomeIcon icon={faUsersLine} />,
-      to: "/admin/allocateduser",
-    },
-    {
-      title: "Tracking",
-      iconStyle:
-        router?.pathname == "/admin/tracking" ? (
-          <FileFilled />
-        ) : (
-          <FileDoneOutlined />
-        ),
-
-      to: "/admin/tracking",
-      childRoute3: "/admin/patients/details",
-    },
-    {
-      title: "Report",
-      iconStyle:
-        router?.pathname == "/admin/report" ? (
-          <FileTextFilled />
-        ) : (
-          <FileTextOutlined />
-        ),
-      to: "/admin/report",
-      childRoute: "/admin/report/individualreport",
-    },
-    {
-      title: "Notification",
-      iconStyle:
-        router?.pathname == "/admin/notification" ? (
-          <BellFilled />
-        ) : (
-          <BellOutlined />
-        ),
-      to: "/admin/notification",
-    },
-    // {
-    //   title: "FeedBack",
-    //   iconStyle: SVGICON.ReportIcon,
-    //   to: "/admin/feedback",
-    // },
-    // {
-    //   title: "Auditing Window",
-    //   iconStyle: SVGICON.Usermanagement,
-    //   to: "/coder/auditing",
-    // },
-  ];
-};
+  {
+    title: "Patients",
+    iconStyle:    <FontAwesomeIcon icon={faHospital} />,
+    activeIcon:  <DashboardFilled />,
+    to: "/admin/patients",
+    childRoute: "/admin/patients/details",
+  },
+  {
+    title: "File Processing",
+    iconStyle:   <FilePptOutlined />,
+    activeIcon:   <FilePptFilled />,
+    to: "/admin/fileprocessing",
+  },
+  {
+    title: "Patient Allocation",
+    iconStyle:<FontAwesomeIcon icon={faUsersLine} />,
+    activeIcon:    <FileFilled />,
+    to: "/admin/allocateduser",
+  },
+  {
+    title: "Tracking",
+    iconStyle: <FileDoneOutlined />,
+    activeIcon:  <DashboardFilled />,
+    to: "/admin/tracking",
+    childRoute3: "/admin/patients/details",
+  },
+  {
+    title: "Report",
+    iconStyle:   <FileTextOutlined />,
+    activeIcon:   <FileTextFilled />,
+    to: "/admin/report",
+    childRoute: "/admin/report/individualreport",
+  },
+  {
+    title: "Notification",
+    iconStyle: <BellOutlined />,
+    activeIcon:   <BellFilled />,
+    to: "/admin/notification",
+  },
+  // {
+  //   title: "FeedBack",
+  //   iconStyle: SVGICON.ReportIcon,
+  //   to: "/admin/feedback",
+  // },
+  // {
+  //   title: "Auditing Window",
+  //   iconStyle: SVGICON.Usermanagement,
+  //   to: "/coder/auditing",
+  // },
+];
 export const L2AuditMenuList = [
   {
     title: "Dashboard",
@@ -211,7 +167,7 @@ export const PhysicanMenu = [
     title: "Dashboard",
     iconStyle: SVGICON.dashboardIcon,
     to: "/physicians/dashboard",
-  },
+  }
 ];
 export const L2AuditorMenuList = [
   {
@@ -278,7 +234,7 @@ export const ProviderMenuList = [
     iconStyle: SVGICON.adminUser,
     to: "/tenantAdmin/fhirTable",
     // childRoute: "/fhirTable/details",
-    childRoute: "/tenantAdmin/fhirTable/pdfTable",
+    childRoute:'/tenantAdmin/fhirTable/pdfTable'
   },
   {
     title: "File Processing",
