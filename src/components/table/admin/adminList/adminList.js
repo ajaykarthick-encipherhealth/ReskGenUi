@@ -13,7 +13,7 @@ import {
   sortFunction,
 } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { ArrowUpOutlined  , ArrowDownOutlined } from "@ant-design/icons";
 import SpinnerDots from "../../../spinner";
 import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
 import { getSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
@@ -149,7 +149,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             >
               DATE CREATED{" "}
               {sortOrder === "ASC" ? (
-                <ArrowUpOutlined />
+               <ArrowUpOutlined />
               ) : (
                 <ArrowDownOutlined />
               )}

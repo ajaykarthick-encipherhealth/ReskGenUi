@@ -13,6 +13,9 @@ import { useRouter } from "next/router";
 import { getMaskData } from "../../../../utils/reusable";
 import { handleCopyToClipboard } from "../../../../components/commonFunctions";
 import { LoadingOutlined } from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFlag } from "@fortawesome/free-regular-svg-icons";
+// import {  } from "@fortawesome/free-solid-svg-icons";
 
 const ContentGroupCard = ({
   item,
@@ -151,7 +154,7 @@ const ContentGroupCard = ({
               className="d-flex justify-content-between"
               style={{ width: "100%" }}
             >
-              <div style={{width:"40%"}}>
+              <div style={{ width: "40%" }}>
                 <Tooltip title={patientId} placement="bottom">
                   <div className={`${styles.headText} -mt-2`}>
                     <p
@@ -159,7 +162,7 @@ const ContentGroupCard = ({
                         width: "]",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
-                        marginTop:"-2px"
+                        marginTop: "-2px",
                       }}
                     >
                       {patientId ? patientId : ""}
@@ -172,13 +175,13 @@ const ContentGroupCard = ({
                   </div>
                 </Tooltip>
               </div>
-              <div className={`${styles.headText}`}  style={{width:"30%"}}>
+              <div className={`${styles.headText}`} style={{ width: "30%" }}>
                 HCC
                 <div className={`${styles.initialText} mt-1`}>
                   {validDiseaseCount ? validDiseaseCount : "---"}
                 </div>
               </div>
-              <div className={`${styles.headText}`}  style={{width:"30%"}}>
+              <div className={`${styles.headText}`} style={{ width: "30%" }}>
                 SUPERVISOR
                 <div className={`${styles.initialText} mt-1`}>
                   {auditedByFirstName ||
@@ -212,9 +215,10 @@ const ContentGroupCard = ({
                   {rafSum ? rafSum : "---"}
                 </Tooltip>
               </div>
+              {console.log(flag[0]?.flagDetails?.flagColour, "flagFlag")}
               <div className={styles.avatarAlign}>
                 <Tooltip title={flag[0]?.flagDetails?.flagName}>
-                  <svg
+                  {/* <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="23"
                     height="23"
@@ -230,7 +234,18 @@ const ContentGroupCard = ({
                       stroke="#000"
                       strokeWidth="10"
                     />
-                  </svg>
+                  </svg> */}
+
+                  <FontAwesomeIcon
+                    icon={faFlag}
+                    style={{
+                      color: flag[0]?.flagDetails?.flagColour
+                        ? flag[0]?.flagDetails?.flagColour
+                        : "#C0C0C0",
+                      fontSize:"20px",
+                    marginTop:"5px"
+                    }}
+                  />
                 </Tooltip>
               </div>
               <div className={styles.avatarAlign}>
@@ -240,10 +255,7 @@ const ContentGroupCard = ({
             </div>
             <div className={`${styles.headText}`}>
               REVIEWER
-              <div
-                className={`${styles.initialText} mt-1`}
-               
-              >
+              <div className={`${styles.initialText} mt-1`}>
                 {patientAllocatedFirstName ||
                 patientAllocatedLastName ||
                 patientAllocatedProfileImage ? (
@@ -268,7 +280,6 @@ const ContentGroupCard = ({
           </div>
         </div>
       </div>
-     
     </div>
   );
 };

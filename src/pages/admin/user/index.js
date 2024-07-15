@@ -260,7 +260,7 @@ const UserList = () => {
                       isRangePickerUsers={true}
                       addUser={true}
                       addUserForm={addUserForm}
-                      btnTitle="Add User"
+                      btnTitle="Add User "
                       setClear={setClear}
                       clear={clear}
                       addBtn={true}
