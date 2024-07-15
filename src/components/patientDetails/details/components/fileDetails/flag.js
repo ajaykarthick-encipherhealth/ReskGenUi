@@ -3,6 +3,8 @@ import styles from "./styles.module.css";
 import TableStyle from "../../../../../components/table/table.module.css";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Tooltip } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 const Flag = ({ patienIdDetails, patientDetails, flagFirstData }) => {
 
@@ -109,7 +111,7 @@ const Flag = ({ patienIdDetails, patientDetails, flagFirstData }) => {
           <div className={`${styles.priorityStatus} p-0`}>
             {patienIdDetails?.priority == "URGENT" ? (
               <div className={styles.priorityStatusIcon}>
-                <i>{SVGICON.alert}</i>
+                <i><FontAwesomeIcon icon={faTriangleExclamation} /></i>
                 <span
                   style={{
                     fontSize: "13px",
@@ -124,7 +126,7 @@ const Flag = ({ patienIdDetails, patientDetails, flagFirstData }) => {
               </div>
             ) : patienIdDetails?.priority == "HIGH" ? (
               <div className={styles.priorityStatusIcon}>
-                <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
+                <i className={TableStyle.highFlag}><FontAwesomeIcon icon={faTriangleExclamation} /></i>
                 <span
                   style={{
                     fontSize: "13px",
@@ -139,7 +141,7 @@ const Flag = ({ patienIdDetails, patientDetails, flagFirstData }) => {
               </div>
             ) : patienIdDetails?.priority == "NORMAL" ? (
               <div className={styles.priorityStatusIcon}>
-                <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
+                <i className={TableStyle.normalFlag}><FontAwesomeIcon icon={faTriangleExclamation} /></i>
                 <span
                   style={{
                     fontSize: "13px",
@@ -154,7 +156,7 @@ const Flag = ({ patienIdDetails, patientDetails, flagFirstData }) => {
               </div>
             ) : (
               <div className={styles.priorityStatusIcon}>
-                <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>
+                <i className={TableStyle.lowFlag}><FontAwesomeIcon icon={faTriangleExclamation} /></i>
                 <span
                   style={{
                     fontSize: "13px",

@@ -4,11 +4,14 @@
   margin-top: 20px;
 }
 .iconBorder{
+  color :#04306f;
   display: inline-block;
-  padding: 9px;
+  padding: 10px;
   border: 2px solid rgb(255, 255, 255);
   border-radius: 50%;
-  margin-top: 10px;
+  margin-top: 3px;
   background-color: rgb(255, 255, 255);
   box-shadow: 0 0px 7px 0 rgba(0, 0, 0, 0.2);
+  width: 100%;
+  font-size: 19px;
 }

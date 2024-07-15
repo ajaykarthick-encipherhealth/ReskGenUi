@@ -2,8 +2,9 @@ import { Avatar } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import CryptoJS from "crypto-js";
-import { SVGICON } from "../../jsx/constant/theme";
 import TableStyle from "../table/table.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 // for search
 export const searchFunction = (
@@ -204,7 +205,9 @@ export const priorityOptions = [
     value: "URGENT",
     label: (
       <>
-        <i>{SVGICON.alert}</i>{" "}
+        <i>
+          <FontAwesomeIcon icon={faTriangleExclamation} />
+        </i>{" "}
         <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
       </>
     ),
@@ -213,7 +216,9 @@ export const priorityOptions = [
     value: "HIGH",
     label: (
       <>
-        <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
+        <i className={TableStyle.highFlag}>
+          <FontAwesomeIcon icon={faTriangleExclamation} />
+        </i>
         <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
       </>
     ),
@@ -222,7 +227,9 @@ export const priorityOptions = [
     value: "NORMAL",
     label: (
       <>
-        <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
+        <i className={TableStyle.normalFlag}>
+          <FontAwesomeIcon icon={faTriangleExclamation} />
+        </i>
         <span style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>{" "}
       </>
     ),
@@ -231,7 +238,9 @@ export const priorityOptions = [
     value: "LOW",
     label: (
       <>
-        <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+        <i className={TableStyle.lowFlag}>
+          <FontAwesomeIcon icon={faTriangleExclamation} />
+        </i>{" "}
         <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
       </>
     ),
@@ -243,30 +252,36 @@ export const priorityStatus = (value) => {
     case "URGENT":
       return (
         <>
-          <i>{SVGICON.alert}</i>{" "}
+          <i>
+            <FontAwesomeIcon icon={faTriangleExclamation} />
+          </i>{" "}
           <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
         </>
       );
     case "HIGH":
       return (
         <>
-          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
+          <i className={TableStyle.highFlag}>
+            <FontAwesomeIcon icon={faTriangleExclamation} />
+          </i>
           <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
         </>
       );
     case "NORMAL":
       return (
         <>
-          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px", color: "#4466ff " }}>
-            Normal
-          </span>{" "}
+          <i className={TableStyle.normalFlag}>
+            <FontAwesomeIcon icon={faTriangleExclamation} />
+          </i>
+          <span style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>{" "}
         </>
       );
     case "LOW":
       return (
         <>
-          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+          <i className={TableStyle.lowFlag}>
+            <FontAwesomeIcon icon={faTriangleExclamation} />
+          </i>{" "}
           <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
         </>
       );
@@ -683,6 +698,6 @@ export const getDateAndTime = (date) => {
   return moment(date).format("MM/DD/YYYY h:mm A");
 };
 
-export const resetPageNumber=(setPageNo)=>{
-setPageNo(0)
-}
+export const resetPageNumber = (setPageNo) => {
+  setPageNo(0);
+};
