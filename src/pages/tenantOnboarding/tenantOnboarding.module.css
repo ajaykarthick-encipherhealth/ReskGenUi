@@ -1,0 +1,132 @@
+.customSteps
+  > :where(.css-dev-only-do-not-override-3rel02).ant-steps
+  .ant-steps-item-container {
+  margin-bottom: 100px !important;
+}
+.sider {
+  padding: 16px !important;
+  color: #fff !important;
+  background: #06439d !important;
+  margin: 20px !important;
+  border-radius: 10px !important;
+}
+
+.customSteps .ant-steps-item {
+  margin-bottom: 20px !important; 
+}
+
+
+.customSteps .ant-steps {
+  margin-bottom: 20px !important; 
+}
+.customForm {
+  max-width: 100%;
+}
+
+.customFormItem {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.customFormItem .ant-form-item-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #fff; 
+  padding: 0 8px; 
+  border-bottom: 1px solid #d9d9d9; 
+  box-sizing: border-box;
+}
+
+.customFormItem .ant-input {
+  margin-top: 24px; 
+  height: 40px;
+}
+.customLabel {
+  z-index: 999;
+  margin: 20px;
+  position: absolute;
+  top: -30px;
+  background: linear-gradient(to bottom, #f2f6fa 50%, #ffff 50%);
+  padding: 0px 10px;
+  color: #06439D;
+}
+.customDescription{
+  color: white;
+}
+/* YourStyles.module.css */
+.customSteps .ant-steps-item-finish .ant-steps-item-icon {
+  background-color: #52c41a; /* Customize finished step icon color */
+  border-color: #52c41a;
+}
+.customSteps .ant-steps .ant-steps-item .ant-steps-item-container .ant-steps-item-tail{
+  padding: 2px;
+}
+.customSteps .ant-steps-item-process .ant-steps-item-icon {
+  background-color: #1890ff; /* Customize current step icon color */
+  border-color: #1890ff;
+}
+
+.customSteps .ant-steps-item-wait .ant-steps-item-icon {
+  background-color: #d9d9d9; /* Customize pending step icon color */
+  border-color: #d9d9d9;
+}
+
+/* Customize the text color for different steps */
+.customSteps .ant-steps-item-finish .ant-steps-item-title,
+.customSteps .ant-steps-item-finish .ant-steps-item-description {
+  color: #52c41a; /* Customize finished step text color */
+}
+
+.customSteps .ant-steps-item-process .ant-steps-item-title,
+.customSteps .ant-steps-item-process .ant-steps-item-description {
+  color: #1890ff; /* Customize current step text color */
+}
+
+.customSteps .ant-steps-item-wait .ant-steps-item-title,
+.customSteps .ant-steps-item-wait .ant-steps-item-description {
+  color: #d9d9d9; /* Customize pending step text color */
+}
+/* .customSelect >  div {
+padding: 24px  !important;
+background-color: #06439D !important;
+color: #ffff !important;
+}  */
+.customSelect .ant-select-selector {
+  /* top: 78% !important;
+  color: #ffff !important; */
+  border:1px solid red !important;
+}
+.delete_button {
+  height: 37px;
+  width: 39px;
+  border-radius: 3px;
+  background-color: #c8201633;
+}
+.customRow{
+  margin-bottom: 20px;
+}
+.customBox {
+  height: 68px;
+  width: 200px;
+}
+.content{
+  padding: 24;
+  margin: 0;
+  min-height: 280;
+  background: #fff,
+}
+.maincontent{
+  padding: 20px;
+  background-color: #06439D0D;
+  border-radius: 20px;
+  height: 600px;
+  overflow: scroll;
+  margin: 100px 50px  0 50px;
+}
+.customButton{
+  background-color: #06439D;
+   color: #ffff 
+}
