@@ -1,12 +1,6 @@
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHospital } from "@fortawesome/free-regular-svg-icons";
-import {
-  faUsersLine,
-  faUser,
-  faFileInvoice,
-  faHospitalAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faUser, faHospitalAlt } from "@fortawesome/free-solid-svg-icons";
 import {
   DashboardOutlined,
   BellOutlined,
@@ -19,12 +13,14 @@ import {
   FileOutlined,
   FileFilled,
   UserOutlined,
-  FileDoneOutlined,
+  EnvironmentOutlined,
   FileTextFilled,
   FileTextOutlined,
+  EnvironmentFilled,
+  ContactsOutlined,
+  ContactsFilled,
 } from "@ant-design/icons";
 import { SVGICON } from "../../constant/theme";
-
 
 export const MenuList = [
   {
@@ -51,22 +47,22 @@ export const MenuList = [
 export const PhysicanMenuList = [
   {
     title: "Dashboard",
-    iconStyle:  <DashboardOutlined />,
-    activeIcon:  <DashboardFilled />,
+    iconStyle: <DashboardOutlined />,
+    activeIcon: <DashboardFilled />,
     to: "/reviewer/dashboard",
   },
 
   {
     title: "My Work Queue",
     iconStyle: <ProfileOutlined />,
-    activeIcon:   <ProfileFilled />,
+    activeIcon: <ProfileFilled />,
     to: "/reviewer/patients",
     childRoute: "/reviewer/patients/details",
   },
   {
     title: "Report",
     iconStyle: <FileOutlined />,
-    activeIcon:   <FileFilled />,
+    activeIcon: <FileFilled />,
     to: "/reviewer/report",
     childRoute: "/reviewer/report/individualreport",
   },
@@ -85,54 +81,54 @@ export const PhysicanMenuList = [
 export const AdminMenuList = [
   {
     title: "Dashboard",
-    iconStyle:  <DashboardOutlined />,
-    activeIcon:  <DashboardFilled />,
+    iconStyle: <DashboardOutlined />,
+    activeIcon: <DashboardFilled />,
     to: "/admin/dashboard",
   },
   {
     title: "Users",
-    iconStyle:  <UserOutlined />,
-    activeIcon:   <FontAwesomeIcon icon={faUser} />,
+    iconStyle: <UserOutlined />,
+    activeIcon: <FontAwesomeIcon icon={faUser} />,
     to: "/admin/user",
   },
 
   {
     title: "Patients",
-    iconStyle:    <FontAwesomeIcon icon={faHospital}  />,
-    activeIcon:  <FontAwesomeIcon icon={faHospitalAlt}  />,
+    iconStyle: <FontAwesomeIcon icon={faHospital} />,
+    activeIcon: <FontAwesomeIcon icon={faHospitalAlt} />,
     to: "/admin/patients",
     childRoute: "/admin/patients/details",
   },
   {
     title: "File Processing",
-    iconStyle:   <FilePptOutlined />,
-    activeIcon:   <FilePptFilled />,
+    iconStyle: <FilePptOutlined />,
+    activeIcon: <FilePptFilled />,
     to: "/admin/fileprocessing",
   },
   {
     title: "Patient Allocation",
-    iconStyle:<FontAwesomeIcon icon={faUsersLine} />,
-    activeIcon:  <FontAwesomeIcon icon={faUsersLine}/>,
+    iconStyle: <ContactsOutlined />,
+    activeIcon: <ContactsFilled />,
     to: "/admin/allocateduser",
   },
   {
     title: "Tracking",
-    iconStyle: <FileDoneOutlined />,
-    activeIcon:  <FileFilled />,
+    iconStyle: <EnvironmentOutlined />,
+    activeIcon: <EnvironmentFilled />,
     to: "/admin/tracking",
     childRoute3: "/admin/patients/details",
   },
   {
     title: "Report",
-    iconStyle:   <FileTextOutlined />,
-    activeIcon:   <FileTextFilled />,
+    iconStyle: <FileTextOutlined />,
+    activeIcon: <FileTextFilled />,
     to: "/admin/report",
     childRoute: "/admin/report/individualreport",
   },
   {
     title: "Notification",
     iconStyle: <BellOutlined />,
-    activeIcon:   <BellFilled />,
+    activeIcon: <BellFilled />,
     to: "/admin/notification",
   },
   // {
@@ -170,7 +166,7 @@ export const PhysicanMenu = [
     title: "Dashboard",
     iconStyle: SVGICON.dashboardIcon,
     to: "/physicians/dashboard",
-  }
+  },
 ];
 export const L2AuditorMenuList = [
   {
@@ -237,7 +233,7 @@ export const ProviderMenuList = [
     iconStyle: SVGICON.adminUser,
     to: "/tenantAdmin/fhirTable",
     // childRoute: "/fhirTable/details",
-    childRoute:'/tenantAdmin/fhirTable/pdfTable'
+    childRoute: "/tenantAdmin/fhirTable/pdfTable",
   },
   {
     title: "File Processing",
