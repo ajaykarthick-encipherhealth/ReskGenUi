@@ -5,6 +5,7 @@ import {
   faUsersLine,
   faUser,
   faFileInvoice,
+  faHospitalAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   DashboardOutlined,
@@ -23,6 +24,7 @@ import {
   FileTextOutlined,
 } from "@ant-design/icons";
 import { SVGICON } from "../../constant/theme";
+
 
 export const MenuList = [
   {
@@ -96,8 +98,8 @@ export const AdminMenuList = [
 
   {
     title: "Patients",
-    iconStyle:    <FontAwesomeIcon icon={faHospital} />,
-    activeIcon:  <DashboardFilled />,
+    iconStyle:    <FontAwesomeIcon icon={faHospital}  />,
+    activeIcon:  <FontAwesomeIcon icon={faHospitalAlt}  />,
     to: "/admin/patients",
     childRoute: "/admin/patients/details",
   },
@@ -110,13 +112,13 @@ export const AdminMenuList = [
   {
     title: "Patient Allocation",
     iconStyle:<FontAwesomeIcon icon={faUsersLine} />,
-    activeIcon:    <FileFilled />,
+    activeIcon:  <FontAwesomeIcon icon={faUsersLine}/>,
     to: "/admin/allocateduser",
   },
   {
     title: "Tracking",
     iconStyle: <FileDoneOutlined />,
-    activeIcon: <FontAwesomeIcon icon={faFileInvoice} />,
+    activeIcon:  <FileFilled />,
     to: "/admin/tracking",
     childRoute3: "/admin/patients/details",
   },
