@@ -342,7 +342,7 @@ const InitialCard = ({
                 <div>
                   <div className=" col-xl-12 d-flex">
                     {reportListAll?.response?.data?.length === 0 ? (
-                      <div className={`col-xl-12 ${styles.emptyCard}`}>
+                      <div className={`col-xl-6 ${styles.emptyCard}`}>
                         <Empty />
                       </div>
                     ) : (
