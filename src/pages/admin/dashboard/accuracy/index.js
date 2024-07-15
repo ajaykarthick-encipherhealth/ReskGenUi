@@ -20,6 +20,8 @@ import {
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
+import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+ import { faCheckDouble} from "@fortawesome/free-solid-svg-icons";
 
 export const TabButtons = [
   {
@@ -696,7 +698,9 @@ const Accuracy = () => {
             </div>
             <div className={styles.accuracy}>
               <div className={styles.header}>
-                <Image src={accuracy} className={styles.Img} />
+                 <div className="mt-1"> <FontAwesomeIcon icon={faCheckDouble} /></div>
+              
+                {/* <Image src={accuracy} className={styles.Img} /> */}
                 <div className={styles.heading}>
                   {currentTabBtn === "CogentAI Accuracy"
                     ? "Accuracy"
