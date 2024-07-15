@@ -37,7 +37,7 @@ const Personal = ({ Styles, credentials, handleInputChange }) => {
                 <label className={Styles.customLabel}>First Name</label>
                 <Input
                   placeholder="Enter Field 1"
-                  suffix={<FontAwesomeIcon icon={faUser} />}
+                  // suffix={<FontAwesomeIcon icon={faUser} />}
                   name="firstName"
                   value={credentials.firstName}
                   onChange={handleInputChange}
@@ -156,7 +156,7 @@ const Personal = ({ Styles, credentials, handleInputChange }) => {
           </Row> */}
           <Row gutter={16} justify="space-between" className={Styles.customRow}>
             <Col span={10}>
-              <Form.Item style={{ marginBottom: "20px" }} className="">
+              <Form.Item style={{ marginBottom: "20px" }} className="selectantdrole">
                 <label className={Styles.customLabel}>Role</label>
                 <Select
                   placeholder="Select a role"

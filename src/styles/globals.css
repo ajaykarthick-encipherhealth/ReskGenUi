@@ -15258,3 +15258,8 @@ input::-webkit-inner-spin-button {
 .layout .ant-layout {
   background-color: #ffff;
 }
+
+.selectantdrole .ant-select.ant-select-in-form-item {
+  width: 100%;
+  height: 45px;
+}
