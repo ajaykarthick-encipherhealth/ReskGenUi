@@ -4,6 +4,7 @@ import { faHospital } from "@fortawesome/free-regular-svg-icons";
 import {
   faUsersLine,
   faUser,
+  faFileInvoice,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   DashboardOutlined,
@@ -115,7 +116,7 @@ export const AdminMenuList = [
   {
     title: "Tracking",
     iconStyle: <FileDoneOutlined />,
-    activeIcon:  <DashboardFilled />,
+    activeIcon: <FontAwesomeIcon icon={faFileInvoice} />,
     to: "/admin/tracking",
     childRoute3: "/admin/patients/details",
   },
