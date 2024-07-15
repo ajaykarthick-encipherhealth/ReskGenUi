@@ -15117,6 +15117,7 @@ input::-webkit-inner-spin-button {
   border-radius: 10px !important;
   padding: 3px !important;
   margin-top: 15px !important;
+  background-color:#6C99DC;
 }
 .customsteps .ant-steps.ant-steps-vertical .ant-steps-item.ant-steps-item-process.ant-steps-item-active .ant-steps-item-container {
   margin-bottom: 100px !important;
