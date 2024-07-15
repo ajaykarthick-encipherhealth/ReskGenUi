@@ -87,7 +87,6 @@ const TenantOnboarding = ({ createOnBoarding }) => {
     if (current < customDescriptions.length - 1) {
       setCurrent((prevCurrent) => prevCurrent + 1);
     }
-    console.log(credentials, "test");
     {
       current === 2 ? handleSubmit() : "test";
     }
@@ -128,7 +127,7 @@ const TenantOnboarding = ({ createOnBoarding }) => {
         address: credentials.address,
       },
     };
-    console.log(payload, "payload");
+
     try {
       const response = await createOnBoarding(payload);
       console.log("User added successfully:", response);
