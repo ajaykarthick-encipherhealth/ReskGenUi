@@ -7,8 +7,9 @@ import styles from "./styles.module.css";
 import spinSTYles from "../../../../styles/auth.module.css";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
-import { SVGICON } from "../../../../jsx/constant/theme";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 
 const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
   const notificationResult = webSocketNotificationData
@@ -28,7 +29,10 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
         <div className={styles.msgDiv} key={info?.id}>
           <div style={{ marginTop: "10px" }}>
             {" "}
-            {SVGICON.dashboardNotification}
+            <FontAwesomeIcon
+              icon={faBell}
+              className={`${styles.notifyIconColor}`}
+            />
           </div>
           <div className={styles.msgCOntainer}>
             <span className={styles.description}>{info.content}</span>
@@ -50,9 +54,8 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       <div className={styles.no_notificarion_container}>
         {!notificationResponse?.loading &&
           (!notificationResponse?.data?.response?.notificationList?.content ||
-            notificationResponse?.data?.response?.notificationList?.content?.length === 0) && (
-            <Image src={NoNotification} alt="" />
-          )}
+            notificationResponse?.data?.response?.notificationList?.content
+              ?.length === 0) && <Image src={NoNotification} alt="" />}
       </div>
     );
 
@@ -66,7 +69,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
 
       <div className={styles.card4}>
         <Card borderRadius="28px" padding="20px">
-        {notificationResponse?.loading ? (
+          {notificationResponse?.loading ? (
             <div
               style={{
                 width: "100%",
@@ -94,7 +97,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       >
         {notificationResponse?.loading ? (
           <div className={spinSTYles.spinStyle}>
-              <Skeleton active paragraph={{ rows: 4 }} />
+            <Skeleton active paragraph={{ rows: 4 }} />
           </div>
         ) : (
           <div className={styles.container} style={{ height: "500px" }}>
