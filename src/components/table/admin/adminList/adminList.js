@@ -13,9 +13,6 @@ import {
   sortFunction,
 } from "../../../headerFilters/functions";
 import { ArrowUpOutlined, ArrowDownOutlined,CloseCircleOutlined } from "@ant-design/icons";
-import { enableUser } from "../../../../services/adminServices/usersService";
-import { ArrowUpOutlined  , ArrowDownOutlined } from "@ant-design/icons";
-import SpinnerDots from "../../../spinner";
 import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
 import { getSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
 import { connect } from "react-redux";

@@ -46,7 +46,7 @@ const UserList = ({
   organizationList,
   getAllUsersList,
   usersListData,
-  loading
+  loading,
 }) => {
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.adminUsers.usersData);
@@ -203,7 +203,7 @@ const UserList = ({
       status,
       role,
       orgId: selectOrgList?.value,
-      sort:sort
+      sort: sort,
     });
   }, [
     pageCount,
@@ -242,7 +242,7 @@ const UserList = ({
   const onFinish = (values) => {
     handleSubmit(values);
   };
-  
+
   return (
     <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
       <Header />
@@ -311,408 +311,400 @@ const UserList = ({
                           setSort={setSort}
                         />
 
-                          <div>
-                            <div className="pagination-container">
-                              <Paginator
-                                first={pageCount === 0 ? 0 : paginationFirst}
-                                rows={15}
-                                totalRecords={totalElements}
-                                onPageChange={onPageChange}
-                              />
-                              <div className="total-pages">
-                                Total count: {totalElements}
-                              </div>
+                        <div>
+                          <div className="pagination-container">
+                            <Paginator
+                              first={pageCount === 0 ? 0 : paginationFirst}
+                              rows={15}
+                              totalRecords={totalElements}
+                              onPageChange={onPageChange}
+                            />
+                            <div className="total-pages">
+                              Total count: {totalElements}
                             </div>
                           </div>
-                        </>
-                      )}
-                    </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <Offcanvas
-          onHide={setAddPatientId}
-          show={addPatientId}
-          className="offcanvas-end"
-          placement="end"
-        >
-          <div className="offcanvas-header">
-            <h5 className="modal-title" id="#gridSystemModal">
-              Add Patient Details
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => {
-                setAddPatientId(false);
-              }}
+      <Offcanvas
+        onHide={setAddPatientId}
+        show={addPatientId}
+        className="offcanvas-end"
+        placement="end"
+      >
+        <div className="offcanvas-header">
+          <h5 className="modal-title" id="#gridSystemModal">
+            Add Patient Details
+          </h5>
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => {
+              setAddPatientId(false);
+            }}
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div className="offcanvas-body">
+          <div className={`container-fluid ${styles.formAnimation}`}>
+            <Form
+              noValidate
+              validated={validated}
+              onSubmit={handleSubmitPatientId}
+              autoComplete="off"
             >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div className="offcanvas-body">
-            <div className={`container-fluid ${styles.formAnimation}`}>
-              <Form
-                noValidate
-                validated={validated}
-                onSubmit={handleSubmitPatientId}
-                autoComplete="off"
-              >
-                <div className="row">
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient ID <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientId"
-                      required
-                      type="text"
-                      onChange={handleChangePatientId}
-                    />
-                  </div>
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientName"
-                      required
-                      type="text"
-                      onChange={handleChangePatientId}
-                    />
-                  </div>
+              <div className="row">
+                <div className="col-xl-12 mb-3">
+                  <Form.Label>
+                    Patient ID <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <Form.Control
+                    name="patientId"
+                    required
+                    type="text"
+                    onChange={handleChangePatientId}
+                  />
                 </div>
+                <div className="col-xl-12 mb-3">
+                  <Form.Label>
+                    Patient Name <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <Form.Control
+                    name="patientName"
+                    required
+                    type="text"
+                    onChange={handleChangePatientId}
+                  />
+                </div>
+              </div>
 
-                <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoadingBtn ? "Loading..." : "Submit"}
+              <div>
+                <Button type="submit" className="btn btn-primary btn-sm me-1">
+                  {isLoadingBtn ? "Loading..." : "Submit"}
+                </Button>
+                <Button
+                  onClick={() => setAddPatientId(false)}
+                  className="btn btn-danger btn-sm light ms-1"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </Form>
+          </div>
+        </div>
+      </Offcanvas>
+      <Offcanvas
+        show={addUser}
+        onHide={() => {
+          setAddUser(false);
+          setRoleValue([]);
+          setRole("");
+          form.resetFields();
+        }}
+        className="offcanvas-end offcanvas-md-size"
+        placement="end"
+      >
+        <div className="offcanvas-header">
+          <h5 className="modal-title" id="#gridSystemModal">
+            Add User
+          </h5>
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => {
+              setAddUser(false);
+              form.resetFields();
+            }}
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div className="offcanvas-body">
+          <div className={`container-fluid ${styles.formAnimation}`}>
+            <Form
+              form={form}
+              name="control-hooks"
+              onFinish={onFinish}
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              autoComplete="off"
+            >
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item
+                    label="First Name"
+                    name="firstName"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your first name!",
+                      },
+                    ]}
+                  >
+                    <div>
+                      <Input
+                        placeholder="Enter first name"
+                        autoComplete="off"
+                      />
+                    </div>
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Last Name"
+                    name="lastName"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your last name!",
+                      },
+                    ]}
+                  >
+                    <div>
+                      <Input placeholder="Enter last name" autoComplete="off" />
+                    </div>
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item
+                    label="Email"
+                    name="emailId"
+                    rules={[
+                      { required: true, message: "Please enter your email!" },
+                      {
+                        type: "email",
+                        message: "Please enter a valid email!",
+                      },
+                    ]}
+                  >
+                    <div>
+                      <Input placeholder="Enter email" autoComplete="off" />
+                    </div>
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="User Name"
+                    name="userName"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your username!",
+                      },
+                      {
+                        validator: (_, value) => {
+                          if (value && value.includes("@")) {
+                            return Promise.reject(
+                              "Username should not contain @ symbol"
+                            );
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                    ]}
+                  >
+                    <div>
+                      <Input placeholder="Enter user name" autoComplete="off" />
+                    </div>
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item
+                    name="role"
+                    label="Role"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <Select
+                      placeholder="Select role"
+                      allowClear
+                      style={{ height: "42px" }}
+                    >
+                      <Select.Option value="REVIEWER">REVIEWER</Select.Option>
+                      <Select.Option value="SUPERVISOR">
+                        SUPERVISOR
+                      </Select.Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Select Organization"
+                    name="orgId"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select Organization!",
+                      },
+                    ]}
+                  >
+                    <Select
+                      placeholder="Select"
+                      options={orgAllList}
+                      style={{ height: "42px" }}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <input type="password" style={{ display: "none" }} />
+
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item
+                    label="Password"
+                    name="password"
+                    dependencies={["password"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your password!",
+                      },
+                      {
+                        validator: (_, value) => {
+                          if (
+                            value?.length === 0 ||
+                            !/[a-z]/.test(value) ||
+                            !/[A-Z]/.test(value)
+                          ) {
+                            return Promise.reject(
+                              "Keep it strong! Your password must be case sensitive"
+                            );
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                    ]}
+                  >
+                    <div className="confirmPass">
+                      <input type="password" style={{ display: "none" }} />
+                      <Input.Password
+                        // style={{ height: "42px" }}
+                        placeholder="Enter password"
+                        autoComplete="new-password"
+                      />
+                    </div>
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Confirm Password"
+                    name="confirmPassword"
+                    dependencies={["password"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please confirm your password!",
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (!value || getFieldValue("password") === value) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            "Passwords do not match. Please verify and re-enter."
+                          );
+                        },
+                      }),
+                    ]}
+                  >
+                    <div className="confirmPass">
+                      <input type="password" style={{ display: "none" }} />
+                      <Input.Password
+                        // style={{
+                        //   height: "42px",
+                        // }}
+                        placeholder="Re-enter the password"
+                        autoComplete="new-password"
+                      />
+                    </div>
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Mobile Number"
+                    name="mobileNumber"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your mobile number!",
+                      },
+                      {
+                        len: 10,
+                        message: "Please enter a valid 10-digit mobile number!",
+                      },
+                    ]}
+                  >
+                    <div>
+                      <Input
+                        type="text"
+                        placeholder="Enter mobile number"
+                        autoComplete="off"
+                        value={getDisplayValue(mobileNumber)}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </Form.Item>
+                </Col>
+              </Row>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <input
+                  type="text"
+                  name="fakeusernameremembered"
+                  value=""
+                  style={{ display: "none" }}
+                />
+                <input
+                  type="password"
+                  name="fakepasswordremembered"
+                  value=""
+                  style={{ display: "none" }}
+                />
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Submit
                   </Button>
+                </Form.Item>
+                <Form.Item>
                   <Button
-                    onClick={() => setAddPatientId(false)}
-                    className="btn btn-danger btn-sm light ms-1"
+                    style={{
+                      backgroundColor: "#ffdede",
+                      color: "#ff5e5e",
+                      borderColor: "#ffdede",
+                    }}
+                    onClick={() => {
+                      setAddUser(false);
+                      setRoleValue([]);
+                      setRole("");
+                      form.resetFields();
+                      setMobileNumber("");
+                    }}
                   >
                     Cancel
                   </Button>
-                </div>
-              </Form>
-            </div>
+                </Form.Item>
+              </div>
+            </Form>
           </div>
-        </Offcanvas>
-        <Offcanvas
-          show={addUser}
-          onHide={() => {
-            setAddUser(false);
-            setRoleValue([]);
-            setRole("");
-            form.resetFields();
-          }}
-          className="offcanvas-end offcanvas-md-size"
-          placement="end"
-        >
-          <div className="offcanvas-header">
-            <h5 className="modal-title" id="#gridSystemModal">
-              Add User
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => {
-                setAddUser(false);
-                form.resetFields();
-              }}
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div className="offcanvas-body">
-            <div className={`container-fluid ${styles.formAnimation}`}>
-              <Form
-                form={form}
-                name="control-hooks"
-                onFinish={onFinish}
-                labelCol={{ span: 24 }}
-                wrapperCol={{ span: 24 }}
-                autoComplete="off"
-              >
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <Form.Item
-                      label="First Name"
-                      name="firstName"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your first name!",
-                        },
-                      ]}
-                    >
-                      <div>
-                        <Input
-                          placeholder="Enter first name"
-                          autoComplete="off"
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Last Name"
-                      name="lastName"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your last name!",
-                        },
-                      ]}
-                    >
-                      <div>
-                        <Input
-                          placeholder="Enter last name"
-                          autoComplete="off"
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Email"
-                      name="emailId"
-                      rules={[
-                        { required: true, message: "Please enter your email!" },
-                        {
-                          type: "email",
-                          message: "Please enter a valid email!",
-                        },
-                      ]}
-                    >
-                      <div>
-                        <Input placeholder="Enter email" autoComplete="off" />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="User Name"
-                      name="userName"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your username!",
-                        },
-                        {
-                          validator: (_, value) => {
-                            if (value && value.includes("@")) {
-                              return Promise.reject(
-                                "Username should not contain @ symbol"
-                              );
-                            }
-                            return Promise.resolve();
-                          },
-                        },
-                      ]}
-                    >
-                      <div>
-                        <Input
-                          placeholder="Enter user name"
-                          autoComplete="off"
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <Form.Item
-                      name="role"
-                      label="Role"
-                      rules={[
-                        {
-                          required: true,
-                        },
-                      ]}
-                    >
-                      <Select
-                        placeholder="Select role"
-                        allowClear
-                        style={{ height: "42px" }}
-                      >
-                        <Select.Option value="REVIEWER">REVIEWER</Select.Option>
-                        <Select.Option value="SUPERVISOR">
-                          SUPERVISOR
-                        </Select.Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Select Organization"
-                      name="orgId"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select Organization!",
-                        },
-                      ]}
-                    >
-                      <Select
-                        placeholder="Select"
-                        options={orgAllList}
-                        style={{ height: "42px" }}
-                      />
-                    </Form.Item>
-                  </Col>
-                </Row>
-
-                <input type="password" style={{ display: "none" }} />
-
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Password"
-                      name="password"
-                      dependencies={["password"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your password!",
-                        },
-                        {
-                          validator: (_, value) => {
-                            if (
-                              value?.length === 0 ||
-                              !/[a-z]/.test(value) ||
-                              !/[A-Z]/.test(value)
-                            ) {
-                              return Promise.reject(
-                                "Keep it strong! Your password must be case sensitive"
-                              );
-                            }
-                            return Promise.resolve();
-                          },
-                        },
-                      ]}
-                    >
-                      <div className="confirmPass">
-                        <input type="password" style={{ display: "none" }} />
-                        <Input.Password
-                          // style={{ height: "42px" }}
-                          placeholder="Enter password"
-                          autoComplete="new-password"
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Confirm Password"
-                      name="confirmPassword"
-                      dependencies={["password"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please confirm your password!",
-                        },
-                        ({ getFieldValue }) => ({
-                          validator(_, value) {
-                            if (!value || getFieldValue("password") === value) {
-                              return Promise.resolve();
-                            }
-                            return Promise.reject(
-                              "Passwords do not match. Please verify and re-enter."
-                            );
-                          },
-                        }),
-                      ]}
-                    >
-                      <div className="confirmPass">
-                        <input type="password" style={{ display: "none" }} />
-                        <Input.Password
-                          // style={{
-                          //   height: "42px",
-                          // }}
-                          placeholder="Re-enter the password"
-                          autoComplete="new-password"
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Mobile Number"
-                      name="mobileNumber"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your mobile number!",
-                        },
-                        {
-                          len: 10,
-                          message:
-                            "Please enter a valid 10-digit mobile number!",
-                        },
-                      ]}
-                    >
-                      <div>
-                        <Input
-                          type="text"
-                          placeholder="Enter mobile number"
-                          autoComplete="off"
-                          value={getDisplayValue(mobileNumber)}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <div style={{ display: "flex", gap: "8px" }}>
-                  <input
-                    type="text"
-                    name="fakeusernameremembered"
-                    value=""
-                    style={{ display: "none" }}
-                  />
-                  <input
-                    type="password"
-                    name="fakepasswordremembered"
-                    value=""
-                    style={{ display: "none" }}
-                  />
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Submit
-                    </Button>
-                  </Form.Item>
-                  <Form.Item>
-                    <Button
-                      style={{
-                        backgroundColor: "#ffdede",
-                        color: "#ff5e5e",
-                        borderColor: "#ffdede",
-                      }}
-                      onClick={() => {
-                        setAddUser(false);
-                        setRoleValue([]);
-                        setRole("");
-                        form.resetFields();
-                        setMobileNumber("");
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  </Form.Item>
-                </div>
-              </Form>
-            </div>
-          </div>
-        </Offcanvas>
-      </div>
-    </>
+        </div>
+      </Offcanvas>
+    </div>
   );
 };
 
@@ -720,7 +712,7 @@ const enhancer = connect(
   (state) => ({
     organizationList: state?.admin?.users?.allOrganization?.data,
     usersListData: state?.admin?.users?.allUsers,
-    loading:state?.admin?.users?.allUsersLoading
+    loading: state?.admin?.users?.allUsersLoading,
   }),
   {
     getAllOrganizationList: adminAction.getAllOrganizationAction,
