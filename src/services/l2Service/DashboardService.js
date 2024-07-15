@@ -144,6 +144,54 @@ export const CompletedScoreNew = async (btn, date, month, year, router) => {
   }
 };
 
+// export const accuracyScoreNew = async (
+//   btn,
+//   date,
+//   month,
+//   year,
+//   router,
+//   type,
+//   user
+// ) => {
+//   const token = localStorage.getItem("token");
+//   switch (btn) {
+//     case "WEEKLY":
+//       btn = "WEEK";
+//       break;
+//     case "MONTHLY":
+//       btn = "MONTH";
+//       break;
+//     default:
+//       null;
+//   }
+//   const orgId=localStorage.getItem("orgId")
+//   var data = {
+//     year: year,
+//     month: month,
+//     date: date,
+//     l1AccuracyMemberType: type,
+//     l1AccuracyDateType: btn,
+//     weekStart: 11,
+//     weekEnd: 13,
+//     orgId: orgId,
+//     userIds: user,
+//   };
+//   try {
+//     const response = await axios.post(
+//       `${ENDPOINTS?.apiEndoint}management/l2dashboard/l1accuracybydatetype`,
+//       data,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+//     return response.data;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
+
 export const accuracyScoreNew = async (
   btn,
   date,
@@ -154,32 +202,21 @@ export const accuracyScoreNew = async (
   user
 ) => {
   const token = localStorage.getItem("token");
-  switch (btn) {
-    case "WEEKLY":
-      btn = "WEEK";
-      break;
-    case "MONTHLY":
-      btn = "MONTH";
-      break;
-    default:
-      null;
-  }
-  const orgId=localStorage.getItem("orgId")
-  var data = {
-    year: year,
-    month: month,
-    date: date,
-    l1AccuracyMemberType: type,
-    l1AccuracyDateType: btn,
-    weekStart: 11,
-    weekEnd: 13,
-    orgId: orgId,
-    userIds: user,
-  };
+  const role = localStorage.getItem("role");
+  const url =
+    btn === "DAILY"
+      ? `daily?month=${month}&role=${
+          role ? role.toUpperCase() : ""
+        }&year=${year}&userId=${user}`
+      : btn === "WEEKLY"
+      ? `weekly?month=${month}&role=${
+          role ? role.toUpperCase() : ""
+        }&year=${year}&userId=${user}`
+      : `monthyly?role=${role ? role.toUpperCase() : ""}&year=${year}&userId=${user}`;
   try {
     const response = await axios.post(
-      `${ENDPOINTS?.apiEndoint}management/l2dashboard/l1accuracybydatetype`,
-      data,
+      `${ENDPOINTS?.apiEndoint}dbservice/accuracyscore/${url}`,
+      {},
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -191,7 +228,6 @@ export const accuracyScoreNew = async (
     console.log(err);
   }
 };
-
 export const UserByIndividual = async (router) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
