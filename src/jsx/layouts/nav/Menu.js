@@ -8,6 +8,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBarsStaggered, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
+import styles from "../nav/styles.module.css";
 
 export const MenuList = [
   {
@@ -151,7 +152,7 @@ export const L2AuditorMenuList = () => {
       title: "Dashboard",
       iconStyle:
         router?.pathname == "/supervisor/dashboard" ? (
-          <DashboardFilled style={{ color: "#04306f" }} />
+          <DashboardFilled />
         ) : (
           <DashboardOutlined />
         ),
@@ -162,7 +163,7 @@ export const L2AuditorMenuList = () => {
       title: "User Queue",
       iconStyle:
         router?.pathname == "/supervisor/user" ? (
-          <FontAwesomeIcon icon={faUser} style={{ color: "#04306f" }} />
+          <FontAwesomeIcon icon={faUser} className={`${styles.filledColor}`} />
         ) : (
           <FontAwesomeIcon icon={faUser} />
         ),
@@ -176,7 +177,7 @@ export const L2AuditorMenuList = () => {
         router?.pathname == "/supervisor/auditing" ? (
           <FontAwesomeIcon
             icon={faBarsStaggered}
-            style={{ color: "#04306f" }}
+            className={`${styles.filledColor}`}
           />
         ) : (
           <FontAwesomeIcon icon={faBarsStaggered} />
@@ -189,7 +190,7 @@ export const L2AuditorMenuList = () => {
       title: "Report",
       iconStyle:
         router?.pathname == "/supervisor/report" ? (
-          <FileFilled style={{ color: "#04306f" }} />
+          <FileFilled />
         ) : (
           <FileOutlined />
         ),
