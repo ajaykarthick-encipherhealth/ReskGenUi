@@ -180,7 +180,7 @@ const Patient = ({
   };
 
   const onPageChange = (e) => {
-    setIsLoading(true);
+    setIsLoading(false);
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageSize(e.rows);
@@ -439,7 +439,6 @@ const Patient = ({
     );
   };
   const statusOptions = [
-    { label: "ALL", value: "" },
     { label: "COMPLETED", value: "COMPLETED" },
     { label: "DECLINED", value: "DECLINED" },
   ];
@@ -904,7 +903,7 @@ const Patient = ({
                                                 <tr>
                                                   <th
                                                     style={{
-                                                      textAlign: "center",
+                                                      textAlign: "start",
                                                     }}
                                                   >
                                                     NAME

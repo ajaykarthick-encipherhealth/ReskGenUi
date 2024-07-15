@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import {
   HccCodes,
   RafCounts,
-  RafCountScore,
+  getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
 
@@ -46,6 +46,12 @@ const CodesGraph = ({
     tooltip: {
       show: true,
       trigger: "axis",
+      axisPointer: {
+        type: "cross",
+        label: {
+          backgroundColor: "#6a7985",
+        },
+      },
     },
 
     series: [
@@ -90,9 +96,7 @@ const CodesGraph = ({
   };
   return (
     <div className={`${className}`}>
-   
       <ReactECharts option={options ? options : graphOptions} />
-     
     </div>
   );
 };
@@ -109,7 +113,7 @@ const enhancer = connect(
   {
     getAllHccCodesData: HccCodes,
     getAllRafData: RafCounts,
-    getAllRafScore: RafCountScore,
+    getAllRafScoreData: getAllRafScore,
   }
 );
 

@@ -21,6 +21,15 @@ import {
   ContactsFilled,
 } from "@ant-design/icons";
 import { SVGICON } from "../../constant/theme";
+import {
+  DashboardFilled,
+  DashboardOutlined,
+  FileFilled,
+  FileOutlined,
+} from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBarsStaggered, faUser } from "@fortawesome/free-solid-svg-icons";
+import styles from "../nav/styles.module.css";
 
 export const MenuList = [
   {
@@ -168,42 +177,51 @@ export const PhysicanMenu = [
     to: "/physicians/dashboard",
   },
 ];
-export const L2AuditorMenuList = [
-  {
-    title: "Dashboard",
-    iconStyle: SVGICON.dashboardIcon,
-    to: "/supervisor/dashboard",
-  },
-  {
-    title: "User Queue",
-    iconStyle: SVGICON.adminUser,
-    to: "/supervisor/user",
-    childRoute: "/supervisor/user/userQueue",
-    childRoute2: "/supervisor/user/details",
-  },
-  {
-    title: "Audited Queue",
-    iconStyle: SVGICON.patientListIcon,
-    to: "/supervisor/auditing",
-    childRoute: "/supervisor/patients/details",
-  },
-  // {
-  //   title: "FeedBack",
-  //   iconStyle: SVGICON.ReportIcon,
-  //   to: "/supervisor/feedback",
-  // },
-  // {
-  //   title: "Org",
-  //   iconStyle: SVGICON.ReportIcon,
-  //   to: "/supervisor/org",
-  // },
-  {
-    title: "Report",
-    iconStyle: SVGICON.ReportIcon,
-    to: "/supervisor/report",
-    childRoute: "/supervisor/report/individualreport",
-  },
-];
+export const L2AuditorMenuList = () => {
+  return [
+    {
+      title: "Dashboard",
+      iconStyle:  <DashboardOutlined />,
+      activeIcon: <DashboardFilled />,
+      to: "/supervisor/dashboard",
+    },
+
+    {
+      title: "User Queue",
+      iconStyle: <FontAwesomeIcon icon={faUser} className={`${styles.outlinedColor}`}/>,
+      activeIcon: <FontAwesomeIcon icon={faUser} className={`${styles.filledColor}`}/>,
+      to: "/supervisor/user",
+      childRoute: "/supervisor/user/userQueue",
+      childRoute2: "/supervisor/user/details",
+    },
+    {
+      title: "Audited Queue",
+      iconStyle: <FontAwesomeIcon icon={faBarsStaggered} className={`${styles.outlinedColor}`}/>,
+      activeIcon: <FontAwesomeIcon icon={faBarsStaggered} className={`${styles.filledColor}`}/>,
+      to: "/supervisor/auditing",
+      childRoute: "/supervisor/patients/details",
+    },
+    {
+      title: "Report",
+      iconStyle: <FileOutlined />,
+      activeIcon: <FileFilled />,
+      to: "/supervisor/report",
+      childRoute: "/supervisor/report/individualreport",
+    },
+  ];
+};
+
+// {
+//   title: "FeedBack",
+//   iconStyle: SVGICON.ReportIcon,
+//   to: "/supervisor/feedback",
+// },
+// {
+//   title: "Org",
+//   iconStyle: SVGICON.ReportIcon,
+//   to: "/supervisor/org",
+// },
+
 export const ProviderMenuList = [
   {
     title: "Dashboard",

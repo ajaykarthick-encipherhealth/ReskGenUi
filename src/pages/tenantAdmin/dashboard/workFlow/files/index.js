@@ -71,8 +71,14 @@ const Files = ({
       show: true,
     },
     tooltip: {
-      show: true,
-      trigger: "axis",
+      show:true,
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        label: {
+          backgroundColor: '#6a7985'
+        }
+      }
     },
     legend: {
       show: false,

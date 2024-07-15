@@ -7,6 +7,7 @@ import styles from "../../styles.module.css";
 import CodesGraph from "../../components/codeGraph";
 import { Skeleton, Spin } from "antd";
 import CodeGraphRevenue from "../../components/codeGraphRevenue/index.js";
+import { formatNumber } from "../../../../../utils/reusable.js";
 
 const index = ({
   rafScoreData,
@@ -43,7 +44,9 @@ const index = ({
         },
         detail: {
           show: true,
-          formatter: "{value}",
+          formatter: function (value) {
+            return value.toFixed(2); 
+          },
           fontSize: 20,
           offsetCenter: [0, "10%"],
         },
@@ -66,7 +69,6 @@ const index = ({
           show: true,
           distance: -40,
           formatter: function (value) {
-            // Only show the min and max labels
             if (value === 0 || value === 1000) {
               return value.toString();
             }
@@ -76,7 +78,7 @@ const index = ({
         },
         data: [
           {
-            value: overAllRafScore?.response,
+            value: parseFloat(overAllRafScore?.response?.toFixed(2)),
             name: "",
           },
         ],
@@ -85,17 +87,9 @@ const index = ({
   };
 
   //FUTURE REVENUE VALUE ENHANCEMENT P1 TASK
-  function formatNumber(num) {
-    if (num >= 1000000) {
-      return Math.floor(num / 1000000) + "M";
-    } else if (num >= 1000) {
-      return Math.floor(num / 1000) + "K";
-    } else {
-      return num.toString();
-    }
-  }
+  formatNumber();
   //donot remove future need
-  const price = 34212312;  //Pass API REVENUE COUNT RESPONSE
+  const price = 781216; //Pass API REVENUE COUNT RESPONSE
 
   return (
     <div style={{ display: "flex", width: "100%" }}>
