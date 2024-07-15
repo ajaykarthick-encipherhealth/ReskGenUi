@@ -699,8 +699,7 @@ const Patient = ({
                             }
                           >
                             {isPatientList || activeTab === 1 ? (
-                              <>
-                                <Tooltip
+                              <Tooltip
                                   title={
                                     selectedRowsId?.length === 0
                                       ? "Select patients to Allocate"
@@ -728,7 +727,6 @@ const Patient = ({
                                     Allocate
                                   </button>
                                 </Tooltip>
-                              </>
                             ) : null}
                           </div>
                         </div>
