@@ -5,11 +5,11 @@ import { connect } from "react-redux";
 import {
   HccCodes,
   RafCounts,
-  getAllRafScore,
+  RafCountScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
 
-const CodesGraph = ({
+const codeGraphRevenue = ({
   options,
   borderColor,
   gradientColor1,
@@ -22,7 +22,6 @@ const CodesGraph = ({
   isRevenue,
   getAllHccCodes,
   selectedValue,
-  className,
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
@@ -43,21 +42,21 @@ const CodesGraph = ({
       type: "value",
       show: true,
     },
+   
     tooltip: {
       show: true,
-      trigger: "axis",
+      trigger: 'axis',
       axisPointer: {
-        type: "cross",
+        type: 'cross',
         label: {
-          backgroundColor: "#6a7985",
-        },
-      },
+          backgroundColor: '#6a7985'
+        }
+      }
     },
-
     series: [
       {
         name: isCargaps
-          ? "Care Gap Codes"
+          ? "Car Gap Codes"
           : isHcc
           ? "HCC Codes"
           : isRevenue
@@ -95,7 +94,8 @@ const CodesGraph = ({
     ],
   };
   return (
-    <div className={`${className}`}>
+    <div className="revenueDollar">
+      {" "}
       <ReactECharts option={options ? options : graphOptions} />
     </div>
   );
@@ -113,8 +113,8 @@ const enhancer = connect(
   {
     getAllHccCodesData: HccCodes,
     getAllRafData: RafCounts,
-    getAllRafScoreData: getAllRafScore,
+    getAllRafScore: RafCountScore,
   }
 );
 
-export default enhancer(CodesGraph);
+export default enhancer(codeGraphRevenue);

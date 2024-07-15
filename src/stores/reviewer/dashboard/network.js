@@ -23,17 +23,18 @@ export const dailyTask = async ({ date }) => {
   return data;
 };
 export const accuracy = async ({ btn, month, year, isAdmin = false }) => {
+  const role = localStorage.getItem('role')
   const url = isAdmin
     ? btn === "Daily"
-      ? `daily?month=${month}&year=${year}&isAdmin=${isAdmin}`
+      ? `daily?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
       : btn === "Weekly"
-      ? `weekly?month=${month}&year=${year}&isAdmin=${isAdmin}`
-      : `monthyly?year=${year}&isAdmin=${isAdmin}`
+      ? `weekly?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
+      : `monthyly?year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
     : btn === "Daily"
-    ? `daily?month=${month}&year=${year}&isAdmin=${isAdmin}`
+    ? `daily?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
     : btn === "Weekly"
-    ? `weekly?month=${month}&year=${year}&isAdmin=${isAdmin}`
-    : `monthyly?year=${year}&isAdmin=${isAdmin}`;
+    ? `weekly?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
+    : `monthyly?year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`;
   const options = {
     method: "POST",
   };

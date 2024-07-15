@@ -3,12 +3,22 @@ import ReusableTable from "../../components/table";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../../stores/tenantAdmin/dashboard/default";
 import { useEffect } from "react";
+import { Skeleton, Spin } from "antd";
 
-const index = ({ getTopOigCodesData, top0ijHccCodes ,dateRange ,selectedOrganization}) => {
+const index = ({
+  getTopOigCodesData,
+  top0ijHccCodes,
+  dateRange,
+  selectedOrganization,
+  top0ijCodesLoader,
+
+}) => {
   useEffect(() => {
-    getTopOigCodesData(dateRange.startDate,
+    getTopOigCodesData(
+      dateRange.startDate,
       dateRange.endDate,
-      selectedOrganization);
+      selectedOrganization
+    );
   }, [dateRange]);
 
   return (
@@ -28,8 +38,17 @@ const index = ({ getTopOigCodesData, top0ijHccCodes ,dateRange ,selectedOrganiza
           {top0ijHccCodes?.response?.totalCount}
         </span>
       </div>
-
-      <ReusableTable items={top0ijHccCodes?.response?.topDiseaseDTOList} />
+      {top0ijCodesLoader ? (
+        <div>
+          <Skeleton.Input
+            className="w-100"
+            style={{ height: "460px" }}
+            active
+          />
+        </div>
+      ) :  (
+        <ReusableTable items={top0ijHccCodes?.response?.topDiseaseDTOList} />
+      )}
     </>
   );
 };
@@ -38,6 +57,7 @@ const enhancer = connect(
   (state) => ({
     top0ijHccCodes:
       state?.tenantAdmin?.dashboard?.default?.allTopOigCodes?.data,
+    top0ijCodesLoader: state?.tenantAdmin?.dashboard?.default?.allTopOigCodes?.loading,
   }),
   {
     getTopOigCodesData: allActions?.topOigCodes,

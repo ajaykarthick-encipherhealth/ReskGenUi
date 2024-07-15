@@ -128,7 +128,9 @@ const Details = ({
   getPatientRadiologyDosList,
   getRadiologyDetails,
   getPatientLabDosList,
-  getLabDetails
+  getLabDetails,
+  radiologyDetailsResult,
+  labDetailsResult
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -236,10 +238,20 @@ const Details = ({
     setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
     getPatientDetails(
       selectPatientId ? selectPatientId?.patirntId : patientId,
-      orgId,
-      tenId
+      patientDetailsResult?.data?.response
     );
   }, [patientDetailsResult?.data?.response]);
+
+  useEffect(() => {
+    const patientId = localStorage.getItem("patientId");
+    setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
+    if(activeTab == 3 || activeTab == 4){
+      getPatientDetails(
+        selectPatientId ? selectPatientId?.patirntId : patientId,  
+        activeTab == 3 ? radiologyDetailsResult?.data?.response : labDetailsResult?.data?.response
+      );
+    }   
+  }, [radiologyDetailsResult?.data?.response,labDetailsResult?.data?.response]);
 
   useEffect(() => {
     if (patientDetailsResult?.data?.response?.fileId) {
@@ -309,13 +321,12 @@ const Details = ({
         dosYearArr[0]?.value
       );
      }
-
   };
 
-  const getPatientDetails = async (patientId) => {
+  const getPatientDetails = async (patientId,fileResponse) => {
     setHccValidCount(0);
-    if (patientDetailsResult?.data?.response) {
-      var result = patientDetailsResult?.data?.response;
+    if (fileResponse) {
+      var result = fileResponse;
       if (patientId == result.patientId) {
         setIsSpinnerLoading(false);
       }
@@ -1261,11 +1272,13 @@ const Details = ({
                           <SupervisorWorkList
                             localUserId={localUserId}
                             setWorkListPatientId={setWorkListPatientId}
+                            setIsModalComments={setIsModalComments}
                           />
                         ) : (
                           <ReviwerWorkList
                             localUserId={localUserId}
                             setWorkListPatientId={setWorkListPatientId}
+                            setIsModalComments={setIsModalComments}
                           />
                         )}
                       </>
@@ -1308,7 +1321,11 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
     flagsDetailsResult: state?.patientDetails.details?.flagsDetailsResult.data,
-    processedYearResult: state?.patientDetails.details?.processedYear
+    processedYearResult: state?.patientDetails.details?.processedYear,
+    radiologyDetailsResult: state?.patientDetails?.details?.radiologyResult,
+    labDetailsResult: state?.patientDetails?.details?.labResult,
+
+
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,

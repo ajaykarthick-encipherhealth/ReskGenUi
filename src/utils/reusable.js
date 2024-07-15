@@ -47,7 +47,48 @@ export const getYears = () => {
 };
 
 export const getMaskData = (value) => {
-  if(value){
-    return value.split('').splice(0,3).join('') + "xxxx"
+  if (value) {
+    return value.split("").splice(0, 3).join("") + "xxxx";
+  }
+};
+
+export function getLast30Days() {
+  const date_thirty_days = [];
+  const currentDate = new Date();
+
+  for (let i = 0; i < 30; i++) {
+    const pastDate = new Date(currentDate);
+    pastDate.setDate(currentDate.getDate() - i);
+    date_thirty_days.push(
+      pastDate.toLocaleString("default", { month: "short" }) +
+        pastDate.getDate()
+    );
+  }
+
+  return date_thirty_days.reverse();
+}
+export function getLast7Days() {
+  const date_seven_days = [];
+  const currentDate = new Date();
+
+  for (let i = 0; i < 7; i++) {
+    const pastDate = new Date(currentDate);
+    pastDate.setDate(currentDate.getDate() - i);
+    date_seven_days.push(
+      pastDate.toLocaleString("default", { month: "short" }) +
+        pastDate.getDate()
+    );
+  }
+
+  return date_seven_days.reverse();
+}
+
+export function formatNumber(num) {
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(2).replace(/\.?0+$/, "") + "M";
+  } else if (num >= 1000) {
+    return (num / 1000).toFixed(2).replace(/\.?0+$/, "") + "K";
+  } else {
+    return num?.toString();
   }
 }

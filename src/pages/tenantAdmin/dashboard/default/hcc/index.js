@@ -9,203 +9,34 @@ import {
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import moment from "moment";
+import { Empty, Spin } from "antd";
+import { Skeleton } from "antd";
+import { formatNumber } from "../../../../../utils/reusable.js";
 
 const index = ({
-  getAllHccCodesData,
   getAllHccCodes,
   getAllRafScoreData,
-  getAllRafScore,
-  getAllRafData,
   getAllRaf,
-  dateRange,
+  selectedOrganization,
+  selectedValue,
+  totalCodesLoader,
+  revenueChartLoader,
+  rafScorechartLoader,
 }) => {
-  const [chartData, setChartData] = useState(new Map());
-  const [chartData1, setChartData1] = useState(new Map());
+  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
+    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
+    : [];
 
-  const [chartRafData, setRafChartData] = useState(new Map());
-  const [chartRafData1, setRafChartData1] = useState(new Map());
+  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
+    ? Object.values(getAllRaf.premiumByDateForHcc)
+    : [];
 
-  const [chartRevenData, setRevenChartData] = useState(new Map());
-  const [chartRevenData1, setRevenChartData1] = useState(new Map());
+  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
+    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
+    : [];
 
-  const ShortMonth = [
-    "",
-    "jan",
-    "feb",
-    "mar",
-    "apr",
-    "may",
-    "jun",
-    "jul",
-    "aug",
-    "sep",
-    "oct",
-    "nov",
-    "dec",
-  ];
-
-  const shortWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-  useEffect(() => {
-    const fetchChartData = async () => {
-      const data = await getAllHccCodesData(
-        dateRange.startDate,
-        dateRange.endDate,
-      );
-      const records = data?.response?.hccDiseaseCountMap;
-      const records1 = data?.response?.suggestedHccDiseaseCountMap;
-      const datediff =
-        moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
-        1;
-
-      const tempRecords = new Map();
-      const tempRecords1 = new Map();
-      if (datediff != 7 && datediff != 30) {
-        ShortMonth.slice(1).forEach((month) => {
-          tempRecords.set(month, 0);
-          tempRecords1.set(month, 0);
-        });
-      }
-
-      if ((!isNaN(datediff) && datediff == 7) || datediff == 30) {
-        for (let i = 0; i < datediff; i++) {
-          const todayDate = moment();
-          const presentDate = todayDate.subtract(i, "days");
-          const currMonth = parseInt(presentDate.format("MM"));
-          const currDay = presentDate.format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, 0);
-          tempRecords1.set(ShortMonth[currMonth] + currDay, 0);
-        }
-
-        Object.entries(records).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-        Object.entries(records1).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-      }
-
-      setChartData1(tempRecords1);
-      setChartData(tempRecords);
-    };
-    fetchChartData();
-  }, [dateRange]);
-
-  useEffect(() => {
-    const fetchChartData = async () => {
-      const data = await getAllRafScore(dateRange.startDate, dateRange.endDate);
-      const records = data?.response?.rafScoreByDateForSuggested;
-      const records1 = data?.response?.rafScoreByDateForHcc;
-
-      const datediff =
-        moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
-        1;
-
-      const tempRecords = new Map();
-      const tempRecords1 = new Map();
-      if (datediff != 7 && datediff != 30) {
-        ShortMonth.slice(1).forEach((month) => {
-          tempRecords.set(month, 0);
-          tempRecords1.set(month, 0);
-        });
-      }
-
-      if ((!isNaN(datediff) && datediff == 7) || datediff == 30) {
-        for (let i = 0; i < datediff; i++) {
-          const todayDate = moment();
-          const presentDate = todayDate.subtract(i, "days");
-          const currMonth = parseInt(presentDate.format("MM"));
-          const currDay = presentDate.format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, 0);
-          tempRecords1.set(ShortMonth[currMonth] + currDay, 0);
-        }
-
-        Object.entries(records).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-        Object.entries(records1).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-      }
-      setRafChartData1(tempRecords1);
-      setRafChartData(tempRecords);
-    };
-    fetchChartData();
-  }, [dateRange]);
-
-
-  useEffect(() => {
-    const fetchChartData = async () => {
-      const data = await getAllRafData(dateRange.startDate, dateRange.endDate);
-      const records = data.response.premiumByDateForHcc;
-      const records1 = data.response.premiumByDateForSuggested;
-
-      const datediff =
-        moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
-        1;
-
-      const tempRecords = new Map();
-      const tempRecords1 = new Map();
-      if (datediff != 7 && datediff != 30) {
-        ShortMonth.slice(1).forEach((month) => {
-          tempRecords.set(month, 0);
-          tempRecords1.set(month, 0);
-        });
-      }
-
-      if ((!isNaN(datediff) && datediff == 7) || datediff == 30) {
-        for (let i = 0; i < datediff; i++) {
-          const todayDate = moment();
-          const presentDate = todayDate.subtract(i, "days");
-          const currMonth = parseInt(presentDate.format("MM"));
-          const currDay = presentDate.format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, 0);
-          tempRecords1.set(ShortMonth[currMonth] + currDay, 0);
-        }
-
-        Object.entries(records).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-        Object.entries(records1).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-      }
-      setRevenChartData1(tempRecords1);
-      setRevenChartData(tempRecords);
-    };
-    fetchChartData();
-  }, [dateRange]);
-
-
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const data = await getAllRafData(dateRange.startDate,
-  //       dateRange.endDate);
-  //     const tempRecords = new Map();
-  //     const records = data?.response?.premiumByDateForHcc;
-  //     for (let i = 6; i >= 0; i--) {
-  //       const todayDate = moment();
-  //       const presentDate = todayDate.subtract(i, "days");
-  //       const presentDayinWeek = presentDate.day();
-  //       tempRecords.set(shortWeek[presentDayinWeek], 0);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [dateRange]);
+  formatNumber();
+  const TotalHccRevenue = getAllRaf?.totalHccRafScore;
 
   return (
     <div className="d-flex justify-content-between">
@@ -215,18 +46,36 @@ const index = ({
             <div className={styles.header}>HCC Codes</div>
             <div>
               <div className={styles.header}>Total Codes</div>
-              <div className={styles.price}>{getAllHccCodes?.totalCount}</div>
+              <div className={styles.price}>
+                {(getAllHccCodes?.hccCount || 0).toFixed(2)}
+              </div>
             </div>
           </div>
         </div>
-        <CodesGraph
-          gradientColor1={"#04B700"}
-          gradientColor2={"#FAFFFA"}
-          borderColor={"#04B700"}
-          isHcc={true}
-          chartData={chartData}
-          chartData1={chartData1}
-        />
+
+        {totalCodesLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : hccDiseaseCountValues?.length > 0 ? (
+          <div className="totalCodesPies">
+            <CodesGraph
+              gradientColor1={"#04B700"}
+              gradientColor2={"#FAFFFA"}
+              borderColor={"#04B700"}
+              isHcc={true}
+              selectedValue={selectedValue}
+              selectedOrganization={selectedOrganization}
+              className="codesGraphStyle3"
+            />
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         className="remianingAreaGraph"
@@ -242,16 +91,32 @@ const index = ({
             <div className={`${styles.header} p-1`}>RAF</div>
             <div className="p-1">
               <div className={styles.header}>Overall RAF</div>
-              <div className={styles.price}>{getAllRafScoreData?.totalHccRaf}</div>
+              <div className={styles.price}>
+                {(getAllRafScoreData?.totalHccRaf || 0).toFixed(2)}
+              </div>
             </div>
           </div>
         </div>
-        <RafGraph
-          rafColor={"#8E68F7"}
-          isHcc={true}
-          chartRafData={chartRafData}
-          // chartRafData1={chartRafData1}
-        />
+
+        {rafScorechartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : rafScoreByDateForHcc?.length > 0 ? (
+          <div className="totalCodesPies2">
+            <RafGraph
+              rafColor={"#8E68F7"}
+              isHcc={true}
+              selectedValue={selectedValue}
+            />
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         style={{
@@ -266,15 +131,37 @@ const index = ({
             <div className={`${styles.header} p-1`}>Revenue</div>
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
-              <div className={styles.price}>{`$ ${getAllRaf?.totalHccRafScore}`}</div>
+              <div className={styles.price}>{`$ ${
+                TotalHccRevenue !== undefined
+                  ? formatNumber(TotalHccRevenue.toFixed(2))
+                  : 0
+              }`}</div>
             </div>
           </div>
         </div>
-        <RevenueGraph
-          isHcc={true}
-          hccColor="#02BBDE"
-          chartRevenData={chartRevenData}
-        />
+
+        {revenueChartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : premiumByDateForHcc?.length > 0 ? (
+          <div className="totalCodesPies">
+            <div className="totalCodesPies2">
+              <RevenueGraph
+                isHcc={true}
+                hccColor="#02BBDE"
+                selectedValue={selectedValue}
+                className="revenueCharts2"
+              />
+            </div>
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
     </div>
   );
@@ -284,13 +171,17 @@ const enhancer = connect(
   (state) => ({
     getAllHccCodes:
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
-
     getAllRafScoreData:
-    // console.log(state,"getAllRafScoreData"),
-     state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
 
     getAllRaf:
-    state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
+    revenueChartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.loading,
+    totalCodesLoader:
+      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
+    rafScorechartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
   }),
   {
     getAllHccCodesData: HccCodes,

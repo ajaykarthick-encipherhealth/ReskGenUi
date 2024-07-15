@@ -2,30 +2,65 @@ import React, { useEffect } from "react";
 import ReusableTable from "../../components/table";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../../stores/tenantAdmin/dashboard/default";
+import { Skeleton, Spin } from "antd";
 
-const index = ({ top10DiseasesData, getTop10DiseasesData,dateRange,selectedOrganization}) => {
+const index = ({
+  top10DiseasesData,
+  getTop10DiseasesData,
+  dateRange,
+  selectedOrganization,
+  top10DisesesLoader,
+
+}) => {
   useEffect(() => {
-    getTop10DiseasesData( dateRange.startDate,
+    getTop10DiseasesData(
+      dateRange.startDate,
       dateRange.endDate,
-      selectedOrganization);
+      selectedOrganization
+    );
   }, [dateRange]);
-
+ 
 
   return (
     <>
       <div>
-        <span style={{fontSize:"18px",fontWeight:"600"}}>Top 10 Diseases</span>
-        <span style={{color:"#FF8551",fontSize:"20px",fontWeight:"600",margin:"0 0 0 10px"}}> {top10DiseasesData?.response?.totalCount}</span>
+        <span style={{ fontSize: "18px", fontWeight: "600" }}>
+          Top 10 Diseases
+        </span>
+        <span
+          style={{
+            color: "#FF8551",
+            fontSize: "20px",
+            fontWeight: "600",
+            margin: "0 0 0 10px",
+          }}
+        >
+          {" "}
+          {top10DiseasesData?.response?.totalCount}
+        </span>
       </div>
-
-      <ReusableTable items={top10DiseasesData?.response?.topDiseaseDTOList} />
+      {top10DisesesLoader ? (
+        <div>
+          <Skeleton.Input
+            className="w-100"
+            style={{ height: "460px" }}
+            active
+          />
+        </div>
+      ) :  (
+        <ReusableTable items={top10DiseasesData?.response?.topDiseaseDTOList} />
+      )}
     </>
   );
 };
 
 const enhancer = connect(
   (state) => ({
-    top10DiseasesData: state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data,
+    top10DiseasesData:
+      state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data,
+    top10DisesesLoader:
+      state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.loading
+      ,
   }),
   {
     getTop10DiseasesData: allActions?.top10Diseases,

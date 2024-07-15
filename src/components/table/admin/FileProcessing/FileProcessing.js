@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { over } from "stompjs";
+import SockJS from "sockjs-client";
 import dayjs from "dayjs";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import { Empty, Progress, Steps, Tooltip } from "antd";
@@ -7,66 +9,67 @@ import TableStyle from "../../table.module.css";
 import { getPatientsList } from "../../../../store/actions/adminAction/fileProcessingActions";
 import ENDPOINTS from "../../../../utility/enpoints";
 import SpinnerDots from "../../../spinner";
+import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin/tracking";
 
-export const eventStreming = (
-  ENDPOINTS,
-  setParsedData,
-  pageNo,
-  getPatients,
-  dispatch,
-  computedStartDate,
-  computedEndDate,
-  selectedOption,
-  search,
-  completedStartDate,
-  completedEndDate,
-  selAllocatedTo,
-  selAllocatedBy,
-  selCreatedBy
-) => {
-  const id = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
-  const sse = new EventSource(
-    `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=`
-  );
+// export const eventStreming = (
+//   ENDPOINTS,
+//   setParsedData,
+//   pageNo,
+//   getPatients,
+//   dispatch,
+//   computedStartDate,
+//   computedEndDate,
+//   selectedOption,
+//   search,
+//   completedStartDate,
+//   completedEndDate,
+//   selAllocatedTo,
+//   selAllocatedBy,
+//   selCreatedBy
+// ) => {
+//   const id = localStorage.getItem("userId");
+//   const token = localStorage.getItem("token");
+//   const orgId = localStorage.getItem("orgId");
+//   const sse = new EventSource(
+//     `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=`
+//   );
 
-  const fileStatusEventListener = (event) => {
-    const data = JSON.parse(event.data);
-    if (data?.length != 0) {
-      const item = data[0];
-      if (item?.processStageChart === "FINISHED") {
-        setParsedData(data);
-        dispatch(
-          getPatients(
-            pageNo,
-            computedStartDate,
-            computedEndDate,
-            selectedOption,
-            search,
-            completedStartDate,
-            completedEndDate,
-            selAllocatedTo,
-            selAllocatedBy,
-            selCreatedBy
-          )
-        );
-        sse.close();
-      }
-    }
-  };
+//   const fileStatusEventListener = (event) => {
+//     const data = JSON.parse(event.data);
+//     if (data?.length != 0) {
+//       const item = data[0];
+//       if (item?.processStageChart === "FINISHED") {
+//         setParsedData(data);
+//         dispatch(
+//           getPatients(
+//             pageNo,
+//             computedStartDate,
+//             computedEndDate,
+//             selectedOption,
+//             search,
+//             completedStartDate,
+//             completedEndDate,
+//             selAllocatedTo,
+//             selAllocatedBy,
+//             selCreatedBy
+//           )
+//         );
+//         sse.close();
+//       }
+//     }
+//   };
 
-  sse.addEventListener("file-status-event", fileStatusEventListener);
+//   sse.addEventListener("file-status-event", fileStatusEventListener);
 
-  sse.onerror = () => {
-    sse.close();
-  };
+//   sse.onerror = () => {
+//     sse.close();
+//   };
 
-  return () => {
-    sse.removeEventListener("file-status-event", fileStatusEventListener);
-    sse.close();
-  };
-};
+//   return () => {
+//     sse.removeEventListener("file-status-event", fileStatusEventListener);
+//     sse.close();
+//   };
+// };
 
 const stageChartMap2 = {
   FILE_UPLOAD: "File Upload",
@@ -78,7 +81,7 @@ const stageChartMap2 = {
   MEAT_FOUND: "Meat",
   COMBINATION_CODES_FOUND: "Combination codes",
   RAF_SCORE_FOUND: "RAF Score",
-  QUERY_CONDITIONS_FOUND: "Query Conditions",
+  // QUERY_CONDITIONS_FOUND: "Query Conditions",
   FINISHED: "Finished",
   DISEASE_FOUND_FAILED: "DISEASE_FOUND_FAILED",
   OCR_FAILED: "OCR_FAILED",
@@ -87,8 +90,8 @@ const stageChartMap2 = {
   COMBINATION_CODES_FOUND_FAILED: "COMBINATION_CODES_FOUND_FAILED",
   MEAT_FOUND_FAILED: "MEAT_FOUND_FAILED",
   RAF_SCORE_FOUND_FAILED: "RAF_SCORE_FOUND_FAILED",
-  STORED_FAILED: "STORED_FAILED",
-  QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
+  // STORED_FAILED: "STORED_FAILED",
+  // QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
   HEALTH_METRICS_CALCULATION_FAILED: "HEALTH_METRICS_CALCULATION_FAILED",
 };
 
@@ -100,8 +103,8 @@ const errStages = {
   COMBINATION_CODES_FOUND_FAILED: "COMBINATION_CODES_FOUND_FAILED",
   MEAT_FOUND_FAILED: "MEAT_FOUND_FAILED",
   RAF_SCORE_FOUND_FAILED: "RAF_SCORE_FOUND_FAILED",
-  STORED_FAILED: "STORED_FAILED",
-  QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
+  // STORED_FAILED: "STORED_FAILED",
+  // QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
   HEALTH_METRICS_CALCULATION_FAILED: "HEALTH_METRICS_CALCULATION_FAILED",
 };
 const stageChartMap = {
@@ -116,19 +119,26 @@ const stageChartMap = {
   HEALTH_METRICS_CALCULATION_FAILED: 3,
   VALID_DISEASE_SEPARATION: 4,
   VALID_DISEASE_SEPARATION_FAILED: 4,
-  COMBINATION_CODES_FOUND: 5,
-  COMBINATION_CODES_FOUND_FAILED: 5,
-  MEAT_FOUND_FAILED: 6,
-  MEAT_FOUND: 6,
+  MEAT_FOUND_FAILED: 5,
+  MEAT_FOUND: 5,
+  COMBINATION_CODES_FOUND: 6,
+  COMBINATION_CODES_FOUND_FAILED: 6,
   RAF_SCORE_FOUND: 7,
   RAF_SCORE_FOUND_FAILED: 7,
-  STORED: 8,
-  STORED_FAILED: 8,
-  QUERY_CONDITIONS_FOUND: 8,
-  QUERY_CONDITIONS_FOUND_FAILED: 8,
-  FINISHED: 9,
+  // STORED: 8,
+  // STORED_FAILED: 8,
+  // QUERY_CONDITIONS_FOUND: 8,
+  // QUERY_CONDITIONS_FOUND_FAILED: 8,
+  FINISHED: 8,
 };
-function FileProcessingTable({ patinetListAll, loading }) {
+const FileProcessingTable = ({
+  patinetListAll,
+  loading,
+  getAllProcessingData,
+  fileProcessingData,
+  webSocketData,
+}) => {
+  let stompClient = null;
   const dispatch = useDispatch();
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
@@ -165,45 +175,32 @@ function FileProcessingTable({ patinetListAll, loading }) {
   };
 
   useEffect(() => {
-    const id = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-    const orgId = localStorage.getItem("orgId");
-    let isFinished = false;
-    const sse = new EventSource(
-      `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=${orgId}`
-    );
+    getAllProcessingData();
+  }, []);
+  useEffect(() => {
+    if (fileProcessingData?.loading) {
+      setFileLoading(false);
+    }
+  }, [fileProcessingData]);
 
-    const fileStatusEventListener = (event) => {
-      setFileLoading(true);
-      const data = JSON.parse(event.data);
-      if (data) {
-        setParsedData(data);
-        setFileLoading(false);
+  useEffect(() => {
+    if (webSocketData && webSocketData?.webSocketType == "PROCESS_STAGE") {
+      const fileData = fileProcessingData?.data?.response;
+      var foundItem = fileData?.find(
+        (x) => x.patientId == webSocketData.patientId
+      );
+      if (foundItem) {
+        foundItem.processStageChart = webSocketData?.processStageChart;
+        if (webSocketData?.createdDate) {
+          var datePush = [
+            ...foundItem.processStageEventDTOs,
+            ...[webSocketData],
+          ];
+          foundItem.processStageEventDTOs = datePush;
+        }
       }
-      const patient = data?.find((item) => item?.patientId === activeId);
-      if (
-        errStages[patient?.processStageChart] ||
-        patient?.processStageChart === "FINISHED"
-      ) {
-        isFinished = true;
-        setIsFInished(true);
-        sse.close();
-      }
-    };
-
-    sse.addEventListener("file-status-event", fileStatusEventListener);
-
-    sse.onerror = () => {
-      if (!isFinished) {
-        sse.close();
-      }
-    };
-
-    return () => {
-      sse.removeEventListener("file-status-event", fileStatusEventListener);
-      sse.close();
-    };
-  }, [activeId]);
+    }
+  }, [webSocketData]);
 
   useEffect(() => {
     if (activeId && parsedData) {
@@ -262,37 +259,37 @@ function FileProcessingTable({ patinetListAll, loading }) {
       case "VALID_DISEASE_SEPARATION_FAILED":
         uploadStatus = 40;
         break;
-
-      case "COMBINATION_CODES_FOUND":
-        uploadStatus = 60;
-        break;
-      case "COMBINATION_CODES_FOUND_FAILED":
-        uploadStatus = 50;
-        break;
       case "MEAT_FOUND":
-        uploadStatus = 70;
+        uploadStatus = 60;
         break;
       case "MEAT_FOUND_FAILED":
+        uploadStatus = 50;
+        break;
+      case "COMBINATION_CODES_FOUND":
+        uploadStatus = 70;
+        break;
+      case "COMBINATION_CODES_FOUND_FAILED":
         uploadStatus = 60;
         break;
+
       case "RAF_SCORE_FOUND":
         uploadStatus = 80;
         break;
       case "RAF_SCORE_FOUND_FAILED":
         uploadStatus = 70;
         break;
-      case "STORED":
-        uploadStatus = 85;
-        break;
-      case "STORED_FAILED":
-        uploadStatus = 80;
-        break;
-      case "QUERY_CONDITIONS_FOUND":
-        uploadStatus = 95;
-        break;
-      case "QUERY_CONDITIONS_FOUND_FAILED":
-        uploadStatus = 90;
-        break;
+      // case "STORED":
+      //   uploadStatus = 85;
+      //   break;
+      // case "STORED_FAILED":
+      //   uploadStatus = 80;
+      //   break;
+      // case "QUERY_CONDITIONS_FOUND":
+      //   uploadStatus = 95;
+      //   break;
+      // case "QUERY_CONDITIONS_FOUND_FAILED":
+      //   uploadStatus = 90;
+      //   break;
       case "FINISHED":
         uploadStatus = 100;
         break;
@@ -305,12 +302,16 @@ function FileProcessingTable({ patinetListAll, loading }) {
     const findPreviousStep = (currentStage) => {
       const stages = Object.keys(stageChartMap2);
       const currentIndex = stages.indexOf(currentStage);
-      
+
+      if (currentIndex == 0) {
+        return stages[currentIndex + 1];
+      }
+
       if (currentIndex > 0) {
         return stages[currentIndex - 1];
-        }
-        return null; // or some other value indicating there's no previous step
-        };
+      }
+      return null; // or some other value indicating there's no previous step
+    };
     const stepsItemBase = [
       {
         title: "",
@@ -383,6 +384,17 @@ function FileProcessingTable({ patinetListAll, loading }) {
       },
       {
         title: "",
+        description: "Meat",
+        status:
+          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+            ? "finish"
+            : stageChartMap2[data?.processStageChart] === "MEAT_FOUND_FAILED"
+            ? "error"
+            : undefined,
+        info: "MEAT_FOUND",
+      },
+      {
+        title: "",
         description: "Combination codes",
         status:
           stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
@@ -392,17 +404,6 @@ function FileProcessingTable({ patinetListAll, loading }) {
             ? "error"
             : undefined,
         info: "COMBINATION_CODES_FOUND",
-      },
-      {
-        title: "",
-        description: "Meat",
-        status:
-          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
-            ? "finish"
-            : stageChartMap2[data?.processStageChart] === "MEAT_FOUND_FAILED"
-            ? "error"
-            : undefined,
-        info: "MEAT_FOUND",
       },
       {
         title: "",
@@ -447,25 +448,25 @@ function FileProcessingTable({ patinetListAll, loading }) {
         (step) => step?.info === "FINISHED"
       );
 
-      const queryConditionsStep = {
-        title: "",
-        description: "Query Conditions",
-        status: stageChartMap[data?.processStageChart]
-          ? "finish"
-          : stageChartMap2[data?.processStageChart] ===
-            "QUERY_CONDITIONS_FOUND_FAILED"
-          ? "error"
-          : stageChartMap2[data?.processStageChart] === undefined
-          ? "processing"
-          : undefined,
-        info: "QUERY_CONDITIONS_FOUND",
-      };
+      // const queryConditionsStep = {
+      //   title: "",
+      //   description: "Query Conditions",
+      //   status: stageChartMap[data?.processStageChart]
+      //     ? "finish"
+      //     : stageChartMap2[data?.processStageChart] ===
+      //       "QUERY_CONDITIONS_FOUND_FAILED"
+      //     ? "error"
+      //     : stageChartMap2[data?.processStageChart] === undefined
+      //     ? "processing"
+      //     : undefined,
+      //   info: "QUERY_CONDITIONS_FOUND",
+      // };
 
-      if (foundIndex !== -1) {
-        stepsItem.splice(foundIndex, 0, queryConditionsStep);
-      } else {
-        stepsItem.push(queryConditionsStep);
-      }
+      // if (foundIndex !== -1) {
+      //   stepsItem.splice(foundIndex, 0, queryConditionsStep);
+      // } else {
+      //   stepsItem.push(queryConditionsStep);
+      // }
     }
 
     const mappedSteps = stepsItem
@@ -484,10 +485,9 @@ function FileProcessingTable({ patinetListAll, loading }) {
           },
         }));
 
-       
     return (
       <div style={{ display: "flex" }}>
-        <div style={{ width: "98%" }}>
+        <div style={{ width: "100%" }}>
           <div style={{ display: "flex" }}>
             <Tooltip
               title={data?.processStageChart
@@ -496,7 +496,13 @@ function FileProcessingTable({ patinetListAll, loading }) {
                 .join(" ")}
             >
               <Progress
-                percent={currentIndex?uploadStatus:`${stageChartMap[findPreviousStep(data?.processStageChart)]}0`}
+                percent={
+                  currentIndex
+                    ? uploadStatus
+                    : `${
+                        stageChartMap[findPreviousStep(data?.processStageChart)]
+                      }0`
+                }
                 status="active"
                 style={{
                   height: "20px",
@@ -515,56 +521,56 @@ function FileProcessingTable({ patinetListAll, loading }) {
             </Tooltip>
           </div>
 
-          {toggle[data?.patientId] && (
-            <>
-              <div
-                className={TableStyle.fileprocessing}
-                style={{ height: "30px" }}
-              >
-                {mappedSteps?.map((step, index) => {
-                  const findData =
-                    selectedRowTime?.data &&
-                    selectedRowTime?.data?.response?.find(
-                      (item) => item?.processStageChart === step?.info
-                    );
-
-                  return (
-                    <div key={index} className={TableStyle.innerProcessingDiv}>
-                      {finished
-                        ? "Loading..."
-                        : selectedRowTime?.data?.response?.length > 0 &&
-                          (findData ? (
-                            <span>
-                              {findData?.createdDate &&
-                                dayjs(findData?.createdDate).format(
-                                  "hh:mm:ss A"
-                                )}
-                            </span>
-                          ) : (
-                            "---"
-                          ))}
-                    </div>
+          <>
+            <div
+              className={TableStyle.fileprocessing}
+              style={{ height: "30px" }}
+            >
+              {mappedSteps?.map((step, index) => {
+                const findData =
+                  data?.processStageEventDTOs &&
+                  data?.processStageEventDTOs?.find(
+                    (item) => item?.processStageChart === step?.info
                   );
-                })}
-              </div>
 
-              <div
-                style={{
-                  position: "relative",
-                  marginTop: stepperVisible ? "10px" : "0",
-                  marginLeft: "-40px",
-                }}
-              >
-                <Steps
-                  current={currentIndex?currentIndex + 1:stageChartMap[findPreviousStep(data?.processStageChart)]}
-                  labelPlacement="vertical"
-                  items={mappedSteps}
-                  percent={failedList ? 0 : count}
-                  finishIconBorderColor="#000"
-                />
-              </div>
-            </>
-          )}
+                return (
+                  <div key={index} className={TableStyle.innerProcessingDiv}>
+                    {finished
+                      ? "Loading..."
+                      : data?.processStageEventDTOs?.length > 0 &&
+                        (findData ? (
+                          <span>
+                            {findData?.createdDate &&
+                              dayjs(findData?.createdDate).format("hh:mm:ss A")}
+                          </span>
+                        ) : (
+                          "---"
+                        ))}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div
+              style={{
+                position: "relative",
+                marginTop: stepperVisible ? "10px" : "0",
+                marginLeft: "-40px",
+              }}
+            >
+              <Steps
+                current={
+                  currentIndex
+                    ? currentIndex + 1
+                    : stageChartMap[findPreviousStep(data?.processStageChart)]
+                }
+                labelPlacement="vertical"
+                items={mappedSteps}
+                percent={failedList ? 0 : count}
+                finishIconBorderColor="#000"
+              />
+            </div>
+          </>
           <div
             style={{
               display: "flex",
@@ -575,22 +581,17 @@ function FileProcessingTable({ patinetListAll, loading }) {
                 ? "green"
                 : "#00000",
             }}
-          >{`${currentIndex?uploadStatus:`${stageChartMap[findPreviousStep(data?.processStageChart)]}0`}% Complete`}</div>
-        </div>
-        <div style={{ width: "2%", marginTop: "6px" }}>
-          <div onClick={() => handleToggleStepper(index, data)}>
-            {toggle[data?.patientId] ? (
-              <UpOutlined style={{ width: "40px", height: "20px" }} />
-            ) : (
-              <DownOutlined style={{ width: "40px", height: "20px" }} />
-            )}
-          </div>
+          >{`${
+            currentIndex
+              ? uploadStatus
+              : `${stageChartMap[findPreviousStep(data?.processStageChart)]}0`
+          }% Complete`}</div>
         </div>
       </div>
     );
   };
   const renderRows = () => {
-    return parsedData?.map((data, index) => (
+    return fileProcessingData?.data?.response?.map((data, index) => (
       <tr key={index}>
         <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
         <td className={TableStyle.childBorder}>
@@ -605,7 +606,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
 
   return (
     <div className={TableStyle.classContaineer}>
-      {fileloading ? (
+      {fileProcessingData?.loading ? (
         <div
           style={{
             display: "flex",
@@ -626,7 +627,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
           </thead>
 
           <tbody>
-            {!loading && parsedData?.length === 0 ? (
+            {fileProcessingData?.data?.response?.length === 0 ? (
               <tr>
                 <td colSpan="9">
                   <Empty />
@@ -640,6 +641,15 @@ function FileProcessingTable({ patinetListAll, loading }) {
       )}
     </div>
   );
-}
+};
 
-export default FileProcessingTable;
+const enhancer = connect(
+  (state) => ({
+    fileProcessingData: state?.tenantAdmin?.tracking?.allFileProcessing,
+    webSocketData: state?.webSocket?.webSocketDetails?.data,
+  }),
+  {
+    getAllProcessingData: tenantAdminAction.getAllFileProcessAction,
+  }
+);
+export default enhancer(FileProcessingTable);

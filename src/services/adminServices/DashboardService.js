@@ -72,12 +72,13 @@ export const DailyTaskApi = async (date, router) => {
 
 export const accuracyScore = async (btn, month, year, router) => {
   const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
   const url =
     btn === "Daily"
-      ? `daily?month=${month}&year=${year}`
+      ? `daily?month=${month}&role=${role ? role.toUpperCase() : ""}&year=${year}`
       : btn === "Weekly"
-      ? `weekly?month=${month}&year=${year}`
-      : `monthyly?year=${year}`;
+      ? `weekly?month=${month}&role=${role ? role.toUpperCase() : ""}&year=${year}`
+      : `monthly&role=${role ? role.toUpperCase() : ""}?year=${year}`;
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}dbservice/accuracyscore/${url}`,
@@ -516,7 +517,7 @@ export const SelectUserList = async (role) => {
   const roles = localStorage.getItem("role");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=${roles == "tenant_admin" ? "" :orgId}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=${orgId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

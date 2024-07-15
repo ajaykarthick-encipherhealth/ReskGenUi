@@ -5,13 +5,18 @@ import styles from "../../styles.module.css";
 import * as echarts from "echarts";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
-import { Empty } from "antd";
+import { Empty, Spin } from "antd";
 import {
   HccCodes,
   RafCounts,
-  RafCountScore,
+  getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import moment from "moment";
+import { Skeleton } from "antd";
+import {
+  getLast30Days,
+  getLast7Days,
+  formatNumber,
+} from "../../../../../utils/reusable.js";
 
 const index = ({
   getAllHccCodesData,
@@ -19,91 +24,14 @@ const index = ({
   getAllRaf,
   getAllRafScoreData,
   dateRange,
+  totalCodesLoader,
   getAllRafData,
-  selectedOrganization
+  getAllRafScore,
+  selectedOrganization,
+  selectedValue,
+  revenueChartLoader,
+  rafScorechartLoader,
 }) => {
-  const [currChartData, setCurrChartData] = useState(new Map());
-  const [chartData, setChartData] = useState(new Map());
-  const [chartData1, setChartData1] = useState(new Map());
-  const [chartRafData1, setRafChartData1] = useState(new Map());
-
-  const [chartRevenData, setRevenChartData] = useState(new Map());
-  const [chartRevenData1, setRevenChartData1] = useState(new Map());
-
-  const ShortMonth = [
-    "",
-    "jan",
-    "feb",
-    "mar",
-    "apr",
-    "may",
-    "jun",
-    "jul",
-    "aug",
-    "sep",
-    "oct",
-    "nov",
-    "dec",
-  ];
-
-  useEffect(() => {
-    const fetchChartData = async () => {
-      const data = await getAllHccCodesData(
-        dateRange.startDate,
-        dateRange.endDate,
-        selectedOrganization
-      );
-      const records = data?.response?.hccDiseaseCountMap;
-      const records1 = data?.response?.suggestedHccDiseaseCountMap;
-      const datediff =
-        moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
-        1;
-
-      const tempRecords = new Map();
-      const tempRecords1 = new Map();
-      if (datediff != 7 && datediff != 30) {
-        ShortMonth.slice(1).forEach((month) => {
-          tempRecords.set(month, 0);
-          tempRecords1.set(month, 0);
-        });
-      }
-
-      if ((!isNaN(datediff) && datediff == 7) || datediff == 30) {
-        for (let i = 0; i < datediff; i++) {
-          const todayDate = moment();
-          const presentDate = todayDate.subtract(i, "days");
-          const currMonth = parseInt(presentDate.format("MM"));
-          const currDay = presentDate.format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, 0);
-          tempRecords1.set(ShortMonth[currMonth] + currDay, 0);
-        }
-
-        Object.entries(records).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-        Object.entries(records1).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-      }
-
-      setChartData1(tempRecords1);
-      setChartData(tempRecords);
-    };
-    fetchChartData();
-  }, [dateRange]);
-
-  useEffect(() => {
-    setCurrChartData(new Map());
-  }, [chartData]);
-
-  useEffect(() => {
-    setCurrChartData(chartData);
-  }, [currChartData]);
-
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
     : [];
@@ -112,80 +40,63 @@ const index = ({
     getAllHccCodes?.suggestedHccDiseaseCountMap
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
+
+  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
+    ? Object.values(getAllRaf.premiumByDateForHcc)
+    : [];
+
+  const rafScoreByDateForSuggested =
+    getAllRafScoreData?.rafScoreByDateForSuggested
+      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
+      : [];
+
+  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
+    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
+    : [];
+
+  let combinedRafData = rafScoreByDateForSuggested.map(
+    (value, index) => value + rafScoreByDateForHcc[index]
+  );
+
   useEffect(() => {
-    const fetchChartData = async () => {
-      const data = await getAllRafData(dateRange.startDate, dateRange.endDate);
-      const records = data.response.premiumByDateForHcc;
-      const records1 = data.response.premiumByDateForSuggested;
+    getAllHccCodesData(
+      dateRange?.startDate,
+      dateRange?.endDate,
+      selectedOrganization
+    );
+  }, [dateRange, selectedOrganization]);
 
-      const datediff =
-        moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
-        1;
+  useEffect(() => {
+    getAllRafScore(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
+  }, [dateRange, selectedOrganization]);
 
-      const tempRecords = new Map();
-      const tempRecords1 = new Map();
-      if (datediff != 7 && datediff != 30) {
-        ShortMonth.slice(1).forEach((month) => {
-          tempRecords.set(month, 0);
-          tempRecords1.set(month, 0);
-        });
-      }
+  useEffect(() => {
+    getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization);
+  }, [dateRange, selectedOrganization]);
 
-      if ((!isNaN(datediff) && datediff == 7) || datediff == 30) {
-        for (let i = 0; i < datediff; i++) {
-          const todayDate = moment();
-          const presentDate = todayDate.subtract(i, "days");
-          const currMonth = parseInt(presentDate.format("MM"));
-          const currDay = presentDate.format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, 0);
-          tempRecords1.set(ShortMonth[currMonth] + currDay, 0);
-        }
-
-        Object.entries(records).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-        Object.entries(records1).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-      }
-      setRevenChartData1(tempRecords1);
-      setRevenChartData(tempRecords);
-    };
-    fetchChartData();
-  }, [dateRange]);
+  let combinedHccData = suggestedHccDiseaseCountMap.map((value, index) => value + hccDiseaseCountValues[index]);
 
   const options = {
     xAxis: {
       type: "category",
-      data:
-        hccDiseaseCountValues || suggestedHccDiseaseCountMap
-          ? [...currChartData.keys()]
-          : [
-              "jan",
-              "feb",
-              "mar",
-              "apr",
-              "may",
-              "jun",
-              "jul",
-              "aug",
-              "sep",
-              "oct",
-              "nov",
-              "dec",
-            ],
+      data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
     },
     yAxis: {
       type: "value",
       show: true,
     },
     tooltip: {
-      show: true,
-      trigger: "axis",
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        label: {
+          backgroundColor: '#6a7985'
+        }
+      }
     },
     legend: {
       show: false,
@@ -193,7 +104,8 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data: [],
+        data: combinedHccData ? combinedHccData : [],
+        color: "#E88D67",
         type: "line",
         lineStyle: { color: "#E88D67" },
         smooth: true,
@@ -222,7 +134,7 @@ const index = ({
         },
       },
       {
-        name: "Car Gap Codes",
+        name: "Care Gap Codes",
         data: suggestedHccDiseaseCountMap,
         type: "line",
         lineStyle: { color: "#FF9209" },
@@ -248,10 +160,22 @@ const index = ({
       color: "#04B700",
     },
     {
-      title: "Car Gap Codes",
+      title: "Care Gap Codes",
       color: "#FF9209",
     },
   ];
+
+  const totalHccRafScore = getAllRaf?.totalHccRafScore || 0;
+  const totalSuggestedRafScore = getAllRaf?.totalSuggestedRafScore || 0;
+  const totalScore = (totalHccRafScore + totalSuggestedRafScore).toFixed(2);
+  
+  const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
+  const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
+  const totalScoreTwo = (hccDiseaseCountMap + suggestedCount).toFixed(2);
+
+  formatNumber();
+
+  const OverAllRevenue = totalScore;
 
   return (
     <div className="d-flex justify-content-between">
@@ -284,7 +208,25 @@ const index = ({
           </div>
         </div>
 
-        <CodesGraph options={options} isRadio={true} />
+        {totalCodesLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : hccDiseaseCountValues?.length > 0 ? (
+          <div className="totalCodesPies">
+            <CodesGraph
+              options={options}
+              isRadio={true}
+              className="codesGraphStyle2"
+            />
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         className="remianingAreaGraph"
@@ -299,21 +241,34 @@ const index = ({
             <div className={`${styles.header} p-1`}>RAF</div>
             <div className="p-1">
               <div className={styles.header}>Overall RAF</div>
-              <div className={styles.price}>
-                {getAllRafScoreData?.totalHccRaf}
-              </div>
+
+              <div className={styles.price}>{totalScoreTwo}</div>
             </div>
           </div>
         </div>
-        <RafGraph
-          overallData={true}
-          chartData={chartData1}
-          chartRafData={chartRafData1}
-          chartRevenData={chartRevenData1}
-          rafColor={"#E88D67"}
-          rafColor3={"#FF9209"}
-          rafColor2={"#00BC13"}
-        />
+        {rafScorechartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : combinedRafData?.length > 0 ? (
+          <div className="totalCodesPies2">
+            <RafGraph
+              overallData={true}
+              rafColor={"#E88D67"}
+              rafColor3={"#FF9209"}
+              rafColor2={"#00BC13"}
+              selectedValue={selectedValue}
+              dateRange={dateRange}
+              selectedOrganization={selectedOrganization}
+            />
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         style={{
@@ -328,13 +283,33 @@ const index = ({
             <div className={`${styles.header} p-1`}>Revenue</div>
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
-              <div
-                className={styles.price}
-              >{`$ ${getAllRaf?.totalHccRafScore}`}</div>
+              <div className={styles.price}>{`$ ${
+                formatNumber(OverAllRevenue) || 0
+              }`}</div>
             </div>
           </div>
         </div>
-        <RevenueGraph isMultiple={true} />
+
+        {revenueChartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : premiumByDateForHcc?.length > 0 ? (
+          <div className="totalCodesPies2">
+            <RevenueGraph
+              selectedOrganization={selectedOrganization}
+              isMultiple={true}
+              selectedValue={selectedValue}
+              className="revenueCharts1"
+            />
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
     </div>
   );
@@ -346,14 +321,20 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
-
+    rafScorechartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
+
+    totalCodesLoader:
+      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
+    revenueChartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.loading,
   }),
   {
     getAllHccCodesData: HccCodes,
     getAllRafData: RafCounts,
-    getAllRafScore: RafCountScore,
+    getAllRafScore: getAllRafScore,
   }
 );
 export default enhancer(index);

@@ -134,8 +134,8 @@ const SentReport = ({
                   <SpinnerDots />
                 ) : (
                   <div className=" col-xl-12 d-flex">
-                    <div className="col-xl-5">
-                      <div>
+                    <div className={`col-xl-6 ${styles.cardDiv}`}>
+                      <div className={styles.cardContainer}>
                         {details?.receivedReportDTOList?.data?.length > 0 ? (
                           details?.receivedReportDTOList?.data.map(
                             (item, index) => (
@@ -161,7 +161,7 @@ const SentReport = ({
                         )}
                       </div>
                     </div>
-                    <div className="col-xl-7" style={{ marginLeft: "10px" }}>
+                    <div className="col-xl-6" style={{ marginLeft: "10px" }}>
                       <div className={styles.cardContainer}>
                         <div className={styles.card2}>
                           <div className={styles.summaryText}>Summary</div>
@@ -171,6 +171,7 @@ const SentReport = ({
                                 details?.receivedReportDTOList?.totalElements
                               }
                               styles={styles}
+                              isSent={true}
                             />
 
                             <OverallUsersSection
@@ -285,7 +286,7 @@ const SentReport = ({
       </div>
       {details?.receivedReportDTOList?.data?.length > 0 ? (
         <Pagination
-          first={receivedPageNo===0?0:paginationFirst}
+          first={receivedPageNo === 0 ? 0 : paginationFirst}
           totalRecords={details?.receivedReportDTOList?.totalElements}
           onPageChange={onSentPageChange}
         />

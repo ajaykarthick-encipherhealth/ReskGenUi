@@ -40,7 +40,7 @@ export async function getReviewerStatus(startDate, endDate,organizationId) {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/reviewerstatus/chart?startDate=${startDate?startDate:""}&endDate=${endDate?endDate:""}&organizationId=${organizationId?organizationId:""}`,
+    `dbservice/tenantadmin/dashboard/reviewerstatus/chart?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId?organizationId:""}`,
     options
   );
   return data;

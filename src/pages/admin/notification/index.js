@@ -348,7 +348,7 @@ const Notification = ({ getAllCustomUsers, allCustomUsers }) => {
                       className={styles.btnLoading}
                     />
                   ) : null}
-                  Send
+                  Send 
                 </Button>
               </div>
             </div>

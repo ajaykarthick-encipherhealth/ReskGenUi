@@ -78,7 +78,10 @@ function AllocatedAdminList({
             style={{ textAlign: "center", width: "40px" }}
           >
             {loading ? (
-              <Spin indicator={<LoadingOutlined/>} style={{fontSize:18,color:"#04306f",marginTop:"-15px"}} /> 
+              <Spin
+                indicator={<LoadingOutlined />}
+                style={{ fontSize: 18, color: "#04306f", marginTop: "-15px" }}
+              />
             ) : (
               <input
                 type="checkbox"
@@ -92,7 +95,9 @@ function AllocatedAdminList({
                         { id: data?.patientId, name: data?.patientName },
                       ];
                     } else {
-                      return prev.filter((item) => item?.id !== data?.patientId);
+                      return prev.filter(
+                        (item) => item?.id !== data?.patientId
+                      );
                     }
                   });
                 }}
@@ -101,7 +106,6 @@ function AllocatedAdminList({
                 )}
                 className={TableStyle.customChecked}
               />
-              
             )}
           </td>
         </tr>
@@ -142,7 +146,7 @@ function AllocatedAdminList({
                 )}
               </span>
             </th>
-            <th style={{ paddingLeft: "22px" }}>PRIORITY</th>
+            <th style={{ paddingLeft: "0px" }}>PRIORITY</th>
             <th>
               <div
                 style={{
@@ -151,30 +155,40 @@ function AllocatedAdminList({
                   justifyContent: "space-around",
                 }}
               >
-                <input
-                  type="checkbox"
-                  onClick={() => {
-                    setSelectAllChecked(!selectAllChecked);
-
-                  }}
-                  style={{
-                    width: "20px",
-                    height: "20px",
-                    flexhrink: "0",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
-                  checked={
-                    selectAllChecked &&
-                    selectedRowsId?.length === selectedChart?.length
-                  }
-                  className={
-                    selectAllChecked &&
-                    selectedRowsId?.length == selectedChart?.length
-                      ? TableStyle.customChecked2
-                      : ""
-                  }
-                />
+                {loading ? (
+                  <Spin
+                    indicator={<LoadingOutlined />}
+                    style={{
+                      fontSize: 18,
+                      color: "#ffff",
+                      marginTop: "-15px",
+                    }}
+                  />
+                ) : (
+                  <input
+                    type="checkbox"
+                    onClick={() => {
+                      setSelectAllChecked(!selectAllChecked);
+                    }}
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      flexhrink: "0",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                    }}
+                    checked={
+                      selectAllChecked &&
+                      selectedRowsId?.length === selectedChart?.length
+                    }
+                    className={
+                      selectAllChecked &&
+                      selectedRowsId?.length == selectedChart?.length
+                        ? TableStyle.customChecked2
+                        : ""
+                    }
+                  />
+                )}
               </div>
             </th>
           </tr>

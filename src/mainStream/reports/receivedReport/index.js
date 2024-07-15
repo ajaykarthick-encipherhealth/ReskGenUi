@@ -108,8 +108,8 @@ const ReceivedReport = ({
                   <SpinnerDots />
                 ) : (
                   <div className=" col-xl-12 d-flex">
-                    <div className="col-xl-5">
-                      <div style={{ height: "100%" }}>
+                    <div className={`col-xl-6 ${styles.cardDiv}`}>
+                      <div className={styles.cardContainer}>
                         {details?.reportStatusDTOList.content.length > 0 ? (
                           details?.reportStatusDTOList.content.map(
                             (item, index) => (
@@ -132,7 +132,7 @@ const ReceivedReport = ({
                         )}
                       </div>
                     </div>
-                    <div className="col-xl-7" style={{ marginLeft: "10px" }}>
+                    <div className="col-xl-6" style={{ marginLeft: "10px" }}>
                       <div className={styles.cardContainer}>
                         <div className={styles.card2}>
                           <div className={styles.summaryText}>Summary</div>

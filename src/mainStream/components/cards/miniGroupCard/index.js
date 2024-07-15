@@ -3,6 +3,8 @@ import { Empty, Popover, Avatar } from "antd";
 import dayjs from "dayjs";
 import EditButton from "../../../../images/adminUsers/EditButton";
 import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 const CardComponent = ({
   data,
@@ -21,14 +23,14 @@ const CardComponent = ({
   };
 
   return (
-    <div className={styles.cardContainer}>
+    <div>
       {data?.length > 0 ? (
         <div
           key={index}
-          style={{ marginBottom: "10px", cursor: "pointer" }}
+          style={{ marginBottom: "0px", cursor: "pointer" }}
           className={`${styles.card} ${
             index === selectedCardIndex ? styles.selectedCard : ""
-          }`}
+          } py-3`}
           onClick={() => handleReceiverReport(item)}
         >
           <div className={styles.contentGroup}>
@@ -41,33 +43,24 @@ const CardComponent = ({
                   paddingBottom: "5px",
                 }}
               >
-                <div className={`col-xl-6 ${styles.pName}`}>
+                <div className={`${styles.pName}`}>
                   {item.reportName}
-                </div>
-                <div className={`col-xl-2 ${styles.dataContainer}`}>
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedRows(item);
-                      dispatch(selectedReport(item));
-                      setOpenEdit(true);
-                    }}
-                  >
-                    <EditButton />
+                  
+                    <div className={`${styles.headText}`}>
+                      {item._id}
+                    </div>
+                  
+                  <div className="d-flex">
+                    <div className={`${styles.dateText}`}>
+                      {handleDateFormat(item.sendDate)}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div style={{ paddingBottom: "5px" }}>
-                <div className={`col-xl-12 ${styles.headText}`}>{item._id}</div>
-              </div>
-              <div className="d-flex justify-content-between align-items-center">
-                <div className={`col-xl-2 ${styles.text}`}>
-                  {handleDateFormat(item.sendDate)}
-                </div>
-                <div className={`col-xl-4 ${styles.text}`}>
+                <div className={`${styles.text}`}>
                   <Avatar.Group maxCount={2}>
                     {item?.receivedUsers?.map((data, index) => {
-                      const { firstName, lastName, profileImageUrl } = data?.userDetails || {};
+                      const { firstName, lastName, profileImageUrl } =
+                        data?.userDetails || {};
                       if (!firstName && !lastName) return null;
                       return (
                         <Popover
@@ -132,6 +125,19 @@ const CardComponent = ({
                       );
                     })}
                   </Avatar.Group>
+                </div>
+                <div className={`${styles.dataContainer}`}>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedRows(item);
+                      dispatch(selectedReport(item));
+                      setOpenEdit(true);
+                    }}
+                  >
+                    {/* <EditButton /> */}
+                    <FontAwesomeIcon icon={faPenToSquare} />
+                  </div>
                 </div>
               </div>
             </div>

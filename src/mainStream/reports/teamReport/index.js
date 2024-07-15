@@ -49,7 +49,7 @@ const TeamReport = ({
   auditReport,
   teamReport,
   handleHeaderCheckbox,
-  selectAllFlags
+  selectAllFlags,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -293,10 +293,11 @@ const TeamReport = ({
                 }}
               >
                 {" "}
-                {reportListAll?.response?.response?.data?.length > 0 &&
-                  // (isLoading ? (
-                  //   <Spin />
-                  // ) : (
+                {
+                  reportListAll?.response?.response?.data?.length > 0 && (
+                    // (isLoading ? (
+                    //   <Spin />
+                    // ) : (
                     <>
                       <div className="col-xl-1 d-flex">
                         <div>
@@ -333,18 +334,19 @@ const TeamReport = ({
                         </span>
                       </div>
                     </>
+                  )
                   // ))
-                  }
+                }
               </div>
               <div className="row">
                 <div>
                   <div className=" col-xl-12 d-flex" style={{ height: "100%" }}>
                     {reportListAll?.response?.response?.data?.length === 0 ? (
-                      <div className={`col-xl-6 ${styles.emptyCard}`}>
+                      <div className={`col-xl-12 ${styles.emptyCard}`}>
                         <Empty />
                       </div>
                     ) : (
-                      <div className="col-xl-6">
+                      <div className={`col-xl-6 ${styles.cardDiv}`}>
                         <div className={styles.cardContainer}>
                           {reportListAll?.response?.response?.data?.map(
                             (item, id) => (

@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { receivedReport, reviewerReport, sentReport } from "./actions";
+import { getAllOrganizationAction, getAllUsersAction } from "./actions";
 
 const initialState = {
   loading: true,
@@ -31,24 +31,23 @@ const createReducer = (actionType) =>
     initialState
   );
 
+const getReportLoading = (type) =>
+  handleActions(
+    {
+      [type.START]: () => true,
+      [type.SUCCEEDED]: () => false,
+      [type.FAILED]: () => false,
+    },
+    false
+  );
 
-  const getReportLoading=(type) => handleActions(
-  {
-    [type.START]: () => true,
-    [type.SUCCEEDED]: () => false,
-    [type.FAILED]: () => false,
-  },
-  false
-);
+const adminUsersReducer = combineReducers({
+  allOrganization: createReducer(getAllOrganizationAction),
+  allUsers: createReducer(getAllUsersAction),
 
-const ReportReducer = combineReducers({
-  reviewer: createReducer(reviewerReport),
-  reviewerLoader: getReportLoading(reviewerReport),
-  sent: createReducer(sentReport),
-  sentLoader: getReportLoading(sentReport),
-  received: createReducer(receivedReport),
-  receivedLoader: getReportLoading(receivedReport)
-
+  // loaders
+  allOrganizationLoader: getReportLoading(getAllOrganizationAction),
+  allUsersLoading: getReportLoading(getAllUsersAction),
 });
 
-export default ReportReducer;
+export default adminUsersReducer;

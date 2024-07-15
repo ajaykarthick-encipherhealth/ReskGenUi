@@ -14,6 +14,10 @@ export const RafCounts = createActionThunk(
   "GET_ALL_RAF_COUNTS_REVENIEW",
   network.getAllRaf
 );
+export const accuracyScore = createActionThunk(
+  "ACCURACY_SCORE_TENANT",
+  network.accuracyScores
+);
 
 export const FilesCount = createActionThunk(
   "GET_ALL_FILES_COUNT",

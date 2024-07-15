@@ -187,7 +187,10 @@ function AllocatedL2AdminList({
         <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
           {processstatusBodyTemplate(data)}
         </td>
-        <td className={TableStyle.lastBorder} style={{ textAlign: "center",width:"40px" }}>
+        <td
+          className={TableStyle.lastBorder}
+          style={{ textAlign: "center", width: "40px" }}
+        >
           {loading ? (
             <Spin
               indicator={<LoadingOutlined />}
@@ -272,29 +275,44 @@ function AllocatedL2AdminList({
             <th>
               {patinetListAll && patinetListAll.length > 0 && (
                 <div
-                  style={{width:"40px", display: "flex", justifyContent: "space-around" }}
+                  style={{
+                    width: "40px",
+                    display: "flex",
+                    justifyContent: "space-around",
+                  }}
                 >
-                  <input
-                    type="checkbox"
-                    onClick={() => setSelectAllChecked(!selectAllChecked)}
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      flexhrink: "0",
-                      borderRadius: "4px",
-                      cursor: "pointer",
-                    }}
-                    checked={
-                      selectAllChecked &&
-                      selectedRowsId.length == selectedChart.length
-                    }
-                    className={
-                      selectAllChecked &&
-                      selectedRowsId.length == selectedChart.length
-                        ? TableStyle.customChecked2
-                        : ""
-                    }
-                  />
+                  {loading ? (
+                    <Spin
+                      indicator={<LoadingOutlined />}
+                      style={{
+                        fontSize: 18,
+                        color: "#ffff",
+                        marginTop: "-15px",
+                      }}
+                    />
+                  ) : (
+                    <input
+                      type="checkbox"
+                      onClick={() => setSelectAllChecked(!selectAllChecked)}
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        flexhrink: "0",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                      checked={
+                        selectAllChecked &&
+                        selectedRowsId.length == selectedChart.length
+                      }
+                      className={
+                        selectAllChecked &&
+                        selectedRowsId.length == selectedChart.length
+                          ? TableStyle.customChecked2
+                          : ""
+                      }
+                    />
+                  )}
                 </div>
               )}
             </th>

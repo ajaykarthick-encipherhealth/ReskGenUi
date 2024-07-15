@@ -15,13 +15,9 @@ import auditHold from "../../.../../../../images/dashboard/auditHold.png";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import auditDecliendbg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
 import spinSTYles from "../../../../styles/auth.module.css";
-import pendingIcon from "../../.../../../../images/trackingImages/AuditPending.png";
-import declineIcon from "../../.../../../../images/trackingImages/AuditDeclined.png";
-import reAuditIcon from "../../.../../../../images/trackingImages/reAuditTrack.png";
-import auditHoldIcon from "../../.../../../../images/trackingImages/AuditHoldTrack.png";
-import auditedIcon from "../../.../../../../images/trackingImages/AuditedTrack.png";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
-
+import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faClockRotateLeft,faFileCircleCheck,faFileCircleExclamation,faCirclePause,faCircleXmark,faUsers} from "@fortawesome/free-solid-svg-icons";
 const WorkFlow = () => {
   const currentDate = dayjs();
   const worlFlowData = useSelector((state) => state?.l2Dashboard?.data);
@@ -44,7 +40,7 @@ const WorkFlow = () => {
   const card1Data = [
     {
       id: 1,
-      icon: allocated,
+      icon: <FontAwesomeIcon icon={faUsers} />,
       title: "Allocated",
       charts: worlFlowData?.data?.response?.auditAllocated,
       days: `Last ${
@@ -54,7 +50,7 @@ const WorkFlow = () => {
     },
     {
       id: 2,
-      icon: auditedIcon,
+      icon: <FontAwesomeIcon icon={faFileCircleCheck} />,
       title: "Audited",
       charts: worlFlowData?.data?.response?.audited,
       days: `Last ${
@@ -64,7 +60,7 @@ const WorkFlow = () => {
     },
     {
       id: 3,
-      icon: reAuditIcon,
+      icon: <FontAwesomeIcon icon={faFileCircleExclamation} />,
       title: "Re Audit",
       charts: worlFlowData?.data?.response?.reAudited,
       days: `Last ${
@@ -74,7 +70,7 @@ const WorkFlow = () => {
     },
     {
       id: 4,
-      icon: auditHoldIcon,
+      icon: <FontAwesomeIcon icon={faCirclePause} />,
       title: "Audit Hold",
       charts: worlFlowData?.data?.response?.auditHold,
       days: `Last ${
@@ -84,7 +80,7 @@ const WorkFlow = () => {
     },
     {
       id: 5,
-      icon: pendingIcon,
+      icon:  <FontAwesomeIcon icon={faClockRotateLeft} />,
       title: "Audit Pending",
       charts: worlFlowData?.data?.response?.auditPending,
       days: `Last ${
@@ -94,7 +90,7 @@ const WorkFlow = () => {
     },
     {
       id: 6,
-      icon: declineIcon,
+      icon: <FontAwesomeIcon icon={faCircleXmark} />,
       title: "Audit Declined",
       charts: worlFlowData?.data?.response?.auditDecliend,
       days: `Last ${
@@ -137,7 +133,7 @@ const WorkFlow = () => {
                 className={styles.colData}
               >
                 <div className={styles.header}>
-                  <Image src={data?.icon} className={styles.Img} />
+                  <div>{data.icon}</div>
                   <div className={styles.heading}>{data.title}</div>
                 </div>
                 <div className={styles.charts}>{`${

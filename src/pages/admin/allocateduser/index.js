@@ -168,7 +168,7 @@ const Patient = ({
   };
 
   const onPageChange = (e) => {
-    setIsLoading(true);
+    setIsLoading(false);
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageSize(e.rows);
@@ -754,6 +754,7 @@ const Patient = ({
                                     setSortDueOrder("DESC");
                                     selectTabClick(1);
                                     setActiveTab(1);
+                                    setPaginationFirst("0")
                                   }}
                                 >
                                   <Nav.Link
@@ -856,7 +857,7 @@ const Patient = ({
                                                 <tr>
                                                   <th
                                                     style={{
-                                                      textAlign: "center",
+                                                      textAlign: "start",
                                                     }}
                                                   >
                                                     NAME

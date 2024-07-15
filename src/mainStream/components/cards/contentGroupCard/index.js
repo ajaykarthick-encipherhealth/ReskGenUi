@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Spin, Tooltip, notification } from "antd";
-import styles from "../../../../resusablereport/reports/report.module.css";
+import styles from "../../../../mainStream/reports/report.module.css";
 import TableStyle from "../../../../components/table/table.module.css";
 import dayjs from "dayjs";
 import {
@@ -13,6 +13,9 @@ import { useRouter } from "next/router";
 import { getMaskData } from "../../../../utils/reusable";
 import { handleCopyToClipboard } from "../../../../components/commonFunctions";
 import { LoadingOutlined } from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFlag } from "@fortawesome/free-regular-svg-icons";
+// import {  } from "@fortawesome/free-solid-svg-icons";
 
 const ContentGroupCard = ({
   item,
@@ -106,8 +109,11 @@ const ContentGroupCard = ({
 
   return (
     <div className={styles.card}>
-      <div className={styles.contentGroup} style={{ cursor: "pointer" }}>
-        <div className={styles.inputContainer}>
+      <div
+        className={`${styles.contentGroup} my-2`}
+        style={{ cursor: "pointer", display: "flex" }}
+      >
+        <div style={{ width: "5%" }}>
           {loading ? (
             <Spin
               indicator={<LoadingOutlined />}
@@ -125,12 +131,16 @@ const ContentGroupCard = ({
           )}
         </div>
         <div
-          className={`col-xl-12 ${styles.checkSep}`}
+          style={{
+            width: "95%",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
           onClick={() => handleTableRowClick(patientId)}
         >
-          <div className="d-flex justify-content-between align-items-center pb-1">
+          <div style={{ width: "70%" }}>
             <div
-              className={`col-xl-6 ${styles.pName}`}
+              className={`${styles.pName} mb-2`}
               onClick={() =>
                 handleCopyToClipboard({
                   text: patientName,
@@ -140,15 +150,75 @@ const ContentGroupCard = ({
             >
               {patientName ? getMaskData(patientName) : "---"}
             </div>
-            <div className={`col-xl-6 ${styles.dataContainer}`}>
-              <span className={styles.raf}>
+            <div
+              className="d-flex justify-content-between"
+              style={{ width: "100%" }}
+            >
+              <div style={{ width: "40%" }}>
+                <Tooltip title={patientId} placement="bottom">
+                  <div className={`${styles.headText} -mt-2`}>
+                    <p
+                      style={{
+                        width: "]",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        marginTop: "-2px",
+                      }}
+                    >
+                      {patientId ? patientId : ""}
+                    </p>
+                  </div>
+                </Tooltip>
+                <Tooltip title="Processed Date" placement="bottom">
+                  <div className={`${styles.initialText}`}>
+                    {dateFormate(dayjs, processedDate)}
+                  </div>
+                </Tooltip>
+              </div>
+              <div className={`${styles.headText}`} style={{ width: "30%" }}>
+                HCC
+                <div className={`${styles.initialText} mt-1`}>
+                  {validDiseaseCount ? validDiseaseCount : "---"}
+                </div>
+              </div>
+              <div className={`${styles.headText}`} style={{ width: "30%" }}>
+                SUPERVISOR
+                <div className={`${styles.initialText} mt-1`}>
+                  {auditedByFirstName ||
+                  auditedByLastName ||
+                  auditedByProfileImage ? (
+                    <div className="d-flex align-items-center">
+                      <span className={styles.avatarAlign}>
+                        {renderUserPrfoileAvatar(
+                          auditedByFirstName,
+                          auditedByLastName,
+                          auditedByProfileImage,
+                          "header"
+                        )}
+                      </span>
+                      <span>
+                        {auditedByFirstName} {auditedByLastName}
+                      </span>
+                    </div>
+                  ) : (
+                    <div>---</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ width: "30%" }}>
+            <div className=" d-flex justify-content-between mb-1 ">
+              <div className={styles.raf}>
                 <Tooltip title="Raf Score" placement="bottom">
                   {rafSum ? rafSum : "---"}
                 </Tooltip>
-              </span>
-              <span className={styles.avatarAlign}>
+              </div>
+              {console.log(flag[0]?.flagDetails?.flagColour, "flagFlag")}
+              <div className={styles.avatarAlign}>
                 <Tooltip title={flag[0]?.flagDetails?.flagName}>
-                  <svg
+                  {/* <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="23"
                     height="23"
@@ -164,83 +234,48 @@ const ContentGroupCard = ({
                       stroke="#000"
                       strokeWidth="10"
                     />
-                  </svg>
+                  </svg> */}
+
+                  <FontAwesomeIcon
+                    icon={faFlag}
+                    style={{
+                      color: flag[0]?.flagDetails?.flagColour
+                        ? flag[0]?.flagDetails?.flagColour
+                        : "#C0C0C0",
+                      fontSize:"20px",
+                    marginTop:"5px"
+                    }}
+                  />
                 </Tooltip>
-              </span>
-              <span className={styles.avatarAlign}>
+              </div>
+              <div className={styles.avatarAlign}>
                 {auditstatusBodyTemplate}
-              </span>
-              <span>{processstatusBodyTemplate}</span>
-            </div>
-          </div>
-          <div className="d-flex justify-content-around align-items-center pb-1">
-            <Tooltip title={patientId} placement="bottom">
-              <div className={`col-xl-2 ${styles.headText}`}>
-                <p
-                  style={{
-                    width: "120px",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {patientId ? patientId : ""}
-                </p>
               </div>
-            </Tooltip>
-            <div className={`col-xl-2 ${styles.headText}`}>HCC</div>
-            <div className={`col-xl-4 ${styles.headText}`}>SUPERVISOR</div>
-            <div className={`col-xl-4 ${styles.headText}`}>REVIEWER</div>
-          </div>
-          <div className="d-flex justify-content-around align-items-center">
-            <Tooltip title="Processed Date" placement="bottom">
-              <div className={`col-xl-2 ${styles.text}`}>
-                {dateFormate(dayjs, processedDate)}
+              <div>{processstatusBodyTemplate}</div>
+            </div>
+            <div className={`${styles.headText}`}>
+              REVIEWER
+              <div className={`${styles.initialText} mt-1`}>
+                {patientAllocatedFirstName ||
+                patientAllocatedLastName ||
+                patientAllocatedProfileImage ? (
+                  <div className="d-flex align-items-center">
+                    <span className={styles.avatarAlign}>
+                      {renderUserPrfoileAvatar(
+                        patientAllocatedFirstName,
+                        patientAllocatedLastName,
+                        patientAllocatedProfileImage,
+                        "header"
+                      )}
+                    </span>
+                    <span>
+                      {patientAllocatedFirstName} {patientAllocatedLastName}
+                    </span>
+                  </div>
+                ) : (
+                  <div>---</div>
+                )}
               </div>
-            </Tooltip>
-            <div className={`col-xl-2 ${styles.text}`}>
-              {validDiseaseCount ? validDiseaseCount : "---"}
-            </div>
-            <div className={`col-xl-4 ${styles.text}`}>
-              {auditedByFirstName ||
-              auditedByLastName ||
-              auditedByProfileImage ? (
-                <div className="d-flex align-items-center">
-                  <span className={styles.avatarAlign}>
-                    {renderUserPrfoileAvatar(
-                      auditedByFirstName,
-                      auditedByLastName,
-                      auditedByProfileImage,
-                      "header"
-                    )}
-                  </span>
-                  <span>
-                    {auditedByFirstName} {auditedByLastName}
-                  </span>
-                </div>
-              ) : (
-                <div>---</div>
-              )}
-            </div>
-            <div className={`col-xl-4 ${styles.text}`}>
-              {patientAllocatedFirstName ||
-              patientAllocatedLastName ||
-              patientAllocatedProfileImage ? (
-                <div className="d-flex align-items-center">
-                  <span className={styles.avatarAlign}>
-                    {renderUserPrfoileAvatar(
-                      patientAllocatedFirstName,
-                      patientAllocatedLastName,
-                      patientAllocatedProfileImage,
-                      "header"
-                    )}
-                  </span>
-                  <span>
-                    {patientAllocatedFirstName} {patientAllocatedLastName}
-                  </span>
-                </div>
-              ) : (
-                <div>---</div>
-              )}
             </div>
           </div>
         </div>

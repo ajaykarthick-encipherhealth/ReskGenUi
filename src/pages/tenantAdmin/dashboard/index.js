@@ -3,6 +3,7 @@ import Header from "../../../jsx/layouts/nav/Header";
 import styles from "./styles.module.css";
 import { connect } from "react-redux";
 import { actions as dashboardWorkflowActions } from "../../../stores/tenantAdmin/dashboard/workFlow";
+import { actions as defaultActions } from ".././../../stores/tenantAdmin/dashboard/default";
 import Card from "../../../components/card";
 import HeaderFilters from "./components/headerFilters";
 import TotalCounts from "./default/totalcounts";
@@ -21,6 +22,7 @@ import HeadTitle from "../../../components/headtitle";
 import PieChartInfo from "./components/pieChart/PieChartInfo";
 import OrgPieChartInfo from "./components/OrgPieChart/OrgPieChartInfo";
 import { Row, Skeleton, Spin } from "antd";
+import moment from "moment";
 
 const Index = ({
   getUserStatusData,
@@ -38,10 +40,17 @@ const Index = ({
   allocatedLoader,
   reviewerLoader,
   orgLoader,
+  getTop10DiseasesData,
+  getAccuracyScore,
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
-  const [loaderButton, setLoaderButton] = useState(true);
-  const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
+
+  const [selectedValue, setSelectedValue] = useState(null);
+  const [dateRange, setDateRange] = useState({
+    startDate:
+      moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z",
+    endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
+  });
   const [selectedOrganization, setSelectedOrganization] = useState("");
 
   const allocatedData = [
@@ -82,12 +91,12 @@ const Index = ({
   const auditorData = [
     {
       value: auditorStatusData?.response?.auditedStatus?.AUDITED,
-      name: "Audit Completed",
+      name: " Audit Completed",
       itemStyle: { color: "#4AA1AB" },
     },
     {
       value: auditorStatusData?.response?.auditedStatus?.AUDIT_PENDING,
-      name: "Audit Pending",
+      name: " Audit Pending",
       itemStyle: { color: "#BD3A79" },
     },
     {
@@ -182,7 +191,17 @@ const Index = ({
       selectedOrganization
     );
     getOrganizationStatusData();
-  }, [dateRange]);
+    getTop10DiseasesData(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
+    getAccuracyScore(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
+  }, [dateRange, selectedOrganization]);
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
@@ -196,15 +215,17 @@ const Index = ({
             handleOrganizationChange={handleOrganizationChange}
             setSelectedOrganization={setSelectedOrganization}
             selectedOrganization={selectedOrganization}
-            loaderButton={loaderButton}
-            setLoaderButton={setLoaderButton}
+            setSelectedValue={setSelectedValue}
           />
           {activeBtn === "default" ? (
             <>
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCounts dateRange={dateRange} selectedOrganization={selectedOrganization} />
+                    <TotalCounts
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                    />
                   </Card>
                 </div>
                 <div className={`col`}>
@@ -220,7 +241,11 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCodes dateRange={dateRange} selectedOrganization={selectedOrganization}/>
+                    <TotalCodes
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      selectedValue={selectedValue}
+                    />
                   </Card>
                 </div>
               </div>
@@ -228,7 +253,11 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <HccCodes dateRange={dateRange} selectedOrganization={selectedOrganization}/>
+                    <HccCodes
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      selectedValue={selectedValue}
+                    />
                   </Card>
                 </div>
               </div>
@@ -236,7 +265,11 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <CaregapCodes dateRange={dateRange} selectedOrganization={selectedOrganization} />
+                    <CaregapCodes
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      selectedValue={selectedValue}
+                    />
                   </Card>
                 </div>
               </div>
@@ -244,12 +277,21 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <RadiolodyAndLab dateRange={dateRange} selectedOrganization={selectedOrganization}/>
+                    {/* <RadiolodyAndLab
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                    /> */}
                   </Card>
                 </div>
                 <div className={`col-lg-8`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Files dateRange={dateRange} selectedOrganization={selectedOrganization}/>
+                    <Files
+                      activeBtn={activeBtn}
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      selectedValue={selectedValue}
+                      classNames="workflowChart"
+                    />
                   </Card>
                 </div>
               </div>
@@ -283,7 +325,6 @@ const Index = ({
                     <OrgPieChartInfo
                       data={orgData}
                       header="Allocated"
-                      loaderButton={loaderButton}
                       orgLoader={orgLoader}
                     />
                   </Card>
@@ -291,7 +332,12 @@ const Index = ({
                 <div className={`col-lg-9`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <HeadTitle header="Files" fontSize="16px" />
-                    <WorkFlowFiles />
+
+                    <WorkFlowFiles
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      classNames="workflowChart1"
+                    />
                   </Card>
                 </div>
               </div>
@@ -299,13 +345,12 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-3`}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
-                    <HeadTitle header="Allocated Status" fontSize="16px" />
+                    <HeadTitle header="Allocated Status" fontSize="20px" />
 
-                    {loaderButton && allocatedLoader ? (
+                    {allocatedLoader ? (
                       <div>{renderCardSkeleton()}</div>
                     ) : allocatedLoader ? (
                       <div className="d-flex justify-content-center align-items-center">
-                        {" "}
                         <Spin size="large" />
                       </div>
                     ) : (
@@ -315,14 +360,9 @@ const Index = ({
                 </div>
                 <div className={`col-lg-3`}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
-                    <HeadTitle header="Reviewer Status" fontSize="16px" />
-                    {loaderButton && reviewerLoader ? (
+                    <HeadTitle header="Reviewer Status" fontSize="20px" />
+                    {reviewerLoader ? (
                       <div>{renderCardSkeleton()}</div>
-                    ) : reviewerLoader ? (
-                      <div className="d-flex justify-content-center align-items-center">
-                        {" "}
-                        <Spin size="large" />
-                      </div>
                     ) : (
                       <PieChartInfo data={reviewerData} header="Reviewer" />
                     )}
@@ -330,15 +370,10 @@ const Index = ({
                 </div>
                 <div className={`col-lg-3`}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
-                    <HeadTitle header="Auditor Status" fontSize="16px" />
+                    <HeadTitle header="Sample Auditor Status" fontSize="20px" />
 
-                    {loaderButton && auditorLoader ? (
+                    {auditorLoader ? (
                       <div>{renderCardSkeleton()}</div>
-                    ) : auditorLoader ? (
-                      <div className="d-flex justify-content-center align-items-center">
-                        {" "}
-                        <Spin size="large" />
-                      </div>
                     ) : (
                       <PieChartInfo data={auditorData} header="Auditor" />
                     )}
@@ -346,15 +381,10 @@ const Index = ({
                 </div>
                 <div className={`col-lg-3`}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
-                    <HeadTitle header="Users" fontSize="16px" />
+                    <HeadTitle header="Users" fontSize="20px" />
 
-                    {loaderButton && userLoader ? (
+                    {userLoader ? (
                       <div>{renderCardSkeleton()}</div>
-                    ) : userLoader ? (
-                      <div className="d-flex justify-content-center align-items-center">
-                        {" "}
-                        <Spin size="large" />
-                      </div>
                     ) : (
                       <PieChartInfo data={usersData} header="Users" />
                     )}
@@ -399,8 +429,9 @@ const enhancer = connect(
     allocatedLoader: state?.tenantAdmin?.workFlow?.allocatedLoader,
     reviewerLoader: state?.tenantAdmin?.workFlow?.reviewerLoader,
     orgLoader: state?.tenantAdmin?.workFlow?.organizationLoader,
+    top10DiseasesData:
+      state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data?.response,
   }),
-
   {
     getUserStatusData: dashboardWorkflowActions?.userStatusAction,
     getAuditorStatusData: dashboardWorkflowActions?.auditorStatusAction,
@@ -408,6 +439,8 @@ const enhancer = connect(
     getReviewerStatusData: dashboardWorkflowActions?.reviewerStatusAction,
     getOrganizationStatusData:
       dashboardWorkflowActions?.organizationStatusAction,
+    getTop10DiseasesData: defaultActions.top10Diseases,
+    getAccuracyScore: defaultActions.accuracyScore,
   }
 );
 export default enhancer(Index);

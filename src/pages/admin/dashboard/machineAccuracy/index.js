@@ -7,7 +7,7 @@ import Image from "next/image";
 import Card from "../../../../components/card/index";
 import styles from "./styles.module.css";
 import HeadTitle from "../../../../components/headtitle";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 import { Empty, Spin } from "antd";
@@ -20,8 +20,6 @@ import {
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
-import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
- import { faCheckDouble} from "@fortawesome/free-solid-svg-icons";
 
 export const TabButtons = [
   {
@@ -117,69 +115,78 @@ export const getGraphData = (
   currentBtn,
   currentDate
 ) => {
-  if (
-    currentBtn === "Monthly" &&
-    parseInt(year) <= parseInt(currentDate.getFullYear())
-  ) {
-    if (parseInt(year) <= parseInt(currentDate.getFullYear())) {
-      return param?.map((item) => item[text]);
+  console.log(param,
+    text,
+    month,
+    year,
+    currentBtn,
+    currentDate, "testing");
+  // if (data) {
+    // const param = Object.values(data);
+    if (
+      currentBtn === "Monthly" &&
+      parseInt(year) <= parseInt(currentDate.getFullYear())
+    ) {
+      if (parseInt(year) <= parseInt(currentDate.getFullYear())) {
+        return param?.map((item) => 0);
+      }
+    } else if (currentBtn !== "Monthly") {
+      if (parseInt(month) <= parseInt(currentDate?.getMonth() + 1)) {
+        return param?.map((item) => 0);
+      }
     }
-  } else if (currentBtn !== "Monthly") {
-    if (parseInt(month) <= parseInt(currentDate?.getMonth() + 1)) {
-      return param?.map((item) => item[text]);
-    }
-  }
+  // } else {
+  //   return []
+  // }
 };
 export const chartBlockedDates = (
   year,
   month,
-  param,
+  data,
   val,
   currentBtn,
   currentDate
 ) => {
-  year = Number(year);
-  month = Number(month);
-  if (year < currentDate.getFullYear()) {
-    return param?.map((item) => item[val]);
-  } else if (
-    year == currentDate.getFullYear() &&
-    month < currentDate.getMonth() + 1 &&
-    currentBtn !== "Monthly"
-  ) {
-    return param?.map((item) => item[val]);
-  } else if (
-    year == currentDate.getFullYear() &&
-    month == currentDate.getMonth() + 1 &&
-    currentBtn !== "Monthly"
-  ) {
-    if (currentBtn == "Daily") {
-      return param?.map(
-        (item, index) => index < new Date().getDate() && item[val]
-      );
-    } else if (currentBtn == "Weekly") {
-      return param?.map(
-        (item, index) => index < getDateWeek(currentDate) && item[val]
-      );
-    }
-    // else if (currentBtn == "Monthly") {
-    //   return param?.data?.response.map(
-    //     (item, index) => index < new Date().getMonth() + 1 && item[val]
-    //   );
-    // }
-  } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
-    if (parseInt(year) > parseInt(currentDate.getFullYear())) {
-      return false;
+  if (data) {
+    const param = Object.values(data);
+    year = Number(year);
+    month = Number(month);
+    if (year < currentDate.getFullYear()) {
+      return param?.map((item) => item);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month < currentDate.getMonth() + 1 &&
+      currentBtn !== "Monthly"
+    ) {
+      return param?.map((item) => item);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month == currentDate.getMonth() + 1 &&
+      currentBtn !== "Monthly"
+    ) {
+      if (currentBtn == "Daily") {
+        return param?.map(
+          (item, index) => index < new Date().getDate() && item
+        );
+      } else if (currentBtn == "Weekly") {
+        return param?.map(
+          (item, index) => index < getDateWeek(currentDate) && item
+        );
+      }
+    } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
+      if (parseInt(year) > parseInt(currentDate.getFullYear())) {
+        return false;
+      } else {
+        return param?.map(
+          (item, index) => index < new Date().getMonth() + 1 && item
+        );
+      }
     } else {
-      return param?.map(
-        (item, index) => index < new Date().getMonth() + 1 && item[val]
-      );
+      return [];
     }
-  } else {
-    return false;
   }
 };
-const Accuracy = () => {
+const MachineAccuracy = ({ accuracyDetails }) => {
   const [activeButton, setActiveButton] = useState(0);
   const [initialAccuracyData, setInitialAccuracyData] = useState(null);
   const [initialQualityData, setInitialQualityData] = useState(null);
@@ -193,18 +200,14 @@ const Accuracy = () => {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
-
   const dispatch = useDispatch();
   const accuracyDatas = useSelector(
     (state) => state?.AdminDashboardReducers?.accuracy
   );
-  const QualityAccuracyDatas = useSelector(
-    (state) => state?.workFlow?.accuracy
-  );
 
   const numberOfWeeks =
-    QualityAccuracyDatas?.data?.response &&
-    Object.keys(QualityAccuracyDatas?.data?.response)?.length;
+    accuracyDetails?.data?.response &&
+    Object.keys(accuracyDetails?.data?.response)?.length;
 
   const weekNames = Array.from(
     { length: numberOfWeeks },
@@ -216,7 +219,7 @@ const Accuracy = () => {
     setActiveButton(index);
     setCurrentBtn(btn);
   };
-
+  // console.log(accuracyDetails?.data?.response, "testing");
   const handleTabButtonClick = (index, btn) => {
     setActiveTabButton(index);
     setCurrentTabBtn(btn);
@@ -235,8 +238,8 @@ const Accuracy = () => {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(
-      QualityAccuracyDatas?.data?.response &&
-        Object.keys(QualityAccuracyDatas?.data?.response)?.length
+      accuracyDetails?.data?.response &&
+        Object.keys(accuracyDetails?.data?.response)?.length
     );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
@@ -272,114 +275,6 @@ const Accuracy = () => {
   if (currentBtn && accuracyDatas?.data?.response) {
     data = Object.values(accuracyDatas?.data?.response);
   }
-
-  const chartBlocked = (year, month, param) => {
-    year = Number(year);
-    month = Number(month);
-    if (year < currentDate.getFullYear()) {
-      return param.map((item) => item);
-    } else if (
-      year == currentDate.getFullYear() &&
-      month < currentDate.getMonth() + 1 &&
-      currentBtn !== "Monthly"
-    ) {
-      if (
-        year == currentDate.getFullYear() &&
-        month < currentDate.getMonth() + 1 &&
-        currentBtn === "Monthly"
-      ) {
-        return param.map(
-          (item, index) => index < new Date().getMonth() + 1 && item
-        );
-      } else {
-        return param.map((item) => item);
-      }
-    } else if (
-      year == currentDate.getFullYear() &&
-      month == currentDate.getMonth() + 1 &&
-      currentBtn !== "Monthly"
-    ) {
-      if (currentBtn == "Daily") {
-        return param.map((item, index) => index < new Date().getDate() && item);
-      } else if (currentBtn == "Weekly") {
-        return param.map(
-          (item, index) => index < getDateWeek(currentDate) && item
-        );
-      }
-      // else if (currentBtn == "Monthly") {
-      //   return param.map(
-      //     (item, index) => index < new Date().getMonth() + 1 && item
-      //   );
-      // }
-    } else if (year == currentDate.getFullYear() && currentBtn === "Monthly") {
-      if (year > currentDate.getFullYear()) {
-        return false;
-      } else {
-        return param?.map(
-          (item, index) => index < new Date().getMonth() + 1 && item
-        );
-      }
-    } else {
-      return false;
-    }
-  };
-
-  const option = {
-    xAxis: {
-      type: "category",
-      data: xAxisData,
-    },
-    yAxis: {
-      type: "value",
-      axisLabel: {
-        formatter: "{value}%",
-      },
-    },
-    tooltip: {
-      show: true,
-
-      formatter: function (params) {
-        let tooltipContent = "";
-
-        if (Array.isArray(params)) {
-          params.forEach((item) => {
-            const allocatedValue = Number(item.data).toFixed(2);
-            tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-          });
-        } else if (params.data) {
-          const allocatedValue = Number(params.data).toFixed(2);
-          tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-        }
-
-        return tooltipContent;
-      },
-    },
-    series: [
-      {
-        data: chartBlocked(selectedYear, selectedMonth, data),
-        type: "bar",
-        itemStyle: {
-          barBorderRadius: [10, 10, 0, 0],
-          color: function (params) {
-            return params.dataIndex === highlightIndex ? "#3479FE" : "#C2D5FF";
-          },
-        },
-        lineStyle: {
-          color: "#BD83B8",
-        },
-        showSymbol: false,
-        label: {
-          show: true,
-          position: "top",
-          formatter: function (params) {
-            return params?.data && currentBtn !== "Daily"
-              ? `${Math.round(params?.data)}%`
-              : "";
-          },
-        },
-      },
-    ],
-  };
 
   const config = {
     chart: {
@@ -451,43 +346,32 @@ const Accuracy = () => {
     tooltip: {
       formatter: function () {
         let finalData;
+        const data = Object.keys(accuracyDetails?.data?.response);
         if (
-          typeof this.point.category === "string" &&
+          typeof this.point.category == "string" &&
           this.point.category.startsWith("Week")
         ) {
           const weekIndex = parseInt(this.point.category.substring(4));
 
-          finalData = QualityAccuracyDatas?.data?.response?.find(
-            (item) => item?.weekOfMonth === weekIndex
-          );
+          finalData = data?.find((item) => item == weekIndex);
         } else if (
-          typeof this.point.category === "string" &&
+          typeof this.point.category == "string" &&
           monthNames.includes(this.point.category.toUpperCase())
         ) {
           const hoveredMonthIndex = monthNames?.findIndex(
-            (month) => month === this.point.category
+            (month) => month == this.point.category
           );
 
-          finalData = QualityAccuracyDatas?.data?.response?.find(
-            (item) => item?.monthOfYear === hoveredMonthIndex + 1
-          );
+          finalData = data?.find((item) => item == hoveredMonthIndex + 1);
         } else {
-          finalData = QualityAccuracyDatas?.data?.response?.find(
-            (item) => item?.dayOfMonth === this.x
-          );
+          // console.log(this.x);
+          finalData = data?.find((item) => item == this.x);
         }
 
         if (finalData) {
           return (
             "Average Score: " +
-            finalData.averageScore +
-            "<br/>" +
-            "Total Correct: " +
-            finalData.totalCorrectCount
-            //  +
-            // "<br/>" +
-            // "Total Wrong: " +
-            // finalData.totalWrongCount
+            Object.values(accuracyDetails?.data?.response)[finalData - 1]
           );
         } else {
           return "No data available";
@@ -510,7 +394,7 @@ const Accuracy = () => {
       {
         name: "totalCorrectCount",
         data: getGraphData(
-          QualityAccuracyDatas?.data?.response,
+          initialQualityData,
           "totalCorrectCount",
           selectedMonth,
           selectedYear,
@@ -520,19 +404,6 @@ const Accuracy = () => {
         color: "#0b59f1",
         yAxis: 1,
       },
-      // {
-      //   name: "totalWrongCount",
-      //   data: getGraphData(
-      //     QualityAccuracyDatas?.data?.response,
-      //     "totalWrongCount",
-      //     selectedMonth,
-      //     selectedYear,
-      //     currentBtn,
-      //     currentDate
-      //   ),
-      //   color: "red",
-      //   yAxis: 1,
-      // },
       {
         name: "Temperature",
         type: "spline",
@@ -540,7 +411,7 @@ const Accuracy = () => {
         data: chartBlockedDates(
           selectedYear,
           selectedMonth,
-          QualityAccuracyDatas?.data?.response,
+          accuracyDetails?.data?.response,
           "averageScore",
           currentBtn,
           currentDate
@@ -554,17 +425,6 @@ const Accuracy = () => {
   };
 
   useEffect(() => {
-    // if (currentTabBtn === "CogentAI Accuracy") {
-    //   if (currentBtn === "Daily") {
-    //     dispatch(getAccuracyDaily(selectedYear, selectedMonth));
-    //   }
-    //   if (currentBtn === "Weekly") {
-    //     dispatch(getAccuracyWeekly(selectedYear, selectedMonth));
-    //   }
-    //   if (currentBtn === "Monthly") {
-    //     dispatch(getAccuracyMOnthly(selectedYear));
-    //   }
-    // } else {
     const isAdmin = true;
     dispatch(
       getAccuracyScore(currentBtn, selectedMonth, selectedYear, router, isAdmin)
@@ -575,23 +435,24 @@ const Accuracy = () => {
     if (accuracyDatas?.data?.response) {
       setInitialAccuracyData(accuracyDatas?.data?.response);
     }
-    if (QualityAccuracyDatas?.data?.response) {
-      setInitialQualityData(QualityAccuracyDatas?.data?.response);
+    if (accuracyDetails?.data?.response) {
+      setInitialQualityData(Object.values(accuracyDetails?.data?.response));
     }
-  }, [accuracyDatas, QualityAccuracyDatas]);
+  }, [accuracyDatas, accuracyDetails]);
 
-  const allAverageScore = chartBlockedDates(
-    selectedYear,
-    selectedMonth,
-    QualityAccuracyDatas?.data?.response,
-    "averageScore",
-    currentBtn,
-    currentDate
-  );
-  const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
-  const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
-  const average = sum / numericalData?.length; // Calculate the average
-
+  // const allAverageScore = chartBlockedDates(
+  //   selectedYear,
+  //   selectedMonth,
+  //   accuracyDetails?.data?.response,
+  //   "averageScore",
+  //   currentBtn,
+  //   currentDate
+  // );
+  // console.log(allAverageScore);
+  // const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
+  // const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
+  // const average = sum / numericalData?.length; // Calculate the average
+  const average = 0;
   return (
     <>
       <HeadTitle header="Accuracy and Quality Insights" />
@@ -646,12 +507,12 @@ const Accuracy = () => {
           </div>
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
-              {accuracyDatas?.loading || QualityAccuracyDatas?.loading ? (
+              {accuracyDatas?.loading || accuracyDetails?.loading ? (
                 <div className={spinSTYles.spinStyle}>
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
-              ) : QualityAccuracyDatas?.loading === false &&
-                QualityAccuracyDatas?.data?.response ? (
+              ) : accuracyDetails?.loading === false &&
+                accuracyDetails?.data?.response ? (
                 currentTabBtn === "CogentAI Accuracy" ? (
                   <div className={styles.highchartStyle}>
                     <HighchartsReact
@@ -698,9 +559,7 @@ const Accuracy = () => {
             </div>
             <div className={styles.accuracy}>
               <div className={styles.header}>
-                 <div className="mt-1"> <FontAwesomeIcon icon={faCheckDouble} /></div>
-              
-                {/* <Image src={accuracy} className={styles.Img} /> */}
+                <Image src={accuracy} className={styles.Img} />
                 <div className={styles.heading}>
                   {currentTabBtn === "CogentAI Accuracy"
                     ? "Accuracy"
@@ -762,4 +621,11 @@ const Accuracy = () => {
   );
 };
 
-export default Accuracy;
+const enhancer = connect(
+  (state) => ({
+    accuracyDetails: state.workFlow.accuracy,
+  }),
+  {}
+);
+
+export default enhancer(MachineAccuracy);

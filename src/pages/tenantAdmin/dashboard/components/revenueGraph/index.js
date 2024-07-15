@@ -5,25 +5,21 @@ import {
   HccCodes,
   RafCounts,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
 
 const RevenueGraph = ({
-  isMultiple,
   hccColor,
   cargapColor,
-  getAllHccCodesData,
-  getAllHccCodes,
-  getAllRafData,
   getAllRaf,
-  chartRevenData,
   isHcc,
   isCargaps,
+  selectedValue,
+  rafColor2,
+  rafColor3,
+  isMultiple,
+  className,
+  selectedOrganization,
 }) => {
-  const [currChartData, setCurrChartData] = useState(new Map());
-
-  useEffect(() => {
-    setCurrChartData(chartRevenData);
-  }, [currChartData]);
-
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)
     : [];
@@ -32,16 +28,18 @@ const RevenueGraph = ({
     ? Object.values(getAllRaf.premiumByDateForSuggested)
     : [];
 
-  const combinedData =
-    isHcc && isCargaps
-      ? [...premiumByDateForHcc, ...premiumByDateForSuggested]
-      : [];
+    let combinedData = premiumByDateForHcc.map((value, index) => value + premiumByDateForSuggested[index]);
+
   const option = {
-    // title: {
-    //   text: "Step Line",
-    // },
     tooltip: {
-      trigger: "axis",
+      show: true,
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        label: {
+          backgroundColor: '#6a7985'
+        }
+      }
     },
     legend: {
       show: false,
@@ -52,60 +50,46 @@ const RevenueGraph = ({
       bottom: "3%",
       containLabel: true,
     },
-    // toolbox: {
-    //   feature: {
-    //     saveAsImage: {},
-    //   },
-    // },
     xAxis: {
       type: "category",
-      data:
-        isHcc || isCargaps
-          ? [...chartRevenData.keys()]
-          : [
-              "jan",
-              "feb",
-              "mar",
-              "apr",
-              "may",
-              "jun",
-              "jul",
-              "aug",
-              "sep",
-              "oct",
-              "nov",
-              "dec",
-            ],
+      data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
     },
     yAxis: {
       type: "value",
     },
     series: [
       {
-        name: "Total Codes",
+        name: isHcc ? "Hcc Codes" : isCargaps ? "Care Gap Codes" : "Total Codes",
         type: "line",
         step: "start",
-        data: [],
+        data: isHcc
+          ? premiumByDateForHcc
+          : isCargaps
+          ? premiumByDateForSuggested
+          : combinedData ? combinedData : [], //REVEN Total Codes
         itemStyle: {
-          color: hccColor ? hccColor : cargapColor ? cargapColor : "#E88D67",
+          color: isHcc ? "#02BBDE" : isCargaps ? "#5A75F2" : "#E88D67",
         },
       },
       {
         name: "HCC Codes",
         type: "line",
         step: "middle",
+        emphasis: {
+          focus: "series",
+        },
 
-        data: premiumByDateForHcc,
+        data: isMultiple ? premiumByDateForHcc : [],
 
         itemStyle: {
           color: "#04B700",
         },
       },
       {
-        name: "Car gap Codes",
+        name: "Care Gap Codes",
         type: "line",
         step: "end",
-        data: premiumByDateForSuggested,
+        data: isMultiple ? premiumByDateForSuggested : [],
         itemStyle: {
           color: "#FF9209",
         },
@@ -113,12 +97,11 @@ const RevenueGraph = ({
     ],
   };
 
-  useEffect(() => {
-    getAllHccCodesData();
-    getAllRafData();
-  }, []);
-
-  return <ReactECharts option={option} />;
+  return (
+    <div className={`${className}`}>
+      <ReactECharts option={option} />{" "}
+    </div>
+  );
 };
 
 const enhancer = connect(
@@ -127,6 +110,8 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
+      revenueChartLoader:
+      state?.tenantAdmin?.dashboard?.default?.revenueChartLoader,
   }),
   {
     getAllHccCodesData: HccCodes,
