@@ -34,14 +34,16 @@ function AddPatientListTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data?.patientId);
-      var role = localStorage.getItem("role")
-      if(role == "tenant_admin"){
-        navigate.push({ pathname: "/tenantAdmin/patients/details", query: page });
-      }else{
+      var role = localStorage.getItem("role");
+      if (role == "tenant_admin") {
+        navigate.push({
+          pathname: "/tenantAdmin/patients/details",
+          query: page,
+        });
+      } else {
         navigate.push({ pathname: "/admin/patients/details", query: page });
       }
       // localStorage.setItem('paginations', JSON.stringify(page))
-      
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
@@ -89,13 +91,13 @@ function AddPatientListTable({
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.fileName ? data.fileName : <div>---</div>}
+              {data.fileName ? data.fileName : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.totalPages ? data.totalPages : <div>---</div>}
+              {data.totalPages ? data.totalPages : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
@@ -119,7 +121,7 @@ function AddPatientListTable({
                   </span>
                 </div>
               ) : (
-                <div style={{ paddingLeft: "50px" }}>---</div>
+                <div style={{ textAlign: "center" }}>---</div>
               )}
             </td>
             <td
@@ -167,8 +169,7 @@ function AddPatientListTable({
             <th>PATIENT ID</th>
             <th>FILE NAME</th>
             <th>TOTAL PAGES</th>
-
-            <th className={TableStyle.rowStyle}>CREATED BY</th>
+            <th style={{ textAlign: "center" }}>CREATED BY</th>
 
             <th
               style={{
