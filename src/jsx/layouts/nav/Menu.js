@@ -1,6 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHospital } from "@fortawesome/free-regular-svg-icons";
-import { faUser, faBarsStaggered,faHospitalAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUser,
+  faBarsStaggered,
+  faHospitalAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   DashboardOutlined,
   BellOutlined,
@@ -20,6 +24,7 @@ import {
   ContactsOutlined,
   ContactsFilled,
 } from "@ant-design/icons";
+import { faUser as faUserReg } from "@fortawesome/free-regular-svg-icons";
 import { SVGICON } from "../../constant/theme";
 import styles from "../nav/styles.module.css";
 
@@ -173,23 +178,28 @@ export const L2AuditorMenuList = () => {
   return [
     {
       title: "Dashboard",
-      iconStyle:  <DashboardOutlined />,
+      iconStyle: <DashboardOutlined />,
       activeIcon: <DashboardFilled />,
       to: "/supervisor/dashboard",
     },
 
     {
       title: "User Queue",
-      iconStyle: <FontAwesomeIcon icon={faUser} className={`${styles.outlinedColor}`}/>,
-      activeIcon: <FontAwesomeIcon icon={faUser} className={`${styles.filledColor}`}/>,
+      iconStyle: <FontAwesomeIcon icon={faUserReg} />,
+      activeIcon: <FontAwesomeIcon icon={faUser} />,
       to: "/supervisor/user",
       childRoute: "/supervisor/user/userQueue",
       childRoute2: "/supervisor/user/details",
     },
     {
       title: "Audited Queue",
-      iconStyle: <FontAwesomeIcon icon={faBarsStaggered} className={`${styles.outlinedColor}`}/>,
-      activeIcon: <FontAwesomeIcon icon={faBarsStaggered} className={`${styles.filledColor}`}/>,
+      iconStyle: (
+        <FontAwesomeIcon
+          icon={faBarsStaggered}
+          className={`${styles.outlinedColor}`}
+        />
+      ),
+      activeIcon: <FontAwesomeIcon icon={faBarsStaggered} />,
       to: "/supervisor/auditing",
       childRoute: "/supervisor/patients/details",
     },
@@ -217,7 +227,7 @@ export const L2AuditorMenuList = () => {
 export const ProviderMenuList = [
   {
     title: "Dashboard",
-     iconStyle: <DashboardOutlined />,
+    iconStyle: <DashboardOutlined />,
     activeIcon: <DashboardFilled />,
     to: "/tenantAdmin/dashboard",
     // childRoute: "/fhirTable/details",
