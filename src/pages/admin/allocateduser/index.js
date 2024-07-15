@@ -532,7 +532,7 @@ const Patient = ({
               <div className="col-xl-12">
                 <div className="">
                   <div className="card-body p-0">
-                    <div className="table-responsive active-projects task-table">
+                    <div className="table-responsive active-projects task-table supervisor-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
                           <div
@@ -857,7 +857,7 @@ const Patient = ({
                                                 <tr>
                                                   <th
                                                     style={{
-                                                      textAlign: "center",
+                                                      paddingLeft:'46px !important',
                                                     }}
                                                   >
                                                     NAME

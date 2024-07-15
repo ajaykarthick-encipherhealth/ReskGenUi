@@ -10308,7 +10308,9 @@ p,
 .active-projects thead tr th:nth-child(1) {
   padding-left: 15px;
 }
-
+.supervisor-table thead tr th:nth-child(1){
+  padding-left: 60px !important;
+}
 .active-projects thead tr th {
   font-size: 12px;
   padding: 15px 6px;
