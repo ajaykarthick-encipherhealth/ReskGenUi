@@ -17,6 +17,7 @@ import {
 } from "../../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
 import SpinnerDots from "../../../components/spinner";
+import UsersList from "../../../components/table/tenantTable/usersList/usersList";
 
 const { Option } = Select;
 const options3 = [
