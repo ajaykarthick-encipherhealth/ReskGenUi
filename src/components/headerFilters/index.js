@@ -428,7 +428,7 @@ const HeaderFilters = ({
               onClick={() => setShowFilters(!showFilters)}
             >
               <button className={styles.filterBtn}>
-                <FilterFilled  src={filter} style={{color:"#04306f", fontSize:"15px"}}/> {showFilters ? "Hide" : "Filter"}
+                <FilterFilled  src={filter} classID="iconStyleColor" className="iconStyleColor"/> {showFilters ? "Hide" : "Filter"}
               </button>
             </div>
           )}
