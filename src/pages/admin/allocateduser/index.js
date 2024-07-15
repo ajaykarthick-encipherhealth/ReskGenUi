@@ -857,7 +857,7 @@ const Patient = ({
                                                 <tr>
                                                   <th
                                                     style={{
-                                                      textAlign: "center",
+                                                      textAlign: "start",
                                                     }}
                                                   >
                                                     NAME
