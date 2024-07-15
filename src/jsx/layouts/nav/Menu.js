@@ -155,7 +155,7 @@ export const L2AuditorMenuList = () => {
 
     {
       title: "User Queue",
-      iconStyle: <FontAwesomeIcon icon={faUser} />,
+      iconStyle: <FontAwesomeIcon icon={faUser} className={`${styles.outlinedColor}`}/>,
       activeIcon: <FontAwesomeIcon icon={faUser} className={`${styles.filledColor}`}/>,
       to: "/supervisor/user",
       childRoute: "/supervisor/user/userQueue",
@@ -163,7 +163,7 @@ export const L2AuditorMenuList = () => {
     },
     {
       title: "Audited Queue",
-      iconStyle: <FontAwesomeIcon icon={faBarsStaggered} />,
+      iconStyle: <FontAwesomeIcon icon={faBarsStaggered} className={`${styles.outlinedColor}`}/>,
       activeIcon: <FontAwesomeIcon icon={faBarsStaggered} className={`${styles.filledColor}`}/>,
       to: "/supervisor/auditing",
       childRoute: "/supervisor/patients/details",
