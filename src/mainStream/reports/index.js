@@ -718,9 +718,11 @@ const Reports = ({
                             >
                               {rowsLength?.length > 0 ||
                               rowsLength?.data?.length > 0 ? (
-                                <ExportImg />
+                                // <ExportImg />
+                                <FontAwesomeIcon icon={faFileExport} className={styles.iconReplaced} style={{color:rowsLength?.data?.length > 0 ? "gray" :"#04306f"}} />
+
                               ) : (
-                                <FontAwesomeIcon icon={faFileExport} className={styles.iconReplaced} />
+                                <FontAwesomeIcon icon={faFileExport} className={styles.iconReplaced} style={{color:rowsLength?.data?.length > 0 ? "#04306f" :"gray"}}/>
                                 // SVGICON.exportDisable
                               )}
                               <span style={{ marginTop: "-3px" }}>Export</span>
