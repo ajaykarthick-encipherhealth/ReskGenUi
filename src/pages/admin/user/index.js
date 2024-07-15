@@ -244,73 +244,65 @@ const UserList = ({
   };
   
   return (
-    <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
-        <Header />
-        <div class="content-body">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-xl-12">
-                <div className="card-body p-0">
-                  <div className="table-responsive active-projects task-table">
-                    <div className="tbl-caption  align-items-center">
-                      <HeaderFilters
-                        setSearch={setSearch}
-                        isSearch={true}
-                        searchlabel="Search By Username"
-                        search={search}
-                        // select status
-                        selectlabel="Select Status"
-                        isSelector={true}
-                        setSelectedOption={setSelectedStatus}
-                        selectOptions={options3}
-                        defaultSelectValue1={""}
-                        selectedValue={status}
-                        //  selecte Role
-                        selectlabel2="Select Role"
-                        selectOptions2={RoleList}
-                        defaultSelectValue2={""}
-                        setSelectedOption2={setRole}
-                        selectedValue2={role}
-                        // selectOrg
-                        selectlabelOrg="Select Organization"
-                        isSelectOrg={true}
-                        setSelectedOptionOrg={setSelectedOrgList}
-                        selectOptionsOrg={orgAllList}
-                        defaultSelectValueOrg={""}
-                        selectedValueOrg={selectOrgList}
-                        // computation date
-                        pickerlabel="Created date Range"
-                        selectedDates={selectedDates}
-                        setSelectedDates={setSelectedDates}
-                        defaultStartDate={""}
-                        defaultEndDate={""}
-                        setStartDate={setStartDate}
-                        setEndDate={setEndDate}
-                        pickerStartValue={startDate}
-                        pickerEndValue={endDate}
-                        isRangePickerUsers={true}
-                        addUser={true}
-                        addUserForm={addUserForm}
-                        btnTitle="Add User"
-                        setClear={setClear}
-                        clear={clear}
-                        addBtn={true}
-                        disable="Yes"
-                        form={form}
-                        setMobileNumber={setMobileNumber}
-                        setPageNo={setPageCount}
-                      />
-                    </div>
-                    <div
-                      id="task-tbl_wrapper"
-                      className="dataTables_wrapper no-footer"
-                    >
-                      {loading ? (
-                        <SpinnerDots />
-                      ) : (
-                        <>
-                         <AdminList
+    <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <Header />
+      <div class="content-body">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-xl-12">
+              <div className="card-body p-0">
+                <div className="table-responsive active-projects task-table">
+                  <div className="tbl-caption  align-items-center">
+                    <HeaderFilters
+                      setSearch={setSearch}
+                      isSearch={true}
+                      searchlabel="Search By Username"
+                      search={search}
+                      // select status
+                      selectlabel="Select Status"
+                      isSelector={true}
+                      setSelectedOption={setSelectedStatus}
+                      selectOptions={options3}
+                      defaultSelectValue1={""}
+                      selectedValue={status}
+                      //  selecte Role
+                      selectlabel2="Select Role"
+                      selectOptions2={RoleList}
+                      defaultSelectValue2={""}
+                      setSelectedOption2={setRole}
+                      selectedValue2={role}
+                      // computation date
+                      pickerlabel="Created date Range"
+                      selectedDates={selectedDates}
+                      setSelectedDates={setSelectedDates}
+                      defaultStartDate={""}
+                      defaultEndDate={""}
+                      setStartDate={setStartDate}
+                      setEndDate={setEndDate}
+                      pickerStartValue={startDate}
+                      pickerEndValue={endDate}
+                      isRangePickerUsers={true}
+                      addUser={true}
+                      addUserForm={addUserForm}
+                      btnTitle="Add User "
+                      setClear={setClear}
+                      clear={clear}
+                      addBtn={true}
+                      disable="Yes"
+                      form={form}
+                      setMobileNumber={setMobileNumber}
+                      setPageNo={setPageCount}
+                    />
+                  </div>
+                  <div
+                    id="task-tbl_wrapper"
+                    className="dataTables_wrapper no-footer"
+                  >
+                    {loading ? (
+                      <SpinnerDots />
+                    ) : (
+                      <>
+                        <AdminList
                           userList={userListAll?.data?.response?.content}
                           switchHandler={switchHandler}
                           setPageCount={setPageCount}

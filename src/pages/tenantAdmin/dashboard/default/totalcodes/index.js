@@ -90,8 +90,13 @@ const index = ({
       show: true,
     },
     tooltip: {
-      show: true,
-      trigger: "axis",
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        label: {
+          backgroundColor: '#6a7985'
+        }
+      }
     },
     legend: {
       show: false,
@@ -162,10 +167,11 @@ const index = ({
 
   const totalHccRafScore = getAllRaf?.totalHccRafScore || 0;
   const totalSuggestedRafScore = getAllRaf?.totalSuggestedRafScore || 0;
-  const totalScore = totalHccRafScore + totalSuggestedRafScore;
+  const totalScore = (totalHccRafScore + totalSuggestedRafScore).toFixed(2);
+  
   const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
-  const totalScoreTwo = hccDiseaseCountMap + suggestedCount;
+  const totalScoreTwo = (hccDiseaseCountMap + suggestedCount).toFixed(2);
 
   formatNumber();
 
