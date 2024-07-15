@@ -417,7 +417,7 @@ const Patient = ({ getPatients, loader, response }) => {
             fontSize={11}
             style={{ color: "#ffff" }}
           /> */}
-          <FontAwesomeIcon icon={faFileArrowUp} className="fontAwesomeIconColor" />
+          <FontAwesomeIcon icon={faFileArrowUp} className={visitStyles.fontAwesomeIconColor} />
         </button>
       </div>
     );
