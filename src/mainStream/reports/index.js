@@ -720,7 +720,7 @@ const Reports = ({
                               rowsLength?.data?.length > 0 ? (
                                 <ExportImg />
                               ) : (
-                                <FontAwesomeIcon icon={faFileExport} style={{color:"gray", marginRight:"10px"}} />
+                                <FontAwesomeIcon icon={faFileExport} className="iconReplaced" />
                                 // SVGICON.exportDisable
                               )}
                               <span style={{ marginTop: "-3px" }}>Export</span>

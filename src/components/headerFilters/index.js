@@ -428,7 +428,7 @@ const HeaderFilters = ({
               onClick={() => setShowFilters(!showFilters)}
             >
               <button className={styles.filterBtn}>
-                <FilterFilled  src={filter} classID="iconStyleColor" className="iconStyleColor"/> {showFilters ? "Hide" : "Filter"}
+                <FilterFilled  src={filter}  className="iconStyleColor"/> {showFilters ? "Hide" : "Filter"}
               </button>
             </div>
           )}
@@ -464,7 +464,7 @@ const HeaderFilters = ({
                   className="mt-[10px]"
                   style={{ cursor: "pointer" }}
                 /> */}
-                <InfoCircleFilled style={{fontSize:"27px", marginTop:"10px", cursor: "pointer", color:"#04306f"}}/>
+                <InfoCircleFilled className="iconStyleColor2"/>
               </Popover>
             </div>
           )}

@@ -47,7 +47,7 @@ const index = ({
             <div>
               <div className={styles.header}>Total Codes</div>
               <div className={styles.price}>
-                {getAllHccCodes?.hccCount || 0}
+                {(getAllHccCodes?.hccCount || 0).toFixed(2)}
               </div>
             </div>
           </div>
@@ -92,7 +92,7 @@ const index = ({
             <div className="p-1">
               <div className={styles.header}>Overall RAF</div>
               <div className={styles.price}>
-                {getAllRafScoreData?.totalHccRaf || 0}
+                {(getAllRafScoreData?.totalHccRaf || 0).toFixed(2)}
               </div>
             </div>
           </div>
@@ -132,7 +132,9 @@ const index = ({
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
               <div className={styles.price}>{`$ ${
-                formatNumber(TotalHccRevenue) || 0
+                TotalHccRevenue !== undefined
+                  ? formatNumber(TotalHccRevenue.toFixed(2))
+                  : 0
               }`}</div>
             </div>
           </div>
