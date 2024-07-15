@@ -1,7 +1,4 @@
-.filledColor{
-    color :#04306f;
-}
-
 .outlinedColor{
-    color:#04306f !important;
+    color:rgb(4, 48, 111);
+    opacity: 0.7;
 }
