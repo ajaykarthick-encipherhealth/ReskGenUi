@@ -14794,6 +14794,13 @@ input::-webkit-inner-spin-button {
   border-radius: 0px 10px 10px 0px !important;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 10px !important;
 }
+.tenantSelector .ant-picker-range {
+  width: 100%;
+  height: 48px !important;
+  border: none !important;
+  border-radius: 0px 10px 10px 0px !important;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 10px !important;
+}
 .speedometerChart > div:nth-child(2) {
   height: 220px !important;
 }
@@ -15258,8 +15265,25 @@ input::-webkit-inner-spin-button {
 .layout .ant-layout {
   background-color: #ffff;
 }
-
 .selectantdrole .ant-select.ant-select-in-form-item {
   width: 100%;
   height: 45px;
 }
+.customsteps .ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after {
+  background-color: white !important;
+}
+.customsteps .ant-steps.ant-steps-vertical >.ant-steps-item>.ant-steps-item-container>.ant-steps-item-tail::after {
+  width: 4px;
+  height: 74%;
+  border-radius: 10px !important;
+  padding: 3px !important;
+  margin-top: 15px !important;
+  background-color:#6C99DC;
+}
+.customsteps .ant-steps.ant-steps-vertical .ant-steps-item.ant-steps-item-process.ant-steps-item-active .ant-steps-item-container {
+  margin-bottom: 100px !important;
+}
+.customsteps .ant-steps-item-container {
+  margin-bottom: 100px !important;
+}
+

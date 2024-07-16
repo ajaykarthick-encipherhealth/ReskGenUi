@@ -10,6 +10,7 @@ import {
   faTrash,
   faPlusCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import Styles from "../tenantOnboarding.module.css";
 
 const { Option } = Select;
 const roles = [
@@ -22,7 +23,7 @@ const roles = [
   { value: "PHYSICIAN", label: "Physician" },
 ];
 const Tenant = ({
-  Styles,
+  
   sets,
   addSet,
   nextStep,
@@ -43,7 +44,7 @@ const Tenant = ({
                   placeholder="Enter Client ID"
                   suffix={<FontAwesomeIcon icon={faUser} />}
                   name="clientId"
-                  value={credentials.clientId}
+                  value={credentials?.clientId}
                   onChange={handleInputChange}
                 />
               </Form.Item>
@@ -55,7 +56,7 @@ const Tenant = ({
                   placeholder="Enter Tenant ID"
                   suffix={<FontAwesomeIcon icon={faIdCard} />}
                   name="tenantid"
-                  value={credentials.tenantid}
+                  value={credentials?.tenantid}
                   onChange={handleInputChange}
                 />
               </Form.Item>
@@ -69,7 +70,7 @@ const Tenant = ({
                   placeholder="Enter Client Secret"
                   suffix={<FontAwesomeIcon icon={faKey} />}
                   name="clientSecret"
-                  value={credentials.clientSecret}
+                  value={credentials?.clientSecret}
                   onChange={handleInputChange}
                 />
               </Form.Item>
@@ -81,7 +82,7 @@ const Tenant = ({
                   placeholder="Enter App Object ID"
                   suffix={<FontAwesomeIcon icon={faMobile} />}
                   name="appObjectId"
-                  value={credentials.appObjectId}
+                  value={credentials?.appObjectId}
                   onChange={handleInputChange}
                 />
               </Form.Item>
@@ -95,7 +96,7 @@ const Tenant = ({
                   placeholder="Enter Client Scope"
                   suffix={<FontAwesomeIcon icon={faIdCard} />}
                   name="scope"
-                  value={credentials.scope}
+                  value={credentials?.scope}
                   onChange={handleInputChange}
                 />
               </Form.Item>
@@ -107,7 +108,7 @@ const Tenant = ({
                   placeholder="Enter Tenant Domain"
                   suffix={<FontAwesomeIcon icon={faGlobe} />}
                   name="tenantDomain"
-                  value={credentials.tenantDomain}
+                  value={credentials?.tenantDomain}
                   onChange={handleInputChange}
                 />
               </Form.Item>
@@ -115,22 +116,22 @@ const Tenant = ({
           </Row>
 
           <Row gutter={16} justify="space-between" className={Styles.customRow}>
-            {sets.map((set, index) => (
+            {sets?.map((set, index) => (
               <div style={{ display: "flex", width: "60%" }} key={set.id}>
                 <Col span={9}>
                   <Form.Item className={Styles.customRow}>
                     <div style={{ width: "100%" }} className={"customSelect"}>
                       <Select
                         placeholder="Roles"
-                        value={credentials.roles[set.id]?.role || undefined}
+                        value={credentials?.roles[set.id]?.role || undefined}
                         defaultValue={"Roles"}
                         onChange={(value) =>
                           handleRoleChange(value, set.id, "role")
                         }
                       >
-                        {roles.map((role) => (
+                        {roles?.map((role) => (
                           <Option key={role.value} value={role.value}>
-                            {role.label}
+                            {role?.label}
                           </Option>
                         ))}
                       </Select>
@@ -143,7 +144,7 @@ const Tenant = ({
                     <Input
                       placeholder="Enter ID"
                       suffix={<FontAwesomeIcon icon={faGlobe} />}
-                      value={credentials.roles[set.id]?.idValue || ""}
+                      value={credentials?.roles[set.id]?.idValue || ""}
                       onChange={(e) =>
                         handleRoleChange(e.target.value, set.id, "idValue")
                       }

@@ -216,15 +216,14 @@ const TenantOnboarding = ({ createOnBoarding }) => {
           <div style={{ position: "relative", bottom: "144px" }}>
             <Image className="login-logo" src={IMAGES.loginPageLogo1} />
           </div>
-
-          <div
-            className={`d-flex justify-content-center align-items-center ${Styles.customSteps}`}
-          >
-            <Steps current={current} onChange={onChange} direction="vertical">
-              {customDescriptions.map((description, index) => (
-                <Step key={index} description={description} />
-              ))}
-            </Steps>
+          <div className="customsteps"
+            style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+          <Steps
+        current={current}
+        onChange={onChange}
+        direction="vertical" > {customDescriptions.map((description, index) => (
+          <Step key={index} description={description} />
+        ))}</Steps>
           </div>
         </Sider>
         <Layout style={{ padding: "0 24px", minHeight: 280 }}>

@@ -6,7 +6,8 @@ import Image from "next/image";
 import { Modal, Spin } from "antd";
 import Card from "../../../../../components/card/index";
 import HeadTitle from "../../../../../components/headtitle";
-import { SVGICON } from "../../../../../jsx/constant/theme";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 import NoNotification from "../../../../../images/dashboard/no-notification.png";
 import spinSTYles from "../../../../../styles/auth.module.css";
 
@@ -25,12 +26,14 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
   const notificationData =
     notificationResult?.length > 0 ? (
       notificationResult?.map((info) => (
-        <div className={styles.msgDiv} key={info?.id}>
-          <div style={{ marginTop: "10px" }}>
-            {" "}
-            {SVGICON.dashboardNotification}
+        <div className={`${styles.msgDiv} m-2`} key={info?.id}>
+          <div className="mt-2">
+            <FontAwesomeIcon
+              icon={faBell}
+              className={`${styles.notifyIconColor}`}
+            />
           </div>
-          <div className={styles.msgCOntainer}>
+          <div className={`${styles.msgCOntainer } m-2`}>
             <span className={styles.description}>{info.content}</span>
             <div className={styles.time}>
               {moment(info?.createdDate).format("MM-DD-YYYY")}&nbsp;{" "}

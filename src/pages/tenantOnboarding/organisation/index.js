@@ -1,15 +1,8 @@
 import React from "react";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  Layout,
-  Divider,
-  Steps,
   Form,
   Input,
-  Button,
-  Row,
-  Col,
   Select,
 } from "antd";
 import {
@@ -17,9 +10,9 @@ import {
   faEnvelope,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
+import Styles from "../tenantOnboarding.module.css";
 
-const { Option } = Select;
-const Organisation = ({ Styles, credentials, handleInputChange }) => {
+const Organisation = ({  credentials, handleInputChange }) => {
   const validateEmail = (_, value) => {
     if (!value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       return Promise.resolve();
@@ -37,7 +30,7 @@ const Organisation = ({ Styles, credentials, handleInputChange }) => {
               placeholder="Enter Name"
               suffix={<FontAwesomeIcon icon={faUser} />}
               name="name"
-              value={credentials.name}
+              value={credentials?.name || ""}
               onChange={handleInputChange}
             />
           </Form.Item>
@@ -49,10 +42,10 @@ const Organisation = ({ Styles, credentials, handleInputChange }) => {
               { validator: validateEmail }
             ]}
             validateStatus={
-              credentials.email ? (validateEmail() ? "success" : "error") : ""
+              credentials?.email ? (validateEmail() ? "success" : "error") : ""
             }
             help={
-              credentials.email && !validateEmail()
+              credentials?.email && !validateEmail()
                 ? "Please enter a valid email"
                 : ""
             }
@@ -62,7 +55,7 @@ const Organisation = ({ Styles, credentials, handleInputChange }) => {
               placeholder="Enter your mail id"
               suffix={<FontAwesomeIcon icon={faEnvelope} />}
               name="email"
-              value={credentials.email}
+              value={credentials?.email || ""}
               onChange={handleInputChange}
             />
           </Form.Item>
@@ -72,7 +65,7 @@ const Organisation = ({ Styles, credentials, handleInputChange }) => {
               placeholder="Enter your Address"
               suffix={<FontAwesomeIcon icon={faLocationDot} />}
               name="address"
-              value={credentials.address}
+              value={credentials?.address || ""}
               onChange={handleInputChange}
             />
           </Form.Item>

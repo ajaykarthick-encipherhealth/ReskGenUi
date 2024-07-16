@@ -2,6 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Form, Input, Row, Col, Select } from "antd";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import Styles from "../tenantOnboarding.module.css";
 
 const { Option } = Select;
 const roles = [
@@ -13,9 +14,8 @@ const roles = [
   { value: "PROVIDER", label: "Provider" },
   { value: "PHYSICIAN", label: "Physician" },
 ];
-const Personal = ({ Styles, credentials, handleInputChange }) => {
+const Personal = ({ credentials, handleInputChange }) => {
   const validateEmail = (_, value) => {
-    // Basic email validation regex
     if (!value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       return Promise.resolve();
     }
@@ -27,6 +27,7 @@ const Personal = ({ Styles, credentials, handleInputChange }) => {
     }
     return Promise.reject(new Error("Invalid mobile number format"));
   };
+  console.log(credentials,"credentials")
   return (
     <div>
       <div style={{ margin: "100px" }}>
@@ -39,7 +40,7 @@ const Personal = ({ Styles, credentials, handleInputChange }) => {
                   placeholder="Enter Field 1"
                   // suffix={<FontAwesomeIcon icon={faUser} />}
                   name="firstName"
-                  value={credentials.firstName}
+                  value={credentials?.firstName}
                   onChange={handleInputChange}
                 />
               </Form.Item>
@@ -50,7 +51,7 @@ const Personal = ({ Styles, credentials, handleInputChange }) => {
                 <Input
                   placeholder="Enter Field 2"
                   name="lastName"
-                  value={credentials.lastName}
+                  value={credentials?.lastName}
                   onChange={handleInputChange}
                 />
               </Form.Item>
@@ -75,7 +76,7 @@ const Personal = ({ Styles, credentials, handleInputChange }) => {
                     placeholder="Enter Email"
                     name="emailId"
                     type="email"
-                    value={credentials.emailId}
+                    value={credentials?.emailId}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -87,7 +88,7 @@ const Personal = ({ Styles, credentials, handleInputChange }) => {
                 <Input
                   placeholder="Enter Field 2"
                   name="password"
-                  value={credentials.password}
+                  value={credentials?.password}
                   onChange={handleInputChange}
                 />
               </Form.Item>
@@ -100,7 +101,7 @@ const Personal = ({ Styles, credentials, handleInputChange }) => {
                 <Input
                   placeholder="Enter Confirm Password"
                   name="confirmPassword"
-                  value={credentials.confirmPassword}
+                  value={credentials?.confirmPassword}
                   onChange={handleInputChange}
                 />
               </Form.Item>
@@ -123,7 +124,7 @@ const Personal = ({ Styles, credentials, handleInputChange }) => {
                   <Input
                     placeholder="Enter Mobile Number"
                     name="mobileNumber"
-                    value={credentials.mobileNumber}
+                    value={credentials?.mobileNumber}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -161,14 +162,14 @@ const Personal = ({ Styles, credentials, handleInputChange }) => {
                 <Select
                   placeholder="Select a role"
                   name="role"
-                  value={credentials.role}
+                  value={credentials?.role}
                   onChange={(value) =>
                     handleInputChange({ target: { name: "role", value } })
                   }
                 >
-                  {roles.map((role) => (
+                  {roles?.map((role) => (
                     <Option key={role.value} value={role.value}>
-                      {role.label}
+                      {role?.label}
                     </Option>
                   ))}
                 </Select>
@@ -180,7 +181,7 @@ const Personal = ({ Styles, credentials, handleInputChange }) => {
                 <Input
                   placeholder="Enter Username"
                   name="userName"
-                  value={credentials.userName}
+                  value={credentials?.userName}
                   onChange={handleInputChange}
                 />
               </Form.Item>

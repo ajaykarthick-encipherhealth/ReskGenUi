@@ -61,9 +61,7 @@
   background-color: #52c41a; /* Customize finished step icon color */
   border-color: #52c41a;
 }
-.customSteps .ant-steps .ant-steps-item .ant-steps-item-container .ant-steps-item-tail{
-  padding: 2px;
-}
+.cus
 .customSteps .ant-steps-item-process .ant-steps-item-icon {
   background-color: #1890ff; /* Customize current step icon color */
   border-color: #1890ff;
