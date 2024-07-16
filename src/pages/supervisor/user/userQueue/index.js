@@ -407,6 +407,8 @@ const Index = ({
                       getFilters={getFilters}
                       username={userName}
                       setPageNo={setPageNo}
+                      bulletsTitle="Reviewed Status"
+                      badgesTitle="Audited Status"
                     />
                   </div>
                   <div
