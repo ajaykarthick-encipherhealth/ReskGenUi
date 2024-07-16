@@ -1,12 +1,8 @@
-.iconContainer {
-  justify-content: center;
-  padding-left: 2rem;
-  margin-top: 20px;
-}
+
 .iconBorder{
   color :#04306f;
   display: inline-block;
-  padding: 10px;
+  padding: 7px;
   border: 2px solid rgb(255, 255, 255);
   border-radius: 50%;
   margin-top: 3px;
