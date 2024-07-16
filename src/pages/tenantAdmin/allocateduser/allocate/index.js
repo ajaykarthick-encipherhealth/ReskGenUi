@@ -117,7 +117,7 @@ const AllocateModal = ({
       title="Select User"
       footer={false}
       width={700}
-      className="allocate_modal_container"
+
     >
       <div class="form-group has-search">
         <FontAwesomeIcon
@@ -140,7 +140,9 @@ const AllocateModal = ({
         />
       </div>
       {userDetails.length > 0 ? (
-        userDetails?.map((item) => (
+        
+     <div  className={modalStyle.scroll}>
+         {userDetails?.map((item) => (
           <div className="mt-4 pe-auto">
             <div
               className={`form-control new-form-control my-2 p-0 ${
@@ -347,7 +349,8 @@ const AllocateModal = ({
               )}
             </div>
           </div>
-        ))
+        ))}
+     </div>
       ) : (
         <div className="m-4">
           <button
