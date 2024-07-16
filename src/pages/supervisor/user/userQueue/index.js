@@ -35,29 +35,28 @@ const bullets = [
 ];
 const badges = [
   {
-    color: "#377880",
+    color: "#4AA1AB",
     name: "Audited",
-    src: audited,
-  },
-  {
-    color: "#FFBE00",
-    name: "Re Audit",
-    src: auditHold,
   },
   {
     color: "#964B00",
+    name: "Re Audit",
+  },
+  {
+    color: "#EBAE00",
     name: "Audit Hold",
-    src: reAudit,
   },
   {
-    color: "#F28585",
+    color: "#BD3A79",
     name: "Audit Pending",
-    src: auditPending,
   },
   {
-    color: "red",
+    color: "#C21807",
     name: "Audit Declined",
-    src: auditDeclined,
+  },
+  {
+    color: "#EC8E27",
+    name: "Not Audit",
   },
 ];
 
