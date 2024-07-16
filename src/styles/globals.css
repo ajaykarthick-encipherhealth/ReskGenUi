@@ -15216,7 +15216,7 @@ input::-webkit-inner-spin-button {
   margin-bottom: 15px;
   border-radius: 10px;
 }
-.anticon svg {
+.customSteps .anticon svg {
   color: black;
 }
 .ant-steps-item-wait .ant-steps-item-icon {
