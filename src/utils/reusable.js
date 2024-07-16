@@ -1,4 +1,5 @@
 import { notification } from "antd";
+import moment from "moment";
 
 export const getResponePopup = (res) => {
   switch (res?.data?.status ? res?.data?.status : res?.status) {
@@ -67,6 +68,7 @@ export function getLast30Days() {
 
   return date_thirty_days.reverse();
 }
+
 export function getLast7Days() {
   const date_seven_days = [];
   const currentDate = new Date();
@@ -82,6 +84,19 @@ export function getLast7Days() {
 
   return date_seven_days.reverse();
 }
+
+export const getAllDatesInRange = (start, end) => {
+  const dates = [];
+  let currentDate = moment(start);
+
+  while (currentDate.isSameOrBefore(end)) {
+      dates.push(currentDate.format('YYYY-MM-DD'));
+      currentDate = currentDate.add(1, 'days');
+  }
+
+  return dates;
+};
+
 
 export function formatNumber(num) {
   if (num >= 1000000) {

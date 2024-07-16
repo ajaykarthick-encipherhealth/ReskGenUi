@@ -23,6 +23,7 @@ import PieChartInfo from "./components/pieChart/PieChartInfo";
 import OrgPieChartInfo from "./components/OrgPieChart/OrgPieChartInfo";
 import { Row, Skeleton, Spin } from "antd";
 import moment from "moment";
+import { getAllDatesInRange } from "../../../utils/reusable";
 
 const Index = ({
   getUserStatusData,
@@ -201,6 +202,9 @@ const Index = ({
       dateRange.endDate,
       selectedOrganization
     );
+
+    console.log(getAllDatesInRange(dateRange.startDate,
+      dateRange.endDate), "teseting");
   }, [dateRange, selectedOrganization]);
 
   return (
