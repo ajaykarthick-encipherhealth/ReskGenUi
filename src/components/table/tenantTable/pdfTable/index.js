@@ -11,7 +11,7 @@ import {
 } from "../../../headerFilters/functions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import FhirDrawer from "../../../../pages/tenantAdmin/patientSync/fhirModal";
+import FhirDrawer from "../../../../pages/tenantAdmin/patientSync/fihrModal";
 import { useRouter } from "next/router";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import SpinnerDots from "../../../spinner";

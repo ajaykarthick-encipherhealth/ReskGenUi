@@ -10,10 +10,10 @@ import styles from "./fhir.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
-import FIHRPatinetTable from "../../../components/table/tenantTable/FihrPatient/index";
+import FIHRPatinetTable from "../../../components/table/tenantTable/fihrPatient/index";
 import PdfTable from "../../../components/table/tenantTable/pdfTable";
 import RegularButton from "../../../components/button";
-import FhirDrawer from "./fhirModal";
+import FihrDrawer from "./fihrModal";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../stores/tenantAdmin/patientSync";
 import { debounce } from "../../../components/input";
@@ -25,7 +25,7 @@ const { RangePicker } = DatePicker;
 const FIHRData = [
   {
     batchID: "#111",
-    batchName:"Batch Name1",
+    batchName: "Batch Name1",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -40,7 +40,7 @@ const FIHRData = [
   },
   {
     batchID: "#222",
-    batchName:"Batch Name2",
+    batchName: "Batch Name2",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -55,7 +55,7 @@ const FIHRData = [
   },
   {
     batchID: "#333",
-    batchName:"Batch Name3",
+    batchName: "Batch Name3",
     patientCount: "100",
     status: "completed",
     statusValue: "200/23",
@@ -70,7 +70,7 @@ const FIHRData = [
   },
   {
     batchID: "#444",
-    batchName:"Batch Name4",
+    batchName: "Batch Name4",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -85,7 +85,7 @@ const FIHRData = [
   },
   {
     batchID: "#555",
-    batchName:"Batch Name5",
+    batchName: "Batch Name5",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -101,7 +101,7 @@ const FIHRData = [
   },
   {
     batchID: "#666",
-    batchName:"Batch Name6",
+    batchName: "Batch Name6",
     patientCount: "100",
     status: "failed",
     statusValue: "200/23",
@@ -116,7 +116,7 @@ const FIHRData = [
   },
   {
     batchID: "#777",
-    batchName:"Batch Name7",
+    batchName: "Batch Name7",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -131,7 +131,7 @@ const FIHRData = [
   },
   {
     batchID: "#888",
-    batchName:"Batch Name8",
+    batchName: "Batch Name8",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -146,7 +146,7 @@ const FIHRData = [
   },
   {
     batchID: "#999",
-    batchName:"Batch Name9",
+    batchName: "Batch Name9",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -162,7 +162,7 @@ const FIHRData = [
   },
   {
     batchID: "#101",
-    batchName:"Batch Name10",
+    batchName: "Batch Name10",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -178,7 +178,7 @@ const FIHRData = [
   {
     batchID: "#102",
     patientCount: "100",
-    batchName:"Batch Name11",
+    batchName: "Batch Name11",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -193,7 +193,7 @@ const FIHRData = [
   {
     batchID: "#103",
     patientCount: "100",
-    batchName:"Batch Name12",
+    batchName: "Batch Name12",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -208,7 +208,7 @@ const FIHRData = [
   {
     batchID: "#104",
     patientCount: "100",
-    batchName:"Batch Name13",
+    batchName: "Batch Name13",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -223,7 +223,7 @@ const FIHRData = [
 
   {
     batchID: "#105",
-    batchName:"Batch Name14",
+    batchName: "Batch Name14",
     patientCount: "100",
     status: "failed",
     statusValue: "200/23",
@@ -238,7 +238,7 @@ const FIHRData = [
   },
   {
     batchID: "#106",
-    batchName:"Batch Name15",
+    batchName: "Batch Name15",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -253,7 +253,7 @@ const FIHRData = [
   },
   {
     batchID: "#107",
-    batchName:"Batch Name16",
+    batchName: "Batch Name16",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -269,7 +269,7 @@ const FIHRData = [
   {
     batchID: "#108",
     patientCount: "100",
-    batchName:"Batch Name17",
+    batchName: "Batch Name17",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -284,7 +284,7 @@ const FIHRData = [
   {
     batchID: "#109",
     patientCount: "100",
-    batchName:"Batch Name18",
+    batchName: "Batch Name18",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -446,7 +446,6 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                     e.preventDefault();
                                   }
                                 }}
-                               
                               />
                             </div>
                           </div>
@@ -471,7 +470,6 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                 disabledDate={(current) =>
                                   disableFutureDate(current)
                                 }
-                               
                               />
                             </div>
                           </div>
@@ -485,29 +483,44 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                   dosOnChange(selectedOption, reportActiveTab);
                                 }}
                                 allowClear
-                               
                               />
                             </div>
                           </div>
                         </div>
                         <div className="d-flex mx-1">
-                          <div
-                            className={styles.btnContainer}
-                            name="upload trigger"
-                            onClick={handleUploadButtonClick}
-                          >
-                            <RegularButton
-                              name={"Upload Trigger"}
-                              width={"150px"}
-                            />
-                          </div>
-                          <div
-                            className={styles.btnContainer}
-                            onClick={handleUploadButtonClick}
-                            name="upload"
-                          >
-                            <RegularButton name={"Create Batch"} />
-                          </div>
+                          {!reportActiveTab || reportActiveTab === "FIHR" ? (
+                            <div
+                              className={styles.btnContainer}
+                              name="upload"
+                              onClick={handleUploadButtonClick}
+                            >
+                              <RegularButton
+                                name={"Upload"}
+                                width={"150px"}
+                                type="outlined"
+                              />
+                            </div>
+                          ) : (
+                            <>
+                              <div
+                                className={styles.btnContainer}
+                                name="upload trigger"
+                                onClick={handleUploadButtonClick}
+                              >
+                                <RegularButton
+                                  name={"Upload"}
+                                  width={"150px"}
+                                />
+                              </div>
+                              <div
+                                className={styles.btnContainer}
+                                onClick={handleUploadButtonClick}
+                                name="upload"
+                              >
+                                <RegularButton name={"Create Batch"} />
+                              </div>
+                            </>
+                          )}
                         </div>
                       </div>
 
@@ -574,12 +587,13 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                         </div>
 
                         {isDrawerOpen && (
-                          <FhirDrawer
+                          <FihrDrawer
                             isDrawerOpen={isDrawerOpen}
                             setIsDrawerOpen={setIsDrawerOpen}
                             uploadType={uploadType}
                             setUploadType={setUploadType}
                             selectedBatch={selectedBatch}
+                            
                           />
                         )}
                       </div>
