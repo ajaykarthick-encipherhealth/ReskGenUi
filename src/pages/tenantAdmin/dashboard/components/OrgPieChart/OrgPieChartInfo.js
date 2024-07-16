@@ -3,7 +3,7 @@ import ReactECharts from "echarts-for-react";
 import styles from "./styles.module.css";
 import { Button, Modal, Skeleton } from "antd";
 
-const OrgPieChartInfo = ({ data,  orgLoader }) => {
+const OrgPieChartInfo = ({ data, orgLoader }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -32,8 +32,10 @@ const OrgPieChartInfo = ({ data,  orgLoader }) => {
         type: "pie",
         radius: ["55%", "60%"],
         avoidLabelOverlap: false,
+        hoverAnimation: false,
         label: {
           show: true,
+          hoverAnimation: false,
           position: "center",
           formatter: function (params) {
             return `{b|${data?.length}}\n {a|${
@@ -59,14 +61,14 @@ const OrgPieChartInfo = ({ data,  orgLoader }) => {
           borderColor: "#fff",
           borderWidth: 5,
         },
-        emphasis: {
-          show: false,
-          label: {
-            show: false,
-            fontSize: 40,
-            fontWeight: "bold",
-          },
-        },
+        // emphasis: {
+        //   show: false,
+        //   label: {
+        //     show: false,
+        //     fontSize: 40,
+        //     fontWeight: "bold",
+        //   },
+        // },
         labelLine: {
           show: false,
         },
@@ -104,23 +106,32 @@ const OrgPieChartInfo = ({ data,  orgLoader }) => {
             </Button>
           </div>
           <div className={styles.bulletsDiv}>
-            {data?.map((item) => {
-              return (
-                <div className={styles.container}>
+            <div className={styles.column}>
+              {data?.slice(0, 50).map((item) => (
+                <div key={item.name} className={styles.container}>
                   <div style={{ display: "flex", width: "100%" }}>
                     <div
                       className={styles.bgColor}
-                      style={{
-                        backgroundColor: item?.itemStyle?.color,
-                      }}
+                      style={{ backgroundColor: item?.itemStyle?.color }}
                     ></div>
                     <span className={styles.userNameTitle}>{item.name}</span>
                   </div>
-
-                  <div className={styles.subText}>{item.value}</div>
                 </div>
-              );
-            })}
+              ))}
+            </div>
+            <div className={styles.column}>
+              {data?.slice(50, 100).map((item) => (
+                <div key={item.name} className={styles.container}>
+                  <div style={{ display: "flex", width: "100%" }}>
+                    <div
+                      className={styles.bgColor}
+                      style={{ backgroundColor: item?.itemStyle?.color }}
+                    ></div>
+                    <span className={styles.userNameTitle}>{item.name}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </>
       )}
@@ -147,8 +158,6 @@ const OrgPieChartInfo = ({ data,  orgLoader }) => {
                   ></div>
                   <span className={styles.userNameTitle}>{item.name}</span>
                 </div>
-
-                <div className={styles.subText}>{item.value}</div>
               </div>
             );
           })}
