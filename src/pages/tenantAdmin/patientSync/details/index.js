@@ -13,12 +13,12 @@ import Header from "../../../../jsx/layouts/nav/Header";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../../components/headerFilters/functions";
 import Selector from "../../../../components/selector";
-import DetailedFihrTable from "../../../../components/table/tenantTable/FihrPatient/DetailedFihrTable";
 import computed from "../../../../images/fihr/computed.svg";
 import profile from "../../../../images/fihr/profile.svg";
 import person from "../../../../images/fihr/person.svg";
 import statusIcon from "../../../../images/fihr/status.svg";
 import calender from "../../../../images/fihr/calender.svg";
+import DetailedFhirTable from "../../../../components/table/tenantTable/FihrPatient/detailedFhirTable";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -30,266 +30,94 @@ const statusOptions = [
 
 const { RangePicker } = DatePicker;
 
-const FIHRData = [
+const FIHRData = {
+  content: [
   {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
-  },
-  {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
-  },
-  {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
+    mrnNumber: "#111",
     status: "computed",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
   },
   {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "failed",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
-  },
-  {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
-    failedCount: "200",
-  },
-  {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
+    mrnNumber: "#112",
     status: "computed",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
   },
   {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
-  },
-  {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
-    failedCount: "200",
-  },
-  {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
-  },
-  {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
+    mrnNumber: "#113",
     status: "failed",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
   },
   {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
+    mrnNumber: "#114",
+    status: "computed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
   },
   {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
-  },
-
-  {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
+    mrnNumber: "#115",
+    status: "failed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
   },
   {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
+    mrnNumber: "#116",
+    status: "computed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
   },
   {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
+    mrnNumber: "#117",
+    status: "computed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
   },
   {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
+    mrnNumber: "#118",
+    status: "computed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
   },
   {
-    patientId: "#1234",
-    patientName: "Ether park",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
+    mrnNumber: "#119",
+    status: "computed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
   },
-];
+  {
+    mrnNumber: "#110",
+    status: "computed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    mrnNumber: "#101",
+    status: "computed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    mrnNumber: "#102",
+    status: "computed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    mrnNumber: "#103",
+    status: "failed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    mrnNumber: "#104",
+    status: "computed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    mrnNumber: "#105",
+    status: "computed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    mrnNumber: "#106",
+    status: "computed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    mrnNumber: "#107",
+    status: "failed",
+    computedDateTime: "2024-03-11T12:16:30.091Z",
+  },
+]};
 
 const Index = () => {
   const router = useRouter();
@@ -311,7 +139,7 @@ const Index = () => {
     if (reportActiveTab) {
       dispatch(getActiveTab(reportActiveTab));
     }
-  }, [reportActiveTab,status,search,pageNo,dateRange]);
+  }, [reportActiveTab, status, search, pageNo, dateRange]);
 
   const headerData = [
     {
@@ -455,7 +283,7 @@ const Index = () => {
                           className="profile-tab "
                           style={{ marginTop: "20px" }}
                         >
-                          <DetailedFihrTable
+                          <DetailedFhirTable
                             paginationFirst={paginationFirst}
                             onPageChange={onPageChange}
                             tableData={FIHRData}

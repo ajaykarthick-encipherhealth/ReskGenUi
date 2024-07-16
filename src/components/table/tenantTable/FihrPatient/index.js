@@ -187,7 +187,8 @@ function FIHRPatinetTable({
                               row?.initiatedByFirstName,
                               row?.initiatedByLastName,
                               row?.auditedByProfileImage,
-                              "header"
+                              "header",
+                              true
                             )}
                           </span>
                           <span>
