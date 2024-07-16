@@ -255,9 +255,9 @@ export const ProviderMenuList = [
     title: "Patients Sync",
     iconStyle: SVGICON.adminUser,
     activeIcon:SVGICON.adminUser,
-    to: "/tenantAdmin/fhirTable",
+    to: "/tenantAdmin/patientSync",
     // childRoute: "/fhirTable/details",
-    childRoute: "/tenantAdmin/fhirTable/pdfTable",
+    childRoute: "/tenantAdmin/patientSync/pdfTable",
   },
   {
     title: "File Processing",

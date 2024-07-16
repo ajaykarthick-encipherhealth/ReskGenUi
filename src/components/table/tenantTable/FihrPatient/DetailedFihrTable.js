@@ -8,7 +8,7 @@ import completed from "../.././../../images/fihr/completed.svg";
 import refresh from "../.././../../images/fihr/refrsh.svg";
 import failed from "../.././../../images/fihr/failed.svg";
 import TableStyle from "../../table.module.css";
-import styles from "../../../../pages/tenantAdmin/fhirTable/fhir.module.css";
+import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
 import PropTypes from "prop-types";
 import SpinnerDots from "../../../spinner";
 
