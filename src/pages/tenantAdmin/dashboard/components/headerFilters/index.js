@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { actions as dashboardActions } from "../../../../../stores/tenantAdmin/dashboard/workFlow";
 import styles from "./styles.module.css";
-import { Select } from "antd";
+import { DatePicker, Select } from "antd";
 import moment from "moment";
-
+import {
+  disableFutureDate,
+  disableFutureDates,
+} from "../../../../../components/headerFilters/functions";
+const { RangePicker } = DatePicker;
 const index = ({
   activeBtn,
   setActiveBtn,
@@ -12,29 +16,39 @@ const index = ({
   organizationStatusData,
   getOrganizationStatusData,
   handleOrganizationChange,
-  
   setSelectedValue,
 }) => {
+  const [isCustom, setIsCustom] = useState(false);
   const handleDateChange = (value) => {
-    setSelectedValue(value);
-    let startDate;
-  
-    if (value === "last_1_week") {
-      startDate =
-        moment().subtract(6, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
-    } else if (value === "last_1_month") {
-      startDate =
-        moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
-    } else if (value == undefined) {
-      setDateRange({ startDate: "", endDate: "" });
-    }
-    if (value != undefined) {
-      const endDate = moment().format("YYYY-MM-DD") + "T23:59:59.000Z";
-      setDateRange({ startDate: startDate, endDate: endDate });
+    // console.log(value, "testing");
+    if (value == "custom") {
+      setIsCustom(true);
+    } else {
+      setIsCustom(false);
+      setSelectedValue(value);
+      let startDate;
+      if (value === "last_1_week") {
+        startDate =
+          moment().subtract(6, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
+      } else if (value === "last_1_month") {
+        startDate =
+          moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
+      } else if (value == undefined) {
+        setDateRange({ startDate: "", endDate: "" });
+      }
+      if (value != undefined) {
+        const endDate = moment().format("YYYY-MM-DD") + "T23:59:59.000Z";
+        setDateRange({ startDate: startDate, endDate: endDate });
+      }
     }
   };
 
- 
+  const handleRange = (e) => {
+    setDateRange({
+      startDate: moment(e[0]).format("YYYY-MM-DD") + "T00:00:00.000Z",
+      endDate: moment(e[1]).format("YYYY-MM-DD") + "T23:59:59.000Z",
+    });
+  };
 
   useEffect(() => {
     getOrganizationStatusData();
@@ -49,15 +63,10 @@ const index = ({
 
   return (
     <div className={styles.container}>
-      <div
-        className="d-flex justify-content-between w-[40%]"
-        style={{ width: "40%" }}
-      >
-        <div className="d-flex" style={{ width: "50%" }}>
-          <div className={styles.flterContainer} style={{ width: "35%" }}>
-            Organization
-          </div>
-          <div className="tenantSelector" style={{ width: "65%" }}>
+      <div className="row" style={{ width: "60%" }}>
+        <div className="col-4 d-flex">
+          <div className={styles.flterContainer}>Organization</div>
+          <div className="tenantSelector" style={{ width: "100%" }}>
             <Select
               placeholder="Organization"
               options={organizationOptions}
@@ -73,11 +82,9 @@ const index = ({
             />
           </div>
         </div>
-        <div className="d-flex" style={{ width: "47%" }}>
-          <div className={styles.flterContainer} style={{ width: "20%" }}>
-            Date
-          </div>
-          <div className="tenantSelector" style={{ width: "80%" }}>
+        <div className="col-3 d-flex">
+          <div className={styles.flterContainer}>Date</div>
+          <div className="tenantSelector" style={{ width: "100%" }}>
             <Select
               placeholder="Date"
               defaultValue="Last 30 days"
@@ -90,6 +97,24 @@ const index = ({
             />
           </div>
         </div>
+        {isCustom && (
+          <div className="col-5 d-flex">
+            <div
+              className={`${styles.flterContainer}`}
+              style={{ fontSize: "14px" }}
+            >
+              Custom DatePicker
+            </div>
+            <div className="tenantSelector" style={{ width: "100%" }}>
+              <RangePicker
+                size="large"
+                disabledDate={(current) => disableFutureDates(current)}
+                onChange={(e, value) => handleRange(value)}
+                format={"MM-DD-YYYY"}
+              />
+            </div>
+          </div>
+        )}
       </div>
       <div className={styles.btnContainer}>
         <button
@@ -98,8 +123,6 @@ const index = ({
           }
           onClick={() => {
             setActiveBtn("default");
-      
-          
           }}
         >
           Default
