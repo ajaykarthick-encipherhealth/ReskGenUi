@@ -517,7 +517,7 @@ export const SelectUserList = async (role) => {
   const roles = localStorage.getItem("role");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=${roles == "tenant_admin" ? "" :orgId}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=${orgId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

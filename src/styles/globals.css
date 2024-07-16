@@ -14796,6 +14796,13 @@ input::-webkit-inner-spin-button {
   border-radius: 0px 10px 10px 0px !important;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 10px !important;
 }
+.tenantSelector .ant-picker-range {
+  width: 100%;
+  height: 48px !important;
+  border: none !important;
+  border-radius: 0px 10px 10px 0px !important;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 10px !important;
+}
 .speedometerChart > div:nth-child(2) {
   height: 220px !important;
 }

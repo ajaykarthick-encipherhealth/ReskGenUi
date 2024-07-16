@@ -1,12 +1,31 @@
-import { SVGICON } from "../../constant/theme";
-import {
-  DashboardFilled,
-  DashboardOutlined,
-  FileFilled,
-  FileOutlined,
-} from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBarsStaggered, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faHospital } from "@fortawesome/free-regular-svg-icons";
+import {
+  faUser,
+  faBarsStaggered,
+  faHospitalAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  DashboardOutlined,
+  BellOutlined,
+  FilePptOutlined,
+  DashboardFilled,
+  FilePptFilled,
+  BellFilled,
+  ProfileFilled,
+  ProfileOutlined,
+  FileOutlined,
+  FileFilled,
+  UserOutlined,
+  EnvironmentOutlined,
+  FileTextFilled,
+  FileTextOutlined,
+  EnvironmentFilled,
+  ContactsOutlined,
+  ContactsFilled,
+} from "@ant-design/icons";
+import { faUser as faUserReg } from "@fortawesome/free-regular-svg-icons";
+import { SVGICON } from "../../constant/theme";
 import styles from "../nav/styles.module.css";
 
 export const MenuList = [
@@ -34,19 +53,22 @@ export const MenuList = [
 export const PhysicanMenuList = [
   {
     title: "Dashboard",
-    iconStyle: SVGICON.dashboardIcon,
+    iconStyle: <DashboardOutlined />,
+    activeIcon: <DashboardFilled />,
     to: "/reviewer/dashboard",
   },
 
   {
     title: "My Work Queue",
-    iconStyle: SVGICON.patientListIcon,
+    iconStyle: <ProfileOutlined />,
+    activeIcon: <ProfileFilled />,
     to: "/reviewer/patients",
     childRoute: "/reviewer/patients/details",
   },
   {
     title: "Report",
-    iconStyle: SVGICON.ReportIcon,
+    iconStyle: <FileOutlined />,
+    activeIcon: <FileFilled />,
     to: "/reviewer/report",
     childRoute: "/reviewer/report/individualreport",
   },
@@ -65,46 +87,54 @@ export const PhysicanMenuList = [
 export const AdminMenuList = [
   {
     title: "Dashboard",
-    iconStyle: SVGICON.dashboardIcon,
+    iconStyle: <DashboardOutlined />,
+    activeIcon: <DashboardFilled />,
     to: "/admin/dashboard",
   },
   {
     title: "Users",
-    iconStyle: SVGICON.adminUser,
+    iconStyle: <UserOutlined />,
+    activeIcon: <FontAwesomeIcon icon={faUser} />,
     to: "/admin/user",
   },
 
   {
     title: "Patients",
-    iconStyle: SVGICON.patientListIcon,
+    iconStyle: <FontAwesomeIcon icon={faHospital} />,
+    activeIcon: <FontAwesomeIcon icon={faHospitalAlt} />,
     to: "/admin/patients",
     childRoute: "/admin/patients/details",
   },
   {
     title: "File Processing",
-    iconStyle: SVGICON.Usermanagement,
+    iconStyle: <FilePptOutlined />,
+    activeIcon: <FilePptFilled />,
     to: "/admin/fileprocessing",
   },
   {
     title: "Patient Allocation",
-    iconStyle: SVGICON.Allocation,
+    iconStyle: <ContactsOutlined />,
+    activeIcon: <ContactsFilled />,
     to: "/admin/allocateduser",
   },
   {
     title: "Tracking",
-    iconStyle: SVGICON.Tracking,
+    iconStyle: <EnvironmentOutlined />,
+    activeIcon: <EnvironmentFilled />,
     to: "/admin/tracking",
     childRoute3: "/admin/patients/details",
   },
   {
     title: "Report",
-    iconStyle: SVGICON.ReportIcon,
+    iconStyle: <FileTextOutlined />,
+    activeIcon: <FileTextFilled />,
     to: "/admin/report",
     childRoute: "/admin/report/individualreport",
   },
   {
     title: "Notification",
-    iconStyle: SVGICON.Notification,
+    iconStyle: <BellOutlined />,
+    activeIcon: <BellFilled />,
     to: "/admin/notification",
   },
   // {
@@ -148,23 +178,28 @@ export const L2AuditorMenuList = () => {
   return [
     {
       title: "Dashboard",
-      iconStyle:  <DashboardOutlined />,
+      iconStyle: <DashboardOutlined />,
       activeIcon: <DashboardFilled />,
       to: "/supervisor/dashboard",
     },
 
     {
       title: "User Queue",
-      iconStyle: <FontAwesomeIcon icon={faUser} className={`${styles.outlinedColor}`}/>,
-      activeIcon: <FontAwesomeIcon icon={faUser} className={`${styles.filledColor}`}/>,
+      iconStyle: <FontAwesomeIcon icon={faUserReg} />,
+      activeIcon: <FontAwesomeIcon icon={faUser} />,
       to: "/supervisor/user",
       childRoute: "/supervisor/user/userQueue",
       childRoute2: "/supervisor/user/details",
     },
     {
       title: "Audited Queue",
-      iconStyle: <FontAwesomeIcon icon={faBarsStaggered} className={`${styles.outlinedColor}`}/>,
-      activeIcon: <FontAwesomeIcon icon={faBarsStaggered} className={`${styles.filledColor}`}/>,
+      iconStyle: (
+        <FontAwesomeIcon
+          icon={faBarsStaggered}
+          className={`${styles.outlinedColor}`}
+        />
+      ),
+      activeIcon: <FontAwesomeIcon icon={faBarsStaggered} />,
       to: "/supervisor/auditing",
       childRoute: "/supervisor/patients/details",
     },
@@ -192,18 +227,21 @@ export const L2AuditorMenuList = () => {
 export const ProviderMenuList = [
   {
     title: "Dashboard",
-    iconStyle: SVGICON.dashboardIcon,
+    iconStyle: <DashboardOutlined />,
+    activeIcon: <DashboardFilled />,
     to: "/tenantAdmin/dashboard",
     // childRoute: "/fhirTable/details",
   },
   {
     title: "Users",
-    iconStyle: SVGICON.adminUser,
+    iconStyle: <UserOutlined />,
+    activeIcon: <FontAwesomeIcon icon={faUser} />,
     to: "/tenantAdmin/user",
   },
   {
     title: "Patients",
-    iconStyle: SVGICON.patientListIcon,
+    iconStyle: <FontAwesomeIcon icon={faHospital} />,
+    activeIcon: <FontAwesomeIcon icon={faHospitalAlt} />,
     to: "/tenantAdmin/patients",
     childRoute: "/tenantAdmin/patients/details",
   },
@@ -222,29 +260,34 @@ export const ProviderMenuList = [
   },
   {
     title: "File Processing",
-    iconStyle: SVGICON.Usermanagement,
+    iconStyle: <FilePptOutlined />,
+    activeIcon: <FilePptFilled />,
     to: "/tenantAdmin/fileprocessing",
   },
   {
     title: "Patient Allocation",
-    iconStyle: SVGICON.Allocation,
+    iconStyle: <ContactsOutlined />,
+    activeIcon: <ContactsFilled />,
     to: "/tenantAdmin/allocateduser",
   },
   {
     title: "Report",
-    iconStyle: SVGICON.ReportIcon,
+    iconStyle: <FileTextOutlined />,
+    activeIcon: <FileTextFilled />,
     to: "/tenantAdmin/report",
     childRoute: "/tenantAdmin/report",
   },
   {
     title: "Tracking",
-    iconStyle: SVGICON.Tracking,
+    iconStyle: <EnvironmentOutlined />,
+    activeIcon: <EnvironmentFilled />,
     to: "/tenantAdmin/tracking",
     childRoute3: "/tenantAdmin/patients/details",
   },
   {
     title: "Notification",
-    iconStyle: SVGICON.Notification,
+    iconStyle: <BellOutlined />,
+    activeIcon: <BellFilled />,
     to: "/admin/notification",
   },
 ];

@@ -70,3 +70,6 @@
 .container::-webkit-scrollbar-thumb {
   border-radius: 4px;
 }
+.notifyIconColor{
+  color :#04306f;
+}
