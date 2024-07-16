@@ -479,7 +479,7 @@ const HeaderFilters = ({
           setSelectAll={setSelectAll}
           setClear={setClear}
           handleClearAllFilters={handleClearAllFilters}
-        />
+        /> &nbsp;
 
         {bullets && (
           <div style={{ cursor: "pointer" }}>

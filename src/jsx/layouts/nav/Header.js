@@ -48,6 +48,9 @@ import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
+import { faBook } from "@fortawesome/free-solid-svg-icons";
+
+
 import {
   getAccuracy,
   getCoderDetails,
@@ -533,8 +536,10 @@ const Header = ({
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
                         <div className={styles.codify}>
-                          <div onClick={showDrawer}>{SVGICON.codify}</div>
+                          {/* <div>{SVGICON.codify}</div> */}
+                          <FontAwesomeIcon  onClick={showDrawer} icon={faBook} />
                         </div>
+                      
                         <Drawer
                           title={titleWithIcons}
                           onClose={onClosed}
