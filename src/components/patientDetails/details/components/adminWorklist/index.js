@@ -195,7 +195,7 @@ const AdminWorkList = ({
             <InputText
               type="text"
               onChange={(e) => filterChangePatientId(e)}
-              className="form-control new-form-control"
+              className="form-control input-form-control"
               placeholder="Search"
               maxLength={25}
               onKeyDown={(e) => {
