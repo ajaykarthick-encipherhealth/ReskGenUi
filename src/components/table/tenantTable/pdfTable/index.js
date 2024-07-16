@@ -110,7 +110,7 @@ function PdfTable({
                         );
                         dispatch(getActiveTab("PDF"));
                         router?.push({
-                          pathname: `/tenantAdmin/fhirTable/pdfTable`,
+                          pathname: `/tenantAdmin/patientSync/pdfTable`,
                           search: `params=${encodedParams}`,
                         });
                       }}

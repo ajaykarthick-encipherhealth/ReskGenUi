@@ -322,7 +322,7 @@
   padding-left: 3px;
 }
 .progreddBr {
-  width: 90%;
+  width: 60%;
 
   /* margin: auto; */
 }
@@ -342,4 +342,19 @@
   font-weight: 600;
   color: rgba(136, 136, 136, 1);
   margin: 0px 0 5px 5px;
+}
+.legendStyle{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background-color:#E10000;
+  margin:7px 5px 0 0;
+}
+.triggerButton{
+  width:30%;
+  border:1px solid #4A249D;
+  background-color: #E0D6F5;
+  color:#4A249D;
+  border-radius: 3px;
+  height: 27px;
 }

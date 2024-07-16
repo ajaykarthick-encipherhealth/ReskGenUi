@@ -24,7 +24,8 @@ const { RangePicker } = DatePicker;
 
 const FIHRData = [
   {
-    batchID: "#1234",
+    batchID: "#111",
+    batchName:"Batch Name1",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -38,7 +39,8 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#222",
+    batchName:"Batch Name2",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -52,7 +54,8 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#333",
+    batchName:"Batch Name3",
     patientCount: "100",
     status: "completed",
     statusValue: "200/23",
@@ -66,7 +69,8 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#444",
+    batchName:"Batch Name4",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -80,7 +84,8 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#555",
+    batchName:"Batch Name5",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -95,9 +100,10 @@ const FIHRData = [
     failedCount: "200",
   },
   {
-    batchID: "#1234",
+    batchID: "#666",
+    batchName:"Batch Name6",
     patientCount: "100",
-    status: "completed",
+    status: "failed",
     statusValue: "200/23",
     yearOfService: [
       "2024-03-11T12:16:30.091Z",
@@ -109,21 +115,8 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
-  },
-  {
-    batchID: "#1234",
+    batchID: "#777",
+    batchName:"Batch Name7",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -137,7 +130,23 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#888",
+    batchName:"Batch Name8",
+    patientCount: "100",
+    status: "processing",
+    statusValue: "200/23",
+    yearOfService: [
+      "2024-03-11T12:16:30.091Z",
+      "2023-03-11T12:16:30.091Z",
+      "2022-03-11T12:16:30.091Z",
+    ],
+    initiatedByFirstName: "John",
+    initiatedByLastName: "Jacobs",
+    initialedDate: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    batchID: "#999",
+    batchName:"Batch Name9",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -152,7 +161,8 @@ const FIHRData = [
     failedCount: "200",
   },
   {
-    batchID: "#1234",
+    batchID: "#101",
+    batchName:"Batch Name10",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -166,8 +176,9 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#102",
     patientCount: "100",
+    batchName:"Batch Name11",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -180,8 +191,9 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#103",
     patientCount: "100",
+    batchName:"Batch Name12",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -194,8 +206,9 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#104",
     patientCount: "100",
+    batchName:"Batch Name13",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -209,7 +222,23 @@ const FIHRData = [
   },
 
   {
-    batchID: "#1234",
+    batchID: "#105",
+    batchName:"Batch Name14",
+    patientCount: "100",
+    status: "failed",
+    statusValue: "200/23",
+    yearOfService: [
+      "2024-03-11T12:16:30.091Z",
+      "2023-03-11T12:16:30.091Z",
+      "2022-03-11T12:16:30.091Z",
+    ],
+    initiatedByFirstName: "John",
+    initiatedByLastName: "Jacobs",
+    initialedDate: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    batchID: "#106",
+    batchName:"Batch Name15",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -223,7 +252,8 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#107",
+    batchName:"Batch Name16",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -237,8 +267,9 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#108",
     patientCount: "100",
+    batchName:"Batch Name17",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -251,22 +282,9 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#109",
     patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
-  },
-  {
-    batchID: "#1234",
-    patientCount: "100",
+    batchName:"Batch Name18",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -540,10 +558,6 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                     tableData={FIHRData}
                                   />
                                 </Tab.Pane>
-                                <Tab.Pane
-                                  id="my-posts"
-                                  eventKey="nonhcc"
-                                ></Tab.Pane>
                                 <Tab.Pane id="my-posts" eventKey="pdf">
                                   <PdfTable
                                     paginationFirst={paginationFirst}
