@@ -16,18 +16,18 @@ const DetailedFhirTable = ({
   onPageChange,
   tableData,
   loader,
+  selectAll, 
+  selectedRows, 
+  setSelectedRows,
+  setSelectAll
 }) => {
   DetailedFhirTable.propTypes = {
     paginationFirst: PropTypes.any.isRequired,
     onPageChange: PropTypes.func.isRequired,
     tableData: PropTypes.array.isRequired,
   };
-
-  const [selectAll, setSelectAll] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([]);
   const handleHeaderCheckboxChange = async () => {
     setSelectAll(!selectAll);
-
     if (!selectAll) {
       try {
         const selected = tableData?.content?.filter(
@@ -38,7 +38,6 @@ const DetailedFhirTable = ({
       } catch (error) {}
     } else setSelectedRows([]);
   };
-
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows?.some(
       (selectedRow) => selectedRow?.mrnNumber === row?.mrnNumber
