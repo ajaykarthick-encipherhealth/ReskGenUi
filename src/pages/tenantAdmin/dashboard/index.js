@@ -336,6 +336,7 @@ const Index = ({
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
                       classNames="workflowChart1"
+                      selectedValue={selectedValue}
                     />
                   </Card>
                 </div>
