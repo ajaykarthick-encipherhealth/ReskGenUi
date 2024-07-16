@@ -277,10 +277,10 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    {/* <RadiolodyAndLab
+                    <RadiolodyAndLab
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                    /> */}
+                    />
                   </Card>
                 </div>
                 <div className={`col-lg-8`}>
