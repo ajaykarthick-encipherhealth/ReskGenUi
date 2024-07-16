@@ -136,7 +136,7 @@ const OrgPieChartInfo = ({ data, orgLoader }) => {
         </>
       )}
       <Modal
-        title="Organzation"
+        title="Organizations"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
