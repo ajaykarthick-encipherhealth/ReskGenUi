@@ -342,8 +342,10 @@ const TeamReport = ({
                 <div>
                   <div className=" col-xl-12 d-flex" style={{ height: "100%" }}>
                     {reportListAll?.response?.response?.data?.length === 0 ? (
-                      <div className={`col-xl-12 ${styles.emptyCard}`}>
+                       <div className={`col-xl-6 ${styles.card1}`}>
+                      <div className={` ${styles.emptyCard}`}>
                         <Empty />
+                      </div>
                       </div>
                     ) : (
                       <div className={`col-xl-6 ${styles.cardDiv}`}>
