@@ -119,6 +119,7 @@ const Patient = ({
     selectedOption,
     selectOrgList,
     batchCount,
+    filterBatchCount
   }) => {
     const uId = localStorage.getItem("userId");
     const orgId = selectOrgList;
@@ -130,7 +131,7 @@ const Patient = ({
       sort?.sortDir ? sort?.sortDir : ""
     }&sortfield=${sort?.sortField ? sort?.sortField : ""}&priority=${
       selectedOption ? selectedOption : ""
-    }&batchCount=${batchCount ? batchCount : ""}`;
+    }&batchCount=${filterBatchCount ? batchCount : ""}`;
     allocatedGetList({ url: resoureUrl });
     // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     // if (response?.data) {
@@ -325,7 +326,9 @@ const Patient = ({
         search: searchStr,
         sort: sort,
         selectedOption: selectedOption,
-        selectOrgList,
+        selectOrgList:selectOrgList,
+        batchCount:batchCount,
+        filterBatchCount:filterBatchCount
       });
     }
   }, [
@@ -338,6 +341,7 @@ const Patient = ({
     searchStr,
     selectedOption,
     selectOrgList,
+    filterBatchCount
   ]);
   useEffect(() => {
     if (!isPatientList) {
