@@ -395,7 +395,8 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Accuracy />
+                    <Accuracy  dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}/>
                   </Card>
                 </div>
                 <div className={`col-lg-3 ${styles.box}`}>
@@ -440,7 +441,7 @@ const enhancer = connect(
     getOrganizationStatusData:
       dashboardWorkflowActions?.organizationStatusAction,
     getTop10DiseasesData: defaultActions.top10Diseases,
-    getAccuracyScore: defaultActions.accuracyScore,
+    getAccuracyScore: dashboardWorkflowActions.getAccuracyWorkflow,
   }
 );
 export default enhancer(Index);

@@ -9,6 +9,7 @@ import { Empty, Spin } from "antd";
 import spinSTYles from "../../../../../styles/auth.module.css";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
+import { connect } from "react-redux";
 
 export const TabButtons = [
   {
@@ -123,7 +124,7 @@ export const chartBlockedDates = (
   param,
   val,
   currentBtn,
-  currentDate
+  currentDate,
 ) => {
   year = Number(year);
   month = Number(month);
@@ -166,7 +167,7 @@ export const chartBlockedDates = (
     return false;
   }
 };
-const Accuracy = () => {
+const Accuracy = ({getAccuracyWorkflow}) => {
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const [activeTabButton, setActiveTabButton] = useState(0);
   const [currentTabBtn, setCurrentTabBtn] = useState("CogentAI Accuracy");
@@ -175,7 +176,7 @@ const Accuracy = () => {
     currentDate.getMonth() + 1
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-
+console.log(getAccuracyWorkflow);
   const accuracyDatas = {
     data: {
       response: [
@@ -743,7 +744,7 @@ const Accuracy = () => {
   }
 
   const chartBlocked = (year, month) => {
-    const param=["20","30","34","98"]
+    const param = ["20", "30", "34", "98"];
     year = Number(year);
     month = Number(month);
     if (year < currentDate.getFullYear()) {
@@ -896,7 +897,7 @@ const Accuracy = () => {
             finalData.averageScore +
             "<br/>" +
             "Total Correct: " +
-            finalData.totalCorrectCount 
+            finalData.totalCorrectCount
             // "<br/>" +
             // "Total Wrong: " +
             // finalData.totalWrongCount
@@ -949,10 +950,11 @@ const Accuracy = () => {
         name: "Temperature",
         type: "spline",
 
-        data: chartBlockedDates( //reviewerAvgScore
+        data: chartBlockedDates(
+          //reviewerAvgScore
           selectedYear,
           selectedMonth,
-          QualityAccuracyDatas?.data?.response,
+          getAccuracyWorkflow?.response,
           "averageScore",
           currentBtn,
           currentDate
@@ -964,7 +966,7 @@ const Accuracy = () => {
       },
     ],
   };
-  
+
   const config2 = {
     chart: {
       type: "column",
@@ -1067,7 +1069,7 @@ const Accuracy = () => {
             finalData.averageScore +
             "<br/>" +
             "Total Correct: " +
-            finalData.totalCorrectCount 
+            finalData.totalCorrectCount
             // "<br/>" +
             // "Total Wrong: " +
             // finalData.totalWrongCount
@@ -1120,7 +1122,8 @@ const Accuracy = () => {
         name: "Temperature",
         type: "spline",
 
-        data: chartBlockedDates( //machineAvgScore
+        data: chartBlockedDates(
+          //machineAvgScore
           selectedYear,
           selectedMonth,
           accuracyDatas?.data?.response,
@@ -1135,7 +1138,7 @@ const Accuracy = () => {
       },
     ],
   };
-  
+
   const allAverageScore = chartBlockedDates(
     selectedYear,
     selectedMonth,
@@ -1170,8 +1173,11 @@ const Accuracy = () => {
       <div className={styles.card3}>
         <div className="d-flex justify-content-between">
           <div style={{ width: "50%" }}>
-            <HeadTitle header="Accuracy and Quality Insights"
-             fontSize="20px" margin="0px" />
+            <HeadTitle
+              header="Accuracy and Quality Insights"
+              fontSize="20px"
+              margin="0px"
+            />
           </div>
           <div className="d-flex">
             <div className={styles.btnScroller}>
@@ -1210,23 +1216,21 @@ const Accuracy = () => {
                 //   }}
                 // />
                 <div className={styles.highchartStyle}>
-                <HighchartsReact
-                  highcharts={Highcharts}
-                  options={config2}
-                  className={styles.hightchartStyles}
-                /> 
-              </div>
+                  <HighchartsReact
+                    highcharts={Highcharts}
+                    options={config2}
+                    className={styles.hightchartStyles}
+                  />
+                </div>
               ) : (
                 <div className={styles.highchartStyle}>
                   <HighchartsReact
                     highcharts={Highcharts}
                     options={config}
                     className={styles.hightchartStyles}
-                  /> 
+                  />
                 </div>
-                
-
-              ) 
+              )
             ) : (
               <div className={spinSTYles.spinStyle}>
                 <Empty />
@@ -1272,4 +1276,12 @@ const Accuracy = () => {
   );
 };
 
-export default Accuracy;
+const enhancer = connect(
+  (state) => ({
+    getAccuracyWorkflow:
+      state?.tenantAdmin?.dashboard?.workFlow?.getAccuracyWorkflow?.data,
+  }),
+  {}
+);
+
+export default enhancer(Accuracy);

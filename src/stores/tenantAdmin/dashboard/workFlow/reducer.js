@@ -6,6 +6,7 @@ import {
   allocatedStatusAction,
   reviewerStatusAction,
   organizationStatusAction,
+  getAccuracyWorkflow,
 } from "./action";
 
 const initialState = {
@@ -58,6 +59,7 @@ const workFlowReducer = combineReducers({
   allocatedLoader: getStatusLoading(allocatedStatusAction),
   reviewerLoader: getStatusLoading(reviewerStatusAction),
   organizationLoader: getStatusLoading(organizationStatusAction),
+  getAccuracyWorkflow: createReducer(getAccuracyWorkflow),
 });
 
 export default workFlowReducer;
