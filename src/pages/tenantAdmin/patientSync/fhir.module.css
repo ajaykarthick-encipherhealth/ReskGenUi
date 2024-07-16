@@ -241,6 +241,7 @@
   width: 65%;
   display: flex;
   justify-content: end;
+  align-items: end;
 }
 .videoflex {
   display: flex;
