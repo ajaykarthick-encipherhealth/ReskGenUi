@@ -666,7 +666,7 @@ const Patient = ({
                                 </div>
                               </div>
 
-                              {/* <div className="col-xl-2">
+                              <div className="col-xl-2">
                                 <label>Batch Count</label>
                                 <div class="form-group d-flex">
                                   <InputText
@@ -704,7 +704,7 @@ const Patient = ({
                                     Select
                                   </button>
                                 </div>
-                              </div> */}
+                              </div>
                             </>
                           ) : !isPatientList && activeTab == 2 ? (
                             <div className="col-xl-6"></div>
@@ -741,8 +741,8 @@ const Patient = ({
                           <div
                             className={
                               isPatientList && activeTab == 2
-                                ? `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
-                                : `col-xl-4 mt-4 ${TableStyle.allocateBtn}`
+                               ? `col-xl-2 mt-4 ${TableStyle.allocateBtn}`
+                                : `col-xl-2 mt-4 ${TableStyle.allocateBtn}`
                             }
                           >
                             {isPatientList || activeTab === 1 ? (
