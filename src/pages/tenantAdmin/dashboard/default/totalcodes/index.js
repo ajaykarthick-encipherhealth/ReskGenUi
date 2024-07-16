@@ -117,6 +117,9 @@ const index = ({
             { offset: 1, color: "#FAFFFA" },
           ]),
         },
+        itemStyle: {
+          color: "#E88D67"
+        }
       },
       {
         name: "HCC Codes",
@@ -132,6 +135,9 @@ const index = ({
             { offset: 1, color: "#FAFFFA" },
           ]),
         },
+        itemStyle: {
+          color: "#04B700" 
+        }
       },
       {
         name: "Care Gap Codes",
@@ -147,6 +153,10 @@ const index = ({
             { offset: 1, color: "#FFFDFA" },
           ]),
         },
+        itemStyle: {
+          color: "#FF9209" 
+        }
+        
       },
     ],
   };
