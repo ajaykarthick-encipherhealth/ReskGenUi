@@ -12,7 +12,11 @@ import {
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import { Skeleton } from "antd";
-import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
+import {
+  getLast30Days,
+  getLast7Days,
+  formatNumber,
+} from "../../../../../utils/reusable.js";
 
 const index = ({
   getAllHccCodesData,
@@ -27,7 +31,6 @@ const index = ({
   selectedValue,
   revenueChartLoader,
   rafScorechartLoader,
-  combinedData,
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
@@ -75,6 +78,8 @@ const index = ({
     getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization);
   }, [dateRange, selectedOrganization]);
 
+  let combinedHccData = suggestedHccDiseaseCountMap.map((value, index) => value + hccDiseaseCountValues[index]);
+
   const options = {
     xAxis: {
       type: "category",
@@ -85,8 +90,13 @@ const index = ({
       show: true,
     },
     tooltip: {
-      show: true,
-      trigger: "axis",
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        label: {
+          backgroundColor: '#6a7985'
+        }
+      }
     },
     legend: {
       show: false,
@@ -94,7 +104,7 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data: combinedData ? combinedData : [],
+        data: combinedHccData ? combinedHccData : [],
         color: "#E88D67",
         type: "line",
         lineStyle: { color: "#E88D67" },
@@ -157,12 +167,15 @@ const index = ({
 
   const totalHccRafScore = getAllRaf?.totalHccRafScore || 0;
   const totalSuggestedRafScore = getAllRaf?.totalSuggestedRafScore || 0;
-  const totalScore = totalHccRafScore + totalSuggestedRafScore;
+  const totalScore = (totalHccRafScore + totalSuggestedRafScore).toFixed(2);
+  
   const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
-  const totalScoreTwo = hccDiseaseCountMap + suggestedCount;
+  const totalScoreTwo = (hccDiseaseCountMap + suggestedCount).toFixed(2);
 
+  formatNumber();
 
+  const OverAllRevenue = totalScore;
 
   return (
     <div className="d-flex justify-content-between">
@@ -270,7 +283,9 @@ const index = ({
             <div className={`${styles.header} p-1`}>Revenue</div>
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
-              <div className={styles.price}>{`$ ${totalScore}`}</div>
+              <div className={styles.price}>{`$ ${
+                formatNumber(OverAllRevenue) || 0
+              }`}</div>
             </div>
           </div>
         </div>

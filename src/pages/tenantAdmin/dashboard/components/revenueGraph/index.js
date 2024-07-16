@@ -32,7 +32,14 @@ const RevenueGraph = ({
 
   const option = {
     tooltip: {
-      trigger: "axis",
+      show: true,
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        label: {
+          backgroundColor: '#6a7985'
+        }
+      }
     },
     legend: {
       show: false,
@@ -52,7 +59,7 @@ const RevenueGraph = ({
     },
     series: [
       {
-        name: isHcc ? "Hcc Codes" : isCargaps ? "Car Gap Codes" : "Total Codes",
+        name: isHcc ? "Hcc Codes" : isCargaps ? "Care Gap Codes" : "Total Codes",
         type: "line",
         step: "start",
         data: isHcc

@@ -222,10 +222,10 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
             finalData.averageScore +
             "<br/>" +
             "Total Correct: " +
-            finalData.totalCorrectCount +
+            finalData.newlyAddedCodesCount +
             "<br/>" +
             "Total Wrong: " +
-            finalData.totalWrongCount
+            finalData.incorrectCodesCount
           );
         } else {
           return "No data available";
@@ -246,10 +246,10 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
     },
     series: [
       {
-        name: "totalCorrectCount",
+        name: "newlyAddedCodesCount",
         data: getGraphData(
           accuracyDatas?.data?.response,
-          "totalCorrectCount",
+          "newlyAddedCodesCount",
           selectedMonth,
           selectedYear,
           currentBtn,
@@ -259,10 +259,10 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
         yAxis: 1,
       },
       {
-        name: "totalWrongCount",
+        name: "incorrectCodesCount",
         data: getGraphData(
           accuracyDatas?.data?.response,
-          "totalWrongCount",
+          "incorrectCodesCount",
           selectedMonth,
           selectedYear,
           currentBtn,

@@ -11,6 +11,7 @@ import {
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import { formatNumber } from "../../../../../utils/reusable.js";
 
 const index = ({
   getAllHccCodes,
@@ -35,7 +36,9 @@ const index = ({
       ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
       : [];
 
- 
+  formatNumber();
+  const TotalCareGapsRevenue = getAllRaf?.totalSuggestedRafScore;
+
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
@@ -45,7 +48,7 @@ const index = ({
             <div>
               <div className={styles.header}>Total Codes</div>
               <div className={styles.price}>
-                {getAllHccCodes?.suggestedCount || 0}
+                {(getAllHccCodes?.suggestedCount || 0).toFixed(2)}
               </div>
             </div>
           </div>
@@ -88,7 +91,7 @@ const index = ({
             <div className="p-2">
               <div className={styles.header}>Overall RAF</div>
               <div className={styles.price}>
-                {getAllRafScoreData?.totalSuggestedRaf || 0}
+                {(getAllRafScoreData?.totalSuggestedRaf || 0).toFixed(2)}
               </div>
             </div>
           </div>
@@ -127,7 +130,12 @@ const index = ({
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
               <div className={styles.price}>
-                {`$ ${getAllRaf?.totalSuggestedRafScore || 0} `}
+              
+                {`$ ${
+                  TotalCareGapsRevenue !== undefined
+                    ? formatNumber(TotalCareGapsRevenue.toFixed(2))
+                    : 0
+                }`}
               </div>
             </div>
           </div>

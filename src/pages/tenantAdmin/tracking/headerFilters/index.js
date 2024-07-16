@@ -4,13 +4,13 @@ import { DatePicker, Popover, Tooltip } from "antd";
 import Image from "next/image";
 import styles from "../../../../pages/reviewer/report/report.module.css";
 import Tracking from "../../tracking/tracking.module.css";
-
 import warning from "../../../../images/svg/warning.svg";
 import { useDispatch } from "react-redux";
 import Legends from "../../../../components/legends";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPalette } from "@fortawesome/free-solid-svg-icons";
 import {
   disableFutureDate,
   handleRnagePicker2,
@@ -19,7 +19,6 @@ import {
 import InputField from "../../../../components/input";
 import { getFilters } from "../../../../stores/authflow/actions";
 import MoreFilter from "../filters";
-import { SVGICON } from "../../../../jsx/constant/theme";
 
 const { RangePicker } = DatePicker;
 
@@ -480,7 +479,7 @@ const HeaderFilters = ({
           setSelectAll={setSelectAll}
           setClear={setClear}
           handleClearAllFilters={handleClearAllFilters}
-        />
+        /> &nbsp;
 
         {bullets && (
           <div style={{ cursor: "pointer" }}>
@@ -505,7 +504,9 @@ const HeaderFilters = ({
               placement="bottom"
             >
               <Tooltip title="Click here for status information.">
-                <div className={Tracking.iconBorder}>{SVGICON.colorPalete}</div>
+                <div className={Tracking.iconBorder}>
+                  <FontAwesomeIcon icon={faPalette} />
+                </div>
               </Tooltip>
             </Popover>
           </div>

@@ -218,7 +218,7 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData ,getFlagDetails
                   className={visitStyles.commentSendIcon}
                 >
                   {SVGICON.sentMessageIcon}
-                </Button>
+                </Button> 
               </div>
             </div>
           </Form>

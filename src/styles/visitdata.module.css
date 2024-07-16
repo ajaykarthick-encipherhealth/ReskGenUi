@@ -1001,6 +1001,7 @@
 
 .timeLine {
   overflow: scroll;
+  height: 900px;
 }
 
 .vertical-timeline--animate .vertical-timeline-element-content.bounce-in {
@@ -2152,4 +2153,8 @@
   box-shadow: rgba(99, 99, 99, 0.1) 0px -50px 36px -28px inset;
   /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
   /* box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
+}
+
+.fontAwesomeIconColor{
+  color: #ffffff;
 }

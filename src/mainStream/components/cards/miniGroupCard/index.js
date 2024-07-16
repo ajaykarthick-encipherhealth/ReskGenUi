@@ -3,6 +3,8 @@ import { Empty, Popover, Avatar } from "antd";
 import dayjs from "dayjs";
 import EditButton from "../../../../images/adminUsers/EditButton";
 import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 const CardComponent = ({
   data,
@@ -133,7 +135,8 @@ const CardComponent = ({
                       setOpenEdit(true);
                     }}
                   >
-                    <EditButton />
+                    {/* <EditButton /> */}
+                    <FontAwesomeIcon icon={faPenToSquare} />
                   </div>
                 </div>
               </div>

@@ -82,8 +82,8 @@ const Accuracy = () => {
     setOptionUser(res);
   };
   const numberOfWeeks =
-    accuracyDatas?.data?.response?.mapAccuracy &&
-    Object?.keys(accuracyDatas?.data?.response.mapAccuracy)?.length;
+    accuracyDatas?.data?.response &&
+    Object?.keys(accuracyDatas?.data?.response)?.length;
 
   const weekNames = Array.from(
     { length: numberOfWeeks },
@@ -153,8 +153,8 @@ const Accuracy = () => {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(
-      accuracyDatas?.data?.response?.mapAccuracy &&
-        Object.keys(accuracyDatas?.data?.response?.mapAccuracy)?.length
+      accuracyDatas?.data?.response &&
+        Object.keys(accuracyDatas?.data?.response)?.length
     );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
@@ -235,7 +235,7 @@ const Accuracy = () => {
         ) {
           const weekIndex = parseInt(this.point.category.substring(4));
 
-          finalData = accuracyDatas?.data?.response?.mapAccuracy?.find(
+          finalData = accuracyDatas?.data?.response?.find(
             (item) => item?.weekOfMonth === weekIndex
           );
         } else if (
@@ -246,11 +246,11 @@ const Accuracy = () => {
             (month) => month === this.point.category
           );
 
-          finalData = accuracyDatas?.data?.response?.mapAccuracy?.find(
+          finalData = accuracyDatas?.data?.response?.find(
             (item) => item?.monthOfYear === hoveredMonthIndex + 1
           );
         } else {
-          finalData = accuracyDatas?.data?.response?.mapAccuracy?.find((item) =>
+          finalData = accuracyDatas?.data?.response?.find((item) =>
             item?.dayOfMonth  === this.x
              
           );
@@ -288,7 +288,7 @@ const Accuracy = () => {
       {
         name: "totalCorrectCount",
         data: getGraphData(
-          accuracyDatas?.data?.response?.mapAccuracy,
+          accuracyDatas?.data?.response,
           "totalCorrectCount",
           selectedMonth,
           selectedYear,
@@ -301,7 +301,7 @@ const Accuracy = () => {
       {
         name: "totalWrongCount",
         data: getGraphData(
-          accuracyDatas?.data?.response?.mapAccuracy,
+          accuracyDatas?.data?.response,
           "totalWrongCount",
           selectedMonth,
           selectedYear,
@@ -317,7 +317,7 @@ const Accuracy = () => {
         data: chartBlockedDates(
           selectedYear,
           selectedMonth,
-          accuracyDatas?.data?.response?.mapAccuracy,
+          accuracyDatas?.data?.response,
           "averageScore",
           currentBtn,
           currentDate
@@ -330,15 +330,15 @@ const Accuracy = () => {
     ],
   };
   useEffect(() => {
-    if (accuracyDatas?.data?.response?.mapAccuracy) {
-      setInitialAccuracyData(accuracyDatas?.data?.response?.mapAccuracy);
+    if (accuracyDatas?.data?.response) {
+      setInitialAccuracyData(accuracyDatas?.data?.response);
     }
   }, [accuracyDatas]);
 
   const allAverageScore = chartBlockedDates(
     selectedYear,
     selectedMonth,
-    accuracyDatas?.data?.response?.mapAccuracy,
+    accuracyDatas?.data?.response,
     "averageScore",
     currentBtn,
     currentDate
@@ -367,6 +367,7 @@ const Accuracy = () => {
                 <div className={styles.select}>
                   <Select
                     showSearch
+                    allowClear
                     placeholder="Select User"
                     className={`custom_select_user ${styles.custom_select_user}`}
                     onChange={(e) => onChangeUser(e)}
@@ -410,7 +411,7 @@ const Accuracy = () => {
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
               ) : accuracyDatas?.loading === false &&
-                accuracyDatas?.data?.response?.mapAccuracy?.length > 0 ? (
+                accuracyDatas?.data?.response?.length > 0 ? (
                 option && (
                   <div className={styles.highchartStyle}>
                     <HighchartsReact
