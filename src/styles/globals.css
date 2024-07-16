@@ -13737,9 +13737,9 @@ overflow: scroll;
   background: #f5f9ff !important;
 }
 
-.allocate_modal_container  .ant-modal-content {
+.allocate_modal_container .ant-modal-content {
   height: 730px !important;
-  overflow-Y: scroll !important;
+  overflow-y: scroll !important;
 }
 
 .ant_select_form {
@@ -14862,13 +14862,13 @@ input::-webkit-inner-spin-button {
     top: -35px !important;
   }
   .remianingAreaGraph > div:nth-child(2) > div:nth-child(1) > canvas {
-    height:330px !important;
+    height: 330px !important;
     top: -35px !important;
   }
 }
 .tenatTable {
   width: 100%;
-  margin:20px 0px !important;
+  margin: 20px 0px !important;
   border-collapse: collapse;
 }
 
@@ -14897,25 +14897,26 @@ input::-webkit-inner-spin-button {
   border-radius: 4px;
 }
 
-.tenatTable thead, .tenatTable tbody tr {
+.tenatTable thead,
+.tenatTable tbody tr {
   display: table;
   width: 100%;
   table-layout: fixed; /* Fix table layout to ensure table structure remains intact */
 }
 
-.tenatTable > thead >tr{
+.tenatTable > thead > tr {
   height: 43px !important;
   border-radius: 10px !important;
-  background-color: #CEE2FD !important;
+  background-color: #cee2fd !important;
   font-weight: 700;
   font-size: 16px;
 }
 .tenatTable > tbody > tr {
   height: 43px !important;
-  border-bottom: 1px solid #C7C7C7;
+  border-bottom: 1px solid #c7c7c7;
 }
-.tenatTable .midRow{
-text-align: start;
+.tenatTable .midRow {
+  text-align: start;
 }
 /* @media only screen and (min-width: 1200px) {
 .tenantPie >div >div>canvas{
@@ -15145,9 +15146,139 @@ text-align: start;
   margin-bottom: 16px;
 }
 
-
-.skeletonantd .ant-skeleton.ant-skeleton-element .ant-skeleton-avatar.ant-skeleton-avatar-lg {
+.skeletonantd
+  .ant-skeleton.ant-skeleton-element
+  .ant-skeleton-avatar.ant-skeleton-avatar-lg {
   width: 200px;
   height: 200px;
   line-height: 40px;
+}
+
+.customSteps .ant-steps .ant-steps-item-container {
+  margin-bottom: 100px;
+}
+
+.customSteps
+  .ant-steps
+  .ant-steps-item-process
+  .ant-steps-item-container
+  .ant-steps-item-tail::after {
+  background-color: white;
+  padding: 2px;
+  margin: 15px 0;
+  margin-bottom: 15px;
+  border-radius: 10px;
+}
+.customSteps
+  .ant-steps-item
+  .ant-steps-item-container
+  .ant-steps-item-tail::after {
+  width: 1px;
+  height: 75%;
+}
+.customSteps
+  .ant-steps-item-finish
+  .ant-steps-item-container
+  .ant-steps-item-tail::after {
+  background-color: white;
+  padding: 2px;
+  margin: 15px 0;
+  margin-bottom: 15px;
+  border-radius: 10px;
+}
+.customSteps
+  .ant-steps-item-wait
+  .ant-steps-item-container
+  .ant-steps-item-tail::after {
+  background-color: #6c99dc;
+  padding: 2px;
+  margin: 15px 0;
+  margin-bottom: 15px;
+  border-radius: 10px;
+}
+:where(.css-dev-only-do-not-override-3rel02).ant-layout
+  .ant-layout-sider-children {
+  height: 100%;
+  margin-top: -0.1px;
+  padding-top: 0.1px;
+  display: flex;
+  flex-direction: columnn;
+  flex-direction: column;
+  align-items: center;
+}
+.customSteps
+  .ant-steps-item-process
+  > .ant-steps-item-container
+  > .ant-steps-item-tail::after {
+  background-color: #6c99dc;
+  padding: 2px;
+  margin: 15px 0;
+  margin-bottom: 15px;
+  border-radius: 10px;
+}
+.anticon svg {
+  color: black;
+}
+.ant-steps-item-wait .ant-steps-item-icon {
+  background-color: #6c99dc !important;
+}
+.ant-steps-item-finish .ant-steps-item-icon {
+  background-color: white !important;
+}
+
+.customSelect .ant-select-selector {
+  background-color: #f0f2f5 !important;
+  border-color: #1890ff !important;
+  border-radius: 10px !important;
+}
+
+.customSelect .ant-select-selection-item {
+  color: #1890ff !important;
+}
+
+.customSelect .ant-select-item-option {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.customSelect .ant-select-item-option-active {
+  background-color: #e6f7ff !important;
+}
+.customSelect .ant-select-selector {
+  height: 52px !important;
+  background-color: #06439d !important;
+  border-radius: "10px" !important;
+}
+.customSelect .ant-select-selector .ant-select-selection-placeholder {
+  color: white !important;
+}
+.customSelect .ant-select-selector .ant-select-selection-item {
+  color: white !important;
+}
+.customSelect .ant-select-arrow {
+  top: 82% !important;
+  color: #ffff !important;
+}
+.customSelect .anticon svg {
+  color: #ffff;
+}
+.layout .ant-layout {
+  background-color: #ffff;
+}
+.customsteps .ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after {
+  background-color: white !important;
+}
+.customsteps .ant-steps.ant-steps-vertical >.ant-steps-item>.ant-steps-item-container>.ant-steps-item-tail::after {
+  width: 4px;
+  height: 74%;
+  border-radius: 10px !important;
+  padding: 3px !important;
+  margin-top: 15px !important;
+  background-color:#6C99DC;
+}
+.customsteps .ant-steps.ant-steps-vertical .ant-steps-item.ant-steps-item-process.ant-steps-item-active .ant-steps-item-container {
+  margin-bottom: 100px !important;
+}
+.customsteps .ant-steps-item-container {
+  margin-bottom: 100px !important;
 }
