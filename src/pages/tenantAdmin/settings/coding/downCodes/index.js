@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
-import { Button, Checkbox, Divider, Switch } from "antd";
+import { Button, Checkbox, Divider, Form, Modal, Switch } from "antd";
 import FileUploader from "../../components/fileUploader";
 import ModalPop from "../../components/modal";
 import CommonModalContent from "../../components/commonModalContent";
@@ -11,14 +11,25 @@ import FileUpload from "../../../../../components/table/tenantSettingsTable/file
 import { PlusOutlined } from "@ant-design/icons";
 import Search from "../../../../../components/table/tenantSettingsTable/search";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
+import EditSettings from "../../components/edit";
 
-const DownCodes = ({ updateSettings, getCodingDetails, list }) => {
+const DownCodes = ({
+  updateSettings,
+  getCodingDetails,
+  list,
+  editComoridConditions,
+  deleteComoridConditions,
+}) => {
+  const [form] = Form.useForm();
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
   const [isChecked, setIsChecked] = useState({
     isDownCodeConversionEnabled: false,
     includeGeneralGuidelineCodes: false,
   });
+  const [isEdit, setIsEdit] = useState(false);
+  const [editRowValue, setEditRowValue] = useState(null);
+  // const [selectFile, setSelectFile] = useState("");
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -74,8 +85,8 @@ const DownCodes = ({ updateSettings, getCodingDetails, list }) => {
     },
     {
       title: "Result Code",
-      dataIndex: "result_code",
-      key: "result_code",
+      dataIndex: "resultCode",
+      key: "resultCode",
     },
     {
       title: "Description",
@@ -86,6 +97,11 @@ const DownCodes = ({ updateSettings, getCodingDetails, list }) => {
       title: "Year",
       dataIndex: "years",
       key: "year",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
     },
   ];
   useEffect(() => {
@@ -102,6 +118,40 @@ const DownCodes = ({ updateSettings, getCodingDetails, list }) => {
           includeGeneralGuidelineCodes:
             res?.response?.includeGeneralGuidelineCodes,
         });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeleteRow = async (value) => {
+    try {
+      const res = await deleteComoridConditions({
+        id: value.id,
+        target: "DOWN_CODES",
+      });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+        setIsEdit(false);
+        setEditRowValue(null);
+        getDownCodes();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleEditRow = async () => {
+    try {
+      const res = await editComoridConditions({
+        ...editRowValue,
+        ...form.getFieldsValue(),
+        target: "DOWN_CODES",
+      });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+        setIsEdit(false);
+        setEditRowValue(null);
+        getDownCodes();
       }
     } catch (error) {
       console.log(error);
@@ -192,6 +242,13 @@ const DownCodes = ({ updateSettings, getCodingDetails, list }) => {
             <TenantSettingsTable
               columns={columns}
               data={list?.response?.downCodesPage?.content}
+              handleEdit={(e) => {
+                setEditRowValue(e);
+                setIsEdit(e);
+                form.setFieldsValue({ ...e });
+              }}
+              // isNoDelete={false}
+              handleDelete={handleDeleteRow}
             />
           </div>
         </div>
@@ -212,6 +269,14 @@ const DownCodes = ({ updateSettings, getCodingDetails, list }) => {
         content={<CommonModalContent tags={tags} setTags={setTags} />}
         setOpenModal={setOpenModal}
       />
+      <Modal
+        title="Edit Comorbid Conditions"
+        onCancel={() => setIsEdit(false)}
+        footer={false}
+        open={isEdit}
+      >
+        <EditSettings form={form} handleEditRow={handleEditRow} />
+      </Modal>
     </>
   );
 };
@@ -221,6 +286,8 @@ const enhancer = connect(
   }),
   {
     updateSettings: settingActions.updateDownCodes,
+    editComoridConditions: settingActions.editComoridConditions,
+    deleteComoridConditions: settingActions.deleteComoridConditions,
     getCodingDetails: settingActions.codingGuidelinesAction,
   }
 );

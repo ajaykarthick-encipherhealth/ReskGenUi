@@ -30,7 +30,7 @@ export const getResponePopup = (res) => {
     case "USER_DEFINED_ERROR":
       return notification.error({
         description: res?.data?.message ? res?.data?.message : res?.message,
-        duration: 2,
+        duration: 3,
       });
     default:
       break;

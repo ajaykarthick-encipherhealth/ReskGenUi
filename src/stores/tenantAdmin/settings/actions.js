@@ -100,3 +100,15 @@ export const uploadFiles = createActionThunk(
   "GET_FILE_PROCESS_SETTINGS",
   network.uploadFile
 );
+export const editHealthMetric = createActionThunk(
+  "EDIT_HEALTH_METRIC",
+  network.editHealthMertic
+);
+export const editComoridConditions = createActionThunk(
+  "EDIT_COMORID_CONDITIONS",
+  network.editComoridCondition
+);
+export const deleteComoridConditions = createActionThunk(
+  "DELETE_COMORID_CONDITIONS",
+  network.deleteComoridCondition
+);

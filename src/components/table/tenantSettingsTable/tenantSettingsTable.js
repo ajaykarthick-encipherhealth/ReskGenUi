@@ -1,7 +1,16 @@
 import React from "react";
 import TableStyle from "./tenantSettings.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Popconfirm } from "antd";
 
-const TenantSettingsTable = ({ columns, data, loading }) => {
+const TenantSettingsTable = ({
+  columns,
+  data,
+  isNoDelete = true,
+  handleEdit,
+  handleDelete,
+}) => {
   const allSortedContent = [];
 
   const genderValue = (value) => {
@@ -33,10 +42,9 @@ const TenantSettingsTable = ({ columns, data, loading }) => {
   };
 
   const yearValue = (value) => {
-
     if (value?.length > 2) {
       return (
-        <div className="d-flex">
+        <div className="d-flex justify-content-center">
           <>{value?.join(",")}</>
         </div>
       );
@@ -58,6 +66,31 @@ const TenantSettingsTable = ({ columns, data, loading }) => {
       } else if (header?.dataIndex === "years") {
         sortedRowValues.push(
           <td className={TableStyle.lastBorder}>{yearValue(value)}</td>
+        );
+      } else if (header?.dataIndex === "action") {
+        sortedRowValues.push(
+          <td className={TableStyle.lastBorder}>
+            <span className="mx-2 cr-pointer">
+              <FontAwesomeIcon
+                icon={faPen}
+                onClick={() => {
+                  handleEdit(data[row]);
+                }}
+              />
+            </span>
+            {isNoDelete && (
+              <Popconfirm
+                title="Are you sure you want to delete this tag?"
+                onConfirm={() => handleDelete(data[row])}
+                okText="Yes"
+                cancelText="No"
+              >
+                <span className="mx-2 cr-pointer">
+                  <FontAwesomeIcon icon={faTrash} />
+                </span>
+              </Popconfirm>
+            )}
+          </td>
         );
       } else {
         sortedRowValues.push(

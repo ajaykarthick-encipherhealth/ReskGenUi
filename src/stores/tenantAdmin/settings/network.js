@@ -286,3 +286,36 @@ export async function uploadFile(obj) {
   );
   return data;
 }
+export async function editHealthMertic(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `management/tenantAdmin/codes/update`,
+    options
+  );
+  return data;
+}
+export async function editComoridCondition(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `management/tenantAdmin/codes/update`,
+    options
+  );
+  return data;
+}
+export async function deleteComoridCondition(obj) {
+  const options = {
+    method: "POST",
+    // body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `management/tenantAdmin/codes/delete?id=${obj.id}&isActive=false&target=${obj.target}`,
+    options
+  );
+  return data;
+}

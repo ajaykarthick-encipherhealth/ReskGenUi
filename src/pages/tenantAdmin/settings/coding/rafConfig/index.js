@@ -232,9 +232,9 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
         <div>
           <TenantSettingsTable
             columns={columns}
-            data={
+            data={ list?.response?.rafScoreYearList ? 
               list?.response?.rafScoreYearList[year == "2023" ? 0 : 1]
-                ?.rafScoreBaseRates
+                ?.rafScoreBaseRates : []
             }
           />
         </div>

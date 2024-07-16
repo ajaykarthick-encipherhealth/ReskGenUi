@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
-import { Button, Checkbox, Divider, Switch } from "antd";
+import { Button, Checkbox, Divider, Form, Modal, Switch } from "antd";
 import FileUploader from "../../components/fileUploader";
 import ModalPop from "../../components/modal";
 import CommonModalContent from "../../components/commonModalContent";
@@ -12,9 +12,20 @@ import { PlusOutlined } from "@ant-design/icons";
 import FilterButton from "../../../../../components/table/tenantSettingsTable/filterButton";
 import Search from "../../../../../components/table/tenantSettingsTable/search";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
+import EditSettings from "../../components/edit";
+import axios from "../../../../../utility/axiosConfig";
+import ENDPOINTS from "../../../../../utility/enpoints";
+import { getResponePopup } from "../../../../../utils/reusable";
 
-const HistoryCodes = ({ updateSettings,updateHistoryCode, getCodingDetails, list }) => {
-  console.log(list);
+const HistoryCodes = ({
+  updateSettings,
+  updateHistoryCode,
+  getCodingDetails,
+  list,
+  editComoridConditions,
+  deleteComoridConditions,
+}) => {
+  const [form] = Form.useForm();
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
   const [isChecked, setIsChecked] = useState({
@@ -22,6 +33,9 @@ const HistoryCodes = ({ updateSettings,updateHistoryCode, getCodingDetails, list
     captureHistoryCodesAsIcdCodes: false,
     includeGeneralGuidelineCodes: false,
   });
+  const [isEdit, setIsEdit] = useState(false);
+  const [editRowValue, setEditRowValue] = useState(null);
+  const [selectFile, setSelectFile] = useState("");
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -56,10 +70,10 @@ const HistoryCodes = ({ updateSettings,updateHistoryCode, getCodingDetails, list
     "Renewed Medications",
     "a/p",
   ]);
-  const onChange = async(checked, name) => {
+  const onChange = async (checked, name) => {
     setIsChecked((prev) => ({ ...prev, [name]: checked }));
     try {
-      const res = await updateHistoryCode({[name]: checked})
+      const res = await updateHistoryCode({ [name]: checked });
       if (res.status == "SUCCESS") {
         getResponePopup(res);
       }
@@ -76,8 +90,8 @@ const HistoryCodes = ({ updateSettings,updateHistoryCode, getCodingDetails, list
     },
     {
       title: "Result Code",
-      dataIndex: "result_code",
-      key: "result_code",
+      dataIndex: "resultCode",
+      key: "resultCode",
     },
     {
       title: "Description",
@@ -88,6 +102,11 @@ const HistoryCodes = ({ updateSettings,updateHistoryCode, getCodingDetails, list
       title: "Year",
       dataIndex: "years",
       key: "year",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
     },
   ];
   useEffect(() => {
@@ -110,7 +129,77 @@ const HistoryCodes = ({ updateSettings,updateHistoryCode, getCodingDetails, list
       console.log(error);
     }
   };
+  const handleDeleteRow = async (value) => {
+    console.log(value, "testing");
+    try {
+      const res = await deleteComoridConditions({
+        id: value.id,
+        target: "HISTORY_CODES",
+      });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+        setIsEdit(false);
+        setEditRowValue(null);
+        getHistorys();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleEditRow = async (value) => {
+    try {
+      const res = await editComoridConditions({
+        ...editRowValue,
+        ...form.getFieldsValue(),
+        target: "HISTORY_CODES",
+      });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+        setIsEdit(false);
+        setEditRowValue(null);
+        getHistorys();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const submitPatientFile = async () => {
+    const formData = new FormData();
+    formData.append("file", selectFile.originFileObj);
+    formData.append("target", "HISTORY_CODES");
+    formData.append("isDefaultYear", false);
+    const headers = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    // setSelectFile(formData);
+    try {
+      const res = await axios.post(
+        ENDPOINTS.apiEndoint +
+          `management/tenantAdmin/codes/upload
+      `,
+        formData,
+        headers
+      );
+      setSelectFile("");
+      if (res.data.status == "SUCCESS") {
+        getResponePopup(res);
+      } else if (res.data.status == "USER_DEFINED_ERROR") {
+        getResponePopup(res);
+      }
+    } catch (error) {
+      if (error.response.status == 513) {
+        getResponePopup({ status: "USER_DEFINED_ERROR" });
+      }
+    }
+  };
 
+  useEffect(() => {
+    if (selectFile) {
+      submitPatientFile();
+    }
+  }, [selectFile]);
   return (
     <>
       <div className="p-3">
@@ -128,7 +217,11 @@ const HistoryCodes = ({ updateSettings,updateHistoryCode, getCodingDetails, list
             </div>
             <div className="d-flex justify-content-start gap-2">
               <div>
-                <FileUpload allowedFormat={"File must be in xlsx or CSV"} />
+              <FileUpload
+                  allowedFormat={"File must be in xlsx or CSV"}
+                  onChange={(e) => setSelectFile(e.file)}
+                  fileList={[]}
+                />
               </div>
               <div>
                 <Button
@@ -215,6 +308,13 @@ const HistoryCodes = ({ updateSettings,updateHistoryCode, getCodingDetails, list
             <TenantSettingsTable
               columns={columns}
               data={list?.response?.historyCodesPage?.content}
+              handleEdit={(e) => {
+                setEditRowValue(e);
+                setIsEdit(e);
+                form.setFieldsValue({ ...e });
+              }}
+              // isNoDelete={false}
+              handleDelete={handleDeleteRow}
             />
           </div>
         </div>
@@ -235,6 +335,14 @@ const HistoryCodes = ({ updateSettings,updateHistoryCode, getCodingDetails, list
         content={<CommonModalContent tags={tags} setTags={setTags} />}
         setOpenModal={setOpenModal}
       />
+      <Modal
+        title="Edit History Codes"
+        onCancel={() => setIsEdit(false)}
+        footer={false}
+        open={isEdit}
+      >
+        <EditSettings form={form} handleEditRow={handleEditRow} />
+      </Modal>
     </>
   );
 };
@@ -245,6 +353,8 @@ const enhancer = connect(
   {
     updateSettings: settingActions.updateSettingsAction,
     updateHistoryCode: settingActions.updateHistoryCode,
+    editComoridConditions: settingActions.editComoridConditions,
+    deleteComoridConditions: settingActions.deleteComoridConditions,
     getCodingDetails: settingActions.codingGuidelinesAction,
   }
 );
