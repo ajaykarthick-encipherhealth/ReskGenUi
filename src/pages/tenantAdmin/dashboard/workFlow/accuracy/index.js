@@ -794,63 +794,6 @@ const Accuracy = () => {
     }
   };
 
-  const option = {
-    xAxis: {
-      type: "category",
-      data: xAxisData,
-    },
-    yAxis: {
-      type: "value",
-      axisLabel: {
-        formatter: "{value}%",
-      },
-    },
-    tooltip: {
-      show: true,
-
-      formatter: function (params) {
-        let tooltipContent = "";
-
-        if (Array.isArray(params)) {
-          params.forEach((item) => {
-            const allocatedValue = Number(item.data).toFixed(2);
-            tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-          });
-        } else if (params.data) {
-          const allocatedValue = Number(params.data).toFixed(2);
-          tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-        }
-
-        return tooltipContent;
-      },
-    },
-    series: [
-      {
-        data: chartBlocked(selectedYear, selectedMonth, accuracyDatas?.data?.response),
-        type: "bar",
-        itemStyle: {
-          barBorderRadius: [10, 10, 0, 0],
-          color: function (params) {
-            return params.dataIndex === highlightIndex ? "#3479FE" : "#C2D5FF";
-          },
-        },
-        lineStyle: {
-          color: "#BD83B8",
-        },
-        showSymbol: false,
-        label: {
-          show: true,
-          position: "top",
-          formatter: function (params) {
-            return params?.data && currentBtn !== "Daily"
-              ? `${Math.round(params?.data)}%`
-              : "";
-          },
-        },
-      },
-    ],
-  };
-
   const config = {
     chart: {
       type: "column",
@@ -953,10 +896,10 @@ const Accuracy = () => {
             finalData.averageScore +
             "<br/>" +
             "Total Correct: " +
-            finalData.totalCorrectCount +
-            "<br/>" +
-            "Total Wrong: " +
-            finalData.totalWrongCount
+            finalData.totalCorrectCount 
+            // "<br/>" +
+            // "Total Wrong: " +
+            // finalData.totalWrongCount
           );
         } else {
           return "No data available";
@@ -989,24 +932,24 @@ const Accuracy = () => {
         color: "#0b59f1",
         yAxis: 1,
       },
-      {
-        name: "totalWrongCount",
-        data: getGraphData(
-          QualityAccuracyDatas?.data?.response,
-          "totalWrongCount",
-          selectedMonth,
-          selectedYear,
-          currentBtn,
-          currentDate
-        ),
-        color: "red",
-        yAxis: 1,
-      },
+      // {
+      //   name: "totalWrongCount",
+      //   data: getGraphData(
+      //     QualityAccuracyDatas?.data?.response,
+      //     "totalWrongCount",
+      //     selectedMonth,
+      //     selectedYear,
+      //     currentBtn,
+      //     currentDate
+      //   ),
+      //   color: "red",
+      //   yAxis: 1,
+      // },
       {
         name: "Temperature",
         type: "spline",
 
-        data: chartBlockedDates(
+        data: chartBlockedDates( //reviewerAvgScore
           selectedYear,
           selectedMonth,
           QualityAccuracyDatas?.data?.response,
@@ -1021,7 +964,178 @@ const Accuracy = () => {
       },
     ],
   };
+  
+  const config2 = {
+    chart: {
+      type: "column",
+    },
+    title: {
+      text: "",
+    },
 
+    xAxis: {
+      categories: xAxisData,
+      crosshair: true,
+      labels: {
+        style: {
+          color: "gray",
+          fontWeight: "500",
+        },
+      },
+      lineColor: "#d9d9d9",
+    },
+    yAxis: [
+      {
+        // primary yAxis (right)
+        title: {
+          text: "Organization Quality",
+          style: {
+            color: "#2dafff",
+          },
+        },
+        labels: {
+          format: "{value}%",
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+        opposite: false,
+        min: 0,
+        max: 100,
+        gridLineWidth: 0,
+      },
+      {
+        // Secondary yAxis (right)
+        title: {
+          text: "Organization Changes Count",
+          style: {
+            color: "#0b59f1",
+          },
+        },
+        labels: {
+          format: "{value}",
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+        opposite: true,
+
+        tickInterval: 4,
+      },
+    ],
+    legend: {
+      enabled: false,
+    },
+
+    credits: {
+      enabled: false,
+    },
+    tooltip: {
+      formatter: function () {
+        let finalData;
+        if (
+          typeof this.point.category === "string" &&
+          this.point.category.startsWith("Week")
+        ) {
+          const weekIndex = parseInt(this.point.category.substring(4));
+
+          finalData = QualityAccuracyDatas?.data?.response?.find(
+            (item) => item?.weekOfMonth === weekIndex
+          );
+        } else if (
+          typeof this.point.category === "string" &&
+          monthNames.includes(this.point.category.toUpperCase())
+        ) {
+          const hoveredMonthIndex = monthNames?.findIndex(
+            (month) => month === this.point.category
+          );
+
+          finalData = QualityAccuracyDatas?.data?.response?.find(
+            (item) => item?.monthOfYear === hoveredMonthIndex + 1
+          );
+        } else {
+          finalData = QualityAccuracyDatas?.data?.response?.find(
+            (item) => item?.dayOfMonth === this.x
+          );
+        }
+
+        if (finalData) {
+          return (
+            "Average Score: " +
+            finalData.averageScore +
+            "<br/>" +
+            "Total Correct: " +
+            finalData.totalCorrectCount 
+            // "<br/>" +
+            // "Total Wrong: " +
+            // finalData.totalWrongCount
+          );
+        } else {
+          return "No data available";
+        }
+      },
+    },
+
+    plotOptions: {
+      column: {
+        stacking: "normal",
+        dataLabels: {
+          enabled: false,
+          format: "{point.y}",
+        },
+        pointWidth: 20,
+        borderRadius: 10,
+      },
+    },
+    series: [
+      {
+        name: "totalCorrectCount",
+        data: getGraphData(
+          accuracyDatas?.data?.response,
+          "totalCorrectCount",
+          selectedMonth,
+          selectedYear,
+          currentBtn,
+          currentDate
+        ),
+        color: "#0b59f1",
+        yAxis: 1,
+      },
+      // {
+      //   name: "totalWrongCount",
+      //   data: getGraphData(
+      //     QualityAccuracyDatas?.data?.response,
+      //     "totalWrongCount",
+      //     selectedMonth,
+      //     selectedYear,
+      //     currentBtn,
+      //     currentDate
+      //   ),
+      //   color: "red",
+      //   yAxis: 1,
+      // },
+      {
+        name: "Temperature",
+        type: "spline",
+
+        data: chartBlockedDates( //machineAvgScore
+          selectedYear,
+          selectedMonth,
+          accuracyDatas?.data?.response,
+          "averageScore",
+          currentBtn,
+          currentDate
+        ),
+        tooltip: {
+          valueSuffix: "",
+        },
+        yAxis: 0,
+      },
+    ],
+  };
+  
   const allAverageScore = chartBlockedDates(
     selectedYear,
     selectedMonth,
@@ -1086,24 +1200,33 @@ const Accuracy = () => {
               </div>
             ) : accuracyDatas?.data?.response ? (
               currentTabBtn === "CogentAI Accuracy" ? (
-                <ReactECharts
-                  option={option}
-                  style={{
-                    width: "100%",
-                    height: "340px",
-                    marginTop: "-30px",
-                    overflowX: "hidden",
-                  }}
-                />
+                // <ReactECharts
+                //   option={option}
+                //   style={{
+                //     width: "100%",
+                //     height: "340px",
+                //     marginTop: "-30px",
+                //     overflowX: "hidden",
+                //   }}
+                // />
+                <div className={styles.highchartStyle}>
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  options={config2}
+                  className={styles.hightchartStyles}
+                /> 
+              </div>
               ) : (
                 <div className={styles.highchartStyle}>
                   <HighchartsReact
                     highcharts={Highcharts}
                     options={config}
                     className={styles.hightchartStyles}
-                  />
+                  /> 
                 </div>
-              )
+                
+
+              ) 
             ) : (
               <div className={spinSTYles.spinStyle}>
                 <Empty />
@@ -1126,10 +1249,9 @@ const Accuracy = () => {
                 ? `Month ${monthNames[currentDate.getMonth()]}`
                 : `Week ${getDateWeek(currentDate)}`}
               {currentBtn !== "Monthly" && (
-                <span className={styles.subTitle}>(Current Month)</span>
+                <span className={styles.subTitle}></span>
               )}
             </div>
-
             <div className={styles.percentage}>
               <span className={styles.insideTitle}>
                 {currentTabBtn === "CogentAI Accuracy" ? (
