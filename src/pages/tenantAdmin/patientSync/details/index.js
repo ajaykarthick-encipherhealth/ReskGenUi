@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { DatePicker, Select } from "antd";
-import { useSelector, useDispatch, connect } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { DatePicker } from "antd";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
@@ -12,18 +12,16 @@ import styles from "../fhir.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../../components/headerFilters/functions";
-import DetailedFihrTable from "../../../../components/table/tenantTable/FihrPatient/DetailedFihrTable";
+import Selector from "../../../../components/selector";
 import computed from "../../../../images/fihr/computed.svg";
 import profile from "../../../../images/fihr/profile.svg";
 import person from "../../../../images/fihr/person.svg";
 import statusIcon from "../../../../images/fihr/status.svg";
 import calender from "../../../../images/fihr/calender.svg";
-import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";;
-import { debounce } from "../../../../components/input";
-import moment from "moment";
+import DetailedFhirTable from "../../../../components/table/tenantTable/fhirPatient/DetailedFhirTable";
 
-export const statusOptions = [
-  { label: "All", value: "" },
+const statusOptions = [
+  { label: "All", value: "ALL" },
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
@@ -32,173 +30,180 @@ export const statusOptions = [
 
 const { RangePicker } = DatePicker;
 
-const Index = ({
-  getBatchInfo,
-  getBatch,
-  loader,
-  getAllBatches,
-  pdfTabledata,
-}) => {
+const FIHRData = {
+  content: [
+    {
+      mrnNumber: "#111",
+      status: "computed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#112",
+      status: "computed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#113",
+      status: "failed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#114",
+      status: "computed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#115",
+      status: "failed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#116",
+      status: "computed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#117",
+      status: "computed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#118",
+      status: "computed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#119",
+      status: "computed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#110",
+      status: "computed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#101",
+      status: "computed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#102",
+      status: "computed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#103",
+      status: "failed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#104",
+      status: "computed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#105",
+      status: "computed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#106",
+      status: "computed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+    {
+      mrnNumber: "#107",
+      status: "failed",
+      computedDateTime: "2024-03-11T12:16:30.091Z",
+    },
+  ],
+};
+
+const Index = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
-  const [searchVal, setSearchVal] = useState([]);
-  const [selectedDates, setSelectedDates] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [status, setStatus] = useState("");
+  const [dateRange, setDateRange] = useState();
   const [search, setSearch] = useState();
-  const [selectedDateRanges, setSelecteddateRanges] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [currentId, setCurrentId] = useState({});
-
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [trigger, setTrigger] = useState(false);
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
   };
 
-  const debouncedSearch = useCallback(
-    debounce((text, setSearchVal, field) => {
-      setSearchVal((prev) => {
-        const existingIndex = prev.findIndex((item) => item.field === field);
-        if (existingIndex !== -1) {
-          return prev.map((item, index) => {
-            if (index === existingIndex) {
-              return { ...item, search: text };
-            }
-            return item;
-          });
-        } else {
-          return [...prev, { search: text, field: field }];
-        }
-      });
-    }, 1000),
-    []
-  );
-  const getNameSearch = (event) => {
-    const value = event.target.value;
-    const field = event.target.name;
-    setSearch({
-      name: event.target.name,
-      searchval: value,
-    });
-    debouncedSearch(value, setSearchVal, field);
-  };
+  const handleHeaderTrigger = async () => {
+    setTrigger(!trigger);
+    setSelectAll(!selectAll)
+    if (!trigger) {
+      try {
+        const selected = FIHRData?.content?.filter(
+          (item) => item?.status === "failed"
+        );
 
-  const handleRangePicker = (date, dateString, tabName) => {
-    const formattedDates = dateString?.map((date, index) => {
-      const formattedDate =
-        index === 1
-          ? date &&
-            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-          : date &&
-            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
-      return formattedDate;
-    });
-    setSelectedDates((prevOptions) => ({
-      ...prevOptions,
-      [tabName]: date,
-    }));
-    setSelecteddateRanges((prevOptions) => ({
-      ...prevOptions,
-      [tabName]: { from: formattedDates[0], to: formattedDates[1] },
-    }));
+        setSelectedRows(selected ? selected : []);
+      } catch (error) {}
+    } else setSelectedRows([]);
   };
-
-  const dosOnChange = (selectedOption, name) => {
-    const nameString = name?.split(" ").join("");
-    setSelectedOptions((prevOptions) => ({
-      ...prevOptions,
-      [nameString]: selectedOption,
-    }));
-  };
-  useEffect(() => {
-    getAllBatches({ page: 0 });
-  }, []);
-  useEffect(() => {
-    if (reportActiveTab) {
-      dispatch(getActiveTab(reportActiveTab));
-    }
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const encodedParams = urlParams.get("params");
-    const decodedParams = JSON.parse(atob(encodedParams));
-    if (pdfTabledata) {
-      const filterData = pdfTabledata?.content?.filter(
-        (item) => item?.id === decodedParams?.batchId
-      );
-      setCurrentId(...filterData);
-    }
-    const coderSearchString = searchVal.find(
-      (item) => item.field === "initialSearch"
-    )?.search;
-
-    getBatchInfo({
-      batchId: decodedParams?.batchId,
-      page: pageNo,
-      search: coderSearchString ? coderSearchString : "",
-      startDate: selectedDateRanges?.batch?.from,
-      endDate: selectedDateRanges?.batch?.to,
-      fileStatus: selectedOptions?.batch,
-    });
-  }, [
-    reportActiveTab,
-    pdfTabledata,
-    pageNo,
-    selectedDateRanges,
-    searchVal,
-    selectedOptions,
-  ]);
 
   const headerData = [
     {
       id: 1,
       title: "Batch Name",
       icon: profile,
-      name: currentId?.name ? currentId?.name : "--",
+      name: "Folder Name6",
     },
     {
       id: 2,
       title: "Status",
       icon: statusIcon,
-      name: currentId?.batchUploadStatus ? currentId?.batchUploadStatus : "--",
+      name: "Completed 270/280",
     },
     {
       id: 3,
       title: "Computed",
       icon: computed,
-      name: "--",
+      name: "269/280",
     },
     {
       id: 4,
       title: "Uploaded By",
       icon: person,
-      name: "--",
+      name: "Nicolas Miles",
     },
     {
       id: 5,
       title: "Upload Date",
       icon: calender,
-      name: "--",
+      name: "03/15/2024",
     },
     {
       id: 6,
       title: "Year Of Service",
       icon: calender,
-      name:
-        currentId?.yearOfService?.length > 0
-          ? currentId?.yearOfService?.map(
-              (item, index) => `${item}${index / 2 === 0 ? "," : ""}`
-            )
-          : "--",
+      name: "2022, 2023, 2024",
     },
   ];
+  useEffect(() => {
+    if (reportActiveTab) {
+      dispatch(getActiveTab(reportActiveTab));
+    }
+  }, [reportActiveTab, status, search, pageNo, dateRange]);
 
   return (
     <>
       <Header />
       <div className={styles.maincontainer}>
         <div className="content-body">
+          {/* {!ReportPatientDetails?.response ? (
+            <SpinnerDots />
+          ) : ( */}
           <div className="container-fluid">
             <div className="row">
               <div className="col-xl-12">
@@ -212,11 +217,6 @@ const Index = ({
                         <button
                           className={`${styles.backButtonStyle}`}
                           onClick={() => {
-                            dispatch(getActiveTab("PDF"));
-                            setSearch();
-                            setSearchVal([]);
-                            setSelectedDates(null);
-                            setSelecteddateRanges([]);
                             router.back();
                           }}
                         >
@@ -253,9 +253,8 @@ const Index = ({
                             />
                             <InputText
                               type="text"
-                              name='initialSearch'
-                              onChange={(e) => getNameSearch(e)}
-                              value={search ? search?.searchVal : ""}
+                              onChange={(e) => setSearch(e.target.value)}
+                              value={""}
                               className="form-control new-form-control"
                               placeholder="Search"
                               maxLength={25}
@@ -272,14 +271,9 @@ const Index = ({
                           <label htmlFor="date">Date</label>
                           <div>
                             <RangePicker
-                            value={
-                              selectedDates
-                                ? selectedDates[reportActiveTab]
-                                : undefined
-                            }
                               format="MM-DD-YYYY"
                               onChange={(dates, dateStrings) => {
-                                handleRangePicker(dates, dateStrings, "batch");
+                                setDateRange(dateStrings);
                               }}
                               disabledDate={(current) =>
                                 disableFutureDate(current)
@@ -287,18 +281,29 @@ const Index = ({
                             />
                           </div>
                         </div>
-                        <div className="col-xl-2 mx-2">
-                          <label>Status</label>
-                          <div className={`custom-react-select1`}>
-                            <Select
-                              placeholder={"Select Status"}
-                              options={statusOptions}
-                              onChange={(selectedOption) => {
-                                dosOnChange(selectedOption, "batch");
-                              }}
-                              allowClear
+                        <div className="col-xl-6 mx-2">
+                          <div className="col-xl-4">
+                            <Selector
+                              selectlabel={"Select Status"}
+                              setSelectedOption={setStatus}
+                              selectOptions={statusOptions}
+                              defaultSelectValue1={""}
                             />
                           </div>
+                        </div>
+                        <div className={`col-xl-2 ${styles.headerTriggerBtn}`}>
+                          <button
+                            className={
+                              trigger
+                                ? styles.triggerButton
+                                : styles.inActiveHeaderTriggerBtn
+                            }
+                            onClick={() => {
+                              handleHeaderTrigger();
+                            }}
+                          >
+                            Trigger
+                          </button>
                         </div>
                       </div>
                       <div
@@ -309,11 +314,14 @@ const Index = ({
                           className="profile-tab "
                           style={{ marginTop: "20px" }}
                         >
-                          <DetailedFihrTable
+                          <DetailedFhirTable
                             paginationFirst={paginationFirst}
                             onPageChange={onPageChange}
-                            tableData={getBatch}
-                            loader={loader}
+                            tableData={FIHRData}
+                            selectAll={selectAll}
+                            selectedRows={selectedRows}
+                            setSelectedRows={setSelectedRows}
+                            setSelectAll={setSelectAll}
                           />
                         </div>
                       </div>
@@ -323,21 +331,11 @@ const Index = ({
               </div>
             </div>
           </div>
+          {/* )} */}
         </div>
       </div>
     </>
   );
 };
 
-const connector = connect(
-  (state) => ({
-    getBatch: state?.tenantAdmin?.patientSync?.getBatch?.data?.response,
-    loader: state?.tenantAdmin?.patientSync?.getBatchLoader,
-    pdfTabledata: state.tenantAdmin?.patientSync?.allBatches?.data?.response,
-  }),
-  {
-    getBatchInfo: allActions.getBatchInfo,
-    getAllBatches: allActions.getAllBatches,
-  }
-);
-export default connector(Index);
+export default Index;

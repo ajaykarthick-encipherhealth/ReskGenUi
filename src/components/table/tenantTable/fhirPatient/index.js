@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Empty, Popover, Tooltip } from "antd";
-import warning from "../../../../images/fihr/warning.svg";
-import waningFilled from "../../../../images/fihr/warningFilled.svg";
+import { Empty, Popover, Progress, Tooltip } from "antd";
+import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
 import TableStyle from "../../table.module.css";
 import { Paginator } from "primereact/paginator";
 import dayjs from "dayjs";
@@ -12,6 +11,7 @@ import {
 import moment from "moment";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import refreshIcon from "../../../../images/fihr/refresh.png";
 
 function FIHRPatinetTable({
   reportListAll,
@@ -20,7 +20,10 @@ function FIHRPatinetTable({
   tableData,
 }) {
   const router = useRouter();
-  const [display, setDisplay] = useState({});
+  const [triggeredBatch, setTriggeredBatch] = useState({
+    status: false,
+    id: null,
+  });
 
   const dateFormateAlign = (dates) => {
     return dates?.map((res, index) => {
@@ -55,7 +58,7 @@ function FIHRPatinetTable({
   };
 
   const handleRow = (row) => {
-    router?.push("/tenantAdmin/fhirTable/details");
+    router?.push("/tenantAdmin/patientSync/details");
   };
 
   return (
@@ -67,12 +70,12 @@ function FIHRPatinetTable({
           <thead className={TableStyle.classTTotalhead}>
             <tr>
               <>
-                <th>BATCH ID</th>
+                <th>BATCH NAME & ID</th>
                 <th>PATIENT COUNT</th>
                 <th style={{ paddingLeft: "40px" }}>STATUS </th>
                 <th>YEAR OF SERVICE</th>
                 <th className={TableStyle.rowAudited}>INITIATED BY </th>
-                <th style={{ textAlign: "center" }}>BATCH INITIATED DATE </th>
+                <th style={{ textAlign: "center" }}>BATCH INITIATED </th>
               </>
             </tr>
           </thead>
@@ -89,75 +92,78 @@ function FIHRPatinetTable({
                 >
                   <>
                     <td className={TableStyle.childBorder}>
-                      {row?.batchID ? row?.batchID : "---"}
+                      <span style={{ fontSize: "14px" }}>
+                        {row?.batchID ? row?.batchID : "---"}
+                      </span>
+                      <br />
+                      <span style={{ fontSize: "12px" }}>
+                        {row?.batchName ? row?.batchName : "---"}
+                      </span>
                     </td>
 
                     <td className={TableStyle.childBorder}>
                       {row?.patientCount ? row?.patientCount : "---"}
                     </td>
-                    <td className={TableStyle.childBorder}>
-                      <div>
-                        <span
-                          className="text-capitalize mx-2"
-                          style={{
-                            color:
-                              row.status === "processing"
-                                ? "#2D6187"
-                                : row.status === "completed"
-                                ? "#008A0E"
-                                : "black",
-                          }}
-                        >
-                          {row?.status}
-                        </span>
-                        <span
-                          style={{
-                            color:
-                              row.status === "processing"
-                                ? "#2D6187"
-                                : row.status === "completed"
-                                ? "#008A0E"
-                                : "black",
-                          }}
-                        >
-                          <span
-                            className="customTooltip"
-                            onMouseOver={() => {
-                              setDisplay((prevState) => ({
-                                ...prevState,
-                                [index]: true,
-                              }));
+                    <td
+                      className={`${TableStyle.childBorder}`}
+                      style={{ width: "20%" }}
+                    >
+                      <div style={{ width: "100%", display: "flex" }}>
+                        {triggeredBatch?.id !== row?.batchID && (
+                          <button
+                            className={styles.triggerButton}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setTriggeredBatch({
+                                status: true,
+                                id: row?.batchID,
+                              });
                             }}
                           >
-                            {row?.failedCount && (
-                              <Tooltip
-                                title={
-                                  <span>
-                                    <span className={TableStyle?.toolTipCOnt}>
-                                      {row?.failedCount}
-                                    </span>
-                                    <span>Files Pending</span>
-                                  </span>
-                                }
+                            Trigger
+                          </button>
+                        )}
+                        {triggeredBatch?.status &&
+                          triggeredBatch?.id === row?.batchID && (
+                            <>
+                              <div
+                                style={{ width: "80%" }}
+                                className={`d-flex ${styles.progressDIv} ${
+                                  row?.status === "processing"
+                                    ? "progressText"
+                                    : row?.status === "failed"
+                                    ? "failedText"
+                                    : "completedText"
+                                }`}
                               >
-                                <Image
-                                  onMouseLeave={() => {
-                                    setDisplay((prevState) => ({
-                                      ...prevState,
-                                      [index]: false,
-                                    }));
-                                  }}
-                                  width={15}
-                                  height={15}
-                                  src={display[index] ? waningFilled : warning}
-                                  alt="noimg"
-                                  className={TableStyle.imgContainer}
+                                <Progress
+                                  percent={80}
+                                  strokeColor={
+                                    row?.status === "processing"
+                                      ? "#0078D4"
+                                      : row?.status === "failed"
+                                      ? "#E10000"
+                                      : "#00940F"
+                                  }
+                                  className={`${styles.progreddBr}`}
                                 />
-                              </Tooltip>
-                            )}
-                          </span>
-                          {row?.statusValue}
-                        </span>
+                              </div>
+                              {row?.status === "failed" && (
+                                <div
+                                  className={`d-flex`}
+                                  style={{ width: "20%" }}
+                                >
+                                  <span className={styles.legendStyle}></span>
+                                  <Image
+                                    src={refreshIcon}
+                                    alt="noImage"
+                                    height={20}
+                                    width={20}
+                                  />
+                                </div>
+                              )}
+                            </>
+                          )}
                       </div>
                     </td>
 
@@ -181,7 +187,8 @@ function FIHRPatinetTable({
                               row?.initiatedByFirstName,
                               row?.initiatedByLastName,
                               row?.auditedByProfileImage,
-                              "header"
+                              "header",
+                              true
                             )}
                           </span>
                           <span>

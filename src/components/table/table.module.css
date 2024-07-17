@@ -225,6 +225,36 @@
   margin-top: -2px;
   cursor: pointer;
 }
+.customFhirChecked[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #d4c9c9;
+  outline: none;
+  transition: background-color 0.3s;
+}
+
+.customFhirChecked[type="checkbox"]:checked {
+  width: 22px;
+  height: 22px;
+  background-color: #fff;
+  cursor: pointer;
+}
+.customFhirChecked[type="checkbox"]::before {
+  content: "\2713";
+  display: flex;
+  justify-content: center;
+  color: #04306f;
+  font-weight: 800;
+  font-size: 16px;
+  margin-top: -2px;
+  cursor: pointer;
+}
 .customChecked2[type="checkbox"] {
   width: 20px;
   height: 20px;
@@ -253,7 +283,6 @@
   font-size: 18px;
   margin-top: -4px;
   cursor: pointer;
-  
 }
 .customChecked3[type="checkbox"] {
   width: 20px;

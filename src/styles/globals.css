@@ -15387,4 +15387,42 @@ input::-webkit-inner-spin-button {
 .customsteps .ant-steps-item-container {
   margin-bottom: 100px !important;
 }
+.progressText .ant-progress-text{
+  color:#0078D4 !important;
+}
+.progressText .ant-progress .ant-progress-outer{
+  width:190px !important;
+}
+.completedText .ant-progress .ant-progress-outer{
+  width:190px !important;
+}
+.completedText .ant-progress-text{
+  color:#00940F !important;
+}
+.failedText .ant-progress .ant-progress-outer{
+  width:190px !important;
+}
+.failedText .ant-progress-text{
+  color:#E10000 !important;
+}
+/* apply background for model */
+.custom-modal {
+  /* background-color: #f0f6fe !important; */
+  border-radius: 30px !important;
+}
 
+/* .custom-modal .ant-modal-content {
+  background-color: #f0f6fe !important;
+}
+
+.custom-modal .ant-modal-header {
+  background-color: #f0f6fe !important;
+}
+
+.custom-modal .ant-modal-body {
+  background-color: #f0f6fe !important;
+}
+
+.custom-modal .ant-modal-footer {
+  background-color: #f0f6fe;
+} */

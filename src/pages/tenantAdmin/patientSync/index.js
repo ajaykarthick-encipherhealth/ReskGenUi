@@ -10,21 +10,23 @@ import styles from "./fhir.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
-import FIHRPatinetTable from "../../../components/table/tenantTable/FihrPatient/index";
+import FHIRPatinetTable from "../../../components/table/tenantTable/fhirPatient/index";
 import PdfTable from "../../../components/table/tenantTable/pdfTable";
 import RegularButton from "../../../components/button";
-import FhirDrawer from "./fhirModal";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../stores/tenantAdmin/patientSync";
 import { debounce } from "../../../components/input";
 import { statusOptions } from "./pdfTable";
 import moment from "moment";
+import PdfDrawer from "./modals/PdfDrawer";
+import FhirDrawer from "./modals/FhirDrawer";
 
 const { RangePicker } = DatePicker;
 
-const FIHRData = [
+const FHIRData = [
   {
-    batchID: "#1234",
+    batchID: "#111",
+    batchName: "Batch Name1",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -38,7 +40,8 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#222",
+    batchName: "Batch Name2",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -52,7 +55,8 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#333",
+    batchName: "Batch Name3",
     patientCount: "100",
     status: "completed",
     statusValue: "200/23",
@@ -66,7 +70,8 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#444",
+    batchName: "Batch Name4",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -80,7 +85,8 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#555",
+    batchName: "Batch Name5",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -95,9 +101,10 @@ const FIHRData = [
     failedCount: "200",
   },
   {
-    batchID: "#1234",
+    batchID: "#666",
+    batchName: "Batch Name6",
     patientCount: "100",
-    status: "completed",
+    status: "failed",
     statusValue: "200/23",
     yearOfService: [
       "2024-03-11T12:16:30.091Z",
@@ -109,21 +116,8 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
-  },
-  {
-    batchID: "#1234",
+    batchID: "#777",
+    batchName: "Batch Name7",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -137,7 +131,23 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#888",
+    batchName: "Batch Name8",
+    patientCount: "100",
+    status: "processing",
+    statusValue: "200/23",
+    yearOfService: [
+      "2024-03-11T12:16:30.091Z",
+      "2023-03-11T12:16:30.091Z",
+      "2022-03-11T12:16:30.091Z",
+    ],
+    initiatedByFirstName: "John",
+    initiatedByLastName: "Jacobs",
+    initialedDate: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    batchID: "#999",
+    batchName: "Batch Name9",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -152,7 +162,8 @@ const FIHRData = [
     failedCount: "200",
   },
   {
-    batchID: "#1234",
+    batchID: "#101",
+    batchName: "Batch Name10",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -166,8 +177,9 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#102",
     patientCount: "100",
+    batchName: "Batch Name11",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -180,8 +192,9 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#103",
     patientCount: "100",
+    batchName: "Batch Name12",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -194,8 +207,9 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#104",
     patientCount: "100",
+    batchName: "Batch Name13",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -209,7 +223,23 @@ const FIHRData = [
   },
 
   {
-    batchID: "#1234",
+    batchID: "#105",
+    batchName: "Batch Name14",
+    patientCount: "100",
+    status: "failed",
+    statusValue: "200/23",
+    yearOfService: [
+      "2024-03-11T12:16:30.091Z",
+      "2023-03-11T12:16:30.091Z",
+      "2022-03-11T12:16:30.091Z",
+    ],
+    initiatedByFirstName: "John",
+    initiatedByLastName: "Jacobs",
+    initialedDate: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    batchID: "#106",
+    batchName: "Batch Name15",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -223,7 +253,8 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#107",
+    batchName: "Batch Name16",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -237,8 +268,9 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#108",
     patientCount: "100",
+    batchName: "Batch Name17",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -251,22 +283,9 @@ const FIHRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
-    batchID: "#1234",
+    batchID: "#109",
     patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
-  },
-  {
-    batchID: "#1234",
-    patientCount: "100",
+    batchName: "Batch Name18",
     status: "processing",
     statusValue: "200/23",
     yearOfService: [
@@ -295,13 +314,17 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [search, setSearch] = useState();
   const [selectedDateRanges, setSelecteddateRanges] = useState([]);
-
+  const [isOpenFhirDrawer, setIsOpenFhirDrawer] = useState(false);
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
     setUploadType(e.target.name);
     setSelectedBatch();
   };
-
+  const handleFhirUpload = (e) => {
+    setIsOpenFhirDrawer(!isOpenFhirDrawer);
+    setUploadType(e.target.name);
+    setSelectedBatch();
+  };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -428,7 +451,6 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                     e.preventDefault();
                                   }
                                 }}
-                               
                               />
                             </div>
                           </div>
@@ -453,7 +475,6 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                 disabledDate={(current) =>
                                   disableFutureDate(current)
                                 }
-                               
                               />
                             </div>
                           </div>
@@ -461,35 +482,65 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                             <label>Status</label>
                             <div className={`custom-react-select1`}>
                               <Select
-                                placeholder={"Select Status"}
+                                placeholder={"Select"}
                                 options={statusOptions}
                                 onChange={(selectedOption) => {
                                   dosOnChange(selectedOption, reportActiveTab);
                                 }}
                                 allowClear
-                               
                               />
                             </div>
                           </div>
+                          {!reportActiveTab || reportActiveTab==="FHIR" && (
+                             <div className="col-xl-4 mx-2">
+                             <label>Initiated By</label>
+                             <div className={`custom-react-select1`}>
+                               <Select
+                                 placeholder={"Select"}
+                                 options={statusOptions}
+                                 onChange={(selectedOption) => {
+                                   dosOnChange(selectedOption, reportActiveTab);
+                                 }}
+                                 allowClear
+                               />
+                             </div>
+                           </div>
+                          )}
                         </div>
                         <div className="d-flex mx-1">
-                          <div
-                            className={styles.btnContainer}
-                            name="upload trigger"
-                            onClick={handleUploadButtonClick}
-                          >
-                            <RegularButton
-                              name={"Upload Trigger"}
-                              width={"150px"}
-                            />
-                          </div>
-                          <div
-                            className={styles.btnContainer}
-                            onClick={handleUploadButtonClick}
-                            name="upload"
-                          >
-                            <RegularButton name={"Create Batch"} />
-                          </div>
+                          {!reportActiveTab || reportActiveTab === "FHIR" ? (
+                            <div
+                              className={styles.btnContainer}
+                              name="upload"
+                              onClick={handleFhirUpload}
+                            >
+                              <RegularButton
+                                name={"Upload"}
+                                width={"150px"}
+                                type="outlined"
+                              />
+                            </div>
+                          ) : (
+                            <>
+                              <div
+                                className={styles.btnContainer}
+                                name="upload trigger"
+                                onClick={handleUploadButtonClick}
+                              >
+                                <RegularButton
+                                  name={"Upload"}
+                                  width={"150px"}
+                                />
+                              </div>
+                              <div
+                                className={styles.btnContainer}
+                                onClick={handleUploadButtonClick}
+                                name="upload"
+                              >
+                                <RegularButton name={"Create Batch"} />
+                              </div>
+                            </>
+                          )}
                         </div>
                       </div>
 
@@ -504,7 +555,7 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                           <div className="custom-tab-1">
                             <Tab.Container
                               defaultActiveKey={
-                                reportActiveTab === "PDF" ? "pdf" : "fihr"
+                                reportActiveTab === "PDF" ? "pdf" : "fhir"
                               }
                             >
                               <Nav as="ul" className="nav nav-tabs">
@@ -512,11 +563,11 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                   as="li"
                                   className="nav-item"
                                   onClick={() => {
-                                    handleTabs("FIHR");
+                                    handleTabs("FHIR");
                                   }}
                                 >
-                                  <Nav.Link to="#my-posts" eventKey="fihr">
-                                    FIHR
+                                  <Nav.Link to="#my-posts" eventKey="fhir">
+                                    FHIR
                                   </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item
@@ -532,18 +583,14 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                 </Nav.Item>
                               </Nav>
                               <Tab.Content>
-                                <Tab.Pane id="my-posts" eventKey="fihr">
-                                  <FIHRPatinetTable
+                                <Tab.Pane id="my-posts" eventKey="fhir">
+                                  <FHIRPatinetTable
                                     reportListAll={filteredCOder}
                                     paginationFirst={paginationFirst}
                                     onPageChange={onPageChange}
-                                    tableData={FIHRData}
+                                    tableData={FHIRData}
                                   />
                                 </Tab.Pane>
-                                <Tab.Pane
-                                  id="my-posts"
-                                  eventKey="nonhcc"
-                                ></Tab.Pane>
                                 <Tab.Pane id="my-posts" eventKey="pdf">
                                   <PdfTable
                                     paginationFirst={paginationFirst}
@@ -560,7 +607,7 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                         </div>
 
                         {isDrawerOpen && (
-                          <FhirDrawer
+                          <PdfDrawer
                             isDrawerOpen={isDrawerOpen}
                             setIsDrawerOpen={setIsDrawerOpen}
                             uploadType={uploadType}
@@ -568,6 +615,14 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                             selectedBatch={selectedBatch}
                           />
                         )}
+
+                        <FhirDrawer
+                            isDrawerOpen={isOpenFhirDrawer}
+                            setIsDrawerOpen={setIsOpenFhirDrawer}
+                            uploadType={uploadType}
+                            setUploadType={setUploadType}
+                            selectedBatch={selectedBatch}
+                          />
                       </div>
                     </div>
                   </div>
