@@ -4,8 +4,8 @@ export const getResponePopup = (res) => {
   switch (res?.data?.status ? res?.data?.status : res?.status) {
     case "USER_DEFINED_ERROR":
       return notification.warning({
-        description: res?.data?.message ? res?.data?.message : res?.status,
-        duration: 1,
+        description: res?.data?.message ? res?.data?.message : res?.message,
+        duration: 2,
       });
     case "SUCCESS":
       return notification.success({
@@ -26,11 +26,6 @@ export const getResponePopup = (res) => {
       return notification.error({
         description: res?.data?.message ? res?.data?.message : res?.message,
         duration: 2,
-      });
-    case "USER_DEFINED_ERROR":
-      return notification.error({
-        description: res?.data?.message ? res?.data?.message : res?.message,
-        duration: 3,
       });
     default:
       break;

@@ -3,7 +3,7 @@ import React from "react";
 import { getYears } from "../../../../utils/reusable";
 import RegularButton from "../../../../components/button";
 
-const EditSettings = ({ form, handleEditRow }) => {
+const EditSettings = ({ form, handleEditRow, isNotResult=true }) => {
   return (
     <Form
       form={form}
@@ -19,9 +19,10 @@ const EditSettings = ({ form, handleEditRow }) => {
       <Form.Item label={"Description"} name={"description"}>
         <Input type="text" />
       </Form.Item>
-      <Form.Item label={"Result Code"} name={"resultCode"}>
+      {isNotResult &&  <Form.Item label={"Result Code"} name={"resultCode"}>
         <Input type="text" />
-      </Form.Item>
+      </Form.Item>}
+     
       <Form.Item label={"Years"} name={"years"}>
         <Select
           allowClear

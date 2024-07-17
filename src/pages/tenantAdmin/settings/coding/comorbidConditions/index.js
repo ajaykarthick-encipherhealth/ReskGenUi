@@ -32,6 +32,9 @@ const ComorbidConditions = ({
   const [isEdit, setIsEdit] = useState(false);
   const [editRowValue, setEditRowValue] = useState(null);
   const [selectFile, setSelectFile] = useState("");
+  const [paginationFirst, setPaginationFirst] = useState(0);
+  const [page, setPage] = useState(0);
+  const [isChecked, setIsChecked] = useState(false);
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -66,9 +69,6 @@ const ComorbidConditions = ({
     "Renewed Medications",
     "a/p",
   ]);
-  const onChange = (checked) => {
-    console.log(`switch to ${checked}`);
-  };
 
   const columns = [
     {
@@ -94,11 +94,11 @@ const ComorbidConditions = ({
   ];
   useEffect(() => {
     getCodingDetailsDetails();
-  }, []);
+  }, [search, page]);
 
   const getCodingDetailsDetails = async () => {
     try {
-      const res = await getCodingDetails({ type: "COMORBID_CONDITIONS" });
+      const res = await getCodingDetails({ type: "COMORBID_CONDITIONS",page: page, search: search });
       if (res?.status == "SUCCESS") {
         setIsGuidelines(res?.response?.includeGeneralGuidelineCodes);
       }
@@ -109,7 +109,7 @@ const ComorbidConditions = ({
     const formData = new FormData();
     formData.append("file", selectFile.originFileObj);
     formData.append("target", "COMORBID_CONDITIONS");
-    formData.append("isDefaultYear", false);
+    formData.append("isDefaultYear", isChecked);
     const headers = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -137,12 +137,6 @@ const ComorbidConditions = ({
     }
   };
 
-  useEffect(() => {
-    if (selectFile) {
-      submitPatientFile();
-    }
-  }, [selectFile]);
-
   const handleGuidelines = async (value) => {
     try {
       const res = await updateComorbidCondition({
@@ -155,8 +149,8 @@ const ComorbidConditions = ({
       console.log(error);
     }
   };
+
   const handleDeleteRow = async (value) => {
-    console.log(value, "testing");
     try {
       const res = await deleteComoridConditions({
         id: value.id,
@@ -189,6 +183,10 @@ const ComorbidConditions = ({
       console.log(error);
     }
   };
+  const onPageChange = (e) => {
+    setPaginationFirst(e.first);
+    setPage(e.page);
+  };
   return (
     <>
       <div className="p-3">
@@ -200,17 +198,27 @@ const ComorbidConditions = ({
             <div className="d-flex justify-content-start gap-2 mt-4">
               <div>Year</div>
               <div>
-                <Checkbox />
+              <Switch
+                    checked={isChecked}
+                    onChange={(e) => setIsChecked(e)}
+                  />
               </div>
               <div>Can We calculate for all Processing Year</div>
             </div>
 
             <div className="d-flex justify-content-start gap-2">
-              <div>
+            <div className="d-flex">
                 <FileUpload
                   allowedFormat={"File must be in xlsx or CSV"}
                   onChange={(e) => setSelectFile(e.file)}
                   fileList={[]}
+                  accept={".xlsx, .csv"}
+                />
+                <RegularButton
+                  name="Upload"
+                  type={selectFile}
+                  disabled={!selectFile}
+                  onClick={submitPatientFile}
                 />
               </div>
               <div>
@@ -243,7 +251,7 @@ const ComorbidConditions = ({
             </div>
 
             <div className="ms-auto mx-4">
-              <Search setSearch={setSearch} />
+              <Search setSearch={setSearch} value={search}/>
             </div>
           </div>
           <div>
@@ -256,11 +264,16 @@ const ComorbidConditions = ({
                 form.setFieldsValue({ ...e });
               }}
               handleDelete={handleDeleteRow}
+              paginationFirst={paginationFirst}
+              totalElements={
+                list?.response?.comorbidConditionsPage?.totalElements
+              }
+              onPageChange={onPageChange}
             />
           </div>
         </div>
       </div>
-      <div className="text-end p-3">
+      {/* <div className="text-end p-3">
         <RegularButton
           type={"outline"}
           name={"Restore Changes"}
@@ -270,7 +283,7 @@ const ComorbidConditions = ({
           name={"Save Changes"}
           onClick={() => console.log("Save Changes")}
         />
-      </div>
+      </div> */}
       <ModalPop
         openModal={openModal}
         content={<CommonModalContent tags={tags} setTags={setTags} />}
@@ -282,7 +295,7 @@ const ComorbidConditions = ({
         footer={false}
         open={isEdit}
       >
-        <EditSettings form={form} handleEditRow={handleEditRow} />
+        <EditSettings form={form} handleEditRow={handleEditRow} isNotResult={false} />
       </Modal>
     </>
   );

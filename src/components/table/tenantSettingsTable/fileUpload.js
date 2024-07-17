@@ -8,16 +8,16 @@ const FileUpload = (props) => {
         <Button
           icon={<CloudUploadOutlined />}
           style={{
-            background: "#06439D",
+            background: "#CEE1FD",
             borderColor: "#06439D",
-            color: "white",
-            height: "47px",
+            // color: "white",
+            height: "44px",
           }}
         >
           Upload a File
         </Button>
       </Upload>
-      <div style={{ fontSize: "12px" }}>{props.allowedFormat}</div>
+      <div className="text-danger" style={{ fontSize: "10px" }}>{props.allowedFormat}</div>
     </div>
   );
 };

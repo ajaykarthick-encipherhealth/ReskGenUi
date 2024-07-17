@@ -47,7 +47,7 @@ const HealthMetricConfig = ({
   updateSettings,
   getCodingDetails,
   list,
-  editHealthMetric
+  editHealthMetric,
 }) => {
   const [form] = Form.useForm();
   const [openModal, setOpenModal] = useState(false);
@@ -58,8 +58,15 @@ const HealthMetricConfig = ({
   const [selectedYears, setSelectedYears] = useState([]);
   const [selectFile, setSelectFile] = useState("");
   const [isEdit, setIsEdit] = useState(false);
-  const [editRowValue, setEditRowValue] = useState(null)
-  const [search, setSearch] = useState(null);
+  const [editRowValue, setEditRowValue] = useState(null);
+  const [select, setSelect] = useState({
+    healthMetricType: "",
+    gender: "",
+    year: "",
+  });
+  const [isChecked, setIsChecked] = useState(false);
+  const [paginationFirst, setPaginationFirst] = useState(0);
+  const [page, setPage] = useState(0);
 
   const handleInputChange = (e) => {
     setInputStrValue(e.target.value);
@@ -135,7 +142,11 @@ const HealthMetricConfig = ({
 
   const content = (
     <>
-      <Form onFinish={isEdit ? '' : handleSubmit} onFieldsChange={(e) => console.log(e)} form={form}>
+      <Form
+        onFinish={isEdit ? "" : handleSubmit}
+        onFieldsChange={(e) => console.log(e)}
+        form={form}
+      >
         <div className="p-3">
           <div className={Style.title}>Health Metric Configuration</div>
           <div className="d-flex justify-content-between mt-4">
@@ -344,14 +355,20 @@ const HealthMetricConfig = ({
   ];
 
   useEffect(() => {
-    getCodingDetails({ type: "HEALTH_METRICS" });
-  }, []);
+    getCodingDetails({
+      type: "HEALTH_METRICS",
+      page: page,
+      healthMetricType: select.healthMetricType,
+      gender: select.gender,
+      year: select.year,
+    });
+  }, [select]);
 
   const submitPatientFile = async () => {
     const formData = new FormData();
     formData.append("file", selectFile.originFileObj);
     formData.append("target", "HEALTH_METRICS");
-    formData.append("isDefaultYear", false);
+    formData.append("isDefaultYear", isChecked);
     const headers = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -379,29 +396,34 @@ const HealthMetricConfig = ({
     }
   };
 
-  useEffect(() => {
-    if (selectFile) {
-      submitPatientFile();
-    }
-  }, [selectFile]);
-
   const handleDeleteRow = async (value) => {
-    console.log(value);
   };
   const handleEditRow = async (value) => {
     try {
-      const res = await editHealthMetric({...editRowValue, ...form.getFieldsValue()})
+      const res = await editHealthMetric({
+        ...editRowValue,
+        ...form.getFieldsValue(),
+      });
       if (res.status == "SUCCESS") {
         getResponePopup(res);
         setIsEdit(false);
-        setEditRowValue(null)
+        setEditRowValue(null);
       }
     } catch (error) {
       console.log(error);
     }
-   
+  };
+  const onPageChange = (e) => {
+    setPaginationFirst(e.first);
+    setPage(e.page);
   };
 
+  const handleFilter = (e, name) => {
+    setSelect((prev) => ({
+      ...prev,
+      [name]: e,
+    }));
+  };
   return (
     <>
       <div className="p-3">
@@ -412,19 +434,25 @@ const HealthMetricConfig = ({
           <div className="d-flex justify-content-start gap-2 mt-4">
             <div>Year</div>
             <div>
-              <Checkbox />
+              <Switch checked={isChecked} onChange={(e) => setIsChecked(e)} />
             </div>
             <div>Can We calculate for all Processing Year</div>
           </div>
 
           <div className="d-flex justify-content-start gap-2 mt-4">
-            <div>
+            <div className="d-flex">
               <FileUpload
                 allowedFormat={"File must be in xlsx or CSV"}
                 onChange={(e) => setSelectFile(e.file)}
                 fileList={[]}
+                accept={".xlsx, .csv"}
               />
-              {/* <RegularButtonWithIcon type={"outline"} icon={<FontAwesomeIcon icon={faUpload} />}/> */}
+              <RegularButton
+                name="Upload"
+                type={selectFile}
+                disabled={!selectFile}
+                onClick={submitPatientFile}
+              />
             </div>
             <div>
               <Button
@@ -441,30 +469,42 @@ const HealthMetricConfig = ({
             </div>
           </div>
         </div>
-        <div className="d-flex justify-content-start  gap-4 mt-4">
+        <div className="d-flex justify-content-start  gap-4 ms-3 mt-4">
           <div>
             <Select
-              label={"Default"}
-              isActive={true}
+              // label={"Default"}
+              // isActive={true}
               style={{ width: "150px" }}
               size="large"
               options={types}
               placeholder="Type"
+              onChange={(e) => handleFilter(e, "healthMetricType")}
+              allowClear
             />
           </div>
           <div>
             <Select
-              label={"Code"}
-              isActive={false}
+              // label={"Code"}
+              // isActive={false}
               style={{ width: "150px" }}
               size="large"
               options={genders}
               placeholder="Gender"
+              onChange={(e) => handleFilter(e, "gender")}
+              allowClear
             />
           </div>
-
-          <div className="ms-auto mx-4">
-            <Search setSearch={setSearch} />
+          <div>
+            <Select
+              label={"Years"}
+              isActive={false}
+              style={{ width: "150px" }}
+              size="large"
+              options={getYears()}
+              placeholder="Years"
+              onChange={(e) => handleFilter(e, "year")}
+              allowClear
+            />
           </div>
         </div>
         <div>
@@ -481,6 +521,9 @@ const HealthMetricConfig = ({
             }}
             isNoDelete={false}
             handleDelete={handleDeleteRow}
+            paginationFirst={paginationFirst}
+            totalElements={list?.response?.totalElements}
+            onPageChange={onPageChange}
           />
         </div>
       </div>

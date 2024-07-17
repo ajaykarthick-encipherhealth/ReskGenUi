@@ -1,6 +1,7 @@
 .classTable>thead {
-    background: #CEE1FD !important;
+    background: #04306f !important;
     border-radius: 10px !important;
+    color: #fff;
 }
 
 .classThead>tr>th {
@@ -8,7 +9,7 @@
 }
 
 .classTTotalhead {
-    color: #000000 !important;
+    color: #ffffff !important;
 }
 
 .classTable {

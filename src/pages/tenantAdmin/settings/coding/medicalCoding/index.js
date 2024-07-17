@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
 import { Form, Switch } from "antd";
@@ -8,6 +8,13 @@ import { getResponePopup } from "../../../../../utils/reusable";
 
 const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
   const [form] = Form.useForm();
+  const [medical, setMedical] = useState({
+    isOIGCodeNeeded: false,
+    considerESRDAsHcc: false,
+    activeHeadersEnabled: false,
+    isSlashConditionsNeedToCapture: false,
+    calculateComboIncludingPastMedicalHistory: false
+  })
 
   useEffect(() => {
     getCodingDetails({ type: "CODING" });
@@ -17,23 +24,28 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
     if (list?.response) {
       form.setFieldsValue({
         isOIGCodeNeeded: list?.response?.isOIGCodeNeeded,
-        // captureHistoryCodes: list?.response?.captureHistoryCodes,
-        // captureHistoryCodesAsIcdCodes:
-        //   list?.response?.captureHistoryCodesAsIcdCodes,
         considerESRDAsHcc: list?.response?.considerESRDAsHcc,
         activeHeadersEnabled: list?.response?.activeHeadersEnabled,
         isSlashConditionsNeedToCapture:
           list?.response?.isSlashConditionsNeedToCapture,
         calculateComboIncludingPastMedicalHistory:
           list.response?.calculateComboIncludingPastMedicalHistory,
-        // isDownCodeConversionEnabled: list.response?.isDownCodeConversionEnabled,
+      });
+      setMedical({
+        isOIGCodeNeeded: list?.response?.isOIGCodeNeeded,
+        considerESRDAsHcc: list?.response?.considerESRDAsHcc,
+        activeHeadersEnabled: list?.response?.activeHeadersEnabled,
+        isSlashConditionsNeedToCapture:
+          list?.response?.isSlashConditionsNeedToCapture,
+        calculateComboIncludingPastMedicalHistory:
+          list.response?.calculateComboIncludingPastMedicalHistory,
       });
     }
   }, [list]);
 
   const onChange = (value, values) => {
     console.log(values);
-    form.setFieldsValue(values);
+    setMedical(values);
   };
   const handleSubmit = async(values) => {
     try {
@@ -44,7 +56,6 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
     } catch (error) {
       console.log(error);
     }
-   
   };
   return (
     <>
@@ -54,7 +65,8 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
         form={form}
         onValuesChange={onChange}
       >
-        <div className="p-3" style={{ height: "65vh" }}>
+        <div style={{ width: "50%" }}>
+        <div className="p-3">
           <div className="d-flex justify-content-between">
             <div className={Style.title}>Medical Coding</div>
           </div>
@@ -63,14 +75,12 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
               <div>{"Do you need an OIG code"}</div>
               <div className="d-flex justify-content-between">
                 <Form.Item name="isOIGCodeNeeded">
-                  <Switch className="switch" />
+                  <Switch />
                 </Form.Item>
                 <div
-                  className={`mx-2 text-${
-                    list?.response?.isOIGCodeNeeded ? "info" : "danger"
-                  }`}
+                  className={`m-2`}
                 >
-                  {list?.response?.isOIGCodeNeeded ? "Enable" : "Disable"}
+                  {medical?.isOIGCodeNeeded? "Yes" : "No"}
                 </div>
               </div>
             </div>
@@ -80,18 +90,14 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
               <div>{"Do you need an Slash Conditions Need to Capture"}</div>
               <div className="d-flex justify-content-between">
                 <Form.Item name="isSlashConditionsNeedToCapture">
-                  <Switch className="switch" />
+                  <Switch />
                 </Form.Item>
                 <div
-                  className={`mx-2 text-${
-                    list?.response?.isSlashConditionsNeedToCapture
-                      ? "info"
-                      : "danger"
-                  }`}
+                  className={`m-2`}
                 >
-                  {list?.response?.isSlashConditionsNeedToCapture
-                    ? "Enable"
-                    : "Disable"}
+                  {medical?.isSlashConditionsNeedToCapture
+                    ? "Yes"
+                    : "No"}
                 </div>
               </div>
             </div>
@@ -103,18 +109,14 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
               </div>
               <div className="d-flex justify-content-between">
                 <Form.Item name="calculateComboIncludingPastMedicalHistory">
-                  <Switch className="switch" />
+                  <Switch />
                 </Form.Item>
                 <div
-                  className={`mx-2 text-${
-                    list?.response?.calculateComboIncludingPastMedicalHistory
-                      ? "info"
-                      : "danger"
-                  }`}
+                  className={`m-2`}
                 >
-                  {list?.response?.calculateComboIncludingPastMedicalHistory
-                    ? "Enable"
-                    : "Disable"}
+                  {medical?.calculateComboIncludingPastMedicalHistory
+                    ? "Yes"
+                    : "No"}
                 </div>
               </div>
             </div>
@@ -124,18 +126,14 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
               <div>{"Do you need to consider ESRD conditions as HCC conditions"}</div>
               <div className="d-flex justify-content-between">
                 <Form.Item name="considerESRDAsHcc">
-                  <Switch className="switch" />
+                  <Switch />
                 </Form.Item>
                 <div
-                  className={`mx-2 text-${
-                    list?.response?.considerESRDAsHcc
-                      ? "info"
-                      : "danger"
-                  }`}
+                  className={`m-2`}
                 >
-                  {list?.response?.considerESRDAsHcc
-                    ? "Enable"
-                    : "Disable"}
+                  {medical?.considerESRDAsHcc
+                    ? "Yes"
+                    : "No"}
                 </div>
               </div>
             </div>
@@ -143,18 +141,14 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
               <div>{"Do you need to enable/disable active headers"}</div>
               <div className="d-flex justify-content-between">
                 <Form.Item name="activeHeadersEnabled">
-                  <Switch className="switch" />
+                  <Switch />
                 </Form.Item>
                 <div
-                  className={`mx-2 text-${
-                    list?.response?.activeHeadersEnabled
-                      ? "info"
-                      : "danger"
-                  }`}
+                  className={`m-2`}
                 >
-                  {list?.response?.activeHeadersEnabled
-                    ? "Enable"
-                    : "Disable"}
+                  {medical?.activeHeadersEnabled
+                    ? "Yes"
+                    : "No"}
                 </div>
               </div>
             </div>
@@ -167,7 +161,7 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
             onClick={() => console.log("Restore Changes")}
           />
           <RegularButton name={"Save Changes"} onClick={handleSubmit} />
-        </div>
+        </div></div>
       </Form>
     </>
   );

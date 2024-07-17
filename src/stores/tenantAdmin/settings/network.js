@@ -99,10 +99,7 @@ export async function configurationFlags() {
   const options = {
     method: "GET",
   };
-  const data = await requestPortal(
-    `dbservice/flag/getAllFlag`,
-    options
-  );
+  const data = await requestPortal(`dbservice/flag/getAllFlag`, options);
   return data;
 }
 
@@ -141,12 +138,19 @@ export async function updateMedicalCoding(obj) {
   return data;
 }
 
-export async function codingGuidelines({ type }) {
+export async function codingGuidelines({
+  type,
+  page = 0,
+  healthMetricType ='',
+  year='',
+  gender='',
+  search=''
+}) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `management/tenantAdmin/medicalCodingGuidelines?type=${type}`,
+    `management/tenantAdmin/medicalCodingGuidelines?type=${type}&size=15&page=${page}&healthMetricType=${healthMetricType}&year=${year}&gender=${gender}&searchText=${search}`,
     options
   );
   return data;
@@ -192,10 +196,7 @@ export async function updateFlag(obj) {
     method: "POST",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(
-    `dbservice/flag/saveflag`,
-    options
-  );
+  const data = await requestPortal(`dbservice/flag/saveflag`, options);
   return data;
 }
 export async function deleteFlag(id) {

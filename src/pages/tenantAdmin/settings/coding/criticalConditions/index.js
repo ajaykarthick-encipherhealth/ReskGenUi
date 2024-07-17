@@ -35,6 +35,8 @@ const CriticalConditions = ({
   const [isEdit, setIsEdit] = useState(false);
   const [editRowValue, setEditRowValue] = useState(null);
   const [selectFile, setSelectFile] = useState("");
+  const [paginationFirst, setPaginationFirst] = useState(0);
+  const [page, setPage] = useState(0);
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -69,6 +71,7 @@ const CriticalConditions = ({
     "Renewed Medications",
     "a/p",
   ]);
+  const [isCheckeds, setIsCheckeds] = useState(false);
 
   const columns = [
     {
@@ -94,7 +97,7 @@ const CriticalConditions = ({
   };
   useEffect(() => {
     getCodingDetailsDetails();
-  }, []);
+  }, [search, page]);
 
   const handleGuidelines = async (value, name) => {
     try {
@@ -109,7 +112,7 @@ const CriticalConditions = ({
 
   const getCodingDetailsDetails = async () => {
     try {
-      const res = await getCodingDetails({ type: "CRITICAL_CONDITIONS" });
+      const res = await getCodingDetails({ type: "CRITICAL_CONDITIONS",page: page, search: search });
       if (res?.status == "SUCCESS") {
         setIsChecked({
           includeGeneralGuidelineCodes:
@@ -121,7 +124,6 @@ const CriticalConditions = ({
     } catch (error) {}
   };
   const handleDeleteRow = async (value) => {
-    console.log(value, "testing");
     try {
       const res = await deleteComoridConditions({
         id: value.id,
@@ -158,7 +160,7 @@ const CriticalConditions = ({
     const formData = new FormData();
     formData.append("file", selectFile.originFileObj);
     formData.append("target", "CRITICAL_CONDITIONS");
-    formData.append("isDefaultYear", false);
+    formData.append("isDefaultYear", isCheckeds);
     const headers = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -186,11 +188,10 @@ const CriticalConditions = ({
     }
   };
 
-  useEffect(() => {
-    if (selectFile) {
-      submitPatientFile();
-    }
-  }, [selectFile]);
+  const onPageChange = (e) => {
+    setPaginationFirst(e.first);
+    setPage(e.page);
+  };
 
   return (
     <>
@@ -202,19 +203,29 @@ const CriticalConditions = ({
           <div className="d-flex justify-content-start gap-2 mt-4">
             <div>Year</div>
             <div>
-              <Checkbox />
+            <Switch
+                    checked={isCheckeds}
+                    onChange={(e) => setIsCheckeds(e)}
+                  />
             </div>
             <div>Can We calculate for all Processing Year</div>
           </div>
 
           <div className="d-flex justify-content-start gap-2">
-            <div>
-              <FileUpload
-                allowedFormat={"File must be in xlsx or CSV"}
-                onChange={(e) => setSelectFile(e.file)}
-                fileList={[]}
-              />
-            </div>
+          <div className="d-flex">
+                <FileUpload
+                  allowedFormat={"File must be in xlsx or CSV"}
+                  onChange={(e) => setSelectFile(e.file)}
+                  fileList={[]}
+                  accept={".xlsx, .csv"}
+                />
+                <RegularButton
+                  name="Upload"
+                  type={selectFile}
+                  disabled={!selectFile}
+                  onClick={submitPatientFile}
+                />
+              </div>
             <div>
               <Button
                 icon={<PlusOutlined />}
@@ -267,7 +278,7 @@ const CriticalConditions = ({
             </div>
           </div>
           <div className="ms-auto mx-4">
-            <Search setSearch={setSearch} />
+            <Search setSearch={setSearch} value={search}/>
           </div>
         </div>
         <div>
@@ -280,10 +291,15 @@ const CriticalConditions = ({
               form.setFieldsValue({ ...e });
             }}
             handleDelete={handleDeleteRow}
+            paginationFirst={paginationFirst}
+            totalElements={
+              list?.response?.criticalConditionsPage?.totalElements
+            }
+            onPageChange={onPageChange}
           />
         </div>
       </div>
-      <div className="text-end p-3">
+      {/* <div className="text-end p-3">
         <RegularButton
           type={"outline"}
           name={"Restore Changes"}
@@ -293,7 +309,7 @@ const CriticalConditions = ({
           name={"Save Changes"}
           onClick={() => handleSettingsUpdate()}
         />
-      </div>
+      </div> */}
       <ModalPop
         openModal={openModal}
         content={<CommonModalContent tags={tags} setTags={setTags} />}

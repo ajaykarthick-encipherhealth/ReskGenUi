@@ -70,6 +70,10 @@ const HistoryCodes = ({
     "Renewed Medications",
     "a/p",
   ]);
+  const [paginationFirst, setPaginationFirst] = useState(0);
+  const [page, setPage] = useState(0);
+  const [isCheckeds, setIsCheckeds] = useState(false);
+
   const onChange = async (checked, name) => {
     setIsChecked((prev) => ({ ...prev, [name]: checked }));
     try {
@@ -111,11 +115,11 @@ const HistoryCodes = ({
   ];
   useEffect(() => {
     getHistorys();
-  }, []);
+  }, [page, search]);
 
   const getHistorys = async () => {
     try {
-      const res = await getCodingDetails({ type: "HISTORY_CODES" });
+      const res = await getCodingDetails({ type: "HISTORY_CODES", page:page, search: search });
       if (res?.status == "SUCCESS") {
         setIsChecked({
           captureHistoryCodes: res?.response?.captureHistoryCodes,
@@ -130,7 +134,6 @@ const HistoryCodes = ({
     }
   };
   const handleDeleteRow = async (value) => {
-    console.log(value, "testing");
     try {
       const res = await deleteComoridConditions({
         id: value.id,
@@ -194,12 +197,10 @@ const HistoryCodes = ({
       }
     }
   };
-
-  useEffect(() => {
-    if (selectFile) {
-      submitPatientFile();
-    }
-  }, [selectFile]);
+  const onPageChange = (e) => {
+    setPaginationFirst(e.first);
+    setPage(e.page);
+  };
   return (
     <>
       <div className="p-3">
@@ -210,17 +211,27 @@ const HistoryCodes = ({
               <div className="d-flex justify-content-start gap-2 mt-4">
                 <div>Year</div>
                 <div>
-                  <Checkbox />
+                <Switch
+                    checked={isCheckeds}
+                    onChange={(e) => setIsCheckeds(e)}
+                  />
                 </div>
                 <div>Can We calculate for all Processing Year</div>
               </div>
             </div>
             <div className="d-flex justify-content-start gap-2">
-              <div>
-              <FileUpload
+              <div className="d-flex">
+                <FileUpload
                   allowedFormat={"File must be in xlsx or CSV"}
                   onChange={(e) => setSelectFile(e.file)}
                   fileList={[]}
+                  accept={".xlsx, .csv"}
+                />
+                <RegularButton
+                  name="Upload"
+                  type={selectFile}
+                  disabled={!selectFile}
+                  onClick={submitPatientFile}
                 />
               </div>
               <div>
@@ -238,22 +249,21 @@ const HistoryCodes = ({
               </div>
             </div>
           </div>
+          <div style={{width: "40%"}}>
           <div className="d-flex justify-content-between mt-1">
             <div>{"Do you need an Capture History Codes"}</div>
             <div className="d-flex justify-content-between">
               <div name="captureHistoryCodes">
                 <Switch
-                  className="switch"
+                  // className="switch"
                   checked={isChecked?.captureHistoryCodes}
                   onChange={(e) => onChange(e, "captureHistoryCodes")}
                 />
               </div>
               <div
-                className={`mx-2 text-${
-                  isChecked?.captureHistoryCodes ? "info" : "danger"
-                }`}
+                className={`mx-2`}
               >
-                {isChecked?.captureHistoryCodes ? "Enable" : "Disable"}
+                {isChecked?.captureHistoryCodes ? "Yes" : "No"}
               </div>
             </div>
           </div>
@@ -263,19 +273,17 @@ const HistoryCodes = ({
             <div className="d-flex justify-content-between">
               <div name="captureHistoryCodesAsIcdCodes">
                 <Switch
-                  className="switch"
+                  // className="switch"
                   checked={isChecked?.captureHistoryCodesAsIcdCodes}
                   onChange={(e) => onChange(e, "captureHistoryCodesAsIcdCodes")}
                 />
               </div>
               <div
-                className={`mx-2 text-${
-                  isChecked?.captureHistoryCodesAsIcdCodes ? "info" : "danger"
-                }`}
+                className={`mx-2`}
               >
                 {isChecked?.captureHistoryCodesAsIcdCodes
-                  ? "Enable"
-                  : "Disable"}
+                  ? "Yes"
+                  : "No"}
               </div>
             </div>
           </div>
@@ -284,24 +292,23 @@ const HistoryCodes = ({
             <div className="d-flex justify-content-between">
               <div name="includeGeneralGuidelineCodes">
                 <Switch
-                  className="switch"
+                  // className="switch"
                   checked={isChecked?.includeGeneralGuidelineCodes}
                   onChange={(e) => onChange(e, "includeGeneralGuidelineCodes")}
                 />
               </div>
               <div
-                className={`mx-2 text-${
-                  isChecked?.includeGeneralGuidelineCodes ? "info" : "danger"
-                }`}
+                className={`mx-2`}
               >
-                {isChecked?.includeGeneralGuidelineCodes ? "Enable" : "Disable"}
+                {isChecked?.includeGeneralGuidelineCodes ? "Yes" : "No"}
               </div>
             </div>
+          </div>
           </div>
           <Divider />
           <div className="d-flex justify-content-start  gap-4 mt-4">
             <div className="ms-auto mx-4">
-              <Search setSearch={setSearch} />
+              <Search setSearch={setSearch} value={search}/>
             </div>
           </div>
           <div>
@@ -315,20 +322,14 @@ const HistoryCodes = ({
               }}
               // isNoDelete={false}
               handleDelete={handleDeleteRow}
+              paginationFirst={paginationFirst}
+              totalElements={
+                list?.response?.historyCodesPage?.totalElements
+              }
+              onPageChange={onPageChange}
             />
           </div>
         </div>
-      </div>
-      <div className="text-end p-3">
-        <RegularButton
-          type={"outline"}
-          name={"Restore Changes"}
-          onClick={() => console.log("Restore Changes")}
-        />
-        <RegularButton
-          name={"Save Changes"}
-          onClick={() => console.log("Save Changes")}
-        />
       </div>
       <ModalPop
         openModal={openModal}

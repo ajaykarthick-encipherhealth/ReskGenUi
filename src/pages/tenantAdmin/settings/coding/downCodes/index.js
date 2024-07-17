@@ -29,7 +29,10 @@ const DownCodes = ({
   });
   const [isEdit, setIsEdit] = useState(false);
   const [editRowValue, setEditRowValue] = useState(null);
-  // const [selectFile, setSelectFile] = useState("");
+  const [selectFile, setSelectFile] = useState("");
+  const [paginationFirst, setPaginationFirst] = useState(0);
+  const [page, setPage] = useState(0);
+  const [isCheckeds, setIsCheckeds] = useState(false);
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -106,11 +109,11 @@ const DownCodes = ({
   ];
   useEffect(() => {
     getDownCodes();
-  }, []);
+  }, [page, search]);
 
   const getDownCodes = async () => {
     try {
-      const res = await getCodingDetails({ type: "DOWN_CODES" });
+      const res = await getCodingDetails({ type: "DOWN_CODES", page: page, search: search });
       if (res?.status == "SUCCESS") {
         setIsChecked({
           isDownCodeConversionEnabled:
@@ -158,6 +161,41 @@ const DownCodes = ({
     }
   };
 
+  const submitPatientFile = async () => {
+    const formData = new FormData();
+    formData.append("file", selectFile.originFileObj);
+    formData.append("target", "HISTORY_CODES");
+    formData.append("isDefaultYear", false);
+    const headers = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    try {
+      const res = await axios.post(
+        ENDPOINTS.apiEndoint +
+          `management/tenantAdmin/codes/upload
+      `,
+        formData,
+        headers
+      );
+      setSelectFile("");
+      if (res.data.status == "SUCCESS") {
+        getResponePopup(res);
+      } else if (res.data.status == "USER_DEFINED_ERROR") {
+        getResponePopup(res);
+      }
+    } catch (error) {
+      if (error.response.status == 513) {
+        getResponePopup({ status: "USER_DEFINED_ERROR" });
+      }
+    }
+  };
+  const onPageChange = (e) => {
+    setPaginationFirst(e.first);
+    setPage(e.page);
+  };
+
   return (
     <>
       <div className="p-3">
@@ -168,15 +206,29 @@ const DownCodes = ({
               <div className="d-flex justify-content-start gap-2 mt-4">
                 <div>Year</div>
                 <div>
-                  <Checkbox />
+                <Switch
+                    checked={isCheckeds}
+                    onChange={(e) => setIsCheckeds(e)}
+                  />
                 </div>
                 <div>Can We calculate for all Processing Year</div>
               </div>
             </div>
 
             <div className="d-flex justify-content-start gap-2">
-              <div>
-                <FileUpload allowedFormat={"File must be in xlsx or CSV"} />
+            <div className="d-flex">
+                <FileUpload
+                  allowedFormat={"File must be in xlsx or CSV"}
+                  onChange={(e) => setSelectFile(e.file)}
+                  fileList={[]}
+                  accept={".xlsx, .csv"}
+                />
+                <RegularButton
+                  name="Upload"
+                  type={selectFile}
+                  disabled={!selectFile}
+                  onClick={submitPatientFile}
+                />
               </div>
               <div>
                 <Button
@@ -193,22 +245,20 @@ const DownCodes = ({
               </div>
             </div>
           </div>
+          <div style={{width: "30%"}}>
           <div className="d-flex justify-content-between mt-4">
             <div>{"Do you need general guidelines codes"}</div>
             <div className="d-flex justify-content-between">
               <div name="isDownCodeConversionEnabled">
                 <Switch
-                  className="switch"
                   checked={isChecked?.includeGeneralGuidelineCodes}
                   onChange={(e) => onChange(e, "includeGeneralGuidelineCodes")}
                 />
               </div>
               <div
-                className={`mx-2 text-${
-                  isChecked?.includeGeneralGuidelineCodes ? "info" : "danger"
-                }`}
+                className={`mx-2`}
               >
-                {isChecked?.includeGeneralGuidelineCodes ? "Enable" : "Disable"}
+                {isChecked?.includeGeneralGuidelineCodes ? "Yes" : "No"}
               </div>
             </div>
           </div>
@@ -217,25 +267,22 @@ const DownCodes = ({
             <div className="d-flex justify-content-between">
               <div name="isDownCodeConversionEnabled">
                 <Switch
-                  className="switch"
                   checked={isChecked?.isDownCodeConversionEnabled}
                   onChange={(e) => onChange(e, "isDownCodeConversionEnabled")}
                 />
               </div>
               <div
-                className={`mx-2 text-${
-                  isChecked?.isDownCodeConversionEnabled ? "info" : "danger"
-                }`}
+                className={`mx-2`}
               >
-                {isChecked?.isDownCodeConversionEnabled ? "Enable" : "Disable"}
+                {isChecked?.isDownCodeConversionEnabled ? "Yes" : "No"}
               </div>
             </div>
           </div>
-
+          </div>
           <Divider />
           <div className="d-flex justify-content-start  gap-4 mt-4">
             <div className="ms-auto mx-4">
-              <Search setSearch={setSearch} />
+              <Search setSearch={setSearch} value={search}/>
             </div>
           </div>
           <div>
@@ -247,22 +294,15 @@ const DownCodes = ({
                 setIsEdit(e);
                 form.setFieldsValue({ ...e });
               }}
-              // isNoDelete={false}
               handleDelete={handleDeleteRow}
+              paginationFirst={paginationFirst}
+              totalElements={
+                list?.response?.downCodesPage?.totalElements
+              }
+              onPageChange={onPageChange}
             />
           </div>
         </div>
-      </div>
-      <div className="text-end p-3">
-        <RegularButton
-          type={"outline"}
-          name={"Restore Changes"}
-          onClick={() => console.log("Restore Changes")}
-        />
-        <RegularButton
-          name={"Save Changes"}
-          onClick={() => console.log("Save Changes")}
-        />
       </div>
       <ModalPop
         openModal={openModal}

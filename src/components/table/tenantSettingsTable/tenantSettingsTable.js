@@ -2,7 +2,8 @@ import React from "react";
 import TableStyle from "./tenantSettings.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Popconfirm } from "antd";
+import { Empty, Popconfirm } from "antd";
+import AppPagination from "../../tables/pagination";
 
 const TenantSettingsTable = ({
   columns,
@@ -10,6 +11,10 @@ const TenantSettingsTable = ({
   isNoDelete = true,
   handleEdit,
   handleDelete,
+  paginationFirst,
+  totalElements,
+  onPageChange,
+  isNoPagenation = true
 }) => {
   const allSortedContent = [];
 
@@ -80,7 +85,7 @@ const TenantSettingsTable = ({
             </span>
             {isNoDelete && (
               <Popconfirm
-                title="Are you sure you want to delete this tag?"
+                title="Are you sure you want to delete?"
                 onConfirm={() => handleDelete(data[row])}
                 okText="Yes"
                 cancelText="No"
@@ -113,8 +118,22 @@ const TenantSettingsTable = ({
           </tr>
         </thead>
 
-        <tbody className={TableStyle.bodytable}>{allSortedContent}</tbody>
+        <tbody className={TableStyle.bodytable}>
+          {data?.length > 0 ? (
+            allSortedContent
+          ) : (
+            <td style={{ border: "none" }} colSpan={columns?.length}>
+              <Empty />
+            </td>
+          )}
+        </tbody>
       </table>
+      {isNoPagenation && <AppPagination
+        paginationFirst={paginationFirst}
+        totalElements={totalElements}
+        onPageChange={onPageChange}
+      />}
+      
     </div>
   );
 };

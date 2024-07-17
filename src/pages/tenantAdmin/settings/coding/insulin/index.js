@@ -78,8 +78,8 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
     }
   };
   const onChange = (checked, type) => {
-    console.log("onChange", checked);
     setIsCaptureInsulin((prev) => ({ ...prev, [type]: checked }));
+    handleSubmit()
   };
   const handleSubmit = async () => {
     try {
@@ -112,11 +112,11 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
       formData,
       headers
     );
-    console.log(res);
     if (res.status == "SUCCESS") {
       getResponePopup(res);
     } else if (res.status == "USER_DEFINED_ERROR") {
-      getResponePopup(res);}
+      getResponePopup(res);
+    }
   };
   return (
     <>
@@ -134,12 +134,12 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
                     checked={
                       isCaptureInsulin?.captureInsulinMedicationAsIcdCodes
                     }
-                    className="directCodeSwitch"
+                    // className="directCodeSwitch"
                     onChange={(e) =>
                       onChange(e, "captureInsulinMedicationAsIcdCodes")
                     }
                   />
-                  <div className={`mx-2 text-${"info"}`}>
+                  <div className={`mx-2`}>
                     {isCaptureInsulin?.captureInsulinMedicationAsIcdCodes
                       ? "Yes"
                       : "No"}
@@ -147,16 +147,16 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
                 </div>
               </div>
               <div className="d-flex justify-content-between my-4">
-                <div >Do you need to include general insulin medications</div>
+                <div>Do you need to include general insulin medications</div>
                 <div className="d-flex justify-content-between">
                   <Switch
                     checked={isCaptureInsulin?.includeGeneralInsulinMedications}
-                    className="directCodeSwitch"
+                    // className="directCodeSwitch"
                     onChange={(e) =>
                       onChange(e, "includeGeneralInsulinMedications")
                     }
                   />
-                  <div className={`mx-2 text-${"info"}`}>
+                  <div className={`mx-2`}>
                     {isCaptureInsulin?.includeGeneralInsulinMedications
                       ? "Yes"
                       : "No"}
@@ -170,7 +170,12 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
                 onChange={(e) => setSelectFile(e.file)}
                 value={selectFile}
               />
-              <RegularButton name="Submit" type={selectFile? 'outline': ""} disabled={!selectFile} onClick={submitPatientFile}/>
+              <RegularButton
+                name="Upload"
+                type={selectFile}
+                disabled={!selectFile}
+                onClick={submitPatientFile}
+              />
             </div>
           </div>
         </div>
