@@ -107,6 +107,7 @@ const Patient = ({
     selectedOption,
     selectOrgList,
     batchCount,
+    filterBatchCount,
   }) => {
     const uId = localStorage.getItem("userId");
     const orgId = localStorage.getItem("orgId");
@@ -118,7 +119,7 @@ const Patient = ({
       sort?.sortDir ? sort?.sortDir : ""
     }&sortfield=${sort?.sortField ? sort?.sortField : ""}&priority=${
       selectedOption ? selectedOption : ""
-    }&batchCount=${batchCount ? batchCount : ""}`;
+    }&batchCount=${filterBatchCount ? batchCount : ""}`;
     allocatedGetList({ url: resoureUrl });
     // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     // if (response?.data) {
@@ -313,6 +314,8 @@ const Patient = ({
         search: searchStr,
         sort: sort,
         selectedOption: selectedOption,
+        batchCount:batchCount,
+        filterBatchCount:filterBatchCount
       });
     }
   }, [
@@ -324,6 +327,7 @@ const Patient = ({
     endDate,
     searchStr,
     selectedOption,
+    filterBatchCount
   ]);
 
   const renderRows = () => {
@@ -752,7 +756,7 @@ const Patient = ({
                                     setSortDueOrder("DESC");
                                     selectTabClick(1);
                                     setActiveTab(1);
-                                    setPaginationFirst("0")
+                                    setPaginationFirst("0");
                                   }}
                                 >
                                   <Nav.Link

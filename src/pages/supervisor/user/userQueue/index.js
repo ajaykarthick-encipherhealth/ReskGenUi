@@ -381,18 +381,18 @@ const Index = ({
                       isAnotherPicker={true}
                       // defaultAllocateTo={""}
                       // allocated by
-                      isAllocatedBySelector={true}
-                      allocatedBylabel=" AllocatedBy"
-                      allocatedByOptoons={generateOptionsList(filteredList)}
-                      setSelAllocatedBy={setSelAllocatedBy}
+                      // isAllocatedBySelector={true}
+                      // allocatedBylabel=" AllocatedBy"
+                      // allocatedByOptoons={generateOptionsList(filteredList)}
+                      // setSelAllocatedBy={setSelAllocatedBy}
                       // defaultAllocatedBy={"All"}
                       // allocated date
-                      pickerlabe3="Allocated Date"
-                      defaultStartDate3={""}
-                      defaultEndDate3={""}
-                      setStartDate3={setAllocatedStartDate}
-                      setEndDate3={setAllocatedEndDate}
-                      isAllocatedDate={true}
+                      // pickerlabe3="Allocated Date"
+                      // defaultStartDate3={""}
+                      // defaultEndDate3={""}
+                      // setStartDate3={setAllocatedStartDate}
+                      // setEndDate3={setAllocatedEndDate}
+                      // isAllocatedDate={true}
                       // Auditeddate
                       pickerlabe4="Audited Date"
                       defaultStartDate4={""}
