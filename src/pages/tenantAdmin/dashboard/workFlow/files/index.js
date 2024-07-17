@@ -10,6 +10,12 @@ import upload from "../../../../../images/tenantAdmin/upload.svg";
 import codeCaptured from "../../../../../images/tenantAdmin/codecaptured.svg";
 import { actions as defaultActions } from "../../../../../stores/tenantAdmin/dashboard/default";
 import { Empty, Skeleton, Spin } from "antd";
+import {
+  formatValues,
+  getLast30Days,
+  getLast7Days,
+} from "../../../../../utils/reusable.js";
+import moment from "moment";
 
 const Files = ({
   getAllComputing,
@@ -23,62 +29,49 @@ const Files = ({
   selectedOrganization,
   selectedValue,
   activeBtn,
-  classNames
-
+  classNames,
 }) => {
-  const dates = [];
-  function getLast7Days() {
-    const currentDate = new Date();
+  const dates =
+    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
+  let computedDate = getAllComputingStatus?.COMPUTED?.map((x) => {
+    return { [x.date]: x.computing };
+  });
+  const resultComputing = formatValues(computedDate, dates);
+  let processingDate = getAllComputingStatus?.PROCESSING?.map((x) => {
+    return { [x.date]: x.computing };
+  });
+  const resultProcessing = formatValues(processingDate, dates);
+  
+  let failedDate = getAllComputingStatus?.FAILED?.map((x) => {
+    return { [x.date]: x.computing };
+  });
+  const resultFailed = formatValues(failedDate, dates);
 
-    for (let i = 0; i < 7; i++) {
-      const pastDate = new Date(currentDate);
-      pastDate.setDate(currentDate.getDate() - i);
-      dates.push(
-        pastDate.toLocaleString("default", { month: "short" }) +
-          pastDate.getDate()
-      );
-    }
+  let uploadDate = getAllComputingStatus?.NOT_UPLOADED?.map((x) => {
+    return { [x.date]: x.computing };
+  });
+  const resultUpload = formatValues(uploadDate, dates);
 
-    return dates.reverse();
-  }
-  const date_thirty_days = [];
 
-  function getLast30Days() {
-    const currentDate = new Date();
-
-    for (let i = 0; i < 30; i++) {
-      const pastDate = new Date(currentDate);
-      pastDate.setDate(currentDate.getDate() - i);
-      date_thirty_days.push(
-        pastDate.toLocaleString("default", { month: "short" }) +
-          pastDate.getDate()
-      );
-    }
-
-    return date_thirty_days.reverse();
-  }
-
-  getLast7Days();
-  getLast30Days();
 
   const options = {
     xAxis: {
       type: "category",
-      data: selectedValue === "last_1_week" ? dates : date_thirty_days,
+      data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
     },
     yAxis: {
       type: "value",
       show: true,
     },
     tooltip: {
-      show:true,
-      trigger: 'axis',
+      show: true,
+      trigger: "axis",
       axisPointer: {
-        type: 'cross',
+        type: "cross",
         label: {
-          backgroundColor: '#6a7985'
-        }
-      }
+          backgroundColor: "#6a7985",
+        },
+      },
     },
     legend: {
       show: false,
@@ -86,7 +79,7 @@ const Files = ({
     series: [
       {
         name: "Upload",
-        data: getAllComputingStatus?.NOT_UPLOADED?.map((x) => x.count),
+        data: resultUpload,
         type: "line",
         lineStyle: { color: "#3B3486" },
         smooth: true,
@@ -95,7 +88,7 @@ const Files = ({
       {
         name: "Completed",
         color: "#00BC13",
-        data: getAllComputingStatus?.COMPUTED?.map((x) => x.count),
+        data: resultComputing,
         type: "line",
         lineStyle: { color: "#00BC13" },
         smooth: true,
@@ -103,7 +96,7 @@ const Files = ({
       },
       {
         name: "Processing",
-        data: getAllComputingStatus?.PROCESSING?.map((x) => x.count),
+        data: resultProcessing,
         color: "#3B3486",
         type: "line",
         lineStyle: { color: "#3B3486" },
@@ -114,7 +107,7 @@ const Files = ({
       {
         name: "Failed",
         color: "#FF8551",
-        data: getAllComputingStatus?.FAILED?.map((x) => x.count),
+        data: resultFailed,
         type: "line",
         lineStyle: { color: "#FF8551" },
         smooth: true,
@@ -171,6 +164,8 @@ const Files = ({
     ];
   }
 
+  
+
   useEffect(() => {
     getComputingStatus(
       dateRange?.startDate,
@@ -183,7 +178,6 @@ const Files = ({
       selectedOrganization
     );
   }, [dateRange, selectedOrganization]);
-  
 
   return (
     <div className="" style={{ marginTop: "20px" }}>
@@ -200,8 +194,7 @@ const Files = ({
               textAlign: "center",
               alignItems: "center",
               borderRadius: "10px",
-              padding:"5px"
-              
+              padding: "5px",
             }}
           >
             {computingTileStatusLoader ? (
@@ -212,7 +205,7 @@ const Files = ({
                   active
                 />
               </div>
-            ) :  (
+            ) : (
               <div className="d-flex w-100 mt-3">
                 <div
                   style={{
@@ -230,7 +223,9 @@ const Files = ({
                   <Image src={item?.icon} />
                 </div>
                 <div>
-                  <div style={{ fontSize: "16px", fontWeight:"900"}}>{item?.title}</div>
+                  <div style={{ fontSize: "16px", fontWeight: "900" }}>
+                    {item?.title}
+                  </div>
                   <div style={{ fontSize: "18px", fontWeight: "700" }}>
                     {item?.count}
                   </div>
@@ -247,17 +242,16 @@ const Files = ({
             className="w-100 mt-2"
             style={{ height: "312px" }}
             active
-            
           />
         </div>
       ) : getAllComputingStatus?.COMPUTED?.length > 0 ? (
-        <div >
+        <div>
           <CodesGraph options={options} className={`${classNames}`} />
         </div>
       ) : (
         <div className={styles.centered_container}>
-        <Empty />
-      </div>
+          <Empty />
+        </div>
       )}
     </div>
   );
@@ -276,8 +270,7 @@ const enhancer = connect(
     computingTileStatusLoader:
       state?.tenantAdmin?.dashboard?.default?.computingTileStatusLoader,
     computingStatusLoader:
-      state?.tenantAdmin?.dashboard?.default?.allComputingStatus?.loading
-      ,
+      state?.tenantAdmin?.dashboard?.default?.allComputingStatus?.loading,
   }),
   {
     getAllComputing: defaultActions.ComputingStatus,

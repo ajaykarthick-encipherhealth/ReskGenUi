@@ -16,6 +16,7 @@ import {
   getLast30Days,
   getLast7Days,
   formatNumber,
+  formatValues,
 } from "../../../../../utils/reusable.js";
 
 const index = ({
@@ -32,31 +33,22 @@ const index = ({
   revenueChartLoader,
   rafScorechartLoader,
 }) => {
-  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
-    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
-    : [];
+  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
+
+  const dates =
+  selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
+  const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
 
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap
-      ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
-      : [];
+    const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
+
 
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)
     : [];
 
-  const rafScoreByDateForSuggested =
-    getAllRafScoreData?.rafScoreByDateForSuggested
-      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
-      : [];
 
-  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
-    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
-    : [];
-
-  let combinedRafData = rafScoreByDateForSuggested.map(
-    (value, index) => value + rafScoreByDateForHcc[index]
-  );
 
   useEffect(() => {
     getAllHccCodesData(
@@ -78,7 +70,7 @@ const index = ({
     getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization);
   }, [dateRange, selectedOrganization]);
 
-  let combinedHccData = suggestedHccDiseaseCountMap.map((value, index) => value + hccDiseaseCountValues[index]);
+
 
   const options = {
     xAxis: {
@@ -90,13 +82,13 @@ const index = ({
       show: true,
     },
     tooltip: {
-      trigger: 'axis',
+      trigger: "axis",
       axisPointer: {
-        type: 'cross',
+        type: "cross",
         label: {
-          backgroundColor: '#6a7985'
-        }
-      }
+          backgroundColor: "#6a7985",
+        },
+      },
     },
     legend: {
       show: false,
@@ -104,7 +96,7 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data: combinedHccData ? combinedHccData : [],
+        data:[10,20,30,10,23,45,78,27,90,16,25,89],
         color: "#E88D67",
         type: "line",
         lineStyle: { color: "#E88D67" },
@@ -118,12 +110,12 @@ const index = ({
           ]),
         },
         itemStyle: {
-          color: "#E88D67"
-        }
+          color: "#E88D67",
+        },
       },
       {
         name: "HCC Codes",
-        data: hccDiseaseCountValues,
+        data: resultArrayHCC,
         type: "line",
         lineStyle: { color: "#04B700" },
         smooth: true,
@@ -136,12 +128,12 @@ const index = ({
           ]),
         },
         itemStyle: {
-          color: "#04B700" 
-        }
+          color: "#04B700",
+        },
       },
       {
         name: "Care Gap Codes",
-        data: suggestedHccDiseaseCountMap,
+        data: resultArrayCaregaps,
         type: "line",
         lineStyle: { color: "#FF9209" },
         smooth: true,
@@ -154,9 +146,8 @@ const index = ({
           ]),
         },
         itemStyle: {
-          color: "#FF9209" 
-        }
-        
+          color: "#FF9209",
+        },
       },
     ],
   };
@@ -178,7 +169,7 @@ const index = ({
   const totalHccRafScore = getAllRaf?.totalHccRafScore || 0;
   const totalSuggestedRafScore = getAllRaf?.totalSuggestedRafScore || 0;
   const totalScore = (totalHccRafScore + totalSuggestedRafScore).toFixed(2);
-  
+
   const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
   const totalScoreTwo = (hccDiseaseCountMap + suggestedCount).toFixed(2);
@@ -219,14 +210,14 @@ const index = ({
         </div>
 
         {totalCodesLoader ? (
-          <div>
+           <div>
             <Skeleton.Input
               className="w-100"
               style={{ height: "288px" }}
               active
             />
-          </div>
-        ) : hccDiseaseCountValues?.length > 0 ? (
+          </div> 
+         ) : resultArrayHCC?.length > 0 ? (
           <div className="totalCodesPies">
             <CodesGraph
               options={options}
@@ -234,9 +225,9 @@ const index = ({
               className="codesGraphStyle2"
             />
           </div>
-        ) : (
+         ) : (
           <Empty className="mt-3" />
-        )}
+        )} 
       </div>
       <div
         className="remianingAreaGraph"
@@ -264,7 +255,7 @@ const index = ({
               active
             />
           </div>
-        ) : combinedRafData?.length > 0 ? (
+        ) : resultArrayCaregaps?.length > 0 ? (
           <div className="totalCodesPies2">
             <RafGraph
               overallData={true}

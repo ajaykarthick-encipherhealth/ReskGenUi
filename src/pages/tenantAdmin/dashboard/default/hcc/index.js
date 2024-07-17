@@ -38,6 +38,8 @@ const index = ({
   formatNumber();
   const TotalHccRevenue = getAllRaf?.totalHccRafScore;
 
+  
+
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
