@@ -382,6 +382,9 @@ const Reports = ({
         startDate: selectedDateRanges?.Team?.from,
         endDate: selectedDateRanges?.Team?.to,
         search: coderSearchString ? coderSearchString : "",
+        filter: selectedOptions?.reviewerStatus?.value
+        ? selectedOptions?.reviewerStatus?.value
+        : "",
         sort: sort,
         flagsList: flagPatientsList ? flagPatientsList : "",
       });
