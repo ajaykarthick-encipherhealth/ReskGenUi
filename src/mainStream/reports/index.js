@@ -3,7 +3,7 @@ import Header from "../../jsx/layouts/nav/Header";
 import styles from "./report.module.css";
 import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch , faFileExport} from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faFileExport } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
 import Select from "react-select";
@@ -60,14 +60,14 @@ const Reports = ({
   supervisorReportDetails,
   teamReport,
   auditeReportLoading,
-  tab
+  tab,
 }) => {
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
   const rowsLength = useSelector((state) => state?.report?.row);
   const activeTabName = useSelector((state) => state.AuditReport?.activetab);
-  const activeTab=activeTabName?activeTabName:tab
-  console.log(tab,activeTab)
+  const activeTab = activeTabName ? activeTabName : tab;
+
   const AdminReportPatientDetails = useSelector(
     (state) => state.report?.details
   );
@@ -378,8 +378,8 @@ const Reports = ({
         endDate: selectedDateRanges?.Team?.to,
         search: coderSearchString ? coderSearchString : "",
         filter: selectedOptions?.reviewerStatus?.value
-        ? selectedOptions?.reviewerStatus?.value
-        : "",
+          ? selectedOptions?.reviewerStatus?.value
+          : "",
         sort: sort,
         flagsList: flagPatientsList ? flagPatientsList : "",
       });
@@ -470,7 +470,7 @@ const Reports = ({
                             <div className="d-flex w-100">
                               <label className="labelStyle d-flex m-auto p-2">
                                 {" "}
-                                Search 
+                                Search
                               </label>
                               <div className="form-group has-search2 w-100">
                                 <FontAwesomeIcon
@@ -717,10 +717,27 @@ const Reports = ({
                               {rowsLength?.length > 0 ||
                               rowsLength?.data?.length > 0 ? (
                                 // <ExportImg />
-                                <FontAwesomeIcon icon={faFileExport} className={styles.iconReplaced} style={{color:rowsLength?.data?.length > 0 ? "gray" :"#04306f"}} />
-
+                                <FontAwesomeIcon
+                                  icon={faFileExport}
+                                  className={styles.iconReplaced}
+                                  style={{
+                                    color:
+                                      rowsLength?.data?.length > 0
+                                        ? "gray"
+                                        : "#04306f",
+                                  }}
+                                />
                               ) : (
-                                <FontAwesomeIcon icon={faFileExport} className={styles.iconReplaced} style={{color:rowsLength?.data?.length > 0 ? "#04306f" :"gray"}}/>
+                                <FontAwesomeIcon
+                                  icon={faFileExport}
+                                  className={styles.iconReplaced}
+                                  style={{
+                                    color:
+                                      rowsLength?.data?.length > 0
+                                        ? "#04306f"
+                                        : "gray",
+                                  }}
+                                />
                                 // SVGICON.exportDisable
                               )}
                               <span style={{ marginTop: "-3px" }}>Export</span>
@@ -765,9 +782,17 @@ const Reports = ({
                     <TeamReport
                       setModal={setModal}
                       modal={modal}
-                      reportListAll={activeTab === "Team"?TeamReportDetails?.data:supervisorReportDetails?.data}
+                      reportListAll={
+                        activeTab === "Team"
+                          ? TeamReportDetails?.data
+                          : supervisorReportDetails?.data
+                      }
                       paginationFirst={paginationTeamFirst}
-                      ReportPatientDetails={activeTab === "Team"?TeamReportDetails?.data:supervisorReportDetails?.data}
+                      ReportPatientDetails={
+                        activeTab === "Team"
+                          ? TeamReportDetails?.data
+                          : supervisorReportDetails?.data
+                      }
                       onPageChange={onTeamPageChange}
                       comments={comments}
                       setComments={setComments}
@@ -785,6 +810,7 @@ const Reports = ({
                       activeTab={activeTab}
                       handleHeaderCheckbox={handleHeaderCheckboxChange}
                       selectAllFlags={selectAllFlags}
+                      userRole={userRole}
                     />
                   )}
                   {activeTab === "Sent" && (
@@ -803,7 +829,6 @@ const Reports = ({
                         isPhysician={true}
                         loader={sentLoader}
                         userRole={userRole}
-
                       />
                     </div>
                   )}

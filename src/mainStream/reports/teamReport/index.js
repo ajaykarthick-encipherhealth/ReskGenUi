@@ -50,6 +50,7 @@ const TeamReport = ({
   teamReport,
   handleHeaderCheckbox,
   selectAllFlags,
+  userRole
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -277,6 +278,7 @@ const TeamReport = ({
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
+
   return (
     <>
       <div>
@@ -430,8 +432,7 @@ const TeamReport = ({
                               styles={styles}
                             />
                             {allocationCountData.map((item, index) =>
-                              localStorage.getItem("role").toLowerCase() ==
-                                "supervisor" && item.title == "Supervisor" ? (
+                              userRole==="supervisor" ? (
                                 ""
                               ) : (
                                 <AllocationCount
