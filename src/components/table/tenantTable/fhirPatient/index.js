@@ -159,6 +159,7 @@ function FIHRPatinetTable({
                                     alt="noImage"
                                     height={20}
                                     width={20}
+                                    onClick={(e)=>{e.stopPropagation();}}
                                   />
                                 </div>
                               )}
