@@ -13,7 +13,7 @@ import Header from "../../../../jsx/layouts/nav/Header";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../../components/headerFilters/functions";
 import Selector from "../../../../components/selector";
-import computed from "../../../../images/fihr/computed.svg";
+import idCard from "../../../../images/fihr/idCard.svg";
 import profile from "../../../../images/fihr/profile.svg";
 import person from "../../../../images/fihr/person.svg";
 import statusIcon from "../../../../images/fihr/status.svg";
@@ -167,27 +167,27 @@ const Index = () => {
     },
     {
       id: 3,
-      title: "Computed",
-      icon: computed,
-      name: "269/280",
-    },
-    {
-      id: 4,
-      title: "Uploaded By",
+      title: "Initiated By",
       icon: person,
       name: "Nicolas Miles",
     },
     {
-      id: 5,
-      title: "Upload Date",
+      id: 4,
+      title: "Initiated Date",
       icon: calender,
       name: "03/15/2024",
     },
     {
-      id: 6,
+      id: 5,
       title: "Year Of Service",
       icon: calender,
       name: "2022, 2023, 2024",
+    },
+    {
+      id: 6,
+      title: "Group ID",
+      icon: idCard,
+      name: "232OFH34",
     },
   ];
   useEffect(() => {
@@ -232,7 +232,7 @@ const Index = () => {
                           {headerData?.map((item) => (
                             <div className="col-xl-2" key={item?.id}>
                               <div style={{ display: "flex" }}>
-                                <Image src={item?.icon} alt="npimg" />
+                                <Image src={item?.icon} alt="noImage" />
                                 <div className={styles.topTitle}>
                                   {item?.title}
                                 </div>

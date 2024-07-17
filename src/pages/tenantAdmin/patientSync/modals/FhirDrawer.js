@@ -13,6 +13,13 @@ import axios from "../../../../utility/axiosConfig";
 import Image from "next/image";
 import style from "../fhir.module.css";
 
+const inputTypeOptions = [
+  { label: "Excel", value: "EXCEL" },
+  { label: "Csv", value: "CSV" },
+  { label: "Json", value: "JSON" },
+  { label: "Manual", value: "MANUAL" },
+  { label: "Group Id", value: "GROUP_ID" },
+];
 const FhirDrawer = ({
   isDrawerOpen,
   setIsDrawerOpen,
@@ -144,10 +151,7 @@ const FhirDrawer = ({
                 mode="tags"
                 name="inputType"
                 style={{ width: "100%" }}
-                options={[
-                  { label: "Excel", value: "EXCEL" },
-                  { label: "Csv", value: "CSV" },
-                ]}
+                options={inputTypeOptions}
                 size="large"
               />
             </Form.Item>

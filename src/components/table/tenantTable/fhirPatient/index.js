@@ -129,20 +129,18 @@ function FIHRPatinetTable({
                               <div
                                 style={{ width: "80%" }}
                                 className={`d-flex ${styles.progressDIv} ${
-                                  row?.status === "processing"
+                                  row?.status === "processing"||
+                                    row?.status === "failed"
                                     ? "progressText"
-                                    : row?.status === "failed"
-                                    ? "failedText"
                                     : "completedText"
                                 }`}
                               >
                                 <Progress
                                   percent={80}
                                   strokeColor={
-                                    row?.status === "processing"
+                                    row?.status === "processing"||
+                                    row?.status === "failed"
                                       ? "#0078D4"
-                                      : row?.status === "failed"
-                                      ? "#E10000"
                                       : "#00940F"
                                   }
                                   className={`${styles.progreddBr}`}
@@ -159,7 +157,9 @@ function FIHRPatinetTable({
                                     alt="noImage"
                                     height={20}
                                     width={20}
-                                    onClick={(e)=>{e.stopPropagation();}}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                    }}
                                   />
                                 </div>
                               )}
