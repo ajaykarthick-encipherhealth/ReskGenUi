@@ -12,7 +12,6 @@ import styles from "../fhir.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../../components/headerFilters/functions";
-import DetailedFihrTable from "../../../../components/table/tenantTable/FihrPatient/DetailedFihrTable";
 import computed from "../../../../images/fihr/computed.svg";
 import profile from "../../../../images/fihr/profile.svg";
 import person from "../../../../images/fihr/person.svg";
@@ -21,6 +20,7 @@ import calender from "../../../../images/fihr/calender.svg";
 import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";;
 import { debounce } from "../../../../components/input";
 import moment from "moment";
+import DetailedPdfTable from "../../../../components/table/tenantTable/pdfTable/detailPdfTable";
 
 export const statusOptions = [
   { label: "All", value: "" },
@@ -309,7 +309,7 @@ const Index = ({
                           className="profile-tab "
                           style={{ marginTop: "20px" }}
                         >
-                          <DetailedFihrTable
+                          <DetailedPdfTable
                             paginationFirst={paginationFirst}
                             onPageChange={onPageChange}
                             tableData={getBatch}

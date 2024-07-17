@@ -215,7 +215,6 @@ const ContentGroupCard = ({
                   {rafSum ? rafSum : "---"}
                 </Tooltip>
               </div>
-              {console.log(flag[0]?.flagDetails?.flagColour, "flagFlag")}
               <div className={styles.avatarAlign}>
                 <Tooltip title={flag[0]?.flagDetails?.flagName}>
                   {/* <svg

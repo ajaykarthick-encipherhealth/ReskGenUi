@@ -107,7 +107,9 @@ const AuditHeaderFilters = ({
   isNextRow,
   badges,
   username,
-  setPageNo
+  setPageNo,
+  bulletsTitle,
+  badgesTitle
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
@@ -218,12 +220,19 @@ const AuditHeaderFilters = ({
               <Popover
                 content={
                   <>
+                  {bulletsTitle && <label className={styles.label} style={{fontWeight:"700"}}>{bulletsTitle}</label>}
                     <Legends
                       bullets={bullets}
                       display="block"
                       padding="0 0px 10px 0"
                     />
-                    {badges?.length > 0 &&
+                    {badgesTitle && <label className={styles.label} style={{fontWeight:"700"}}>{badgesTitle}</label>}
+                    <Legends
+                      bullets={badges}
+                      display="block"
+                      padding="0 0px 10px 0"
+                    />
+                    {/* {badges?.length > 0 &&
                       badges?.map((data) => (
                         <div style={{ marginBottom: "10px" }}>
                           <Image src={data.src} width={20} height={30} />
@@ -231,7 +240,7 @@ const AuditHeaderFilters = ({
                             {data?.name}
                           </span>
                         </div>
-                      ))}
+                      ))} */}
                   </>
                 }
                 trigger={["click"]}

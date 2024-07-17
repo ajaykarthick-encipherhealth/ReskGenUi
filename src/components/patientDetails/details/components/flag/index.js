@@ -190,7 +190,7 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData ,getFlagDetails
               <div className="col-xl-12 mb-3">
                 <Select
                   options={flagPostList}
-                  className="custom-react-select"
+                  className="customize-react-select"
                   isSearchable={false}
                   id="flag"
                   name="flag"

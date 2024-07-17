@@ -321,7 +321,6 @@ const Index = ({
                 <div className={`col-lg-3`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <HeadTitle header="Organizations" fontSize="16px" />
-
                     <OrgPieChartInfo
                       data={orgData}
                       header="Allocated"
@@ -337,6 +336,7 @@ const Index = ({
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
                       classNames="workflowChart1"
+                      selectedValue={selectedValue}
                     />
                   </Card>
                 </div>

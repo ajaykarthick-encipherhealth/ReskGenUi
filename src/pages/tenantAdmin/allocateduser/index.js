@@ -34,7 +34,7 @@ import { getFilters } from "../../../stores/authflow/actions";
 import AllocateModal from "./allocate";
 import { debounce } from "../../../components/input";
 import { useCallback } from "react";
-import {actions as tenantAdminUsersAction} from '../../../stores/tenantAdmin/users'
+import { actions as tenantAdminUsersAction } from "../../../stores/tenantAdmin/users";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 
 const { RangePicker } = DatePicker;
@@ -119,6 +119,7 @@ const Patient = ({
     selectedOption,
     selectOrgList,
     batchCount,
+    filterBatchCount
   }) => {
     const uId = localStorage.getItem("userId");
     const orgId = selectOrgList;
@@ -130,7 +131,7 @@ const Patient = ({
       sort?.sortDir ? sort?.sortDir : ""
     }&sortfield=${sort?.sortField ? sort?.sortField : ""}&priority=${
       selectedOption ? selectedOption : ""
-    }&batchCount=${batchCount ? batchCount : ""}`;
+    }&batchCount=${filterBatchCount ? batchCount : ""}`;
     allocatedGetList({ url: resoureUrl });
     // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     // if (response?.data) {
@@ -311,7 +312,7 @@ const Patient = ({
     } else {
       setSelectedRowsId([]);
     }
-  }, [selectAllChecked, sort, isPatientList,pageNo]);
+  }, [selectAllChecked, sort, isPatientList, pageNo]);
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
@@ -325,7 +326,9 @@ const Patient = ({
         search: searchStr,
         sort: sort,
         selectedOption: selectedOption,
-        selectOrgList,
+        selectOrgList:selectOrgList,
+        batchCount:batchCount,
+        filterBatchCount:filterBatchCount
       });
     }
   }, [
@@ -338,6 +341,7 @@ const Patient = ({
     searchStr,
     selectedOption,
     selectOrgList,
+    filterBatchCount
   ]);
   useEffect(() => {
     if (!isPatientList) {
@@ -562,7 +566,7 @@ const Patient = ({
               <div className="col-xl-12">
                 <div className="">
                   <div className="card-body p-0">
-                    <div className="table-responsive active-projects task-table">
+                    <div className="table-responsive active-projects task-table supervisor-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
                           <div
@@ -901,13 +905,15 @@ const Patient = ({
                                                 }
                                               >
                                                 <tr>
+
                                                   <th
                                                     style={{
-                                                      textAlign: "start",
+                                                        paddingLeft:'46px !important',
                                                     }}
                                                   >
                                                     NAME
                                                   </th>
+
                                                   <th
                                                     style={{
                                                       textAlign: "center",
@@ -1086,7 +1092,8 @@ const enhancer = connect(
     loader2: state.admin?.patientAllocate?.l2Loader,
     loader3: state.admin?.patientAllocate?.supervisorLoader,
     supervisorResponse: state.admin?.patientAllocate?.l2AllocatedList?.data,
-    selectedSupervisors: state.admin?.patientAllocate?.selectedSupervisors?.data,
+    selectedSupervisors:
+      state.admin?.patientAllocate?.selectedSupervisors?.data,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,

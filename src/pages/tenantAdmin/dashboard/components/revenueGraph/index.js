@@ -5,41 +5,36 @@ import {
   HccCodes,
   RafCounts,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
+import { getLast30Days, getLast7Days,formatValues } from "../../../../../utils/reusable.js";
 
 const RevenueGraph = ({
-  hccColor,
-  cargapColor,
   getAllRaf,
   isHcc,
   isCargaps,
   selectedValue,
-  rafColor2,
-  rafColor3,
   isMultiple,
   className,
-  selectedOrganization,
 }) => {
-  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
-    ? Object.values(getAllRaf.premiumByDateForHcc)
-    : [];
 
-  const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested
-    ? Object.values(getAllRaf.premiumByDateForSuggested)
-    : [];
 
-    let combinedData = premiumByDateForHcc.map((value, index) => value + premiumByDateForSuggested[index]);
+  const dates =
+    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
+  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc;
+
+  const resultArrayHCC = formatValues(premiumByDateForHcc, dates);
+  const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested;
+  const resultArrayCaregaps = formatValues(premiumByDateForSuggested, dates);
 
   const option = {
     tooltip: {
       show: true,
-      trigger: 'axis',
+      trigger: "axis",
       axisPointer: {
-        type: 'cross',
+        type: "cross",
         label: {
-          backgroundColor: '#6a7985'
-        }
-      }
+          backgroundColor: "#6a7985",
+        },
+      },
     },
     legend: {
       show: false,
@@ -59,14 +54,17 @@ const RevenueGraph = ({
     },
     series: [
       {
-        name: isHcc ? "Hcc Codes" : isCargaps ? "Care Gap Codes" : "Total Codes",
+        name: isHcc
+          ? "Hcc Codes"
+          : isCargaps
+          ? "Care Gap Codes"
+          : "Total Codes",
         type: "line",
         step: "start",
         data: isHcc
-          ? premiumByDateForHcc
+          ? resultArrayHCC
           : isCargaps
-          ? premiumByDateForSuggested
-          : combinedData ? combinedData : [], //REVEN Total Codes
+          ? resultArrayCaregaps:[],
         itemStyle: {
           color: isHcc ? "#02BBDE" : isCargaps ? "#5A75F2" : "#E88D67",
         },
@@ -79,7 +77,7 @@ const RevenueGraph = ({
           focus: "series",
         },
 
-        data: isMultiple ? premiumByDateForHcc : [],
+        data: isMultiple ? resultArrayHCC : [""],
 
         itemStyle: {
           color: "#04B700",
@@ -89,7 +87,7 @@ const RevenueGraph = ({
         name: "Care Gap Codes",
         type: "line",
         step: "end",
-        data: isMultiple ? premiumByDateForSuggested : [],
+        data: isMultiple ? resultArrayCaregaps : [""],
         itemStyle: {
           color: "#FF9209",
         },
@@ -110,7 +108,7 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
-      revenueChartLoader:
+    revenueChartLoader:
       state?.tenantAdmin?.dashboard?.default?.revenueChartLoader,
   }),
   {

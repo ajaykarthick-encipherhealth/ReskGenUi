@@ -997,6 +997,7 @@
   justify-content: center;
   cursor: pointer;
   margin-bottom: 10px;
+  margin-left:10px !important
 }
 
 .timeLine {
