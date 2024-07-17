@@ -18,7 +18,7 @@ import profile from "../../../../images/fihr/profile.svg";
 import person from "../../../../images/fihr/person.svg";
 import statusIcon from "../../../../images/fihr/status.svg";
 import calender from "../../../../images/fihr/calender.svg";
-import DetailedFhirTable from "../../../../components/table/tenantTable/FhIrPatient/detailedFhirTable";
+import DetailedFhirTable from "../../../../components/table/tenantTable/fhirPatient/DetailedFhirTable";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
