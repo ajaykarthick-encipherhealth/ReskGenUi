@@ -36,19 +36,16 @@ const index = ({
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
 
   const dates =
-  selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
+    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
   const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
 
   const suggestedHccDiseaseCountMap =
-    getAllHccCodes?.suggestedHccDiseaseCountMap
-    const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
-
+    getAllHccCodes?.suggestedHccDiseaseCountMap;
+  const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
 
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)
     : [];
-
- 
 
   const rafScoreByDateForSuggested =
     getAllRafScoreData?.rafScoreByDateForSuggested
@@ -79,8 +76,6 @@ const index = ({
     getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization);
   }, [dateRange, selectedOrganization]);
 
-
-
   const options = {
     xAxis: {
       type: "category",
@@ -105,7 +100,7 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data:[10,20,30,10,23,45,78,27,90,16,25,89],
+        data: [10, 20, 30, 10, 23, 45, 78, 27, 90, 16, 25, 89],
         color: "#E88D67",
         type: "line",
         lineStyle: { color: "#E88D67" },
@@ -219,14 +214,14 @@ const index = ({
         </div>
 
         {totalCodesLoader ? (
-           <div>
+          <div>
             <Skeleton.Input
               className="w-100"
               style={{ height: "288px" }}
               active
             />
-          </div> 
-         ) : rafScoreByDateForHcc?.length > 0 ? (
+          </div>
+        ) : rafScoreByDateForHcc?.length > 0 ? (
           <div className="totalCodesPies">
             <CodesGraph
               options={options}
@@ -234,9 +229,9 @@ const index = ({
               className="codesGraphStyle2"
             />
           </div>
-         ) : (
+        ) : (
           <Empty className="mt-3" />
-        )} 
+        )}
       </div>
       <div
         className="remianingAreaGraph"
