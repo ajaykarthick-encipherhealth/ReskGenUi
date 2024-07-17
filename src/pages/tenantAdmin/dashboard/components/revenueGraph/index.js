@@ -14,12 +14,8 @@ const RevenueGraph = ({
   selectedValue,
   isMultiple,
   className,
-  selectedOrganization,
-  
 }) => {
-  let combinedData = premiumByDateForHcc?.map(
-    (value, index) => value + premiumByDateForSuggested[index]
-  );
+
 
   const dates =
     selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
@@ -68,10 +64,7 @@ const RevenueGraph = ({
         data: isHcc
           ? resultArrayHCC
           : isCargaps
-          ? resultArrayCaregaps
-          // : combinedData
-          // ? combinedData
-          : [], //REVEN Total Codes
+          ? resultArrayCaregaps:[""],
         itemStyle: {
           color: isHcc ? "#02BBDE" : isCargaps ? "#5A75F2" : "#E88D67",
         },
@@ -84,7 +77,7 @@ const RevenueGraph = ({
           focus: "series",
         },
 
-        data: isMultiple ? resultArrayHCC : [],
+        data: isMultiple ? resultArrayHCC : [""],
 
         itemStyle: {
           color: "#04B700",
@@ -94,7 +87,7 @@ const RevenueGraph = ({
         name: "Care Gap Codes",
         type: "line",
         step: "end",
-        data: isMultiple ? resultArrayCaregaps : [],
+        data: isMultiple ? resultArrayCaregaps : [""],
         itemStyle: {
           color: "#FF9209",
         },
