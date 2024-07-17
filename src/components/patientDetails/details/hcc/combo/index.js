@@ -31,6 +31,8 @@ const Combo = ({
   const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
   const [invalidComboDiseaseCodesList, setInvalidComboDiseaseCodesList] =
     useState([]);
+  const [careGapComboDiseaseCodesList, setCareGapComboDiseaseCodesList] =
+    useState([]);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
   const [patientDocumentResult, setPatientDocumentResult] = useState([]);
   const [selectFileURL, setSelectFileURL] = useState([]);
@@ -72,7 +74,6 @@ const Combo = ({
   const [zIndex, setZIndex] = useState(false);
   const [allMeatList, setAllMeatList] = useState([]);
 
-
   const handleChange = async (e) => {
     const key = e.target.name;
     if (key == "diagnosisCodeQuery") {
@@ -110,8 +111,8 @@ const Combo = ({
       "",
       "",
       setInvalidComboDiseaseCodesList,
-      setAllMeatList
-
+      setAllMeatList,
+      setCareGapComboDiseaseCodesList
     );
   }, [patientDetailsResult]);
 
@@ -224,7 +225,7 @@ const Combo = ({
       ) : null}
       <div className={`${visitStyles.comboContainer}`}>
         <div className={`row ${visitStyles.comboContainer2}`}>
-          <div className="col-xl-6">
+          <div className="col-xl-4">
             <div className={`${visitStyles.comboTitle}`}>
               <span>VALID CODES </span>
             </div>
@@ -254,7 +255,36 @@ const Combo = ({
             />
           </div>
 
-          <div className="col-xl-6">
+          <div className="col-xl-4">
+            <div className={`${visitStyles.comboTitle}`}>
+              <span>CARE GAP COMBO CODES </span>
+            </div>
+            <ComboCard
+              list={careGapComboDiseaseCodesList}
+              captureSectionMatching={captureSectionMatching}
+              encounterDateMatching={encounterDateMatching}
+              okText="OK"
+              cancelText="Cancel"
+              popConfirmTitle="You want move to valid?"
+              setOpens={setOpens}
+              setCombiTree={setCombiTree}
+              setSearch={setSearch}
+              setFileLoading={setFileLoading}
+              setFileModalHeader={setFileModalHeader}
+              onchangeCombo={onchangeCombo}
+              setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
+              isAddComboCode={false}
+              setConfirmNotesModalValid={setConfirmNotesModalValid}
+              setIsValidAction={setIsValidAction}
+              patientDocumentResult={patientDocumentResult}
+              setActiveTabHead={setActiveTabHead}
+              setActiveMeatTitle={setActiveMeatTitle}
+              meatCriteriaList={allMeatList}
+              cardTitle="DELETED_COMBO"
+            />
+          </div>
+
+          <div className="col-xl-4">
             <div className={`${visitStyles.comboTitle}`}>
               <span>DELETED COMBO CODES </span>
             </div>
@@ -280,7 +310,6 @@ const Combo = ({
               setActiveMeatTitle={setActiveMeatTitle}
               meatCriteriaList={allMeatList}
               cardTitle="DELETED_COMBO"
-
             />
           </div>
         </div>

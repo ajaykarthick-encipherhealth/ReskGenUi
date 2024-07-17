@@ -231,7 +231,7 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
           </div>
         </Tooltip>
         <div className="text-start">
-          {[node.addOnCode, node.addOnCodeTwo, node.addOnCodeThree]?.map(
+          {node.addOnCodes?.map(
             (addCombo, index) =>
               addCombo && (
                 <span className="font-bold">

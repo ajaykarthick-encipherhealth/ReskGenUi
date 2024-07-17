@@ -62,7 +62,6 @@ const ComboCard = ({
     "geekblue",
     "purple",
   ];
-
   return (
     <>
       <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
@@ -72,7 +71,7 @@ const ComboCard = ({
               <label htmlFor="combo">Combo Codes</label>
             </div>
             <div className="col-xl-3">
-              <label htmlFor="additional">Additional Codes</label>
+              <label htmlFor="additional">Addons</label>
             </div>
             <div className="col-xl-5">
               <label htmlFor="description">Description</label>
@@ -108,8 +107,8 @@ const ComboCard = ({
                   >
                     <div className="row">
                       <div className="col-xl-3 d-grid">
-                        <span className="font-bold">
-                          {item.diagnosisCodeCombo}
+                        <span className="font-bold ms-3">
+                          {item.diagnosisCode}
                         </span>
                       </div>
                       <div className="col-xl-3">
@@ -119,8 +118,9 @@ const ComboCard = ({
                               <span
                                 className="font-bold"
                                 key={addOnCodeColor[index]}
+                                
                               >
-                                <Tag color={addOnCodeColor[index]}>
+                                <Tag color={addOnCodeColor[index]} style={{fontSize: "10px"}}>
                                   {addCombo}
                                 </Tag>
                               </span>
@@ -128,7 +128,7 @@ const ComboCard = ({
                         )}
                       </div>
                       <div className="col-xl-5">
-                        <span>{item.diseaseName}</span>
+                        <span>{item.actualDescription}</span>
                       </div>
                       <div className="col-xl-1">
                         {/* <div>
