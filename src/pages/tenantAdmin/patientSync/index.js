@@ -482,7 +482,7 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                             <label>Status</label>
                             <div className={`custom-react-select1`}>
                               <Select
-                                placeholder={"Select Status"}
+                                placeholder={"Select"}
                                 options={statusOptions}
                                 onChange={(selectedOption) => {
                                   dosOnChange(selectedOption, reportActiveTab);
@@ -491,6 +491,21 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                               />
                             </div>
                           </div>
+                          {!reportActiveTab || reportActiveTab==="FHIR" && (
+                             <div className="col-xl-4 mx-2">
+                             <label>Initiated By</label>
+                             <div className={`custom-react-select1`}>
+                               <Select
+                                 placeholder={"Select"}
+                                 options={statusOptions}
+                                 onChange={(selectedOption) => {
+                                   dosOnChange(selectedOption, reportActiveTab);
+                                 }}
+                                 allowClear
+                               />
+                             </div>
+                           </div>
+                          )}
                         </div>
                         <div className="d-flex mx-1">
                           {!reportActiveTab || reportActiveTab === "FHIR" ? (
