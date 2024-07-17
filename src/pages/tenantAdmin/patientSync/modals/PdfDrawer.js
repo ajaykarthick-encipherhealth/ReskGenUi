@@ -10,7 +10,7 @@ import { useState } from "react";
 import ENDPOINTS from "../../../../utility/enpoints";
 import axios from "../../../../utility/axiosConfig";
 
-const FihrDrawer = ({
+const PdfDrawer = ({
   isDrawerOpen,
   setIsDrawerOpen,
   uploadType,
@@ -176,4 +176,4 @@ const enhancer = connect((state) => ({}), {
   getCreateBatch: tenantActions.getCreateBatch,
   getAllBatches: tenantActions.getAllBatches,
 });
-export default enhancer(FihrDrawer);
+export default enhancer(PdfDrawer);

@@ -376,3 +376,19 @@
   justify-content: center;
   align-items: center;
 }
+.sampleBtnStyle,
+.sampleBtnStyle:hover,
+.sampleBtnStyle:active,
+.sampleBtnStyle:focus {
+  background-color: #fff !important;
+  border-radius: 5px;
+  border: 1px solid #888888 !important;
+  color: #888888 !important;
+}
+.sampleFileImg {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #888888;
+  border-radius: 3px;
+  margin: 0px 0 0 7px;
+}

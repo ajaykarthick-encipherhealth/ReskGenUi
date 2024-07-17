@@ -10,19 +10,20 @@ import styles from "./fhir.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
-import FIHRPatinetTable from "../../../components/table/tenantTable/fihrPatient/index";
+import FHIRPatinetTable from "../../../components/table/tenantTable/fhirPatient/index";
 import PdfTable from "../../../components/table/tenantTable/pdfTable";
 import RegularButton from "../../../components/button";
-import FihrDrawer from "./fihrModal";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../stores/tenantAdmin/patientSync";
 import { debounce } from "../../../components/input";
 import { statusOptions } from "./pdfTable";
 import moment from "moment";
+import PdfDrawer from "./modals/PdfDrawer";
+import FhirDrawer from "./modals/FhirDrawer";
 
 const { RangePicker } = DatePicker;
 
-const FIHRData = [
+const FHIRData = [
   {
     batchID: "#111",
     batchName: "Batch Name1",
@@ -313,13 +314,17 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [search, setSearch] = useState();
   const [selectedDateRanges, setSelecteddateRanges] = useState([]);
-
+  const [isOpenFhirDrawer, setIsOpenFhirDrawer] = useState(false);
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
     setUploadType(e.target.name);
     setSelectedBatch();
   };
-
+  const handleFhirUpload = (e) => {
+    setIsOpenFhirDrawer(!isOpenFhirDrawer);
+    setUploadType(e.target.name);
+    setSelectedBatch();
+  };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -488,11 +493,11 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                           </div>
                         </div>
                         <div className="d-flex mx-1">
-                          {!reportActiveTab || reportActiveTab === "FIHR" ? (
+                          {!reportActiveTab || reportActiveTab === "FHIR" ? (
                             <div
                               className={styles.btnContainer}
                               name="upload"
-                              onClick={handleUploadButtonClick}
+                              onClick={handleFhirUpload}
                             >
                               <RegularButton
                                 name={"Upload"}
@@ -535,7 +540,7 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                           <div className="custom-tab-1">
                             <Tab.Container
                               defaultActiveKey={
-                                reportActiveTab === "PDF" ? "pdf" : "fihr"
+                                reportActiveTab === "PDF" ? "pdf" : "fhir"
                               }
                             >
                               <Nav as="ul" className="nav nav-tabs">
@@ -543,11 +548,11 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                   as="li"
                                   className="nav-item"
                                   onClick={() => {
-                                    handleTabs("FIHR");
+                                    handleTabs("FHIR");
                                   }}
                                 >
-                                  <Nav.Link to="#my-posts" eventKey="fihr">
-                                    FIHR
+                                  <Nav.Link to="#my-posts" eventKey="fhir">
+                                    FHIR
                                   </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item
@@ -563,12 +568,12 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                 </Nav.Item>
                               </Nav>
                               <Tab.Content>
-                                <Tab.Pane id="my-posts" eventKey="fihr">
-                                  <FIHRPatinetTable
+                                <Tab.Pane id="my-posts" eventKey="fhir">
+                                  <FHIRPatinetTable
                                     reportListAll={filteredCOder}
                                     paginationFirst={paginationFirst}
                                     onPageChange={onPageChange}
-                                    tableData={FIHRData}
+                                    tableData={FHIRData}
                                   />
                                 </Tab.Pane>
                                 <Tab.Pane id="my-posts" eventKey="pdf">
@@ -587,15 +592,22 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                         </div>
 
                         {isDrawerOpen && (
-                          <FihrDrawer
+                          <PdfDrawer
                             isDrawerOpen={isDrawerOpen}
                             setIsDrawerOpen={setIsDrawerOpen}
                             uploadType={uploadType}
                             setUploadType={setUploadType}
                             selectedBatch={selectedBatch}
-                            
                           />
                         )}
+
+                        <FhirDrawer
+                            isDrawerOpen={isOpenFhirDrawer}
+                            setIsDrawerOpen={setIsOpenFhirDrawer}
+                            uploadType={uploadType}
+                            setUploadType={setUploadType}
+                            selectedBatch={selectedBatch}
+                          />
                       </div>
                     </div>
                   </div>
