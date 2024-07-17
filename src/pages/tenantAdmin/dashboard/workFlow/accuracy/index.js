@@ -105,18 +105,19 @@ export const getGraphData = (
   currentBtn,
   currentDate
 ) => {
-  if (
-    currentBtn === "Monthly" &&
-    parseInt(year) <= parseInt(currentDate.getFullYear())
-  ) {
-    if (parseInt(year) <= parseInt(currentDate.getFullYear())) {
-      return param?.map((item) => item[text]);
-    }
-  } else if (currentBtn !== "Monthly") {
-    if (parseInt(month) <= parseInt(currentDate?.getMonth() + 1)) {
-      return param?.map((item) => item[text]);
-    }
-  }
+  return param?.map((item) => item[text]);
+  // if (
+  //   currentBtn === "Monthly" &&
+  //   parseInt(year) <= parseInt(currentDate.getFullYear())
+  // ) {
+  //   if (parseInt(year) <= parseInt(currentDate.getFullYear())) {
+  //     return param?.map((item) => item[text]);
+  //   }
+  // } else if (currentBtn !== "Monthly") {
+  //   if (parseInt(month) <= parseInt(currentDate?.getMonth() + 1)) {
+  //     return param?.map((item) => item[text]);
+  //   }
+  // }
 };
 export const chartBlockedDates = (
   year,
@@ -124,7 +125,7 @@ export const chartBlockedDates = (
   param,
   val,
   currentBtn,
-  currentDate,
+  currentDate
 ) => {
   year = Number(year);
   month = Number(month);
@@ -167,7 +168,7 @@ export const chartBlockedDates = (
     return false;
   }
 };
-const Accuracy = ({getAccuracyWorkflow}) => {
+const Accuracy = ({ getAccuracyWorkflow }) => {
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const [activeTabButton, setActiveTabButton] = useState(0);
   const [currentTabBtn, setCurrentTabBtn] = useState("CogentAI Accuracy");
@@ -176,7 +177,6 @@ const Accuracy = ({getAccuracyWorkflow}) => {
     currentDate.getMonth() + 1
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-console.log(getAccuracyWorkflow);
   const accuracyDatas = {
     data: {
       response: [
@@ -862,42 +862,20 @@ console.log(getAccuracyWorkflow);
     credits: {
       enabled: false,
     },
+
     tooltip: {
-      formatter: function () {
+      formatter: function (param) {
         let finalData;
-        if (
-          typeof this.point.category === "string" &&
-          this.point.category.startsWith("Week")
-        ) {
-          const weekIndex = parseInt(this.point.category.substring(4));
-
-          finalData = QualityAccuracyDatas?.data?.response?.find(
-            (item) => item?.weekOfMonth === weekIndex
-          );
-        } else if (
-          typeof this.point.category === "string" &&
-          monthNames.includes(this.point.category.toUpperCase())
-        ) {
-          const hoveredMonthIndex = monthNames?.findIndex(
-            (month) => month === this.point.category
-          );
-
-          finalData = QualityAccuracyDatas?.data?.response?.find(
-            (item) => item?.monthOfYear === hoveredMonthIndex + 1
-          );
-        } else {
-          finalData = QualityAccuracyDatas?.data?.response?.find(
-            (item) => item?.dayOfMonth === this.x
-          );
-        }
+        finalData = getAccuracyWorkflow?.response[this.x - 1];
 
         if (finalData) {
           return (
-            "Average Score: " +
-            finalData.averageScore +
+            "Reviewer Avg Score: " +
+            finalData.reviewerAvgScore +
             "<br/>" +
-            "Total Correct: " +
-            finalData.totalCorrectCount
+            "Total Newly Added Codes Count: " +
+            finalData?.totalNewlyAddedCodesCount
+
             // "<br/>" +
             // "Total Wrong: " +
             // finalData.totalWrongCount
@@ -920,11 +898,12 @@ console.log(getAccuracyWorkflow);
       },
     },
     series: [
+      //chart3
       {
-        name: "totalCorrectCount",
+        name: "totalNewlyAddedCodesCount",
         data: getGraphData(
-          QualityAccuracyDatas?.data?.response,
-          "totalCorrectCount",
+          getAccuracyWorkflow?.response,
+          "totalNewlyAddedCodesCount",
           selectedMonth,
           selectedYear,
           currentBtn,
@@ -1035,41 +1014,18 @@ console.log(getAccuracyWorkflow);
       enabled: false,
     },
     tooltip: {
-      formatter: function () {
+      formatter: function (param) {
         let finalData;
-        if (
-          typeof this.point.category === "string" &&
-          this.point.category.startsWith("Week")
-        ) {
-          const weekIndex = parseInt(this.point.category.substring(4));
-
-          finalData = QualityAccuracyDatas?.data?.response?.find(
-            (item) => item?.weekOfMonth === weekIndex
-          );
-        } else if (
-          typeof this.point.category === "string" &&
-          monthNames.includes(this.point.category.toUpperCase())
-        ) {
-          const hoveredMonthIndex = monthNames?.findIndex(
-            (month) => month === this.point.category
-          );
-
-          finalData = QualityAccuracyDatas?.data?.response?.find(
-            (item) => item?.monthOfYear === hoveredMonthIndex + 1
-          );
-        } else {
-          finalData = QualityAccuracyDatas?.data?.response?.find(
-            (item) => item?.dayOfMonth === this.x
-          );
-        }
+        finalData = getAccuracyWorkflow?.response[this.x - 1];
 
         if (finalData) {
           return (
-            "Average Score: " +
-            finalData.averageScore +
+            "Machine Avg Score: " +
+            finalData.machineAvgScore +
             "<br/>" +
-            "Total Correct: " +
-            finalData.totalCorrectCount
+            "Total Newly Added Codes Count: " +
+            finalData?.totalNewlyAddedCodesCount
+
             // "<br/>" +
             // "Total Wrong: " +
             // finalData.totalWrongCount
@@ -1093,10 +1049,12 @@ console.log(getAccuracyWorkflow);
     },
     series: [
       {
-        name: "totalCorrectCount",
+        name: "totalNewlyAddedCodesCount",
         data: getGraphData(
-          accuracyDatas?.data?.response,
-          "totalCorrectCount",
+          // accuracyDatas?.data?.response,
+          getAccuracyWorkflow?.response,
+          // totalNewlyAddedCodesCount,
+          "totalNewlyAddedCodesCount",
           selectedMonth,
           selectedYear,
           currentBtn,
@@ -1126,8 +1084,8 @@ console.log(getAccuracyWorkflow);
           //machineAvgScore
           selectedYear,
           selectedMonth,
-          accuracyDatas?.data?.response,
-          "averageScore",
+          getAccuracyWorkflow?.response,
+          "machineAvgScore",
           currentBtn,
           currentDate
         ),
@@ -1167,7 +1125,6 @@ console.log(getAccuracyWorkflow);
     0
   ); // Sum the numerical values
   const averageQuality = qualiotySum / numericalQualityData?.length; // Calculate the average
-
   return (
     <>
       <div className={styles.card3}>
@@ -1204,7 +1161,7 @@ console.log(getAccuracyWorkflow);
               <div className={spinSTYles.spinStyle}>
                 <Spin loading={accuracyDatas?.loading} />
               </div>
-            ) : accuracyDatas?.data?.response ? (
+            ) : getAccuracyWorkflow?.response ? (
               currentTabBtn === "CogentAI Accuracy" ? (
                 // <ReactECharts
                 //   option={option}
