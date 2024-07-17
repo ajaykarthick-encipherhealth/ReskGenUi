@@ -10308,7 +10308,9 @@ p,
 .active-projects thead tr th:nth-child(1) {
   padding-left: 15px;
 }
-
+.supervisor-table thead tr th:nth-child(1){
+  padding-left: 60px !important;
+}
 .active-projects thead tr th {
   font-size: 12px;
   padding: 15px 6px;
@@ -10336,6 +10338,9 @@ p,
 
 .active-projects .tbl-caption {
   padding: 20px;
+}
+.active-projects .tbl-caption2 {
+  padding: 0px 20px 20px 20px;
 }
 
 .active-projects .dt-buttons {
@@ -11806,6 +11811,11 @@ li.p-dropdown-item {
   padding-left: 2.375rem;
   font-size: 14px;
 }
+.has-search .input-form-control {
+  padding-left: 2.375rem;
+  font-size: 14px;
+
+}
 .has-search2 .new-form-control {
   padding-left: 2.375rem;
   font-size: 14px;
@@ -12308,25 +12318,26 @@ tbody > tr {
   flex-shrink: 0;
   border: none !important;
 }
-.new-inputform-control {
+/* .input-form-control {
   border-radius: 8px !important;
   background: #fff !important;
-  box-shadow: none !important;
   width: 100%;
   height: 42px;
   flex-shrink: 0;
   border: 1px solid #d9d9d9 !important;
-}
-.new-form-controls {
-  border-radius: 8px 0 0 8px !important;
+} */
+
+.input-form-control {
+  border-radius: 8px !important;
   background: #fff !important;
-  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  /* box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important; */
   width: 100%;
   height: 42px;
   flex-shrink: 0;
-  border: none !important;
-}
+  border: 1px solid #d8c9c9 !important;
+  margin-right: 10px;
 
+}
 .select-count {
   height: 40px !important;
 }
@@ -12430,12 +12441,67 @@ tbody > tr {
   border-radius: 8px !important;
   background: #fff !important;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
-  height: 42px !important;
+  height: 44px !important;
   flex-shrink: 0;
-  border: none !important;
-  z-index: 11;
+  /* border: 1px solid #e6e6e6 !important; */
+  border: none;
+  z-index: 10;
   width: 100% !important;
 }
+
+.customize-react-select {
+  border-radius: 8px !important;
+  background: #fff !important;
+  /* box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important; */
+  height: 44px !important;
+  flex-shrink: 0;
+  border: 1px solid #e6e6e6 !important;
+  /* border: none; */
+  z-index: 10;
+  width: 100% !important;
+}
+.customize-react-select > div:nth-child(4) > div {
+  background-color: #fff;
+}
+
+.customize-react-select > div:nth-child(4) > div > div {
+  background-color: #fff;
+  cursor: pointer;
+  -webkit-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+.customize-react-select > div:nth-child(4) > div > div:hover {
+  background-color: var(--rgba-primary-1);
+  color: #000;
+}
+
+.customize-react-select > div:nth-child(3) {
+  height: 42px !important;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  border: none !important;
+}
+
+.customize-react-select > div:nth-child(4) {
+  border-radius: 10px;
+  min-width: 150px;
+  overflow: hidden;
+  box-shadow: 0px 10px 40px 0px rgba(21, 50, 93, 0.1);
+}
+
+.customize-react-select > div > div:first-child div {
+  font-size: 14px;
+  color: #6e6e6e;
+}
+
+.customize-react-select > div > div:nth-child(2) > span {
+  display: none;
+}
+
+
+
 
 .custom-react-select > div:nth-child(4) > div {
   background-color: #fff;
@@ -15324,4 +15390,38 @@ input::-webkit-inner-spin-button {
 .customsteps .ant-steps-item-container {
   margin-bottom: 100px !important;
 }
+.progressText .ant-progress-text{
+  color:#0078D4 !important;
+}
+.progressText .ant-progress .ant-progress-outer{
+  width:190px !important;
+  margin-left: -10px;
+}
+.completedText .ant-progress .ant-progress-outer{
+  width:190px !important;
+  margin-left: -10px;
+}
+.completedText .ant-progress-text{
+  color:#00940F !important;
+}
+/* apply background for model */
+.custom-modal {
+  /* background-color: #f0f6fe !important; */
+  border-radius: 30px !important;
+}
 
+/* .custom-modal .ant-modal-content {
+  background-color: #f0f6fe !important;
+}
+
+.custom-modal .ant-modal-header {
+  background-color: #f0f6fe !important;
+}
+
+.custom-modal .ant-modal-body {
+  background-color: #f0f6fe !important;
+}
+
+.custom-modal .ant-modal-footer {
+  background-color: #f0f6fe;
+} */

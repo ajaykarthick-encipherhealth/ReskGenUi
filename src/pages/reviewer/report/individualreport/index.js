@@ -47,7 +47,7 @@ const IndividualReceiverReport = () => {
   const [reportInfo, setReportInfo] = useState();
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [receivedSort, setReceivedSort] = useState("DESC");
- const [currentRole,setCurrentRole]=useState()
+  const [currentRole, setCurrentRole] = useState();
   const [loading, setLoading] = useState(false);
   const [isSentReport, setIsSentReport] = useState(false);
   const [isAdminPage, setIsAdminPage] = useState(false);
@@ -114,7 +114,7 @@ const IndividualReceiverReport = () => {
       dispatch(getReceivedDetails(0, "", "", searchValue, sort));
       dispatch(getSelectedReportDetails(id));
     }
-    setCurrentRole(localStorage.getItem("userRole"))
+    setCurrentRole(localStorage.getItem("userRole"));
   }, [searchValue, sort, router]);
   useEffect(() => {
     if (url) {
@@ -134,9 +134,10 @@ const IndividualReceiverReport = () => {
         reportDatas?.data?.response?.reportStatusDTOList?.content?.filter(
           (item) => item?.reportId === id
         );
-      const sentdata = sentReportDatas?.data?.response?.receivedReportDTOList?.data?.filter(
-        (item) => item?._id === id
-      );
+      const sentdata =
+        sentReportDatas?.data?.response?.receivedReportDTOList?.data?.filter(
+          (item) => item?._id === id
+        );
 
       setReportInfo(!isSentReport ? reportdata[0] : sentdata[0]);
     }
@@ -161,29 +162,19 @@ const IndividualReceiverReport = () => {
                   style={{ width: "40px", height: "30px" }}
                   className={reportStyles.filterBtn}
                   onClick={() => {
-                    if (currentRole !=="supervisor") {
-                      router?.push(`/${currentRole}/report`);
-                    } else {
-                      const page = new URLSearchParams(
-                        window.location.search
-                      ).get("page");
-                      const limit = new URLSearchParams(
-                        window.location.search
-                      ).get("limit");
-                      router?.push(
-                        `/supervisor/report?page=${page}&limit=${limit}`
-                      );
-                    }
-
-                    dispatch(
-                      getActiveTab(
-                        isSentReport ? "SentReport" : "ReceivedReport"
-                      )
+                    const page = new URLSearchParams(
+                      window.location.search
+                    ).get("page");
+                    const limit = new URLSearchParams(
+                      window.location.search
+                    ).get("limit");
+                    router?.push(
+                      `/reviewer/report?page=${page}&limit=${limit}`
                     );
+
+                    dispatch(getActiveTab(isSentReport ? "Sent" : "Received"));
                     dispatch(
-                      getReportActiveTab(
-                        isSentReport ? "SentReport" : "ReceivedReport"
-                      )
+                      getReportActiveTab(isSentReport ? "Sent" : "Received")
                     );
                     setLoading(true);
                     setIsSentReport(false);

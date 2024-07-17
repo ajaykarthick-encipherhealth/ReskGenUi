@@ -312,7 +312,6 @@ const UserList = ({
                       ) : (
                         <>
                           <UsersList
-                           
                             switchHandler={switchHandler}
                             setPageCount={setPageCount}
                             sortOrder={sortOrder}

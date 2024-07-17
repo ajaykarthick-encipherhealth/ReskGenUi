@@ -4,11 +4,8 @@ import { DatePicker, Popover, Tooltip } from "antd";
 import Image from "next/image";
 import styles from "../../../../pages/reviewer/report/report.module.css";
 import Tracking from "../../tracking/tracking.module.css";
-import warning from "../../../../images/svg/warning.svg";
 import { useDispatch } from "react-redux";
 import Legends from "../../../../components/legends";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { InputText } from "primereact/inputtext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPalette } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -415,7 +412,7 @@ const HeaderFilters = ({
 
   return (
     <div style={{ display: "flex" }}>
-      <div className="row filter-contain" style={{ width: "100%" }}>
+      <div className="row filter-contain" style={{ width: "95%"}}>
         {isAllocatedToSelector && (
           <div
             className={defaultSize}
@@ -469,8 +466,9 @@ const HeaderFilters = ({
         ))}
       </div>
 
-      <div className={Tracking.iconContainer}>
-        <MoreFilter
+      <div className={Tracking} style={{ width: "5%",display:"flex",justifyContent:"end"}}>
+       <div>
+         <MoreFilter
           clear={clear}
           activeFilters={activeFilters}
           setActiveFilters={setActiveFilters}
@@ -479,7 +477,8 @@ const HeaderFilters = ({
           setSelectAll={setSelectAll}
           setClear={setClear}
           handleClearAllFilters={handleClearAllFilters}
-        /> &nbsp;
+        /> 
+       
 
         {bullets && (
           <div style={{ cursor: "pointer" }}>
@@ -489,7 +488,7 @@ const HeaderFilters = ({
                   <Legends
                     bullets={bullets}
                     display="block"
-                    padding="0 0px 10px 0"
+                    
                   />
                   {badges?.length > 0 &&
                     badges?.map((data) => (
@@ -511,6 +510,7 @@ const HeaderFilters = ({
             </Popover>
           </div>
         )}
+        </div>
       </div>
     </div>
   );
