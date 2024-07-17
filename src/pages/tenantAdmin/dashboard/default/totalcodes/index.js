@@ -48,7 +48,16 @@ const index = ({
     ? Object.values(getAllRaf.premiumByDateForHcc)
     : [];
 
+ 
 
+  const rafScoreByDateForSuggested =
+    getAllRafScoreData?.rafScoreByDateForSuggested
+      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
+      : [];
+
+  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
+    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
+    : [];
 
   useEffect(() => {
     getAllHccCodesData(
@@ -217,7 +226,7 @@ const index = ({
               active
             />
           </div> 
-         ) : resultArrayHCC?.length > 0 ? (
+         ) : rafScoreByDateForHcc?.length > 0 ? (
           <div className="totalCodesPies">
             <CodesGraph
               options={options}
@@ -255,7 +264,7 @@ const index = ({
               active
             />
           </div>
-        ) : resultArrayCaregaps?.length > 0 ? (
+        ) : rafScoreByDateForSuggested?.length > 0 ? (
           <div className="totalCodesPies2">
             <RafGraph
               overallData={true}

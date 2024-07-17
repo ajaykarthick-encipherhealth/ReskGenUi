@@ -91,10 +91,7 @@ const RafGraph = ({
         data: isHcc
           ? resultArrayHCC
           : isCargaps
-          ? resultArrayCaregaps
-          // : combinedData
-          // ? combinedData
-          : [], //RAF Total Codes
+          ? resultArrayCaregaps:[]
       },
 
       {
