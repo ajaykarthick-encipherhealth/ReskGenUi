@@ -10339,6 +10339,9 @@ p,
 .active-projects .tbl-caption {
   padding: 20px;
 }
+.active-projects .tbl-caption2 {
+  padding: 0px 20px 20px 20px;
+}
 
 .active-projects .dt-buttons {
   float: unset;
