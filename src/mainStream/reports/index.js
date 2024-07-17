@@ -32,8 +32,6 @@ import Tab from "../components/tags";
 import MoreFilter from "../../resusablereport/reports/MoreFilter";
 import TeamReport from "./teamReport";
 
-
-
 const statusOptions = [
   { label: "All", value: "" },
   { label: "Completed", value: "COMPLETED" },
@@ -59,6 +57,7 @@ const Reports = ({
   sentLoader,
   auditReport,
   TeamReportDetails,
+  supervisorReportDetails,
   teamReport,
   auditeReportLoading,
   tab
@@ -68,6 +67,7 @@ const Reports = ({
   const rowsLength = useSelector((state) => state?.report?.row);
   const activeTabName = useSelector((state) => state.AuditReport?.activetab);
   const activeTab=activeTabName?activeTabName:tab
+  console.log(tab,activeTab)
   const AdminReportPatientDetails = useSelector(
     (state) => state.report?.details
   );
@@ -446,6 +446,7 @@ const Reports = ({
       : activeTab === "Audit"
       ? setTeamPageNo
       : setPageNo;
+
   return (
     <div>
       <Header />
@@ -764,9 +765,9 @@ const Reports = ({
                     <TeamReport
                       setModal={setModal}
                       modal={modal}
-                      reportListAll={TeamReportDetails?.data}
+                      reportListAll={activeTab === "Team"?TeamReportDetails?.data:supervisorReportDetails?.data}
                       paginationFirst={paginationTeamFirst}
-                      ReportPatientDetails={TeamReportDetails?.data}
+                      ReportPatientDetails={activeTab === "Team"?TeamReportDetails?.data:supervisorReportDetails?.data}
                       onPageChange={onTeamPageChange}
                       comments={comments}
                       setComments={setComments}
