@@ -30,8 +30,8 @@ const ChatAuditConfig = ({ getConfigurationDetails, updateSettings,data }) => {
       value: "DUE_DATE",
     },
     {
-      label: "Batch",
-      value: "BATCH",
+      label: "RAF",
+      value: "RAF",
     },
   ];
 
@@ -50,7 +50,7 @@ const ChatAuditConfig = ({ getConfigurationDetails, updateSettings,data }) => {
   return (
     <>
       <Form id={"chart-audit"} onFinish={handleSubmit} form={form}>
-        <div className="p-3" style={{ height: "65vh" }}>
+        <div className="p-3" style={{ width: "60%" }}>
           <div className={Style.title}>Chart Audit Configuration</div>
           <div className="d-flex justify-content-between mt-4">
             <div>
@@ -131,7 +131,7 @@ const ChatAuditConfig = ({ getConfigurationDetails, updateSettings,data }) => {
             </div>
           </div>
         </div>
-        <div className="d-flex justify-content-end p-3">
+        <div className="d-flex justify-content-end p-3" style={{ width: "60%" }}>
           <RegularButton
             type={"outline"}
             name={"Restore Changes"}

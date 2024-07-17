@@ -74,7 +74,7 @@ const FileProcessingConfig = ({
         onFinish={handleSubmit}
         form={form}
       >
-        <div className="p-3" style={{ height: "65vh" }}>
+        <div className="p-3" style={{ width: "40%" }}>
           <div className={Style.title}>File Processing Configuration</div>
           <div className="d-flex justify-content-between mt-4">
             <div>
@@ -137,7 +137,7 @@ const FileProcessingConfig = ({
             </div>
           </div>
         </div>
-        <div className="d-flex justify-content-end p-3">
+        <div className="d-flex justify-content-end p-3" style={{width: "40%"}}>
           <RegularButton
             type={"outline"}
             name={"Restore Changes"}

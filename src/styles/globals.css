@@ -15425,3 +15425,8 @@ input::-webkit-inner-spin-button {
 .custom-modal .ant-modal-footer {
   background-color: #f0f6fe;
 } */
+
+::-webkit-scrollbar {
+  width: 5px !important;
+  height: 15px !important;
+}
