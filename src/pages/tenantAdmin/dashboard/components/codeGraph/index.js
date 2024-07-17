@@ -7,7 +7,11 @@ import {
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
+import {
+  formatValues,
+  getLast30Days,
+  getLast7Days,
+} from "../../../../../utils/reusable.js";
 
 const CodesGraph = ({
   options,
@@ -24,14 +28,17 @@ const CodesGraph = ({
   selectedValue,
   className,
 }) => {
-  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
-    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
-    : [];
+  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
+  const dates =
+    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
 
+  const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
+
+ 
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap
-      ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
-      : [];
+    const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
+  
 
   const graphOptions = {
     xAxis: {
@@ -64,9 +71,9 @@ const CodesGraph = ({
           ? "Revenue"
           : isTwoWaves && "Radiology",
         data: isHcc
-          ? hccDiseaseCountValues
+          ? resultArrayHCC
           : isCargaps
-          ? suggestedHccDiseaseCountMap
+          ? resultArrayCaregaps
           : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
         type: "line",
         lineStyle: { color: borderColor },

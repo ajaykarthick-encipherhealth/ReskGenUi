@@ -6,7 +6,7 @@ import {
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
+import { getLast30Days, getLast7Days ,formatValues} from "../../../../../utils/reusable.js";
 import moment from "moment";
 const RafGraph = ({
   rafColor,
@@ -33,16 +33,14 @@ const RafGraph = ({
     );
   }, [dateRange, selectedOrganization]);
 
+  const dates =
+    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
+  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc;
+  const resultArrayHCC = formatValues(rafScoreByDateForHcc, dates);
   const rafScoreByDateForSuggested =
-    getAllRafScoreData?.rafScoreByDateForSuggested
-      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
-      : [];
+    getAllRafScoreData?.rafScoreByDateForSuggested;
+  const resultArrayCaregaps = formatValues(rafScoreByDateForSuggested, dates);
 
-  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
-    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
-    : [];
-
-   let combinedData = rafScoreByDateForSuggested.map((value, index) => value + rafScoreByDateForHcc[index]);
 
   const option = {
     tooltip: {
@@ -91,10 +89,9 @@ const RafGraph = ({
           focus: "series",
         },
         data: isHcc
-          ? rafScoreByDateForSuggested
+          ? resultArrayHCC
           : isCargaps
-          ? rafScoreByDateForHcc
-          : combinedData ? combinedData : [], //RAF Total Codes
+          ? resultArrayCaregaps:[]
       },
 
       {
@@ -109,7 +106,7 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: rafColor2 && rafScoreByDateForHcc,
+        data: rafColor2 && resultArrayHCC,
       },
       {
         name: "Care Gaps Codes",
@@ -123,13 +120,12 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: rafColor3 && rafScoreByDateForSuggested,
+        data: rafColor3 && resultArrayCaregaps,
       },
     ],
   };
   return (
     <div className="carecapRAF">
-    
       <ReactECharts option={option} />
     </div>
   );

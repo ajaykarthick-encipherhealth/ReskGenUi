@@ -24,7 +24,7 @@ const index = ({ items, key }) => {
                 <span style={{ fontWeight: "700", marginRight: "5px" }}>
                   {item?.count}
                 </span>
-                <span
+                {/* <span
                   style={{
                     color: Math.sign(item?.count) === 1 ? "#00BC13" : "#BC0000",
                   }}
@@ -34,7 +34,7 @@ const index = ({ items, key }) => {
                     alt="npimg"
                   />
                   <span style={{ fontSize: "10px" }}>{item?.average}</span>
-                </span>
+                </span> */}
               </td>
             </tr>
           ))
