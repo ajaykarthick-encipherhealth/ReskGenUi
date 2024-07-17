@@ -12,11 +12,7 @@ import {
   renderUserPrfoileAvatarDisabled,
   sortFunction,
 } from "../../../headerFilters/functions";
-import {
-
-  CloseCircleOutlined,
-
-} from "@ant-design/icons";
+import { CloseCircleOutlined } from "@ant-design/icons";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
 import { getSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
@@ -36,10 +32,10 @@ const UserList = ({
   usersList,
   getEnableUser,
   getAllUsersList,
+  setPageCount,
 }) => {
   const usersData = usersList;
   const dispatch = useDispatch();
-  const [checked, setChecked] = useState(false);
   const [rowData, setRowData] = useState();
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isMultiple, setIsMultiple] = useState(false);
@@ -48,7 +44,8 @@ const UserList = ({
   const [openManager, setOpenManager] = useState(false);
   const [selectedManager, setSelectedManager] = useState();
   const [switchStates, setSwitchStates] = useState({});
- 
+  const [roleChangeLoader, setRoleChangeLoader] = useState(false);
+
   const selectUserList = useSelector(
     (state) => state?.AdminDashboardReducers?.selectedUsers
   );
@@ -84,10 +81,7 @@ const UserList = ({
     return (
       <div>
         <div className="d-flex justify-content-end cr-pointer">
-        <CloseCircleOutlined
-             onClick={() => setPopoverVisible(null)}
-             
-          />
+          <CloseCircleOutlined onClick={() => setPopoverVisible(null)} />
         </div>
         <div style={{ height: "200px", width: "100%" }}>
           <div className="my-2">Change Role</div>
@@ -130,7 +124,7 @@ const UserList = ({
             }}
             disabled={selectedRoles?.length === 0 ? true : false}
           >
-            Save
+            {roleChangeLoader ? "Loading...." : "Save"}
           </button>
         </div>
       </div>
@@ -139,8 +133,9 @@ const UserList = ({
 
   const handleSave = async () => {
     if (selectedRoles?.length > 0) {
+      setRoleChangeLoader(true);
       const res = await getEnableUser({
-        checked:null,
+        checked: null,
         user: rowData,
         role: selectedRoles,
         setPopoverVisible: setPopoverVisible,
@@ -150,6 +145,8 @@ const UserList = ({
       if (res?.status === "SUCCESS") {
         getAllUsersList({ pageCount: 0 });
         setPopoverVisible(null);
+        setPageCount(0);
+        setRoleChangeLoader(false);
       }
     }
   };
@@ -370,24 +367,23 @@ const UserList = ({
                   >
                     <div>
                       {/* {popoverVisible ? ( */}
-                        <Popover
-                          content={() => getContent(item)}
-                          // title="Change Role"
-                          trigger="click"
-                          open={popoverVisible===item?.id}
+                      <Popover
+                        content={() => getContent(item)}
+                        // title="Change Role"
+                        trigger="click"
+                        open={popoverVisible === item?.id}
+                      >
+                        <div
+                          onClick={() => {
+                            // setChecked(false);
+                            setRowData(item);
+                            setPopoverVisible(item?.id);
+                            setSelectedRoles(item?.role);
+                          }}
                         >
-                          
-                          <div
-                            onClick={() => {
-                              // setChecked(false);
-                              setRowData(item);
-                              setPopoverVisible(item?.id);
-                              setSelectedRoles(item?.role);
-                            }}
-                          >
-                            <EditButton />
-                          </div>
-                        </Popover>
+                          <EditButton />
+                        </div>
+                      </Popover>
                       {/* // ) : (
                       //   <div
                       //     onClick={() => {

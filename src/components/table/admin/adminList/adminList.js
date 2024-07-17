@@ -12,7 +12,11 @@ import {
   renderUserPrfoileAvatarDisabled,
   sortFunction,
 } from "../../../headerFilters/functions";
-import { ArrowUpOutlined, ArrowDownOutlined,CloseCircleOutlined } from "@ant-design/icons";
+import {
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
 import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
 import { getSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
 import { connect } from "react-redux";
@@ -31,6 +35,7 @@ const AdminList = ({
   usersList,
   getEnableUser,
   getAllUsersList,
+  setPageCount,
 }) => {
   const usersData = usersList;
   const dispatch = useDispatch();
@@ -43,7 +48,8 @@ const AdminList = ({
   const [openManager, setOpenManager] = useState(false);
   const [selectedManager, setSelectedManager] = useState();
   const [switchStates, setSwitchStates] = useState({});
- 
+  const [roleChangeLoader, setRoleChangeLoader] = useState(false);
+
   const selectUserList = useSelector(
     (state) => state?.AdminDashboardReducers?.selectedUsers
   );
@@ -79,10 +85,7 @@ const AdminList = ({
     return (
       <div>
         <div className="d-flex justify-content-end cr-pointer">
-        <CloseCircleOutlined
-             onClick={() => setPopoverVisible(null)}
-             
-          />
+          <CloseCircleOutlined onClick={() => setPopoverVisible(null)} />
         </div>
         <div style={{ height: "200px", width: "100%" }}>
           <div className="my-2">Change Role</div>
@@ -125,7 +128,7 @@ const AdminList = ({
             }}
             disabled={selectedRoles?.length === 0 ? true : false}
           >
-            Save
+            {roleChangeLoader ? "Loading...." : "Save"}
           </button>
         </div>
       </div>
@@ -134,8 +137,9 @@ const AdminList = ({
 
   const handleSave = async () => {
     if (selectedRoles?.length > 0) {
+      setRoleChangeLoader(true);
       const res = await getEnableUser({
-        checked:null,
+        checked: null,
         user: rowData,
         role: selectedRoles,
         setPopoverVisible: setPopoverVisible,
@@ -145,6 +149,8 @@ const AdminList = ({
       if (res?.status === "SUCCESS") {
         getAllUsersList({ pageCount: 0 });
         setPopoverVisible(null);
+        setPageCount(0);
+        setRoleChangeLoader(false);
       }
     }
   };
@@ -192,7 +198,7 @@ const AdminList = ({
             >
               DATE CREATED{" "}
               {sortOrder === "ASC" ? (
-               <ArrowUpOutlined />
+                <ArrowUpOutlined />
               ) : (
                 <ArrowDownOutlined />
               )}
@@ -365,24 +371,23 @@ const AdminList = ({
                   >
                     <div>
                       {/* {popoverVisible ? ( */}
-                        <Popover
-                          content={() => getContent(item)}
-                          // title="Change Role"
-                          trigger="click"
-                          open={popoverVisible===item?.id}
+                      <Popover
+                        content={() => getContent(item)}
+                        // title="Change Role"
+                        trigger="click"
+                        open={popoverVisible === item?.id}
+                      >
+                        <div
+                          onClick={() => {
+                            // setChecked(false);
+                            setRowData(item);
+                            setPopoverVisible(item?.id);
+                            setSelectedRoles(item?.role);
+                          }}
                         >
-                          
-                          <div
-                            onClick={() => {
-                              // setChecked(false);
-                              setRowData(item);
-                              setPopoverVisible(item?.id);
-                              setSelectedRoles(item?.role);
-                            }}
-                          >
-                            <EditButton />
-                          </div>
-                        </Popover>
+                          <EditButton />
+                        </div>
+                      </Popover>
                       {/* // ) : (
                       //   <div
                       //     onClick={() => {
