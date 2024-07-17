@@ -507,7 +507,7 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                            </div>
                           )}
                         </div>
-                        <div className="d-flex mx-1">
+                        <div className="d-flex mx-1 justify-content-end">
                           {!reportActiveTab || reportActiveTab === "FHIR" ? (
                             <div
                               className={styles.btnContainer}

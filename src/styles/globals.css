@@ -15392,18 +15392,14 @@ input::-webkit-inner-spin-button {
 }
 .progressText .ant-progress .ant-progress-outer{
   width:190px !important;
+  margin-left: -10px;
 }
 .completedText .ant-progress .ant-progress-outer{
   width:190px !important;
+  margin-left: -10px;
 }
 .completedText .ant-progress-text{
   color:#00940F !important;
-}
-.failedText .ant-progress .ant-progress-outer{
-  width:190px !important;
-}
-.failedText .ant-progress-text{
-  color:#E10000 !important;
 }
 /* apply background for model */
 .custom-modal {
