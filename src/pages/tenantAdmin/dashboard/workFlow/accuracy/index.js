@@ -898,7 +898,6 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
       },
     },
     series: [
-      //chart3
       {
         name: "totalNewlyAddedCodesCount",
         data: getGraphData(
@@ -934,7 +933,7 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
           selectedYear,
           selectedMonth,
           getAccuracyWorkflow?.response,
-          "averageScore",
+          "reviewerAvgScore",
           currentBtn,
           currentDate
         ),
@@ -969,7 +968,7 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
       {
         // primary yAxis (right)
         title: {
-          text: "Organization Quality",
+          text: "Accuracy Quality",
           style: {
             color: "#2dafff",
           },
@@ -989,7 +988,7 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
       {
         // Secondary yAxis (right)
         title: {
-          text: "Organization Changes Count",
+          text: "Accuracy Changes Count",
           style: {
             color: "#0b59f1",
           },
