@@ -32,6 +32,7 @@ import AllocateModal from "./allocate";
 import { debounce } from "../../../components/input";
 import { useCallback } from "react";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
+import { renderSkeleton } from "../../../components/reuseableFunctions";
 const { RangePicker } = DatePicker;
 const statusOption = [
   { value: "", label: "ALL" },
@@ -795,7 +796,7 @@ const Patient = ({
                                   eventKey="validDiseases"
                                 >
                                   {loader ? (
-                                    <SpinnerDots />
+                                    renderSkeleton()
                                   ) : (
                                     <>
                                       <AllocatedAdminList
@@ -840,7 +841,7 @@ const Patient = ({
 
                                 <Tab.Pane id="my-posts" eventKey="team">
                                   {loader2 ? (
-                                    <SpinnerDots />
+                                    renderSkeleton()
                                   ) : (
                                     <>
                                       <div

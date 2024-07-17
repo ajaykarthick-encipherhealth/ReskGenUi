@@ -28,10 +28,11 @@ import Completed from "../../../../src/images/trackingImages/CompletedTrack.png"
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 import Abort from "../../../../src/images/trackingImages/Abort.png";
-import {actions as allActions} from '../../../stores/admin/workqueue'
+import { actions as allActions } from '../../../stores/admin/workqueue'
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
 import { patientDetails } from "../../../stores/authflow/actions";
+import { renderSkeleton } from "../../../components/reuseableFunctions";
 const bullets = [
   {
     title: "Processed Status",
@@ -100,7 +101,7 @@ const auditStatusOptions = [
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED", status: 0 },
 ];
 
-const Patient=({getTrackingList,loader,response}) =>{
+const Patient = ({ getTrackingList, loader, response }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const filteredList = useSelector((state) => state.auth.filterList);
@@ -157,12 +158,12 @@ const Patient=({getTrackingList,loader,response}) =>{
   const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
 
   useEffect(() => {
-   
+
     if (window !== "undefined") {
       setIsLoading(true)
       if (navigate) {
-        setPageNo(navigate?.query?.pageNo?navigate?.query?.pageNo:0)
-        setPaginationFirst(navigate?.query?.paginationFirst?navigate?.query?.paginationFirst:0)
+        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0)
+        setPaginationFirst(navigate?.query?.paginationFirst ? navigate?.query?.paginationFirst : 0)
       }
     }
     setIsLoading(false)
@@ -188,22 +189,22 @@ const Patient=({getTrackingList,loader,response}) =>{
       auditSelectedOption: clear
         ? ""
         : auditSelectedOption
-        ? auditSelectedOption?.value
-        : "",
+          ? auditSelectedOption?.value
+          : "",
       selAuditAllocatedBy: clear
         ? ""
         : selAuditAllocatedBy
-        ? selAuditAllocatedBy?.value
-        : "",
+          ? selAuditAllocatedBy?.value
+          : "",
       auditSelAllocatedTo: clear
         ? ""
         : auditSelAllocatedTo
-        ? auditSelAllocatedTo?.value
-        : "",
+          ? auditSelAllocatedTo?.value
+          : "",
       sort,
     };
     setIsLoading(true)
-    getTrackingList({data:data});
+    getTrackingList({ data: data });
   }, [
     pageNo,
     dueDateStart,
@@ -309,7 +310,7 @@ const Patient=({getTrackingList,loader,response}) =>{
     }
   };
 
-   const processstatusBodyTemplate = (rowData) => {
+  const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes
     );
@@ -632,7 +633,7 @@ const Patient=({getTrackingList,loader,response}) =>{
                         className="dataTables_wrapper no-footer"
                       >
                         {loader ? (
-                          <SpinnerDots />
+                          renderSkeleton()
                         ) : (
                           <>
                             <TrackingTable
@@ -645,12 +646,12 @@ const Patient=({getTrackingList,loader,response}) =>{
                               setSortOrder={setAllocatedSortOrder}
                               sortOrder={allocatedSortOrder}
                               setSort={setSort}
-                              page={{pageNo, paginationFirst}}
+                              page={{ pageNo, paginationFirst }}
                             />
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                  first={pageNo===0?0:paginationFirst}
+                                  first={pageNo === 0 ? 0 : paginationFirst}
                                   rows={15}
                                   totalRecords={response?.response?.patientDTOList?.totalElements}
                                   onPageChange={onPageChange}
