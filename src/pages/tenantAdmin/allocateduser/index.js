@@ -34,7 +34,7 @@ import { getFilters } from "../../../stores/authflow/actions";
 import AllocateModal from "./allocate";
 import { debounce } from "../../../components/input";
 import { useCallback } from "react";
-import {actions as tenantAdminUsersAction} from '../../../stores/tenantAdmin/users'
+import { actions as tenantAdminUsersAction } from "../../../stores/tenantAdmin/users";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 
 const { RangePicker } = DatePicker;
@@ -311,7 +311,7 @@ const Patient = ({
     } else {
       setSelectedRowsId([]);
     }
-  }, [selectAllChecked, sort, isPatientList,pageNo]);
+  }, [selectAllChecked, sort, isPatientList, pageNo]);
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
@@ -562,7 +562,7 @@ const Patient = ({
               <div className="col-xl-12">
                 <div className="">
                   <div className="card-body p-0">
-                    <div className="table-responsive active-projects task-table">
+                    <div className="table-responsive active-projects task-table supervisor-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
                           <div
@@ -901,13 +901,15 @@ const Patient = ({
                                                 }
                                               >
                                                 <tr>
+
                                                   <th
                                                     style={{
-                                                      textAlign: "start",
+                                                        paddingLeft:'46px !important',
                                                     }}
                                                   >
                                                     NAME
                                                   </th>
+
                                                   <th
                                                     style={{
                                                       textAlign: "center",
@@ -1086,7 +1088,8 @@ const enhancer = connect(
     loader2: state.admin?.patientAllocate?.l2Loader,
     loader3: state.admin?.patientAllocate?.supervisorLoader,
     supervisorResponse: state.admin?.patientAllocate?.l2AllocatedList?.data,
-    selectedSupervisors: state.admin?.patientAllocate?.selectedSupervisors?.data,
+    selectedSupervisors:
+      state.admin?.patientAllocate?.selectedSupervisors?.data,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
