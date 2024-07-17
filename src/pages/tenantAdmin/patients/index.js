@@ -453,7 +453,7 @@ const Patient = ({
       headers
     );
     if (response?.status === 200) {
-      getAllList(response);
+      // getAllList(response);
 
       notification.success({
         message: "Patient File Upload Successfully!",
@@ -483,7 +483,7 @@ const Patient = ({
     }
     setAddPatient(false);
     setIsLoadingBtn(false);
-    getAllList(localUserId);
+    // getAllList(localUserId);
   };
   const submitRadiology = async () => {
     const formData = new FormData();
@@ -507,7 +507,7 @@ const Patient = ({
       headers
     );
     if (response?.status == 202) {
-      getAllList(localUserId, pageNo, pageSize);
+      // getAllList(localUserId, pageNo, pageSize);
       setAddPatient(false);
       setIsLoadingBtn(false);
     } else {
