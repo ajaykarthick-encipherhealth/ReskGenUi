@@ -5,7 +5,7 @@
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
   "eslint.validate": ["javascript", "javascriptreact"],
