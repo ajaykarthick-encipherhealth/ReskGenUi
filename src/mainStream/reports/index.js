@@ -3,7 +3,8 @@ import Header from "../../jsx/layouts/nav/Header";
 import styles from "./report.module.css";
 import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch , faFileExport} from "@fortawesome/free-solid-svg-icons";
+import {   } from "@fortawesome/free-regular-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
 import Select from "react-select";
@@ -35,6 +36,8 @@ import Tab from "../components/tags";
 import MoreFilter from "../../resusablereport/reports/MoreFilter";
 import { SVGICON } from "../../jsx/constant/theme";
 import TeamReport from "./teamReport";
+
+
 
 const statusOptions = [
   { label: "All", value: "" },
@@ -379,6 +382,9 @@ const Reports = ({
         startDate: selectedDateRanges?.Team?.from,
         endDate: selectedDateRanges?.Team?.to,
         search: coderSearchString ? coderSearchString : "",
+        filter: selectedOptions?.reviewerStatus?.value
+        ? selectedOptions?.reviewerStatus?.value
+        : "",
         sort: sort,
         flagsList: flagPatientsList ? flagPatientsList : "",
       });
@@ -469,7 +475,7 @@ const Reports = ({
                             <div className="d-flex w-100">
                               <label className="labelStyle d-flex m-auto p-2">
                                 {" "}
-                                Search
+                                Search 
                               </label>
                               <div className="form-group has-search2 w-100">
                                 <FontAwesomeIcon
@@ -715,9 +721,12 @@ const Reports = ({
                             >
                               {rowsLength?.length > 0 ||
                               rowsLength?.data?.length > 0 ? (
-                                <ExportImg />
+                                // <ExportImg />
+                                <FontAwesomeIcon icon={faFileExport} className={styles.iconReplaced} style={{color:rowsLength?.data?.length > 0 ? "gray" :"#04306f"}} />
+
                               ) : (
-                                SVGICON.exportDisable
+                                <FontAwesomeIcon icon={faFileExport} className={styles.iconReplaced} style={{color:rowsLength?.data?.length > 0 ? "#04306f" :"gray"}}/>
+                                // SVGICON.exportDisable
                               )}
                               <span style={{ marginTop: "-3px" }}>Export</span>
                             </button>

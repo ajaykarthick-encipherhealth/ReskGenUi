@@ -19,6 +19,8 @@ import spinSTYles from "../../../../styles/auth.module.css";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 import declinedBg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
 import declineIcon from "../../.../../../../images/trackingImages/DeclineTrack.png";
+import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+ import { faCircleCheck ,faClockRotateLeft,faUsers} from "@fortawesome/free-solid-svg-icons";
 
 const WorkFlow = ({ worlFlowData }) => {
   const currentDate = dayjs();
@@ -41,7 +43,7 @@ const WorkFlow = ({ worlFlowData }) => {
   const card1Data = [
     {
       id: 1,
-      icon: allocated,
+      icon:<FontAwesomeIcon icon={faUsers} /> ,
       title: "Allocated",
       charts: worlFlowData?.data?.response?.allocated,
       days: `Last ${
@@ -51,7 +53,7 @@ const WorkFlow = ({ worlFlowData }) => {
     },
     {
       id: 2,
-      icon: completed,
+      icon:<FontAwesomeIcon icon={faCircleCheck} />,
       title: "Completed",
       charts: worlFlowData?.data?.response?.completed,
       days: `Last ${
@@ -61,7 +63,7 @@ const WorkFlow = ({ worlFlowData }) => {
     },
     {
       id: 3,
-      icon: pending,
+      icon:  <FontAwesomeIcon icon={faClockRotateLeft} />,
       title: "Pending",
       charts: worlFlowData?.data?.response?.pending,
       days: `Last ${
@@ -71,7 +73,7 @@ const WorkFlow = ({ worlFlowData }) => {
     },
     {
       id: 4,
-      icon: declineIcon,
+      icon:  <FontAwesomeIcon icon={faClockRotateLeft} />,
       title: "Declined",
       charts: worlFlowData?.data?.response?.declined,
       days: `Last ${
@@ -140,7 +142,8 @@ const WorkFlow = ({ worlFlowData }) => {
               className={styles.colData}
             >
               <div className={styles.header}>
-                <Image src={data?.icon} className={styles.Img} />
+                <div className="mt-1">{data?.icon}</div>
+                {/* <Image src={data?.icon} className={styles.Img} /> */}
                 <div className={styles.heading}>{data.title}</div>
               </div>
               <div className={styles.charts}>{`${data?.charts ? data?.charts : '0'} Charts`}</div>

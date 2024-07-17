@@ -5,9 +5,13 @@ import { connect } from "react-redux";
 import {
   HccCodes,
   RafCounts,
-  RafCountScore,
+  getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
+import {
+  formatValues,
+  getLast30Days,
+  getLast7Days,
+} from "../../../../../utils/reusable.js";
 
 const CodesGraph = ({
   options,
@@ -22,22 +26,24 @@ const CodesGraph = ({
   isRevenue,
   getAllHccCodes,
   selectedValue,
-
+  className,
 }) => {
+  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
+  const dates =
+    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
 
-  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
-    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
-    : [];
+  const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
 
+ 
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap
-      ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
-      : [];
-    
+    const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
+  
+
   const graphOptions = {
     xAxis: {
       type: "category",
-        data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
+      data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
     },
 
     yAxis: {
@@ -47,21 +53,27 @@ const CodesGraph = ({
     tooltip: {
       show: true,
       trigger: "axis",
+      axisPointer: {
+        type: "cross",
+        label: {
+          backgroundColor: "#6a7985",
+        },
+      },
     },
 
     series: [
       {
         name: isCargaps
-          ? "Car Gap Codes"
+          ? "Care Gap Codes"
           : isHcc
           ? "HCC Codes"
           : isRevenue
           ? "Revenue"
           : isTwoWaves && "Radiology",
         data: isHcc
-          ? hccDiseaseCountValues
+          ? resultArrayHCC
           : isCargaps
-          ? suggestedHccDiseaseCountMap
+          ? resultArrayCaregaps
           : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
         type: "line",
         lineStyle: { color: borderColor },
@@ -89,7 +101,11 @@ const CodesGraph = ({
       },
     ],
   };
-  return <ReactECharts option={options ? options : graphOptions} />;
+  return (
+    <div className={`${className}`}>
+      <ReactECharts option={options ? options : graphOptions} />
+    </div>
+  );
 };
 
 const enhancer = connect(
@@ -104,7 +120,7 @@ const enhancer = connect(
   {
     getAllHccCodesData: HccCodes,
     getAllRafData: RafCounts,
-    getAllRafScore: RafCountScore,
+    getAllRafScoreData: getAllRafScore,
   }
 );
 

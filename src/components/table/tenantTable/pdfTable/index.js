@@ -11,7 +11,7 @@ import {
 } from "../../../headerFilters/functions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import FhirDrawer from "../../../../pages/tenantAdmin/fhirTable/fhirModal";
+import FhirDrawer from "../../../../pages/tenantAdmin/patientSync/modals/PdfDrawer";
 import { useRouter } from "next/router";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import SpinnerDots from "../../../spinner";
@@ -110,7 +110,7 @@ function PdfTable({
                         );
                         dispatch(getActiveTab("PDF"));
                         router?.push({
-                          pathname: `/tenantAdmin/fhirTable/pdfTable`,
+                          pathname: `/tenantAdmin/patientSync/pdfTable`,
                           search: `params=${encodedParams}`,
                         });
                       }}

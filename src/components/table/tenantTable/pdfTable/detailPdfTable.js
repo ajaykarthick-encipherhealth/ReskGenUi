@@ -5,61 +5,62 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import processing from "../../../../images/fihr/processing.svg";
 import completed from "../.././../../images/fihr/completed.svg";
-import refresh from "../.././../../images/fihr/refrsh.svg";
+import refresh from "../.././../../images/fihr/detailedFhirRefresh.svg";
 import failed from "../.././../../images/fihr/failed.svg";
 import TableStyle from "../../table.module.css";
-import styles from "../../../../pages/tenantAdmin/fhirTable/fhir.module.css";
+import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
 import PropTypes from "prop-types";
 import SpinnerDots from "../../../spinner";
 
-const DetailedFihrTable = ({
+export const getColors = (rowStatus) => {
+  let strokeColor;
+  let progressTextClass;
+  let textColor;
+  let imageSrc;
+  const status = rowStatus?.toLowerCase();
+
+  switch (status) {
+    case "computed":
+    case "already_present":
+      strokeColor = "rgba(11, 96, 176, 1)";
+      progressTextClass = "fihrComputedProgressText";
+      textColor = "rgba(11, 96, 176, 1)";
+      imageSrc = completed;
+      break;
+    case "failed":
+      strokeColor = "red";
+      progressTextClass = "fihrFailedProgressText";
+      textColor = "red";
+      imageSrc = failed;
+      break;
+    case "processing":
+      strokeColor = "rgba(252, 103, 54, 1)";
+      progressTextClass = "fihrProgressText";
+      textColor = "rgba(252, 103, 54, 1)";
+      imageSrc = processing;
+      break;
+
+    default:
+      strokeColor = "rgba(252, 103, 54, 1)";
+      progressTextClass = "fihrProgressText";
+      textColor = "rgba(252, 103, 54, 1)";
+      imageSrc = completed;
+  }
+
+  return { strokeColor, progressTextClass, textColor, imageSrc };
+};
+const DetailedPdfTable = ({
   paginationFirst,
   onPageChange,
   tableData,
   loader,
 }) => {
-  DetailedFihrTable.propTypes = {
+  DetailedPdfTable.propTypes = {
     paginationFirst: PropTypes.any.isRequired,
     onPageChange: PropTypes.func.isRequired,
     tableData: PropTypes.array.isRequired,
   };
-  const getColors = (row) => {
-    let strokeColor;
-    let progressTextClass;
-    let textColor;
-    let imageSrc;
-    const status = row?.fileStatus?.toLowerCase();
 
-    switch (status) {
-      case "computed":
-      case "already_present":
-        strokeColor = "rgba(11, 96, 176, 1)";
-        progressTextClass = "fihrComputedProgressText";
-        textColor = "rgba(11, 96, 176, 1)";
-        imageSrc = completed;
-        break;
-      case "failed":
-        strokeColor = "red";
-        progressTextClass = "fihrFailedProgressText";
-        textColor = "red";
-        imageSrc = failed;
-        break;
-      case "processing":
-        strokeColor = "rgba(252, 103, 54, 1)";
-        progressTextClass = "fihrProgressText";
-        textColor = "rgba(252, 103, 54, 1)";
-        imageSrc = processing;
-        break;
-
-      default:
-        strokeColor = "rgba(252, 103, 54, 1)";
-        progressTextClass = "fihrProgressText";
-        textColor = "rgba(252, 103, 54, 1)";
-        imageSrc = completed;
-    }
-
-    return { strokeColor, progressTextClass, textColor, imageSrc };
-  };
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -117,11 +118,11 @@ const DetailedFihrTable = ({
                             display: "flex",
                             margin: "auto",
                             justifyContent: "start",
-                            color: getColors(row)?.textColor,
+                            color: getColors(row?.fileStatus)?.textColor,
                           }}
                         >
                           <Image
-                            src={getColors(row)?.imageSrc}
+                            src={getColors(row?.fileStatus)?.imageSrc}
                             style={{ paddingRight: "5px" }}
                           />
                           {row?.fileStatus}
@@ -134,9 +135,9 @@ const DetailedFihrTable = ({
                         <div className={styles.progressDIv}>
                           <Progress
                             percent={80}
-                            strokeColor={getColors(row)?.strokeColor}
+                            strokeColor={getColors(row?.fileStatus)?.strokeColor}
                             className={`${styles.progreddBr} ${
-                              getColors(row)?.progressTextClass
+                              getColors(row?.fileStatus)?.progressTextClass
                             }`}
                           />
                         </div>
@@ -170,4 +171,4 @@ const DetailedFihrTable = ({
   );
 };
 
-export default DetailedFihrTable;
+export default DetailedPdfTable;

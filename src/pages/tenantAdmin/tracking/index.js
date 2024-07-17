@@ -480,7 +480,7 @@ const Patient = ({
               <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
-        );
+        ); 
       case "AUDITED":
         return (
           <Popover placement="bottom" title=" Status: AUDITED">

@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactECharts from "echarts-for-react";
 import styles from "./styles.module.css";
-import { Skeleton } from "antd";
+import { Button, Modal, Skeleton } from "antd";
 
-const OrgPieChartInfo = ({ data, loaderButton, orgLoader }) => {
+const OrgPieChartInfo = ({ data, orgLoader }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   const option = {
     tooltip: {
       trigger: "item",
@@ -21,8 +32,10 @@ const OrgPieChartInfo = ({ data, loaderButton, orgLoader }) => {
         type: "pie",
         radius: ["55%", "60%"],
         avoidLabelOverlap: false,
+        hoverAnimation: false,
         label: {
           show: true,
+          hoverAnimation: false,
           position: "center",
           formatter: function (params) {
             return `{b|${data?.length}}\n {a|${
@@ -48,14 +61,14 @@ const OrgPieChartInfo = ({ data, loaderButton, orgLoader }) => {
           borderColor: "#fff",
           borderWidth: 5,
         },
-        emphasis: {
-          show: false,
-          label: {
-            show: false,
-            fontSize: 40,
-            fontWeight: "bold",
-          },
-        },
+        // emphasis: {
+        //   show: false,
+        //   label: {
+        //     show: false,
+        //     fontSize: 40,
+        //     fontWeight: "bold",
+        //   },
+        // },
         labelLine: {
           show: false,
         },
@@ -66,14 +79,9 @@ const OrgPieChartInfo = ({ data, loaderButton, orgLoader }) => {
 
   return (
     <>
-      {loaderButton && orgLoader ? (
+      {orgLoader ? (
         <div className="skeletonantd d-flex justify-content-center align-items-center">
           <Skeleton.Avatar active size="large" shape="circle" />
-        </div>
-      ) : orgLoader ? (
-        <div className="d-flex justify-content-center align-items-center">
-          {" "}
-          <Spin size="large" />
         </div>
       ) : (
         <ReactECharts
@@ -82,18 +90,65 @@ const OrgPieChartInfo = ({ data, loaderButton, orgLoader }) => {
         />
       )}
 
-      {loaderButton && orgLoader ? (
+      {orgLoader ? (
         <Skeleton active />
-      ) : orgLoader ? (
-        <div className="d-flex justify-content-center align-items-center">
-          {" "}
-          <Spin size="large" />
-        </div>
       ) : (
-        <div className={styles.bulletsDiv}>
+        <>
+          <div style={{ display: "flex", justifyContent: "end" }}>
+            <Button
+              type="link"
+              onClick={() => {
+                showModal();
+                console.log("click");
+              }}
+            >
+              view all
+            </Button>
+          </div>
+          <div className={styles.bulletsDiv}>
+            <div className={styles.column}>
+              {data?.slice(0, 50).map((item) => (
+                <div key={item.name} className={styles.container}>
+                  <div style={{ display: "flex", width: "100%" }}>
+                    <div
+                      className={styles.bgColor}
+                      style={{ backgroundColor: item?.itemStyle?.color }}
+                    ></div>
+                    <span className={styles.userNameTitle}>{item.name}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className={styles.column}>
+              {data?.slice(50, 100).map((item) => (
+                <div key={item.name} className={styles.container}>
+                  <div style={{ display: "flex", width: "100%" }}>
+                    <div
+                      className={styles.bgColor}
+                      style={{ backgroundColor: item?.itemStyle?.color }}
+                    ></div>
+                    <span className={styles.userNameTitle}>{item.name}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+      <Modal
+        title="Organizations"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <div style={{ height: "500px", overflow: "auto" }}>
           {data?.map((item) => {
             return (
-              <div className={styles.container}>
+              <div
+                className={styles.container}
+                style={{ maxHeight: "400px", overflowY: "auto" }}
+              >
                 <div style={{ display: "flex", width: "100%" }}>
                   <div
                     className={styles.bgColor}
@@ -103,13 +158,11 @@ const OrgPieChartInfo = ({ data, loaderButton, orgLoader }) => {
                   ></div>
                   <span className={styles.userNameTitle}>{item.name}</span>
                 </div>
-
-                <div className={styles.subText}>{item.value}</div>
               </div>
             );
           })}
         </div>
-      )}
+      </Modal>
     </>
   );
 };

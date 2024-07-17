@@ -6,7 +6,7 @@ import {
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
+import { getLast30Days, getLast7Days ,formatValues} from "../../../../../utils/reusable.js";
 import moment from "moment";
 const RafGraph = ({
   rafColor,
@@ -15,7 +15,7 @@ const RafGraph = ({
   isCargaps,
   isHcc,
   getAllRafScoreData,
-  getAllRafScore,
+  getAllRafScoreAPI,
   selectedValue,
   selectedOrganization,
 }) => {
@@ -25,24 +25,22 @@ const RafGraph = ({
     endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
   });
 
-
   useEffect(() => {
-    getAllRafScore(
+    getAllRafScoreAPI(
       dateRange.startDate,
       dateRange.endDate,
-      selectedOrganization,
+      selectedOrganization
     );
   }, [dateRange, selectedOrganization]);
 
-
+  const dates =
+    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
+  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc;
+  const resultArrayHCC = formatValues(rafScoreByDateForHcc, dates);
   const rafScoreByDateForSuggested =
-    getAllRafScoreData?.rafScoreByDateForSuggested
-      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
-      : [];
+    getAllRafScoreData?.rafScoreByDateForSuggested;
+  const resultArrayCaregaps = formatValues(rafScoreByDateForSuggested, dates);
 
-  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
-    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
-    : [];
 
   const option = {
     tooltip: {
@@ -75,7 +73,11 @@ const RafGraph = ({
     ],
     series: [
       {
-        name: isCargaps ? "Car gap Codes" : isHcc ? "HCC Codes" : "Total Codes",
+        name: isCargaps
+          ? "Care Gap Codes"
+          : isHcc
+          ? "HCC Codes"
+          : "Total Codes",
         type: "line",
         itemStyle: {
           color: rafColor,
@@ -87,10 +89,9 @@ const RafGraph = ({
           focus: "series",
         },
         data: isHcc
-          ? rafScoreByDateForSuggested
+          ? resultArrayHCC
           : isCargaps
-          ? rafScoreByDateForHcc
-          : "",
+          ? resultArrayCaregaps:[]
       },
 
       {
@@ -105,10 +106,10 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: rafColor2 && rafScoreByDateForHcc,
+        data: rafColor2 && resultArrayHCC,
       },
       {
-        name: "Car gaps Codes",
+        name: "Care Gaps Codes",
         type: "line",
         itemStyle: {
           color: rafColor3,
@@ -119,11 +120,15 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: rafColor3 && rafScoreByDateForSuggested,
+        data: rafColor3 && resultArrayCaregaps,
       },
     ],
   };
-  return <ReactECharts option={option} />;
+  return (
+    <div className="carecapRAF">
+      <ReactECharts option={option} />
+    </div>
+  );
 };
 
 const enhancer = connect(
@@ -138,7 +143,7 @@ const enhancer = connect(
   {
     getAllHccCodesData: HccCodes,
     getAllRafData: RafCounts,
-    getAllRafScore: getAllRafScore,
+    getAllRafScoreAPI: getAllRafScore,
   }
 );
 export default enhancer(RafGraph);

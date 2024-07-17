@@ -33,7 +33,7 @@ export function extractLatestData(notes) {
   return declinedData;
 }
 
-const SupervisorWorkList = ({ localUserId, setWorkListPatientId,getWorkListFilter }) => {
+const SupervisorWorkList = ({ localUserId, setWorkListPatientId,getWorkListFilter,setIsModalComments }) => {
   const dispatch = useDispatch();
   const result = useSelector((state) => state.AuditWork.workListFilter);
   const [patientList, setPatientList] = useState([]);
@@ -54,6 +54,7 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId,getWorkListFilte
   const [closeSlider, setCloseSlider] = useState(true);
   const [selectCompletedPicker, setSelectCompletedPicker] = useState("");
   const [selectComputedPicker, setSelectComputedPicker] = useState("");
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   const getWorkList = async () => {
     setPatientList(result?.response?.content);
@@ -67,10 +68,13 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId,getWorkListFilte
   const onPageChange = async (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
+    setFilterModalOpen(false)
   };
 
   const getPatientListToDetails = (id) => {
     setWorkListPatientId(id);
+    setIsModalComments(false)
+    setFilterModalOpen(false)
   };
 
   const statusOptions = [
@@ -264,7 +268,7 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId,getWorkListFilte
             <InputText
               type="text"
               onChange={(e) => filterChangePatientId(e)}
-              className="form-control new-form-control"
+              className="form-control input-form-control"
               placeholder="Search"
               maxLength={25}
               onKeyDown={(e) => {
@@ -297,6 +301,8 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId,getWorkListFilte
               setSelectComputedPicker={setSelectComputedPicker}
               datePicker1Lable="Audit Due Date"
               datePicker2Lable="Audited Date"
+              filterModalOpen={filterModalOpen}
+              setFilterModalOpen={setFilterModalOpen}
             />
           </div>
         </div>

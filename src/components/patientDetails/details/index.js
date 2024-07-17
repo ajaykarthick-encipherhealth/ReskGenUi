@@ -1272,11 +1272,13 @@ const Details = ({
                           <SupervisorWorkList
                             localUserId={localUserId}
                             setWorkListPatientId={setWorkListPatientId}
+                            setIsModalComments={setIsModalComments}
                           />
                         ) : (
                           <ReviwerWorkList
                             localUserId={localUserId}
                             setWorkListPatientId={setWorkListPatientId}
+                            setIsModalComments={setIsModalComments}
                           />
                         )}
                       </>

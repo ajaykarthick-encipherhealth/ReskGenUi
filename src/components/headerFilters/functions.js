@@ -2,8 +2,9 @@ import { Avatar } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import CryptoJS from "crypto-js";
-import { SVGICON } from "../../jsx/constant/theme";
 import TableStyle from "../table/table.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 // for search
 export const searchFunction = (
@@ -191,7 +192,7 @@ export const handleRnagePicker2 = ({
 };
 
 export const dateFormate = (dayjs, date) => {
-  return date ? dayjs(date).format("MM-DD-YYYY") : <div>---</div>;
+  return date ? dayjs(date).format("MM-DD-YYYY hh:mm A") : <div>---</div>;
 };
 
 //sorting
@@ -204,7 +205,9 @@ export const priorityOptions = [
     value: "URGENT",
     label: (
       <>
-        <i>{SVGICON.alert}</i>{" "}
+        <i>
+          <FontAwesomeIcon icon={faTriangleExclamation} />
+        </i>{" "}
         <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
       </>
     ),
@@ -213,7 +216,9 @@ export const priorityOptions = [
     value: "HIGH",
     label: (
       <>
-        <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
+        <i className={TableStyle.highFlag}>
+          <FontAwesomeIcon icon={faTriangleExclamation} />
+        </i>
         <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
       </>
     ),
@@ -222,7 +227,9 @@ export const priorityOptions = [
     value: "NORMAL",
     label: (
       <>
-        <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
+        <i className={TableStyle.normalFlag}>
+          <FontAwesomeIcon icon={faTriangleExclamation} />
+        </i>
         <span style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>{" "}
       </>
     ),
@@ -231,7 +238,9 @@ export const priorityOptions = [
     value: "LOW",
     label: (
       <>
-        <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+        <i className={TableStyle.lowFlag}>
+          <FontAwesomeIcon icon={faTriangleExclamation} />
+        </i>{" "}
         <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
       </>
     ),
@@ -243,30 +252,36 @@ export const priorityStatus = (value) => {
     case "URGENT":
       return (
         <>
-          <i>{SVGICON.alert}</i>{" "}
+          <i>
+            <FontAwesomeIcon icon={faTriangleExclamation} />
+          </i>{" "}
           <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
         </>
       );
     case "HIGH":
       return (
         <>
-          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
+          <i className={TableStyle.highFlag}>
+            <FontAwesomeIcon icon={faTriangleExclamation} />
+          </i>
           <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
         </>
       );
     case "NORMAL":
       return (
         <>
-          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px", color: "#4466ff " }}>
-            Normal
-          </span>{" "}
+          <i className={TableStyle.normalFlag}>
+            <FontAwesomeIcon icon={faTriangleExclamation} />
+          </i>
+          <span style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>{" "}
         </>
       );
     case "LOW":
       return (
         <>
-          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+          <i className={TableStyle.lowFlag}>
+            <FontAwesomeIcon icon={faTriangleExclamation} />
+          </i>{" "}
           <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
         </>
       );
@@ -393,26 +408,27 @@ export const renderUserPrfoileAvatar = (
   firstName,
   lastName,
   imageUrl,
-  field
+  field,
+  customBg
 ) => {
   const firstNameInitial = firstName?.charAt(0) || "";
   const secondNameInitial = lastName?.charAt(0) || "";
   const hash = (firstNameInitial.charCodeAt(0) % 6) + 1;
-  const backgroundColor = field ? getBackgroundColor(hash) : "#F3C217";
+  const backgroundColor = customBg?"#93BEFB": field ? getBackgroundColor(hash) : "#F3C217";
 
   if (!imageUrl) {
     const profileAvatar = (
       <Avatar
         style={{
           backgroundColor: backgroundColor,
-          color: "white",
+          color: customBg?"black":"white",
           cursor: "pointer",
           width: "30px",
           height: "30px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          fontSize: "15px",
+          fontSize: customBg?"14px":"15px",
           fontWeight: 500,
         }}
       >
@@ -547,6 +563,10 @@ export const getSelectedDaysCount = (DateRanges) => {
 
 export const disableFutureDate = (current) => {
   return current && current.isAfter(moment());
+};
+export const disableFutureDates = (current) => {
+  const oneYearFromNow = moment().add(1, 'year');
+  return current && (current.isAfter(oneYearFromNow) || current.isAfter(moment()));
 };
 
 export const disablePastDate = (current) => {
@@ -683,6 +703,6 @@ export const getDateAndTime = (date) => {
   return moment(date).format("MM/DD/YYYY h:mm A");
 };
 
-export const resetPageNumber=(setPageNo)=>{
-setPageNo(0)
-}
+export const resetPageNumber = (setPageNo) => {
+  setPageNo(0);
+};

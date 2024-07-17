@@ -9,10 +9,15 @@ import { Empty, Spin } from "antd";
 import {
   HccCodes,
   RafCounts,
-  RafCountScore,
+  getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import { Skeleton } from "antd";
-import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
+import {
+  getLast30Days,
+  getLast7Days,
+  formatNumber,
+  formatValues,
+} from "../../../../../utils/reusable.js";
 
 const index = ({
   getAllHccCodesData,
@@ -20,12 +25,37 @@ const index = ({
   getAllRaf,
   getAllRafScoreData,
   dateRange,
-  loaderButton,
   totalCodesLoader,
   getAllRafData,
+  getAllRafScore,
   selectedOrganization,
   selectedValue,
+  revenueChartLoader,
+  rafScorechartLoader,
 }) => {
+  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
+
+  const dates =
+    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
+  const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
+
+  const suggestedHccDiseaseCountMap =
+    getAllHccCodes?.suggestedHccDiseaseCountMap;
+  const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
+
+  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
+    ? Object.values(getAllRaf.premiumByDateForHcc)
+    : [];
+
+  const rafScoreByDateForSuggested =
+    getAllRafScoreData?.rafScoreByDateForSuggested
+      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
+      : [];
+
+  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
+    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
+    : [];
+
   useEffect(() => {
     getAllHccCodesData(
       dateRange?.startDate,
@@ -34,14 +64,14 @@ const index = ({
     );
   }, [dateRange, selectedOrganization]);
 
-  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
-    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
-    : [];
+  useEffect(() => {
+    getAllRafScore(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
+  }, [dateRange, selectedOrganization]);
 
-  const suggestedHccDiseaseCountMap =
-    getAllHccCodes?.suggestedHccDiseaseCountMap
-      ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
-      : [];
   useEffect(() => {
     getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization);
   }, [dateRange, selectedOrganization]);
@@ -56,8 +86,13 @@ const index = ({
       show: true,
     },
     tooltip: {
-      show: true,
       trigger: "axis",
+      axisPointer: {
+        type: "cross",
+        label: {
+          backgroundColor: "#6a7985",
+        },
+      },
     },
     legend: {
       show: false,
@@ -65,7 +100,8 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data: [],
+        data: [10, 20, 30, 10, 23, 45, 78, 27, 90, 16, 25, 89],
+        color: "#E88D67",
         type: "line",
         lineStyle: { color: "#E88D67" },
         smooth: true,
@@ -77,10 +113,13 @@ const index = ({
             { offset: 1, color: "#FAFFFA" },
           ]),
         },
+        itemStyle: {
+          color: "#E88D67",
+        },
       },
       {
         name: "HCC Codes",
-        data: hccDiseaseCountValues,
+        data: resultArrayHCC,
         type: "line",
         lineStyle: { color: "#04B700" },
         smooth: true,
@@ -92,10 +131,13 @@ const index = ({
             { offset: 1, color: "#FAFFFA" },
           ]),
         },
+        itemStyle: {
+          color: "#04B700",
+        },
       },
       {
-        name: "Car Gap Codes",
-        data: suggestedHccDiseaseCountMap,
+        name: "Care Gap Codes",
+        data: resultArrayCaregaps,
         type: "line",
         lineStyle: { color: "#FF9209" },
         smooth: true,
@@ -106,6 +148,9 @@ const index = ({
             { offset: 0, color: "#FF9209" },
             { offset: 1, color: "#FFFDFA" },
           ]),
+        },
+        itemStyle: {
+          color: "#FF9209",
         },
       },
     ],
@@ -120,18 +165,22 @@ const index = ({
       color: "#04B700",
     },
     {
-      title: "Car Gap Codes",
+      title: "Care Gap Codes",
       color: "#FF9209",
     },
   ];
 
-  const totalHccRafScore = getAllRaf?.totalHccRafScore;
-  const totalSuggestedRafScore = getAllRaf?.totalSuggestedRafScore;
-  const totalScore = totalHccRafScore + totalSuggestedRafScore;
-  const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf;
-  const suggestedCount = getAllRafScoreData?.totalSuggestedRaf;
-  const totalScoreTwo = hccDiseaseCountMap + suggestedCount;
+  const totalHccRafScore = getAllRaf?.totalHccRafScore || 0;
+  const totalSuggestedRafScore = getAllRaf?.totalSuggestedRafScore || 0;
+  const totalScore = (totalHccRafScore + totalSuggestedRafScore).toFixed(2);
 
+  const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
+  const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
+  const totalScoreTwo = (hccDiseaseCountMap + suggestedCount).toFixed(2);
+
+  formatNumber();
+
+  const OverAllRevenue = totalScore;
 
   return (
     <div className="d-flex justify-content-between">
@@ -164,7 +213,7 @@ const index = ({
           </div>
         </div>
 
-        {loaderButton && totalCodesLoader ? (
+        {totalCodesLoader ? (
           <div>
             <Skeleton.Input
               className="w-100"
@@ -172,15 +221,17 @@ const index = ({
               active
             />
           </div>
-         ) : totalCodesLoader ? (
-          <div className="d-flex justify-content-center align-items-center h-75 ">
-            <Spin  size="large" />
-          </div>
-       ) :hccDiseaseCountValues?.length >0? (
+        ) : rafScoreByDateForHcc?.length > 0 ? (
           <div className="totalCodesPies">
-          <CodesGraph options={options} isRadio={true} />
+            <CodesGraph
+              options={options}
+              isRadio={true}
+              className="codesGraphStyle2"
+            />
           </div>
-        ):<Empty className="mt-3"/>} 
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         className="remianingAreaGraph"
@@ -200,15 +251,29 @@ const index = ({
             </div>
           </div>
         </div>
-        <RafGraph
-          overallData={true}
-          rafColor={"#E88D67"}
-          rafColor3={"#FF9209"}
-          rafColor2={"#00BC13"}
-          selectedValue={selectedValue}
-          dateRange={dateRange}
-          selectedOrganization={selectedOrganization}
-        />
+        {rafScorechartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : rafScoreByDateForSuggested?.length > 0 ? (
+          <div className="totalCodesPies2">
+            <RafGraph
+              overallData={true}
+              rafColor={"#E88D67"}
+              rafColor3={"#FF9209"}
+              rafColor2={"#00BC13"}
+              selectedValue={selectedValue}
+              dateRange={dateRange}
+              selectedOrganization={selectedOrganization}
+            />
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         style={{
@@ -223,17 +288,33 @@ const index = ({
             <div className={`${styles.header} p-1`}>Revenue</div>
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
-              <div className={styles.price}>{`$ ${totalScore}`}</div>
+              <div className={styles.price}>{`$ ${
+                formatNumber(OverAllRevenue) || 0
+              }`}</div>
             </div>
           </div>
         </div>
-        <div className="totalCodesPies2">
-          <RevenueGraph
-            selectedOrganization={selectedOrganization}
-            isMultiple={true}
-            selectedValue={selectedValue}
-          />
-        </div>
+
+        {revenueChartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : premiumByDateForHcc?.length > 0 ? (
+          <div className="totalCodesPies2">
+            <RevenueGraph
+              selectedOrganization={selectedOrganization}
+              isMultiple={true}
+              selectedValue={selectedValue}
+              className="revenueCharts1"
+            />
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
     </div>
   );
@@ -245,14 +326,20 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
+    rafScorechartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
-    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
+
+    totalCodesLoader:
+      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
+    revenueChartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.loading,
   }),
   {
     getAllHccCodesData: HccCodes,
     getAllRafData: RafCounts,
-    getAllRafScore: RafCountScore,
+    getAllRafScore: getAllRafScore,
   }
 );
 export default enhancer(index);

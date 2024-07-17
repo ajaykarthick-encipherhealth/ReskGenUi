@@ -8,25 +8,33 @@ const index = ({data,header}) => {
   const option = {
     tooltip: {
       trigger: "item",
+      // formatter: function (params) {
+      //   if (params.seriesName) {
+      //     return `${params.name}: ${params.value} (${params.percent}%)`;
+      //   }
+      //   return "";
+      // },
     },
     legend: {
       top: "5%",
       left: "60%",
-      //   left: "start",
       width: 20,
       show: false,
     },
     series: [
       {
-        // name: "Access From",
+        name: header,
         type: "pie",
         radius: ["65%", "45%"],
         avoidLabelOverlap: false,
+        hoverAnimation: false,
         label: {
           show: true,
           position: "center",
-          formatter: function (params) {
-            return `{b|${totalSum}}\n {a|${header}}`;
+          hoverAnimation: false,
+
+          formatter: function () {
+            return `{b|${totalSum}}\n {a|Total}`;
           },
           backgroundColor: "transparent",
 
@@ -47,17 +55,19 @@ const index = ({data,header}) => {
           borderColor: "#fff",
           borderWidth: 5,
         },
-        emphasis: {
-          show: false,
-          label: {
-            show: false,
-            fontSize: 40,
-            fontWeight: "bold",
-          },
-        },
+        // emphasis: {
+        //   scale: false,
+        //   label: {
+        //     show: true,
+        //     fontSize: 40,
+        //     fontWeight: "bold",
+            
+        //   },
+        // },
         labelLine: {
           show: false,
         },
+
         data: data,
       },
     ],
@@ -76,11 +86,11 @@ const index = ({data,header}) => {
         </div>
       </Col>
       <Col span={12} className={styles.headerTitle}>
-        <div style={{width:"100%"}}>
+        <div >
           {data?.map((item) => {
             return (
               <div className={styles.container}>
-                <div style={{ display: "flex", }}>
+                <div style={{ display: "flex",width:"90%" , justifyContent:"center", alignItems:"center"}}>
                   <div
                     className={styles.bgColor}
                     style={{
@@ -88,9 +98,10 @@ const index = ({data,header}) => {
                     }}
                   ></div>
                   <span className={styles.userNameTitle}>{item.name}</span>
+                  <div className={styles.subText}>{item.value}</div>
                 </div>
 
-                <div className={styles.subText}>{item.value}</div>
+                
               </div>
             );
           })}

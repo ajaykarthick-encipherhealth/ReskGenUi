@@ -45,20 +45,21 @@ export const accuracyScore = async (
   isAdmin = false
 ) => {
   const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
   const url = isAdmin
     ? btn === "Daily"
-      ? `daily?month=${month}&year=${year}&isAdmin=${isAdmin}`
+      ? `daily?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
       : btn === "Weekly"
-      ? `weekly?month=${month}&year=${year}&isAdmin=${isAdmin}`
-      : `monthyly?year=${year}&isAdmin=${isAdmin}`
+      ? `weekly?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
+      : `monthly?year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
     : btn === "Daily"
-    ? `daily?month=${month}&year=${year}&isAdmin=${isAdmin}`
+    ? `daily?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
     : btn === "Weekly"
-    ? `weekly?month=${month}&year=${year}&isAdmin=${isAdmin}`
-    : `monthyly?year=${year}&isAdmin=${isAdmin}`;
+    ? `weekly?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
+    : `monthly?year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`;
   try {
-    const response = await axios.post(
-      `${ENDPOINTS?.apiEndoint}dbservice/accuracyscore/${url}`,
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/accuracyscore/machine/${url}`,
       {},
       {
         headers: {

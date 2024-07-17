@@ -15,7 +15,6 @@
 }
 .msgCOntainer {
   width: 100%;
-  margin: 10px;
 }
 .Image {
   display: flex;
@@ -69,4 +68,7 @@
 
 .container::-webkit-scrollbar-thumb {
   border-radius: 4px;
+}
+.notifyIconColor{
+  color :#04306f;
 }

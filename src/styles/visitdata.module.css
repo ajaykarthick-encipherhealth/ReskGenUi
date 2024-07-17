@@ -283,8 +283,8 @@
 
 .flag_container {
   width: 60px;
-  max-height: 80vh;
-  min-height: 80vh;
+  max-height: 81vh;
+  min-height: 81vh;
   border-radius: 8px;
   background: #e1edfe;
   float: right;
@@ -997,10 +997,12 @@
   justify-content: center;
   cursor: pointer;
   margin-bottom: 10px;
+  margin-left:10px !important
 }
 
 .timeLine {
   overflow: scroll;
+  height: 900px;
 }
 
 .vertical-timeline--animate .vertical-timeline-element-content.bounce-in {
@@ -1049,8 +1051,8 @@
 
 .sideTabClose {
   width: 66px;
-  max-height: 80vh;
-  min-height: 80vh;
+  max-height: 81vh;
+  min-height: 81vh;
   flex-shrink: 0;
   border-radius: 12px;
   background: #e1edfe;
@@ -2152,4 +2154,8 @@
   box-shadow: rgba(99, 99, 99, 0.1) 0px -50px 36px -28px inset;
   /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
   /* box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
+}
+
+.fontAwesomeIconColor{
+  color: #ffffff;
 }

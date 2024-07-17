@@ -11,20 +11,34 @@ import {
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import { formatNumber } from "../../../../../utils/reusable.js";
 
 const index = ({
   getAllHccCodes,
   getAllRaf,
   getAllRafScoreData,
   selectedValue,
-  loaderButton,
   totalCodesLoader,
+  revenueChartLoader,
+  rafScorechartLoader,
 }) => {
-
   const suggestedHccDiseaseCountMap =
-  getAllHccCodes?.suggestedHccDiseaseCountMap
-    ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
+    getAllHccCodes?.suggestedHccDiseaseCountMap
+      ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
+      : [];
+
+  const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested
+    ? Object.values(getAllRaf.premiumByDateForSuggested)
     : [];
+
+  const rafScoreByDateForSuggested =
+    getAllRafScoreData?.rafScoreByDateForSuggested
+      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
+      : [];
+
+  formatNumber();
+  const TotalCareGapsRevenue = getAllRaf?.totalSuggestedRafScore;
+
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
@@ -34,22 +48,19 @@ const index = ({
             <div>
               <div className={styles.header}>Total Codes</div>
               <div className={styles.price}>
-                {getAllHccCodes?.suggestedCount}
+                {(getAllHccCodes?.suggestedCount || 0).toFixed(2)}
               </div>
             </div>
           </div>
         </div>
-        {loaderButton && totalCodesLoader ? (
+
+        {totalCodesLoader ? (
           <div>
             <Skeleton.Input
               className="w-100"
               style={{ height: "288px" }}
               active
             />
-          </div>
-         ) : totalCodesLoader ? (
-          <div className="d-flex justify-content-center align-items-center h-75">
-            <Spin size="large" />
           </div>
         ) : suggestedHccDiseaseCountMap?.length > 0 ? (
           <div className="totalCodesPies">
@@ -59,14 +70,15 @@ const index = ({
               borderColor={"#FF9209"}
               isCargaps={true}
               selectedValue={selectedValue}
+              className="codesGraphStyle1"
             />
           </div>
         ) : (
           <Empty className="mt-3" />
-        )} 
+        )}
       </div>
       <div
-        className="remianingAreaGraph"
+        className=""
         style={{
           width: "33%",
           backgroundColor: "#E2F1F3",
@@ -79,16 +91,30 @@ const index = ({
             <div className="p-2">
               <div className={styles.header}>Overall RAF</div>
               <div className={styles.price}>
-                {getAllRafScoreData?.totalSuggestedRaf}
+                {(getAllRafScoreData?.totalSuggestedRaf || 0).toFixed(2)}
               </div>
             </div>
           </div>
         </div>
-        <RafGraph
-          rafColor={"#4AA1AB"}
-          isCargaps={true}
-          selectedValue={selectedValue}
-        />
+        {rafScorechartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : rafScoreByDateForSuggested?.length > 0 ? (
+          <div>
+            <RafGraph
+              rafColor={"#4AA1AB"}
+              isCargaps={true}
+              selectedValue={selectedValue}
+            />
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         style={{
@@ -104,16 +130,39 @@ const index = ({
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
               <div className={styles.price}>
-                {`$ ${getAllRaf?.totalSuggestedRafScore}`}
+              
+                {`$ ${
+                  TotalCareGapsRevenue !== undefined
+                    ? formatNumber(TotalCareGapsRevenue.toFixed(2))
+                    : 0
+                }`}
               </div>
             </div>
           </div>
         </div>
-        <RevenueGraph
-          isCargaps={true}
-          cargapColor="#5A75F2"
-          selectedValue={selectedValue}
-        />
+
+        {revenueChartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : premiumByDateForSuggested?.length > 0 ? (
+          <div className="totalCodesPies">
+            <div className="totalCodesPies2">
+              <RevenueGraph
+                isCargaps={true}
+                cargapColor="#5A75F2"
+                selectedValue={selectedValue}
+                className="revenueCharts3"
+              />
+            </div>
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
     </div>
   );
@@ -125,10 +174,14 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
+    rafScorechartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
-    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
-
+    totalCodesLoader:
+      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
+    revenueChartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.loading,
   }),
   {
     getAllHccCodesData: HccCodes,

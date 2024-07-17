@@ -6,15 +6,19 @@ import ReactECharts from "echarts-for-react";
 import styles from "../../styles.module.css";
 import CodesGraph from "../../components/codeGraph";
 import { Skeleton, Spin } from "antd";
+import CodeGraphRevenue from "../../components/codeGraphRevenue/index.js";
+import { formatNumber } from "../../../../../utils/reusable.js";
 
-
-const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrganization, loaderButton}) => {
-
+const index = ({
+  rafScoreData,
+  overAllRafScore,
+  rafLoader,
+  dateRange,
+  selectedOrganization,
+}) => {
   useEffect(() => {
-    rafScoreData( dateRange.startDate,
-      dateRange.endDate,
-      selectedOrganization);
-  }, [dateRange,selectedOrganization]);
+    rafScoreData(dateRange.startDate, dateRange.endDate, selectedOrganization);
+  }, [dateRange, selectedOrganization]);
 
   const speedometerOptions = {
     tooltip: {
@@ -40,7 +44,9 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrg
         },
         detail: {
           show: true,
-          formatter: "{value}",
+          formatter: function (value) {
+            return value.toFixed(2); 
+          },
           fontSize: 20,
           offsetCenter: [0, "10%"],
         },
@@ -63,7 +69,6 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrg
           show: true,
           distance: -40,
           formatter: function (value) {
-            // Only show the min and max labels
             if (value === 0 || value === 1000) {
               return value.toString();
             }
@@ -73,13 +78,18 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrg
         },
         data: [
           {
-            value: overAllRafScore?.response,
+            value: parseFloat(overAllRafScore?.response?.toFixed(2)),
             name: "",
           },
         ],
       },
     ],
   };
+
+  //FUTURE REVENUE VALUE ENHANCEMENT P1 TASK
+  formatNumber();
+  //donot remove future need
+  const price = 781216; //Pass API REVENUE COUNT RESPONSE
 
   return (
     <div style={{ display: "flex", width: "100%" }}>
@@ -88,13 +98,9 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrg
         style={{ width: "33%", height: "auto" }}
       >
         <div className={styles.header}>Raf Score Count</div>
-        {loaderButton && rafLoader ? (
+        {rafLoader ? (
           <div className="skeletonantd d-flex justify-content-center align-items-center">
             <Skeleton.Avatar active size="large" shape="circle" />
-          </div>
-        ) : rafLoader ? (
-          <div className="d-flex justify-content-center align-items-center">
-            <Spin size="large" />
           </div>
         ) : (
           <ReactECharts option={speedometerOptions} />
@@ -103,14 +109,15 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrg
       <div className="revenueChart" style={{ width: "65%" }}>
         <div className={styles.header}>
           <div className="py-1">Revenue</div>
-          <div className={styles.price}>$ 3189k</div>
+          <div className={styles.price}>{`$ ${formatNumber(price)}`}</div>
           <div className={styles.revenue}>$ 3.1k Increase</div>
         </div>
-        <CodesGraph
+        <CodeGraphRevenue
           gradientColor1={"#5D94FE"}
           gradientColor2={"#FAFCFF"}
           borderColor={"#3479FE"}
           isRevenue={true}
+          className
         />
       </div>
     </div>

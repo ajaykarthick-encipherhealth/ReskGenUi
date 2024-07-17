@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 import { getDateRange } from "../../store/actions/DashboardActions";
 import moment from "moment";
 import { disableFutureDate } from "../headerFilters/functions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 
 const { RangePicker } = DatePicker;
 
@@ -19,7 +21,7 @@ const HeadTitle = ({
   setOpenPicker,
   isAdmin = false,
   margin,
-   fontSize
+  fontSize,
 }) => {
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
@@ -30,8 +32,10 @@ const HeadTitle = ({
   const handleDatePickerChange = (date) => {
     if (date) {
       const dates = {
-        startDate: moment(date[0], "MM-DD-YYYY").format("YYYY-MM-DD") + "T00:00:00.000Z",
-        endDate: moment(date[1], "MM-DD-YYYY").format("YYYY-MM-DD") + "T23:59:59.000Z",
+        startDate:
+          moment(date[0], "MM-DD-YYYY").format("YYYY-MM-DD") + "T00:00:00.000Z",
+        endDate:
+          moment(date[1], "MM-DD-YYYY").format("YYYY-MM-DD") + "T23:59:59.000Z",
       };
       setDates(dates);
     }
@@ -41,7 +45,10 @@ const HeadTitle = ({
   const lastDateWithTime = currentDate.endOf("day").toISOString();
 
   return (
-    <div className={styles.header} style={{ display: anchorTag && "flex",margin:margin }}>
+    <div
+      className={styles.header}
+      style={{ display: anchorTag && "flex", margin: margin }}
+    >
       <div
         style={{
           display: "flex",
@@ -50,20 +57,28 @@ const HeadTitle = ({
           justifyContent: "space-between",
         }}
       >
-        <div className={styles.title} style={{fontSize: fontSize}}>{header}</div>
+        <div className={styles.title} style={{ fontSize: fontSize }}>
+          {header}
+        </div>
         {icon && (
           <div className={styles.imgContainer}>
-            <Image
+            {/* <Image
               src={icon}
               alt="Calendar Icon"
-              onClick={() => {
-                setOpenPicker(!openPicker);
-                // if (!openPicker) {
-                //   setSelectedDates([]);
-                // }
-              }}
+             
               className={styles.IMG}
-            />
+            /> */}
+            <div>
+              <FontAwesomeIcon
+                onClick={() => {
+                  setOpenPicker(!openPicker);
+                  if (!openPicker) {
+                    setSelectedDates([]);
+                  }
+                }}
+                icon={faCalendar}
+              />
+            </div>
           </div>
         )}
       </div>
@@ -74,10 +89,10 @@ const HeadTitle = ({
       )}
       <Modal
         open={openPicker}
-        mask={false}
+        mask={true}
         width="34.5%"
         closable={false}
-        style={{ left: "-20%", top: "18%" }}
+        style={{ left: "-20%", top: "14%" }}
         onOk={() => {
           dispatch(getDateRange(dateValues));
           setOpenPicker(false);

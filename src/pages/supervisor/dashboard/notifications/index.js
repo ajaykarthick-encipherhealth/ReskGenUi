@@ -6,9 +6,10 @@ import { Modal, Spin } from "antd";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
-import { SVGICON } from "../../../../jsx/constant/theme";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
 import spinSTYles from "../../../../styles/auth.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 
 const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
   const notificationResult = webSocketNotificationData
@@ -26,12 +27,14 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
     notificationResult?.length > 0 ? (
       notificationResult?.map((info) => (
         <div className={styles.msgDiv} key={info?.id}>
-          <div style={{ marginTop: "10px" }}>
-            {" "}
-            {SVGICON.dashboardNotification}
+          <div className="mt-2">
+            <FontAwesomeIcon
+              icon={faBell}
+              className={`${styles.notifyIconColor}`}
+            />
           </div>
-          <div className={styles.msgCOntainer}>
-            <span className={styles.description}>{info.content}</span>
+          <div className={`${styles.msgCOntainer} m-2`}>
+            <span className={`${styles.description}`}>{info.content}</span>
             <div className={styles.time}>
               {moment(info?.createdDate).format("MM-DD-YYYY")}&nbsp;{" "}
               {moment(info?.createdDate).format("hh:mm:A")} &nbsp;{" "}
@@ -50,9 +53,8 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       <div className={styles.no_notificarion_container}>
         {!notificationResponse?.loading &&
           (!notificationResponse?.data?.response?.notificationList?.content ||
-            notificationResponse?.data?.response?.notificationList?.content?.length === 0) && (
-            <Image src={NoNotification} alt="" />
-          )}
+            notificationResponse?.data?.response?.notificationList?.content
+              ?.length === 0) && <Image src={NoNotification} alt="" />}
       </div>
     );
 

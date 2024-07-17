@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import styles from "../../styles.module.css";
 import CodesGraph from "../../components/codeGraph";
 import Image from "next/image";
 import processing from "../../../../../images/tenantAdmin/processing.svg";
@@ -9,8 +10,12 @@ import upload from "../../../../../images/tenantAdmin/upload.svg";
 import codeCaptured from "../../../../../images/tenantAdmin/codecaptured.svg";
 import { actions as defaultActions } from "../../../../../stores/tenantAdmin/dashboard/default";
 import { Empty, Skeleton, Spin } from "antd";
-
-
+import {
+  formatValues,
+  getLast30Days,
+  getLast7Days,
+} from "../../../../../utils/reusable.js";
+import moment from "moment";
 
 const Files = ({
   getAllComputing,
@@ -18,55 +23,41 @@ const Files = ({
   getComputingStatus,
   getAllComputingTile,
   top10DiseasesData,
-  loaderButton,
   computingTileStatusLoader,
   computingStatusLoader,
   dateRange,
   selectedOrganization,
   selectedValue,
+  activeBtn,
+  classNames,
 }) => {
-  const dates = [];
-  function getLast7Days() {
-    const currentDate = new Date();
-
-    for (let i = 0; i < 7; i++) {
-      const pastDate = new Date(currentDate);
-      pastDate.setDate(currentDate.getDate() - i);
-      dates.push(
-        pastDate.toLocaleString("default", { month: "short" }) +
-          pastDate.getDate()
-      );
-    }
-
-    return dates.reverse();
-  }
-  const date_thirty_days = [];
-
-  function getLast30Days() {
-    const currentDate = new Date();
-
-    for (let i = 0; i < 30; i++) {
-      const pastDate = new Date(currentDate);
-      pastDate.setDate(currentDate.getDate() - i);
-      date_thirty_days.push(
-        pastDate.toLocaleString("default", { month: "short" }) +
-          pastDate.getDate()
-      );
-    }
-
-    return date_thirty_days.reverse()
-  }
-
+  const dates =
+    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
+  let computedDate = getAllComputingStatus?.COMPUTED?.map((x) => {
+    return { [x.date]: x.computing };
+  });
+  const resultComputing = formatValues(computedDate, dates);
+  let processingDate = getAllComputingStatus?.PROCESSING?.map((x) => {
+    return { [x.date]: x.computing };
+  });
+  const resultProcessing = formatValues(processingDate, dates);
   
+  let failedDate = getAllComputingStatus?.FAILED?.map((x) => {
+    return { [x.date]: x.computing };
+  });
+  const resultFailed = formatValues(failedDate, dates);
 
-  getLast7Days();
-  getLast30Days();
+  let uploadDate = getAllComputingStatus?.NOT_UPLOADED?.map((x) => {
+    return { [x.date]: x.computing };
+  });
+  const resultUpload = formatValues(uploadDate, dates);
+
 
 
   const options = {
     xAxis: {
       type: "category",
-      data: selectedValue === "last_1_week" ? dates : date_thirty_days,
+      data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
     },
     yAxis: {
       type: "value",
@@ -75,6 +66,12 @@ const Files = ({
     tooltip: {
       show: true,
       trigger: "axis",
+      axisPointer: {
+        type: "cross",
+        label: {
+          backgroundColor: "#6a7985",
+        },
+      },
     },
     legend: {
       show: false,
@@ -82,31 +79,35 @@ const Files = ({
     series: [
       {
         name: "Upload",
-        data: getAllComputingStatus?.NOT_UPLOADED?.map((x) => x.count),
+        data: resultUpload,
         type: "line",
         lineStyle: { color: "#3B3486" },
         smooth: true,
         showSymbol: false,
       },
       {
-        name: "Processing",
-        data: getAllComputingStatus?.PROCESSING?.map((x) => x.count),
-        type: "line",
-        lineStyle: { color: "#4A3AFF" },
-        smooth: true,
-        showSymbol: false,
-      },
-      {
         name: "Completed",
-        data: getAllComputingStatus?.COMPUTED?.map((x) => x.count),
+        color: "#00BC13",
+        data: resultComputing,
         type: "line",
         lineStyle: { color: "#00BC13" },
         smooth: true,
         showSymbol: false,
       },
       {
+        name: "Processing",
+        data: resultProcessing,
+        color: "#3B3486",
+        type: "line",
+        lineStyle: { color: "#3B3486" },
+        smooth: true,
+        showSymbol: false,
+      },
+
+      {
         name: "Failed",
-        data: getAllComputingStatus?.FAILED?.map((x) => x.count),
+        color: "#FF8551",
+        data: resultFailed,
         type: "line",
         lineStyle: { color: "#FF8551" },
         smooth: true,
@@ -114,7 +115,7 @@ const Files = ({
       },
     ],
   };
-  const cardData = [
+  let cardData = [
     {
       id: 1,
       title: "Upload",
@@ -147,25 +148,36 @@ const Files = ({
       color: "#FFEAE0",
       iconBg: "#FFDBCC",
     },
-    {
-      id: 5,
-      title: "Codes Captures",
-      count: top10DiseasesData?.totalCount,
-      icon: codeCaptured,
-      color: "#FFEAE0",
-      iconBg: "#FFDBCC",
-    },
   ];
 
+  if (activeBtn == "default") {
+    cardData = [
+      ...cardData,
+      {
+        id: 5,
+        title: "Codes",
+        count: top10DiseasesData?.totalCount,
+        icon: codeCaptured,
+        color: "#FFEAE0",
+        iconBg: "#FFDBCC",
+      },
+    ];
+  }
+
+  
+
   useEffect(() => {
-    getComputingStatus(dateRange?.startDate, dateRange?.endDate,selectedOrganization);
+    getComputingStatus(
+      dateRange?.startDate,
+      dateRange?.endDate,
+      selectedOrganization
+    );
     getAllComputing(
       dateRange?.startDate,
       dateRange?.endDate,
-      selectedOrganization,
+      selectedOrganization
     );
   }, [dateRange, selectedOrganization]);
-
 
   return (
     <div className="" style={{ marginTop: "20px" }}>
@@ -175,16 +187,17 @@ const Files = ({
             className="rounded-lg w-30"
             style={{
               backgroundColor: item?.color,
-              width: "17%",
-              height: "70px",
+              width: "19%",
+              height: "80px",
               display: "flex",
-              justifyContent: "center",
+              // justifyContent: "center",
               textAlign: "center",
               alignItems: "center",
               borderRadius: "10px",
+              padding: "5px",
             }}
           >
-            {loaderButton && computingTileStatusLoader ? (
+            {computingTileStatusLoader ? (
               <div>
                 <Skeleton.Input
                   className="w-100"
@@ -192,19 +205,15 @@ const Files = ({
                   active
                 />
               </div>
-            ) : computingTileStatusLoader ? (
-              <div className="d-flex justify-content-center align-items-center">
-                <Spin size="large" />
-              </div>
             ) : (
-              <div className="d-flex justify-content-between">
+              <div className="d-flex w-100 mt-3">
                 <div
                   style={{
-                    width: "40px",
-                    height: "40px",
+                    width: "48px",
+                    height: "47px",
                     backgroundColor: item?.iconBg,
                     borderRadius: "10px",
-                    margin: "0 10px 0 0",
+                    margin: "0 10px 16px",
                     display: "flex",
                     justifyContent: "center",
                     textAlign: "center",
@@ -214,7 +223,9 @@ const Files = ({
                   <Image src={item?.icon} />
                 </div>
                 <div>
-                  <div style={{ fontSize: "16px" }}>{item?.title}</div>
+                  <div style={{ fontSize: "16px", fontWeight: "900" }}>
+                    {item?.title}
+                  </div>
                   <div style={{ fontSize: "18px", fontWeight: "700" }}>
                     {item?.count}
                   </div>
@@ -225,7 +236,7 @@ const Files = ({
         ))}
       </div>
 
-      {computingStatusLoader && loaderButton ? (
+      {computingStatusLoader ? (
         <div>
           <Skeleton.Input
             className="w-100 mt-2"
@@ -233,22 +244,20 @@ const Files = ({
             active
           />
         </div>
-      ) : computingStatusLoader ? (
-        <div className="d-flex justify-content-center align-items-center " style={{height:'300px'}}>
-          <Spin size="large" />
+      ) : getAllComputingStatus?.COMPUTED?.length > 0 ? (
+        <div>
+          <CodesGraph options={options} className={`${classNames}`} />
         </div>
-       ) : getAllComputingStatus?.COMPUTED?.length >0? (
-        
-        <div className="totalCodesPies3">
-          <CodesGraph options={options} />
+      ) : (
+        <div className={styles.centered_container}>
+          <Empty />
         </div>
-        
-      ):<Empty className="mt-3"/>}
+      )}
     </div>
   );
 };
 
-const enhancer = connect( 
+const enhancer = connect(
   (state) => ({
     getAllComputingStatus:
       state?.tenantAdmin?.dashboard?.default?.allComputingStatus?.data
@@ -261,7 +270,7 @@ const enhancer = connect(
     computingTileStatusLoader:
       state?.tenantAdmin?.dashboard?.default?.computingTileStatusLoader,
     computingStatusLoader:
-      state?.tenantAdmin?.dashboard?.default?.computingStatusLoader,
+      state?.tenantAdmin?.dashboard?.default?.allComputingStatus?.loading,
   }),
   {
     getAllComputing: defaultActions.ComputingStatus,

@@ -52,6 +52,7 @@ const AdminWorkList = ({
   const [selAllocatedTo, setSelAllocatedTo] = useState("");
   const [selectCompletedPicker, setSelectCompletedPicker] = useState("");
   const [selectComputedPicker, setSelectComputedPicker] = useState("");
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   const getWorkList = async () => {
     setPatientList(result?.response?.content);
@@ -65,11 +66,13 @@ const AdminWorkList = ({
   const onPageChange = async (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
+    setFilterModalOpen(false)
   };
 
   const getPatientListToDetails = (id) => {
     setWorkListPatientId(id);
     setIsModalComments(false);
+    setFilterModalOpen(false)
   };
 
   const statusOptions = [
@@ -192,7 +195,7 @@ const AdminWorkList = ({
             <InputText
               type="text"
               onChange={(e) => filterChangePatientId(e)}
-              className="form-control new-form-control"
+              className="form-control input-form-control"
               placeholder="Search"
               maxLength={25}
               onKeyDown={(e) => {
@@ -225,6 +228,8 @@ const AdminWorkList = ({
               setSelectComputedPicker={setSelectComputedPicker}
               datePicker1Lable="Created Date"
               datePicker2Lable="Completed Date"
+              filterModalOpen={filterModalOpen}
+              setFilterModalOpen={setFilterModalOpen}
             />
           </div>
         </div>

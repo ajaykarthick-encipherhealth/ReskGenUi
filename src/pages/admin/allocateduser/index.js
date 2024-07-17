@@ -107,6 +107,7 @@ const Patient = ({
     selectedOption,
     selectOrgList,
     batchCount,
+    filterBatchCount,
   }) => {
     const uId = localStorage.getItem("userId");
     const orgId = localStorage.getItem("orgId");
@@ -118,7 +119,7 @@ const Patient = ({
       sort?.sortDir ? sort?.sortDir : ""
     }&sortfield=${sort?.sortField ? sort?.sortField : ""}&priority=${
       selectedOption ? selectedOption : ""
-    }&batchCount=${batchCount ? batchCount : ""}`;
+    }&batchCount=${filterBatchCount ? batchCount : ""}`;
     allocatedGetList({ url: resoureUrl });
     // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     // if (response?.data) {
@@ -168,7 +169,7 @@ const Patient = ({
   };
 
   const onPageChange = (e) => {
-    setIsLoading(true);
+    setIsLoading(false);
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageSize(e.rows);
@@ -313,6 +314,8 @@ const Patient = ({
         search: searchStr,
         sort: sort,
         selectedOption: selectedOption,
+        batchCount:batchCount,
+        filterBatchCount:filterBatchCount
       });
     }
   }, [
@@ -324,6 +327,7 @@ const Patient = ({
     endDate,
     searchStr,
     selectedOption,
+    filterBatchCount
   ]);
 
   const renderRows = () => {
@@ -532,7 +536,7 @@ const Patient = ({
               <div className="col-xl-12">
                 <div className="">
                   <div className="card-body p-0">
-                    <div className="table-responsive active-projects task-table">
+                    <div className="table-responsive active-projects task-table supervisor-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
                           <div
@@ -619,7 +623,7 @@ const Patient = ({
                                   />
                                 </div>
                               </div>
-                              {/* <div className="col-xl-2">
+                              <div className="col-xl-2">
                                 <label>Batch Count</label>
                                 <div class="form-group d-flex">
                                   <InputText
@@ -657,7 +661,7 @@ const Patient = ({
                                     Select
                                   </button>
                                 </div>
-                              </div> */}
+                              </div>
                             </>
                           ) : !isPatientList && activeTab == 2 ? (
                             <div className="col-xl-6"></div>
@@ -694,13 +698,12 @@ const Patient = ({
                           <div
                             className={
                               isPatientList && activeTab == 2
-                                ? `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
-                                : `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
+                                ? `col-xl-2 mt-4 ${TableStyle.allocateBtn}`
+                                : `col-xl-4 mt-4 ${TableStyle.allocateBtn}`
                             }
                           >
                             {isPatientList || activeTab === 1 ? (
-                              <>
-                                <Tooltip
+                              <Tooltip
                                   title={
                                     selectedRowsId?.length === 0
                                       ? "Select patients to Allocate"
@@ -728,7 +731,6 @@ const Patient = ({
                                     Allocate
                                   </button>
                                 </Tooltip>
-                              </>
                             ) : null}
                           </div>
                         </div>
@@ -754,7 +756,7 @@ const Patient = ({
                                     setSortDueOrder("DESC");
                                     selectTabClick(1);
                                     setActiveTab(1);
-                                    setPaginationFirst("0")
+                                    setPaginationFirst("0");
                                   }}
                                 >
                                   <Nav.Link
@@ -857,7 +859,9 @@ const Patient = ({
                                                 <tr>
                                                   <th
                                                     style={{
-                                                      textAlign: "center",
+
+                                                      paddingLeft:'46px !important',
+
                                                     }}
                                                   >
                                                     NAME

@@ -13,7 +13,6 @@ const index = ({
   getAllFiles,
   dateRange,
   selectedOrganization,
-  loaderButton,
   totalCountsLoader,
 }) => {
   const cardData = [
@@ -46,7 +45,7 @@ const index = ({
       dateRange.endDate,
       selectedOrganization
     );
-  }, [dateRange,selectedOrganization]);
+  }, [dateRange, selectedOrganization]);
 
   return (
     <div
@@ -55,52 +54,45 @@ const index = ({
     >
       {cardData?.map((item, index) => (
         <div
-          className="rounded-lg"
+          className="rounded-lg "
           style={{
             backgroundColor:
               index === 0 ? "#FDF1F2" : index === 1 ? "#FDF8F2" : "#F0FFF7",
             width: "32%",
             height: "250px",
             display: "flex",
-            justifyContent: "center",
-            textAlign: "center",
-            alignItems: "center",
           }}
         >
-
-
-
-
-          <div style={{ width: "90%" }}>
-
-
-          {loaderButton && totalCountsLoader ? (
+          <div
+            style={{ width: "90%", height: "100%", margin: "10px 0 0 10px" }}
+          >
+            {totalCountsLoader ? (
               <Skeleton.Input active size="default" className="mt-2" />
-            ) :             
-            (
-            <div className="d-flex justify-content-center align-items-center">
-
-              <div
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  backgroundColor: item?.iconBg,
-                  borderRadius: "10px",
-                  margin: "0 5px 0 0",
-                  display: "flex",
-                  justifyContent: "center",
-                  textAlign: "center",
-                  alignItems: "center",
-                }}
-              >
-
-                <Image src={item?.icon} />
+            ) : (
+              <div>
+                <div className="d-flex justify-content-start align-items-start gap-1" style={{height:"50px"}}> 
+                  <div
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      backgroundColor: item?.iconBg,
+                      borderRadius: "10px",
+                      margin: "0 5px 0 0",
+                      display: "flex",
+                      justifyContent: "center",
+                      textAlign: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Image src={item?.icon} />
+                  </div>
+                  <div style={{ fontSize: "16px" }}  className="align-self-center">{item?.title}</div>
+                </div>
+               
               </div>
-              <div style={{ fontSize: "16px" }}>{item?.title}</div>
-            </div>
-             )}
+            )}
 
-            {loaderButton && totalCountsLoader ? (
+            {totalCountsLoader ? (
               <Skeleton.Input active size="default" className="mt-2" />
             ) : totalCountsLoader ? (
               <div className="d-flex justify-content-center align-items-center mt-2">
@@ -108,13 +100,9 @@ const index = ({
                 <Spin size="large" />
               </div>
             ) : (
-              <div className={styles.count}>{item?.count}</div>
+              <div className={`${styles.count}  h-50 d-flex align-items-center justify-content-center`}>{item?.count}</div>
             )}
           </div>
-
-
-
-          
         </div>
       ))}
     </div>

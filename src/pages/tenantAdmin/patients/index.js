@@ -597,7 +597,7 @@ const Patient = ({
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
-                        <div className="tbl-caption  align-items-center">
+                        <div className="tbl-caption2  align-items-center">
                           <HeaderFilters
                             setSearch={setSearch}
                             isSearch={true}

@@ -12,37 +12,60 @@ import {
   renderUserPrfoileAvatarDisabled,
   sortFunction,
 } from "../../../headerFilters/functions";
-import { enableUser } from "../../../../services/adminServices/usersService";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import SpinnerDots from "../../../spinner";
+import {
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
 import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
 import { getSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
-
+import { connect } from "react-redux";
+import { actions as adminAction } from "../../../../stores/admin/users";
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
   { value: "REVIEWER", label: "Reviewer", role: "REVIEWER" },
   { value: "SUPERVISOR", label: "Supervisor", role: "SUPERVISOR" },
 ];
 
-const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
-  const usersData = useSelector((state) => state.adminUsers.usersData);
-
+const AdminList = ({
+  userList,
+  sortOrder,
+  setSortOrder,
+  setSort,
+  usersList,
+  getEnableUser,
+  getAllUsersList,
+  setPageCount,
+}) => {
+  const usersData = usersList;
   const dispatch = useDispatch();
-  const [checkedd, setChecked] = useState();
+  const [checked, setChecked] = useState(false);
   const [rowData, setRowData] = useState();
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isMultiple, setIsMultiple] = useState(false);
   const [open, setOpen] = useState(false);
-  const [popoverVisible, setPopoverVisible] = useState(true);
+  const [popoverVisible, setPopoverVisible] = useState(null);
   const [openManager, setOpenManager] = useState(false);
   const [selectedManager, setSelectedManager] = useState();
+  const [switchStates, setSwitchStates] = useState({});
+  const [roleChangeLoader, setRoleChangeLoader] = useState(false);
 
   const selectUserList = useSelector(
     (state) => state?.AdminDashboardReducers?.selectedUsers
   );
-  const onChange = (item, checked) => {
-    setRowData(item);
-    setChecked(checked ? "yes" : "no");
+
+  const onChange = async (item, checked) => {
+    setSwitchStates((prevState) => ({
+      ...prevState,
+      [item.email]: checked,
+    }));
+    const res = await getEnableUser({
+      checked: checked ? "yes" : "no",
+      user: item,
+    });
+    if (res?.status === "SUCCESS") {
+      getAllUsersList({ pageCount: 0 });
+    }
   };
 
   const handleRows = (value) => {
@@ -61,6 +84,9 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const getContent = (data) => {
     return (
       <div>
+        <div className="d-flex justify-content-end cr-pointer">
+          <CloseCircleOutlined onClick={() => setPopoverVisible(null)} />
+        </div>
         <div style={{ height: "200px", width: "100%" }}>
           <div className="my-2">Change Role</div>
           <Select
@@ -98,41 +124,64 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
           <button
             className={styles.sendBtn}
             onClick={() => {
-              if (selectedRoles?.length > 0) {
-                dispatch(
-                  enableUser(
-                    null,
-                    rowData,
-                    selectedRoles,
-                    setPopoverVisible,
-                    selectedManager,
-                    "addrole"
-                  )
-                );
-                setPopoverVisible(false);
-              }
+              handleSave();
             }}
             disabled={selectedRoles?.length === 0 ? true : false}
           >
-            Save
+            {roleChangeLoader ? "Loading...." : "Save"}
           </button>
         </div>
       </div>
     );
   };
 
+  const handleSave = async () => {
+    if (selectedRoles?.length > 0) {
+      setRoleChangeLoader(true);
+      const res = await getEnableUser({
+        checked: null,
+        user: rowData,
+        role: selectedRoles,
+        setPopoverVisible: setPopoverVisible,
+        selectedManager: selectedManager,
+        field: "addRole",
+      });
+      if (res?.status === "SUCCESS") {
+        getAllUsersList({ pageCount: 0 });
+        setPopoverVisible(null);
+        setPageCount(0);
+        setRoleChangeLoader(false);
+      }
+    }
+  };
   useEffect(() => {
-    dispatch(enableUser(checkedd, rowData));
+    // getEnableUser({ checked: "no", user: rowData });
     dispatch(getSelectUserList("REVIEWER"));
-  }, [checkedd, rowData]);
+  }, [rowData]);
+  useEffect(() => {
+    if (usersData?.data?.response?.content) {
+      const initialSwitchStates = {};
+      usersData.data.response.content.forEach((user) => {
+        initialSwitchStates[user.email] = user.accountStatus;
+      });
+      setSwitchStates(initialSwitchStates);
+    }
+  }, [usersData]);
 
   return (
-    <div className={TableStyle.classContaineer}>
+    <div className={`${TableStyle.classContaineer} mt-3`}>
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
             <th className={TableStyle.rowEmailStyle}>NAME</th>
-            <th style={{ paddingLeft: "20px" }}>EMAIL</th>
+            <th style={{ paddingLeft: "120px" }}>EMAIL</th>
+            <th
+              style={{
+                textAlign: "center",
+              }}
+            >
+              ORGANIZATION
+            </th>
             <th
               style={{
                 textAlign: "center",
@@ -237,6 +286,20 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                   style={{
                     backgroundColor:
                       item.accountStatus === true ? "" : "#0000001a",
+                    textAlign: "center",
+                  }}
+                >
+                  <span>
+                    {item?.organizationDTO?.name
+                      ? item?.organizationDTO?.name
+                      : "---"}
+                  </span>
+                </td>
+                <td
+                  className={TableStyle.childBorder}
+                  style={{
+                    backgroundColor:
+                      item.accountStatus === true ? "" : "#0000001a",
                     // paddingLeft: "70px",
                     textAlign: "center",
                   }}
@@ -307,33 +370,34 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                     }}
                   >
                     <div>
-                      {popoverVisible ? (
-                        <Popover
-                          content={() => getContent(item)}
-                          // title="Change Role"
-                          trigger="click"
-                        >
-                          <div
-                            onClick={() => {
-                              setChecked();
-                              setRowData(item);
-                              setPopoverVisible(true);
-                              setSelectedRoles(item?.role);
-                            }}
-                          >
-                            <EditButton />
-                          </div>
-                        </Popover>
-                      ) : (
+                      {/* {popoverVisible ? ( */}
+                      <Popover
+                        content={() => getContent(item)}
+                        // title="Change Role"
+                        trigger="click"
+                        open={popoverVisible === item?.id}
+                      >
                         <div
                           onClick={() => {
+                            // setChecked(false);
                             setRowData(item);
-                            setPopoverVisible(true);
+                            setPopoverVisible(item?.id);
+                            setSelectedRoles(item?.role);
                           }}
                         >
                           <EditButton />
                         </div>
-                      )}
+                      </Popover>
+                      {/* // ) : (
+                      //   <div
+                      //     onClick={() => {
+                      //       setRowData(item);
+                      //       setPopoverVisible(item?.id);
+                      //     }}
+                      //   >
+                      //     <EditButton />
+                      //   </div>
+                      // )} */}
                     </div>
                   </td>
                 ) : (
@@ -367,7 +431,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                   }}
                 >
                   <Switch
-                    defaultChecked={item?.accountStatus}
+                    checked={switchStates[item.email]}
                     onChange={(checked) => {
                       onChange(item, checked);
                       setPopoverVisible(true);
@@ -378,7 +442,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             ))
           ) : (
             <tr>
-              <td colSpan={7}>
+              <td colSpan={8}>
                 <Empty />
               </td>
             </tr>
@@ -389,4 +453,13 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   );
 };
 
-export default AdminList;
+const enhancer = connect(
+  (state) => ({
+    usersList: state?.admin?.users?.allUsers,
+  }),
+  {
+    getAllUsersList: adminAction.getAllUsersAction,
+    getEnableUser: adminAction.getEnableUser,
+  }
+);
+export default enhancer(AdminList);

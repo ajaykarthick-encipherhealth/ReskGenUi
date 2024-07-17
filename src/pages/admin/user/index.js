@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Form, Input, Button, Select, Row, Col, notification } from "antd";
@@ -17,7 +17,8 @@ import {
   getValidatePassword,
 } from "../../../components/headerFilters/functions";
 import SpinnerDots from "../../../components/spinner";
-const { Option } = Select;
+import { actions as adminAction } from "../../../stores/admin/users";
+
 const options3 = [
   { value: "ALL", label: "ALL" },
   { value: "true", label: "Enabled" },
@@ -40,7 +41,13 @@ const intialValues = {
   mobileNumber: "",
   confirmPassword: "",
 };
-const UserList = () => {
+const UserList = ({
+  getAllOrganizationList,
+  organizationList,
+  getAllUsersList,
+  usersListData,
+  loading,
+}) => {
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.adminUsers.usersData);
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -73,13 +80,16 @@ const UserList = () => {
     patientId: "",
     patientName: "",
   });
-
+  const [selectOrgList, setSelectedOrgList] = useState("");
+  const [orgAllList, setOrgAllList] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
 
   const handleChange = (e) => {
     let value = e.target.value;
+    // if (value?.length===10) {
     const val = getDisplayValue(value);
     setMobileNumber(val);
+    // }
   };
   const getDisplayValue = (number) => {
     if (number.length === 10) {
@@ -98,7 +108,7 @@ const UserList = () => {
   const handleSubmit = async (userFormData) => {
     const encrptedData = encyptingPass(userFormData?.password);
     userFormData.tenantId = localTenantId;
-    userFormData.organizationId = localOrgId;
+    userFormData.organizationId = userFormData.orgId;
     userFormData.role = [userFormData?.role];
     userFormData.password = encrptedData?.pass;
     userFormData.passwordIv = encrptedData.iv;
@@ -108,7 +118,6 @@ const UserList = () => {
       setUseAdd(true);
       form.resetFields();
       setIsLoadingBtn(false);
-      setMobileNumber("");
     }
     setRoleValue([]);
     setValidated(true);
@@ -172,11 +181,11 @@ const UserList = () => {
   };
 
   useEffect(() => {
-    if (usersData) {
-      setUserListAll(usersData);
-      setTotalElements(usersData?.data?.response?.totalElements);
+    if (usersListData?.data?.response) {
+      setUserListAll(usersListData?.data);
+      setTotalElements(usersListData?.data?.response?.totalElements);
     }
-  }, [usersData]);
+  }, [usersListData]);
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -186,17 +195,16 @@ const UserList = () => {
     setLocalUserId(uId);
     setLocalOrgId(orgId);
     setUseAdd(false);
-    dispatch(
-      getUsers({
-        pageCount,
-        search,
-        startDate,
-        endDate,
-        status,
-        role,
-        sort,
-      })
-    );
+    getAllUsersList({
+      pageCount,
+      search,
+      startDate,
+      endDate,
+      status,
+      role,
+      orgId: selectOrgList?.value,
+      sort: sort,
+    });
   }, [
     pageCount,
     search,
@@ -207,6 +215,7 @@ const UserList = () => {
     sort,
     useAdd,
     clear,
+    selectOrgList,
   ]);
 
   useEffect(() => {
@@ -214,6 +223,21 @@ const UserList = () => {
       setFormData(intialValues);
     }, 750);
   }, [addUser]);
+
+  useEffect(() => {
+    getAllOrganizationList();
+  }, []);
+
+  useEffect(() => {
+    var orgListArray = [];
+    organizationList?.response?.map((res) => {
+      orgListArray.push({
+        value: res.id,
+        label: res.name,
+      });
+    });
+    setOrgAllList(orgListArray);
+  }, [organizationList]);
 
   const onFinish = (values) => {
     handleSubmit(values);
@@ -260,7 +284,7 @@ const UserList = () => {
                       isRangePickerUsers={true}
                       addUser={true}
                       addUserForm={addUserForm}
-                      btnTitle="Add User"
+                      btnTitle="Add User "
                       setClear={setClear}
                       clear={clear}
                       addBtn={true}
@@ -274,7 +298,7 @@ const UserList = () => {
                     id="task-tbl_wrapper"
                     className="dataTables_wrapper no-footer"
                   >
-                    {usersData?.loading ? (
+                    {loading ? (
                       <SpinnerDots />
                     ) : (
                       <>
@@ -499,32 +523,6 @@ const UserList = () => {
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
-                    label="Mobile Number"
-                    name="mobileNumber"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter your mobile number!",
-                      },
-                      {
-                        len: 10,
-                        message: "Please enter a valid 10-digit mobile number!",
-                      },
-                    ]}
-                  >
-                    <div>
-                      <Input
-                        type="text"
-                        placeholder="Enter mobile number"
-                        autoComplete="off"
-                        value={mobileNumber}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
                     name="role"
                     label="Role"
                     rules={[
@@ -543,6 +541,24 @@ const UserList = () => {
                         SUPERVISOR
                       </Select.Option>
                     </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Select Organization"
+                    name="orgId"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select Organization!",
+                      },
+                    ]}
+                  >
+                    <Select
+                      placeholder="Select"
+                      options={orgAllList}
+                      style={{ height: "42px" }}
+                    />
                   </Form.Item>
                 </Col>
               </Row>
@@ -620,6 +636,32 @@ const UserList = () => {
                     </div>
                   </Form.Item>
                 </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Mobile Number"
+                    name="mobileNumber"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your mobile number!",
+                      },
+                      {
+                        len: 10,
+                        message: "Please enter a valid 10-digit mobile number!",
+                      },
+                    ]}
+                  >
+                    <div>
+                      <Input
+                        type="text"
+                        placeholder="Enter mobile number"
+                        autoComplete="off"
+                        value={getDisplayValue(mobileNumber)}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </Form.Item>
+                </Col>
               </Row>
               <div style={{ display: "flex", gap: "8px" }}>
                 <input
@@ -666,4 +708,15 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+const enhancer = connect(
+  (state) => ({
+    organizationList: state?.admin?.users?.allOrganization?.data,
+    usersListData: state?.admin?.users?.allUsers,
+    loading: state?.admin?.users?.allUsersLoading,
+  }),
+  {
+    getAllOrganizationList: adminAction.getAllOrganizationAction,
+    getAllUsersList: adminAction.getAllUsersAction,
+  }
+);
+export default enhancer(UserList);

@@ -32,10 +32,9 @@ const MyWorkQueueFilter = ({
   setSelectComputedPicker,
   datePicker1Lable,
   datePicker2Lable,
+  filterModalOpen,
+  setFilterModalOpen,
 }) => {
-  const dateFormat = "MM-DD-YYYY";
-  const [filterModalOpen, setFilterModalOpen] = useState(false);
-
   const handleDatePickerChange = async (dates, dateString) => {
     if (dates) {
       setSelectComputedPicker(dates);

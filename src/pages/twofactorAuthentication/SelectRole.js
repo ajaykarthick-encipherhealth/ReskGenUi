@@ -25,7 +25,7 @@ const SelectRole = () => {
     ...(rolesList?.length > 0
       ? rolesList?.map((info) => ({
           value: info,
-          label: info,
+          label: info?.split("_").join(" "),
         }))
       : []),
   ];
