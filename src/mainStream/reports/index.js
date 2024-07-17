@@ -4,12 +4,10 @@ import styles from "./report.module.css";
 import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch , faFileExport} from "@fortawesome/free-solid-svg-icons";
-import {   } from "@fortawesome/free-regular-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
 import Select from "react-select";
 import { Modal, DatePicker, Tooltip } from "antd";
-import ExportImg from "../../images/svg/Export";
 import { debounce } from "../../../src/pages/admin/reports/Export";
 import {
   disableFutureDate,
@@ -25,8 +23,6 @@ import { actions as workflowActions } from "../../stores/reviewer/workqueue";
 import { actions as reviewerAction } from "../../stores/reviewer/report";
 import { actions as supervisorAction } from "../../stores/supervisor/report";
 import moment from "moment";
-import TableStyle from "../../components/table/table.module.css";
-import dayjs from "dayjs";
 import {
   selectedReport,
   getReportDetails,
@@ -34,7 +30,6 @@ import {
 } from "../../store/actions/adminAction/ReportActions";
 import Tab from "../components/tags";
 import MoreFilter from "../../resusablereport/reports/MoreFilter";
-import { SVGICON } from "../../jsx/constant/theme";
 import TeamReport from "./teamReport";
 
 
@@ -66,19 +61,20 @@ const Reports = ({
   TeamReportDetails,
   teamReport,
   auditeReportLoading,
+  tab
 }) => {
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
   const rowsLength = useSelector((state) => state?.report?.row);
-  const activeTab = useSelector((state) => state.AuditReport.activetab);
-
+  const activeTabName = useSelector((state) => state.AuditReport?.activetab);
+  const activeTab=activeTabName?activeTabName:tab
   const AdminReportPatientDetails = useSelector(
     (state) => state.report?.details
   );
   const selectUserList = useSelector(
     (state) => state?.adminReport?.selectedUsers
   );
-  const [userRole, setUserRole] = useState(activeTab);
+  const [userRole, setUserRole] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
@@ -175,7 +171,6 @@ const Reports = ({
   const handleTabs = (name) => {
     setSelectedDates(null);
     setSelecteddateRanges([]);
-
     dispatch(getActiveTab(name));
     setSearch();
     setSearchVal([]);
@@ -451,7 +446,6 @@ const Reports = ({
       : activeTab === "Audit"
       ? setTeamPageNo
       : setPageNo;
-
   return (
     <div>
       <Header />
@@ -807,6 +801,8 @@ const Reports = ({
                         receivedEndDate={selectedDateRanges?.Sent?.to}
                         isPhysician={true}
                         loader={sentLoader}
+                        userRole={userRole}
+
                       />
                     </div>
                   )}

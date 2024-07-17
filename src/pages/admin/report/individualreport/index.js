@@ -177,12 +177,12 @@ const IndividualReceiverReport = () => {
 
                     dispatch(
                       getActiveTab(
-                        isSentReport ? "SentReport" : "ReceivedReport"
+                        isSentReport ? "Sent" : "Received"
                       )
                     );
                     dispatch(
                       getReportActiveTab(
-                        isSentReport ? "SentReport" : "ReceivedReport"
+                        isSentReport ? "Sent" : "Received"
                       )
                     );
                     setLoading(true);

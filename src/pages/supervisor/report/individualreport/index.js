@@ -237,6 +237,7 @@ const IndividualReceiverReport = () => {
                   {searchValue && detailsContent?.length === 0 ? (
                     <div>No data</div>
                   ) : (
+                    
                     detailsContent?.map((item) => (
                       <div key={item.reportId ? item.reportId : item._d}>
                         <div
