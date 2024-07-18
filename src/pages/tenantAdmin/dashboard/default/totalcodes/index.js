@@ -113,7 +113,7 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data: [10, 20, 30, 10, 23, 45, 78, 27, 90, 16, 25, 89],
+        data: [],
         color: "#E88D67",
         type: "line",
         lineStyle: { color: "#E88D67" },
