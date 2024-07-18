@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import Image from "next/image";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import LoadingSpinner from "../../../../../components/loadingSpinner";
@@ -17,6 +17,8 @@ import AuditPending from "../../../../../../src/images/trackingImages/AuditPendi
 import AuditeDeclineTrack from "../../../../../../src/images/trackingImages/AuditDeclined.png";
 import Legends from "../../../../../components/legends";
 import MyWorkQueueFilter from "../MyWorkQueueFilter";
+import { actions as workflowActions } from "../../../../../stores/supervisor/auditedQueue";
+
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -33,9 +35,10 @@ export function extractLatestData(notes) {
   return declinedData;
 }
 
-const SupervisorWorkList = ({ localUserId, setWorkListPatientId,getWorkListFilter,setIsModalComments }) => {
+const SupervisorWorkList = ({ result, setWorkListPatientId,getWorkListFilter,setIsModalComments }) => {
+  console.log(result)
   const dispatch = useDispatch();
-  const result = useSelector((state) => state.AuditWork.workListFilter);
+  // const result = useSelector((state) => state.AuditWork.workListFilter);
   const [patientList, setPatientList] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -57,8 +60,9 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId,getWorkListFilte
   const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   const getWorkList = async () => {
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
+    console.log(result?.data?.response?.content)
+    setPatientList(result?.data?.response?.content);
+    setTotalElements(result?.data?.response?.totalElements);
     setFilterDataLoading(false);
   };
 
@@ -306,7 +310,7 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId,getWorkListFilte
             />
           </div>
         </div>
-        {result?.response?.content && !filterDataLoading ? (
+        {!filterDataLoading ? (
           <>
             <div className={visitStyles.patientListHead}>
               <ul className={`${visitStyles.patientDetailsHead}`}>
@@ -347,5 +351,12 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId,getWorkListFilte
     </>
   );
 };
-
-export default SupervisorWorkList;
+const enhancer = connect(
+  (state) => ({
+    result: state?.supervisor?.audited?.filteredList,
+  }),
+  {
+    getWorkListFilter: workflowActions.getWorkListFilter,  
+  }
+);
+export default enhancer(SupervisorWorkList);
