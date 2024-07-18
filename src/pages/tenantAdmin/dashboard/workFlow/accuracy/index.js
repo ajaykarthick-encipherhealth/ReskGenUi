@@ -630,10 +630,10 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
   };
 
   const [xdata, setXData] = useState([]);
-  const [valueOne, setValueOne] = useState([]);
-  const [valueTwo, setValueTwo] = useState([]);
-  const [valueThree, setValueThree] = useState([]);
-  const [valueFour, setValueFour] = useState([]);
+  const [OrgTotalCode, setorgTotalCode] = useState([]);
+  const [OrgRevScore, setOrgRevScore] = useState([]);
+  const [AccuracyTotalCode, setAccuracyTotalCode] = useState([]);
+  const [AccMachineScore, setAccMachineScore] = useState([]);
 
   useEffect(() => {
     const fetchDates = async () => {
@@ -642,10 +642,10 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
         dateRange.endDate
       );
       setXData(dates);
-      setValueOne([]);
-      setValueTwo([]);
-      setValueThree([]);
-      setValueFour([]);
+      setorgTotalCode([]);
+      setOrgRevScore([]);
+      setAccuracyTotalCode([]);
+      setAccMachineScore([]);
     };
 
     fetchDates();
@@ -653,25 +653,27 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
 
   useEffect(() => {
     if (getAccuracyWorkflow?.response && xdata) {
-      const valueOne = [];
-      const valueTwo = [];
-      const valueThree = [];
-      const valueFour = [];
+      const OrgTotalCode = [];
+      const OrgRevScore = [];
+      const AccuracyTotalCode = [];
+      const AccMachineScore = [];
 
       xdata.forEach((date) => {
         const foundItem = getAccuracyWorkflow.response.find(
           (item) => item.date === date
         );
-        valueOne.push(foundItem ? foundItem.totalNewlyAddedCodesCount : 0);
-        valueTwo.push(foundItem ? foundItem.reviewerAvgScore : 100);
-        valueThree.push(foundItem ? foundItem.totalNewlyAddedCodesCount : 0);
-        valueFour.push(foundItem ? foundItem.machineAvgScore : 100);
+        OrgTotalCode.push(foundItem ? foundItem.totalNewlyAddedCodesCount : 0);
+        OrgRevScore.push(foundItem ? foundItem.reviewerAvgScore : 100);
+        AccuracyTotalCode.push(
+          foundItem ? foundItem.totalNewlyAddedCodesCount : 0
+        );
+        AccMachineScore.push(foundItem ? foundItem.machineAvgScore : 100);
       });
 
-      setValueOne(valueOne);
-      setValueTwo(valueTwo);
-      setValueThree(valueThree);
-      setValueFour(valueFour);
+      setorgTotalCode(OrgTotalCode);
+      setOrgRevScore(OrgRevScore);
+      setAccuracyTotalCode(AccuracyTotalCode);
+      setAccMachineScore(AccMachineScore);
     }
   }, [getAccuracyWorkflow?.response, xdata]);
 
@@ -682,11 +684,11 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
         const d = getAccuracyWorkflow?.response?.find(
           (ite) => ite.date == item
         );
-        setValueOne((pre) => [...pre, d.totalNewlyAddedCodesCount]);
-        setValueTwo((pre) => [...pre, d.reviewerAvgScore]);
+        setorgTotalCode((pre) => [...pre, d.totalNewlyAddedCodesCount]);
+        setOrgRevScore((pre) => [...pre, d.reviewerAvgScore]);
       } else {
-        setValueOne((pre) => [...pre, 0]);
-        setValueTwo((pre) => [...pre, 100]);
+        setorgTotalCode((pre) => [...pre, 0]);
+        setOrgRevScore((pre) => [...pre, 100]);
       }
     });
   };
@@ -794,7 +796,7 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
     series: [
       {
         name: "totalNewlyAddedCodesCount",
-        data: valueOne,
+        data: OrgTotalCode,
         color: "#0b59f1",
         yAxis: 1,
       },
@@ -814,7 +816,7 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
       {
         name: "reviewerAvgScore",
         type: "spline",
-        data: valueTwo,
+        data: OrgRevScore,
         tooltip: {
           valueSuffix: "",
         },
@@ -919,7 +921,7 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
     series: [
       {
         name: "totalNewlyAddedCodesCount",
-        data: valueThree,
+        data: AccuracyTotalCode,
         color: "#0b59f1",
         yAxis: 1,
       },
@@ -939,7 +941,7 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
       {
         name: "machineAvgScore",
         type: "spline",
-        data: valueFour,
+        data: AccMachineScore,
         tooltip: {
           valueSuffix: "",
         },
