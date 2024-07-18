@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch, connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { DatePicker, Empty, Tooltip } from "antd";
+import { DatePicker, Empty, Input, Space, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
@@ -314,8 +314,8 @@ const Patient = ({
         search: searchStr,
         sort: sort,
         selectedOption: selectedOption,
-        batchCount:batchCount,
-        filterBatchCount:filterBatchCount
+        batchCount: batchCount,
+        filterBatchCount: filterBatchCount,
       });
     }
   }, [
@@ -327,7 +327,7 @@ const Patient = ({
     endDate,
     searchStr,
     selectedOption,
-    filterBatchCount
+    filterBatchCount,
   ]);
 
   const renderRows = () => {
@@ -626,7 +626,7 @@ const Patient = ({
                               <div className="col-xl-2">
                                 <label>Batch Count</label>
                                 <div class="form-group d-flex">
-                                  <InputText
+                                  {/* <InputText
                                     type="text"
                                     onChange={(e) => {
                                       setBatchCount(e.target.value);
@@ -659,7 +659,43 @@ const Patient = ({
                                     className="btn btn-outline-secondary py-0 px-2 select-count"
                                   >
                                     Select
-                                  </button>
+                                  </button> */}
+                                  <Space.Compact style={{ width: "100%" }}>
+                                    <Input
+                                      type="text"
+                                      onChange={(e) => {
+                                        setBatchCount(e.target.value);
+                                        if (e.target.value.length <= 0) {
+                                          setFilterBatchCount(true);
+                                        }
+                                        const inputValue =
+                                          e.target.value.replace(/[^\d]/g, "");
+                                        setBatchCount(inputValue);
+                                        if (inputValue.length <= 0) {
+                                          setFilterBatchCount(true);
+                                        }
+                                      }}
+                                      value={batchCount}
+                                      className="batch-form-control"
+                                      placeholder="Batch Count"
+                                      maxLength={3}
+                                      onKeyDown={(e) => {
+                                        // Prevent input of backslash ("\")
+                                        if (e.key === "\\") {
+                                          e.preventDefault();
+                                        }
+                                      }}
+                                    />
+                                    <button
+                                      onClick={() => setFilterBatchCount(true)}
+                                      style={{
+                                        borderRadius: "0px 10px 10px 0px",
+                                      }}
+                                      className="btn btn-outline-secondary py-0 px-2 select-count"
+                                    >
+                                      Select
+                                    </button>
+                                  </Space.Compact>
                                 </div>
                               </div>
                             </>
@@ -704,33 +740,33 @@ const Patient = ({
                           >
                             {isPatientList || activeTab === 1 ? (
                               <Tooltip
-                                  title={
-                                    selectedRowsId?.length === 0
-                                      ? "Select patients to Allocate"
-                                      : ""
+                                title={
+                                  selectedRowsId?.length === 0
+                                    ? "Select patients to Allocate"
+                                    : ""
+                                }
+                              >
+                                {" "}
+                                <button
+                                  onClick={handleOpneModal}
+                                  className={styles.export}
+                                  style={{
+                                    backgroundColor: "#133dd426",
+                                    cursor:
+                                      selectedRowsId?.length === 0
+                                        ? "not-allowed"
+                                        : "",
+                                  }}
+                                  disabled={
+                                    selectedRowsId?.length > 0 ||
+                                    selectedRowsId?.data?.length > 0
+                                      ? false
+                                      : true
                                   }
                                 >
-                                  {" "}
-                                  <button
-                                    onClick={handleOpneModal}
-                                    className={styles.export}
-                                    style={{
-                                      backgroundColor: "#133dd426",
-                                      cursor:
-                                        selectedRowsId?.length === 0
-                                          ? "not-allowed"
-                                          : "",
-                                    }}
-                                    disabled={
-                                      selectedRowsId?.length > 0 ||
-                                      selectedRowsId?.data?.length > 0
-                                        ? false
-                                        : true
-                                    }
-                                  >
-                                    Allocate
-                                  </button>
-                                </Tooltip>
+                                  Allocate
+                                </button>
+                              </Tooltip>
                             ) : null}
                           </div>
                         </div>
@@ -859,9 +895,8 @@ const Patient = ({
                                                 <tr>
                                                   <th
                                                     style={{
-
-                                                      paddingLeft:'46px !important',
-
+                                                      paddingLeft:
+                                                        "46px !important",
                                                     }}
                                                   >
                                                     NAME
