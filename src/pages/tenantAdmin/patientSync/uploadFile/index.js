@@ -1,7 +1,8 @@
 import React, { useRef } from "react";
 import styles from "../../../../components/imageUploading/styles.module.css";
+import Image from "next/image";
 
-const UploadFile = ({ filelList, setFileList }) => {
+const UploadFile = ({ filelList, setFileList, subText, uploaderImg }) => {
   const fileInputRef = useRef(null);
   const fileHandleChange = (e) => {
     if (e.target.files) {
@@ -33,14 +34,23 @@ const UploadFile = ({ filelList, setFileList }) => {
 
         <div
           className={styles.videoflex}
-          style={{ overflowY: "scroll", height: "100px", padding: "15px" }}
+          style={{ overflowY: "scroll", height: "110px", padding: "15px" }}
         >
-          {filelList?.length > 0
-            ? filelList?.map(
-                (item, index) =>
-                  `${item?.name} ${filelList?.length === index + 1 ? "" : ", "}`
-              )
-            : "Upload"}
+          {uploaderImg ? (
+            <div>
+              <div className={styles.uploadContainer}>
+                <Image src={uploaderImg} alt="noImage" />
+              </div>
+              <div className={styles.subText}>{subText}</div>
+            </div>
+          ) : filelList?.length > 0 ? (
+            filelList?.map(
+              (item, index) =>
+                `${item?.name} ${filelList?.length === index + 1 ? "" : ", "}`
+            )
+          ) : (
+            "Upload"
+          )}
         </div>
       </label>
     </div>

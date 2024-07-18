@@ -155,6 +155,7 @@ export const getPatientDetails = async (
   setDeletedMeatList,
   setInvalidComboDiseaseCodesList,
   setAllMeatList,
+  setCareGapComboDiseaseCodesList
 ) => {
   if (patientDetailsResult?.data?.response) {
     var result = patientDetailsResult?.data?.response;
@@ -168,6 +169,7 @@ export const getPatientDetails = async (
       var deleteHccList = [];
       var combiDisArray = [];
       var combiDisArrayInvalid = [];
+      var combiDisArrayCareGap = [];
       var meatHeaderList = [];
       var deletedmeatListArr = [];
       var rafScore = [];
@@ -346,12 +348,12 @@ export const getPatientDetails = async (
         res.dateOfServices?.map((res) => {
           dosList.push(res.date);
         });
-        combiDisArray.push({
+        if (res.diseaseSource == "COMBINATION_DISEASES") {
+           combiDisArray.push({
           ...res,
           addOnCode: res.addOnCode,
           addOnCodeTwo: res.addOnCodeTwo,
           addOnCodeThree: res.addOnCodeThree,
-          addOnCodes: [res.addOnCode, res.addOnCodeTwo, res.addOnCodeThree],
           diagnosisCodeCombo: res.diagnosisCodeCombo,
           diseaseName: res.diseaseName,
           diagnosisCode: res.diagnosisCode,
@@ -366,37 +368,82 @@ export const getPatientDetails = async (
           hyperlinks: res?.hyperlinks,
           dateOfServices: res.dateOfServices,
         });
+        } else if (res.diseaseSource == "COMBINATION_DELETED_DISEASES") {
+          combiDisArrayInvalid.push({
+            ...res,
+            addOnCode: res.addOnCode,
+            addOnCodeTwo: res.addOnCodeTwo,
+            addOnCodeThree: res.addOnCodeThree,
+            diagnosisCodeCombo: res.diagnosisCodeCombo,
+            diseaseName: res.diseaseName,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: res.dateOfServices,
+            providerName: providerList,
+            providers: res.provider ? res.providers : res.provider,
+            ruleType: res.ruleType,
+            capturedSections: res.capturedSections,
+            children: res.children ? res.children : [],
+            expanded: true,
+            hyperlinks: res?.hyperlinks,
+            dateOfServices: res.dateOfServices,
+          });
+        }else if (res.diseaseSource == "COMBINATION_SUGGESTED_DISEASES") {
+          combiDisArrayCareGap.push({
+            ...res,
+            addOnCode: res.addOnCode,
+            addOnCodeTwo: res.addOnCodeTwo,
+            addOnCodeThree: res.addOnCodeThree,
+            diagnosisCodeCombo: res.diagnosisCodeCombo,
+            diseaseName: res.diseaseName,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: res.dateOfServices,
+            providerName: providerList,
+            providers: res.provider ? res.providers : res.provider,
+            ruleType: res.ruleType,
+            capturedSections: res.capturedSections,
+            children: res.children ? res.children : [],
+            expanded: true,
+            hyperlinks: res?.hyperlinks,
+            dateOfServices: res.dateOfServices,
+          });
+        }
+       
       });
-      result?.deletedComboDisease?.map((res, index) => {
-        var providerList = [];
-        var dosList = [];
-        res.providerNames?.map((res) => {
-          providerList.push(res);
-        });
-        res.dateOfServices?.map((res) => {
-          dosList.push(res.date);
-        });
-        combiDisArrayInvalid.push({
-          ...res,
-          addOnCode: res.addOnCode,
-          addOnCodeTwo: res.addOnCodeTwo,
-          addOnCodeThree: res.addOnCodeThree,
-          addOnCodes: [res.addOnCode, res.addOnCodeTwo, res.addOnCodeThree],
-          diagnosisCodeCombo: res.diagnosisCodeCombo,
-          diseaseName: res.diseaseName,
-          diagnosisCode: res.diagnosisCode,
-          encounterDate: res.encounterDate,
-          encounterDateSplit: res.dateOfServices,
-          providerName: providerList,
-          providers: res.provider ? res.providers : res.provider,
-          ruleType: res.ruleType,
-          capturedSections: res.capturedSections,
-          children: res.children ? res.children : [],
-          expanded: true,
-          hyperlinks: res?.hyperlinks,
-          dateOfServices: res.dateOfServices,
-        });
-      });
+
+      //responce changed by uvais 
+
+      // result?.deletedComboDisease?.map((res, index) => {
+      //   var providerList = [];
+      //   var dosList = [];
+      //   res.providerNames?.map((res) => {
+      //     providerList.push(res);
+      //   });
+      //   res.dateOfServices?.map((res) => {
+      //     dosList.push(res.date);
+      //   });
+      //   combiDisArrayInvalid.push({
+      //     ...res,
+      //     addOnCode: res.addOnCode,
+      //     addOnCodeTwo: res.addOnCodeTwo,
+      //     addOnCodeThree: res.addOnCodeThree,
+      //     addOnCodes: [res.addOnCode, res.addOnCodeTwo, res.addOnCodeThree],
+      //     diagnosisCodeCombo: res.diagnosisCodeCombo,
+      //     diseaseName: res.diseaseName,
+      //     diagnosisCode: res.diagnosisCode,
+      //     encounterDate: res.encounterDate,
+      //     encounterDateSplit: res.dateOfServices,
+      //     providerName: providerList,
+      //     providers: res.provider ? res.providers : res.provider,
+      //     ruleType: res.ruleType,
+      //     capturedSections: res.capturedSections,
+      //     children: res.children ? res.children : [],
+      //     expanded: true,
+      //     hyperlinks: res?.hyperlinks,
+      //     dateOfServices: res.dateOfServices,
+      //   });
+      // });
 
       setNewValidDiseaseList && setNewValidDiseaseList(hccDisArray);
       setSuggestedHccList && setSuggestedHccList(suggestListAll);
@@ -405,6 +452,8 @@ export const getPatientDetails = async (
       setComboDiseaseCodesList && setComboDiseaseCodesList(combiDisArray);
       setInvalidComboDiseaseCodesList &&
         setInvalidComboDiseaseCodesList(combiDisArrayInvalid);
+        setCareGapComboDiseaseCodesList &&
+        setCareGapComboDiseaseCodesList(combiDisArrayCareGap);
       setDosSummariesList && setDosSummariesList(result?.dosSummaries);
       var capturedSectionsColorsMatching = [];
       var capturedSectionsArr = [];

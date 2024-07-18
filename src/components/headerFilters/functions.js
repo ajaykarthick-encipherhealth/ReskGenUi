@@ -192,7 +192,7 @@ export const handleRnagePicker2 = ({
 };
 
 export const dateFormate = (dayjs, date) => {
-  return date ? dayjs(date).format("MM-DD-YYYY") : <div>---</div>;
+  return date ? dayjs(date).format("MM-DD-YYYY hh:mm A") : <div>---</div>;
 };
 
 //sorting
@@ -408,26 +408,27 @@ export const renderUserPrfoileAvatar = (
   firstName,
   lastName,
   imageUrl,
-  field
+  field,
+  customBg
 ) => {
   const firstNameInitial = firstName?.charAt(0) || "";
   const secondNameInitial = lastName?.charAt(0) || "";
   const hash = (firstNameInitial.charCodeAt(0) % 6) + 1;
-  const backgroundColor = field ? getBackgroundColor(hash) : "#F3C217";
+  const backgroundColor = customBg?"#93BEFB": field ? getBackgroundColor(hash) : "#F3C217";
 
   if (!imageUrl) {
     const profileAvatar = (
       <Avatar
         style={{
           backgroundColor: backgroundColor,
-          color: "white",
+          color: customBg?"black":"white",
           cursor: "pointer",
           width: "30px",
           height: "30px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          fontSize: "15px",
+          fontSize: customBg?"14px":"15px",
           fontWeight: 500,
         }}
       >

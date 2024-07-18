@@ -316,7 +316,7 @@ const Patient = ({ getPatients, loader, response }) => {
           setIsLoadingBtn(false);
         }
         // setAddPatientId(false);
-        getAllList(response?.response);
+        // getAllList(response?.response);
       } catch (Err) {
         notification.error({
           message: Err?.response?.data?.message,
@@ -448,7 +448,7 @@ const Patient = ({ getPatients, loader, response }) => {
       headers
     );
     if (response?.status === 200) {
-      getAllList(response);
+      // getAllList(response);
 
       notification.success({
         message: "Patient File Upload Successfully!",
@@ -495,7 +495,7 @@ const Patient = ({ getPatients, loader, response }) => {
     }
     setAddPatient(false);
     setIsLoadingBtn(false);
-    getAllList(localUserId);
+    // getAllList(localUserId);
   };
   const submitRadiology = async () => {
     const formData = new FormData();
@@ -519,7 +519,7 @@ const Patient = ({ getPatients, loader, response }) => {
       headers
     );
     if (response?.status == 202) {
-      getAllList(localUserId, pageNo, pageSize);
+      // getAllList(localUserId, pageNo, pageSize);
       setAddPatient(false);
       setIsLoadingBtn(false);
     } else {

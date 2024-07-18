@@ -24,6 +24,10 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
     rafScoreMedicAid: false,
     rafScoreOrec: "",
   });
+  const [selectFile, setSelectFile] = useState("");
+  const [paginationFirst, setPaginationFirst] = useState(0);
+  const [page, setPage] = useState(0);
+  const [isCheckeds, setIsCheckeds] = useState(false);
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -88,11 +92,11 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
 
   useEffect(() => {
     getRafConfig();
-  }, []);
+  }, [page]);
 
   const getRafConfig = async () => {
     try {
-      const res = await getCodingDetails({ type: "RAF" });
+      const res = await getCodingDetails({ type: "RAF", page: page });
       if (res?.status == "SUCCESS") {
         console.log(res);
         setIsChecked({
@@ -122,25 +126,73 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
     }
   };
 
-  console.log(options);
+  const submitPatientFile = async () => {
+    const formData = new FormData();
+    formData.append("file", selectFile.originFileObj);
+    formData.append("target", "HISTORY_CODES");
+    formData.append("isDefaultYear", false);
+    const headers = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    // setSelectFile(formData);
+    try {
+      const res = await axios.post(
+        ENDPOINTS.apiEndoint +
+          `management/tenantAdmin/codes/upload
+      `,
+        formData,
+        headers
+      );
+      setSelectFile("");
+      if (res.data.status == "SUCCESS") {
+        getResponePopup(res);
+      } else if (res.data.status == "USER_DEFINED_ERROR") {
+        getResponePopup(res);
+      }
+    } catch (error) {
+      if (error.response.status == 513) {
+        getResponePopup({ status: "USER_DEFINED_ERROR" });
+      }
+    }
+  };
+  const onPageChange = (e) => {
+    setPaginationFirst(e.first);
+    setPage(e.page);
+  };
   return (
     <div>
       <div className="p-3">
-        <div className="d-flex justify-content-between">
+        {/* <div className="d-flex justify-content-between">
           <div>
             <div className={Style.title}>RAF Configuration</div>
             <div className="d-flex justify-content-start gap-2 mt-4">
               <div>Year</div>
               <div>
-                <Checkbox />
+              <Switch
+                    checked={isCheckeds}
+                    onChange={(e) => setIsCheckeds(e)}
+                  />
               </div>
               <div>Can We calculate for all Processing Year</div>
             </div>
           </div>
           <div className="d-flex justify-content-start gap-2">
-            <div>
-              <FileUpload allowedFormat={"File must be in xlsx or CSV"} />
-            </div>
+          <div className="d-flex">
+                <FileUpload
+                  allowedFormat={"File must be in xlsx or CSV"}
+                  onChange={(e) => setSelectFile(e.file)}
+                  fileList={[]}
+                  accept={".xlsx, .csv"}
+                />
+                <RegularButton
+                  name="Upload"
+                  type={selectFile}
+                  disabled={!selectFile}
+                  onClick={submitPatientFile}
+                />
+              </div>
             <div>
               <Button
                 icon={<PlusOutlined />}
@@ -156,22 +208,21 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
             </div>
           </div>
         </div>
-
-        <div className="mt-4">
+        <Divider /> */}
+        <div className={Style.title}>RAF Configuration</div>
+        <div className="mt-4" style={{width: "35%"}}>
           <div className="d-flex justify-content-between mt-1 mb-4">
             <div>{"Do you need to calculate RAF"}</div>
             <div className="d-flex justify-content-between">
               <Switch
-                className="switch"
+                // className="switch"
                 checked={isChecked?.isRafCalculationEnabled}
                 onChange={(e) => onChange(e, "isRafCalculationEnabled")}
               />
               <div
-                className={`mx-2 text-${
-                  isChecked?.isRafCalculationEnabled ? "info" : "danger"
-                }`}
+                className={`mx-2`}
               >
-                {isChecked?.isRafCalculationEnabled ? "Enable" : "Disable"}
+                {isChecked?.isRafCalculationEnabled ? "Yes" : "No"}
               </div>
             </div>
           </div>
@@ -180,16 +231,14 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
             <div>{"Do you need RAF medicaid"}</div>
             <div className="d-flex justify-content-between">
               <Switch
-                className="switch"
+                // className="switch"
                 checked={isChecked?.rafScoreMedicAid}
                 onChange={(e) => onChange(e, "rafScoreMedicAid")}
               />
               <div
-                className={`mx-2 text-${
-                  isChecked?.rafScoreMedicAid ? "info" : "danger"
-                }`}
+                className={`mx-2`}
               >
-                {isChecked?.rafScoreMedicAid ? "Enable" : "Disable"}
+                {isChecked?.rafScoreMedicAid ? "Yes" : "No"}
               </div>
             </div>
           </div>
@@ -197,8 +246,8 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
             <div>{"Enter RAF score OREC"}</div>
             <div className="d-flex justify-content-between">
               <Input
-                className="switch"
-                style={{ width: "280px" }}
+                // className="switch"
+                style={{ width: "200px" }}
                 value={isChecked?.rafScoreOrec}
                 onChange={(e) => onChange(e.target.value, "rafScoreOrec")}
               />
@@ -232,10 +281,16 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
         <div>
           <TenantSettingsTable
             columns={columns}
-            data={
+            data={ list?.response?.rafScoreYearList ? 
               list?.response?.rafScoreYearList[year == "2023" ? 0 : 1]
-                ?.rafScoreBaseRates
+                ?.rafScoreBaseRates : []
             }
+            paginationFirst={paginationFirst}
+            totalElements={
+              list?.response?.historyCodesPage?.totalElements
+            }
+            onPageChange={onPageChange}
+            isNoPagenation={false}
           />
         </div>
       </div>

@@ -32,6 +32,7 @@ const SentReport = ({
   receivedStartDate,
   receivedEndDate,
   loader,
+  userRole
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -109,6 +110,7 @@ const SentReport = ({
   const adminOptions = getChartAdminOption(details);
   const selectedChartOption =
     reportActiveTab === "Supervisor" ? userOptions : adminOptions;
+    const currentRole=userRole?.split("_").map((item,index)=>index===0?item:item.charAt(0).toUpperCase()+item?.slice(1)).join("")
   const handleReceiverReport = (item) => {
     const info = {
       reportUser: item,
@@ -118,11 +120,12 @@ const SentReport = ({
     };
     dispatch(selectedReport(info));
     router?.push(
-      `/supervisor/report/individualreport?reportId=${
+      `/${currentRole}/report/individualreport?reportId=${
         item?._id
       }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
     );
   };
+
   return (
     <>
       <div>

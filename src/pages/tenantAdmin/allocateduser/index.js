@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch, connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { DatePicker, Empty, Tooltip } from "antd";
+import { Button, DatePicker, Empty, Input, Space, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
@@ -34,7 +34,7 @@ import { getFilters } from "../../../stores/authflow/actions";
 import AllocateModal from "./allocate";
 import { debounce } from "../../../components/input";
 import { useCallback } from "react";
-import {actions as tenantAdminUsersAction} from '../../../stores/tenantAdmin/users'
+import { actions as tenantAdminUsersAction } from "../../../stores/tenantAdmin/users";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 
 const { RangePicker } = DatePicker;
@@ -311,7 +311,7 @@ const Patient = ({
     } else {
       setSelectedRowsId([]);
     }
-  }, [selectAllChecked, sort, isPatientList,pageNo]);
+  }, [selectAllChecked, sort, isPatientList, pageNo]);
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
@@ -325,7 +325,7 @@ const Patient = ({
         search: searchStr,
         sort: sort,
         selectedOption: selectedOption,
-        selectOrgList,
+        selectOrgList: selectOrgList,
       });
     }
   }, [
@@ -562,7 +562,7 @@ const Patient = ({
               <div className="col-xl-12">
                 <div className="">
                   <div className="card-body p-0">
-                    <div className="table-responsive active-projects task-table">
+                    <div className="table-responsive active-projects task-table supervisor-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
                           <div
@@ -669,7 +669,7 @@ const Patient = ({
                               <div className="col-xl-2">
                                 <label>Batch Count</label>
                                 <div class="form-group d-flex">
-                                  <InputText
+                                  {/* <InputText
                                     type="text"
                                     onChange={(e) => {
                                       setBatchCount(e.target.value);
@@ -702,7 +702,55 @@ const Patient = ({
                                     className="btn btn-outline-secondary py-0 px-2 select-count"
                                   >
                                     Select
-                                  </button>
+                                  </button> */}
+                                  <Space.Compact style={{ width: "100%" }}>
+                                    <Input
+                                      type="number"
+                                      onChange={(e) => {
+                                        // setBatchCount(e.target.value);
+                                        if (e.target.value.length <= 0) {
+                                          setFilterBatchCount(true);
+                                          getAllList({
+                                            batchCount: "",
+                                            selectOrgList:selectOrgList
+                                          })
+                                          setBatchCount("");
+                                        }
+                                        const inputValue =
+                                          e.target.value.replace(/[^\d]/g, "");
+
+                                        setBatchCount(inputValue);
+                                        if (inputValue?.length >= 0) {
+                                          setFilterBatchCount(true);
+                                        }
+                                      }}
+                                      value={batchCount}
+                                      className="batch-form-control"
+                                      placeholder="Batch Count"
+                                      maxLength={3}
+                                      onKeyDown={(e) => {
+                                        // Prevent input of backslash ("\")
+                                        if (e.key === "\\") {
+                                          e.preventDefault();
+                                        }
+                                      }}
+                                    />
+                                    <button
+                                      onClick={() => {
+                                        setFilterBatchCount(true);
+                                        getAllList({
+                                          batchCount: batchCount,
+                                          selectOrgList:selectOrgList
+                                        });
+                                      }}
+                                      style={{
+                                        borderRadius: "0px 10px 10px 0px",
+                                      }}
+                                      className="btn btn-outline-secondary py-0 px-2 select-count"
+                                    >
+                                      Select
+                                    </button>
+                                  </Space.Compact>
                                 </div>
                               </div>
                             </>
@@ -741,7 +789,7 @@ const Patient = ({
                           <div
                             className={
                               isPatientList && activeTab == 2
-                               ? `col-xl-2 mt-4 ${TableStyle.allocateBtn}`
+                                ? `col-xl-2 mt-4 ${TableStyle.allocateBtn}`
                                 : `col-xl-2 mt-4 ${TableStyle.allocateBtn}`
                             }
                           >
@@ -903,11 +951,13 @@ const Patient = ({
                                                 <tr>
                                                   <th
                                                     style={{
-                                                      textAlign: "start",
+                                                      paddingLeft:
+                                                        "46px !important",
                                                     }}
                                                   >
                                                     NAME
                                                   </th>
+
                                                   <th
                                                     style={{
                                                       textAlign: "center",
@@ -1086,7 +1136,8 @@ const enhancer = connect(
     loader2: state.admin?.patientAllocate?.l2Loader,
     loader3: state.admin?.patientAllocate?.supervisorLoader,
     supervisorResponse: state.admin?.patientAllocate?.l2AllocatedList?.data,
-    selectedSupervisors: state.admin?.patientAllocate?.selectedSupervisors?.data,
+    selectedSupervisors:
+      state.admin?.patientAllocate?.selectedSupervisors?.data,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,

@@ -5,8 +5,12 @@ import { Button, Input, Switch } from "antd";
 import { useState } from "react";
 import Tags from "../../components/tags";
 import { connect, useSelector } from "react-redux";
+import { PlusOutlined } from "@ant-design/icons";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
+import FileUpload from "../../../../../components/table/tenantSettingsTable/fileUpload";
+import axios from "../../../../../utility/axiosConfig";
+import ENDPOINTS from "../../../../../utility/enpoints";
 
 export const handleRemoveTag = ({ index, setTags, tags }) => {
   const newTags = [...tags];
@@ -42,6 +46,7 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
   const [inputValue, setInputValue] = useState("");
   const [editIndex, setEditIndex] = useState(null);
   const [editValue, setEditValue] = useState("");
+  const [selectFile, setSelectFile] = useState("");
   const [isCaptureInsulin, setIsCaptureInsulin] = useState({
     captureInsulinMedicationAsIcdCodes: false,
     includeGeneralInsulinMedications: false,
@@ -73,8 +78,8 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
     }
   };
   const onChange = (checked, type) => {
-    console.log("onChange", checked);
     setIsCaptureInsulin((prev) => ({ ...prev, [type]: checked }));
+    handleSubmit()
   };
   const handleSubmit = async () => {
     try {
@@ -89,12 +94,90 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
       console.log(error);
     }
   };
-
+  const submitPatientFile = async () => {
+    const formData = new FormData();
+    formData.append("file", selectFile.originFileObj);
+    formData.append("target", "INSULIN_MEDICATIONS");
+    formData.append("isDefaultYear", false);
+    const headers = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    setSelectFile(formData);
+    const res = await axios.post(
+      ENDPOINTS.apiEndoint +
+        `management/tenantAdmin/codes/upload
+      `,
+      formData,
+      headers
+    );
+    if (res.status == "SUCCESS") {
+      getResponePopup(res);
+    } else if (res.status == "USER_DEFINED_ERROR") {
+      getResponePopup(res);
+    }
+  };
   return (
     <>
       <div className="p-3" style={{ height: "65vh" }}>
-        <div className="d-flex justify-content-between">
+        <div>
           <div className={Style.title}>Insulin Medications</div>
+          <div className="d-flex justify-content-between align-items-center">
+            <div>
+              <div className="d-flex justify-content-between my-4">
+                <div className="me-3">
+                  Do you need an Capture Insulin Medication as ICD Codes
+                </div>
+                <div className="d-flex justify-content-between">
+                  <Switch
+                    checked={
+                      isCaptureInsulin?.captureInsulinMedicationAsIcdCodes
+                    }
+                    // className="directCodeSwitch"
+                    onChange={(e) =>
+                      onChange(e, "captureInsulinMedicationAsIcdCodes")
+                    }
+                  />
+                  <div className={`mx-2`}>
+                    {isCaptureInsulin?.captureInsulinMedicationAsIcdCodes
+                      ? "Yes"
+                      : "No"}
+                  </div>
+                </div>
+              </div>
+              <div className="d-flex justify-content-between my-4">
+                <div>Do you need to include general insulin medications</div>
+                <div className="d-flex justify-content-between">
+                  <Switch
+                    checked={isCaptureInsulin?.includeGeneralInsulinMedications}
+                    // className="directCodeSwitch"
+                    onChange={(e) =>
+                      onChange(e, "includeGeneralInsulinMedications")
+                    }
+                  />
+                  <div className={`mx-2`}>
+                    {isCaptureInsulin?.includeGeneralInsulinMedications
+                      ? "Yes"
+                      : "No"}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="d-flex">
+              <FileUpload
+                allowedFormat={"File must be in xlsx or CSV"}
+                onChange={(e) => setSelectFile(e.file)}
+                value={selectFile}
+              />
+              <RegularButton
+                name="Upload"
+                type={selectFile}
+                disabled={!selectFile}
+                onClick={submitPatientFile}
+              />
+            </div>
+          </div>
         </div>
         <div>
           <div>
@@ -115,44 +198,7 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
                 <RegularButton name={"Add"} onClick={handleAddTag} />
               </div>
             </div>
-            <div className="d-flex justify-content-between my-4">
-              <div>Do you need an Capture Insulin Medication as ICD Codes</div>
-              <div className="d-flex justify-content-between">
-                <Switch
-                  checked={
-                    isCaptureInsulin?.captureInsulinMedicationAsIcdCodes
-                  }
-                  className="directCodeSwitch"
-                  onChange={(e) =>
-                    onChange(e, "captureInsulinMedicationAsIcdCodes")
-                  }
-                />
-                <div className={`mx-2 text-${"info"}`}>
-                  {isCaptureInsulin?.captureInsulinMedicationAsIcdCodes
-                    ? "Yes"
-                    : "No"}
-                </div>
-              </div>
-            </div>
-            <div className="d-flex justify-content-between my-4">
-              <div>Do you need to include general insulin medications</div>
-              <div className="d-flex justify-content-between">
-                <Switch
-                  checked={
-                    isCaptureInsulin?.includeGeneralInsulinMedications
-                  }
-                  className="directCodeSwitch"
-                  onChange={(e) =>
-                    onChange(e, "includeGeneralInsulinMedications")
-                  }
-                />
-                <div className={`mx-2 text-${"info"}`}>
-                  {isCaptureInsulin?.includeGeneralInsulinMedications
-                    ? "Yes"
-                    : "No"}
-                </div>
-              </div>
-            </div>
+
             <div className="mt-2 max-h-[60vh] overflow-y-auto">
               {tags?.length > 0 ? (
                 tags?.map((tag, index) => (
@@ -243,10 +289,13 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
   );
 };
 
-const enhancer = connect((state) => ({
-  list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
-}), {
-  getCodingDetails: settingActions.codingGuidelinesAction,
-  updateSettings: settingActions.updateInsulinConfig,
-});
+const enhancer = connect(
+  (state) => ({
+    list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
+  }),
+  {
+    getCodingDetails: settingActions.codingGuidelinesAction,
+    updateSettings: settingActions.updateInsulinConfig,
+  }
+);
 export default enhancer(Insulin);

@@ -70,7 +70,7 @@ const InitialCard = ({
 
           setSelectedRows(seletedAll ? seletedAll : []);
           setIsLoading(false);
-        } catch (error) {}
+        } catch (error) { }
       } else setSelectedRows([]);
     }
     if (activeTab === "Admin") {
@@ -79,7 +79,7 @@ const InitialCard = ({
           setIsLoading(true);
           const res = await fetch(
             ENDPOINTS.apiEndoint +
-              `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
+            `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
             {
               headers: { Authorization: `Bearer ${await getStorage("token")}` },
             }
@@ -88,7 +88,7 @@ const InitialCard = ({
 
           setSelectedRows(seletedAll ? seletedAll : []);
           setIsLoading(false);
-        } catch (error) {}
+        } catch (error) { }
       } else setSelectedRows([]);
 
       // dispatch(
@@ -341,12 +341,17 @@ const InitialCard = ({
               <div className="row">
                 <div>
                   <div className=" col-xl-12 d-flex">
-                    {reportListAll?.response?.data?.length === 0 ? (
-                      <div className={`col-xl-6 ${styles.emptyCard}`}>
-                        <Empty />
-                      </div>
-                    ) : (
-                      <div className={`col-xl-6 ${styles.cardDiv}`}>
+
+
+                    <div className={`col-xl-6 ${styles.cardDiv}`}>
+
+                      {reportListAll?.response?.response?.data?.length === 0 ? (
+                        <div className={`col-xl-6 ${styles.card1}`}>
+                          <div className={` ${styles.emptyCard}`}>
+                            <Empty />
+                          </div>
+                        </div>
+                      ) : (
                         <div className={styles.cardContainer}>
                           {reportListAll?.response?.data?.map((item, id) => (
                             <ContentGroupCard
@@ -387,8 +392,10 @@ const InitialCard = ({
                             />
                           ))}
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
+
+
 
                     <div className={`col-xl-6 ${styles.cardSeperation}`}>
                       <div className={styles.cardContainer}>
@@ -444,16 +451,16 @@ const InitialCard = ({
                             {activeTab === "Reviewer"
                               ? ""
                               : allocationCountData.map((item, index) => (
-                                  <AllocationCount
-                                    key={item?.id}
-                                    title={item?.title}
-                                    allocationCount={item?.allocationCount}
-                                    renderUserPrfoileAvatar={
-                                      renderUserPrfoileAvatar
-                                    }
-                                    styles={styles}
-                                  />
-                                ))}
+                                <AllocationCount
+                                  key={item?.id}
+                                  title={item?.title}
+                                  allocationCount={item?.allocationCount}
+                                  renderUserPrfoileAvatar={
+                                    renderUserPrfoileAvatar
+                                  }
+                                  styles={styles}
+                                />
+                              ))}
                           </div>
                         </div>
                       </div>

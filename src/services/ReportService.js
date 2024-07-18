@@ -36,7 +36,6 @@ export const SentReport = async (
   sort
 ) => {
   const token = localStorage.getItem("token");
-  console.log(pagenum, "pagenum");
   const url = `dbservice/reportdetails/sent?pageNo=${pagenum}&size=8&startdate=${
     startDate ? startDate : ""
   }&enddate=${endDate ? endDate : ""}&searchstring=${

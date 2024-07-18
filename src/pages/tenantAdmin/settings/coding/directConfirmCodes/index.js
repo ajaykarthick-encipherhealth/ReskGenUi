@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
-import { Button, Checkbox, Divider, Switch } from "antd";
+import { Button, Checkbox, Divider, Form, Modal, Switch } from "antd";
 import FileUploader from "../../components/fileUploader";
 import ModalPop from "../../components/modal";
 import CommonModalContent from "../../components/commonModalContent";
@@ -15,13 +15,18 @@ import TenantSettingsTable from "../../../../../components/table/tenantSettingsT
 import { getResponePopup } from "../../../../../utils/reusable";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import axios from "../../../../../utility/axiosConfig";
+import EditSettings from "../../components/edit";
 
 const DirectConfirmCodes = ({
   updateSettings,
   updateDirectCode,
   getCodingDetails,
   list,
+  uploadfile,
+  deleteComoridConditions,
+  editComoridConditions,
 }) => {
+  const [form] = Form.useForm();
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
   const [isGuidelines, setIsGuidelines] = useState(false);
@@ -29,6 +34,10 @@ const DirectConfirmCodes = ({
   const [editValue, setEditValue] = useState("");
   const [isEditValue, setIsEditValue] = useState(false);
   const [selectFile, setSelectFile] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
+  const [paginationFirst, setPaginationFirst] = useState(0);
+  const [page, setPage] = useState(0);
+  const [editRowValue, setEditRowValue] = useState(null);
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -80,14 +89,22 @@ const DirectConfirmCodes = ({
       dataIndex: "years",
       key: "year",
     },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+    },
   ];
   useEffect(() => {
     getDirectConfirmDetails();
-  }, []);
+  }, [paginationFirst]);
 
   const getDirectConfirmDetails = async () => {
     try {
-      const res = await getCodingDetails({ type: "DIRECT_CONFIRM_CODES" });
+      const res = await getCodingDetails({
+        type: "DIRECT_CONFIRM_CODES",
+        page: page,
+      });
       if (res?.status == "SUCCESS") {
         setIsGuidelines(res?.response?.includeGeneralGuidelineCodes);
       }
@@ -120,26 +137,66 @@ const DirectConfirmCodes = ({
 
   const submitPatientFile = async () => {
     const formData = new FormData();
-    formData.append("file", selectFile);
+    formData.append("file", selectFile.originFileObj);
     formData.append("target", "DIRECT_CONFIRM_CODES");
-    formData.append("isDefaultYear", false);
+    formData.append("isDefaultYear", isChecked);
     const headers = {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     };
-    setSelectFile(formData);
-    const response = await axios.post(
+    const res = await axios.post(
       ENDPOINTS.apiEndoint +
         `management/tenantAdmin/codes/upload
       `,
       formData,
       headers
     );
+    setSelectFile("");
+    if (res.status == "SUCCESS") {
+      getResponePopup(res);
+    } else if (res.status == "USER_DEFINED_ERROR") {
+      getResponePopup(res);
+    }
   };
 
-  console.log(selectFile, "testing");
-
+  const handleDeleteRow = async (value) => {
+    try {
+      const res = await deleteComoridConditions({
+        id: value.id,
+        target: "DIRECT_CONFIRM_CODES",
+      });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+        setIsEdit(false);
+        setEditRowValue(null);
+        getHistorys();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleEditRow = async (value) => {
+    try {
+      const res = await editComoridConditions({
+        ...editRowValue,
+        ...form.getFieldsValue(),
+        target: "DIRECT_CONFIRM_CODES",
+      });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+        setIsEdit(false);
+        setEditRowValue(null);
+        getHistorys();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const onPageChange = (e) => {
+    setPaginationFirst(e.first);
+    setPage(e.page);
+  };
   return (
     <>
       <div className="p-3">
@@ -150,27 +207,35 @@ const DirectConfirmCodes = ({
               <div className="d-flex justify-content-start gap-2 mt-4">
                 <div>Year</div>
                 <div>
-                  <Checkbox
+                  <Switch
                     checked={isChecked}
-                    onChange={(e) => setIsChecked(e.target.checked)}
+                    onChange={(e) => setIsChecked(e)}
                   />
                 </div>
                 <div>Can We calculate for all Processing Year</div>
               </div>
             </div>
 
-            <div className="d-flex justify-content-start gap-2 ">
-              <div>
+            <div className="d-flex justify-content-start">
+              <div className="d-flex">
                 <FileUpload
                   allowedFormat={"File must be in xlsx or CSV"}
                   onChange={(e) => setSelectFile(e.file)}
+                  fileList={[]}
+                  accept={".xlsx, .csv"}
+                />
+                <RegularButton
+                  name="Upload"
+                  type={selectFile}
+                  disabled={!selectFile}
+                  onClick={submitPatientFile}
                 />
               </div>
               <div>
                 <Button
                   icon={<PlusOutlined />}
                   style={{
-                    height: "47px",
+                    height: "44px",
                   }}
                   onClick={() => {
                     setOpenModal(true);
@@ -195,13 +260,25 @@ const DirectConfirmCodes = ({
               <div className={`mx-2`}>{isGuidelines ? "Yes" : "No"}</div>
             </div>
             <div className="ms-auto mx-4">
-              <Search setSearch={setSearch} />
+              <Search setSearch={setSearch} value={search}/>
             </div>
           </div>
           <div>
             <TenantSettingsTable
               columns={columns}
               data={list?.response?.directConfirmCodesPage?.content}
+              handleEdit={(e) => {
+                setEditRowValue(e);
+                setIsEdit(e);
+                form.setFieldsValue({ ...e });
+              }}
+              // isNoDelete={false}
+              handleDelete={handleDeleteRow}
+              paginationFirst={paginationFirst}
+              totalElements={
+                list?.response?.directConfirmCodesPage?.totalElements
+              }
+              onPageChange={onPageChange}
             />
           </div>
         </div>
@@ -212,10 +289,7 @@ const DirectConfirmCodes = ({
           name={"Restore Changes"}
           onClick={() => console.log("Restore Changes")}
         />
-        <RegularButton
-          name={"Save Changes"}
-          onClick={submitPatientFile}
-        />
+        {/* <RegularButton name={"Save Changes"} onClick={submitPatientFile} /> */}
       </div>
       <ModalPop
         openModal={openModal}
@@ -231,6 +305,14 @@ const DirectConfirmCodes = ({
         }
         setOpenModal={setOpenModal}
       />
+      <Modal
+        title="Edit Direct Confirm Codes"
+        onCancel={() => setIsEdit(false)}
+        footer={false}
+        open={isEdit}
+      >
+        <EditSettings form={form} handleEditRow={handleEditRow} />
+      </Modal>
     </>
   );
 };
@@ -241,6 +323,9 @@ const enhancer = connect(
   {
     updateSettings: settingActions.updateSettingsAction,
     updateDirectCode: settingActions.updateDirectCode,
+    uploadfile: settingActions.uploadFiles,
+    editComoridConditions: settingActions.editComoridConditions,
+    deleteComoridConditions: settingActions.deleteComoridConditions,
     getCodingDetails: settingActions.codingGuidelinesAction,
   }
 );
