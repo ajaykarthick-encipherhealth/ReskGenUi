@@ -102,20 +102,28 @@ export function formatDate(dateString) {
 
 export function formatValues(values, dates) {
   const formatobj = {};
-  if (values?.length) {
-    values &&
-      values.forEach((key, i) => {
-        const formattedKey = formatDate(Object?.keys(key)?.[0]);
-        let count = values[i];
-        formatobj[formattedKey] = count[Object?.keys(key)?.[0]];
-      });
-  } else {
-    values &&
-      Object?.keys(values).forEach((key) => {
-        const formattedKey = formatDate(key);
-        formatobj[formattedKey] = values[key];
-      });
+  
+  if (Array.isArray(values)) {
+    values.forEach((obj) => {
+      const key = Object.keys(obj)[0];
+      const formattedKey = formatDate(key);
+      formatobj[formattedKey] = obj[key];
+    });
+  } else if (values && typeof values === 'object') {
+    Object.keys(values).forEach((key) => {
+      const formattedKey = formatDate(key);
+      formatobj[formattedKey] = values[key];
+    });
   }
-  const resultArray = dates?.map((date) => formatobj[date] || 0);
+  
+  const resultArray = dates.map((date) => formatobj[formatDate(date)] || 0);
   return resultArray;
 }
+
+
+
+
+
+
+
+

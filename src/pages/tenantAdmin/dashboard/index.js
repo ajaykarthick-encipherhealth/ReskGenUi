@@ -44,7 +44,6 @@ const Index = ({
   getAccuracyScore,
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
-
   const [selectedValue, setSelectedValue] = useState(null);
   const [dateRange, setDateRange] = useState({
     startDate:
@@ -52,6 +51,23 @@ const Index = ({
     endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
   });
   const [selectedOrganization, setSelectedOrganization] = useState("");
+  const [customDate, setCustomDate] = useState("");
+
+  const getAllDatesInRange = (dateRange) => {
+    const dates = [];
+    let currentDate = moment(dateRange?.startDate);
+
+    while (currentDate.isSameOrBefore(dateRange?.endDate)) {
+      dates.push(currentDate.format("MMMDD"));
+      currentDate = currentDate.add(1, "days");
+    }
+
+    return dates;
+  };
+  useEffect(() => {
+    const customRange = getAllDatesInRange(dateRange);
+    setCustomDate(customRange);
+  }, [dateRange]);
 
   const allocatedData = [
     {
@@ -216,6 +232,7 @@ const Index = ({
             setSelectedOrganization={setSelectedOrganization}
             selectedOrganization={selectedOrganization}
             setSelectedValue={setSelectedValue}
+            dateRange={dateRange}
           />
           {activeBtn === "default" ? (
             <>
@@ -233,6 +250,7 @@ const Index = ({
                     <RafAndRevenue
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
+                      customDate={customDate}
                     />
                   </Card>
                 </div>
@@ -245,6 +263,7 @@ const Index = ({
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
                       selectedValue={selectedValue}
+                      customDate={customDate}
                     />
                   </Card>
                 </div>
@@ -257,6 +276,7 @@ const Index = ({
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
                       selectedValue={selectedValue}
+                      customDate={customDate}
                     />
                   </Card>
                 </div>
@@ -269,6 +289,7 @@ const Index = ({
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
                       selectedValue={selectedValue}
+                      customDate={customDate}
                     />
                   </Card>
                 </div>
@@ -291,6 +312,7 @@ const Index = ({
                       selectedOrganization={selectedOrganization}
                       selectedValue={selectedValue}
                       classNames="workflowChart"
+                      customDate={customDate}
                     />
                   </Card>
                 </div>
@@ -337,6 +359,7 @@ const Index = ({
                       selectedOrganization={selectedOrganization}
                       classNames="workflowChart1"
                       selectedValue={selectedValue}
+                      customDate={customDate}
                     />
                   </Card>
                 </div>

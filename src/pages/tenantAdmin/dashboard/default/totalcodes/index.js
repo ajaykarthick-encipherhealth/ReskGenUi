@@ -32,11 +32,15 @@ const index = ({
   selectedValue,
   revenueChartLoader,
   rafScorechartLoader,
+  customDate,
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
-
   const dates =
-    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
+    selectedValue === "custom"
+      ? customDate
+      : selectedValue === "last_1_week"
+      ? getLast7Days()
+      : getLast30Days();
   const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
 
   const suggestedHccDiseaseCountMap =
@@ -79,7 +83,12 @@ const index = ({
   const options = {
     xAxis: {
       type: "category",
-      data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
+      data:
+        selectedValue === "custom"
+          ? customDate
+          : selectedValue === "last_1_week"
+          ? getLast7Days()
+          : getLast30Days(),
     },
     yAxis: {
       type: "value",
@@ -227,6 +236,7 @@ const index = ({
               options={options}
               isRadio={true}
               className="codesGraphStyle2"
+              customDate={customDate}
             />
           </div>
         ) : (
@@ -268,6 +278,7 @@ const index = ({
               rafColor2={"#00BC13"}
               selectedValue={selectedValue}
               dateRange={dateRange}
+              customDate={customDate}
               selectedOrganization={selectedOrganization}
             />
           </div>
@@ -310,6 +321,7 @@ const index = ({
               isMultiple={true}
               selectedValue={selectedValue}
               className="revenueCharts1"
+              customDate={customDate}
             />
           </div>
         ) : (

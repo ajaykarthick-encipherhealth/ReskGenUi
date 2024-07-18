@@ -22,6 +22,7 @@ const index = ({
   totalCodesLoader,
   revenueChartLoader,
   rafScorechartLoader,
+  customDate,
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
@@ -37,8 +38,6 @@ const index = ({
 
   formatNumber();
   const TotalHccRevenue = getAllRaf?.totalHccRafScore;
-
-  
 
   return (
     <div className="d-flex justify-content-between">
@@ -73,6 +72,7 @@ const index = ({
               selectedValue={selectedValue}
               selectedOrganization={selectedOrganization}
               className="codesGraphStyle3"
+              customDate={customDate}
             />
           </div>
         ) : (
@@ -114,6 +114,7 @@ const index = ({
               rafColor={"#8E68F7"}
               isHcc={true}
               selectedValue={selectedValue}
+              customDate={customDate}
             />
           </div>
         ) : (
@@ -158,6 +159,7 @@ const index = ({
                 hccColor="#02BBDE"
                 selectedValue={selectedValue}
                 className="revenueCharts2"
+                customDate={customDate}
               />
             </div>
           </div>

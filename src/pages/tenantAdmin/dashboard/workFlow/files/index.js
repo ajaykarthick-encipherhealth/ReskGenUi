@@ -15,7 +15,6 @@ import {
   getLast30Days,
   getLast7Days,
 } from "../../../../../utils/reusable.js";
-import moment from "moment";
 
 const Files = ({
   getAllComputing,
@@ -30,9 +29,14 @@ const Files = ({
   selectedValue,
   activeBtn,
   classNames,
+  customDate,
 }) => {
   const dates =
-    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
+    selectedValue === "custom"
+      ? customDate
+      : selectedValue === "last_1_week"
+      ? getLast7Days()
+      : getLast30Days();
   let computedDate = getAllComputingStatus?.COMPUTED?.map((x) => {
     return { [x.date]: x.computing };
   });
@@ -41,7 +45,7 @@ const Files = ({
     return { [x.date]: x.computing };
   });
   const resultProcessing = formatValues(processingDate, dates);
-  
+
   let failedDate = getAllComputingStatus?.FAILED?.map((x) => {
     return { [x.date]: x.computing };
   });
@@ -52,12 +56,15 @@ const Files = ({
   });
   const resultUpload = formatValues(uploadDate, dates);
 
-
-
   const options = {
     xAxis: {
       type: "category",
-      data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
+      data:
+        selectedValue === "custom"
+          ? customDate
+          : selectedValue === "last_1_week"
+          ? getLast7Days()
+          : getLast30Days(),
     },
     yAxis: {
       type: "value",
@@ -163,8 +170,6 @@ const Files = ({
       },
     ];
   }
-
-  
 
   useEffect(() => {
     getComputingStatus(
