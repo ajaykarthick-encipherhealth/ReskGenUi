@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch, connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { DatePicker, Empty, Tooltip } from "antd";
+import { Button, DatePicker, Empty, Input, Space, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
@@ -119,7 +119,6 @@ const Patient = ({
     selectedOption,
     selectOrgList,
     batchCount,
-    filterBatchCount
   }) => {
     const uId = localStorage.getItem("userId");
     const orgId = selectOrgList;
@@ -131,7 +130,7 @@ const Patient = ({
       sort?.sortDir ? sort?.sortDir : ""
     }&sortfield=${sort?.sortField ? sort?.sortField : ""}&priority=${
       selectedOption ? selectedOption : ""
-    }&batchCount=${filterBatchCount ? batchCount : ""}`;
+    }&batchCount=${batchCount ? batchCount : ""}`;
     allocatedGetList({ url: resoureUrl });
     // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     // if (response?.data) {
@@ -326,9 +325,7 @@ const Patient = ({
         search: searchStr,
         sort: sort,
         selectedOption: selectedOption,
-        selectOrgList:selectOrgList,
-        batchCount:batchCount,
-        filterBatchCount:filterBatchCount
+        selectOrgList: selectOrgList,
       });
     }
   }, [
@@ -341,7 +338,6 @@ const Patient = ({
     searchStr,
     selectedOption,
     selectOrgList,
-    filterBatchCount
   ]);
   useEffect(() => {
     if (!isPatientList) {
@@ -673,7 +669,7 @@ const Patient = ({
                               <div className="col-xl-2">
                                 <label>Batch Count</label>
                                 <div class="form-group d-flex">
-                                  <InputText
+                                  {/* <InputText
                                     type="text"
                                     onChange={(e) => {
                                       setBatchCount(e.target.value);
@@ -706,7 +702,55 @@ const Patient = ({
                                     className="btn btn-outline-secondary py-0 px-2 select-count"
                                   >
                                     Select
-                                  </button>
+                                  </button> */}
+                                  <Space.Compact style={{ width: "100%" }}>
+                                    <Input
+                                      type="number"
+                                      onChange={(e) => {
+                                        // setBatchCount(e.target.value);
+                                        if (e.target.value.length <= 0) {
+                                          setFilterBatchCount(true);
+                                          getAllList({
+                                            batchCount: "",
+                                            selectOrgList:selectOrgList
+                                          })
+                                          setBatchCount("");
+                                        }
+                                        const inputValue =
+                                          e.target.value.replace(/[^\d]/g, "");
+
+                                        setBatchCount(inputValue);
+                                        if (inputValue?.length >= 0) {
+                                          setFilterBatchCount(true);
+                                        }
+                                      }}
+                                      value={batchCount}
+                                      className="batch-form-control"
+                                      placeholder="Batch Count"
+                                      maxLength={3}
+                                      onKeyDown={(e) => {
+                                        // Prevent input of backslash ("\")
+                                        if (e.key === "\\") {
+                                          e.preventDefault();
+                                        }
+                                      }}
+                                    />
+                                    <button
+                                      onClick={() => {
+                                        setFilterBatchCount(true);
+                                        getAllList({
+                                          batchCount: batchCount,
+                                          selectOrgList:selectOrgList
+                                        });
+                                      }}
+                                      style={{
+                                        borderRadius: "0px 10px 10px 0px",
+                                      }}
+                                      className="btn btn-outline-secondary py-0 px-2 select-count"
+                                    >
+                                      Select
+                                    </button>
+                                  </Space.Compact>
                                 </div>
                               </div>
                             </>
@@ -745,7 +789,7 @@ const Patient = ({
                           <div
                             className={
                               isPatientList && activeTab == 2
-                               ? `col-xl-2 mt-4 ${TableStyle.allocateBtn}`
+                                ? `col-xl-2 mt-4 ${TableStyle.allocateBtn}`
                                 : `col-xl-2 mt-4 ${TableStyle.allocateBtn}`
                             }
                           >
@@ -905,10 +949,10 @@ const Patient = ({
                                                 }
                                               >
                                                 <tr>
-
                                                   <th
                                                     style={{
-                                                        paddingLeft:'46px !important',
+                                                      paddingLeft:
+                                                        "46px !important",
                                                     }}
                                                   >
                                                     NAME
