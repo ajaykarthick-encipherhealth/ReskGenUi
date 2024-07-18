@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Offcanvas, Button } from "react-bootstrap";
 import { actions as tenantActions } from "../../../../stores/tenantAdmin/patientSync";
 import { connect } from "react-redux";
-import { Form, Input, Select } from "antd";
+import { Divider, Form, Input, Select, Space } from "antd";
 import downloadImg from "../../../../images/fihr/download.png";
 import uploaderImg from "../../../../images/fihr/uploaderImg.png";
 import UploadFile from "../uploadFile";
-import { useSelector } from "react-redux";
 import { useState } from "react";
 import ENDPOINTS from "../../../../utility/enpoints";
 import axios from "../../../../utility/axiosConfig";
 import Image from "next/image";
 import style from "../fhir.module.css";
-import sampleFiles from '../sampleFiles/sampleCsv.csv'
+import { PlusOutlined } from "@ant-design/icons";
+import CustomSelect from "../../../../components/customSelect";
+// import CustomSelect from "../../../../components/customSelect";
+// import CustomSelect from "../../../../customSelect";
 
 export const getYears = () => {
   const currentYear = new Date().getFullYear();
@@ -40,6 +42,11 @@ const FhirDrawer = ({
 }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
+  const [items, setItems] = useState([]);
+  const [name, setName] = useState("");
+  const [capturedSections, setCapturedSections] = useState([]);
+  const [section, setSection] = useState("");
+
   const [selectedType, setSelectedType] = useState(null);
   const handleClose = (form) => {
     setFileList([]);
@@ -51,6 +58,18 @@ const FhirDrawer = ({
     }
   };
 
+  const inputRef = useRef(null);
+  const onNameChange = (event) => {
+    setName(event.target.value);
+  };
+  const addItem = (e) => {
+    e.preventDefault();
+    setItems([...items, name || `New item ${index++}`]);
+    setName("");
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
+  };
   const generateUUID = () => {
     let dt = new Date().getTime();
     let uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
@@ -104,7 +123,7 @@ const FhirDrawer = ({
     } else {
       fileName = "sample.xlsx";
     }
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = `/${fileName}`;
     link.download = fileName;
     document.body.appendChild(link);
@@ -136,7 +155,7 @@ const FhirDrawer = ({
                 },
               ]}
             >
-              <Input name="batchName" />
+              <Input name="batchName" placeholder="BatchName" />
             </Form.Item>
 
             <Form.Item
@@ -161,6 +180,7 @@ const FhirDrawer = ({
                 onChange={(value) => {
                   setSelectedType(value);
                 }}
+                placeholder="Input Type"
               />
             </Form.Item>
             <Form.Item
@@ -183,6 +203,7 @@ const FhirDrawer = ({
                 style={{ width: "100%" }}
                 options={getYears()}
                 size="large"
+                placeholder="year Of Service"
               />
             </Form.Item>
             {selectedType === "GROUP_ID" ? (
@@ -202,48 +223,69 @@ const FhirDrawer = ({
               >
                 <Input name="groupId" />
               </Form.Item>
-            ) : (
-              <>
+            ) : selectedType === "MANUAL" ? (
               <Form.Item
                 label={
                   <label>
-                    Upload File <span className="text-danger">*</span>
+                    MRN Number<span className="text-danger">*</span>
                   </label>
                 }
-                name="upload"
+                name="mrnNumber"
                 rules={[
                   {
-                    required: false,
-                    message: "Please Upload File",
+                    required: true,
+                    message: "Please enter MRN Number",
                   },
                 ]}
               >
-                <UploadFile
-                  filelList={fileList}
-                  setFileList={setFileList}
-                  uploaderImg={uploaderImg}
-                  subText={
-                    fileList?.length > 0
-                      ? fileList[0]?.name
-                      : "Upload Excel, CSV, Json or Drag and drop your files"
-                  }
-                />
+                <CustomSelect disabled={false} />
               </Form.Item>
-              <Form.Item label={<label>Sample File Input</label>}>
-              <Button type="button" className={style.sampleBtnStyle}>
-                {selectedType==="CSV"?"Sample Csv File.csv":selectedType==="JSON"?"Sample Json File.json":"Sample Excel File.xlsx"}
-                <Image
-                  src={downloadImg}
-                  alt="noImage"
-                  className={style.sampleFileImg}
-                  onClick={()=>{handleDownload()}}
-                />
-              </Button>
-            </Form.Item>
-            </>
+            ) : (
+              <>
+                <Form.Item
+                  label={
+                    <label>
+                      Upload File <span className="text-danger">*</span>
+                    </label>
+                  }
+                  name="upload"
+                  rules={[
+                    {
+                      required: false,
+                      message: "Please Upload File",
+                    },
+                  ]}
+                >
+                  <UploadFile
+                    filelList={fileList}
+                    setFileList={setFileList}
+                    uploaderImg={uploaderImg}
+                    subText={
+                      fileList?.length > 0
+                        ? fileList[0]?.name
+                        : "Upload Excel, CSV, Json or Drag and drop your files"
+                    }
+                  />
+                </Form.Item>
+                <Form.Item label={<label>Sample File Input</label>}>
+                  <Button type="button" className={style.sampleBtnStyle}>
+                    {selectedType === "CSV"
+                      ? "Sample Csv File.csv"
+                      : selectedType === "JSON"
+                      ? "Sample Json File.json"
+                      : "Sample Excel File.xlsx"}
+                    <Image
+                      src={downloadImg}
+                      alt="noImage"
+                      className={style.sampleFileImg}
+                      onClick={() => {
+                        handleDownload();
+                      }}
+                    />
+                  </Button>
+                </Form.Item>
+              </>
             )}
-
-            
 
             <Form.Item>
               <div className="col-xl-12 mb-3 d-grid justify-content-center">
