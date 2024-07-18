@@ -1,18 +1,14 @@
 import { Input } from "antd";
 import React from "react";
 
-const Search = ({ setSearch }) => {
+const Search = ({ setSearch, value }) => {
   return (
     <div>
       <Input
         placeholder="Search....!"
         size="large"
         onChange={(e) => setSearch(e.target.value)}
-        // style={{ height: "58px" }}
-        // prefix={prefix}
-        // suffix={suffix}
-
-        // onSearch={onSearch}
+        value={value}
       />
     </div>
   );

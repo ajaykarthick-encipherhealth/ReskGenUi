@@ -2,6 +2,10 @@
   /* margin-top: -60px; */
   height: 150px;
   overflow-y: hidden;
+  display: flex;
+}
+.column {
+  flex: 1;
 }
 .bulletsDiv:hover {
   overflow-y: scroll;

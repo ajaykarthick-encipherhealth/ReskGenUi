@@ -13,7 +13,7 @@
 .heading {
   font-size: 16px;
   font-weight: 500;
-  line-height: 20px;
+  line-height: 30px;
   letter-spacing: 0em;
   text-align: left;
 }
@@ -81,3 +81,100 @@
 .editIcon {
   font-size: 10px;
 }
+.notesContainer {
+  margin-top: 20px;
+  background: #eaf8ff;
+  border-radius: 5px;
+}
+.notesTextContainer {
+  display: grid;
+}
+.notesTextContainer2 {
+  display: grid;
+  padding-left: 20px;
+}
+.notesHeading {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 30px;
+}
+.notesHeading2 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 30px;
+}
+.notesDes {
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a4a4a;
+}
+
+.stpesTextContainer {
+  margin-top: 20px;
+}
+.stepsContainer {
+  margin-top: 20px;
+}
+.stepsTitle {
+  font-size: 16px !important;
+}
+.stepsHeading {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 30px;
+}
+.activationContainer {
+  display: flex;
+  margin: 30px 0 0 25px;
+}
+.activationHeading {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 30px;
+  margin-top: 7px;
+}
+.btnContainer {
+  text-align: center;
+  margin-top: 25px;
+}
+.statusContainer {
+  display: flex;
+  margin-top: 20px;
+  background: #eaf8ff;
+  border-radius: 5px;
+  padding: 10px;
+}
+.cancelBtn {
+  background: #fff !important;
+  border: 1px solid !important;
+  border-radius: 5px !important;
+  color: #000 !important;
+}
+.cancelBtn :hover {
+  background: #fff !important;
+  border-radius: 5px !important;
+  color: #000 !important;
+}
+.statusImg {
+  background: #fff;
+  border-radius: 5px;
+  width: 105px;
+  text-align: center;
+  padding: 5px;
+  height: 35px;
+}
+.statusImgCompleted {
+  background: #fff;
+  border-radius: 5px;
+  width: 125px;
+  text-align: center;
+  padding: 5px;
+  height: 35px;
+}
+.borderStyleConnect{
+  border: 1px solid #06439D;
+}
+.borderStyleDisConnect{
+  border: 1px solid #8C9097;
+}
+

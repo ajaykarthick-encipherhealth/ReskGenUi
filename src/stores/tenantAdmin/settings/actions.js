@@ -56,11 +56,6 @@ export const getAllOrganizationAction = createActionThunk(
   "GET_ALL_ORGANIZATION",
   network.getAllOrganization
 );
-
-export const uploadFileSetting = createActionThunk(
-  "GET_ALL_FILE_PROCESS",
-  network.uploadFileSettings
-);
 export const getAllBatches=createActionThunk(
   'GET_ALL_BATCHES',
   network.allBatches
@@ -100,4 +95,20 @@ export const updateDownCodes = createActionThunk(
 export const updateRafConfigs = createActionThunk(
   "UPDATE_DOWN_CODES",
   network.updateRafConfig
+);
+export const uploadFiles = createActionThunk(
+  "GET_FILE_PROCESS_SETTINGS",
+  network.uploadFile
+);
+export const editHealthMetric = createActionThunk(
+  "EDIT_HEALTH_METRIC",
+  network.editHealthMertic
+);
+export const editComoridConditions = createActionThunk(
+  "EDIT_COMORID_CONDITIONS",
+  network.editComoridCondition
+);
+export const deleteComoridConditions = createActionThunk(
+  "DELETE_COMORID_CONDITIONS",
+  network.deleteComoridCondition
 );

@@ -30,6 +30,7 @@ export async function teamApi({
   startDate = "",
   endDate = "",
   search,
+  filter="",
   sort,
   size,
   flagsList
@@ -37,9 +38,10 @@ export async function teamApi({
   const options = {
     method: "GET",
   };
+  const searchValue = filter === "ALL" ? "" : filter;
   const orgId = localStorage.getItem("orgId");
   const data = await requestPortal(
-    `dbservice/patient/auditorreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&searchstring=${search?search:""}&orgid=${orgId}&sortfield=${sort?.sortField?sort?.sortField:""}&sortdirection=${sort?.sortDir?sort?.sortDir:""}&patientIds=${flagsList?flagsList:""}
+    `dbservice/patient/auditorreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&status=${searchValue?searchValue:""}&searchstring=${search?search:""}&orgid=${orgId}&sortfield=${sort?.sortField?sort?.sortField:""}&sortdirection=${sort?.sortDir?sort?.sortDir:""}&patientIds=${flagsList?flagsList:""}
   `,
     options
   );

@@ -20,12 +20,14 @@ import RafConfig from "./coding/rafConfig";
 import HistoryCodes from "./coding/historyCodes";
 import DownCodes from "./coding/downCodes";
 import DirectConfirmCodes from "./coding/directConfirmCodes";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHospital } from "@fortawesome/free-solid-svg-icons";
 const { Sider } = Layout;
 
 const menuList = [
   {
     key: `Configuration`,
-    icon: <ConfigIcon />,
+    icon: <span className=""><ConfigIcon /></span>,
     label: `Configuration`,
     children: [
       {
@@ -44,7 +46,9 @@ const menuList = [
   },
   {
     key: `Coding_Guidelines`,
-    icon: <ConfigIcon />,
+    icon: <FontAwesomeIcon icon={faHospital} style={{
+      color:"#04306f"
+    }} />,
     label: `Coding Guidelines`,
     children: [
       {
@@ -87,7 +91,7 @@ const menuList = [
   },
   {
     key: `EMR-FHIR`,
-    icon: <Fire />,
+    icon: <span className=""><Fire /></span>,
     label: `EMR-FHIR`,
   },
 ];
@@ -108,7 +112,7 @@ const Settings = () => {
             <div>
               <Layout>
                 <Sider width={250} >
-                  <div className={Style.menuLists}>
+                  <div className={Style.menuLists} style={{width: "100%"}}>
                   <Menu
                     mode="inline"
                     defaultSelectedKeys={["File_Processing_Config"]}

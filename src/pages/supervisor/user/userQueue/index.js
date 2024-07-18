@@ -35,29 +35,28 @@ const bullets = [
 ];
 const badges = [
   {
-    color: "#377880",
+    color: "#4AA1AB",
     name: "Audited",
-    src: audited,
-  },
-  {
-    color: "#FFBE00",
-    name: "Re Audit",
-    src: auditHold,
   },
   {
     color: "#964B00",
+    name: "Re Audit",
+  },
+  {
+    color: "#EBAE00",
     name: "Audit Hold",
-    src: reAudit,
   },
   {
-    color: "#F28585",
+    color: "#BD3A79",
     name: "Audit Pending",
-    src: auditPending,
   },
   {
-    color: "red",
+    color: "#C21807",
     name: "Audit Declined",
-    src: auditDeclined,
+  },
+  {
+    color: "#EC8E27",
+    name: "Not Audit",
   },
 ];
 
@@ -381,18 +380,18 @@ const Index = ({
                       isAnotherPicker={true}
                       // defaultAllocateTo={""}
                       // allocated by
-                      isAllocatedBySelector={true}
-                      allocatedBylabel=" AllocatedBy"
-                      allocatedByOptoons={generateOptionsList(filteredList)}
-                      setSelAllocatedBy={setSelAllocatedBy}
+                      // isAllocatedBySelector={true}
+                      // allocatedBylabel=" AllocatedBy"
+                      // allocatedByOptoons={generateOptionsList(filteredList)}
+                      // setSelAllocatedBy={setSelAllocatedBy}
                       // defaultAllocatedBy={"All"}
                       // allocated date
-                      pickerlabe3="Allocated Date"
-                      defaultStartDate3={""}
-                      defaultEndDate3={""}
-                      setStartDate3={setAllocatedStartDate}
-                      setEndDate3={setAllocatedEndDate}
-                      isAllocatedDate={true}
+                      // pickerlabe3="Allocated Date"
+                      // defaultStartDate3={""}
+                      // defaultEndDate3={""}
+                      // setStartDate3={setAllocatedStartDate}
+                      // setEndDate3={setAllocatedEndDate}
+                      // isAllocatedDate={true}
                       // Auditeddate
                       pickerlabe4="Audited Date"
                       defaultStartDate4={""}
@@ -407,6 +406,8 @@ const Index = ({
                       getFilters={getFilters}
                       username={userName}
                       setPageNo={setPageNo}
+                      bulletsTitle="Reviewed Status"
+                      badgesTitle="Audited Status"
                     />
                   </div>
                   <div

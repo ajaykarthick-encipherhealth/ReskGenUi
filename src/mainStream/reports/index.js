@@ -3,13 +3,11 @@ import Header from "../../jsx/layouts/nav/Header";
 import styles from "./report.module.css";
 import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch , faFileExport} from "@fortawesome/free-solid-svg-icons";
-import {   } from "@fortawesome/free-regular-svg-icons";
+import { faSearch, faFileExport } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
 import Select from "react-select";
 import { Modal, DatePicker, Tooltip } from "antd";
-import ExportImg from "../../images/svg/Export";
 import { debounce } from "../../../src/pages/admin/reports/Export";
 import {
   disableFutureDate,
@@ -25,8 +23,6 @@ import { actions as workflowActions } from "../../stores/reviewer/workqueue";
 import { actions as reviewerAction } from "../../stores/reviewer/report";
 import { actions as supervisorAction } from "../../stores/supervisor/report";
 import moment from "moment";
-import TableStyle from "../../components/table/table.module.css";
-import dayjs from "dayjs";
 import {
   selectedReport,
   getReportDetails,
@@ -34,10 +30,7 @@ import {
 } from "../../store/actions/adminAction/ReportActions";
 import Tab from "../components/tags";
 import MoreFilter from "../../resusablereport/reports/MoreFilter";
-import { SVGICON } from "../../jsx/constant/theme";
 import TeamReport from "./teamReport";
-
-
 
 const statusOptions = [
   { label: "All", value: "" },
@@ -64,13 +57,16 @@ const Reports = ({
   sentLoader,
   auditReport,
   TeamReportDetails,
+  supervisorReportDetails,
   teamReport,
   auditeReportLoading,
+  tab,
 }) => {
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
   const rowsLength = useSelector((state) => state?.report?.row);
-  const activeTab = useSelector((state) => state.AuditReport.activetab);
+  const activeTabName = useSelector((state) => state.AuditReport?.activetab);
+  const activeTab = activeTabName ? activeTabName : tab;
 
   const AdminReportPatientDetails = useSelector(
     (state) => state.report?.details
@@ -78,7 +74,7 @@ const Reports = ({
   const selectUserList = useSelector(
     (state) => state?.adminReport?.selectedUsers
   );
-  const [userRole, setUserRole] = useState(activeTab);
+  const [userRole, setUserRole] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
@@ -175,7 +171,6 @@ const Reports = ({
   const handleTabs = (name) => {
     setSelectedDates(null);
     setSelecteddateRanges([]);
-
     dispatch(getActiveTab(name));
     setSearch();
     setSearchVal([]);
@@ -382,6 +377,9 @@ const Reports = ({
         startDate: selectedDateRanges?.Team?.from,
         endDate: selectedDateRanges?.Team?.to,
         search: coderSearchString ? coderSearchString : "",
+        filter: selectedOptions?.reviewerStatus?.value
+          ? selectedOptions?.reviewerStatus?.value
+          : "",
         sort: sort,
         flagsList: flagPatientsList ? flagPatientsList : "",
       });
@@ -472,7 +470,7 @@ const Reports = ({
                             <div className="d-flex w-100">
                               <label className="labelStyle d-flex m-auto p-2">
                                 {" "}
-                                Search 
+                                Search
                               </label>
                               <div className="form-group has-search2 w-100">
                                 <FontAwesomeIcon
@@ -719,10 +717,27 @@ const Reports = ({
                               {rowsLength?.length > 0 ||
                               rowsLength?.data?.length > 0 ? (
                                 // <ExportImg />
-                                <FontAwesomeIcon icon={faFileExport} className={styles.iconReplaced} style={{color:rowsLength?.data?.length > 0 ? "gray" :"#04306f"}} />
-
+                                <FontAwesomeIcon
+                                  icon={faFileExport}
+                                  className={styles.iconReplaced}
+                                  style={{
+                                    color:
+                                      rowsLength?.data?.length > 0
+                                        ? "gray"
+                                        : "#04306f",
+                                  }}
+                                />
                               ) : (
-                                <FontAwesomeIcon icon={faFileExport} className={styles.iconReplaced} style={{color:rowsLength?.data?.length > 0 ? "#04306f" :"gray"}}/>
+                                <FontAwesomeIcon
+                                  icon={faFileExport}
+                                  className={styles.iconReplaced}
+                                  style={{
+                                    color:
+                                      rowsLength?.data?.length > 0
+                                        ? "#04306f"
+                                        : "gray",
+                                  }}
+                                />
                                 // SVGICON.exportDisable
                               )}
                               <span style={{ marginTop: "-3px" }}>Export</span>
@@ -767,9 +782,17 @@ const Reports = ({
                     <TeamReport
                       setModal={setModal}
                       modal={modal}
-                      reportListAll={TeamReportDetails?.data}
+                      reportListAll={
+                        activeTab === "Team"
+                          ? TeamReportDetails?.data
+                          : supervisorReportDetails?.data
+                      }
                       paginationFirst={paginationTeamFirst}
-                      ReportPatientDetails={TeamReportDetails?.data}
+                      ReportPatientDetails={
+                        activeTab === "Team"
+                          ? TeamReportDetails?.data
+                          : supervisorReportDetails?.data
+                      }
                       onPageChange={onTeamPageChange}
                       comments={comments}
                       setComments={setComments}
@@ -787,6 +810,7 @@ const Reports = ({
                       activeTab={activeTab}
                       handleHeaderCheckbox={handleHeaderCheckboxChange}
                       selectAllFlags={selectAllFlags}
+                      userRole={userRole}
                     />
                   )}
                   {activeTab === "Sent" && (
@@ -804,6 +828,7 @@ const Reports = ({
                         receivedEndDate={selectedDateRanges?.Sent?.to}
                         isPhysician={true}
                         loader={sentLoader}
+                        userRole={userRole}
                       />
                     </div>
                   )}

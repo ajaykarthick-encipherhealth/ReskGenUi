@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Style from "./../../style.module.css";
 import RegularButton from "../../../../../components/button";
-import { ColorPicker, Form } from "antd";
+import { ColorPicker, Form, Popconfirm } from "antd";
 import { connect, useSelector } from "react-redux";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -63,6 +63,8 @@ const FlagConfig = ({ getFlagConfigDetails, flagSave, deleteFlag }) => {
           setColor("#1677ff");
           setFlag("");
           setIsEdit(null);
+        } else if (res?.status == "USER_DEFINED_ERROR") {
+          getResponePopup(res);
         }
       } catch (error) {
         console.log(error);
@@ -199,14 +201,21 @@ const FlagConfig = ({ getFlagConfigDetails, flagSave, deleteFlag }) => {
               </span>
               <span className=" cr-pointer">
                 {
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    style={{
-                      fontSize: "15px",
-                      color: "#dc4848",
-                    }}
-                    onClick={() => handleDeleteFlag(item)}
-                  />
+                  <Popconfirm
+                    title="Are you sure you want to delete?"
+                    onConfirm={() => handleDeleteFlag(item)}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      style={{
+                        fontSize: "15px",
+                        color: "#dc4848",
+                      }}
+                      // onClick={() => }
+                    />
+                  </Popconfirm>
                 }
               </span>
             </div>

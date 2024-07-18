@@ -10,7 +10,7 @@ import { useState } from "react";
 import ENDPOINTS from "../../../../utility/enpoints";
 import axios from "../../../../utility/axiosConfig";
 
-const FhirDrawer = ({
+const PdfDrawer = ({
   isDrawerOpen,
   setIsDrawerOpen,
   uploadType,
@@ -83,7 +83,7 @@ const FhirDrawer = ({
       <Offcanvas.Header closeButton onClick={() => handleClose(form)}>
         <Offcanvas.Title>
           {" "}
-          {uploadType === "upload" ? "Update New Batch" : "Create batch"}{" "}
+          {uploadType === "upload" ? "Upload New Batch" : "Create batch"}{" "}
         </Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
@@ -176,4 +176,4 @@ const enhancer = connect((state) => ({}), {
   getCreateBatch: tenantActions.getCreateBatch,
   getAllBatches: tenantActions.getAllBatches,
 });
-export default enhancer(FhirDrawer);
+export default enhancer(PdfDrawer);

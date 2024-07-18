@@ -90,7 +90,7 @@ const index = ({data,header}) => {
           {data?.map((item) => {
             return (
               <div className={styles.container}>
-                <div style={{ display: "flex",width:"90%" }}>
+                <div style={{ display: "flex",width:"90%" , justifyContent:"center", alignItems:"center"}}>
                   <div
                     className={styles.bgColor}
                     style={{
