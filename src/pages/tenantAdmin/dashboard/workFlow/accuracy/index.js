@@ -665,7 +665,7 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
         valueOne.push(foundItem ? foundItem.totalNewlyAddedCodesCount : 0);
         valueTwo.push(foundItem ? foundItem.reviewerAvgScore : 100);
         valueThree.push(foundItem ? foundItem.totalNewlyAddedCodesCount : 0);
-        valueFour.push(foundItem ? foundItem.reviewerAvgScore : 100);
+        valueFour.push(foundItem ? foundItem.machineAvgScore : 100);
       });
 
       setValueOne(valueOne);
