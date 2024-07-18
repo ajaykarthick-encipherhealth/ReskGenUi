@@ -11,10 +11,7 @@ import ENDPOINTS from "../../../../utility/enpoints";
 import axios from "../../../../utility/axiosConfig";
 import Image from "next/image";
 import style from "../fhir.module.css";
-import { PlusOutlined } from "@ant-design/icons";
 import CustomSelect from "../../../../components/customSelect";
-// import CustomSelect from "../../../../components/customSelect";
-// import CustomSelect from "../../../../customSelect";
 
 export const getYears = () => {
   const currentYear = new Date().getFullYear();
@@ -238,7 +235,9 @@ const FhirDrawer = ({
                   },
                 ]}
               >
-                <CustomSelect disabled={false} />
+                <div>
+                  <CustomSelect disabled={false} placeholder="MRN Number" />
+                </div>
               </Form.Item>
             ) : (
               <>
