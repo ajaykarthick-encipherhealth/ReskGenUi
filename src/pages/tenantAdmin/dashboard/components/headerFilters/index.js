@@ -114,6 +114,7 @@ const index = ({
                 disabledDate={(current) => disableFutureDates(current)}
                 onChange={(e, value) => handleRange(value)}
                 format={"MM-DD-YYYY"}
+                allowClear={false}
               />
             </div>
           </div>
