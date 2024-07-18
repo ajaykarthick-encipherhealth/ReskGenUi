@@ -36,38 +36,6 @@ const ComorbidConditions = ({
   const [page, setPage] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
   const [tags, setTags] = useState([
-    "plan",
-    "assessment/plan",
-    "Current Medication",
-    "impression/plan",
-    "Impression and Plan",
-    "treatment",
-    "treatments",
-    "hpi",
-    "assessment",
-    "problem",
-    "judgment and insight",
-    "recommendations",
-    "examinations",
-    "examination",
-    "diagnoses",
-    "cognitive assessment",
-    "Todays Treatments",
-    "impression",
-    "problems",
-    "history of present illness",
-    "Todays Diagnoses Include",
-    "today diagnoses include",
-    "mental status exam",
-    "medications",
-    "HPI Summary",
-    "Problem List",
-    "Assessment/Plan Summary",
-    "Assessment/Plan",
-    "Ambulatory Assessment/Plan",
-    "New Medications",
-    "Renewed Medications",
-    "a/p",
   ]);
 
   const columns = [
@@ -286,7 +254,7 @@ const ComorbidConditions = ({
       </div> */}
       <ModalPop
         openModal={openModal}
-        content={<CommonModalContent tags={tags} setTags={setTags} />}
+        content={<CommonModalContent tags={tags} setTags={setTags} isChecked={isChecked} target={"COMORBID_CONDITIONS"} setOpenModal={setOpenModal}/>}
         setOpenModal={setOpenModal}
       />
       <Modal

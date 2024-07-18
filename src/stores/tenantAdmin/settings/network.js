@@ -320,3 +320,14 @@ export async function deleteComoridCondition(obj) {
   );
   return data;
 }
+export async function addManually(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `management/tenantAdmin/codes/manualAdd`,
+    options
+  );
+  return data;
+}
