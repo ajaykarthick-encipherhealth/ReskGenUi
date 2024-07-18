@@ -557,6 +557,7 @@ const FileProcessingTable = ({
                 marginTop: stepperVisible ? "10px" : "0",
                 marginLeft: "-40px",
               }}
+              
             >
               <Steps
                 current={
