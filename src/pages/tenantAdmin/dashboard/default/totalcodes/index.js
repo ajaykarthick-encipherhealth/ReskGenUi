@@ -32,16 +32,23 @@ const index = ({
   selectedValue,
   revenueChartLoader,
   rafScorechartLoader,
+  customDate,
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
-
   const dates =
-    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
+    selectedValue === "custom"
+      ? customDate
+      : selectedValue === "last_1_week"
+      ? getLast7Days()
+      : getLast30Days();
   const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
 
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap;
   const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
+  const hccDiseaseCountValue = getAllHccCodes?.hccDiseaseCountMap
+    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
+    : [];
 
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)
@@ -79,7 +86,13 @@ const index = ({
   const options = {
     xAxis: {
       type: "category",
-      data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
+      data:
+        selectedValue === "custom"
+          ? customDate
+          : 
+          selectedValue === "last_1_week"
+          ? getLast7Days()
+          : getLast30Days(),
     },
     yAxis: {
       type: "value",
@@ -100,7 +113,7 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data: [10, 20, 30, 10, 23, 45, 78, 27, 90, 16, 25, 89],
+        data: [],
         color: "#E88D67",
         type: "line",
         lineStyle: { color: "#E88D67" },
@@ -221,12 +234,14 @@ const index = ({
               active
             />
           </div>
-        ) : rafScoreByDateForHcc?.length > 0 ? (
+        ) : hccDiseaseCountValue?.length > 0 ? (
           <div className="totalCodesPies">
             <CodesGraph
               options={options}
               isRadio={true}
               className="codesGraphStyle2"
+              customDate={customDate}
+              selectedValue={selectedValue}
             />
           </div>
         ) : (
@@ -268,6 +283,7 @@ const index = ({
               rafColor2={"#00BC13"}
               selectedValue={selectedValue}
               dateRange={dateRange}
+              customDate={customDate}
               selectedOrganization={selectedOrganization}
             />
           </div>
@@ -310,6 +326,7 @@ const index = ({
               isMultiple={true}
               selectedValue={selectedValue}
               className="revenueCharts1"
+              customDate={customDate}
             />
           </div>
         ) : (

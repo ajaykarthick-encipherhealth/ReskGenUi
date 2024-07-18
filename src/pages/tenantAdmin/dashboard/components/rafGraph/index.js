@@ -6,7 +6,11 @@ import {
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import { getLast30Days, getLast7Days ,formatValues} from "../../../../../utils/reusable.js";
+import {
+  getLast30Days,
+  getLast7Days,
+  formatValues,
+} from "../../../../../utils/reusable.js";
 import moment from "moment";
 const RafGraph = ({
   rafColor,
@@ -18,6 +22,7 @@ const RafGraph = ({
   getAllRafScoreAPI,
   selectedValue,
   selectedOrganization,
+  customDate,
 }) => {
   const [dateRange, setDateRange] = useState({
     startDate:
@@ -34,13 +39,16 @@ const RafGraph = ({
   }, [dateRange, selectedOrganization]);
 
   const dates =
-    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
+    selectedValue === "custom"
+      ? customDate
+      : selectedValue === "last_1_week"
+      ? getLast7Days()
+      : getLast30Days();
   const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc;
   const resultArrayHCC = formatValues(rafScoreByDateForHcc, dates);
   const rafScoreByDateForSuggested =
     getAllRafScoreData?.rafScoreByDateForSuggested;
   const resultArrayCaregaps = formatValues(rafScoreByDateForSuggested, dates);
-
 
   const option = {
     tooltip: {
@@ -63,7 +71,11 @@ const RafGraph = ({
         type: "category",
         boundaryGap: false,
         data:
-          selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
+          selectedValue === "custom"
+            ? customDate
+            : selectedValue === "last_1_week"
+            ? getLast7Days()
+            : getLast30Days(),
       },
     ],
     yAxis: [
@@ -88,10 +100,7 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: isHcc
-          ? resultArrayHCC
-          : isCargaps
-          ? resultArrayCaregaps:[]
+        data: isHcc ? resultArrayHCC : isCargaps ? resultArrayCaregaps : [],
       },
 
       {

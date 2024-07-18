@@ -21,6 +21,7 @@ const index = ({
   totalCodesLoader,
   revenueChartLoader,
   rafScorechartLoader,
+  customDate,
 }) => {
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap
@@ -71,6 +72,7 @@ const index = ({
               isCargaps={true}
               selectedValue={selectedValue}
               className="codesGraphStyle1"
+              customDate={customDate}
             />
           </div>
         ) : (
@@ -110,6 +112,7 @@ const index = ({
               rafColor={"#4AA1AB"}
               isCargaps={true}
               selectedValue={selectedValue}
+              customDate={customDate}
             />
           </div>
         ) : (
@@ -130,7 +133,6 @@ const index = ({
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
               <div className={styles.price}>
-              
                 {`$ ${
                   TotalCareGapsRevenue !== undefined
                     ? formatNumber(TotalCareGapsRevenue.toFixed(2))
@@ -157,6 +159,7 @@ const index = ({
                 cargapColor="#5A75F2"
                 selectedValue={selectedValue}
                 className="revenueCharts3"
+                customDate={customDate}
               />
             </div>
           </div>

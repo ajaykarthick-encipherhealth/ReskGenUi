@@ -18,6 +18,7 @@ import {
 } from "../../../components/headerFilters/functions";
 import SpinnerDots from "../../../components/spinner";
 import { actions as adminAction } from "../../../stores/admin/users";
+import { renderSkeleton } from "../../../components/reuseableFunctions";
 
 const options3 = [
   { value: "ALL", label: "ALL" },
@@ -299,7 +300,7 @@ const UserList = ({
                     className="dataTables_wrapper no-footer"
                   >
                     {loading ? (
-                      <SpinnerDots />
+                      renderSkeleton()
                     ) : (
                       <>
                         <AdminList
