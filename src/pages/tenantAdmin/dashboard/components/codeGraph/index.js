@@ -27,23 +27,31 @@ const CodesGraph = ({
   getAllHccCodes,
   selectedValue,
   className,
+  customDate,
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
   const dates =
-    selectedValue === "last_1_week" ? getLast7Days() : getLast30Days();
+    selectedValue === "custom"
+      ? customDate
+      : selectedValue === "last_1_week"
+      ? getLast7Days()
+      : getLast30Days();
 
   const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
 
- 
   const suggestedHccDiseaseCountMap =
-    getAllHccCodes?.suggestedHccDiseaseCountMap
-    const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
-  
+    getAllHccCodes?.suggestedHccDiseaseCountMap;
+  const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
 
   const graphOptions = {
     xAxis: {
       type: "category",
-      data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
+      data:
+        selectedValue === "custom"
+          ? customDate
+          : selectedValue === "last_1_week"
+          ? getLast7Days()
+          : getLast30Days(),
     },
 
     yAxis: {
