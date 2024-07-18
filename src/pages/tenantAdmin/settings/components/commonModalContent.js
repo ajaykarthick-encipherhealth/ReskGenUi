@@ -37,8 +37,7 @@ const CommonModalContent = ({
   const [isEdit, setIsEdit] = useState("");
 
   const [inputValue, setInputValue] = useState("");
-  const [editIndex, setEditIndex] = useState(null);
-  const [editValue, setEditValue] = useState("");
+  const [year, setYear] = useState(null);
 
   const handleInputTagChange = (e) => {
     setInputValue(e.target.value);
@@ -52,37 +51,6 @@ const CommonModalContent = ({
   const handleOption = (value) => {
     setSelectedOption(value);
   };
-  const handleInputChange = (e, field) => {
-    // [field]=e.target.value
-    setInputStrValue(([field] = e.target.value));
-  };
-  const handleSwitch = (checked) => {
-    console.log(`switch to ${checked}`);
-  };
-  // const handleFormSubmit = (values) => {
-  //   console.log("values", values);
-
-  //   values.target = "DIRECT_CONFIRM_CODES";
-  //   !values.isDefaultYear ? (values.year = values.year) : delete values.year;
-  //   if (selectedOption === "Default") {
-  //     values.default = [
-  //       {
-  //         code: values.code,
-  //         description: values.description,
-  //       },
-  //     ];
-  //   } else if (selectedOption === "Code") {
-  //     values.codes = values.codes;
-  //   } else {
-  //     values.description = values.description;
-  //   }
-  //   delete values.description;
-  //   delete values.code;
-  //   console.log(values);
-  //   // form.resetFields();
-
-  //   // createDirectCodes(values);
-  // };
 
   const manuallyAdded = async (e) => {
     try {
@@ -107,6 +75,7 @@ const CommonModalContent = ({
     console.log(selectedOption);
     try {
       const res = await setAddManually({
+        years: year,
         [selectedOption.toLowerCase() + "s"]: tags,
         target: target,
         isDefaultYear: isChecked,
@@ -117,6 +86,7 @@ const CommonModalContent = ({
         getResponePopup(res);
         setOpenModal(false);
         setTags([]);
+        setYear(null);
       } else if (res.status == "USER_DEFINED_ERROR") {
         getResponePopup(res);
       }
@@ -247,19 +217,34 @@ const CommonModalContent = ({
         </>
       )}
       {selectedOption !== "Default" && (
+
         <div>
+          <Form>
           <div className="mb-4 w-[100%]">
             <div className="mt-2">
               <label htmlFor="year">Year</label>
               <div className="d-flex justify-content-between">
                 <div style={{ width: "100%" }}>
-                  <Select
-                    allowClear
-                    options={getYears()}
-                    size="large"
-                    mode="multiple"
-                    style={{ width: "100%" }}
-                  />
+                  
+                    <Form.Item
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select years",
+                        },
+                      ]}
+                    >
+                      <Select
+                        allowClear
+                        options={getYears()}
+                        size="large"
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        onChange={(e) => setYear(e)}
+                        value={year}
+                      />
+                    </Form.Item>
+             
                 </div>
               </div>
             </div>
@@ -283,115 +268,6 @@ const CommonModalContent = ({
               )}
             </div>
           </div>
-          {/* <div
-            className="mt-2"
-            style={{ height: "400px", overflowY: "scroll" }}
-          >
-            {tags?.length > 0 ? (
-              tags?.map((tag, index) => (
-                <div
-                  key={index}
-                  className="mb-2 mr-2"
-                  style={{ display: "inline-block" }}
-                >
-                  {editIndex === index ? (
-                    <div className="me-2">
-                      <Input
-                        size="small"
-                        value={editValue}
-                        onChange={(e) =>
-                          handleEditInputChange({ e, setEditValue })
-                        }
-                        onBlur={() =>
-                          handleSaveEdit({
-                            index,
-                            setTags,
-                            setEditIndex,
-                            setEditValue,
-                            editValue,
-                            tags,
-                          })
-                        }
-                        onPressEnter={() =>
-                          handleSaveEdit({
-                            index,
-                            setTags,
-                            setEditIndex,
-                            setEditValue,
-                            editValue,
-                            tags,
-                          })
-                        }
-                        className="mr-2 w-auto p-3"
-                      />
-                    </div>
-                  ) : (
-                    <Tags
-                      tag={tag}
-                      index={index}
-                      handleRemoveTag={() =>
-                        handleRemoveTag({ index, setTags, tags })
-                      }
-                      handleEditTag={() =>
-                        handleEditTag({
-                          index,
-                          setEditIndex,
-                          setEditValue,
-                          tags,
-                        })
-                      }
-                      editIndex={editIndex}
-                      editValue={editValue}
-                      handleEditInputChange={(e) =>
-                        handleEditInputChange({ e, setEditValue })
-                      }
-                      handleSaveEdit={() =>
-                        handleSaveEdit({
-                          index,
-                          setTags,
-                          setEditIndex,
-                          setEditValue,
-                          editValue,
-                          tags,
-                        })
-                      }
-                    />
-                  )}
-                  <div className="p-2 mx-2 rounded py-1 fs-4" style={{backgroundColor: "#bae0fc"}}>
-                    <label>{tag}</label>
-                    <span className="px-2 cr-pointer">
-                {
-                  <FontAwesomeIcon
-                    icon={faPen}
-                    style={{
-                      fontSize: "15px",
-                      color: "#6464ff",
-                    }}
-                    onClick={() => {
-                      handleEdit(tag);
-                    }}
-                  />
-                }
-              </span>
-              <span className=" cr-pointer">
-                {
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    style={{
-                      fontSize: "15px",
-                      color: "#dc4848",
-                    }}
-                    onClick={() => handleDelete(tag)}
-                  />
-                }
-              </span>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div>No tags available</div>
-            )}
-          </div> */}
           <div
             // className="mt-2"
             style={{ height: "200px", overflowY: "scroll" }}
@@ -442,11 +318,13 @@ const CommonModalContent = ({
                 </span>
               ))}
           </div>
-          {tags.length > 0 && (
+          {tags.length > 0 && year && (
             <div className="d-flex mt-5 justify-content-center">
-              <RegularButton name="Submit" onClick={manuallyAddedCodes} />
+              <Form.Item>
+              <RegularButton name="Submit" onClick={manuallyAddedCodes} /></Form.Item>
             </div>
           )}
+          </Form>
         </div>
       )}
     </>
