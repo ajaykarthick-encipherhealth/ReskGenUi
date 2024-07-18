@@ -23,6 +23,7 @@ import {
 } from "../../../components/headerFilters/functions";
 import { patientDetails } from "../../../stores/authflow/actions";
 import { actions as allActions } from "../../../stores/admin/workqueue";
+import { renderSkeleton } from "../../../components/reuseableFunctions";
 const bullets = [
   {
     color: "#34ace8",
@@ -356,12 +357,12 @@ const Patient = ({ getPatients, loader, response }) => {
       rowData?.computing === 0 && parsedData?.length === 0
         ? "Not Computed"
         : rowData?.computing == 1
-        ? "Processing"
-        : isFinished || rowData?.computing == 2
-        ? "Computed"
-        : rowData?.computing == 3
-        ? "Failed"
-        : "Not Computed";
+          ? "Processing"
+          : isFinished || rowData?.computing == 2
+            ? "Computed"
+            : rowData?.computing == 3
+              ? "Failed"
+              : "Not Computed";
     return (
       <div className="patient-status">
         <div
@@ -371,18 +372,18 @@ const Patient = ({ getPatients, loader, response }) => {
               rowStatus === "Computed"
                 ? "#cceeff "
                 : rowStatus === "Processing"
-                ? "#dfd8f3"
-                : rowStatus === "Failed"
-                ? "#e88d8d"
-                : "#F1DEDA",
+                  ? "#dfd8f3"
+                  : rowStatus === "Failed"
+                    ? "#e88d8d"
+                    : "#F1DEDA",
             color:
               rowStatus === "Computed"
                 ? " #285563"
                 : rowStatus === "Processing"
-                ? "#452b90"
-                : rowStatus === "Failed"
-                ? "red"
-                : "#BA704F",
+                  ? "#452b90"
+                  : rowStatus === "Failed"
+                    ? "red"
+                    : "#BA704F",
           }}
         >
           {rowStatus === "Processing" && (
@@ -442,7 +443,7 @@ const Patient = ({ getPatients, loader, response }) => {
     setSelectFile(formData);
     const response = await axios.post(
       ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload
+      `aiservice/ai/upload
       `,
       formData,
       headers
@@ -513,7 +514,7 @@ const Patient = ({ getPatients, loader, response }) => {
     setSelectFile(formData);
     const response = await axios.post(
       ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/radiology
+      `aiservice/ai/upload/radiology
     `,
       formData,
       headers
@@ -610,7 +611,7 @@ const Patient = ({ getPatients, loader, response }) => {
                         className="dataTables_wrapper no-footer"
                       >
                         {loader ? (
-                          <SpinnerDots />
+                          renderSkeleton()
                         ) : (
                           <>
                             <AddPatientListTable
