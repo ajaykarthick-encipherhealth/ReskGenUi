@@ -46,6 +46,9 @@ const index = ({
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap;
   const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
+  const hccDiseaseCountValue = getAllHccCodes?.hccDiseaseCountMap
+    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
+    : [];
 
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)
@@ -231,7 +234,7 @@ const index = ({
               active
             />
           </div>
-        ) : rafScoreByDateForHcc?.length > 0 ? (
+        ) : hccDiseaseCountValue?.length > 0 ? (
           <div className="totalCodesPies">
             <CodesGraph
               options={options}
