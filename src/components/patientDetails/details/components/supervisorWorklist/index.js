@@ -19,7 +19,6 @@ import Legends from "../../../../../components/legends";
 import MyWorkQueueFilter from "../MyWorkQueueFilter";
 import { actions as workflowActions } from "../../../../../stores/supervisor/auditedQueue";
 
-
 export function extractLatestData(notes) {
   let declinedData;
   if (notes && typeof notes === "object") {
@@ -35,7 +34,12 @@ export function extractLatestData(notes) {
   return declinedData;
 }
 
-const SupervisorWorkList = ({ result, setWorkListPatientId,getWorkListFilter,setIsModalComments }) => {
+const SupervisorWorkList = ({
+  result,
+  setWorkListPatientId,
+  getWorkListFilter,
+  setIsModalComments,
+}) => {
   const dispatch = useDispatch();
   // const result = useSelector((state) => state.AuditWork.workListFilter);
   const [patientList, setPatientList] = useState([]);
@@ -70,13 +74,13 @@ const SupervisorWorkList = ({ result, setWorkListPatientId,getWorkListFilter,set
   const onPageChange = async (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
-    setFilterModalOpen(false)
+    setFilterModalOpen(false);
   };
 
   const getPatientListToDetails = (id) => {
     setWorkListPatientId(id);
-    setIsModalComments(false)
-    setFilterModalOpen(false)
+    setIsModalComments(false);
+    setFilterModalOpen(false);
   };
 
   const statusOptions = [
@@ -236,7 +240,7 @@ const SupervisorWorkList = ({ result, setWorkListPatientId,getWorkListFilter,set
       selCreatedBy,
     };
 
-    getWorkListFilter({data:data});
+    getWorkListFilter({ data: data });
   }, [
     pageNo,
     computedStartDate,
@@ -354,7 +358,7 @@ const enhancer = connect(
     result: state?.supervisor?.audited?.filteredList,
   }),
   {
-    getWorkListFilter: workflowActions.getWorkListFilter,  
+    getWorkListFilter: workflowActions.getWorkListFilter,
   }
 );
 export default enhancer(SupervisorWorkList);
