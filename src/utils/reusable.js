@@ -90,13 +90,12 @@ export const getAllDatesInRange = (start, end) => {
   let currentDate = moment(start);
 
   while (currentDate.isSameOrBefore(end)) {
-      dates.push(currentDate.format('YYYY-MM-DD'));
-      currentDate = currentDate.add(1, 'days');
+    dates.push(currentDate.format("YYYY-MM-DD"));
+    currentDate = currentDate.add(1, "days");
   }
 
   return dates;
 };
-
 
 export function formatNumber(num) {
   if (num >= 1000000) {
@@ -107,3 +106,7 @@ export function formatNumber(num) {
     return num?.toString();
   }
 }
+
+export const dateFormatForDashboard = (date) => {
+  return moment(date).format("MMM") + moment(date).format("D");
+};

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Buttonscroller from "../../../../../components/buttonSroller";
 import ReactECharts from "echarts-for-react";
 import accuracy from "../../../../../images/dashboard/accuracy.png";
@@ -10,6 +10,11 @@ import spinSTYles from "../../../../../styles/auth.module.css";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import { connect } from "react-redux";
+import {
+  dateFormatForDashboard,
+  getAllDatesInRange,
+} from "../../../../../utils/reusable";
+import moment from "moment";
 
 export const TabButtons = [
   {
@@ -97,78 +102,11 @@ export function getHighlightedIndex(
   return constHighlitedIndex;
 }
 
-export const getGraphData = (
-  param,
-  text,
-  month,
-  year,
-  currentBtn,
-  currentDate
-) => {
+export const getGraphData = (param, text) => {
   return param?.map((item) => item[text]);
-  // if (
-  //   currentBtn === "Monthly" &&
-  //   parseInt(year) <= parseInt(currentDate.getFullYear())
-  // ) {
-  //   if (parseInt(year) <= parseInt(currentDate.getFullYear())) {
-  //     return param?.map((item) => item[text]);
-  //   }
-  // } else if (currentBtn !== "Monthly") {
-  //   if (parseInt(month) <= parseInt(currentDate?.getMonth() + 1)) {
-  //     return param?.map((item) => item[text]);
-  //   }
-  // }
 };
-export const chartBlockedDates = (
-  year,
-  month,
-  param,
-  val,
-  currentBtn,
-  currentDate
-) => {
-  year = Number(year);
-  month = Number(month);
-  if (year < currentDate.getFullYear()) {
-    return param?.map((item) => item[val]);
-  } else if (
-    year == currentDate.getFullYear() &&
-    month < currentDate.getMonth() + 1 &&
-    currentBtn !== "Monthly"
-  ) {
-    return param?.map((item) => item[val]);
-  } else if (
-    year == currentDate.getFullYear() &&
-    month == currentDate.getMonth() + 1 &&
-    currentBtn !== "Monthly"
-  ) {
-    if (currentBtn == "Daily") {
-      return param?.map(
-        (item, index) => index < new Date().getDate() && item[val]
-      );
-    } else if (currentBtn == "Weekly") {
-      return param?.map(
-        (item, index) => index < getDateWeek(currentDate) && item[val]
-      );
-    }
-    // else if (currentBtn == "Monthly") {
-    //   return param?.data?.response.map(
-    //     (item, index) => index < new Date().getMonth() + 1 && item[val]
-    //   );
-    // }
-  } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
-    if (parseInt(year) > parseInt(currentDate.getFullYear())) {
-      return false;
-    } else {
-      return param?.map(
-        (item, index) => index < new Date().getMonth() + 1 && item[val]
-      );
-    }
-  } else {
-    return false;
-  }
-};
-const Accuracy = ({ getAccuracyWorkflow }) => {
+export const chartBlockedDates = () => {};
+const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const [activeTabButton, setActiveTabButton] = useState(0);
   const [currentTabBtn, setCurrentTabBtn] = useState("CogentAI Accuracy");
@@ -686,114 +624,78 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
     },
   };
 
-  const numberOfWeeks =
-    accuracyDatas?.data?.response &&
-    Object.keys(accuracyDatas?.data?.response)?.length;
-
-  const weekNames = Array.from(
-    { length: numberOfWeeks },
-    (_, index) => `Week ${index + 1}`
-  );
-
   const handleTabButtonClick = (index, btn) => {
     setActiveTabButton(index);
     setCurrentTabBtn(btn);
   };
 
-  let xAxisData = [];
-  if (currentBtn === "Monthly") {
-    xAxisData = monthNames;
-  } else if (currentBtn === "Daily") {
-    xAxisData = getDays(
-      accuracyDatas?.data?.response &&
-        Object.keys(accuracyDatas?.data?.response)?.length
-    );
-  } else if (currentBtn === "Weekly") {
-    xAxisData = weekNames;
-  }
+  const [xdata, setXData] = useState([]);
+  const [valueOne, setValueOne] = useState([]);
+  const [valueTwo, setValueTwo] = useState([]);
+  const [valueThree, setValueThree] = useState([]);
+  const [valueFour, setValueFour] = useState([]);
 
-  let highlightIndex = -1;
+  useEffect(() => {
+    const fetchDates = async () => {
+      const dates = await getAllDatesInRange(
+        dateRange.startDate,
+        dateRange.endDate
+      );
+      setXData(dates);
+      setValueOne([]);
+      setValueTwo([]);
+      setValueThree([]);
+      setValueFour([]);
+    };
 
-  if (currentBtn === "Monthly") {
-    if (
-      parseInt(selectedYear) === parseInt(new Date().getFullYear()) ||
-      parseInt(selectedMonth) <= parseInt(currentDate.getMonth() + 1)
-    ) {
-      highlightIndex = currentDate.getMonth();
+    fetchDates();
+  }, [dateRange, selectedOrganization]);
+
+  useEffect(() => {
+    if (getAccuracyWorkflow?.response && xdata) {
+      const valueOne = [];
+      const valueTwo = [];
+      const valueThree = [];
+      const valueFour = [];
+
+      xdata.forEach((date) => {
+        const foundItem = getAccuracyWorkflow.response.find(
+          (item) => item.date === date
+        );
+        valueOne.push(foundItem ? foundItem.totalNewlyAddedCodesCount : 0);
+        valueTwo.push(foundItem ? foundItem.reviewerAvgScore : 100);
+        valueThree.push(foundItem ? foundItem.totalNewlyAddedCodesCount : 0);
+        valueFour.push(foundItem ? foundItem.reviewerAvgScore : 100);
+      });
+
+      setValueOne(valueOne);
+      setValueTwo(valueTwo);
+      setValueThree(valueThree);
+      setValueFour(valueFour);
     }
-  } else if (currentBtn === "Daily") {
-    if (
-      parseInt(selectedYear) === new Date().getFullYear() &&
-      selectedMonth === new Date().getMonth() + 1
-    ) {
-      highlightIndex = currentDate.getDate() - 1;
-    }
-  } else if (currentBtn === "Weekly") {
-    if (
-      parseInt(selectedYear) === new Date().getFullYear() &&
-      selectedMonth === new Date().getMonth() + 1
-    ) {
-      const currentWeek = getDateWeek(currentDate);
-      highlightIndex = currentWeek - 1;
-    }
-  }
+  }, [getAccuracyWorkflow?.response, xdata]);
+
+  const getData = async (dates) => {
+    const dat = await getAccuracyWorkflow?.response?.map((item) => item.date);
+    dates.map((item) => {
+      if (dat.includes(item)) {
+        const d = getAccuracyWorkflow?.response?.find(
+          (ite) => ite.date == item
+        );
+        setValueOne((pre) => [...pre, d.totalNewlyAddedCodesCount]);
+        setValueTwo((pre) => [...pre, d.reviewerAvgScore]);
+      } else {
+        setValueOne((pre) => [...pre, 0]);
+        setValueTwo((pre) => [...pre, 100]);
+      }
+    });
+  };
 
   let data = [];
+
   if (currentBtn && accuracyDatas?.data?.response) {
     data = Object.values(accuracyDatas?.data?.response);
   }
-
-  const chartBlocked = (year, month) => {
-    const param = ["20", "30", "34", "98"];
-    year = Number(year);
-    month = Number(month);
-    if (year < currentDate.getFullYear()) {
-      return param.map((item) => item);
-    } else if (
-      year == currentDate.getFullYear() &&
-      month < currentDate.getMonth() + 1 &&
-      currentBtn !== "Monthly"
-    ) {
-      if (
-        year == currentDate.getFullYear() &&
-        month < currentDate.getMonth() + 1 &&
-        currentBtn === "Monthly"
-      ) {
-        return param.map(
-          (item, index) => index < new Date().getMonth() + 1 && item
-        );
-      } else {
-        return param.map((item) => item);
-      }
-    } else if (
-      year == currentDate.getFullYear() &&
-      month == currentDate.getMonth() + 1 &&
-      currentBtn !== "Monthly"
-    ) {
-      if (currentBtn == "Daily") {
-        return param.map((item, index) => index < new Date().getDate() && item);
-      } else if (currentBtn == "Weekly") {
-        return param.map(
-          (item, index) => index < getDateWeek(currentDate) && item
-        );
-      }
-      // else if (currentBtn == "Monthly") {
-      //   return param.map(
-      //     (item, index) => index < new Date().getMonth() + 1 && item
-      //   );
-      // }
-    } else if (year == currentDate.getFullYear() && currentBtn === "Monthly") {
-      if (year > currentDate.getFullYear()) {
-        return false;
-      } else {
-        return param?.map(
-          (item, index) => index < new Date().getMonth() + 1 && item
-        );
-      }
-    } else {
-      return false;
-    }
-  };
 
   const config = {
     chart: {
@@ -802,9 +704,8 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
     title: {
       text: "",
     },
-
     xAxis: {
-      categories: xAxisData,
+      categories: xdata.map((date) => dateFormatForDashboard(date)),
       crosshair: true,
       labels: {
         style: {
@@ -816,7 +717,6 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
     },
     yAxis: [
       {
-        // primary yAxis (right)
         title: {
           text: "Organization Quality",
           style: {
@@ -836,7 +736,6 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
         gridLineWidth: 0,
       },
       {
-        // Secondary yAxis (right)
         title: {
           text: "Organization Changes Count",
           style: {
@@ -864,25 +763,20 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
     },
 
     tooltip: {
-      formatter: function (param) {
-        let finalData;
-        finalData = getAccuracyWorkflow?.response[this.x - 1];
+      shared: true,
+      formatter: function () {
+        let tooltip = `<b>${this.x}</b><br/>`;
+        this.points.forEach((point) => {
+          let seriesName = point.series.name;
+          let value = point.y;
+          if (seriesName === "totalNewlyAddedCodesCount") {
+            tooltip += ` <span style="color:${point.color}">\u25CF</span> ${seriesName}: ${value}<br/>`;
+          } else {
+            tooltip += `<span style="color:${point.color}">\u25CF</span> ${seriesName}: ${value}<br/>`;
+          }
+        });
 
-        if (finalData) {
-          return (
-            "Reviewer Avg Score: " +
-            finalData.reviewerAvgScore +
-            "<br/>" +
-            "Total Newly Added Codes Count: " +
-            finalData?.totalNewlyAddedCodesCount
-
-            // "<br/>" +
-            // "Total Wrong: " +
-            // finalData.totalWrongCount
-          );
-        } else {
-          return "No data available";
-        }
+        return tooltip;
       },
     },
 
@@ -900,43 +794,27 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
     series: [
       {
         name: "totalNewlyAddedCodesCount",
-        data: getGraphData(
-          getAccuracyWorkflow?.response,
-          "totalNewlyAddedCodesCount",
-          selectedMonth,
-          selectedYear,
-          currentBtn,
-          currentDate
-        ),
+        data: valueOne,
         color: "#0b59f1",
         yAxis: 1,
       },
       // {
-      //   name: "totalWrongCount",
-      //   data: getGraphData(
-      //     QualityAccuracyDatas?.data?.response,
-      //     "totalWrongCount",
-      //     selectedMonth,
-      //     selectedYear,
-      //     currentBtn,
-      //     currentDate
-      //   ),
-      //   color: "red",
-      //   yAxis: 1,
+      // name: "totalWrongCount",
+      // data: getGraphData(
+      // QualityAccuracyDatas?.data?.response,
+      // "totalWrongCount",
+      // selectedMonth,
+      // selectedYear,
+      // currentBtn,
+      // currentDate
+      // ),
+      // color: "red",
+      // yAxis: 1,
       // },
       {
-        name: "Temperature",
+        name: "reviewerAvgScore",
         type: "spline",
-
-        data: chartBlockedDates(
-          //reviewerAvgScore
-          selectedYear,
-          selectedMonth,
-          getAccuracyWorkflow?.response,
-          "reviewerAvgScore",
-          currentBtn,
-          currentDate
-        ),
+        data: valueTwo,
         tooltip: {
           valueSuffix: "",
         },
@@ -944,7 +822,6 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
       },
     ],
   };
-
   const config2 = {
     chart: {
       type: "column",
@@ -954,7 +831,7 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
     },
 
     xAxis: {
-      categories: xAxisData,
+      categories: xdata.map((date) => dateFormatForDashboard(date)),
       crosshair: true,
       labels: {
         style: {
@@ -966,7 +843,6 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
     },
     yAxis: [
       {
-        // primary yAxis (right)
         title: {
           text: "Accuracy Quality",
           style: {
@@ -986,7 +862,6 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
         gridLineWidth: 0,
       },
       {
-        // Secondary yAxis (right)
         title: {
           text: "Accuracy Changes Count",
           style: {
@@ -1013,25 +888,20 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
       enabled: false,
     },
     tooltip: {
-      formatter: function (param) {
-        let finalData;
-        finalData = getAccuracyWorkflow?.response[this.x - 1];
+      shared: true,
+      formatter: function () {
+        let tooltip = `<b>${this.x}</b><br/>`;
+        this.points.forEach((point) => {
+          let seriesName = point.series.name;
+          let value = point.y;
+          if (seriesName === "totalNewlyAddedCodesCount") {
+            tooltip += `<span style="color:${point.color}">\u25CF</span> ${seriesName}: ${value}<br/>`;
+          } else {
+            tooltip += `<span style="color:${point.color}">\u25CF</span> ${seriesName}: ${value}<br/>`;
+          }
+        });
 
-        if (finalData) {
-          return (
-            "Machine Avg Score: " +
-            finalData.machineAvgScore +
-            "<br/>" +
-            "Total Newly Added Codes Count: " +
-            finalData?.totalNewlyAddedCodesCount
-
-            // "<br/>" +
-            // "Total Wrong: " +
-            // finalData.totalWrongCount
-          );
-        } else {
-          return "No data available";
-        }
+        return tooltip;
       },
     },
 
@@ -1049,45 +919,27 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
     series: [
       {
         name: "totalNewlyAddedCodesCount",
-        data: getGraphData(
-          // accuracyDatas?.data?.response,
-          getAccuracyWorkflow?.response,
-          // totalNewlyAddedCodesCount,
-          "totalNewlyAddedCodesCount",
-          selectedMonth,
-          selectedYear,
-          currentBtn,
-          currentDate
-        ),
+        data: valueThree,
         color: "#0b59f1",
         yAxis: 1,
       },
       // {
-      //   name: "totalWrongCount",
-      //   data: getGraphData(
-      //     QualityAccuracyDatas?.data?.response,
-      //     "totalWrongCount",
-      //     selectedMonth,
-      //     selectedYear,
-      //     currentBtn,
-      //     currentDate
-      //   ),
-      //   color: "red",
-      //   yAxis: 1,
+      // name: "totalWrongCount",
+      // data: getGraphData(
+      // QualityAccuracyDatas?.data?.response,
+      // "totalWrongCount",
+      // selectedMonth,
+      // selectedYear,
+      // currentBtn,
+      // currentDate
+      // ),
+      // color: "red",
+      // yAxis: 1,
       // },
       {
-        name: "Temperature",
+        name: "machineAvgScore",
         type: "spline",
-
-        data: chartBlockedDates(
-          //machineAvgScore
-          selectedYear,
-          selectedMonth,
-          getAccuracyWorkflow?.response,
-          "machineAvgScore",
-          currentBtn,
-          currentDate
-        ),
+        data: valueFour,
         tooltip: {
           valueSuffix: "",
         },
@@ -1143,12 +995,12 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
                 activeButton={activeTabButton}
                 activeColor="#fff"
                 inActiveColor="
-  #000000"
+#000000"
                 activeBg="#043069"
                 inActiveBg="
-  #E6EEFF"
+#E6EEFF"
                 containerBg="
-  #E6EEFF"
+#E6EEFF"
                 width="150px"
               />
             </div>
@@ -1163,13 +1015,13 @@ const Accuracy = ({ getAccuracyWorkflow }) => {
             ) : getAccuracyWorkflow?.response ? (
               currentTabBtn === "CogentAI Accuracy" ? (
                 // <ReactECharts
-                //   option={option}
-                //   style={{
-                //     width: "100%",
-                //     height: "340px",
-                //     marginTop: "-30px",
-                //     overflowX: "hidden",
-                //   }}
+                // option={option}
+                // style={{
+                // width: "100%",
+                // height: "340px",
+                // marginTop: "-30px",
+                // overflowX: "hidden",
+                // }}
                 // />
                 <div className={styles.highchartStyle}>
                   <HighchartsReact
