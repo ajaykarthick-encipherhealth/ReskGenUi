@@ -10308,7 +10308,7 @@ p,
 .active-projects thead tr th:nth-child(1) {
   padding-left: 15px;
 }
-.supervisor-table thead tr th:nth-child(1){
+.supervisor-table thead tr th:nth-child(1) {
   padding-left: 60px !important;
 }
 .active-projects thead tr th {
@@ -11814,7 +11814,6 @@ li.p-dropdown-item {
 .has-search .input-form-control {
   padding-left: 2.375rem;
   font-size: 14px;
-
 }
 .has-search2 .new-form-control {
   padding-left: 2.375rem;
@@ -12319,7 +12318,7 @@ tbody > tr {
   border: none !important;
 }
 .batch-form-control {
-  border-radius:10px 0px 0px 10px !important;
+  border-radius: 10px 0px 0px 10px !important;
   background: #fff !important;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
   width: 60%;
@@ -12345,12 +12344,11 @@ tbody > tr {
   flex-shrink: 0;
   border: 1px solid #d8c9c9 !important;
   margin-right: 10px;
-
 }
 .select-count {
   height: 41.5px !important;
   background-color: #6c757d !important;
-  color:#fff !important;
+  color: #fff !important;
   box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.08) !important;
 }
 
@@ -12511,9 +12509,6 @@ tbody > tr {
 .customize-react-select > div > div:nth-child(2) > span {
   display: none;
 }
-
-
-
 
 .custom-react-select > div:nth-child(4) > div {
   background-color: #fff;
@@ -13730,7 +13725,7 @@ tbody > tr {
 
 /*ant stepper  */
 .ant-steps.ant-steps-label-vertical .ant-steps-item-tail {
-  background: #1677ff !important;
+  background: #04306f !important;
 }
 
 .ant-steps .ant-steps-item-tail {
@@ -13739,66 +13734,15 @@ tbody > tr {
   width: 100%;
   left: 16px;
   padding: 0px !important;
+  background: #04306f !important;
 }
-
-.ant-steps.ant-steps-label-vertical .ant-steps-item-icon {
-  display: inline-block;
-  margin-inline-start: 40px;
-  /* border: 1px solid #1677ff !important; */
-  background-color: #fff;
+.ant-steps
+  .ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-tail::after {
+  background: #04306f !important;
 }
-
-.ant-steps .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
-  color: white;
-  font-weight: 700;
-}
-
-/* Finished Step */
-.ant-steps-item-finish .ant-steps-item-icon {
-  background-color: blue !important;
-  border: 1px solid #1677ff !important;
-  font-weight: 700;
-  color: #fff !important;
-}
-
-/* Process Step */
-.ant-steps-item-process .ant-steps-item-icon {
-  /* background-color: yellow !important; */
-  border: 1px solid #1677ff !important;
-  font-weight: 700;
-  color: black !important;
-  /* color: #1677ff !important; */
-}
-
-.ant-steps .ant-steps-item-process .ant-steps-item-icon > .ant-steps-icon {
-  color: rgba(0, 0, 0, 0.65) !important;
-}
-
-.ant-steps.ant-steps-with-progress
-  .ant-steps-item-process
-  .ant-steps-item-container
-  .ant-steps-item-icon
-  .ant-steps-icon {
-  color: rgba(0, 0, 0, 0.65) !important;
-}
-
-/* Wait Step */
-.ant-steps-item-wait .ant-steps-item-icon {
-  background-color: white !important;
-  border: 1px solid #1677ff !important;
-}
-
-.ant-steps .ant-steps-item-error .ant-steps-item-icon {
-  background: red !important;
-}
-
-.ant-steps .ant-steps-item-finish:last-child .ant-steps-item-icon {
-  background-color: green !important;
-  /* width:33% !important;
-  height:80% !important; */
-  border: 1px solid green !important;
-}
-
+/* 
 /* .ant-modal-content {
   background: #f5f9ff !important;
 }
@@ -15026,9 +14970,7 @@ input::-webkit-inner-spin-button {
   }
 } */
 
-
-
-.totalCodesPies >div >div>canvas{
+.totalCodesPies > div > div > canvas {
   position: absolute;
   left: 0px;
   top: -50px !important;
@@ -15041,7 +14983,7 @@ input::-webkit-inner-spin-button {
   border-width: 0px;
 }
 
-.totalCodesPies2 >div >div>canvas{
+.totalCodesPies2 > div > div > canvas {
   position: absolute;
   left: 0px;
   top: -42px !important;
@@ -15053,7 +14995,7 @@ input::-webkit-inner-spin-button {
   margin: 0px;
   border-width: 0px;
 }
-.totalCodesPies3 >div >div>canvas{
+.totalCodesPies3 > div > div > canvas {
   position: absolute;
   left: 0px;
   top: 13px !important;
@@ -15065,7 +15007,7 @@ input::-webkit-inner-spin-button {
   margin: 0px;
   border-width: 0px;
 }
-.revenueCharts3 >div >div>canvas{
+.revenueCharts3 > div > div > canvas {
   position: absolute;
   left: 0px;
   top: -26px !important;
@@ -15077,7 +15019,6 @@ input::-webkit-inner-spin-button {
   margin: 0px;
   border-width: 0px;
 }
-
 
 /* .careCapsPieChart  >div >div>canvas {
   
@@ -15094,36 +15035,32 @@ input::-webkit-inner-spin-button {
 
 } */
 
-.codesGraphStyle1   >div >div>canvas {
-  
+.codesGraphStyle1 > div > div > canvas {
   position: absolute;
-    left: 0px;
-    top: 25px !important;
-    width: 592px;
-    height: 300px !important;
-    user-select: none;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    padding: 0px;
-    margin: 0px;
-    border-width: 0px;
-
+  left: 0px;
+  top: 25px !important;
+  width: 592px;
+  height: 300px !important;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
 }
-.codesGraphStyle2   >div >div>canvas {
-  
+.codesGraphStyle2 > div > div > canvas {
   position: absolute;
-    left: 0px;
-    top: 4px !important;
-    width: 592px;
-    height: 300px !important;
-    user-select: none;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    padding: 0px;
-    margin: 0px;
-    border-width: 0px;
-
+  left: 0px;
+  top: 4px !important;
+  width: 592px;
+  height: 300px !important;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
 }
 
-.carecapRAF >div >div>canvas{
+.carecapRAF > div > div > canvas {
   position: absolute;
   left: 0px;
   top: -34px !important;
@@ -15136,7 +15073,7 @@ input::-webkit-inner-spin-button {
   border-width: 0px;
 }
 
-.revenueCharts1 >div >div>canvas{
+.revenueCharts1 > div > div > canvas {
   position: absolute;
   left: 0px;
   top: -34px !important;
@@ -15148,7 +15085,7 @@ input::-webkit-inner-spin-button {
   margin: 0px;
   border-width: 0px;
 }
-.revenueCharts2 >div >div>canvas{
+.revenueCharts2 > div > div > canvas {
   position: absolute;
   left: 0px;
   top: -34px !important;
@@ -15160,35 +15097,33 @@ input::-webkit-inner-spin-button {
   margin: 0px;
   border-width: 0px;
 }
-.codesGraphStyle3   >div >div>canvas {
-  
+.codesGraphStyle3 > div > div > canvas {
   position: absolute;
-    left: 0px;
-    top: 18px !important;
-    width: 592px;
-    height: 300px !important;
-    user-select: none;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    padding: 0px;
-    margin: 0px;
-    border-width: 0px;
-
+  left: 0px;
+  top: 18px !important;
+  width: 592px;
+  height: 300px !important;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
 }
 
-  .revenueDollar >div >div>canvas{
- position: absolute;
-    left: -46px !important;
-    top: -45px !important;
-    width: 100% !important;
-    height: 300px !important;
-    user-select: none;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    padding: 0px;
-    margin: 0px;
-    border-width: 0px;
+.revenueDollar > div > div > canvas {
+  position: absolute;
+  left: -46px !important;
+  top: -45px !important;
+  width: 100% !important;
+  height: 300px !important;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
 }
 
-.workflowChart >div >div>canvas{
+.workflowChart > div > div > canvas {
   position: absolute;
   left: 0px !important;
   top: 10px !important;
@@ -15201,11 +15136,11 @@ input::-webkit-inner-spin-button {
   border-width: 0px;
 }
 
-.workflowChart1 >div >div>canvas{
+.workflowChart1 > div > div > canvas {
   position: absolute;
   left: 0px !important;
   top: 53px !important;
-  
+
   height: 300px !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -15385,36 +15320,47 @@ input::-webkit-inner-spin-button {
   width: 100%;
   height: 45px;
 }
-.customsteps .ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after {
+.customsteps
+  .ant-steps
+  .ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-tail::after {
   background-color: white !important;
 }
-.customsteps .ant-steps.ant-steps-vertical >.ant-steps-item>.ant-steps-item-container>.ant-steps-item-tail::after {
+.customsteps
+  .ant-steps.ant-steps-vertical
+  > .ant-steps-item
+  > .ant-steps-item-container
+  > .ant-steps-item-tail::after {
   width: 4px;
   height: 74%;
   border-radius: 10px !important;
   padding: 3px !important;
   margin-top: 15px !important;
-  background-color:#6C99DC;
+  background-color: #6c99dc;
 }
-.customsteps .ant-steps.ant-steps-vertical .ant-steps-item.ant-steps-item-process.ant-steps-item-active .ant-steps-item-container {
+.customsteps
+  .ant-steps.ant-steps-vertical
+  .ant-steps-item.ant-steps-item-process.ant-steps-item-active
+  .ant-steps-item-container {
   margin-bottom: 100px !important;
 }
 .customsteps .ant-steps-item-container {
   margin-bottom: 100px !important;
 }
-.progressText .ant-progress-text{
-  color:#0078D4 !important;
+.progressText .ant-progress-text {
+  color: #0078d4 !important;
 }
-.progressText .ant-progress .ant-progress-outer{
-  width:190px !important;
+.progressText .ant-progress .ant-progress-outer {
+  width: 190px !important;
   margin-left: -10px;
 }
-.completedText .ant-progress .ant-progress-outer{
-  width:190px !important;
+.completedText .ant-progress .ant-progress-outer {
+  width: 190px !important;
   margin-left: -10px;
 }
-.completedText .ant-progress-text{
-  color:#00940F !important;
+.completedText .ant-progress-text {
+  color: #00940f !important;
 }
 /* apply background for model */
 .custom-modal {
@@ -15454,3 +15400,43 @@ input::-webkit-inner-spin-button {
 .select-count {
   margin-left: 5px;
 } */
+.errStages
+  .ant-steps.ant-steps-with-progress
+  .ant-steps-item-process
+  .ant-steps-item-container
+  .ant-steps-item-icon {
+  background-color: gray !important;
+  border: 1px solid gray !important;
+}
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+  color: white !important;
+}
+.ant-steps.ant-steps-label-vertical .ant-steps-item-icon {
+  background-color: gray !important;
+}
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon {
+  background-color: green !important;
+  color: white !important;
+  border: 1px solid green !important;
+}
+.ant-steps .ant-steps-item-error .ant-steps-item-icon {
+  background-color: red !important;
+  border: 1px solid red !important;
+}
+.ant-steps.ant-steps-with-progress
+  .ant-steps-item-process
+  .ant-steps-item-container
+  .ant-steps-item-icon {
+  background-color: #04306f !important;
+}
+.ant-steps.ant-steps-with-progress
+  .ant-steps-item-process
+  .ant-steps-item-container
+  .ant-steps-item-icon
+  .ant-steps-icon {
+  color: white !important;
+  font-weight: 500 !important;
+}
+.ant-steps .ant-steps-item-wait .ant-steps-item-icon .ant-steps-icon {
+  color: white !important;
+}
