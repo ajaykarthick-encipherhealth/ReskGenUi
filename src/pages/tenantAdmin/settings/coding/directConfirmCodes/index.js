@@ -31,48 +31,12 @@ const DirectConfirmCodes = ({
   const [search, setSearch] = useState(null);
   const [isGuidelines, setIsGuidelines] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const [editValue, setEditValue] = useState("");
-  const [isEditValue, setIsEditValue] = useState(false);
   const [selectFile, setSelectFile] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [page, setPage] = useState(0);
   const [editRowValue, setEditRowValue] = useState(null);
-  const [tags, setTags] = useState([
-    "plan",
-    "assessment/plan",
-    "Current Medication",
-    "impression/plan",
-    "Impression and Plan",
-    "treatment",
-    "treatments",
-    "hpi",
-    "assessment",
-    "problem",
-    "judgment and insight",
-    "recommendations",
-    "examinations",
-    "examination",
-    "diagnoses",
-    "cognitive assessment",
-    "Todays Treatments",
-    "impression",
-    "problems",
-    "history of present illness",
-    "Todays Diagnoses Include",
-    "today diagnoses include",
-    "mental status exam",
-    "medications",
-    "HPI Summary",
-    "Problem List",
-    "Assessment/Plan Summary",
-    "Assessment/Plan",
-    "Ambulatory Assessment/Plan",
-    "New Medications",
-    "Renewed Medications",
-    "a/p",
-  ]);
-
+  const [tags, setTags] = useState([]);
   const columns = [
     {
       title: "Code",
@@ -111,17 +75,6 @@ const DirectConfirmCodes = ({
     } catch (error) {}
   };
 
-  const handleDelete = (value) => {
-    const del = tags.map((item) => item != value);
-    setTags(del);
-  };
-
-  const handleEdit = (value) => {
-    setIsEditValue(true);
-    setEditValue(value);
-  };
-
-  const handleUpdate = () => {};
   const handleGuidelines = async (value) => {
     try {
       const res = await updateDirectCode({
@@ -170,7 +123,9 @@ const DirectConfirmCodes = ({
         getResponePopup(res);
         setIsEdit(false);
         setEditRowValue(null);
-        getHistorys();
+        getDirectConfirmDetails();
+      } else if (res.status == "USER_DEFINED_ERROR") {
+        getResponePopup(res);
       }
     } catch (error) {
       console.log(error);
@@ -187,7 +142,9 @@ const DirectConfirmCodes = ({
         getResponePopup(res);
         setIsEdit(false);
         setEditRowValue(null);
-        getHistorys();
+        getDirectConfirmDetails();
+      } else if (res.status == "USER_DEFINED_ERROR") {
+        getResponePopup(res);
       }
     } catch (error) {
       console.log(error);
@@ -260,7 +217,7 @@ const DirectConfirmCodes = ({
               <div className={`mx-2`}>{isGuidelines ? "Yes" : "No"}</div>
             </div>
             <div className="ms-auto mx-4">
-              <Search setSearch={setSearch} value={search}/>
+              <Search setSearch={setSearch} value={search} />
             </div>
           </div>
           <div>
@@ -297,13 +254,12 @@ const DirectConfirmCodes = ({
           <CommonModalContent
             tags={tags}
             setTags={setTags}
-            handleDelete={handleDelete}
-            handleEdit={handleEdit}
-            isEdit={isEditValue}
-            handleUpdate={handleUpdate}
+            isChecked={isChecked}
+            target={"DIRECT_CONFIRM_CODES"}
+            setOpenModal={() => setOpenModal(false)}
           />
         }
-        setOpenModal={setOpenModal}
+        setOpenModal={() => setOpenModal(false)}
       />
       <Modal
         title="Edit Direct Confirm Codes"

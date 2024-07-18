@@ -116,3 +116,7 @@ export const addManually = createActionThunk(
   "ADD_MANUALLY_SETTINGS",
   network.addManually
 );
+export const addHealthMetric = createActionThunk(
+  "ADD_HEALTH_METRIC",
+  network.addHealthMetric
+);

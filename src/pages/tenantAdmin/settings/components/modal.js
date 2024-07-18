@@ -6,7 +6,7 @@ const ModalPop = ({ openModal, content, setOpenModal, width }) => {
     <Modal
       open={openModal}
       footer={false}
-      onCancel={() => setOpenModal(false)}
+      onCancel={setOpenModal}
       width={width ? width : 700}
       destroyOnClose={true}
     >

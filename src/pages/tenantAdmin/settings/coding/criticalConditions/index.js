@@ -37,40 +37,7 @@ const CriticalConditions = ({
   const [selectFile, setSelectFile] = useState("");
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [page, setPage] = useState(0);
-  const [tags, setTags] = useState([
-    "plan",
-    "assessment/plan",
-    "Current Medication",
-    "impression/plan",
-    "Impression and Plan",
-    "treatment",
-    "treatments",
-    "hpi",
-    "assessment",
-    "problem",
-    "judgment and insight",
-    "recommendations",
-    "examinations",
-    "examination",
-    "diagnoses",
-    "cognitive assessment",
-    "Todays Treatments",
-    "impression",
-    "problems",
-    "history of present illness",
-    "Todays Diagnoses Include",
-    "today diagnoses include",
-    "mental status exam",
-    "medications",
-    "HPI Summary",
-    "Problem List",
-    "Assessment/Plan Summary",
-    "Assessment/Plan",
-    "Ambulatory Assessment/Plan",
-    "New Medications",
-    "Renewed Medications",
-    "a/p",
-  ]);
+  const [tags, setTags] = useState([]);
   const [isCheckeds, setIsCheckeds] = useState(false);
 
   const columns = [
@@ -92,9 +59,6 @@ const CriticalConditions = ({
     },
   ];
 
-  const handleSettingsUpdate = () => {
-    updateSettings({ CriticalConditions: "values" });
-  };
   useEffect(() => {
     getCodingDetailsDetails();
   }, [search, page]);
@@ -112,7 +76,11 @@ const CriticalConditions = ({
 
   const getCodingDetailsDetails = async () => {
     try {
-      const res = await getCodingDetails({ type: "CRITICAL_CONDITIONS",page: page, search: search });
+      const res = await getCodingDetails({
+        type: "CRITICAL_CONDITIONS",
+        page: page,
+        search: search,
+      });
       if (res?.status == "SUCCESS") {
         setIsChecked({
           includeGeneralGuidelineCodes:
@@ -133,7 +101,9 @@ const CriticalConditions = ({
         getResponePopup(res);
         setIsEdit(false);
         setEditRowValue(null);
-        getHistorys();
+        getCodingDetailsDetails();
+      } else if (res.status == "USER_DEFINED_ERROR") {
+        getResponePopup(res);
       }
     } catch (error) {
       console.log(error);
@@ -150,7 +120,9 @@ const CriticalConditions = ({
         getResponePopup(res);
         setIsEdit(false);
         setEditRowValue(null);
-        getHistorys();
+        getCodingDetailsDetails();
+      } else if (res.status == "USER_DEFINED_ERROR") {
+        getResponePopup(res);
       }
     } catch (error) {
       console.log(error);
@@ -203,29 +175,26 @@ const CriticalConditions = ({
           <div className="d-flex justify-content-start gap-2 mt-4">
             <div>Year</div>
             <div>
-            <Switch
-                    checked={isCheckeds}
-                    onChange={(e) => setIsCheckeds(e)}
-                  />
+              <Switch checked={isCheckeds} onChange={(e) => setIsCheckeds(e)} />
             </div>
             <div>Can We calculate for all Processing Year</div>
           </div>
 
           <div className="d-flex justify-content-start gap-2">
-          <div className="d-flex">
-                <FileUpload
-                  allowedFormat={"File must be in xlsx or CSV"}
-                  onChange={(e) => setSelectFile(e.file)}
-                  fileList={[]}
-                  accept={".xlsx, .csv"}
-                />
-                <RegularButton
-                  name="Upload"
-                  type={selectFile}
-                  disabled={!selectFile}
-                  onClick={submitPatientFile}
-                />
-              </div>
+            <div className="d-flex">
+              <FileUpload
+                allowedFormat={"File must be in xlsx or CSV"}
+                onChange={(e) => setSelectFile(e.file)}
+                fileList={[]}
+                accept={".xlsx, .csv"}
+              />
+              <RegularButton
+                name="Upload"
+                type={selectFile}
+                disabled={!selectFile}
+                onClick={submitPatientFile}
+              />
+            </div>
             <div>
               <Button
                 icon={<PlusOutlined />}
@@ -278,7 +247,7 @@ const CriticalConditions = ({
             </div>
           </div>
           <div className="ms-auto mx-4">
-            <Search setSearch={setSearch} value={search}/>
+            <Search setSearch={setSearch} value={search} />
           </div>
         </div>
         <div>
@@ -312,11 +281,19 @@ const CriticalConditions = ({
       </div> */}
       <ModalPop
         openModal={openModal}
-        content={<CommonModalContent tags={tags} setTags={setTags} />}
-        setOpenModal={setOpenModal}
+        content={
+          <CommonModalContent
+            tags={tags}
+            setTags={setTags}
+            isChecked={isCheckeds}
+            target={"CRITICAL_CONDITIONS"}
+            setOpenModal={() => setOpenModal(false)}
+          />
+        }
+        setOpenModal={() => setOpenModal(false)}
       />
       <Modal
-        title="Edit Comorbid Conditions"
+        title="Edit Critical Conditions"
         onCancel={() => setIsEdit(false)}
         footer={false}
         open={isEdit}

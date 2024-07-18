@@ -21,21 +21,12 @@ const CommonModalContent = ({
   isChecked,
   target,
   setOpenModal,
-  createDirectCodes,
-  handleEdit,
-  handleDelete,
-  // isEdit,
-  // handleUpdate,
   setAddManually,
+  isResult,
 }) => {
   const [form] = Form.useForm();
   const [selectedOption, setSelectedOption] = useState("Default");
-  const [inputStrValue, setInputStrValue] = useState({
-    code: "",
-    description: "",
-  });
   const [isEdit, setIsEdit] = useState("");
-
   const [inputValue, setInputValue] = useState("");
   const [year, setYear] = useState(null);
 
@@ -72,14 +63,13 @@ const CommonModalContent = ({
   };
 
   const manuallyAddedCodes = async () => {
-    console.log(selectedOption);
     try {
       const res = await setAddManually({
         years: year,
         [selectedOption.toLowerCase() + "s"]: tags,
         target: target,
         isDefaultYear: isChecked,
-        defaults: [],
+        // defaults: [],
       });
 
       if (res.status == "SUCCESS") {
@@ -110,16 +100,18 @@ const CommonModalContent = ({
         <div className="fw-500" style={{ fontSize: "22px" }}>
           Add Manually
         </div>
-        <Select
-          defaultValue={{ value: "Default", label: "Default" }}
-          options={[
-            { value: "Default", label: "Default" },
-            { value: "Description", label: "Description" },
-            { value: "Code", label: "Code" },
-          ]}
-          className={Style.selector}
-          onChange={handleOption}
-        />
+        {!isResult && (
+          <Select
+            defaultValue={{ value: "Default", label: "Default" }}
+            options={[
+              { value: "Default", label: "Default" },
+              { value: "Description", label: "Description" },
+              { value: "Code", label: "Code" },
+            ]}
+            className={Style.selector}
+            onChange={handleOption}
+          />
+        )}
       </div>
       {selectedOption === "Default" && (
         <>
@@ -156,6 +148,21 @@ const CommonModalContent = ({
                 </Form.Item>
               </div>
             </div>
+            {isResult && (
+              <>
+                <label htmlFor="resultCode">Result Codes</label>
+                <div className="d-flex justify-content-between">
+                  <div className="w-100">
+                    <Form.Item name="resultCode">
+                      <Input
+                        placeholder={"Result code"}
+                        style={{ padding: "22px" }}
+                      />
+                    </Form.Item>
+                  </div>
+                </div>
+              </>
+            )}
             {/* <div className="d-flex gap-5">
               <div className="font-semibold"> Billable </div>
               <div className="mx-2 w-100">
@@ -217,113 +224,116 @@ const CommonModalContent = ({
         </>
       )}
       {selectedOption !== "Default" && (
-
         <div>
           <Form>
-          <div className="mb-4 w-[100%]">
-            <div className="mt-2">
-              <label htmlFor="year">Year</label>
-              <div className="d-flex justify-content-between">
-                <div style={{ width: "100%" }}>
-                  
-                    <Form.Item
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select years",
-                        },
-                      ]}
-                    >
-                      <Select
-                        allowClear
-                        options={getYears()}
-                        size="large"
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        onChange={(e) => setYear(e)}
-                        value={year}
-                      />
-                    </Form.Item>
-             
-                </div>
-              </div>
-            </div>
-            <div className="text-lg font-semibold my-2" id="modal-title">
-              {`Add ${selectedOption}`}
-            </div>
-
-            <div className="d-flex justify-content-between">
-              <div className="w-100">
-                <Input
-                  placeholder={`${selectedOption}`}
-                  onChange={handleInputTagChange}
-                  value={inputValue}
-                  style={{ padding: "22px" }}
-                />
-              </div>
-              {isEdit ? (
-                <RegularButton name={"Edit"} onClick={handleUpdate} />
-              ) : (
-                <RegularButton name={"Add"} onClick={handleAddTag} />
-              )}
-            </div>
-          </div>
-          <div
-            // className="mt-2"
-            style={{ height: "200px", overflowY: "scroll" }}
-          >
-            {tags.length > 0 &&
-              tags.map((item, index) => (
-                <span
-                  className="p-2 px-3 me-2 my-1 d-inline-block rounded"
-                  style={{ background: "#c8c8ff" }}
-                >
-                  <span>{item}</span>
-                  <span className="px-2 cr-pointer">
-                    {
-                      <FontAwesomeIcon
-                        icon={faPen}
-                        style={{
-                          fontSize: "15px",
-                          color: "#6464ff",
-                        }}
-                        onClick={() => {
-                          setIsEdit(index + 1);
-                          setInputValue(item);
-                        }}
-                      />
-                    }
-                  </span>
-                  <span className=" cr-pointer">
-                    {
-                      <Popconfirm
-                        title="Are you sure you want to delete?"
-                        onConfirm={() => {
-                          const del = tags.filter((item, ind) => ind != index);
-                          setTags(del);
-                        }}
-                        okText="Yes"
-                        cancelText="No"
+            <div className="mb-4 w-[100%]">
+              {!isChecked && (
+                <div className="mt-2">
+                  <label htmlFor="year">Year</label>
+                  <div className="d-flex justify-content-between">
+                    <div style={{ width: "100%" }}>
+                      <Form.Item
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select years",
+                          },
+                        ]}
                       >
+                        <Select
+                          allowClear
+                          options={getYears()}
+                          size="large"
+                          mode="multiple"
+                          style={{ width: "100%" }}
+                          onChange={(e) => setYear(e)}
+                          value={year}
+                        />
+                      </Form.Item>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="text-lg font-semibold my-2" id="modal-title">
+                {`Add ${selectedOption}`}
+              </div>
+
+              <div className="d-flex justify-content-between">
+                <div className="w-100">
+                  <Input
+                    placeholder={`${selectedOption}`}
+                    onChange={handleInputTagChange}
+                    value={inputValue}
+                    style={{ padding: "22px" }}
+                  />
+                </div>
+                {isEdit ? (
+                  <RegularButton name={"Edit"} onClick={handleUpdate} />
+                ) : (
+                  <RegularButton name={"Add"} onClick={handleAddTag} />
+                )}
+              </div>
+            </div>
+            <div
+              // className="mt-2"
+              style={{ height: "200px", overflowY: "scroll" }}
+            >
+              {tags.length > 0 &&
+                tags.map((item, index) => (
+                  <span
+                    className="p-2 px-3 me-2 my-1 d-inline-block rounded"
+                    style={{ background: "#c8c8ff" }}
+                  >
+                    <span>{item}</span>
+                    <span className="px-2 cr-pointer">
+                      {
                         <FontAwesomeIcon
-                          icon={faTrash}
+                          icon={faPen}
                           style={{
                             fontSize: "15px",
-                            color: "#dc4848",
+                            color: "#6464ff",
+                          }}
+                          onClick={() => {
+                            setIsEdit(index + 1);
+                            setInputValue(item);
                           }}
                         />
-                      </Popconfirm>
-                    }
+                      }
+                    </span>
+                    <span className=" cr-pointer">
+                      {
+                        <Popconfirm
+                          title="Are you sure you want to delete?"
+                          onConfirm={() => {
+                            const del = tags.filter(
+                              (item, ind) => ind != index
+                            );
+                            setTags(del);
+                          }}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            style={{
+                              fontSize: "15px",
+                              color: "#dc4848",
+                            }}
+                          />
+                        </Popconfirm>
+                      }
+                    </span>
                   </span>
-                </span>
-              ))}
-          </div>
-          {tags.length > 0 && year && (
-            <div className="d-flex mt-5 justify-content-center">
-              <Form.Item>
-              <RegularButton name="Submit" onClick={manuallyAddedCodes} /></Form.Item>
+                ))}
             </div>
-          )}
+            {tags.length > 0 && (year || isChecked) && (
+              <div className="d-flex mt-5 justify-content-center">
+                <Form.Item>
+                  <RegularButton name="Submit" onClick={manuallyAddedCodes} />
+                </Form.Item>
+              </div>
+            )}
           </Form>
         </div>
       )}

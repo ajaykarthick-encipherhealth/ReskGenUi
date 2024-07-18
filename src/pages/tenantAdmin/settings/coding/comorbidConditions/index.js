@@ -35,8 +35,7 @@ const ComorbidConditions = ({
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [page, setPage] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
-  const [tags, setTags] = useState([
-  ]);
+  const [tags, setTags] = useState([]);
 
   const columns = [
     {
@@ -66,7 +65,11 @@ const ComorbidConditions = ({
 
   const getCodingDetailsDetails = async () => {
     try {
-      const res = await getCodingDetails({ type: "COMORBID_CONDITIONS",page: page, search: search });
+      const res = await getCodingDetails({
+        type: "COMORBID_CONDITIONS",
+        page: page,
+        search: search,
+      });
       if (res?.status == "SUCCESS") {
         setIsGuidelines(res?.response?.includeGeneralGuidelineCodes);
       }
@@ -166,16 +169,13 @@ const ComorbidConditions = ({
             <div className="d-flex justify-content-start gap-2 mt-4">
               <div>Year</div>
               <div>
-              <Switch
-                    checked={isChecked}
-                    onChange={(e) => setIsChecked(e)}
-                  />
+                <Switch checked={isChecked} onChange={(e) => setIsChecked(e)} />
               </div>
               <div>Can We calculate for all Processing Year</div>
             </div>
 
             <div className="d-flex justify-content-start gap-2">
-            <div className="d-flex">
+              <div className="d-flex">
                 <FileUpload
                   allowedFormat={"File must be in xlsx or CSV"}
                   onChange={(e) => setSelectFile(e.file)}
@@ -219,7 +219,7 @@ const ComorbidConditions = ({
             </div>
 
             <div className="ms-auto mx-4">
-              <Search setSearch={setSearch} value={search}/>
+              <Search setSearch={setSearch} value={search} />
             </div>
           </div>
           <div>
@@ -254,8 +254,16 @@ const ComorbidConditions = ({
       </div> */}
       <ModalPop
         openModal={openModal}
-        content={<CommonModalContent tags={tags} setTags={setTags} isChecked={isChecked} target={"COMORBID_CONDITIONS"} setOpenModal={setOpenModal}/>}
-        setOpenModal={setOpenModal}
+        content={
+          <CommonModalContent
+            tags={tags}
+            setTags={setTags}
+            isChecked={isChecked}
+            target={"COMORBID_CONDITIONS"}
+            setOpenModal={() => setOpenModal(false)}
+          />
+        }
+        setOpenModal={() => setOpenModal(false)}
       />
       <Modal
         title="Edit Comorbid Conditions"
@@ -263,7 +271,11 @@ const ComorbidConditions = ({
         footer={false}
         open={isEdit}
       >
-        <EditSettings form={form} handleEditRow={handleEditRow} isNotResult={false} />
+        <EditSettings
+          form={form}
+          handleEditRow={handleEditRow}
+          isNotResult={false}
+        />
       </Modal>
     </>
   );
