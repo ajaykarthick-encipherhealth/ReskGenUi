@@ -1,4 +1,5 @@
 import { notification } from "antd";
+import moment from "moment";
 
 
 
@@ -64,6 +65,7 @@ export function getLast30Days() {
 
   return date_thirty_days.reverse();
 }
+
 export function getLast7Days() {
   const date_seven_days = [];
   const currentDate = new Date();
@@ -80,7 +82,17 @@ export function getLast7Days() {
   return date_seven_days.reverse();
 }
 
+export const getAllDatesInRange = (start, end) => {
+  const dates = [];
+  let currentDate = moment(start);
 
+  while (currentDate.isSameOrBefore(end)) {
+    dates.push(currentDate.format("YYYY-MM-DD"));
+    currentDate = currentDate.add(1, "days");
+  }
+
+  return dates;
+};
 
 
 export function formatNumber(num) {
@@ -92,6 +104,10 @@ export function formatNumber(num) {
     return num?.toString();
   }
 }
+
+export const dateFormatForDashboard = (date) => {
+  return moment(date).format("MMM") + moment(date).format("D");
+};
 
 export function formatDate(dateString) {
   const date = new Date(dateString);
@@ -141,9 +157,5 @@ export function formatValues(values, dates) {
   const resultArray = dates.map((date) => formatobj[formatDate(date)] || 0);
   return resultArray;
 }
-
-
-
-
 
 

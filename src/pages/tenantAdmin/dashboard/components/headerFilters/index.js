@@ -94,7 +94,7 @@ const index = ({
               options={[
                 { label: "Last 7 days", value: "last_1_week" },
                 { label: "Last 30 days", value: "last_1_month" },
-                { label: "Custom range Picker", value: "custom" },
+                { label: "Custom Date", value: "custom" },
               ]}
               onChange={handleDateChange}
             />
@@ -106,7 +106,7 @@ const index = ({
               className={`${styles.flterContainer}`}
               style={{ fontSize: "14px" }}
             >
-              Custom DatePicker
+              Custom Date
             </div>
             <div className="tenantSelector" style={{ width: "100%" }}>
               <RangePicker

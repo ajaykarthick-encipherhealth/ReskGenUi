@@ -23,6 +23,10 @@ export const organizationStatusAction = createActionThunk(
   "ORGANIZATION_STATUS",
   network.getAllOrganization
 );
+export const getAccuracyWorkflow = createActionThunk(
+  "GET_ACCURACY_WORKFLOW",
+  network.getAccuracyWorkflow
+);
 
 
 

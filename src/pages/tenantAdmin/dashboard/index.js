@@ -23,6 +23,7 @@ import PieChartInfo from "./components/pieChart/PieChartInfo";
 import OrgPieChartInfo from "./components/OrgPieChart/OrgPieChartInfo";
 import { Row, Skeleton, Spin } from "antd";
 import moment from "moment";
+import { getAllDatesInRange } from "../../../utils/reusable";
 
 const Index = ({
   getUserStatusData,
@@ -217,6 +218,9 @@ const Index = ({
       dateRange.endDate,
       selectedOrganization
     );
+
+    console.log(getAllDatesInRange(dateRange.startDate,
+      dateRange.endDate), "teseting");
   }, [dateRange, selectedOrganization]);
 
   return (
@@ -418,7 +422,8 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Accuracy />
+                    <Accuracy  dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}/>
                   </Card>
                 </div>
                 <div className={`col-lg-3 ${styles.box}`}>
@@ -463,7 +468,7 @@ const enhancer = connect(
     getOrganizationStatusData:
       dashboardWorkflowActions?.organizationStatusAction,
     getTop10DiseasesData: defaultActions.top10Diseases,
-    getAccuracyScore: defaultActions.accuracyScore,
+    getAccuracyScore: dashboardWorkflowActions.getAccuracyWorkflow,
   }
 );
 export default enhancer(Index);

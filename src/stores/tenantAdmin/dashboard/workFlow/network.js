@@ -45,6 +45,16 @@ export async function getReviewerStatus(startDate, endDate,organizationId) {
   );
   return data;
 }
+export async function getAccuracyWorkflow(startDate, endDate,organizationId) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/tenantadmin/dashboard/accuracy?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId?organizationId:""}`,
+    options
+  );
+  return data;
+}
 
 
 export async function getAllOrganization() {
