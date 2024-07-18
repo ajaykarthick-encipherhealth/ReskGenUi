@@ -107,7 +107,6 @@ const Patient = ({
     selectedOption,
     selectOrgList,
     batchCount,
-    filterBatchCount,
   }) => {
     const uId = localStorage.getItem("userId");
     const orgId = localStorage.getItem("orgId");
@@ -119,7 +118,7 @@ const Patient = ({
       sort?.sortDir ? sort?.sortDir : ""
     }&sortfield=${sort?.sortField ? sort?.sortField : ""}&priority=${
       selectedOption ? selectedOption : ""
-    }&batchCount=${filterBatchCount ? batchCount : ""}`;
+    }&batchCount=${batchCount ? batchCount : ""}`;
     allocatedGetList({ url: resoureUrl });
     // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     // if (response?.data) {
@@ -314,8 +313,6 @@ const Patient = ({
         search: searchStr,
         sort: sort,
         selectedOption: selectedOption,
-        batchCount: batchCount,
-        filterBatchCount: filterBatchCount,
       });
     }
   }, [
@@ -327,7 +324,6 @@ const Patient = ({
     endDate,
     searchStr,
     selectedOption,
-    filterBatchCount,
   ]);
 
   const renderRows = () => {
@@ -662,16 +658,21 @@ const Patient = ({
                                   </button> */}
                                   <Space.Compact style={{ width: "100%" }}>
                                     <Input
-                                      type="text"
+                                      type="number"
                                       onChange={(e) => {
-                                        setBatchCount(e.target.value);
+                                        // setBatchCount(e.target.value);
                                         if (e.target.value.length <= 0) {
                                           setFilterBatchCount(true);
+                                          getAllList({
+                                            batchCount: "",
+                                          });
+                                          setBatchCount("");
                                         }
                                         const inputValue =
                                           e.target.value.replace(/[^\d]/g, "");
+
                                         setBatchCount(inputValue);
-                                        if (inputValue.length <= 0) {
+                                        if (inputValue?.length >= 0) {
                                           setFilterBatchCount(true);
                                         }
                                       }}
@@ -687,7 +688,12 @@ const Patient = ({
                                       }}
                                     />
                                     <button
-                                      onClick={() => setFilterBatchCount(true)}
+                                      onClick={() => {
+                                        setFilterBatchCount(true);
+                                        getAllList({
+                                          batchCount: batchCount,
+                                        });
+                                      }}
                                       style={{
                                         borderRadius: "0px 10px 10px 0px",
                                       }}
