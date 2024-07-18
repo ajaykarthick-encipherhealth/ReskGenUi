@@ -36,7 +36,6 @@ export function extractLatestData(notes) {
 }
 
 const SupervisorWorkList = ({ result, setWorkListPatientId,getWorkListFilter,setIsModalComments }) => {
-  console.log(result)
   const dispatch = useDispatch();
   // const result = useSelector((state) => state.AuditWork.workListFilter);
   const [patientList, setPatientList] = useState([]);
@@ -60,7 +59,6 @@ const SupervisorWorkList = ({ result, setWorkListPatientId,getWorkListFilter,set
   const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   const getWorkList = async () => {
-    console.log(result?.data?.response?.content)
     setPatientList(result?.data?.response?.content);
     setTotalElements(result?.data?.response?.totalElements);
     setFilterDataLoading(false);
