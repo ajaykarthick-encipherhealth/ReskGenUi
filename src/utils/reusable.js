@@ -100,6 +100,28 @@ export function formatDate(dateString) {
   return month + day;
 }
 
+// export function formatValues(values, dates) {
+//   const formatobj = {};
+//   if (values?.length) {
+//     values &&
+//       values.forEach((key, i) => {
+//         const formattedKey = formatDate(Object?.keys(key)?.[0]);
+//         let count = values[i];
+//         formatobj[formattedKey] = count[Object?.keys(key)?.[0]];
+//       });   
+//   }
+//    else {
+//     values &&
+//       Object?.keys(values).forEach((key) => {
+//         const formattedKey = formatDate(key);
+//         formatobj[formattedKey] = values[key];
+//       });
+//   }
+//   const resultArray = dates?.map((date) => formatobj[date] || 0);
+//   return resultArray;
+
+// }
+
 export function formatValues(values, dates) {
   const formatobj = {};
   
@@ -119,8 +141,6 @@ export function formatValues(values, dates) {
   const resultArray = dates.map((date) => formatobj[formatDate(date)] || 0);
   return resultArray;
 }
-
-
 
 
 

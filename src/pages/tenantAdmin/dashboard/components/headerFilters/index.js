@@ -30,9 +30,11 @@ const index = ({
       if (value === "last_1_week") {
         startDate =
           moment().subtract(6, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
+          setSelectedValue(value);
       } else if (value === "last_1_month") {
         startDate =
           moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
+          setSelectedValue(value);
       } else if (value == undefined) {
         setDateRange({ startDate: "", endDate: "" });
       }

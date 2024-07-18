@@ -73,6 +73,7 @@ const index = ({
               selectedOrganization={selectedOrganization}
               className="codesGraphStyle3"
               customDate={customDate}
+             
             />
           </div>
         ) : (

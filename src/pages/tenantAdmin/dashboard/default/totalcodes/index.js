@@ -86,7 +86,8 @@ const index = ({
       data:
         selectedValue === "custom"
           ? customDate
-          : selectedValue === "last_1_week"
+          : 
+          selectedValue === "last_1_week"
           ? getLast7Days()
           : getLast30Days(),
     },
@@ -237,6 +238,7 @@ const index = ({
               isRadio={true}
               className="codesGraphStyle2"
               customDate={customDate}
+              selectedValue={selectedValue}
             />
           </div>
         ) : (
