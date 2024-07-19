@@ -116,7 +116,7 @@ export const getGraphData = (
   currentBtn,
   currentDate
 ) => {
-  console.log(param, text, month, year, currentBtn, currentDate, "testing");
+
   // if (data) {
   // const param = Object.values(data);
   if (
