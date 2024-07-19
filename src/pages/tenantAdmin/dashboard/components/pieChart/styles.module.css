@@ -55,6 +55,7 @@
   font-weight: 500;
   font-size: 14px;
   color: #000000;
+ 
   /* padding-top: 10px; */
 }
 .ImgDIv {
@@ -69,10 +70,10 @@
   display: flex;
   justify-content: end;
   align-items: end;
-  margin-left: 20px;
+  margin-left: 10px;
 }
 .userNameTitle {
-  width: 155px;
+  width: 139px;
   font-size: 14px;
   margin-top: 3px;
 }

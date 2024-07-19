@@ -38,23 +38,25 @@ const Files = ({
       ? getLast7Days()
       : getLast30Days();
   let computedDate = getAllComputingStatus?.COMPUTED?.map((x) => {
-    return { [x.date]: x.computing };
+    return { [x.date]: x.count };
   });
   const resultComputing = formatValues(computedDate, dates);
   let processingDate = getAllComputingStatus?.PROCESSING?.map((x) => {
-    return { [x.date]: x.computing };
+    return { [x.date]: x.count };
   });
   const resultProcessing = formatValues(processingDate, dates);
 
   let failedDate = getAllComputingStatus?.FAILED?.map((x) => {
-    return { [x.date]: x.computing };
+    return { [x.date]: x.count };
   });
   const resultFailed = formatValues(failedDate, dates);
 
-  let uploadDate = getAllComputingStatus?.NOT_UPLOADED?.map((x) => {
-    return { [x.date]: x.computing };
-  });
-  const resultUpload = formatValues(uploadDate, dates);
+
+  const totalStatusCount =
+  (getAllComputingTile?.PROCESSING || 0) +
+  (getAllComputingTile?.COMPUTED || 0) +
+  (getAllComputingTile?.FAILED || 0);
+ 
 
   const options = {
     xAxis: {
@@ -84,14 +86,14 @@ const Files = ({
       show: false,
     },
     series: [
-      {
-        name: "Upload",
-        data: resultUpload,
-        type: "line",
-        lineStyle: { color: "#3B3486" },
-        smooth: true,
-        showSymbol: false,
-      },
+      // {
+      //   name: "Upload",
+      //   // data: resultUpload,
+      //   type: "line",
+      //   lineStyle: { color: "#3B3486" },
+      //   smooth: true,
+      //   showSymbol: false,
+      // },
       {
         name: "Completed",
         color: "#00BC13",
@@ -126,7 +128,7 @@ const Files = ({
     {
       id: 1,
       title: "Upload",
-      count: getAllComputingTile?.NOT_UPLOADED,
+      count: totalStatusCount,
       icon: upload,
       color: "#ECEBFF",
       iconBg: "#D0CCFF",

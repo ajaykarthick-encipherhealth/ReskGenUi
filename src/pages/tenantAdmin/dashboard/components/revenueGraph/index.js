@@ -31,6 +31,8 @@ const RevenueGraph = ({
   const resultArrayHCC = formatValues(premiumByDateForHcc, dates);
   const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested;
   const resultArrayCaregaps = formatValues(premiumByDateForSuggested, dates);
+  const totalCodes = resultArrayHCC.map((num, index) => num + resultArrayCaregaps[index]);
+
 
   const option = {
     tooltip: {
@@ -73,7 +75,7 @@ const RevenueGraph = ({
           : "Total Codes",
         type: "line",
         step: "start",
-        data: isHcc ? resultArrayHCC : isCargaps ? resultArrayCaregaps : [],
+        data: isHcc ? resultArrayHCC : isCargaps ? resultArrayCaregaps : totalCodes,
         itemStyle: {
           color: isHcc ? "#02BBDE" : isCargaps ? "#5A75F2" : "#E88D67",
         },

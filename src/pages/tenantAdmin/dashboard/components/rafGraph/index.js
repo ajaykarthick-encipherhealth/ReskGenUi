@@ -49,6 +49,8 @@ const RafGraph = ({
   const rafScoreByDateForSuggested =
     getAllRafScoreData?.rafScoreByDateForSuggested;
   const resultArrayCaregaps = formatValues(rafScoreByDateForSuggested, dates);
+  const totalCodes = resultArrayHCC.map((num, index) => num + resultArrayCaregaps[index]);
+
 
   const option = {
     tooltip: {
@@ -100,7 +102,7 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: isHcc ? resultArrayHCC : isCargaps ? resultArrayCaregaps : [],
+        data: isHcc ? resultArrayHCC : isCargaps ? resultArrayCaregaps : totalCodes,
       },
 
       {

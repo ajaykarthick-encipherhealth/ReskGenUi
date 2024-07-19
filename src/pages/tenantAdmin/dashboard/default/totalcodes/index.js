@@ -59,9 +59,10 @@ const index = ({
       ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
       : [];
 
-  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
-    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
-    : [];
+  const totalCodes = resultArrayHCC.map(
+    (num, index) => num + resultArrayCaregaps[index]
+  );
+ 
 
   useEffect(() => {
     getAllHccCodesData(
@@ -89,8 +90,7 @@ const index = ({
       data:
         selectedValue === "custom"
           ? customDate
-          : 
-          selectedValue === "last_1_week"
+          : selectedValue === "last_1_week"
           ? getLast7Days()
           : getLast30Days(),
     },
@@ -113,7 +113,7 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data: [],
+        data: totalCodes,
         color: "#E88D67",
         type: "line",
         lineStyle: { color: "#E88D67" },
