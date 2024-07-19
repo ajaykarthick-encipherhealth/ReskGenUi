@@ -3,13 +3,52 @@ import styles from "./styles.module.css";
 import { connect, useSelector } from "react-redux";
 import moment from "moment";
 import Image from "next/image";
-import { Modal, Spin } from "antd";
+import { Col, Modal, Row, Skeleton, Spin } from "antd";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
 import spinSTYles from "../../../../styles/auth.module.css";
 
+
+export const NotifiAvatar = () => {
+  return (
+    <div style={{ width: '100%', maxWidth: '600px', margin: '0 auto' }}>
+    <Row gutter={16} align="top" style={{ marginBottom: '16px' }}>
+      <Col>
+        <Skeleton.Avatar active size="large" shape="circle" />
+      </Col>
+      <Col flex="auto">
+        <Skeleton active title={false} paragraph={{ rows: 2, width: '80%' }} />
+      </Col>
+    </Row>
+    <Row gutter={16} align="top" style={{ marginBottom: '16px' }}>
+      <Col>
+        <Skeleton.Avatar active size="large" shape="circle" />
+      </Col>
+      <Col flex="auto">
+        <Skeleton active title={false} paragraph={{ rows: 2, width: '60%' }} />
+      </Col>
+    </Row>
+    <Row gutter={16} align="top" style={{ marginBottom: '16px' }}>
+      <Col>
+        <Skeleton.Avatar active size="large" shape="circle" />
+      </Col>
+      <Col flex="auto">
+        <Skeleton active title={false} paragraph={{ rows: 2, width: '70%' }} />
+      </Col>
+    </Row>
+    <Row gutter={16} align="top" style={{ marginBottom: '16px' }}>
+      <Col>
+        <Skeleton.Avatar active size="large" shape="circle" />
+      </Col>
+      <Col flex="auto">
+        <Skeleton active title={false} paragraph={{ rows: 2, width: '70%' }} />
+      </Col>
+    </Row>
+  </div>
+  );
+};
 const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
   const notificationResult = webSocketNotificationData
     ? webSocketNotificationData
@@ -50,11 +89,11 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       <div className={styles.no_notificarion_container}>
         {!notificationResponse?.loading &&
           (!notificationResponse?.data?.response?.notificationList?.content ||
-            notificationResponse?.data?.response?.notificationList?.content?.length === 0) && (
-            <Image src={NoNotification} alt="" />
-          )}
+            notificationResponse?.data?.response?.notificationList?.content
+              ?.length === 0) && <Image src={NoNotification} alt="" />}
       </div>
     );
+
 
   return (
     <>
@@ -76,7 +115,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
                 alignItems: "center",
               }}
             >
-              <Spin loading={notificationResponse?.loading} />
+              {NotifiAvatar()}
             </div>
           ) : (
             <div className={styles.container}>{notificationData}</div>
@@ -93,9 +132,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
         onCancel={handleOk}
       >
         {notificationResponse?.loading ? (
-          <div className={spinSTYles.spinStyle}>
-            <Spin loading={notificationResponse?.loading} />
-          </div>
+          <div className={spinSTYles.spinStyle}>{NotifiAvatar()}</div>
         ) : (
           <div className={styles.container} style={{ height: "500px" }}>
             {notificationData}

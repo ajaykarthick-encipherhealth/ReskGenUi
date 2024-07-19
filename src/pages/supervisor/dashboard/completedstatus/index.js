@@ -4,7 +4,7 @@ import ReactECharts from "echarts-for-react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./styles.module.css";
-import { Empty, Spin } from "antd";
+import { Empty, Skeleton, Spin } from "antd";
 import { Buttons } from "../../../reviewer/workingstatus";
 import Buttonscroller from "../../../../components/buttonSroller";
 import Card from "../../../../components/card/index";
@@ -192,7 +192,11 @@ const CompletedStatus = () => {
 
           {completedDatas?.loading ? (
             <div className={spinSTYles.spinStyle}>
-              <Spin loading={completedDatas?.loading} />
+                <Skeleton
+                active
+                paragraph={{ rows: 4 }}
+                style={{ padding: "40px" }}
+              />
             </div>
           ) : completedDatas?.loading === false &&
             completedDatas?.data?.response ? (

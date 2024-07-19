@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPatientID } from "../../../../store/actions/PatientsActions";
 import { getHoldStatusData } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
+import { renderSkeletonHold } from "../../../../components/reuseableFunctions";
 
 const HoldStatus = () => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
@@ -61,13 +62,21 @@ const HoldStatus = () => {
               }}
             >
               <td className={styles.description}>{item.patientId}</td>
-              <td className={styles.description}>{item.testValue ? item.testValue : "---"}</td>
+              <td className={styles.description}>
+                {item.testValue ? item.testValue : "---"}
+              </td>
             </tr>
           ))
         ) : (
           <tr>
             <td colSpan="2">
-              <Empty  style={{  paddingTop:"50px", textAlign:"center",height:"260px"}}/>
+              <Empty
+                style={{
+                  paddingTop: "50px",
+                  textAlign: "center",
+                  height: "260px",
+                }}
+              />
             </td>
           </tr>
         )}
@@ -93,7 +102,7 @@ const HoldStatus = () => {
                 alignItems: "center",
               }}
             >
-              <Spin loading={holdStatusData?.loading} />
+              {renderSkeletonHold()}{" "}
             </div>
           ) : (
             <div className={styles.container}> {TableData}</div>

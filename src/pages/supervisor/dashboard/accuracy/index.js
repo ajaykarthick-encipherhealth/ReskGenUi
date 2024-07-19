@@ -155,7 +155,7 @@ const Accuracy = () => {
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(
       accuracyDatas?.data?.response &&
-        Object.keys(accuracyDatas?.data?.response)?.length
+      Object.keys(accuracyDatas?.data?.response)?.length
     );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
@@ -430,7 +430,8 @@ const Accuracy = () => {
               )}
             </div>
             {accuracyDatas?.loading ? (
-              <Spin />
+              <div className={styles.accuracy}>{renderCardSkeleton(230, 250)}</div>
+
             ) : (
               <div className={styles.accuracy}>
                 <div className={styles.header}>
