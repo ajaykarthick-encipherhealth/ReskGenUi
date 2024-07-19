@@ -48,7 +48,26 @@ export const getDays = (datasLength) => {
     return [];
   }
 };
-
+export const renderCardSkeleton = (width, height, borderRadius) => (
+  <Row style={{ display: "flex", justifyContent: "space-between" }}>
+    {Array.from({ length: 1 }).map((_, index) => (
+      <Row>
+        <Col span={12}>
+          <div className={styles.container}>
+            <Skeleton.Input
+              style={{
+                width: width,
+                height: height,
+                borderRadius: borderRadius,
+              }}
+              active
+            />
+          </div>
+        </Col>
+      </Row>
+    ))}
+  </Row>
+);
 export const monthNames = [
   "JAN",
   "FEB",
@@ -306,22 +325,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
   const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
   const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
   const average = sum / numericalData?.length; // Calculate the average
-  const renderCardSkeleton = () => (
-    <Row style={{ display: "flex", justifyContent: "space-between" }}>
-      {Array.from({ length: 1 }).map((_, index) => (
-        <Row>
-          <Col span={12}>
-            <div className={styles.container}>
-              <Skeleton.Input
-                style={{ width: "210px", height: "250px" }}
-                active
-              />
-            </div>
-          </Col>
-        </Row>
-      ))}
-    </Row>
-  );
+
   return (
     <>
       <HeadTitle header="System Quality Score" />
@@ -358,9 +362,11 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
             <div style={{ width: "85%", overflowX: "scroll" }}>
               {accuracyDatas?.loading && accuracyLoading && (
                 <div className={styles.highchartStyle}>
-                  {" "}
-                  {/* Container width */}
-                  <Skeleton active paragraph={{ rows: 4 }} />
+                  <Skeleton
+                    active
+                    paragraph={{ rows: 4 }}
+                    style={{ width: "700px", padding: "40px" }}
+                  />
                 </div>
               )}
               {!accuracyDatas?.loading &&
@@ -377,14 +383,20 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                 )
               ) : accuracyLoading ? (
                 <div className={spinSTYles.highchartStyle}>
-                  <Skeleton active paragraph={{ rows: 4 }} />
+                  <Skeleton
+                    active
+                    paragraph={{ rows: 4 }}
+                    style={{ width: "700px", padding: "40px" }}
+                  />
                 </div>
               ) : (
                 <div className={spinSTYles.spinStyle}>{<Empty />}</div>
               )}
             </div>
             {accuracyLoading ? (
-              <div className={styles.accuracy}>{renderCardSkeleton()}</div>
+              <div className={styles.accuracy}>
+                {renderCardSkeleton(220, 250)}
+              </div>
             ) : (
               <div className={styles.accuracy}>
                 <div className={styles.header}>

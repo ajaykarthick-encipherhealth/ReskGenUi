@@ -10,6 +10,7 @@ import HeadTitle from "../../../../components/headtitle";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { NotifiAvatar } from "../../../admin/dashboard/notifications";
 
 const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
   const notificationResult = webSocketNotificationData
@@ -79,7 +80,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
                 alignItems: "center",
               }}
             >
-              <Skeleton active paragraph={{ rows: 4 }} />
+              {NotifiAvatar()}
             </div>
           ) : (
             <div className={styles.container}>{notificationData}</div>
@@ -96,9 +97,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
         onCancel={handleOk}
       >
         {notificationResponse?.loading ? (
-          <div className={spinSTYles.spinStyle}>
-            <Skeleton active paragraph={{ rows: 4 }} />
-          </div>
+          <div className={spinSTYles.spinStyle}>{NotifiAvatar()}</div>
         ) : (
           <div className={styles.container} style={{ height: "500px" }}>
             {notificationData}

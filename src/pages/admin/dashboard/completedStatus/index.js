@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { useRouter } from "next/router";
-import { Empty, Spin, Select } from "antd";
+import { Empty, Spin, Select, Skeleton } from "antd";
 import * as echarts from "echarts";
 import ReactECharts from "echarts-for-react";
 import { Buttons } from "../../../reviewer/workingstatus";
@@ -270,7 +270,11 @@ const CompletedStatus = () => {
 
           {completedDatas?.loading ? (
             <div className={spinSTYles.spinStyle}>
-              <Spin loading={completedDatas?.loading} />
+              <Skeleton
+                active
+                paragraph={{ rows: 4 }}
+                style={{ padding: "40px" }}
+              />
             </div>
           ) : completedDatas?.loading === false &&
             completedDatas?.data?.response ? (

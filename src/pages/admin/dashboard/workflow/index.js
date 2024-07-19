@@ -2,11 +2,20 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Image from "next/image";
 import dayjs from "dayjs";
-import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faClockRotateLeft  } from "@fortawesome/free-regular-svg-icons";
- import { faCircleCheck ,faClockRotateLeft,faFileCircleCheck,faFileCircleExclamation,faCirclePause,faCircleXmark,faUsers,faFile} from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleCheck,
+  faClockRotateLeft,
+  faFileCircleCheck,
+  faFileCircleExclamation,
+  faCirclePause,
+  faCircleXmark,
+  faUsers,
+  faFile,
+} from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
-import { Col, Empty, Row, Spin } from "antd";
+import { Col, Empty, Row, Skeleton, Spin } from "antd";
 import { useRouter } from "next/router";
 import completed from "../../../../images/trackingImages/CompletedTrack.png";
 import calender from "../../../../images/dashboard/calender.png";
@@ -85,7 +94,7 @@ const WorkFlow = () => {
     // },
     {
       id: 2,
-      icon:<FontAwesomeIcon icon={faUsers} /> ,
+      icon: <FontAwesomeIcon icon={faUsers} />,
       title: "Allocated",
       charts: chartValue.totalPatientsAllocated
         ? chartValue.totalPatientsAllocated
@@ -98,7 +107,7 @@ const WorkFlow = () => {
 
     {
       id: 3,
-      icon:<FontAwesomeIcon icon={faCircleCheck} />,
+      icon: <FontAwesomeIcon icon={faCircleCheck} />,
       title: "Completed",
       charts: dateRange.processedStatus
         ? dateRange.processedStatus.COMPLETED
@@ -110,7 +119,7 @@ const WorkFlow = () => {
     },
     {
       id: 4,
-      icon:  <FontAwesomeIcon icon={faClockRotateLeft} />,
+      icon: <FontAwesomeIcon icon={faClockRotateLeft} />,
       title: "Pending",
       charts: dateRange.processedStatus
         ? dateRange.processedStatus.PENDING
@@ -144,7 +153,7 @@ const WorkFlow = () => {
     },
     {
       id: 6,
-       icon:<FontAwesomeIcon icon={faFileCircleCheck} />,
+      icon: <FontAwesomeIcon icon={faFileCircleCheck} />,
       title: "Audited",
       charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITED : "0",
       days: `${
@@ -154,7 +163,7 @@ const WorkFlow = () => {
     },
     {
       id: 7,
-       icon:  <FontAwesomeIcon icon={faFileCircleExclamation} />,
+      icon: <FontAwesomeIcon icon={faFileCircleExclamation} />,
       title: "Audit Pending",
       charts: dateRange.auditedStatus
         ? dateRange.auditedStatus.AUDIT_PENDING
@@ -177,7 +186,7 @@ const WorkFlow = () => {
 
     {
       id: 9,
-       icon: <FontAwesomeIcon icon={faCircleXmark} />,
+      icon: <FontAwesomeIcon icon={faCircleXmark} />,
       title: "Audit Declined",
       charts: dateRange.auditedStatus
         ? dateRange.auditedStatus.AUDIT_DECLINED
@@ -191,7 +200,7 @@ const WorkFlow = () => {
   const card2Data = [
     {
       id: 1,
-     icon: <FontAwesomeIcon icon={faFile} />,
+      icon: <FontAwesomeIcon icon={faFile} />,
       title: "Total charts",
       charts: chartValue.totalPatients ? chartValue.totalPatients : "0",
       days: `${
@@ -210,6 +219,56 @@ const WorkFlow = () => {
       console.log(error);
     }
   };
+  const renderCardSkeleton = () => (
+    <Row className={styles.carddiv}>
+      {Array.from({ length: 4 }).map((_, index) => (
+        <>
+          <Col
+            key={index}
+            span={5}
+            style={{
+              backgroundColor: "#f0f0f0",
+              borderRadius: "8px",
+              padding: "16px",
+              marginBottom: "30px",
+              width: "100px",
+              height: "100px",
+            }}
+          >
+            <Skeleton.Avatar
+              size={30}
+              style={{
+                marginBottom: "16px",
+                borderRadius: "50%",
+              }}
+            />
+            <Skeleton active title={{ width: "70%" }} paragraph={{ rows: 0 }} />
+          </Col>
+          <Col
+            key={index}
+            span={5}
+            style={{
+              backgroundColor: "#f0f0f0",
+              borderRadius: "8px",
+              padding: "16px",
+              marginBottom: "30px",
+              width: "100px",
+              height: "100px",
+            }}
+          >
+            <Skeleton.Avatar
+              size={30}
+              style={{
+                marginBottom: "16px",
+                borderRadius: "50%",
+              }}
+            />
+            <Skeleton active title={{ width: "70%" }} paragraph={{ rows: 0 }} />
+          </Col>
+        </>
+      ))}
+    </Row>
+  );
   useEffect(() => {
     getWorkFlow();
   }, [startDate, endDate, router]);
@@ -232,9 +291,7 @@ const WorkFlow = () => {
       />
       <Card borderRadius="28px" style={{ width: "100%", height: "75%" }}>
         {worlFlowData?.loading ? (
-          <div className={spinSTYles.spinStyle}>
-            <Spin loading={worlFlowData?.loading} />
-          </div>
+          renderCardSkeleton()
         ) : worlFlowData?.data?.response ? (
           <Row
             className={styles.carddiv}
