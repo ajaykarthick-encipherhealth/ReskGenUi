@@ -11,7 +11,7 @@
 .suggestedIcon {
   background: #ff9209;
   color: #fff;
-  font-size: 19px;
+  font-size: 19px !important;
   margin-right: 2px;
   cursor: pointer;
   border-radius: 100%;

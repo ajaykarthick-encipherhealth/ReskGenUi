@@ -130,7 +130,7 @@ const ComboCard = ({
                       <div className="col-xl-5">
                         <span>{item.actualDescription}</span>
                       </div>
-                      <div className="col-xl-1">
+                      <div className="col-xl-1" style={{position:"relative",right:"18px"}}>
                         {/* <div>
                           <Popconfirm
                             title={popConfirmTitle}
@@ -168,21 +168,38 @@ const ComboCard = ({
                             <CloseCircleFilled className={styles.deleteIcon} onClick={() => message.warning("Delete only formed codes")}/>
                           ) : (
                             <MovementAction
-                              validAction={
-                                cardTitle == "DELETED_COMBO" ? true : false
-                              }
-                              deleteAction={
-                                cardTitle == "VALID_COMBO" ? true : false
-                              }
-                              setIsValidAction={setIsValidAction}
-                              cardTitle="COMBO"
-                              setConfirmNotesModalValid={
-                                setConfirmNotesModalValid
-                              }
-                              onchangeValid={onchangeCombo}
-                              result={item}
-                              setFileLoading={setFileLoading}
-                            />
+                            validAction={cardTitle == "HCC" ? false : true}
+                            suggestedAction={
+                              cardTitle == "SUGGESTED" ? false : true
+                            }
+                            deleteAction={
+                              cardTitle == "DELETED" ? false : true
+                            }
+                            setIsValidAction={setIsValidAction}
+                            cardTitle={cardTitle}
+                            setConfirmNotesModalValid={
+                              setConfirmNotesModalValid
+                            }
+                            onchangeValid={onchangeCombo}
+                            result={item}
+                            setFileLoading={setFileLoading}
+                          />
+                            // <MovementAction
+                            //   validAction={
+                            //     cardTitle == "DELETED_COMBO" ? true : false
+                            //   }
+                            //   deleteAction={
+                            //     cardTitle == "VALID_COMBO" ? true : false
+                            //   }
+                            //   setIsValidAction={setIsValidAction}
+                            //   cardTitle="COMBO"
+                            //   setConfirmNotesModalValid={
+                            //     setConfirmNotesModalValid
+                            //   }
+                            //   onchangeValid={onchangeCombo}
+                            //   result={item}
+                            //   setFileLoading={setFileLoading}
+                            // />
                           )}
                         </div>
                         {item?.children?.length > 0 && (
