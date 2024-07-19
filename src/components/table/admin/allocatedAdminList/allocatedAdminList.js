@@ -20,11 +20,11 @@ function AllocatedAdminList({
   selectedChart,
   setSort,
   loading,
+  sortCompleteOrder, 
+  setSortCompleteOrder
 }) {
   const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows.some(
       (selectedRow) => selectedRow.patientId === row.patientId

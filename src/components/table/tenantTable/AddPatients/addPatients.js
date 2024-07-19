@@ -20,9 +20,10 @@ function AddPatientListTable({
   setSortOrder,
   setSort,
   page,
+  sortCompleteOrder,
+  setSortCompleteOrder
 }) {
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
 
   const dispatch = useDispatch();
   const navigate = useRouter();

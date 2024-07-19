@@ -144,6 +144,9 @@ const Patient = ({
   const [auditedDueStartDate, setAuditedDueStartDate] = useState("");
   const [auditedDueEndDate, setAuditedDueEndDate] = useState("");
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
+  const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
+  const [sortDueOrder, setSortDueOrder] = useState("DESC");
+  const [sortAuditDueOrder, setSortAuditDueOrder] = useState("DESC");
   const [trackChart, setTrackChart] = useState({
     COMPLETED: 0,
     PENDING: 0,
@@ -713,6 +716,12 @@ const Patient = ({
                               setSort={setSort}
                               page={{ pageNo, paginationFirst }}
                               loader={loader}
+                              sortAuditOrder={sortAuditOrder} 
+                              setSortAuditOrder={setSortAuditOrder}
+                              sortDueOrder={sortDueOrder}
+                              setSortDueOrder={setSortDueOrder}
+                              sortAuditDueOrder={sortAuditDueOrder} 
+                              setSortAuditDueOrder={setSortAuditDueOrder}
                             />
                             <div>
                               <div className="pagination-container">
