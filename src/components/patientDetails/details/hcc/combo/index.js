@@ -193,7 +193,7 @@ const Combo = ({
     if (activeComboTree) {
       comboDiseaseCodesList?.map((item) => {
         if (
-          item.diagnosisCodeCombo.replace(".", "") ==
+          item.diagnosisCodeCombo?.replace(".", "") ==
           activeComboTree.diagnosisCode.replace(".", "")
         ) {
           setOpens(true);

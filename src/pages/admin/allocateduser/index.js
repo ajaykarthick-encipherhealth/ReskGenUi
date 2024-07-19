@@ -54,7 +54,7 @@ const Patient = ({
   loader3,
 }) => {
   const [validated, setValidated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [selectAllCheckedL2, setSelectAllCheckedL2] = useState(false);
@@ -121,40 +121,20 @@ const Patient = ({
       selectedOption ? selectedOption : ""
     }&batchCount=${batchCount ? batchCount : ""}`;
     allocatedGetList({ url: resoureUrl });
-    // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    // if (response?.data) {
-    //   let resultMap = [];
-    //   let result = response?.data?.response?.content;
-    //   setTotalElements(response?.data?.response?.totalElements);
-    //   result?.map((res) => {
-    //     resultMap.push({
-    //       ...res,
-    //       patientId: res.patientId,
-    //       patientName: res.patientName,
-    //       computedDate: res.computedDate,
-    //     });
-    //   });
-    //   if (result?.length > 0) {
-    //     setPatinetListAll(result);
-    //     setIsLoading(false);
-    //   } else {
-    //     setPatinetListAll([]);
-    //   }
-
-    //   setTableLoading(false);
-    // }
   };
   const getAllCheckList = async (sort) => {
     setIsLoading(true);
     const uId = localStorage.getItem("userId");
     const orgId = localStorage.getItem("orgId");
-    let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${
-      batchCount ? batchCount : pageSize
-    }&userId=${uId}&organizationId=${orgId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
+    let resoureUrl = `dbservice/patient/admin/computation/filter?&organizationId=${orgId}&
+    page=${pageNo}&size=${
+      batchCount ? batchCount : reviewerResponse?.response?.totalElements
+    }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
       sort?.sortDir
     }&sortfield=${sort?.sortField}&priority=${
       selectedOption ? selectedOption : ""
     }&batchCount=${batchCount}`;
+   
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response?.data) {
       let result = response?.data?.response?.content;
@@ -210,7 +190,7 @@ const Patient = ({
   const selectTabClick = (number) => {
     setSearchString("");
     setPaginationFirst(0);
-    setIsLoading(true);
+    setIsLoading(false);
     setActiveTab(number);
     setSelectedRowsId([]);
     setAllocateClicked(false);
@@ -260,34 +240,7 @@ const Patient = ({
     let tenantid = localStorage.getItem("tenantId");
     let resoureUrl = `dbservice/l2audit?organizationId=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
     getSupervisorsList({ url: resoureUrl });
-    // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    // if (response.data) {
-    //   let resultMap = [];
-    //   let result = response?.data?.response?.content;
-    //   setTotalElementsUser(response?.data?.response?.content?.totalElements);
-    //   result?.map((res) => {
-    //     resultMap.push({
-    //       ...res,
-    //       name: res.name,
-    //       userName: res.userName,
-    //       totalFileAudited: res.totalFileAudited,
-    //       totalFileAuditAllocated: res.totalFileAuditAllocated,
-    //       totalFileAuditPending: res.totalFileAuditPending,
-    //       totalFileAuditHold: res.totalFileAuditHold,
-    //       totalFileAuditDeclined: res.totalFileAuditDeclined,
-    //       firstName: res.firstName,
-    //       lastName: res.lastName,
-    //       profileImageUrl: res.profileImageUrl,
-    //     });
-    //   });
-    //   if (result?.length > 0) {
-    //     setL2UserListAll(result);
-    //   } else {
-    //     setL2UserListAll([]);
-    //   }
-    //   setIsLoading(false);
-    //   setTableLoading(false);
-    // }
+
   };
 
   useEffect(() => {
@@ -315,6 +268,9 @@ const Patient = ({
         sort: sort,
         selectedOption: selectedOption,
       });
+    }
+    if (activeTab == 2 && !isPatientList) {
+      getAuditL2List(pageNo, searchStr);
     }
   }, [
     pageNo,
@@ -429,7 +385,8 @@ const Patient = ({
       userName: data?.userName,
     };
     setL2selectUser(dataMap);
-    let resoureUrl = `dbservice/l2audit/patients?username=${
+    let orgId = localStorage.getItem("orgId");
+    let resoureUrl = `dbservice/l2audit/patients?organizationId=${orgId}&username=${
       data?.userName
     }&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${
       sort?.sortDir ? sort?.sortDir : "DESC"
@@ -440,41 +397,21 @@ const Patient = ({
     }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
     getSelectedSupervisorList({ url: resoureUrl });
     setIsPatientList(true);
-    // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    // if (response.data) {
-    //   let resultMap = [];
-    //   let result = response?.data?.response?.content;
-    //   setTotalElementsPatient(response?.data?.response?.totalElements);
-    //   result?.map((res) => {
-    //     resultMap.push({
-    //       ...res,
-    //       patientId: res.patientId,
-    //       patientName: res.patientName,
-    //       computedDate: res.computedDate,
-    //       patientAllocatedFirstName: res.patientAllocatedFirstName,
-    //       patientAllocatedLastName: res.patientAllocatedLastName,
-    //       patientAllocatedProfileImage: res.patientAllocatedProfileImage,
-    //     });
-    //   });
-    //   const data = result.map((item) => ({
-    //     id: item.patientId,
-    //     name: item.patientName,
-    //   }));
-    //   setHeaderCheckValidation(data);
-    //   if (result) {
-    //     setL2PatinetListAll(result);
-    //     setIsPatientList(true);
-    //   } else {
-    //     setL2PatinetListAll([]);
-    //   }
-    //   setTableLoading(false);
-    //   setIsLoading(false);
-    // }
   };
 
   const getAllCheckListL2 = async (sort) => {
     setCheckedLoading(true);
-    let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${supervisorResponse?.response?.totalElements}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
+    let orgId = localStorage.getItem("orgId");
+    let resoureUrl = `dbservice/l2audit/patients?organizationId=${orgId}&username=${
+      l2selectUser?.userName
+    }&page=${pageNoL2Patient}&size=${15}&sortdirection=${
+      sort?.sortDir ? sort?.sortDir : "DESC"
+    }&sortfield=${
+      sort?.sortField ? sort?.sortField : "dueDate"
+    }&searchstring=${searchString}&processedStatus=${
+      selectedOptions ? selectedOptions : ""
+    }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
+    // let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=${pageNoL2Patient}&size=${15}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       let result = response?.data?.response;
@@ -487,38 +424,6 @@ const Patient = ({
     }
     setCheckedLoading(false);
   };
-  useEffect(() => {
-    setIsLoading(true);
-    if (!isPatientList) {
-      // getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
-    } else {
-      getL2PatientList(
-        l2selectUser,
-        pageNoL2Patient,
-        sort,
-        "",
-        selectedOptions,
-        allocatedOption
-      );
-      setIsLoading(false);
-    }
-    setAllocateClicked(false);
-    setSelectedRowsId([]);
-    setSelectAllChecked(false);
-    setSelectAllCheckedL2(false);
-    setIsLoading(false);
-    setFilterBatchCount(false);
-  }, [
-    isPatientList,
-    pageNoL2Patient,
-    sort,
-    allocateClicked,
-    selectedOption,
-    filterBatchCount,
-    selectedOptions,
-    allocatedOption,
-  ]);
-
   useEffect(() => {
     dispatch(getFilters("patientAllocated"));
   }, []);
@@ -724,8 +629,8 @@ const Patient = ({
                                   />
                                 </div>
                               </div>
-                              <div className="col-xl-2">
-                                <div>
+                              <div className="col-xl-6">
+                                <div className="col-xl-4">
                                   <Selector
                                     selectlabel={"Status"}
                                     setSelectedOption={setSelectedOptions}

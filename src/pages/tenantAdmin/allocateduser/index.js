@@ -60,7 +60,7 @@ const Patient = ({
   loader3,
 }) => {
   const [validated, setValidated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [selectAllCheckedL2, setSelectAllCheckedL2] = useState(false);
@@ -122,7 +122,7 @@ const Patient = ({
   }) => {
     const uId = localStorage.getItem("userId");
     const orgId = selectOrgList;
-    let resoureUrl = `page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
+    let resoureUrl = `page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${
       startDate ? startDate : ""
     }&computationEnd=${endDate ? endDate : ""}&isAllocation=${
       allocate ? allocate : ""
@@ -160,8 +160,8 @@ const Patient = ({
     const uId = localStorage.getItem("userId");
     const orgId = localStorage.getItem("orgId");
     let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${
-      batchCount ? batchCount : pageSize
-    }&userId=${uId}&organizationId=${orgId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
+      batchCount ? batchCount : reviewerResponse?.response?.totalElements
+    }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
       sort?.sortDir
     }&sortfield=${sort?.sortField}&priority=${
       selectedOption ? selectedOption : ""
@@ -221,7 +221,7 @@ const Patient = ({
   const selectTabClick = (number) => {
     setSearchString("");
     setPaginationFirst(0);
-    setIsLoading(true);
+    setIsLoading(false);
     setActiveTab(number);
     setSelectedRowsId([]);
     setAllocateClicked(false);
@@ -239,13 +239,14 @@ const Patient = ({
   const searchFunction = (search, activeTab) => {
     if (activeTab === 1) {
       setSearchStr(search);
-    } else {
-      if (!isPatientList) {
-        getAuditL2List(pageNo, search);
-      } else {
-        getL2PatientList(l2selectUser, pageNoL2Patient, sort, search);
-      }
     }
+    // else {
+    //   if (!isPatientList) {
+    //     getAuditL2List(pageNo, search);
+    //   } else {
+    //     getL2PatientList(l2selectUser, pageNoL2Patient, sort, search);
+    //   }
+    // }
   };
   const debounceFunc = useCallback(
     debounce((text, activeTab) => searchFunction(text, activeTab), 900),
@@ -269,41 +270,13 @@ const Patient = ({
   const getAuditL2List = async (pageNo, searchString) => {
     let orgId = localStorage.getItem("orgId");
     let tenantid = localStorage.getItem("tenantId");
-    let resoureUrl = `dbservice/l2audit?organizationId=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
+    let resoureUrl = `dbservice/l2audit?tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
     getSupervisorsList({ url: resoureUrl });
-    // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    // if (response.data) {
-    //   let resultMap = [];
-    //   let result = response?.data?.response?.content;
-    //   setTotalElementsUser(response?.data?.response?.content?.totalElements);
-    //   result?.map((res) => {
-    //     resultMap.push({
-    //       ...res,
-    //       name: res.name,
-    //       userName: res.userName,
-    //       totalFileAudited: res.totalFileAudited,
-    //       totalFileAuditAllocated: res.totalFileAuditAllocated,
-    //       totalFileAuditPending: res.totalFileAuditPending,
-    //       totalFileAuditHold: res.totalFileAuditHold,
-    //       totalFileAuditDeclined: res.totalFileAuditDeclined,
-    //       firstName: res.firstName,
-    //       lastName: res.lastName,
-    //       profileImageUrl: res.profileImageUrl,
-    //     });
-    //   });
-    //   if (result?.length > 0) {
-    //     setL2UserListAll(result);
-    //   } else {
-    //     setL2UserListAll([]);
-    //   }
-    //   setIsLoading(false);
-    //   setTableLoading(false);
-    // }
   };
 
   useEffect(() => {
     if (selectAllChecked) {
-      if (isPatientList == true) {
+      if (isPatientList) {
         getAllCheckListL2(sort);
       } else {
         getAllCheckList(sort);
@@ -311,7 +284,7 @@ const Patient = ({
     } else {
       setSelectedRowsId([]);
     }
-  }, [selectAllChecked, sort, isPatientList, pageNo]);
+  }, [selectAllChecked, sort, isPatientList, pageNoL2Patient]);
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
@@ -328,6 +301,9 @@ const Patient = ({
         selectOrgList: selectOrgList,
       });
     }
+    if (activeTab == 2 && !isPatientList) {
+      getAuditL2List(pageNo, searchStr);
+    }
   }, [
     pageNo,
     pageSize,
@@ -338,12 +314,9 @@ const Patient = ({
     searchStr,
     selectedOption,
     selectOrgList,
+    isPatientList,
   ]);
-  useEffect(() => {
-    if (!isPatientList) {
-      getAuditL2List(pageNo, searchStr, selectOrgList);
-    }
-  }, [selectOrgList, searchStr]);
+
   useEffect(() => {
     if (!organizationList?.response) {
       getAllOrganizationList();
@@ -470,41 +443,21 @@ const Patient = ({
     }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
     getSelectedSupervisorList({ url: resoureUrl });
     setIsPatientList(true);
-    // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    // if (response.data) {
-    //   let resultMap = [];
-    //   let result = response?.data?.response?.content;
-    //   setTotalElementsPatient(response?.data?.response?.totalElements);
-    //   result?.map((res) => {
-    //     resultMap.push({
-    //       ...res,
-    //       patientId: res.patientId,
-    //       patientName: res.patientName,
-    //       computedDate: res.computedDate,
-    //       patientAllocatedFirstName: res.patientAllocatedFirstName,
-    //       patientAllocatedLastName: res.patientAllocatedLastName,
-    //       patientAllocatedProfileImage: res.patientAllocatedProfileImage,
-    //     });
-    //   });
-    //   const data = result.map((item) => ({
-    //     id: item.patientId,
-    //     name: item.patientName,
-    //   }));
-    //   setHeaderCheckValidation(data);
-    //   if (result) {
-    //     setL2PatinetListAll(result);
-    //     setIsPatientList(true);
-    //   } else {
-    //     setL2PatinetListAll([]);
-    //   }
-    //   setTableLoading(false);
-    //   setIsLoading(false);
-    // }
   };
 
   const getAllCheckListL2 = async (sort) => {
     setCheckedLoading(true);
-    let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
+
+    let resoureUrl = `dbservice/l2audit/patients?username=${
+      l2selectUser?.userName
+    }&page=${pageNoL2Patient}&size=${15}&sortdirection=${
+      sort?.sortDir ? sort?.sortDir : "DESC"
+    }&sortfield=${
+      sort?.sortField ? sort?.sortField : "dueDate"
+    }&searchstring=${searchString}&processedStatus=${
+      selectedOptions ? selectedOptions : ""
+    }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
+    // let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       let result = response?.data?.response;
@@ -517,41 +470,11 @@ const Patient = ({
     }
     setCheckedLoading(false);
   };
-  useEffect(() => {
-    setIsLoading(true);
-    if (!isPatientList) {
-      // getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
-    } else {
-      getL2PatientList(
-        l2selectUser,
-        pageNoL2Patient,
-        sort,
-        "",
-        selectedOptions,
-        allocatedOption
-      );
-      setIsLoading(false);
-    }
-    setAllocateClicked(false);
-    setSelectedRowsId([]);
-    setSelectAllChecked(false);
-    setSelectAllCheckedL2(false);
-    setIsLoading(false);
-    setFilterBatchCount(false);
-  }, [
-    isPatientList,
-    pageNoL2Patient,
-    sort,
-    allocateClicked,
-    selectedOption,
-    filterBatchCount,
-    selectedOptions,
-    allocatedOption,
-  ]);
 
   useEffect(() => {
     dispatch(getFilters("patientAllocated"));
   }, []);
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -712,8 +635,8 @@ const Patient = ({
                                           setFilterBatchCount(true);
                                           getAllList({
                                             batchCount: "",
-                                            selectOrgList:selectOrgList
-                                          })
+                                            selectOrgList: selectOrgList,
+                                          });
                                           setBatchCount("");
                                         }
                                         const inputValue =
@@ -740,7 +663,7 @@ const Patient = ({
                                         setFilterBatchCount(true);
                                         getAllList({
                                           batchCount: batchCount,
-                                          selectOrgList:selectOrgList
+                                          selectOrgList: selectOrgList,
                                         });
                                       }}
                                       style={{
@@ -772,8 +695,8 @@ const Patient = ({
                                   />
                                 </div>
                               </div>
-                              <div className="col-xl-2">
-                                <div>
+                              <div className="col-xl-6">
+                                <div className="col-xl-4">
                                   <Selector
                                     selectlabel={"Status"}
                                     setSelectedOption={setSelectedOptions}
@@ -1059,7 +982,7 @@ const Patient = ({
                                                 <div className="pagination-container">
                                                   <Paginator
                                                     first={
-                                                      pageNo === 0
+                                                      pageNoL2Patient === 0
                                                         ? 0
                                                         : paginationFirst
                                                     }
