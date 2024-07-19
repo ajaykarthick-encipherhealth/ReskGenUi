@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Offcanvas, Button } from "react-bootstrap";
 import { actions as tenantActions } from "../../../../stores/tenantAdmin/patientSync";
 import { connect } from "react-redux";
-import { Divider, Form, Input, Select, Space } from "antd";
+import { Divider, Drawer, Form, Input, Select, Space } from "antd";
 import downloadImg from "../../../../images/fihr/download.png";
 import uploaderImg from "../../../../images/fihr/uploaderImg.png";
 import UploadFile from "../uploadFile";
@@ -12,7 +12,7 @@ import axios from "../../../../utility/axiosConfig";
 import Image from "next/image";
 import style from "../fhir.module.css";
 import CustomSelect from "../../../../components/customSelect";
-
+import { CloseOutlined } from "@ant-design/icons";
 export const getYears = () => {
   const currentYear = new Date().getFullYear();
   let year = [];
@@ -28,22 +28,9 @@ const inputTypeOptions = [
   { label: "Manual", value: "MANUAL" },
   { label: "Group Id", value: "GROUP_ID" },
 ];
-const FhirDrawer = ({
-  isDrawerOpen,
-  setIsDrawerOpen,
-  uploadType,
-  Batch,
-  // getAllBatches,
-  selectedBatch,
-  setSelectedBatch,
-}) => {
+const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
-  const [items, setItems] = useState([]);
-  const [name, setName] = useState("");
-  const [capturedSections, setCapturedSections] = useState([]);
-  const [section, setSection] = useState("");
-
   const [selectedType, setSelectedType] = useState(null);
   const handleClose = (form) => {
     setFileList([]);
@@ -55,18 +42,6 @@ const FhirDrawer = ({
     }
   };
 
-  const inputRef = useRef(null);
-  const onNameChange = (event) => {
-    setName(event.target.value);
-  };
-  const addItem = (e) => {
-    e.preventDefault();
-    setItems([...items, name || `New item ${index++}`]);
-    setName("");
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
-  };
   const generateUUID = () => {
     let dt = new Date().getTime();
     let uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
@@ -128,173 +103,195 @@ const FhirDrawer = ({
     document.body.removeChild(link);
   };
   return (
-    <Offcanvas show={isDrawerOpen} className="offcanvas-end" placement="end">
-      <Offcanvas.Header closeButton onClick={() => handleClose(form)}>
-        <Offcanvas.Title>
-          {" "}
-          {uploadType === "upload" ? "Upload New Batch" : "Create batch"}{" "}
-        </Offcanvas.Title>
-      </Offcanvas.Header>
-      <Offcanvas.Body>
-        <div className="container-fluid">
-          <Form form={form} name="basic" layout="vertical" onFinish={onFinish}>
-            <Form.Item
-              label={
-                <label>
-                  Batch Name <span className="text-danger">*</span>{" "}
-                </label>
-              }
-              name="batchName"
-              rules={[
-                {
-                  required: true,
-                  message: "Please Enter Batch Name ",
-                },
-              ]}
-            >
-              <Input name="batchName" placeholder="BatchName" />
-            </Form.Item>
+    // <Offcanvas show={isDrawerOpen} className="offcanvas-end" placement="end">
+    //   <Offcanvas.Header closeButton onClick={() => handleClose(form)}>
+    //     <Offcanvas.Title>
+    //       {" "}
+    //       {uploadType === "upload" ? "Upload New Batch" : "Create batch"}{" "}
+    //     </Offcanvas.Title>
+    //   </Offcanvas.Header>
+    //   <Offcanvas.Body>
 
-            <Form.Item
-              label={
-                <label>
-                  Input Type <span className="text-danger">*</span>{" "}
-                </label>
-              }
+    <Drawer
+      title={
+        <div
+          className="d-flex justify-content-between"
+          style={{ padding: "10px 0px" }}
+        >
+          <div>Upload New Batch</div>
+          <div className="cr-pointer" onClick={() => handleClose(form)}>
+            <CloseOutlined />
+          </div>
+        </div>
+      }
+      width={450}
+      closable={false}
+      onClose={() => handleClose(form)}
+      open={isDrawerOpen}
+      style={{ padding: "10px" }}
+      headerStyle={{ padding: "10px" }}
+    >
+      <div className="container-fluid pt-4">
+        <Form form={form} name="basic" layout="vertical" onFinish={onFinish}>
+          <Form.Item
+            label={
+              <label>
+                Batch Name <span className="text-danger">*</span>{" "}
+              </label>
+            }
+            name="batchName"
+            rules={[
+              {
+                required: true,
+                message: "Please Enter Batch Name ",
+              },
+            ]}
+          >
+            <Input name="batchName" placeholder="BatchName" />
+          </Form.Item>
+
+          <Form.Item
+            label={
+              <label>
+                Input Type <span className="text-danger">*</span>{" "}
+              </label>
+            }
+            name="inputType"
+            rules={[
+              {
+                required: true,
+                message: "Please Enter Input Type ",
+              },
+            ]}
+          >
+            <Select
               name="inputType"
-              rules={[
-                {
-                  required: true,
-                  message: "Please Enter Input Type ",
-                },
-              ]}
-            >
-              <Select
-                name="inputType"
-                style={{ width: "100%" }}
-                options={inputTypeOptions}
-                size="large"
-                onChange={(value) => {
-                  setSelectedType(value);
-                }}
-                placeholder="Input Type"
-              />
-            </Form.Item>
+              style={{ width: "100%" }}
+              options={inputTypeOptions}
+              size="large"
+              onChange={(value) => {
+                setSelectedType(value);
+              }}
+              placeholder="Input Type"
+            />
+          </Form.Item>
+          <Form.Item
+            label={
+              <label>
+                YearOf Service <span className="text-danger">*</span>{" "}
+              </label>
+            }
+            name="yearOfService"
+            rules={[
+              {
+                required: true,
+                message: "Please Enter yearOfService ",
+              },
+            ]}
+          >
+            <Select
+              mode="tags"
+              name="yearOfService"
+              style={{ width: "100%" }}
+              options={getYears()}
+              size="large"
+              placeholder="year Of Service"
+            />
+          </Form.Item>
+          {selectedType === "GROUP_ID" ? (
             <Form.Item
               label={
                 <label>
-                  YearOf Service <span className="text-danger">*</span>{" "}
+                  Group ID <span className="text-danger">*</span>{" "}
                 </label>
               }
-              name="yearOfService"
+              name="groupId"
               rules={[
                 {
                   required: true,
-                  message: "Please Enter yearOfService ",
+                  message: "Please Enter Group Id ",
                 },
               ]}
             >
-              <Select
-                mode="tags"
-                name="yearOfService"
-                style={{ width: "100%" }}
-                options={getYears()}
-                size="large"
-                placeholder="year Of Service"
-              />
+              <Input name="groupId" />
             </Form.Item>
-            {selectedType === "GROUP_ID" ? (
-              <Form.Item
-                label={
-                  <label>
-                    Group ID <span className="text-danger">*</span>{" "}
-                  </label>
-                }
-                name="groupId"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Enter Group Id ",
-                  },
-                ]}
-              >
-                <Input name="groupId" />
-              </Form.Item>
-            ) : selectedType === "MANUAL" ? (
-              <Form.Item
-                label={
-                  <label>
-                    MRN Number<span className="text-danger">*</span>
-                  </label>
-                }
-                name="mrnNumber"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter MRN Number",
-                  },
-                ]}
-              >
-                <div>
-                  <CustomSelect disabled={false} placeholder="MRN Number" />
-                </div>
-              </Form.Item>
-            ) : (
-              <>
-                <Form.Item
-                  label={
-                    <label>
-                      Upload File <span className="text-danger">*</span>
-                    </label>
-                  }
-                  name="upload"
-                  rules={[
-                    {
-                      required: false,
-                      message: "Please Upload File",
-                    },
-                  ]}
-                >
-                  <UploadFile
-                    filelList={fileList}
-                    setFileList={setFileList}
-                    uploaderImg={uploaderImg}
-                    subText={
-                      fileList?.length > 0
-                        ? fileList[0]?.name
-                        : "Upload Excel, CSV, Json or Drag and drop your files"
-                    }
-                  />
-                </Form.Item>
-                <Form.Item label={<label>Sample File Input</label>}>
-                  <Button type="button" className={style.sampleBtnStyle}>
-                    {selectedType === "CSV"
-                      ? "Sample Csv File.csv"
-                      : selectedType === "JSON"
-                      ? "Sample Json File.json"
-                      : "Sample Excel File.xlsx"}
-                    <Image
-                      src={downloadImg}
-                      alt="noImage"
-                      className={style.sampleFileImg}
-                      onClick={() => {
-                        handleDownload();
-                      }}
-                    />
-                  </Button>
-                </Form.Item>
-              </>
-            )}
-
-            <Form.Item>
-              <div className="col-xl-12 mb-3 d-grid justify-content-center">
-                <Button type="submit">SUBMIT</Button>
+          ) : selectedType === "MANUAL" ? (
+            <Form.Item
+              label={
+                <label>
+                  MRN Number<span className="text-danger">*</span>
+                </label>
+              }
+              name="mrnNumber"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter MRN Number",
+                },
+              ]}
+            >
+              <div>
+                <CustomSelect disabled={false} placeholder="MRN Number" />
               </div>
             </Form.Item>
-          </Form>
-        </div>
-      </Offcanvas.Body>
-    </Offcanvas>
+          ) : (
+            <>
+              <Form.Item
+                label={
+                  <label>
+                    Upload File <span className="text-danger">*</span>
+                  </label>
+                }
+                name="upload"
+                rules={[
+                  {
+                    required: false,
+                    message: "Please Upload File",
+                  },
+                ]}
+              >
+                <UploadFile
+                  filelList={fileList}
+                  setFileList={setFileList}
+                  uploaderImg={uploaderImg}
+                  subText={
+                    fileList?.length > 0
+                      ? fileList[0]?.name
+                      : "Upload Excel, CSV, Json or Drag and drop your files"
+                  }
+                />
+              </Form.Item>
+              <Form.Item label={<label>Sample File Input</label>}>
+                <Button type="button" className={style.sampleBtnStyle}>
+                  {selectedType === "CSV"
+                    ? "Sample Csv File.csv"
+                    : selectedType === "JSON"
+                    ? "Sample Json File.json"
+                    : "Sample Excel File.xlsx"}
+                  <Image
+                    src={downloadImg}
+                    alt="noImage"
+                    className={style.sampleFileImg}
+                    onClick={() => {
+                      handleDownload();
+                    }}
+                  />
+                </Button>
+              </Form.Item>
+            </>
+          )}
+
+          <Form.Item>
+            <div className="col-xl-12 mb-3 d-grid justify-content-center">
+              <Button type="submit">SUBMIT</Button>
+            </div>
+          </Form.Item>
+        </Form>
+      </div>
+    </Drawer>
+
+    //   </Offcanvas.Body>
+    // </Offcanvas>
   );
 };
 const enhancer = connect((state) => ({}), {
