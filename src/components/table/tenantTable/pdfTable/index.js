@@ -15,6 +15,7 @@ import FhirDrawer from "../../../../pages/tenantAdmin/patientSync/modals/PdfDraw
 import { useRouter } from "next/router";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import SpinnerDots from "../../../spinner";
+import { renderSkeleton } from "../../../reuseableFunctions";
 
 function PdfTable({
   paginationFirst,
@@ -76,7 +77,7 @@ function PdfTable({
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (
-        <SpinnerDots />
+         renderSkeleton()
       ) : (
         <>
           {tableData?.content?.length === 0 ? (

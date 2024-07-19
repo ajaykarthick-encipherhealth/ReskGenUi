@@ -11,6 +11,7 @@ import TableStyle from "../../table.module.css";
 import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
 import PropTypes from "prop-types";
 import SpinnerDots from "../../../spinner";
+import { renderSkeleton } from "../../../reuseableFunctions";
 
 export const getColors = (rowStatus) => {
   let strokeColor;
@@ -65,7 +66,7 @@ const DetailedPdfTable = ({
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (
-        <SpinnerDots />
+      renderSkeleton()
       ) : (
         <>
           <table className={TableStyle.classTable}>

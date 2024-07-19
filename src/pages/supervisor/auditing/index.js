@@ -38,6 +38,7 @@ export function extractLatestData(notes) {
 }
 import Image from "next/image";
 import { patientDetails } from "../../../stores/authflow/actions";
+import { renderSkeleton } from "../../../components/reuseableFunctions";
 const bullets = [
   {
     color: "#377880",
@@ -416,7 +417,7 @@ const Patient = ({ getWorkListFilter, response, loader }) => {
                       className="dataTables_wrapper no-footer"
                     >
                       {loader  ? (
-                        <SpinnerDots />
+                       renderSkeleton()
                       ) : (
                         <>
                           <PatientTable

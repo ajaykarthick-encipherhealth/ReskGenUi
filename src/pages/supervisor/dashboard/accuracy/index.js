@@ -430,7 +430,7 @@ const Accuracy = () => {
               )}
             </div>
             {accuracyDatas?.loading ? (
-              <div className={styles.accuracy}>{renderCardSkeleton()}</div>
+              <Spin />
             ) : (
               <div className={styles.accuracy}>
                 <div className={styles.header}>

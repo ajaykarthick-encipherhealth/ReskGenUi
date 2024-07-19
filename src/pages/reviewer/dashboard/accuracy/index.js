@@ -48,22 +48,7 @@ export const getDays = (datasLength) => {
     return [];
   }
 };
-export const renderCardSkeleton = () => (
-  <Row style={{ display: "flex", justifyContent: "space-between" }}>
-    {Array.from({ length: 1 }).map((_, index) => (
-      <Row>
-        <Col span={12}>
-          <div className={styles.container}>
-            <Skeleton.Input
-              style={{ width: "210px", height: "250px" }}
-              active
-            />
-          </div>
-        </Col>
-      </Row>
-    ))}
-  </Row>
-);
+
 export const monthNames = [
   "JAN",
   "FEB",
@@ -321,7 +306,22 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
   const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
   const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
   const average = sum / numericalData?.length; // Calculate the average
-
+  const renderCardSkeleton = () => (
+    <Row style={{ display: "flex", justifyContent: "space-between" }}>
+      {Array.from({ length: 1 }).map((_, index) => (
+        <Row>
+          <Col span={12}>
+            <div className={styles.container}>
+              <Skeleton.Input
+                style={{ width: "210px", height: "250px" }}
+                active
+              />
+            </div>
+          </Col>
+        </Row>
+      ))}
+    </Row>
+  );
   return (
     <>
       <HeadTitle header="System Quality Score" />

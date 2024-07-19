@@ -878,7 +878,7 @@ const Patient = ({
                                             </div>
                                           </>
                                         ) : !loader2 && loader3 ? (
-                                          <SpinnerDots />
+                                          renderSkeleton()
                                         ) : (
                                           <>
                                             <AllocatedL2AdminList

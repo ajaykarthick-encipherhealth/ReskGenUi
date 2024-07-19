@@ -31,8 +31,9 @@ import Abort from "../../../../src/images/trackingImages/Abort.png";
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
 import { patientDetails } from "../../../stores/authflow/actions";
-import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/tracking"
-import {actions as tenantUserAdminAction} from '../../../stores/tenantAdmin/users'
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/tracking";
+import { actions as tenantUserAdminAction } from "../../../stores/tenantAdmin/users";
+import { renderSkeleton } from "../../../components/reuseableFunctions";
 
 const bullets = [
   {
@@ -483,7 +484,7 @@ const Patient = ({
               <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
-        ); 
+        );
       case "AUDITED":
         return (
           <Popover placement="bottom" title=" Status: AUDITED">
@@ -587,7 +588,10 @@ const Patient = ({
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption row d-flex ">
-                        <div className="tbl-caption2 col-xl-10 align-items-center" style={{padding:"20px 0px 20px 20px"}}>
+                        <div
+                          className="tbl-caption2 col-xl-10 align-items-center"
+                          style={{ padding: "20px 0px 20px 20px" }}
+                        >
                           <HeaderFilters
                             // audioAllocatedTo
                             isAuditAllocatedToSelector={true}
@@ -699,9 +703,7 @@ const Patient = ({
                         className="dataTables_wrapper no-footer"
                       >
                         {loader ? (
-                          <div>
-                            <SpinnerDots topHeight={"10pc"} />
-                          </div>
+                          <div>{renderSkeleton()}</div>
                         ) : (
                           <>
                             <TrackingTable
@@ -716,11 +718,11 @@ const Patient = ({
                               setSort={setSort}
                               page={{ pageNo, paginationFirst }}
                               loader={loader}
-                              sortAuditOrder={sortAuditOrder} 
+                              sortAuditOrder={sortAuditOrder}
                               setSortAuditOrder={setSortAuditOrder}
                               sortDueOrder={sortDueOrder}
                               setSortDueOrder={setSortDueOrder}
-                              sortAuditDueOrder={sortAuditDueOrder} 
+                              sortAuditDueOrder={sortAuditDueOrder}
                               setSortAuditDueOrder={setSortAuditDueOrder}
                             />
                             <div>
