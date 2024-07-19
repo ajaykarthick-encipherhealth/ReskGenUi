@@ -557,6 +557,8 @@ const FileProcessingTable = ({
                 marginTop: stepperVisible ? "10px" : "0",
                 marginLeft: "-40px",
               }}
+              className={errStages[data?.processStageChart]?"errStages":""}
+              
             >
               <Steps
                 current={
@@ -566,8 +568,9 @@ const FileProcessingTable = ({
                 }
                 labelPlacement="vertical"
                 items={mappedSteps}
-                percent={failedList ? 0 : count}
+                percent={failedList|| errStages[data?.processStageChart] ? 0 : count}
                 finishIconBorderColor="#000"
+                // className={errStages[data?.processStageChart]?"errStages":""}
               />
             </div>
           </>

@@ -13725,7 +13725,7 @@ tbody > tr {
 
 /*ant stepper  */
 .ant-steps.ant-steps-label-vertical .ant-steps-item-tail {
-  background: #1677ff !important;
+  background: #04306f !important;
 }
 
 .ant-steps .ant-steps-item-tail {
@@ -13734,66 +13734,15 @@ tbody > tr {
   width: 100%;
   left: 16px;
   padding: 0px !important;
+  background: #04306f !important;
 }
-
-.ant-steps.ant-steps-label-vertical .ant-steps-item-icon {
-  display: inline-block;
-  margin-inline-start: 40px;
-  /* border: 1px solid #1677ff !important; */
-  background-color: #fff;
+.ant-steps
+  .ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-tail::after {
+  background: #04306f !important;
 }
-
-.ant-steps .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
-  color: white;
-  font-weight: 700;
-}
-
-/* Finished Step */
-.ant-steps-item-finish .ant-steps-item-icon {
-  background-color: blue !important;
-  border: 1px solid #1677ff !important;
-  font-weight: 700;
-  color: #fff !important;
-}
-
-/* Process Step */
-.ant-steps-item-process .ant-steps-item-icon {
-  /* background-color: yellow !important; */
-  border: 1px solid #1677ff !important;
-  font-weight: 700;
-  color: black !important;
-  /* color: #1677ff !important; */
-}
-
-.ant-steps .ant-steps-item-process .ant-steps-item-icon > .ant-steps-icon {
-  color: rgba(0, 0, 0, 0.65) !important;
-}
-
-.ant-steps.ant-steps-with-progress
-  .ant-steps-item-process
-  .ant-steps-item-container
-  .ant-steps-item-icon
-  .ant-steps-icon {
-  color: rgba(0, 0, 0, 0.65) !important;
-}
-
-/* Wait Step */
-.ant-steps-item-wait .ant-steps-item-icon {
-  background-color: white !important;
-  border: 1px solid #1677ff !important;
-}
-
-.ant-steps .ant-steps-item-error .ant-steps-item-icon {
-  background: red !important;
-}
-
-.ant-steps .ant-steps-item-finish:last-child .ant-steps-item-icon {
-  background-color: green !important;
-  /* width:33% !important;
-  height:80% !important; */
-  border: 1px solid green !important;
-}
-
+/* 
 /* .ant-modal-content {
   background: #f5f9ff !important;
 }
@@ -15451,3 +15400,44 @@ input::-webkit-inner-spin-button {
 .select-count {
   margin-left: 5px;
 } */
+
+.errStages
+  .ant-steps.ant-steps-with-progress
+  .ant-steps-item-process
+  .ant-steps-item-container
+  .ant-steps-item-icon {
+  background-color: gray !important;
+  border: 1px solid gray !important;
+}
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+  color: white !important;
+}
+.ant-steps.ant-steps-label-vertical .ant-steps-item-icon {
+  background-color: gray !important;
+}
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon {
+  background-color: green !important;
+  color: white !important;
+  border: 1px solid green !important;
+}
+.ant-steps .ant-steps-item-error .ant-steps-item-icon {
+  background-color: red !important;
+  border: 1px solid red !important;
+}
+.ant-steps.ant-steps-with-progress
+  .ant-steps-item-process
+  .ant-steps-item-container
+  .ant-steps-item-icon {
+  background-color: #04306f !important;
+}
+.ant-steps.ant-steps-with-progress
+  .ant-steps-item-process
+  .ant-steps-item-container
+  .ant-steps-item-icon
+  .ant-steps-icon {
+  color: white !important;
+  font-weight: 500 !important;
+}
+.ant-steps .ant-steps-item-wait .ant-steps-item-icon .ant-steps-icon {
+  color: white !important;
+}

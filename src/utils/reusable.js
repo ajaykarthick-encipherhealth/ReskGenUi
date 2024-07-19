@@ -1,4 +1,5 @@
 import { notification } from "antd";
+import moment from "moment";
 
 
 
@@ -64,6 +65,7 @@ export function getLast30Days() {
 
   return date_thirty_days.reverse();
 }
+
 export function getLast7Days() {
   const date_seven_days = [];
   const currentDate = new Date();
@@ -80,7 +82,17 @@ export function getLast7Days() {
   return date_seven_days.reverse();
 }
 
+export const getAllDatesInRange = (start, end) => {
+  const dates = [];
+  let currentDate = moment(start);
 
+  while (currentDate.isSameOrBefore(end)) {
+    dates.push(currentDate.format("YYYY-MM-DD"));
+    currentDate = currentDate.add(1, "days");
+  }
+
+  return dates;
+};
 
 
 export function formatNumber(num) {
@@ -93,6 +105,10 @@ export function formatNumber(num) {
   }
 }
 
+export const dateFormatForDashboard = (date) => {
+  return moment(date).format("MMM") + moment(date).format("D");
+};
+
 export function formatDate(dateString) {
   const date = new Date(dateString);
   const month = date.toLocaleString("default", { month: "short" });
@@ -100,22 +116,46 @@ export function formatDate(dateString) {
   return month + day;
 }
 
+// export function formatValues(values, dates) {
+//   const formatobj = {};
+//   if (values?.length) {
+//     values &&
+//       values.forEach((key, i) => {
+//         const formattedKey = formatDate(Object?.keys(key)?.[0]);
+//         let count = values[i];
+//         formatobj[formattedKey] = count[Object?.keys(key)?.[0]];
+//       });   
+//   }
+//    else {
+//     values &&
+//       Object?.keys(values).forEach((key) => {
+//         const formattedKey = formatDate(key);
+//         formatobj[formattedKey] = values[key];
+//       });
+//   }
+//   const resultArray = dates?.map((date) => formatobj[date] || 0);
+//   return resultArray;
+
+// }
+
 export function formatValues(values, dates) {
   const formatobj = {};
-  if (values?.length) {
-    values &&
-      values.forEach((key, i) => {
-        const formattedKey = formatDate(Object?.keys(key)?.[0]);
-        let count = values[i];
-        formatobj[formattedKey] = count[Object?.keys(key)?.[0]];
-      });
-  } else {
-    values &&
-      Object?.keys(values).forEach((key) => {
-        const formattedKey = formatDate(key);
-        formatobj[formattedKey] = values[key];
-      });
+  
+  if (Array.isArray(values)) {
+    values.forEach((obj) => {
+      const key = Object.keys(obj)[0];
+      const formattedKey = formatDate(key);
+      formatobj[formattedKey] = obj[key];
+    });
+  } else if (values && typeof values === 'object') {
+    Object.keys(values).forEach((key) => {
+      const formattedKey = formatDate(key);
+      formatobj[formattedKey] = values[key];
+    });
   }
-  const resultArray = dates?.map((date) => formatobj[date] || 0);
+  
+  const resultArray = dates.map((date) => formatobj[formatDate(date)] || 0);
   return resultArray;
 }
+
+

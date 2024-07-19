@@ -23,6 +23,7 @@ import PieChartInfo from "./components/pieChart/PieChartInfo";
 import OrgPieChartInfo from "./components/OrgPieChart/OrgPieChartInfo";
 import { Row, Skeleton, Spin } from "antd";
 import moment from "moment";
+import { getAllDatesInRange } from "../../../utils/reusable";
 
 const Index = ({
   getUserStatusData,
@@ -44,7 +45,6 @@ const Index = ({
   getAccuracyScore,
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
-
   const [selectedValue, setSelectedValue] = useState(null);
   const [dateRange, setDateRange] = useState({
     startDate:
@@ -52,6 +52,23 @@ const Index = ({
     endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
   });
   const [selectedOrganization, setSelectedOrganization] = useState("");
+  const [customDate, setCustomDate] = useState("");
+
+  const getAllDatesInRange = (dateRange) => {
+    const dates = [];
+    let currentDate = moment(dateRange?.startDate);
+
+    while (currentDate.isSameOrBefore(dateRange?.endDate)) {
+      dates.push(currentDate.format("MMMDD"));
+      currentDate = currentDate.add(1, "days");
+    }
+
+    return dates;
+  };
+  useEffect(() => {
+    const customRange = getAllDatesInRange(dateRange);
+    setCustomDate(customRange);
+  }, [dateRange]);
 
   const allocatedData = [
     {
@@ -201,6 +218,9 @@ const Index = ({
       dateRange.endDate,
       selectedOrganization
     );
+
+    console.log(getAllDatesInRange(dateRange.startDate,
+      dateRange.endDate), "teseting");
   }, [dateRange, selectedOrganization]);
 
   return (
@@ -216,6 +236,7 @@ const Index = ({
             setSelectedOrganization={setSelectedOrganization}
             selectedOrganization={selectedOrganization}
             setSelectedValue={setSelectedValue}
+            dateRange={dateRange}
           />
           {activeBtn === "default" ? (
             <>
@@ -233,6 +254,7 @@ const Index = ({
                     <RafAndRevenue
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
+                      customDate={customDate}
                     />
                   </Card>
                 </div>
@@ -245,6 +267,7 @@ const Index = ({
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
                       selectedValue={selectedValue}
+                      customDate={customDate}
                     />
                   </Card>
                 </div>
@@ -257,6 +280,7 @@ const Index = ({
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
                       selectedValue={selectedValue}
+                      customDate={customDate}
                     />
                   </Card>
                 </div>
@@ -269,6 +293,7 @@ const Index = ({
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
                       selectedValue={selectedValue}
+                      customDate={customDate}
                     />
                   </Card>
                 </div>
@@ -291,6 +316,7 @@ const Index = ({
                       selectedOrganization={selectedOrganization}
                       selectedValue={selectedValue}
                       classNames="workflowChart"
+                      customDate={customDate}
                     />
                   </Card>
                 </div>
@@ -337,6 +363,7 @@ const Index = ({
                       selectedOrganization={selectedOrganization}
                       classNames="workflowChart1"
                       selectedValue={selectedValue}
+                      customDate={customDate}
                     />
                   </Card>
                 </div>
@@ -395,7 +422,8 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Accuracy />
+                    <Accuracy  dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}/>
                   </Card>
                 </div>
                 <div className={`col-lg-3 ${styles.box}`}>
@@ -440,7 +468,7 @@ const enhancer = connect(
     getOrganizationStatusData:
       dashboardWorkflowActions?.organizationStatusAction,
     getTop10DiseasesData: defaultActions.top10Diseases,
-    getAccuracyScore: defaultActions.accuracyScore,
+    getAccuracyScore: dashboardWorkflowActions.getAccuracyWorkflow,
   }
 );
 export default enhancer(Index);

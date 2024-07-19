@@ -17,22 +17,24 @@ const index = ({
   getOrganizationStatusData,
   handleOrganizationChange,
   setSelectedValue,
+  dateRange,
 }) => {
   const [isCustom, setIsCustom] = useState(false);
   const handleDateChange = (value) => {
-    // console.log(value, "testing");
     if (value == "custom") {
       setIsCustom(true);
+      setSelectedValue(value);
     } else {
       setIsCustom(false);
-      setSelectedValue(value);
       let startDate;
       if (value === "last_1_week") {
         startDate =
           moment().subtract(6, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
+          setSelectedValue(value);
       } else if (value === "last_1_month") {
         startDate =
           moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
+          setSelectedValue(value);
       } else if (value == undefined) {
         setDateRange({ startDate: "", endDate: "" });
       }
@@ -44,10 +46,11 @@ const index = ({
   };
 
   const handleRange = (e) => {
-    setDateRange({
+    const range = {
       startDate: moment(e[0]).format("YYYY-MM-DD") + "T00:00:00.000Z",
       endDate: moment(e[1]).format("YYYY-MM-DD") + "T23:59:59.000Z",
-    });
+    };
+    setDateRange(range);
   };
 
   useEffect(() => {
@@ -91,7 +94,7 @@ const index = ({
               options={[
                 { label: "Last 7 days", value: "last_1_week" },
                 { label: "Last 30 days", value: "last_1_month" },
-                { label: "Custom range Picker", value: "custom" },
+                { label: "Custom Date", value: "custom" },
               ]}
               onChange={handleDateChange}
             />
@@ -103,7 +106,7 @@ const index = ({
               className={`${styles.flterContainer}`}
               style={{ fontSize: "14px" }}
             >
-              Custom DatePicker
+              Custom Date
             </div>
             <div className="tenantSelector" style={{ width: "100%" }}>
               <RangePicker
@@ -111,6 +114,7 @@ const index = ({
                 disabledDate={(current) => disableFutureDates(current)}
                 onChange={(e, value) => handleRange(value)}
                 format={"MM-DD-YYYY"}
+                allowClear={false}
               />
             </div>
           </div>

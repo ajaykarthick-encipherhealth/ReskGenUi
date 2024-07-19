@@ -67,10 +67,13 @@ const index = ({
             style={{ width: "90%", height: "100%", margin: "10px 0 0 10px" }}
           >
             {totalCountsLoader ? (
-              <Skeleton.Input active size="default" className="mt-2" />
+              <Skeleton.Input active size="small" className="mt-2" />
             ) : (
               <div>
-                <div className="d-flex justify-content-start align-items-start gap-1" style={{height:"50px"}}> 
+                <div
+                  className="d-flex justify-content-start align-items-start gap-1"
+                  style={{ height: "50px" }}
+                >
                   <div
                     style={{
                       width: "40px",
@@ -86,21 +89,24 @@ const index = ({
                   >
                     <Image src={item?.icon} />
                   </div>
-                  <div style={{ fontSize: "16px" }}  className="align-self-center">{item?.title}</div>
+                  <div
+                    style={{ fontSize: "16px" }}
+                    className="align-self-center"
+                  >
+                    {item?.title}
+                  </div>
                 </div>
-               
               </div>
             )}
 
             {totalCountsLoader ? (
-              <Skeleton.Input active size="default" className="mt-2" />
-            ) : totalCountsLoader ? (
-              <div className="d-flex justify-content-center align-items-center mt-2">
-                {" "}
-                <Spin size="large" />
-              </div>
+              <Skeleton.Input active size="small" className="mt-2" />
             ) : (
-              <div className={`${styles.count}  h-50 d-flex align-items-center justify-content-center`}>{item?.count}</div>
+              <div
+                className={`${styles.count}  h-50 d-flex align-items-center justify-content-center`}
+              >
+                {item?.count}
+              </div>
             )}
           </div>
         </div>
