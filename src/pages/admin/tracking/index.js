@@ -145,6 +145,9 @@ const Patient = ({ getTrackingList, loader, response }) => {
   const [auditSelectedOption, setAuditSelectedOption] = useState("");
   const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
   const [allocatedSortOrder, setAllocatedSortOrder] = useState("DESC");
+  const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
+  const [sortDueOrder, setSortDueOrder] = useState("DESC");
+  const [sortAuditDueOrder, setSortAuditDueOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [clear, setClear] = useState(false);
   const [selectedDates, setSelectedDates] = useState();
@@ -647,6 +650,12 @@ const Patient = ({ getTrackingList, loader, response }) => {
                               sortOrder={allocatedSortOrder}
                               setSort={setSort}
                               page={{ pageNo, paginationFirst }}
+                              sortAuditOrder={sortAuditOrder}
+                              setSortAuditOrder={setSortAuditOrder}
+                              sortDueOrder={sortDueOrder}
+                              setSortDueOrder={setSortDueOrder}
+                              sortAuditDueOrder={sortAuditDueOrder} 
+                              setSortAuditDueOrder={setSortAuditDueOrder}
                             />
                             <div>
                               <div className="pagination-container">

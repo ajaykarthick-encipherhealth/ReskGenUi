@@ -94,7 +94,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z"
   );
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-
+  const [sortDueOrder, setSortDueOrder] = useState("DESC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
+  const [sortAllocateOrder, setSortAllocateOrder] = useState("DESC");
   useEffect(() => {
     setDefaultStartDate(
       dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
@@ -605,6 +607,12 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                               setSort={setSort}
                               getFilteApi={getFilteApi}
                               page={{ pageNo, paginationFirst }}
+                              sortDueOrder={sortDueOrder}
+                              setSortDueOrder={setSortDueOrder}
+                              sortCompleteOrder={sortCompleteOrder}
+                              setSortCompleteOrder={setSortCompleteOrder}
+                              sortAllocateOrder={sortAllocateOrder}
+                              setSortAllocateOrder={setSortAllocateOrder}
                             />
                             <div>
                               <div className="pagination-container">

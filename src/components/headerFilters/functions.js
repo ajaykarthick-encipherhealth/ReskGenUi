@@ -197,8 +197,11 @@ export const dateFormate = (dayjs, date) => {
 
 //sorting
 export const sortFunction = (sortDir, setSortDir, setSort, field) => {
-  setSortDir(sortDir === "ASC" ? "DESC" : "ASC");
-  setSort({ sortDir: sortDir === "ASC" ? "DESC" : "ASC", sortField: field });
+  setSortDir((prevSortDir) => {
+    const newSortDir = prevSortDir === "ASC" ? "DESC" : "ASC";
+    setSort({ sortDir: newSortDir, sortField: field });
+    return newSortDir;
+  });
 };
 export const priorityOptions = [
   {
@@ -414,21 +417,25 @@ export const renderUserPrfoileAvatar = (
   const firstNameInitial = firstName?.charAt(0) || "";
   const secondNameInitial = lastName?.charAt(0) || "";
   const hash = (firstNameInitial.charCodeAt(0) % 6) + 1;
-  const backgroundColor = customBg?"#93BEFB": field ? getBackgroundColor(hash) : "#F3C217";
+  const backgroundColor = customBg
+    ? "#93BEFB"
+    : field
+    ? getBackgroundColor(hash)
+    : "#F3C217";
 
   if (!imageUrl) {
     const profileAvatar = (
       <Avatar
         style={{
           backgroundColor: backgroundColor,
-          color: customBg?"black":"white",
+          color: customBg ? "black" : "white",
           cursor: "pointer",
           width: "30px",
           height: "30px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          fontSize: customBg?"14px":"15px",
+          fontSize: customBg ? "14px" : "15px",
           fontWeight: 500,
         }}
       >
@@ -565,8 +572,10 @@ export const disableFutureDate = (current) => {
   return current && current.isAfter(moment());
 };
 export const disableFutureDates = (current) => {
-  const oneYearFromNow = moment().add(1, 'year');
-  return current && (current.isAfter(oneYearFromNow) || current.isAfter(moment()));
+  const oneYearFromNow = moment().add(1, "year");
+  return (
+    current && (current.isAfter(oneYearFromNow) || current.isAfter(moment()))
+  );
 };
 
 export const disablePastDate = (current) => {

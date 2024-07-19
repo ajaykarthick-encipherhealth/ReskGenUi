@@ -17,7 +17,7 @@ import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png"
 import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
 import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
 import AuditeDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
-import {actions as allActions} from '../../../stores/supervisor/auditedQueue'
+import { actions as allActions } from "../../../stores/supervisor/auditedQueue";
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -71,7 +71,7 @@ const statusOptions = [
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
 ];
 
-const Patient=({getWorkListFilter,response,loader})=> {
+const Patient = ({ getWorkListFilter, response, loader }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -113,7 +113,9 @@ const Patient=({getWorkListFilter,response,loader})=> {
   const [search, setSearch] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
   const [selectedDates, setSelectedDates] = useState([]);
-
+  const [sortDueOrder, setSortDueOrder] = useState("DESC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
+  const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
   useEffect(() => {
     let tenId = localStorage.getItem("tenantId");
     let uId = localStorage.getItem("userId");
@@ -121,6 +123,10 @@ const Patient=({getWorkListFilter,response,loader})=> {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
+    
+    // const newSortDir = prevSortDir === "ASC" ? "DESC" : "ASC";
+    // setSort({ sortDir: newSortDir, sortField: field });
+
     const data = {
       pageNo,
       computedStartDate,
@@ -135,7 +141,7 @@ const Patient=({getWorkListFilter,response,loader})=> {
       selCreatedBy,
     };
 
-  getWorkListFilter({data:data});
+    getWorkListFilter({ data: data });
   }, [
     pageNo,
     computedStartDate,
@@ -161,16 +167,16 @@ const Patient=({getWorkListFilter,response,loader})=> {
   }, [navigate]);
 
   useEffect(() => {
-    if (response?.response?.content) {
-      getAllList(response?.response?.content);
+    if (response?.data?.response?.content) {
+      getAllList();
     }
   }, [parsedData, response, pageNo, pageSize]);
 
-  const getAllList = (info) => {
+  const getAllList = () => {
     if (response) {
       let resultMap = [];
-      let result = response?.response?.content;
-      setTotalElements(response?.response?.totalElements);
+      let result = response?.data?.response?.content;
+      setTotalElements(response?.data?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
           patientId: res.patientId,
@@ -345,7 +351,7 @@ const Patient=({getWorkListFilter,response,loader})=> {
     setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
-    getAllList(response?.response);
+    // getAllList(response?.data?.response);
   };
 
   return (
@@ -409,7 +415,7 @@ const Patient=({getWorkListFilter,response,loader})=> {
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      {loader ? (
+                      {loader  ? (
                         <SpinnerDots />
                       ) : (
                         <>
@@ -422,11 +428,17 @@ const Patient=({getWorkListFilter,response,loader})=> {
                             sort={sort}
                             setSort={setSort}
                             page={{ pageNo, paginationFirst }}
+                            sortDueOrder={sortDueOrder}
+                            setSortDueOrder={setSortDueOrder}
+                            sortCompleteOrder={sortCompleteOrder}
+                            setSortCompleteOrder={setSortCompleteOrder}
+                            sortAuditOrder={sortAuditOrder}
+                            setSortAuditOrder={setSortAuditOrder}
                           />
                           <div>
                             <div className="pagination-container">
                               <Paginator
-                                first={pageNo===0?0:paginationFirst}
+                                first={pageNo === 0 ? 0 : paginationFirst}
                                 rows={15}
                                 totalRecords={totalElements}
                                 onPageChange={onPageChange}
@@ -448,12 +460,15 @@ const Patient=({getWorkListFilter,response,loader})=> {
       </div>
     </div>
   );
-}
+};
 
-const connector=connect((state)=>({
-  response:state.supervisor?.audited?.filteredList,
-  loader:state.supervisor?.audited?.loading,
-}),{
-  getWorkListFilter:allActions.getWorkListFilter,
-})
+const connector = connect(
+  (state) => ({
+    response: state.supervisor?.audited?.filteredList,
+    loader: state.supervisor?.audited?.loading,
+  }),
+  {
+    getWorkListFilter: allActions.getWorkListFilter,
+  }
+);
 export default connector(Patient);

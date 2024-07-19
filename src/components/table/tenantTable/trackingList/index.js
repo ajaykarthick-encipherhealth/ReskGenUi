@@ -21,10 +21,13 @@ function TrackingTable({
   setSort,
   page,
   loader,
+  sortAuditOrder,
+  setSortAuditOrder,
+  sortDueOrder,
+  setSortDueOrder,
+  sortAuditDueOrder,
+  setSortAuditDueOrder,
 }) {
-  const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
-  const [sortDueOrder, setSortDueOrder] = useState("DESC");
-  const [sortAuditDueOrder, setSortAuditDueOrder] = useState("DESC");
   const dispatch = useDispatch();
   const navigate = useRouter();
 

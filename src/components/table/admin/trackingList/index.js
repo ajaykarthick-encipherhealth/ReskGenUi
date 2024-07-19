@@ -18,11 +18,14 @@ function TrackingTable({
   sortOrder,
   setSortOrder,
   setSort,
-  page
+  page,
+  sortAuditOrder,
+  setSortAuditOrder,
+  sortDueOrder,
+  setSortDueOrder,
+  sortAuditDueOrder,
+  setSortAuditDueOrder,
 }) {
-  const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
-  const [sortDueOrder, setSortDueOrder] = useState("DESC");
-  const [sortAuditDueOrder, setSortAuditDueOrder] = useState("DESC");
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -34,13 +37,17 @@ function TrackingTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data?.patientId);
-      var role = localStorage.getItem("role")
-      if(role == "tenant_admin"){
-        navigate.push({ pathname: "/tenantAdmin/patients/details",query:{...page, isTenantAdminTracking: true}});
-
-      }else{
-        navigate.push({pathname: "/admin/patients/details", query:{...page, isAdminTracking: true}})
-
+      var role = localStorage.getItem("role");
+      if (role == "tenant_admin") {
+        navigate.push({
+          pathname: "/tenantAdmin/patients/details",
+          query: { ...page, isTenantAdminTracking: true },
+        });
+      } else {
+        navigate.push({
+          pathname: "/admin/patients/details",
+          query: { ...page, isAdminTracking: true },
+        });
       }
     } else {
       notification.warning({
@@ -214,7 +221,9 @@ function TrackingTable({
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
         >
-          {data?.processedDate ? moment(data?.processedDate).format("MM-DD-YYYY") : "---"}
+          {data?.processedDate
+            ? moment(data?.processedDate).format("MM-DD-YYYY")
+            : "---"}
         </td>
 
         <td
@@ -319,7 +328,12 @@ function TrackingTable({
 
             <th
               onClick={() => {
-                sortFunction(sortDueOrder, setSortDueOrder, setSort, "processedDate");
+                sortFunction(
+                  sortDueOrder,
+                  setSortDueOrder,
+                  setSort,
+                  "processedDate"
+                );
               }}
               style={{ textAlign: "center" }}
             >

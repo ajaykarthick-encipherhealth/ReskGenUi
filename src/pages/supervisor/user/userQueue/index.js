@@ -11,11 +11,6 @@ import Completed from "../../../../../src/images/trackingImages/CompletedTrack.p
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
 import { extractLatestData } from "../../auditing";
 import { generateOptionsList } from "../../../../components/headerFilters/functions";
-import audited from "../../../../images/svg/audited.svg";
-import reAudit from "../../../../images/svg/reAudit.svg";
-import auditHold from "../../../../images/svg/auditHold.svg";
-import auditPending from "../../../../images/svg/auditPending.svg";
-import auditDeclined from "../../../../images/svg/auditDeclined.svg";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
 import userStyles from "./styles.module.css";
@@ -84,7 +79,10 @@ const Index = ({
   const router = useRouter();
   const sideMenu = useSelector((state) => state?.sideMenu);
   const filteredList = useSelector((state) => state?.auth?.filterList);
-
+  const [processSort, setProcessSort] = useState("DESC");
+  const [auditAllocatedSort, setAuditAllocatedSort] = useState("DESC");
+  const [audirDateSort, setAuditDateSort] = useState("DESC");
+  const [auditDueSort, setAuditDueSort] = useState("DESC");
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
@@ -423,6 +421,14 @@ const Index = ({
                         setSort={setSort}
                         auditBodyTemplate={auditstatusBodyTemplate}
                         page={{ ...router.query, pageNo, paginationFirst }}
+                        auditDueSort={auditDueSort}
+                        setAuditDueSort={setAuditDueSort}
+                        processSort={processSort}
+                        setProcessSort={setProcessSort}
+                        auditAllocatedSort={auditAllocatedSort}
+                        setAuditAllocatedSort={setAuditAllocatedSort}
+                        audirDateSort={audirDateSort}
+                        setAuditDateSort={setAuditDateSort}
                       />
                     )}
                     <div>

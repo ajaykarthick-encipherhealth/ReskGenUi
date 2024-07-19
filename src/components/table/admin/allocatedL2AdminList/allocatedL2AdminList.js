@@ -236,7 +236,7 @@ function AllocatedL2AdminList({
               style={{ paddingLeft: "20px" }}
               onClick={() => {
                 sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
-                setSortCompleteOrder("DESC");
+                // setSortCompleteOrder("DESC");
               }}
             >
               DUE DATE
@@ -257,7 +257,7 @@ function AllocatedL2AdminList({
                   setSort,
                   "processedDate"
                 );
-                setSortDueOrder("DESC");
+                // setSortDueOrder("DESC");
               }}
             >
               COMPLETED DATE

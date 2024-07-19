@@ -759,6 +759,8 @@ const Patient = ({
                                         selectedChart={headerCheckValidation}
                                         setSort={setSort}
                                         loading={isLoading}
+                                        sortCompleteOrder={sortCompleteOrder}
+                                        setSortCompleteOrder={setSortCompleteOrder}
                                       />
                                       <div>
                                         <div className="pagination-container">

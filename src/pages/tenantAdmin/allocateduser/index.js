@@ -97,6 +97,7 @@ const Patient = ({
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
+
   const filteredList = useSelector((state) => state.auth.filterList);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -826,6 +827,8 @@ const Patient = ({
                                         selectedChart={headerCheckValidation}
                                         setSort={setSort}
                                         loading={isLoading}
+                                        sortCompleteOrder={sortCompleteOrder} 
+                                        setSortCompleteOrder={setSortCompleteOrder}
                                       />
                                       <div>
                                         <div className="pagination-container">

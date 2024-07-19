@@ -95,6 +95,7 @@ const Patient = ({ getPatients, loader, response }) => {
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
   const [computedSortOrder, setComputedSortOrder] = useState("DESC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   const [selecteddates, setSelectedDates] = useState([]);
   const [selecteddates2, setSelectedDate2s] = useState([]);
 
@@ -624,6 +625,10 @@ const Patient = ({ getPatients, loader, response }) => {
                               sortOrder={computedSortOrder}
                               setSort={setSort}
                               page={{ pageNo, paginationFirst }}
+                              sortCompleteOrder={sortCompleteOrder}
+                              setSortCompleteOrder={setSortCompleteOrder}
+
+                              
                             />
                             <div>
                               <div className="pagination-container">

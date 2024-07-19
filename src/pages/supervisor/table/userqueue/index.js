@@ -23,13 +23,22 @@ import {
 import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAction";
 import { extractLatestData } from "../../auditing";
 
-const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
+const UserQueueTable = ({
+  userList,
+  setSort,
+  auditBodyTemplate,
+  page,
+  auditDueSort,
+  setAuditDueSort,
+  processSort,
+  setProcessSort,
+  auditAllocatedSort,
+  setAuditAllocatedSort,
+  audirDateSort,
+  setAuditDateSort,
+}) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [processSort, setProcessSort] = useState("DESC");
-  const [auditAllocatedSort, setAuditAllocatedSort] = useState("DESC");
-  const [audirDateSort, setAuditDateSort] = useState("DESC");
-  const [auditDueSort, setAuditDueSort] = useState("DESC");
 
   const auditstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
