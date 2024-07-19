@@ -251,7 +251,7 @@ const Combo = ({
               setActiveTabHead={setActiveTabHead}
               setActiveMeatTitle={setActiveMeatTitle}
               meatCriteriaList={allMeatList}
-              cardTitle="VALID_COMBO"
+              cardTitle="HCC"
             />
           </div>
 
@@ -280,7 +280,7 @@ const Combo = ({
               setActiveTabHead={setActiveTabHead}
               setActiveMeatTitle={setActiveMeatTitle}
               meatCriteriaList={allMeatList}
-              cardTitle="DELETED_COMBO"
+              cardTitle="SUGGESTED"
             />
           </div>
 
@@ -309,7 +309,7 @@ const Combo = ({
               setActiveTabHead={setActiveTabHead}
               setActiveMeatTitle={setActiveMeatTitle}
               meatCriteriaList={allMeatList}
-              cardTitle="DELETED_COMBO"
+              cardTitle="DELETED"
             />
           </div>
         </div>
