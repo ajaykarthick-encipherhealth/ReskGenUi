@@ -116,14 +116,14 @@ const index = ({
         data: totalCodes,
         color: "#E88D67",
         type: "line",
-        lineStyle: { color: "#E88D67" },
+        lineStyle: { color: "#04306F" },
         smooth: true,
         showSymbol: false,
         areaStyle: {
           opacity: 0.5,
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "#E88D67" },
-            { offset: 1, color: "#FAFFFA" },
+            { offset: 0, color: "#FAFFFA" },
+            { offset: 1, color: "#84B5FB" },
           ]),
         },
         itemStyle: {
@@ -278,7 +278,7 @@ const index = ({
           <div className="totalCodesPies2">
             <RafGraph
               overallData={true}
-              rafColor={"#E88D67"}
+              rafColor={"#04306F"}
               rafColor3={"#FF9209"}
               rafColor2={"#00BC13"}
               selectedValue={selectedValue}

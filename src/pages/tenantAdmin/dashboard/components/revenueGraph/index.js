@@ -77,7 +77,7 @@ const RevenueGraph = ({
         step: "start",
         data: isHcc ? resultArrayHCC : isCargaps ? resultArrayCaregaps : totalCodes,
         itemStyle: {
-          color: isHcc ? "#02BBDE" : isCargaps ? "#5A75F2" : "#E88D67",
+          color: isHcc ? "#02BBDE" : isCargaps ? "#5A75F2" : "#04306F",
         },
       },
       {
