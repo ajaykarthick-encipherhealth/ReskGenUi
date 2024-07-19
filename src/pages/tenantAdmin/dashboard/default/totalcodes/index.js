@@ -59,9 +59,10 @@ const index = ({
       ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
       : [];
 
-  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
-    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
-    : [];
+  const totalCodes = resultArrayHCC.map(
+    (num, index) => num + resultArrayCaregaps[index]
+  );
+ 
 
   useEffect(() => {
     getAllHccCodesData(
@@ -89,8 +90,7 @@ const index = ({
       data:
         selectedValue === "custom"
           ? customDate
-          : 
-          selectedValue === "last_1_week"
+          : selectedValue === "last_1_week"
           ? getLast7Days()
           : getLast30Days(),
     },
@@ -113,21 +113,21 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data: [],
+        data: totalCodes,
         color: "#E88D67",
         type: "line",
-        lineStyle: { color: "#E88D67" },
+        lineStyle: { color: "#0095C2" },
         smooth: true,
         showSymbol: false,
         areaStyle: {
           opacity: 0.5,
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "#E88D67" },
-            { offset: 1, color: "#FAFFFA" },
+            { offset: 0, color: "#FAFFFA" },
+            { offset: 1, color: "#84B5FB" },
           ]),
         },
         itemStyle: {
-          color: "#E88D67",
+          color: "#0095C2",
         },
       },
       {
@@ -278,7 +278,7 @@ const index = ({
           <div className="totalCodesPies2">
             <RafGraph
               overallData={true}
-              rafColor={"#E88D67"}
+              rafColor={"#0095C2"}
               rafColor3={"#FF9209"}
               rafColor2={"#00BC13"}
               selectedValue={selectedValue}

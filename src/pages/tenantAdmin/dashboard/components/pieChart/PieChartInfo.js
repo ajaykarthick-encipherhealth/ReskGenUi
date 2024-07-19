@@ -40,12 +40,12 @@ const index = ({data,header}) => {
 
           rich: {
             a: {
-              fontSize: 12,
+              fontSize: 17,
               fontWeight: 500,
               marginTop: 320,
             },
             b: {
-              fontSize: 10,
+              fontSize: 17,
               fontWeight: 700,
             },
           },
