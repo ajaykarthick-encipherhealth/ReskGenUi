@@ -20,12 +20,14 @@ function PatientTable({
   setSort,
   getFilteApi,
   page,
-  setSelectedPriority
+  setSelectedPriority,
+  sortDueOrder,
+  setSortDueOrder,
+  sortCompleteOrder,
+  setSortCompleteOrder,
+  sortAllocateOrder,
+  setSortAllocateOrder,
 }) {
-  const [sortDueOrder, setSortDueOrder] = useState("DESC");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-  const [sortAllocateOrder, setSortAllocateOrder] = useState("DESC");
-
   const dispatch = useDispatch();
   const navigate = useRouter();
 
@@ -44,7 +46,7 @@ function PatientTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push({pathname: "/reviewer/patients/details", query:page});
+      navigate.push({ pathname: "/reviewer/patients/details", query: page });
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",

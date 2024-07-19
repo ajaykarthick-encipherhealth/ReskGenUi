@@ -1,10 +1,10 @@
 import React from "react";
 import { ThreeDots } from "react-loader-spinner";
 
-function SpinnerDots({topHeight}) {
+function SpinnerDots({topHeight,background}) {
   return (
     <div class="content-body">
-      <div className="container-fluid">
+      <div className="container-fluid" style={{background:background&& background}}>
         <div
           style={{
             position: "relative",
@@ -12,7 +12,7 @@ function SpinnerDots({topHeight}) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "#f0f6fe",
+            // backgroundColor: "#f0f6fe",
           }}
         >
           <ThreeDots

@@ -18,13 +18,16 @@ function PatientTable({
   statusBodyTemplate,
   patientDetails,
   setSort,
-  page
+  page,
+  sortDueOrder,
+  setSortDueOrder,
+  sortCompleteOrder,
+  setSortCompleteOrder,
+  sortAuditOrder,
+  setSortAuditOrder,
 }) {
   const dispatch = useDispatch();
   const navigate = useRouter();
-  const [sortDueOrder, setSortDueOrder] = useState("DESC");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-  const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
 
   const priorityOptions = [
     {
@@ -82,7 +85,10 @@ function PatientTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push({pathname:"/supervisor/patients/details", query: {...page, isSupervisorAuited: true}});
+      navigate.push({
+        pathname: "/supervisor/patients/details",
+        query: { ...page, isSupervisorAuited: true },
+      });
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
@@ -141,31 +147,37 @@ function PatientTable({
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td 
+          <td
             className={TableStyle.childBorder}
-            style={{ textAlign: "center", textAlign:"center" }}
+            style={{ textAlign: "center", textAlign: "center" }}
             onClick={handleTableRowClick}
           >
-            {data?.accuracyScore?.correctCount
-              ? data?.accuracyScore?.correctCount
-              :<div   style={{ textAlign: "center" }}>---</div>}
+            {data?.accuracyScore?.correctCount ? (
+              data?.accuracyScore?.correctCount
+            ) : (
+              <div style={{ textAlign: "center" }}>---</div>
+            )}
           </td>
-          <td 
+          <td
             className={TableStyle.childBorder}
             style={{ textAlign: "center" }}
             onClick={handleTableRowClick}
           >
-            {data?.accuracyScore?.wrongCount
-              ? data?.accuracyScore?.wrongCount
-              : <div   style={{ textAlign: "center", textAlign:"center" }}>---</div>}
+            {data?.accuracyScore?.wrongCount ? (
+              data?.accuracyScore?.wrongCount
+            ) : (
+              <div style={{ textAlign: "center", textAlign: "center" }}>
+                ---
+              </div>
+            )}
           </td>
 
-          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+          <td className={TableStyle.childBorder} onClick={handleTableRowClick} style={{padding:"0px 50px"}}>
             {data.auditAllocatedDate
               ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
               : "---"}
           </td>
-          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+          <td className={TableStyle.childBorder} onClick={handleTableRowClick} style={{padding:"0px 30px"}}>
             {data.auditDueDate
               ? moment(data.auditDueDate).format("MM-DD-YYYY")
               : "---"}
@@ -239,13 +251,13 @@ function PatientTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENTS</th>
-            <th style={{paddingLeft:'60px'}}>REVIEWER</th>
-            <th  style={{ cursor: "pointer", textAlign:"center" }}>
+            <th style={{ paddingLeft: "60px" }}>REVIEWER</th>
+            <th style={{ cursor: "pointer", textAlign: "center" }}>
               <Tooltip placement="bottom" title="REVIEWER CHANGES">
                 RC
               </Tooltip>
             </th>
-            <th  style={{ cursor: "pointer", textAlign:"center" }}>
+            <th style={{ cursor: "pointer", textAlign: "center" }}>
               {" "}
               <Tooltip placement="bottom" title="REVIEWER CHANGES REJECTION">
                 RCR
@@ -260,6 +272,7 @@ function PatientTable({
                   setSort,
                   "auditAllocatedDate"
                 );
+               
               }}
             >
               AUDIT ALLOCATED DATE
@@ -273,6 +286,7 @@ function PatientTable({
             </th>
             <th
               onClick={() => {
+               
                 sortFunction(
                   sortDueOrder,
                   setSortDueOrder,
@@ -310,7 +324,7 @@ function PatientTable({
               </span>
             </th>
 
-            <th  style={{ paddingLeft: "30px" }}>AUDIT ALLOCATED BY</th>
+            <th style={{ paddingLeft: "30px" }}>AUDIT ALLOCATED BY</th>
             <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
             <th className={TableStyle.rowStyle2}>AUDIT STATUS</th>
           </tr>
