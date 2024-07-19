@@ -310,7 +310,7 @@ const InitialCard = ({
                             checked={selectAll}
                           />
                         </div>
-                        <span className={`pl-4 text-center ${styles.pName}`}>
+                        <span className={`pl-0 text-start ${styles.pName}`}>
                           All
                         </span>
                       </div>
@@ -329,7 +329,7 @@ const InitialCard = ({
                             checked={selectAllFlags}
                           />
                         </div>
-                        <span className={`pl-4 text-center ${styles.pName}`}>
+                        <span className={`pl-4 text-start ${styles.pName}`}>
                           All Flags
                         </span>
                       </div>
