@@ -127,7 +127,7 @@ const index = ({
           ]),
         },
         itemStyle: {
-          color: "#E88D67",
+          color: "#04306F",
         },
       },
       {
