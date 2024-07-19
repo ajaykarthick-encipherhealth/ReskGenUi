@@ -22,6 +22,7 @@ import Highcharts from "highcharts";
 import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
 import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
  import { faCheckDouble} from "@fortawesome/free-solid-svg-icons";
+import { renderCardSkeleton } from "../../../reviewer/dashboard/accuracy";
 
 export const TabButtons = [
   {
@@ -647,8 +648,8 @@ const Accuracy = () => {
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
               {accuracyDatas?.loading || QualityAccuracyDatas?.loading ? (
-                <div className={spinSTYles.spinStyle}>
-                  <Spin loading={accuracyDatas?.loading} />
+                <div>
+                  {renderCardSkeleton()}
                 </div>
               ) : QualityAccuracyDatas?.loading === false &&
                 QualityAccuracyDatas?.data?.response ? (

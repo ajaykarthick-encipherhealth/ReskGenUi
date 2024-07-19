@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import HeadTitle from "../../../../components/headtitle";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card";
-import { Empty, Spin } from "antd";
+import { Empty, Skeleton, Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { TeamChart } from "../../../../services/adminServices/DashboardService";
 import dynamic from "next/dynamic";
+import { renderCardSkeleton } from "../../../reviewer/dashboard/accuracy";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -254,17 +255,17 @@ const BarChart = () => {
                 className={styles.chartContainer}
               >
                 {teamChartData?.loading ? (
-                  <div
-                    className={spinSTYles.spinStyle}
-                    style={{
-                      paddingTop: "150px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Spin loading={teamChartData?.loading} />
-                  </div>
+                  // <div
+                  //   className={spinSTYles.spinStyle}
+                  //   style={{
+                  //     paddingTop: "150px",
+                  //     display: "flex",
+                  //     justifyContent: "center",
+                  //     alignItems: "center",
+                  //   }}
+                  // >
+                    renderCardSkeleton(426, 650, 30)
+       
                 ) : teamChartData?.data?.response?.length > 0 ? (
                   option && (
                     <ReactApexChart
@@ -275,7 +276,10 @@ const BarChart = () => {
                     />
                   )
                 ) : (
-                  <div className={spinSTYles.spinStyle} style={{height:"600px",alignItems:"center"}}>
+                  <div
+                    className={spinSTYles.spinStyle}
+                    style={{ height: "600px", alignItems: "center" }}
+                  >
                     <Empty />
                   </div>
                 )}

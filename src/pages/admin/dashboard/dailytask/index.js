@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./styles.module.css";
 import ReactECharts from "echarts-for-react";
 import dayjs from "dayjs";
-import { Col, Row, Spin } from "antd";
+import { Col, Row, Skeleton, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
@@ -203,26 +203,28 @@ const DailyTask = () => {
     <>
       <HeadTitle header="Total Users" />
       <div className={styles.card2} style={{ height: "75%" }}>
-        <Card borderRadius="28px" style={{ display: "flex" }}>
+        <Card style={{ borderRadius: "28px", display: "flex" }}>
           <Row>
             <Col span={1}></Col>
-            <Col span={30}>
+            <Col span={22}>
               {currentDays?.length > 0 ? (
                 <Row
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   {uniqueData?.slice(0, 1)?.map((data, index) => (
-                    <Col key={index} span={70}>
+                    <Col key={index} span={24}>
                       <h4
                         className={styles.headerTitle}
                         style={{ fontSize: "16px" }}
-                      ></h4>
+                      >
+                        {/* Add your header title here if needed */}
+                      </h4>
 
                       <Row>
                         <Col span={12}>
                           <div
                             className={styles.container}
-                            style={{ width: "308%" }}
+                            style={{ width: "100%" }}
                           >
                             <ReactECharts
                               option={getChartOption(
@@ -239,30 +241,29 @@ const DailyTask = () => {
                         </Col>
                         <Col span={12} className={styles.headerTitle}>
                           <div style={{ paddingLeft: "10px" }}>
-                            {bullets?.map((item) => {
-                              return (
-                                <div className={styles.container}>
-                                  <div style={{ display: "flex" }}>
-                                    <div
-                                      className={styles.bgColor}
-                                      style={{
-                                        backgroundColor: item.color,
-                                      }}
-                                    ></div>
-                                    {item.name}
-                                  </div>
-                                  <div className={styles.subText}>
-                                    {item.name === "Admin"
-                                      ? roles.ADMIN
-                                      : item.name === "Supervisor"
-                                      ? roles.SUPERVISOR
-                                      : item.name === "Reviewer"
-                                      ? roles.REVIEWER
-                                      : data.declined}
-                                  </div>
+                            {bullets?.map((item, bulletIndex) => (
+                              <div
+                                key={bulletIndex}
+                                className={styles.container}
+                              >
+                                <div style={{ display: "flex" }}>
+                                  <div
+                                    className={styles.bgColor}
+                                    style={{ backgroundColor: item.color }}
+                                  ></div>
+                                  {item.name}
                                 </div>
-                              );
-                            })}
+                                <div className={styles.subText}>
+                                  {item.name === "Admin"
+                                    ? roles.ADMIN
+                                    : item.name === "Supervisor"
+                                    ? roles.SUPERVISOR
+                                    : item.name === "Reviewer"
+                                    ? roles.REVIEWER
+                                    : data.declined}
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         </Col>
                       </Row>
@@ -270,8 +271,12 @@ const DailyTask = () => {
                   ))}
                 </Row>
               ) : (
-                <div className={spinSTYles.spinStyle}>
-                  <Spin loading={dailyStatusData?.loading} />
+                <div>
+                  {!dailyStatusData?.loading && (
+                    <div className="skeletonantd d-flex justify-content-center align-items-center">
+                      <Skeleton.Avatar active size="large" shape="circle" />
+                    </div>
+                  )}
                 </div>
               )}
             </Col>

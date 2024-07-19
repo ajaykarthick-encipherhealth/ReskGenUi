@@ -10,7 +10,7 @@ import HeadTitle from "../../../../components/headtitle";
 import { connect, useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
-import { Empty, Spin } from "antd";
+import { Empty, Skeleton, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
 import {
   getAccuracyDaily,
@@ -20,6 +20,7 @@ import {
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
+import { renderCardSkeleton } from "../../../reviewer/dashboard/accuracy";
 
 export const TabButtons = [
   {
@@ -115,26 +116,21 @@ export const getGraphData = (
   currentBtn,
   currentDate
 ) => {
-  console.log(param,
-    text,
-    month,
-    year,
-    currentBtn,
-    currentDate, "testing");
+  console.log(param, text, month, year, currentBtn, currentDate, "testing");
   // if (data) {
-    // const param = Object.values(data);
-    if (
-      currentBtn === "Monthly" &&
-      parseInt(year) <= parseInt(currentDate.getFullYear())
-    ) {
-      if (parseInt(year) <= parseInt(currentDate.getFullYear())) {
-        return param?.map((item) => 0);
-      }
-    } else if (currentBtn !== "Monthly") {
-      if (parseInt(month) <= parseInt(currentDate?.getMonth() + 1)) {
-        return param?.map((item) => 0);
-      }
+  // const param = Object.values(data);
+  if (
+    currentBtn === "Monthly" &&
+    parseInt(year) <= parseInt(currentDate.getFullYear())
+  ) {
+    if (parseInt(year) <= parseInt(currentDate.getFullYear())) {
+      return param?.map((item) => 0);
     }
+  } else if (currentBtn !== "Monthly") {
+    if (parseInt(month) <= parseInt(currentDate?.getMonth() + 1)) {
+      return param?.map((item) => 0);
+    }
+  }
   // } else {
   //   return []
   // }
@@ -508,8 +504,12 @@ const MachineAccuracy = ({ accuracyDetails }) => {
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
               {accuracyDatas?.loading || accuracyDetails?.loading ? (
-                <div className={spinSTYles.spinStyle}>
-                  <Spin loading={accuracyDatas?.loading} />
+                <div>
+                  <Skeleton
+                    active
+                    paragraph={{ rows: 5 }}
+                    style={{ width: "800px", padding: "30px" }}
+                  />
                 </div>
               ) : accuracyDetails?.loading === false &&
                 accuracyDetails?.data?.response ? (
@@ -557,63 +557,67 @@ const MachineAccuracy = ({ accuracyDetails }) => {
                 </div>
               )}
             </div>
-            <div className={styles.accuracy}>
-              <div className={styles.header}>
-                <Image src={accuracy} className={styles.Img} />
-                <div className={styles.heading}>
-                  {currentTabBtn === "CogentAI Accuracy"
-                    ? "Accuracy"
-                    : "Average Score"}
+            {accuracyDatas?.loading || accuracyDetails?.loading ? (
+              <div className={styles.accuracy}>{renderCardSkeleton(265, 250)}</div>
+            ) : (
+              <div className={styles.accuracy}>
+                <div className={styles.header}>
+                  <Image src={accuracy} className={styles.Img} />
+                  <div className={styles.heading}>
+                    {currentTabBtn === "CogentAI Accuracy"
+                      ? "Accuracy"
+                      : "Average Score"}
+                  </div>
+                </div>
+                {/* <div className={styles.month}>
+   {currentBtn === "Daily"
+     ? `Day ${currentDate.getDate()}`
+     : currentBtn === "Monthly"
+     ? `Month ${monthNames[currentDate.getMonth()]}`
+     : `Week ${getDateWeek(currentDate)}`}
+   {currentBtn !== "Monthly" && (
+     <span className={styles.subTitle}>(Current Month)</span>
+   )}
+ </div> */}
+
+                <div className={styles.percentage}>
+                  <span className={styles.insideTitle}>
+                    {/* {currentTabBtn === "CogentAI Accuracy"
+       ? initialAccuracyData
+         ? currentBtn === "Monthly"
+           ? `${initialAccuracyData[currentDate?.getMonth() + 1]}%`
+           : currentBtn === "Daily"
+           ? `${
+               initialAccuracyData[currentDate?.getDate()]
+                 ? initialAccuracyData[currentDate?.getDate()]
+                 : 0
+             }%`
+           : `${initialAccuracyData[getDateWeek(currentDate)]}%`
+         : "0%"
+       : initialQualityData
+       ? currentBtn === "Monthly"
+         ? `${
+             initialQualityData[currentDate?.getMonth()]
+               ?.averageScore
+           }%`
+         : currentBtn === "Daily"
+         ? `${
+             initialQualityData[currentDate?.getDate() - 1]
+               ?.averageScore
+               ? initialQualityData[currentDate?.getDate() - 1]
+                   ?.averageScore
+               : 0
+           }%`
+         : `${
+             initialQualityData[getDateWeek(currentDate) - 1]
+               ?.averageScore
+           }%`
+       : "0%"} */}
+                    {average ? `${average?.toFixed(2)}%` : `0%`}
+                  </span>
                 </div>
               </div>
-              {/* <div className={styles.month}>
-                {currentBtn === "Daily"
-                  ? `Day ${currentDate.getDate()}`
-                  : currentBtn === "Monthly"
-                  ? `Month ${monthNames[currentDate.getMonth()]}`
-                  : `Week ${getDateWeek(currentDate)}`}
-                {currentBtn !== "Monthly" && (
-                  <span className={styles.subTitle}>(Current Month)</span>
-                )}
-              </div> */}
-
-              <div className={styles.percentage}>
-                <span className={styles.insideTitle}>
-                  {/* {currentTabBtn === "CogentAI Accuracy"
-                    ? initialAccuracyData
-                      ? currentBtn === "Monthly"
-                        ? `${initialAccuracyData[currentDate?.getMonth() + 1]}%`
-                        : currentBtn === "Daily"
-                        ? `${
-                            initialAccuracyData[currentDate?.getDate()]
-                              ? initialAccuracyData[currentDate?.getDate()]
-                              : 0
-                          }%`
-                        : `${initialAccuracyData[getDateWeek(currentDate)]}%`
-                      : "0%"
-                    : initialQualityData
-                    ? currentBtn === "Monthly"
-                      ? `${
-                          initialQualityData[currentDate?.getMonth()]
-                            ?.averageScore
-                        }%`
-                      : currentBtn === "Daily"
-                      ? `${
-                          initialQualityData[currentDate?.getDate() - 1]
-                            ?.averageScore
-                            ? initialQualityData[currentDate?.getDate() - 1]
-                                ?.averageScore
-                            : 0
-                        }%`
-                      : `${
-                          initialQualityData[getDateWeek(currentDate) - 1]
-                            ?.averageScore
-                        }%`
-                    : "0%"} */}
-                  {average ? `${average?.toFixed(2)}%` : `0%`}
-                </span>
-              </div>
-            </div>
+            )}
           </div>
         </Card>
       </div>
