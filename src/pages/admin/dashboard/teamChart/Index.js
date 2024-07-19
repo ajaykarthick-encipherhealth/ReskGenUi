@@ -255,17 +255,7 @@ const BarChart = () => {
                 className={styles.chartContainer}
               >
                 {teamChartData?.loading ? (
-                  // <div
-                  //   className={spinSTYles.spinStyle}
-                  //   style={{
-                  //     paddingTop: "150px",
-                  //     display: "flex",
-                  //     justifyContent: "center",
-                  //     alignItems: "center",
-                  //   }}
-                  // >
-                    renderCardSkeleton(426, 650, 30)
-       
+                  renderCardSkeleton(426, 650, 30)
                 ) : teamChartData?.data?.response?.length > 0 ? (
                   option && (
                     <ReactApexChart

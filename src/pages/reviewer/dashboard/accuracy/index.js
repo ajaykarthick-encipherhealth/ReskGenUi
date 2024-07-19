@@ -362,8 +362,6 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
             <div style={{ width: "85%", overflowX: "scroll" }}>
               {accuracyDatas?.loading && accuracyLoading && (
                 <div className={styles.highchartStyle}>
-                  {" "}
-                  {/* Container width */}
                   <Skeleton
                     active
                     paragraph={{ rows: 4 }}
