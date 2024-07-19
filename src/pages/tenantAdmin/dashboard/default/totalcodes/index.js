@@ -116,7 +116,7 @@ const index = ({
         data: totalCodes,
         color: "#E88D67",
         type: "line",
-        lineStyle: { color: "#04306F" },
+        lineStyle: { color: "#0095C2" },
         smooth: true,
         showSymbol: false,
         areaStyle: {
@@ -127,7 +127,7 @@ const index = ({
           ]),
         },
         itemStyle: {
-          color: "#04306F",
+          color: "#0095C2",
         },
       },
       {
@@ -278,7 +278,7 @@ const index = ({
           <div className="totalCodesPies2">
             <RafGraph
               overallData={true}
-              rafColor={"#04306F"}
+              rafColor={"#0095C2"}
               rafColor3={"#FF9209"}
               rafColor2={"#00BC13"}
               selectedValue={selectedValue}
