@@ -91,7 +91,7 @@ const InputField = ({
         className={
           isInputFiled
             ? "form-control new-inputform-control"
-            : "form-control new-form-control"
+            : "form-control new-form-control new-item-control"
         }
         placeholder={placeholder}
         maxLength={25}
@@ -102,6 +102,7 @@ const InputField = ({
             e.preventDefault();
           }
         }}
+        su
       />
     </div>
   );

@@ -478,7 +478,7 @@ const Patient = ({
                                     resetPageNumber(setPageNo);
                                   }}
                                   value={searchString}
-                                  className="form-control new-form-control"
+                                  className="form-control new-form-control new-item-control"
                                   placeholder="Search"
                                   maxLength={25}
                                   onKeyDown={(e) => {

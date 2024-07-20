@@ -442,7 +442,7 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                 name="initialSearch"
                                 onChange={(e) => getNameSearch(e)}
                                 value={search ? search?.searchVal : ""}
-                                className="form-control new-form-control"
+                                className="form-control new-form-control new-item-control"
                                 placeholder="Search"
                                 maxLength={25}
                                 onKeyDown={(e) => {
@@ -451,6 +451,7 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                     e.preventDefault();
                                   }
                                 }}
+                               
                               />
                             </div>
                           </div>
