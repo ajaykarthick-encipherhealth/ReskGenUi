@@ -485,7 +485,7 @@ const Reports = ({
                                     filterChangePatientId(e);
                                     resetPageNumber(resetPageState);
                                   }}
-                                  className="form-control new-form-control reportInput"
+                                  className="form-control new-form-control new-item-control reportInput"
                                   placeholder="Search"
                                   maxLength={25}
                                   value={search ? search?.searchVal : ""}
