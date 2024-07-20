@@ -32,6 +32,7 @@ const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [selectedType, setSelectedType] = useState(null);
+  const [options, setOptions] = useState([]);
   const handleClose = (form) => {
     setFileList([]);
     setSelectedType(null);
@@ -231,7 +232,12 @@ const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch }) => {
               ]}
             >
               <div>
-                <CustomSelect disabled={false} placeholder="MRN Number" />
+                <CustomSelect
+                  disabled={false}
+                  placeholder="MRN Number"
+                  options={options}
+                  setOptions={setOptions}
+                />
               </div>
             </Form.Item>
           ) : (
