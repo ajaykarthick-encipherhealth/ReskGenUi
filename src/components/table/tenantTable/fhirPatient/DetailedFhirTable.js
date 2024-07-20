@@ -10,16 +10,17 @@ import PropTypes from "prop-types";
 import SpinnerDots from "../../../spinner";
 import reportStyles from "../../../../mainStream/reports/report.module.css";
 import { getColors } from "../pdfTable/detailPdfTable";
+import { renderSkeleton } from "../../../reuseableFunctions";
 
 const DetailedFhirTable = ({
   paginationFirst,
   onPageChange,
   tableData,
   loader,
-  selectAll, 
-  selectedRows, 
+  selectAll,
+  selectedRows,
   setSelectedRows,
-  setSelectAll
+  setSelectAll,
 }) => {
   DetailedFhirTable.propTypes = {
     paginationFirst: PropTypes.any.isRequired,
@@ -53,11 +54,11 @@ const DetailedFhirTable = ({
 
     setSelectedRows(updatedRows);
   };
- 
+
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (
-        <SpinnerDots />
+        renderSkeleton()
       ) : (
         <>
           <table className={TableStyle.classTable}>

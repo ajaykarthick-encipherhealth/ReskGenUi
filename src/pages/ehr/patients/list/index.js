@@ -12,6 +12,7 @@ import {
   renderUserPrfoileAvatar,
   renderUserPrfoileAvatarDisabled,
 } from "../../../../components/headerFilters/functions";
+import { renderSkeleton } from "../../../../components/reuseableFunctions";
 
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
@@ -72,7 +73,7 @@ const PatientList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   return (
     <div>
       {!usersData || usersData?.loading ? (
-        <SpinnerDots />
+       renderSkeleton()
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classThead}>

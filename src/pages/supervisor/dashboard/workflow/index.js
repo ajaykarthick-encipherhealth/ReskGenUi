@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
-import { Col, Empty, Row, Spin } from "antd";
+import { Col, Empty, Row, Skeleton, Spin } from "antd";
 import styles from "./styles.module.css";
 import calender from "../../../../images/dashboard/calender.png";
 import Card from "../../../../components/card";
@@ -16,8 +16,15 @@ import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import auditDecliendbg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
-import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faClockRotateLeft,faFileCircleCheck,faFileCircleExclamation,faCirclePause,faCircleXmark,faUsers} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faClockRotateLeft,
+  faFileCircleCheck,
+  faFileCircleExclamation,
+  faCirclePause,
+  faCircleXmark,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 const WorkFlow = () => {
   const currentDate = dayjs();
   const worlFlowData = useSelector((state) => state?.l2Dashboard?.data);
@@ -80,7 +87,7 @@ const WorkFlow = () => {
     },
     {
       id: 5,
-      icon:  <FontAwesomeIcon icon={faClockRotateLeft} />,
+      icon: <FontAwesomeIcon icon={faClockRotateLeft} />,
       title: "Audit Pending",
       charts: worlFlowData?.data?.response?.auditPending,
       days: `Last ${
@@ -99,7 +106,56 @@ const WorkFlow = () => {
       bg: auditDecliendbg,
     },
   ];
-
+  const renderCardSkeleton = () => (
+    <Row className={styles.carddiv}>
+      {Array.from({ length: 3 }).map((_, index) => (
+        <>
+          <Col
+            key={index}
+            span={9}
+            style={{
+              backgroundColor: "#f0f0f0",
+              borderRadius: "8px",
+              padding: "16px",
+              marginBottom: "10px",
+              width: "150px",
+              height: "100px",
+            }}
+          >
+            <Skeleton.Avatar
+              size={30}
+              style={{
+                marginBottom: "16px",
+                borderRadius: "50%",
+              }}
+            />
+            <Skeleton active title={{ width: "70%" }} paragraph={{ rows: 0 }} />
+          </Col>
+          <Col
+            key={index}
+            span={9}
+            style={{
+              backgroundColor: "#f0f0f0",
+              borderRadius: "8px",
+              padding: "16px",
+              marginBottom: "10px",
+              width: "150px",
+              height: "100px",
+            }}
+          >
+            <Skeleton.Avatar
+              size={30}
+              style={{
+                marginBottom: "16px",
+                borderRadius: "50%",
+              }}
+            />
+            <Skeleton active title={{ width: "70%" }} paragraph={{ rows: 0 }} />
+          </Col>
+        </>
+      ))}
+    </Row>
+  );
   return (
     <div className={styles.card1}>
       <HeadTitle
@@ -117,9 +173,7 @@ const WorkFlow = () => {
       />
       <Card borderRadius="28px">
         {worlFlowData?.loading ? (
-          <div className={spinSTYles.spinStyle}>
-            <Spin loading={worlFlowData?.loading} />
-          </div>
+       renderCardSkeleton()
         ) : worlFlowData?.data?.response ? (
           <Row className={styles.carddiv}>
             {card1Data?.map((data) => (

@@ -4,7 +4,7 @@ import Image from "next/image";
 import ReactECharts from "echarts-for-react";
 import left from "../../../../images/dashboard/left.png";
 import right from "../../../../images/dashboard/right.png";
-import { Col, Row, Spin } from "antd";
+import { Col, Row, Skeleton, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
@@ -239,6 +239,44 @@ const DailyTask = () => {
     );
     return index === firstIndex;
   });
+  const renderCardSkeleton = () => (
+    <Row gutter={[16, 16]} style={{ display: 'flex', justifyContent: 'space-between' }}>
+    {Array.from({ length: 3 }).map((_, index) => (
+      <Col
+        key={index}
+        xs={24} sm={12} md={8} lg={7} 
+        className={styles.sliderdiv}
+        style={{
+          backgroundColor: '#f0f0f0',
+          borderRadius: '12px',
+          padding: '5px',
+          marginBottom: '16px',
+          height: '260px',
+        }}
+      >
+        <Row>
+          <Col span={12}>
+            <div>
+              <Skeleton.Input
+                style={{ width: '100%', height: '200px' }} 
+                active
+              />
+            </div>
+          </Col>
+          <Col span={12} className={styles.headerTitle}>
+            <div style={{ paddingLeft: '10px' }}>
+              {Array.from({ length: bullets.length }).map((_, i) => (
+                <div className={styles.container} key={i}>
+                  <Skeleton.Input style={{ width: 30 }} active />
+                </div>
+              ))}
+            </div>
+          </Col>
+        </Row>
+      </Col>
+    ))}
+  </Row>
+  );
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -321,9 +359,7 @@ const DailyTask = () => {
                   ))}
                 </Row>
               ) : (
-                <div className={spinSTYles.spinStyle}>
-                  <Spin loading={dailyStatusData?.loading} />
-                </div>
+                renderCardSkeleton()
               )}
 
               <div className={styles.infoCards}>
