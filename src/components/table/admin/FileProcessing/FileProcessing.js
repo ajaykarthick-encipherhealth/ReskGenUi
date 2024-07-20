@@ -4,7 +4,7 @@ import { over } from "stompjs";
 import SockJS from "sockjs-client";
 import dayjs from "dayjs";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
-import { Empty, Progress, Steps, Tooltip } from "antd";
+import { Empty, Progress, Skeleton, Steps, Tooltip } from "antd";
 import TableStyle from "../../table.module.css";
 import { getPatientsList } from "../../../../store/actions/adminAction/fileProcessingActions";
 import ENDPOINTS from "../../../../utility/enpoints";
@@ -70,7 +70,80 @@ import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin/tra
 //     sse.close();
 //   };
 // };
-
+export const fileProcessingSkeleton = () => {
+  return (
+    <div>
+      <div className="skeleton-stepper">
+        <Skeleton.Input
+          active
+          size="large"
+          style={{ marginBottom: 16, width: "100%" }}
+        />
+        <Skeleton.Input
+          active
+          size="large"
+          style={{ marginBottom: 16, width: "100%" }}
+        />
+        <Skeleton.Input
+          active
+          size="large"
+          style={{ marginBottom: 16, width: "100%" }}
+        />
+      </div>
+      <div className="skeleton-stepper">
+        <Skeleton.Input
+          active
+          size="large"
+          style={{ marginBottom: 16, width: "100%" }}
+        />
+        <Skeleton.Input
+          active
+          size="large"
+          style={{ marginBottom: 16, width: "100%" }}
+        />
+        <Skeleton.Input
+          active
+          size="large"
+          style={{ marginBottom: 16, width: "100%" }}
+        />
+      </div>
+      <div className="skeleton-stepper">
+        <Skeleton.Input
+          active
+          size="large"
+          style={{ marginBottom: 16, width: "100%" }}
+        />
+        <Skeleton.Input
+          active
+          size="large"
+          style={{ marginBottom: 16, width: "100%" }}
+        />
+        <Skeleton.Input
+          active
+          size="large"
+          style={{ marginBottom: 16, width: "100%" }}
+        />
+      </div>
+      <div className="skeleton-stepper">
+        <Skeleton.Input
+          active
+          size="large"
+          style={{ marginBottom: 16, width: "100%" }}
+        />
+        <Skeleton.Input
+          active
+          size="large"
+          style={{ marginBottom: 16, width: "100%" }}
+        />
+        <Skeleton.Input
+          active
+          size="large"
+          style={{ marginBottom: 16, width: "100%" }}
+        />
+      </div>
+    </div>
+  );
+};
 const stageChartMap2 = {
   FILE_UPLOAD: "File Upload",
   OCR: "OCR",
@@ -557,8 +630,7 @@ const FileProcessingTable = ({
                 marginTop: stepperVisible ? "10px" : "0",
                 marginLeft: "-40px",
               }}
-              className={errStages[data?.processStageChart]?"errStages":""}
-              
+              className={errStages[data?.processStageChart] ? "errStages" : ""}
             >
               <Steps
                 current={
@@ -568,7 +640,9 @@ const FileProcessingTable = ({
                 }
                 labelPlacement="vertical"
                 items={mappedSteps}
-                percent={failedList|| errStages[data?.processStageChart] ? 0 : count}
+                percent={
+                  failedList || errStages[data?.processStageChart] ? 0 : count
+                }
                 finishIconBorderColor="#000"
                 // className={errStages[data?.processStageChart]?"errStages":""}
               />
@@ -610,15 +684,7 @@ const FileProcessingTable = ({
   return (
     <div className={TableStyle.classContaineer}>
       {fileProcessingData?.loading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <SpinnerDots />
-        </div>
+        fileProcessingSkeleton()
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classThead}>
