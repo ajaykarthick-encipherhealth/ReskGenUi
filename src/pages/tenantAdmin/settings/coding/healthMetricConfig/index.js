@@ -48,6 +48,8 @@ const HealthMetricConfig = ({
   getCodingDetails,
   list,
   editHealthMetric,
+  addHealthMetric,
+  deleteComoridConditions,
 }) => {
   const [form] = Form.useForm();
   const [openModal, setOpenModal] = useState(false);
@@ -105,39 +107,26 @@ const HealthMetricConfig = ({
     },
   ];
 
-  const handleSubmit = (values) => {
-    if (selectedIndex) {
-      healthMetricItems[selectedIndex] = values;
-      setHealthMetricsItems([...healthMetricItems]);
-    } else {
-      if (healthMetricItems?.length)
-        setHealthMetricsItems([...healthMetricItems, values]);
-      else setHealthMetricsItems([values]);
+  const handleSubmit = async (values) => {
+    try {
+      const res = await addHealthMetric({ ...values });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+        setOpenModal(false);
+        form.resetFields();
+        getCodingDetails({
+          type: "HEALTH_METRICS",
+          page: page,
+          healthMetricType: select.healthMetricType,
+          gender: select.gender,
+          year: select.year,
+        });
+      } else if (res.status == "USER_DEFINED_ERROR") {
+        getResponePopup(res);
+      }
+    } catch (error) {
+      console.log(error);
     }
-    form.resetFields();
-  };
-
-  const handleEdit = (values, index) => {
-    form.setFieldsValue(values);
-    setSelectedIndex(index);
-  };
-  const handleDelete = (index) => {
-    healthMetricItems.splice(index, 1);
-    setHealthMetricsItems([...healthMetricItems]);
-  };
-
-  const handleAddHealthMetric = () => {
-    let values = {
-      healthMetrics: healthMetricItems,
-      isDefaultYear: isDefaultYear,
-      year: selectedYears,
-    };
-    !isDefaultYear ? (values.year = selectedYears) : delete values.year;
-    healthMetricAdd(healthMetricItems);
-    setHealthMetricsItems([]);
-  };
-  const handleSwitch = (checked) => {
-    setIsDefaultYear(checked);
   };
 
   const content = (
@@ -154,12 +143,20 @@ const HealthMetricConfig = ({
               <div className={Style.heading}>Health Metric Type</div>
             </div>
             <div>
-              <Form.Item name={"healthMetricType"}>
+              <Form.Item
+                name={"type"}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select health metric",
+                  },
+                ]}
+              >
                 <Select
                   placeholder="Health Metric Type"
                   options={healthMetricsOptions}
                   className={Style.selector2}
-                  disabled={isEdit}
+                  // disabled={isEdit}
                 />
               </Form.Item>
             </div>
@@ -169,12 +166,20 @@ const HealthMetricConfig = ({
               <div className={Style.heading}>Gender</div>
             </div>
             <div>
-              <Form.Item name={"gender"}>
+              <Form.Item
+                name={"gender"}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select gender",
+                  },
+                ]}
+              >
                 <Select
                   placeholder="Gender"
                   options={genderOptions}
                   className={Style.selector2}
-                  disabled={isEdit}
+                  // disabled={isEdit}
                 />
               </Form.Item>
             </div>
@@ -184,7 +189,15 @@ const HealthMetricConfig = ({
               <div className={Style.heading}>Health Metric Limit</div>
             </div>
             <div>
-              <Form.Item name={"value"}>
+              <Form.Item
+                name={"value"}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter limit",
+                  },
+                ]}
+              >
                 <Input
                   placeholder={"Limit"}
                   onChange={(e) => handleInputChange(e, "code")}
@@ -195,59 +208,52 @@ const HealthMetricConfig = ({
               </Form.Item>
             </div>
           </div>
-          {!isEdit && (
-            <div className="d-flex justify-content-between mt-4">
-              <div>
-                <div className={Style.heading}>Default Year</div>
-              </div>
-              <div>
-                <Switch
-                  defaultChecked={isDefaultYear}
-                  // className="directCodeSwitch"
-                  onChange={handleSwitch}
-                />
-              </div>
-            </div>
-          )}
 
-          {!isDefaultYear && (
+          {!isChecked && (
             <div className="d-flex justify-content-between mt-4">
               <div>
                 <div className={Style.heading}>Year</div>
               </div>
               <div style={{ width: "250px" }}>
-                <Select
-                  allowClear
-                  options={getYears()}
-                  size="large"
-                  mode="multiple"
-                  placeholder="Year"
-                  // className={Style.selector2}
-                  onChange={(value) => {
-                    setSelectedYears(value);
-                  }}
-                  value={selectedYears}
-                  disabled={isEdit}
-                />
+                <Form.Item
+                  name={"years"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select years",
+                    },
+                  ]}
+                >
+                  <Select
+                    allowClear
+                    options={getYears()}
+                    size="large"
+                    mode="multiple"
+                    placeholder="Year"
+                    onChange={(value) => {
+                      setSelectedYears(value);
+                    }}
+                    value={selectedYears}
+                    // disabled={isEdit}
+                    style={{ width: "100%" }}
+                  />
+                </Form.Item>
               </div>
             </div>
           )}
         </div>
-        {isEdit ? (
-          <div className="d-flex justify-content-center">
-            <Form.Item>
-              <Button
-                htmlType="submit"
-                className={ButtonStyles.outer}
-                style={{ height: "45px" }}
-                onClick={() => handleEditRow()}
-              >
-                Update
-              </Button>
-            </Form.Item>
-          </div>
-        ) : (
-          <div className="d-flex justify-content-center">
+
+        <div className="d-flex justify-content-center">
+          {isEdit ? (
+            <Button
+              htmlType="button"
+              className={ButtonStyles.outer}
+              style={{ height: "45px" }}
+              onClick={() => handleEditRow()}
+            >
+              Update
+            </Button>
+          ) : (
             <Form.Item>
               <Button
                 htmlType="submit"
@@ -257,19 +263,10 @@ const HealthMetricConfig = ({
                 Save
               </Button>
             </Form.Item>
-            {healthMetricItems?.length ? (
-              <RegularButton
-                name={"Submit"}
-                // loading={loading}
-                onClick={() => handleAddHealthMetric()}
-              />
-            ) : (
-              <></>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </Form>
-      <div className="row mx-1 gap-5 justify-content-center">
+      {/* <div className="row mx-1 gap-5 justify-content-center">
         {healthMetricItems?.map((item, index) => {
           return (
             <div className="card  bordered col-5  p-2 bg-light" key={index}>
@@ -318,7 +315,7 @@ const HealthMetricConfig = ({
             </div>
           );
         })}
-      </div>
+      </div> */}
     </>
   );
 
@@ -362,7 +359,7 @@ const HealthMetricConfig = ({
       gender: select.gender,
       year: select.year,
     });
-  }, [select]);
+  }, [select, page]);
 
   const submitPatientFile = async () => {
     const formData = new FormData();
@@ -397,10 +394,32 @@ const HealthMetricConfig = ({
   };
 
   const handleDeleteRow = async (value) => {
+    try {
+      const res = await deleteComoridConditions({
+        id: value.id,
+        target: "HEALTH_METRICS",
+      });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+        setIsEdit(false);
+        setEditRowValue(null);
+        getCodingDetails({
+          type: "HEALTH_METRICS",
+          page: page,
+          healthMetricType: select.healthMetricType,
+          gender: select.gender,
+          year: select.year,
+        });
+      } else if (res.status == "USER_DEFINED_ERROR") {
+        getResponePopup(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleEditRow = async (value) => {
     try {
-      const res = await editHealthMetric({
+      const res = await addHealthMetric({
         ...editRowValue,
         ...form.getFieldsValue(),
       });
@@ -408,6 +427,15 @@ const HealthMetricConfig = ({
         getResponePopup(res);
         setIsEdit(false);
         setEditRowValue(null);
+        getCodingDetails({
+          type: "HEALTH_METRICS",
+          page: page,
+          healthMetricType: select.healthMetricType,
+          gender: select.gender,
+          year: select.year,
+        });
+      } else if (res.status == "USER_DEFINED_ERROR") {
+        getResponePopup(res);
       }
     } catch (error) {
       console.log(error);
@@ -517,9 +545,7 @@ const HealthMetricConfig = ({
               // console.log(e);
               form.setFieldsValue({ ...e, healthMetricType: e.type });
               setSelectedYears(e.years);
-              setIsDefaultYear(false);
             }}
-            isNoDelete={false}
             handleDelete={handleDeleteRow}
             paginationFirst={paginationFirst}
             totalElements={list?.response?.totalElements}
@@ -538,13 +564,19 @@ const HealthMetricConfig = ({
       <ModalPop
         openModal={openModal}
         content={content}
-        setOpenModal={setOpenModal}
+        setOpenModal={() => {
+          setOpenModal(false);
+          form.resetFields();
+        }}
         width={800}
       />
       <ModalPop
         openModal={isEdit}
         content={content}
-        setOpenModal={setIsEdit}
+        setOpenModal={() => {
+          setIsEdit(false);
+          form.resetFields();
+        }}
         width={800}
       />
     </>
@@ -559,6 +591,8 @@ const enhancer = connect(
     healthMetricAdd: settingActions.healthMetricAddAction,
     updateSettings: settingActions.updateSettingsAction,
     editHealthMetric: settingActions.editHealthMetric,
+    deleteComoridConditions: settingActions.deleteComoridConditions,
+    addHealthMetric: settingActions.addHealthMetric,
     getCodingDetails: settingActions.codingGuidelinesAction,
   }
 );
