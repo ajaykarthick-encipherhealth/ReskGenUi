@@ -45,6 +45,7 @@ import StatusAction from "./components/statusAction";
 import { handleCopyToClipboard } from "../../commonFunctions";
 import LogoLoader from "../../logoLoader";
 import FileDetails from "./components/fileDetails";
+import ManuallyAddProvider from "./manuallyAddProvider";
 const tabList = [
   {
     title: "HCC",
@@ -130,7 +131,7 @@ const Details = ({
   getPatientLabDosList,
   getLabDetails,
   radiologyDetailsResult,
-  labDetailsResult
+  labDetailsResult,
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -200,28 +201,28 @@ const Details = ({
   };
   useEffect(() => {
     const patientId = localStorage.getItem("patientId");
-    if(activeTab == 1){
-      getAllProcessYear(patientId,"HCC");
+    if (activeTab == 1) {
+      getAllProcessYear(patientId, "HCC");
     }
-    if(activeTab == 3){
-      getAllProcessYear(patientId,"RADIOLOGY");
+    if (activeTab == 3) {
+      getAllProcessYear(patientId, "RADIOLOGY");
     }
-    if(activeTab == 4){
-      getAllProcessYear(patientId,"LAB");
+    if (activeTab == 4) {
+      getAllProcessYear(patientId, "LAB");
     }
   }, [activeTab]);
 
   useEffect(() => {
-    if(processedYearResult?.data?.response){
+    if (processedYearResult?.data?.response) {
       getAllProcessYearSelect(processedYearResult);
     }
   }, [processedYearResult]);
 
   useEffect(() => {
-    getLabFileDetailsClear()
-    getLabDetailsClear()
-    getRadiologyDetailsClear()
-    getRadiologyFileClear()
+    getLabFileDetailsClear();
+    getLabDetailsClear();
+    getRadiologyDetailsClear();
+    getRadiologyFileClear();
   }, []);
 
   useEffect(() => {
@@ -245,13 +246,18 @@ const Details = ({
   useEffect(() => {
     const patientId = localStorage.getItem("patientId");
     setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
-    if(activeTab == 3 || activeTab == 4){
+    if (activeTab == 3 || activeTab == 4) {
       getPatientDetails(
-        selectPatientId ? selectPatientId?.patirntId : patientId,  
-        activeTab == 3 ? radiologyDetailsResult?.data?.response : labDetailsResult?.data?.response
+        selectPatientId ? selectPatientId?.patirntId : patientId,
+        activeTab == 3
+          ? radiologyDetailsResult?.data?.response
+          : labDetailsResult?.data?.response
       );
-    }   
-  }, [radiologyDetailsResult?.data?.response,labDetailsResult?.data?.response]);
+    }
+  }, [
+    radiologyDetailsResult?.data?.response,
+    labDetailsResult?.data?.response,
+  ]);
 
   useEffect(() => {
     if (patientDetailsResult?.data?.response?.fileId) {
@@ -270,38 +276,40 @@ const Details = ({
 
   const getAllProcessYearSelect = async (result) => {
     const patientId = localStorage.getItem("patientId");
-      var dosResonse = result?.data?.response;
-      var dosYearArr = [];
-      result?.data?.response?.map((res) => {
-        dosYearArr?.push({ value: res, label: res });
-      });
-      setDosYearDefalutSelect(dosYearArr[0]);
-      setSelectedDosValue(dosYearArr[0]?.value);
-      setDosYear(dosYearArr);
-      setIsLoadingDos(false);
-     if(activeTab == 3){
-      getRadiologyDetails(selectPatientId ? selectPatientId?.patirntId : patientId,
+    var dosResonse = result?.data?.response;
+    var dosYearArr = [];
+    result?.data?.response?.map((res) => {
+      dosYearArr?.push({ value: res, label: res });
+    });
+    setDosYearDefalutSelect(dosYearArr[0]);
+    setSelectedDosValue(dosYearArr[0]?.value);
+    setDosYear(dosYearArr);
+    setIsLoadingDos(false);
+    if (activeTab == 3) {
+      getRadiologyDetails(
+        selectPatientId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0]?.value,
         null,
-        setIsSpinnerLoading,
-      )
+        setIsSpinnerLoading
+      );
       getPatientRadiologyDosList(
         selectPatientId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0]?.value
       );
-     }
-      if(activeTab == 4){
-      getLabDetails(selectPatientId ? selectPatientId?.patirntId : patientId,
+    }
+    if (activeTab == 4) {
+      getLabDetails(
+        selectPatientId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0]?.value,
         null,
-        setIsSpinnerLoading,
-      )
+        setIsSpinnerLoading
+      );
       getPatientLabDosList(
         selectPatientId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0]?.value
       );
-     }
-     if(activeTab == 1){
+    }
+    if (activeTab == 1) {
       getpatientDetailsData(
         selectPatientId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0]?.value,
@@ -320,10 +328,10 @@ const Details = ({
         selectPatientId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0]?.value
       );
-     }
+    }
   };
 
-  const getPatientDetails = async (patientId,fileResponse) => {
+  const getPatientDetails = async (patientId, fileResponse) => {
     setHccValidCount(0);
     if (fileResponse) {
       var result = fileResponse;
@@ -401,6 +409,9 @@ const Details = ({
       setTimeLineData(result);
       setFilterDataLoading(false);
     }
+    if (value == "Add DOS & Provider") {
+      setFlagContainerActiveTitle("Add DOS & Provider");
+    }
   };
 
   const flagList = [
@@ -424,11 +435,21 @@ const Details = ({
       name: "Notes",
       icon: SVGICON.notsIcon,
     },
+    {
+      name: "Add DOS & Provider",
+      icon: SVGICON.notsIcon,
+    },
   ];
 
   const getPatientListToDetails = (userId, orgId, tenantId) => {
     setIsLoading(true);
-    getpatientDetailsData(userId, selectedDosValue, null, setIsLoading, userRole);
+    getpatientDetailsData(
+      userId,
+      selectedDosValue,
+      null,
+      setIsLoading,
+      userRole
+    );
     getPatientIdData(userId);
     setLocalPatientId(userId);
   };
@@ -595,18 +616,20 @@ const Details = ({
     setShowTerminal(false);
   }, []);
 
-
   const getMastData = (value) => {
-    if(value){
-      return value.split('').splice(0,3).join('') + "xxxx"
+    if (value) {
+      return value.split("").splice(0, 3).join("") + "xxxx";
     }
-  }
+  };
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`} style={{height:"100vh",background:"#fff"}}>
+      <div
+        className={`show ${sideMenu ? "menu-toggle" : ""}`}
+        style={{ height: "100vh", background: "#fff" }}
+      >
         <NavBar />
-        <div className={visitStyles.headerFixed} style={{height:"100%"}}>
+        <div className={visitStyles.headerFixed} style={{ height: "100%" }}>
           {isSpinnerLoading ? (
             <LogoLoader />
           ) : (
@@ -619,406 +642,442 @@ const Details = ({
                 <div className="row patient-file-container">
                   <div className="col-xl-12">
                     <div className="row">
-                      {(activeTab == 1 || activeTab == 2)  ?
-                      <>
-                        <div
-                        className="col-xl-1 col-sm-12"
-                        style={{ zIndex: "1" }}
-                      >
-                        <Button
-                          onClick={backToPatientData}
-                          className={`ms-2 ${visitStyles.backArrowBtn}`}
-                        >
-                          <FontAwesomeIcon
-                            icon={faArrowLeft}
-                            style={{
-                              color: "rgb(38 50 107)",
-                            }}
-                          />
-                        </Button>
-                      </div>
-                      <div
-                        className={`${
-                          !screenWidth || screenWidth > 1500
-                            ? "col-xl-7"
-                            : "col-xl-10"
-                        } col-sm-12`}
-                      >
-                        <div className={`${visitStyles.patient_info_details}`}>
-                          <div className="card-body">
-                            <div className="row">
-                              <div className="col-xl-2 col-sm-12">
-                                <FontAwesomeIcon icon={faIdCardClip} />
-                                <label>Patient ID</label>
-                                {/* <Tooltip
+                      {activeTab == 1 || activeTab == 2 ? (
+                        <>
+                          <div
+                            className="col-xl-1 col-sm-12"
+                            style={{ zIndex: "1" }}
+                          >
+                            <Button
+                              onClick={backToPatientData}
+                              className={`ms-2 ${visitStyles.backArrowBtn}`}
+                            >
+                              <FontAwesomeIcon
+                                icon={faArrowLeft}
+                                style={{
+                                  color: "rgb(38 50 107)",
+                                }}
+                              />
+                            </Button>
+                          </div>
+                          <div
+                            className={`${
+                              !screenWidth || screenWidth > 1500
+                                ? "col-xl-7"
+                                : "col-xl-10"
+                            } col-sm-12`}
+                          >
+                            <div
+                              className={`${visitStyles.patient_info_details}`}
+                            >
+                              <div className="card-body">
+                                <div className="row">
+                                  <div className="col-xl-2 col-sm-12">
+                                    <FontAwesomeIcon icon={faIdCardClip} />
+                                    <label>Patient ID</label>
+                                    {/* <Tooltip
                                   placement="bottom"
                                   title={patientDocumentResult.patientId}
                                 > */}
-                                  <h6
-                                    onClick={() =>
-                                      handleCopyToClipboard({
-                                        text: patientDocumentResult.patientId,
-                                        setCopied: setCopied,
-                                      })
-                                    }
-                                    className="ageDtails"
-                                    style={{
-                                      paddingLeft: "25px",
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    {getMastData(patientDocumentResult.patientId)} 
-                                  </h6>
-                                {/* </Tooltip> */}
-                              </div>
-                              <div className="col-xl-2 col-sm-12">
-                                <FontAwesomeIcon icon={faUserCircle} />
+                                    <h6
+                                      onClick={() =>
+                                        handleCopyToClipboard({
+                                          text: patientDocumentResult.patientId,
+                                          setCopied: setCopied,
+                                        })
+                                      }
+                                      className="ageDtails"
+                                      style={{
+                                        paddingLeft: "25px",
+                                        cursor: "pointer",
+                                      }}
+                                    >
+                                      {getMastData(
+                                        patientDocumentResult.patientId
+                                      )}
+                                    </h6>
+                                    {/* </Tooltip> */}
+                                  </div>
+                                  <div className="col-xl-2 col-sm-12">
+                                    <FontAwesomeIcon icon={faUserCircle} />
 
-                                <label>Patient Name</label>
-                                {/* <Tooltip
+                                    <label>Patient Name</label>
+                                    {/* <Tooltip
                                   placement="bottom"
                                   title={patientDocumentResult.patientId}
                                 > */}
-                                  <h6 className="ageDtails">
-                                    {getMastData(patientDocumentResult.patientId)}  
-                                  </h6>
-                                {/* </Tooltip> */}
-                              </div>
-                              <div className="col-xl-2 col-sm-12">
-                                <FontAwesomeIcon icon={faFile} />
+                                    <h6 className="ageDtails">
+                                      {getMastData(
+                                        patientDocumentResult.patientId
+                                      )}
+                                    </h6>
+                                    {/* </Tooltip> */}
+                                  </div>
+                                  <div className="col-xl-2 col-sm-12">
+                                    <FontAwesomeIcon icon={faFile} />
 
-                                <label>File Name</label>
-                                <h6 className="ageDtails">
-                                  {
-                                    patientDocumentResult?.fileDetailDTO
-                                      ?.fileName
-                                  }
-                                </h6>
-                              </div>
-                              <div className="col-xl-1 col-sm-12">
-                                <FontAwesomeIcon icon={faCalendarAlt} />
-                                <label>Age</label>
-                                <h6
-                                  className="ageDtails"
-                                  style={{ paddingLeft: "20px" }}
-                                >
-                                  {patientDocumentResult.age}
-                                </h6>
-                              </div>
-                              <div className="col-xl-2 col-sm-12">
-                                <FontAwesomeIcon icon={faVenusMars} />
-                                <label>Gender</label>
-                                <h6
-                                  className="ageDtails"
-                                  style={{ paddingLeft: "25px" }}
-                                >
-                                  {patientDocumentResult.gender}
-                                </h6>
-                              </div>
-                              <div className="col-xl-2 col-sm-12">
-                                <i className={visitStyles.dob_icon}>
-                                  {SVGICON.DatebirthIcon}
-                                </i>
-                                <label>DOB</label>
-                                <h6 className="ageDtails">
-                                  {patientDocumentResult.dob}
-                                </h6>
-                              </div>
-                              <div className="col-xl-1 col-sm-12">
-                                <div
-                                  className={`${visitStyles.priorityStatus} p-0`}
-                                >
-                                  {patienIdDetails?.priority == "URGENT" ? (
-                                    <div
-                                      className={visitStyles.priorityStatusIcon}
+                                    <label>File Name</label>
+                                    <h6 className="ageDtails">
+                                      {
+                                        patientDocumentResult?.fileDetailDTO
+                                          ?.fileName
+                                      }
+                                    </h6>
+                                  </div>
+                                  <div className="col-xl-1 col-sm-12">
+                                    <FontAwesomeIcon icon={faCalendarAlt} />
+                                    <label>Age</label>
+                                    <h6
+                                      className="ageDtails"
+                                      style={{ paddingLeft: "20px" }}
                                     >
-                                      <i>{SVGICON.alert}</i>
-                                      <span
-                                        style={{
-                                          fontSize: "13px",
-                                          fontWeight: 500,
-                                          color: "red",
-                                        }}
-                                      >
-                                        Urgent
-                                      </span>
-                                    </div>
-                                  ) : patienIdDetails?.priority == "HIGH" ? (
-                                    <div
-                                      className={visitStyles.priorityStatusIcon}
+                                      {patientDocumentResult.age}
+                                    </h6>
+                                  </div>
+                                  <div className="col-xl-2 col-sm-12">
+                                    <FontAwesomeIcon icon={faVenusMars} />
+                                    <label>Gender</label>
+                                    <h6
+                                      className="ageDtails"
+                                      style={{ paddingLeft: "25px" }}
                                     >
-                                      <i className={TableStyle.highFlag}>
-                                        {SVGICON.alert}
-                                      </i>
-                                      <span
-                                        style={{
-                                          fontSize: "13px",
-                                          fontWeight: 500,
-                                          color: "#cf940a",
-                                        }}
-                                      >
-                                        High
-                                      </span>
-                                    </div>
-                                  ) : patienIdDetails?.priority == "NORMAL" ? (
+                                      {patientDocumentResult.gender}
+                                    </h6>
+                                  </div>
+                                  <div className="col-xl-2 col-sm-12">
+                                    <i className={visitStyles.dob_icon}>
+                                      {SVGICON.DatebirthIcon}
+                                    </i>
+                                    <label>DOB</label>
+                                    <h6 className="ageDtails">
+                                      {patientDocumentResult.dob}
+                                    </h6>
+                                  </div>
+                                  <div className="col-xl-1 col-sm-12">
                                     <div
-                                      className={visitStyles.priorityStatusIcon}
+                                      className={`${visitStyles.priorityStatus} p-0`}
                                     >
-                                      <i className={TableStyle.normalFlag}>
-                                        {SVGICON.alert}
-                                      </i>
-                                      <span
-                                        style={{
-                                          fontSize: "13px",
-                                          fontWeight: 500,
-                                          color: "#4466ff ",
-                                        }}
-                                      >
-                                        Normal
-                                      </span>
+                                      {patienIdDetails?.priority == "URGENT" ? (
+                                        <div
+                                          className={
+                                            visitStyles.priorityStatusIcon
+                                          }
+                                        >
+                                          <i>{SVGICON.alert}</i>
+                                          <span
+                                            style={{
+                                              fontSize: "13px",
+                                              fontWeight: 500,
+                                              color: "red",
+                                            }}
+                                          >
+                                            Urgent
+                                          </span>
+                                        </div>
+                                      ) : patienIdDetails?.priority ==
+                                        "HIGH" ? (
+                                        <div
+                                          className={
+                                            visitStyles.priorityStatusIcon
+                                          }
+                                        >
+                                          <i className={TableStyle.highFlag}>
+                                            {SVGICON.alert}
+                                          </i>
+                                          <span
+                                            style={{
+                                              fontSize: "13px",
+                                              fontWeight: 500,
+                                              color: "#cf940a",
+                                            }}
+                                          >
+                                            High
+                                          </span>
+                                        </div>
+                                      ) : patienIdDetails?.priority ==
+                                        "NORMAL" ? (
+                                        <div
+                                          className={
+                                            visitStyles.priorityStatusIcon
+                                          }
+                                        >
+                                          <i className={TableStyle.normalFlag}>
+                                            {SVGICON.alert}
+                                          </i>
+                                          <span
+                                            style={{
+                                              fontSize: "13px",
+                                              fontWeight: 500,
+                                              color: "#4466ff ",
+                                            }}
+                                          >
+                                            Normal
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <div
+                                          className={
+                                            visitStyles.priorityStatusIcon
+                                          }
+                                        >
+                                          <i className={TableStyle.lowFlag}>
+                                            {SVGICON.alert}
+                                          </i>
+                                          <span
+                                            style={{
+                                              fontSize: "13px",
+                                              fontWeight: 500,
+                                              color: "#87909e",
+                                            }}
+                                          >
+                                            Low
+                                          </span>
+                                        </div>
+                                      )}
                                     </div>
-                                  ) : (
-                                    <div
-                                      className={visitStyles.priorityStatusIcon}
-                                    >
-                                      <i className={TableStyle.lowFlag}>
-                                        {SVGICON.alert}
-                                      </i>
-                                      <span
-                                        style={{
-                                          fontSize: "13px",
-                                          fontWeight: 500,
-                                          color: "#87909e",
-                                        }}
-                                      >
-                                        Low
-                                      </span>
-                                    </div>
-                                  )}
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                      <div
-                        className={`${
-                          !screenWidth || screenWidth > 1500
-                            ? "col-xl-1"
-                            : "col-xl-2"
-                        } col-sm-12`}
-                      >
-                        <div className={visitStyles.priorityStatus}>
-                          <div className={`${visitStyles.hccCountHeader} `}>
-                            <label>CMS</label>
+                          <div
+                            className={`${
+                              !screenWidth || screenWidth > 1500
+                                ? "col-xl-1"
+                                : "col-xl-2"
+                            } col-sm-12`}
+                          >
+                            <div className={visitStyles.priorityStatus}>
+                              <div className={`${visitStyles.hccCountHeader} `}>
+                                <label>CMS</label>
 
-                            <h6 className="ageDtails">{hccCounts.isCmsHcc}</h6>
-                          </div>
-                          <div className={`${visitStyles.hccCountHeader} `}>
-                            <label>RX</label>
+                                <h6 className="ageDtails">
+                                  {hccCounts.isCmsHcc}
+                                </h6>
+                              </div>
+                              <div className={`${visitStyles.hccCountHeader} `}>
+                                <label>RX</label>
 
-                            <h6 className="ageDtails">{hccCounts.isRxHcc}</h6>
-                          </div>
-                          <div className={`${visitStyles.hccCountHeader} `}>
-                            <label>TOTAL</label>
+                                <h6 className="ageDtails">
+                                  {hccCounts.isRxHcc}
+                                </h6>
+                              </div>
+                              <div className={`${visitStyles.hccCountHeader} `}>
+                                <label>TOTAL</label>
 
-                            <h6 className="ageDtails">{hccValidCount}</h6>
+                                <h6 className="ageDtails">{hccValidCount}</h6>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                      <div
-                        className={`${
-                          !screenWidth || screenWidth > 1500
-                            ? "col-xl-1"
-                            : "col-xl-2"
-                        } col-sm-12 px-4 d-flex`}
-                      >
-                        <div className={`${visitStyles.rafscoreheader} `}>
-                          <label>Score</label>
-                          {patientDetails?.rafScore?.rafVersionDTO
-                            ?.overAllScore != null ? (
-                            <h6 className="ageDtails">
-                              {patientDetails?.rafScore?.rafVersionDTO?.overAllScore?.toFixed(
-                                3
+                          <div
+                            className={`${
+                              !screenWidth || screenWidth > 1500
+                                ? "col-xl-1"
+                                : "col-xl-2"
+                            } col-sm-12 px-4 d-flex`}
+                          >
+                            <div className={`${visitStyles.rafscoreheader} `}>
+                              <label>Score</label>
+                              {patientDetails?.rafScore?.rafVersionDTO
+                                ?.overAllScore != null ? (
+                                <h6 className="ageDtails">
+                                  {patientDetails?.rafScore?.rafVersionDTO?.overAllScore?.toFixed(
+                                    3
+                                  )}
+                                </h6>
+                              ) : (
+                                <h6 className="ageDtails">0.00</h6>
                               )}
-                            </h6>
-                          ) : (
-                            <h6 className="ageDtails">0.00</h6>
-                          )}
-                        </div>
-                        <span
-                          className={`${visitStyles.commentsName} ${visitStyles.statusFLag}`}
-                        >
-                          {/* {flagFirstData.flag} */}
-                          {flagFirstData?.flag == "PATIENT_NAME_MISSED" ? (
-                            <Tooltip
-                              title="PATIENT_NAME_MISSED"
-                              placement="bottom"
+                            </div>
+                            <span
+                              className={`${visitStyles.commentsName} ${visitStyles.statusFLag}`}
                             >
-                              <i className={visitStyles.name_missed}>
-                                {SVGICON.emptyFlagSmallLarge}
-                              </i>
-                            </Tooltip>
-                          ) : flagFirstData?.flag == "PATIENT_DOB_MISSED" ? (
-                            <Tooltip
-                              title="PATIENT_DOB_MISSED"
-                              placement="bottom"
-                            >
-                              <i className={visitStyles.dob_missed}>
-                                {SVGICON.emptyFlagSmallLarge}
-                              </i>
-                            </Tooltip>
-                          ) : flagFirstData?.flag == "MRN_ID_MISMATCH" ? (
-                            <Tooltip title="MRN_ID_MISMATCH" placement="bottom">
-                              <i className={visitStyles.id_missed}>
-                                {SVGICON.emptyFlagSmallLarge}
-                              </i>
-                            </Tooltip>
-                          ) : flagFirstData?.flag == "PROVIDER_SIGN_MISSED" ? (
-                            <Tooltip
-                              title="PROVIDER_SIGN_MISSED"
-                              placement="bottom"
-                            >
-                              <i className={visitStyles.sign_missed}>
-                                {SVGICON.emptyFlagSmallLarge}
-                              </i>
-                            </Tooltip>
-                          ) : flagFirstData?.flag ==
-                            "PROVIDER_SIGNATURE_MISSED" ? (
-                            <Tooltip
-                              title="PROVIDER_SIGNATURE_MISSED"
-                              placement="bottom"
-                            >
-                              <i className={visitStyles.signature_missed}>
-                                {SVGICON.emptyFlagSmallLarge}
-                              </i>
-                            </Tooltip>
-                          ) : flagFirstData?.flag ==
-                            "PROVIDER_CREDENTIAL_MISSED" ? (
-                            <Tooltip
-                              title="PROVIDER_CREDENTIAL_MISSED"
-                              placement="bottom"
-                            >
-                              <i className={visitStyles.cred_missed}>
-                                {SVGICON.emptyFlagSmallLarge}
-                              </i>
-                            </Tooltip>
-                          ) : flagFirstData?.flag ==
-                            "PROVIDER_SIGN_STATUS_PENDING" ? (
-                            <Tooltip
-                              title="PROVIDER_SIGN_STATUS_PENDING"
-                              placement="bottom"
-                            >
-                              <i className={visitStyles.sign_status}>
-                                {SVGICON.emptyFlagSmallLarge}
-                              </i>
-                            </Tooltip>
-                          ) : flagFirstData?.flag == "NO_HCC_FOUND" ? (
-                            <Tooltip title="NO_HCC_FOUND" placement="bottom">
-                              <i className={visitStyles.no_hcc_found}>
-                                {SVGICON.emptyFlagSmallLarge}
-                              </i>
-                            </Tooltip>
-                          ) : flagFirstData?.flag ==
-                            "NO_VALID_DOCUMENT_FOUND" ? (
-                            <Tooltip
-                              title="NO_VALID_DOCUMENT_FOUND"
-                              placement="bottom"
-                            >
-                              <i className={visitStyles.no_doc_found}>
-                                {SVGICON.emptyFlagSmallLarge}
-                              </i>
-                            </Tooltip>
-                          ) : flagFirstData?.flag == "PATIENT_DECEASED" ? (
-                            <Tooltip
-                              title="PATIENT_DECEASED"
-                              placement="bottom"
-                            >
-                              <i className={visitStyles.patient_diseased}>
-                                {SVGICON.emptyFlagSmallLarge}
-                              </i>
-                            </Tooltip>
-                          ) : flagFirstData?.flag == "PATIENT_INACTIVE" ? (
-                            <Tooltip
-                              title="PATIENT_INACTIVE"
-                              placement="bottom"
-                            >
-                              <i className={visitStyles.patient_inactive}>
-                                {SVGICON.emptyFlagSmallLarge}
-                              </i>
-                            </Tooltip>
-                          ) : null}
-                        </span>
-                      </div>
+                              {/* {flagFirstData.flag} */}
+                              {flagFirstData?.flag == "PATIENT_NAME_MISSED" ? (
+                                <Tooltip
+                                  title="PATIENT_NAME_MISSED"
+                                  placement="bottom"
+                                >
+                                  <i className={visitStyles.name_missed}>
+                                    {SVGICON.emptyFlagSmallLarge}
+                                  </i>
+                                </Tooltip>
+                              ) : flagFirstData?.flag ==
+                                "PATIENT_DOB_MISSED" ? (
+                                <Tooltip
+                                  title="PATIENT_DOB_MISSED"
+                                  placement="bottom"
+                                >
+                                  <i className={visitStyles.dob_missed}>
+                                    {SVGICON.emptyFlagSmallLarge}
+                                  </i>
+                                </Tooltip>
+                              ) : flagFirstData?.flag == "MRN_ID_MISMATCH" ? (
+                                <Tooltip
+                                  title="MRN_ID_MISMATCH"
+                                  placement="bottom"
+                                >
+                                  <i className={visitStyles.id_missed}>
+                                    {SVGICON.emptyFlagSmallLarge}
+                                  </i>
+                                </Tooltip>
+                              ) : flagFirstData?.flag ==
+                                "PROVIDER_SIGN_MISSED" ? (
+                                <Tooltip
+                                  title="PROVIDER_SIGN_MISSED"
+                                  placement="bottom"
+                                >
+                                  <i className={visitStyles.sign_missed}>
+                                    {SVGICON.emptyFlagSmallLarge}
+                                  </i>
+                                </Tooltip>
+                              ) : flagFirstData?.flag ==
+                                "PROVIDER_SIGNATURE_MISSED" ? (
+                                <Tooltip
+                                  title="PROVIDER_SIGNATURE_MISSED"
+                                  placement="bottom"
+                                >
+                                  <i className={visitStyles.signature_missed}>
+                                    {SVGICON.emptyFlagSmallLarge}
+                                  </i>
+                                </Tooltip>
+                              ) : flagFirstData?.flag ==
+                                "PROVIDER_CREDENTIAL_MISSED" ? (
+                                <Tooltip
+                                  title="PROVIDER_CREDENTIAL_MISSED"
+                                  placement="bottom"
+                                >
+                                  <i className={visitStyles.cred_missed}>
+                                    {SVGICON.emptyFlagSmallLarge}
+                                  </i>
+                                </Tooltip>
+                              ) : flagFirstData?.flag ==
+                                "PROVIDER_SIGN_STATUS_PENDING" ? (
+                                <Tooltip
+                                  title="PROVIDER_SIGN_STATUS_PENDING"
+                                  placement="bottom"
+                                >
+                                  <i className={visitStyles.sign_status}>
+                                    {SVGICON.emptyFlagSmallLarge}
+                                  </i>
+                                </Tooltip>
+                              ) : flagFirstData?.flag == "NO_HCC_FOUND" ? (
+                                <Tooltip
+                                  title="NO_HCC_FOUND"
+                                  placement="bottom"
+                                >
+                                  <i className={visitStyles.no_hcc_found}>
+                                    {SVGICON.emptyFlagSmallLarge}
+                                  </i>
+                                </Tooltip>
+                              ) : flagFirstData?.flag ==
+                                "NO_VALID_DOCUMENT_FOUND" ? (
+                                <Tooltip
+                                  title="NO_VALID_DOCUMENT_FOUND"
+                                  placement="bottom"
+                                >
+                                  <i className={visitStyles.no_doc_found}>
+                                    {SVGICON.emptyFlagSmallLarge}
+                                  </i>
+                                </Tooltip>
+                              ) : flagFirstData?.flag == "PATIENT_DECEASED" ? (
+                                <Tooltip
+                                  title="PATIENT_DECEASED"
+                                  placement="bottom"
+                                >
+                                  <i className={visitStyles.patient_diseased}>
+                                    {SVGICON.emptyFlagSmallLarge}
+                                  </i>
+                                </Tooltip>
+                              ) : flagFirstData?.flag == "PATIENT_INACTIVE" ? (
+                                <Tooltip
+                                  title="PATIENT_INACTIVE"
+                                  placement="bottom"
+                                >
+                                  <i className={visitStyles.patient_inactive}>
+                                    {SVGICON.emptyFlagSmallLarge}
+                                  </i>
+                                </Tooltip>
+                              ) : null}
+                            </span>
+                          </div>
 
-                      <div className="col-xl-1 col-sm-2">
-                        <div className="card-body">
-                          <div className="row">
-                            <div className="col-xl-12 col-sm-12">
-                              {!isLoadingDos ? (
-                                <>
-                                  <Select
-                                    value={dosYearDefalutSelect}
-                                    onChange={(e) => dosOnChange(e)}
-                                    className={`custom_select_type ${visitStyles.custom_select_type}`}
-                                    options={dosYear}
-                                    style={{
-                                      backgroundColor: "#F3F3FF",
-                                      width: "120px",
-                                    }}
-                                  />
-                                  {/* <Select
+                          <div className="col-xl-1 col-sm-2">
+                            <div className="card-body">
+                              <div className="row">
+                                <div className="col-xl-12 col-sm-12">
+                                  {!isLoadingDos ? (
+                                    <>
+                                      <Select
+                                        value={dosYearDefalutSelect}
+                                        onChange={(e) => dosOnChange(e)}
+                                        className={`custom_select_type ${visitStyles.custom_select_type}`}
+                                        options={dosYear}
+                                        style={{
+                                          backgroundColor: "#F3F3FF",
+                                          width: "120px",
+                                        }}
+                                      />
+                                      {/* <Select
                                     onChange={(e) => dosOnChange(e)}
                                     options={dosYear}
                                     className={`custom-react-select ${visitStyles.dosSelectPicker}`}
                                     defaultValue={dosYearDefalutSelect}
                                     isSearchable={false}
                                   /> */}
-                                </>
-                              ) : null}
+                                    </>
+                                  ) : null}
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                      <div
-                        className={`${
-                          !screenWidth || screenWidth > 1500
-                            ? "col-xl-1"
-                            : "col-xl-2"
-                        } col-sm-12`}
-                      >
-                        <StatusAction />
-                      </div>
-                      </>:
-                      <>
-                       <div
-                        className="col-xl-1 col-sm-12"
-                        style={{ zIndex: "1" ,marginTop:"20px"}}
-                      >
-                        <Button
-                          onClick={backToPatientData}
-                          className={`ms-2 ${visitStyles.backArrowBtn}`}
-                        >
-                          <FontAwesomeIcon
-                            icon={faArrowLeft}
-                            style={{
-                              color: "rgb(38 50 107)",
-                            }}
-                          />
-                        </Button>
-                      </div>
-                      <div className="col-xl-11">
-                        <FileDetails title={activeTab == 3 ? "Radiology" : "LAB"} patienIdDetails={patienIdDetails} patientDetails={patientDetails} fileResult={patientDocumentResult} hccCounts={hccCounts} hccValidCount={hccValidCount} flagFirstData={flagFirstData}/>
-                      </div>
-                      </>
-                    }
+                          <div
+                            className={`${
+                              !screenWidth || screenWidth > 1500
+                                ? "col-xl-1"
+                                : "col-xl-2"
+                            } col-sm-12`}
+                          >
+                            <StatusAction />
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div
+                            className="col-xl-1 col-sm-12"
+                            style={{ zIndex: "1", marginTop: "20px" }}
+                          >
+                            <Button
+                              onClick={backToPatientData}
+                              className={`ms-2 ${visitStyles.backArrowBtn}`}
+                            >
+                              <FontAwesomeIcon
+                                icon={faArrowLeft}
+                                style={{
+                                  color: "rgb(38 50 107)",
+                                }}
+                              />
+                            </Button>
+                          </div>
+                          <div className="col-xl-11">
+                            <FileDetails
+                              title={activeTab == 3 ? "Radiology" : "LAB"}
+                              patienIdDetails={patienIdDetails}
+                              patientDetails={patientDetails}
+                              fileResult={patientDocumentResult}
+                              hccCounts={hccCounts}
+                              hccValidCount={hccValidCount}
+                              flagFirstData={flagFirstData}
+                            />
+                          </div>
+                        </>
+                      )}
                       <div
                         className={
                           isSideNavShow
                             ? `${visitStyles.visitDataMain}`
                             : `${visitStyles.visitDataMainClose}`
                         }
-                        
                       >
                         <div className={`${visitStyles.firstContainer}`}>
                           <div
@@ -1167,7 +1226,10 @@ const Details = ({
                           </div>
                         </div>
 
-                        <div className={`${visitStyles.secondContainer}`} style={{height:"100%"}}>
+                        <div
+                          className={`${visitStyles.secondContainer}`}
+                          style={{ height: "100%" }}
+                        >
                           <>
                             {activeTab == 1 ? (
                               <Hcc
@@ -1232,11 +1294,14 @@ const Details = ({
 
                   <Drawer
                     onClose={handleCloseModal}
-                    open={isModalComments}                 
-                    width={ 
-                        flagContainerActiveTitle === "Timeline"
-                          ? "460px"
-                          : null
+                    open={isModalComments}
+                    width={
+                      flagContainerActiveTitle === "Timeline"
+                        ? "460px"
+                        : flagContainerActiveTitle ===
+                          "Add DOS & Provider"
+                        ? "1200px"
+                        : null
                     }
                     title={flagContainerActiveTitle}
                     placement="right"
@@ -1282,6 +1347,9 @@ const Details = ({
                           />
                         )}
                       </>
+                    ) : flagContainerActive ===
+                      "Add DOS & Provider" ? (
+                      <ManuallyAddProvider />
                     ) : null}
                   </Drawer>
                 </div>
@@ -1324,8 +1392,6 @@ const enhancer = connect(
     processedYearResult: state?.patientDetails.details?.processedYear,
     radiologyDetailsResult: state?.patientDetails?.details?.radiologyResult,
     labDetailsResult: state?.patientDetails?.details?.labResult,
-
-
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -1342,10 +1408,9 @@ const enhancer = connect(
     getRadiologyFileClear: detailsActions.radiologyDetailsActionSetEmpty,
     getAllProcessYear: detailsActions.getAllProcessYearAction,
     getPatientRadiologyDosList: detailsActions.radiologyDosDeatilsAction,
-    getRadiologyDetails:detailsActions.radiologyDetailsAction,
-    getPatientLabDosList: detailsActions.labDosDeatilsAction, 
-    getLabDetails:detailsActions.labDetailsAction,
-  
+    getRadiologyDetails: detailsActions.radiologyDetailsAction,
+    getPatientLabDosList: detailsActions.labDosDeatilsAction,
+    getLabDetails: detailsActions.labDetailsAction,
   }
 );
 export default enhancer(Details);
