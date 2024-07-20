@@ -14098,8 +14098,8 @@ overflow: scroll;
 /* Default (light) theme */
 :root {
   --scrollbar-track: transparent;
-  --scrollbar-thumb: rgb(155, 155, 155);
-  --scrollbar-thumb-hover: grey;
+  /* --scrollbar-thumb: rgb(155, 155, 155);
+  --scrollbar-thumb-hover: grey; */
   --scrollbar-width: 3px;
 }
 
@@ -14107,7 +14107,7 @@ overflow: scroll;
 
 /* Firefox */
 * {
-  scrollbar-width: thin;
+  /* scrollbar-width: thin; */
   /* none | auto  */
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
