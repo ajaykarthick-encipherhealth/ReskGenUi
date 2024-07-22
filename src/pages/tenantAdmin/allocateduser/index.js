@@ -242,13 +242,13 @@ const Patient = ({
     if (activeTab === 1) {
       setSearchStr(search);
     }
-    // else {
-    //   if (!isPatientList) {
-    //     getAuditL2List(pageNo, search);
-    //   } else {
-    //     getL2PatientList(l2selectUser, pageNoL2Patient, sort, search);
-    //   }
-    // }
+    else {
+      if (!isPatientList) {
+        getAuditL2List(pageNo, search);
+      } else {
+        getL2PatientList(l2selectUser, pageNoL2Patient, sort, search);
+      }
+    }
   };
   const debounceFunc = useCallback(
     debounce((text, activeTab) => searchFunction(text, activeTab), 900),
