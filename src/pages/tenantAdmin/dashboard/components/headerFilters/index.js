@@ -63,26 +63,16 @@ const index = ({
     })
   );
 
-  // function addOneYear(date) {
-  //   date.setFullYear(date.getFullYear() + 1);
-  //   return date;
-  // }
-  // const date = new Date(dateRange.startDate);
-  // console.log(date, "date");
-  // const newDate = addOneYear(date);
-  // console.log(newDate, "new");
-
-
-  const disableDate = (current, { from }) => {
-    const isFutureDate = disableFutureDates(current);
-    if (from) {
-      const curMonth = current.year() * 12 + current.month();
-      const fromMonth = from.year() * 12 + from.month();
-      return isFutureDate || Math.abs(fromMonth - curMonth) >= 12;
-    }
-    return isFutureDate;
-  };
  
+  const disabled1YearDate = (current, { from }) => {
+    if (disableFutureDates(current)) {
+      return true;
+    }
+    if (from) {
+      return Math.abs(current.diff(from, "years")) >= 1;
+    }
+    return false;
+  };
 
   return (
     <div className={styles.container}>
@@ -131,7 +121,7 @@ const index = ({
             <div className="tenantSelector" style={{ width: "100%" }}>
               <RangePicker
                 size="large"
-                disabledDate={disableDate}
+                disabledDate={disabled1YearDate}
                 onChange={(e, value) => handleRange(value)}
                 format={"MM-DD-YYYY"}
                 allowClear={false}
