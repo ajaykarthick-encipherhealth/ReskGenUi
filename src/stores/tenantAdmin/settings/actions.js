@@ -120,3 +120,7 @@ export const addHealthMetric = createActionThunk(
   "ADD_HEALTH_METRIC",
   network.addHealthMetric
 );
+export const manuallyAddedRaf = createActionThunk(
+  "MENUALLY_ADDED_RAF",
+  network.manuallyAddedRaf
+);

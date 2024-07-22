@@ -141,16 +141,18 @@ export async function updateMedicalCoding(obj) {
 export async function codingGuidelines({
   type,
   page = 0,
-  healthMetricType ='',
-  year='',
-  gender='',
-  search=''
+  healthMetricType = "",
+  year = "",
+  gender = "",
+  search = "",
 }) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `management/tenantAdmin/medicalCodingGuidelines?type=${type}&size=15&page=${page}&healthMetricType=${healthMetricType}&year=${year}&gender=${gender}&searchText=${search}`,
+    `management/tenantAdmin/medicalCodingGuidelines?type=${type}&size=15&page=${page}&healthMetricType=${healthMetricType}&year=${year}&gender=${gender}&searchText=${
+      search || ""
+    }`,
     options
   );
   return data;
@@ -304,7 +306,7 @@ export async function editComoridCondition(obj) {
     body: JSON.stringify(obj),
   };
   const data = await requestPortal(
-    `management/tenantAdmin/codes/update`,
+    `management/tenantAdmin/codes/update?year=${obj.year ? obj.year : ''}`,
     options
   );
   return data;
@@ -338,6 +340,17 @@ export async function addHealthMetric(obj) {
   };
   const data = await requestPortal(
     `management/tenantAdmin/medicalCodingGuidelines/updateHealthMetricConfig`,
+    options
+  );
+  return data;
+}
+export async function manuallyAddedRaf(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `management/tenantAdmin/medicalCodingGuidelines/updateRafConfigYearList`,
     options
   );
   return data;
