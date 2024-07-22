@@ -18,6 +18,7 @@ import {
   formatNumber,
   formatValues,
 } from "../../../../../utils/reusable.js";
+import {useSelector } from "react-redux";
 
 const index = ({
   getAllHccCodesData,
@@ -34,6 +35,11 @@ const index = ({
   rafScorechartLoader,
   customDate,
 }) => {
+ 
+  const loading = useSelector(
+    (state) => state?.tenantAdmin?.dashboard?.default?.allHccCodes
+  )
+
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
   const dates =
     selectedValue === "custom"
@@ -62,7 +68,6 @@ const index = ({
   const totalCodes = resultArrayHCC.map(
     (num, index) => num + resultArrayCaregaps[index]
   );
- 
 
   useEffect(() => {
     getAllHccCodesData(
@@ -171,7 +176,7 @@ const index = ({
   const bullets = [
     {
       title: "Total Codes",
-      color: "#E88D67",
+      color: "#0095C2",
     },
     {
       title: "HCC Codes",
@@ -190,9 +195,7 @@ const index = ({
   const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
   const totalScoreTwo = (hccDiseaseCountMap + suggestedCount).toFixed(2);
-
   formatNumber();
-
   const OverAllRevenue = totalScore;
 
   return (
@@ -347,7 +350,6 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
-
     totalCodesLoader:
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
     revenueChartLoader:

@@ -275,7 +275,7 @@ const enhancer = connect(
     top10DiseasesData:
       state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data?.response,
     computingTileStatusLoader:
-      state?.tenantAdmin?.dashboard?.default?.computingTileStatusLoader,
+      state?.tenantAdmin?.dashboard?.default?.allComputingTileStatus?.loading,
     computingStatusLoader:
       state?.tenantAdmin?.dashboard?.default?.allComputingStatus?.loading,
   }),

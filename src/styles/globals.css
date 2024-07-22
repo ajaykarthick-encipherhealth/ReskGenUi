@@ -14946,7 +14946,7 @@ input::-webkit-inner-spin-button {
   position: absolute;
   left: -25px !important;
   top: -21px !important;
-  width: 249px !important;
+  width: 255px !important;
   height: 226px !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);

@@ -15,6 +15,7 @@ const index = ({
   rafLoader,
   dateRange,
   selectedOrganization,
+  selectedValue,
 }) => {
   useEffect(() => {
     rafScoreData(dateRange.startDate, dateRange.endDate, selectedOrganization);
@@ -118,6 +119,7 @@ const index = ({
           borderColor={"#3479FE"}
           isRevenue={true}
           className
+          selectedValue={selectedValue}
         />
       </div>
     </div>
@@ -127,7 +129,8 @@ const index = ({
 const enhancer = connect(
   (state) => ({
     overAllRafScore: state?.tenantAdmin?.dashboard?.default?.allRafScore?.data,
-    rafLoader: state?.tenantAdmin?.dashboard?.default?.rafScoreLoader,
+    rafLoader: state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
+  
   }),
 
   {
