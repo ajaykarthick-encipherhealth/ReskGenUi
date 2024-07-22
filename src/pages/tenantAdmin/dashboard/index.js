@@ -422,8 +422,12 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Accuracy  dateRange={dateRange}
-                      selectedOrganization={selectedOrganization}/>
+                    <Accuracy
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      selectedValue={selectedValue}
+                      customDate={customDate}
+                    />
                   </Card>
                 </div>
                 <div className={`col-lg-3 ${styles.box}`}>
