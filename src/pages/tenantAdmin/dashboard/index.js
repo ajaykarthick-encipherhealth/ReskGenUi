@@ -218,9 +218,6 @@ const Index = ({
       dateRange.endDate,
       selectedOrganization
     );
-
-    console.log(getAllDatesInRange(dateRange.startDate,
-      dateRange.endDate), "teseting");
   }, [dateRange, selectedOrganization]);
 
   return (
