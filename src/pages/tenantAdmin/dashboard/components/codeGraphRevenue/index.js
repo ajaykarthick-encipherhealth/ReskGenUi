@@ -7,7 +7,11 @@ import {
   RafCounts,
   RafCountScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import { formatValues, getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
+import {
+  formatValues,
+  getLast30Days,
+  getLast7Days,
+} from "../../../../../utils/reusable.js";
 
 const codeGraphRevenue = ({
   options,
@@ -23,6 +27,7 @@ const codeGraphRevenue = ({
   getAllHccCodes,
   selectedValue,
   getAllRaf,
+  customDate,
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
@@ -33,15 +38,15 @@ const codeGraphRevenue = ({
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
 
-      const dates =
-      selectedValue === "custom"
-        ? customDate
-        : selectedValue === "last_1_week"
-        ? getLast7Days()
-        : getLast30Days();
-    const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc;
-    const resultArrayHCC = formatValues(premiumByDateForHcc, dates);
+  const dates =
+    selectedValue === "custom"
+      ? customDate
+      : selectedValue === "last_1_week"
+      ? getLast7Days()
+      : getLast30Days();
 
+  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc;
+  const resultArrayHCC = formatValues(premiumByDateForHcc, dates);
 
   const graphOptions = {
     xAxis: {
@@ -58,16 +63,16 @@ const codeGraphRevenue = ({
       type: "value",
       show: true,
     },
-   
+
     tooltip: {
       show: true,
-      trigger: 'axis',
+      trigger: "axis",
       axisPointer: {
-        type: 'cross',
+        type: "cross",
         label: {
-          backgroundColor: '#6a7985'
-        }
-      }
+          backgroundColor: "#6a7985",
+        },
+      },
     },
     series: [
       {

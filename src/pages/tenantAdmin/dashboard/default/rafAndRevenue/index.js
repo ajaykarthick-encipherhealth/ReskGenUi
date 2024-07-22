@@ -16,6 +16,7 @@ const index = ({
   dateRange,
   selectedOrganization,
   selectedValue,
+  customDate,
 }) => {
   useEffect(() => {
     rafScoreData(dateRange.startDate, dateRange.endDate, selectedOrganization);
@@ -104,7 +105,7 @@ const index = ({
             <Skeleton.Avatar active size="large" shape="circle" />
           </div>
         ) : (
-          <ReactECharts option={speedometerOptions} />
+          <ReactECharts   selectedValue={selectedValue} option={speedometerOptions} />
         )}
       </div>
       <div className="revenueChart" style={{ width: "65%" }}>
@@ -119,6 +120,7 @@ const index = ({
           borderColor={"#3479FE"}
           isRevenue={true}
           className
+          customDate={customDate}
           selectedValue={selectedValue}
         />
       </div>
