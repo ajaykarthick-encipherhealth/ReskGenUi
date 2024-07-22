@@ -36,6 +36,7 @@ import { debounce } from "../../../components/input";
 import { useCallback } from "react";
 import { actions as tenantAdminUsersAction } from "../../../stores/tenantAdmin/users";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
+import { renderSkeleton } from "../../../components/reuseableFunctions";
 
 const { RangePicker } = DatePicker;
 const statusOption = [
@@ -526,7 +527,7 @@ const Patient = ({
                                     getNameSearch(e.target.value);
                                   }}
                                   value={searchString}
-                                  className="form-control new-form-control"
+                                  className="form-control new-form-control new-item-control"
                                   placeholder="Search"
                                   maxLength={25}
                                   onKeyDown={(e) => {
@@ -811,7 +812,7 @@ const Patient = ({
                                   eventKey="validDiseases"
                                 >
                                   {loader ? (
-                                    <SpinnerDots />
+                                    renderSkeleton()
                                   ) : (
                                     <>
                                       <AllocatedAdminList
@@ -827,8 +828,10 @@ const Patient = ({
                                         selectedChart={headerCheckValidation}
                                         setSort={setSort}
                                         loading={isLoading}
-                                        sortCompleteOrder={sortCompleteOrder} 
-                                        setSortCompleteOrder={setSortCompleteOrder}
+                                        sortCompleteOrder={sortCompleteOrder}
+                                        setSortCompleteOrder={
+                                          setSortCompleteOrder
+                                        }
                                       />
                                       <div>
                                         <div className="pagination-container">
@@ -858,7 +861,7 @@ const Patient = ({
 
                                 <Tab.Pane id="my-posts" eventKey="team">
                                   {loader2 ? (
-                                    <SpinnerDots />
+                                    renderSkeleton()
                                   ) : (
                                     <>
                                       <div

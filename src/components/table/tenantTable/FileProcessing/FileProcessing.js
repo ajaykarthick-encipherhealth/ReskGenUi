@@ -10,6 +10,7 @@ import { getPatientsList } from "../../../../store/actions/adminAction/fileProce
 import ENDPOINTS from "../../../../utility/enpoints";
 import SpinnerDots from "../../../spinner";
 import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin/tracking";
+import { fileProcessingSkeleton } from "../../admin/FileProcessing/FileProcessing";
 
 // export const eventStreming = (
 //   ENDPOINTS,
@@ -557,7 +558,7 @@ const FileProcessingTable = ({
                 marginTop: stepperVisible ? "10px" : "0",
                 marginLeft: "-40px",
               }}
-              className={errStages[data?.processStageChart]?"errStages":""}
+              className={errStages[data?.processStageChart] ? "errStages" : ""}
             >
               <Steps
                 current={
@@ -567,7 +568,9 @@ const FileProcessingTable = ({
                 }
                 labelPlacement="vertical"
                 items={mappedSteps}
-                percent={failedList|| errStages[data?.processStageChart] ? 0 : count}
+                percent={
+                  failedList || errStages[data?.processStageChart] ? 0 : count
+                }
                 finishIconBorderColor="#000"
               />
             </div>
@@ -608,15 +611,7 @@ const FileProcessingTable = ({
   return (
     <div className={TableStyle.classContaineer}>
       {fileProcessingData?.loading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <SpinnerDots />
-        </div>
+        <div>{fileProcessingSkeleton()}</div>
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classThead}>

@@ -63,7 +63,7 @@ const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult ,processedYear
       dosYearArr.push({ value: res, label: res });
     });
     setDosYearDefalutSelect(dosYearArr[0]);
-    setSelectedDosValue(dosYearArr[0].value);
+    setSelectedDosValue(dosYearArr[0]?.value);
     setDosYear(dosYearArr);
   };
 

@@ -10,6 +10,7 @@ import NoNotification from "../../../../images/dashboard/no-notification.png";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { NotifiAvatar } from "../../../admin/dashboard/notifications";
 
 const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
   const notificationResult = webSocketNotificationData
@@ -69,17 +70,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       <div className={styles.card4}>
         <Card borderRadius="28px" padding="20px">
           {notificationResponse?.loading ? (
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Spin loading={notificationResponse?.loading} />
-            </div>
+            NotifiAvatar()
           ) : (
             <div className={styles.container}>{notificationData}</div>
           )}
@@ -95,9 +86,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
         onCancel={handleOk}
       >
         {notificationResponse?.loading ? (
-          <div className={spinSTYles.spinStyle}>
-            <Spin loading={notificationResponse?.loading} />
-          </div>
+          <div className={spinSTYles.spinStyle}>{NotifiAvatar()}</div>
         ) : (
           <div className={styles.container} style={{ height: "500px" }}>
             {notificationData}

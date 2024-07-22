@@ -76,7 +76,7 @@ const Radiology = ({
       dosYearArr.push({ value: res, label: res });
     });
     // setDosYearDefalutSelect(dosYearArr[0]);
-    setSelectedYearValue(dosYearArr[0].value);
+    setSelectedYearValue(dosYearArr[0]?.value);
     setDosYear(dosYearArr);
   };
 

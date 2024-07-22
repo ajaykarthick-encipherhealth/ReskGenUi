@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 import Image from "next/image";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
-import { Empty, Spin, Select } from "antd";
+import { Empty, Spin, Select, Skeleton } from "antd";
 import Buttonscroller from "../../../../components/buttonSroller";
 import { Buttons } from "../../../reviewer/workingstatus";
 import accuracy from "../../../../images/dashboard/accuracy.png";
@@ -21,6 +21,7 @@ import {
   chartBlockedDates,
   getGraphData,
 } from "../../../admin/dashboard/accuracy";
+import { renderCardSkeleton } from "../../../reviewer/dashboard/accuracy";
 
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -154,7 +155,7 @@ const Accuracy = () => {
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(
       accuracyDatas?.data?.response &&
-        Object.keys(accuracyDatas?.data?.response)?.length
+      Object.keys(accuracyDatas?.data?.response)?.length
     );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
@@ -250,9 +251,8 @@ const Accuracy = () => {
             (item) => item?.monthOfYear === hoveredMonthIndex + 1
           );
         } else {
-          finalData = accuracyDatas?.data?.response?.find((item) =>
-            item?.dayOfMonth  === this.x
-             
+          finalData = accuracyDatas?.data?.response?.find(
+            (item) => item?.dayOfMonth === this.x
           );
         }
 
@@ -407,9 +407,11 @@ const Accuracy = () => {
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
               {accuracyDatas?.loading ? (
-                <div className={spinSTYles.spinStyle}>
-                  <Spin loading={accuracyDatas?.loading} />
-                </div>
+                <Skeleton
+                  active
+                  paragraph={{ rows: 4 }}
+                  style={{ width: "700px", padding: "20px" }}
+                />
               ) : accuracyDatas?.loading === false &&
                 accuracyDatas?.data?.response?.length > 0 ? (
                 option && (
@@ -427,12 +429,16 @@ const Accuracy = () => {
                 </div>
               )}
             </div>
-            <div className={styles.accuracy}>
-              <div className={styles.header}>
-                <Image src={accuracy} className={styles.Img} />
-                <div className={styles.heading}>Quality</div>
-              </div>
-              {/* <div className={styles.month}>
+            {accuracyDatas?.loading ? (
+              <div className={styles.accuracy}>{renderCardSkeleton(230, 250)}</div>
+
+            ) : (
+              <div className={styles.accuracy}>
+                <div className={styles.header}>
+                  <Image src={accuracy} className={styles.Img} />
+                  <div className={styles.heading}>Quality</div>
+                </div>
+                {/* <div className={styles.month}>
                 {currentBtn === "Daily"
                   ? `Day ${currentDate.getDate()}`
                   : currentBtn === "Monthly"
@@ -442,9 +448,9 @@ const Accuracy = () => {
                   <span className={styles.subTitle}>(Current Month)</span>
                 )}
               </div> */}
-              <div className={styles.percentage}>
-                <span className={styles.insideTitle}>
-                  {/* {initialAccuracyData
+                <div className={styles.percentage}>
+                  <span className={styles.insideTitle}>
+                    {/* {initialAccuracyData
                     ? currentBtn === "Monthly"
                       ? `${
                           initialAccuracyData[currentDate?.getMonth()]
@@ -463,10 +469,11 @@ const Accuracy = () => {
                             ?.averageScore
                         }%`
                     : "0%"} */}
-                  {average ? `${average?.toFixed(2)}%` : `0%`}
-                </span>
+                    {average ? `${average?.toFixed(2)}%` : `0%`}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </Card>
       </div>

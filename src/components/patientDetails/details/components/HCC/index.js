@@ -204,7 +204,7 @@ const HccCards = ({
                                   )}
                                 </>
                               )}
-                              {data.children.length > 0 && (
+                              {data?.children?.length > 0 && (
                                 <>
                                   <div
                                     className={visitStyles.tree_icon}

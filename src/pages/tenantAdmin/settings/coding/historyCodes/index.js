@@ -36,40 +36,7 @@ const HistoryCodes = ({
   const [isEdit, setIsEdit] = useState(false);
   const [editRowValue, setEditRowValue] = useState(null);
   const [selectFile, setSelectFile] = useState("");
-  const [tags, setTags] = useState([
-    "plan",
-    "assessment/plan",
-    "Current Medication",
-    "impression/plan",
-    "Impression and Plan",
-    "treatment",
-    "treatments",
-    "hpi",
-    "assessment",
-    "problem",
-    "judgment and insight",
-    "recommendations",
-    "examinations",
-    "examination",
-    "diagnoses",
-    "cognitive assessment",
-    "Todays Treatments",
-    "impression",
-    "problems",
-    "history of present illness",
-    "Todays Diagnoses Include",
-    "today diagnoses include",
-    "mental status exam",
-    "medications",
-    "HPI Summary",
-    "Problem List",
-    "Assessment/Plan Summary",
-    "Assessment/Plan",
-    "Ambulatory Assessment/Plan",
-    "New Medications",
-    "Renewed Medications",
-    "a/p",
-  ]);
+  const [tags, setTags] = useState([]);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [page, setPage] = useState(0);
   const [isCheckeds, setIsCheckeds] = useState(false);
@@ -119,7 +86,11 @@ const HistoryCodes = ({
 
   const getHistorys = async () => {
     try {
-      const res = await getCodingDetails({ type: "HISTORY_CODES", page:page, search: search });
+      const res = await getCodingDetails({
+        type: "HISTORY_CODES",
+        page: page,
+        search: search,
+      });
       if (res?.status == "SUCCESS") {
         setIsChecked({
           captureHistoryCodes: res?.response?.captureHistoryCodes,
@@ -144,6 +115,8 @@ const HistoryCodes = ({
         setIsEdit(false);
         setEditRowValue(null);
         getHistorys();
+      }else if (res.data.status == "USER_DEFINED_ERROR") {
+        getResponePopup(res);
       }
     } catch (error) {
       console.log(error);
@@ -161,6 +134,8 @@ const HistoryCodes = ({
         setIsEdit(false);
         setEditRowValue(null);
         getHistorys();
+      }else if (res.data.status == "USER_DEFINED_ERROR") {
+        getResponePopup(res);
       }
     } catch (error) {
       console.log(error);
@@ -170,7 +145,7 @@ const HistoryCodes = ({
     const formData = new FormData();
     formData.append("file", selectFile.originFileObj);
     formData.append("target", "HISTORY_CODES");
-    formData.append("isDefaultYear", false);
+    formData.append("isDefaultYear", isCheckeds);
     const headers = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -211,7 +186,7 @@ const HistoryCodes = ({
               <div className="d-flex justify-content-start gap-2 mt-4">
                 <div>Year</div>
                 <div>
-                <Switch
+                  <Switch
                     checked={isCheckeds}
                     onChange={(e) => setIsCheckeds(e)}
                   />
@@ -249,66 +224,62 @@ const HistoryCodes = ({
               </div>
             </div>
           </div>
-          <div style={{width: "40%"}}>
-          <div className="d-flex justify-content-between mt-1">
-            <div>{"Do you need an Capture History Codes"}</div>
-            <div className="d-flex justify-content-between">
-              <div name="captureHistoryCodes">
-                <Switch
-                  // className="switch"
-                  checked={isChecked?.captureHistoryCodes}
-                  onChange={(e) => onChange(e, "captureHistoryCodes")}
-                />
-              </div>
-              <div
-                className={`mx-2`}
-              >
-                {isChecked?.captureHistoryCodes ? "Yes" : "No"}
+          <div style={{ width: "40%" }}>
+            <div className="d-flex justify-content-between mt-1">
+              <div>{"Do you need an Capture History Codes"}</div>
+              <div className="d-flex justify-content-between">
+                <div name="captureHistoryCodes">
+                  <Switch
+                    // className="switch"
+                    checked={isChecked?.captureHistoryCodes}
+                    onChange={(e) => onChange(e, "captureHistoryCodes")}
+                  />
+                </div>
+                <div className={`mx-2`}>
+                  {isChecked?.captureHistoryCodes ? "Yes" : "No"}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="d-flex justify-content-between mt-2">
-            <div>{"Do you need an Capture History Codes as ICD Codes"}</div>
-            <div className="d-flex justify-content-between">
-              <div name="captureHistoryCodesAsIcdCodes">
-                <Switch
-                  // className="switch"
-                  checked={isChecked?.captureHistoryCodesAsIcdCodes}
-                  onChange={(e) => onChange(e, "captureHistoryCodesAsIcdCodes")}
-                />
-              </div>
-              <div
-                className={`mx-2`}
-              >
-                {isChecked?.captureHistoryCodesAsIcdCodes
-                  ? "Yes"
-                  : "No"}
-              </div>
-            </div>
-          </div>
-          <div className="d-flex justify-content-between mt-2">
-            <div>{" Do you need general guidelines codes "}</div>
-            <div className="d-flex justify-content-between">
-              <div name="includeGeneralGuidelineCodes">
-                <Switch
-                  // className="switch"
-                  checked={isChecked?.includeGeneralGuidelineCodes}
-                  onChange={(e) => onChange(e, "includeGeneralGuidelineCodes")}
-                />
-              </div>
-              <div
-                className={`mx-2`}
-              >
-                {isChecked?.includeGeneralGuidelineCodes ? "Yes" : "No"}
+            <div className="d-flex justify-content-between mt-2">
+              <div>{"Do you need an Capture History Codes as ICD Codes"}</div>
+              <div className="d-flex justify-content-between">
+                <div name="captureHistoryCodesAsIcdCodes">
+                  <Switch
+                    // className="switch"
+                    checked={isChecked?.captureHistoryCodesAsIcdCodes}
+                    onChange={(e) =>
+                      onChange(e, "captureHistoryCodesAsIcdCodes")
+                    }
+                  />
+                </div>
+                <div className={`mx-2`}>
+                  {isChecked?.captureHistoryCodesAsIcdCodes ? "Yes" : "No"}
+                </div>
               </div>
             </div>
-          </div>
+            <div className="d-flex justify-content-between mt-2">
+              <div>{" Do you need general guidelines codes "}</div>
+              <div className="d-flex justify-content-between">
+                <div name="includeGeneralGuidelineCodes">
+                  <Switch
+                    // className="switch"
+                    checked={isChecked?.includeGeneralGuidelineCodes}
+                    onChange={(e) =>
+                      onChange(e, "includeGeneralGuidelineCodes")
+                    }
+                  />
+                </div>
+                <div className={`mx-2`}>
+                  {isChecked?.includeGeneralGuidelineCodes ? "Yes" : "No"}
+                </div>
+              </div>
+            </div>
           </div>
           <Divider />
           <div className="d-flex justify-content-start  gap-4 mt-4">
             <div className="ms-auto mx-4">
-              <Search setSearch={setSearch} value={search}/>
+              <Search setSearch={setSearch} value={search} />
             </div>
           </div>
           <div>
@@ -323,9 +294,7 @@ const HistoryCodes = ({
               // isNoDelete={false}
               handleDelete={handleDeleteRow}
               paginationFirst={paginationFirst}
-              totalElements={
-                list?.response?.historyCodesPage?.totalElements
-              }
+              totalElements={list?.response?.historyCodesPage?.totalElements}
               onPageChange={onPageChange}
             />
           </div>
@@ -333,8 +302,17 @@ const HistoryCodes = ({
       </div>
       <ModalPop
         openModal={openModal}
-        content={<CommonModalContent tags={tags} setTags={setTags} />}
-        setOpenModal={setOpenModal}
+        content={
+          <CommonModalContent
+            tags={tags}
+            setTags={setTags}
+            isChecked={isCheckeds}
+            target={"HISTORY_CODES"}
+            setOpenModal={() => setOpenModal(false)}
+            isResult={true}
+          />
+        }
+        setOpenModal={() => setOpenModal(false)}
       />
       <Modal
         title="Edit History Codes"

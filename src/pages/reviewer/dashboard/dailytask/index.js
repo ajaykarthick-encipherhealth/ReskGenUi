@@ -14,6 +14,9 @@ import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
 import spinSTYles from "../../../../styles/auth.module.css";
+
+
+
 const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
@@ -222,7 +225,7 @@ const DailyTask = () => {
     );
     return index === firstIndex;
   });
-  const renderCardSkeleton = () => (
+   const renderCardSkeleton = () => (
     <Row gutter={[16, 16]} style={{ display: 'flex', justifyContent: 'space-between' }}>
     {Array.from({ length: 3 }).map((_, index) => (
       <Col

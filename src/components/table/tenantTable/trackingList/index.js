@@ -10,6 +10,7 @@ import {
   sortFunction,
 } from "../../../headerFilters/functions";
 import SpinnerDots from "../../../spinner";
+import { renderSkeleton } from "../../../reuseableFunctions";
 
 function TrackingTable({
   patinetListAll,
@@ -242,7 +243,7 @@ function TrackingTable({
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (
-        <SpinnerDots />
+         renderSkeleton()
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.tenantAdminclassThead}>

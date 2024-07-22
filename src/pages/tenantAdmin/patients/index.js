@@ -23,6 +23,7 @@ import { patientDetails } from "../../../stores/authflow/actions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 import { connect } from "react-redux";
 import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
+import { renderSkeleton } from "../../../components/reuseableFunctions";
 const bullets = [
   {
     color: "#34ace8",
@@ -56,7 +57,7 @@ const Patient = ({
   getAllPatients,
   allPatientList,
   webSocketData,
-  loading
+  loading,
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -663,11 +664,13 @@ const Patient = ({
                         className="dataTables_wrapper no-footer"
                       >
                         {loading ? (
-                          <SpinnerDots />
+                          renderSkeleton()
                         ) : (
                           <>
                             <AddPatientListTable
-                              patinetListAll={allPatientList?.data?.response?.content}
+                              patinetListAll={
+                                allPatientList?.data?.response?.content
+                              }
                               actionBodyTemplate={actionBodyTemplate}
                               statusBodyTemplate={processstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
@@ -684,11 +687,18 @@ const Patient = ({
                                 <Paginator
                                   first={pageNo === 0 ? 0 : paginationFirst}
                                   rows={15}
-                                  totalRecords={allPatientList?.data?.response?.totalElements}
+                                  totalRecords={
+                                    allPatientList?.data?.response
+                                      ?.totalElements
+                                  }
                                   onPageChange={onPageChange}
                                 />
                                 <div className="total-pages">
-                                  Total count: {allPatientList?.data?.response?.totalElements}
+                                  Total count:{" "}
+                                  {
+                                    allPatientList?.data?.response
+                                      ?.totalElements
+                                  }
                                 </div>
                               </div>
                             </div>

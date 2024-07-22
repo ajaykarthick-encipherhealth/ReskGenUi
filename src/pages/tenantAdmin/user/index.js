@@ -18,6 +18,7 @@ import {
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
 import SpinnerDots from "../../../components/spinner";
 import UsersList from "../../../components/table/tenantTable/usersList/usersList";
+import { renderSkeleton } from "../../../components/reuseableFunctions";
 
 const { Option } = Select;
 const options3 = [
@@ -47,7 +48,7 @@ const UserList = ({
   organizationList,
   getAllUsersList,
   usersListData,
-  loading
+  loading,
 }) => {
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.adminUsers.usersData);
@@ -204,7 +205,7 @@ const UserList = ({
       status,
       role,
       orgId: selectOrgList?.value,
-      sort:sort
+      sort: sort,
     });
   }, [
     pageCount,
@@ -308,7 +309,7 @@ const UserList = ({
                       className="dataTables_wrapper no-footer"
                     >
                       {loading ? (
-                        <SpinnerDots />
+                        renderSkeleton()
                       ) : (
                         <>
                           <UsersList
@@ -728,7 +729,7 @@ const enhancer = connect(
   (state) => ({
     organizationList: state?.tenantAdmin?.users?.allOrganization?.data,
     usersListData: state?.tenantAdmin?.users?.allUsers,
-    loading:state?.tenantAdmin?.users?.allUsersLoading
+    loading: state?.tenantAdmin?.users?.allUsersLoading,
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

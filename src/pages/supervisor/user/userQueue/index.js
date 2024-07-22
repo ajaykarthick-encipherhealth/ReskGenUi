@@ -17,6 +17,7 @@ import userStyles from "./styles.module.css";
 import { getFilters } from "../../../../stores/authflow/actions";
 import UserQueueTable from "../../table/userqueue";
 import { actions as allActions } from "../../../../stores/supervisor/users";
+import { renderSkeleton } from "../../../../components/reuseableFunctions";
 
 const bullets = [
   {
@@ -413,7 +414,7 @@ const Index = ({
                     className="dataTables_wrapper no-footer"
                   >
                     {loader ? (
-                      <SpinnerDots />
+                      renderSkeleton()
                     ) : (
                       <UserQueueTable
                         userList={userListAll?.content}

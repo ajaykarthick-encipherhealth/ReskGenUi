@@ -8,7 +8,11 @@ import moment from "moment";
 import TableStyle from "../../../components/table/table.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FilterOutlined } from "@ant-design/icons";
-import { faFlag,faComment,faCalendarDays } from "@fortawesome/free-regular-svg-icons";
+import {
+  faFlag,
+  faComment,
+  faCalendarDays,
+} from "@fortawesome/free-regular-svg-icons";
 import {
   faArrowLeft,
   faUserCircle,
@@ -19,7 +23,7 @@ import {
   faAngleDoubleRight,
   faAngleDoubleLeft,
   faFile,
-  faTimeline, 
+  faTimeline,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Avatar, Tooltip, Select, Badge, notification, Drawer } from "antd";
@@ -48,6 +52,7 @@ import StatusAction from "./components/statusAction";
 import { handleCopyToClipboard } from "../../commonFunctions";
 import LogoLoader from "../../logoLoader";
 import FileDetails from "./components/fileDetails";
+import ManuallyAddProvider from "./manuallyAddProvider";
 const tabList = [
   {
     title: "HCC",
@@ -411,6 +416,9 @@ const Details = ({
       setTimeLineData(result);
       setFilterDataLoading(false);
     }
+    if (value == "Add DOS & Provider") {
+      setFlagContainerActiveTitle("Add DOS & Provider");
+    }
   };
 
   const flagList = [
@@ -433,6 +441,10 @@ const Details = ({
     {
       name: "Notes",
       icon: <FontAwesomeIcon icon={faCalendarDays} />,
+    },
+    {
+      name: "Add DOS & Provider",
+      icon: SVGICON.notsIcon,
     },
   ];
 
@@ -591,7 +603,6 @@ const Details = ({
       getPatientIdData(localPatientId, flagFirstData);
     }
   }, [flagFirstData?.flag]);
- 
 
   useEffect(() => {
     if (workListPatientId) {
@@ -1292,7 +1303,11 @@ const Details = ({
                     onClose={handleCloseModal}
                     open={isModalComments}
                     width={
-                      flagContainerActiveTitle === "Timeline" ? "460px" : null
+                      flagContainerActiveTitle === "Timeline"
+                        ? "460px"
+                        : flagContainerActiveTitle === "Add DOS & Provider"
+                        ? "1200px"
+                        : null
                     }
                     title={flagContainerActiveTitle}
                     placement="right"
@@ -1338,6 +1353,8 @@ const Details = ({
                           />
                         )}
                       </>
+                    ) : flagContainerActive === "Add DOS & Provider" ? (
+                      <ManuallyAddProvider />
                     ) : null}
                   </Drawer>
                 </div>

@@ -144,7 +144,7 @@ const AllocateModal = ({
         userDetails?.map((item) => (
           <div className="mt-4 pe-auto">
             <div
-              className={`form-control new-form-control my-2 p-0 ${
+              className={`form-control new-item-control my-2 p-0 ${
                 item.id == activeCard
                   ? modalStyle.listContentLarge
                   : modalStyle.listContent

@@ -9,6 +9,7 @@ import HeaderFilters from "../../../components/headerFilters";
 import { getPatients } from "../../../store/actions/physicianAction/patientsActions";
 import PatientTable from "../table/PatientList/patientList";
 import { patientDetails } from "../../../stores/authflow/actions";
+import { renderSkeleton } from "../../../components/reuseableFunctions";
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -152,7 +153,7 @@ export default function Patients() {
                       >
                        
                         {response?.loading || !response ? (
-                          <SpinnerDots />
+                         renderSkeleton()
                         ) : (
                           <>
                             <PatientTable

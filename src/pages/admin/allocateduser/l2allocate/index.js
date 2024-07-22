@@ -99,7 +99,7 @@ const L2AllocateModal = ({
       <div className="pe-auto" style={{ marginTop: "30px" }}>
         <div
           style={{ height: "475 !important" }}
-          className={`form-control new-form-control my-2 p-0 ${modalStyle.listContentLargeL2}`}
+          className={`form-control new-item-control2 my-2 p-0 ${modalStyle.listContentLargeL2}`}
         >
           <div className="d-flex justify-content-between">
             <div className="d-flex">

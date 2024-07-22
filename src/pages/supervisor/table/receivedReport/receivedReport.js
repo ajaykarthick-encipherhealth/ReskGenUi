@@ -13,6 +13,7 @@ import {
   sortFunction,
 } from "../../../../components/headerFilters/functions";
 import SpinnerDots from "../../../../components/spinner";
+import { renderSkeleton } from "../../../../components/reuseableFunctions";
 
 function ReceivedReport({
   details,
@@ -50,7 +51,7 @@ function ReceivedReport({
   return (
     <div className={TableStyle.classContaineer}>
       {loading ? (
-        <SpinnerDots />
+        renderSkeleton()
       ) : (
         <>
           {detailsContent?.length === 0 ? (
