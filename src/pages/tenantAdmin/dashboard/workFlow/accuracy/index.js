@@ -13,6 +13,8 @@ import { connect } from "react-redux";
 import {
   dateFormatForDashboard,
   getAllDatesInRange,
+  getLast30Days,
+  getLast7Days,
 } from "../../../../../utils/reusable";
 import moment from "moment";
 
@@ -98,531 +100,33 @@ export function getHighlightedIndex(
       constHighlitedIndex = selectedMonth - 1;
     }
   }
-
   return constHighlitedIndex;
 }
 
 export const getGraphData = (param, text) => {
   return param?.map((item) => item[text]);
 };
+
 export const chartBlockedDates = () => {};
-const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
+const Accuracy = ({
+  getAccuracyWorkflow,
+  dateRange,
+  selectedOrganization,
+  selectedValue,
+  customDate,
+}) => {
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const [activeTabButton, setActiveTabButton] = useState(0);
   const [currentTabBtn, setCurrentTabBtn] = useState("CogentAI Accuracy");
+
   const currentDate = new Date();
   const [selectedMonth, setSelectedMonth] = useState(
     currentDate.getMonth() + 1
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-  const accuracyDatas = {
-    data: {
-      response: [
-        {
-          dayOfMonth: 1,
-          averageScore: 100,
-          totalCorrectCount: 20,
-          totalWrongCount: 10,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 2,
-          averageScore: 100,
-          totalCorrectCount: 30,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 3,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 4,
-          averageScore: 100,
-          totalCorrectCount: 50,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 5,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 6,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 7,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 8,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 9,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 10,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 11,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 12,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 13,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 14,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 15,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 16,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 17,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 18,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 19,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 20,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 21,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 22,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 23,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 24,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 25,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 26,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 27,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 28,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 29,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 30,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 31,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-      ],
-    },
-  };
-  const QualityAccuracyDatas = {
-    data: {
-      response: [
-        {
-          dayOfMonth: 1,
-          averageScore: 100,
-          totalCorrectCount: 30,
-          totalWrongCount: 10,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 2,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 3,
-          averageScore: 100,
-          totalCorrectCount: 50,
-          totalWrongCount: 10,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 4,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 5,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 6,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 7,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 8,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 9,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 10,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 11,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 12,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 13,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 14,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 15,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 16,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 17,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 18,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 19,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 20,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 21,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 22,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 23,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 24,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 25,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 26,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 27,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 28,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 29,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 30,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-        {
-          dayOfMonth: 31,
-          averageScore: 100,
-          totalCorrectCount: 0,
-          totalWrongCount: 0,
-          weekOfMonth: null,
-          monthOfYear: null,
-        },
-      ],
-    },
-  };
+
+  const accuracyDatas = {};
+  const QualityAccuracyDatas = {};
 
   const handleTabButtonClick = (index, btn) => {
     setActiveTabButton(index);
@@ -630,22 +134,26 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
   };
 
   const [xdata, setXData] = useState([]);
-  const [OrgTotalCode, setorgTotalCode] = useState([]);
+  const [OrgTotalCode, setOrgTotalCode] = useState([]);
   const [OrgRevScore, setOrgRevScore] = useState([]);
   const [AccuracyTotalCode, setAccuracyTotalCode] = useState([]);
-  const [AccMachineScore, setAccMachineScore] = useState([]);
+  const [AccEngineScore, setAccEngineScore] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDates = async () => {
-      const dates = await getAllDatesInRange(
+      setLoading(true);
+      const dates = getAllDatesInRange(
         dateRange.startDate,
-        dateRange.endDate
+        dateRange.endDate,
+        selectedOrganization
       );
       setXData(dates);
-      setorgTotalCode([]);
+      setOrgTotalCode([]);
       setOrgRevScore([]);
       setAccuracyTotalCode([]);
-      setAccMachineScore([]);
+      setAccEngineScore([]);
+      setLoading(false);
     };
 
     fetchDates();
@@ -656,27 +164,28 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
       const OrgTotalCode = [];
       const OrgRevScore = [];
       const AccuracyTotalCode = [];
-      const AccMachineScore = [];
+      const AccEngineScore = [];
 
       xdata.forEach((date) => {
         const foundItem = getAccuracyWorkflow.response.find(
           (item) => item.date === date
         );
-        OrgTotalCode.push(foundItem ? foundItem.totalNewlyAddedCodesCount : 0);
+
+        const totalNewlyAddedCodesCount = foundItem
+          ? foundItem.totalNewlyAddedCodesCount
+          : 0;
+        OrgTotalCode.push(totalNewlyAddedCodesCount);
         OrgRevScore.push(foundItem ? foundItem.reviewerAvgScore : 100);
-        AccuracyTotalCode.push(
-          foundItem ? foundItem.totalNewlyAddedCodesCount : 0
-        );
-        AccMachineScore.push(foundItem ? foundItem.machineAvgScore : 100);
+        AccuracyTotalCode.push(totalNewlyAddedCodesCount);
+        AccEngineScore.push(foundItem ? foundItem.machineAvgScore : 100);
       });
 
-      setorgTotalCode(OrgTotalCode);
+      setOrgTotalCode(OrgTotalCode);
       setOrgRevScore(OrgRevScore);
       setAccuracyTotalCode(AccuracyTotalCode);
-      setAccMachineScore(AccMachineScore);
+      setAccEngineScore(AccEngineScore);
     }
   }, [getAccuracyWorkflow?.response, xdata]);
-
   const getData = async (dates) => {
     const dat = await getAccuracyWorkflow?.response?.map((item) => item.date);
     dates.map((item) => {
@@ -684,10 +193,10 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
         const d = getAccuracyWorkflow?.response?.find(
           (ite) => ite.date == item
         );
-        setorgTotalCode((pre) => [...pre, d.totalNewlyAddedCodesCount]);
+        setOrgTotalCode((pre) => [...pre, d.totalNewlyAddedCodesCount]);
         setOrgRevScore((pre) => [...pre, d.reviewerAvgScore]);
       } else {
-        setorgTotalCode((pre) => [...pre, 0]);
+        setOrgTotalCode((pre) => [...pre, 0]);
         setOrgRevScore((pre) => [...pre, 100]);
       }
     });
@@ -707,18 +216,70 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
       text: "",
     },
     xAxis: {
-      categories: xdata.map((date) => dateFormatForDashboard(date)),
+      categories: (() => {
+        if (selectedValue === "custom") {
+          return customDate;
+        } else if (selectedValue === "last_1_week") {
+          return getLast7Days();
+        } else {
+          const last30Days = getLast30Days();
+          last30Days.push("");
+          return last30Days;
+        }
+      })(),
       crosshair: true,
       labels: {
+        formatter: function () {
+          const categories = this.axis.categories;
+          const index = categories.indexOf(this.value);
+          const totalCategories = categories.length;
+
+          if (selectedValue === "last_1_week") {
+            return this.value.length > 10
+              ? this.value.slice(0, 10) + "..."
+              : this.value;
+          } else {
+            if (
+              index === 0 ||
+              index === totalCategories - 1 ||
+              index === Math.floor(totalCategories / 2)
+            ) {
+              return this.value.length > 10
+                ? this.value.slice(0, 10) + "..."
+                : this.value;
+            }
+            if (index % 2 === 0) {
+              return this.value.length > 10
+                ? this.value.slice(0, 10) + "..."
+                : this.value;
+            }
+            return "";
+          }
+        },
         style: {
           color: "gray",
-          fontWeight: "500",
+          fontWeight: "900",
+          fontSize: "12px",
+          whiteSpace: "nowrap",
         },
+        rotation: 0,
+        align: "center",
+        x: 2,
+        y: 20,
+        step:
+          selectedValue === "last_1_week"
+            ? 1
+            : selectedValue === "custom"
+            ? 15
+            : 2,
       },
       lineColor: "#d9d9d9",
+      minPadding: 0.1,
+      maxPadding: 0.1,
     },
     yAxis: [
       {
+        tickPositions: [0, 25, 50, 75, 100],
         title: {
           text: "Organization Quality",
           style: {
@@ -730,6 +291,7 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
           style: {
             color: "gray",
             fontWeight: "500",
+            fontSize: "14px",
           },
         },
         opposite: false,
@@ -752,36 +314,18 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
           },
         },
         opposite: true,
-
         tickInterval: 4,
       },
     ],
     legend: {
       enabled: false,
     },
-
     credits: {
       enabled: false,
     },
-
     tooltip: {
       shared: true,
-      formatter: function () {
-        let tooltip = `<b>${this.x}</b><br/>`;
-        this.points.forEach((point) => {
-          let seriesName = point.series.name;
-          let value = point.y;
-          if (seriesName === "totalNewlyAddedCodesCount") {
-            tooltip += ` <span style="color:${point.color}">\u25CF</span> ${seriesName}: ${value}<br/>`;
-          } else {
-            tooltip += `<span style="color:${point.color}">\u25CF</span> ${seriesName}: ${value}<br/>`;
-          }
-        });
-
-        return tooltip;
-      },
     },
-
     plotOptions: {
       column: {
         stacking: "normal",
@@ -795,26 +339,13 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
     },
     series: [
       {
-        name: "totalNewlyAddedCodesCount",
+        name: "Total Codes Count",
         data: OrgTotalCode,
         color: "#0b59f1",
         yAxis: 1,
       },
-      // {
-      // name: "totalWrongCount",
-      // data: getGraphData(
-      // QualityAccuracyDatas?.data?.response,
-      // "totalWrongCount",
-      // selectedMonth,
-      // selectedYear,
-      // currentBtn,
-      // currentDate
-      // ),
-      // color: "red",
-      // yAxis: 1,
-      // },
       {
-        name: "reviewerAvgScore",
+        name: "Reviewer Score",
         type: "spline",
         data: OrgRevScore,
         tooltip: {
@@ -824,6 +355,7 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
       },
     ],
   };
+
   const config2 = {
     chart: {
       type: "column",
@@ -831,20 +363,71 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
     title: {
       text: "",
     },
-
     xAxis: {
-      categories: xdata.map((date) => dateFormatForDashboard(date)),
+      categories: (() => {
+        if (selectedValue === "custom") {
+          return customDate;
+        } else if (selectedValue === "last_1_week") {
+          return getLast7Days();
+        } else {
+          const last30Days = getLast30Days();
+          last30Days.push("");
+          return last30Days;
+        }
+      })(),
       crosshair: true,
       labels: {
+        formatter: function () {
+          const categories = this.axis.categories;
+          const index = categories.indexOf(this.value);
+          const totalCategories = categories.length;
+
+          if (selectedValue === "last_1_week") {
+            return this.value.length > 10
+              ? this.value.slice(0, 10) + "..."
+              : this.value;
+          } else {
+            if (
+              index === 0 ||
+              index === totalCategories - 1 ||
+              index === Math.floor(totalCategories / 2)
+            ) {
+              return this.value.length > 10
+                ? this.value.slice(0, 10) + "..."
+                : this.value;
+            }
+            if (index % 2 === 0) {
+              return this.value.length > 10
+                ? this.value.slice(0, 10) + "..."
+                : this.value;
+            }
+            return "";
+          }
+        },
         style: {
           color: "gray",
-          fontWeight: "500",
+          fontWeight: "900",
+          fontSize: "12px",
+          whiteSpace: "nowrap",
         },
+        rotation: 0,
+        align: "center",
+        x: 2,
+        y: 20,
+        step:
+          selectedValue === "last_1_week"
+            ? 1
+            : selectedValue === "custom"
+            ? 15
+            : 2,
       },
       lineColor: "#d9d9d9",
+      minPadding: 0.1,
+      maxPadding: 0.1,
     },
     yAxis: [
       {
+        tickPositions: [0, 25, 50, 75, 100],
         title: {
           text: "Accuracy Quality",
           style: {
@@ -878,35 +461,18 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
           },
         },
         opposite: true,
-
         tickInterval: 4,
       },
     ],
     legend: {
       enabled: false,
     },
-
     credits: {
       enabled: false,
     },
     tooltip: {
       shared: true,
-      formatter: function () {
-        let tooltip = `<b>${this.x}</b><br/>`;
-        this.points.forEach((point) => {
-          let seriesName = point.series.name;
-          let value = point.y;
-          if (seriesName === "totalNewlyAddedCodesCount") {
-            tooltip += `<span style="color:${point.color}">\u25CF</span> ${seriesName}: ${value}<br/>`;
-          } else {
-            tooltip += `<span style="color:${point.color}">\u25CF</span> ${seriesName}: ${value}<br/>`;
-          }
-        });
-
-        return tooltip;
-      },
     },
-
     plotOptions: {
       column: {
         stacking: "normal",
@@ -920,28 +486,15 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
     },
     series: [
       {
-        name: "totalNewlyAddedCodesCount",
+        name: "Total Codes Count",
         data: AccuracyTotalCode,
         color: "#0b59f1",
         yAxis: 1,
       },
-      // {
-      // name: "totalWrongCount",
-      // data: getGraphData(
-      // QualityAccuracyDatas?.data?.response,
-      // "totalWrongCount",
-      // selectedMonth,
-      // selectedYear,
-      // currentBtn,
-      // currentDate
-      // ),
-      // color: "red",
-      // yAxis: 1,
-      // },
       {
-        name: "machineAvgScore",
+        name: "Engine Score",
         type: "spline",
-        data: AccMachineScore,
+        data: AccEngineScore,
         tooltip: {
           valueSuffix: "",
         },
@@ -950,34 +503,6 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
     ],
   };
 
-  const allAverageScore = chartBlockedDates(
-    selectedYear,
-    selectedMonth,
-    accuracyDatas?.data?.response,
-    "averageScore",
-    currentBtn,
-    currentDate
-  );
-  const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
-  const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
-  const averageAccuracy = sum / numericalData?.length; // Calculate the average
-
-  const allAverageQualityScore = chartBlockedDates(
-    selectedYear,
-    selectedMonth,
-    QualityAccuracyDatas?.data?.response,
-    "averageScore",
-    currentBtn,
-    currentDate
-  );
-  const numericalQualityData = allAverageQualityScore?.filter(
-    (value) => value !== false
-  ); // Filter out false values
-  const qualiotySum = numericalQualityData?.reduce(
-    (acc, value) => acc + value,
-    0
-  ); // Sum the numerical values
-  const averageQuality = qualiotySum / numericalQualityData?.length; // Calculate the average
   return (
     <>
       <div className={styles.card3}>
@@ -996,13 +521,10 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
                 handleButtonClick={handleTabButtonClick}
                 activeButton={activeTabButton}
                 activeColor="#fff"
-                inActiveColor="
-#000000"
+                inActiveColor="#000000"
                 activeBg="#043069"
-                inActiveBg="
-#E6EEFF"
-                containerBg="
-#E6EEFF"
+                inActiveBg="#E6EEFF"
+                containerBg="#E6EEFF"
                 width="150px"
               />
             </div>
@@ -1010,41 +532,36 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
         </div>
         <div className={styles.header}>
           <div style={{ width: "85%", overflowX: "scroll" }}>
-            {accuracyDatas?.loading || QualityAccuracyDatas?.loading ? (
+            {loading ? (
               <div className={spinSTYles.spinStyle}>
-                <Spin loading={accuracyDatas?.loading} />
+                <Spin loading={loading} />
               </div>
-            ) : getAccuracyWorkflow?.response ? (
-              currentTabBtn === "CogentAI Accuracy" ? (
-                // <ReactECharts
-                // option={option}
-                // style={{
-                // width: "100%",
-                // height: "340px",
-                // marginTop: "-30px",
-                // overflowX: "hidden",
-                // }}
-                // />
-                <div className={styles.highchartStyle}>
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={config2}
-                    className={styles.hightchartStyles}
-                  />
-                </div>
-              ) : (
-                <div className={styles.highchartStyle}>
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={config}
-                    className={styles.hightchartStyles}
-                  />
-                </div>
-              )
             ) : (
-              <div className={spinSTYles.spinStyle}>
-                <Empty />
-              </div>
+              <>
+                {getAccuracyWorkflow?.response ? (
+                  currentTabBtn === "CogentAI Accuracy" ? (
+                    <div className={styles.highchartStyle}>
+                      <HighchartsReact
+                        highcharts={Highcharts}
+                        options={config2}
+                        className={styles.hightchartStyles}
+                      />
+                    </div>
+                  ) : (
+                    <div className={styles.highchartStyle}>
+                      <HighchartsReact
+                        highcharts={Highcharts}
+                        options={config}
+                        className={styles.hightchartStyles}
+                      />
+                    </div>
+                  )
+                ) : (
+                  <div className={spinSTYles.spinStyle}>
+                    <Empty />
+                  </div>
+                )}
+              </>
             )}
           </div>
           <div className={styles.accuracy}>
@@ -1070,12 +587,13 @@ const Accuracy = ({ getAccuracyWorkflow, dateRange, selectedOrganization }) => {
               <span className={styles.insideTitle}>
                 {currentTabBtn === "CogentAI Accuracy" ? (
                   <>
-                    {averageAccuracy ? `${averageAccuracy?.toFixed(2)}%` : "0%"}
+                    {/* {averagePercentage
+                      ? `${averagePercentage.toFixed(2)}%`
+                      : "100%"} */}
+                    100%
                   </>
                 ) : (
-                  <>
-                    {averageQuality ? `${averageQuality?.toFixed(2)}%` : "0%"}
-                  </>
+                  <>50%</>
                 )}
               </span>
             </div>
