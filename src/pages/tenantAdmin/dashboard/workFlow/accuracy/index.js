@@ -138,6 +138,8 @@ const Accuracy = ({
   const [OrgRevScore, setOrgRevScore] = useState([]);
   const [AccuracyTotalCode, setAccuracyTotalCode] = useState([]);
   const [AccEngineScore, setAccEngineScore] = useState([]);
+  const [averageReviewerScore, setAverageReviewerScore] = useState(0);
+  const [averageEngineScore, setAverageEngineScore] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -166,6 +168,11 @@ const Accuracy = ({
       const AccuracyTotalCode = [];
       const AccEngineScore = [];
 
+      let reviewerTotalScore = 0;
+      let reviewerCount = 0;
+      let machineTotalScore = 0;
+      let machineCount = 0;
+
       xdata.forEach((date) => {
         const foundItem = getAccuracyWorkflow.response.find(
           (item) => item.date === date
@@ -174,18 +181,35 @@ const Accuracy = ({
         const totalNewlyAddedCodesCount = foundItem
           ? foundItem.totalNewlyAddedCodesCount
           : 0;
+        console.log(totalNewlyAddedCodesCount, "totalNewlyAddedCodesCount");
+
         OrgTotalCode.push(totalNewlyAddedCodesCount);
         OrgRevScore.push(foundItem ? foundItem.reviewerAvgScore : 100);
         AccuracyTotalCode.push(totalNewlyAddedCodesCount);
         AccEngineScore.push(foundItem ? foundItem.machineAvgScore : 100);
+
+        if (foundItem) {
+          reviewerTotalScore += foundItem.reviewerAvgScore;
+          reviewerCount++;
+          machineTotalScore += foundItem.machineAvgScore;
+          machineCount++;
+        }
       });
+
+      const averageReviewerScore =
+        reviewerCount > 0 ? reviewerTotalScore / reviewerCount : 0;
+      const averageEngineScore =
+        machineCount > 0 ? machineTotalScore / machineCount : 0;
 
       setOrgTotalCode(OrgTotalCode);
       setOrgRevScore(OrgRevScore);
       setAccuracyTotalCode(AccuracyTotalCode);
       setAccEngineScore(AccEngineScore);
+      setAverageReviewerScore(averageReviewerScore);
+      setAverageEngineScore(averageEngineScore);
     }
   }, [getAccuracyWorkflow?.response, xdata]);
+
   const getData = async (dates) => {
     const dat = await getAccuracyWorkflow?.response?.map((item) => item.date);
     dates.map((item) => {
@@ -204,9 +228,9 @@ const Accuracy = ({
 
   let data = [];
 
-  if (currentBtn && accuracyDatas?.data?.response) {
-    data = Object.values(accuracyDatas?.data?.response);
-  }
+  // if (currentBtn && accuracyDatas?.data?.response) {
+  //   data = Object.values(accuracyDatas?.data?.response);
+  // }
 
   const config = {
     chart: {
@@ -586,14 +610,9 @@ const Accuracy = ({
             <div className={styles.percentage}>
               <span className={styles.insideTitle}>
                 {currentTabBtn === "CogentAI Accuracy" ? (
-                  <>
-                    {/* {averagePercentage
-                      ? `${averagePercentage.toFixed(2)}%`
-                      : "100%"} */}
-                    100%
-                  </>
+                  <>{averageEngineScore.toFixed(2)}%</>
                 ) : (
-                  <>50%</>
+                  <>{averageReviewerScore.toFixed(2)}%</>
                 )}
               </span>
             </div>
