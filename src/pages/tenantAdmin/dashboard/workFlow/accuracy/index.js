@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Buttonscroller from "../../../../../components/buttonSroller";
-import ReactECharts from "echarts-for-react";
 import accuracy from "../../../../../images/dashboard/accuracy.png";
 import Image from "next/image";
 import styles from "./styles.module.css";
@@ -11,12 +10,10 @@ import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import { connect } from "react-redux";
 import {
-  dateFormatForDashboard,
   getAllDatesInRange,
   getLast30Days,
   getLast7Days,
 } from "../../../../../utils/reusable";
-import moment from "moment";
 
 export const TabButtons = [
   {
@@ -115,23 +112,8 @@ const Accuracy = ({
   selectedValue,
   customDate,
 }) => {
-  const [currentBtn, setCurrentBtn] = useState("Daily");
   const [activeTabButton, setActiveTabButton] = useState(0);
   const [currentTabBtn, setCurrentTabBtn] = useState("CogentAI Accuracy");
-
-  const currentDate = new Date();
-  const [selectedMonth, setSelectedMonth] = useState(
-    currentDate.getMonth() + 1
-  );
-  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-
-  const accuracyDatas = {};
-  const QualityAccuracyDatas = {};
-
-  const handleTabButtonClick = (index, btn) => {
-    setActiveTabButton(index);
-    setCurrentTabBtn(btn);
-  };
 
   const [xdata, setXData] = useState([]);
   const [OrgTotalCode, setOrgTotalCode] = useState([]);
@@ -141,6 +123,11 @@ const Accuracy = ({
   const [averageReviewerScore, setAverageReviewerScore] = useState(0);
   const [averageEngineScore, setAverageEngineScore] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const handleTabButtonClick = (index, btn) => {
+    setActiveTabButton(index);
+    setCurrentTabBtn(btn);
+  };
 
   useEffect(() => {
     const fetchDates = async () => {
@@ -181,7 +168,6 @@ const Accuracy = ({
         const totalNewlyAddedCodesCount = foundItem
           ? foundItem.totalNewlyAddedCodesCount
           : 0;
-        console.log(totalNewlyAddedCodesCount, "totalNewlyAddedCodesCount");
 
         OrgTotalCode.push(totalNewlyAddedCodesCount);
         OrgRevScore.push(foundItem ? foundItem.reviewerAvgScore : 100);
@@ -209,22 +195,6 @@ const Accuracy = ({
       setAverageEngineScore(averageEngineScore);
     }
   }, [getAccuracyWorkflow?.response, xdata]);
-
-  const getData = async (dates) => {
-    const dat = await getAccuracyWorkflow?.response?.map((item) => item.date);
-    dates.map((item) => {
-      if (dat.includes(item)) {
-        const d = getAccuracyWorkflow?.response?.find(
-          (ite) => ite.date == item
-        );
-        setOrgTotalCode((pre) => [...pre, d.totalNewlyAddedCodesCount]);
-        setOrgRevScore((pre) => [...pre, d.reviewerAvgScore]);
-      } else {
-        setOrgTotalCode((pre) => [...pre, 0]);
-        setOrgRevScore((pre) => [...pre, 100]);
-      }
-    });
-  };
 
   let data = [];
 
@@ -305,7 +275,7 @@ const Accuracy = ({
       {
         tickPositions: [0, 25, 50, 75, 100],
         title: {
-          text: "Organization Quality",
+          text: "Organization Changes Count",
           style: {
             color: "#2dafff",
           },
@@ -453,7 +423,7 @@ const Accuracy = ({
       {
         tickPositions: [0, 25, 50, 75, 100],
         title: {
-          text: "Accuracy Quality",
+          text: "Accuracy Changes Count",
           style: {
             color: "#2dafff",
           },
@@ -597,22 +567,12 @@ const Accuracy = ({
                   : "Average Score"}
               </div>
             </div>
-            <div className={styles.month}>
-              {currentBtn === "Daily"
-                ? `Day ${currentDate.getDate()}`
-                : currentBtn === "Monthly"
-                ? `Month ${monthNames[currentDate.getMonth()]}`
-                : `Week ${getDateWeek(currentDate)}`}
-              {currentBtn !== "Monthly" && (
-                <span className={styles.subTitle}></span>
-              )}
-            </div>
             <div className={styles.percentage}>
               <span className={styles.insideTitle}>
                 {currentTabBtn === "CogentAI Accuracy" ? (
-                  <>{averageEngineScore.toFixed(2)}%</>
+                  <>{`${averageEngineScore.toFixed(2)}%`}</>
                 ) : (
-                  <>{averageReviewerScore.toFixed(2)}%</>
+                  <>{`${averageReviewerScore.toFixed(2)}%`}</>
                 )}
               </span>
             </div>
