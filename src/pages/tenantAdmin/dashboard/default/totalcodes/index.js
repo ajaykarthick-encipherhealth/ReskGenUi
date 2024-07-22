@@ -18,7 +18,7 @@ import {
   formatNumber,
   formatValues,
 } from "../../../../../utils/reusable.js";
-import {useSelector } from "react-redux";
+
 
 const index = ({
   getAllHccCodesData,
@@ -35,10 +35,6 @@ const index = ({
   rafScorechartLoader,
   customDate,
 }) => {
- 
-  const loading = useSelector(
-    (state) => state?.tenantAdmin?.dashboard?.default?.allHccCodes
-  )
 
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
   const dates =
