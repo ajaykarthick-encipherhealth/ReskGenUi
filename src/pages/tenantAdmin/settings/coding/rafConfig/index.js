@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
-import { Button, Checkbox, Divider, Input, Select, Switch } from "antd";
-import FileUploader from "../../components/fileUploader";
-import ModalPop from "../../components/modal";
-import CommonModalContent from "../../components/commonModalContent";
+import { Button, Divider, Input, Modal, Select, Switch } from "antd";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 import { connect } from "react-redux";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
 import { PlusOutlined } from "@ant-design/icons";
-import Search from "../../../../../components/table/tenantSettingsTable/search";
-import FilterButton from "../../../../../components/table/tenantSettingsTable/filterButton";
-import FileUpload from "../../../../../components/table/tenantSettingsTable/fileUpload";
-import { useSelector } from "react-redux";
 import { getResponePopup } from "../../../../../utils/reusable";
-const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
+import RafModal from "../../components/rafModal";
+
+const RAFConfig = ({
+  updateSettings,
+  getCodingDetails,
+  deleteComoridConditions,
+  list,
+  editComoridConditions,
+}) => {
   const [openModal, setOpenModal] = useState(false);
-  const [search, setSearch] = useState(null);
+  const [listCount, setListCount] = useState([]);
   const [options, setOptions] = useState([]);
   const [year, setYear] = useState("");
   const [isChecked, setIsChecked] = useState({
@@ -24,13 +25,10 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
     rafScoreMedicAid: false,
     rafScoreOrec: "",
   });
-  const [selectFile, setSelectFile] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
+  const [editRowValue, setEditRowValue] = useState(null);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [page, setPage] = useState(0);
-  const [isCheckeds, setIsCheckeds] = useState(false);
-  const [tags, setTags] = useState([
-    
-  ]);
 
   const columns = [
     {
@@ -53,6 +51,11 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
       dataIndex: "rafScoreBaseRate",
       key: "rafScoreBaseRate",
     },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+    },
   ];
 
   const onChange = async (checked, name) => {
@@ -67,7 +70,6 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
     try {
       const res = await getCodingDetails({ type: "RAF", page: page });
       if (res?.status == "SUCCESS") {
-        console.log(res);
         setIsChecked({
           isRafCalculationEnabled: res?.response?.isRafCalculationEnabled,
           rafScoreMedicAid: res?.response?.rafScoreMedicAid,
@@ -95,141 +97,124 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
     }
   };
 
-  const submitPatientFile = async () => {
-    const formData = new FormData();
-    formData.append("file", selectFile.originFileObj);
-    formData.append("target", "HISTORY_CODES");
-    formData.append("isDefaultYear", false);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    // setSelectFile(formData);
+  const handleEditRow = async (value) => {
     try {
-      const res = await axios.post(
-        ENDPOINTS.apiEndoint +
-          `management/tenantAdmin/codes/upload
-      `,
-        formData,
-        headers
-      );
-      setSelectFile("");
-      if (res.data.status == "SUCCESS") {
+      const res = await editComoridConditions({
+        ...editRowValue,
+        ...value,
+        target: "RAF",
+      });
+      if (res.status == "SUCCESS") {
         getResponePopup(res);
-      } else if (res.data.status == "USER_DEFINED_ERROR") {
+        setIsEdit(false);
+        setOpenModal(false);
+        setEditRowValue(null);
+        getRafConfig()
+      } else if (res.status == "USER_DEFINED_ERROR") {
         getResponePopup(res);
       }
     } catch (error) {
-      if (error.response.status == 513) {
-        getResponePopup({ status: "USER_DEFINED_ERROR" });
-      }
+      console.log(error);
     }
   };
+  const handleDeleteRow = async (value) => {
+    try {
+      const res = await deleteComoridConditions({
+        id: value.id,
+        target: "HEALTH_METRICS",
+      });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+        setIsEdit(false);
+        setEditRowValue(null);
+        getRafConfig()
+      } else if (res.status == "USER_DEFINED_ERROR") {
+        getResponePopup(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPage(e.page);
   };
+
+  useEffect(() => {
+    if (year) {
+      list?.response?.rafScoreYearList?.map((item, i) => {
+        if (year == item.year) {
+          setListCount(item.rafScoreBaseRates);
+        }
+      });
+    }
+  }, [year]);
   return (
     <div>
       <div className="p-3">
-        {/* <div className="d-flex justify-content-between">
-          <div>
-            <div className={Style.title}>RAF Configuration</div>
-            <div className="d-flex justify-content-start gap-2 mt-4">
-              <div>Year</div>
-              <div>
-              <Switch
-                    checked={isCheckeds}
-                    onChange={(e) => setIsCheckeds(e)}
-                  />
-              </div>
-              <div>Can We calculate for all Processing Year</div>
-            </div>
-          </div>
-          <div className="d-flex justify-content-start gap-2">
-          <div className="d-flex">
-                <FileUpload
-                  allowedFormat={"File must be in xlsx or CSV"}
-                  onChange={(e) => setSelectFile(e.file)}
-                  fileList={[]}
-                  accept={".xlsx, .csv"}
-                />
-                <RegularButton
-                  name="Upload"
-                  type={selectFile}
-                  disabled={!selectFile}
-                  onClick={submitPatientFile}
-                />
-              </div>
-            <div>
-              <Button
-                icon={<PlusOutlined />}
-                style={{
-                  height: "47px",
-                }}
-                onClick={() => {
-                  setOpenModal(true);
-                }}
-              >
-                Add Manually
-              </Button>
-            </div>
-          </div>
-        </div>
-        <Divider /> */}
         <div className={Style.title}>RAF Configuration</div>
-        <div className="mt-4" style={{width: "35%"}}>
-          <div className="d-flex justify-content-between mt-1 mb-4">
-            <div>{"Do you need to calculate RAF"}</div>
-            <div className="d-flex justify-content-between">
-              <Switch
-                // className="switch"
-                checked={isChecked?.isRafCalculationEnabled}
-                onChange={(e) => onChange(e, "isRafCalculationEnabled")}
-              />
-              <div
-                className={`mx-2`}
-              >
-                {isChecked?.isRafCalculationEnabled ? "Yes" : "No"}
+        <div className="d-flex justify-content-between">
+          <div className="mt-4" style={{ width: "35%" }}>
+            <div className="d-flex justify-content-between mt-1 mb-4">
+              <div>{"Do you need to calculate RAF"}</div>
+              <div className="d-flex justify-content-between">
+                <Switch
+                  // className="switch"
+                  checked={isChecked?.isRafCalculationEnabled}
+                  onChange={(e) => onChange(e, "isRafCalculationEnabled")}
+                />
+                <div className={`mx-2`}>
+                  {isChecked?.isRafCalculationEnabled ? "Yes" : "No"}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="d-flex justify-content-between">
-            <div>{"Do you need RAF medicaid"}</div>
             <div className="d-flex justify-content-between">
-              <Switch
-                // className="switch"
-                checked={isChecked?.rafScoreMedicAid}
-                onChange={(e) => onChange(e, "rafScoreMedicAid")}
-              />
-              <div
-                className={`mx-2`}
-              >
-                {isChecked?.rafScoreMedicAid ? "Yes" : "No"}
+              <div>{"Do you need RAF medicaid"}</div>
+              <div className="d-flex justify-content-between">
+                <Switch
+                  // className="switch"
+                  checked={isChecked?.rafScoreMedicAid}
+                  onChange={(e) => onChange(e, "rafScoreMedicAid")}
+                />
+                <div className={`mx-2`}>
+                  {isChecked?.rafScoreMedicAid ? "Yes" : "No"}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="d-flex justify-content-between mt-4">
-            <div>{"Enter RAF score OREC"}</div>
-            <div className="d-flex justify-content-between">
-              <Input
-                // className="switch"
-                style={{ width: "200px" }}
-                value={isChecked?.rafScoreOrec}
-                onChange={(e) => onChange(e.target.value, "rafScoreOrec")}
+            <div className="d-flex justify-content-between mt-4">
+              <div>{"Enter RAF score OREC"}</div>
+              <div className="d-flex justify-content-between">
+                <Input
+                  // className="switch"
+                  style={{ width: "200px" }}
+                  value={isChecked?.rafScoreOrec}
+                  onChange={(e) => onChange(e.target.value, "rafScoreOrec")}
+                />
+              </div>
+            </div>
+            <div className="text-end mt-4">
+              <RegularButton
+                name={"Save Changes"}
+                onClick={() => handleSubmit()}
               />
             </div>
           </div>
-          <div className="text-end mt-4">
-            <RegularButton
-              name={"Save Changes"}
-              onClick={() => handleSubmit()}
-            />
+          <div>
+            <Button
+              icon={<PlusOutlined />}
+              style={{
+                height: "47px",
+              }}
+              onClick={() => {
+                setOpenModal(true);
+              }}
+            >
+              Add Manually
+            </Button>
           </div>
         </div>
-
         <Divider />
         <div className="d-flex justify-content-end  gap-4 mt-4">
           <div className="mx-2">
@@ -238,7 +223,9 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
               style={{ width: "200px" }}
               placeholder="Select Year"
               options={options}
-              onChange={(e, value) => setYear(value.value)}
+              onChange={(e, value) => {
+                setYear(value.value);
+              }}
               value={year}
             />
           </div>
@@ -246,28 +233,51 @@ const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
             <Search setSearch={setSearch} value={search} />
           </div> */}
         </div>
-
         <div>
           <TenantSettingsTable
             columns={columns}
-            data={ list?.response?.rafScoreYearList ? 
-              list?.response?.rafScoreYearList[year == "2023" ? 0 : 1]
-                ?.rafScoreBaseRates : []
+            data={
+              listCount.length > 0
+                ? listCount
+                : list?.response?.rafScoreYearList
+                ? list?.response?.rafScoreYearList[0]?.rafScoreBaseRates
+                : []
             }
+            handleEdit={(e) => {
+              console.log(e);
+              setOpenModal(true);
+              setIsEdit(true);
+              setEditRowValue(e);
+            }}
+            handleDelete={handleDeleteRow}
             paginationFirst={paginationFirst}
-            totalElements={
-              list?.response?.historyCodesPage?.totalElements
-            }
+            totalElements={list?.response?.historyCodesPage?.totalElements}
             onPageChange={onPageChange}
             isNoPagenation={false}
           />
         </div>
       </div>
-      <ModalPop
-        openModal={openModal}
-        content={<CommonModalContent tags={tags} setTags={setTags} />}
-        setOpenModal={setOpenModal}
-      />
+      <Modal
+        title={`${isEdit ? "Edit" : "ADD"} RAF Codes` }
+        onCancel={() => {
+          setOpenModal(false);
+          setIsEdit(false);
+          setEditRowValue(null);
+        }}
+        footer={false}
+        open={openModal}
+        width={"52%"}
+      >
+        <RafModal
+          setIsEdit={setOpenModal}
+          page={page}
+          reRenderPage={getRafConfig}
+          isEdit={isEdit}
+          updateDetails={editRowValue}
+          year={year}
+          handleEditRow={handleEditRow}
+        />
+      </Modal>
     </div>
   );
 };
@@ -278,6 +288,8 @@ const enhancer = connect(
   {
     updateSettings: settingActions.updateRafConfigs,
     getCodingDetails: settingActions.codingGuidelinesAction,
+    editComoridConditions: settingActions.editComoridConditions,
+    deleteComoridConditions: settingActions.deleteComoridConditions,
   }
 );
 export default enhancer(RAFConfig);
