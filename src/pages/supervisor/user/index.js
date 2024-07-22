@@ -6,6 +6,7 @@ import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
 import SpinnerDots from "../../../components/spinner";
 import {actions as allActions} from '../../../stores/supervisor/users'
+import { renderSkeleton } from "../../../components/reuseableFunctions";
 const UserList = ({getUsers,loader,usersData}) => {
   const sideMenu = useSelector((state) => state.sideMenu);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -54,7 +55,7 @@ console.log(usersData)
                       className="dataTables_wrapper no-footer"
                     >
                       {loader ? (
-                        <SpinnerDots />
+                         renderSkeleton()
                       ) : (
                         <AdminList
                           userList={userListAll?.content}
