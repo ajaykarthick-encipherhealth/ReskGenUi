@@ -4,10 +4,7 @@ import { actions as dashboardActions } from "../../../../../stores/tenantAdmin/d
 import styles from "./styles.module.css";
 import { DatePicker, Select } from "antd";
 import moment from "moment";
-import {
-  disableFutureDate,
-  disableFutureDates,
-} from "../../../../../components/headerFilters/functions";
+import { disableFutureDates } from "../../../../../components/headerFilters/functions";
 const { RangePicker } = DatePicker;
 const index = ({
   activeBtn,
@@ -20,6 +17,7 @@ const index = ({
   dateRange,
 }) => {
   const [isCustom, setIsCustom] = useState(false);
+
   const handleDateChange = (value) => {
     if (value == "custom") {
       setIsCustom(true);
@@ -30,11 +28,11 @@ const index = ({
       if (value === "last_1_week") {
         startDate =
           moment().subtract(6, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
-          setSelectedValue(value);
+        setSelectedValue(value);
       } else if (value === "last_1_month") {
         startDate =
           moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
-          setSelectedValue(value);
+        setSelectedValue(value);
       } else if (value == undefined) {
         setDateRange({ startDate: "", endDate: "" });
       }
@@ -50,6 +48,7 @@ const index = ({
       startDate: moment(e[0]).format("YYYY-MM-DD") + "T00:00:00.000Z",
       endDate: moment(e[1]).format("YYYY-MM-DD") + "T23:59:59.000Z",
     };
+
     setDateRange(range);
   };
 
@@ -63,6 +62,17 @@ const index = ({
       label: org.name,
     })
   );
+
+ 
+  const disabled1YearDate = (current, { from }) => {
+    if (disableFutureDates(current)) {
+      return true;
+    }
+    if (from) {
+      return Math.abs(current.diff(from, "years")) >= 1;
+    }
+    return false;
+  };
 
   return (
     <div className={styles.container}>
@@ -111,7 +121,7 @@ const index = ({
             <div className="tenantSelector" style={{ width: "100%" }}>
               <RangePicker
                 size="large"
-                disabledDate={(current) => disableFutureDates(current)}
+                disabledDate={disabled1YearDate}
                 onChange={(e, value) => handleRange(value)}
                 format={"MM-DD-YYYY"}
                 allowClear={false}
