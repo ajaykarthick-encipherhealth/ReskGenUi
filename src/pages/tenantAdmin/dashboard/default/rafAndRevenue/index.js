@@ -16,6 +16,8 @@ const index = ({
   dateRange,
   selectedOrganization,
   getAllRaf,
+  selectedValue,
+  customDate,
 }) => {
   useEffect(() => {
     rafScoreData(dateRange.startDate, dateRange.endDate, selectedOrganization);
@@ -101,7 +103,7 @@ const index = ({
             <Skeleton.Avatar active size="large" shape="circle" />
           </div>
         ) : (
-          <ReactECharts option={speedometerOptions} />
+          <ReactECharts   selectedValue={selectedValue} option={speedometerOptions} />
         )}
       </div>
       <div className="revenueChart" style={{ width: "65%" }}>
@@ -116,6 +118,8 @@ const index = ({
           borderColor={"#3479FE"}
           isRevenue={true}
           className
+          customDate={customDate}
+          selectedValue={selectedValue}
         />
       </div>
     </div>
@@ -127,7 +131,8 @@ const enhancer = connect(
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     overAllRafScore: state?.tenantAdmin?.dashboard?.default?.allRafScore?.data,
-    rafLoader: state?.tenantAdmin?.dashboard?.default?.rafScoreLoader,
+    rafLoader: state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
+  
   }),
 
   {

@@ -19,6 +19,7 @@ import {
   formatValues,
 } from "../../../../../utils/reusable.js";
 
+
 const index = ({
   getAllHccCodesData,
   getAllHccCodes,
@@ -34,6 +35,7 @@ const index = ({
   rafScorechartLoader,
   customDate,
 }) => {
+
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
   const dates =
     selectedValue === "custom"
@@ -170,7 +172,7 @@ const index = ({
   const bullets = [
     {
       title: "Total Codes",
-      color: "#E88D67",
+      color: "#0095C2",
     },
     {
       title: "HCC Codes",
@@ -344,7 +346,6 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
-
     totalCodesLoader:
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
     revenueChartLoader:

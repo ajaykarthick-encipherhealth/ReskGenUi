@@ -7,7 +7,12 @@ import visitStyles from "../../../styles/visitdata.module.css";
 import moment from "moment";
 import TableStyle from "../../../components/table/table.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { FilterOutlined } from "@ant-design/icons";
+import {
+  faFlag,
+  faComment,
+  faCalendarDays,
+} from "@fortawesome/free-regular-svg-icons";
 import {
   faArrowLeft,
   faUserCircle,
@@ -18,7 +23,9 @@ import {
   faAngleDoubleRight,
   faAngleDoubleLeft,
   faFile,
+  faTimeline,
 } from "@fortawesome/free-solid-svg-icons";
+
 import { Avatar, Tooltip, Select, Badge, notification, Drawer } from "antd";
 import { IMAGES, SVGICON } from "../../../jsx/constant/theme";
 import { Button, Offcanvas } from "react-bootstrap";
@@ -417,23 +424,23 @@ const Details = ({
   const flagList = [
     {
       name: "Filter",
-      icon: SVGICON.List,
+      icon: <FilterOutlined />,
     },
     {
       name: "Flag",
-      icon: SVGICON.flagIcon,
+      icon: <FontAwesomeIcon icon={faFlag} />,
     },
     {
       name: "Timeline",
-      icon: SVGICON.filterIcon,
+      icon: <FontAwesomeIcon icon={faTimeline} />,
     },
     {
       name: "Comments",
-      icon: SVGICON.commentIcon,
+      icon: <FontAwesomeIcon icon={faComment} />,
     },
     {
       name: "Notes",
-      icon: SVGICON.notsIcon,
+      icon: <FontAwesomeIcon icon={faCalendarDays} />,
     },
     {
       name: "Add DOS & Provider",
@@ -1298,8 +1305,7 @@ const Details = ({
                     width={
                       flagContainerActiveTitle === "Timeline"
                         ? "460px"
-                        : flagContainerActiveTitle ===
-                          "Add DOS & Provider"
+                        : flagContainerActiveTitle === "Add DOS & Provider"
                         ? "1200px"
                         : null
                     }
@@ -1347,8 +1353,7 @@ const Details = ({
                           />
                         )}
                       </>
-                    ) : flagContainerActive ===
-                      "Add DOS & Provider" ? (
+                    ) : flagContainerActive === "Add DOS & Provider" ? (
                       <ManuallyAddProvider />
                     ) : null}
                   </Drawer>

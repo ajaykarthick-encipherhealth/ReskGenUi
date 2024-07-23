@@ -252,6 +252,7 @@ const Index = ({
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
                       customDate={customDate}
+                      selectedValue={selectedValue}
                     />
                   </Card>
                 </div>
