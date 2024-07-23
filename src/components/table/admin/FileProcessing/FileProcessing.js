@@ -715,7 +715,7 @@ const FileProcessingTable = ({
 const enhancer = connect(
   (state) => ({
     fileProcessingData: state?.tenantAdmin?.tracking?.allFileProcessing,
-    webSocketData: state?.webSocket?.webSocketDetails?.data,
+    webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
   }),
   {
     getAllProcessingData: tenantAdminAction.getAllFileProcessAction,
