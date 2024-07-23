@@ -5,9 +5,9 @@ import Athena from "../../../../images/svg/settingsIcons/icons/athena.png";
 import Cerner from "../../../../images/svg/settingsIcons/icons/cerner.png";
 import EClinical from "../../../../images/svg/settingsIcons/icons/eclinicalworks.png";
 import Image from "next/image";
-import { Tag } from "antd";
+import { notification, Tag } from "antd";
 import { getFihrList } from "../../../../store/actions/tanantAdminAction/FihrActions";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getDateAndTime } from "../../../../components/headerFilters/functions";
 import axios from "axios";
@@ -17,14 +17,24 @@ import Notes from "./notes";
 import RegularButton from "../../../../components/button";
 import ButtonStyles from "../../../../components/button/style.module.css";
 import ConnectStep from "./connectStep";
+import { actions as settingActions } from "../../../../stores/tenantAdmin/settings";
+import { getResponePopup } from "../../../../utils/reusable";
 
-const EmrFhir = () => {
+const EmrFhir = ({
+  data,
+  getFhirInstructionDetails,
+  getFhirConnectDetails,
+  connectStatus,
+}) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [emrUrl, setEmrUrl] = useState("");
   const [isConnectNext, setIsConnectNext] = useState(false);
+  const [isSelectEMR, setIsSelectEMR] = useState(null);
+  const [inputValues, setInputValues] = useState(null);
+  const [connectBtn, setConnectBtn] = useState("NEXT");
 
   // const FihrList = useSelector(
   //   (state) => state?.tanantAdmin?.fihr_list?.fihr_list
@@ -37,15 +47,15 @@ const EmrFhir = () => {
     },
     {
       emr: "Athena",
-      status: "connected",
+      status: "disconnected",
     },
     {
       emr: "EClinical",
-      status: "connected",
+      status: "disconnected",
     },
     {
       emr: "Cerner",
-      status: "connected",
+      status: "disconnected",
     },
   ];
 
@@ -79,13 +89,51 @@ const EmrFhir = () => {
   };
 
   const handleSubmit = async (values) => {
-    console.log(values);
-    setIsConnectNext(true)
+    if (isSelectEMR) {
+      setConnectBtn("Loading...");
+      var data = {
+        appType: appType[0].value?.toUpperCase(),
+        emrType: isSelectEMR.toUpperCase(),
+      };
+      setInputValues(data);
+      getFhirConnectDetails(
+        appType[0].value.toUpperCase(),
+        isSelectEMR.toUpperCase()
+      );
+    } else {
+      // if(!isSelectEMR){
+      //   notification.warning({
+      //     description: "Please select one fhir",
+      //     duration: 1,
+      //   });
+      // }else if(!values?.appType){
+      //   notification.warning({
+      //     description: "Please select app type",
+      //     duration: 1,
+      //   });
+      // }
+    }
+  };
+
+  const fhirListOnclick = (value) => {
+    setIsSelectEMR(value);
   };
 
   useEffect(() => {
+    getFhirInstructionDetails();
     dispatch(getFihrList(router));
   }, []);
+
+  useEffect(() => {
+    setConnectBtn("NEXT");
+    if (connectStatus?.data?.status == "SUCCESS") {
+      notification.success({
+        description: connectStatus?.data?.message,
+        duration: 1,
+      });
+      setIsConnectNext(true);
+    }
+  }, [connectStatus]);
 
   return (
     <div>
@@ -98,18 +146,24 @@ const EmrFhir = () => {
             {FihrList?.map((item) => (
               <div
                 className={
-                  item.status.toLowerCase() === "connected" ? 
-                  `p-1 px-3 d-inline-block m-2 rounded-3 ${Style.borderStyleConnect}`:
-                  `p-1 px-3 d-inline-block m-2 rounded-3 ${Style.borderStyleDisConnect}`
+                  item.status.toLowerCase() === "connected"
+                    ? `p-1 px-3 d-inline-block m-2 rounded-3 cr-pointer ${Style.borderStyleConnect}`
+                    : `p-1 px-3 d-inline-block m-2 rounded-3 cr-pointer ${Style.borderStyleDisConnect}`
                 }
-                // style={{
-                //   background: `${
-                //     item.status.toLowerCase() !== "connected" ? "#efefef" : ""
-                //   }`,
-                //   cursor: `${
-                //     item.status.toLowerCase() !== "connected" ? "no-drop" : ""
-                //   }`,
-                // }}
+                onClick={() => {
+                  fhirListOnclick(item.emr);
+                }}
+                style={{
+                  background: `${
+                    item.status.toLowerCase() === "connected" ||
+                    isSelectEMR == item.emr
+                      ? "#efefef"
+                      : ""
+                  }`,
+                  cursor: `${
+                    item.status.toLowerCase() === "connected" ? "no-drop" : ""
+                  }`,
+                }}
               >
                 <div className="p-2 text-center">
                   <div
@@ -141,7 +195,9 @@ const EmrFhir = () => {
                         }`,
                       }}
                     ></span>
-                    <span>{item.status}</span>
+                    <span>
+                      {isSelectEMR == item.emr ? "selected " : item.status}
+                    </span>
                   </div>
                   {/* <div className="my-2">
                 {item.updatedDate ? getDateAndTime(item.updatedDate) : "---"}
@@ -175,11 +231,14 @@ const EmrFhir = () => {
           </div>
           <div>
             <Form id={"chart-audit"} onFinish={handleSubmit} form={form}>
-              <div className="p-3" style={{ height: "180px"}}>
+              <div className="p-3" style={{ height: "180px" }}>
                 <div className="d-flex justify-content-between mt-4">
                   <div>
                     <div className={Style.heading}>App Type</div>
-                    <span>An app type refers to the category or function of a web application</span>
+                    <span>
+                      An app type refers to the category or function of a web
+                      application
+                    </span>
                   </div>
                   <div>
                     <Form.Item name={"appType"}>
@@ -187,6 +246,7 @@ const EmrFhir = () => {
                         placeholder="App Type"
                         options={appType}
                         className={Style.selector}
+                        defaultValue={appType[0]}
                         allowClear
                       />
                     </Form.Item>
@@ -195,13 +255,17 @@ const EmrFhir = () => {
                 <div className="d-flex justify-content-between mt-2">
                   <div>
                     <div className={Style.heading}>Access Type</div>
-                    <span>An access type refers to the category or function of a web application</span>
+                    <span>
+                      An access type refers to the category or function of a web
+                      application
+                    </span>
                   </div>
                   <div>
                     <Form.Item name={"accessType"}>
                       <Select
                         placeholder="Access Type"
                         options={accessType}
+                        defaultValue={accessType[0]}
                         className={Style.selector}
                         allowClear
                       />
@@ -216,9 +280,9 @@ const EmrFhir = () => {
                     type="primary"
                     className={ButtonStyles?.btnColor}
                     style={{ height: "45px", width: "100px" }}
-                    onClick={handleSubmit}
+                    // onClick={handleSubmit}
                   >
-                    NEXT
+                    {connectBtn}
                   </Button>
                 </Form.Item>
               </div>
@@ -227,7 +291,10 @@ const EmrFhir = () => {
           <Notes />
         </>
       ) : (
-        <ConnectStep setIsConnectNext={setIsConnectNext} />
+        <ConnectStep
+          setIsConnectNext={setIsConnectNext}
+          filedInputValues={inputValues}
+        />
       )}
       <Modal
         title={""}
@@ -249,4 +316,14 @@ const EmrFhir = () => {
   );
 };
 
-export default EmrFhir;
+const enhancer = connect(
+  (state) => ({
+    data: state?.tenantAdmin?.settings?.fhirInstructions,
+    connectStatus: state?.tenantAdmin?.settings?.fhirConnectStatus,
+  }),
+  {
+    getFhirInstructionDetails: settingActions.fhirInstructionsAction,
+    getFhirConnectDetails: settingActions.fhirConnectAction,
+  }
+);
+export default enhancer(EmrFhir);

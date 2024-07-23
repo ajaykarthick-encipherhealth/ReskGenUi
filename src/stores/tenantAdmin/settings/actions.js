@@ -124,3 +124,20 @@ export const manuallyAddedRaf = createActionThunk(
   "MENUALLY_ADDED_RAF",
   network.manuallyAddedRaf
 );
+
+export const fhirInstructionsAction = createActionThunk(
+  "FHIR_INSTRUCTIONS",
+  network.getFhirInstructions
+);
+export const fhirConnectAction = createActionThunk(
+  "FHIR_CONNECT",
+  network.getFhirConnect
+);
+export const fhirOrgSubmiAction = createActionThunk(
+  "FHIR_ORG_SUBMIT",
+  network.submitFhirOrg
+);
+export const emrConnectAction = createActionThunk(
+  "FHIR_ORG_SUBMIT",
+  network.emrConnect
+);
