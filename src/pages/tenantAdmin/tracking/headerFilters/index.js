@@ -7,7 +7,7 @@ import Tracking from "../../tracking/tracking.module.css";
 import { useDispatch } from "react-redux";
 import Legends from "../../../../components/legends";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPalette } from "@fortawesome/free-solid-svg-icons";
+import { faPalette,faChartSimple } from "@fortawesome/free-solid-svg-icons";
 import {
   disableFutureDate,
   handleRnagePicker2,
@@ -412,7 +412,7 @@ const HeaderFilters = ({
 
   return (
     <div style={{ display: "flex" }}>
-      <div className="row filter-contain" style={{ width: "95%"}}>
+      <div className="row filter-contain" style={{ width: "95%" }}>
         {isAllocatedToSelector && (
           <div
             className={defaultSize}
@@ -466,50 +466,51 @@ const HeaderFilters = ({
         ))}
       </div>
 
-      <div className={Tracking} style={{ width: "5%",display:"flex",justifyContent:"end"}}>
-       <div>
-         <MoreFilter
-          clear={clear}
-          activeFilters={activeFilters}
-          setActiveFilters={setActiveFilters}
-          allFilters={allFilters}
-          selectAll={selectAll}
-          setSelectAll={setSelectAll}
-          setClear={setClear}
-          handleClearAllFilters={handleClearAllFilters}
-        /> 
-       
+      <div
+        className={Tracking}
+        style={{ width: "5%", display: "flex", justifyContent: "end" }}
+      >
+        <div>
+          <MoreFilter
+            clear={clear}
+            activeFilters={activeFilters}
+            setActiveFilters={setActiveFilters}
+            allFilters={allFilters}
+            selectAll={selectAll}
+            setSelectAll={setSelectAll}
+            setClear={setClear}
+            handleClearAllFilters={handleClearAllFilters}
+          />
 
-        {bullets && (
-          <div style={{ cursor: "pointer" }}>
-            <Popover
-              content={
-                <>
-                  <Legends
-                    bullets={bullets}
-                    display="block"
-                    
-                  />
-                  {badges?.length > 0 &&
-                    badges?.map((data) => (
-                      <div style={{ marginBottom: "10px" }}>
-                        <Image src={data.src} width={20} height={30} />
-                        <span style={{ marginLeft: "5px" }}>{data?.name}</span>
-                      </div>
-                    ))}
-                </>
-              }
-              trigger={["click"]}
-              placement="bottom"
-            >
-              <Tooltip title="Click here for status information.">
-                <div className={Tracking.iconBorder}>
-                  <FontAwesomeIcon icon={faPalette} />
-                </div>
-              </Tooltip>
-            </Popover>
-          </div>
-        )}
+          {bullets && (
+            <div style={{ cursor: "pointer" }}>
+              <Popover
+                content={
+                  <>
+                    <Legends bullets={bullets} display="block" />
+                    {badges?.length > 0 &&
+                      badges?.map((data) => (
+                        <div style={{ marginBottom: "10px" }}>
+                          <Image src={data.src} width={20} height={30} />
+                          <span style={{ marginLeft: "5px" }}>
+                            {data?.name}
+                          </span>
+                        </div>
+                      ))}
+                  </>
+                }
+                trigger={["click"]}
+                placement="bottom"
+              >
+                <Tooltip title="Click here for status information.">
+                  <div className={Tracking.iconBorder}>
+                    <FontAwesomeIcon icon={faChartSimple} />
+                    {/* <FontAwesomeIcon icon={faPalette} /> */}
+                  </div>
+                </Tooltip>
+              </Popover>
+            </div>
+          )}
         </div>
       </div>
     </div>

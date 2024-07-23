@@ -52,6 +52,7 @@ import StatusAction from "./components/statusAction";
 import { handleCopyToClipboard } from "../../commonFunctions";
 import LogoLoader from "../../logoLoader";
 import FileDetails from "./components/fileDetails";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import ManuallyAddProvider from "./manuallyAddProvider";
 const tabList = [
   {
@@ -444,7 +445,7 @@ const Details = ({
     },
     {
       name: "Add DOS & Provider",
-      icon: SVGICON.notsIcon,
+      icon: <PlusCircleOutlined className="text-dark" />,
     },
   ];
 
