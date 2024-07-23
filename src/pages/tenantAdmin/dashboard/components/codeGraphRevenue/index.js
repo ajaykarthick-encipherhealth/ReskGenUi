@@ -12,6 +12,7 @@ import {
   getLast30Days,
   getLast7Days,
 } from "../../../../../utils/reusable.js";
+import { Empty, Skeleton } from "antd";
 
 const codeGraphRevenue = ({
   options,
@@ -28,6 +29,7 @@ const codeGraphRevenue = ({
   selectedValue,
   getAllRaf,
   customDate,
+  revenueChartLoader,
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
@@ -47,6 +49,7 @@ const codeGraphRevenue = ({
 
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc;
   const resultArrayHCC = formatValues(premiumByDateForHcc, dates);
+  
 
   const graphOptions = {
     xAxis: {
@@ -115,9 +118,23 @@ const codeGraphRevenue = ({
     ],
   };
   return (
-    <div className="revenueDollar">
-      {" "}
-      <ReactECharts option={options ? options : graphOptions} />
+    <div>
+      {revenueChartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "200px" }}
+              active
+            />
+          </div>
+        ) : hccDiseaseCountValues?.length > 0 ? (
+          <div className="revenueDollar">
+           <ReactECharts option={options ? options : graphOptions} />
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
+    
     </div>
   );
 };
@@ -130,6 +147,8 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
+          revenueChartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.loading,
   }),
   {
     getAllHccCodesData: HccCodes,

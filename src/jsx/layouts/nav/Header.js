@@ -427,6 +427,7 @@ const Header = ({
     var countUnread =
       notificationResponse?.data?.response?.totalUnreadCount + count?.length;
     setNotificationCount(countUnread ? countUnread : 0);
+  
     notificationSoundRef.current = new Audio("/messageSound.mp3");
       // Play notification sound
       if (countUnread>0) {
@@ -435,7 +436,7 @@ const Header = ({
         });
       }
   }, [webSocketNotificationData,notificationResponse]);
-
+  
 
   useEffect(() => {
     if (
