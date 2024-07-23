@@ -8,6 +8,7 @@ import { Empty, Spin } from "antd";
 import spinSTYles from "../../../../../styles/auth.module.css";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
+import { Skeleton } from "antd";
 import { connect } from "react-redux";
 import {
   getAllDatesInRange,
@@ -112,6 +113,7 @@ const Accuracy = ({
   selectedOrganization,
   selectedValue,
   customDate,
+  getAccuracyWorkflowLoader,
 }) => {
   const [activeTabButton, setActiveTabButton] = useState(0);
   const [currentTabBtn, setCurrentTabBtn] = useState("CogentAI Accuracy");
@@ -196,6 +198,7 @@ const Accuracy = ({
 
   let data = [];
 
+  const totalCodes = AccuracyTotalCode;
   const config = {
     chart: {
       type: "column",
@@ -342,7 +345,7 @@ const Accuracy = ({
       },
     ],
   };
-
+  
   return (
     <>
       <div className={styles.card3}>
@@ -372,26 +375,37 @@ const Accuracy = ({
         </div>
         <div className={styles.header}>
           <div style={{ width: "85%", overflowX: "scroll" }}>
-            <>
-              {currentTabBtn === "CogentAI Accuracy" ? (
-                <div className={styles.highchartStyle}>
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={config}
-                    className={styles.hightchartStyles}
+            {getAccuracyWorkflowLoader ? (
+              <Skeleton.Input
+                className="w-100"
+                style={{ height: "288px" }}
+                active
+              />
+            ) : totalCodes.length > 0 ? (
+              <>
+                {currentTabBtn === "CogentAI Accuracy" ? (
+                  <div className={styles.highchartStyle}>
+                    <HighchartsReact
+                      highcharts={Highcharts}
+                      options={config}
+                      className={styles.hightchartStyles}
+                    />
+                  </div>
+                ) : (
+                  <AccuracyChart
+                    selectedValue={selectedValue}
+                    OrgTotalCode={OrgTotalCode}
+                    OrgRevScore={OrgRevScore}
+                    dateRange={dateRange}
+                    customDate={customDate}
                   />
-                </div>
-              ) : (
-                <AccuracyChart
-                  selectedValue={selectedValue}
-                  OrgTotalCode={OrgTotalCode}
-                  OrgRevScore={OrgRevScore}
-                  dateRange={dateRange}
-                  customDate={customDate}
-                />
-              )}
-            </>
+                )}
+              </>
+            ) : (
+              <Empty className="mt-3" />
+            )}
           </div>
+
           <div className={styles.accuracy}>
             <div className={styles.header}>
               <Image src={accuracy} className={styles.Img} />
@@ -419,6 +433,8 @@ const Accuracy = ({
 
 const enhancer = connect(
   (state) => ({
+    getAccuracyWorkflowLoader:
+      state?.tenantAdmin?.dashboard?.workFlow?.getAccuracyWorkflowLoader,
     getAccuracyWorkflow:
       state?.tenantAdmin?.dashboard?.workFlow?.getAccuracyWorkflow?.data,
   }),

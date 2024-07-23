@@ -59,6 +59,7 @@ const workFlowReducer = combineReducers({
   allocatedLoader: getStatusLoading(allocatedStatusAction),
   reviewerLoader: getStatusLoading(reviewerStatusAction),
   organizationLoader: getStatusLoading(organizationStatusAction),
+  getAccuracyWorkflowLoader: getStatusLoading(getAccuracyWorkflow),
   getAccuracyWorkflow: createReducer(getAccuracyWorkflow),
 });
 
