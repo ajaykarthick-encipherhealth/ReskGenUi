@@ -45,6 +45,7 @@ import StatusAction from "./components/statusAction";
 import { handleCopyToClipboard } from "../../commonFunctions";
 import LogoLoader from "../../logoLoader";
 import FileDetails from "./components/fileDetails";
+import { FileTextOutlined } from "@ant-design/icons";
 import ManuallyAddProvider from "./manuallyAddProvider";
 const tabList = [
   {
@@ -437,7 +438,7 @@ const Details = ({
     },
     {
       name: "Add DOS & Provider",
-      icon: SVGICON.notsIcon,
+      icon: <FileTextOutlined />,
     },
   ];
 
