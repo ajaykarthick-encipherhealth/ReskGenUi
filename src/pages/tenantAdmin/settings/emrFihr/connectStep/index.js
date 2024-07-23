@@ -36,10 +36,7 @@ const ConnectStep = ({
     setInputValueOrg(e.target.value);
   };
   const handleSubmit = async () => {
-    console.log(inputValueOrg);
     setOrgtBtn("Loading...");
-    console.log(filedInputValues);
-
     const res = await orgSubmit(
       filedInputValues?.appType,
       filedInputValues?.emrType,
@@ -82,11 +79,9 @@ const ConnectStep = ({
   };
 
   useEffect(() => {
-    console.log(connectStatus);
     setInputValue(connectStatus?.data?.response);
   }, [connectStatus]);
   useEffect(() => {
-    console.log(orgStatus);
     if (orgStatus?.data?.status == "SUCCESS") {
       notification.success({
         description: orgStatus?.data?.message,
