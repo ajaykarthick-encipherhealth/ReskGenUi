@@ -100,7 +100,7 @@ const ManuallyAdd = ({
   const dosList = patientDosResult?.data?.response?.map(
     (item) =>
       ({
-        label: item.dateOfService,
+        label: moment(item.dateOfService).format('MM-DD-YYYY'),
         value: item?.dateOfService,
       } || [])
   );
@@ -592,7 +592,6 @@ const ManuallyAdd = ({
   };
 
   const handleMeatSubmit = async () => {
-    console.log("hits");
     let data = {};
     const forms = form.getFieldsValue();
     if (isEditPage) {
@@ -996,7 +995,7 @@ const ManuallyAdd = ({
       setListOfSectionT(transformData(sectionListT));
     }
   }, [isEditMeat, isEditMeatValue]);
-  
+
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
