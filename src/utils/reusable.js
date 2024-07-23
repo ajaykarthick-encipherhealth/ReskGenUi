@@ -1,8 +1,6 @@
 import { notification } from "antd";
 import moment from "moment";
 
-
-
 export const getResponePopup = (res) => {
   switch (res?.data?.status ? res?.data?.status : res?.status) {
     case "USER_DEFINED_ERROR":
@@ -71,7 +69,7 @@ export function getLast7Days() {
   const currentDate = new Date();
 
   for (let i = 0; i < 7; i++) {
-    const pastDate = new Date(currentDate); 
+    const pastDate = new Date(currentDate);
     pastDate.setDate(currentDate.getDate() - i);
     date_seven_days.push(
       pastDate.toLocaleString("default", { month: "short" }) +
@@ -94,10 +92,11 @@ export const getAllDatesInRange = (start, end) => {
   return dates;
 };
 
-
 export function formatNumber(num) {
   if (num >= 1000000) {
     return (num / 1000000).toFixed(2).replace(/\.?0+$/, "") + "M";
+  } else if (num >= 100000) {
+    return (num / 100000).toFixed(2).replace(/\.?0+$/, "") + "L";
   } else if (num >= 1000) {
     return (num / 1000).toFixed(2).replace(/\.?0+$/, "") + "K";
   } else {
@@ -124,7 +123,7 @@ export function formatDate(dateString) {
 //         const formattedKey = formatDate(Object?.keys(key)?.[0]);
 //         let count = values[i];
 //         formatobj[formattedKey] = count[Object?.keys(key)?.[0]];
-//       });   
+//       });
 //   }
 //    else {
 //     values &&
@@ -140,22 +139,20 @@ export function formatDate(dateString) {
 
 export function formatValues(values, dates) {
   const formatobj = {};
-  
+
   if (Array.isArray(values)) {
     values.forEach((obj) => {
       const key = Object.keys(obj)[0];
       const formattedKey = formatDate(key);
       formatobj[formattedKey] = obj[key];
     });
-  } else if (values && typeof values === 'object') {
+  } else if (values && typeof values === "object") {
     Object.keys(values).forEach((key) => {
       const formattedKey = formatDate(key);
       formatobj[formattedKey] = values[key];
     });
   }
-  
+
   const resultArray = dates.map((date) => formatobj[formatDate(date)] || 0);
   return resultArray;
 }
-
-

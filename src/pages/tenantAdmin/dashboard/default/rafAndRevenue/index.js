@@ -15,6 +15,7 @@ const index = ({
   rafLoader,
   dateRange,
   selectedOrganization,
+  getAllRaf,
   selectedValue,
   customDate,
 }) => {
@@ -47,7 +48,7 @@ const index = ({
         detail: {
           show: true,
           formatter: function (value) {
-            return value.toFixed(2); 
+            return value.toFixed(2);
           },
           fontSize: 20,
           offsetCenter: [0, "10%"],
@@ -88,10 +89,7 @@ const index = ({
     ],
   };
 
-  //FUTURE REVENUE VALUE ENHANCEMENT P1 TASK
-  formatNumber();
-  //donot remove future need
-  const price = 781216; //Pass API REVENUE COUNT RESPONSE
+  const totalRev = getAllRaf?.totalHccRafScore;
 
   return (
     <div style={{ display: "flex", width: "100%" }}>
@@ -111,8 +109,8 @@ const index = ({
       <div className="revenueChart" style={{ width: "65%" }}>
         <div className={styles.header}>
           <div className="py-1">Revenue</div>
-          <div className={styles.price}>{`$ ${formatNumber(price)}`}</div>
-          <div className={styles.revenue}>$ 3.1k Increase</div>
+          <div className={styles.price}>{`$ ${formatNumber(totalRev)}`}</div>
+          {/* <div className={styles.revenue}>$ 3.1k Increase</div> */}
         </div>
         <CodeGraphRevenue
           gradientColor1={"#5D94FE"}
@@ -130,6 +128,8 @@ const index = ({
 
 const enhancer = connect(
   (state) => ({
+    getAllRaf:
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     overAllRafScore: state?.tenantAdmin?.dashboard?.default?.allRafScore?.data,
     rafLoader: state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
   
