@@ -37,7 +37,6 @@ const index = ({
       ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
       : [];
 
-  formatNumber();
   const TotalCareGapsRevenue = getAllRaf?.totalSuggestedRafScore;
 
   return (
@@ -133,7 +132,6 @@ const index = ({
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
               <div className={styles.price}>
-              
                 {`$ ${
                   TotalCareGapsRevenue !== undefined
                     ? formatNumber(TotalCareGapsRevenue.toFixed(2))

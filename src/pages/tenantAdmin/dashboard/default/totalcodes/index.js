@@ -62,7 +62,6 @@ const index = ({
   const totalCodes = resultArrayHCC.map(
     (num, index) => num + resultArrayCaregaps[index]
   );
- 
 
   useEffect(() => {
     getAllHccCodesData(
@@ -190,8 +189,6 @@ const index = ({
   const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
   const totalScoreTwo = (hccDiseaseCountMap + suggestedCount).toFixed(2);
-
-  formatNumber();
 
   const OverAllRevenue = totalScore;
 
