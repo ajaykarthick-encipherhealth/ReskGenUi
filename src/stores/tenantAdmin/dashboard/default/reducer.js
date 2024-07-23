@@ -39,13 +39,13 @@ const createReducer = (actionType) =>
         error: action.payload,
       }),
     },
-    initialState
+    initialState,
   );
 
 const getReportLoading = (type) =>
   handleActions(
     {
-      [type.START]: () => true,
+      [type.STARTED]: () => true,
       [type.SUCCEEDED]: () => false,
       [type.FAILED]: () => false,
     },

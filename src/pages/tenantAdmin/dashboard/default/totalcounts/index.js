@@ -119,8 +119,7 @@ const enhancer = connect(
   (state) => ({
     getAllFiles:
       state?.tenantAdmin?.dashboard?.default?.allFilesCounts?.data?.response,
-    totalCountsLoader:
-      state?.tenantAdmin?.dashboard?.default?.totalCountsLoader,
+      totalCountsLoader:state?.tenantAdmin?.dashboard?.default?.allFilesCounts?.loading,
   }),
   {
     getAllFilesCount: FilesCount,

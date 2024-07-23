@@ -303,12 +303,14 @@ export const EHRMenuList = [
 export const PhysicianMenuList = [
   {
     title: "Dashbaord",
-    iconStyle: SVGICON.dashboardIcon,
+    iconStyle: <DashboardOutlined />,
+    activeIcon: <DashboardFilled />,
     to: "/physician/dashboard",
   },
   {
     title: "Patients",
-    iconStyle: SVGICON.physicianPatient,
+    iconStyle: <FontAwesomeIcon icon={faHospital} />,
+    activeIcon: <FontAwesomeIcon icon={faHospitalAlt} />,
     to: "/physician/patients",
     childRoute: "/physician/comparison",
   },

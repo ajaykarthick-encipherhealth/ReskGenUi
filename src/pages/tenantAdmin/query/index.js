@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faMessage,faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import styles from "./styles.module.css";
 import visitStyles from "../../../styles/visitdata.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
@@ -188,7 +189,8 @@ const Query = () => {
                                       onClick={() => meatQueriedComments(item)}
                                       className="cr-pointer meat-name-details"
                                     >
-                                      {SVGICON.comment}
+                                      {/* {SVGICON.comment} */}
+                                      <FontAwesomeIcon className="mx-4" style={{fontSize:"20px"}} icon={faMessage} />
                                     </span>
                                   </div>
                                   <div className="col-xl-2 d-grid">
@@ -203,7 +205,8 @@ const Query = () => {
                                       }
                                       className={styles.edit_meat_query}
                                     >
-                                      {SVGICON.meatQueryEdit}
+                                      <FontAwesomeIcon className="mx-1" style ={{color:"white",fontSize:"14px"}}icon={faPenToSquare} />
+                                      {/* {SVGICON.meatQueryEdit} */}
                                     </div>
                                   </div>
                                 </div>
