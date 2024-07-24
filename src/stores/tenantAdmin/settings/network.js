@@ -355,3 +355,43 @@ export async function manuallyAddedRaf(obj) {
   );
   return data;
 }
+
+export async function getFhirInstructions() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`controlzen/fhir/v1/getinstructions?instructionKey=APP_TYPES_AND_ACCESS_TYPE`, options);
+  return data;
+}
+
+export async function getFhirConnect(appType,emrType,accessType) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`emr/fhir/v1/emr/add?appType=${appType}&emrType=${emrType}&access=${accessType}`, options);
+  return data;
+}
+
+export async function submitFhirOrg(appType,emrType,orgName) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`emr/fhir/v1/emr/add?appType=${appType}&emrType=${emrType}&orgName=${orgName}`, options);
+  return data;
+}
+
+export async function emrConnect() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`emr/fhir/v1/emr/activate/tokenstore`, options);
+  return data;
+}
+
+export async function fhirList() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`controlzen/fhir/v1/getconnectiondetails`, options);
+  return data;
+}

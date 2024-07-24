@@ -8,12 +8,26 @@ import Pending from "../../../../../images/trackingImages/PendingTrack.png";
 import Completed from "../../../../../images/trackingImages/CompletedTrack.png";
 import Swal from "sweetalert2";
 import { handleCopyToClipboard } from "../../../../../components/commonFunctions";
+import { connect } from "react-redux";
+import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
+import { getResponePopup } from "../../../../../utils/reusable";
 
-const ConnectStep = ({setIsConnectNext}) => {
+const ConnectStep = ({
+  setIsConnectNext,
+  filedInputValues,
+  connectStatus,
+  orgStatus,
+  orgSubmit,
+  emrConnectSubmit,
+  emrConnectStatus,
+}) => {
   const [inputValue, setInputValue] = useState("");
   const [inputValueOrg, setInputValueOrg] = useState("");
   const [isCompleted, setIsCompleted] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [connectBtn, setConnectBtn] = useState("Connect");
+  const [orgBtn, setOrgtBtn] = useState("SUBMIT");
+  const [orgPostSuccess, setOrgPostSuccess] = useState(false);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -21,35 +35,61 @@ const ConnectStep = ({setIsConnectNext}) => {
   const handleInputChangeOrg = (e) => {
     setInputValueOrg(e.target.value);
   };
-  const handleSubmit = async (values) => {
-    console.log(values);
-    notification.success({
-      message: "Success",
-      placement: "topRight",
-      duration:1
-    });
+  const handleSubmit = async () => {
+    setOrgtBtn("Loading...");
+    const res = await orgSubmit(
+      filedInputValues?.appType,
+      filedInputValues?.emrType,
+      inputValueOrg
+    );
+    if (res.status == "SUCCESS") {
+      setOrgtBtn("SUBMIT");
+      getResponePopup(res);
+      setOrgPostSuccess(true);
+    } else if (res.status == "USER_DEFINED_ERROR") {
+      setOrgtBtn("SUBMIT");
+      getResponePopup(res);
+    }
   };
   const handleSubmitConnect = async (values) => {
-    console.log(values);
-    Swal.fire({
-      title: "Authorized",
-      icon: "success",
-      timer: 1000,
-      showConfirmButton: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        
-      }
-    });
-    setTimeout(() => {
-      setIsConnectNext(false)
-    }, 1000);
-
+    setConnectBtn("Loading...");
+    const res = await emrConnectSubmit();
+    if (res.status == "SUCCESS") {
+      setConnectBtn("Connect");
+      Swal.fire({
+        title: "Authorized",
+        icon: "success",
+        timer: 1000,
+        showConfirmButton: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+        }
+      });
+      setTimeout(() => {
+        setIsConnectNext(false);
+      }, 1000);
+    } else if (res.status == "USER_DEFINED_ERROR") {
+      setConnectBtn("Connect");
+      getResponePopup(res);
+    }
   };
 
   const handleSubmitCancel = async (values) => {
-    setIsConnectNext(false)
+    setIsConnectNext(false);
   };
+
+  useEffect(() => {
+    setInputValue(connectStatus?.data?.response);
+  }, [connectStatus]);
+  useEffect(() => {
+    if (orgStatus?.data?.status == "SUCCESS") {
+      notification.success({
+        description: orgStatus?.data?.message,
+        duration: 1,
+      });
+      setIsConnectNext(true);
+    }
+  }, [orgStatus]);
 
   return (
     <div className={` p-1 px-3  m-2  ${Style.stepsContainer}`}>
@@ -96,7 +136,7 @@ const ConnectStep = ({setIsConnectNext}) => {
           style={{ marginTop: "7px" }}
           onClick={() =>
             handleCopyToClipboard({
-              text: "123456",
+              text: connectStatus?.data?.response,
               setCopied: setCopied,
             })
           }
@@ -137,78 +177,95 @@ const ConnectStep = ({setIsConnectNext}) => {
           style={{ height: "45px", width: "100px" }}
           onClick={handleSubmit}
         >
-          SUBMIT
+          {orgBtn}
         </Button>
       </div>
-      {!isCompleted ? (
-        <div className={Style.statusContainer}>
-          <span style={{ padding: "5px" }}>
-            Your activation code is in the process of being activated, please
-            wait.Status
-          </span>
-          <div className={Style.statusImg}>
-            <Image
-              src={Pending}
-              width={20}
-              alt="epic"
-              style={{ marginRight: "5px" }}
-            />
-            <span style={{ color: "#0078D4" }}>Pending</span>
-          </div>
-          <div style={{ marginLeft: "10px" }}>
-            <Button
-              htmlType="submit"
-              type="primary"
-              className={Style?.cancelBtn}
-              style={{ height: "35px", width: "100px" }}
-              onClick={handleSubmit}
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <div className={Style.statusContainer}>
-          <span style={{ padding: "5px" }}>Your activation process is </span>
-          <div className={Style.statusImgCompleted}>
-            <Image
-              src={Completed}
-              width={20}
-              alt="epic"
-              style={{ marginRight: "5px" }}
-            />
-            <span style={{ color: "#009910" }}>Completed</span>
-          </div>
-          <span style={{ padding: "5px" }}>
-            and the code is now active. Connect to EMR
-          </span>
+      {orgPostSuccess && (
+        <>
+          {!isCompleted ? (
+            <div className={Style.statusContainer}>
+              <span style={{ padding: "5px" }}>
+                Your activation code is in the process of being activated,
+                please wait.Status
+              </span>
+              <div className={Style.statusImg}>
+                <Image
+                  src={Pending}
+                  width={20}
+                  alt="epic"
+                  style={{ marginRight: "5px" }}
+                />
+                <span style={{ color: "#0078D4" }}>Pending</span>
+              </div>
+              <div style={{ marginLeft: "10px" }}>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  className={Style?.cancelBtn}
+                  style={{ height: "35px", width: "100px" }}
+                  onClick={handleSubmit}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className={Style.statusContainer}>
+              <span style={{ padding: "5px" }}>
+                Your activation process is{" "}
+              </span>
+              <div className={Style.statusImgCompleted}>
+                <Image
+                  src={Completed}
+                  width={20}
+                  alt="epic"
+                  style={{ marginRight: "5px" }}
+                />
+                <span style={{ color: "#009910" }}>Completed</span>
+              </div>
+              <span style={{ padding: "5px" }}>
+                and the code is now active. Connect to EMR
+              </span>
 
-          <div style={{ marginLeft: "10px" }}>
-            <Button
-              htmlType="submit"
-              type="primary"
-              className={ButtonStyles?.btnColor}
-              style={{ height: "35px", width: "100px" }}
-              onClick={handleSubmitConnect}
-            >
-              Connect
-            </Button>
-          </div>
-          <div style={{ marginLeft: "10px" }}>
-            <Button
-              htmlType="submit"
-              type="primary"
-              className={Style?.cancelBtn}
-              style={{ height: "35px", width: "100px" }}
-              onClick={handleSubmitCancel}
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
+              <div style={{ marginLeft: "10px" }}>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  className={ButtonStyles?.btnColor}
+                  style={{ height: "35px", width: "100px" }}
+                  onClick={handleSubmitConnect}
+                >
+                  {connectBtn}
+                </Button>
+              </div>
+              <div style={{ marginLeft: "10px" }}>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  className={Style?.cancelBtn}
+                  style={{ height: "35px", width: "100px" }}
+                  onClick={handleSubmitCancel}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
 };
 
-export default ConnectStep;
+const enhancer = connect(
+  (state) => ({
+    connectStatus: state?.tenantAdmin?.settings?.fhirConnectStatus,
+    orgStatus: state?.tenantAdmin?.settings?.fhirOrgStatus,
+    emrConnectStatus: state?.tenantAdmin?.settings?.emrConnectStatus,
+  }),
+  {
+    orgSubmit: settingActions.fhirOrgSubmiAction,
+    emrConnectSubmit: settingActions.emrConnectAction,
+  }
+);
+export default enhancer(ConnectStep);
