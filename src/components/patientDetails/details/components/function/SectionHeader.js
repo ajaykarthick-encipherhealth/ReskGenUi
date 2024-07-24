@@ -41,7 +41,7 @@ export const getSectionHeaderBackground = ({ value }) => {
           }
           trigger={["hover"]}
           placement="bottom"
-          overlayStyle={{zIndex:10000}}
+          overlayStyle={{zIndex:9999}}
         >
           <span
             style={{
