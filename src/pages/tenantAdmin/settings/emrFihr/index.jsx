@@ -25,6 +25,8 @@ const EmrFhir = ({
   getFhirInstructionDetails,
   getFhirConnectDetails,
   connectStatus,
+  fhirAllList,
+  getFhirList
 }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -94,11 +96,13 @@ const EmrFhir = ({
       var data = {
         appType: appType[0].value?.toUpperCase(),
         emrType: isSelectEMR.toUpperCase(),
+        accessType:values?.accessType ? values?.accessType?.toUpperCase() : accessType[0].value?.toUpperCase()
       };
       setInputValues(data);
       getFhirConnectDetails(
         appType[0].value.toUpperCase(),
-        isSelectEMR.toUpperCase()
+        isSelectEMR.toUpperCase(),
+        values?.accessType ? values?.accessType?.toUpperCase() : accessType[0].value?.toUpperCase()
       );
     } else {
       // if(!isSelectEMR){
@@ -120,6 +124,7 @@ const EmrFhir = ({
   };
 
   useEffect(() => {
+    getFhirList();
     getFhirInstructionDetails();
     dispatch(getFihrList(router));
   }, []);
@@ -320,10 +325,13 @@ const enhancer = connect(
   (state) => ({
     data: state?.tenantAdmin?.settings?.fhirInstructions,
     connectStatus: state?.tenantAdmin?.settings?.fhirConnectStatus,
+    fhirAllList: state?.tenantAdmin?.settings?.fhirList,
   }),
   {
     getFhirInstructionDetails: settingActions.fhirInstructionsAction,
     getFhirConnectDetails: settingActions.fhirConnectAction,
+    getFhirList: settingActions.fhirListAction,
+
   }
 );
 export default enhancer(EmrFhir);

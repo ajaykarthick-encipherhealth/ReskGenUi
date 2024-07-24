@@ -364,11 +364,11 @@ export async function getFhirInstructions() {
   return data;
 }
 
-export async function getFhirConnect(appType,emrType) {
+export async function getFhirConnect(appType,emrType,accessType) {
   const options = {
     method: "GET",
   };
-  const data = await requestPortal(`emr/fhir/v1/emr/add?appType=${appType}&emrType=${emrType}`, options);
+  const data = await requestPortal(`emr/fhir/v1/emr/add?appType=${appType}&emrType=${emrType}&access=${accessType}`, options);
   return data;
 }
 
@@ -385,5 +385,13 @@ export async function emrConnect() {
     method: "GET",
   };
   const data = await requestPortal(`emr/fhir/v1/emr/activate/tokenstore`, options);
+  return data;
+}
+
+export async function fhirList() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`controlzen/fhir/v1/getconnectiondetails`, options);
   return data;
 }

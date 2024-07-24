@@ -141,3 +141,8 @@ export const emrConnectAction = createActionThunk(
   "FHIR_ORG_SUBMIT",
   network.emrConnect
 );
+
+export const fhirListAction = createActionThunk(
+  "FHIR_LIST",
+  network.fhirList
+);

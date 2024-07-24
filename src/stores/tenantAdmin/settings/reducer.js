@@ -7,6 +7,7 @@ import {
   emrConnectAction,
   fhirConnectAction,
   fhirInstructionsAction,
+  fhirListAction,
   fhirOrgSubmiAction,
   getFlags,
   healthMetricAddAction,
@@ -60,6 +61,7 @@ const tenantAminSettingsReducer = combineReducers({
   updateSetting: createReducer(updateSettingsAction),
   fhirInstructions: createReducer(fhirInstructionsAction),
   fhirConnectStatus: createReducer(fhirConnectAction),
+  fhirList: createReducer(fhirListAction),
   // manualAdd: createReducer(manualAddAction),
   // healthMetricAdd: createReducer(healthMetricAddAction),
 });
