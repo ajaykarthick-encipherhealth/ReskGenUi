@@ -127,7 +127,7 @@ const Patient = ({
     const uId = localStorage.getItem("userId");
     const orgId = localStorage.getItem("orgId");
     let resoureUrl = `dbservice/patient/admin/computation/filter?&organizationId=${orgId}&
-    page=${pageNo}&size=${
+    page=${0}&size=${
       batchCount ? batchCount : reviewerResponse?.response?.totalElements
     }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
       sort?.sortDir
