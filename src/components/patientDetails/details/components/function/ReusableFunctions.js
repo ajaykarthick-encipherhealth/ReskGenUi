@@ -846,7 +846,6 @@ export const handleSubmitValidNotes = async ({
   if (isValidAction.name == "Move to Deleted" && isValidAction.title == "MEAT") {
     apiURL = "management/meat/move/validtosuggested";
   }
-  setFileLoading(false);
   try {
     var patientId = localStorage.getItem("patientId");
     var dataFormatSuggested = {
