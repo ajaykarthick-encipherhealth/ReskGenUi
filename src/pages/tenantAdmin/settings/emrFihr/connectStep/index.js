@@ -40,6 +40,7 @@ const ConnectStep = ({
     const res = await orgSubmit(
       filedInputValues?.appType,
       filedInputValues?.emrType,
+      filedInputValues?.accessType,
       inputValueOrg
     );
     if (res.status == "SUCCESS") {
