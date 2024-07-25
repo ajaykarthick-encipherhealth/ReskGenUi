@@ -16,6 +16,7 @@ import {
 import InputField from "../../../../components/input";
 import { getFilters } from "../../../../stores/authflow/actions";
 import MoreFilter from "../filters";
+import { InfoCircleFilled } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 
@@ -504,8 +505,7 @@ const HeaderFilters = ({
               >
                 <Tooltip title="Click here for status information.">
                   <div className={Tracking.iconBorder}>
-                    <FontAwesomeIcon icon={faChartSimple} />
-                    {/* <FontAwesomeIcon icon={faPalette} /> */}
+                    <InfoCircleFilled />
                   </div>
                 </Tooltip>
               </Popover>
