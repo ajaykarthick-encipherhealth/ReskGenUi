@@ -77,7 +77,7 @@ const ComboCard = ({
               <label htmlFor="description">Description</label>
             </div>
             <div className="col-xl-1">
-              {isAddComboCode && (
+              {/* {isAddComboCode && (
                 <div className="d-flex justify-content-center">
                   <button
                     onClick={() => addComboCode()}
@@ -92,7 +92,7 @@ const ComboCard = ({
                     />
                   </button>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>
