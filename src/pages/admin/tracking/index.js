@@ -28,10 +28,10 @@ import Completed from "../../../../src/images/trackingImages/CompletedTrack.png"
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 import Abort from "../../../../src/images/trackingImages/Abort.png";
-import { actions as allActions } from '../../../stores/admin/workqueue'
+import { actions as allActions } from "../../../stores/admin/workqueue";
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
-import { patientDetails } from "../../../stores/authflow/actions";
+import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 const bullets = [
   {
@@ -104,7 +104,7 @@ const auditStatusOptions = [
 const Patient = ({ getTrackingList, loader, response }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
-  const filteredList = useSelector((state) => state.auth.filterList);
+  // const filteredList = useSelector((state) => state.auth.filterList);
   const sideMenu = useSelector((state) => state.sideMenu);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -161,16 +161,19 @@ const Patient = ({ getTrackingList, loader, response }) => {
   const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
 
   useEffect(() => {
-
     if (window !== "undefined") {
-      setIsLoading(true)
+      setIsLoading(true);
       if (navigate) {
-        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0)
-        setPaginationFirst(navigate?.query?.paginationFirst ? navigate?.query?.paginationFirst : 0)
+        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
+        setPaginationFirst(
+          navigate?.query?.paginationFirst
+            ? navigate?.query?.paginationFirst
+            : 0
+        );
       }
     }
-    setIsLoading(false)
-  }, [navigate])
+    setIsLoading(false);
+  }, [navigate]);
 
   useEffect(() => {
     const data = {
@@ -192,22 +195,26 @@ const Patient = ({ getTrackingList, loader, response }) => {
       auditSelectedOption: clear
         ? ""
         : auditSelectedOption
-          ? auditSelectedOption?.value
-          : "",
+        ? auditSelectedOption?.value
+        : "",
       selAuditAllocatedBy: clear
         ? ""
         : selAuditAllocatedBy
-          ? selAuditAllocatedBy?.value
-          : "",
+        ? selAuditAllocatedBy?.value
+        : "",
       auditSelAllocatedTo: clear
         ? ""
         : auditSelAllocatedTo
-          ? auditSelAllocatedTo?.value
-          : "",
+        ? auditSelAllocatedTo?.value
+        : "",
       sort,
     };
-    setIsLoading(true)
+    setIsLoading(true);
     getTrackingList({ data: data });
+    dispatch(getFilters("auditAllocatedBy"));
+    dispatch(getFilters("patientAllocated"));
+    dispatch(getFilters("auditedAssigned"));
+    dispatch(getFilters("allocatedBy"));
   }, [
     pageNo,
     dueDateStart,
@@ -515,6 +522,16 @@ const Patient = ({ getTrackingList, loader, response }) => {
     setTableLoading(true);
     getAllList(response?.response);
   };
+
+  const auditAllocatedBy = useSelector(
+    (state) => state.filters.auditAllocatedBy
+  );
+  const patientAllocated = useSelector(
+    (state) => state.filters.patientAllocated
+  );
+  const auditedAssigned = useSelector((state) => state.filters.auditedAssigned);
+  const allocatedBy = useSelector((state) => state.filters.allocatedBy);
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -533,7 +550,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
                             isAuditAllocatedToSelector={true}
                             auditAllocatedTolabel="Audit Allocated to"
                             auditallocatedToOptoons={generateOptionsList(
-                              filteredList
+                              auditedAssigned
                             )}
                             setAuditSelAllocatedTo={setAuditSelAllocatedTo}
                             setSearch={setSearchTextValue}
@@ -579,7 +596,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
                             isAllocatedToSelector={true}
                             allocatedTolabel="Allocated to"
                             allocatedToOptoons={generateOptionsList(
-                              filteredList
+                              patientAllocated
                             )}
                             setSelAllocatedTo={setSelAllocatedTo}
                             // defaultAllocateTo="All"
@@ -587,9 +604,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
                             // allocated by
                             isAllocatedBySelector={true}
                             allocatedBylabel=" Allocated By"
-                            allocatedByOptoons={generateOptionsList(
-                              filteredList
-                            )}
+                            allocatedByOptoons={generateOptionsList(allocatedBy)}
                             setSelAllocatedBy={setSelAllocatedBy}
                             // defaultAllocatedBy={"All"}
                             bullets={bullets}
@@ -602,7 +617,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
                             setEndDate6={setAuditedDueEndDate}
                             setSelAuditAllocatedBy={setSelAuditAllocatedBy}
                             auditAllocatedByOptoons={generateOptionsList(
-                              filteredList
+                              auditAllocatedBy
                             )}
                             setClear={setClear}
                             clear={clear}
@@ -640,7 +655,9 @@ const Patient = ({ getTrackingList, loader, response }) => {
                         ) : (
                           <>
                             <TrackingTable
-                              patinetListAll={response?.response?.patientDTOList?.content}
+                              patinetListAll={
+                                response?.response?.patientDTOList?.content
+                              }
                               actionBodyTemplate={actionBodyTemplate}
                               statusBodyTemplate={processstatusBodyTemplate}
                               auditBodyTemplate={auditstatusBodyTemplate}
@@ -654,7 +671,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
                               setSortAuditOrder={setSortAuditOrder}
                               sortDueOrder={sortDueOrder}
                               setSortDueOrder={setSortDueOrder}
-                              sortAuditDueOrder={sortAuditDueOrder} 
+                              sortAuditDueOrder={sortAuditDueOrder}
                               setSortAuditDueOrder={setSortAuditDueOrder}
                             />
                             <div>
@@ -662,11 +679,18 @@ const Patient = ({ getTrackingList, loader, response }) => {
                                 <Paginator
                                   first={pageNo === 0 ? 0 : paginationFirst}
                                   rows={15}
-                                  totalRecords={response?.response?.patientDTOList?.totalElements}
+                                  totalRecords={
+                                    response?.response?.patientDTOList
+                                      ?.totalElements
+                                  }
                                   onPageChange={onPageChange}
                                 />
                                 <div className="total-pages">
-                                  Total count: {response?.response?.patientDTOList?.totalElements}
+                                  Total count:{" "}
+                                  {
+                                    response?.response?.patientDTOList
+                                      ?.totalElements
+                                  }
                                 </div>
                               </div>
                             </div>
@@ -683,7 +707,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
       </div>
     </>
   );
-}
+};
 
 const connector = connect(
   (state) => ({
@@ -694,4 +718,4 @@ const connector = connect(
     getTrackingList: allActions.getTrackingList,
   }
 );
-export default connector(Patient)
+export default connector(Patient);

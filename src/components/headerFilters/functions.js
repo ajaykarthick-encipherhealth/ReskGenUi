@@ -294,27 +294,22 @@ export const priorityStatus = (value) => {
 };
 
 export const generateOptionsList = (items) => {
-  if (!items?.data) {
-    return [{ label: "Loading...", value: "", isDisabled: true }];
+  if (items?.data?.data?.response?.length>0) {
+    const options = [
+      { label: "All", value: "" },
+      ...items?.data?.data?.response?.map((item) => ({
+        label: (
+          <span>
+            {item?.firstName}&nbsp;&nbsp;{item?.lastName}
+          </span>
+        ),
+        value: item?.userName,
+      })),
+    ].filter(Boolean);
+    return options;
   } else {
-    if (items?.data?.data?.response) {
-      const options = [
-        { label: "All", value: "" },
-        ...items?.data?.data?.response?.map((item) => ({
-          label: (
-            <span>
-              {item?.firstName}&nbsp;&nbsp;{item?.lastName}
-            </span>
-          ),
-          value: item?.userName,
-        })),
-      ].filter(Boolean);
-      return options;
-    } else {
-      const options = [{ label: "All", value: "" }];
-      return options;
-    }
-    // }
+    
+    return [];
   }
 };
 export const generateOptionsLists = (items) => {

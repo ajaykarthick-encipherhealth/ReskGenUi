@@ -30,7 +30,7 @@ import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDecl
 import Abort from "../../../../src/images/trackingImages/Abort.png";
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
-import { patientDetails } from "../../../stores/authflow/actions";
+import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/tracking";
 import { actions as tenantUserAdminAction } from "../../../stores/tenantAdmin/users";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
@@ -112,7 +112,7 @@ const Patient = ({
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
-  const filteredList = useSelector((state) => state.auth.filterList);
+  // const filteredList = useSelector((state) => state.auth.filterList);
   const sideMenu = useSelector((state) => state.sideMenu);
   const response = useSelector((state) => state.adminList.tracking);
   const [validated, setValidated] = useState(false);
@@ -247,6 +247,10 @@ const Patient = ({
     };
     setIsLoading(true);
     getAllTrackingList(datas);
+    dispatch(getFilters("auditAllocatedBy"));
+    dispatch(getFilters("patientAllocated"));
+    dispatch(getFilters("auditedAssigned"));
+    dispatch(getFilters("allocatedBy"));
     // setIsLoading(false);
   }, [
     pageNo,
@@ -575,6 +579,15 @@ const Patient = ({
     });
     setOrgAllList(orgListArray);
   }, [organizationList]);
+  const auditAllocatedBy = useSelector(
+    (state) => state.filters.auditAllocatedBy
+  );
+  const patientAllocated = useSelector(
+    (state) => state.filters.patientAllocated
+  );
+  const auditedAssigned = useSelector((state) => state.filters.auditedAssigned);
+  const allocatedBy = useSelector((state) => state.filters.allocatedBy);
+  const organization = useSelector((state) => state.filters.organization);
 
   return (
     <>
@@ -597,7 +610,7 @@ const Patient = ({
                             isAuditAllocatedToSelector={true}
                             auditAllocatedTolabel="Audit Allocated to"
                             auditallocatedToOptoons={generateOptionsList(
-                              filteredList
+                              auditedAssigned
                             )}
                             setAuditSelAllocatedTo={setAuditSelAllocatedTo}
                             setSearch={setSearchTextValue}
@@ -643,7 +656,7 @@ const Patient = ({
                             isAllocatedToSelector={true}
                             allocatedTolabel="Allocated to"
                             allocatedToOptoons={generateOptionsList(
-                              filteredList
+                              patientAllocated
                             )}
                             setSelAllocatedTo={setSelAllocatedTo}
                             // defaultAllocateTo="All"
@@ -652,7 +665,7 @@ const Patient = ({
                             isAllocatedBySelector={true}
                             allocatedBylabel=" Allocated By"
                             allocatedByOptoons={generateOptionsList(
-                              filteredList
+                              allocatedBy
                             )}
                             setSelAllocatedBy={setSelAllocatedBy}
                             // defaultAllocatedBy={"All"}
@@ -666,7 +679,7 @@ const Patient = ({
                             setEndDate6={setAuditedDueEndDate}
                             setSelAuditAllocatedBy={setSelAuditAllocatedBy}
                             auditAllocatedByOptoons={generateOptionsList(
-                              filteredList
+                              auditAllocatedBy
                             )}
                             orgAllList={orgAllList}
                             setSelectedOrgList={setSelectedOrgList}

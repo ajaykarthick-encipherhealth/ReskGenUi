@@ -225,15 +225,15 @@ const HeaderFilters = ({
           {isNextCreatedBySelector && (
             <div
               className={defaultSize}
-              onClick={() => {
-                dispatch(
-                  getFilters(
-                    optionKey ? optionKey : "createdBy",
-                    null,
-                    "auditedqueue"
-                  )
-                );
-              }}
+              // onClick={() => {
+              //   dispatch(
+              //     getFilters(
+              //       optionKey ? optionKey : "createdBy",
+              //       null,
+              //       "auditedqueue"
+              //     )
+              //   );
+              // }}
             >
               <label className={styles.label}>{createdTolabel}</label>
               <div class="form-group has-search">
@@ -542,11 +542,11 @@ const HeaderFilters = ({
               <div
                 className={defaultSize}
                 style={{ position: "relative", left: atCorner && "-20px" }}
-                onClick={() => {
-                  dispatch(
-                    getFilters(selectorField ? selectorField : "allocatedBy")
-                  );
-                }}
+                // onClick={() => {
+                //   dispatch(
+                //     getFilters(selectorField ? selectorField : "allocatedBy")
+                //   );
+                // }}
               >
                 <label className={styles.label}>{allocatedBylabel}</label>
                 <div class="form-group has-search">
@@ -592,9 +592,9 @@ const HeaderFilters = ({
               <div
                 className={defaultSize}
                 style={{ zIndex: tracking && "2" }}
-                onClick={() => {
-                  dispatch(getFilters("patientAllocated"));
-                }}
+                // onClick={() => {
+                //   dispatch(getFilters("patientAllocated"));
+                // }}
               >
                 <label className={styles.label}>{allocatedTolabel}</label>
                 <div class="form-group has-search">
@@ -616,15 +616,15 @@ const HeaderFilters = ({
             {isCreatedBySelector && (
               <div
                 className={defaultSize}
-                onClick={() => {
-                  dispatch(
-                    getFilters(
-                      optionKey ? optionKey : "createdBy",
-                      null,
-                      "audited queue"
-                    )
-                  );
-                }}
+                // onClick={() => {
+                //   dispatch(
+                //     getFilters(
+                //       optionKey ? optionKey : "createdBy",
+                //       null,
+                //       "audited queue"
+                //     )
+                //   );
+                // }}
               >
                 <label className={styles.label}>{createdTolabel}</label>
                 <div class="form-group has-search">

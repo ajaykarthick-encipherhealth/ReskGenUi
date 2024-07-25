@@ -99,7 +99,7 @@ const Patient = ({
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
 
-  const filteredList = useSelector((state) => state.auth.filterList);
+  const filteredList = useSelector((state) => state.filters?.patientAllocated);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [searchStr, setSearchStr] = useState("");
@@ -241,8 +241,7 @@ const Patient = ({
   const searchFunction = (search, activeTab) => {
     if (activeTab === 1) {
       setSearchStr(search);
-    }
-    else {
+    } else {
       if (!isPatientList) {
         getAuditL2List(pageNo, search);
       } else {
@@ -306,6 +305,7 @@ const Patient = ({
     if (activeTab == 2 && !isPatientList) {
       getAuditL2List(pageNo, searchStr);
     }
+    dispatch(getFilters("patientAllocated"));
   }, [
     pageNo,
     pageSize,

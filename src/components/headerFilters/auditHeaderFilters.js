@@ -176,9 +176,9 @@ const AuditHeaderFilters = ({
           {isAuditAllocatedBy && (
             <div
               className="col-xl-2"
-              onClick={() => {
-                dispatch(getFilters("auditAllocatedBy", username));
-              }}
+              // onClick={() => {
+              //   dispatch(getFilters("auditAllocatedBy", username));
+              // }}
             >
               <label className={styles.label}>{audiallocatedBylabel}</label>
               <div class="form-group has-search">
@@ -345,9 +345,9 @@ const AuditHeaderFilters = ({
             {isAllocatedBySelector && (
               <div
                 className="col-xl-2"
-                onClick={() => {
-                  dispatch(getFilters("allocatedBy", username));
-                }}
+                // onClick={() => {
+                //   dispatch(getFilters("allocatedBy", username));
+                // }}
                 style={{ zIndex: "2" }}
               >
                 <label className={styles.label}>{allocatedBylabel}</label>
