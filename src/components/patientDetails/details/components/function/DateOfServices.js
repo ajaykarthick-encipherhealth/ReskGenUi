@@ -63,6 +63,7 @@ export const getDateOfServiceBackground = ({ value }) => {
           }
           trigger={["hover"]}
           placement="bottom"
+          overlayStyle={{ zIndex: 9999 }}
         >
           <span
             style={{
