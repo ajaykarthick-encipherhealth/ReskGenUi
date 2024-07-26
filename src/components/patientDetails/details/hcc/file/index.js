@@ -432,9 +432,7 @@ const File = ({
                             className={`${visitStyles.deleted_title_badge}`}
                           >
                             {
-                              deletedHccList.filter(
-                                (item) => item.isComboCode != true
-                              ).length
+                              deletedHccList.length
                             }
                           </span>
                         </div>
