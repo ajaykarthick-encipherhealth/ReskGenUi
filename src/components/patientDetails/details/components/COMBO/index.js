@@ -77,7 +77,7 @@ const ComboCard = ({
               <label htmlFor="description">Description</label>
             </div>
             <div className="col-xl-1">
-              {isAddComboCode && (
+              {/* {isAddComboCode && (
                 <div className="d-flex justify-content-center">
                   <button
                     onClick={() => addComboCode()}
@@ -92,7 +92,7 @@ const ComboCard = ({
                     />
                   </button>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>
@@ -295,12 +295,12 @@ const ComboCard = ({
                               setActiveTabHead(4);
                               setActiveMeatTitle({
                                 header: "M",
-                                diagnosisCode: item?.diagnosisCodeCombo,
+                                diagnosisCode: item?.diagnosisCode,
                               });
                             }}
                           >
                             {getMeatFound(
-                              item?.diagnosisCodeCombo,
+                              item?.diagnosisCode,
                               meatCriteriaList,
                               "M"
                             )}
@@ -310,12 +310,12 @@ const ComboCard = ({
                               setActiveTabHead(4);
                               setActiveMeatTitle({
                                 header: "E",
-                                diagnosisCode: item?.diagnosisCodeCombo,
+                                diagnosisCode: item?.diagnosisCode,
                               });
                             }}
                           >
                             {getMeatFound(
-                              item?.diagnosisCodeCombo,
+                              item?.diagnosisCode,
                               meatCriteriaList,
                               "E"
                             )}
@@ -325,12 +325,12 @@ const ComboCard = ({
                               setActiveTabHead(4);
                               setActiveMeatTitle({
                                 header: "A",
-                                diagnosisCode: item?.diagnosisCodeCombo,
+                                diagnosisCode: item?.diagnosisCode,
                               });
                             }}
                           >
                             {getMeatFound(
-                              item?.diagnosisCodeCombo,
+                              item?.diagnosisCode,
                               meatCriteriaList,
                               "A"
                             )}
@@ -340,12 +340,12 @@ const ComboCard = ({
                               setActiveTabHead(4);
                               setActiveMeatTitle({
                                 header: "T",
-                                diagnosisCode: item?.diagnosisCodeCombo,
+                                diagnosisCode: item?.diagnosisCode,
                               });
                             }}
                           >
                             {getMeatFound(
-                              item?.diagnosisCodeCombo,
+                              item?.diagnosisCode,
                               meatCriteriaList,
                               "T"
                             )}
