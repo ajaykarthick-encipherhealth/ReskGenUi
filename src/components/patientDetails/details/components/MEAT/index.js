@@ -403,7 +403,7 @@ const MeatCard = ({
                                 cardTitle == "VALID_MEAT" ? true : false
                               }
                               setIsValidAction={setIsValidAction}
-                              cardTitle="MEAT"
+                              cardTitle={item.isMeatCriteriaPresent === true ? "MEAT" : "NON_MEAT"}
                               setConfirmNotesModalValid={
                                 setConfirmNotesModalValid
                               }
