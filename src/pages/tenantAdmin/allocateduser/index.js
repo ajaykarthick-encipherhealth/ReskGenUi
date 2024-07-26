@@ -98,7 +98,6 @@ const Patient = ({
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-
   const filteredList = useSelector((state) => state.auth.filterList);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -217,9 +216,14 @@ const Patient = ({
     setPaginationFirst(e.first);
     setPageNoL2Patient(e.page);
     setPageSize(e.rows);
-    getL2PatientList(l2selectUser, e.page, sort, "");
+    getL2PatientList({
+      data: l2selectUser,
+      pageNoL2Patient: e.page,
+      sort: sort,
+    });
     setTableLoading(true);
   };
+
   const selectTabClick = (number) => {
     setSearchString("");
     setPaginationFirst(0);
@@ -230,6 +234,8 @@ const Patient = ({
     setSelectedRowsId([]);
     setSelectAllChecked(false);
     setSelectAllCheckedL2(false);
+    setSelectedOption("");
+    setSelectedOptions("");
     if (number == 2) {
       getAuditL2List(pageNoL2User, "");
     } else {
@@ -241,12 +247,16 @@ const Patient = ({
   const searchFunction = (search, activeTab) => {
     if (activeTab === 1) {
       setSearchStr(search);
-    }
-    else {
+    } else {
       if (!isPatientList) {
         getAuditL2List(pageNo, search);
       } else {
-        getL2PatientList(l2selectUser, pageNoL2Patient, sort, search);
+        getL2PatientList({
+          data: l2selectUser,
+          pageNoL2Patient: pageNoL2Patient,
+          sort: sort,
+          searchString: search,
+        });
       }
     }
   };
@@ -341,7 +351,11 @@ const Patient = ({
           style={{ height: "35px" }}
           key={index}
           onClick={() => {
-            getL2PatientList(data, pageNoL2Patient, sort, "");
+            getL2PatientList({
+              data,
+              pageNoL2Patient: pageNoL2Patient,
+              sort: sort,
+            });
           }}
         >
           <td
@@ -416,16 +430,17 @@ const Patient = ({
   const statusOptions = [
     { label: "COMPLETED", value: "COMPLETED" },
     { label: "DECLINED", value: "DECLINED" },
+    { label: "ALL", value: "ALL" },
   ];
 
-  const getL2PatientList = async (
+  const getL2PatientList = async ({
     data,
     pageNoL2Patient,
     sort,
     searchString,
     selectedOptions,
-    allocatedOption
-  ) => {
+    allocatedOption,
+  }) => {
     setTableLoading(true);
     setIsLoading(true);
     let dataMap = {
@@ -440,8 +455,8 @@ const Patient = ({
       sort?.sortDir ? sort?.sortDir : "DESC"
     }&sortfield=${
       sort?.sortField ? sort?.sortField : "dueDate"
-    }&searchstring=${searchString}&processedStatus=${
-      selectedOptions ? selectedOptions : ""
+    }&searchstring=${searchString?searchString:""}&processedStatus=${
+      selectedOptions ? selectedOptions==="ALL"?"":selectedOptions : ""
     }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
     getSelectedSupervisorList({ url: resoureUrl });
     setIsPatientList(true);
@@ -476,6 +491,12 @@ const Patient = ({
   useEffect(() => {
     dispatch(getFilters("patientAllocated"));
   }, []);
+
+  useEffect(() => {
+    if (selectedOptions?.length > 0) {
+      getL2PatientList({data:l2selectUser,pageNoL2Patient:pageNoL2Patient, selectedOptions: selectedOptions });
+    }
+  }, [selectedOptions]);
 
   return (
     <>
@@ -587,6 +608,7 @@ const Patient = ({
                                     defaultSelectValue1={""}
                                     // isClose={true}
                                     setPageNo={setPageNo}
+                                    selectDefaultValue={selectedOption}
                                   />
                                 </div>
                               </div>
