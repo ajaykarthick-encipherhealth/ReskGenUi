@@ -356,7 +356,7 @@ const Accuracy = ({
               fontSize="20px"
             />
           </div>
-          <div className="d-flex" style ={{    margin: "20px 20px 0px 0px"}}>
+          <div className= {styles.btn}   >
             <div className={styles.btnScroller}>
               <Buttonscroller
                 Buttons={TabButtons}
