@@ -11,7 +11,7 @@ import {
   moveToAnotherAction,
 } from "../function/ReusableFunctions";
 import { SVGICON } from "../../../../../jsx/constant/theme";
-
+import {actions as detailsAction} from '../../../../../stores/patient/details'
 import { connect } from "react-redux";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
 import MovementAction from "../movementAction";
@@ -42,6 +42,7 @@ const MeatCard = ({
   onchangeMeat,
   getDisTitlePopover,
   cardTitle,
+  getSelectedDosPageNumber
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -147,7 +148,25 @@ const MeatCard = ({
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
                           >
-                            {getProviderNameTag(
+                            {getProviderNameTag({
+                              providerNames: item?.providerName,
+                              hyperlinks:item?.providerHyperlinks,
+                              setSearch: setSearch,
+                              diagnosisCode: item.diagnosisCode,
+                              diseaseName: item.diseaseName,
+                              setIsModalOpen: setIsModalOpen,
+                              setFileModalHeader: setFileModalHeader,
+                              patientDocumentResult: patientDocumentResult,
+                              setIsMulitpleHeader: setIsMulitpleProvider,
+                              isMulitpleHeader: isMulitpleProvider,
+                              setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
+                              isMulitpleHeaderCode: isMulitpleHeaderCode,
+                              setSelectMeatResult: setSelectMeatResult,
+                              meatresult:item,
+                              getSelectedDosPageNumber:
+                                getSelectedDosPageNumber,
+                            })}
+                            {/* {getProviderNameTag(
                               item?.providerName,
                               item?.providerHyperlinks,
                               setSearch,
@@ -162,7 +181,7 @@ const MeatCard = ({
                               isMulitpleHeaderCode,
                               setSelectMeatResult,
                               item
-                            )}
+                            )} */}
                           </div>
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
@@ -225,7 +244,8 @@ const MeatCard = ({
                           item.diagnosisCode,
                           setSelectMeatResult,
                           item,
-                          setSelectHyperlink
+                          setSelectHyperlink,
+                          getSelectedDosPageNumber
                         )}
                       </div>
                     </div>
@@ -268,7 +288,8 @@ const MeatCard = ({
                           item.diagnosisCode,
                           setSelectMeatResult,
                           item,
-                          setSelectHyperlink
+                          setSelectHyperlink,
+                          getSelectedDosPageNumber
                         )}
                       </div>
                     </div>
@@ -354,7 +375,8 @@ const MeatCard = ({
                           item.diagnosisCode,
                           setSelectMeatResult,
                           item,
-                          setSelectHyperlink
+                          setSelectHyperlink,
+                          getSelectedDosPageNumber
                         )}
                       </div>
                     </div>
@@ -470,5 +492,7 @@ const MeatCard = ({
 
 const enhancer = connect((state) => ({
   fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
-}));
+}),{
+  getSelectedDosPageNumber:detailsAction.getSelectedDosPageNumber
+});
 export default enhancer(MeatCard);

@@ -29,6 +29,7 @@ const Hcc = ({
   getpatientDetailsData,
   patientDosResult,
   getSelectedDos,
+  getSelectedDosPageNumber,
 }) => {
   const dispatch = useDispatch();
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -40,7 +41,7 @@ const Hcc = ({
   const [search, setSearch] = useState();
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [dosSummariesList, setDosSummariesList] = useState([]);
-  const [selectDosValue, setSelectDosValue] = useState('');
+  const [selectDosValue, setSelectDosValue] = useState("");
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
@@ -76,6 +77,10 @@ const Hcc = ({
   const handleOptions = (value) => {
     setIsLoading(true);
     setSelectDosValue(value);
+    const filteredDos = pageNumberOptions?.filter(
+      (data) => data?.dos === value
+    );
+    getSelectedDosPageNumber(filteredDos?.length>0?filteredDos[0]?.startPageNumber:null);
     if (value) {
       getSelectedDos(value);
     } else {
@@ -173,11 +178,7 @@ const Hcc = ({
                         handleChangePageNumber(data.startPageNumber)
                       }
                     >
-                      <span
-                       
-                      >
-                        {data?.startPageNumber}
-                      </span>
+                      <span>{data?.startPageNumber}</span>
                     </div>
                     <div
                       className="col-xl-1 text-center"
@@ -192,14 +193,9 @@ const Hcc = ({
                         textAlign: "center",
                         margin: "10px",
                       }}
-                      onClick={() =>
-                        handleChangePageNumber(data.endPagNumber)
-                      }
+                      onClick={() => handleChangePageNumber(data.endPagNumber)}
                     >
-                      <span
-                      >
-                        {data?.endPagNumber}
-                      </span>
+                      <span>{data?.endPagNumber}</span>
                     </div>
                   </div>
                 </div>
@@ -344,9 +340,10 @@ const Hcc = ({
                     </Select>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item mx-2">
-                    {localStorage.getItem("role") != "admin" && selectDosValue &&  (
-                      <YearAndDosStatus setIsLoading={setIsLoading} />
-                    )}
+                    {localStorage.getItem("role") != "admin" &&
+                      selectDosValue && (
+                        <YearAndDosStatus setIsLoading={setIsLoading} />
+                      )}
                   </Nav.Item>
                   {activeTabHead == 1 && (
                     <Popover
@@ -505,6 +502,7 @@ const enhancer = connect(
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
     getSelectedDos: detailsActions.getSelectedDos,
+    getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
   }
 );
 export default enhancer(Hcc);

@@ -110,3 +110,5 @@ export const labDosDeatilsAction = createActionThunk(
   "LAB_DOS_LIST",
   network.labdosWiseList
 );
+
+export const getSelectedDosPageNumber = createAction("GET_SELECTED_DOS_PAGE_NUMBER");
