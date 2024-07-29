@@ -207,6 +207,7 @@ const Accuracy = ({
       text: "",
     },
     xAxis: {
+      type: "category",
       categories: (() => {
         if (selectedValue === "custom") {
           return customDate;
@@ -218,8 +219,33 @@ const Accuracy = ({
           return last30Days;
         }
       })(),
-      crosshair: true,
       labels: {
+        rotation: 0,
+        step: (() => {
+          const categories = (() => {
+            if (selectedValue === "custom") {
+              return customDate;
+            } else if (selectedValue === "last_1_week") {
+              return getLast7Days();
+            } else {
+              const last30Days = getLast30Days();
+              last30Days.push("");
+              return last30Days;
+            }
+          })();
+
+          if (selectedValue === "last_1_week") {
+            return;
+          } else if (selectedValue === "custom") {
+            return categories.length > 50
+              ? Math.ceil(categories.length / 25)
+              : 2;
+          } else if (selectedValue === "last_1_month") {
+            return 2;
+          }
+
+          return 1;
+        })(),
         formatter: function () {
           const categories = this.axis.categories;
           const index = categories.indexOf(this.value);
@@ -253,20 +279,8 @@ const Accuracy = ({
           fontSize: "12px",
           whiteSpace: "nowrap",
         },
-        rotation: 0,
-        align: "center",
-        x: 2,
-        y: 20,
-        step:
-          selectedValue === "last_1_week"
-            ? 1
-            : selectedValue === "custom"
-            ? 15
-            : 2,
       },
       lineColor: "#d9d9d9",
-      minPadding: 0.1,
-      maxPadding: 0.1,
     },
     yAxis: [
       {
@@ -345,7 +359,7 @@ const Accuracy = ({
       },
     ],
   };
-  
+
   return (
     <>
       <div className={styles.card3}>
