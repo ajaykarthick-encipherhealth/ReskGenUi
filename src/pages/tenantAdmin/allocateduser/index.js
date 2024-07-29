@@ -98,7 +98,7 @@ const Patient = ({
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-  const filteredList = useSelector((state) => state.auth.filterList);
+  const filteredList = useSelector((state) => state.auth?.filters?.patientAllocated);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [searchStr, setSearchStr] = useState("");
@@ -316,6 +316,7 @@ const Patient = ({
     if (activeTab == 2 && !isPatientList) {
       getAuditL2List(pageNo, searchStr);
     }
+    dispatch(getFilters("patientAllocated"));
   }, [
     pageNo,
     pageSize,

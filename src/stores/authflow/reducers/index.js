@@ -121,3 +121,28 @@ export function PatientStore(state = initialStatePatient, action) {
   }
   return state;
 }
+
+const filterInitialState = {
+  auditAllocatedBy: [],
+  patientAllocated: [],
+  auditedAssigned: [],
+  organization: [],
+  allocatedBy: [],
+};
+
+const filterReducer = (state = filterInitialState, action) => {
+  switch (action.type) {
+    case 'SET_FILTERS_AUDITALLOCATEDBY':
+      return { ...state, auditAllocatedBy: action.payload };
+    case 'SET_FILTERS_PATIENTALLOCATED':
+      return { ...state, patientAllocated: action.payload };
+    case 'SET_FILTERS_AUDITEDASSIGNED':
+      return { ...state, auditedAssigned: action.payload };
+    case 'SET_FILTERS_ALLOCATEDBY':
+      return { ...state, allocatedBy: action.payload };
+    default:
+      return state;
+  }
+};
+
+export default filterReducer;

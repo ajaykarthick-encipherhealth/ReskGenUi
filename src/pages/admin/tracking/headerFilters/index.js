@@ -142,9 +142,9 @@ const HeaderFilters = ({
             <div
               className={defaultSize}
               style={{ zIndex: tracking && "2" }}
-              onClick={() => {
-                dispatch(getFilters("patientAllocated"));
-              }}
+              // onClick={() => {
+              //   dispatch(getFilters("patientAllocated"));
+              // }}
             >
               <label className={styles.label}>Reviewer</label>
               <div class="form-group has-search">
@@ -168,9 +168,9 @@ const HeaderFilters = ({
             <div
               className={defaultSize}
               style={{ zIndex: tracking && "2" }}
-              onClick={() => {
-                dispatch(getFilters("auditedAssigned"));
-              }}
+              // onClick={() => {
+              //   dispatch(getFilters("auditedAssigned"));
+              // }}
             >
               <label className={styles.label}>Supervisor</label>
               <div class="form-group has-search">
@@ -400,11 +400,11 @@ const HeaderFilters = ({
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
-                onClick={() => {
-                  dispatch(
-                    getFilters(selectorField ? selectorField : "allocatedBy")
-                  );
-                }}
+                // onClick={() => {
+                //   dispatch(
+                //     getFilters(selectorField ? selectorField : "allocatedBy")
+                //   );
+                // }}
               >
                 <label className={styles.label}>{allocatedBylabel}</label>
                 <div class="form-group has-search">
@@ -427,9 +427,9 @@ const HeaderFilters = ({
             {isSelector ? (
               <div
                 className={defaultSize}
-                onClick={() => {
-                  dispatch(getFilters("auditAllocatedBy"));
-                }}
+                // onClick={() => {
+                //   dispatch(getFilters("auditAllocatedBy"));
+                // }}
               >
                 <label className={styles.label}>{"Audit Allocated By"}</label>
                 <div class="form-group has-search">

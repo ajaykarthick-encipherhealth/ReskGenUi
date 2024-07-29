@@ -470,7 +470,7 @@ export const getFilters = (field, username, pageQueue) => async (dispatch) => {
       }`;
 
   dispatch({
-    type: FILTER,
+    type: `SET_FILTERS_${field.toUpperCase()}`,
     payload: {
       loading: true,
       data: null,
@@ -485,7 +485,7 @@ export const getFilters = (field, username, pageQueue) => async (dispatch) => {
 
     if (response) {
       dispatch({
-        type: FILTER,
+        type: `SET_FILTERS_${field.toUpperCase()}`,
         payload: {
           data: response,
           loading: false,

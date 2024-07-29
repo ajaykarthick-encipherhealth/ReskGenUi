@@ -77,7 +77,7 @@ const Patient = ({ getWorkListFilter, response, loader }) => {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   // const response = useSelector((state) => state.AuditWork.workListFilter);
-  const filteredList = useSelector((state) => state.auth.filterList);
+  const filteredList = useSelector((state) => state.filters?.patientAllocated);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
@@ -143,6 +143,7 @@ const Patient = ({ getWorkListFilter, response, loader }) => {
     };
 
     getWorkListFilter({ data: data });
+    dispatch(getFilters("patientAllocated"));
   }, [
     pageNo,
     computedStartDate,

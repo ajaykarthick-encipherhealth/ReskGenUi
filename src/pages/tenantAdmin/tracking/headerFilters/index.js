@@ -264,11 +264,11 @@ const HeaderFilters = ({
         return (
           <div
             className={defaultSize}
-            onClick={() => {
-              dispatch(
-                getFilters(selectorField ? selectorField : "allocatedBy")
-              );
-            }}
+            // onClick={() => {
+            //   dispatch(
+            //     getFilters(selectorField ? selectorField : "allocatedBy")
+            //   );
+            // }}
           >
             <label className={styles.label}>Allocated By</label>
             <div className="form-group has-search">
@@ -290,9 +290,9 @@ const HeaderFilters = ({
         return (
           <div
             className={defaultSize}
-            onClick={() => {
-              dispatch(getFilters("organization"));
-            }}
+            // onClick={() => {
+            //   dispatch(getFilters("organization"));
+            // }}
           >
             <label className={styles.label}>Select Organization</label>
             <div className="form-group has-search">
@@ -365,9 +365,9 @@ const HeaderFilters = ({
         return (
           <div
             className={defaultSize}
-            onClick={() => {
-              dispatch(getFilters("auditAllocatedBy"));
-            }}
+            // onClick={() => {
+            //   dispatch(getFilters("auditAllocatedBy"));
+            // }}
           >
             <label className={styles.label}>{"Audit Allocated By"}</label>
             <div class="form-group has-search">
@@ -418,9 +418,9 @@ const HeaderFilters = ({
           <div
             className={defaultSize}
             style={{ zIndex: tracking && "2" }}
-            onClick={() => {
-              dispatch(getFilters("patientAllocated"));
-            }}
+            // onClick={() => {
+            //   dispatch(getFilters("patientAllocated"));
+            // }}
           >
             <label className={styles.label}>Reviewer</label>
             <div className="form-group has-search">
@@ -442,9 +442,9 @@ const HeaderFilters = ({
           <div
             className={defaultSize}
             style={{ zIndex: tracking && "2" }}
-            onClick={() => {
-              dispatch(getFilters("auditedAssigned"));
-            }}
+            // onClick={() => {
+            //   dispatch(getFilters("auditedAssigned"));
+            // }}
           >
             <label className={styles.label}>Supervisor</label>
             <div className="form-group has-search">
