@@ -2,7 +2,7 @@
   /* margin-top: -60px; */
   height: 150px;
   overflow-y: hidden;
-  display: flex;
+  /* display: flex; */
 }
 .column {
   flex: 1;
@@ -90,6 +90,6 @@
   font-weight: 700;
 }
 .userNameTitle {
-  width: 90px;
+  width:110px;
   font-size: 14px;
 }

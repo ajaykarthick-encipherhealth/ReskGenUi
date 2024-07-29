@@ -106,32 +106,17 @@ const OrgPieChartInfo = ({ data, orgLoader }) => {
             </Button>
           </div>
           <div className={styles.bulletsDiv}>
-            <div className={styles.column}>
-              {data?.slice(0, 50).map((item) => (
-                <div key={item.name} className={styles.container}>
-                  <div style={{ display: "flex", width: "100%" }}>
-                    <div
-                      className={styles.bgColor}
-                      style={{ backgroundColor: item?.itemStyle?.color }}
-                    ></div>
-                    <span className={styles.userNameTitle}>{item.name}</span>
-                  </div>
+            {data?.map((item) => (
+              <div key={item.name} className={styles.container}>
+                <div style={{ display: "flex", width: "100%" }}>
+                  <div
+                    className={styles.bgColor}
+                    style={{ backgroundColor: item?.itemStyle?.color }}
+                  ></div>
+                  <span className={styles.userNameTitle}>{item.name}</span>
                 </div>
-              ))}
-            </div>
-            <div className={styles.column}>
-              {data?.slice(50, 100).map((item) => (
-                <div key={item.name} className={styles.container}>
-                  <div style={{ display: "flex", width: "100%" }}>
-                    <div
-                      className={styles.bgColor}
-                      style={{ backgroundColor: item?.itemStyle?.color }}
-                    ></div>
-                    <span className={styles.userNameTitle}>{item.name}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </>
       )}
