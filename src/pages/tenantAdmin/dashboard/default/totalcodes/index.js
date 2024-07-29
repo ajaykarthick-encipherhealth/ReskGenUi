@@ -219,7 +219,7 @@ const index = ({
               </div>
               <div>
                 <div className={styles.header}>Total Codes</div>
-                <div className={styles.price}>{getAllHccCodes?.totalCount}</div>
+                <div className={styles.price}>{`${getAllHccCodes?.totalCount || "0.00"} `}</div>
               </div>
             </div>
           </div>
