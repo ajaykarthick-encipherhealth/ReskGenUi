@@ -341,9 +341,9 @@ const Index = ({
             </>
           ) : (
             <>
-              <div className={`row ${styles.box}`}>
+              <div className={`row ${styles.box1}`}>
                 <div className={`col-lg-3`}>
-                  <Card padding="10px" borderRadius={"10px"}>
+                  <Card padding="10px" borderRadius={"10px"} height={"95%"}>
                     <HeadTitle header="Organizations" fontSize="16px" />
                     <OrgPieChartInfo
                       data={orgData}
@@ -353,9 +353,8 @@ const Index = ({
                   </Card>
                 </div>
                 <div className={`col-lg-9`}>
-                  <Card padding="10px" borderRadius={"10px"}>
+                  <Card padding="10px" borderRadius={"10px"} height={"95%"}>
                     <HeadTitle header="Files" fontSize="16px" />
-
                     <WorkFlowFiles
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}

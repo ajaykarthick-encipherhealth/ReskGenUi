@@ -368,10 +368,9 @@ const Accuracy = ({
             <HeadTitle
               header="Accuracy and Quality Insights"
               fontSize="20px"
-              margin="0px"
             />
           </div>
-          <div className="d-flex">
+          <div className= {styles.btn}   >
             <div className={styles.btnScroller}>
               <Buttonscroller
                 Buttons={TabButtons}
