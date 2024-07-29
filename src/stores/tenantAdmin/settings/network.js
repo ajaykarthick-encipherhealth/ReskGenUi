@@ -372,11 +372,11 @@ export async function getFhirConnect(appType,emrType,accessType) {
   return data;
 }
 
-export async function submitFhirOrg(appType,emrType,orgName) {
+export async function submitFhirOrg(appType,emrType,accessType,orgName) {
   const options = {
     method: "GET",
   };
-  const data = await requestPortal(`emr/fhir/v1/emr/add?appType=${appType}&emrType=${emrType}&orgName=${orgName}`, options);
+  const data = await requestPortal(`emr/fhir/v1/emr/add?appType=${appType}&emrType=${emrType}&orgName=${orgName}&access=${accessType}`, options);
   return data;
 }
 

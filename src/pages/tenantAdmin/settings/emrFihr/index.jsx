@@ -44,19 +44,19 @@ const EmrFhir = ({
 
   const FihrList = [
     {
-      emr: "Epic",
+      emr: "EPIC",
       status: "disconnected",
     },
     {
-      emr: "Athena",
+      emr: "ATHENAHEALTH",
       status: "disconnected",
     },
     {
-      emr: "EClinical",
+      emr: "ECW",
       status: "disconnected",
     },
     {
-      emr: "Cerner",
+      emr: "CERNER",
       status: "disconnected",
     },
   ];
@@ -140,6 +140,19 @@ const EmrFhir = ({
     }
   }, [connectStatus]);
 
+  // useEffect(() => {
+  //   console.log(fhirAllList?.data?.response)
+  //   fhirAllList?.data?.response.map((res, index) => {
+  //     var foundItem = FihrList?.find(
+  //       (x) => x.emr == res.emrType
+  //     );
+  //     if (foundItem) {
+  //       foundItem.status = "connected";
+  //     }
+
+  //   });
+  // }, [fhirAllList]);
+
   return (
     <div>
       <div className="p-3">
@@ -179,13 +192,13 @@ const EmrFhir = ({
                       width: "220px",
                     }}
                   >
-                    {item.emr == "Epic" ? (
+                    {item.emr == "EPIC" ? (
                       <Image src={Epic} width={100} alt="epic" />
-                    ) : item.emr == "Athena" ? (
+                    ) : item.emr == "ATHENAHEALTH" ? (
                       <Image src={Athena} width={100} alt="Athena" />
-                    ) : item.emr == "EClinical" ? (
+                    ) : item.emr == "ECW" ? (
                       <Image src={EClinical} width={100} alt="EClinical" />
-                    ) : item.emr == "Cerner" ? (
+                    ) : item.emr == "CERNER" ? (
                       <Image src={Cerner} width={100} alt="Cerner" />
                     ) : null}
                   </div>
