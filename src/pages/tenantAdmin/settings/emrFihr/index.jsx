@@ -140,22 +140,18 @@ const EmrFhir = ({
     }
   }, [connectStatus]);
 
-  useEffect(() => {
-    console.log(fhirAllList?.data?.response)
-    fhirAllList?.data?.response.map((res, index) => {
-      var foundItem = FihrList?.find(
-        (x) => x.emr == res.emrType
-      );
-      console.log(foundItem)
-      if (foundItem) {
-        foundItem.status = "connected";
-      }
-      console.log(foundItem)
+  // useEffect(() => {
+  //   console.log(fhirAllList?.data?.response)
+  //   fhirAllList?.data?.response.map((res, index) => {
+  //     var foundItem = FihrList?.find(
+  //       (x) => x.emr == res.emrType
+  //     );
+  //     if (foundItem) {
+  //       foundItem.status = "connected";
+  //     }
 
-    });
-
-
-  }, [fhirAllList]);
+  //   });
+  // }, [fhirAllList]);
 
   return (
     <div>
