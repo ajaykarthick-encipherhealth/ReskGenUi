@@ -354,10 +354,9 @@ const Accuracy = ({
             <HeadTitle
               header="Accuracy and Quality Insights"
               fontSize="20px"
-              margin="0px"
             />
           </div>
-          <div className="d-flex">
+          <div className="d-flex" style ={{    margin: "20px 20px 0px 0px"}}>
             <div className={styles.btnScroller}>
               <Buttonscroller
                 Buttons={TabButtons}

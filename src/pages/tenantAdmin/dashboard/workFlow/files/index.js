@@ -188,6 +188,7 @@ const Files = ({
 
   return (
     <div className="" style={{ marginTop: "20px" }}>
+      <div className={styles.head}>
       <div className="d-flex justify-content-between" style={{ width: "100%" }}>
         {cardData?.map((item, index) => (
           <div
@@ -241,6 +242,7 @@ const Files = ({
             )}
           </div>
         ))}
+      </div>
       </div>
 
       {computingStatusLoader ? (
