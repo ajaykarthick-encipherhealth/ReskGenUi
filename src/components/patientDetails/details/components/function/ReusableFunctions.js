@@ -843,8 +843,11 @@ export const handleSubmitValidNotes = async ({
   if (isValidAction.name == "Move to HCC" && isValidAction.title == "MEAT") {
     apiURL = "management/meat/move/suggestedtovalid";
   }
+  if (isValidAction.name == "Move to HCC" && isValidAction.title == "NON_MEAT") {
+    apiURL = "management/meat/move/suggestedtovalid";
+  }
   if (isValidAction.name == "Move to Deleted" && isValidAction.title == "MEAT") {
-    apiURL = "management/meat/move/validtosuggested";
+    apiURL = "management/disease/move/validtosuggested";
   }
   try {
     var patientId = localStorage.getItem("patientId");
