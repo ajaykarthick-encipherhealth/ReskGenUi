@@ -13752,7 +13752,7 @@ tbody > tr {
   width: 100%;
   left: 16px;
   padding: 0px !important;
-  background: #04306f !important;
+  /* background: #04306f !important; */
 }
 .ant-steps
   .ant-steps-item-finish
