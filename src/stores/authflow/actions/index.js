@@ -80,10 +80,7 @@ export const getMFAValidation =
         type: ENABLEMFA,
         payload: { data: null, loading: false },
       });
-      notification.error({
-        message: err?.response?.data?.message,
-        duration: 1,
-      });
+      getResponePopup(err);
     }
   };
 
