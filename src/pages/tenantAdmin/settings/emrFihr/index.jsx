@@ -45,19 +45,19 @@ const EmrFhir = ({
   const FihrList = [
     {
       emr: "EPIC",
-      status: "disconnected",
+      status: fhirAllList?.data?.response?.find(item=>item?.emrType==="EPIC")?.isConnected,
     },
     {
       emr: "ATHENAHEALTH",
-      status: "disconnected",
+      status: fhirAllList?.data?.response?.find(item=>item?.emrType==="ATHENAHEALTH")?.isConnected,
     },
     {
       emr: "ECW",
-      status: "disconnected",
+      status: fhirAllList?.data?.response?.find(item=>item?.emrType==="ECW")?.isConnected,
     },
     {
       emr: "CERNER",
-      status: "disconnected",
+      status:fhirAllList?.data?.response?.find(item=>item?.emrType==="CERNER")?.isConnected,
     },
   ];
 
@@ -164,7 +164,7 @@ const EmrFhir = ({
             {FihrList?.map((item) => (
               <div
                 className={
-                  item.status.toLowerCase() === "connected"
+                  item.status
                     ? `p-1 px-3 d-inline-block m-2 rounded-3 cr-pointer ${Style.borderStyleConnect}`
                     : `p-1 px-3 d-inline-block m-2 rounded-3 cr-pointer ${Style.borderStyleDisConnect}`
                 }
@@ -173,13 +173,13 @@ const EmrFhir = ({
                 }}
                 style={{
                   background: `${
-                    item.status.toLowerCase() === "connected" ||
+                    item.status||
                     isSelectEMR == item.emr
                       ? "#efefef"
                       : ""
                   }`,
                   cursor: `${
-                    item.status.toLowerCase() === "connected" ? "no-drop" : ""
+                    item.status? "no-drop" : ""
                   }`,
                 }}
               >
@@ -207,14 +207,14 @@ const EmrFhir = ({
                       className={Style.flagDot}
                       style={{
                         backgroundColor: `${
-                          item.status.toLowerCase() != "connected"
+                          !item.status
                             ? "#C70000"
                             : "#389e0d"
                         }`,
                       }}
                     ></span>
                     <span>
-                      {isSelectEMR == item.emr ? "selected " : item.status}
+                      {isSelectEMR == item.emr ? "selected " : item.status===true?"connected":"disconnected"}
                     </span>
                   </div>
                   {/* <div className="my-2">
