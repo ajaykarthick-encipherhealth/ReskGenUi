@@ -187,9 +187,9 @@ const Files = ({
   }, [dateRange, selectedOrganization]);
 
   return (
-    <div className="" style={{ marginTop: "20px" }}>
+    <div className="mt-3" >
       <div className={styles.head}>
-      <div className="d-flex justify-content-between" style={{ width: "100%" }}>
+      <div className="d-flex justify-content-between w-100">
         {cardData?.map((item, index) => (
           <div
             className="rounded-lg w-30"
