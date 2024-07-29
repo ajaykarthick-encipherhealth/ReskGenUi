@@ -528,6 +528,7 @@ const Patient = ({
                                     defaultSelectValue1={""}
                                     // isClose={true}
                                     setPageNo={setPageNo}
+                                    selectDefaultValue={selectedOption && {label:selectedOption,value:selectedOption}}
                                   />
                                 </div>
                               </div>
