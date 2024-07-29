@@ -21,7 +21,8 @@ import {
   diseaseEditMeat,
   getAllProcessYearAction,
   radiologyDosDeatilsAction,
-  labDosDeatilsAction
+  labDosDeatilsAction,
+  getSelectedDosPageNumber
 } from "./actions";
 
 const initialState = {
@@ -58,6 +59,13 @@ const getSelectedDosDetails = handleActions(
   },
   ""
 );
+const getSelectedDetails = (action) =>
+  handleActions(
+    {
+      [action.toString()]: (state, { payload }) => payload,
+    },
+    ""
+  );
 
 const patientDetailsReducer = combineReducers({
   patientResult: createReducer(patientDetailsAction),
@@ -75,6 +83,7 @@ const patientDetailsReducer = combineReducers({
   isCodeAlready: createReducer(isCodeAlready),
   getValidCode: createReducer(getValideCode),
   getSelectedDosDetails: getSelectedDosDetails,
+  selectedDosPageNumber:getSelectedDetails(getSelectedDosPageNumber),
   manuallyAdd: createReducer(manuallyAdd),
   diseaseEdit: createReducer(diseaseEdit),
   diseaseEditMeat: createReducer(diseaseEditMeat),

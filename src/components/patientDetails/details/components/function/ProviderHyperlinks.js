@@ -5,7 +5,7 @@ import moment from "moment";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { stringToColour, truncateString } from "./ReusableFunctions";
-export const getProviderNameTag = (
+export const getProviderNameTag = ({
   providerNames,
   hyperlinks,
   setSearch,
@@ -19,26 +19,28 @@ export const getProviderNameTag = (
   setIsMulitpleHeadeCode,
   isMulitpleHeaderCode,
   setSelectMeatResult,
-  meatresult
-) => {
-  return providerNames.map((res, index) => {
+  meatresult,
+  getSelectedDosPageNumber
+}) => {
+  return providerNames?.map((res, index) => {
     const headerResult = hyperlinks?.filter((res2) => res2.header === res);
     if (index < 2) {
       if (headerResult?.length == 1) {
         var sectionMapArr = (
           <span
             onClick={() =>
-              findProviderNameDocument(
-                headerResult[0],
-                diagnosisCode,
-                diseaseName,
-                setSearch,
-                setIsModalOpen,
-                setFileModalHeader,
-                patientDocumentResult,
-                setSelectMeatResult,
-                meatresult
-              )
+              findProviderNameDocument({
+                data:headerResult[0],
+                diagnosisCode:diagnosisCode,
+                diseaseName:diseaseName,
+                setSearch:setSearch,
+                setIsModalOpen:setIsModalOpen,
+                setFileModalHeader:setFileModalHeader,
+                patientDocumentResult:patientDocumentResult,
+                setSelectMeatResult:setSelectMeatResult,
+                meatresult:meatresult,
+                getSelectedDosPageNumber:getSelectedDosPageNumber
+            })
             }
             className={`mt-2 text-start ${visitStyles.provider_name} truncate-text`}
             style={{
@@ -68,17 +70,18 @@ export const getProviderNameTag = (
             placement="bottom"
             content={
               <>
-                {getProviderPopoverHyperlink(
-                  headerResult,
-                  diagnosisCode,
-                  diseaseName,
-                  setSearch,
-                  setIsModalOpen,
-                  setFileModalHeader,
-                  patientDocumentResult,
-                  setSelectMeatResult,
-                  meatresult
-                )}
+                {getProviderPopoverHyperlink({
+                  value:headerResult,
+                  diagnosisCode:diagnosisCode,
+                  diseaseName:diseaseName,
+                  setSearch:setSearch,
+                  setIsModalOpen:setIsModalOpen,
+                  setFileModalHeader:setFileModalHeader,
+                  patientDocumentResult:patientDocumentResult,
+                  setSelectMeatResult:setSelectMeatResult,
+                  meatresult:meatresult,
+                  getSelectedDosPageNumber:getSelectedDosPageNumber
+            })}
               </>
             }
           >
@@ -118,17 +121,18 @@ export const getProviderNameTag = (
                     diagnosisCode == isMulitpleHeaderCode && (
                       <span
                         onClick={() =>
-                          findProviderNameDocument(
-                            findSectionHyperlink(hyperlinks, item)[0],
-                            diagnosisCode,
-                            diseaseName,
-                            setSearch,
-                            setIsModalOpen,
-                            setFileModalHeader,
-                            patientDocumentResult,
-                            setSelectMeatResult,
-                            meatresult
-                          )
+                          findProviderNameDocument({
+                            data:findSectionHyperlink(hyperlinks, item)[0],
+                            diagnosisCode:diagnosisCode,
+                            diseaseName:diseaseName,
+                            setSearch:setSearch,
+                            setIsModalOpen:setIsModalOpen,
+                            setFileModalHeader:setFileModalHeader,
+                            patientDocumentResult:patientDocumentResult,
+                            setSelectMeatResult:setSelectMeatResult,
+                            meatresult:meatresult,
+                            getSelectedDosPageNumber:getSelectedDosPageNumber
+                        })
                         }
                         className={`mt-2 text-start ${visitStyles.provider_name}`}
                         style={{
@@ -187,17 +191,18 @@ export const getProviderNameTag = (
               i > 1 ? (
                 <Popover
                   placement="bottom"
-                  content={getProviderPopoverHyperlink(
-                    findSectionHyperlink(hyperlinks, item),
-                    diagnosisCode,
-                    diseaseName,
-                    setSearch,
-                    setIsModalOpen,
-                    setFileModalHeader,
-                    patientDocumentResult,
-                    setSelectMeatResult,
-                    meatresult
-                  )}
+                  content={getProviderPopoverHyperlink({
+                    value:findSectionHyperlink(hyperlinks, item),
+                    diagnosisCode:diagnosisCode,
+                    diseaseName:diseaseName,
+                    setSearch:setSearch,
+                    setIsModalOpen:setIsModalOpen,
+                    setFileModalHeader:setFileModalHeader,
+                    patientDocumentResult:patientDocumentResult,
+                    setSelectMeatResult:setSelectMeatResult,
+                    meatresult:meatresult,
+                    getSelectedDosPageNumber:getSelectedDosPageNumber
+                  })}
                 >
                   {isMulitpleHeader &&
                     diagnosisCode == isMulitpleHeaderCode && (
@@ -257,7 +262,7 @@ export const getProviderNameTag = (
   });
 };
 
-export const getProviderPopoverHyperlink = (
+export const getProviderPopoverHyperlink = ({
   value,
   diagnosisCode,
   diseaseName,
@@ -266,23 +271,25 @@ export const getProviderPopoverHyperlink = (
   setFileModalHeader,
   patientDocumentResult,
   setSelectMeatResult,
-  meatresult
-) => {
+  meatresult,
+  getSelectedDosPageNumber
+}) => {
   return value?.map((res) => {
     var sectionMapArr = res ? (
       <span
         onClick={() =>
-          findProviderNameDocument(
-            res,
-            diagnosisCode,
-            diseaseName,
-            setSearch,
-            setIsModalOpen,
-            setFileModalHeader,
-            patientDocumentResult,
-            setSelectMeatResult,
-            meatresult
-          )
+          findProviderNameDocument({
+            data:res,
+            diagnosisCode:diagnosisCode,
+            diseaseName:diseaseName,
+            setSearch:setSearch,
+            setIsModalOpen:setIsModalOpen,
+            setFileModalHeader:setFileModalHeader,
+            patientDocumentResult:patientDocumentResult,
+            setSelectMeatResult:setSelectMeatResult,
+            meatresult:meatresult,
+            getSelectedDosPageNumber:getSelectedDosPageNumber
+        })
         }
         style={{
           borderColor: stringToColour(res?.dateOfService) + 33,
@@ -302,7 +309,7 @@ export const getProviderPopoverHyperlink = (
     return sectionMapArr;
   });
 };
-const findProviderNameDocument = (
+const findProviderNameDocument = ({
   data,
   diagnosisCode,
   diseaseName,
@@ -311,9 +318,9 @@ const findProviderNameDocument = (
   setFileModalHeader,
   patientDocumentResult,
   setSelectMeatResult,
-  meatresult
-) => {
-  console.log(data);
+  meatresult,
+  getSelectedDosPageNumber
+}) => {
   setSelectMeatResult && setSelectMeatResult(meatresult);
   var disName = diseaseName ? diseaseName : meatresult?.diseaseName;
   var headerName = patientDocumentResult
@@ -339,6 +346,7 @@ const findProviderNameDocument = (
     headers: true,
     headerContent: data?.header,
   });
+  getSelectedDosPageNumber(null)
   if (patientDocumentResult && setIsModalOpen) {
     setIsModalOpen(true);
   }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ENDPOINTS from "../../../utility/enpoints";
+import { connect } from "react-redux";
 
 const PdfViewer = ({
   src,
@@ -8,16 +9,18 @@ const PdfViewer = ({
   headers,
   headerContent,
   height,
-  heightFrame = height?"870":"800",
+  heightFrame = height ? "870" : "800",
+  selectedPageNumber,
 }) => {
   const [iframeSrc, setIframeSrc] = useState("");
-
+console.log(selectedPageNumber,pageNumber)
   useEffect(() => {
+    const page = selectedPageNumber ? selectedPageNumber : pageNumber;
     if (!Array.isArray(src)) {
       const pdfUrl = encodeURIComponent(src);
       let searchUrl = `${ENDPOINTS.PdfViewer}?file=${pdfUrl}`;
       // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
-      if (searchQuery || pageNumber || headerContent) {
+      if (searchQuery || page || headerContent) {
         const queryParams = [];
         if (searchQuery) {
           const encodedSearchQuery = encodeURIComponent(`${searchQuery}`);
@@ -25,8 +28,8 @@ const PdfViewer = ({
             `search=${encodedSearchQuery.toLocaleLowerCase()}&casesensitive=true&phrase=true&wholeword=true&entireword=true&headers=${headers}`
           );
         }
-        if (pageNumber) {
-          queryParams.push(`page=${pageNumber}`);
+        if (page) {
+          queryParams.push(`page=${page}`);
         }
         if (headerContent) {
           queryParams.push(`headerContent=${headerContent}`);
@@ -35,10 +38,16 @@ const PdfViewer = ({
       }
       setIframeSrc(searchUrl);
     }
-  }, [src, searchQuery, pageNumber, headerContent]);
+  }, [src, searchQuery, pageNumber, headerContent, selectedPageNumber]);
   return (
     <>
-      <div style={{ maxHeight:height? "100vh":"75vh", minHeight: height?"100vh":"75vh", overflow: "hidden" }}>
+      <div
+        style={{
+          maxHeight: height ? "100vh" : "75vh",
+          minHeight: height ? "100vh" : "75vh",
+          overflow: "hidden",
+        }}
+      >
         <iframe
           id="pdfViewer"
           title="PDF Viewer"
@@ -52,4 +61,10 @@ const PdfViewer = ({
   );
 };
 
-export default PdfViewer;
+const enhancer = connect(
+  (state) => ({
+    selectedPageNumber: state.patientDetails?.details?.selectedDosPageNumber,
+  }),
+  {}
+);
+export default enhancer(PdfViewer);

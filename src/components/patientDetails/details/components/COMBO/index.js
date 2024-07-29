@@ -19,7 +19,7 @@ import {
 import { connect } from "react-redux";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
 import MovementAction from "../movementAction";
-
+import {actions as detailsAction} from '../../../../../stores/patient/details'
 const ComboCard = ({
   list,
   captureSectionMatching,
@@ -44,6 +44,7 @@ const ComboCard = ({
   setActiveMeatTitle,
   meatCriteriaList,
   popup,
+  getSelectedDosPageNumber,
   cardTitle,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
@@ -77,7 +78,7 @@ const ComboCard = ({
               <label htmlFor="description">Description</label>
             </div>
             <div className="col-xl-1">
-              {isAddComboCode && (
+              {/* {isAddComboCode && (
                 <div className="d-flex justify-content-center">
                   <button
                     onClick={() => addComboCode()}
@@ -92,7 +93,7 @@ const ComboCard = ({
                     />
                   </button>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>
@@ -118,9 +119,11 @@ const ComboCard = ({
                               <span
                                 className="font-bold"
                                 key={addOnCodeColor[index]}
-                                
                               >
-                                <Tag color={addOnCodeColor[index]} style={{fontSize: "10px"}}>
+                                <Tag
+                                  color={addOnCodeColor[index]}
+                                  style={{ fontSize: "10px" }}
+                                >
                                   {addCombo}
                                 </Tag>
                               </span>
@@ -130,7 +133,10 @@ const ComboCard = ({
                       <div className="col-xl-5">
                         <span>{item.actualDescription}</span>
                       </div>
-                      <div className="col-xl-1" style={{position:"relative",right:"18px"}}>
+                      <div
+                        className="col-xl-1"
+                        style={{ position: "relative", right: "18px" }}
+                      >
                         {/* <div>
                           <Popconfirm
                             title={popConfirmTitle}
@@ -165,25 +171,30 @@ const ComboCard = ({
 
                         <div className={styles.comcoActionIcon}>
                           {item?.children?.length > 0 ? (
-                            <CloseCircleFilled className={styles.deleteIcon} onClick={() => message.warning("Delete only formed codes")}/>
+                            <CloseCircleFilled
+                              className={styles.deleteIcon}
+                              onClick={() =>
+                                message.warning("Delete only formed codes")
+                              }
+                            />
                           ) : (
                             <MovementAction
-                            validAction={cardTitle == "HCC" ? false : true}
-                            suggestedAction={
-                              cardTitle == "SUGGESTED" ? false : true
-                            }
-                            deleteAction={
-                              cardTitle == "DELETED" ? false : true
-                            }
-                            setIsValidAction={setIsValidAction}
-                            cardTitle={cardTitle}
-                            setConfirmNotesModalValid={
-                              setConfirmNotesModalValid
-                            }
-                            onchangeValid={onchangeCombo}
-                            result={item}
-                            setFileLoading={setFileLoading}
-                          />
+                              validAction={cardTitle == "HCC" ? false : true}
+                              suggestedAction={
+                                cardTitle == "SUGGESTED" ? false : true
+                              }
+                              deleteAction={
+                                cardTitle == "DELETED" ? false : true
+                              }
+                              setIsValidAction={setIsValidAction}
+                              cardTitle={cardTitle}
+                              setConfirmNotesModalValid={
+                                setConfirmNotesModalValid
+                              }
+                              onchangeValid={onchangeCombo}
+                              result={item}
+                              setFileLoading={setFileLoading}
+                            />
                             // <MovementAction
                             //   validAction={
                             //     cardTitle == "DELETED_COMBO" ? true : false
@@ -226,7 +237,24 @@ const ComboCard = ({
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
                           >
-                            {getProviderNameTag(
+                            {getProviderNameTag({
+                              providerNames: item?.providerName,
+                              hyperlinks: item?.providerHyperlinks,
+                              setSearch: setSearch,
+                              diagnosisCode: item.diagnosisCodeCombo,
+                              diseaseName: item.diseaseName,
+                              setIsModalOpen: setIsModalOpenCaptureSection,
+                              setFileModalHeader: setFileModalHeader,
+                              patientDocumentResult: patientDocumentResult,
+                              setIsMulitpleHeader: setIsMulitpleProvider,
+                              isMulitpleHeader: isMulitpleProvider,
+                              setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
+                              isMulitpleHeaderCode: isMulitpleHeaderCode,
+                              setSelectMeatResult: "",
+                              getSelectedDosPageNumber:
+                                getSelectedDosPageNumber,
+                            })}
+                            {/* {getProviderNameTag(
                               item?.providerName,
                               item?.providerHyperlinks,
                               setSearch,
@@ -239,7 +267,7 @@ const ComboCard = ({
                               isMulitpleProvider,
                               setIsMulitpleHeadeCode,
                               isMulitpleHeaderCode
-                            )}
+                            )} */}
                           </div>
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
@@ -253,7 +281,7 @@ const ComboCard = ({
                               setSearch: setSearch,
                               setFileModalHeader: setFileModalHeader,
                               patientDocumentResult: patientDocumentResult,
-                              popup
+                              popup,
                             })}
                           </div>
                           <div
@@ -295,12 +323,12 @@ const ComboCard = ({
                               setActiveTabHead(4);
                               setActiveMeatTitle({
                                 header: "M",
-                                diagnosisCode: item?.diagnosisCodeCombo,
+                                diagnosisCode: item?.diagnosisCode,
                               });
                             }}
                           >
                             {getMeatFound(
-                              item?.diagnosisCodeCombo,
+                              item?.diagnosisCode,
                               meatCriteriaList,
                               "M"
                             )}
@@ -310,12 +338,12 @@ const ComboCard = ({
                               setActiveTabHead(4);
                               setActiveMeatTitle({
                                 header: "E",
-                                diagnosisCode: item?.diagnosisCodeCombo,
+                                diagnosisCode: item?.diagnosisCode,
                               });
                             }}
                           >
                             {getMeatFound(
-                              item?.diagnosisCodeCombo,
+                              item?.diagnosisCode,
                               meatCriteriaList,
                               "E"
                             )}
@@ -325,12 +353,12 @@ const ComboCard = ({
                               setActiveTabHead(4);
                               setActiveMeatTitle({
                                 header: "A",
-                                diagnosisCode: item?.diagnosisCodeCombo,
+                                diagnosisCode: item?.diagnosisCode,
                               });
                             }}
                           >
                             {getMeatFound(
-                              item?.diagnosisCodeCombo,
+                              item?.diagnosisCode,
                               meatCriteriaList,
                               "A"
                             )}
@@ -340,12 +368,12 @@ const ComboCard = ({
                               setActiveTabHead(4);
                               setActiveMeatTitle({
                                 header: "T",
-                                diagnosisCode: item?.diagnosisCodeCombo,
+                                diagnosisCode: item?.diagnosisCode,
                               });
                             }}
                           >
                             {getMeatFound(
-                              item?.diagnosisCodeCombo,
+                              item?.diagnosisCode,
                               meatCriteriaList,
                               "T"
                             )}
@@ -372,5 +400,7 @@ const ComboCard = ({
 
 const enhancer = connect((state) => ({
   fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
-}));
+}),{
+  getSelectedDosPageNumber:detailsAction.getSelectedDosPageNumber
+});
 export default enhancer(ComboCard);

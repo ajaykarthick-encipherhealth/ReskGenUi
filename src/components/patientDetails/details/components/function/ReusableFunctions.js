@@ -180,7 +180,8 @@ export const getHeaderHyperlink = (
   diagnosisCode,
   setSelectMeatResult,
   meatresult,
-  diseaseName
+  diseaseName,
+  getSelectedDosPageNumber
 ) => {
   return value?.map((res) => {
     const result = encounterDateMatching.filter(
@@ -189,7 +190,8 @@ export const getHeaderHyperlink = (
     var backColor = result[0]?.colors;
     var sectionMapArr = res ? (
       <span
-        onClick={() =>
+        onClick={() =>{
+          getSelectedDosPageNumber(null)
           newFindValueDocument(
             res,
             documentPlace,
@@ -209,7 +211,7 @@ export const getHeaderHyperlink = (
             "",
             diseaseName
           )
-        }
+        }}
         style={{
           borderColor: stringToColour(res?.dateOfService) + 33,
           color: stringToColour(res?.dateOfService),
@@ -306,7 +308,7 @@ export const truncateString = (str, num) => {
   return str;
 };
 
-export const getCaptureSectionBackgroundFile = (
+export const getCaptureSectionBackgroundFile = ({
   value,
   encounterDate,
   actualDescription,
@@ -330,7 +332,9 @@ export const getCaptureSectionBackgroundFile = (
   setIsMulitpleHeadeCode,
   isMulitpleHeaderCode,
   diseaseName,
-  popup
+  popup,
+  getSelectedDosPageNumber
+}
 ) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res, index) => {
@@ -347,7 +351,8 @@ export const getCaptureSectionBackgroundFile = (
       if (headerResult?.length == 1) {
         var sectionMapArr = (
           <span
-            onClick={() =>
+            onClick={() =>{
+              getSelectedDosPageNumber(null)
               newFindValueDocument(
                 headerResult[0],
                 documentPlace,
@@ -367,7 +372,7 @@ export const getCaptureSectionBackgroundFile = (
                 "",
                 diseaseName
               )
-            }
+            }}
             style={{ backgroundColor: backColor, color: textColor }}
             className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
           >
@@ -401,7 +406,8 @@ export const getCaptureSectionBackgroundFile = (
                   diagnosisCode,
                   "",
                   "",
-                  diseaseName
+                  diseaseName,
+                  getSelectedDosPageNumber
                 )}
               </>
             }
@@ -428,7 +434,9 @@ export const getCaptureSectionBackgroundFile = (
                   {isMulitpleHeader &&
                     diagnosisCode == isMulitpleHeaderCode && (
                       <span
-                        onClick={() =>
+                        onClick={() =>{
+                          getSelectedDosPageNumber(null)
+                        
                           newFindValueDocument(
                             findSectionHyperlink(hyperlinks, item)[0],
                             documentPlace,
@@ -448,7 +456,7 @@ export const getCaptureSectionBackgroundFile = (
                             "",
                             diseaseName
                           )
-                        }
+                        }}
                         style={{
                           background: stringToColour(item) + 33,
                           color: stringToColour(item),
@@ -510,7 +518,8 @@ export const getCaptureSectionBackgroundFile = (
                     patientDocumentResult,
                     fileInitialPage,
                     setFileInitialPage,
-                    diagnosisCode
+                    diagnosisCode,
+                    getSelectedDosPageNumber
                   )}
                 >
                   {isMulitpleHeader &&
@@ -836,12 +845,15 @@ export const handleSubmitValidNotes = async ({
   }
   if (
     isValidAction.name == "Move to Deleted" &&
-    isValidAction.title == "MEAT"
+    isValidAction.title == "NON_MEAT"
   ) {
     apiURL = "management/disease/move/suggestedtodeleted";
   }
   if (isValidAction.name == "Move to HCC" && isValidAction.title == "MEAT") {
     apiURL = "management/meat/move/suggestedtovalid";
+  }
+  if (isValidAction.name == "Move to Deleted" && isValidAction.title == "MEAT") {
+    apiURL = "management/meat/move/validtosuggested";
   }
   try {
     var patientId = localStorage.getItem("patientId");
@@ -1198,7 +1210,8 @@ export const getCaptureSectionBackgroundMeatNew = (
   setSelectMeatResult,
   meatresult,
   setSelectHyperlink,
-  meatTitle
+  meatTitle,
+  getSelectedDosPageNumber
 ) => {
   var dublicateCaptureRemove = removeDuplicatesArray(value);
   return dublicateCaptureRemove?.map((res) => {
@@ -1226,7 +1239,8 @@ export const getCaptureSectionBackgroundMeatNew = (
       //   }
       // >
       <span
-        onClick={() =>
+        onClick={() =>{
+          getSelectedDosPageNumber(null)
           newFindValueDocument(
             res,
             documentPlace,
@@ -1245,7 +1259,7 @@ export const getCaptureSectionBackgroundMeatNew = (
             setSelectHyperlink,
             value
           )
-        }
+        }}
         style={{
           backgroundColor: stringToColour(res.header) + 33,
           color: stringToColour(res.header),
