@@ -9,19 +9,17 @@ import {
   ACCURACYSCRORE,
   PATIENT_DETAILS,
   AUTHENTICATION,
-  VERIFYMFA
+  VERIFYMFA,
 } from "../actions";
 import { CHATBOT } from "../../../store/actions/DashboardActions";
-export const PDF_URL='PDF_URL'
+export const PDF_URL = "PDF_URL";
 
-export const pdfUrl=(url)=>{
-  return(
-    {
-      type: PDF_URL,
-      payload: url,
-    }
-  )
-}
+export const pdfUrl = (url) => {
+  return {
+    type: PDF_URL,
+    payload: url,
+  };
+};
 const initialState = {
   codeDetails: null,
   qrcode: "",
@@ -30,9 +28,9 @@ const initialState = {
   url: false,
   userInfo: null,
   chatReply: null,
-  pdfUrl:null,
-  authInfo:null,
-  verifyMfa:null
+  pdfUrl: null,
+  authInfo: null,
+  verifyMfa: null,
 };
 const initialStatePatient = {
   patientDetails: {},
@@ -98,17 +96,17 @@ export function AuthReducer(state = initialState, action) {
       pdfUrl: action.payload,
     };
   }
-  if(action.type === AUTHENTICATION){
-    return{
+  if (action.type === AUTHENTICATION) {
+    return {
       ...state,
-      authInfo:action.payload
-    }
+      authInfo: action.payload,
+    };
   }
-  if(action.type === VERIFYMFA){
-    return{
+  if (action.type === VERIFYMFA) {
+    return {
       ...state,
-      verifyMfa:action.payload
-    }
+      verifyMfa: action.payload,
+    };
   }
   return state;
 }
@@ -132,14 +130,16 @@ const filterInitialState = {
 
 const filterReducer = (state = filterInitialState, action) => {
   switch (action.type) {
-    case 'SET_FILTERS_AUDITALLOCATEDBY':
+    case "SET_FILTERS_AUDITALLOCATEDBY":
       return { ...state, auditAllocatedBy: action.payload };
-    case 'SET_FILTERS_PATIENTALLOCATED':
+    case "SET_FILTERS_PATIENTALLOCATED":
       return { ...state, patientAllocated: action.payload };
-    case 'SET_FILTERS_AUDITEDASSIGNED':
+    case "SET_FILTERS_AUDITEDASSIGNED":
       return { ...state, auditedAssigned: action.payload };
-    case 'SET_FILTERS_ALLOCATEDBY':
+    case "SET_FILTERS_ALLOCATEDBY":
       return { ...state, allocatedBy: action.payload };
+    case "SET_FILTERS_CREATEDBY":
+      return { ...state, createdBy: action.payload };
     default:
       return state;
   }

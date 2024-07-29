@@ -79,7 +79,7 @@ const Index = ({
 }) => {
   const router = useRouter();
   const sideMenu = useSelector((state) => state?.sideMenu);
-  const filteredList = useSelector((state) => state?.auth?.filterList);
+  const filteredList = useSelector((state) => state?.filters?.auditAllocatedBy);
   const [processSort, setProcessSort] = useState("DESC");
   const [auditAllocatedSort, setAuditAllocatedSort] = useState("DESC");
   const [audirDateSort, setAuditDateSort] = useState("DESC");
@@ -109,7 +109,7 @@ const Index = ({
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedDates2, setSelectedDates2] = useState([]);
   const [selectedDates3, setSelectedDates3] = useState([]);
-
+const dispatch=useDispatch()
   const [sort, setSort] = useState({
     sortDir: "DESC",
     sortField: "auditDueDate",
@@ -273,6 +273,9 @@ const Index = ({
     }
   };
 
+  useEffect(()=>{
+    dispatch(getFilters("auditAllocatedBy", userName));
+  },[userName])
   return (
     <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
       <Header />

@@ -25,7 +25,7 @@ const RegularButton = ({
       disabled={disabled}
       htmlType={htmlType}
     >
-      {loading ? "Loading..." : name}
+      {loading ? "LOADING..." : name}
     </button>
   );
 };
