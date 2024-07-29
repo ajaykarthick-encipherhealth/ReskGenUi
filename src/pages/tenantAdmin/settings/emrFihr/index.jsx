@@ -26,7 +26,7 @@ const EmrFhir = ({
   getFhirConnectDetails,
   connectStatus,
   fhirAllList,
-  getFhirList
+  getFhirList,
 }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -34,7 +34,7 @@ const EmrFhir = ({
   const [open, setOpen] = useState(false);
   const [emrUrl, setEmrUrl] = useState("");
   const [isConnectNext, setIsConnectNext] = useState(false);
-  const [isSelectEMR, setIsSelectEMR] = useState(null);
+  const [isSelectEMR, setIsSelectEMR] = useState();
   const [inputValues, setInputValues] = useState(null);
   const [connectBtn, setConnectBtn] = useState("NEXT");
 
@@ -45,37 +45,45 @@ const EmrFhir = ({
   const FihrList = [
     {
       emr: "EPIC",
-      status: fhirAllList?.data?.response?.find(item=>item?.emrType==="EPIC")?.isConnected,
+      status: fhirAllList?.data?.response?.find(
+        (item) => item?.emrType === "EPIC"
+      )?.isConnected,
     },
     {
       emr: "ATHENAHEALTH",
-      status: fhirAllList?.data?.response?.find(item=>item?.emrType==="ATHENAHEALTH")?.isConnected,
+      status: fhirAllList?.data?.response?.find(
+        (item) => item?.emrType === "ATHENAHEALTH"
+      )?.isConnected,
     },
     {
       emr: "ECW",
-      status: fhirAllList?.data?.response?.find(item=>item?.emrType==="ECW")?.isConnected,
+      status: fhirAllList?.data?.response?.find(
+        (item) => item?.emrType === "ECW"
+      )?.isConnected,
     },
     {
       emr: "CERNER",
-      status:fhirAllList?.data?.response?.find(item=>item?.emrType==="CERNER")?.isConnected,
+      status: fhirAllList?.data?.response?.find(
+        (item) => item?.emrType === "CERNER"
+      )?.isConnected,
     },
   ];
 
   const appType = [
     {
-      label: "Backend",
-      value: "Backend",
+      label: "BACKEND",
+      value: "BACKEND",
     },
   ];
 
   const accessType = [
     {
-      label: "Online",
-      value: "Online",
+      label: "ONLINE",
+      value: "ONLINE",
     },
     {
-      label: "Offline",
-      value: "Offline",
+      label: "OFFLINE",
+      value: "OFFLINE",
     },
   ];
 
@@ -96,13 +104,17 @@ const EmrFhir = ({
       var data = {
         appType: appType[0].value?.toUpperCase(),
         emrType: isSelectEMR.toUpperCase(),
-        accessType:values?.accessType ? values?.accessType?.toUpperCase() : accessType[0].value?.toUpperCase()
+        accessType: values?.accessType
+          ? values?.accessType?.toUpperCase()
+          : accessType[0].value?.toUpperCase(),
       };
       setInputValues(data);
       getFhirConnectDetails(
         appType[0].value.toUpperCase(),
         isSelectEMR.toUpperCase(),
-        values?.accessType ? values?.accessType?.toUpperCase() : accessType[0].value?.toUpperCase()
+        values?.accessType
+          ? values?.accessType?.toUpperCase()
+          : accessType[0].value?.toUpperCase()
       );
     } else {
       // if(!isSelectEMR){
@@ -152,7 +164,14 @@ const EmrFhir = ({
 
   //   });
   // }, [fhirAllList]);
-
+  const selectedItem = fhirAllList?.data?.response?.find(
+    (item) => item?.emrType === isSelectEMR
+  );
+  useEffect(() => {
+    form.setFieldsValue({
+      accessType: selectedItem?.access || null,
+    });
+  }, [selectedItem, form]);
   return (
     <div>
       <div className="p-3">
@@ -173,14 +192,9 @@ const EmrFhir = ({
                 }}
                 style={{
                   background: `${
-                    item.status||
-                    isSelectEMR == item.emr
-                      ? "#efefef"
-                      : ""
+                    item.status || isSelectEMR == item.emr ? "#efefef" : ""
                   }`,
-                  cursor: `${
-                    item.status? "no-drop" : ""
-                  }`,
+                  cursor: `${item.status ? "no-drop" : ""}`,
                 }}
               >
                 <div className="p-2 text-center">
@@ -207,14 +221,16 @@ const EmrFhir = ({
                       className={Style.flagDot}
                       style={{
                         backgroundColor: `${
-                          !item.status
-                            ? "#C70000"
-                            : "#389e0d"
+                          !item.status ? "#C70000" : "#389e0d"
                         }`,
                       }}
                     ></span>
                     <span>
-                      {isSelectEMR == item.emr ? "selected " : item.status===true?"connected":"disconnected"}
+                      {isSelectEMR == item.emr
+                        ? "selected "
+                        : item.status === true
+                        ? "connected"
+                        : "disconnected"}
                     </span>
                   </div>
                   {/* <div className="my-2">
@@ -278,17 +294,16 @@ const EmrFhir = ({
                       application
                     </span>
                   </div>
-                  <div>
-                    <Form.Item name={"accessType"}>
-                      <Select
-                        placeholder="Access Type"
-                        options={accessType}
-                        defaultValue={accessType[0]}
-                        className={Style.selector}
-                        allowClear
-                      />
-                    </Form.Item>
-                  </div>
+                  {/* <div> */}
+                  <Form.Item name="accessType">
+                    <Select
+                      placeholder="Access Type"
+                      options={accessType}
+                      className={Style.selector}
+                      allowClear
+                    />
+                  </Form.Item>
+                  {/* </div> */}
                 </div>
               </div>
               <div className="d-flex justify-content-center p-3">
@@ -344,7 +359,6 @@ const enhancer = connect(
     getFhirInstructionDetails: settingActions.fhirInstructionsAction,
     getFhirConnectDetails: settingActions.fhirConnectAction,
     getFhirList: settingActions.fhirListAction,
-
   }
 );
 export default enhancer(EmrFhir);
