@@ -85,12 +85,12 @@ export const getMFAValidation =
   };
 
 export const getValidateCode =
-  (username, code, route, validate, userpassword) => async (dispatch) => {
+  (username, code, route, validate, userpassword, enableMFA = false) => async (dispatch) => {
     const datas = {
       username: username,
       code: code?.pass,
       codeIv: code?.iv,
-      newMfa: true,
+      newMfa: !enableMFA,
       password: userpassword?.pass,
       passwordIv: userpassword?.iv,
     };

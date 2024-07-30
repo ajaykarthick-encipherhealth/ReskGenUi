@@ -98,7 +98,21 @@ const Index = () => {
         inputRefs[index - 1]?.current?.focus();
       }
     }
+    if (e.code == "Enter" && code.length >= 6) {
+      const codeString = code?.join("");
+      dispatch(
+        getValidateCode(
+          username,
+          encyptingPass(codeString),
+          router,
+          "validate",
+          password,
+          enableMFA
+        )
+      );
+    }
   };
+
   return (
     <div className={styles.maindiv}>
       <section className={styles.innerdiv}>
@@ -172,7 +186,8 @@ const Index = () => {
                         encyptingPass(codeString),
                         router,
                         "validate",
-                        password
+                        password,
+                        enableMFA
                       )
                     );
                   }}
