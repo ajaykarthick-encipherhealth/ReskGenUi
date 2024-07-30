@@ -124,7 +124,7 @@ const index = ({
                 disabledDate={disabled1YearDate}
                 onChange={(e, value) => handleRange(value)}
                 format={"MM-DD-YYYY"}
-                allowClear={false}
+                allowClear={true}
               />
             </div>
           </div>
