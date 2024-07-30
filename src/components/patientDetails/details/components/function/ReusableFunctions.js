@@ -1213,7 +1213,6 @@ export const getCaptureSectionBackgroundMeatNew = (
   setSelectMeatResult,
   meatresult,
   setSelectHyperlink,
-  meatTitle,
   getSelectedDosPageNumber
 ) => {
   var dublicateCaptureRemove = removeDuplicatesArray(value);

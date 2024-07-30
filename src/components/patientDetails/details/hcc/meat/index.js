@@ -42,6 +42,7 @@ const Meat = ({
   getpatientDetailsData,
   hccFileDetails,
   fileDosPageNumberList,
+  getSelectedDosPageNumber
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -498,7 +499,8 @@ const Meat = ({
                             selectMeatResult.diagnosisCode,
                             setSelectMeatResult,
                             selectMeatResult,
-                            setSelectHyperlink
+                            setSelectHyperlink,
+                            getSelectedDosPageNumber
                           )}
                         </div>
                       </div>
@@ -550,7 +552,8 @@ const Meat = ({
                             selectMeatResult.diagnosisCode,
                             setSelectMeatResult,
                             selectMeatResult,
-                            setSelectHyperlink
+                            setSelectHyperlink,
+                            getSelectedDosPageNumber
                           )}
                         </div>
                       </div>
@@ -602,7 +605,8 @@ const Meat = ({
                             selectMeatResult.diagnosisCode,
                             setSelectMeatResult,
                             selectMeatResult,
-                            setSelectHyperlink
+                            setSelectHyperlink,
+                            getSelectedDosPageNumber
                           )}
                         </div>
                       </div>
@@ -654,7 +658,8 @@ const Meat = ({
                             selectMeatResult.diagnosisCode,
                             setSelectMeatResult,
                             selectMeatResult,
-                            setSelectHyperlink
+                            setSelectHyperlink,
+                            getSelectedDosPageNumber
                           )}
                         </div>
                       </div>
@@ -792,6 +797,7 @@ const enhancer = connect(
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
+    getSelectedDosPageNumber:detailsActions.getSelectedDosPageNumber
   }
 );
 export default enhancer(Meat);
