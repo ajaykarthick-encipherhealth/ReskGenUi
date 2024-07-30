@@ -296,6 +296,7 @@ const Patient = ({
     var orgId = selectOrgList?.value;
     form.allocatedBy = localUserId;
     form.computing = 0;
+    form.patientId = form.patientId.trim()
     try {
       setIsLoadingBtn(true);
       const response = await axios.post(

@@ -76,14 +76,15 @@ const Addpatients = ({
                   rules={[
                     {
                       required: true,
-                      message: "Please enter patientId!",
+                      message: "Please enter patient ID!",
+                    },
+                    {
+                      pattern: /^\S*$/,
+                      message: "Patient ID should not contain spaces!",
                     },
                   ]}
                 >
-                  <div>
-                    {" "}
-                    <Input placeholder="Enter patient Id" />
-                  </div>
+                  <Input placeholder="Enter patient ID" />
                 </Form.Item>
               </Col>
               <Col span={24}>
