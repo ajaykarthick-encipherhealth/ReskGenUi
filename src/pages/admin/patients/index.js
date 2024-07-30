@@ -21,7 +21,7 @@ import {
   generateOptionsList,
   validateYear,
 } from "../../../components/headerFilters/functions";
-import { patientDetails } from "../../../stores/authflow/actions";
+import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { actions as allActions } from "../../../stores/admin/workqueue";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 const bullets = [
@@ -56,7 +56,7 @@ const Patient = ({ getPatients, loader, response }) => {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   // const response = useSelector((state) => state.adminList.patients);
-  const filteredList = useSelector((state) => state.auth?.filterList);
+  const filteredList = useSelector((state) => state?.filters?.createdBy);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
@@ -541,7 +541,9 @@ const Patient = ({ getPatients, loader, response }) => {
     setTableLoading(true);
     // getAllList(response?.response);
   };
-
+  useEffect(()=>{
+    dispatch(getFilters("createdBy"));
+  },[])
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>

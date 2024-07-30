@@ -72,23 +72,17 @@ const Patient = ({
   const [allocateModalL2, setAllocateModalL2] = useState(false);
   const [selectedChart, setSelectedChart] = useState([]);
   const [headerCheckValidation, setHeaderCheckValidation] = useState([]);
-  const [patinetListAll, setPatinetListAll] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [pageNoL2Patient, setPageNoL2Patient] = useState(0);
   const [pageNoL2User, setPageNoL2User] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
-  const [totalElementsPatient, setTotalElementsPatient] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const sideMenu = useSelector((state) => state.sideMenu);
   const [activeTab, setActiveTab] = useState(1);
-  const [l2UserListAll, setL2UserListAll] = useState([]);
   const [isPatientList, setIsPatientList] = useState(false);
-  const [l2patinetListAll, setL2PatinetListAll] = useState([]);
   const [l2selectUser, setL2selectUser] = useState(null);
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-  const [totalElementsUser, setTotalElementsUser] = useState(0);
   const [searchString, setSearchString] = useState("");
   const [checkedLoading, setCheckedLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
@@ -609,7 +603,7 @@ const Patient = ({
                                     defaultSelectValue1={""}
                                     // isClose={true}
                                     setPageNo={setPageNo}
-                                    selectDefaultValue={selectedOption}
+                                    selectDefaultValue={selectedOption && {label:selectedOption,value:selectedOption}}
                                   />
                                 </div>
                               </div>

@@ -37,7 +37,7 @@ export function extractLatestData(notes) {
   return declinedData;
 }
 import Image from "next/image";
-import { patientDetails } from "../../../stores/authflow/actions";
+import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 const bullets = [
   {
