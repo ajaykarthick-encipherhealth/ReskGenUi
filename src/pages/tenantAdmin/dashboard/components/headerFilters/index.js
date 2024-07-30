@@ -42,14 +42,21 @@ const index = ({
       }
     }
   };
-
   const handleRange = (e) => {
-    const range = {
-      startDate: moment(e[0]).format("YYYY-MM-DD") + "T00:00:00.000Z",
-      endDate: moment(e[1]).format("YYYY-MM-DD") + "T23:59:59.000Z",
-    };
-
-    setDateRange(range);
+    if (!e || !e[0] || !e[1]) {
+      const range = {
+        startDate:
+          moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z",
+        endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
+      };
+      setDateRange(range);
+    } else {
+      const range = {
+        startDate: moment(e[0]).format("YYYY-MM-DD") + "T00:00:00.000Z",
+        endDate: moment(e[1]).format("YYYY-MM-DD") + "T23:59:59.000Z",
+      };
+      setDateRange(range);
+    }
   };
 
   useEffect(() => {
@@ -63,7 +70,6 @@ const index = ({
     })
   );
 
- 
   const disabled1YearDate = (current, { from }) => {
     if (disableFutureDates(current)) {
       return true;
