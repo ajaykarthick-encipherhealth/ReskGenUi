@@ -104,7 +104,8 @@ const Codify = ({
   const handleSearchButton = () => {
     fetchTreeData();
     fetchCodeData();
-  };
+    fetchIndexData();
+  }
 
   const handleIndexClick = (clickedWord) => {
     const IndexWord = clickedWord.split(", ")[0];
