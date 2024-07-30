@@ -82,7 +82,7 @@ export default function Login() {
                   style={{ display: "block", margin: "0 auto" }}
                 />
                 <div className="company-name">
-                  Encipher health private limited
+                Encipher Health Inc.
                 </div>
               </div>
             </div>

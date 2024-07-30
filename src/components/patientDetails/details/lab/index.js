@@ -17,7 +17,13 @@ import { SwapOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
-const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult ,processedYearResult}) => {
+const Lab = ({
+  getLabDetails,
+  getLabFileDetails,
+  labDetailsResult,
+  processedYearResult,
+  patientDosResult,
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [activeMeatTitle, setActiveMeatTitle] = useState(null);
@@ -26,7 +32,8 @@ const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult ,processedYear
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [dosYear, setDosYear] = useState([]);
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
-  const [selectedDosValue, setSelectedDosValue] = useState("");
+  const [selectedDosValue, setSelectedDosValue] = useState(true);
+  const [selectedYearValue, setSelectedYearValue] = useState([]);
 
   const selectTab = (num) => {
     setActiveTabHead(num);
@@ -63,7 +70,7 @@ const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult ,processedYear
       dosYearArr.push({ value: res, label: res });
     });
     setDosYearDefalutSelect(dosYearArr[0]);
-    setSelectedDosValue(dosYearArr[0]?.value);
+    setSelectedYearValue(dosYearArr[0]?.value);
     setDosYear(dosYearArr);
   };
 
@@ -75,78 +82,39 @@ const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult ,processedYear
     if (labDetailsResult?.data?.response) {
       if (labDetailsResult?.data?.response?.labFileDetail) {
         getLabFileDetails(
-          labDetailsResult?.data?.response?.labFileDetail[0].azureBlobPath
+          labDetailsResult?.data?.response?.fileDetailDTO?.labAzureBlobPaths[0]
         );
         setIsLoading(true);
       }
     }
   }, [labDetailsResult?.data?.response]);
 
-  const exmpleData = [
-    {
-      dos: "2023-10-25",
-      startPageNumber: 1,
-      endPagNumber: 3,
-      dosWiseFlag: null,
-      suspectTypes: null,
-      processStage: null,
-      radiologyTestName: "CT-Scan",
-    },
-    {
-      dos: "2023-04-06",
-      startPageNumber: 4,
-      endPagNumber: 10,
-      dosWiseFlag: null,
-      suspectTypes: null,
-      processStage: null,
-      radiologyTestName: "Ultra sound",
-    },
-    {
-      dos: "2023-01-17",
-      startPageNumber: 11,
-      endPagNumber: 14,
-      dosWiseFlag: null,
-      suspectTypes: null,
-      processStage: null,
-      radiologyTestName: "ECHO",
-    },
-    {
-      dos: "2023-01-20",
-      startPageNumber: 15,
-      endPagNumber: 18,
-      dosWiseFlag: null,
-      suspectTypes: null,
-      processStage: null,
-      radiologyTestName: "MRI",
-    },
-  ];
-
   useEffect(() => {
-    // if (patientDosResult?.data?.response) {
-    setSelectDosValue();
-    var dosList = [];
-
-    // patientDosResult?.data?.response?.map((res, index) => {
-    exmpleData?.map((res, index) => {
-      if (res) {
-        var dosLable = (
-          <>
-            <div className="d-flex justify-content-between">
-              <span className={styles.dosLable}>
-                {moment(res.dos).format("MM-DD-YYYY")} - {res.radiologyTestName}
-              </span>
-              {getStatusIcon(res.processStage)}
-            </div>
-          </>
-        );
-        dosList.push({ value: res.dos, label: dosLable });
-      }
-    });
-    setDosSummariesList(dosList);
-    // if (patientDetailsResult?.data?.response?.dateOfService) {
-    //   setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
-    // }
-    // }
+    if (patientDosResult?.data?.response) {
+      setSelectedDosValue(false);
+      setSelectDosValue();
+      var dosList = [];
+      patientDosResult?.data?.response?.map((res, index) => {
+        if (res) {
+          var dosLable = (
+            <>
+              <div className="d-flex justify-content-between">
+                <span className={styles.dosLable}>
+                  {moment(res.dos).format("MM-DD-YYYY")} -{" "}
+                  {res.radiologyTestName}
+                </span>
+                {getStatusIcon(res.processStage)}
+              </div>
+            </>
+          );
+          dosList.push({ value: res.dos, label: dosLable });
+        }
+      });
+      setDosSummariesList(dosList);
+      setTimeout(() => {
+        setSelectedDosValue(true);
+      }, 1);
+    }
   }, []);
 
   const handleChangePageNumber = async (value) => {
@@ -193,8 +161,8 @@ const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult ,processedYear
         <div style={{ paddingLeft: "60px" }}>Page Number</div>
       </div>
       <div className={styles.displayDiv}>
-        {exmpleData
-          ? exmpleData?.map((data) => (
+        {patientDosResult?.data?.response
+          ? patientDosResult?.data?.response?.map((data) => (
               <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
                 <div
                   className={` ${styles.selectDetailsContainer}`}
@@ -297,7 +265,7 @@ const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult ,processedYear
                         onChange={handleOptions}
                         className="dosSelect"
                         allowClear
-                        value={selectDosValue}
+                        value={selectedYearValue}
                         style={{ marginRight: "10px" }}
                       >
                         {dosYear?.map((data) => (
@@ -307,21 +275,22 @@ const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult ,processedYear
                         ))}
                       </Select>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
-                      <Select
-                        placeholder="Select DOS"
-                        onChange={handleOptions}
-                        className="dosSelect"
-                        allowClear
-                        value={selectDosValue}
-                      >
-                        {dosSummariesList?.map((data) => (
-                          <Option key={data?.value} value={data?.value}>
-                            {data.label}
-                          </Option>
-                        ))}
-                      </Select>
-                    </Nav.Item>
+                    {selectedDosValue && (
+                      <Nav.Item as="li" className="nav-item">
+                        <Select
+                          placeholder="Select DOS"
+                          onChange={handleOptions}
+                          allowClear
+                          style={{ width: "220px" }}
+                        >
+                          {dosSummariesList?.map((data) => (
+                            <Option key={data?.value} value={data?.value}>
+                              {data.label}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Nav.Item>
+                    )}
                     {activeTabHead == 1 && (
                       <Popover
                         open={popoverVisible}
@@ -388,7 +357,7 @@ const enhancer = connect(
   (state) => ({
     labDetailsResult: state?.patientDetails?.details?.labResult,
     processedYearResult: state?.patientDetails.details?.processedYear,
-
+    patientDosResult: state?.patientDetails?.details?.labDosResult,
   }),
   {
     getLabDetails: detailsActions.labDetailsAction,

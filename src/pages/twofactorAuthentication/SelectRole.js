@@ -111,7 +111,7 @@ const SelectRole = () => {
                 <p className="sub-title"></p>
                 <Image className="login-logo" src={IMAGES.loginPageLogo1} />
                 <div className="company-name">
-                  Encipher health private limited
+                Encipher Health Inc.
                 </div>
               </div>
             </div>

@@ -52,9 +52,10 @@ const ReceivedReport = ({
       receivedEndDate: receivedEndDate,
     };
     dispatch(selectedReport(info));
-    const currentpath = localStorage.getItem("userRole");
+    const userRole = localStorage.getItem("userRole");
+    const currentRole=userRole?.split("_").map((item,index)=>index===0?item:item.charAt(0).toUpperCase()+item?.slice(1)).join("")
     router?.push(
-      `/${currentpath}/report/individualreport?reportId=${
+      `/${currentRole}/report/individualreport?reportId=${
         item?.reportId
       }&isAdminPage=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
     );

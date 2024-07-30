@@ -332,7 +332,8 @@ const MeatCard = ({
                           item.diagnosisCode,
                           setSelectMeatResult,
                           item,
-                          setSelectHyperlink
+                          setSelectHyperlink,
+                          getSelectedDosPageNumber
                         )}
                       </div>
                     </div>

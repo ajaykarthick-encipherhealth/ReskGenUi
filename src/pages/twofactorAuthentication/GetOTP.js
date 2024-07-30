@@ -73,7 +73,7 @@ const GetOTP = () => {
             <div className={styles.pointsDiv}>
               <ol>
                 <li className={styles.steps}>
-                To download Authenticator on your device, go to 
+                  To download Authenticator on your device, go to
                   <div
                     style={{
                       width: "60%",
@@ -92,18 +92,19 @@ const GetOTP = () => {
                       App Store <Image src={redirect} alt="noimg" />
                     </span>
                   </div>
-                 
                 </li>
                 {/* <li className={styles.steps}>
                   Open One Authentication on your mobile or tab.
                 </li> */}
                 <li className={styles.steps}>
-                Open Authenticator, tap Menu{" "}
+                  Open Authenticator, tap Menu{" "}
                   <Image src={hamburgermenu} alt="noimg" /> or settings{" "}
-                  <Image src={settings} alt="noimg" /> and select linked devices.
+                  <Image src={settings} alt="noimg" /> and select linked
+                  devices.
                 </li>
                 <li className={styles.steps}>
-                  Tap "Link a Device" and scan the QR code for further authentication.
+                  Tap "Link a Device" and scan the QR code for further
+                  authentication.
                 </li>
               </ol>
             </div>

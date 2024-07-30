@@ -110,7 +110,7 @@ const Patient = ({
   const [errors, setErrors] = useState({ year: "" });
   const [selectOrgList, setSelectedOrgList] = useState("");
   const [orgAllList, setOrgAllList] = useState([]);
-
+  
   useEffect(() => {
     if (window !== "undefined") {
       if (navigate) {
@@ -296,6 +296,7 @@ const Patient = ({
     var orgId = selectOrgList?.value;
     form.allocatedBy = localUserId;
     form.computing = 0;
+    form.patientId = form.patientId.trim()
     try {
       setIsLoadingBtn(true);
       const response = await axios.post(
@@ -741,7 +742,7 @@ const enhancer = connect(
   (state) => ({
     organizationList: state?.tenantAdmin?.patients?.allOrganization?.data,
     allPatientList: state?.tenantAdmin?.patients?.allPatients,
-    webSocketData: state?.webSocket?.webSocketDetails?.data,
+    webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
     loading: state?.tenantAdmin?.patients?.allPatientsLoading,
   }),
   {
