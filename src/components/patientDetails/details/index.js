@@ -1017,6 +1017,7 @@ const Details = ({
                                   {!isLoadingDos ? (
                                     <>
                                       <Select
+                                      placeholder="Year"
                                         value={dosYearDefalutSelect}
                                         onChange={(e) => dosOnChange(e)}
                                         className={`custom_select_type ${visitStyles.custom_select_type}`}

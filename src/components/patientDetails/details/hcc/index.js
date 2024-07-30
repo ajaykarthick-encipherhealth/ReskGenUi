@@ -330,7 +330,7 @@ const Hcc = ({
                       onChange={handleOptions}
                       className="dosSelect"
                       allowClear
-                      value={selectDosValue}
+                      value={selectDosValue?selectDosValue:null}
                     >
                       {dosSummariesList?.map((data) => (
                         <Option key={data?.value} value={data?.value}>
