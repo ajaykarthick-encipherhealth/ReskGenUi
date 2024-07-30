@@ -61,6 +61,7 @@ background-color: red !important;
   width: 60%;
   height: auto;
   display: grid;
+  margin: auto;
   align-items: center;
   justify-content: center;
 }
@@ -165,22 +166,27 @@ background-color: red !important;
   background-image: url("../images/login/back_1.webp");
   background-repeat: no-repeat;
   background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .mfaMainDiv {
   display: flex;
-  height: 60%;
+  /* height: 60%; */
+  width:100%;
   justify-content: space-between;
 }
 .instrucDIv {
-  width: 60%;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   padding-right: 20px;
-  position: relative;
+  /* position: relative;
   top: 100px;
-  left: 200px;
+  left: 200px; */
 }
 .pointsDiv {
   margin-top: 60px;
@@ -188,12 +194,18 @@ background-color: red !important;
 .qrDIv {
   width: 40%;
   height: 100%;
+  padding-right: 20px;
+  /* position: relative;
+  top: 200px; */
   display: flex;
   flex-direction: column;
-
-  padding-right: 20px;
-  position: relative;
-  top: 200px;
+  justify-content: center;
+  align-items: "center";
+}
+.imgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .steps {
   font-weight: 500;
@@ -210,7 +222,7 @@ background-color: red !important;
   width: 100%;
   height: 200px;
   /* background-color: #fff; */
-  position: absolute;
+  /* position: absolute; */
 }
 .btnDiv {
   width: 100%;
