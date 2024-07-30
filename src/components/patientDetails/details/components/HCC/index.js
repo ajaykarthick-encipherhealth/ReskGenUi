@@ -733,33 +733,40 @@ const HccCards = ({
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                  {getCaptureSectionBackgroundFile(
-                                    data?.capturedSections,
-                                    data?.encounterDate,
-                                    data?.actualDescription,
-                                    data?.diagnosisCode,
-                                    data?.getPlace,
-                                    captureSectionMatching,
-                                    setSearch,
-                                    setFileLoading,
-                                    setIsModalOpenLab,
-                                    setIsModalOpenRadiology,
-                                    setIsModalOpenValidCodes,
-                                    setFileModalHeader,
-                                    fileId,
-                                    patientDocumentResult,
-                                    fileInitialPage,
-                                    setFileInitialPage,
-                                    data?.hyperlinks,
-                                    encounterDateMatching,
-                                    setIsMulitpleHeader,
-                                    isMulitpleHeader,
-                                    setIsMulitpleHeadeCode,
-                                    isMulitpleHeaderCode,
-                                    data.dbDescription,
-                                    popup,
-                                    getSelectedDosPageNumber
-                                  )}
+                                  {getCaptureSectionBackgroundFile({
+                                    value: data?.capturedSections,
+                                    encounterDate: data?.encounterDate,
+                                    actualDescription: data?.actualDescription,
+                                    diagnosisCode: data?.diagnosisCode,
+                                    documentPlace: data?.getPlace,
+                                    captureSectionMatching:
+                                      captureSectionMatching,
+                                    setSearch: setSearch,
+                                    setFileLoading: setFileLoading,
+                                    setIsModalOpenLab: setIsModalOpenLab,
+                                    setIsModalOpenRadiology:
+                                      setIsModalOpenRadiology,
+                                    setIsModalOpenValidCodes:
+                                      setIsModalOpenValidCodes,
+                                    setFileModalHeader: setFileModalHeader,
+                                    fileId: fileId,
+                                    patientDocumentResult:
+                                      patientDocumentResult,
+                                    fileInitialPage: fileInitialPage,
+                                    setFileInitialPage: setFileInitialPage,
+                                    hyperlinks: data?.hyperlinks,
+                                    encounterDateMatching:
+                                      encounterDateMatching,
+                                    setIsMulitpleHeader: setIsMulitpleHeader,
+                                    isMulitpleHeader: isMulitpleHeader,
+                                    setIsMulitpleHeadeCode:
+                                      setIsMulitpleHeadeCode,
+                                    isMulitpleHeaderCode: isMulitpleHeaderCode,
+
+                                    diseaseName: data.dbDescription,
+                                    popup: "",
+                                    getSelectedDosPageNumber,
+                                  })}
                                 </div>
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
