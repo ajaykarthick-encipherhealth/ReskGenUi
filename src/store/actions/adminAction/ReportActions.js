@@ -49,6 +49,7 @@ export const getReportDetails = ({
   selectManager = "",
   size,
   flagsList,
+  allPatientIds
 }) => {
   return (dispatch) => {
     try {
@@ -62,7 +63,8 @@ export const getReportDetails = ({
         sort,
         selectManager,
         size,
-        flagsList
+        flagsList,
+        allPatientIds
       }).then((response) => {
         if (response) {
           dispatch({

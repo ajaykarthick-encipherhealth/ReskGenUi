@@ -49,6 +49,7 @@ const InitialCard = ({
   handleHeaderCheckbox,
   selectAllFlags,
   adminLoader,
+  apiCall,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -70,25 +71,52 @@ const InitialCard = ({
 
           setSelectedRows(seletedAll ? seletedAll : []);
           setIsLoading(false);
-        } catch (error) { }
+        } catch (error) {}
       } else setSelectedRows([]);
     }
     if (activeTab === "Admin") {
       if (!selectAll) {
+        const {
+          filter,
+          pagenum,
+          size,
+          startDate,
+          endDate,
+          search,
+          sort,
+          userName,
+          selectManager,
+          flagsList,
+          allPatientIds,
+        } = apiCall.admin;
         try {
           setIsLoading(true);
+          const orgId = localStorage.getItem("orgId");
+          const role = localStorage.getItem("role");
+          const searchValue = filter === "ALL" ? "" : filter;
+          const url = `dbservice/patient/adminreport?pageno=${0}&size=${
+            size ? size : 7
+          }&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${
+            sort?.sortField ? sort?.sortField : ""
+          }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&username=${
+            userName === "REVIEWER" ? selectManager : ""
+          }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${
+            role == "tenant_admin" ? "" : orgId
+          }&patientIds=${
+            flagsList ? flagsList : ""
+          }&allPatientIds=${allPatientIds}`;
           const res = await fetch(
-            ENDPOINTS.apiEndoint +
-            `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
+            ENDPOINTS.apiEndoint + url,
+            // `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
             {
               headers: { Authorization: `Bearer ${await getStorage("token")}` },
             }
           ).then((res) => res.json());
-          const seletedAll = res?.response?.response?.data;
-
+          
+          const seletedAll = res?.response?.patientIds;
           setSelectedRows(seletedAll ? seletedAll : []);
           setIsLoading(false);
-        } catch (error) { }
+        } catch (error) {}
       } else setSelectedRows([]);
 
       // dispatch(
@@ -276,6 +304,8 @@ const InitialCard = ({
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
 
+  console.log(reportListAll?.response?.data);
+
   return (
     <>
       <div>
@@ -341,10 +371,7 @@ const InitialCard = ({
               <div className="row">
                 <div>
                   <div className=" col-xl-12 d-flex">
-
-
                     <div className={`col-xl-6 ${styles.cardDiv}`}>
-
                       {reportListAll?.response?.response?.data?.length === 0 ? (
                         <div className={`col-xl-6 ${styles.card1}`}>
                           <div className={` ${styles.emptyCard}`}>
@@ -394,8 +421,6 @@ const InitialCard = ({
                         </div>
                       )}
                     </div>
-
-
 
                     <div className={`col-xl-6 ${styles.cardSeperation}`}>
                       <div className={styles.cardContainer}>
@@ -451,16 +476,16 @@ const InitialCard = ({
                             {activeTab === "Reviewer"
                               ? ""
                               : allocationCountData.map((item, index) => (
-                                <AllocationCount
-                                  key={item?.id}
-                                  title={item?.title}
-                                  allocationCount={item?.allocationCount}
-                                  renderUserPrfoileAvatar={
-                                    renderUserPrfoileAvatar
-                                  }
-                                  styles={styles}
-                                />
-                              ))}
+                                  <AllocationCount
+                                    key={item?.id}
+                                    title={item?.title}
+                                    allocationCount={item?.allocationCount}
+                                    renderUserPrfoileAvatar={
+                                      renderUserPrfoileAvatar
+                                    }
+                                    styles={styles}
+                                  />
+                                ))}
                           </div>
                         </div>
                       </div>
