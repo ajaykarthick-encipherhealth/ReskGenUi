@@ -92,7 +92,7 @@ const Patient = ({
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-  const filteredList = useSelector((state) => state.auth?.filters?.patientAllocated);
+  const filteredList = useSelector((state) => state.filters?.patientAllocated);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [searchStr, setSearchStr] = useState("");
@@ -448,10 +448,10 @@ const Patient = ({
       data?.userName
     }&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${
       sort?.sortDir ? sort?.sortDir : "DESC"
-    }&sortfield=${
-      sort?.sortField ? sort?.sortField : "dueDate"
-    }&searchstring=${searchString?searchString:""}&processedStatus=${
-      selectedOptions ? selectedOptions==="ALL"?"":selectedOptions : ""
+    }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
+      searchString ? searchString : ""
+    }&processedStatus=${
+      selectedOptions ? (selectedOptions === "ALL" ? "" : selectedOptions) : ""
     }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
     getSelectedSupervisorList({ url: resoureUrl });
     setIsPatientList(true);
@@ -489,7 +489,11 @@ const Patient = ({
 
   useEffect(() => {
     if (selectedOptions?.length > 0) {
-      getL2PatientList({data:l2selectUser,pageNoL2Patient:pageNoL2Patient, selectedOptions: selectedOptions });
+      getL2PatientList({
+        data: l2selectUser,
+        pageNoL2Patient: pageNoL2Patient,
+        selectedOptions: selectedOptions,
+      });
     }
   }, [selectedOptions]);
 
@@ -603,7 +607,12 @@ const Patient = ({
                                     defaultSelectValue1={""}
                                     // isClose={true}
                                     setPageNo={setPageNo}
-                                    selectDefaultValue={selectedOption && {label:selectedOption,value:selectedOption}}
+                                    selectDefaultValue={
+                                      selectedOption && {
+                                        label: selectedOption,
+                                        value: selectedOption,
+                                      }
+                                    }
                                   />
                                 </div>
                               </div>
