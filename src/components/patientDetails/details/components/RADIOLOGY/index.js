@@ -255,8 +255,6 @@ const RadiologyCards = ({
                                   ) : null}
                                 </>
                               ) : null}
-
-                              
                             </div>
                           </div>
                           <div className="d-flex justify-content-between">
@@ -264,20 +262,22 @@ const RadiologyCards = ({
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
-                                {getProviderNameTag(
-                                  data?.providerName,
-                                  data?.providerHyperlinks,
-                                  setSearch,
-                                  data.diagnosisCode,
-                                  data.dbDescription,
-                                  setIsModalOpenValidCodes,
-                                  setFileModalHeader,
-                                  patientDocumentResult,
-                                  setIsMulitpleProvider,
-                                  isMulitpleProvider,
-                                  setIsMulitpleHeadeCode,
-                                  isMulitpleHeaderCode
-                                )}
+                                {getProviderNameTag({
+                                  providerNames: data?.providerName,
+                                  hyperlinks: data?.providerHyperlinks,
+                                  setSearch: setSearch,
+                                  diagnosisCode: data.diagnosisCode,
+                                  diseaseName: data.dbDescription,
+                                  setIsModalOpen: setIsModalOpenValidCodes,
+                                  setFileModalHeader: setFileModalHeader,
+                                  patientDocumentResult: patientDocumentResult,
+                                  setIsMulitpleHeader: setIsMulitpleProvider,
+                                  isMulitpleHeader: isMulitpleProvider,
+                                  setIsMulitpleHeadeCode:
+                                    setIsMulitpleHeadeCode,
+                                  isMulitpleHeaderCode: isMulitpleHeaderCode,
+                                  setSelectMeatResult: "",
+                                })}
                               </div>
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
@@ -293,38 +293,46 @@ const RadiologyCards = ({
                                   setSearch: setSearch,
                                   setFileModalHeader: setFileModalHeader,
                                   patientDocumentResult: patientDocumentResult,
-                                  popup
+                                  popup,
                                 })}
                               </div>
                               {data.providerName.length == 0 && (
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                  {getCaptureSectionBackgroundFile(
-                                    data?.capturedSections,
-                                    data?.encounterDate,
-                                    data?.actualDescription,
-                                    data?.diagnosisCode,
-                                    data?.getPlace,
-                                    captureSectionMatching,
-                                    setSearch,
-                                    setFileLoading,
-                                    setIsModalOpenLab,
-                                    setIsModalOpenRadiology,
-                                    setIsModalOpenValidCodes,
-                                    setFileModalHeader,
-                                    fileId,
-                                    patientDocumentResult,
-                                    fileInitialPage,
-                                    setFileInitialPage,
-                                    data?.hyperlinks,
-                                    encounterDateMatching,
-                                    setIsMulitpleHeader,
-                                    isMulitpleHeader,
-                                    setIsMulitpleHeadeCode,
-                                    isMulitpleHeaderCode,
-                                    data.dbDescription
-                                  )}
+                                  {getCaptureSectionBackgroundFile({
+                                    value: data?.capturedSections,
+                                    encounterDate: data?.encounterDate,
+                                    actualDescription: data?.actualDescription,
+                                    diagnosisCode: data?.diagnosisCode,
+                                    documentPlace: data?.getPlace,
+                                    captureSectionMatching:
+                                      captureSectionMatching,
+                                    setSearch: setSearch,
+                                    setFileLoading: setFileLoading,
+                                    setIsModalOpenLab: setIsModalOpenLab,
+                                    setIsModalOpenRadiology:
+                                      setIsModalOpenRadiology,
+                                    setIsModalOpenValidCodes:
+                                      setIsModalOpenValidCodes,
+                                    setFileModalHeader: setFileModalHeader,
+                                    fileId: fileId,
+                                    patientDocumentResult:
+                                      patientDocumentResult,
+                                    fileInitialPage: fileInitialPage,
+                                    setFileInitialPage: setFileInitialPage,
+                                    hyperlinks: data?.hyperlinks,
+                                    encounterDateMatching:
+                                      encounterDateMatching,
+                                    setIsMulitpleHeader: setIsMulitpleHeader,
+                                    isMulitpleHeader: isMulitpleHeader,
+                                    setIsMulitpleHeadeCode:
+                                      setIsMulitpleHeadeCode,
+                                    isMulitpleHeaderCode: isMulitpleHeaderCode,
+
+                                    diseaseName: data.dbDescription,
+                                    popup: "",
+                                  })}
                                 </div>
                               )}
                             </div>
@@ -474,32 +482,37 @@ const RadiologyCards = ({
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
-                                {getCaptureSectionBackgroundFile(
-                                  data?.capturedSections,
-                                  data?.encounterDate,
-                                  data?.actualDescription,
-                                  data?.diagnosisCode,
-                                  data?.getPlace,
-                                  captureSectionMatching,
-                                  setSearch,
-                                  setFileLoading,
-                                  setIsModalOpenLab,
-                                  setIsModalOpenRadiology,
-                                  setIsModalOpenValidCodes,
-                                  setFileModalHeader,
-                                  fileId,
-                                  patientDocumentResult,
-                                  fileInitialPage,
-                                  setFileInitialPage,
-                                  data?.hyperlinks,
-                                  encounterDateMatching,
-                                  setIsMulitpleHeader,
-                                  isMulitpleHeader,
-                                  setIsMulitpleHeadeCode,
-                                  isMulitpleHeaderCode,
-                                  data.dbDescription,
-                                  popup
-                                )}
+                                {getCaptureSectionBackgroundFile({
+                                  value: data?.capturedSections,
+                                  encounterDate: data?.encounterDate,
+                                  actualDescription: data?.actualDescription,
+                                  diagnosisCode: data?.diagnosisCode,
+                                  documentPlace: data?.getPlace,
+                                  captureSectionMatching:
+                                    captureSectionMatching,
+                                  setSearch: setSearch,
+                                  setFileLoading: setFileLoading,
+                                  setIsModalOpenLab: setIsModalOpenLab,
+                                  setIsModalOpenRadiology:
+                                    setIsModalOpenRadiology,
+                                  setIsModalOpenValidCodes:
+                                    setIsModalOpenValidCodes,
+                                  setFileModalHeader: setFileModalHeader,
+                                  fileId: fileId,
+                                  patientDocumentResult: patientDocumentResult,
+                                  fileInitialPage: fileInitialPage,
+                                  setFileInitialPage: setFileInitialPage,
+                                  hyperlinks: data?.hyperlinks,
+                                  encounterDateMatching: encounterDateMatching,
+                                  setIsMulitpleHeader: setIsMulitpleHeader,
+                                  isMulitpleHeader: isMulitpleHeader,
+                                  setIsMulitpleHeadeCode:
+                                    setIsMulitpleHeadeCode,
+                                  isMulitpleHeaderCode: isMulitpleHeaderCode,
+
+                                  diseaseName: data.dbDescription,
+                                  popup: "",
+                                })}
                               </div>
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
