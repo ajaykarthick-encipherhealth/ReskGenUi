@@ -110,7 +110,7 @@ const Patient = ({
   const [errors, setErrors] = useState({ year: "" });
   const [selectOrgList, setSelectedOrgList] = useState("");
   const [orgAllList, setOrgAllList] = useState([]);
-
+  
   useEffect(() => {
     if (window !== "undefined") {
       if (navigate) {
@@ -742,7 +742,7 @@ const enhancer = connect(
   (state) => ({
     organizationList: state?.tenantAdmin?.patients?.allOrganization?.data,
     allPatientList: state?.tenantAdmin?.patients?.allPatients,
-    webSocketData: state?.webSocket?.webSocketDetails?.data,
+    webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
     loading: state?.tenantAdmin?.patients?.allPatientsLoading,
   }),
   {
