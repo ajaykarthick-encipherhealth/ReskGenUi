@@ -529,3 +529,21 @@ export const SelectUserList = async (role) => {
     console.log(err);
   }
 };
+export const tenantAdminSelectUserList = async (role) => {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  const roles = localStorage.getItem("role");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};

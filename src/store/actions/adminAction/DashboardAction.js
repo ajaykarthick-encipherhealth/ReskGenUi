@@ -11,6 +11,7 @@ import {
   CompletedStatus,
   SelectUserList,
   workStatusApiTenantAdmin,
+  tenantAdminSelectUserList,
 } from "../../../services/adminServices/DashboardService";
 
 export const WORKFLOWDATA = "WORKFLOWDATA";
@@ -317,6 +318,29 @@ export const getSelectUserList = (role) => {
     });
     try {
       SelectUserList(role).then((response) => {
+        dispatch({
+          type: SELECTED_USER,
+          payload: {
+            data: response,
+            loading: false,
+          },
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+export const getTenantAdminSelectUserList = (role) => {
+  return (dispatch) => {
+    dispatch({
+      type: SELECTED_USER,
+      payload: {
+        loading: true,
+      },
+    });
+    try {
+      tenantAdminSelectUserList(role).then((response) => {
         dispatch({
           type: SELECTED_USER,
           payload: {
