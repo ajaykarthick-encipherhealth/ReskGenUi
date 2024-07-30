@@ -135,7 +135,7 @@ const index = ({
                 {`$ ${
                   TotalCareGapsRevenue !== undefined
                     ? formatNumber(TotalCareGapsRevenue.toFixed(2))
-                    : 0
+                    : "0.00"
                 }`}
               </div>
             </div>

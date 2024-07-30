@@ -112,7 +112,7 @@ const index = ({
         <div className={styles.header}>
           
           <div className="py-1">Revenue</div>
-          <div className={styles.price}>{`$ ${formatNumber(totalRev)}`}</div>
+          <div className={styles.price}>{`$ ${formatNumber(totalRev) || "0.00"}`}</div>
           {/* <div className={styles.revenue}>$ 3.1k Increase</div> */}
         </div>
         <CodeGraphRevenue
