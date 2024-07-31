@@ -184,7 +184,7 @@ const Patient = ({
     setPaginationFirst(e.first);
     setPageNoL2Patient(e.page);
     setPageSize(e.rows);
-    getL2PatientList({data:l2selectUser, pageNoL2Patient:e.page, sort:sort});
+    getL2PatientList({data:l2selectUser, pageNoL2Patient:e.page, sort:sort, selectedOptions:selectedOptions});
     setTableLoading(true);
   };
   const selectTabClick = (number) => {

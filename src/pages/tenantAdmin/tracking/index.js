@@ -73,12 +73,16 @@ const bullets = [
         name: "RE AUDIT",
       },
       {
-        color: "#EBAE00",
+        color: "#FFEBAD",
         name: "AUDIT HOLD",
       },
       {
         color: "#C21807",
         name: "AUDIT DECLINED",
+      },
+      {
+        color: "#E69021",
+        name: "NOT AUDIT",
       },
     ],
   },

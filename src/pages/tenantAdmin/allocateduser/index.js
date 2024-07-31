@@ -214,6 +214,7 @@ const Patient = ({
       data: l2selectUser,
       pageNoL2Patient: e.page,
       sort: sort,
+      selectedOptions:selectedOptions
     });
     setTableLoading(true);
   };
