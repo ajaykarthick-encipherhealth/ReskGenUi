@@ -156,7 +156,7 @@ const AdminList = ({
   };
   useEffect(() => {
     // getEnableUser({ checked: "no", user: rowData });
-    dispatch(getSelectUserList("REVIEWER"));
+    dispatch(getSelectUserList("SUPERVISOR"));
   }, [rowData]);
   useEffect(() => {
     if (usersData?.data?.response?.content) {

@@ -15,7 +15,7 @@ import {
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
-import { getSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
+import {getTenantAdminSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
 import { connect } from "react-redux";
 import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin/users";
 const items = [
@@ -152,7 +152,7 @@ const UserList = ({
   };
   useEffect(() => {
     // getEnableUser({ checked: "no", user: rowData });
-    dispatch(getSelectUserList("REVIEWER"));
+    dispatch(getTenantAdminSelectUserList("SUPERVISOR"));
   }, [rowData]);
   useEffect(() => {
     if (usersData?.data?.response?.content) {

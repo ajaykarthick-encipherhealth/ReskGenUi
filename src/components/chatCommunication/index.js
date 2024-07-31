@@ -1216,7 +1216,8 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                           {user.firstName} {user.lastName}
                                         </p>
                                         <p className="small text-muted">
-                                          {user?.role[0]}
+                                          {user?.role?.length > 0 &&
+                                            user?.role[0]}
                                         </p>
                                       </div>
                                     </div>
