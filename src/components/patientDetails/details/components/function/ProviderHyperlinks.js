@@ -414,6 +414,7 @@ export const getProviderNameTagList = ({ data }) => {
           }
           trigger={["hover"]}
           placement="bottom"
+          overlayStyle={{ zIndex: 9999 }}
         >
           <span
             style={{ background: "#a6cfa6", color: "#fff" }}
