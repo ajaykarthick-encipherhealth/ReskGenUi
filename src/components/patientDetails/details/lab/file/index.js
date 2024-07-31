@@ -259,6 +259,7 @@ const File = ({
                       </div>
                       <div className={visitStyles.container}>
                         <div className={visitStyles.hccStickey_head}>
+                 
                           <HccCards
                             list={newValidDiseaseList}
                             hccVersionDetails={hccVersionDetails}
