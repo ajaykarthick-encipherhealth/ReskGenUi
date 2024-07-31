@@ -559,6 +559,7 @@ const UserList = ({
                       placeholder="Select"
                       options={orgAllList}
                       style={{ height: "42px" }}
+                      allowClear
                     />
                   </Form.Item>
                 </Col>

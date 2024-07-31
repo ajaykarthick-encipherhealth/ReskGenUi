@@ -551,6 +551,7 @@ const UserList = ({
                         allowClear
                         style={{ height: "42px" }}
                       >
+                        <Select.Option value="ADMIN">ADMIN</Select.Option>
                         <Select.Option value="REVIEWER">REVIEWER</Select.Option>
                         <Select.Option value="SUPERVISOR">
                           SUPERVISOR
@@ -573,6 +574,7 @@ const UserList = ({
                         placeholder="Select"
                         options={orgAllList}
                         style={{ height: "42px" }}
+                        allowClear
                       />
                     </Form.Item>
                   </Col>
