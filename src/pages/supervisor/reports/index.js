@@ -383,7 +383,7 @@ const Index = () => {
                                       dosOnChange(selectedOption);
                                     }}
                                     options={statusOptions}
-                                    className="custom-react-select"
+                                    className="custom-react-react-select"
                                     isSearchable={false}
                                   />
                                   {/* )} */}

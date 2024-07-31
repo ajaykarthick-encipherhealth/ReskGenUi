@@ -521,7 +521,7 @@ const Reports = ({
                                       resetPageNumber(resetPageState);
                                     }}
                                     options={statusOptions}
-                                    className={`custom-react-select`}
+                                    className={`custom-react-report-select`}
                                     isSearchable={false}
                                   />
                                 </div>
@@ -529,7 +529,7 @@ const Reports = ({
                             </div>
                           ) : null}
 
-                          <div className="col-xl-2 d-flex">
+                          <div className="col-xl-3 d-flex">
                             <div className="d-flex w-100">
                               <label className="labelStyle d-flex  p-2">
                                 {" "}
@@ -595,7 +595,7 @@ const Reports = ({
                                             ? optionsUser
                                             : info?.options
                                         }
-                                        className={`custom-react-select`}
+                                        className={`custom-react-report-select`}
                                         isSearchable={false}
                                         value={selectedOptions[info?.name]}
                                       />
