@@ -830,7 +830,7 @@ const HccCards = ({
             )
           ) : (
             <div className={styles.noMsContainer}>
-              {`No ${cardTitle} codes are found`}
+              {`${cardTitle == "SUGGESTED" ? "CARE GAP" : cardTitle} Codes Not Found`}
             </div>
           )}
           <span className="d-none">{provided?.placeholder}</span>

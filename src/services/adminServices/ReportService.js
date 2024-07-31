@@ -4,16 +4,17 @@ import { getSentDetails } from "../../store/actions/adminAction/ReportActions";
 
 export const UPDATE_SENTREPORT = "UPDATE_SENTREPORT";
 export const patientDetails = async ({
-  pagenum= "",
+  pagenum = "",
   startDate = "",
   endDate = "",
-  search = '',
+  search = "",
   filter = "",
   userName = "",
   sort = "",
   selectManager = "",
-  size="",
-  flagsList=""
+  size = "",
+  flagsList = "",
+  allPatientIds = false,
 }) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
@@ -22,10 +23,12 @@ export const patientDetails = async ({
   const url = `dbservice/patient/adminreport?pageno=${pagenum}&size=${
     size ? size : 7
   }&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${
-    sort?.sortField ?  sort?.sortField :""
+    sort?.sortField ? sort?.sortField : ""
   }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&username=${
     userName === "REVIEWER" ? selectManager : ""
-  }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${role == "tenant_admin" ? "" : orgId}&patientIds=${flagsList?flagsList:""}`;
+  }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${
+    role == "tenant_admin" ? "" : orgId
+  }&patientIds=${flagsList ? flagsList : ""}&allPatientIds=${allPatientIds}`;
 
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {

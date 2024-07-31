@@ -4,6 +4,7 @@ import styles from "./report.module.css";
 import {
   getExportDetails,
   getUsersList,
+  getUsersLists
 } from "../../store/actions/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
 import { debounce } from "../../pages/admin/reports/Export";
@@ -15,80 +16,140 @@ import { SVGICON } from "../../jsx/constant/theme";
 export const checkBoxData = [
   {
     id: 1,
-    title: "patientId",
+    title: "Patient Id",
     heading: "Patient ID",
     checked: false,
   },
   {
     id: 2,
-    title: "patientName",
+    title: "patient Name",
     heading: "Patient Name",
     checked: false,
   },
   {
     id: 3,
-    title: "dob",
-    heading: "DOB",
+    title: "DOS",
+    heading: "DOS",
     checked: false,
   },
   {
     id: 4,
-    title: "computedDate",
-    heading: "Computed Date",
+    title: "DOB",
+    heading: "DOB",
     checked: false,
   },
   {
     id: 5,
-    title: "providerNames",
-    heading: "Provider Names",
+    title: "Computed Date",
+    heading: "Computed Date",
     checked: false,
   },
   {
     id: 6,
-    title: "allocatedOn",
-    heading: "Allocated On",
+    title: "Provider Names",
+    heading: "Provider Names",
     checked: false,
   },
   {
     id: 7,
-    title: "noOfValidCodes",
-    heading: "No Of Valid Codes",
+    title: "Allocated On",
+    heading: "Allocated On",
     checked: false,
   },
   {
     id: 8,
-    title: "noOfSuggestedCodes",
-    heading: "No Of Suggested Codes",
+    title: "NO Of Valid Codes",
+    heading: "No Of Valid Codes",
     checked: false,
   },
   {
     id: 9,
-    title: "noOfDeletedCodes",
-    heading: "No Of Deleted Codes",
+    title: "No Of Suggested Codes",
+    heading: "No Of Suggested Codes",
     checked: false,
   },
   {
     id: 10,
-    title: "totalCodes",
-    heading: "Total Codes",
+    title: "No Of Deleted Codes",
+    heading: "No Of Deleted Codes",
     checked: false,
   },
   {
     id: 11,
-    title: "patientAllocated",
+    title: "Total Codes",
+    heading: "Total Codes",
+    checked: false,
+  },
+  {
+    id: 12,
+    title: "Patient Allocated",
     heading: "Patient Allocated",
     checked: false,
   },
-  // {
-  //   id: 12,
-  //   title: "comments",
-  //   heading: "Comments",
-  //   checked: false,
-  // },
   {
     id: 13,
-    title: "hccDiagnosisCodes",
+    title: "Hcc Diagnosis Codes Desc",
+    heading: "Hcc Diagnosis Codes Desc",
+    checked: false,
+  },
+  {
+    id: 14,
+    title: "Hcc Diagnosis Codes",
     heading: "Hcc Diagnosis Codes",
+    checked: false,
+  },
+  {
+    id: 15,
+    title: "Suggested Diagnosis Codes",
+    heading: "Suggested Diagnosis Codes",
+    checked: false,
+  },
+  {
+    id: 16,
+    title: "Suggested Diagnosis Codes Desc",
+    heading: "Suggested Diagnosis Codes Desc",
+    checked: false,
+  },
+  {
+    id: 17,
+    title: "SUGGESTED PAGE NUMBER",
+    heading: "Suggested Page Number",
+    checked: false,
+  },
+  {
+    id: 18,
+    title: "MEAT PRESENT",
+    heading: "MEAT Present",
+    checked: false,
+  },
+  {
+    id: 19,
+    title: "MEAT",
+    heading: "MEAT",
+    checked: false,
+  },
+  {
+    id: 20,
+    title: "Provider Credentials",
+    heading: "Provider Credentials",
+    checked: false,
+  },
+  {
+    id: 21,
+    title: "Provider Signature",
+    heading: "Provider Signature",
+    checked: false,
+  },
+  {
+    id: 22,
+    title: "Authorized Provider",
+    heading: "Authorized Provider",
+    checked: false,
+  },
+  {
+    id: 23,
+    title: "HCC PAGE NUMBER",
+    heading: "HCC Page Number",
     checked: false,
   },
 ];
@@ -102,7 +163,7 @@ const Export = ({
   selectedRows,
   isSent,
 }) => {
-  const usersList = useSelector((state) => state.report?.usersList);
+  const usersList = useSelector((state) => state.report?.usersLists);
   const selectedReportInfo = useSelector((state) => state.report?.reportInfo);
   const list = useSelector((state) => state.report.row);
   const [selectedUser, setSelectedUser] = useState();
@@ -124,7 +185,7 @@ const Export = ({
   useEffect(() => {
     setCurrentUser(localStorage.getItem("userId"));
     var orgId = localStorage.getItem("orgId");
-    dispatch(getUsersList(orgId, search));
+    dispatch(getUsersLists(orgId, search));
   }, [search]);
 
   const dispatch = useDispatch();
@@ -208,13 +269,13 @@ const Export = ({
       userAndAccess: editUserAndAccess,
       removedUsers: removedUsers,
     };
-
-    if (!isSent) {
-      dispatch(getExportDetails(data));
-    } else {
-      dispatch(updateSentReport(updatedData));
-      dispatch(getActiveTab("Sent"));
-    }
+    console.log(data);
+    // if (!isSent) {
+    //   dispatch(getExportDetails(data));
+    // } else {
+    //   dispatch(updateSentReport(updatedData));
+    //   dispatch(getActiveTab("Sent"));
+    // }
     form.resetFields();
     setUsersList([]);
     setCheckAll((prev) => {
@@ -384,6 +445,7 @@ const Export = ({
                       padding: "10px",
                       borderRadius: "10px",
                       height: "435px",
+                      overflowY: "scroll"
                     }}
                   >
                     <ul>
