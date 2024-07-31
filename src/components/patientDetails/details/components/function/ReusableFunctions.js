@@ -1221,11 +1221,9 @@ export const getCaptureSectionBackgroundMeatNew = (
   getSelectedDosPageNumber,
   getRadiologyPDF,
   getLabPDF,
-  treatmentHyperLink,
-  selectedMeat, setSelectedMeat
 ) => {
   var dublicateCaptureRemove = removeDuplicatesArray(value);
-  
+
   return dublicateCaptureRemove?.map((res) => {
     const result = captureSectionMatching?.filter(
       (res2) => res2.sectionName === res.header
@@ -1254,10 +1252,26 @@ export const getCaptureSectionBackgroundMeatNew = (
         onClick={() => {
           getSelectedDosPageNumber && getSelectedDosPageNumber(null);
           const patientId = localStorage.getItem("patientId");
-          const selectedMeatData=dublicateCaptureRemove?.find(item=>item?.header===res.header)
-          console.log(selectedMeatData)
-          // getRadiologyPDF(patientId,"",selectedMeatData?.dateOfService,"","radiology")
-          // getLabPDF(patientId,"",selectedMeatData?.dateOfService,"","lab")
+          const selectedMeatData = dublicateCaptureRemove?.find(
+            (item) => item?.header === res.header
+          );
+          console.log(selectedMeatData?.stateIndicator);
+          const type = "lab";
+          type === "lab"
+            ? getLabPDF(
+                patientId,
+                "",
+                selectedMeatData?.dateOfService,
+                "",
+                "lab"
+              )
+            : getRadiologyPDF(
+                patientId,
+                "",
+                selectedMeatData?.dateOfService,
+                "",
+                "radiology"
+              );
 
           newFindValueDocument(
             res,

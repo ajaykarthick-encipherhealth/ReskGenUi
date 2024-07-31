@@ -604,7 +604,7 @@ const StatusAction = ({
     getPatientIdDetails(patientIdDetailsData?.data?.response);
     setPatienIdDetails(patientIdDetailsData?.data?.response);
   }, [patientIdDetailsData?.data?.response]);
-  console.log(userRole);
+
   return (
     <>
       {patientIdDetailsData?.data?.response && (

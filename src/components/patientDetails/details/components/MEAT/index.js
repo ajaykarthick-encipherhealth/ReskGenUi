@@ -49,7 +49,7 @@ const MeatCard = ({
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
-  const [selectedMeat, setSelectedMeat] = useState("");
+
   const highlight = (code) => {
     if (code == activeMeatTitle?.diagnosisCode) {
       return true;
@@ -243,10 +243,7 @@ const MeatCard = ({
                       setSelectHyperlink,
                       getSelectedDosPageNumber,
                       getRadiologyPDF,
-                      getLabPDF,
-                      item?.treatmentHyperLink,
-                      selectedMeat, 
-                      setSelectedMeat
+                      getLabPDF
                     )}
                   </div>
                 </div>
