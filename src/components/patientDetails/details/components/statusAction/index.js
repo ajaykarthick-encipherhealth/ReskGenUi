@@ -579,7 +579,7 @@ const StatusAction = ({
       }
       setConfirmNotesModal(false);
       setConfirmCompleteModal(false);
-      setConfirmAuditModal(false)
+      setConfirmAuditModal(false);
       getPatientIdData(localPatientId);
       setInputValue({
         notes: "",
@@ -604,14 +604,14 @@ const StatusAction = ({
     getPatientIdDetails(patientIdDetailsData?.data?.response);
     setPatienIdDetails(patientIdDetailsData?.data?.response);
   }, [patientIdDetailsData?.data?.response]);
-
+  console.log(userRole);
   return (
     <>
       {patientIdDetailsData?.data?.response && (
         <>
-          {userRole == "admin" ? (
+          {userRole == "admin" || userRole === "tenant_admin" ? (
             <div className={`${visitStyles.actionbtnContainer}`}>
-              <Dropdown
+              {/* <Dropdown
                 overlay={adminActionItems}
                 onVisibleChange={(v) => setMenuIsOpen(v)}
                 visible={menuIsOpen}
@@ -628,7 +628,15 @@ const StatusAction = ({
                     <DownOutlined />
                   </span>
                 </Button>
-              </Dropdown>
+              </Dropdown> */}
+              <Button
+                type="primary"
+                className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
+              >
+                <span>
+                  {patienIdDetails?.allocatedOn ? "ALLOCATED" : "ALLOCATE"}
+                </span>
+              </Button>
             </div>
           ) : userRole == "supervisor" ? (
             <div className={`${visitStyles.actionbtnContainer}`}>
@@ -841,7 +849,7 @@ const StatusAction = ({
             title="Are you sure to audit this task?"
             open={true}
             centered
-            onOk={() => updateStatus('audited')}
+            onOk={() => updateStatus("audited")}
             onCancel={() => setConfirmAuditModal(false)}
           ></Modal>
         </div>
