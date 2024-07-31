@@ -6,6 +6,7 @@ import {
   exportData,
   usersList,
   getFile,
+  usersLists,
 } from "../../services/ReportService";
 import { notification } from "antd";
 
@@ -19,6 +20,7 @@ export const SEARCH = "SEARCH";
 export const FILEPATH = "FILEPATH";
 export const FILEDETAILS = "FILEDETAILS";
 export const REPORT = "REPORT";
+export const GET_USERS_ALL = "GET_USERS_ALL";
 
 export const selectedRow = (val) => ({
   type: SELECTEDROW,
@@ -80,6 +82,20 @@ export const getUsersList = (id, search) => {
       usersList(id, search).then((response) => {
         dispatch({
           type: SEARCH,
+          payload: response.data,
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+export const getUsersLists = (id, search) => {
+  return (dispatch) => {
+    try {
+      usersLists(id, search).then((response) => {
+        dispatch({
+          type: GET_USERS_ALL,
           payload: response.data,
         });
       });

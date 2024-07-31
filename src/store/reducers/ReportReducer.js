@@ -7,7 +7,8 @@ import {
   RECEIVED_REPORT,
   REPORT_DETAILS,
   FILEDETAILS,
-  REPORT
+  REPORT,
+  GET_USERS_ALL
 } from "../actions/ReportActions";
 
 const initialState = {
@@ -19,7 +20,7 @@ const initialState = {
   receivedDetails: null,
   getReport: null,
   uploadFile: null,
-  reportInfo:null
+  reportInfo: null,
 };
 
 export const ReportReducer = (state = initialState, action) => {
@@ -39,6 +40,12 @@ export const ReportReducer = (state = initialState, action) => {
     return {
       ...state,
       usersList: action.payload,
+    };
+  }
+  if (action.type === GET_USERS_ALL) {
+    return {
+      ...state,
+      usersLists: action.payload,
     };
   }
   if (action.type === EXPORT) {
@@ -72,11 +79,11 @@ export const ReportReducer = (state = initialState, action) => {
       uploadFile: action.payload,
     };
   }
-  if(action.type===REPORT){
+  if (action.type === REPORT) {
     return {
       ...state,
-      reportInfo:action.payload
-    }
+      reportInfo: action.payload,
+    };
   }
   return state;
 };

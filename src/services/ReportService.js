@@ -120,6 +120,18 @@ export const usersList = (id, search) => {
   );
 };
 
+export const usersLists = (id, search) => {
+  const token = localStorage.getItem("token");
+  return axios.get(
+    `${ENDPOINTS?.apiEndoint}dbservice/user/getuser/report`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
 export const getFile = (pathname) => {
   const token = localStorage.getItem("token");
   return axios.get(
