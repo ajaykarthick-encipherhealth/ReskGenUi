@@ -9,11 +9,10 @@ const PdfViewer = ({
   headers,
   headerContent,
   height,
-  heightFrame = height ? "870" : "800",
+  heightFrame = height ? "850" : "720",
   selectedPageNumber,
 }) => {
   const [iframeSrc, setIframeSrc] = useState("");
-console.log(selectedPageNumber,pageNumber)
   useEffect(() => {
     const page = selectedPageNumber ? selectedPageNumber : pageNumber;
     if (!Array.isArray(src)) {
