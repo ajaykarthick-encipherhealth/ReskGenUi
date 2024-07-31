@@ -609,7 +609,6 @@ const HccCards = ({
                                 <div
                                   className={`cr-pointer ${styles.meatFoundContainer}`}
                                 >
-
                                   <div
                                     onClick={() => {
                                       setActiveTabHead(4);

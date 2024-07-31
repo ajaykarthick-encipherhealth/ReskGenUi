@@ -574,7 +574,6 @@ export const getMeatFound = (code, data, value) => {
     (res2) => res2?.diagnosisCode?.replace(".", "") == code?.replace(".", "")
   
   );
-
   var backColor = "#f93d3d";
   var meatTitle = "MEAT";
   if (result?.length != 0) {
