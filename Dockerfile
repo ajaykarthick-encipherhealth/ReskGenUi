@@ -6,6 +6,7 @@ WORKDIR /app
 
 # Copy only the necessary files for package installation
 COPY package.json .
+COPY package-lock.json .
 
 # Install project dependencies
 RUN npm install --legacy-peer-deps
