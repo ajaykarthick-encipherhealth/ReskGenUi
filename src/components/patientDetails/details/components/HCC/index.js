@@ -282,7 +282,7 @@ const HccCards = ({
                                 />
 
                                 <Popover
-                                  placement="left"
+                                  placement="bottom"
                                   title={""}
                                   trigger="click"
                                   overlayStyle={{ zIndex: 1000 }}
