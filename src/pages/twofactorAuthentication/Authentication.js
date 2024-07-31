@@ -192,7 +192,7 @@ const Index = () => {
                     );
                   }}
                   name="SUBMIT"
-                  width={250}
+                   width="100%"
                 />
               </div>
               <RegularButton
@@ -202,7 +202,7 @@ const Index = () => {
                 onClick={() => {
                   router.push("/login");
                 }}
-                width={250}
+                 width="100%"
               />
             </>
           ) : (
