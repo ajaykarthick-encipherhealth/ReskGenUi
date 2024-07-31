@@ -19,7 +19,7 @@ import {
   generateOptionsList,
   validateYear,
 } from "../../../components/headerFilters/functions";
-import { patientDetails } from "../../../stores/authflow/actions";
+import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 import { connect } from "react-redux";
 import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
@@ -63,7 +63,7 @@ const Patient = ({
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const response = useSelector((state) => state.adminList.patients);
-  const filteredList = useSelector((state) => state.auth?.filterList);
+  const filteredList = useSelector((state) => state.filters.allocatedBy);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
@@ -87,6 +87,7 @@ const Patient = ({
     patientId: "",
     patientName: "",
   });
+  console.log(filteredList)
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -146,6 +147,7 @@ const Patient = ({
       sort,
       (orgId = selectOrgList?.value)
     );
+    dispatch(getFilters("allocatedBy"));
   }, [
     pageNo,
     computedStartDate,
