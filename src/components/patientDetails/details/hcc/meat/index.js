@@ -42,7 +42,9 @@ const Meat = ({
   getpatientDetailsData,
   hccFileDetails,
   fileDosPageNumberList,
-  getSelectedDosPageNumber
+  getSelectedDosPageNumber,
+  getLabPDFData,
+  getRadiologyPDFData,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -119,7 +121,14 @@ const Meat = ({
     if (hccFileDetails?.data?.response) {
       setSelectFileURL(hccFileDetails?.data?.response);
     }
-  }, [hccFileDetails]);
+    if (getLabPDFData?.data?.response) {
+      setSelectFileURL(getLabPDFData?.data?.response);
+    }
+    if (getRadiologyPDFData?.data?.response) {
+      setSelectFileURL(getRadiologyPDFData?.data?.response);
+    }
+    console.log(getLabPDFData,getRadiologyPDFData)
+  }, [hccFileDetails,getLabPDFData,getRadiologyPDFData]);
 
   const onchangeMeat = (code, data) => {
     var title = data.diagnosisCode + " - " + data.diseaseName;
@@ -794,6 +803,8 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     hccFileDetails: state?.patientDetails?.details?.hccFileResult,
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+    getLabPDFData: state?.patientDetails?.details?.labResult,
+    getRadiologyPDFData: state?.patientDetails?.details?.radiologyResult
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
