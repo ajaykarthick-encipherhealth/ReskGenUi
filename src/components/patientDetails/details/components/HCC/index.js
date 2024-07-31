@@ -808,7 +808,7 @@ const HccCards = ({
                                     </span>
                                   </Tooltip>
                                 )}
-                                {data.lab == true && (
+                                {data.isLab == true && (
                                   <Tooltip title="LAB">
                                     <span
                                       className={` mt-2 ${visitStyles.labStatus}`}

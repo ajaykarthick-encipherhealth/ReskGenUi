@@ -294,24 +294,24 @@ const Details = ({
     setDosYear(dosYearArr);
     setIsLoadingDos(false);
     if (activeTab == 3) {
-      getRadiologyDetails(
-        selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0]?.value,
-        null,
-        setIsSpinnerLoading
-      );
+      // getRadiologyDetails(
+      //   selectPatientId ? selectPatientId?.patirntId : patientId,
+      //   dosYearArr[0]?.value,
+      //   null,
+      //   setIsSpinnerLoading
+      // );
       getPatientRadiologyDosList(
         selectPatientId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0]?.value
       );
     }
     if (activeTab == 4) {
-      getLabDetails(
-        selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0]?.value,
-        null,
-        setIsSpinnerLoading
-      );
+      // getLabDetails(
+      //   selectPatientId ? selectPatientId?.patirntId : patientId,
+      //   dosYearArr[0]?.value,
+      //   null,
+      //   setIsSpinnerLoading
+      // );
       getPatientLabDosList(
         selectPatientId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0]?.value

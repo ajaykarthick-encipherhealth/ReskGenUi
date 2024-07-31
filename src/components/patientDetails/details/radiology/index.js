@@ -23,7 +23,7 @@ const Radiology = ({
   getRadiologyFileDetails,
   radiologyDetailsResult,
   processedYearResult,
-  patientDosResult
+  patientDosResult,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -44,6 +44,9 @@ const Radiology = ({
   };
 
   const handleOptions = (value) => {
+    var selectData = patientDosResult?.data?.response.filter(
+      (i) => i.testName === value
+    );
     setIsLoading(true);
     setSelectDosValue(value);
     const patientId = localStorage.getItem("patientId");
@@ -52,15 +55,17 @@ const Radiology = ({
       getRadiologyDetails(
         patientId,
         null,
-        moment(value).format("YYYY-MM-DD"),
-        ""
+        moment(selectData[0]?.dos).format("YYYY-MM-DD"),
+        "",
+        selectData[0]?.testName
       );
     } else {
       getRadiologyDetails(
         patientId,
         radiologyDetailsResult?.data?.response?.processedYear,
         null,
-        ""
+        "",
+        null
       );
     }
   };
@@ -88,7 +93,8 @@ const Radiology = ({
     if (radiologyDetailsResult?.data?.response) {
       if (radiologyDetailsResult?.data?.response?.fileDetailDTO) {
         getRadiologyFileDetails(
-          radiologyDetailsResult?.data?.response?.fileDetailDTO?.radiologyAzureBlobPaths[0]
+          radiologyDetailsResult?.data?.response?.fileDetailDTO
+            ?.radiologyAzureBlobPaths[0]
         );
         setIsLoading(true);
       }
@@ -103,29 +109,37 @@ const Radiology = ({
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
-    setSelectDosValue();
-    var dosList = [];
+      var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
-      if (res) {
-        var dosLable = (
-          <>
-            <div className="d-flex justify-content-between">
-              <span className={styles.dosLable}>
-                {moment(res.dos).format("MM-DD-YYYY")} - {res.radiologyTestName}
-              </span>
-              {getStatusIcon(res.processStage)}
-            </div>
-          </>
+        if (res) {
+          var dosLable = (
+            <>
+              <div className="d-flex justify-content-between">
+                <span className={styles.dosLable}>
+                  {moment(res.dos).format("MM-DD-YYYY")} -{" "}
+                  {res.testName}
+                </span>
+                {getStatusIcon(res.processStage)}
+              </div>
+            </>
+          );
+          dosList.push({ value: res.testName, label: dosLable });
+        }
+      });
+      setDosSummariesList(dosList);
+      if (dosList?.length != 0) {
+        setSelectDosValue(dosList[0]?.value);
+        const patientId = localStorage.getItem("patientId");
+        getRadiologyDetails(
+          patientId,
+          null,
+          moment(patientDosResult?.data?.response[0].dos).format("YYYY-MM-DD"),
+          "",
+          patientDosResult?.data?.response[0].testName
         );
-        dosList.push({ value: res.dos, label: dosLable });
       }
-    });
-    setDosSummariesList(dosList);
-    // if (patientDetailsResult?.data?.response?.dateOfService) {
-    //   setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
-    // }
     }
-  }, []);
+  }, [patientDosResult?.data?.response]);
 
   const handleChangePageNumber = async (value) => {
     setPopoverVisible(false);
@@ -299,10 +313,8 @@ const Radiology = ({
                       <Select
                         placeholder="Select DOS"
                         onChange={handleOptions}
-                        // className="dosSelect"
-                        allowClear
-                        // value={selectDosValue}
-                        style={{width: "220px"}}
+                        value={selectDosValue}
+                        style={{ width: "220px" }}
                       >
                         {dosSummariesList?.map((data) => (
                           <Option key={data?.value} value={data?.value}>

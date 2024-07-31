@@ -1242,7 +1242,7 @@ export const getCaptureSectionBackgroundMeatNew = (
       // >
       <span
         onClick={() =>{
-          getSelectedDosPageNumber(null)
+          getSelectedDosPageNumber && getSelectedDosPageNumber(null)
           newFindValueDocument(
             res,
             documentPlace,
