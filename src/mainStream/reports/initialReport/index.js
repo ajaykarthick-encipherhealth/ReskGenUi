@@ -130,15 +130,15 @@ const InitialCard = ({
 
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows?.some(
-      (selectedRow) => selectedRow.patientId === row?.patientId
+      (selectedRow) => selectedRow === row?.patientId
     );
     let updatedRows;
     if (isSelected) {
       updatedRows = selectedRows?.filter(
-        (selectedRow) => selectedRow.patientId !== row?.patientId
+        (selectedRow) => selectedRow !== row?.patientId
       );
     } else {
-      updatedRows = [...selectedRows, row];
+      updatedRows = [...selectedRows, row?.patientId];
     }
 
     setSelectedRows(updatedRows);
@@ -302,9 +302,9 @@ const InitialCard = ({
 
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
+    setSelectAll(reportListAll?.response?.totalElements == selectedRows.length)
   }, [selectedRows]);
 
-  console.log(reportListAll?.response?.data);
 
   return (
     <>
@@ -337,7 +337,7 @@ const InitialCard = ({
                               styles.checkAlign +
                               (selectAll ? " " + TableStyle.customChecked : "")
                             }
-                            checked={selectAll}
+                            checked={selectAll && reportListAll?.response?.totalElements == selectedRows.length}
                           />
                         </div>
                         <span className={`pl-0 text-start ${styles.pName}`}>
