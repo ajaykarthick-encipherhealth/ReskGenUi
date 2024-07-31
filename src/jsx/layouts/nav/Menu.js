@@ -174,6 +174,15 @@ export const PhysicanMenu = [
     to: "/physicians/dashboard",
   },
 ];
+export const Analyst = [
+  {
+    title: "Patients",
+    iconStyle: <FontAwesomeIcon icon={faHospital} />,
+    activeIcon: <FontAwesomeIcon icon={faHospitalAlt} />,
+    to: "/analyst/patients",
+    childRoute: "/admin/patients/details",
+  },
+];
 export const L2AuditorMenuList = () => {
   return [
     {

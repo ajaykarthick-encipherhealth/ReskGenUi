@@ -36,6 +36,7 @@ import {
   EHRMenuList,
   PhysicianMenuList,
   PhysicanMenu,
+  Analyst,
 } from "./Menu";
 import Notification from "../../../components/notification/index";
 import {
@@ -49,7 +50,6 @@ import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
 import { faBook } from "@fortawesome/free-solid-svg-icons";
-
 
 import {
   getAccuracy,
@@ -99,7 +99,7 @@ const Header = ({
   const [drawerWidth, setDrawerWidth] = useState(700);
   const [notificationCount, setNotificationCount] = useState(0);
   const notificationSoundRef = useRef(null);
-    
+
   const showDrawer = () => {
     setOpened(true);
     setPopoverVisible(false);
@@ -317,6 +317,8 @@ const Header = ({
         return ProviderMenuList;
       case "ehr":
         return EHRMenuList;
+      case "RECORD_ANALYST":
+        return Analyst;
       case "physician":
         // return PhysicianMenuList;
         return PhysicanMenu;
@@ -427,16 +429,15 @@ const Header = ({
     var countUnread =
       notificationResponse?.data?.response?.totalUnreadCount + count?.length;
     setNotificationCount(countUnread ? countUnread : 0);
-  
+
     notificationSoundRef.current = new Audio("/messageSound.mp3");
-      // Play notification sound
-      if (countUnread>0) {
-        notificationSoundRef.current.play().catch((error) => {
-          console.error("Error playing notification sound:", error);
-        });
-      }
-  }, [webSocketNotificationData,notificationResponse]);
-  
+    // Play notification sound
+    if (countUnread > 0) {
+      notificationSoundRef.current.play().catch((error) => {
+        console.error("Error playing notification sound:", error);
+      });
+    }
+  }, [webSocketNotificationData, notificationResponse]);
 
   useEffect(() => {
     if (
@@ -515,9 +516,11 @@ const Header = ({
                         <Link href={data.to} className="d-flex">
                           <div
                             className="menu-icon"
-                            style={{ paddingRight: "5px" , color:"#04306f" }}
+                            style={{ paddingRight: "5px", color: "#04306f" }}
                           >
-                           {stateActive === data.to ? data.activeIcon :data.iconStyle}
+                            {stateActive === data.to
+                              ? data.activeIcon
+                              : data.iconStyle}
                           </div>
                           <span className={`nav-text header-nav-text`}>
                             {data.title}
@@ -538,9 +541,9 @@ const Header = ({
                       <div className="header-info2 d-flex align-items-center">
                         <div className={styles.codify}>
                           {/* <div>{SVGICON.codify}</div> */}
-                          <FontAwesomeIcon  onClick={showDrawer} icon={faBook} />
+                          <FontAwesomeIcon onClick={showDrawer} icon={faBook} />
                         </div>
-                      
+
                         <Drawer
                           title={titleWithIcons}
                           onClose={onClosed}
@@ -729,6 +732,8 @@ const Header = ({
                                         ? "Supervisor"
                                         : currentRole == "tenant_admin"
                                         ? "Tenant Admin"
+                                        : currentRole == "record_analyst"
+                                        ? "Analyst"
                                         : currentRole == "ehr"
                                         ? "EHR"
                                         : "Admin"}
@@ -801,7 +806,9 @@ const Header = ({
                                   className="header-name"
                                   style={{ marginLeft: "10px" }}
                                 >
-                                  {userRole}
+                                  {currentRole == "record_analyst"
+                                    ? "Analyst"
+                                    : userRole}
                                   <DownOutlined
                                     style={{ margin: "0 0 0 5px" }}
                                   />
@@ -819,6 +826,8 @@ const Header = ({
                                 ? "Supervisor"
                                 : currentRole == "tenant_admin"
                                 ? "Tenant"
+                                : currentRole == "record_analyst"
+                                ? "Analyst"
                                 : currentRole == "ehr"
                                 ? "EHR"
                                 : "Admin"}
