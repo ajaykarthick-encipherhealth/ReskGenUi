@@ -308,7 +308,7 @@ const Combo = ({
               patientDocumentResult={patientDocumentResult}
               setActiveTabHead={setActiveTabHead}
               setActiveMeatTitle={setActiveMeatTitle}
-              meatCriteriaList={deletedMeatList}
+              meatCriteriaList={allMeatList}
               cardTitle="DELETED"
             />
           </div>
