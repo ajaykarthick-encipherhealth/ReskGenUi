@@ -1004,6 +1004,10 @@
   overflow: scroll;
   height: 900px;
 }
+.timeLines {
+  overflow: scroll;
+  height: 95vh;
+}
 
 .vertical-timeline--animate .vertical-timeline-element-content.bounce-in {
   width: 177px;

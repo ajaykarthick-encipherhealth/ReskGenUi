@@ -737,10 +737,10 @@ const Timeline = ({
     );
   }
   return (
-<div className={visitStyles.timeLine}>
+<div className={visitStyles.timeLines}>
   {!filterDataLoading ? (
     <div className="widget-timeline">
-      <ul className="timeline" style={{ height: "95%", overflow: "scroll" }}>
+      <ul className="timeline" style={{ height: "99vh", overflow: "scroll" }}>
         {timelineData?.length > 0 ? (
           timelineData?.map((item, index) => renderTimelineItem(item, index))
         ) : (
