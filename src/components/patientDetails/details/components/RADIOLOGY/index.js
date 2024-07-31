@@ -357,14 +357,14 @@ const RadiologyCards = ({
                               </div>
                               <div
                                 className={`cr-pointer ${styles.meatFoundContainer}`}
-                              >                        
+                              >        
                                 <div
                                   onClick={() => {
                                     setActiveTabHead(4);
                                     setActiveMeatTitle({
                                       header: "M",
                                       diagnosisCode: data?.diagnosisCode,
-                                    });                                 
+                                    });             
                                   }}
                                 >
                                   {getMeatFound(
