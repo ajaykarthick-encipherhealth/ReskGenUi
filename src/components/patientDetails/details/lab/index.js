@@ -32,7 +32,7 @@ const Lab = ({
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [dosYear, setDosYear] = useState([]);
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
-  const [selectedDosValue, setSelectedDosValue] = useState(true);
+  const [selectedDosValue, setSelectedDosValue] = useState([]);
   const [selectedYearValue, setSelectedYearValue] = useState([]);
 
   const selectTab = (num) => {
@@ -48,12 +48,21 @@ const Lab = ({
   // }, []);
 
   const handleOptions = (value) => {
+    var selectData = patientDosResult?.data?.response.filter(
+      (i) => i.dos === value
+    );
     setIsLoading(true);
     setSelectDosValue(value);
     const patientId = localStorage.getItem("patientId");
     const role = localStorage.getItem("role");
     if (value) {
-      getLabDetails(patientId, null, moment(value).format("YYYY-MM-DD"), "");
+      getLabDetails(
+        patientId,
+        null,
+        moment(value).format("YYYY-MM-DD"),
+        "",
+        selectData[0]?.testName
+      );
     } else {
       getLabDetails(
         patientId,
@@ -80,9 +89,10 @@ const Lab = ({
 
   useEffect(() => {
     if (labDetailsResult?.data?.response) {
-      if (labDetailsResult?.data?.response?.labFileDetail) {
+      if (labDetailsResult?.data?.response) {
         getLabFileDetails(
-          labDetailsResult?.data?.response?.fileDetailDTO?.labAzureBlobPaths[0]
+          labDetailsResult?.data?.response?.fileDetailDTO
+            ?.radiologyAzureBlobPaths[0]
         );
         setIsLoading(true);
       }
@@ -91,7 +101,6 @@ const Lab = ({
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
-      setSelectedDosValue(false);
       setSelectDosValue();
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
@@ -100,8 +109,7 @@ const Lab = ({
             <>
               <div className="d-flex justify-content-between">
                 <span className={styles.dosLable}>
-                  {moment(res.dos).format("MM-DD-YYYY")} -{" "}
-                  {res.radiologyTestName}
+                  {moment(res.dos).format("MM-DD-YYYY")} / {res.testName}
                 </span>
                 {getStatusIcon(res.processStage)}
               </div>
@@ -111,11 +119,19 @@ const Lab = ({
         }
       });
       setDosSummariesList(dosList);
-      setTimeout(() => {
-        setSelectedDosValue(true);
-      }, 1);
+      if (dosList?.length != 0) {
+        setSelectedDosValue(dosList[0]?.value);
+        const patientId = localStorage.getItem("patientId");
+        getLabDetails(
+          patientId,
+          null,
+          moment(patientDosResult?.data?.response[0].dos).format("YYYY-MM-DD"),
+          "",
+          patientDosResult?.data?.response[0]?.testName
+        );
+      }
     }
-  }, []);
+  }, [patientDosResult?.data?.response]);
 
   const handleChangePageNumber = async (value) => {
     setPopoverVisible(false);
@@ -275,22 +291,21 @@ const Lab = ({
                         ))}
                       </Select>
                     </Nav.Item>
-                    {selectedDosValue && (
-                      <Nav.Item as="li" className="nav-item">
-                        <Select
-                          placeholder="Select DOS"
-                          onChange={handleOptions}
-                          allowClear
-                          style={{ width: "220px" }}
-                        >
-                          {dosSummariesList?.map((data) => (
-                            <Option key={data?.value} value={data?.value}>
-                              {data.label}
-                            </Option>
-                          ))}
-                        </Select>
-                      </Nav.Item>
-                    )}
+                    <Nav.Item as="li" className="nav-item">
+                      <Select
+                        placeholder="Select DOS"
+                        onChange={handleOptions}
+                        allowClear
+                        style={{ width: "220px" }}
+                        value={selectedDosValue}
+                      >
+                        {dosSummariesList?.map((data) => (
+                          <Option key={data?.value} value={data?.value}>
+                            {data.label}
+                          </Option>
+                        ))}
+                      </Select>
+                    </Nav.Item>
                     {activeTabHead == 1 && (
                       <Popover
                         open={popoverVisible}

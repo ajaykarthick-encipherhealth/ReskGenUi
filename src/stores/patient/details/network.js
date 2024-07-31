@@ -35,14 +35,14 @@ export async function patientIdDetails(patientId) {
 }
 
 
-export async function radiologyDetails(patientId,processedYear,dos,setIsSpinnerLoading) {
+export async function radiologyDetails(patientId,processedYear,dos,setIsSpinnerLoading,testName) {
   const roles = localStorage.getItem('role')
   const options = {
     method: "GET",
   };
   var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}` 
   if(dos){
-    url = `patientId=${patientId}&role=${roles ? roles?.toUpperCase() : ""}&dateOfService=${dos}` 
+    url = `patientId=${patientId}&role=${roles ? roles?.toUpperCase() : ""}&dateOfService=${dos}&testName=${testName}` 
   }
   try {
     const data = await requestPortal(
@@ -58,14 +58,14 @@ export async function radiologyDetails(patientId,processedYear,dos,setIsSpinnerL
 }
 
 
-export async function labDetails(patientId,processedYear,dos,setIsSpinnerLoading) {
+export async function labDetails(patientId,processedYear,dos,setIsSpinnerLoading,testName) {
   const roles = localStorage.getItem('role')
   const options = {
     method: "GET",
   };
   var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}` 
   if(dos){
-    url = `patientId=${patientId}&role=${roles ? roles?.toUpperCase() : ""}&dateOfService=${dos}` 
+    url = `patientId=${patientId}&role=${roles ? roles?.toUpperCase() : ""}&dateOfService=${dos}&testName=${testName}` 
   }
   try {
     const data = await requestPortal(
