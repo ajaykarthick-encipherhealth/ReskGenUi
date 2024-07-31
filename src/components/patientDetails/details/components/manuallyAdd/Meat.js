@@ -54,10 +54,12 @@ const Meat = ({
   form,
   disabled
 }) => {
+  console.log(isEditMeat, disabled);
   return (
     <div>
       <div className="row">
-        {!disabled ? (
+        {/* {!disabled ? (
+        
           <div className="col-12">
             <Form.Item
               label={
@@ -90,7 +92,19 @@ const Meat = ({
               </Form.Item>
             </div>
           </>
-        )}
+        )} */}
+        {!disabled && isEditMeat && <>
+            <div className="col-12">
+              <Form.Item label={<label>Code</label>}>
+                <Input value={isEditMeatValue.diagnosisCode} disabled />
+              </Form.Item>
+            </div>
+            <div className="col-12">
+              <Form.Item label={<label>Description</label>}>
+                <Input value={isEditMeatValue.diseaseName} disabled />
+              </Form.Item>
+            </div>
+          </>}
         <div className="col-12">
           <Form.Item
             label={
