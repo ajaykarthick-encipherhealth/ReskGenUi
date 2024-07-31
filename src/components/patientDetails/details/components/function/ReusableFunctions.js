@@ -572,7 +572,6 @@ export const getCaptureSectionBackgroundFile = ({
 export const getMeatFound = (code, data, value) => {
   const result = data?.filter(
     (res2) => res2?.diagnosisCode?.replace(".", "") == code?.replace(".", "")
-  
   );
   var backColor = "#f93d3d";
   var meatTitle = "MEAT";

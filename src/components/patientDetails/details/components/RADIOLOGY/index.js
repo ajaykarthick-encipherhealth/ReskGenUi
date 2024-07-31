@@ -364,8 +364,7 @@ const RadiologyCards = ({
                                     setActiveMeatTitle({
                                       header: "M",
                                       diagnosisCode: data?.diagnosisCode,
-                                    });
-                                  
+                                    });                                 
                                   }}
                                 >
                                   {getMeatFound(
