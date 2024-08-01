@@ -22,7 +22,8 @@ import {
   getAllProcessYearAction,
   radiologyDosDeatilsAction,
   labDosDeatilsAction,
-  getSelectedDosPageNumber
+  getSelectedDosPageNumber,
+  getCurrentDiseaseType
 } from "./actions";
 
 const initialState = {
@@ -66,6 +67,13 @@ const getSelectedDetails = (action) =>
     },
     ""
   );
+  // const getCurrentDiseaseDetails = (action) =>
+  //   handleActions(
+  //     {
+  //       [action.toString()]: (state, { payload }) => payload,
+  //     },
+  //     true
+  //   );
 
 const patientDetailsReducer = combineReducers({
   patientResult: createReducer(patientDetailsAction),
@@ -84,6 +92,7 @@ const patientDetailsReducer = combineReducers({
   getValidCode: createReducer(getValideCode),
   getSelectedDosDetails: getSelectedDosDetails,
   selectedDosPageNumber:getSelectedDetails(getSelectedDosPageNumber),
+  currentDiseaseType:getSelectedDetails(getCurrentDiseaseType),
   manuallyAdd: createReducer(manuallyAdd),
   diseaseEdit: createReducer(diseaseEdit),
   diseaseEditMeat: createReducer(diseaseEditMeat),

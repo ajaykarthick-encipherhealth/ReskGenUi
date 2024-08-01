@@ -49,6 +49,10 @@ const Meat = ({
   radiologyResult,
   getRadiologyFileDetails,
   getLabFileDetails,
+  currentDiseaseType,
+  getCurrentDiseaseType, 
+  getRadiologyPDF,
+  getLabPDF
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -284,16 +288,19 @@ const Meat = ({
     }
   }, [radiologyResult?.data?.response]);
   useEffect(() => {
-    if (hccFileDetails?.data?.response) {
+    if (
+      hccFileDetails?.data?.response &&
+      (currentDiseaseType || currentDiseaseType === "")
+    ) {
       setSelectFileURL(hccFileDetails?.data?.response);
     }
-    if (radiologyFile?.data?.response) {
+    if (radiologyFile?.data?.response && !currentDiseaseType) {
       setSelectFileURL(radiologyFile?.data?.response);
     }
-    if (labFile?.data?.response) {
+    if (labFile?.data?.response && !currentDiseaseType) {
       setSelectFileURL(labFile?.data?.response);
     }
-  }, [hccFileDetails, radiologyFile, labFile]);
+  }, [hccFileDetails, radiologyFile, labFile, currentDiseaseType]);
 
   const onFinishFailed = (form) => {};
 
@@ -398,7 +405,10 @@ const Meat = ({
                       setFileInitialPage,
                       selectMeatResult.diagnosisCode,
                       setSelectMeatResult,
-                      selectMeatResult
+                      selectMeatResult,
+                      getRadiologyPDF,
+                      getLabPDF,
+                      getCurrentDiseaseType
                     )}
                   >
                     <Button type="primary">Still Hyperlink Issue</Button>
@@ -478,6 +488,7 @@ const Meat = ({
                         {getProviderNameList({
                           data: selectMeatResult?.providerName,
                           captureSectionMatching: captureSectionMatching,
+                          
                         })}
                       </div>
                       <div
@@ -493,6 +504,7 @@ const Meat = ({
                           setSearch: setSearch,
                           setFileModalHeader: setFileModalHeader,
                           patientDocumentResult: patientDocumentResult,
+                          getCurrentDiseaseType:getCurrentDiseaseType
                         })}
                       </div>
                     </div>
@@ -531,7 +543,10 @@ const Meat = ({
                             setSelectMeatResult,
                             selectMeatResult,
                             setSelectHyperlink,
-                            getSelectedDosPageNumber
+                            getSelectedDosPageNumber,
+                            getRadiologyPDF,
+                            getLabPDF,
+                            getCurrentDiseaseType
                           )}
                         </div>
                       </div>
@@ -584,7 +599,10 @@ const Meat = ({
                             setSelectMeatResult,
                             selectMeatResult,
                             setSelectHyperlink,
-                            getSelectedDosPageNumber
+                            getSelectedDosPageNumber,
+                            getRadiologyPDF,
+                            getLabPDF,
+                            getCurrentDiseaseType
                           )}
                         </div>
                       </div>
@@ -637,7 +655,10 @@ const Meat = ({
                             setSelectMeatResult,
                             selectMeatResult,
                             setSelectHyperlink,
-                            getSelectedDosPageNumber
+                            getSelectedDosPageNumber,
+                            getRadiologyPDF,
+                            getLabPDF,
+                            getCurrentDiseaseType
                           )}
                         </div>
                       </div>
@@ -690,7 +711,10 @@ const Meat = ({
                             setSelectMeatResult,
                             selectMeatResult,
                             setSelectHyperlink,
-                            getSelectedDosPageNumber
+                            getSelectedDosPageNumber,
+                            getRadiologyPDF,
+                            getLabPDF,
+                            getCurrentDiseaseType,
                           )}
                         </div>
                       </div>
@@ -829,12 +853,16 @@ const enhancer = connect(
     labFile: state?.patientDetails?.details?.labFileResult,
     radiologyResult: state?.patientDetails?.details?.radiologyResult,
     labResult: state?.patientDetails?.details?.labResult,
+    currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
     getRadiologyFileDetails: detailsActions.radiologyFileAction,
     getLabFileDetails: detailsActions.labFileAction,
+    getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
+    getLabPDF: detailsActions.labDetailsAction,
+    getRadiologyPDF: detailsActions.radiologyDetailsAction,
   }
 );
 export default enhancer(Meat);

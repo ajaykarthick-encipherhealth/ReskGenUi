@@ -44,6 +44,7 @@ const File = ({
   radiologyResult,
   getRadiologyFileDetails,
   getLabFileDetails,
+  currentDiseaseType,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -204,21 +205,23 @@ const File = ({
     }
   }, [radiologyResult?.data?.response]);
   useEffect(() => {
-    if (hccFileDetails?.data?.response) {
+    if (
+      hccFileDetails?.data?.response &&
+      (currentDiseaseType || currentDiseaseType === "")
+    ) {
       setSelectFileURL(hccFileDetails?.data?.response);
     }
-    if (radiologyFile?.data?.response) {
+    if (radiologyFile?.data?.response && !currentDiseaseType) {
       setSelectFileURL(radiologyFile?.data?.response);
     }
-    if (labFile?.data?.response) {
+    if (labFile?.data?.response && !currentDiseaseType) {
       setSelectFileURL(labFile?.data?.response);
     }
-  }, [hccFileDetails, radiologyFile, labFile]);
+  }, [hccFileDetails, radiologyFile, labFile, currentDiseaseType]);
 
   useEffect(() => {
     getFileDosPageNumber();
   }, [fileDosPageNumberList]);
-
   return (
     <>
       {fileLoading ? <LogoLoader /> : null}
@@ -625,6 +628,7 @@ const enhancer = connect(
     labFile: state?.patientDetails?.details?.labFileResult,
     radiologyResult: state?.patientDetails?.details?.radiologyResult,
     labResult: state?.patientDetails?.details?.labResult,
+    currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
   }),
   {
     getRadiologyFileDetails: detailsActions.radiologyFileAction,

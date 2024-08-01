@@ -45,6 +45,7 @@ const MeatCard = ({
   getSelectedDosPageNumber,
   getRadiologyPDF,
   getLabPDF,
+  getCurrentDiseaseType
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
@@ -163,6 +164,7 @@ const MeatCard = ({
                           getSelectedDosPageNumber: getSelectedDosPageNumber,
                           getRadiologyPDF: getRadiologyPDF,
                           getLabPDF: getLabPDF,
+                          getCurrentDiseaseType:getCurrentDiseaseType
                         })}
                         {/* {getProviderNameTag(
                               item?.providerName,
@@ -196,6 +198,7 @@ const MeatCard = ({
                           datas: item,
                           getRadiologyPDF: getRadiologyPDF,
                           getLabPDF: getLabPDF,
+                          getCurrentDiseaseType:getCurrentDiseaseType
                         })}
                       </div>
                     </div>
@@ -247,7 +250,8 @@ const MeatCard = ({
                       setSelectHyperlink,
                       getSelectedDosPageNumber,
                       getRadiologyPDF,
-                      getLabPDF
+                      getLabPDF,
+                      getCurrentDiseaseType
                     )}
                   </div>
                 </div>
@@ -293,7 +297,8 @@ const MeatCard = ({
                       setSelectHyperlink,
                       getSelectedDosPageNumber,
                       getRadiologyPDF,
-                      getLabPDF
+                      getLabPDF,
+                      getCurrentDiseaseType
                     )}
                   </div>
                 </div>
@@ -339,7 +344,8 @@ const MeatCard = ({
                       setSelectHyperlink,
                       getSelectedDosPageNumber,
                       getRadiologyPDF,
-                      getLabPDF
+                      getLabPDF,
+                      getCurrentDiseaseType
                     )}
                   </div>
                 </div>
@@ -385,7 +391,8 @@ const MeatCard = ({
                       setSelectHyperlink,
                       getSelectedDosPageNumber,
                       getRadiologyPDF,
-                      getLabPDF
+                      getLabPDF,
+                      getCurrentDiseaseType
                     )}
                   </div>
                 </div>
@@ -509,6 +516,8 @@ const enhancer = connect(
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,
     getLabPDF: detailsAction.labDetailsAction,
     getRadiologyPDF: detailsAction.radiologyDetailsAction,
+    getCurrentDiseaseType:detailsAction.getCurrentDiseaseType
+    
   }
 );
 export default enhancer(MeatCard);

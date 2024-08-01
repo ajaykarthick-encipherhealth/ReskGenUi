@@ -23,6 +23,7 @@ export const getProviderNameTag = ({
   getSelectedDosPageNumber,
   getRadiologyPDF,
   getLabPDF,
+  getCurrentDiseaseType,
 }) => {
   return providerNames?.map((res, index) => {
     const headerResult = hyperlinks?.filter((res2) => res2.header === res);
@@ -35,21 +36,26 @@ export const getProviderNameTag = ({
               const selectedMeatData = hyperlinks?.find(
                 (item) => item?.header === res
               );
-              selectedMeatData?.stateIndicator === "LAB"
-                ? getLabPDF(
-                    patientId,
-                    "",
-                    selectedMeatData?.dateOfService,
-                    "",
-                    selectedMeatData?.diagnosticTestName
-                  )
-                : getRadiologyPDF(
-                    patientId,
-                    "",
-                    selectedMeatData?.dateOfService,
-                    "",
-                    selectedMeatData?.diagnosticTestName
-                  );
+              if (selectedMeatData?.stateIndicator) {
+                getCurrentDiseaseType(false);
+                selectedMeatData?.stateIndicator === "LAB"
+                  ? getLabPDF(
+                      patientId,
+                      "",
+                      selectedMeatData?.dateOfService,
+                      "",
+                      selectedMeatData?.diagnosticTestName
+                    )
+                  : getRadiologyPDF(
+                      patientId,
+                      "",
+                      selectedMeatData?.dateOfService,
+                      "",
+                      selectedMeatData?.diagnosticTestName
+                    );
+              } else {
+                getCurrentDiseaseType(true);
+              }
               findProviderNameDocument({
                 data: headerResult[0],
                 diagnosisCode: diagnosisCode,
@@ -104,6 +110,7 @@ export const getProviderNameTag = ({
                   getSelectedDosPageNumber: getSelectedDosPageNumber,
                   getRadiologyPDF,
                   getLabPDF,
+                  getCurrentDiseaseType,
                 })}
               </>
             }
@@ -165,6 +172,8 @@ export const getProviderNameTag = ({
                                   "",
                                   selectedMeatData?.diagnosticTestName
                                 );
+                          } else {
+                            getCurrentDiseaseType(false);
                           }
                           findProviderNameDocument({
                             data: findSectionHyperlink(hyperlinks, item)[0],
@@ -322,6 +331,7 @@ export const getProviderPopoverHyperlink = ({
   getSelectedDosPageNumber,
   getRadiologyPDF,
   getLabPDF,
+  getCurrentDiseaseType,
 }) => {
   return value?.map((res) => {
     var sectionMapArr = res ? (
@@ -332,23 +342,24 @@ export const getProviderPopoverHyperlink = ({
             (item) => item?.dateOfService === res.dateOfService
           );
           if (selectedMeatData?.stateIndicator) {
-            if (selectedMeatData?.stateIndicator) {
-              selectedMeatData?.stateIndicator === "LAB"
-                ? getLabPDF(
-                    patientId,
-                    "",
-                    selectedMeatData?.dateOfService,
-                    "",
-                    selectedMeatData?.diagnosticTestName
-                  )
-                : getRadiologyPDF(
-                    patientId,
-                    "",
-                    selectedMeatData?.dateOfService,
-                    "",
-                    selectedMeatData?.diagnosticTestName
-                  );
-            }
+            getCurrentDiseaseType(false);
+            selectedMeatData?.stateIndicator === "LAB"
+              ? getLabPDF(
+                  patientId,
+                  "",
+                  selectedMeatData?.dateOfService,
+                  "",
+                  selectedMeatData?.diagnosticTestName
+                )
+              : getRadiologyPDF(
+                  patientId,
+                  "",
+                  selectedMeatData?.dateOfService,
+                  "",
+                  selectedMeatData?.diagnosticTestName
+                );
+          } else {
+            getCurrentDiseaseType(true);
           }
           findProviderNameDocument({
             data: res,
