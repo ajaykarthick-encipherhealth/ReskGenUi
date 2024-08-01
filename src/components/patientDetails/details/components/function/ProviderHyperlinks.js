@@ -20,7 +20,9 @@ export const getProviderNameTag = ({
   isMulitpleHeaderCode,
   setSelectMeatResult,
   meatresult,
-  getSelectedDosPageNumber
+  getSelectedDosPageNumber,
+  getRadiologyPDF,
+  getLabPDF,
 }) => {
   return providerNames?.map((res, index) => {
     const headerResult = hyperlinks?.filter((res2) => res2.header === res);
@@ -28,20 +30,41 @@ export const getProviderNameTag = ({
       if (headerResult?.length == 1) {
         var sectionMapArr = (
           <span
-            onClick={() =>
+            onClick={() => {
+              const patientId = localStorage.getItem("patientId");
+              const selectedMeatData = hyperlinks?.find(
+                (item) => item?.header === res
+              );
+              console.log(selectedMeatData);
+
+              selectedMeatData?.diagnosticTestName === "lab"
+                ? getLabPDF(
+                    patientId,
+                    "",
+                    selectedMeatData?.dateOfService,
+                    "",
+                    selectedMeatData?.diagnosticTestName
+                  )
+                : getRadiologyPDF(
+                    patientId,
+                    "",
+                    selectedMeatData?.dateOfService,
+                    "",
+                    selectedMeatData?.diagnosticTestName
+                  );
               findProviderNameDocument({
-                data:headerResult[0],
-                diagnosisCode:diagnosisCode,
-                diseaseName:diseaseName,
-                setSearch:setSearch,
-                setIsModalOpen:setIsModalOpen,
-                setFileModalHeader:setFileModalHeader,
-                patientDocumentResult:patientDocumentResult,
-                setSelectMeatResult:setSelectMeatResult,
-                meatresult:meatresult,
-                getSelectedDosPageNumber:getSelectedDosPageNumber
-            })
-            }
+                data: headerResult[0],
+                diagnosisCode: diagnosisCode,
+                diseaseName: diseaseName,
+                setSearch: setSearch,
+                setIsModalOpen: setIsModalOpen,
+                setFileModalHeader: setFileModalHeader,
+                patientDocumentResult: patientDocumentResult,
+                setSelectMeatResult: setSelectMeatResult,
+                meatresult: meatresult,
+                getSelectedDosPageNumber: getSelectedDosPageNumber,
+              });
+            }}
             className={`mt-2 text-start ${visitStyles.provider_name} truncate-text`}
             style={{
               backgroundColor: stringToColour(res) + 33,
@@ -71,17 +94,19 @@ export const getProviderNameTag = ({
             content={
               <>
                 {getProviderPopoverHyperlink({
-                  value:headerResult,
-                  diagnosisCode:diagnosisCode,
-                  diseaseName:diseaseName,
-                  setSearch:setSearch,
-                  setIsModalOpen:setIsModalOpen,
-                  setFileModalHeader:setFileModalHeader,
-                  patientDocumentResult:patientDocumentResult,
-                  setSelectMeatResult:setSelectMeatResult,
-                  meatresult:meatresult,
-                  getSelectedDosPageNumber:getSelectedDosPageNumber
-            })}
+                  value: headerResult,
+                  diagnosisCode: diagnosisCode,
+                  diseaseName: diseaseName,
+                  setSearch: setSearch,
+                  setIsModalOpen: setIsModalOpen,
+                  setFileModalHeader: setFileModalHeader,
+                  patientDocumentResult: patientDocumentResult,
+                  setSelectMeatResult: setSelectMeatResult,
+                  meatresult: meatresult,
+                  getSelectedDosPageNumber: getSelectedDosPageNumber,
+                  getRadiologyPDF,
+                  getLabPDF,
+                })}
               </>
             }
           >
@@ -120,25 +145,48 @@ export const getProviderNameTag = ({
                   {isMulitpleHeader &&
                     diagnosisCode == isMulitpleHeaderCode && (
                       <span
-                        onClick={() =>
+                        onClick={() =>{
+                          const patientId = localStorage.getItem("patientId");
+                          const selectedMeatData = hyperlinks?.find(
+                            (item) => item?.header === res
+                          );
+                          console.log(selectedMeatData);
+                          const type = "lab";
+                          type === "lab"
+                            ? getLabPDF(
+                              patientId,
+                              "",
+                              selectedMeatData?.dateOfService,
+                              "",
+                              "lab"
+                            )
+                            : getRadiologyPDF(
+                              patientId,
+                              "",
+                              selectedMeatData?.dateOfService,
+                              "",
+                              "radiology"
+                            );
                           findProviderNameDocument({
-                            data:findSectionHyperlink(hyperlinks, item)[0],
-                            diagnosisCode:diagnosisCode,
-                            diseaseName:diseaseName,
-                            setSearch:setSearch,
-                            setIsModalOpen:setIsModalOpen,
-                            setFileModalHeader:setFileModalHeader,
-                            patientDocumentResult:patientDocumentResult,
-                            setSelectMeatResult:setSelectMeatResult,
-                            meatresult:meatresult,
-                            getSelectedDosPageNumber:getSelectedDosPageNumber
-                        })
+                            data: findSectionHyperlink(hyperlinks, item)[0],
+                            diagnosisCode: diagnosisCode,
+                            diseaseName: diseaseName,
+                            setSearch: setSearch,
+                            setIsModalOpen: setIsModalOpen,
+                            setFileModalHeader: setFileModalHeader,
+                            patientDocumentResult: patientDocumentResult,
+                            setSelectMeatResult: setSelectMeatResult,
+                            meatresult: meatresult,
+                            getSelectedDosPageNumber: getSelectedDosPageNumber,
+                          })
                         }
+                      }
                         className={`mt-2 text-start ${visitStyles.provider_name}`}
                         style={{
                           backgroundColor: stringToColour(item) + 33,
                           color: stringToColour(item),
                         }}
+                        
                       >
                         <i>
                           {" "}
@@ -192,16 +240,18 @@ export const getProviderNameTag = ({
                 <Popover
                   placement="bottom"
                   content={getProviderPopoverHyperlink({
-                    value:findSectionHyperlink(hyperlinks, item),
-                    diagnosisCode:diagnosisCode,
-                    diseaseName:diseaseName,
-                    setSearch:setSearch,
-                    setIsModalOpen:setIsModalOpen,
-                    setFileModalHeader:setFileModalHeader,
-                    patientDocumentResult:patientDocumentResult,
-                    setSelectMeatResult:setSelectMeatResult,
-                    meatresult:meatresult,
-                    getSelectedDosPageNumber:getSelectedDosPageNumber
+                    value: findSectionHyperlink(hyperlinks, item),
+                    diagnosisCode: diagnosisCode,
+                    diseaseName: diseaseName,
+                    setSearch: setSearch,
+                    setIsModalOpen: setIsModalOpen,
+                    setFileModalHeader: setFileModalHeader,
+                    patientDocumentResult: patientDocumentResult,
+                    setSelectMeatResult: setSelectMeatResult,
+                    meatresult: meatresult,
+                    getSelectedDosPageNumber: getSelectedDosPageNumber,
+                    getRadiologyPDF,
+                    getLabPDF,
                   })}
                 >
                   {isMulitpleHeader &&
@@ -272,25 +322,48 @@ export const getProviderPopoverHyperlink = ({
   patientDocumentResult,
   setSelectMeatResult,
   meatresult,
-  getSelectedDosPageNumber
+  getSelectedDosPageNumber,
+  getRadiologyPDF,
+  getLabPDF,
 }) => {
   return value?.map((res) => {
     var sectionMapArr = res ? (
       <span
-        onClick={() =>
+        onClick={() =>{
+          const patientId = localStorage.getItem("patientId");
+          const selectedMeatData = value?.find(
+            (item) => item?.dateOfService === res.dateOfService
+          );
+          console.log(selectedMeatData);
+          const type = "lab";
+          type === "lab"
+            ? getLabPDF(
+              patientId,
+              "",
+              selectedMeatData?.dateOfService,
+              "",
+              "lab"
+            )
+            : getRadiologyPDF(
+              patientId,
+              "",
+              selectedMeatData?.dateOfService,
+              "",
+              "radiology"
+            );
           findProviderNameDocument({
-            data:res,
-            diagnosisCode:diagnosisCode,
-            diseaseName:diseaseName,
-            setSearch:setSearch,
-            setIsModalOpen:setIsModalOpen,
-            setFileModalHeader:setFileModalHeader,
-            patientDocumentResult:patientDocumentResult,
-            setSelectMeatResult:setSelectMeatResult,
-            meatresult:meatresult,
-            getSelectedDosPageNumber:getSelectedDosPageNumber
-        })
-        }
+            data: res,
+            diagnosisCode: diagnosisCode,
+            diseaseName: diseaseName,
+            setSearch: setSearch,
+            setIsModalOpen: setIsModalOpen,
+            setFileModalHeader: setFileModalHeader,
+            patientDocumentResult: patientDocumentResult,
+            setSelectMeatResult: setSelectMeatResult,
+            meatresult: meatresult,
+            getSelectedDosPageNumber: getSelectedDosPageNumber,
+          })
+        }}
         style={{
           borderColor: stringToColour(res?.dateOfService) + 33,
           color: stringToColour(res?.dateOfService),
@@ -319,7 +392,7 @@ const findProviderNameDocument = ({
   patientDocumentResult,
   setSelectMeatResult,
   meatresult,
-  getSelectedDosPageNumber
+  getSelectedDosPageNumber,
 }) => {
   setSelectMeatResult && setSelectMeatResult(meatresult);
   var disName = diseaseName ? diseaseName : meatresult?.diseaseName;
@@ -346,7 +419,7 @@ const findProviderNameDocument = ({
     headers: true,
     headerContent: data?.header,
   });
-  getSelectedDosPageNumber(null)
+  getSelectedDosPageNumber(null);
   if (patientDocumentResult && setIsModalOpen) {
     setIsModalOpen(true);
   }

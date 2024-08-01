@@ -39,6 +39,8 @@ const File = ({
   search,
   setSearch,
   fileDosPageNumberList,
+  radiologyFile,
+  labFile
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -114,12 +116,12 @@ const File = ({
       setSelectFileURL(hccFileDetails?.data?.response);
     }
     if (radiologyFileDetails?.result?.response) {
-      setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
+      setSelectFileURL(radiologyFile?.result?.response);
     }
     if (labFileDetails?.result?.response) {
-      setLabReportFile(labFileDetails?.result?.response);
+      setSelectFileURL(labFile?.result?.response);
     }
-  }, [hccFileDetails, radiologyFileDetails, labFileDetails]);
+  }, [hccFileDetails, radiologyFile, labFile]);
 
   useEffect(() => {
     getFileDosPageNumber();
@@ -595,5 +597,7 @@ const enhancer = connect((state) => ({
   patientDetailsResult: state?.patientDetails?.details?.patientResult,
   hccFileDetails: state?.patientDetails?.details?.hccFileResult,
   fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+  radiologyFile :state?.patientDetails?.details?.radiologyFileResult,
+  labFile :state?.patientDetails?.details?.labFileResult,
 }));
 export default enhancer(File);

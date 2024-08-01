@@ -24,6 +24,8 @@ export const getEncounterDateBackground = ({
   selectMeatResult,
   datas,
   popup,
+  getRadiologyPDF,
+  getLabPDF,
 }) => {
   return value?.map((res, index) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -31,7 +33,28 @@ export const getEncounterDateBackground = ({
     if (index < 2) {
       var sectionMapArr = res ? (
         <span
-          onClick={() =>
+          onClick={() => {
+            const patientId = localStorage.getItem("patientId");
+            const selectedMeatData = encounterDateMatching?.find(
+              (item) => item?.header === res
+            );
+            console.log(selectedMeatData);
+            const type = "lab";
+            type === "lab"
+              ? getLabPDF(
+                patientId,
+                "",
+                selectedMeatData?.dateOfService,
+                "",
+                "lab"
+              )
+              : getRadiologyPDF(
+                patientId,
+                "",
+                selectedMeatData?.dateOfService,
+                "",
+                "radiology"
+              );
             getEncounterDetails(
               res,
               fileDosPageNumberList,
@@ -42,8 +65,8 @@ export const getEncounterDateBackground = ({
               selectMeatResult,
               datas,
               patientDocumentResult
-            )
-          }
+            );
+          }}
           style={{
             borderColor: stringToColour(res) + 33,
             color: stringToColour(res),
@@ -150,10 +173,10 @@ const getEncounterDetails = async (
       setIsModalOpenValidCodes(true);
       var headerName = patientDocumentResult
         ? patientDocumentResult.patientId +
-          " / " +
-          patientDocumentResult.patientName +
-          " / " +
-          moment(date).format("MM-DD-YYYY")
+        " / " +
+        patientDocumentResult.patientName +
+        " / " +
+        moment(date).format("MM-DD-YYYY")
         : "";
       setFileModalHeader(headerName);
     }
@@ -165,6 +188,25 @@ const getEncounterDetails = async (
 };
 
 export const getHeaderHyperlink = (
+  // headerResult,
+  //                 encounterDateMatching,
+  //                 documentPlace,
+  //                 setSearch,
+  //                 setFileLoading,
+  //                 setIsModalOpenLab,
+  //                 setIsModalOpenRadiology,
+  //                 setIsModalOpenValidCodes,
+  //                 setFileModalHeader,
+  //                 patientDocumentResult,
+  //                 fileInitialPage,
+  //                 setFileInitialPage,
+  //                 diagnosisCode,
+  //                 "",
+  //                 "",
+  //                 diseaseName,
+  //                 getSelectedDosPageNumber,
+  //                 getLabPDF,
+  //                 getRadiologyPDF
   value,
   encounterDateMatching,
   documentPlace,
@@ -181,7 +223,9 @@ export const getHeaderHyperlink = (
   setSelectMeatResult,
   meatresult,
   diseaseName,
-  getSelectedDosPageNumber
+  getSelectedDosPageNumber,
+  getLabPDF,
+  getRadiologyPDF
 ) => {
   return value?.map((res) => {
     const result = encounterDateMatching.filter(
@@ -192,6 +236,27 @@ export const getHeaderHyperlink = (
       <span
         onClick={() => {
           getSelectedDosPageNumber(null);
+          const patientId = localStorage.getItem("patientId");
+          const selectedMeatData = value?.find(
+            (item) => item?.dateOfService === res?.dateOfService
+          );
+          console.log(selectedMeatData);
+
+          selectedMeatData?.diagnosticTestName === "lab"
+            ? getLabPDF(
+              patientId,
+              "",
+              selectedMeatData?.dateOfService,
+              "",
+              selectedMeatData?.diagnosticTestName
+            )
+            : getRadiologyPDF(
+              patientId,
+              "",
+              selectedMeatData?.dateOfService,
+              "",
+              selectedMeatData?.diagnosticTestName
+            );
           newFindValueDocument(
             res,
             documentPlace,
@@ -257,16 +322,16 @@ const newFindValueDocument = (
   var disName = diseaseName ? diseaseName : meatresult?.diseaseName;
   var headerName = patientDocumentResult
     ? patientDocumentResult.patientId +
-      " / " +
-      patientDocumentResult.patientName +
-      " / " +
-      diagnosisCode +
-      " - (" +
-      disName +
-      ")" +
-      " - (" +
-      data?.header +
-      ")"
+    " / " +
+    patientDocumentResult.patientName +
+    " / " +
+    diagnosisCode +
+    " - (" +
+    disName +
+    ")" +
+    " - (" +
+    data?.header +
+    ")"
     : "";
   setFileModalHeader(headerName);
   if (data?.pageNumber == fileInitialPage) {
@@ -334,6 +399,8 @@ export const getCaptureSectionBackgroundFile = ({
   diseaseName,
   popup,
   getSelectedDosPageNumber,
+  getLabPDF,
+  getRadiologyPDF,
 }) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res, index) => {
@@ -352,6 +419,27 @@ export const getCaptureSectionBackgroundFile = ({
           <span
             onClick={() => {
               getSelectedDosPageNumber(null);
+              const patientId = localStorage.getItem("patientId");
+              const selectedMeatData = hyperlinks?.find(
+                (item) => item?.header === res
+              );
+              console.log(selectedMeatData);
+
+              selectedMeatData?.diagnosticTestName === "lab"
+                ? getLabPDF(
+                  patientId,
+                  "",
+                  selectedMeatData?.dateOfService,
+                  "",
+                  selectedMeatData?.diagnosticTestName
+                )
+                : getRadiologyPDF(
+                  patientId,
+                  "",
+                  selectedMeatData?.dateOfService,
+                  "",
+                  selectedMeatData?.diagnosticTestName
+                );
               newFindValueDocument(
                 headerResult[0],
                 documentPlace,
@@ -390,6 +478,25 @@ export const getCaptureSectionBackgroundFile = ({
               <>
                 {res?.length > 30 && <div>{res}</div>}
                 {getHeaderHyperlink(
+                  // headerResult,
+                  // encounterDateMatching,
+                  // documentPlace,
+                  // setSearch,
+                  // setFileLoading,
+                  // setIsModalOpenLab,
+                  // setIsModalOpenRadiology,
+                  // setIsModalOpenValidCodes,
+                  // setFileModalHeader,
+                  // patientDocumentResult,
+                  // fileInitialPage,
+                  // setFileInitialPage,
+                  // diagnosisCode,
+                  // "",
+                  // "",
+                  // diseaseName,
+                  // getSelectedDosPageNumber,
+                  // getLabPDF,
+                  // getRadiologyPDF
                   headerResult,
                   encounterDateMatching,
                   documentPlace,
@@ -406,7 +513,9 @@ export const getCaptureSectionBackgroundFile = ({
                   "",
                   "",
                   diseaseName,
-                  getSelectedDosPageNumber
+                  getSelectedDosPageNumber,
+                  getLabPDF,
+                  getRadiologyPDF
                 )}
               </>
             }
@@ -435,7 +544,27 @@ export const getCaptureSectionBackgroundFile = ({
                       <span
                         onClick={() => {
                           getSelectedDosPageNumber(null);
+                          const patientId = localStorage.getItem("patientId");
+                          const selectedMeatData = hyperlinks?.find(
+                            (item) => item?.header === res
+                          );
+                          console.log(selectedMeatData);
 
+                          selectedMeatData?.diagnosticTestName === "lab"
+                            ? getLabPDF(
+                              patientId,
+                              "",
+                              selectedMeatData?.dateOfService,
+                              "",
+                              selectedMeatData?.diagnosticTestName
+                            )
+                            : getRadiologyPDF(
+                              patientId,
+                              "",
+                              selectedMeatData?.dateOfService,
+                              "",
+                              selectedMeatData?.diagnosticTestName
+                            );
                           newFindValueDocument(
                             findSectionHyperlink(hyperlinks, item)[0],
                             documentPlace,
@@ -505,6 +634,25 @@ export const getCaptureSectionBackgroundFile = ({
                   overlayStyle={{ zIndex: 999 }}
                   placement="bottom"
                   content={getHeaderHyperlink(
+                  //   headerResult,
+                  // encounterDateMatching,
+                  // documentPlace,
+                  // setSearch,
+                  // setFileLoading,
+                  // setIsModalOpenLab,
+                  // setIsModalOpenRadiology,
+                  // setIsModalOpenValidCodes,
+                  // setFileModalHeader,
+                  // patientDocumentResult,
+                  // fileInitialPage,
+                  // setFileInitialPage,
+                  // diagnosisCode,
+                  // "",
+                  // "",
+                  // diseaseName,
+                  // getSelectedDosPageNumber,
+                  // getLabPDF,
+                  // getRadiologyPDF
                     findSectionHyperlink(hyperlinks, item),
                     encounterDateMatching,
                     documentPlace,
@@ -518,7 +666,12 @@ export const getCaptureSectionBackgroundFile = ({
                     fileInitialPage,
                     setFileInitialPage,
                     diagnosisCode,
-                    getSelectedDosPageNumber
+                    "",
+                    "",
+                    diseaseName,
+                    getSelectedDosPageNumber,
+                    getLabPDF,
+                    getRadiologyPDF
                   )}
                 >
                   {isMulitpleHeader &&
@@ -1017,13 +1170,13 @@ export const findValueDocument = async ({
   };
   var headerName = patientDocumentResult
     ? patientDocumentResult.patientId +
-      " / " +
-      patientDocumentResult.patientName +
-      " / " +
-      diagnosisCode +
-      " - (" +
-      headerNames +
-      ")"
+    " / " +
+    patientDocumentResult.patientName +
+    " / " +
+    diagnosisCode +
+    " - (" +
+    headerNames +
+    ")"
     : "";
   setFileModalHeader(headerName);
   try {
@@ -1220,7 +1373,7 @@ export const getCaptureSectionBackgroundMeatNew = (
   setSelectHyperlink,
   getSelectedDosPageNumber,
   getRadiologyPDF,
-  getLabPDF,
+  getLabPDF
 ) => {
   var dublicateCaptureRemove = removeDuplicatesArray(value);
 
@@ -1255,23 +1408,23 @@ export const getCaptureSectionBackgroundMeatNew = (
           const selectedMeatData = dublicateCaptureRemove?.find(
             (item) => item?.header === res.header
           );
-          console.log(selectedMeatData?.stateIndicator);
+          console.log(selectedMeatData);
           const type = "lab";
           type === "lab"
             ? getLabPDF(
-                patientId,
-                "",
-                selectedMeatData?.dateOfService,
-                "",
-                "lab"
-              )
+              patientId,
+              "",
+              selectedMeatData?.dateOfService,
+              "",
+              "lab"
+            )
             : getRadiologyPDF(
-                patientId,
-                "",
-                selectedMeatData?.dateOfService,
-                "",
-                "radiology"
-              );
+              patientId,
+              "",
+              selectedMeatData?.dateOfService,
+              "",
+              "radiology"
+            );
 
           newFindValueDocument(
             res,
@@ -1298,7 +1451,7 @@ export const getCaptureSectionBackgroundMeatNew = (
         }}
         className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
       >
-        {truncateString(res.header, 30)}
+        {truncateString(res.header, 25)}
       </span>
       // </Popover>
     );

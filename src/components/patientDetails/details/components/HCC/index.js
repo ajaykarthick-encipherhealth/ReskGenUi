@@ -64,6 +64,8 @@ const HccCards = ({
   fileDosPageNumberList,
   popup,
   getSelectedDosPageNumber,
+  getRadiologyPDF,
+  getLabPDF
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -520,6 +522,9 @@ const HccCards = ({
                                     setSelectMeatResult: "",
                                     getSelectedDosPageNumber:
                                       getSelectedDosPageNumber,
+                                      getRadiologyPDF,
+                                      getLabPDF,
+                                    
                                   })}
                                 </div>
                                 <div
@@ -542,6 +547,8 @@ const HccCards = ({
                                     popup,
                                     getSelectedDosPageNumber:
                                       getSelectedDosPageNumber,
+                                      getRadiologyPDF,
+                                      getLabPDF
                                   })}
                                 </div>
                                 {data.providerName.length == 0 && (
@@ -583,6 +590,8 @@ const HccCards = ({
                                       diseaseName: data.dbDescription,
                                       popup: "",
                                       getSelectedDosPageNumber,
+                                      getRadiologyPDF,
+                                      getLabPDF
                                     })}
                                   </div>
                                 )}
@@ -766,6 +775,8 @@ const HccCards = ({
                                     diseaseName: data.dbDescription,
                                     popup: "",
                                     getSelectedDosPageNumber,
+                                    getLabPDF,
+                                    getRadiologyPDF
                                   })}
                                 </div>
                                 <div
@@ -858,6 +869,8 @@ const enhancer = connect(
   }),
   {
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
+    getLabPDF: detailsActions.labDetailsAction,
+    getRadiologyPDF: detailsActions.radiologyDetailsAction,
   }
 );
 export default enhancer(HccCards);

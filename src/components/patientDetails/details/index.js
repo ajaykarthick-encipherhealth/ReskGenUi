@@ -279,6 +279,8 @@ const Details = ({
         );
         setIsFileCheck(true);
       }
+    }else{
+      setIsSpinnerLoading(false)
     }
   }, [patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath]);
 
