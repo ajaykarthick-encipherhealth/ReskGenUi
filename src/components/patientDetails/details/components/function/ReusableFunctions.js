@@ -216,25 +216,6 @@ const getEncounterDetails = async (
 };
 
 export const getHeaderHyperlink = (
-  // headerResult,
-  //                 encounterDateMatching,
-  //                 documentPlace,
-  //                 setSearch,
-  //                 setFileLoading,
-  //                 setIsModalOpenLab,
-  //                 setIsModalOpenRadiology,
-  //                 setIsModalOpenValidCodes,
-  //                 setFileModalHeader,
-  //                 patientDocumentResult,
-  //                 fileInitialPage,
-  //                 setFileInitialPage,
-  //                 diagnosisCode,
-  //                 "",
-  //                 "",
-  //                 diseaseName,
-  //                 getSelectedDosPageNumber,
-  //                 getLabPDF,
-  //                 getRadiologyPDF
   value,
   encounterDateMatching,
   documentPlace,
@@ -618,7 +599,7 @@ export const getCaptureSectionBackgroundFile = ({
                             fileInitialPage,
                             setFileInitialPage,
                             diagnosisCode,
-                            "",
+                            setSelectMeatResult,
                             "",
                             "",
                             "",
@@ -674,25 +655,6 @@ export const getCaptureSectionBackgroundFile = ({
                   overlayStyle={{ zIndex: 999 }}
                   placement="bottom"
                   content={getHeaderHyperlink(
-                    //   headerResult,
-                    // encounterDateMatching,
-                    // documentPlace,
-                    // setSearch,
-                    // setFileLoading,
-                    // setIsModalOpenLab,
-                    // setIsModalOpenRadiology,
-                    // setIsModalOpenValidCodes,
-                    // setFileModalHeader,
-                    // patientDocumentResult,
-                    // fileInitialPage,
-                    // setFileInitialPage,
-                    // diagnosisCode,
-                    // "",
-                    // "",
-                    // diseaseName,
-                    // getSelectedDosPageNumber,
-                    // getLabPDF,
-                    // getRadiologyPDF
                     findSectionHyperlink(hyperlinks, item),
                     encounterDateMatching,
                     documentPlace,
@@ -713,6 +675,7 @@ export const getCaptureSectionBackgroundFile = ({
                     getLabPDF,
                     getRadiologyPDF,
                     getCurrentDiseaseType
+                    getSelectedDosPageNumber
                   )}
                 >
                   {isMulitpleHeader &&

@@ -590,9 +590,10 @@ export const handleTogglePasswordVisibility = (
 };
 
 export const getValidatePassword = (password, setErrors) => {
+ 
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
-
+    console.log(password, !passwordRegex.test(password), "testing");
   if (password.length === 0) {
     setErrors({
       password: "Please enter the password",
@@ -605,9 +606,9 @@ export const getValidatePassword = (password, setErrors) => {
     });
     return false;
   }
-  if (password.length > 14) {
+  if (password.length > 30) {
     setErrors({
-      password: "Password should be less than 14 characters",
+      password: "Password should be less than 30 characters",
     });
     return false;
   }

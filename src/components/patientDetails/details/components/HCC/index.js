@@ -595,11 +595,12 @@ const HccCards = ({
 
                                       diseaseName: data.dbDescription,
                                       popup: "",
-                                      getSelectedDosPageNumber,
-                                      getRadiologyPDF,
-                                      getLabPDF,
-                                      getCurrentDiseaseType,
-                                    })}
+                                      getSelectedDosPageNumber:getSelectedDosPageNumber,
+                                      getRadiologyPDF:getRadiologyPDF,
+                                      getLabPDF:getLabPDF,
+                                      getCurrentDiseaseType:getCurrentDiseaseType,
+                                      getSelectedDosPageNumber: getSelectedDosPageNumber,
+                })}
                                   </div>
                                 )}
                               </div>
@@ -781,10 +782,12 @@ const HccCards = ({
 
                                     diseaseName: data.dbDescription,
                                     popup: "",
-                                    getSelectedDosPageNumber,
-                                    getLabPDF,
-                                    getRadiologyPDF,
-                                    getCurrentDiseaseType,
+                                    getSelectedDosPageNumber:getSelectedDosPageNumber,
+                                    getLabPDF:getLabPDF,
+                                    getRadiologyPDF:getRadiologyPDF,
+                                    getCurrentDiseaseType:getCurrentDiseaseType,
+                                    getSelectedDosPageNumber: getSelectedDosPageNumber,
+
                                   })}
                                 </div>
                                 <div
@@ -849,7 +852,7 @@ const HccCards = ({
             )
           ) : (
             <div className={styles.noMsContainer}>
-              {`No ${cardTitle} codes are found`}
+              {`${cardTitle == "SUGGESTED" ? "CARE GAP" : cardTitle} Codes Not Found`}
             </div>
           )}
           <span className="d-none">{provided?.placeholder}</span>

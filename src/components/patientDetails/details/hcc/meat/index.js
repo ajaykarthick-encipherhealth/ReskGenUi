@@ -744,6 +744,8 @@ const Meat = ({
                       pageNumber={search?.page ? search?.page : 1}
                       headers={search?.headers}
                       headerContent={search?.headerContent}
+                      fileHeight={true}
+                    fileHeightFrame={"950"}
                     />
                   )}
                 </>
@@ -802,8 +804,8 @@ const Meat = ({
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
                     headers={search?.headers}
-                    height="100vh"
-                    heightFrame="900"
+                    fileHeight={true}
+                    fileHeightFrame={"950"}
                   />
                 )}
               </>

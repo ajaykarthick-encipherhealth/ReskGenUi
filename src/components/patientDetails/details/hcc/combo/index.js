@@ -363,6 +363,8 @@ const Combo = ({
                     pageNumber={search?.page ? search?.page : 1}
                     headers={search?.headers}
                     headerContent={search?.headerContent}
+                    fileHeight={true}
+                    fileHeightFrame={"950"}
                   />
                 )}
               </div>

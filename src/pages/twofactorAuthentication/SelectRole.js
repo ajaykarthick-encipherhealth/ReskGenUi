@@ -62,14 +62,17 @@ const SelectRole = () => {
         route: "/tenantAdmin/dashboard",
       },
       physician: { userRole: "physician", route: "/physicians/dashboard" },
+      record_analyst: { userRole: "record_analyst", route: "/analyst/patients" },
       // physician: { userRole: "physician", route: "/physician/dashboard" },
     };
+    
     const selectedRoleInfo = rolesMapping[selectedRole];
     if (selectedRoleInfo && !roleError) {
       localStorage.setItem("userRole", selectedRoleInfo?.userRole);
       localStorage.setItem("role", selectedRole);
       setLoading(true);
       router?.push(selectedRoleInfo?.route);
+      console.log(selectedRole);
     }
   };
 

@@ -10,17 +10,17 @@ export const getResponePopup = (res) => {
       });
     case "SUCCESS":
       return notification.success({
-        description: res?.data?.message ? res?.data?.message : res?.status,
+        description: res?.data?.message ? res?.data?.message : res?.message,
         duration: 1,
       });
     case "FAILED":
       return notification.error({
-        description: res?.data?.message ? res?.data?.message : res?.status,
+        description: res?.data?.message ? res?.data?.message : res?.message,
         duration: 1,
       });
     case "EXCEPTION":
       return notification.error({
-        description: res?.data?.message ? res?.data?.message : res?.status,
+        description: res?.data?.message ? res?.data?.message : res?.message,
         duration: 1,
       });
     case "CUSTOM_EXCEPTION":

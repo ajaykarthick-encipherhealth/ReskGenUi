@@ -357,6 +357,7 @@ const Reports = ({
               ? selectedOptions?.User?.value
               : "",
           flagsList: flagPatientsList ? flagPatientsList : "",
+          allPatientIds: false,
         })
       );
     } else if (activeTab === "Audit") {
@@ -775,6 +776,36 @@ const Reports = ({
                         activeTab={activeTab}
                         handleHeaderCheckbox={handleHeaderCheckboxChange}
                         selectAllFlags={selectAllFlags}
+                        apiCall={{
+                          admin: {
+                            pagenum: pageNo,
+                            startDate: selectedDateRanges?.Admin?.from
+                              ? selectedDateRanges?.Admin?.from
+                              : "",
+                            endDate: selectedDateRanges?.Admin?.to
+                              ? selectedDateRanges?.Admin?.to
+                              : "",
+                            search: searchVal.find(
+                              (item) => item.field === "initialSearch"
+                            )?.search
+                              ? searchVal.find(
+                                  (item) => item.field === "initialSearch"
+                                )?.search
+                              : "",
+                            filter: selectedOptions?.Status?.value ? selectedOptions?.Status?.value : '',
+                            userName: selectedOptions?.UserRole?.value
+                              ? selectedOptions?.UserRole?.value
+                              : "",
+                            sort: sort ? sort : "",
+                            selectManager:
+                              selectedOptions?.User?.value &&
+                              selectedOptions?.UserRole?.value !== "All"
+                                ? selectedOptions?.User?.value
+                                : "",
+                            flagsList: flagPatientsList ? flagPatientsList : "",
+                            allPatientIds: true,
+                          },
+                        }}
                       />
                     </div>
                   )}

@@ -853,6 +853,8 @@ const VisitData = ({
                     headers={search?.headers}
                     height="100vh"
                     heightFrame="900"
+                    fileHeight={true}
+                    fileHeightFrame={"950"}
                   />
                 )}
               </>
