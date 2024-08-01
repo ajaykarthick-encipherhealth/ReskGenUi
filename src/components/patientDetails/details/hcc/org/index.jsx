@@ -50,6 +50,7 @@ const CamboTree = ({
   patientDetailsResult,
   getPatientDetailsReload,
   getpatientDetailsData,
+  isDosSelected
 }) => {
   const [background, setBackground] = useState([]);
   const [trees, setTrees] = useState(Tree);
@@ -232,7 +233,7 @@ const CamboTree = ({
               ? node.diagnosisCodeCombo
               : node.diagnosisCode}
           </div>
-          {trees?.diagnosisCodeCombo == node.diagnosisCodeCombo && (
+          {trees?.diagnosisCodeCombo == node.diagnosisCodeCombo && isDosSelected && (
             <div>
               <Popconfirm
                 title="You want move to Delete?"
@@ -368,6 +369,7 @@ const CamboTree = ({
 const enhancer = connect(
   (state) => ({
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,

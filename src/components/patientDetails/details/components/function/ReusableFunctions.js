@@ -26,7 +26,7 @@ export const getEncounterDateBackground = ({
   popup,
   getRadiologyPDF,
   getLabPDF,
-  getCurrentDiseaseType
+  getCurrentDiseaseType,
 }) => {
   return value?.map((res, index) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -40,7 +40,7 @@ export const getEncounterDateBackground = ({
               (item) => item?.header === res
             );
             if (selectedMeatData?.stateIndicator) {
-              getCurrentDiseaseType(false)
+              getCurrentDiseaseType(false);
               selectedMeatData?.stateIndicator === "LAB"
                 ? getLabPDF(
                     patientId,
@@ -56,8 +56,8 @@ export const getEncounterDateBackground = ({
                     "",
                     selectedMeatData?.diagnosticTestName
                   );
-            }else{
-              getCurrentDiseaseType(true)
+            } else {
+              getCurrentDiseaseType && getCurrentDiseaseType(true);
             }
             getEncounterDetails(
               res,
@@ -110,7 +110,7 @@ export const getEncounterDateBackground = ({
                         (item) => item?.header === res
                       );
                       if (selectedMeatData?.stateIndicator) {
-                        getCurrentDiseaseType(false)
+                        getCurrentDiseaseType(false);
                         selectedMeatData?.stateIndicator === "LAB"
                           ? getLabPDF(
                               patientId,
@@ -126,8 +126,8 @@ export const getEncounterDateBackground = ({
                               "",
                               selectedMeatData?.diagnosticTestName
                             );
-                      }else{
-                        getCurrentDiseaseType(true)
+                      } else {
+                        getCurrentDiseaseType(true);
                       }
                       getEncounterDetails(
                         item,
@@ -675,7 +675,7 @@ export const getCaptureSectionBackgroundFile = ({
                     getSelectedDosPageNumber,
                     getLabPDF,
                     getRadiologyPDF,
-                    getCurrentDiseaseType,
+                    getCurrentDiseaseType
                   )}
                 >
                   {isMulitpleHeader &&
@@ -1010,7 +1010,10 @@ export const handleSubmitValidNotes = async ({
     apiURL = "management/meat/move/suggestedtovalid";
   }
 
-  if (isValidAction.name == "Move to Deleted" && isValidAction.title == "NON_HCC_DISEASES") {
+  if (
+    isValidAction.name == "Move to Deleted" &&
+    isValidAction.title == "NON_HCC_DISEASES"
+  ) {
     apiURL = "management/disease/move/invalidtodeleted";
   }
 
@@ -1018,7 +1021,6 @@ export const handleSubmitValidNotes = async ({
     isValidAction.name == "Move to HCC" &&
     isValidAction.title == "NON_MEAT"
   ) {
-
     apiURL = "management/meat/move/suggestedtovalid";
   }
   if (
@@ -1421,7 +1423,7 @@ export const getCaptureSectionBackgroundMeatNew = (
             (item) => item?.header === res.header
           );
           if (selectedMeatData?.stateIndicator) {
-            getCurrentDiseaseType(false)
+            getCurrentDiseaseType(false);
             selectedMeatData?.stateIndicator === "LAB"
               ? getLabPDF(
                   patientId,

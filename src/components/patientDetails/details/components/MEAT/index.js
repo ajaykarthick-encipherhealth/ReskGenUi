@@ -45,7 +45,8 @@ const MeatCard = ({
   getSelectedDosPageNumber,
   getRadiologyPDF,
   getLabPDF,
-  getCurrentDiseaseType
+  getCurrentDiseaseType,
+  isDosSelected
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
@@ -396,6 +397,7 @@ const MeatCard = ({
                     )}
                   </div>
                 </div>
+                {isDosSelected && 
                 <div className="col-xl-1 meatclose">
                   <div
                     className="d-flex align-items-center justify-content-center"
@@ -486,7 +488,7 @@ const MeatCard = ({
                       ) : null}
                     </div>
                   </div>
-                </div>
+                </div>}
               </div>
             </div>
           );
@@ -511,6 +513,7 @@ const enhancer = connect(
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
     radiologyResult:state?.patientDetails?.details?.radiologyResult,
     labResult:state?.patientDetails?.details?.labResult,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,
