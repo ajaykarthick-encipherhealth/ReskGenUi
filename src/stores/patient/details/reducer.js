@@ -86,7 +86,7 @@ const getSelectedDetails = (action) =>
 const patientDetailsReducer = combineReducers({
   patientResult: createReducer(patientDetailsAction),
   patientIdResult: createReducer(patientIdDetailsAction),
-  loading:getPatientsLoading(patientIdDetailsAction),
+  loading:getPatientsLoading(patientDetailsAction),
   hccFileResult: createReducer(patientHccFileAction),
   dosResult: createReducer(dosDeatilsAction),
   dosPageNumberResult: createReducer(dosPageNumberAction),
