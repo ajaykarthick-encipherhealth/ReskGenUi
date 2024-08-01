@@ -72,7 +72,6 @@ const CamboTree = ({
     }
     // setZoom((prev) => ({ width: prev.width - 30, height: prev.height - 10 }));
   };
-  console.log(patientDetailsResult, "test");
   const zoomOut = () => {
     if (zoom.width <= 350) {
       setZoom((prev) => ({ width: prev.width + 30, height: prev.height + 10 }));
@@ -219,7 +218,6 @@ const CamboTree = ({
   };
 
   const nodeTemplate = (node) => {
-    console.log(node);
     return (
       <div
         className={Style.cards}
