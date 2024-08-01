@@ -11,7 +11,7 @@ const PdfViewer = ({
   height,
   fileHeight,
   fileHeightFrame,
-  heightFrame = height ? "850" : "720",
+  heightFrame = "100%",
   selectedPageNumber,
 }) => {
   const [iframeSrc, setIframeSrc] = useState("");
@@ -44,8 +44,8 @@ const PdfViewer = ({
     <>
       <div
         style={{
-          maxHeight: height ? "100vh" : fileHeight ? "90vh" : "75vh",
-          minHeight: height ? "100vh" : fileHeight ? "90vh" : "75vh",
+          maxHeight: "75vh",
+          minHeight: "75vh",
           overflow: "hidden",
         }}
       >
@@ -54,7 +54,7 @@ const PdfViewer = ({
           title="PDF Viewer"
           frameBorder="0"
           width={"100%"}
-          height={fileHeight ? fileHeightFrame : heightFrame}
+          height={"710px"}
           src={iframeSrc}
         />
       </div>

@@ -238,7 +238,7 @@ const File = ({
           )
         }
       >
-        <div className="my-post-content row pt-3">
+        <div className="my-post-content row pt-3" style={{ height: "100%" }}>
           {!isFileFormShow ? (
             <div className="col-xl-3">
               <Droppable droppableId={"HCC"} key={"HCC"}>
@@ -403,7 +403,10 @@ const File = ({
                           </span>
                         </div>
                       </div>
-                      <div className={visitStyles.suggestedcontainer2}>
+                      <div
+                        className={visitStyles.suggestedcontainer2}
+                        style={{ height: "34vh" }}
+                      >
                         <div className={visitStyles.hccStickey_head}>
                           <HccCards
                             list={suggestedHccList}
