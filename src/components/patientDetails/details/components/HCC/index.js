@@ -582,7 +582,7 @@ const HccCards = ({
 
                                       diseaseName: data.dbDescription,
                                       popup: "",
-                                      getSelectedDosPageNumber,
+                                      getSelectedDosPageNumber: getSelectedDosPageNumber,
                                     })}
                                   </div>
                                 )}
@@ -765,7 +765,7 @@ const HccCards = ({
 
                                     diseaseName: data.dbDescription,
                                     popup: "",
-                                    getSelectedDosPageNumber,
+                                    getSelectedDosPageNumber: getSelectedDosPageNumber,
                                   })}
                                 </div>
                                 <div

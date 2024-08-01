@@ -190,8 +190,8 @@ export const getHeaderHyperlink = (
     var backColor = result[0]?.colors;
     var sectionMapArr = res ? (
       <span
-        onClick={() =>{
-          getSelectedDosPageNumber(null)
+        onClick={() => {
+          getSelectedDosPageNumber(null);
           newFindValueDocument(
             res,
             documentPlace,
@@ -210,7 +210,7 @@ export const getHeaderHyperlink = (
             "",
             "",
             diseaseName
-          )
+          );
         }}
         style={{
           borderColor: stringToColour(res?.dateOfService) + 33,
@@ -333,9 +333,8 @@ export const getCaptureSectionBackgroundFile = ({
   isMulitpleHeaderCode,
   diseaseName,
   popup,
-  getSelectedDosPageNumber
-}
-) => {
+  getSelectedDosPageNumber,
+}) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res, index) => {
     const result = captureSectionMatching?.filter(
@@ -351,8 +350,8 @@ export const getCaptureSectionBackgroundFile = ({
       if (headerResult?.length == 1) {
         var sectionMapArr = (
           <span
-            onClick={() =>{
-              getSelectedDosPageNumber(null)
+            onClick={() => {
+              getSelectedDosPageNumber(null);
               newFindValueDocument(
                 headerResult[0],
                 documentPlace,
@@ -371,7 +370,7 @@ export const getCaptureSectionBackgroundFile = ({
                 "",
                 "",
                 diseaseName
-              )
+              );
             }}
             style={{ backgroundColor: backColor, color: textColor }}
             className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
@@ -434,9 +433,9 @@ export const getCaptureSectionBackgroundFile = ({
                   {isMulitpleHeader &&
                     diagnosisCode == isMulitpleHeaderCode && (
                       <span
-                        onClick={() =>{
-                          getSelectedDosPageNumber(null)
-                        
+                        onClick={() => {
+                          getSelectedDosPageNumber(null);
+
                           newFindValueDocument(
                             findSectionHyperlink(hyperlinks, item)[0],
                             documentPlace,
@@ -450,12 +449,12 @@ export const getCaptureSectionBackgroundFile = ({
                             fileInitialPage,
                             setFileInitialPage,
                             diagnosisCode,
-                            "",
+                            setSelectMeatResult,
                             "",
                             "",
                             "",
                             diseaseName
-                          )
+                          );
                         }}
                         style={{
                           background: stringToColour(item) + 33,
@@ -519,6 +518,9 @@ export const getCaptureSectionBackgroundFile = ({
                     fileInitialPage,
                     setFileInitialPage,
                     diagnosisCode,
+                    "",
+                    "",
+                    diseaseName,
                     getSelectedDosPageNumber
                   )}
                 >
@@ -853,13 +855,22 @@ export const handleSubmitValidNotes = async ({
   if (isValidAction.name == "Move to HCC" && isValidAction.title == "MEAT") {
     apiURL = "management/meat/move/suggestedtovalid";
   }
+
   if (isValidAction.name == "Move to Deleted" && isValidAction.title == "NON_HCC_DISEASES") {
     apiURL = "management/disease/move/invalidtodeleted";
   }
-  if (isValidAction.name == "Move to HCC" && isValidAction.title == "NON_MEAT") {
+
+  if (
+    isValidAction.name == "Move to HCC" &&
+    isValidAction.title == "NON_MEAT"
+  ) {
+
     apiURL = "management/meat/move/suggestedtovalid";
   }
-  if (isValidAction.name == "Move to Deleted" && isValidAction.title == "MEAT") {
+  if (
+    isValidAction.name == "Move to Deleted" &&
+    isValidAction.title == "MEAT"
+  ) {
     apiURL = "management/disease/move/validtosuggested";
   }
   try {
@@ -1245,8 +1256,8 @@ export const getCaptureSectionBackgroundMeatNew = (
       //   }
       // >
       <span
-        onClick={() =>{
-          getSelectedDosPageNumber && getSelectedDosPageNumber(null)
+        onClick={() => {
+          getSelectedDosPageNumber && getSelectedDosPageNumber(null);
           newFindValueDocument(
             res,
             documentPlace,
@@ -1264,7 +1275,7 @@ export const getCaptureSectionBackgroundMeatNew = (
             meatresult,
             setSelectHyperlink,
             value
-          )
+          );
         }}
         style={{
           backgroundColor: stringToColour(res.header) + 33,

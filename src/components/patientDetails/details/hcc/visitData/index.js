@@ -823,8 +823,8 @@ const VisitData = ({
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
                     headers={search?.headers}
-                    height="100vh"
-                    heightFrame='900'
+                    fileHeight={true}
+                    fileHeightFrame={"950"}
                   />
                 )}
               </>
