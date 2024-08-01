@@ -385,7 +385,7 @@ export const getCaptureSectionBackgroundFile = ({
       } else {
         var sectionMapArr = (
           <Popover
-            overlayStyle={{ zIndex: !popup && 999 }}
+            overlayStyle={{ zIndex: !popup && 1000 }}
             placement="bottom"
             content={
               <>
