@@ -344,7 +344,7 @@ const File = ({
               </div>
             </Popover> */}
             <div className="card-body p-0">
-              {loading ?<div className={visitStyles?.loaderDiv}><Spinner/></div>: (
+              {loading ? <div className={visitStyles?.loaderDiv}><Spinner/></div>: (
                 <>
                   {selectFileURL && (
                     <PdfViewer
