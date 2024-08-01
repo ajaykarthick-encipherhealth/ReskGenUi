@@ -161,6 +161,8 @@ const MeatCard = ({
                           setSelectMeatResult: setSelectMeatResult,
                           meatresult: item,
                           getSelectedDosPageNumber: getSelectedDosPageNumber,
+                          getRadiologyPDF: getRadiologyPDF,
+                          getLabPDF: getLabPDF,
                         })}
                         {/* {getProviderNameTag(
                               item?.providerName,
@@ -192,6 +194,8 @@ const MeatCard = ({
                           patientDocumentResult: patientDocumentResult,
                           selectMeatResult: setSelectMeatResult,
                           datas: item,
+                          getRadiologyPDF: getRadiologyPDF,
+                          getLabPDF: getLabPDF,
                         })}
                       </div>
                     </div>
@@ -287,7 +291,9 @@ const MeatCard = ({
                       setSelectMeatResult,
                       item,
                       setSelectHyperlink,
-                      getSelectedDosPageNumber
+                      getSelectedDosPageNumber,
+                      getRadiologyPDF,
+                      getLabPDF
                     )}
                   </div>
                 </div>
@@ -331,7 +337,9 @@ const MeatCard = ({
                       setSelectMeatResult,
                       item,
                       setSelectHyperlink,
-                      getSelectedDosPageNumber
+                      getSelectedDosPageNumber,
+                      getRadiologyPDF,
+                      getLabPDF
                     )}
                   </div>
                 </div>
@@ -375,7 +383,9 @@ const MeatCard = ({
                       setSelectMeatResult,
                       item,
                       setSelectHyperlink,
-                      getSelectedDosPageNumber
+                      getSelectedDosPageNumber,
+                      getRadiologyPDF,
+                      getLabPDF
                     )}
                   </div>
                 </div>
