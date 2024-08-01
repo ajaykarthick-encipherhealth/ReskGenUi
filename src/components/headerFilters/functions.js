@@ -605,9 +605,9 @@ export const getValidatePassword = (password, setErrors) => {
     });
     return false;
   }
-  if (password.length > 14) {
+  if (password.length > 30) {
     setErrors({
-      password: "Password should be less than 14 characters",
+      password: "Password should be less than 30 characters",
     });
     return false;
   }
