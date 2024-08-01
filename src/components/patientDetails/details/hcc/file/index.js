@@ -323,6 +323,9 @@ const File = ({
                       searchQuery={search?.value ? search?.value : ""}
                       pageNumber={search?.page ? search?.page : 1}
                       headers={search?.headers}
+                      // height={true}
+                      fileHeight={true}
+                      fileHeightFrame={"850"}
                     />
                   )}
                 </>
@@ -330,24 +333,26 @@ const File = ({
             </div>
           </div>
           {isFileFormShow ? (
-            <div className="col-xl-5" style={{ height: "74.5vh", overflowY: "scroll"}}>
+            <div
+              className="col-xl-5"
+              style={{ height: "74.5vh", overflowY: "scroll" }}
+            >
               {/* <AddHccForm
                 handleCloseModal={handleCloseModal}
                 isAddHccForm={isAddHccForm}
                 setIsAddHccForm={setIsAddHccForm}
                 isMeatNew={true}
               /> */}
-              
-                <ManuallyAdd
-                  handleCloseModal={handleCloseModal}
-                  setIsFileFormShow={setIsFileFormShow}
-                  year={year}
-                />
-             
+
+              <ManuallyAdd
+                handleCloseModal={handleCloseModal}
+                setIsFileFormShow={setIsFileFormShow}
+                year={year}
+              />
             </div>
           ) : null}
           {!isFileFormShow ? (
-            <div className="col-xl-3" style={{height:"74vh" }}>
+            <div className="col-xl-3" style={{ height: "74vh" }}>
               <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                 {(provided) => {
                   return (
@@ -431,9 +436,7 @@ const File = ({
                           <span
                             className={`${visitStyles.deleted_title_badge}`}
                           >
-                            {
-                              deletedHccList.length
-                            }
+                            {deletedHccList.length}
                           </span>
                         </div>
                       </div>
@@ -564,8 +567,8 @@ const File = ({
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
                     headers={search?.headers}
-                    height="100vh"
-                    heightFrame="900"
+                    fileHeight={true}
+                    fileHeightFrame={"950"}
                   />
                 )}
               </>

@@ -64,6 +64,7 @@ const RadiologyCards = ({
   isVisitData,
   fileDosPageNumberList,
   popup,
+  getSelectedDosPageNumber
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -277,6 +278,7 @@ const RadiologyCards = ({
                                     setIsMulitpleHeadeCode,
                                   isMulitpleHeaderCode: isMulitpleHeaderCode,
                                   setSelectMeatResult: "",
+                                  getSelectedDosPageNumber: getSelectedDosPageNumber
                                 })}
                               </div>
                               <div
@@ -357,14 +359,14 @@ const RadiologyCards = ({
                               </div>
                               <div
                                 className={`cr-pointer ${styles.meatFoundContainer}`}
-                              >        
+                              >
                                 <div
                                   onClick={() => {
                                     setActiveTabHead(4);
                                     setActiveMeatTitle({
                                       header: "M",
                                       diagnosisCode: data?.diagnosisCode,
-                                    });             
+                                    });
                                   }}
                                 >
                                   {getMeatFound(
@@ -573,7 +575,12 @@ const RadiologyCards = ({
   );
 };
 
-const enhancer = connect((state) => ({
-  fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
-}));
+const enhancer = connect(
+  (state) => ({
+    fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+  }),
+  {
+    getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
+  }
+);
 export default enhancer(RadiologyCards);

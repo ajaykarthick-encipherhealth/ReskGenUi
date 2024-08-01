@@ -223,7 +223,7 @@ const File = ({
               </div>
             </div>
             <div className={visitStyles.container}>
-              <div className={visitStyles.hccStickey_head}>
+              <div className={''}>
                 <NonHccCards
                   list={nonHccDiseasesList}
                   hccVersionDetails={hccVersionDetails}
@@ -266,6 +266,8 @@ const File = ({
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
                     headers={search?.headers}
+                    fileHeight={true}
+                    fileHeightFrame={"850"}
                   />
                 )}
               </>
