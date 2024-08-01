@@ -23,6 +23,7 @@ import {
 } from "../../components/function/ReusableFunctions";
 import ManuallyAdd from "../../components/manuallyAdd";
 import LogoLoader from "../../../../logoLoader";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
 
 const VisitData = ({
   setActiveTabHead,
@@ -31,6 +32,13 @@ const VisitData = ({
   patientDetailsResult,
   hccFileDetails,
   year,
+  radiologyFile,
+  labFile,
+  labResult,
+  radiologyResult,
+  getRadiologyFileDetails,
+  getLabFileDetails,
+  currentDiseaseType
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -79,8 +87,6 @@ const VisitData = ({
   const [allMeatList, setAllMeatList] = useState([]);
   const [deletedMeatList, setDeletedMeatList] = useState([]);
 
-
-
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
@@ -114,17 +120,17 @@ const VisitData = ({
     setUserDetails(dotLoading);
   }, [patientDetailsResult]);
 
-  useEffect(() => {
-    if (hccFileDetails?.data?.response) {
-      setSelectFileURL(hccFileDetails?.data?.response);
-    }
-    if (radiologyFileDetails?.result?.response) {
-      setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
-    }
-    if (labFileDetails?.result?.response) {
-      setLabReportFile(labFileDetails?.result?.response);
-    }
-  }, [hccFileDetails, radiologyFileDetails, labFileDetails]);
+  // useEffect(() => {
+  //   if (hccFileDetails?.data?.response) {
+  //     setSelectFileURL(hccFileDetails?.data?.response);
+  //   }
+  //   if (radiologyFileDetails?.result?.response) {
+  //     setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
+  //   }
+  //   if (labFileDetails?.result?.response) {
+  //     setLabReportFile(labFileDetails?.result?.response);
+  //   }
+  // }, [hccFileDetails, radiologyFileDetails, labFileDetails]);
 
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
@@ -144,7 +150,7 @@ const VisitData = ({
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
     setFileLoading(false);
-    setIsEditHccForm(false)
+    setIsEditHccForm(false);
     setOpens(false);
   };
 
@@ -240,9 +246,7 @@ const VisitData = ({
                         </span>
                         <div className="d-flex justify-content-center">
                           <span className={`${visitStyles.hcc_title_badge}`}>
-                            {
-                              newValidDiseaseList.length
-                            }
+                            {newValidDiseaseList.length}
                           </span>
                         </div>
                       </div>
@@ -314,7 +318,7 @@ const VisitData = ({
             </div>
           ) : null}
           {!isFileFormShow ? (
-            <div className="col-xl-3" style={{height:"73vh"}}>
+            <div className="col-xl-3" style={{ height: "73vh" }}>
               <div className="">
                 <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                   {(provided) => {
@@ -330,15 +334,13 @@ const VisitData = ({
                           <span
                             className={`${visitStyles.suggested_title_name}`}
                           >
-                             CARE GAP
+                            CARE GAP
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
                               className={`${visitStyles.suggested_title_badge}`}
                             >
-                              {
-                                suggestedHccList.length
-                              }
+                              {suggestedHccList.length}
                             </span>
                           </div>
                         </div>
@@ -407,9 +409,7 @@ const VisitData = ({
                             <span
                               className={`${visitStyles.deleted_title_badge}`}
                             >
-                              {
-                                deletedHccList.length
-                              }
+                              {deletedHccList.length}
                             </span>
                           </div>
                         </div>
@@ -466,6 +466,40 @@ const VisitData = ({
     </div>
   );
 
+  useEffect(() => {
+    if (labResult?.data?.response) {
+      if (labResult?.data?.response) {
+        getLabFileDetails(
+          labResult?.data?.response?.fileDetailDTO?.radiologyAzureBlobPaths[0]
+        );
+      }
+    }
+  }, [labResult?.data?.response]);
+  useEffect(() => {
+    if (radiologyResult?.data?.response) {
+      if (radiologyResult?.data?.response?.fileDetailDTO) {
+        getRadiologyFileDetails(
+          radiologyResult?.data?.response?.fileDetailDTO
+            ?.radiologyAzureBlobPaths[0]
+        );
+      }
+    }
+  }, [radiologyResult?.data?.response]);
+  useEffect(() => {
+    if (
+      hccFileDetails?.data?.response &&
+      (currentDiseaseType || currentDiseaseType === "")
+    ) {
+      setSelectFileURL(hccFileDetails?.data?.response);
+    }
+    if (radiologyFile?.data?.response && !currentDiseaseType) {
+      setSelectFileURL(radiologyFile?.data?.response);
+    }
+    if (labFile?.data?.response && !currentDiseaseType) {
+      setSelectFileURL(labFile?.data?.response);
+    }
+  }, [hccFileDetails, radiologyFile, labFile, currentDiseaseType]);
+
   return (
     <>
       {fileLoading ? <LogoLoader /> : null}
@@ -506,9 +540,7 @@ const VisitData = ({
                           </span>
                           <div className="d-flex justify-content-center">
                             <span className={`${visitStyles.hcc_title_badge}`}>
-                              {
-                                newValidDiseaseList.length
-                              }
+                              {newValidDiseaseList.length}
                             </span>
                           </div>
                         </div>
@@ -572,15 +604,13 @@ const VisitData = ({
                           <span
                             className={`${visitStyles.suggested_title_name}`}
                           >
-                             CARE GAP 
+                            CARE GAP
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
                               className={`${visitStyles.suggested_title_badge}`}
                             >
-                              {
-                                suggestedHccList.length
-                              }
+                              {suggestedHccList.length}
                             </span>
                           </div>
                         </div>
@@ -648,9 +678,7 @@ const VisitData = ({
                             <span
                               className={`${visitStyles.deleted_title_badge}`}
                             >
-                              {
-                                deletedHccList.length
-                              }
+                              {deletedHccList.length}
                             </span>
                           </div>
                         </div>
@@ -761,10 +789,9 @@ const VisitData = ({
         show={isModalOpenValid}
         className="offcanvas-end"
         placement="end"
-        style={{width: "80vw",height:"100%"}}
+        style={{ width: "80vw", height: "100%" }}
       >
-       
-       <div className="row p-4" style={{overflow: "hidden", height: '100%'}}>
+        <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
           <div className="col-8">
             {hccFileDetails?.loading != true ? (
               <>
@@ -781,15 +808,16 @@ const VisitData = ({
               </>
             ) : null}
           </div>
-          <div className="col-4"  style={{ height: "100vh", overflowY: "scroll"}}>
-            
-              <ManuallyAdd
-                handleCloseModal={handleCloseModal}
-                setIsFileFormShow={setIsModalOpenValid}
-                year={year}
-                reset={isModalOpenValid}
-              />
-           
+          <div
+            className="col-4"
+            style={{ height: "100vh", overflowY: "scroll" }}
+          >
+            <ManuallyAdd
+              handleCloseModal={handleCloseModal}
+              setIsFileFormShow={setIsModalOpenValid}
+              year={year}
+              reset={isModalOpenValid}
+            />
           </div>
         </div>
       </Offcanvas>
@@ -806,14 +834,14 @@ const VisitData = ({
         setIsEditHccForm={setIsEditHccForm}
         formEditPlace={formEditPlace}
       /> */}
-       <Drawer
+      <Drawer
         title=""
         onClose={handleCloseModal}
         closeIcon={false}
         open={isEditHccForm}
         width={"80vw"}
       >
-        <div className="row p-4" style={{overflow: "hidden", height: '100%'}}>
+        <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
           <div className="col-8">
             {hccFileDetails?.loading != true ? (
               <>
@@ -823,6 +851,8 @@ const VisitData = ({
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
                     headers={search?.headers}
+                    height="100vh"
+                    heightFrame="900"
                     fileHeight={true}
                     fileHeightFrame={"950"}
                   />
@@ -831,7 +861,10 @@ const VisitData = ({
             ) : null}
           </div>
           <div className="col-4">
-            <div className="px-4" style={{height: "90vh", overflowY: "scroll" }}>
+            <div
+              className="px-4"
+              style={{ height: "90vh", overflowY: "scroll" }}
+            >
               <ManuallyAdd
                 handleCloseModal={handleCloseModal}
                 setIsFileFormShow={setIsFileFormShow}
@@ -848,8 +881,19 @@ const VisitData = ({
   );
 };
 
-const enhancer = connect((state) => ({
-  patientDetailsResult: state?.patientDetails?.details?.patientResult,
-  hccFileDetails: state?.patientDetails?.details?.hccFileResult,
-}));
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    hccFileDetails: state?.patientDetails?.details?.hccFileResult,
+    radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
+    labFile: state?.patientDetails?.details?.labFileResult,
+    radiologyResult: state?.patientDetails?.details?.radiologyResult,
+    labResult: state?.patientDetails?.details?.labResult,
+    currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
+  }),
+  {
+    getRadiologyFileDetails: detailsActions.radiologyFileAction,
+    getLabFileDetails: detailsActions.labFileAction,
+  }
+);
 export default enhancer(VisitData);

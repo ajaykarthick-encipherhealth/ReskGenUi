@@ -1,13 +1,21 @@
 import { requestPortal } from "../../../utils/network";
 
-export async function patientDetails(patientId,processedYear,dos,setIsSpinnerLoading, role) {
-  const roles = localStorage.getItem('role')
+export async function patientDetails(
+  patientId,
+  processedYear,
+  dos,
+  setIsSpinnerLoading,
+  role
+) {
+  const roles = localStorage.getItem("role");
   const options = {
     method: "GET",
   };
-  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}` 
-  if(dos){
-    url = `patientId=${patientId}&role=${roles ? roles?.toUpperCase() : ""}&dateOfService=${dos}` 
+  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}`;
+  if (dos) {
+    url = `patientId=${patientId}&role=${
+      roles ? roles?.toUpperCase() : ""
+    }&dateOfService=${dos}`;
   }
   try {
     const data = await requestPortal(
@@ -19,7 +27,6 @@ export async function patientDetails(patientId,processedYear,dos,setIsSpinnerLoa
   } catch (error) {
     setIsSpinnerLoading(false);
   }
- 
 }
 
 export async function patientIdDetails(patientId) {
@@ -34,15 +41,22 @@ export async function patientIdDetails(patientId) {
   return data;
 }
 
-
-export async function radiologyDetails(patientId,processedYear,dos,setIsSpinnerLoading,testName) {
-  const roles = localStorage.getItem('role')
+export async function radiologyDetails(
+  patientId,
+  processedYear,
+  dos,
+  setIsSpinnerLoading,
+  testName
+) {
+  const roles = localStorage.getItem("role");
   const options = {
     method: "GET",
   };
-  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}` 
-  if(dos){
-    url = `patientId=${patientId}&role=${roles ? roles?.toUpperCase() : ""}&dateOfService=${dos}&testName=${testName}` 
+  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}`;
+  if (dos) {
+    url = `patientId=${patientId}&role=${
+      roles ? roles?.toUpperCase() : ""
+    }&dateOfService=${dos}&testName=${testName}`;
   }
   try {
     const data = await requestPortal(
@@ -52,20 +66,28 @@ export async function radiologyDetails(patientId,processedYear,dos,setIsSpinnerL
     );
     return data;
   } catch (error) {
-    setIsSpinnerLoading(false);
+    if (setIsSpinnerLoading) {
+      setIsSpinnerLoading(false);
+    }
   }
- 
 }
 
-
-export async function labDetails(patientId,processedYear,dos,setIsSpinnerLoading,testName) {
-  const roles = localStorage.getItem('role')
+export async function labDetails(
+  patientId,
+  processedYear,
+  dos,
+  setIsSpinnerLoading,
+  testName
+) {
+  const roles = localStorage.getItem("role");
   const options = {
     method: "GET",
   };
-  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}` 
-  if(dos){
-    url = `patientId=${patientId}&role=${roles ? roles?.toUpperCase() : ""}&dateOfService=${dos}&testName=${testName}` 
+  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}`;
+  if (dos) {
+    url = `patientId=${patientId}&role=${
+      roles ? roles?.toUpperCase() : ""
+    }&dateOfService=${dos}&testName=${testName}`;
   }
   try {
     const data = await requestPortal(
@@ -77,7 +99,6 @@ export async function labDetails(patientId,processedYear,dos,setIsSpinnerLoading
   } catch (error) {
     setIsSpinnerLoading(false);
   }
- 
 }
 
 export async function patientHccFile(fileId) {
@@ -93,7 +114,7 @@ export async function patientHccFile(fileId) {
   return data;
 }
 
-export async function dosWiseList(patientId,year) {
+export async function dosWiseList(patientId, year) {
   const options = {
     method: "GET",
   };
@@ -103,7 +124,7 @@ export async function dosWiseList(patientId,year) {
   );
   return data;
 }
-export async function dosPageNumerList(patientId,year) {
+export async function dosPageNumerList(patientId, year) {
   const options = {
     method: "GET",
   };
@@ -114,7 +135,7 @@ export async function dosPageNumerList(patientId,year) {
   return data;
 }
 
-export async function meatQuery(patientId,year,dos) {
+export async function meatQuery(patientId, year, dos) {
   const options = {
     method: "GET",
   };
@@ -124,14 +145,14 @@ export async function meatQuery(patientId,year,dos) {
   );
   return data;
 }
-export async function getFlagsList(patientId,year,dos) {
+export async function getFlagsList(patientId, year, dos) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/flagdetails/get?patientId=${patientId}&processedYear=${year || ""}&dateOfService=${
-      dos || ""
-    }`,
+    `dbservice/flagdetails/get?patientId=${patientId}&processedYear=${
+      year || ""
+    }&dateOfService=${dos || ""}`,
     options
   );
   return data;
@@ -160,7 +181,7 @@ export async function isValideCode(code) {
   return data;
 }
 
-export async function isCodePracent({code, patientId, dos, date}) {
+export async function isCodePracent({ code, patientId, dos, date }) {
   const options = {
     method: "GET",
   };
@@ -176,10 +197,7 @@ export async function manuallyAddCode(obj) {
     method: "POST",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(
-    `management/disease/add`,
-    options
-  );
+  const data = await requestPortal(`management/disease/add`, options);
   return data;
 }
 export async function diseaseEdit(obj) {
@@ -187,10 +205,7 @@ export async function diseaseEdit(obj) {
     method: "PUT",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(
-    `management/edit/disease`,
-    options
-  );
+  const data = await requestPortal(`management/edit/disease`, options);
   return data;
 }
 export async function diseaseEditMeat(obj) {
@@ -198,10 +213,7 @@ export async function diseaseEditMeat(obj) {
     method: "PUT",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(
-    `management/edit/meat`,
-    options
-  );
+  const data = await requestPortal(`management/edit/meat`, options);
   return data;
 }
 
@@ -209,22 +221,22 @@ export async function radiologyDetailsSetEmpty() {
   return null;
 }
 
-export async function getAllProcessYear(patientId,type) {
+export async function getAllProcessYear(patientId, type) {
   const options = {
     method: "GET",
   };
   var URL = `dbservice/patient/compute/get/allyear?patientId=${patientId}`;
-  if(type == "RADIOLOGY"){
+  if (type == "RADIOLOGY") {
     URL = `dbservice/radiology/compute/get/allyear?patientId=${patientId}`;
   }
-  if(type == "LAB"){
+  if (type == "LAB") {
     URL = `dbservice/lab/compute/get/allyear?patientId=${patientId}`;
   }
-  const data = await requestPortal(URL,options);
+  const data = await requestPortal(URL, options);
   return data;
 }
 
-export async function radiologydosWiseList(patientId,year) {
+export async function radiologydosWiseList(patientId, year) {
   const options = {
     method: "GET",
   };
@@ -235,7 +247,7 @@ export async function radiologydosWiseList(patientId,year) {
   return data;
 }
 
-export async function labdosWiseList(patientId,year) {
+export async function labdosWiseList(patientId, year) {
   const options = {
     method: "GET",
   };

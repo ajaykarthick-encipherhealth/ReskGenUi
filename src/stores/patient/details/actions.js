@@ -112,3 +112,5 @@ export const labDosDeatilsAction = createActionThunk(
 );
 
 export const getSelectedDosPageNumber = createAction("GET_SELECTED_DOS_PAGE_NUMBER");
+
+export const getCurrentDiseaseType = createAction("GET_CURRENT_DISEASE_TYPE");

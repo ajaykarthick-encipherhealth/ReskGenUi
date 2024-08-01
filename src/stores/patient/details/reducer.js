@@ -22,7 +22,8 @@ import {
   getAllProcessYearAction,
   radiologyDosDeatilsAction,
   labDosDeatilsAction,
-  getSelectedDosPageNumber
+  getSelectedDosPageNumber,
+  getCurrentDiseaseType
 } from "./actions";
 
 const initialState = {
@@ -66,10 +67,26 @@ const getSelectedDetails = (action) =>
     },
     ""
   );
+  // const getCurrentDiseaseDetails = (action) =>
+  //   handleActions(
+  //     {
+  //       [action.toString()]: (state, { payload }) => payload,
+  //     },
+  //     true
+  //   );
 
+  const getPatientsLoading=(type) => handleActions(
+    {
+      [type.START]: () => true,
+      [type.SUCCEEDED]: () => false,
+      [type.FAILED]: () => false,
+    },
+    false
+  );
 const patientDetailsReducer = combineReducers({
   patientResult: createReducer(patientDetailsAction),
   patientIdResult: createReducer(patientIdDetailsAction),
+  loading:getPatientsLoading(patientIdDetailsAction),
   hccFileResult: createReducer(patientHccFileAction),
   dosResult: createReducer(dosDeatilsAction),
   dosPageNumberResult: createReducer(dosPageNumberAction),
@@ -84,6 +101,7 @@ const patientDetailsReducer = combineReducers({
   getValidCode: createReducer(getValideCode),
   getSelectedDosDetails: getSelectedDosDetails,
   selectedDosPageNumber:getSelectedDetails(getSelectedDosPageNumber),
+  currentDiseaseType:getSelectedDetails(getCurrentDiseaseType),
   manuallyAdd: createReducer(manuallyAdd),
   diseaseEdit: createReducer(diseaseEdit),
   diseaseEditMeat: createReducer(diseaseEditMeat),

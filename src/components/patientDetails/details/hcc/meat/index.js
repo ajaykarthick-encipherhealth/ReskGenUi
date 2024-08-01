@@ -42,7 +42,17 @@ const Meat = ({
   getpatientDetailsData,
   hccFileDetails,
   fileDosPageNumberList,
-  getSelectedDosPageNumber
+  getSelectedDosPageNumber,
+  radiologyFile,
+  labFile,
+  labResult,
+  radiologyResult,
+  getRadiologyFileDetails,
+  getLabFileDetails,
+  currentDiseaseType,
+  getCurrentDiseaseType, 
+  getRadiologyPDF,
+  getLabPDF
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -114,12 +124,6 @@ const Meat = ({
     );
     setSelectOtherHyperlink(result);
   }, [selectHyperlink]);
-
-  useEffect(() => {
-    if (hccFileDetails?.data?.response) {
-      setSelectFileURL(hccFileDetails?.data?.response);
-    }
-  }, [hccFileDetails]);
 
   const onchangeMeat = (code, data) => {
     var title = data.diagnosisCode + " - " + data.diseaseName;
@@ -264,6 +268,40 @@ const Meat = ({
     setFileModalHeader(headerName);
   };
 
+  useEffect(() => {
+    if (labResult?.data?.response) {
+      if (labResult?.data?.response) {
+        getLabFileDetails(
+          labResult?.data?.response?.fileDetailDTO?.radiologyAzureBlobPaths[0]
+        );
+      }
+    }
+  }, [labResult?.data?.response]);
+  useEffect(() => {
+    if (radiologyResult?.data?.response) {
+      if (radiologyResult?.data?.response?.fileDetailDTO) {
+        getRadiologyFileDetails(
+          radiologyResult?.data?.response?.fileDetailDTO
+            ?.radiologyAzureBlobPaths[0]
+        );
+      }
+    }
+  }, [radiologyResult?.data?.response]);
+  useEffect(() => {
+    if (
+      hccFileDetails?.data?.response &&
+      (currentDiseaseType || currentDiseaseType === "")
+    ) {
+      setSelectFileURL(hccFileDetails?.data?.response);
+    }
+    if (radiologyFile?.data?.response && !currentDiseaseType) {
+      setSelectFileURL(radiologyFile?.data?.response);
+    }
+    if (labFile?.data?.response && !currentDiseaseType) {
+      setSelectFileURL(labFile?.data?.response);
+    }
+  }, [hccFileDetails, radiologyFile, labFile, currentDiseaseType]);
+
   const onFinishFailed = (form) => {};
 
   return (
@@ -367,7 +405,10 @@ const Meat = ({
                       setFileInitialPage,
                       selectMeatResult.diagnosisCode,
                       setSelectMeatResult,
-                      selectMeatResult
+                      selectMeatResult,
+                      getRadiologyPDF,
+                      getLabPDF,
+                      getCurrentDiseaseType
                     )}
                   >
                     <Button type="primary">Still Hyperlink Issue</Button>
@@ -447,6 +488,7 @@ const Meat = ({
                         {getProviderNameList({
                           data: selectMeatResult?.providerName,
                           captureSectionMatching: captureSectionMatching,
+                          
                         })}
                       </div>
                       <div
@@ -462,6 +504,7 @@ const Meat = ({
                           setSearch: setSearch,
                           setFileModalHeader: setFileModalHeader,
                           patientDocumentResult: patientDocumentResult,
+                          getCurrentDiseaseType:getCurrentDiseaseType
                         })}
                       </div>
                     </div>
@@ -500,7 +543,10 @@ const Meat = ({
                             setSelectMeatResult,
                             selectMeatResult,
                             setSelectHyperlink,
-                            getSelectedDosPageNumber
+                            getSelectedDosPageNumber,
+                            getRadiologyPDF,
+                            getLabPDF,
+                            getCurrentDiseaseType
                           )}
                         </div>
                       </div>
@@ -553,7 +599,10 @@ const Meat = ({
                             setSelectMeatResult,
                             selectMeatResult,
                             setSelectHyperlink,
-                            getSelectedDosPageNumber
+                            getSelectedDosPageNumber,
+                            getRadiologyPDF,
+                            getLabPDF,
+                            getCurrentDiseaseType
                           )}
                         </div>
                       </div>
@@ -606,7 +655,10 @@ const Meat = ({
                             setSelectMeatResult,
                             selectMeatResult,
                             setSelectHyperlink,
-                            getSelectedDosPageNumber
+                            getSelectedDosPageNumber,
+                            getRadiologyPDF,
+                            getLabPDF,
+                            getCurrentDiseaseType
                           )}
                         </div>
                       </div>
@@ -659,7 +711,10 @@ const Meat = ({
                             setSelectMeatResult,
                             selectMeatResult,
                             setSelectHyperlink,
-                            getSelectedDosPageNumber
+                            getSelectedDosPageNumber,
+                            getRadiologyPDF,
+                            getLabPDF,
+                            getCurrentDiseaseType,
                           )}
                         </div>
                       </div>
@@ -796,10 +851,20 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     hccFileDetails: state?.patientDetails?.details?.hccFileResult,
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+    radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
+    labFile: state?.patientDetails?.details?.labFileResult,
+    radiologyResult: state?.patientDetails?.details?.radiologyResult,
+    labResult: state?.patientDetails?.details?.labResult,
+    currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
-    getSelectedDosPageNumber:detailsActions.getSelectedDosPageNumber
+    getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
+    getRadiologyFileDetails: detailsActions.radiologyFileAction,
+    getLabFileDetails: detailsActions.labFileAction,
+    getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
+    getLabPDF: detailsActions.labDetailsAction,
+    getRadiologyPDF: detailsActions.radiologyDetailsAction,
   }
 );
 export default enhancer(Meat);

@@ -15,8 +15,7 @@ import { Drawer, Popover, notification } from "antd";
 import { Button, Offcanvas } from "react-bootstrap";
 import styles from "../styles.module.css";
 import PdfViewer from "../../PdfViewerComponent";
-import AddHccForm from "../../components/addHccForm";
-import EditHccForm from "../../components/editHccForm";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
 import HccCards from "../../components/HCC";
 import ModelIndex from "../../components/model/Index";
 import { getPatientDetails } from "../../components/function/GetData";
@@ -39,6 +38,13 @@ const File = ({
   search,
   setSearch,
   fileDosPageNumberList,
+  radiologyFile,
+  labFile,
+  labResult,
+  radiologyResult,
+  getRadiologyFileDetails,
+  getLabFileDetails,
+  currentDiseaseType,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -109,21 +115,6 @@ const File = ({
     );
   }, [patientDetailsResult]);
 
-  useEffect(() => {
-    if (hccFileDetails?.data?.response) {
-      setSelectFileURL(hccFileDetails?.data?.response);
-    }
-    if (radiologyFileDetails?.result?.response) {
-      setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
-    }
-    if (labFileDetails?.result?.response) {
-      setLabReportFile(labFileDetails?.result?.response);
-    }
-  }, [hccFileDetails, radiologyFileDetails, labFileDetails]);
-
-  useEffect(() => {
-    getFileDosPageNumber();
-  }, [fileDosPageNumberList]);
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
@@ -194,6 +185,43 @@ const File = ({
     notification.info({ message: "Tree Not Available", duration: 1 });
   };
 
+  useEffect(() => {
+    if (labResult?.data?.response) {
+      if (labResult?.data?.response) {
+        getLabFileDetails(
+          labResult?.data?.response?.fileDetailDTO?.radiologyAzureBlobPaths[0]
+        );
+      }
+    }
+  }, [labResult?.data?.response]);
+  useEffect(() => {
+    if (radiologyResult?.data?.response) {
+      if (radiologyResult?.data?.response?.fileDetailDTO) {
+        getRadiologyFileDetails(
+          radiologyResult?.data?.response?.fileDetailDTO
+            ?.radiologyAzureBlobPaths[0]
+        );
+      }
+    }
+  }, [radiologyResult?.data?.response]);
+  useEffect(() => {
+    if (
+      hccFileDetails?.data?.response &&
+      (currentDiseaseType || currentDiseaseType === "")
+    ) {
+      setSelectFileURL(hccFileDetails?.data?.response);
+    }
+    if (radiologyFile?.data?.response && !currentDiseaseType) {
+      setSelectFileURL(radiologyFile?.data?.response);
+    }
+    if (labFile?.data?.response && !currentDiseaseType) {
+      setSelectFileURL(labFile?.data?.response);
+    }
+  }, [hccFileDetails, radiologyFile, labFile, currentDiseaseType]);
+
+  useEffect(() => {
+    getFileDosPageNumber();
+  }, [fileDosPageNumberList]);
   return (
     <>
       {fileLoading ? <LogoLoader /> : null}
@@ -594,9 +622,20 @@ const File = ({
   );
 };
 
-const enhancer = connect((state) => ({
-  patientDetailsResult: state?.patientDetails?.details?.patientResult,
-  hccFileDetails: state?.patientDetails?.details?.hccFileResult,
-  fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
-}));
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    hccFileDetails: state?.patientDetails?.details?.hccFileResult,
+    fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+    radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
+    labFile: state?.patientDetails?.details?.labFileResult,
+    radiologyResult: state?.patientDetails?.details?.radiologyResult,
+    labResult: state?.patientDetails?.details?.labResult,
+    currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
+  }),
+  {
+    getRadiologyFileDetails: detailsActions.radiologyFileAction,
+    getLabFileDetails: detailsActions.labFileAction,
+  }
+);
 export default enhancer(File);

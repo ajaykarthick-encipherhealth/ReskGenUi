@@ -64,6 +64,10 @@ const HccCards = ({
   fileDosPageNumberList,
   popup,
   getSelectedDosPageNumber,
+  getRadiologyPDF,
+  getLabPDF,
+  getCurrentDiseaseType,
+  loading,
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -126,12 +130,15 @@ const HccCards = ({
       pagenumber: "",
     });
   };
-
   return (
     <>
       {provided && (
         <div ref={provided?.innerRef} {...provided?.droppableProps}>
-          {list?.length > 0 ? (
+          {loading ? (
+            <div className={styles.noMsContainer}>
+              <Spinner />
+            </div>
+          ) : list?.length > 0 ? (
             list?.map(
               (
                 data,
@@ -520,6 +527,9 @@ const HccCards = ({
                                     setSelectMeatResult: "",
                                     getSelectedDosPageNumber:
                                       getSelectedDosPageNumber,
+                                    getRadiologyPDF,
+                                    getLabPDF,
+                                    getCurrentDiseaseType,
                                   })}
                                 </div>
                                 <div
@@ -542,6 +552,9 @@ const HccCards = ({
                                     popup,
                                     getSelectedDosPageNumber:
                                       getSelectedDosPageNumber,
+                                    getRadiologyPDF,
+                                    getLabPDF,
+                                    getCurrentDiseaseType,
                                   })}
                                 </div>
                                 {data.providerName.length == 0 && (
@@ -582,8 +595,12 @@ const HccCards = ({
 
                                       diseaseName: data.dbDescription,
                                       popup: "",
+                                      getSelectedDosPageNumber:getSelectedDosPageNumber,
+                                      getRadiologyPDF:getRadiologyPDF,
+                                      getLabPDF:getLabPDF,
+                                      getCurrentDiseaseType:getCurrentDiseaseType,
                                       getSelectedDosPageNumber: getSelectedDosPageNumber,
-                                    })}
+                })}
                                   </div>
                                 )}
                               </div>
@@ -765,7 +782,12 @@ const HccCards = ({
 
                                     diseaseName: data.dbDescription,
                                     popup: "",
+                                    getSelectedDosPageNumber:getSelectedDosPageNumber,
+                                    getLabPDF:getLabPDF,
+                                    getRadiologyPDF:getRadiologyPDF,
+                                    getCurrentDiseaseType:getCurrentDiseaseType,
                                     getSelectedDosPageNumber: getSelectedDosPageNumber,
+
                                   })}
                                 </div>
                                 <div
@@ -855,9 +877,13 @@ const HccCards = ({
 const enhancer = connect(
   (state) => ({
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+    loading: state?.patientDetails?.details?.loading,
   }),
   {
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
+    getLabPDF: detailsActions.labDetailsAction,
+    getRadiologyPDF: detailsActions.radiologyDetailsAction,
+    getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
   }
 );
 export default enhancer(HccCards);

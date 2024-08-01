@@ -24,6 +24,9 @@ export const getEncounterDateBackground = ({
   selectMeatResult,
   datas,
   popup,
+  getRadiologyPDF,
+  getLabPDF,
+  getCurrentDiseaseType
 }) => {
   return value?.map((res, index) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -31,7 +34,31 @@ export const getEncounterDateBackground = ({
     if (index < 2) {
       var sectionMapArr = res ? (
         <span
-          onClick={() =>
+          onClick={() => {
+            const patientId = localStorage.getItem("patientId");
+            const selectedMeatData = encounterDateMatching?.find(
+              (item) => item?.header === res
+            );
+            if (selectedMeatData?.stateIndicator) {
+              getCurrentDiseaseType(false)
+              selectedMeatData?.stateIndicator === "LAB"
+                ? getLabPDF(
+                    patientId,
+                    "",
+                    selectedMeatData?.dateOfService,
+                    "",
+                    selectedMeatData?.diagnosticTestName
+                  )
+                : getRadiologyPDF(
+                    patientId,
+                    "",
+                    selectedMeatData?.dateOfService,
+                    "",
+                    selectedMeatData?.diagnosticTestName
+                  );
+            }else{
+              getCurrentDiseaseType(true)
+            }
             getEncounterDetails(
               res,
               fileDosPageNumberList,
@@ -42,8 +69,8 @@ export const getEncounterDateBackground = ({
               selectMeatResult,
               datas,
               patientDocumentResult
-            )
-          }
+            );
+          }}
           style={{
             borderColor: stringToColour(res) + 33,
             color: stringToColour(res),
@@ -77,7 +104,31 @@ export const getEncounterDateBackground = ({
               {value?.map((item, i) =>
                 i > 1 ? (
                   <span
-                    onClick={() =>
+                    onClick={() => {
+                      const patientId = localStorage.getItem("patientId");
+                      const selectedMeatData = encounterDateMatching?.find(
+                        (item) => item?.header === res
+                      );
+                      if (selectedMeatData?.stateIndicator) {
+                        getCurrentDiseaseType(false)
+                        selectedMeatData?.stateIndicator === "LAB"
+                          ? getLabPDF(
+                              patientId,
+                              "",
+                              selectedMeatData?.dateOfService,
+                              "",
+                              selectedMeatData?.diagnosticTestName
+                            )
+                          : getRadiologyPDF(
+                              patientId,
+                              "",
+                              selectedMeatData?.dateOfService,
+                              "",
+                              selectedMeatData?.diagnosticTestName
+                            );
+                      }else{
+                        getCurrentDiseaseType(true)
+                      }
                       getEncounterDetails(
                         item,
                         fileDosPageNumberList,
@@ -88,8 +139,8 @@ export const getEncounterDateBackground = ({
                         selectMeatResult,
                         datas,
                         patientDocumentResult
-                      )
-                    }
+                      );
+                    }}
                     style={{
                       borderColor: stringToColour(item) + 33,
                       color: stringToColour(item),
@@ -181,7 +232,10 @@ export const getHeaderHyperlink = (
   setSelectMeatResult,
   meatresult,
   diseaseName,
-  getSelectedDosPageNumber
+  getSelectedDosPageNumber,
+  getLabPDF,
+  getRadiologyPDF,
+  getCurrentDiseaseType
 ) => {
   return value?.map((res) => {
     const result = encounterDateMatching.filter(
@@ -192,6 +246,30 @@ export const getHeaderHyperlink = (
       <span
         onClick={() => {
           getSelectedDosPageNumber(null);
+          const patientId = localStorage.getItem("patientId");
+          const selectedMeatData = value?.find(
+            (item) => item?.dateOfService === res?.dateOfService
+          );
+          if (selectedMeatData?.stateIndicator) {
+            getCurrentDiseaseType(false);
+            selectedMeatData?.stateIndicator === "LAB"
+              ? getLabPDF(
+                  patientId,
+                  "",
+                  selectedMeatData?.dateOfService,
+                  "",
+                  selectedMeatData?.diagnosticTestName
+                )
+              : getRadiologyPDF(
+                  patientId,
+                  "",
+                  selectedMeatData?.dateOfService,
+                  "",
+                  selectedMeatData?.diagnosticTestName
+                );
+          } else {
+            getCurrentDiseaseType(true);
+          }
           newFindValueDocument(
             res,
             documentPlace,
@@ -334,6 +412,9 @@ export const getCaptureSectionBackgroundFile = ({
   diseaseName,
   popup,
   getSelectedDosPageNumber,
+  getLabPDF,
+  getRadiologyPDF,
+  getCurrentDiseaseType,
 }) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res, index) => {
@@ -352,6 +433,31 @@ export const getCaptureSectionBackgroundFile = ({
           <span
             onClick={() => {
               getSelectedDosPageNumber(null);
+              const patientId = localStorage.getItem("patientId");
+              const selectedMeatData = hyperlinks?.find(
+                (item) => item?.header === res
+              );
+
+              if (selectedMeatData?.stateIndicator) {
+                getCurrentDiseaseType(false);
+                selectedMeatData?.stateIndicator === "LAB"
+                  ? getLabPDF(
+                      patientId,
+                      "",
+                      selectedMeatData?.dateOfService,
+                      "",
+                      selectedMeatData?.diagnosticTestName
+                    )
+                  : getRadiologyPDF(
+                      patientId,
+                      "",
+                      selectedMeatData?.dateOfService,
+                      "",
+                      selectedMeatData?.diagnosticTestName
+                    );
+              } else {
+                getCurrentDiseaseType(true);
+              }
               newFindValueDocument(
                 headerResult[0],
                 documentPlace,
@@ -390,6 +496,25 @@ export const getCaptureSectionBackgroundFile = ({
               <>
                 {res?.length > 30 && <div>{res}</div>}
                 {getHeaderHyperlink(
+                  // headerResult,
+                  // encounterDateMatching,
+                  // documentPlace,
+                  // setSearch,
+                  // setFileLoading,
+                  // setIsModalOpenLab,
+                  // setIsModalOpenRadiology,
+                  // setIsModalOpenValidCodes,
+                  // setFileModalHeader,
+                  // patientDocumentResult,
+                  // fileInitialPage,
+                  // setFileInitialPage,
+                  // diagnosisCode,
+                  // "",
+                  // "",
+                  // diseaseName,
+                  // getSelectedDosPageNumber,
+                  // getLabPDF,
+                  // getRadiologyPDF
                   headerResult,
                   encounterDateMatching,
                   documentPlace,
@@ -406,7 +531,10 @@ export const getCaptureSectionBackgroundFile = ({
                   "",
                   "",
                   diseaseName,
-                  getSelectedDosPageNumber
+                  getSelectedDosPageNumber,
+                  getLabPDF,
+                  getRadiologyPDF,
+                  getCurrentDiseaseType
                 )}
               </>
             }
@@ -435,7 +563,29 @@ export const getCaptureSectionBackgroundFile = ({
                       <span
                         onClick={() => {
                           getSelectedDosPageNumber(null);
-
+                          const patientId = localStorage.getItem("patientId");
+                          const selectedMeatData = hyperlinks?.find(
+                            (item) => item?.header === res
+                          );
+                          if (selectedMeatData?.stateIndicator) {
+                            selectedMeatData?.stateIndicator === "LAB"
+                              ? getLabPDF(
+                                  patientId,
+                                  "",
+                                  selectedMeatData?.dateOfService,
+                                  "",
+                                  selectedMeatData?.diagnosticTestName
+                                )
+                              : getRadiologyPDF(
+                                  patientId,
+                                  "",
+                                  selectedMeatData?.dateOfService,
+                                  "",
+                                  selectedMeatData?.diagnosticTestName
+                                );
+                          } else {
+                            getCurrentDiseaseType(false);
+                          }
                           newFindValueDocument(
                             findSectionHyperlink(hyperlinks, item)[0],
                             documentPlace,
@@ -521,7 +671,10 @@ export const getCaptureSectionBackgroundFile = ({
                     "",
                     "",
                     diseaseName,
-                    getSelectedDosPageNumber
+                    getSelectedDosPageNumber,
+                    getLabPDF,
+                    getRadiologyPDF,
+                    getCurrentDiseaseType,
                   )}
                 >
                   {isMulitpleHeader &&
@@ -1228,9 +1381,13 @@ export const getCaptureSectionBackgroundMeatNew = (
   setSelectMeatResult,
   meatresult,
   setSelectHyperlink,
-  getSelectedDosPageNumber
+  getSelectedDosPageNumber,
+  getRadiologyPDF,
+  getLabPDF,
+  getCurrentDiseaseType
 ) => {
   var dublicateCaptureRemove = removeDuplicatesArray(value);
+
   return dublicateCaptureRemove?.map((res) => {
     const result = captureSectionMatching?.filter(
       (res2) => res2.sectionName === res.header
@@ -1258,6 +1415,30 @@ export const getCaptureSectionBackgroundMeatNew = (
       <span
         onClick={() => {
           getSelectedDosPageNumber && getSelectedDosPageNumber(null);
+          const patientId = localStorage.getItem("patientId");
+          const selectedMeatData = dublicateCaptureRemove?.find(
+            (item) => item?.header === res.header
+          );
+          if (selectedMeatData?.stateIndicator) {
+            getCurrentDiseaseType(false)
+            selectedMeatData?.stateIndicator === "LAB"
+              ? getLabPDF(
+                  patientId,
+                  "",
+                  selectedMeatData?.dateOfService,
+                  "",
+                  selectedMeatData?.diagnosticTestName
+                )
+              : getRadiologyPDF(
+                  patientId,
+                  "",
+                  selectedMeatData?.dateOfService,
+                  "",
+                  selectedMeatData?.diagnosticTestName
+                );
+          } else {
+            getCurrentDiseaseType(true);
+          }
           newFindValueDocument(
             res,
             documentPlace,
@@ -1283,7 +1464,7 @@ export const getCaptureSectionBackgroundMeatNew = (
         }}
         className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
       >
-        {truncateString(res.header, 30)}
+        {truncateString(res.header, 25)}
       </span>
       // </Popover>
     );

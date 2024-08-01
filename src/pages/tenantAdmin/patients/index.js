@@ -87,7 +87,7 @@ const Patient = ({
     patientId: "",
     patientName: "",
   });
-  console.log(filteredList)
+
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
