@@ -38,23 +38,23 @@ export const getEncounterDateBackground = ({
             const selectedMeatData = encounterDateMatching?.find(
               (item) => item?.header === res
             );
-            console.log(selectedMeatData);
-            const type = "lab";
-            type === "lab"
-              ? getLabPDF(
-                  patientId,
-                  "",
-                  selectedMeatData?.dateOfService,
-                  "",
-                  "lab"
-                )
-              : getRadiologyPDF(
-                  patientId,
-                  "",
-                  selectedMeatData?.dateOfService,
-                  "",
-                  "radiology"
-                );
+            if (selectedMeatData?.stateIndicator) {
+              selectedMeatData?.stateIndicator === "LAB"
+                ? getLabPDF(
+                    patientId,
+                    "",
+                    selectedMeatData?.dateOfService,
+                    "",
+                    selectedMeatData?.diagnosticTestName
+                  )
+                : getRadiologyPDF(
+                    patientId,
+                    "",
+                    selectedMeatData?.dateOfService,
+                    "",
+                    selectedMeatData?.diagnosticTestName
+                  );
+            }
             getEncounterDetails(
               res,
               fileDosPageNumberList,
@@ -105,23 +105,23 @@ export const getEncounterDateBackground = ({
                       const selectedMeatData = encounterDateMatching?.find(
                         (item) => item?.header === res
                       );
-                      console.log(selectedMeatData);
-                      const type = "lab";
-                      type === "lab"
-                        ? getLabPDF(
-                            patientId,
-                            "",
-                            selectedMeatData?.dateOfService,
-                            "",
-                            "lab"
-                          )
-                        : getRadiologyPDF(
-                            patientId,
-                            "",
-                            selectedMeatData?.dateOfService,
-                            "",
-                            "radiology"
-                          );
+                      if (selectedMeatData?.stateIndicator) {
+                        selectedMeatData?.stateIndicator === "LAB"
+                          ? getLabPDF(
+                              patientId,
+                              "",
+                              selectedMeatData?.dateOfService,
+                              "",
+                              selectedMeatData?.diagnosticTestName
+                            )
+                          : getRadiologyPDF(
+                              patientId,
+                              "",
+                              selectedMeatData?.dateOfService,
+                              "",
+                              selectedMeatData?.diagnosticTestName
+                            );
+                      }
                       getEncounterDetails(
                         item,
                         fileDosPageNumberList,
@@ -261,23 +261,23 @@ export const getHeaderHyperlink = (
           const selectedMeatData = value?.find(
             (item) => item?.dateOfService === res?.dateOfService
           );
-          console.log(selectedMeatData);
-
-          selectedMeatData?.diagnosticTestName === "lab"
-            ? getLabPDF(
-                patientId,
-                "",
-                selectedMeatData?.dateOfService,
-                "",
-                selectedMeatData?.diagnosticTestName
-              )
-            : getRadiologyPDF(
-                patientId,
-                "",
-                selectedMeatData?.dateOfService,
-                "",
-                selectedMeatData?.diagnosticTestName
-              );
+          if (selectedMeatData?.stateIndicator) {
+            selectedMeatData?.stateIndicator === "LAB"
+              ? getLabPDF(
+                  patientId,
+                  "",
+                  selectedMeatData?.dateOfService,
+                  "",
+                  selectedMeatData?.diagnosticTestName
+                )
+              : getRadiologyPDF(
+                  patientId,
+                  "",
+                  selectedMeatData?.dateOfService,
+                  "",
+                  selectedMeatData?.diagnosticTestName
+                );
+          }
           newFindValueDocument(
             res,
             documentPlace,
@@ -444,23 +444,23 @@ export const getCaptureSectionBackgroundFile = ({
               const selectedMeatData = hyperlinks?.find(
                 (item) => item?.header === res
               );
-              console.log(selectedMeatData);
-
-              selectedMeatData?.diagnosticTestName === "lab"
-                ? getLabPDF(
-                    patientId,
-                    "",
-                    selectedMeatData?.dateOfService,
-                    "",
-                    selectedMeatData?.diagnosticTestName
-                  )
-                : getRadiologyPDF(
-                    patientId,
-                    "",
-                    selectedMeatData?.dateOfService,
-                    "",
-                    selectedMeatData?.diagnosticTestName
-                  );
+              if (selectedMeatData?.stateIndicator) {
+                selectedMeatData?.stateIndicator === "LAB"
+                  ? getLabPDF(
+                      patientId,
+                      "",
+                      selectedMeatData?.dateOfService,
+                      "",
+                      selectedMeatData?.diagnosticTestName
+                    )
+                  : getRadiologyPDF(
+                      patientId,
+                      "",
+                      selectedMeatData?.dateOfService,
+                      "",
+                      selectedMeatData?.diagnosticTestName
+                    );
+              }
               newFindValueDocument(
                 headerResult[0],
                 documentPlace,
@@ -569,23 +569,23 @@ export const getCaptureSectionBackgroundFile = ({
                           const selectedMeatData = hyperlinks?.find(
                             (item) => item?.header === res
                           );
-                          console.log(selectedMeatData);
-
-                          selectedMeatData?.diagnosticTestName === "lab"
-                            ? getLabPDF(
-                                patientId,
-                                "",
-                                selectedMeatData?.dateOfService,
-                                "",
-                                selectedMeatData?.diagnosticTestName
-                              )
-                            : getRadiologyPDF(
-                                patientId,
-                                "",
-                                selectedMeatData?.dateOfService,
-                                "",
-                                selectedMeatData?.diagnosticTestName
-                              );
+                          if (selectedMeatData?.stateIndicator) {
+                            selectedMeatData?.stateIndicator === "LAB"
+                              ? getLabPDF(
+                                  patientId,
+                                  "",
+                                  selectedMeatData?.dateOfService,
+                                  "",
+                                  selectedMeatData?.diagnosticTestName
+                                )
+                              : getRadiologyPDF(
+                                  patientId,
+                                  "",
+                                  selectedMeatData?.dateOfService,
+                                  "",
+                                  selectedMeatData?.diagnosticTestName
+                                );
+                          }
                           newFindValueDocument(
                             findSectionHyperlink(hyperlinks, item)[0],
                             documentPlace,
@@ -1429,24 +1429,23 @@ export const getCaptureSectionBackgroundMeatNew = (
           const selectedMeatData = dublicateCaptureRemove?.find(
             (item) => item?.header === res.header
           );
-          console.log(selectedMeatData);
-          const type = "lab";
-          type === "lab"
-            ? getLabPDF(
-                patientId,
-                "",
-                selectedMeatData?.dateOfService,
-                "",
-                "lab"
-              )
-            : getRadiologyPDF(
-                patientId,
-                "",
-                selectedMeatData?.dateOfService,
-                "",
-                "radiology"
-              );
-
+          if (selectedMeatData?.stateIndicator) {
+            selectedMeatData?.stateIndicator === "LAB"
+              ? getLabPDF(
+                  patientId,
+                  "",
+                  selectedMeatData?.dateOfService,
+                  "",
+                  selectedMeatData?.diagnosticTestName
+                )
+              : getRadiologyPDF(
+                  patientId,
+                  "",
+                  selectedMeatData?.dateOfService,
+                  "",
+                  selectedMeatData?.diagnosticTestName
+                );
+          }
           newFindValueDocument(
             res,
             documentPlace,

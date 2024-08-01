@@ -15,8 +15,7 @@ import { Drawer, Popover, notification } from "antd";
 import { Button, Offcanvas } from "react-bootstrap";
 import styles from "../styles.module.css";
 import PdfViewer from "../../PdfViewerComponent";
-import AddHccForm from "../../components/addHccForm";
-import EditHccForm from "../../components/editHccForm";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
 import HccCards from "../../components/HCC";
 import ModelIndex from "../../components/model/Index";
 import { getPatientDetails } from "../../components/function/GetData";
@@ -40,7 +39,11 @@ const File = ({
   setSearch,
   fileDosPageNumberList,
   radiologyFile,
-  labFile
+  labFile,
+  labResult,
+  radiologyResult,
+  getRadiologyFileDetails,
+  getLabFileDetails,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -111,21 +114,6 @@ const File = ({
     );
   }, [patientDetailsResult]);
 
-  useEffect(() => {
-    if (hccFileDetails?.data?.response) {
-      setSelectFileURL(hccFileDetails?.data?.response);
-    }
-    if (radiologyFile?.result?.response) {
-      setSelectFileURL(radiologyFile?.result?.response);
-    }
-    if (labFile?.result?.response) {
-      setSelectFileURL(labFile?.result?.response);
-    }
-  }, [hccFileDetails, radiologyFile, labFile]);
-
-  useEffect(() => {
-    getFileDosPageNumber();
-  }, [fileDosPageNumberList]);
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
@@ -195,6 +183,41 @@ const File = ({
     notification.destroy();
     notification.info({ message: "Tree Not Available", duration: 1 });
   };
+
+  useEffect(() => {
+    if (labResult?.data?.response) {
+      if (labResult?.data?.response) {
+        getLabFileDetails(
+          labResult?.data?.response?.fileDetailDTO?.radiologyAzureBlobPaths[0]
+        );
+      }
+    }
+  }, [labResult?.data?.response]);
+  useEffect(() => {
+    if (radiologyResult?.data?.response) {
+      if (radiologyResult?.data?.response?.fileDetailDTO) {
+        getRadiologyFileDetails(
+          radiologyResult?.data?.response?.fileDetailDTO
+            ?.radiologyAzureBlobPaths[0]
+        );
+      }
+    }
+  }, [radiologyResult?.data?.response]);
+  useEffect(() => {
+    if (hccFileDetails?.data?.response) {
+      setSelectFileURL(hccFileDetails?.data?.response);
+    }
+    if (radiologyFile?.data?.response) {
+      setSelectFileURL(radiologyFile?.data?.response);
+    }
+    if (labFile?.data?.response) {
+      setSelectFileURL(labFile?.data?.response);
+    }
+  }, [hccFileDetails, radiologyFile, labFile]);
+
+  useEffect(() => {
+    getFileDosPageNumber();
+  }, [fileDosPageNumberList]);
 
   return (
     <>
@@ -332,24 +355,26 @@ const File = ({
             </div>
           </div>
           {isFileFormShow ? (
-            <div className="col-xl-5" style={{ height: "74.5vh", overflowY: "scroll"}}>
+            <div
+              className="col-xl-5"
+              style={{ height: "74.5vh", overflowY: "scroll" }}
+            >
               {/* <AddHccForm
                 handleCloseModal={handleCloseModal}
                 isAddHccForm={isAddHccForm}
                 setIsAddHccForm={setIsAddHccForm}
                 isMeatNew={true}
               /> */}
-              
-                <ManuallyAdd
-                  handleCloseModal={handleCloseModal}
-                  setIsFileFormShow={setIsFileFormShow}
-                  year={year}
-                />
-             
+
+              <ManuallyAdd
+                handleCloseModal={handleCloseModal}
+                setIsFileFormShow={setIsFileFormShow}
+                year={year}
+              />
             </div>
           ) : null}
           {!isFileFormShow ? (
-            <div className="col-xl-3" style={{height:"74vh" }}>
+            <div className="col-xl-3" style={{ height: "74vh" }}>
               <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                 {(provided) => {
                   return (
@@ -433,9 +458,7 @@ const File = ({
                           <span
                             className={`${visitStyles.deleted_title_badge}`}
                           >
-                            {
-                              deletedHccList.length
-                            }
+                            {deletedHccList.length}
                           </span>
                         </div>
                       </div>
@@ -593,11 +616,19 @@ const File = ({
   );
 };
 
-const enhancer = connect((state) => ({
-  patientDetailsResult: state?.patientDetails?.details?.patientResult,
-  hccFileDetails: state?.patientDetails?.details?.hccFileResult,
-  fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
-  radiologyFile :state?.patientDetails?.details?.radiologyFileResult,
-  labFile :state?.patientDetails?.details?.labFileResult,
-}));
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    hccFileDetails: state?.patientDetails?.details?.hccFileResult,
+    fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+    radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
+    labFile: state?.patientDetails?.details?.labFileResult,
+    radiologyResult: state?.patientDetails?.details?.radiologyResult,
+    labResult: state?.patientDetails?.details?.labResult,
+  }),
+  {
+    getRadiologyFileDetails: detailsActions.radiologyFileAction,
+    getLabFileDetails: detailsActions.labFileAction,
+  }
+);
 export default enhancer(File);

@@ -502,6 +502,8 @@ const MeatCard = ({
 const enhancer = connect(
   (state) => ({
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+    radiologyResult:state?.patientDetails?.details?.radiologyResult,
+    labResult:state?.patientDetails?.details?.labResult,
   }),
   {
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,

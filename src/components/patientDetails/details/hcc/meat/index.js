@@ -44,7 +44,11 @@ const Meat = ({
   fileDosPageNumberList,
   getSelectedDosPageNumber,
   radiologyFile,
-  labFile
+  labFile,
+  labResult,
+  radiologyResult,
+  getRadiologyFileDetails,
+  getLabFileDetails,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -116,18 +120,6 @@ const Meat = ({
     );
     setSelectOtherHyperlink(result);
   }, [selectHyperlink]);
-
-  useEffect(() => {
-    if (hccFileDetails?.data?.response) {
-      setSelectFileURL(hccFileDetails?.data?.response);
-    }
-    if (radiologyFile?.result?.response) {
-      setSelectFileURL(radiologyFile?.result?.response);
-    }
-    if (labFile?.result?.response) {
-      setSelectFileURL(labFile?.result?.response);
-    }
-  }, [hccFileDetails,radiologyFile, labFile]);
 
   const onchangeMeat = (code, data) => {
     var title = data.diagnosisCode + " - " + data.diseaseName;
@@ -271,6 +263,37 @@ const Meat = ({
       : "";
     setFileModalHeader(headerName);
   };
+
+  useEffect(() => {
+    if (labResult?.data?.response) {
+      if (labResult?.data?.response) {
+        getLabFileDetails(
+          labResult?.data?.response?.fileDetailDTO?.radiologyAzureBlobPaths[0]
+        );
+      }
+    }
+  }, [labResult?.data?.response]);
+  useEffect(() => {
+    if (radiologyResult?.data?.response) {
+      if (radiologyResult?.data?.response?.fileDetailDTO) {
+        getRadiologyFileDetails(
+          radiologyResult?.data?.response?.fileDetailDTO
+            ?.radiologyAzureBlobPaths[0]
+        );
+      }
+    }
+  }, [radiologyResult?.data?.response]);
+  useEffect(() => {
+    if (hccFileDetails?.data?.response) {
+      setSelectFileURL(hccFileDetails?.data?.response);
+    }
+    if (radiologyFile?.data?.response) {
+      setSelectFileURL(radiologyFile?.data?.response);
+    }
+    if (labFile?.data?.response) {
+      setSelectFileURL(labFile?.data?.response);
+    }
+  }, [hccFileDetails, radiologyFile, labFile]);
 
   const onFinishFailed = (form) => {};
 
@@ -802,12 +825,16 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     hccFileDetails: state?.patientDetails?.details?.hccFileResult,
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
-    radiologyFile :state?.patientDetails?.details?.radiologyFileResult,
-    labFile :state?.patientDetails?.details?.labFileResult,
+    radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
+    labFile: state?.patientDetails?.details?.labFileResult,
+    radiologyResult: state?.patientDetails?.details?.radiologyResult,
+    labResult: state?.patientDetails?.details?.labResult,
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
-    getSelectedDosPageNumber:detailsActions.getSelectedDosPageNumber
+    getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
+    getRadiologyFileDetails: detailsActions.radiologyFileAction,
+    getLabFileDetails: detailsActions.labFileAction,
   }
 );
 export default enhancer(Meat);
