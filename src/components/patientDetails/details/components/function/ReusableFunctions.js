@@ -674,8 +674,7 @@ export const getCaptureSectionBackgroundFile = ({
                     getSelectedDosPageNumber,
                     getLabPDF,
                     getRadiologyPDF,
-                    getCurrentDiseaseType
-                    getSelectedDosPageNumber
+                    getCurrentDiseaseType,
                   )}
                 >
                   {isMulitpleHeader &&
