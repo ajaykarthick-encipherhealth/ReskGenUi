@@ -802,6 +802,7 @@ export const handleSubmitValidNotes = async ({
   setFileLoading(true);
   setConfirmNotesModalValid(false);
   handleCloseModal();
+
   var apiURL = "";
   if (
     isValidAction.name == "Move to Suggested" &&
@@ -854,10 +855,16 @@ export const handleSubmitValidNotes = async ({
   if (isValidAction.name == "Move to HCC" && isValidAction.title == "MEAT") {
     apiURL = "management/meat/move/suggestedtovalid";
   }
+
+  if (isValidAction.name == "Move to Deleted" && isValidAction.title == "NON_HCC_DISEASES") {
+    apiURL = "management/disease/move/invalidtodeleted";
+  }
+
   if (
     isValidAction.name == "Move to HCC" &&
     isValidAction.title == "NON_MEAT"
   ) {
+
     apiURL = "management/meat/move/suggestedtovalid";
   }
   if (

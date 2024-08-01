@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { OrganizationChart } from "primereact/organizationchart";
 import Style from "./style.module.css";
-import { Badge, Popconfirm, Popover, Tag, Tooltip } from "antd";
+import { Badge, Popconfirm, Popover, notification, Tag, Tooltip } from "antd";
 import Tree from "./data.json";
 import Header from "../../../../../jsx/layouts/nav/Header";
 import { Card } from "react-bootstrap";
@@ -20,6 +20,7 @@ import {
 import SpinnerDots from "../../../../../components/spinner";
 import ModelIndex from "../../components/model/Index";
 import {
+  handleSubmitValidNotes,
   moveToAnotherAction,
   stringToColour,
 } from "../../components/function/ReusableFunctions";
@@ -28,6 +29,7 @@ import { getProviderNameTagList } from "../../components/function/ProviderHyperl
 import { getDateOfServiceBackground } from "../../components/function/DateOfServices";
 import { getSectionHeaderBackground } from "../../components/function/SectionHeader";
 import { getStateIndicators } from "../../components/function/GetData";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
 
 const addOnCodeColor = [
   "magenta",
@@ -41,14 +43,24 @@ const addOnCodeColor = [
   "purple",
 ];
 
-const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
+const CamboTree = ({
+  tree,
+  setOpens,
+  setCombiTree,
+  patientDetailsResult,
+  getPatientDetailsReload,
+  getpatientDetailsData,
+}) => {
   const [background, setBackground] = useState([]);
   const [trees, setTrees] = useState(Tree);
   const [isLoading, setLoading] = useState(tree);
   const [zoom, setZoom] = useState({ width: 350, height: 185 });
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
-  const [isValidAction, setIsValidAction] = useState("");
+  const [isValidAction, setIsValidAction] = useState({
+    name: "Move to Deleted",
+    title: "",
+  });
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const [fileLoading, setFileLoading] = useState(false);
 
@@ -60,7 +72,6 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
     }
     // setZoom((prev) => ({ width: prev.width - 30, height: prev.height - 10 }));
   };
-
   const zoomOut = () => {
     if (zoom.width <= 350) {
       setZoom((prev) => ({ width: prev.width + 30, height: prev.height + 10 }));
@@ -78,6 +89,37 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
         ? "SUGGESTED"
         : "COMBO"
     );
+  };
+  useEffect(() => {
+    if (selectDisDetails && selectDisDetails.diseaseSource) {
+      const title =
+        selectDisDetails.diseaseSource === "HCC_DISEASES"
+          ? "HCC"
+          : selectDisDetails.diseaseSource === "SUGGESTED_HCC_DISEASES"
+          ? "SUGGESTED"
+          : selectDisDetails.diseaseSource === "NON_HCC_DISEASES"
+          ? "NON_HCC_DISEASES"
+          : "HCC";
+
+      setIsValidAction((prev) => {
+        if (prev.title !== title) {
+          return { ...prev, title: title };
+        }
+        return prev;
+      });
+    }
+  }, [selectDisDetails]);
+  const handleDeleteDisease = async () => {
+    handleSubmitValidNotes({
+      setFileLoading,
+      setConfirmNotesModalValid,
+      getPatientDetailsReload,
+      isValidAction,
+      selectDisDetails,
+      getpatientDetailsData,
+      patientDetailsResult,
+      handleCloseModal,
+    });
   };
   const onchangeCombo = (data, code, diseaseSource) => {
     var title =
@@ -176,7 +218,6 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
   };
 
   const nodeTemplate = (node) => {
-    console.log(node);
     return (
       <div
         className={Style.cards}
@@ -196,10 +237,24 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
               <Popconfirm
                 title="You want move to Delete?"
                 description={node.diseaseName}
-                onConfirm={confirmComboDelete}
+                onConfirm={handleDeleteDisease}
                 placement="leftTop"
                 okText="Yes"
                 cancelText="No"
+                // onOk={() =>
+                //   handleSubmitValidNotes({
+                //     setFileLoading,
+                //     setConfirmNotesModalValid,
+                //     getPatientDetailsReload,
+                //     isValidAction,
+                //     selectDisDetails,
+                //     getpatientDetailsData,
+                //     patientDetailsResult,
+                //     getLabDetails,
+                //     getRadiologyDetails,
+                //     handleCloseModal,
+                //   })
+                // }
                 onOpenChange={() =>
                   onchangeCombo(
                     node,
@@ -299,7 +354,7 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
       </div>
       <ModelIndex
         title={selectDiseasesName}
-        openState={confirmNotesModalValid}
+        // openState={confirmNotesModalValid}
         setFileLoading={setFileLoading}
         handleCloseModal={handleCloseModal}
         setConfirmNotesModalValid={setConfirmNotesModalValid}
@@ -309,7 +364,15 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
     </>
   );
 };
-const enhancer = connect((state) => ({
-  patientDetailsResult: state?.patientDetails?.details?.patientResult,
-}));
+
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
+  }),
+  {
+    getpatientDetailsData: detailsActions.patientDetailsAction,
+    getRadiologyDetails: detailsActions.radiologyDetailsAction,
+    getLabDetails: detailsActions.labDetailsAction,
+  }
+);
 export default enhancer(CamboTree);
