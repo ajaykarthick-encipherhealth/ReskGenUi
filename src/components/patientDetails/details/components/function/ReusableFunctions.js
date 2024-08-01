@@ -599,7 +599,7 @@ export const getCaptureSectionBackgroundFile = ({
                             fileInitialPage,
                             setFileInitialPage,
                             diagnosisCode,
-                            setSelectMeatResult,
+                            "",
                             "",
                             "",
                             "",
