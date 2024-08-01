@@ -125,6 +125,7 @@ const StatusAction = ({
   };
 
   const getPatientIdDetails = async (result) => {
+    const userRoleLocal = localStorage.getItem("userRole");
     var data = [
       {
         id: result?.patientId,
@@ -198,6 +199,33 @@ const StatusAction = ({
             </div>
           </Menu.Item>
         ) : null}
+        {userRoleLocal == "tenant_admin" &&
+        <>
+        <Menu.Item
+          key="5"
+          onClick={() => {
+            handleActionClick("ADD RADIOLOGY");
+            setMenuIsOpen(false);
+          }}
+        >
+          <div className="patient-status">
+            <span className={`badge  ${visitStyles.add_text}`}>
+              + ADD RADIOLOGY
+            </span>
+          </div>
+        </Menu.Item>
+        <Menu.Item
+          key="6"
+          onClick={() => {
+            handleActionClick("ADD LAB");
+            setMenuIsOpen(false);
+          }}
+        >
+          <div className="patient-status">
+            <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>
+          </div>
+        </Menu.Item>
+        </>}
       </Menu>
     );
 
