@@ -19,7 +19,7 @@ import {
 import { connect } from "react-redux";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
 import MovementAction from "../movementAction";
-import {actions as detailsAction} from '../../../../../stores/patient/details'
+import { actions as detailsAction } from "../../../../../stores/patient/details";
 const ComboCard = ({
   list,
   captureSectionMatching,
@@ -46,6 +46,7 @@ const ComboCard = ({
   popup,
   getSelectedDosPageNumber,
   cardTitle,
+  isDosSelected,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -170,14 +171,14 @@ const ComboCard = ({
                         </div> */}
 
                         <div className={styles.comcoActionIcon}>
-                          {item?.children?.length > 0 ? (
+                          {item?.children?.length > 0 && isDosSelected ? (
                             <CloseCircleFilled
                               className={styles.deleteIcon}
                               onClick={() =>
                                 message.warning("Delete only formed codes")
                               }
                             />
-                          ) : (
+                          ) : isDosSelected ? (
                             <MovementAction
                               validAction={cardTitle == "HCC" ? false : true}
                               suggestedAction={
@@ -195,23 +196,7 @@ const ComboCard = ({
                               result={item}
                               setFileLoading={setFileLoading}
                             />
-                            // <MovementAction
-                            //   validAction={
-                            //     cardTitle == "DELETED_COMBO" ? true : false
-                            //   }
-                            //   deleteAction={
-                            //     cardTitle == "VALID_COMBO" ? true : false
-                            //   }
-                            //   setIsValidAction={setIsValidAction}
-                            //   cardTitle="COMBO"
-                            //   setConfirmNotesModalValid={
-                            //     setConfirmNotesModalValid
-                            //   }
-                            //   onchangeValid={onchangeCombo}
-                            //   result={item}
-                            //   setFileLoading={setFileLoading}
-                            // />
-                          )}
+                          ) : null}
                         </div>
                         {item?.children?.length > 0 && (
                           <div
@@ -398,9 +383,13 @@ const ComboCard = ({
   );
 };
 
-const enhancer = connect((state) => ({
-  fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
-}),{
-  getSelectedDosPageNumber:detailsAction.getSelectedDosPageNumber
-});
+const enhancer = connect(
+  (state) => ({
+    fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
+  }),
+  {
+    getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,
+  }
+);
 export default enhancer(ComboCard);

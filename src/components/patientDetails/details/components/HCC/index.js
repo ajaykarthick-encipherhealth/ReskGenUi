@@ -68,6 +68,7 @@ const HccCards = ({
   getLabPDF,
   getCurrentDiseaseType,
   loading,
+  isDosSelected,
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -130,6 +131,7 @@ const HccCards = ({
       pagenumber: "",
     });
   };
+
   return (
     <>
       {provided && (
@@ -172,7 +174,7 @@ const HccCards = ({
                                     {data.diagnosisCode}
                                   </span>
 
-                                  {!isDeletedCodes && (
+                                  {!isDeletedCodes && isDosSelected && (
                                     <FontAwesomeIcon
                                       icon={faPen}
                                       style={{ cursor: "pointer" }}
@@ -266,28 +268,28 @@ const HccCards = ({
                                     ) : null}
                                   </>
                                 ) : null}
-
-                                <MovementAction
-                                  validAction={
-                                    cardTitle == "HCC" ? false : true
-                                  }
-                                  suggestedAction={
-                                    cardTitle == "SUGGESTED" ? false : true
-                                  }
-                                  deleteAction={
-                                    cardTitle == "DELETED" ? false : true
-                                  }
-                                  setIsValidAction={setIsValidAction}
-                                  cardTitle={cardTitle}
-                                  setConfirmNotesModalValid={
-                                    setConfirmNotesModalValid
-                                  }
-                                  onchangeValid={onchangeValid}
-                                  result={data}
-                                  setFileLoading={setFileLoading}
-                                  isComboCode={data.isComboCode}
-                                />
-
+                                {isDosSelected && (
+                                  <MovementAction
+                                    validAction={
+                                      cardTitle == "HCC" ? false : true
+                                    }
+                                    suggestedAction={
+                                      cardTitle == "SUGGESTED" ? false : true
+                                    }
+                                    deleteAction={
+                                      cardTitle == "DELETED" ? false : true
+                                    }
+                                    setIsValidAction={setIsValidAction}
+                                    cardTitle={cardTitle}
+                                    setConfirmNotesModalValid={
+                                      setConfirmNotesModalValid
+                                    }
+                                    onchangeValid={onchangeValid}
+                                    result={data}
+                                    setFileLoading={setFileLoading}
+                                    isComboCode={data.isComboCode}
+                                  />
+                                )}
                                 <Popover
                                   placement="bottom"
                                   title={""}
@@ -391,7 +393,7 @@ const HccCards = ({
                                           )
                                         }
                                       >
-                                        {
+                                        { isDosSelected &&
                                           <div className="cr-pointer d-flex">
                                             <div
                                               className={visitStyles.close_icon}
@@ -460,7 +462,7 @@ const HccCards = ({
                                         </div>
                                       )}
                                       {/* edit Option */}
-                                      {isVisitData &&
+                                      {isVisitData && isDosSelected &&
                                         ENDPOINTS?.isLocalEdit && (
                                           <div
                                             className="d-flex"
@@ -595,12 +597,15 @@ const HccCards = ({
 
                                       diseaseName: data.dbDescription,
                                       popup: "",
-                                      getSelectedDosPageNumber:getSelectedDosPageNumber,
-                                      getRadiologyPDF:getRadiologyPDF,
-                                      getLabPDF:getLabPDF,
-                                      getCurrentDiseaseType:getCurrentDiseaseType,
-                                      getSelectedDosPageNumber: getSelectedDosPageNumber,
-                })}
+                                      getSelectedDosPageNumber:
+                                        getSelectedDosPageNumber,
+                                      getRadiologyPDF: getRadiologyPDF,
+                                      getLabPDF: getLabPDF,
+                                      getCurrentDiseaseType:
+                                        getCurrentDiseaseType,
+                                      getSelectedDosPageNumber:
+                                        getSelectedDosPageNumber,
+                                    })}
                                   </div>
                                 )}
                               </div>
@@ -782,12 +787,14 @@ const HccCards = ({
 
                                     diseaseName: data.dbDescription,
                                     popup: "",
-                                    getSelectedDosPageNumber:getSelectedDosPageNumber,
-                                    getLabPDF:getLabPDF,
-                                    getRadiologyPDF:getRadiologyPDF,
-                                    getCurrentDiseaseType:getCurrentDiseaseType,
-                                    getSelectedDosPageNumber: getSelectedDosPageNumber,
-
+                                    getSelectedDosPageNumber:
+                                      getSelectedDosPageNumber,
+                                    getLabPDF: getLabPDF,
+                                    getRadiologyPDF: getRadiologyPDF,
+                                    getCurrentDiseaseType:
+                                      getCurrentDiseaseType,
+                                    getSelectedDosPageNumber:
+                                      getSelectedDosPageNumber,
                                   })}
                                 </div>
                                 <div
@@ -852,7 +859,9 @@ const HccCards = ({
             )
           ) : (
             <div className={styles.noMsContainer}>
-              {`${cardTitle == "SUGGESTED" ? "CARE GAP" : cardTitle} Codes Not Found`}
+              {`${
+                cardTitle == "SUGGESTED" ? "CARE GAP" : cardTitle
+              } Codes Not Found`}
             </div>
           )}
           <span className="d-none">{provided?.placeholder}</span>
@@ -878,6 +887,7 @@ const enhancer = connect(
   (state) => ({
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
     loading: state?.patientDetails?.details?.loading,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
