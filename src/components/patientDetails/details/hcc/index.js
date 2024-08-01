@@ -30,6 +30,7 @@ const Hcc = ({
   patientDosResult,
   getSelectedDos,
   getSelectedDosPageNumber,
+  getCurrentDiseaseType
 }) => {
   const dispatch = useDispatch();
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -219,7 +220,7 @@ const Hcc = ({
                       to="#my-posts"
                       eventKey={1}
                       className={visitStyles.navColor}
-                      onClick={() =>
+                      onClick={() =>{
                         selectTab(
                           1,
                           setFlagTagActive,
@@ -227,7 +228,8 @@ const Hcc = ({
                           setActiveComboTree,
                           setPopoverVisible
                         )
-                      }
+                        getCurrentDiseaseType(true);
+                      }}
                     >
                       File
                     </Nav.Link>
@@ -503,6 +505,7 @@ const enhancer = connect(
     getpatientDetailsData: detailsActions.patientDetailsAction,
     getSelectedDos: detailsActions.getSelectedDos,
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
+    getCurrentDiseaseType:detailsActions.getCurrentDiseaseType
   }
 );
 export default enhancer(Hcc);

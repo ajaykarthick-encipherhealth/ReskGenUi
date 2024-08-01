@@ -568,6 +568,7 @@ export const getCaptureSectionBackgroundFile = ({
                             (item) => item?.header === res
                           );
                           if (selectedMeatData?.stateIndicator) {
+                            getCurrentDiseaseType(false);
                             selectedMeatData?.stateIndicator === "LAB"
                               ? getLabPDF(
                                   patientId,
@@ -584,7 +585,7 @@ export const getCaptureSectionBackgroundFile = ({
                                   selectedMeatData?.diagnosticTestName
                                 );
                           } else {
-                            getCurrentDiseaseType(false);
+                            getCurrentDiseaseType(true);
                           }
                           newFindValueDocument(
                             findSectionHyperlink(hyperlinks, item)[0],

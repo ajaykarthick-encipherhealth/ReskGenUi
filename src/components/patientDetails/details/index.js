@@ -140,6 +140,7 @@ const Details = ({
   getLabDetails,
   radiologyDetailsResult,
   labDetailsResult,
+  getCurrentDiseaseType
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -474,6 +475,7 @@ const Details = ({
 
   const backToPatientData = () => {
     dispatch(getPatientID(null));
+    getCurrentDiseaseType(true);
     const user = localStorage.getItem("userRole");
     if (user && user.toLowerCase() === "admin") {
       const { user: _, ...queryWithoutUser } = navigate.query;
@@ -1420,6 +1422,7 @@ const enhancer = connect(
     getRadiologyDetails: detailsActions.radiologyDetailsAction,
     getPatientLabDosList: detailsActions.labDosDeatilsAction,
     getLabDetails: detailsActions.labDetailsAction,
+    getCurrentDiseaseType:detailsActions.getCurrentDiseaseType
   }
 );
 export default enhancer(Details);
