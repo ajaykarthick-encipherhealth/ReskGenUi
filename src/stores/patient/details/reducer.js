@@ -75,9 +75,18 @@ const getSelectedDetails = (action) =>
   //     true
   //   );
 
+  const getPatientsLoading=(type) => handleActions(
+    {
+      [type.START]: () => true,
+      [type.SUCCEEDED]: () => false,
+      [type.FAILED]: () => false,
+    },
+    false
+  );
 const patientDetailsReducer = combineReducers({
   patientResult: createReducer(patientDetailsAction),
   patientIdResult: createReducer(patientIdDetailsAction),
+  loading:getPatientsLoading(patientIdDetailsAction),
   hccFileResult: createReducer(patientHccFileAction),
   dosResult: createReducer(dosDeatilsAction),
   dosPageNumberResult: createReducer(dosPageNumberAction),

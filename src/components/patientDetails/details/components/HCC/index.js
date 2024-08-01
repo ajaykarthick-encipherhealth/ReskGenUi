@@ -67,6 +67,7 @@ const HccCards = ({
   getRadiologyPDF,
   getLabPDF,
   getCurrentDiseaseType,
+  loading,
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -129,12 +130,15 @@ const HccCards = ({
       pagenumber: "",
     });
   };
-
   return (
     <>
       {provided && (
         <div ref={provided?.innerRef} {...provided?.droppableProps}>
-          {list?.length > 0 ? (
+          {loading ? (
+            <div className={styles.noMsContainer}>
+              <Spinner />
+            </div>
+          ) : list?.length > 0 ? (
             list?.map(
               (
                 data,
@@ -870,6 +874,7 @@ const HccCards = ({
 const enhancer = connect(
   (state) => ({
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+    loading: state?.patientDetails?.details?.loading,
   }),
   {
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
