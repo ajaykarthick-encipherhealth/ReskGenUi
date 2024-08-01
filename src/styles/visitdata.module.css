@@ -2163,3 +2163,10 @@
 .fontAwesomeIconColor {
   color: #ffffff;
 }
+
+.loaderDiv{
+  height:600px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
