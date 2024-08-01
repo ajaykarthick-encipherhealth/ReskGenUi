@@ -25,6 +25,8 @@ import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
+
 
 const NonHccCards = ({
   list,
@@ -59,6 +61,7 @@ const NonHccCards = ({
   provided,
   isVisitData,
   fileDosPageNumberList,
+  getSelectedDosPageNumber
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -169,20 +172,23 @@ const NonHccCards = ({
               <div className="d-flex justify-content-between">
                 <div className={`${visitStyles.hoverActiveHcc}`}>
                   <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                    {getProviderNameTag(
-                      data?.providerName,
-                      data?.providerHyperlinks,
-                      setSearch,
-                      data.diagnosisCode,
-                      data.dbDescription,
-                      setIsModalOpenValidCodes,
-                      setFileModalHeader,
-                      patientDocumentResult,
-                      setIsMulitpleProvider,
-                      isMulitpleProvider,
-                      setIsMulitpleHeadeCode,
-                      isMulitpleHeaderCode
-                    )}
+                    {getProviderNameTag({
+                      providerNames: data?.providerName,
+                      hyperlinks: data?.providerHyperlinks,
+                      setSearch: setSearch,
+                      diagnosisCode: data.diagnosisCode,
+                      diseaseName: data.dbDescription,
+                      setIsModalOpen: setIsModalOpenValidCodes,
+                      setFileModalHeader: setFileModalHeader,
+                      patientDocumentResult: patientDocumentResult,
+                      setIsMulitpleHeader: setIsMulitpleProvider,
+                      isMulitpleHeader: isMulitpleProvider,
+                      setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
+                      isMulitpleHeaderCode: isMulitpleHeaderCode,
+                      setSelectMeatResult: "",
+                      getSelectedDosPageNumber:
+                      getSelectedDosPageNumber,
+                    })}
                   </div>
                   <div className={`${visitStyles.encounterAndSectionHeader}`}>
                     {getEncounterDateBackground({
@@ -198,30 +204,33 @@ const NonHccCards = ({
                     })}
                   </div>
                   <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                    {getCaptureSectionBackgroundFile(
-                      data?.capturedSections,
-                      data?.encounterDate,
-                      data?.actualDescription,
-                      data?.diagnosisCode,
-                      data?.getPlace,
-                      captureSectionMatching,
-                      setSearch,
-                      setFileLoading,
-                      setIsModalOpenLab,
-                      setIsModalOpenRadiology,
-                      setIsModalOpenValidCodes,
-                      setFileModalHeader,
-                      fileId,
-                      patientDocumentResult,
-                      fileInitialPage,
-                      setFileInitialPage,
-                      data?.hyperlinks,
-                      encounterDateMatching,
-                      setIsMulitpleHeader,
-                      isMulitpleHeader,
-                      setIsMulitpleHeadeCode,
-                      isMulitpleHeaderCode
-                    )}
+                    {getCaptureSectionBackgroundFile({
+                      value: data?.capturedSections,
+                      encounterDate: data?.encounterDate,
+                      actualDescription: data?.actualDescription,
+                      diagnosisCode: data?.diagnosisCode,
+                      documentPlace: data?.getPlace,
+                      captureSectionMatching: captureSectionMatching,
+                      setSearch: setSearch,
+                      setFileLoading: setFileLoading,
+                      setIsModalOpenLab: setIsModalOpenLab,
+                      setIsModalOpenRadiology: setIsModalOpenRadiology,
+                      setIsModalOpenValidCodes: setIsModalOpenValidCodes,
+                      setFileModalHeader: setFileModalHeader,
+                      fileId: fileId,
+                      patientDocumentResult: patientDocumentResult,
+                      fileInitialPage: fileInitialPage,
+                      setFileInitialPage: setFileInitialPage,
+                      hyperlinks: data?.hyperlinks,
+                      encounterDateMatching: encounterDateMatching,
+                      setIsMulitpleHeader: setIsMulitpleHeader,
+                      isMulitpleHeader: isMulitpleHeader,
+                      setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
+                      isMulitpleHeaderCode: isMulitpleHeaderCode,
+                      diseaseName: data.dbDescription,
+                      popup: "",
+                      getSelectedDosPageNumber,
+                    })}
                   </div>
                 </div>
                 <div className={`${visitStyles.encounterAndSectionHeader}`}>
@@ -245,5 +254,9 @@ const NonHccCards = ({
 
 const enhancer = connect((state) => ({
   fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
-}));
+}),
+{
+  getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
+}
+);
 export default enhancer(NonHccCards);
