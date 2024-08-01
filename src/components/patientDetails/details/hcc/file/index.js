@@ -115,10 +115,10 @@ const File = ({
     if (hccFileDetails?.data?.response) {
       setSelectFileURL(hccFileDetails?.data?.response);
     }
-    if (radiologyFileDetails?.result?.response) {
+    if (radiologyFile?.result?.response) {
       setSelectFileURL(radiologyFile?.result?.response);
     }
-    if (labFileDetails?.result?.response) {
+    if (labFile?.result?.response) {
       setSelectFileURL(labFile?.result?.response);
     }
   }, [hccFileDetails, radiologyFile, labFile]);

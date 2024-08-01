@@ -31,6 +31,8 @@ const VisitData = ({
   patientDetailsResult,
   hccFileDetails,
   year,
+  radiologyFile,
+  labFile
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -114,18 +116,30 @@ const VisitData = ({
     setUserDetails(dotLoading);
   }, [patientDetailsResult]);
 
+  // useEffect(() => {
+  //   if (hccFileDetails?.data?.response) {
+  //     setSelectFileURL(hccFileDetails?.data?.response);
+  //   }
+  //   if (radiologyFileDetails?.result?.response) {
+  //     setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
+  //   }
+  //   if (labFileDetails?.result?.response) {
+  //     setLabReportFile(labFileDetails?.result?.response);
+  //   }
+  // }, [hccFileDetails, radiologyFileDetails, labFileDetails]);
   useEffect(() => {
     if (hccFileDetails?.data?.response) {
       setSelectFileURL(hccFileDetails?.data?.response);
     }
-    if (radiologyFileDetails?.result?.response) {
-      setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
+    if (radiologyFile?.result?.response) {
+      setSelectFileURL(radiologyFile?.result?.response);
     }
-    if (labFileDetails?.result?.response) {
-      setLabReportFile(labFileDetails?.result?.response);
+    if (labFile?.result?.response) {
+      setSelectFileURL(labFile?.result?.response);
     }
-  }, [hccFileDetails, radiologyFileDetails, labFileDetails]);
+  }, [hccFileDetails, radiologyFile, labFile]);
 
+  
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
@@ -851,5 +865,7 @@ const VisitData = ({
 const enhancer = connect((state) => ({
   patientDetailsResult: state?.patientDetails?.details?.patientResult,
   hccFileDetails: state?.patientDetails?.details?.hccFileResult,
+  radiologyFile :state?.patientDetails?.details?.radiologyFileResult,
+  labFile :state?.patientDetails?.details?.labFileResult,
 }));
 export default enhancer(VisitData);
