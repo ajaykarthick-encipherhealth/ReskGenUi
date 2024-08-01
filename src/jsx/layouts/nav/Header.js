@@ -317,7 +317,7 @@ const Header = ({
         return ProviderMenuList;
       case "ehr":
         return EHRMenuList;
-      case "RECORD_ANALYST":
+      case "record_analyst":
         return Analyst;
       case "physician":
         // return PhysicianMenuList;

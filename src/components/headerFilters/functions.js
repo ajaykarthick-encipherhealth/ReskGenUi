@@ -590,9 +590,10 @@ export const handleTogglePasswordVisibility = (
 };
 
 export const getValidatePassword = (password, setErrors) => {
+ 
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
-
+    console.log(password, !passwordRegex.test(password), "testing");
   if (password.length === 0) {
     setErrors({
       password: "Please enter the password",
