@@ -12,7 +12,7 @@ import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Drawer, Popover, notification } from "antd";
-import { Button, Offcanvas } from "react-bootstrap";
+import { Button, Offcanvas, Spinner } from "react-bootstrap";
 import styles from "../styles.module.css";
 import PdfViewer from "../../PdfViewerComponent";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
@@ -45,6 +45,7 @@ const File = ({
   getRadiologyFileDetails,
   getLabFileDetails,
   currentDiseaseType,
+  loading
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -343,7 +344,7 @@ const File = ({
               </div>
             </Popover> */}
             <div className="card-body p-0">
-              {hccFileDetails?.loading != true ? (
+              {loading ?<div className={visitStyles?.loaderDiv}><Spinner/></div>: (
                 <>
                   {selectFileURL && (
                     <PdfViewer
@@ -357,7 +358,7 @@ const File = ({
                     />
                   )}
                 </>
-              ) : null}
+              )}
             </div>
           </div>
           {isFileFormShow ? (
@@ -635,6 +636,7 @@ const enhancer = connect(
     radiologyResult: state?.patientDetails?.details?.radiologyResult,
     labResult: state?.patientDetails?.details?.labResult,
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
+    loading:state?.patientDetails?.details?.loading
   }),
   {
     getRadiologyFileDetails: detailsActions.radiologyFileAction,
