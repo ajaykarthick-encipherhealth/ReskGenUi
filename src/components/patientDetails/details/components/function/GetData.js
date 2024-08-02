@@ -4,6 +4,7 @@ import {
 } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
+import { sortFunction } from "./GetDataLab";
 import { stringToColour } from "./ReusableFunctions";
 import NewResponse from "./newresponse.json";
 
@@ -177,7 +178,10 @@ export const getPatientDetails = async (
       if (result.scoreDetailVersionDTO != null) {
         rafScore = result.scoreDetailVersionDTO;
       }
-      result?.hccDiseases?.map((res, index) => {
+      sortFunction({
+        array: result?.hccDiseases,
+        sortKey: "diagnosisCode",
+      })?.map((res, index) => {
         var providerList = [];
         var dosList = [];
         res.providerNames?.map((res) => {
@@ -220,7 +224,10 @@ export const getPatientDetails = async (
         }
       });
 
-      result?.nonHccDiseases?.map((res, index) => {
+      sortFunction({
+        array: result?.nonHccDiseases,
+        sortKey: "diagnosisCode",
+      })?.map((res, index) => {
         var providerList = [];
         res.providerNames?.map((res) => {
           providerList.push(res);
@@ -256,7 +263,10 @@ export const getPatientDetails = async (
         });
       });
 
-      result?.suggestedHccDiseases?.map((res, index) => {
+      sortFunction({
+        array: result?.suggestedHccDiseases,
+        sortKey: "diagnosisCode",
+      })?.map((res, index) => {
         if (res.isShow != false) {
           var providerList = [];
           var dosList = [];
@@ -302,7 +312,10 @@ export const getPatientDetails = async (
         }
       });
 
-      result?.deletedDiseases?.map((res, index) => {
+      sortFunction({
+        array: result?.deletedDiseases,
+        sortKey: "diagnosisCode",
+      })?.map((res, index) => {
         if (res.isShow != false) {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
@@ -339,7 +352,10 @@ export const getPatientDetails = async (
         }
       });
 
-      result?.comboDisease?.map((res, index) => {
+      sortFunction({
+        array: result?.comboDisease,
+        sortKey: "diagnosisCode",
+      })?.map((res, index) => {
         var providerList = [];
         var dosList = [];
         res.providerNames?.map((res) => {
@@ -621,7 +637,10 @@ export const getPatientDetails = async (
         dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, "header");
       });
 
-      result?.meatCriteria?.map((res, index) => {
+      sortFunction({
+        array: result?.meatCriteria,
+        sortKey: "diagnosisCode",
+      })?.map((res, index) => {
         if (res.category == "Invalid") {
           nonHccMeatListArr.push({
             diagnosisCode: res.diagnosisCode,
@@ -688,7 +707,10 @@ export const getPatientDetails = async (
           }
         }
       });
-      result?.deletedMeatCriteria?.map((res, index) => {
+      sortFunction({
+        array: result?.deletedMeatCriteria,
+        sortKey: "diagnosisCode",
+      })?.map((res, index) => {
         if (res) {
           var providerList = [];
           var dosList = [];
