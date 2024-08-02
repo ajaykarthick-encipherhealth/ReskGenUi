@@ -30,6 +30,7 @@ const Files = ({
   activeBtn,
   classNames,
   customDate,
+  getFilesWorkflowLoader,
 }) => {
   const dates =
     selectedValue === "custom"
@@ -51,12 +52,10 @@ const Files = ({
   });
   const resultFailed = formatValues(failedDate, dates);
 
-
   const totalStatusCount =
-  (getAllComputingTile?.PROCESSING || 0) +
-  (getAllComputingTile?.COMPUTED || 0) +
-  (getAllComputingTile?.FAILED || 0);
- 
+    (getAllComputingTile?.PROCESSING || 0) +
+    (getAllComputingTile?.COMPUTED || 0) +
+    (getAllComputingTile?.FAILED || 0);
 
   const options = {
     xAxis: {
@@ -187,65 +186,65 @@ const Files = ({
   }, [dateRange, selectedOrganization]);
 
   return (
-    <div className="mt-3" >
+    <div className="mt-3">
       <div className={styles.head}>
-      <div className="d-flex justify-content-between w-100">
-        {cardData?.map((item, index) => (
-          <div
-            className="rounded-lg w-30"
-            style={{
-              backgroundColor: item?.color,
-              width: "19%",
-              height: "80px",
-              display: "flex",
-              // justifyContent: "center",
-              textAlign: "center",
-              alignItems: "center",
-              borderRadius: "10px",
-              padding: "5px",
-            }}
-          >
-            {computingTileStatusLoader ? (
-              <div>
-                <Skeleton.Input
-                  className="w-100"
-                  style={{ height: "60px" }}
-                  active
-                />
-              </div>
-            ) : (
-              <div className="d-flex w-100 mt-3">
-                <div
-                  style={{
-                    width: "48px",
-                    height: "47px",
-                    backgroundColor: item?.iconBg,
-                    borderRadius: "10px",
-                    margin: "0 10px 16px",
-                    display: "flex",
-                    justifyContent: "center",
-                    textAlign: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Image src={item?.icon} />
-                </div>
+        <div className="d-flex justify-content-between w-100">
+          {cardData?.map((item, index) => (
+            <div
+              className="rounded-lg w-30"
+              style={{
+                backgroundColor: item?.color,
+                width: "19%",
+                height: "80px",
+                display: "flex",
+                // justifyContent: "center",
+                textAlign: "center",
+                alignItems: "center",
+                borderRadius: "10px",
+                padding: "5px",
+              }}
+            >
+              {getFilesWorkflowLoader ? (
                 <div>
-                  <div style={{ fontSize: "16px", fontWeight: "900" }}>
-                    {item?.title}
+                  <Skeleton.Input
+                    className="w-100"
+                    style={{ height: "60px" }}
+                    active
+                  />
+                </div>
+              ) : (
+                <div className="d-flex w-100 mt-3">
+                  <div
+                    style={{
+                      width: "48px",
+                      height: "47px",
+                      backgroundColor: item?.iconBg,
+                      borderRadius: "10px",
+                      margin: "0 10px 16px",
+                      display: "flex",
+                      justifyContent: "center",
+                      textAlign: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Image src={item?.icon} />
                   </div>
-                  <div style={{ fontSize: "18px", fontWeight: "700" }}>
-                    {item?.count}
+                  <div>
+                    <div style={{ fontSize: "16px", fontWeight: "900" }}>
+                      {item?.title}
+                    </div>
+                    <div style={{ fontSize: "18px", fontWeight: "700" }}>
+                      {item?.count}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {computingStatusLoader ? (
+      {getFilesWorkflowLoader ? (
         <div>
           <Skeleton.Input
             className="w-100 mt-2"
@@ -276,6 +275,8 @@ const enhancer = connect(
         ?.response,
     top10DiseasesData:
       state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data?.response,
+    getFilesWorkflowLoader:
+      state?.tenantAdmin?.dashboard?.workFlow?.getFilesWorkflowLoader,
     computingTileStatusLoader:
       state?.tenantAdmin?.dashboard?.default?.allComputingTileStatus?.loading,
     computingStatusLoader:
