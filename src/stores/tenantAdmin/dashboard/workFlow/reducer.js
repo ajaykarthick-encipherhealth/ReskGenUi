@@ -61,6 +61,7 @@ const workFlowReducer = combineReducers({
   organizationLoader: getStatusLoading(organizationStatusAction),
   getAccuracyWorkflowLoader: getStatusLoading(getAccuracyWorkflow),
   getAccuracyWorkflow: createReducer(getAccuracyWorkflow),
+  getFilesWorkflowLoader: getStatusLoading(getAccuracyWorkflow),
 });
 
 export default workFlowReducer;

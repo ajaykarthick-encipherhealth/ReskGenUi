@@ -417,7 +417,7 @@ const Index = ({
               </div>
               {/* hcc */}
               <div className={`row`}>
-                <div className={`col ${styles.box}`}>
+                <div className={`col-9 ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <Accuracy
                       dateRange={dateRange}
@@ -427,7 +427,7 @@ const Index = ({
                     />
                   </Card>
                 </div>
-                <div className={`col-lg-3 ${styles.box}`}>
+                <div className={`col-3 ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <Notifications />
                   </Card>
