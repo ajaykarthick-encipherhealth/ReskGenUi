@@ -1260,6 +1260,7 @@ const Details = ({
                             ) : activeTab == 2 ? (
                               <NonHcc
                                 patientNonHccResult={patientDocumentResult}
+                                setIsLoading={setIsLoading}
                               />
                             ) : activeTab == 3 ? (
                               <Radiology />

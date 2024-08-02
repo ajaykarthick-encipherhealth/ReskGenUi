@@ -30,7 +30,8 @@ const Hcc = ({
   patientDosResult,
   getSelectedDos,
   getSelectedDosPageNumber,
-  getCurrentDiseaseType
+  getCurrentDiseaseType,
+  isDosSelected
 }) => {
   const dispatch = useDispatch();
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -66,6 +67,17 @@ const Hcc = ({
       setDosSummariesList(dosList);
       if (patientDetailsResult?.data?.response?.dateOfService) {
         setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
+        if (isDosSelected) {
+          const patientId = localStorage.getItem("patientId");
+          const role = localStorage.getItem("role");
+          getpatientDetailsData(
+            patientId,
+            null,
+            moment(isDosSelected).format("YYYY-MM-DD"),
+            "",
+            role
+          );
+        }
       }
     }
   }, [patientDosResult?.data?.response]);
@@ -75,6 +87,7 @@ const Hcc = ({
       setActiveMeatTitle(null);
     }, 10000);
   }, [activeMeatTitle]);
+  
   const handleOptions = (value) => {
     setIsLoading(true);
     setSelectDosValue(value);
@@ -500,6 +513,7 @@ const enhancer = connect(
   (state) => ({
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     patientDosResult: state?.patientDetails?.details?.dosResult,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
