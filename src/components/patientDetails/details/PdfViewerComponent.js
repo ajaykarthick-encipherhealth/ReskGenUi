@@ -38,6 +38,7 @@ const PdfViewer = ({
         searchUrl += `#${queryParams.join("&")}`;
       }
       setIframeSrc(searchUrl);
+      console.log(searchUrl)
     }
   }, [src, searchQuery, pageNumber, headerContent, selectedPageNumber]);
   return (

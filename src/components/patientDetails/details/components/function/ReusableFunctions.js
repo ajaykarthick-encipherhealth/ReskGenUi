@@ -40,16 +40,16 @@ export const getEncounterDateBackground = ({
               (item) => item?.header === res
             );
             if (selectedMeatData?.stateIndicator) {
-              getCurrentDiseaseType(false);
+              getCurrentDiseaseType && getCurrentDiseaseType(false);
               selectedMeatData?.stateIndicator === "LAB"
-                ? getLabPDF(
+                ? getLabPDF && getLabPDF(
                     patientId,
                     "",
                     selectedMeatData?.dateOfService,
                     "",
                     selectedMeatData?.diagnosticTestName
                   )
-                : getRadiologyPDF(
+                : getRadiologyPDF && getRadiologyPDF(
                     patientId,
                     "",
                     selectedMeatData?.dateOfService,
@@ -110,16 +110,16 @@ export const getEncounterDateBackground = ({
                         (item) => item?.header === res
                       );
                       if (selectedMeatData?.stateIndicator) {
-                        getCurrentDiseaseType(false);
+                        getCurrentDiseaseType && getCurrentDiseaseType(false);
                         selectedMeatData?.stateIndicator === "LAB"
-                          ? getLabPDF(
+                          ? getLabPDF && getLabPDF(
                               patientId,
                               "",
                               selectedMeatData?.dateOfService,
                               "",
                               selectedMeatData?.diagnosticTestName
                             )
-                          : getRadiologyPDF(
+                          : getRadiologyPDF && getRadiologyPDF(
                               patientId,
                               "",
                               selectedMeatData?.dateOfService,
@@ -251,16 +251,16 @@ export const getHeaderHyperlink = (
             (item) => item?.dateOfService === res?.dateOfService
           );
           if (selectedMeatData?.stateIndicator) {
-            getCurrentDiseaseType(false);
+            getCurrentDiseaseType && getCurrentDiseaseType(false);
             selectedMeatData?.stateIndicator === "LAB"
-              ? getLabPDF(
+              ? getLabPDF && getLabPDF && getLabPDF(
                   patientId,
                   "",
                   selectedMeatData?.dateOfService,
                   "",
                   selectedMeatData?.diagnosticTestName
                 )
-              : getRadiologyPDF(
+              : getRadiologyPDF && getRadiologyPDF && getRadiologyPDF(
                   patientId,
                   "",
                   selectedMeatData?.dateOfService,
@@ -268,7 +268,7 @@ export const getHeaderHyperlink = (
                   selectedMeatData?.diagnosticTestName
                 );
           } else {
-            getCurrentDiseaseType &&  getCurrentDiseaseType(true);
+            getCurrentDiseaseType &&  getCurrentDiseaseType && getCurrentDiseaseType(true);
           }
           newFindValueDocument(
             res,
@@ -439,16 +439,16 @@ export const getCaptureSectionBackgroundFile = ({
               );
 
               if (selectedMeatData?.stateIndicator) {
-                getCurrentDiseaseType(false);
+                getCurrentDiseaseType && getCurrentDiseaseType(false);
                 selectedMeatData?.stateIndicator === "LAB"
-                  ? getLabPDF(
+                  ? getLabPDF && getLabPDF && getLabPDF(
                       patientId,
                       "",
                       selectedMeatData?.dateOfService,
                       "",
                       selectedMeatData?.diagnosticTestName
                     )
-                  : getRadiologyPDF(
+                  : getRadiologyPDF && getRadiologyPDF && getRadiologyPDF(
                       patientId,
                       "",
                       selectedMeatData?.dateOfService,
@@ -568,16 +568,16 @@ export const getCaptureSectionBackgroundFile = ({
                             (item) => item?.header === res
                           );
                           if (selectedMeatData?.stateIndicator) {
-                            getCurrentDiseaseType(false);
+                            getCurrentDiseaseType && getCurrentDiseaseType(false);
                             selectedMeatData?.stateIndicator === "LAB"
-                              ? getLabPDF(
+                              ? getLabPDF && getLabPDF(
                                   patientId,
                                   "",
                                   selectedMeatData?.dateOfService,
                                   "",
                                   selectedMeatData?.diagnosticTestName
                                 )
-                              : getRadiologyPDF(
+                              : getRadiologyPDF && getRadiologyPDF(
                                   patientId,
                                   "",
                                   selectedMeatData?.dateOfService,
@@ -585,7 +585,7 @@ export const getCaptureSectionBackgroundFile = ({
                                   selectedMeatData?.diagnosticTestName
                                 );
                           } else {
-                            getCurrentDiseaseType(true);
+                            getCurrentDiseaseType && getCurrentDiseaseType(true);
                           }
                           newFindValueDocument(
                             findSectionHyperlink(hyperlinks, item)[0],
@@ -1423,16 +1423,16 @@ export const getCaptureSectionBackgroundMeatNew = (
             (item) => item?.header === res.header
           );
           if (selectedMeatData?.stateIndicator) {
-            getCurrentDiseaseType(false);
+            getCurrentDiseaseType && getCurrentDiseaseType(false);
             selectedMeatData?.stateIndicator === "LAB"
-              ? getLabPDF(
+              ? getLabPDF && getLabPDF(
                   patientId,
                   "",
                   selectedMeatData?.dateOfService,
                   "",
                   selectedMeatData?.diagnosticTestName
                 )
-              : getRadiologyPDF(
+              : getRadiologyPDF && getRadiologyPDF(
                   patientId,
                   "",
                   selectedMeatData?.dateOfService,
@@ -1440,7 +1440,7 @@ export const getCaptureSectionBackgroundMeatNew = (
                   selectedMeatData?.diagnosticTestName
                 );
           } else {
-            getCurrentDiseaseType(true);
+            getCurrentDiseaseType && getCurrentDiseaseType(true);
           }
           newFindValueDocument(
             res,

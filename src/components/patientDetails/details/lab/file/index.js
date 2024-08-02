@@ -11,7 +11,7 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Drawer, Popover, notification } from "antd";
 import { Button, Offcanvas } from "react-bootstrap";
 import PdfViewer from "../../PdfViewerComponent";
-import HccCards from "../../components/RADIOLOGY";
+import HccCards from "../../components/LAB";
 import ModelIndex from "../../components/model/Index";
 import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
