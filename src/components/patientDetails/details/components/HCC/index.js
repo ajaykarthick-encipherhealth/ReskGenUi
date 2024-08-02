@@ -64,11 +64,15 @@ const HccCards = ({
   fileDosPageNumberList,
   popup,
   getSelectedDosPageNumber,
-  getRadiologyPDF,
-  getLabPDF,
+  getRadiologyPDFFile,
+  getLabPDFFile,
   getCurrentDiseaseType,
   loading,
   isDosSelected,
+  labFile,
+  labDetailsResult,
+  radiologyFile,
+  radiologyDetailsResult,
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -85,6 +89,21 @@ const HccCards = ({
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
+
+  const getPdfEmptyFunction = () => {};
+  const getRadiologyPDF =
+    radiologyFile?.data?.response &&
+    radiologyDetailsResult?.data?.response?.patientId ==
+      patientDocumentResult?.patientId
+      ? getPdfEmptyFunction
+      : getRadiologyPDFFile;
+
+  const getLabPDF =
+    labFile?.data?.response &&
+    labDetailsResult?.data?.response?.patientId ==
+      patientDocumentResult?.patientId
+      ? getPdfEmptyFunction
+      : getLabPDFFile;
 
   const PopContentHccVersion = (
     <div className={styles.innerPop}>
@@ -393,7 +412,7 @@ const HccCards = ({
                                           )
                                         }
                                       >
-                                        { isDosSelected &&
+                                        {isDosSelected && (
                                           <div className="cr-pointer d-flex">
                                             <div
                                               className={visitStyles.close_icon}
@@ -408,7 +427,7 @@ const HccCards = ({
                                             </div>
                                             <div className="m-1">Actions</div>
                                           </div>
-                                        }
+                                        )}
                                       </Popconfirm>
                                       {/* {data.isMostSpecific == true && (
                                     <div className="cr-pointer d-flex">
@@ -462,7 +481,8 @@ const HccCards = ({
                                         </div>
                                       )}
                                       {/* edit Option */}
-                                      {isVisitData && isDosSelected &&
+                                      {isVisitData &&
+                                        isDosSelected &&
                                         ENDPOINTS?.isLocalEdit && (
                                           <div
                                             className="d-flex"
@@ -888,11 +908,15 @@ const enhancer = connect(
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
     loading: state?.patientDetails?.details?.loading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
+    radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
+    labFile: state?.patientDetails?.details?.labFileResult,
+    labDetailsResult: state?.patientDetails?.details?.labResult,
+    radiologyDetailsResult: state?.patientDetails?.details?.radiologyResult,
   }),
   {
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
-    getLabPDF: detailsActions.labDetailsAction,
-    getRadiologyPDF: detailsActions.radiologyDetailsAction,
+    getLabPDFFile: detailsActions.labDetailsAction,
+    getRadiologyPDFFile: detailsActions.radiologyDetailsAction,
     getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
   }
 );
