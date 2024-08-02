@@ -121,6 +121,7 @@ const Lab = ({
       setDosSummariesList(dosList);
       if (dosList?.length != 0) {
         setSelectedDosValue(dosList[0]?.value);
+        setSelectDosValue(dosList[0]?.value);
         const patientId = localStorage.getItem("patientId");
         getLabDetails(
           patientId,
@@ -297,7 +298,7 @@ const Lab = ({
                         onChange={handleOptions}
                         allowClear
                         style={{ width: "220px" }}
-                        value={selectedDosValue}
+                        value={selectDosValue}
                       >
                         {dosSummariesList?.map((data) => (
                           <Option key={data?.value} value={data?.value}>
