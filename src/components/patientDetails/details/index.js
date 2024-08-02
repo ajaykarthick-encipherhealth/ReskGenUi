@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import NavBar from "../../../jsx/layouts/nav/Header";
 import { useSelector, useDispatch, connect } from "react-redux";
 import axios from "../../../utility/axiosConfig";
@@ -140,7 +140,8 @@ const Details = ({
   getLabDetails,
   radiologyDetailsResult,
   labDetailsResult,
-  getCurrentDiseaseType
+  getCurrentDiseaseType,
+  getCurrentProcessYearAction
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -151,6 +152,7 @@ const Details = ({
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
+  const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [dosYear, setDosYear] = useState("");
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
@@ -222,7 +224,8 @@ const Details = ({
   }, [activeTab]);
 
   useEffect(() => {
-    if (processedYearResult?.data?.response) {
+    setCount(prevCount => prevCount + 1);
+    if (count==1 && processedYearResult?.data?.response) {
       getAllProcessYearSelect(processedYearResult);
     }
   }, [processedYearResult]);
@@ -280,65 +283,66 @@ const Details = ({
         );
         setIsFileCheck(true);
       }
-    }else{
-      setIsSpinnerLoading(false)
+    } else {
+      setIsSpinnerLoading(false);
     }
   }, [patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath]);
 
   const getAllProcessYearSelect = async (result) => {
     const patientId = localStorage.getItem("patientId");
-    var dosResonse = result?.data?.response;
-    var dosYearArr = [];
-    result?.data?.response?.map((res) => {
-      dosYearArr?.push({ value: res, label: res });
+
+    var dosYearArr = result?.data?.response?.map((res) => {
+      return { value: res, label: res };
     });
     setDosYearDefalutSelect(dosYearArr[0]);
     setSelectedDosValue(dosYearArr[0]?.value);
     setDosYear(dosYearArr);
     setIsLoadingDos(false);
-    if (activeTab == 3) {
-      // getRadiologyDetails(
-      //   selectPatientId ? selectPatientId?.patirntId : patientId,
-      //   dosYearArr[0]?.value,
-      //   null,
-      //   setIsSpinnerLoading
-      // );
-      getPatientRadiologyDosList(
-        selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0]?.value
-      );
-    }
-    if (activeTab == 4) {
-      // getLabDetails(
-      //   selectPatientId ? selectPatientId?.patirntId : patientId,
-      //   dosYearArr[0]?.value,
-      //   null,
-      //   setIsSpinnerLoading
-      // );
-      getPatientLabDosList(
-        selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0]?.value
-      );
-    }
-    if (activeTab == 1) {
-      getpatientDetailsData(
-        selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0]?.value,
-        null,
-        setIsSpinnerLoading,
-        userRole
-      );
-      getPatientIdData(
-        selectPatientId ? selectPatientId?.patirntId : patientId
-      );
-      getPatientDosList(
-        selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0]?.value
-      );
-      getDosPageNumber(
-        selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0]?.value
-      );
+    if (result?.data?.response?.length > 0) {
+      if (activeTab == 3) {
+        // getRadiologyDetails(
+        //   selectPatientId ? selectPatientId?.patirntId : patientId,
+        //   dosYearArr[0]?.value,
+        //   null,
+        //   setIsSpinnerLoading
+        // );
+        getPatientRadiologyDosList(
+          selectPatientId ? selectPatientId?.patirntId : patientId,
+          dosYearArr[0]?.value
+        );
+      }
+      if (activeTab == 4) {
+        // getLabDetails(
+        //   selectPatientId ? selectPatientId?.patirntId : patientId,
+        //   dosYearArr[0]?.value,
+        //   null,
+        //   setIsSpinnerLoading
+        // );
+        getPatientLabDosList(
+          selectPatientId ? selectPatientId?.patirntId : patientId,
+          dosYearArr[0]?.value
+        );
+      }
+      if (activeTab == 1) {
+        getpatientDetailsData(
+          selectPatientId ? selectPatientId?.patirntId : patientId,
+          dosYearArr[0]?.value,
+          null,
+          setIsSpinnerLoading,
+          userRole
+        );
+        getPatientIdData(
+          selectPatientId ? selectPatientId?.patirntId : patientId
+        );
+        getPatientDosList(
+          selectPatientId ? selectPatientId?.patirntId : patientId,
+          dosYearArr[0]?.value
+        );
+        getDosPageNumber(
+          selectPatientId ? selectPatientId?.patirntId : patientId,
+          dosYearArr[0]?.value
+        );
+      }
     }
   };
 
@@ -1021,7 +1025,7 @@ const Details = ({
                                   {!isLoadingDos ? (
                                     <>
                                       <Select
-                                      placeholder="Year"
+                                        placeholder="Year"
                                         value={dosYearDefalutSelect}
                                         onChange={(e) => dosOnChange(e)}
                                         className={`custom_select_type ${visitStyles.custom_select_type}`}
@@ -1422,7 +1426,8 @@ const enhancer = connect(
     getRadiologyDetails: detailsActions.radiologyDetailsAction,
     getPatientLabDosList: detailsActions.labDosDeatilsAction,
     getLabDetails: detailsActions.labDetailsAction,
-    getCurrentDiseaseType:detailsActions.getCurrentDiseaseType
+    getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
+    getCurrentProcessYearAction:detailsActions.getCurrentProcessYearAction
   }
 );
 export default enhancer(Details);
