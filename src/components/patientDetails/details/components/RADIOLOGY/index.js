@@ -335,6 +335,8 @@ const RadiologyCards = ({
 
                                     diseaseName: data.dbDescription,
                                     popup: "",
+                                    getSelectedDosPageNumber:
+                                    getSelectedDosPageNumber,
                                   })}
                                 </div>
                               )}
@@ -515,6 +517,8 @@ const RadiologyCards = ({
 
                                   diseaseName: data.dbDescription,
                                   popup: "",
+                                  getSelectedDosPageNumber:
+                                  getSelectedDosPageNumber,
                                 })}
                               </div>
                               <div
@@ -578,7 +582,7 @@ const RadiologyCards = ({
 
 const enhancer = connect(
   (state) => ({
-    fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+    fileDosPageNumberList: state?.patientDetails?.details?.radiologyDosResult,
   }),
   {
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
