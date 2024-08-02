@@ -127,7 +127,7 @@ export const getEncounterDateBackground = ({
                               selectedMeatData?.diagnosticTestName
                             );
                       } else {
-                        getCurrentDiseaseType(true);
+                        getCurrentDiseaseType && getCurrentDiseaseType(true);
                       }
                       getEncounterDetails(
                         item,
@@ -268,7 +268,7 @@ export const getHeaderHyperlink = (
                   selectedMeatData?.diagnosticTestName
                 );
           } else {
-            getCurrentDiseaseType(true);
+            getCurrentDiseaseType &&  getCurrentDiseaseType(true);
           }
           newFindValueDocument(
             res,
@@ -456,7 +456,7 @@ export const getCaptureSectionBackgroundFile = ({
                       selectedMeatData?.diagnosticTestName
                     );
               } else {
-                getCurrentDiseaseType(true);
+                getCurrentDiseaseType && getCurrentDiseaseType(true);
               }
               newFindValueDocument(
                 headerResult[0],

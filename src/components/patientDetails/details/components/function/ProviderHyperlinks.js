@@ -54,7 +54,7 @@ export const getProviderNameTag = ({
                       selectedMeatData?.diagnosticTestName
                     );
               } else {
-                getCurrentDiseaseType(true);
+                getCurrentDiseaseType && getCurrentDiseaseType(true);
               }
               findProviderNameDocument({
                 data: headerResult[0],
@@ -359,7 +359,7 @@ export const getProviderPopoverHyperlink = ({
                   selectedMeatData?.diagnosticTestName
                 );
           } else {
-            getCurrentDiseaseType(true);
+            getCurrentDiseaseType && getCurrentDiseaseType(true);
           }
           findProviderNameDocument({
             data: res,
