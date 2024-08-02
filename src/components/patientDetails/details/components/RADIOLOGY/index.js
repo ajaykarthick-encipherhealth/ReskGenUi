@@ -64,7 +64,8 @@ const RadiologyCards = ({
   isVisitData,
   fileDosPageNumberList,
   popup,
-  getSelectedDosPageNumber
+  getSelectedDosPageNumber,
+  isLab
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -362,7 +363,7 @@ const RadiologyCards = ({
                               >
                                 <div
                                   onClick={() => {
-                                    setActiveTabHead(4);
+                                    setActiveTabHead(3);
                                     setActiveMeatTitle({
                                       header: "M",
                                       diagnosisCode: data?.diagnosisCode,
@@ -377,7 +378,7 @@ const RadiologyCards = ({
                                 </div>
                                 <div
                                   onClick={() => {
-                                    setActiveTabHead(4);
+                                    setActiveTabHead(3);
                                     setActiveMeatTitle({
                                       header: "E",
                                       diagnosisCode: data?.diagnosisCode,
@@ -392,7 +393,7 @@ const RadiologyCards = ({
                                 </div>
                                 <div
                                   onClick={() => {
-                                    setActiveTabHead(4);
+                                    setActiveTabHead(3);
                                     setActiveMeatTitle({
                                       header: "A",
                                       diagnosisCode: data?.diagnosisCode,
@@ -407,7 +408,7 @@ const RadiologyCards = ({
                                 </div>
                                 <div
                                   onClick={() => {
-                                    setActiveTabHead(4);
+                                    setActiveTabHead(3);
                                     setActiveMeatTitle({
                                       header: "T",
                                       diagnosisCode: data?.diagnosisCode,
