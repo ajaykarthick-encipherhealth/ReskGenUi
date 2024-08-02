@@ -221,6 +221,33 @@ const Details = ({
     if (activeTab == 4) {
       getAllProcessYear(patientId, "LAB");
     }
+    var dosYearArr = processedYearResult?.data?.response?.map((res) => {
+      return { value: res, label: res };
+    });
+    if (activeTab == 3) {
+      // getRadiologyDetails(
+      //   selectPatientId ? selectPatientId?.patirntId : patientId,
+      //   dosYearArr[0]?.value,
+      //   null,
+      //   setIsSpinnerLoading
+      // );
+      getPatientRadiologyDosList(
+        selectPatientId ? selectPatientId?.patirntId : patientId,
+        dosYearArr[0]?.value
+      );
+    }
+    if (activeTab == 4) {
+      // getLabDetails(
+      //   selectPatientId ? selectPatientId?.patirntId : patientId,
+      //   dosYearArr[0]?.value,
+      //   null,
+      //   setIsSpinnerLoading
+      // );
+      getPatientLabDosList(
+        selectPatientId ? selectPatientId?.patirntId : patientId,
+        dosYearArr[0]?.value
+      );
+    }
   }, [activeTab]);
 
   useEffect(() => {
@@ -299,30 +326,6 @@ const Details = ({
     setDosYear(dosYearArr);
     setIsLoadingDos(false);
     if (result?.data?.response?.length > 0) {
-      if (activeTab == 3) {
-        // getRadiologyDetails(
-        //   selectPatientId ? selectPatientId?.patirntId : patientId,
-        //   dosYearArr[0]?.value,
-        //   null,
-        //   setIsSpinnerLoading
-        // );
-        getPatientRadiologyDosList(
-          selectPatientId ? selectPatientId?.patirntId : patientId,
-          dosYearArr[0]?.value
-        );
-      }
-      if (activeTab == 4) {
-        // getLabDetails(
-        //   selectPatientId ? selectPatientId?.patirntId : patientId,
-        //   dosYearArr[0]?.value,
-        //   null,
-        //   setIsSpinnerLoading
-        // );
-        getPatientLabDosList(
-          selectPatientId ? selectPatientId?.patirntId : patientId,
-          dosYearArr[0]?.value
-        );
-      }
       if (activeTab == 1) {
         getpatientDetailsData(
           selectPatientId ? selectPatientId?.patirntId : patientId,
