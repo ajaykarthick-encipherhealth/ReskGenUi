@@ -12,8 +12,8 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 const ModelIndex = ({
   validated,
   handleSubmit,
-  title,
   openState,
+  title,
   handleCloseModal,
   combiTree,
   labReportFile,
@@ -34,10 +34,13 @@ const ModelIndex = ({
   patientDetailsResult,
   getRadiologyDetails,
   getLabDetails,
-  dragMovemntAction
+  dragMovemntAction,
 }) => {
   const [form] = Form.useForm();
+ 
   const { TextArea } = Input;
+   const [opens, setOpens] = useState(false); 
+  const [combiTrees, setCombiTree] = useState({});
   const dispatch = useDispatch();
   return (
     <>
@@ -81,7 +84,8 @@ const ModelIndex = ({
           : modalOpenValidContent && "90%"
       }
     >
-      {combiTree && <CamboTree tree={combiTree} />}
+      {openState && combiTree && <CamboTree tree={combiTree}  setOpens={setOpens}
+           setCombiTree={setCombiTree} />}
       {labReportFile && (
         <PdfViewer
           src={labReportFile}
