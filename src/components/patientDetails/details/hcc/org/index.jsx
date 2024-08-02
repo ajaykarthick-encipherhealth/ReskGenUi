@@ -236,7 +236,7 @@ const CamboTree = ({
           {trees?.diagnosisCodeCombo == node.diagnosisCodeCombo && isDosSelected && (
             <div>
               <Popconfirm
-                title="You want move to Delete?"
+                title="Do you want to move to Delete?"
                 description={node.diseaseName}
                 onConfirm={handleDeleteDisease}
                 placement="leftTop"
@@ -353,7 +353,7 @@ const CamboTree = ({
           )}
         </div>
       </div>
-      <ModelIndex
+      {/* <ModelIndex
         title={selectDiseasesName}
         // openState={confirmNotesModalValid}
         setFileLoading={setFileLoading}
@@ -361,7 +361,7 @@ const CamboTree = ({
         setConfirmNotesModalValid={setConfirmNotesModalValid}
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
-      />
+      /> */}
     </>
   );
 };
