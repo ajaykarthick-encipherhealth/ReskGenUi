@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch, connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowLeft,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Drawer, Popover, notification } from "antd";
-import { Button, Offcanvas } from "react-bootstrap";
+import { Button, Offcanvas, Spinner } from "react-bootstrap";
 import PdfViewer from "../../PdfViewerComponent";
 import HccCards from "../../components/LAB";
 import ModelIndex from "../../components/model/Index";
@@ -32,7 +29,8 @@ const File = ({
   pageNumberOptions,
   setPageNumberOptions,
   fileDosPageNumberList,
-  radiologyFile
+  radiologyFile,
+  loading,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -79,9 +77,7 @@ const File = ({
   const [labResultStatus, setLabResultStatus] = useState(false);
   const [labFileDateDefaulteSelect, setLabFileDateDefaulteSelect] =
     useState("");
-    const [labFileFilterList, setLabFileFilterList] = useState(10);
-
-
+  const [labFileFilterList, setLabFileFilterList] = useState(10);
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -125,10 +121,6 @@ const File = ({
       setSelectFileURL(radiologyFile?.data?.response);
     }
   };
-
-
-
-
 
   useEffect(() => {
     getFileDosPageNumber();
@@ -220,7 +212,7 @@ const File = ({
         }
       >
         <div className="my-post-content row pt-3">
-        <div className="radiology-select-dos">
+          <div className="radiology-select-dos">
             {labResultStatus ? (
               <Select
                 onChange={(e) => dosOnChangeLabFile(e)}
@@ -242,6 +234,7 @@ const File = ({
                       className="timeline"
                       {...provided.droppableProps}
                       ref={provided.innerRef}
+                      style={{ height: "74vh" }}
                     >
                       <div
                         className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
@@ -251,14 +244,12 @@ const File = ({
                         </span>
                         <div className="d-flex justify-content-center">
                           <span className={`${visitStyles.hcc_title_badge}`}>
-                            {
-                              newValidDiseaseList.length
-                            }
+                            {newValidDiseaseList.length}
                           </span>
                         </div>
                       </div>
-                      <div className={visitStyles.container}>
-                        <div className={visitStyles.hccStickey_head}>               
+                      <div className={visitStyles.labContainer}>
+                        <div className={visitStyles.hccStickey_head}>
                           <HccCards
                             list={newValidDiseaseList}
                             hccVersionDetails={hccVersionDetails}
@@ -337,14 +328,18 @@ const File = ({
             <div className="card-body p-0">
               {hccFileDetails?.loading != true ? (
                 <>
-                  {selectFileURL && (
+                  {loading ? (
+                    <div className={visitStyles?.loaderDiv}>
+                      <Spinner />
+                    </div>
+                  ) : (
                     <PdfViewer
                       src={selectFileURL}
                       searchQuery={search?.value ? search?.value : ""}
                       pageNumber={search?.page ? search?.page : 1}
                       headers={search?.headers}
                       fileHeight={true}
-                    fileHeightFrame={"830"}
+                      fileHeightFrame={"830"}
                     />
                   )}
                 </>
@@ -370,7 +365,7 @@ const File = ({
           ) : null}
           {!isFileFormShow ? (
             <div className="col-xl-3">
-                    <div className={visitStyles.deleteFileContainer}>
+              <div className={visitStyles.deleteFileContainer}>
                 <Droppable droppableId={"DELETED"} key={"DELETED"}>
                   {(provided) => {
                     return (
@@ -378,6 +373,7 @@ const File = ({
                         className="timeline"
                         {...provided.droppableProps}
                         ref={provided.innerRef}
+                        style={{ height: "72vh" }}
                       >
                         <div
                           className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
@@ -397,7 +393,7 @@ const File = ({
                             </span>
                           </div>
                         </div>
-                        <div className={visitStyles.deletedContainer}>
+                        <div className={visitStyles.labDeletedContainer}>
                           <div className={visitStyles.hccStickey_head}>
                             <HccCards
                               list={deletedHccList}
@@ -513,7 +509,7 @@ const File = ({
         open={isEditHccForm}
         width={"80vw"}
       >
-        <div className="row p-4" style={{overflow: "hidden", height: '100%'}}>
+        <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
           <div className="col-8">
             {hccFileDetails?.loading != true ? (
               <>
@@ -524,14 +520,17 @@ const File = ({
                     pageNumber={search?.page ? search?.page : 1}
                     headers={search?.headers}
                     height="100vh"
-                    heightFrame='900'
+                    heightFrame="900"
                   />
                 )}
               </>
             ) : null}
           </div>
           <div className="col-4">
-            <div className="px-4" style={{height: "90vh", overflowY: "scroll" }}>
+            <div
+              className="px-4"
+              style={{ height: "90vh", overflowY: "scroll" }}
+            >
               <ManuallyAdd
                 handleCloseModal={handleCloseModal}
                 setIsFileFormShow={setIsFileFormShow}
@@ -548,10 +547,10 @@ const File = ({
 };
 
 const enhancer = connect((state) => ({
-  patientDetailsResult:state?.patientDetails?.details?.labResult,
+  patientDetailsResult: state?.patientDetails?.details?.labResult,
   hccFileDetails: state?.patientDetails?.details?.hccFileResult,
   fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
-  radiologyFile :state?.patientDetails?.details?.labFileResult,
+  radiologyFile: state?.patientDetails?.details?.labFileResult,
+  loading: state?.patientDetails?.details?.loading,
 }));
 export default enhancer(File);
-
