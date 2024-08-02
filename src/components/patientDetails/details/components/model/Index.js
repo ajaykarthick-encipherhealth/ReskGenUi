@@ -35,11 +35,11 @@ const ModelIndex = ({
   getRadiologyDetails,
   getLabDetails,
   dragMovemntAction,
+  setOpens
 }) => {
   const [form] = Form.useForm();
  
   const { TextArea } = Input;
-   const [opens, setOpens] = useState(false); 
   const [combiTrees, setCombiTree] = useState({});
   const dispatch = useDispatch();
   return (
@@ -74,15 +74,7 @@ const ModelIndex = ({
       onCancel={handleCloseModal}
       footer={null}
       closable={isEdit?false:true} 
-      width={
-        combiTree
-          ? "90%"
-          : labReportFile
-          ? "80%"
-          : setOpenEdit
-          ? "60%"
-          : modalOpenValidContent && "90%"
-      }
+      width =  "90%"
     >
       {openState && combiTree && <CamboTree tree={combiTree}  setOpens={setOpens}
            setCombiTree={setCombiTree} />}
