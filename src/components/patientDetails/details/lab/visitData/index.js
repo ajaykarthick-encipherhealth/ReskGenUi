@@ -428,6 +428,7 @@ const VisitData = ({
                         className="timeline"
                         {...provided.droppableProps}
                         ref={provided.innerRef}
+                        style={{ height: "74vh" }}
                       >
                         <div
                           className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
@@ -443,7 +444,7 @@ const VisitData = ({
                             </span>
                           </div>
                         </div>
-                        <div className={visitStyles.container}>
+                        <div className={visitStyles.labContainer}>
                           <div className={visitStyles.hccStickey_head}>
                             <HccCards
                               list={newValidDiseaseList}
@@ -496,6 +497,7 @@ const VisitData = ({
                         className="timeline"
                         {...provided.droppableProps}
                         ref={provided.innerRef}
+                        style={{ height: "74vh" }}
                       >
                         <div
                           className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
@@ -513,7 +515,7 @@ const VisitData = ({
                             </span>
                           </div>
                         </div>
-                        <div className={visitStyles.container}>
+                        <div className={visitStyles.labContainer}>
                           <div className={visitStyles.hccStickey_head}>
                             <HccCards
                               list={deletedHccList}
