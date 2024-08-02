@@ -555,6 +555,7 @@ const File = ({
           handleCloseModal={handleCloseModal}
           combiTree={combiTree}
           setOpens={setOpens}
+          setCombiTree={setCombiTree}
         />
       ) : (
         opens && showErrorMessage()
