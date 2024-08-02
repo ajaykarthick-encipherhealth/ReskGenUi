@@ -115,7 +115,7 @@ const MovementAction = ({
                 handleCloseModal,
               });
             }}
-            title="You want move to delete?"
+            title="Do you want to move to Delete?"
             placement="bottom"
             okText="Yes"
             cancelText="No"
