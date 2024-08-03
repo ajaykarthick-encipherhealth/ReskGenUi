@@ -12,8 +12,9 @@ const TableRisk = ({
     setActiveButton("ICD-10");
     setSearchInput(data?.[0]?.diagnosisCode);
   };
+  console.log(data,"risk")
   return (
-    <div className={fromPatientDetails ? style.card1 : style.card}>
+    <div className={style.card}>
       {!fromPatientDetails && (
         <div
           className={`${style.desc} p-3`}

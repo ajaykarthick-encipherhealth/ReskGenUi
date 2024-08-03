@@ -348,7 +348,7 @@ const HccCards = ({
                                         />
                                       </div>
 
-                                      <div className="px-1">
+                                      <div className="px-1 patientDetailsPop">
                                         <Popover
                                           onClick={() =>
                                             getValidHccDetails(
@@ -359,7 +359,7 @@ const HccCards = ({
                                           content={PopContentHccVersion(
                                             data?.riskAdjustmentDtoList
                                           )}
-                                          title={data.diagnosisCode}
+                                          title={data?.diagnosisCode}
                                           placement="bottom"
                                           trigger="click"
                                           overlayStyle={{ zIndex: 1000 }}
