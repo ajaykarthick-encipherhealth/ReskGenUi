@@ -217,6 +217,18 @@ export const getPatientLabDetails = async (
     }
   }
 };
+
+export const sortFunction = ({ array, sortKey }) => {
+  if (!array || !sortKey) return array;
+
+  return array.sort((a, b) => {
+    if (a[sortKey] && b[sortKey]) {
+      return a[sortKey].localeCompare(b[sortKey]);
+    }
+    return 0;
+  });
+
+};
 export const getPatientLabDetailsNew = async (
   orgId,
   tenId,
@@ -240,7 +252,6 @@ export const getPatientLabDetailsNew = async (
   setLabFileFilterList,
   setLabResultStatus,
   setLabFileDateDefaulteSelect
-
 ) => {
   if (patientDetailsResult?.data?.response) {
     var result = patientDetailsResult?.data?.response;
@@ -261,7 +272,6 @@ export const getPatientLabDetailsNew = async (
       }
     }
 
-
     if (result.hccDiseases != null) {
       var hccDisArray = [];
       var nonHccDisArray = [];
@@ -272,7 +282,10 @@ export const getPatientLabDetailsNew = async (
       var meatHeaderList = [];
       var deletedmeatListArr = [];
 
-      result?.hccDiseases?.map((res, index) => {
+      sortFunction({
+        array: result?.hccDiseases,
+        sortKey: "diagnosisCode",
+      })?.map((res, index) => {
         var providerList = [];
         var dosList = [];
         res.providerNames?.map((res) => {
@@ -315,7 +328,10 @@ export const getPatientLabDetailsNew = async (
         }
       });
 
-      result?.nonHccDiseases?.map((res, index) => {
+      sortFunction({
+        array: result?.nonHccDiseases,
+        sortKey: "diagnosisCode",
+      })?.map((res, index) => {
         var providerList = [];
         res.providerNames?.map((res) => {
           providerList.push(res);
@@ -351,7 +367,7 @@ export const getPatientLabDetailsNew = async (
         });
       });
 
-      result?.suggestedHccDiseases?.map((res, index) => {
+      sortFunction({array:result?.suggestedHccDiseases,sortKey:"diagnosisCode"})?.map((res, index) => {
         if (res.isShow != false) {
           var providerList = [];
           var dosList = [];
@@ -395,7 +411,7 @@ export const getPatientLabDetailsNew = async (
         }
       });
 
-      result?.deletedDiseases?.map((res, index) => {
+      sortFunction({array:result?.deletedDiseases,sortKey:"diagnosisCode"})?.map((res, index) => {
         if (res.isShow != false) {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
@@ -432,7 +448,7 @@ export const getPatientLabDetailsNew = async (
         }
       });
 
-      result?.comboDisease?.map((res, index) => {
+      sortFunction({array:result?.comboDisease,sortKey:"diagnosisCode"})?.map((res, index) => {
         var providerList = [];
         var dosList = [];
         res.providerNames?.map((res) => {
@@ -462,7 +478,7 @@ export const getPatientLabDetailsNew = async (
           dateOfServices: res.dateOfServices,
         });
       });
-      result?.deletedComboDisease?.map((res, index) => {
+      sortFunction({array:result?.deletedComboDisease,sortKey:"diagnosisCode"})?.map((res, index) => {
         var providerList = [];
         var dosList = [];
         res.providerNames?.map((res) => {
@@ -654,7 +670,7 @@ export const getPatientLabDetailsNew = async (
         dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, "header");
       });
 
-      result?.meatCriteria?.map((res, index) => {
+      sortFunction({array:result?.meatCriteria,sortKey:"diagnosisCode"})?.map((res, index) => {
         if (res.category == "Invalid") {
           nonHccMeatListArr.push({
             diagnosisCode: res.diagnosisCode,
@@ -717,7 +733,7 @@ export const getPatientLabDetailsNew = async (
           }
         }
       });
-      result?.deletedMeatCriteria?.map((res, index) => {
+      sortFunction({array:result?.deletedMeatCriteria,sortKey:"diagnosisCode"})?.map((res, index) => {
         if (res) {
           var providerList = [];
           var dosList = [];

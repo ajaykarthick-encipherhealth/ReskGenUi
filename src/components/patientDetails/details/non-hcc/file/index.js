@@ -87,7 +87,7 @@ const File = ({
       setPatientDocumentResult,
       "",
       "",
-      "",
+      setDeletedHccList,
       setEncounterDateMatching,
       setCaptureSectionMatching,
       "",
@@ -197,6 +197,7 @@ const File = ({
     }
   };
 
+
   return (
     <>
       {fileLoading ? (
@@ -218,14 +219,14 @@ const File = ({
               <span className={`${visitStyles.hcc_title_name}`}>NON-HCC</span>
               <div className="d-flex justify-content-center">
                 <span className={`${visitStyles.hcc_title_badge}`}>
-                  {nonHccDiseasesList.length}
+                  {nonHccDiseasesList.filter((item) => item.isShow).length}
                 </span>
               </div>
             </div>
             <div className={visitStyles.labContainer}>
               <div className={''}>
                 <NonHccCards
-                  list={nonHccDiseasesList}
+                  list={nonHccDiseasesList?.filter((item) => item.isShow)}
                   hccVersionDetails={hccVersionDetails}
                   captureSectionMatching={captureSectionMatching}
                   encounterDateMatching={encounterDateMatching}
@@ -277,21 +278,21 @@ const File = ({
         <div className="col-xl-3">
           <div className="timeline" style={{height:"74vh"}}>
             <div
-              className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+              className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
             >
-              <span className={`${visitStyles.suggested_title_name}`}>
-              CARE GAP
+              <span className={`${visitStyles.deleted_title_name}`}>
+              DELETED CODES
               </span>
               <div className="d-flex justify-content-center">
-                <span className={`${visitStyles.suggested_title_badge}`}>
-                  {suggestedHccList.length}
+                <span className={`${visitStyles.deleted_title_badge}`}>
+                  {deletedHccList.filter((item) => item.isShow).length}
                 </span>
               </div>
             </div>
             <div className={visitStyles.labContainer}>
               <div className={visitStyles.hccStickey_head}>
                 <NonHccCards
-                  list={suggestedHccList}
+                  list={deletedHccList.filter((item) => item.isShow)}
                   hccVersionDetails={hccVersionDetails}
                   captureSectionMatching={captureSectionMatching}
                   encounterDateMatching={encounterDateMatching}
@@ -301,9 +302,9 @@ const File = ({
                   setFormValues={setFormValues}
                   setIsEditHccForm={setIsEditHccForm}
                   setFormEditPlace={setFormEditPlace}
-                  okText={"Move to Deleted"}
-                  cancelText={"Move to HCC"}
-                  editFormPlace={"SUGGESTED_DISEASE"}
+                  okText={"Move to NON HCC"}
+                  cancelText={"Cancel"}
+                  // isDeletedCodes={true}
                   setOpens={setOpens}
                   setCombiTree={setCombiTree}
                   setActiveTabHead={setActiveTabHead}

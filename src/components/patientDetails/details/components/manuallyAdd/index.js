@@ -1079,7 +1079,7 @@ const ManuallyAdd = ({
                     },
                   ]}
                 >
-                  <Input name="description" onChange={(e) => e.target.value} />
+                  <Input name="description" onChange={(e) => e.target.value} disabled/>
                 </Form.Item>
               </div>
               <div className="col-12">

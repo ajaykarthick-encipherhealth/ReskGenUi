@@ -280,6 +280,7 @@ const File = ({
                             setIsValidAction={setIsValidAction}
                             cardTitle="HCC"
                             provided={provided}
+                            isMeatBlocked={true}
                           />
                         </div>
                       </div>
@@ -426,6 +427,7 @@ const File = ({
                               setIsValidAction={setIsValidAction}
                               cardTitle="DELETED"
                               provided={provided}
+                              isMeatBlocked={true}
                             />
                           </div>
                         </div>
