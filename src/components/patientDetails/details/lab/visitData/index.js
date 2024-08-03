@@ -288,6 +288,7 @@ const VisitData = ({
                             isVisitData={true}
                             provided={provided}
                             popup={zIndex}
+                            isMeatBlocked={true}
                           />
                         </div>
                       </div>
@@ -386,6 +387,7 @@ const VisitData = ({
                               isVisitData={true}
                               provided={provided}
                               popup={zIndex}
+                              isMeatBlocked={true}
                             />
                           </div>
                         </div>
