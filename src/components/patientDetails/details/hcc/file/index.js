@@ -556,6 +556,8 @@ const File = ({
           combiTree={combiTree}
           setOpens={setOpens}
           setCombiTree={setCombiTree}
+          fileLoading={fileLoading}
+          setFileLoading={setFileLoading}
         />
       ) : (
         opens && showErrorMessage()

@@ -50,7 +50,8 @@ const CamboTree = ({
   patientDetailsResult,
   getPatientDetailsReload,
   getpatientDetailsData,
-  isDosSelected
+  isDosSelected,
+  setFileLoading
 }) => {
   const [background, setBackground] = useState([]);
   const [trees, setTrees] = useState(Tree);
@@ -63,7 +64,6 @@ const CamboTree = ({
     title: "",
   });
   const [selectDisDetails, setSelectDisDetails] = useState(false);
-  const [fileLoading, setFileLoading] = useState(false);
 
   const zoomIn = () => {
     if (zoom.width < 500 && zoom.width > 200) {
