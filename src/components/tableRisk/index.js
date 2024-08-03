@@ -12,7 +12,6 @@ const TableRisk = ({
     setActiveButton("ICD-10");
     setSearchInput(data?.[0]?.diagnosisCode);
   };
-  console.log(data,"risk")
   return (
     <div className={style.card}>
       {!fromPatientDetails && (
