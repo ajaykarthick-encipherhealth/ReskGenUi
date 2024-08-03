@@ -386,6 +386,7 @@ const Combo = ({
             tree={combiTree}
             setOpens={setOpens}
             setCombiTree={setCombiTree}
+            setFileLoading={setFileLoading}
           />
         </Modal>
       ) : (
