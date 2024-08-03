@@ -65,6 +65,7 @@ const LabCards = ({
   popup,
   getSelectedDosPageNumber,
   loading,
+  isMeatBlocked
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -371,7 +372,7 @@ const LabCards = ({
                                     </div>
                                   )}
                                 </div>
-                                <div
+                                {!isMeatBlocked && <div
                                   className={`cr-pointer ${styles.meatFoundContainer}`}
                                 >
                                   <div
@@ -434,7 +435,8 @@ const LabCards = ({
                                       "T"
                                     )}
                                   </div>
-                                </div>
+                                </div>}
+                                
                                 {data.providerName.length == 0 && (
                                   <>
                                     <div

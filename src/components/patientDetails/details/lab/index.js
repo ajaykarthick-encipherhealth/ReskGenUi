@@ -265,7 +265,8 @@ const Lab = ({
                         Visit Data
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
+                    {/* As of now we dont want to show meet UVAIS Suggested to remove this feature */}
+                    {/* <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
                         eventKey={3}
@@ -275,7 +276,7 @@ const Lab = ({
                       >
                         MEAT Criteria
                       </Nav.Link>
-                    </Nav.Item>
+                    </Nav.Item> */}
                     <Nav.Item as="li" className="nav-item">
                       <Select
                         placeholder="Select Year"
