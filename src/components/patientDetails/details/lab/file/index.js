@@ -31,6 +31,8 @@ const File = ({
   fileDosPageNumberList,
   radiologyFile,
   loading,
+  search,
+  setSearch,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -66,7 +68,6 @@ const File = ({
   // const [pageNumberOptions, setPageNumberOptions] = useState([]);
   const [fileLoading, setFileLoading] = useState(false);
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
-  const [search, setSearch] = useState();
   const [isAddHccForm, setIsAddHccForm] = useState(false);
   const [isEditHccForm, setIsEditHccForm] = useState(false);
   const [formValues, setFormValues] = useState(false);

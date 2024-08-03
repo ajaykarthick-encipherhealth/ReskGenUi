@@ -34,6 +34,7 @@ const Lab = ({
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
   const [selectedDosValue, setSelectedDosValue] = useState([]);
   const [selectedYearValue, setSelectedYearValue] = useState([]);
+  const [search, setSearch] = useState();
 
   const selectTab = (num) => {
     setActiveTabHead(num);
@@ -99,6 +100,11 @@ const Lab = ({
     }
   }, [labDetailsResult?.data?.response]);
 
+
+  function getUniqueListBy(arr, key) {
+    return [...new Map(arr.map((item) => [item[key], item])).values()];
+  }
+
   useEffect(() => {
     if (patientDosResult?.data?.response) {
       setSelectDosValue();
@@ -136,10 +142,10 @@ const Lab = ({
 
   const handleChangePageNumber = async (value) => {
     setPopoverVisible(false);
-    // setSearch({
-    //   value: "",
-    //   page: value,
-    // });
+    setSearch({
+      value: "",
+      page: value,
+    });
   };
 
   const PopContent = (
@@ -179,7 +185,7 @@ const Lab = ({
       </div>
       <div className={styles.displayDiv}>
         {patientDosResult?.data?.response
-          ? patientDosResult?.data?.response?.map((data) => (
+          ? getUniqueListBy(patientDosResult?.data?.response, "dos")?.map((data) => (
               <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
                 <div
                   className={` ${styles.selectDetailsContainer}`}
@@ -349,6 +355,8 @@ const Lab = ({
                     <File
                       setActiveTabHead={setActiveTabHead}
                       setActiveMeatTitle={setActiveMeatTitle}
+                      search={search}
+                      setSearch={setSearch}
                     />
                   </Tab.Pane>
                   <Tab.Pane id="my-posts" eventKey={2}>
