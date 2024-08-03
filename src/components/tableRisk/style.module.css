@@ -16,6 +16,9 @@
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   min-height: 250px;
 }
+.card1{
+  background-color: #F1F2F3 !important;
+}
 .code {
   color: #04306f;
   font-weight: 600;
