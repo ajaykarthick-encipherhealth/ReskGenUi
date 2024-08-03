@@ -212,7 +212,7 @@ const File = ({
 
       <div className="my-post-content row pt-3">
         <div className="col-xl-3">
-          <div className="timeline">
+          <div className="timeline" style={{height:"74vh"}}>
             <div
               className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
             >
@@ -223,7 +223,7 @@ const File = ({
                 </span>
               </div>
             </div>
-            <div className={visitStyles.HccContainer}>
+            <div className={visitStyles.labContainer}>
               <div className={''}>
                 <NonHccCards
                   list={nonHccDiseasesList?.filter((item) => item.isShow)}
@@ -276,7 +276,7 @@ const File = ({
           </div>
         </div>
         <div className="col-xl-3">
-          <div className="timeline">
+          <div className="timeline" style={{height:"74vh"}}>
             <div
               className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
             >
@@ -289,7 +289,7 @@ const File = ({
                 </span>
               </div>
             </div>
-            <div className={visitStyles.container}>
+            <div className={visitStyles.labContainer}>
               <div className={visitStyles.hccStickey_head}>
                 <NonHccCards
                   list={deletedHccList.filter((item) => item.isShow)}
