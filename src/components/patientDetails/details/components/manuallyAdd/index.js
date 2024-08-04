@@ -194,7 +194,7 @@ const ManuallyAdd = ({
   };
 
   const handleCodeVaildate = async (e) => {
-    const value = e.target.value;
+    const value = e.target.value.toUpperCase();
     setCode(value);
     if (value.length > 0) {
       try {
@@ -724,7 +724,7 @@ const ManuallyAdd = ({
   const resetForms = ({ reload = false }) => {
     handleCloseModal(false);
     form.resetFields();
-    reload && getPatient();
+    getPatient(reload)
 
     setValidCode("");
     setProviderDetails([]);
@@ -765,14 +765,17 @@ const ManuallyAdd = ({
     setCapturedSectionsT([]);
   };
 
-  const getPatient = async () => {
-    const res = await getpatientDetailsData(
+  const getPatient = async (reload) => {
+    // if (reload) {
+      const res = await getpatientDetailsData(
       patientDetailsResult?.data?.response?.patientId,
       patientDetailsResult?.data?.response?.processedYear,
       patientDetailsResult?.data?.response?.dateOfService,
       "",
       await getStorage("role")
     );
+    // }
+    
   };
 
   const sectionDelete = (item) => {
@@ -1044,6 +1047,9 @@ const ManuallyAdd = ({
               handledSave(form);
             }}
             onFinishFailed={() => {}}
+            onChange={(e) =>{
+              console.log(e);
+            }}
           >
             <div className="row">
               <div className="col-12">
@@ -1064,8 +1070,8 @@ const ManuallyAdd = ({
                   <Input
                     name="diagnosisCode"
                     onChange={(e) => handleCodeVaildate(e)}
-                    value={code}
-                    // className={styles.formControl}
+                    value={code.toUpperCase()}
+                    className="text-uppercase"
                   />
                 </Form.Item>
                 {validCode.length > 0 &&

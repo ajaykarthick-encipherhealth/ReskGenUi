@@ -133,13 +133,9 @@ const File = ({
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
     setFileLoading(false);
-    // setIsEditHccForm(false);
+    setIsEditHccForm(false);
     setOpens(false);
   };
-
-  const handleClose = () => {
-    setIsEditHccForm(false);
-  }
 
   const getValidHccDetails = async (value, code) => {
     var result = "";
@@ -359,8 +355,8 @@ const File = ({
                       pageNumber={search?.page ? search?.page : 1}
                       headers={search?.headers}
                       // height={true}
-                      fileHeight={true}
-                      fileHeightFrame={"850"}
+                      fileHeightFrames={window.screen.availHeight - 300}
+                      fileHeights={"80vh"}
                     />
                   )}
                 </>
@@ -570,7 +566,7 @@ const File = ({
       )}
       <Drawer
         title=""
-        onClose={handleClose}
+        onClose={handleCloseModal}
         closeIcon={false}
         open={isEditHccForm}
         width={"80vw"}
@@ -586,9 +582,11 @@ const File = ({
                     pageNumber={search?.page ? search?.page : 1}
                     headers={search?.headers}
                     fileHeight={true}
-                    fileHeightFrame={"950"}
+                    fileHeightFrames={window.screen.availHeight - 50}
+                    fileHeights={"100vh"}
                   />
                 )}
+                {console.log(window.screen.availHeight - 100)}
               </>
             ) : null}
           </div>
@@ -598,7 +596,7 @@ const File = ({
               style={{ height: "90vh", overflowY: "scroll" }}
             >
               <ManuallyAdd
-                handleCloseModal={handleClose}
+                handleCloseModal={handleCloseModal}
                 setIsFileFormShow={setIsFileFormShow}
                 year={year}
                 isEditPage={true}

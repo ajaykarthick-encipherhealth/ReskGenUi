@@ -115,7 +115,7 @@ const Lab = ({
             <>
               <div className="d-flex justify-content-between">
                 <span className={styles.dosLable}>
-                  {moment(res.dos).format("MM-DD-YYYY")} / {res.testName}
+                  {moment(res.dos).format("MM-DD-YYYY")}
                 </span>
                 {getStatusIcon(res.processStage)}
               </div>

@@ -843,7 +843,7 @@ const VisitData = ({
         open={isEditHccForm}
         width={"80vw"}
       >
-        <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
+        <div className="row p-4" style={{ overflow: "hidden", height: "95%" }}>
           <div className="col-8">
             {hccFileDetails?.loading != true ? (
               <>
@@ -857,6 +857,8 @@ const VisitData = ({
                     heightFrame="900"
                     fileHeight={true}
                     fileHeightFrame={"950"}
+                    fileHeightFrames={window.screen.availHeight - 50}
+                    fileHeights={"100vh"}
                   />
                 )}
               </>

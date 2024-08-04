@@ -746,6 +746,8 @@ const Meat = ({
                       headerContent={search?.headerContent}
                       fileHeight={true}
                     fileHeightFrame={"950"}
+                    fileHeightFrames={window.screen.availHeight - 50}
+                    fileHeights={"90vh"}
                     />
                   )}
                 </>
@@ -794,7 +796,7 @@ const Meat = ({
         open={meatEdit}
         width={"80vw"}
       >
-        <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
+        <div className="row p-4" style={{ overflow: "hidden", height: "95%" }}>
           <div className="col-8">
             {hccFileDetails?.loading != true ? (
               <>
@@ -806,6 +808,8 @@ const Meat = ({
                     headers={search?.headers}
                     fileHeight={true}
                     fileHeightFrame={"950"}
+                    fileHeightFrames={window.screen.availHeight - 50}
+                    fileHeights={"100vh"}
                   />
                 )}
               </>

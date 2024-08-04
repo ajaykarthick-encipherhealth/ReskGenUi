@@ -648,6 +648,7 @@ const HccCards = ({
                                     </div>
                                   )}
                                 </div>
+                                {data.isLab != true &&
                                 <div
                                   className={`cr-pointer ${styles.meatFoundContainer}`}
                                 >
@@ -711,7 +712,7 @@ const HccCards = ({
                                       "T"
                                     )}
                                   </div>
-                                </div>
+                                </div>}
                                 {data.providerName.length == 0 && (
                                   <>
                                     <div
