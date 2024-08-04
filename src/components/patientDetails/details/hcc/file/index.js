@@ -45,7 +45,8 @@ const File = ({
   getRadiologyFileDetails,
   getLabFileDetails,
   currentDiseaseType,
-  loading
+  loading,
+  isDosSelected
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -132,9 +133,13 @@ const File = ({
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
     setFileLoading(false);
-    setIsEditHccForm(false);
+    // setIsEditHccForm(false);
     setOpens(false);
   };
+
+  const handleClose = () => {
+    setIsEditHccForm(false);
+  }
 
   const getValidHccDetails = async (value, code) => {
     var result = "";
@@ -255,10 +260,11 @@ const File = ({
                       >
                         <span className={`${visitStyles.hcc_title_name}`}>
                           HCC
+                          {isDosSelected && 
                           <FontAwesomeIcon
                             onClick={() => addValidCodeFile()}
                             icon={faPlus}
-                          />
+                          />}
                         </span>
                         <div className="d-flex justify-content-center">
                           <span className={`${visitStyles.hcc_title_badge}`}>
@@ -344,7 +350,7 @@ const File = ({
               </div>
             </Popover> */}
             <div className="card-body p-0">
-              {loading ? <div className={visitStyles?.loaderDiv}><Spinner/></div>: (
+              {loading ? <div className={visitStyles?.loaderDiv}><Spinner/></div> : (
                 <>
                   {selectFileURL && (
                     <PdfViewer
@@ -358,7 +364,7 @@ const File = ({
                     />
                   )}
                 </>
-              )}
+               )} 
             </div>
           </div>
           {isFileFormShow ? (
@@ -562,33 +568,9 @@ const File = ({
       ) : (
         opens && showErrorMessage()
       )}
-
-      {/* <EditHccForm
-        formValues={formValues}
-        isEditHccForm={isEditHccForm}
-        setIsEditHccForm={setIsEditHccForm}
-        formEditPlace={formEditPlace}
-      /> */}
-
-      {/* <Offcanvas
-        onHide={handleCloseModal}
-        show={isEditHccForm}
-        className="offcanvas-end"
-        placement="end"
-      >
-        <div className="p-4" style={{ overflowY: "scroll" }}>
-          <ManuallyAdd
-            handleCloseModal={handleCloseModal}
-            setIsFileFormShow={setIsFileFormShow}
-            year={year}
-            isEditPage={true}
-            isEditValue={formValues}
-          />
-        </div>
-      </Offcanvas> */}
       <Drawer
         title=""
-        onClose={handleCloseModal}
+        onClose={handleClose}
         closeIcon={false}
         open={isEditHccForm}
         width={"80vw"}
@@ -616,7 +598,7 @@ const File = ({
               style={{ height: "90vh", overflowY: "scroll" }}
             >
               <ManuallyAdd
-                handleCloseModal={handleCloseModal}
+                handleCloseModal={handleClose}
                 setIsFileFormShow={setIsFileFormShow}
                 year={year}
                 isEditPage={true}
@@ -640,7 +622,8 @@ const enhancer = connect(
     radiologyResult: state?.patientDetails?.details?.radiologyResult,
     labResult: state?.patientDetails?.details?.labResult,
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
-    loading:state?.patientDetails?.details?.loading
+    loading:state?.patientDetails?.details?.loading,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
     getRadiologyFileDetails: detailsActions.radiologyFileAction,

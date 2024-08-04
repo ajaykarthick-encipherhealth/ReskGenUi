@@ -36,7 +36,6 @@ const { Option } = Select;
 
 const ManuallyAdd = ({
   handleCloseModal,
-  setIsFileFormShow,
   patientDosResult,
   getValidate,
   isCodeAlready,
@@ -52,10 +51,11 @@ const ManuallyAdd = ({
   isEditMeatValue,
   isEditMeat,
   diseaseEditMeat,
-  reset
+  reset,
+  isDosSelected,
 }) => {
   const [form] = Form.useForm();
-  const [isMeat, setIsMeat] = useState(false);
+  const [isMeat, setIsMeat] = useState(true);
   const [validCode, setValidCode] = useState("");
   const [code, setCode] = useState("");
   const [providerDetails, setProviderDetails] = useState([]);
@@ -100,7 +100,7 @@ const ManuallyAdd = ({
   const dosList = patientDosResult?.data?.response?.map(
     (item) =>
       ({
-        label: moment(item.dateOfService).format('MM-DD-YYYY'),
+        label: moment(item.dateOfService).format("MM-DD-YYYY"),
         value: item?.dateOfService,
       } || [])
   );
@@ -117,7 +117,7 @@ const ManuallyAdd = ({
           setSection: setSectionM,
           setShowSection: setShowSectionM,
           setSectionCount: setSectionCountM,
-          setCapturedSections: setCapturedSectionsM
+          setCapturedSections: setCapturedSectionsM,
         };
       case "E":
         return {
@@ -129,7 +129,7 @@ const ManuallyAdd = ({
           setSection: setSectionE,
           setShowSection: setShowSectionE,
           setSectionCount: setSectionCountE,
-          setCapturedSections: setCapturedSectionsE
+          setCapturedSections: setCapturedSectionsE,
         };
       case "A":
         return {
@@ -141,7 +141,7 @@ const ManuallyAdd = ({
           setSection: setSectionA,
           setShowSection: setShowSectionA,
           setSectionCount: setSectionCountA,
-          setCapturedSections: setCapturedSectionsA
+          setCapturedSections: setCapturedSectionsA,
         };
       case "T":
         return {
@@ -153,7 +153,7 @@ const ManuallyAdd = ({
           setSection: setSectionT,
           setShowSection: setShowSectionT,
           setSectionCount: setSectionCountT,
-          setCapturedSections: setCapturedSectionsT
+          setCapturedSections: setCapturedSectionsT,
         };
       default:
         break;
@@ -172,7 +172,9 @@ const ManuallyAdd = ({
             processedYear: year.value,
             patientId: await getStorage("patientId"),
             dateOfService: val,
-            fileId: patientDetailsResult?.data?.response?.fileId ? patientDetailsResult.data.response.fileId : ""
+            fileId: patientDetailsResult?.data?.response?.fileId
+              ? patientDetailsResult.data.response.fileId
+              : "",
           });
           if (res.status == "SUCCESS") {
             setProviderDetails([...res?.response?.providerInfoList]);
@@ -610,22 +612,26 @@ const ManuallyAdd = ({
         hyperlinks: listOfSection
           .map((item) => item.hyperlinks)
           .flat(capturedSections.length + 1),
-        monitorHyperLink: listOfSectionM.length > 0
+        monitorHyperLink:
+          listOfSectionM.length > 0
             ? listOfSectionM
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
             : null,
-        evaluateHyperLink: listOfSectionE.length > 0
+        evaluateHyperLink:
+          listOfSectionE.length > 0
             ? listOfSectionE
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
             : null,
-        assessmentHyperLink: listOfSectionA.length > 0
+        assessmentHyperLink:
+          listOfSectionA.length > 0
             ? listOfSectionA
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
             : null,
-        treatmentHyperLink: listOfSectionT.length > 0
+        treatmentHyperLink:
+          listOfSectionT.length > 0
             ? listOfSectionT
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
@@ -705,26 +711,25 @@ const ManuallyAdd = ({
         if (res?.status == "SUCCESS") {
           handleCloseModal(false);
           getResponePopup(res);
-          resetForms()
+          resetForms({ reload: true });
         } else if (res?.status == "CUSTOM_EXCEPTION") {
           getResponePopup(res);
-        }
-         else if (res?.status == "USER_DEFINED_ERROR") {
+        } else if (res?.status == "USER_DEFINED_ERROR") {
           getResponePopup(res);
         }
       } catch (error) {}
     }
   };
 
-  const resetForms = () => {
+  const resetForms = ({ reload = false }) => {
     handleCloseModal(false);
     form.resetFields();
-    getPatient();
+    reload && getPatient();
 
     setValidCode("");
     setProviderDetails([]);
     setCode("");
-    setIsMeat(false);
+    setIsMeat(true);
     setCapturedSections([]);
     setDiagnosisForm({});
     setSectionCount([1]);
@@ -758,7 +763,7 @@ const ManuallyAdd = ({
     setListOfSectionT([]);
     setShowSectionT(false);
     setCapturedSectionsT([]);
-  }
+  };
 
   const getPatient = async () => {
     const res = await getpatientDetailsData(
@@ -910,9 +915,9 @@ const ManuallyAdd = ({
   useEffect(() => {
     if (isEditPage) {
       const filterData =
-      patientDetailsResult?.data?.response?.meatCriteria?.find(
-        (item) => item.diagnosisCode == isEditValue.diagnosisCode
-      );
+        patientDetailsResult?.data?.response?.meatCriteria?.find(
+          (item) => item.diagnosisCode == isEditValue.diagnosisCode
+        );
       setCode(isEditValue.diagnosisCode);
       setValidCode("Valid Code");
       const dos = isEditValue?.dateOfServices?.map((item) => ({
@@ -938,12 +943,10 @@ const ManuallyAdd = ({
         section: item.header,
         hyperlinks: item,
       }));
-      const sectionListA = filterData?.assessmentHyperLink?.map(
-        (item) => ({
-          section: item.header,
-          hyperlinks: item,
-        })
-      );
+      const sectionListA = filterData?.assessmentHyperLink?.map((item) => ({
+        section: item.header,
+        hyperlinks: item,
+      }));
       const sectionListT = filterData?.treatmentHyperLink?.map((item) => ({
         section: item.header,
         hyperlinks: item,
@@ -955,7 +958,6 @@ const ManuallyAdd = ({
       setListOfSectionA(transformData(sectionListA));
       setListOfSectionT(transformData(sectionListT));
     }
-
   }, [isEditPage, isEditValue, reset]);
 
   useEffect(() => {
@@ -996,6 +998,17 @@ const ManuallyAdd = ({
     }
   }, [isEditMeat, isEditMeatValue]);
 
+  useEffect(() => {
+    if (isDosSelected) {
+      const selectedDos = [{ label: isDosSelected, value: isDosSelected }]
+      setCapturedSections(selectedDos);
+      setCapturedSectionsM(selectedDos);
+      setCapturedSectionsE(selectedDos);
+      setCapturedSectionsA(selectedDos);
+      setCapturedSectionsT(selectedDos);
+    }
+  }, [isDosSelected]);
+
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
@@ -1011,8 +1024,8 @@ const ManuallyAdd = ({
           onClick={() => {
             handleCloseModal(false);
             setMeatDisplay(false);
-            resetForms()
-            form.resetFields()
+            resetForms({ reload: false });
+            form.resetFields();
             setProviderDetails([]);
           }}
         >
@@ -1079,7 +1092,11 @@ const ManuallyAdd = ({
                     },
                   ]}
                 >
-                  <Input name="description" onChange={(e) => e.target.value} disabled/>
+                  <Input
+                    name="description"
+                    onChange={(e) => e.target.value}
+                    disabled
+                  />
                 </Form.Item>
               </div>
               <div className="col-12">
@@ -1309,7 +1326,7 @@ const ManuallyAdd = ({
             <div className="d-flex">
               <label htmlFor="">Active Header</label>
               <div className="mx-2">
-                <Switch onChange={(e) => setIsMeat(e)} />
+                <Switch onChange={(e) => setIsMeat(e)} checked={isMeat} />
               </div>
             </div>
           )}
@@ -1379,6 +1396,7 @@ const enhancer = connect(
     patientDosResult: state?.patientDetails?.details?.dosResult,
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     getSelectedDos: state?.patientDetails?.details?.getSelectedDosDetails,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
     getProviderSection: patientDetailsAction.getProviderSection,

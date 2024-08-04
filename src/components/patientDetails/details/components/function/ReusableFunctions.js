@@ -797,8 +797,7 @@ export const getProviderNameManually = ({ data }) => {
           fontSize: "16px",
         }}
       >
-        <i>
-          {" "}
+        <i className="mx-1">
           <FontAwesomeIcon
             icon={faCircleUser}
             style={{

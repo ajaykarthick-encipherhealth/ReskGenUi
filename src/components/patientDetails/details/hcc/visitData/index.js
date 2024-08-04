@@ -38,7 +38,8 @@ const VisitData = ({
   radiologyResult,
   getRadiologyFileDetails,
   getLabFileDetails,
-  currentDiseaseType
+  currentDiseaseType,
+  isDosSelected
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -533,10 +534,11 @@ const VisitData = ({
                         >
                           <span className={`${visitStyles.hcc_title_name}`}>
                             HCC
+                            {isDosSelected && 
                             <FontAwesomeIcon
                               onClick={() => addValidDiseases()}
                               icon={faPlus}
-                            />
+                            />}
                           </span>
                           <div className="d-flex justify-content-center">
                             <span className={`${visitStyles.hcc_title_badge}`}>
@@ -890,6 +892,7 @@ const enhancer = connect(
     radiologyResult: state?.patientDetails?.details?.radiologyResult,
     labResult: state?.patientDetails?.details?.labResult,
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
     getRadiologyFileDetails: detailsActions.radiologyFileAction,
