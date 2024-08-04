@@ -1332,7 +1332,7 @@ const ManuallyAdd = ({
             <div className="d-flex">
               <label htmlFor="">Active Header</label>
               <div className="mx-2">
-                <Switch onChange={(e) => setIsMeat(e)} checked={!isMeat} />
+                <Switch onChange={() => setIsMeat(!isMeat)} checked={!isMeat} />
               </div>
             </div>
           )}
