@@ -54,32 +54,7 @@ import LogoLoader from "../../logoLoader";
 import FileDetails from "./components/fileDetails";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import ManuallyAddProvider from "./manuallyAddProvider";
-const tabList = [
-  {
-    title: "HCC",
-    type: "HCC",
-    iconStyle: IMAGES.visitDataHcc,
-    defaultComplete: true,
-  },
-  {
-    title: "NON HCC",
-    type: "NON HCC",
-    iconStyle: IMAGES.visitDataNonHcc,
-    defaultComplete: true,
-  },
-  {
-    title: "Radiology",
-    type: "Radiology",
-    iconStyle: IMAGES.visitDataRadioloy,
-    defaultComplete: false,
-  },
-  {
-    title: "Lab Report",
-    type: "Lab Report",
-    iconStyle: IMAGES.visitDataLabreport,
-    defaultComplete: false,
-  },
-];
+
 export const navigetPageDetails = async (
   pageTitle,
   setSideNavLabelActiveKey,
@@ -88,6 +63,7 @@ export const navigetPageDetails = async (
   setIsLoadingDos,
   setIsLoading
 ) => {
+ 
   setSideNavLabelActiveKey(pageTitle);
   var patientId = localStorage.getItem("patientId");
   var orgId = localStorage.getItem("orgId");
@@ -115,6 +91,7 @@ export const navigetPageDetails = async (
   }
   setIsLoading(false);
 };
+
 const Details = ({
   workFgetFlagsowData,
   getFlagsData,
@@ -141,7 +118,10 @@ const Details = ({
   radiologyDetailsResult,
   labDetailsResult,
   getCurrentDiseaseType,
-  getCurrentProcessYearAction
+  getCurrentProcessYearAction,
+  activeLabels,
+  isDosSelected,
+  isActives
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -188,19 +168,35 @@ const Details = ({
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [showTerminal, setShowTerminal] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [completedTabs, setCompletedTabs] = useState(
-    tabList.filter((tab) => tab.defaultComplete).map((tab) => tab.type)
-  );
+  const tabList = [
+    {
+      title: "HCC",
+      type: "HCC",
+      iconStyle: IMAGES.visitDataHcc,
+      defaultComplete: "HCC_DISEASES",
+    },
+    {
+      title: "NON HCC",
+      type: "NON HCC",
+      iconStyle: IMAGES.visitDataNonHcc,
+      defaultComplete: "NON_HCC_DISEASE",
+    },
+    {
+      title: "Radiology",
+      type: "Radiology",
+      iconStyle: IMAGES.visitDataRadioloy,
+      defaultComplete: "RADIOLOGY",
+    },
+    {
+      title: "Lab Report",
+      type: "Lab Report",
+      iconStyle: IMAGES.visitDataLabreport,
+      defaultComplete: 'LAB',
+    },
+  ];
+ 
   const handleNavigation = (data) => {
-    // const response = true;
-
-    // if (response) {
-    //   setCompletedTabs((prevCompletedTabs) => [
-    //     ...prevCompletedTabs,
-    //     data.title,
-    //   ]);
-    // }
-
+ 
     navigetPageDetails(
       data.type,
       setSideNavLabelActiveKey,
@@ -251,8 +247,8 @@ const Details = ({
   }, [activeTab]);
 
   useEffect(() => {
-    setCount(prevCount => prevCount + 1);
-    if (count==1 && processedYearResult?.data?.response) {
+    setCount((prevCount) => prevCount + 1);
+    if (count == 1 && processedYearResult?.data?.response) {
       getAllProcessYearSelect(processedYearResult);
     }
   }, [processedYearResult]);
@@ -640,6 +636,22 @@ const Details = ({
       return value.split("").splice(0, 3).join("") + "xxxx";
     }
   };
+
+  const getActiveLabels = async () => {
+    const patientId = localStorage.getItem("patientId");
+    const res = await activeLabels({
+      patientId,
+      year: dosYearDefalutSelect.value,
+      dos: isDosSelected,
+    });
+  };
+
+  useEffect(() => {
+    if (dosYearDefalutSelect) {
+      getActiveLabels()
+    }
+    
+  }, [isDosSelected, dosYearDefalutSelect])
 
   return (
     <>
@@ -1190,7 +1202,7 @@ const Details = ({
                                               : ""
                                           }`}
                                         >
-                                          {completedTabs.includes(data.type) ? (
+                                          {isActives?.response[data.defaultComplete] ? (
                                             <div className="menu-icon">
                                               <Badge
                                                 count={
@@ -1411,6 +1423,8 @@ const enhancer = connect(
     processedYearResult: state?.patientDetails.details?.processedYear,
     radiologyDetailsResult: state?.patientDetails?.details?.radiologyResult,
     labDetailsResult: state?.patientDetails?.details?.labResult,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
+    isActives: state.patientDetails.details.activeLabel?.data,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -1431,7 +1445,8 @@ const enhancer = connect(
     getPatientLabDosList: detailsActions.labDosDeatilsAction,
     getLabDetails: detailsActions.labDetailsAction,
     getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
-    getCurrentProcessYearAction:detailsActions.getCurrentProcessYearAction
+    activeLabels: detailsActions.activeLabels,
+    getCurrentProcessYearAction: detailsActions.getCurrentProcessYearAction,
   }
 );
 export default enhancer(Details);

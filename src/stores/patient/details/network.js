@@ -257,3 +257,13 @@ export async function labdosWiseList(patientId, year) {
   );
   return data;
 }
+export async function activeLabel({patientId, year, dos}) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/patient/compute/get/diseasegroup?patientId=${patientId}&processedYear=${year}&dateOfService=${dos}`,
+    options
+  );
+  return data;
+}
