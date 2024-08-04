@@ -12,6 +12,7 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
+import { getResponePopup } from "../../../../../utils/reusable";
 
 export const getEncounterDateBackground = ({
   value,
@@ -1065,17 +1066,12 @@ export const handleSubmitValidNotes = async ({
       );
     } else {
       setFileLoading(false);
-      notification.error({
-        message: result.response,
-        placement: "top",
-        duration: 1,
-      });
+     getResponePopup(result)
     }
   } catch (err) {
     setFileLoading(false);
-    notification.error({
-      message: err?.response?.data?.response,
-    });
+    getResponePopup(err?.response)
+   
   }
 };
 

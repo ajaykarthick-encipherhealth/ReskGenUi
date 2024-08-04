@@ -586,7 +586,6 @@ const File = ({
                     fileHeights={"100vh"}
                   />
                 )}
-                {console.log(window.screen.availHeight - 100)}
               </>
             ) : null}
           </div>
