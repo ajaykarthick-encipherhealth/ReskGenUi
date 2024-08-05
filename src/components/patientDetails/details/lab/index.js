@@ -90,7 +90,14 @@ const Lab = ({
     getAllProcessYearSelect(processedYearResult);
   }, [processedYearResult]);
 
-
+  useEffect(() => {
+    if (patientDosResult?.data?.response) {
+      getLabFileDetails(
+        patientDosResult?.data?.response[0]?.fileDetailDTO?.azureBlobPath
+      );
+      setIsLoading(true);
+    }
+  }, [patientDosResult?.data?.response]);
 
   function getUniqueListBy(arr, key) {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
@@ -130,15 +137,6 @@ const Lab = ({
           patientDosResult?.data?.response[0]?.testName
         );
       }
-    }
-  }, [patientDosResult?.data?.response]);
-
-  useEffect(() => {
-    if (patientDosResult?.data?.response) {
-      getLabFileDetails(
-        patientDosResult?.data?.response[0]?.fileDetailDTO?.azureBlobPath
-      );
-      setIsLoading(true);
     }
   }, [patientDosResult?.data?.response]);
 
