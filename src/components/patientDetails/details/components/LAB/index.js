@@ -82,6 +82,7 @@ const LabCards = ({
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
+  const [labData, setLabData] = useState("");
 
   const PopContentHccVersion = (
     <div className={styles.innerPop}>
@@ -287,6 +288,7 @@ const LabCards = ({
                                     setSelectMeatResult: "",
                                     getSelectedDosPageNumber:
                                       getSelectedDosPageNumber,
+                                      setLabData: setLabData
                                   })}
                                 </div>
                                 <div
@@ -349,6 +351,7 @@ const LabCards = ({
                                       popup: "",
                                       getSelectedDosPageNumber:
                                         getSelectedDosPageNumber,
+                                        setLabData: setLabData
                                     })}
                                   </div>
                                 )}

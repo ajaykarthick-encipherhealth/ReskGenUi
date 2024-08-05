@@ -358,6 +358,7 @@ const File = ({
                       // height={true}
                       fileHeightFrames={window.screen.availHeight - 300}
                       fileHeights={"80vh"}
+                      isFillView={true}
                     />
                   )}
                 </>

@@ -448,7 +448,7 @@ export const getCaptureSectionBackgroundFile = ({
               );
 
               if (selectedMeatData?.stateIndicator) {
-                setLabData(selectedMeatData?.fileId)
+                setLabData && setLabData(selectedMeatData?.fileId)
                 getCurrentDiseaseType && getCurrentDiseaseType(false);
                 selectedMeatData?.stateIndicator === "LAB"
                   ? getLabPDF &&

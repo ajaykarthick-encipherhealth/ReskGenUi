@@ -269,6 +269,7 @@ const File = ({
                     headers={search?.headers}
                     fileHeight={true}
                     fileHeightFrame={"850"}
+                    isFillView={true}
                   />
                 )}
               </>

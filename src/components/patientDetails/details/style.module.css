@@ -1,0 +1,6 @@
+.pdfViewerContainer > iframe{
+    height: 96vh !important;
+}
+.pdfViewerContainerHalf > iframe{
+    height: 76vh !important;
+}

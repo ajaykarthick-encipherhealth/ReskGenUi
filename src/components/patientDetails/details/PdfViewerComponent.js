@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ENDPOINTS from "../../../utility/enpoints";
 import { connect } from "react-redux";
+import Style from "./style.module.css";
 
 const PdfViewer = ({
   src,
@@ -8,12 +9,10 @@ const PdfViewer = ({
   pageNumber,
   headers,
   headerContent,
-  height,
-  fileHeight,
-  fileHeightFrame,
   fileHeightFrames,
   fileHeights,
   selectedPageNumber,
+  isFillView,
 }) => {
   const [iframeSrc, setIframeSrc] = useState("");
   useEffect(() => {
@@ -44,18 +43,21 @@ const PdfViewer = ({
   return (
     <>
       <div
-        style={{
-          maxHeight: fileHeights? fileHeights:"75vh",
-          minHeight: fileHeights? fileHeights:"75vh",
-          overflow: "hidden",
-        }}
+        // style={{
+        //   maxHeight: fileHeights ? fileHeights : "75vh",
+        //   minHeight: fileHeights ? fileHeights : "75vh",
+        //   overflow: "hidden",
+        // }}
+        className={
+          isFillView ? Style.pdfViewerContainerHalf : Style.pdfViewerContainer
+        }
       >
         <iframe
           id="pdfViewer"
           title="PDF Viewer"
           frameBorder="0"
           width={"100%"}
-          height={fileHeightFrames? fileHeightFrames :"710px"}
+          // height={fileHeightFrames ? fileHeightFrames : "710px"}
           src={iframeSrc}
         />
       </div>

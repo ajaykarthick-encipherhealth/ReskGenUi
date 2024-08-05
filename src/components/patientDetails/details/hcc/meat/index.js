@@ -433,7 +433,7 @@ const Meat = ({
           <div className="section-container">
             <div className="row">
               <div className="col-xl-4">
-                <div style={{ height: "90%", overflowY: "scroll" }}>
+                <div style={{ height: "98%", overflowY: "scroll" }}>
                   <div
                     className={
                       selectMeatResult?.isMeatCriteriaPresent === true
