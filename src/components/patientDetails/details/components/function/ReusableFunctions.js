@@ -560,17 +560,14 @@ export const getCaptureSectionBackgroundFile = ({
                             (item) => item?.header === res
                           );
                           if (selectedMeatData?.stateIndicator) {
+                            setLabData && setLabData(selectedMeatData?.fileId)
                             getCurrentDiseaseType &&
                               getCurrentDiseaseType(false);
                             selectedMeatData?.stateIndicator === "LAB"
                               ? getLabPDF &&
-                                getLabPDF(
-                                  patientId,
-                                  "",
-                                  selectedMeatData?.dateOfService,
-                                  "",
-                                  selectedMeatData?.diagnosticTestName
-                                )
+                              getLabPDF({
+                                fileId: selectedMeatData?.fileId,
+                              })
                               : getRadiologyPDF &&
                                 getRadiologyPDF(
                                   patientId,
