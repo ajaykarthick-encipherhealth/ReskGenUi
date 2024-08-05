@@ -50,7 +50,7 @@ const Lab = ({
 
   const handleOptions = (value) => {
     var selectData = patientDosResult?.data?.response.filter(
-      (i) => i.dos === value
+      (i) => i.dateOfService === value
     );
     setIsLoading(true);
     setSelectDosValue(value);
@@ -59,16 +59,18 @@ const Lab = ({
     if (value) {
       getLabDetails(
         patientId,
-        null,
+        processedYearResult?.data?.response[0],
         moment(value).format("YYYY-MM-DD"),
         "",
         selectData[0]?.testName
       );
+      getLabFileDetails(selectData[0]?.fileDetailDTO?.azureBlobPath);
     } else {
+      setSelectDosValue(dosSummariesList[0]?.value);
       getLabDetails(
         patientId,
         labDetailsResult?.data?.response?.processedYear,
-        null,
+        moment(dosSummariesList[0]?.value).format("YYYY-MM-DD"),
         ""
       );
     }
@@ -88,17 +90,6 @@ const Lab = ({
     getAllProcessYearSelect(processedYearResult);
   }, [processedYearResult]);
 
-  useEffect(() => {
-    if (labDetailsResult?.data?.response) {
-      if (labDetailsResult?.data?.response) {
-        getLabFileDetails(
-          labDetailsResult?.data?.response?.fileDetailDTO
-            ?.radiologyAzureBlobPaths[0]
-        );
-        setIsLoading(true);
-      }
-    }
-  }, [labDetailsResult?.data?.response]);
 
 
   function getUniqueListBy(arr, key) {
@@ -115,13 +106,13 @@ const Lab = ({
             <>
               <div className="d-flex justify-content-between">
                 <span className={styles.dosLable}>
-                  {moment(res.dos).format("MM-DD-YYYY")}
+                  {moment(res.dateOfService).format("MM-DD-YYYY")}
                 </span>
                 {getStatusIcon(res.processStage)}
               </div>
             </>
           );
-          dosList.push({ value: res.dos, label: dosLable });
+          dosList.push({ value: res.dateOfService, label: dosLable });
         }
       });
       setDosSummariesList(dosList);
@@ -131,12 +122,23 @@ const Lab = ({
         const patientId = localStorage.getItem("patientId");
         getLabDetails(
           patientId,
-          null,
-          moment(patientDosResult?.data?.response[0].dos).format("YYYY-MM-DD"),
+          processedYearResult?.data?.response[0],
+          moment(patientDosResult?.data?.response[0].dateOfService).format(
+            "YYYY-MM-DD"
+          ),
           "",
           patientDosResult?.data?.response[0]?.testName
         );
       }
+    }
+  }, [patientDosResult?.data?.response]);
+
+  useEffect(() => {
+    if (patientDosResult?.data?.response) {
+      getLabFileDetails(
+        patientDosResult?.data?.response[0]?.fileDetailDTO?.azureBlobPath
+      );
+      setIsLoading(true);
     }
   }, [patientDosResult?.data?.response]);
 
@@ -185,7 +187,10 @@ const Lab = ({
       </div>
       <div className={styles.displayDiv}>
         {patientDosResult?.data?.response
-          ? getUniqueListBy(patientDosResult?.data?.response, "dos")?.map((data) => (
+          ? getUniqueListBy(
+              patientDosResult?.data?.response,
+              "dateOfService"
+            )?.map((data) => (
               <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
                 <div
                   className={` ${styles.selectDetailsContainer}`}
@@ -197,7 +202,7 @@ const Lab = ({
                 >
                   <div className="col-xl-6 ">
                     <span className={styles.selectHead}>
-                      {moment(data.dos).format("MM-DD-YYYY")}
+                      {moment(data?.dateOfService).format("MM-DD-YYYY")}
                     </span>
                   </div>
 
@@ -288,7 +293,6 @@ const Lab = ({
                         placeholder="Select Year"
                         onChange={handleOptions}
                         className="dosSelect"
-                        allowClear
                         value={selectedYearValue}
                         style={{ marginRight: "10px" }}
                       >
