@@ -83,15 +83,10 @@ export async function labDetails(
   const options = {
     method: "GET",
   };
-  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}`;
-  if (dos) {
-    url = `patientId=${patientId}&role=${
-      roles ? roles?.toUpperCase() : ""
-    }&dateOfService=${dos}&testName=${testName}`;
-  }
+  var url = `patientId=${patientId}&processedYear=${processedYear}&dateOfService=${dos}&stateIndicator=LAB`;
   try {
     const data = await requestPortal(
-      `dbservice/lab/compute/get?${url}
+      `dbservice/patient/compute/get/diagnostic/data?${url}
     `,
       options
     );
@@ -229,9 +224,9 @@ export async function getAllProcessYear(patientId, type) {
   if (type == "RADIOLOGY") {
     URL = `dbservice/radiology/compute/get/allyear?patientId=${patientId}`;
   }
-  if (type == "LAB") {
-    URL = `dbservice/lab/compute/get/allyear?patientId=${patientId}`;
-  }
+  // if (type == "LAB") {
+  //   URL = `dbservice/lab/compute/get/allyear?patientId=${patientId}`;
+  // }
   const data = await requestPortal(URL, options);
   return data;
 }
@@ -252,7 +247,7 @@ export async function labdosWiseList(patientId, year) {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/lab/compute/get/alldossummaries?patientId=${patientId}&processedYear=${year}`,
+    `dbservice/patient/compute/get/alldos/stateindicator?patientId=${patientId}&processedYear=${year}&stateIndicator=LAB`,
     options
   );
   return data;
