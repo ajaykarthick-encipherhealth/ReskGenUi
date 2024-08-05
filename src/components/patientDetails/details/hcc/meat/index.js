@@ -25,7 +25,7 @@ import AddMeatQuery from "../../components/addMeatQuery";
 import {
   getCaptureSectionBackgroundMeatNew,
   getEncounterDateBackground,
-  getProviderNameList,
+  // getProviderNameList,
 } from "../../components/function/ReusableFunctions";
 import { getPatientDetails } from "../../components/function/GetData";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
@@ -33,6 +33,7 @@ import MeatCard from "../../components/MEAT";
 import ModelIndex from "../../components/model/Index";
 import ManuallyAdd from "../../components/manuallyAdd";
 import { getDateOfServiceBackground } from "../../components/function/DateOfServices";
+import { getProviderNameTag } from "../../components/function/ProviderHyperlinks";
 const { Option } = Select;
 
 const Meat = ({
@@ -50,9 +51,9 @@ const Meat = ({
   getRadiologyFileDetails,
   getLabFileDetails,
   currentDiseaseType,
-  getCurrentDiseaseType, 
+  getCurrentDiseaseType,
   getRadiologyPDF,
-  getLabPDF
+  getLabPDF,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -91,6 +92,8 @@ const Meat = ({
   const [isValidAction, setIsValidAction] = useState("");
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const [deletedMeatList, setDeletedMeatList] = useState([]);
+  const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
+  const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -485,10 +488,29 @@ const Meat = ({
                       <div
                         className={`${visitStyles.encounterAndSectionHeader}`}
                       >
-                        {getProviderNameList({
+                        {/* {getProviderNameList({
                           data: selectMeatResult?.providerName,
                           captureSectionMatching: captureSectionMatching,
-                          
+                        })} */}
+                        {getProviderNameTag({
+                          providerNames: selectMeatResult?.providerName,
+                          hyperlinks: selectMeatResult?.providerHyperlinks,
+                          setSearch: setSearch,
+                          diagnosisCode: selectMeatResult.diagnosisCode,
+                          diseaseName: selectMeatResult.diseaseName,
+                          setIsModalOpen: setIsModalOpen,
+                          setFileModalHeader: setFileModalHeader,
+                          patientDocumentResult: patientDocumentResult,
+                          setIsMulitpleHeader: setIsMulitpleProvider,
+                          isMulitpleHeader: isMulitpleProvider,
+                          setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
+                          isMulitpleHeaderCode: isMulitpleHeaderCode,
+                          setSelectMeatResult: setSelectMeatResult,
+                          meatresult: selectMeatResult,
+                          getSelectedDosPageNumber: getSelectedDosPageNumber,
+                          getRadiologyPDF: getRadiologyPDF,
+                          getLabPDF: getLabPDF,
+                          getCurrentDiseaseType:getCurrentDiseaseType
                         })}
                       </div>
                       <div
@@ -504,7 +526,7 @@ const Meat = ({
                           setSearch: setSearch,
                           setFileModalHeader: setFileModalHeader,
                           patientDocumentResult: patientDocumentResult,
-                          getCurrentDiseaseType:getCurrentDiseaseType
+                          getCurrentDiseaseType: getCurrentDiseaseType,
                         })}
                       </div>
                     </div>
@@ -714,7 +736,7 @@ const Meat = ({
                             getSelectedDosPageNumber,
                             getRadiologyPDF,
                             getLabPDF,
-                            getCurrentDiseaseType,
+                            getCurrentDiseaseType
                           )}
                         </div>
                       </div>
@@ -745,9 +767,9 @@ const Meat = ({
                       headers={search?.headers}
                       headerContent={search?.headerContent}
                       fileHeight={true}
-                    fileHeightFrame={"950"}
-                    fileHeightFrames={window.screen.availHeight - 50}
-                    fileHeights={"90vh"}
+                      fileHeightFrame={"950"}
+                      fileHeightFrames={window.screen.availHeight - 50}
+                      fileHeights={"90vh"}
                     />
                   )}
                 </>
