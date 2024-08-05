@@ -191,11 +191,12 @@ const File = ({
     if (labResult?.data?.response) {
       if (labResult?.data?.response) {
         getLabFileDetails(
-          labResult?.data?.response?.fileDetailDTO?.radiologyAzureBlobPaths[0]
+          labResult?.data?.response?.azureBlobPath
         );
       }
     }
   }, [labResult?.data?.response]);
+  
   useEffect(() => {
     if (radiologyResult?.data?.response) {
       if (radiologyResult?.data?.response?.fileDetailDTO) {
@@ -617,7 +618,7 @@ const enhancer = connect(
     radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
     labFile: state?.patientDetails?.details?.labFileResult,
     radiologyResult: state?.patientDetails?.details?.radiologyResult,
-    labResult: state?.patientDetails?.details?.labResult,
+    labResult: state?.patientDetails?.details?.labPDFDetails,
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
     loading:state?.patientDetails?.details?.loading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,

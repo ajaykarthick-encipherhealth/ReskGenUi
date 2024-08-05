@@ -24,7 +24,8 @@ import {
   labDosDeatilsAction,
   getSelectedDosPageNumber,
   getCurrentDiseaseType,
-  activeLabels
+  activeLabels,
+  labPDFDetails
 } from "./actions";
 
 const initialState = {
@@ -109,7 +110,8 @@ const patientDetailsReducer = combineReducers({
   processedYear: createReducer(getAllProcessYearAction),
   radiologyDosResult: createReducer(radiologyDosDeatilsAction),
   labDosResult: createReducer(labDosDeatilsAction),
-  activeLabel: createReducer(activeLabels)
+  activeLabel: createReducer(activeLabels),
+  labPDFDetails: createReducer(labPDFDetails)
 });
 
 export default patientDetailsReducer;

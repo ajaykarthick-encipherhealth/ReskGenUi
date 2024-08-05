@@ -96,6 +96,18 @@ export async function labDetails(
   }
 }
 
+
+export async function labPDFData({fileId}) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/fileDetail/findbyid?fileId=${fileId}`,
+    options
+  );
+  return data;
+}
+
 export async function patientHccFile(fileId) {
   const tenId = localStorage.getItem("tenantId");
   const options = {

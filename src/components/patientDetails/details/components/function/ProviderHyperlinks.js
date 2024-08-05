@@ -24,6 +24,7 @@ export const getProviderNameTag = ({
   getRadiologyPDF,
   getLabPDF,
   getCurrentDiseaseType,
+  setLabData
 }) => {
   return providerNames?.map((res, index) => {
     const headerResult = hyperlinks?.filter((res2) => res2.header === res);
@@ -38,14 +39,12 @@ export const getProviderNameTag = ({
               );
               if (selectedMeatData?.stateIndicator) {
                 getCurrentDiseaseType(false);
+                setLabData && setLabData(selectedMeatData?.fileId);
                 selectedMeatData?.stateIndicator === "LAB"
-                  ? getLabPDF(
-                      patientId,
-                      "",
-                      selectedMeatData?.dateOfService,
-                      "",
-                      selectedMeatData?.diagnosticTestName
-                    )
+                  ? getLabPDF &&
+                    getLabPDF({
+                      fileId: selectedMeatData?.fileId,
+                    })
                   : getRadiologyPDF(
                       patientId,
                       "",
@@ -67,6 +66,7 @@ export const getProviderNameTag = ({
                 setSelectMeatResult: setSelectMeatResult,
                 meatresult: meatresult,
                 getSelectedDosPageNumber: getSelectedDosPageNumber,
+                setLabData: setLabData
               });
             }}
             className={`mt-2 text-start ${visitStyles.provider_name} truncate-text`}
@@ -111,6 +111,7 @@ export const getProviderNameTag = ({
                   getRadiologyPDF,
                   getLabPDF,
                   getCurrentDiseaseType,
+                  setLabData
                 })}
               </>
             }
@@ -332,6 +333,7 @@ export const getProviderPopoverHyperlink = ({
   getRadiologyPDF,
   getLabPDF,
   getCurrentDiseaseType,
+  setLabData
 }) => {
   return value?.map((res) => {
     var sectionMapArr = res ? (
@@ -343,14 +345,12 @@ export const getProviderPopoverHyperlink = ({
           );
           if (selectedMeatData?.stateIndicator) {
             getCurrentDiseaseType(false);
+            setLabData &&  setLabData(selectedMeatData?.fileId)
             selectedMeatData?.stateIndicator === "LAB"
-              ? getLabPDF(
-                  patientId,
-                  "",
-                  selectedMeatData?.dateOfService,
-                  "",
-                  selectedMeatData?.diagnosticTestName
-                )
+              ? getLabPDF &&
+              getLabPDF({
+                fileId: selectedMeatData?.fileId,
+              })
               : getRadiologyPDF(
                   patientId,
                   "",
@@ -403,6 +403,7 @@ const findProviderNameDocument = ({
   setSelectMeatResult,
   meatresult,
   getSelectedDosPageNumber,
+  setLabData
 }) => {
   setSelectMeatResult && setSelectMeatResult(meatresult);
   var disName = diseaseName ? diseaseName : meatresult?.diseaseName;

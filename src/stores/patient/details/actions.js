@@ -38,6 +38,10 @@ export const labDetailsAction = createActionThunk(
   "LAB_DETAILS",
   network.labDetails
 );
+export const labPDFDetails = createActionThunk(
+  "LAB_PDF_DETAILS",
+  network.labPDFData
+);
 export const labFileAction = createActionThunk(
   "LAB_FILE_DETAILS",
   network.patientHccFile
