@@ -365,6 +365,7 @@ const Combo = ({
                     headerContent={search?.headerContent}
                     fileHeight={true}
                     fileHeightFrame={"950"}
+                    isFillView={false}
                   />
                 )}
               </div>
