@@ -27,7 +27,7 @@ export const getProviderNameTag = ({
   setLabData
 }) => {
   return providerNames?.map((res, index) => {
-    const headerResult = hyperlinks?.filter((res2) => res2.header === res);
+    const headerResult = hyperlinks?.filter((res2) => res2.header === res.toLowerCase());
     if (index < 2) {
       if (headerResult?.length == 1) {
         var sectionMapArr = (
@@ -35,7 +35,7 @@ export const getProviderNameTag = ({
             onClick={() => {
               const patientId = localStorage.getItem("patientId");
               const selectedMeatData = hyperlinks?.find(
-                (item) => item?.header === res
+                (item) => item?.header === res.toLowerCase()
               );
               if (selectedMeatData?.stateIndicator) {
                 getCurrentDiseaseType(false);
