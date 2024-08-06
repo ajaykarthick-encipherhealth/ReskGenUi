@@ -53,7 +53,7 @@ const Meat = ({
   currentDiseaseType,
   getCurrentDiseaseType,
   getRadiologyPDF,
-  getLabPDF,
+  getLabPDFFile
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -94,6 +94,7 @@ const Meat = ({
   const [deletedMeatList, setDeletedMeatList] = useState([]);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
+  const [labData, setLabData] = useState("");
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -190,6 +191,11 @@ const Meat = ({
       console.log(error);
     }
   };
+  const getPdfEmptyFunction = () => {};
+  const getLabPDF =
+  labFile?.data?.response && labData == labFile?.data?.response?.fileId
+    ? getPdfEmptyFunction
+    : getLabPDFFile;
 
   const getDisTitlePopover = (title, value, subString, result) => {
     var popOver = "";
@@ -345,6 +351,8 @@ const Meat = ({
           addMeatQuery={addMeatQuery}
           getDisTitlePopover={getDisTitlePopover}
           cardTitle="VALID_MEAT"
+          setLabData={setLabData}
+          labData={labData}
         />
 
         {deletedMeatList?.length != 0 && (
@@ -378,6 +386,8 @@ const Meat = ({
               addMeatQuery={addMeatQuery}
               getDisTitlePopover={getDisTitlePopover}
               cardTitle="DELETED_MEAT"
+              setLabData={setLabData}
+              labData={labData}
             />
           </>
         )}
@@ -411,7 +421,8 @@ const Meat = ({
                       selectMeatResult,
                       getRadiologyPDF,
                       getLabPDF,
-                      getCurrentDiseaseType
+                      getCurrentDiseaseType,
+                      setLabData
                     )}
                   >
                     <Button type="primary">Still Hyperlink Issue</Button>
@@ -568,7 +579,8 @@ const Meat = ({
                             getSelectedDosPageNumber,
                             getRadiologyPDF,
                             getLabPDF,
-                            getCurrentDiseaseType
+                            getCurrentDiseaseType,
+                            setLabData
                           )}
                         </div>
                       </div>
@@ -624,7 +636,8 @@ const Meat = ({
                             getSelectedDosPageNumber,
                             getRadiologyPDF,
                             getLabPDF,
-                            getCurrentDiseaseType
+                            getCurrentDiseaseType,
+                            setLabData
                           )}
                         </div>
                       </div>
@@ -680,7 +693,8 @@ const Meat = ({
                             getSelectedDosPageNumber,
                             getRadiologyPDF,
                             getLabPDF,
-                            getCurrentDiseaseType
+                            getCurrentDiseaseType,
+                            setLabData
                           )}
                         </div>
                       </div>
@@ -736,7 +750,8 @@ const Meat = ({
                             getSelectedDosPageNumber,
                             getRadiologyPDF,
                             getLabPDF,
-                            getCurrentDiseaseType
+                            getCurrentDiseaseType,
+                            setLabData
                           )}
                         </div>
                       </div>
@@ -890,6 +905,7 @@ const enhancer = connect(
     getLabFileDetails: detailsActions.labFileAction,
     getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
     getLabPDF: detailsActions.labDetailsAction,
+    getLabPDFFile: detailsActions.labPDFDetails,
     getRadiologyPDF: detailsActions.radiologyDetailsAction,
   }
 );

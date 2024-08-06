@@ -304,7 +304,7 @@ const HccCards = ({
                                     onchangeValid={onchangeValid}
                                     result={data}
                                     setFileLoading={setFileLoading}
-                                    isComboCode={data.isComboCode}
+                                    isComboCode={data.isComboCode && data.ruleType != "DIRECT_COMBINATION_RULE_ENGINE"}
                                   />
                                 )}
                                 <Popover
@@ -550,7 +550,7 @@ const HccCards = ({
                                     getRadiologyPDF,
                                     getLabPDF,
                                     getCurrentDiseaseType,
-                                    setLabData
+                                    setLabData,
                                   })}
                                 </div>
                                 <div
@@ -820,6 +820,7 @@ const HccCards = ({
                                     setLabData: setLabData,
                                   })}
                                 </div>
+
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
@@ -830,46 +831,47 @@ const HccCards = ({
                                       Manually Added
                                     </Badge>
                                   ) : null}
+
+                                  {data.isComboCode == true ? (
+                                    <Badge
+                                      className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                      onClick={() => {
+                                        setActiveTabHead(3);
+                                        setActiveComboTree({
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      Combo
+                                    </Badge>
+                                  ) : data.isMostSpecific ? (
+                                    <Badge
+                                      className={`mt-2 text-start  ${visitStyles.isMostSpecific}`}
+                                    >
+                                      Most Specified
+                                    </Badge>
+                                  ) : null}
+                                  {data.isRadiology == true && (
+                                    <Tooltip title="RADIOLOGY">
+                                      <span
+                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                        bg={`  mt-2 bg-bg-eight `}
+                                      >
+                                        Radiology
+                                      </span>
+                                    </Tooltip>
+                                  )}
+                                  {data.isLab == true && (
+                                    <Tooltip title="LAB">
+                                      <span
+                                        className={` mt-2 ${visitStyles.labStatus}`}
+                                        bg={`  mt-2 bg-bg-seven `}
+                                      >
+                                        Lab
+                                      </span>
+                                    </Tooltip>
+                                  )}
                                 </div>
-                                {data.isComboCode == true ? (
-                                  <Badge
-                                    className={`mt-2 text-start  ${visitStyles.isComboCode}`}
-                                    onClick={() => {
-                                      setActiveTabHead(3);
-                                      setActiveComboTree({
-                                        diagnosisCode: data?.diagnosisCode,
-                                      });
-                                    }}
-                                  >
-                                    Combo
-                                  </Badge>
-                                ) : data.isMostSpecific ? (
-                                  <Badge
-                                    className={`mt-2 text-start  ${visitStyles.isMostSpecific}`}
-                                  >
-                                    Most Specified
-                                  </Badge>
-                                ) : null}
-                                {data.isRadiology == true && (
-                                  <Tooltip title="RADIOLOGY">
-                                    <span
-                                      className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                      bg={`  mt-2 bg-bg-eight `}
-                                    >
-                                      Radiology
-                                    </span>
-                                  </Tooltip>
-                                )}
-                                {data.isLab == true && (
-                                  <Tooltip title="LAB">
-                                    <span
-                                      className={` mt-2 ${visitStyles.labStatus}`}
-                                      bg={`  mt-2 bg-bg-seven `}
-                                    >
-                                      Lab
-                                    </span>
-                                  </Tooltip>
-                                )}
                               </div>
                             )}
                           </div>

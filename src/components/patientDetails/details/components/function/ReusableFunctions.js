@@ -258,12 +258,12 @@ export const getHeaderHyperlink = (
           );
           if (selectedMeatData?.stateIndicator) {
             getCurrentDiseaseType && getCurrentDiseaseType(false);
-            setLabData &&  setLabData(selectedMeatData?.fileId)
+            setLabData && setLabData(selectedMeatData?.fileId);
             selectedMeatData?.stateIndicator === "LAB"
               ? getLabPDF &&
-              getLabPDF({
-                fileId: selectedMeatData?.fileId,
-              })
+                getLabPDF({
+                  fileId: selectedMeatData?.fileId,
+                })
               : getRadiologyPDF &&
                 getRadiologyPDF &&
                 getRadiologyPDF(
@@ -423,15 +423,15 @@ export const getCaptureSectionBackgroundFile = ({
   getLabPDF,
   getRadiologyPDF,
   getCurrentDiseaseType,
-  setLabData
+  setLabData,
 }) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res, index) => {
     const result = captureSectionMatching?.filter(
-      (res2) => res2.sectionName === res
+      (res2) => res2.sectionName == res
     );
     const headerResult = hyperlinks?.filter(
-      (res2) => res2.header === result[0]?.sectionName
+      (res2) => res2.header == result[0]?.sectionName
     );
     var backColor = result[0]?.backgroundColor;
     var textColor = result[0]?.sectionColor;
@@ -448,7 +448,7 @@ export const getCaptureSectionBackgroundFile = ({
               );
 
               if (selectedMeatData?.stateIndicator) {
-                setLabData && setLabData(selectedMeatData?.fileId)
+                setLabData && setLabData(selectedMeatData?.fileId);
                 getCurrentDiseaseType && getCurrentDiseaseType(false);
                 selectedMeatData?.stateIndicator === "LAB"
                   ? getLabPDF &&
@@ -557,17 +557,17 @@ export const getCaptureSectionBackgroundFile = ({
                           getSelectedDosPageNumber(null);
                           const patientId = localStorage.getItem("patientId");
                           const selectedMeatData = hyperlinks?.find(
-                            (item) => item?.header === res
+                            (it) => it?.header == item
                           );
                           if (selectedMeatData?.stateIndicator) {
-                            setLabData && setLabData(selectedMeatData?.fileId)
+                            setLabData && setLabData(selectedMeatData?.fileId);
                             getCurrentDiseaseType &&
                               getCurrentDiseaseType(false);
                             selectedMeatData?.stateIndicator === "LAB"
                               ? getLabPDF &&
-                              getLabPDF({
-                                fileId: selectedMeatData?.fileId,
-                              })
+                                getLabPDF({
+                                  fileId: selectedMeatData?.fileId,
+                                })
                               : getRadiologyPDF &&
                                 getRadiologyPDF(
                                   patientId,
@@ -1374,7 +1374,8 @@ export const getCaptureSectionBackgroundMeatNew = (
   getSelectedDosPageNumber,
   getRadiologyPDF,
   getLabPDF,
-  getCurrentDiseaseType
+  getCurrentDiseaseType,
+  setLabData
 ) => {
   var dublicateCaptureRemove = removeDuplicatesArray(value);
 
@@ -1386,22 +1387,6 @@ export const getCaptureSectionBackgroundMeatNew = (
     var textColor = result[0]?.sectionColor;
     var headerNames = result[0]?.sectionName;
     var sectionMapArr = (
-      //   <Popover
-      //   placement="topLeft"
-      //   title={res?.header}
-      //   content={
-      //     <>
-      //       <div className={styles.subStringContainer}>
-      //         <div>
-      //           <span className={styles.substringHead}>
-      //             Document Word
-      //           </span>
-      //         </div>
-      //         {res?.substring}
-      //       </div>
-      //     </>
-      //   }
-      // >
       <span
         onClick={() => {
           getSelectedDosPageNumber && getSelectedDosPageNumber(null);
@@ -1410,16 +1395,13 @@ export const getCaptureSectionBackgroundMeatNew = (
             (item) => item?.header === res.header
           );
           if (selectedMeatData?.stateIndicator) {
+            setLabData && setLabData(selectedMeatData?.fileId);
             getCurrentDiseaseType && getCurrentDiseaseType(false);
             selectedMeatData?.stateIndicator === "LAB"
               ? getLabPDF &&
-                getLabPDF(
-                  patientId,
-                  "",
-                  selectedMeatData?.dateOfService,
-                  "",
-                  selectedMeatData?.diagnosticTestName
-                )
+              getLabPDF({
+                fileId: selectedMeatData?.fileId,
+              })
               : getRadiologyPDF &&
                 getRadiologyPDF(
                   patientId,
@@ -1530,6 +1512,12 @@ export const stringToColour = (str) => {
   }
   if (str.toLocaleLowerCase() === "examination") {
     colour = "#9eb875";
+  }
+  if (
+    str.toLocaleLowerCase() == "assessments" ||
+    str.toLocaleLowerCase() == "assessment"
+  ) {
+    colour = "#f1a113";
   }
   return colour;
 };
