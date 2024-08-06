@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Tab, Nav } from "react-bootstrap";
+import { Tab, Nav, Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import VisitData from "./visitData";
@@ -13,7 +13,8 @@ import { Popover, Select } from "antd";
 import styles from "../hcc/styles.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
-import { SwapOutlined } from "@ant-design/icons";
+import { SwapOutlined, PlusCircleFilled } from "@ant-design/icons";
+import AddLabForm from "../components/addLabForm";
 
 const { Option } = Select;
 
@@ -35,6 +36,7 @@ const Lab = ({
   const [selectedDosValue, setSelectedDosValue] = useState([]);
   const [selectedYearValue, setSelectedYearValue] = useState([]);
   const [search, setSearch] = useState();
+  const [labForm, setLabForm] = useState(false);
 
   const selectTab = (num) => {
     setActiveTabHead(num);
@@ -251,31 +253,35 @@ const Lab = ({
             <Tab.Container activeKey={activeTabHead}>
               <div className="row">
                 <div className="col-xl-12">
-                  <Nav as="ul" className="nav nav-tabs">
-                    <Nav.Item as="li" className="nav-item">
-                      <Nav.Link
-                        to="#my-posts"
-                        eventKey={1}
-                        className={visitStyles.navColor}
-                        activeClassName={visitStyles.activeLink}
-                        onClick={() => selectTab(1)}
-                      >
-                        File
-                      </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
-                      <Nav.Link
-                        to="#my-posts"
-                        eventKey={2}
-                        className={visitStyles.navColor}
-                        activeClassName={visitStyles.activeLink}
-                        onClick={() => selectTab(2)}
-                      >
-                        Visit Data
-                      </Nav.Link>
-                    </Nav.Item>
-                    {/* As of now we dont want to show meet UVAIS Suggested to remove this feature */}
-                    {/* <Nav.Item as="li" className="nav-item">
+                  <Nav
+                    as="ul"
+                    className={`nav nav-tabs ${styles.tabsContainer}`}
+                  >
+                    <div className={styles.tabslistConatiner}>
+                      <Nav.Item as="li" className="nav-item">
+                        <Nav.Link
+                          to="#my-posts"
+                          eventKey={1}
+                          className={visitStyles.navColor}
+                          activeClassName={visitStyles.activeLink}
+                          onClick={() => selectTab(1)}
+                        >
+                          File
+                        </Nav.Link>
+                      </Nav.Item>
+                      <Nav.Item as="li" className="nav-item">
+                        <Nav.Link
+                          to="#my-posts"
+                          eventKey={2}
+                          className={visitStyles.navColor}
+                          activeClassName={visitStyles.activeLink}
+                          onClick={() => selectTab(2)}
+                        >
+                          Visit Data
+                        </Nav.Link>
+                      </Nav.Item>
+                      {/* As of now we dont want to show meet UVAIS Suggested to remove this feature */}
+                      {/* <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
                         eventKey={3}
@@ -286,66 +292,85 @@ const Lab = ({
                         MEAT Criteria
                       </Nav.Link>
                     </Nav.Item> */}
-                    <Nav.Item as="li" className="nav-item">
-                      <Select
-                        placeholder="Select Year"
-                        onChange={handleOptions}
-                        className="dosSelect"
-                        value={selectedYearValue}
-                        style={{ marginRight: "10px" }}
-                      >
-                        {dosYear?.map((data) => (
-                          <Option key={data?.value} value={data?.value}>
-                            {data.label}
-                          </Option>
-                        ))}
-                      </Select>
-                    </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
-                      <Select
-                        placeholder="Select DOS"
-                        onChange={handleOptions}
-                        allowClear
-                        style={{ width: "220px" }}
-                        value={selectDosValue}
-                      >
-                        {dosSummariesList?.map((data) => (
-                          <Option key={data?.value} value={data?.value}>
-                            {data.label}
-                          </Option>
-                        ))}
-                      </Select>
-                    </Nav.Item>
-                    {activeTabHead == 1 && (
-                      <Popover
-                        open={popoverVisible}
-                        content={PopContent}
-                        placement="bottom"
-                        trigger={"click"}
-                        overlayStyle={{ zIndex: 1000 }}
-                        onOpenChange={() => setPopoverVisible(false)}
-                      >
-                        <div
-                          className={styles.dosContainer}
-                          onClick={() => {
-                            setPopoverVisible(true);
-                          }}
-                          style={{ marginLeft: "10px" }}
+                      <Nav.Item as="li" className="nav-item">
+                        <Select
+                          placeholder="Select Year"
+                          onChange={handleOptions}
+                          className="dosSelect"
+                          value={selectedYearValue}
+                          style={{ marginRight: "10px" }}
                         >
-                          <span className={styles.dosPageNumber}>
-                            Select Dos Page Number
-                          </span>
-                          <FontAwesomeIcon
-                            icon={faAngleDown}
-                            style={{
-                              size: 10,
-                              color: "#e6e6e6",
-                              marginLeft: "5px",
-                            }}
-                          />
-                        </div>
-                      </Popover>
-                    )}
+                          {dosYear?.map((data) => (
+                            <Option key={data?.value} value={data?.value}>
+                              {data.label}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Nav.Item>
+                      <Nav.Item as="li" className="nav-item">
+                        <Select
+                          placeholder="Select DOS"
+                          onChange={handleOptions}
+                          allowClear
+                          style={{ width: "220px" }}
+                          value={selectDosValue}
+                        >
+                          {dosSummariesList?.map((data) => (
+                            <Option key={data?.value} value={data?.value}>
+                              {data.label}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Nav.Item>
+                      <Nav.Item as="li" className="nav-item">
+                        <>
+                          {activeTabHead == 1 && (
+                            <Popover
+                              open={popoverVisible}
+                              content={PopContent}
+                              placement="bottom"
+                              trigger={"click"}
+                              overlayStyle={{ zIndex: 1000 }}
+                              onOpenChange={() => setPopoverVisible(false)}
+                            >
+                              <div
+                                className={styles.dosContainer}
+                                onClick={() => {
+                                  setPopoverVisible(true);
+                                }}
+                                style={{ marginLeft: "10px" }}
+                              >
+                                <span className={styles.dosPageNumber}>
+                                  Select Dos Page Number
+                                </span>
+                                <FontAwesomeIcon
+                                  icon={faAngleDown}
+                                  style={{
+                                    size: 10,
+                                    color: "#e6e6e6",
+                                    marginLeft: "5px",
+                                  }}
+                                />
+                              </div>
+                            </Popover>
+                          )}
+                        </>
+                      </Nav.Item>
+                    </div>
+                    <div>
+                      <Button
+                        onClick={() => {
+                          setLabForm(true);
+                        }}
+                        style={{
+                          background: "#04306f",
+                          height: "31px !",
+                        }}
+                        className={`btn btn-sm ms-2 flr width-max-conten ${styles.labUploadBtn}`}
+                      >
+                        <PlusCircleFilled /> UPLOAD
+                      </Button>
+                    </div>
                   </Nav>
                 </div>
               </div>
@@ -376,6 +401,7 @@ const Lab = ({
           </div>
         </div>
       </div>
+      <AddLabForm setOpen={setLabForm} open={labForm} />
     </>
   );
 };

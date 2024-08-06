@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { notification } from "antd";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import axios from "../../../../../utility/axiosConfig";
 import { validateYear } from "../../../../headerFilters/functions";
 import ENDPOINTS from "../../../../../utility/enpoints";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
+import { getResponePopup } from "../../../../../utils/reusable";
 
-const AddLabForm = ({ setOpen, open }) => {
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
+const AddLabForm = ({
+  setOpen,
+  open,
+  patientDetailsResult,
+  getPatientLabDosList,
+  processedYearResult,
+}) => {
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [validated, setValidated] = useState(false);
   const [error, setError] = useState({ year: "" });
@@ -60,38 +65,46 @@ const AddLabForm = ({ setOpen, open }) => {
     formData.append("tenantid", tenId);
     formData.append("userid", uId);
     formData.append("patientid", inputValue.patientId);
-    formData.append("patientname", inputValue.name);
     formData.append("dos", inputValue.year);
     const headers = {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     };
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/lab
+    try {
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint +
+          `aiservice/ai/upload/lab
           `,
-      formData,
-      headers
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-      setOpen(false);
-      setIsLoadingBtn(false);
-    } else {
+        formData,
+        headers
+      );
+      var res = response.data;
+      if (res?.status == "SUCCESS") {
+        getPatientLabDosList(
+          patientDetailsResult?.data?.response?.patientId,
+          processedYearResult?.data?.response[0]
+        );
+        setOpen(false);
+        setIsLoadingBtn(false);
+        getResponePopup(response);
+      } else if (res?.status == "CUSTOM_EXCEPTION") {
+        setIsLoadingBtn(false);
+        getResponePopup(response);
+      } else if (res?.status == "USER_DEFINED_ERROR") {
+        setIsLoadingBtn(false);
+        getResponePopup(response);
+      }
+    } catch (error) {
       setIsLoadingBtn(false);
     }
   };
 
   useEffect(() => {
-    inputValue.patientId = patientDetailsResult?.result?.response?.patientId;
-    inputValue.name = patientDetailsResult?.result?.response?.patientName;
-  }, []);
+    console.log(processedYearResult);
+    inputValue.patientId = patientDetailsResult?.data?.response?.patientId;
+    inputValue.name = patientDetailsResult?.data?.response?.patientName;
+  }, [patientDetailsResult?.data?.response]);
 
   return (
     <Offcanvas
@@ -179,4 +192,13 @@ const AddLabForm = ({ setOpen, open }) => {
   );
 };
 
-export default AddLabForm;
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    processedYearResult: state?.patientDetails.details?.processedYear,
+  }),
+  {
+    getPatientLabDosList: detailsActions.labDosDeatilsAction,
+  }
+);
+export default enhancer(AddLabForm);
