@@ -309,6 +309,7 @@ const LabCards = ({
                                     patientDocumentResult:
                                       patientDocumentResult,
                                     popup,
+                                    hyperlinks: data?.hyperlinks,
                                   })}
                                 </div>
                                 {data.providerName.length == 0 && (
@@ -609,9 +610,11 @@ const enhancer = connect(
   (state) => ({
     fileDosPageNumberList: state?.patientDetails?.details?.labDosResult,
     loading: state?.patientDetails?.details?.loading,
+    labFile: state?.patientDetails?.details?.labPDFDetails,
   }),
   {
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
+    getLabPDFFile: detailsActions.labPDFDetails,
   }
 );
 export default enhancer(LabCards);

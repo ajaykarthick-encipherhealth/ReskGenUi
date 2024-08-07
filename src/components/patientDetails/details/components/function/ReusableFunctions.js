@@ -28,6 +28,8 @@ export const getEncounterDateBackground = ({
   getRadiologyPDF,
   getLabPDF,
   getCurrentDiseaseType,
+  hyperlinks,
+  setSelectedDos,
 }) => {
   return value?.map((res, index) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -109,21 +111,23 @@ export const getEncounterDateBackground = ({
                   <span
                     onClick={() => {
                       const patientId = localStorage.getItem("patientId");
-                      const selectedMeatData = encounterDateMatching?.find(
-                        (item) => item?.header === res
+                      const selectedMeatData = hyperlinks?.find(
+                        (ite) =>
+                          ite?.header === "COGENT_DOS" &&
+                          ite.dateOfService == item
                       );
                       if (selectedMeatData?.stateIndicator) {
                         getCurrentDiseaseType && getCurrentDiseaseType(false);
-                        selectedMeatData?.stateIndicator === "LAB"
-                          ? getLabPDF &&
-                            getLabPDF(
-                              patientId,
-                              "",
-                              selectedMeatData?.dateOfService,
-                              "",
-                              selectedMeatData?.diagnosticTestName
-                            )
-                          : getRadiologyPDF &&
+                        if (selectedMeatData?.stateIndicator === "LAB") {
+                          setSelectedDos && setSelectedDos(item);
+                          if (getLabPDF) {
+                            getLabPDF({
+                              fileId: selectedMeatData?.fileId,
+                            });
+                          }
+                        } else {
+                          setSelectedDos && setSelectedDos("");
+                          getRadiologyPDF &&
                             getRadiologyPDF(
                               patientId,
                               "",
@@ -131,7 +135,9 @@ export const getEncounterDateBackground = ({
                               "",
                               selectedMeatData?.diagnosticTestName
                             );
+                        }
                       } else {
+                        setSelectedDos && setSelectedDos("");
                         getCurrentDiseaseType && getCurrentDiseaseType(true);
                       }
                       getEncounterDetails(

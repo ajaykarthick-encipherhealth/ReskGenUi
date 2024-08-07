@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Popconfirm, Popover, Tooltip } from "antd";
@@ -29,6 +29,7 @@ import ENDPOINTS from "../../../../../utility/enpoints";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import MovementAction from "../movementAction";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
+import moment from "moment";
 const HccCards = ({
   list,
   hccVersionDetails,
@@ -90,6 +91,7 @@ const HccCards = ({
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
   const [labData, setLabData] = useState("");
+  const [selectedDos, setSelectedDos] = useState('')
 
   const getPdfEmptyFunction = () => {};
   const getRadiologyPDF =
@@ -148,6 +150,16 @@ const HccCards = ({
       pagenumber: "",
     });
   };
+
+  useEffect(() => {
+    if (selectedDos && labFile?.data?.response?.dosSummaries) {
+      const res = labFile?.data?.response?.dosSummaries.find((item) => item.dos == selectedDos)
+       setSearch({
+         value: moment(selectedDos).format("MM/DD/YYYY"),
+         page: res?.startPageNumber,
+       });
+    }
+  }, [selectedDos, labFile?.data?.response?.dosSummaries])
 
   return (
     <>
@@ -576,6 +588,8 @@ const HccCards = ({
                                     getRadiologyPDF,
                                     getLabPDF,
                                     getCurrentDiseaseType,
+                                    hyperlinks: data?.hyperlinks,
+                                    setSelectedDos
                                   })}
                                 </div>
                                 {data.providerName.length == 0 && (
