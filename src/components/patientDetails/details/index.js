@@ -168,6 +168,7 @@ const Details = ({
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [showTerminal, setShowTerminal] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [selectDosValue, setSelectDosValue] = useState("");
   const tabList = [
     {
       title: "HCC",
@@ -478,6 +479,7 @@ const Details = ({
 
   const backToPatientData = () => {
     dispatch(getPatientID(null));
+
     getCurrentDiseaseType(true);
     const user = localStorage.getItem("userRole");
     if (user && user.toLowerCase() === "admin") {
@@ -540,6 +542,7 @@ const Details = ({
     } else {
       navigate.back();
     }
+    setSelectDosValue("")
   };
 
   const splitUserName = (name) => {
@@ -1268,11 +1271,16 @@ const Details = ({
                                 patientHccResult={patientDocumentResult}
                                 year={dosYearDefalutSelect}
                                 setIsLoading={setIsLoading}
+                                selectDosValue={selectDosValue}
+                                setSelectDosValue={setSelectDosValue}
+
                               />
                             ) : activeTab == 2 ? (
                               <NonHcc
                                 patientNonHccResult={patientDocumentResult}
                                 setIsLoading={setIsLoading}
+                                selectDosValue={selectDosValue}
+                                setSelectDosValue={setSelectDosValue}
                               />
                             ) : activeTab == 3 ? (
                               <Radiology />
