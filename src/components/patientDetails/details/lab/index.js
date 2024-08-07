@@ -188,8 +188,8 @@ const Lab = ({
       <div className={styles.displayDiv}>
         {patientDosResult?.data?.response
           ? getUniqueListBy(
-              patientDosResult?.data?.response,
-              "dateOfService"
+            patientDosResult?.data?.response[1]?.fileDetailDTO?.dosSummaries,
+              "dos"
             )?.map((data) => (
               <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
                 <div
@@ -202,7 +202,7 @@ const Lab = ({
                 >
                   <div className="col-xl-6 ">
                     <span className={styles.selectHead}>
-                      {moment(data?.dateOfService).format("MM-DD-YYYY")}
+                      {moment(data?.dos).format("MM-DD-YYYY")}
                     </span>
                   </div>
 
