@@ -26,19 +26,24 @@ export const getProviderNameTag = ({
   getCurrentDiseaseType,
   setLabData
 }) => {
+  
   return providerNames?.map((res, index) => {
-    const headerResult = hyperlinks?.filter((res2) => res2.header === res.toLowerCase());
+    const normalizedRes = res.toLowerCase();
+    const headerResult = hyperlinks?.filter(
+      (res2) => res2.header.toLowerCase() === normalizedRes
+    );
+  
     if (index < 2) {
-      if (headerResult?.length == 1) {
-        var sectionMapArr = (
+      if (headerResult?.length === 1) {
+        const sectionMapArr = (
           <span
             onClick={() => {
               const patientId = localStorage.getItem("patientId");
               const selectedMeatData = hyperlinks?.find(
-                (item) => item?.header === res.toLowerCase()
+                (item) => item?.header.toLowerCase() === normalizedRes
               );
               if (selectedMeatData?.stateIndicator) {
-                getCurrentDiseaseType(false);
+                getCurrentDiseaseType && getCurrentDiseaseType(false);
                 setLabData && setLabData(selectedMeatData?.fileId);
                 selectedMeatData?.stateIndicator === "LAB"
                   ? getLabPDF &&
@@ -88,11 +93,11 @@ export const getProviderNameTag = ({
             <Tooltip title={res}> {truncateString(res, 30)}</Tooltip>
           </span>
         );
-        if (res != "") {
+        if (res !== "") {
           return sectionMapArr;
         }
       } else {
-        var sectionMapArr = (
+        const sectionMapArr = (
           <Popover
             placement="bottom"
             content={
@@ -137,26 +142,26 @@ export const getProviderNameTag = ({
             </span>
           </Popover>
         );
-        if (res != "") {
+        if (res !== "") {
           return sectionMapArr;
         }
       }
-    } else if (providerNames.length - 1 == index) {
-      if (headerResult?.length == 1) {
-        var sectionMapArr = (
+    } else if (providerNames.length - 1 === index) {
+      if (headerResult?.length === 1) {
+        const sectionMapArr = (
           <>
             {providerNames?.map((item, i) =>
               i > 1 ? (
                 <>
                   {isMulitpleHeader &&
-                    diagnosisCode == isMulitpleHeaderCode && (
+                    diagnosisCode === isMulitpleHeaderCode && (
                       <span
                         onClick={() => {
                           const patientId = localStorage.getItem("patientId");
                           const selectedMeatData = hyperlinks?.find(
                             (item) => item?.header === res
                           );
-
+  
                           if (selectedMeatData?.stateIndicator) {
                             selectedMeatData?.stateIndicator === "LAB"
                               ? getLabPDF(
@@ -211,11 +216,11 @@ export const getProviderNameTag = ({
                 </>
               ) : null
             )}
-
+  
             <span
               style={{
                 backgroundColor:
-                  isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode
+                  isMulitpleHeader && diagnosisCode === isMulitpleHeaderCode
                     ? "#f35f5f"
                     : "#b3b3ec",
                 color: "#fff",
@@ -223,14 +228,14 @@ export const getProviderNameTag = ({
               className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
               onClick={() => {
                 setIsMulitpleHeader(
-                  isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode
+                  isMulitpleHeader && diagnosisCode === isMulitpleHeaderCode
                     ? false
                     : true
-                ),
-                  setIsMulitpleHeadeCode(diagnosisCode);
+                );
+                setIsMulitpleHeadeCode(diagnosisCode);
               }}
             >
-              {isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode ? (
+              {isMulitpleHeader && diagnosisCode === isMulitpleHeaderCode ? (
                 "X"
               ) : (
                 <>{providerNames.length - 2}+</>
@@ -240,7 +245,7 @@ export const getProviderNameTag = ({
         );
         return sectionMapArr;
       } else {
-        var sectionMapArr = (
+        const sectionMapArr = (
           <>
             {providerNames?.map((item, i) =>
               i > 1 ? (
@@ -262,7 +267,7 @@ export const getProviderNameTag = ({
                   })}
                 >
                   {isMulitpleHeader &&
-                    diagnosisCode == isMulitpleHeaderCode && (
+                    diagnosisCode === isMulitpleHeaderCode && (
                       <span
                         className={`mt-2 text-start ${visitStyles.provider_name}`}
                         style={{
@@ -286,11 +291,11 @@ export const getProviderNameTag = ({
                 </Popover>
               ) : null
             )}
-
+  
             <span
               style={{
                 backgroundColor:
-                  isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode
+                  isMulitpleHeader && diagnosisCode === isMulitpleHeaderCode
                     ? "#f35f5f"
                     : "#b3b3ec",
                 color: "#fff",
@@ -298,14 +303,14 @@ export const getProviderNameTag = ({
               className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
               onClick={() => {
                 setIsMulitpleHeader(
-                  isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode
+                  isMulitpleHeader && diagnosisCode === isMulitpleHeaderCode
                     ? false
                     : true
-                ),
-                  setIsMulitpleHeadeCode(diagnosisCode);
+                );
+                setIsMulitpleHeadeCode(diagnosisCode);
               }}
             >
-              {isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode ? (
+              {isMulitpleHeader && diagnosisCode === isMulitpleHeaderCode ? (
                 "X"
               ) : (
                 <>{providerNames.length - 2}+</>
@@ -317,6 +322,7 @@ export const getProviderNameTag = ({
       }
     }
   });
+  
 };
 
 export const getProviderPopoverHyperlink = ({
