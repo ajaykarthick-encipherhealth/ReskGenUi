@@ -241,16 +241,16 @@ const RafScore = ({ patientDetailsResult }) => {
                       </div>
                     </div>
                     <div className={style.stickyHeader}>
-                      {rafScoreData?.map((item, i) => (
+                      {rafScoreDetails?.map((item, i) => (
                         <div className={style.detailsHead}>
                           <div
                             className={
-                              rafScoreData?.length != i + 1
+                              rafScoreDetails?.length != i + 1
                                 ? `row ${style.rafchildBorder}`
                                 : `row`
                             }
                           >
-                            <div className="col-xl-3"> {item.dx_name}</div>
+                            <div className="col-xl-3"> {item.dx_code}</div>
                             <div className={`col-xl-9 ${style.rafDescription}`}>
                               <Popover title={item.dx_desc}>
                                 {item.dx_desc}{" "}
