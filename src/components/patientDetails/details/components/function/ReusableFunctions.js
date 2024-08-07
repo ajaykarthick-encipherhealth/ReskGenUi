@@ -646,7 +646,7 @@ export const getCaptureSectionBackgroundFile = ({
             {dublicateCaptureDelete?.map((item, i) =>
               i > 1 ? (
                 <Popover
-                  overlayStyle={{ zIndex: 999 }}
+                  overlayStyle={{ zIndex: 9999 }}
                   placement="bottom"
                   content={getHeaderHyperlink(
                     findSectionHyperlink(hyperlinks, item),
