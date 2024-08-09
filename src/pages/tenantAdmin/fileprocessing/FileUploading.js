@@ -135,6 +135,7 @@ const FileUploading = ({
                   { label: "Amazing Charts", value: "Amazing Charts" },
                   { label: "Aprima", value: "Aprima" },
                   { label: "Athena", value: "Athena" },
+                  { label: "Allegiance MD", value: "Allegiance MD" },
                   { label: "Bizmatics", value: "Bizmatics" },
                   { label: "Cronos", value: "Cronos" },
                   { label: "DR RIAZ U HAQUE MD", value: "DR RIAZ U HAQUE MD" },
