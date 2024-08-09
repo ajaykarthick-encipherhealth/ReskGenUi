@@ -121,7 +121,8 @@ const Details = ({
   getCurrentProcessYearAction,
   activeLabels,
   isDosSelected,
-  isActives
+  isActives,
+  getSelectedDos
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -400,6 +401,7 @@ const Details = ({
     setPatientResultReload(false);
     setIsLoading(true);
     getPatientDosList(localPatientId, e);
+    getSelectedDos('')
     getpatientDetailsData(localPatientId, e, null, setIsLoading, userRole);
   };
 
@@ -1454,6 +1456,7 @@ const enhancer = connect(
     getLabDetails: detailsActions.labDetailsAction,
     getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
     activeLabels: detailsActions.activeLabels,
+    getSelectedDos: detailsActions.getSelectedDos,
     getCurrentProcessYearAction: detailsActions.getCurrentProcessYearAction,
   }
 );

@@ -182,7 +182,7 @@ export const getProviderNameTag = ({
                             getCurrentDiseaseType(false);
                           }
                           findProviderNameDocument({
-                            data: findSectionHyperlink(hyperlinks, item)[0],
+                            data: findSectionHyperlink(hyperlinks, item.toLowerCase())[0],
                             diagnosisCode: diagnosisCode,
                             diseaseName: diseaseName,
                             setSearch: setSearch,

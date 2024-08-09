@@ -294,7 +294,7 @@ export const priorityStatus = (value) => {
 };
 
 export const generateOptionsList = (items) => {
-  if (items?.data?.data?.response?.length>0) {
+  if (items?.data?.data?.response?.length > 0) {
     const options = [
       { label: "All", value: "" },
       ...items?.data?.data?.response?.map((item) => ({
@@ -308,7 +308,6 @@ export const generateOptionsList = (items) => {
     ].filter(Boolean);
     return options;
   } else {
-    
     return [];
   }
 };
@@ -590,10 +589,9 @@ export const handleTogglePasswordVisibility = (
 };
 
 export const getValidatePassword = (password, setErrors) => {
- 
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
-    console.log(password, !passwordRegex.test(password), "testing");
+  console.log(password, !passwordRegex.test(password), "testing");
   if (password.length === 0) {
     setErrors({
       password: "Please enter the password",
@@ -645,22 +643,25 @@ export const validateYear = (year, setErrors) => {
   const currentYear = new Date().getFullYear();
 
   if (year?.length === 0) {
-    setErrors({
+    setErrors((prev) => ({
+      ...prev,
       year: "Please enter year",
-    });
+    }));
 
     return false;
   }
   if (!yearPattern.test(year) && !correctYear) {
-    setErrors({
+    setErrors((prev) => ({
+      ...prev,
       year: "Please enter a valid 4-digit positive year",
-    });
+    }));
     return false;
   }
   if (year > currentYear || year?.length < 4) {
-    setErrors({
+    setErrors((prev) => ({
+      ...prev,
       year: "Please enter a valid year",
-    });
+    }));
     return false;
   }
 
