@@ -490,7 +490,7 @@ const Patient = ({
         sort,
         orgId
       );
-
+      handleClose()
       setAddPatient(false);
       setAddPatient(false);
       setIsLoadingBtn(false);
