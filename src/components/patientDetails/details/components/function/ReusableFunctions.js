@@ -39,8 +39,10 @@ export const getEncounterDateBackground = ({
         <span
           onClick={() => {
             const patientId = localStorage.getItem("patientId");
-            const selectedMeatData = encounterDateMatching?.find(
-              (item) => item?.header === res
+            const selectedMeatData = hyperlinks?.find(
+              (ite) =>
+                ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
+                ite.dateOfService == res
             );
             if (selectedMeatData?.stateIndicator) {
               getCurrentDiseaseType && getCurrentDiseaseType(false);
@@ -113,7 +115,7 @@ export const getEncounterDateBackground = ({
                       const patientId = localStorage.getItem("patientId");
                       const selectedMeatData = hyperlinks?.find(
                         (ite) =>
-                          ite?.header === "COGENT_DOS" &&
+                          ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
                           ite.dateOfService == item
                       );
                       if (selectedMeatData?.stateIndicator) {
@@ -124,6 +126,202 @@ export const getEncounterDateBackground = ({
                             getLabPDF({
                               fileId: selectedMeatData?.fileId,
                             });
+                            // setSearch({
+                            //   value: moment(findPageNumber[0]?.dos).format("MM/DD/YYYY"),
+                            //   page: findPageNumber[0]?.startPageNumber,
+                            // });
+                          }
+                        } else {
+                          setSelectedDos && setSelectedDos("");
+                          getRadiologyPDF &&
+                            getRadiologyPDF(
+                              patientId,
+                              "",
+                              selectedMeatData?.dateOfService,
+                              "",
+                              selectedMeatData?.diagnosticTestName
+                            );
+                        }
+                      } else {
+                        setSelectedDos && setSelectedDos("");
+                        getCurrentDiseaseType && getCurrentDiseaseType(true);
+                      }
+                      getEncounterDetails(
+                        item,
+                        fileDosPageNumberList,
+                        setIsModalOpenValidCodes,
+                        setSearch,
+                        setFileModalHeader,
+                        patientDocumentResult,
+                        selectMeatResult,
+                        datas,
+                        patientDocumentResult
+                      );
+                    }}
+                    style={{
+                      borderColor: stringToColour(item) + 33,
+                      color: stringToColour(item),
+                      border: "1px solid",
+                    }}
+                    className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate}`}
+                  >
+                    <i>
+                      <CalendarOutlined
+                        className={visitStyles.calenderIconNew}
+                        style={{
+                          size: 10,
+                          color: stringToColour(item),
+                        }}
+                      />
+                    </i>
+                    {moment(item).format("MMM DD")}
+                  </span>
+                ) : null
+              )}
+            </>
+          }
+        >
+          <span
+            style={{
+              background: "#a0b1a0",
+              color: "#fff",
+            }}
+            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+          >
+            {value.length - 2}+
+          </span>
+        </Popover>
+      );
+
+      return sectionMapArr;
+    }
+  });
+};
+
+export const getEncounterDateBackgroundLab = ({
+  value,
+  encounterDateMatching,
+  fileDosPageNumberList,
+  setIsModalOpenValidCodes,
+  setSearch,
+  setFileModalHeader,
+  patientDocumentResult,
+  selectMeatResult,
+  datas,
+  popup,
+  getRadiologyPDF,
+  getLabPDF,
+  getCurrentDiseaseType,
+  hyperlinks,
+  setSelectedDos,
+}) => {
+  return value?.map((res, index) => {
+    const result = encounterDateMatching.filter((res2) => res2.name == res);
+    var backColor = result[0]?.colors;
+    const dosSummaries = fileDosPageNumberList.data.response[0].fileDetailDTO.dosSummaries
+    if (index < 2) {
+      var sectionMapArr = res ? (
+        <span
+          onClick={() => {
+            const patientId = localStorage.getItem("patientId");
+            const selectedMeatData = dosSummaries?.find(
+              (ite) =>
+                // ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
+                ite.dos == res
+            );console.log(selectedMeatData
+              ,"testing");
+              if (selectedMeatData) {
+                setSearch({
+                  value: moment(selectedMeatData?.dos).format("MM/DD/YYYY"),
+                  page: selectedMeatData?.startPageNumber,
+                });
+              }
+            // if (selectedMeatData?.stateIndicator) {
+            //   getCurrentDiseaseType && getCurrentDiseaseType(false);
+            //   selectedMeatData?.stateIndicator === "LAB"
+            //     ? getLabPDF &&
+            //       getLabPDF(
+            //         patientId,
+            //         "",
+            //         selectedMeatData?.dateOfService,
+            //         "",
+            //         selectedMeatData?.diagnosticTestName
+            //       )
+            //     : getRadiologyPDF &&
+            //       getRadiologyPDF(
+            //         patientId,
+            //         "",
+            //         selectedMeatData?.dateOfService,
+            //         "",
+            //         selectedMeatData?.diagnosticTestName
+            //       );
+            // } else {
+            //   getCurrentDiseaseType && getCurrentDiseaseType(true);
+            // }
+            getEncounterDetails(
+              res,
+              fileDosPageNumberList,
+              setIsModalOpenValidCodes,
+              setSearch,
+              setFileModalHeader,
+              patientDocumentResult,
+              selectMeatResult,
+              datas,
+              patientDocumentResult
+            );
+          }}
+          style={{
+            borderColor: stringToColour(res) + 33,
+            color: stringToColour(res),
+            border: "1px solid",
+          }}
+          className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate}`}
+        >
+          <i>
+            <CalendarOutlined
+              className={visitStyles.calenderIconNew}
+              style={{
+                size: 10,
+                color: stringToColour(res),
+              }}
+            />
+          </i>
+          {moment(res).format("MMM DD")}
+        </span>
+      ) : (
+        ""
+      );
+      return sectionMapArr;
+    } else if (value.length - 1 == index) {
+      var sectionMapArr = (
+        <Popover
+          trigger={["hover"]}
+          placement="bottom"
+          overlayStyle={{ zIndex: 1000 }}
+          content={
+            <>
+              {value?.map((item, i) =>
+                i > 1 ? (
+                  <span
+                    onClick={() => {
+                      const patientId = localStorage.getItem("patientId");
+                      const selectedMeatData = hyperlinks?.find(
+                        (ite) =>
+                          ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
+                          ite.dateOfService == item
+                      );
+                      if (selectedMeatData?.stateIndicator) {
+                        getCurrentDiseaseType && getCurrentDiseaseType(false);
+                        if (selectedMeatData?.stateIndicator === "LAB") {
+                          setSelectedDos && setSelectedDos(item);
+                          if (getLabPDF) {
+                            getLabPDF({
+                              fileId: selectedMeatData?.fileId,
+                            });
+                            // setSearch({
+                            //   value: moment(findPageNumber[0]?.dos).format("MM/DD/YYYY"),
+                            //   page: findPageNumber[0]?.startPageNumber,
+                            // });
                           }
                         } else {
                           setSelectedDos && setSelectedDos("");

@@ -17,6 +17,7 @@ import { QuestionCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import {
   getCaptureSectionBackgroundFile,
   getEncounterDateBackground,
+  getEncounterDateBackgroundLab,
   getMeatFound,
   getProviderNameList,
   getSuspectTypes,
@@ -294,7 +295,7 @@ const LabCards = ({
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                  {getEncounterDateBackground({
+                                  {getEncounterDateBackgroundLab({
                                     value: data?.encounterDateSplit,
                                     encounterDateMatching:
                                       encounterDateMatching,
