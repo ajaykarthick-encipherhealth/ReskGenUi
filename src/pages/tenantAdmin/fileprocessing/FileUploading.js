@@ -121,6 +121,7 @@ const FileUploading = ({
               </Form.Label>
               <Select
                 // mode="multiple"
+                showSearch
                 name="emrType"
                 maxTagCount="responsive"
                 className={`ant_select_form hcc_form mb-2`}
