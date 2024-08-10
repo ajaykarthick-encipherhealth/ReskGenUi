@@ -4,3 +4,11 @@
 .pdfViewerContainerHalf > iframe{
     height: 76vh !important;
 }
+.emptyFileView{
+    height: 76vh;
+    border-radius: 5px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
