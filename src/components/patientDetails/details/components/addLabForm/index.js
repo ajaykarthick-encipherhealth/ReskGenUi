@@ -101,7 +101,6 @@ const AddLabForm = ({
   };
 
   useEffect(() => {
-    console.log(processedYearResult);
     inputValue.patientId = patientDetailsResult?.data?.response?.patientId;
     inputValue.name = patientDetailsResult?.data?.response?.patientName;
   }, [patientDetailsResult?.data?.response]);

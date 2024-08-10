@@ -209,7 +209,7 @@ const File = ({
   }, [radiologyResult?.data?.response]);
   useEffect(() => {
     if (
-      hccFileDetails?.data?.response &&
+      (hccFileDetails?.data?.response && patientDetailsResult?.data?.response?.fileDetailDTO) &&
       (currentDiseaseType || currentDiseaseType === "")
     ) {
       setSelectFileURL(hccFileDetails?.data?.response);

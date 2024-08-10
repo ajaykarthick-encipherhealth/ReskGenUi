@@ -102,7 +102,7 @@ const File = ({
   }, [patientDetailsResult]);
 
   useEffect(() => {
-    if (hccFileDetails?.data?.response) {
+    if (hccFileDetails?.data?.response && patientDetailsResult?.data?.response?.fileDetailDTO) {
       setSelectFileURL(hccFileDetails?.data?.response);
     }
     if (radiologyFileDetails?.result?.response) {
