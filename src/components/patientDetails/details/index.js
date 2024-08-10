@@ -1047,7 +1047,10 @@ const Details = ({
                                       <Select
                                         placeholder="Year"
                                         value={dosYearDefalutSelect}
-                                        onChange={(e) => dosOnChange(e)}
+                                        onChange={(e) => {
+                                          dosOnChange(e)
+                                          setSelectDosValue("")
+                                          getSelectedDos("")}}
                                         className={`custom_select_type ${visitStyles.custom_select_type}`}
                                         options={dosYear}
                                         style={{
