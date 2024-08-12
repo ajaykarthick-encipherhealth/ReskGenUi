@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
-import { notification, Select as AntSelect, Empty } from "antd";
+import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import {
   renderUserPrfoileAvatar,
@@ -21,7 +21,7 @@ function AddPatientListTable({
   setSort,
   page,
   sortCompleteOrder,
-  setSortCompleteOrder
+  setSortCompleteOrder,
 }) {
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
 
@@ -86,13 +86,50 @@ function AddPatientListTable({
               className={TableStyle.firstTdBorder}
               onClick={handleTableRowClick}
             >
-              {data.patientId ? data.patientId : "---"}
+              {data.patientId ? (
+                <Tooltip title={data.patientId}>
+                  <div
+                    style={{
+                      width: "160px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {data.patientId}
+                  </div>
+                </Tooltip>
+              ) : (
+                "---"
+              )}
             </td>
             <td
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.fileName ? data.fileName : "---"}
+              {data.fileName ? (
+                <Tooltip title={data.fileName}>
+                  <div
+                    style={{
+                      width: "160px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {data.fileName}
+                  </div>
+                </Tooltip>
+              ) : (
+                "---"
+              )}
+              {/* {data.fileName ? data.fileName : "---"} */}
+            </td>
+            <td
+              className={TableStyle.childBorder}
+              onClick={handleTableRowClick}
+            >
+              {data.emr ? data.emr : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
@@ -169,6 +206,7 @@ function AddPatientListTable({
           <tr>
             <th>PATIENT ID</th>
             <th>FILE NAME</th>
+            <th>EMR TYPE</th>
             <th>TOTAL PAGES</th>
             <th style={{ textAlign: "center" }}>CREATED BY</th>
 

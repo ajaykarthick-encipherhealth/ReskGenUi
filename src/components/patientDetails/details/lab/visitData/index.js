@@ -123,10 +123,7 @@ const VisitData = ({
   }, [radiologyFile?.data?.response]);
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
-    if (
-      radiologyFile?.data?.response &&
-      patientDetailsResult?.data?.response?.patientId
-    ) {
+    if (radiologyFile?.data?.response) {
       setSelectFileURL(radiologyFile?.data?.response);
     }
   };
@@ -288,6 +285,7 @@ const VisitData = ({
                             isVisitData={true}
                             provided={provided}
                             popup={zIndex}
+                            isMeatBlocked={true}
                           />
                         </div>
                       </div>
@@ -386,6 +384,7 @@ const VisitData = ({
                               isVisitData={true}
                               provided={provided}
                               popup={zIndex}
+                              isMeatBlocked={true}
                             />
                           </div>
                         </div>

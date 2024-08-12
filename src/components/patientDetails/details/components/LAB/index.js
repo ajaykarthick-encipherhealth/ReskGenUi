@@ -17,6 +17,7 @@ import { QuestionCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import {
   getCaptureSectionBackgroundFile,
   getEncounterDateBackground,
+  getEncounterDateBackgroundLab,
   getMeatFound,
   getProviderNameList,
   getSuspectTypes,
@@ -82,6 +83,7 @@ const LabCards = ({
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
+  const [labData, setLabData] = useState("");
 
   const PopContentHccVersion = (
     <div className={styles.innerPop}>
@@ -287,12 +289,13 @@ const LabCards = ({
                                     setSelectMeatResult: "",
                                     getSelectedDosPageNumber:
                                       getSelectedDosPageNumber,
+                                      setLabData: setLabData
                                   })}
                                 </div>
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                  {getEncounterDateBackground({
+                                  {getEncounterDateBackgroundLab({
                                     value: data?.encounterDateSplit,
                                     encounterDateMatching:
                                       encounterDateMatching,
@@ -307,6 +310,7 @@ const LabCards = ({
                                     patientDocumentResult:
                                       patientDocumentResult,
                                     popup,
+                                    hyperlinks: data?.hyperlinks,
                                   })}
                                 </div>
                                 {data.providerName.length == 0 && (
@@ -349,6 +353,7 @@ const LabCards = ({
                                       popup: "",
                                       getSelectedDosPageNumber:
                                         getSelectedDosPageNumber,
+                                        setLabData: setLabData
                                     })}
                                   </div>
                                 )}
@@ -606,9 +611,11 @@ const enhancer = connect(
   (state) => ({
     fileDosPageNumberList: state?.patientDetails?.details?.labDosResult,
     loading: state?.patientDetails?.details?.loading,
+    labFile: state?.patientDetails?.details?.labPDFDetails,
   }),
   {
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
+    getLabPDFFile: detailsActions.labPDFDetails,
   }
 );
 export default enhancer(LabCards);

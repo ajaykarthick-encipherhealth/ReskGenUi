@@ -45,7 +45,8 @@ const File = ({
   getRadiologyFileDetails,
   getLabFileDetails,
   currentDiseaseType,
-  loading
+  loading,
+  isDosSelected
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -190,11 +191,12 @@ const File = ({
     if (labResult?.data?.response) {
       if (labResult?.data?.response) {
         getLabFileDetails(
-          labResult?.data?.response?.fileDetailDTO?.radiologyAzureBlobPaths[0]
+          labResult?.data?.response?.azureBlobPath
         );
       }
     }
   }, [labResult?.data?.response]);
+  
   useEffect(() => {
     if (radiologyResult?.data?.response) {
       if (radiologyResult?.data?.response?.fileDetailDTO) {
@@ -207,7 +209,7 @@ const File = ({
   }, [radiologyResult?.data?.response]);
   useEffect(() => {
     if (
-      hccFileDetails?.data?.response &&
+      (hccFileDetails?.data?.response && patientDetailsResult?.data?.response?.fileDetailDTO) &&
       (currentDiseaseType || currentDiseaseType === "")
     ) {
       setSelectFileURL(hccFileDetails?.data?.response);
@@ -255,10 +257,11 @@ const File = ({
                       >
                         <span className={`${visitStyles.hcc_title_name}`}>
                           HCC
+                          {isDosSelected && 
                           <FontAwesomeIcon
                             onClick={() => addValidCodeFile()}
                             icon={faPlus}
-                          />
+                          />}
                         </span>
                         <div className="d-flex justify-content-center">
                           <span className={`${visitStyles.hcc_title_badge}`}>
@@ -344,7 +347,7 @@ const File = ({
               </div>
             </Popover> */}
             <div className="card-body p-0">
-              {loading ? <div className={visitStyles?.loaderDiv}><Spinner/></div>: (
+              {loading ? <div className={visitStyles?.loaderDiv}><Spinner/></div> : (
                 <>
                   {selectFileURL && (
                     <PdfViewer
@@ -353,12 +356,13 @@ const File = ({
                       pageNumber={search?.page ? search?.page : 1}
                       headers={search?.headers}
                       // height={true}
-                      fileHeight={true}
-                      fileHeightFrame={"850"}
+                      fileHeightFrames={window.screen.availHeight - 300}
+                      fileHeights={"80vh"}
+                      isFillView={true}
                     />
                   )}
                 </>
-              )}
+               )} 
             </div>
           </div>
           {isFileFormShow ? (
@@ -556,34 +560,12 @@ const File = ({
           combiTree={combiTree}
           setOpens={setOpens}
           setCombiTree={setCombiTree}
+          fileLoading={fileLoading}
+          setFileLoading={setFileLoading}
         />
       ) : (
         opens && showErrorMessage()
       )}
-
-      {/* <EditHccForm
-        formValues={formValues}
-        isEditHccForm={isEditHccForm}
-        setIsEditHccForm={setIsEditHccForm}
-        formEditPlace={formEditPlace}
-      /> */}
-
-      {/* <Offcanvas
-        onHide={handleCloseModal}
-        show={isEditHccForm}
-        className="offcanvas-end"
-        placement="end"
-      >
-        <div className="p-4" style={{ overflowY: "scroll" }}>
-          <ManuallyAdd
-            handleCloseModal={handleCloseModal}
-            setIsFileFormShow={setIsFileFormShow}
-            year={year}
-            isEditPage={true}
-            isEditValue={formValues}
-          />
-        </div>
-      </Offcanvas> */}
       <Drawer
         title=""
         onClose={handleCloseModal}
@@ -602,7 +584,8 @@ const File = ({
                     pageNumber={search?.page ? search?.page : 1}
                     headers={search?.headers}
                     fileHeight={true}
-                    fileHeightFrame={"950"}
+                    fileHeightFrames={window.screen.availHeight - 50}
+                    fileHeights={"100vh"}
                   />
                 )}
               </>
@@ -636,9 +619,10 @@ const enhancer = connect(
     radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
     labFile: state?.patientDetails?.details?.labFileResult,
     radiologyResult: state?.patientDetails?.details?.radiologyResult,
-    labResult: state?.patientDetails?.details?.labResult,
+    labResult: state?.patientDetails?.details?.labPDFDetails,
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
-    loading:state?.patientDetails?.details?.loading
+    loading:state?.patientDetails?.details?.loading,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
     getRadiologyFileDetails: detailsActions.radiologyFileAction,

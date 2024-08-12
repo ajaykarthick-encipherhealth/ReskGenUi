@@ -106,12 +106,12 @@ const Patient = ({
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   const [selecteddates, setSelectedDates] = useState([]);
   const [selecteddates2, setSelectedDate2s] = useState([]);
-
+  const [emrType, setEmrType] = useState("");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-  const [errors, setErrors] = useState({ year: "" });
+  const [errors, setErrors] = useState({ year: "", emr: "" });
   const [selectOrgList, setSelectedOrgList] = useState("");
   const [orgAllList, setOrgAllList] = useState([]);
-  
+
   useEffect(() => {
     if (window !== "undefined") {
       if (navigate) {
@@ -257,14 +257,23 @@ const Patient = ({
     setSelectFile(e[0]);
   };
 
-  const handleChange = async (e) => {
-    const key = e.target.name;
-    const value = e.target.value;
-    if (e.target.name === "year") {
+  const handleChange = async (e, name) => {
+    const key =  name == "dos" ? "dos" : e.target.name;
+    const value = name == "dos" ? e : e.target.value;
+    if (e?.target?.name === "year") {
       const validateYearField = validateYear(e.target.value, setErrors);
       if (validateYearField) {
-        setErrors({ year: "" });
+        setErrors({ ...errors, year: "" });
         setInputValue({ ...inputValue, [key]: value });
+      } else {
+        console.log(validateYearField);
+      }
+    } else if (name == "dos") {
+      if (value) {
+        setInputValue({ ...inputValue, [key]: value });
+        setErrors({ ...errors, emr: "" });
+      } else {
+        setErrors({ ...errors, emr: "Please Select EMR Type" });
       }
     } else {
       setInputValue({ ...inputValue, [key]: value });
@@ -280,7 +289,7 @@ const Patient = ({
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
-    if (form.checkValidity() === true) {
+    if (form.checkValidity() === true && emrType) {
       setIsLoadingBtn(true);
       event.preventDefault();
       event.stopPropagation();
@@ -290,6 +299,8 @@ const Patient = ({
       if (selectFileRadiology != null) {
         submitRadiology();
       }
+    } else if (!emrType) {
+      setErrors({ ...errors, emr: "Please Select EMR Type" });
     }
     setValidated(true);
   };
@@ -298,7 +309,7 @@ const Patient = ({
     var orgId = selectOrgList?.value;
     form.allocatedBy = localUserId;
     form.computing = 0;
-    form.patientId = form.patientId.trim()
+    form.patientId = form.patientId.trim();
     try {
       setIsLoadingBtn(true);
       const response = await axios.post(
@@ -444,6 +455,7 @@ const Patient = ({
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
+    formData.append("emrtype", emrType);
     const headers = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -478,7 +490,7 @@ const Patient = ({
         sort,
         orgId
       );
-
+      handleClose()
       setAddPatient(false);
       setAddPatient(false);
       setIsLoadingBtn(false);
@@ -498,6 +510,7 @@ const Patient = ({
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
+    formData.append("emrtype", emrType);
     const headers = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -522,6 +535,12 @@ const Patient = ({
     // setIsLoadingBtn(false);
     setSelectFileRadiology(null);
   };
+
+  const handleClose = () => {
+    setAddPatient(false);
+    setErrors({ year: "", emr: "" })
+    setEmrType('')
+  }
 
   const onPageChange = (e) => {
     setIsLoading(true);
@@ -725,6 +744,9 @@ const Patient = ({
           isLoadingBtn={isLoadingBtn}
           onChangeFile={onChangeFile}
           errors={errors}
+          setEmrType={setEmrType}
+          emrType={emrType}
+          handleClose={handleClose}
         />
         <Addpatients
           addPatientId={addPatientId}

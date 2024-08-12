@@ -38,7 +38,8 @@ const VisitData = ({
   radiologyResult,
   getRadiologyFileDetails,
   getLabFileDetails,
-  currentDiseaseType
+  currentDiseaseType,
+  isDosSelected
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -533,10 +534,11 @@ const VisitData = ({
                         >
                           <span className={`${visitStyles.hcc_title_name}`}>
                             HCC
+                            {isDosSelected && 
                             <FontAwesomeIcon
                               onClick={() => addValidDiseases()}
                               icon={faPlus}
-                            />
+                            />}
                           </span>
                           <div className="d-flex justify-content-center">
                             <span className={`${visitStyles.hcc_title_badge}`}>
@@ -841,7 +843,7 @@ const VisitData = ({
         open={isEditHccForm}
         width={"80vw"}
       >
-        <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
+        <div className="row p-4" style={{ overflow: "hidden", height: "95%" }}>
           <div className="col-8">
             {hccFileDetails?.loading != true ? (
               <>
@@ -855,6 +857,8 @@ const VisitData = ({
                     heightFrame="900"
                     fileHeight={true}
                     fileHeightFrame={"950"}
+                    fileHeightFrames={window.screen.availHeight - 50}
+                    fileHeights={"100vh"}
                   />
                 )}
               </>
@@ -890,6 +894,7 @@ const enhancer = connect(
     radiologyResult: state?.patientDetails?.details?.radiologyResult,
     labResult: state?.patientDetails?.details?.labResult,
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
     getRadiologyFileDetails: detailsActions.radiologyFileAction,

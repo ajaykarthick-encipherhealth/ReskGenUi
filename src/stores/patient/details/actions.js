@@ -38,6 +38,10 @@ export const labDetailsAction = createActionThunk(
   "LAB_DETAILS",
   network.labDetails
 );
+export const labPDFDetails = createActionThunk(
+  "LAB_PDF_DETAILS",
+  network.labPDFData
+);
 export const labFileAction = createActionThunk(
   "LAB_FILE_DETAILS",
   network.patientHccFile
@@ -109,6 +113,10 @@ export const radiologyDosDeatilsAction = createActionThunk(
 export const labDosDeatilsAction = createActionThunk(
   "LAB_DOS_LIST",
   network.labdosWiseList
+);
+export const activeLabels = createActionThunk(
+  "ACTIVE_LABEL",
+  network.activeLabel
 );
 
 export const getSelectedDosPageNumber = createAction("GET_SELECTED_DOS_PAGE_NUMBER");
