@@ -190,7 +190,9 @@ export const getPatientDetails = async (
         res.dateOfServices?.map((res) => {
           dosList.push(res.date);
         });
-        if (res.isShow != false) {
+        if (res.isShow != false && res.riskAdjustmentDtoList?.some((item) =>
+          item?.cmsHcc?.some((hcc) => hcc.value > 1)
+        )) {
           hccDisArray.push({
             ...res,
             actualDescription: res.actualDescription,
@@ -267,7 +269,9 @@ export const getPatientDetails = async (
         array: result?.suggestedHccDiseases,
         sortKey: "diagnosisCode",
       })?.map((res, index) => {
-        if (res.isShow != false) {
+        if (res.isShow != false && res.riskAdjustmentDtoList?.some((item) =>
+          item?.cmsHcc?.some((hcc) => hcc.value > 1)
+        )) {
           var providerList = [];
           var dosList = [];
           res.providerNames?.map((res) => {
@@ -316,7 +320,9 @@ export const getPatientDetails = async (
         array: result?.deletedDiseases,
         sortKey: "diagnosisCode",
       })?.map((res, index) => {
-        if (res.isShow != false) {
+        if (res.isShow != false && res.riskAdjustmentDtoList?.some((item) =>
+          item?.cmsHcc?.some((hcc) => hcc.value > 1)
+        )) {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
           res.providerNames?.map((res) => {
