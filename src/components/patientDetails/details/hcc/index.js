@@ -31,7 +31,9 @@ const Hcc = ({
   getSelectedDos,
   getSelectedDosPageNumber,
   getCurrentDiseaseType,
-  isDosSelected
+  isDosSelected,
+  selectDosValue,
+  setSelectDosValue,
 }) => {
   const dispatch = useDispatch();
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -43,7 +45,6 @@ const Hcc = ({
   const [search, setSearch] = useState();
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [dosSummariesList, setDosSummariesList] = useState([]);
-  const [selectDosValue, setSelectDosValue] = useState("");
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
@@ -128,6 +129,7 @@ const Hcc = ({
       page: value,
     });
   };
+
   const PopContent = (
     <div className={styles.innerPop}>
       <div
@@ -219,7 +221,9 @@ const Hcc = ({
       </div>
     </div>
   );
-
+useEffect(() => {
+  getSelectedDos("");
+}, [])
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>

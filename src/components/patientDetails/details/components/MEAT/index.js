@@ -44,9 +44,12 @@ const MeatCard = ({
   cardTitle,
   getSelectedDosPageNumber,
   getRadiologyPDF,
-  getLabPDF,
   getCurrentDiseaseType,
-  isDosSelected
+  isDosSelected,
+  getLabPDFFile,
+  labFile,
+  setLabData,
+  labData
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
@@ -57,7 +60,11 @@ const MeatCard = ({
       return true;
     }
   };
-
+  const getPdfEmptyFunction = () => {};
+  const getLabPDF =
+    labFile?.data?.response && labData == labFile?.data?.response?.fileId
+      ? getPdfEmptyFunction
+      : getLabPDFFile;
   return (
     <>
       <div className={`my-post-content pt-5 `}>
@@ -165,7 +172,7 @@ const MeatCard = ({
                           getSelectedDosPageNumber: getSelectedDosPageNumber,
                           getRadiologyPDF: getRadiologyPDF,
                           getLabPDF: getLabPDF,
-                          getCurrentDiseaseType:getCurrentDiseaseType
+                          getCurrentDiseaseType: getCurrentDiseaseType,
                         })}
                         {/* {getProviderNameTag(
                               item?.providerName,
@@ -199,7 +206,7 @@ const MeatCard = ({
                           datas: item,
                           getRadiologyPDF: getRadiologyPDF,
                           getLabPDF: getLabPDF,
-                          getCurrentDiseaseType:getCurrentDiseaseType
+                          getCurrentDiseaseType: getCurrentDiseaseType,
                         })}
                       </div>
                     </div>
@@ -252,7 +259,8 @@ const MeatCard = ({
                       getSelectedDosPageNumber,
                       getRadiologyPDF,
                       getLabPDF,
-                      getCurrentDiseaseType
+                      getCurrentDiseaseType,
+                      setLabData
                     )}
                   </div>
                 </div>
@@ -299,7 +307,8 @@ const MeatCard = ({
                       getSelectedDosPageNumber,
                       getRadiologyPDF,
                       getLabPDF,
-                      getCurrentDiseaseType
+                      getCurrentDiseaseType,
+                      setLabData
                     )}
                   </div>
                 </div>
@@ -346,7 +355,8 @@ const MeatCard = ({
                       getSelectedDosPageNumber,
                       getRadiologyPDF,
                       getLabPDF,
-                      getCurrentDiseaseType
+                      getCurrentDiseaseType,
+                      setLabData
                     )}
                   </div>
                 </div>
@@ -393,23 +403,24 @@ const MeatCard = ({
                       getSelectedDosPageNumber,
                       getRadiologyPDF,
                       getLabPDF,
-                      getCurrentDiseaseType
+                      getCurrentDiseaseType,
+                      setLabData
                     )}
                   </div>
                 </div>
-                {isDosSelected && 
-                <div className="col-xl-1 meatclose">
-                  <div
-                    className="d-flex align-items-center justify-content-center"
-                    style={{
-                      background: "#edf5ff",
-                      height: "100%",
-                      width: "100%",
-                      borderRadius: "10px",
-                    }}
-                  >
-                    <div className="d-flex">
-                      {/* <Popconfirm
+                {isDosSelected && (
+                  <div className="col-xl-1 meatclose">
+                    <div
+                      className="d-flex align-items-center justify-content-center"
+                      style={{
+                        background: "#edf5ff",
+                        height: "100%",
+                        width: "100%",
+                        borderRadius: "10px",
+                      }}
+                    >
+                      <div className="d-flex">
+                        {/* <Popconfirm
                           title={popConfirmTitle}
                           onConfirm={() =>
                             moveToAnotherAction(
@@ -434,61 +445,64 @@ const MeatCard = ({
                           </div>
                         </Popconfirm> */}
 
-                      <div className={styles.meatActionIcon}>
-                        <MovementAction
-                          validAction={
-                            cardTitle == "DELETED_MEAT" ? true : false
-                          }
-                          deleteAction={
-                            cardTitle == "VALID_MEAT" ? true : false
-                          }
-                          setIsValidAction={setIsValidAction}
-                          cardTitle={
-                            item.isMeatCriteriaPresent === true
-                              ? "MEAT"
-                              : "NON_MEAT"
-                          }
-                          setConfirmNotesModalValid={setConfirmNotesModalValid}
-                          onchangeValid={onchangeMeat}
-                          result={item}
-                          setFileLoading={setFileLoading}
-                        />
-                      </div>
-
-                      <Tooltip title="Edit">
-                        <div
-                          className={visitStyles.edit_icon}
-                          onClick={() => {
-                            setMeatEdit(true);
-                            setEditData(item);
-                          }}
-                        >
-                          <FontAwesomeIcon
-                            icon={faPen}
-                            style={{ size: 8, color: "#706e70" }}
+                        <div className={styles.meatActionIcon}>
+                          <MovementAction
+                            validAction={
+                              cardTitle == "DELETED_MEAT" ? true : false
+                            }
+                            deleteAction={
+                              cardTitle == "VALID_MEAT" ? true : false
+                            }
+                            setIsValidAction={setIsValidAction}
+                            cardTitle={
+                              item.isMeatCriteriaPresent === true
+                                ? "MEAT"
+                                : "NON_MEAT"
+                            }
+                            setConfirmNotesModalValid={
+                              setConfirmNotesModalValid
+                            }
+                            onchangeValid={onchangeMeat}
+                            result={item}
+                            setFileLoading={setFileLoading}
                           />
                         </div>
-                      </Tooltip>
-                      {item.isMeatCriteriaPresent === false ? (
-                        <div
-                          onClick={() => addMeatQuery(item, "Add")}
-                          className={visitStyles.add_meat_query}
-                        >
-                          <span
-                            style={{
-                              fontSize: "12px",
-                              fontWeight: "600",
-                              color: "#716969",
+
+                        <Tooltip title="Edit">
+                          <div
+                            className={visitStyles.edit_icon}
+                            onClick={() => {
+                              setMeatEdit(true);
+                              setEditData(item);
                             }}
                           >
-                            S
-                          </span>
-                          {/* {SVGICON.meatQueryIcon} */}
-                        </div>
-                      ) : null}
+                            <FontAwesomeIcon
+                              icon={faPen}
+                              style={{ size: 8, color: "#706e70" }}
+                            />
+                          </div>
+                        </Tooltip>
+                        {item.isMeatCriteriaPresent === false ? (
+                          <div
+                            onClick={() => addMeatQuery(item, "Add")}
+                            className={visitStyles.add_meat_query}
+                          >
+                            <span
+                              style={{
+                                fontSize: "12px",
+                                fontWeight: "600",
+                                color: "#716969",
+                              }}
+                            >
+                              S
+                            </span>
+                            {/* {SVGICON.meatQueryIcon} */}
+                          </div>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
-                </div>}
+                )}
               </div>
             </div>
           );
@@ -511,16 +525,17 @@ const MeatCard = ({
 const enhancer = connect(
   (state) => ({
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
-    radiologyResult:state?.patientDetails?.details?.radiologyResult,
-    labResult:state?.patientDetails?.details?.labResult,
+    radiologyResult: state?.patientDetails?.details?.radiologyResult,
+    labResult: state?.patientDetails?.details?.labResult,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
+    labFile: state?.patientDetails?.details?.labFileResult,
   }),
   {
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,
     getLabPDF: detailsAction.labDetailsAction,
     getRadiologyPDF: detailsAction.radiologyDetailsAction,
-    getCurrentDiseaseType:detailsAction.getCurrentDiseaseType
-    
+    getLabPDFFile: detailsAction.labPDFDetails,
+    getCurrentDiseaseType: detailsAction.getCurrentDiseaseType,
   }
 );
 export default enhancer(MeatCard);

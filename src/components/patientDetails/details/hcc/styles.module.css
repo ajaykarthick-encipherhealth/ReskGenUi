@@ -463,3 +463,14 @@
   background-color: #e2edf9;
   border-radius: 7px;
 } 
+
+.labUploadBtn{
+  height: 31px !important;
+}
+.tabsContainer{
+  display: flex;
+  justify-content: space-between;
+}
+.tabslistConatiner{
+  display: flex;
+}

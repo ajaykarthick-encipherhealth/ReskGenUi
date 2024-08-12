@@ -31,6 +31,8 @@ const File = ({
   fileDosPageNumberList,
   radiologyFile,
   loading,
+  search,
+  setSearch,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -66,7 +68,6 @@ const File = ({
   // const [pageNumberOptions, setPageNumberOptions] = useState([]);
   const [fileLoading, setFileLoading] = useState(false);
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
-  const [search, setSearch] = useState();
   const [isAddHccForm, setIsAddHccForm] = useState(false);
   const [isEditHccForm, setIsEditHccForm] = useState(false);
   const [formValues, setFormValues] = useState(false);
@@ -114,10 +115,7 @@ const File = ({
   }, [radiologyFile?.data?.response]);
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
-    if (
-      radiologyFile?.data?.response &&
-      patientDetailsResult?.data?.response?.patientId
-    ) {
+    if (radiologyFile?.data?.response) {
       setSelectFileURL(radiologyFile?.data?.response);
     }
   };
@@ -341,6 +339,7 @@ const File = ({
                       headers={search?.headers}
                       fileHeight={true}
                       fileHeightFrame={"830"}
+                      isFillView={true}
                     />
                   )}
                 </>

@@ -102,7 +102,7 @@ const ComboCard = ({
           <div className={visitStyles.container}>
             <div className={visitStyles.hccStickey_head}>
               {list?.map((item) => {
-                return (
+                return item.isShow && (
                   <div
                     className={visitStyles.combo_details_card}
                     key={item?.id}

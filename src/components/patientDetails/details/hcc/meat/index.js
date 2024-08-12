@@ -25,7 +25,7 @@ import AddMeatQuery from "../../components/addMeatQuery";
 import {
   getCaptureSectionBackgroundMeatNew,
   getEncounterDateBackground,
-  getProviderNameList,
+  // getProviderNameList,
 } from "../../components/function/ReusableFunctions";
 import { getPatientDetails } from "../../components/function/GetData";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
@@ -33,6 +33,7 @@ import MeatCard from "../../components/MEAT";
 import ModelIndex from "../../components/model/Index";
 import ManuallyAdd from "../../components/manuallyAdd";
 import { getDateOfServiceBackground } from "../../components/function/DateOfServices";
+import { getProviderNameTag } from "../../components/function/ProviderHyperlinks";
 const { Option } = Select;
 
 const Meat = ({
@@ -50,9 +51,9 @@ const Meat = ({
   getRadiologyFileDetails,
   getLabFileDetails,
   currentDiseaseType,
-  getCurrentDiseaseType, 
+  getCurrentDiseaseType,
   getRadiologyPDF,
-  getLabPDF
+  getLabPDFFile
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -91,6 +92,9 @@ const Meat = ({
   const [isValidAction, setIsValidAction] = useState("");
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const [deletedMeatList, setDeletedMeatList] = useState([]);
+  const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
+  const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
+  const [labData, setLabData] = useState("");
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -187,6 +191,11 @@ const Meat = ({
       console.log(error);
     }
   };
+  const getPdfEmptyFunction = () => {};
+  const getLabPDF =
+  labFile?.data?.response && labData == labFile?.data?.response?.fileId
+    ? getPdfEmptyFunction
+    : getLabPDFFile;
 
   const getDisTitlePopover = (title, value, subString, result) => {
     var popOver = "";
@@ -342,6 +351,8 @@ const Meat = ({
           addMeatQuery={addMeatQuery}
           getDisTitlePopover={getDisTitlePopover}
           cardTitle="VALID_MEAT"
+          setLabData={setLabData}
+          labData={labData}
         />
 
         {deletedMeatList?.length != 0 && (
@@ -375,6 +386,8 @@ const Meat = ({
               addMeatQuery={addMeatQuery}
               getDisTitlePopover={getDisTitlePopover}
               cardTitle="DELETED_MEAT"
+              setLabData={setLabData}
+              labData={labData}
             />
           </>
         )}
@@ -408,7 +421,8 @@ const Meat = ({
                       selectMeatResult,
                       getRadiologyPDF,
                       getLabPDF,
-                      getCurrentDiseaseType
+                      getCurrentDiseaseType,
+                      setLabData
                     )}
                   >
                     <Button type="primary">Still Hyperlink Issue</Button>
@@ -430,7 +444,7 @@ const Meat = ({
           <div className="section-container">
             <div className="row">
               <div className="col-xl-4">
-                <div style={{ height: "90%", overflowY: "scroll" }}>
+                <div style={{ height: "98%", overflowY: "scroll" }}>
                   <div
                     className={
                       selectMeatResult?.isMeatCriteriaPresent === true
@@ -485,10 +499,29 @@ const Meat = ({
                       <div
                         className={`${visitStyles.encounterAndSectionHeader}`}
                       >
-                        {getProviderNameList({
+                        {/* {getProviderNameList({
                           data: selectMeatResult?.providerName,
                           captureSectionMatching: captureSectionMatching,
-                          
+                        })} */}
+                        {getProviderNameTag({
+                          providerNames: selectMeatResult?.providerName,
+                          hyperlinks: selectMeatResult?.providerHyperlinks,
+                          setSearch: setSearch,
+                          diagnosisCode: selectMeatResult.diagnosisCode,
+                          diseaseName: selectMeatResult.diseaseName,
+                          setIsModalOpen: setIsModalOpen,
+                          setFileModalHeader: setFileModalHeader,
+                          patientDocumentResult: patientDocumentResult,
+                          setIsMulitpleHeader: setIsMulitpleProvider,
+                          isMulitpleHeader: isMulitpleProvider,
+                          setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
+                          isMulitpleHeaderCode: isMulitpleHeaderCode,
+                          setSelectMeatResult: setSelectMeatResult,
+                          meatresult: selectMeatResult,
+                          getSelectedDosPageNumber: getSelectedDosPageNumber,
+                          getRadiologyPDF: getRadiologyPDF,
+                          getLabPDF: getLabPDF,
+                          getCurrentDiseaseType:getCurrentDiseaseType
                         })}
                       </div>
                       <div
@@ -504,7 +537,7 @@ const Meat = ({
                           setSearch: setSearch,
                           setFileModalHeader: setFileModalHeader,
                           patientDocumentResult: patientDocumentResult,
-                          getCurrentDiseaseType:getCurrentDiseaseType
+                          getCurrentDiseaseType: getCurrentDiseaseType,
                         })}
                       </div>
                     </div>
@@ -546,7 +579,8 @@ const Meat = ({
                             getSelectedDosPageNumber,
                             getRadiologyPDF,
                             getLabPDF,
-                            getCurrentDiseaseType
+                            getCurrentDiseaseType,
+                            setLabData
                           )}
                         </div>
                       </div>
@@ -602,7 +636,8 @@ const Meat = ({
                             getSelectedDosPageNumber,
                             getRadiologyPDF,
                             getLabPDF,
-                            getCurrentDiseaseType
+                            getCurrentDiseaseType,
+                            setLabData
                           )}
                         </div>
                       </div>
@@ -658,7 +693,8 @@ const Meat = ({
                             getSelectedDosPageNumber,
                             getRadiologyPDF,
                             getLabPDF,
-                            getCurrentDiseaseType
+                            getCurrentDiseaseType,
+                            setLabData
                           )}
                         </div>
                       </div>
@@ -715,6 +751,7 @@ const Meat = ({
                             getRadiologyPDF,
                             getLabPDF,
                             getCurrentDiseaseType,
+                            setLabData
                           )}
                         </div>
                       </div>
@@ -745,7 +782,9 @@ const Meat = ({
                       headers={search?.headers}
                       headerContent={search?.headerContent}
                       fileHeight={true}
-                    fileHeightFrame={"950"}
+                      fileHeightFrame={"950"}
+                      fileHeightFrames={window.screen.availHeight - 50}
+                      fileHeights={"90vh"}
                     />
                   )}
                 </>
@@ -794,7 +833,7 @@ const Meat = ({
         open={meatEdit}
         width={"80vw"}
       >
-        <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
+        <div className="row p-4" style={{ overflow: "hidden", height: "95%" }}>
           <div className="col-8">
             {hccFileDetails?.loading != true ? (
               <>
@@ -806,6 +845,8 @@ const Meat = ({
                     headers={search?.headers}
                     fileHeight={true}
                     fileHeightFrame={"950"}
+                    fileHeightFrames={window.screen.availHeight - 50}
+                    fileHeights={"100vh"}
                   />
                 )}
               </>
@@ -864,6 +905,7 @@ const enhancer = connect(
     getLabFileDetails: detailsActions.labFileAction,
     getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
     getLabPDF: detailsActions.labDetailsAction,
+    getLabPDFFile: detailsActions.labPDFDetails,
     getRadiologyPDF: detailsActions.radiologyDetailsAction,
   }
 );

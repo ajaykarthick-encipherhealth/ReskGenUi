@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Popconfirm, Popover, Tooltip } from "antd";
@@ -30,6 +30,7 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import MovementAction from "../movementAction";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
 import TableRisk from "../../../../tableRisk";
+import moment from "moment";
 const HccCards = ({
   list,
   hccVersionDetails,
@@ -90,6 +91,8 @@ const HccCards = ({
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
+  const [labData, setLabData] = useState("");
+  const [selectedDos, setSelectedDos] = useState('')
 
   const getPdfEmptyFunction = () => {};
   const getRadiologyPDF =
@@ -98,11 +101,8 @@ const HccCards = ({
       patientDocumentResult?.patientId
       ? getPdfEmptyFunction
       : getRadiologyPDFFile;
-
   const getLabPDF =
-    labFile?.data?.response &&
-    labDetailsResult?.data?.response?.patientId ==
-      patientDocumentResult?.patientId
+    labFile?.data?.response && labData == labFile?.data?.response?.fileId
       ? getPdfEmptyFunction
       : getLabPDFFile;
 
@@ -156,6 +156,16 @@ const HccCards = ({
       pagenumber: "",
     });
   };
+
+  useEffect(() => {
+    if (selectedDos && labFile?.data?.response?.dosSummaries) {
+      const res = labFile?.data?.response?.dosSummaries.find((item) => item.dos == selectedDos)
+       setSearch({
+         value: moment(selectedDos).format("MM/DD/YYYY"),
+         page: res?.startPageNumber,
+       });
+    }
+  }, [selectedDos, labFile?.data?.response?.dosSummaries])
 
   return (
     <>
@@ -321,7 +331,7 @@ const HccCards = ({
                                     onchangeValid={onchangeValid}
                                     result={data}
                                     setFileLoading={setFileLoading}
-                                    isComboCode={data.isComboCode}
+                                    isComboCode={data.isComboCode && data.ruleType != "DIRECT_COMBINATION_RULE_ENGINE"}
                                   />
                                 )}
                                 <Popover
@@ -569,6 +579,7 @@ const HccCards = ({
                                     getRadiologyPDF,
                                     getLabPDF,
                                     getCurrentDiseaseType,
+                                    setLabData,
                                   })}
                                 </div>
                                 <div
@@ -594,6 +605,8 @@ const HccCards = ({
                                     getRadiologyPDF,
                                     getLabPDF,
                                     getCurrentDiseaseType,
+                                    hyperlinks: data?.hyperlinks,
+                                    setSelectedDos
                                   })}
                                 </div>
                                 {data.providerName.length == 0 && (
@@ -642,6 +655,7 @@ const HccCards = ({
                                         getCurrentDiseaseType,
                                       getSelectedDosPageNumber:
                                         getSelectedDosPageNumber,
+                                      setLabData: setLabData,
                                     })}
                                   </div>
                                 )}
@@ -665,70 +679,72 @@ const HccCards = ({
                                     </div>
                                   )}
                                 </div>
-                                <div
-                                  className={`cr-pointer ${styles.meatFoundContainer}`}
-                                >
+                                {data.isLab != true && (
                                   <div
-                                    onClick={() => {
-                                      setActiveTabHead(4);
-                                      setActiveMeatTitle({
-                                        header: "M",
-                                        diagnosisCode: data?.diagnosisCode,
-                                      });
-                                    }}
+                                    className={`cr-pointer ${styles.meatFoundContainer}`}
                                   >
-                                    {getMeatFound(
-                                      data?.diagnosisCode,
-                                      meatCriteriaList,
-                                      "M"
-                                    )}
+                                    <div
+                                      onClick={() => {
+                                        setActiveTabHead(4);
+                                        setActiveMeatTitle({
+                                          header: "M",
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "M"
+                                      )}
+                                    </div>
+                                    <div
+                                      onClick={() => {
+                                        setActiveTabHead(4);
+                                        setActiveMeatTitle({
+                                          header: "E",
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "E"
+                                      )}
+                                    </div>
+                                    <div
+                                      onClick={() => {
+                                        setActiveTabHead(4);
+                                        setActiveMeatTitle({
+                                          header: "A",
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "A"
+                                      )}
+                                    </div>
+                                    <div
+                                      onClick={() => {
+                                        setActiveTabHead(4);
+                                        setActiveMeatTitle({
+                                          header: "T",
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "T"
+                                      )}
+                                    </div>
                                   </div>
-                                  <div
-                                    onClick={() => {
-                                      setActiveTabHead(4);
-                                      setActiveMeatTitle({
-                                        header: "E",
-                                        diagnosisCode: data?.diagnosisCode,
-                                      });
-                                    }}
-                                  >
-                                    {getMeatFound(
-                                      data?.diagnosisCode,
-                                      meatCriteriaList,
-                                      "E"
-                                    )}
-                                  </div>
-                                  <div
-                                    onClick={() => {
-                                      setActiveTabHead(4);
-                                      setActiveMeatTitle({
-                                        header: "A",
-                                        diagnosisCode: data?.diagnosisCode,
-                                      });
-                                    }}
-                                  >
-                                    {getMeatFound(
-                                      data?.diagnosisCode,
-                                      meatCriteriaList,
-                                      "A"
-                                    )}
-                                  </div>
-                                  <div
-                                    onClick={() => {
-                                      setActiveTabHead(4);
-                                      setActiveMeatTitle({
-                                        header: "T",
-                                        diagnosisCode: data?.diagnosisCode,
-                                      });
-                                    }}
-                                  >
-                                    {getMeatFound(
-                                      data?.diagnosisCode,
-                                      meatCriteriaList,
-                                      "T"
-                                    )}
-                                  </div>
-                                </div>
+                                )}
                                 {data.providerName.length == 0 && (
                                   <>
                                     <div
@@ -832,8 +848,10 @@ const HccCards = ({
                                       getCurrentDiseaseType,
                                     getSelectedDosPageNumber:
                                       getSelectedDosPageNumber,
+                                    setLabData: setLabData,
                                   })}
                                 </div>
+
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
@@ -844,46 +862,47 @@ const HccCards = ({
                                       Manually Added
                                     </Badge>
                                   ) : null}
+
+                                  {data.isComboCode == true ? (
+                                    <Badge
+                                      className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                      onClick={() => {
+                                        setActiveTabHead(3);
+                                        setActiveComboTree({
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      Combo
+                                    </Badge>
+                                  ) : data.isMostSpecific ? (
+                                    <Badge
+                                      className={`mt-2 text-start  ${visitStyles.isMostSpecific}`}
+                                    >
+                                      Most Specified
+                                    </Badge>
+                                  ) : null}
+                                  {data.isRadiology == true && (
+                                    <Tooltip title="RADIOLOGY">
+                                      <span
+                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                        bg={`  mt-2 bg-bg-eight `}
+                                      >
+                                        Radiology
+                                      </span>
+                                    </Tooltip>
+                                  )}
+                                  {data.isLab == true && (
+                                    <Tooltip title="LAB">
+                                      <span
+                                        className={` mt-2 ${visitStyles.labStatus}`}
+                                        bg={`  mt-2 bg-bg-seven `}
+                                      >
+                                        Lab
+                                      </span>
+                                    </Tooltip>
+                                  )}
                                 </div>
-                                {data.isComboCode == true ? (
-                                  <Badge
-                                    className={`mt-2 text-start  ${visitStyles.isComboCode}`}
-                                    onClick={() => {
-                                      setActiveTabHead(3);
-                                      setActiveComboTree({
-                                        diagnosisCode: data?.diagnosisCode,
-                                      });
-                                    }}
-                                  >
-                                    Combo
-                                  </Badge>
-                                ) : data.isMostSpecific ? (
-                                  <Badge
-                                    className={`mt-2 text-start  ${visitStyles.isMostSpecific}`}
-                                  >
-                                    Most Specified
-                                  </Badge>
-                                ) : null}
-                                {data.isRadiology == true && (
-                                  <Tooltip title="RADIOLOGY">
-                                    <span
-                                      className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                      bg={`  mt-2 bg-bg-eight `}
-                                    >
-                                      Radiology
-                                    </span>
-                                  </Tooltip>
-                                )}
-                                {data.isLab == true && (
-                                  <Tooltip title="LAB">
-                                    <span
-                                      className={` mt-2 ${visitStyles.labStatus}`}
-                                      bg={`  mt-2 bg-bg-seven `}
-                                    >
-                                      Lab
-                                    </span>
-                                  </Tooltip>
-                                )}
                               </div>
                             )}
                           </div>
@@ -926,13 +945,13 @@ const enhancer = connect(
     loading: state?.patientDetails?.details?.loading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
-    labFile: state?.patientDetails?.details?.labFileResult,
+    labFile: state?.patientDetails?.details?.labPDFDetails,
     labDetailsResult: state?.patientDetails?.details?.labResult,
     radiologyDetailsResult: state?.patientDetails?.details?.radiologyResult,
   }),
   {
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
-    getLabPDFFile: detailsActions.labDetailsAction,
+    getLabPDFFile: detailsActions.labPDFDetails,
     getRadiologyPDFFile: detailsActions.radiologyDetailsAction,
     getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
   }

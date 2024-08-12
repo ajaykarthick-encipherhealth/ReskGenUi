@@ -19,9 +19,10 @@ const NonHcc = ({
   patientDosResult,
   patientDetailsResult,
   getSelectedDos,
-  isDosSelected
+  isDosSelected,
+  selectDosValue, setSelectDosValue
 }) => {
-  const [selectDosValue, setSelectDosValue] = useState("");
+  // const [selectDosValue, setSelectDosValue] = useState("");
   const [dosSummariesList, setDosSummariesList] = useState([]);
   const selectTab = async (number) => {};
 

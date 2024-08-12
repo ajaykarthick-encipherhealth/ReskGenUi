@@ -214,6 +214,7 @@
   transition: all 0.5s;
   margin-right: 1px;
   padding-bottom: 5px;
+  background-color: #f6f6ff;
 }
 
 .hcc_card > .timeline-panel {
@@ -495,7 +496,7 @@
   margin-right: 5px;
   height: 20px;
   cursor: pointer;
-  width: 85px;
+  min-width: 90px;
   padding: 5px;
 }
 
@@ -2154,7 +2155,7 @@
   height: 36vh;
   border-radius: 10px;
   background-color: transparent !important;
-  box-shadow: rgba(99, 99, 99, 0.1) 0px -50px 36px -28px inset;
+  /* box-shadow: rgba(99, 99, 99, 0.1) 0px -50px 36px -28px inset; */
   /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
   /* box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
 }
@@ -2174,7 +2175,7 @@
   overflow-y: scroll;
   border-radius: 10px;
   background-color: transparent !important;
-  box-shadow: rgba(99, 99, 99, 0.1) 0px -50px 36px -28px inset;
+  /* box-shadow: rgba(99, 99, 99, 0.1) 0px -50px 36px -28px inset; */
   /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
   /* box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
 }

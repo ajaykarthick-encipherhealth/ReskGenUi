@@ -365,6 +365,7 @@ const Combo = ({
                     headerContent={search?.headerContent}
                     fileHeight={true}
                     fileHeightFrame={"950"}
+                    isFillView={false}
                   />
                 )}
               </div>
@@ -386,6 +387,7 @@ const Combo = ({
             tree={combiTree}
             setOpens={setOpens}
             setCombiTree={setCombiTree}
+            setFileLoading={setFileLoading}
           />
         </Modal>
       ) : (

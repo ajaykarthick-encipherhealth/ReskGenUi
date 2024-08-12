@@ -89,6 +89,7 @@ const ModelIndex = ({
               tree={combiTree}
               setOpens={setOpens}
               setCombiTree={setCombiTree}
+              setFileLoading={setFileLoading}
             />
           )}
           {labReportFile && (
