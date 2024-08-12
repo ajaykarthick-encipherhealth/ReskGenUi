@@ -12,6 +12,7 @@ const TableRisk = ({
     setActiveButton("ICD-10");
     setSearchInput(data?.[0]?.diagnosisCode);
   };
+
   return (
     <div className={style.card}>
       {!fromPatientDetails && (
@@ -58,33 +59,72 @@ const TableRisk = ({
             </tr>
             {data?.map?.((head, i) => (
               <tr>
-                {i == 0 &&
+                {i == 0 && head?.esrd?.length > 0 ? (
                   head?.esrd?.map((item) => (
                     <th
                       style={{ background: "rgb(73 128 207", color: "white" }}
                       scope="col"
                     >
-                      {item.version}
+                      {item?.version}
                     </th>
-                  ))}
-                {i == 0 &&
+                  ))
+                ) : (
+                  <th
+                    style={{
+                      background: "rgb(73 128 207 ",
+                      color: "white",
+                    }}
+                    scope="col"
+                  >
+                    V00
+                  </th>
+                )}
+                {i == 0 && head?.cmsHcc?.length > 0 ? (
                   head?.cmsHcc?.map((item) => (
                     <th
-                      style={{ background: "rgb(73 128 207 ", color: "white" }}
+                      style={{
+                        background: "rgb(73 128 207 ",
+                        color: "white",
+                      }}
                       scope="col"
                     >
-                      {item.version}
+                      {item?.version}
                     </th>
-                  ))}
-                {i == 0 &&
+                  ))
+                ) : (
+                  <th
+                    style={{
+                      background: "rgb(73 128 207 ",
+                      color: "white",
+                    }}
+                    scope="col"
+                  >
+                    V00
+                  </th>
+                )}
+                {i == 0 && head?.rxHcc?.length > 0 ? (
                   head?.rxHcc?.map((item) => (
                     <th
-                      style={{ background: "rgb(73 128 207 ", color: "white" }}
+                      style={{
+                        background: "rgb(73 128 207 ",
+                        color: "white",
+                      }}
                       scope="col"
                     >
-                      {item.version}
+                      {item?.version}
                     </th>
-                  ))}
+                  ))
+                ) : (
+                  <th
+                    style={{
+                      background: "rgb(73 128 207 ",
+                      color: "white",
+                    }}
+                    scope="col"
+                  >
+                    V00
+                  </th>
+                )}
               </tr>
             ))}
           </thead>
@@ -95,49 +135,76 @@ const TableRisk = ({
                 <>
                   <tr>
                     <td style={{ background: "#f0f6fe " }}>{list.year}</td>
-                    {list?.esrd?.map((res) => (
+                    {list?.esrd?.length > 0 ? (
+                      list?.esrd.map((res) => (
+                        <td style={{ background: "#f0f6fe " }}>
+                          <div className="d-flex justify-content-center gap-2">
+                            {res.value}
+                            {res.payment ? (
+                              <span>
+                                <CheckCircleOutlined className="text-success" />
+                              </span>
+                            ) : (
+                              <CloseCircleOutlined className="text-danger" />
+                            )}
+                          </div>
+                        </td>
+                      ))
+                    ) : (
                       <td style={{ background: "#f0f6fe " }}>
                         <div className="d-flex justify-content-center gap-2">
-                          {res.value}
-                          {res.payment ? (
-                            <span>
-                              <CheckCircleOutlined className="text-success" />
-                            </span>
-                          ) : (
-                            <CloseCircleOutlined className="text-danger" />
-                          )}
+                          0
+                          <CloseCircleOutlined className="text-danger" />
                         </div>
                       </td>
-                    ))}
+                    )}
 
-                    {list?.cmsHcc?.map((res) => (
-                      <td style={{ background: "#f0f6fe" }}>
-                        <div className="d-flex justify-content-center gap-2">
-                          {res.value}
-                          {res.payment ? (
-                            <span>
-                              <CheckCircleOutlined className="text-success" />
-                            </span>
-                          ) : (
-                            <CloseCircleOutlined className="text-danger" />
-                          )}
-                        </div>
-                      </td>
-                    ))}
-                    {list?.rxHcc?.map((res) => (
+                    {list?.cmsHcc?.length > 0 ? (
+                      list?.cmsHcc?.map((res) => (
+                        <td style={{ background: "#f0f6fe" }}>
+                          <div className="d-flex justify-content-center gap-2">
+                            {res.value}
+                            {res.payment ? (
+                              <span>
+                                <CheckCircleOutlined className="text-success" />
+                              </span>
+                            ) : (
+                              <CloseCircleOutlined className="text-danger" />
+                            )}
+                          </div>
+                        </td>
+                      ))
+                    ) : (
                       <td style={{ background: "#f0f6fe " }}>
                         <div className="d-flex justify-content-center gap-2">
-                          {res.value}
-                          {res.payment ? (
-                            <span>
-                              <CheckCircleOutlined className="text-success" />
-                            </span>
-                          ) : (
-                            <CloseCircleOutlined className="text-danger" />
-                          )}
+                          0
+                          <CloseCircleOutlined className="text-danger" />
                         </div>
                       </td>
-                    ))}
+                    )}
+                    {list?.rxHcc?.length > 0 ? (
+                      list?.rxHcc?.map((res) => (
+                        <td style={{ background: "#f0f6fe " }}>
+                          <div className="d-flex justify-content-center gap-2">
+                            {res.value}
+                            {res.payment ? (
+                              <span>
+                                <CheckCircleOutlined className="text-success" />
+                              </span>
+                            ) : (
+                              <CloseCircleOutlined className="text-danger" />
+                            )}
+                          </div>
+                        </td>
+                      ))
+                    ) : (
+                      <td style={{ background: "#f0f6fe " }}>
+                        <div className="d-flex justify-content-center gap-2">
+                          0
+                          <CloseCircleOutlined className="text-danger" />
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 </>
               );
