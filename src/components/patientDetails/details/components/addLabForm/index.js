@@ -7,7 +7,7 @@ import axios from "../../../../../utility/axiosConfig";
 import { validateYear } from "../../../../headerFilters/functions";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
-import { getResponePopup } from "../../../../../utils/reusable";
+import { getResponePopup, validateFileName } from "../../../../../utils/reusable";
 
 const AddLabForm = ({
   setOpen,
@@ -47,6 +47,17 @@ const AddLabForm = ({
       }
     } else {
       setInputValue({ ...inputValue, [key]: value });
+    }
+  };
+
+  const handleFileChange = (files) => {
+    const file = files[0];
+    if (file && validateFileName(file.name)) {
+      setSelectFile(file);
+    } else {
+      message.error("Invalid files");
+      const fileValue = document.getElementById("fileInput");
+      fileValue.value = "";
     }
   };
 
@@ -182,7 +193,7 @@ const AddLabForm = ({
                   type="file"
                   accept="application/pdf,text/plain"
                   required
-                  onChange={(e) => onChangeReportFile(e.target.files)}
+                  onChange={(e) => handleFileChange(e.target.files)}
                   disabled={isLoadingBtn ? true : false}
                 />
               </div>

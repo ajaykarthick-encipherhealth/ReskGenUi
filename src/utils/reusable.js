@@ -141,3 +141,9 @@ export const getAge = (dob) => {
     return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
   }
 };
+
+export const validateFileName = (fileName) => {
+  // Regular expression to detect double extensions
+  const doubleExtensionPattern = /\.[^/.]+(\.[^/.]+)$/;
+  return !doubleExtensionPattern.test(fileName);
+};

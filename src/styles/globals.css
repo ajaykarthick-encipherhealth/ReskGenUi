@@ -15523,3 +15523,8 @@ input::-webkit-inner-spin-button {
 .skeleton-stepper .ant-skeleton-input {
   width: 1500px !important;
 }
+.text-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
