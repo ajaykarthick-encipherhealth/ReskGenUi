@@ -188,7 +188,7 @@ const Lab = ({
       <div className={styles.displayDiv}>
         {patientDosResult?.data?.response
           ? getUniqueListBy(
-            patientDosResult?.data?.response[1]?.fileDetailDTO?.dosSummaries,
+            patientDosResult?.data?.response[0]?.fileDetailDTO?.dosSummaries,
               "dos"
             )?.map((data) => (
               <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
@@ -244,7 +244,7 @@ const Lab = ({
       </div>
     </div>
   );
-
+  
   return (
     <>
       <div className={visitStyles.visitdata_tab_body}>

@@ -178,7 +178,7 @@ const File = ({
   };
 
   const getFileDosPageNumber = async () => {
-    setPageNumberOptions(fileDosPageNumberList?.data?.response);
+    setPageNumberOptions(patientDetailsResult?.data?.response?.fileDetailDTO?.dosSummaries);
   };
 
   const showErrorMessage = () => {
