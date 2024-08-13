@@ -65,6 +65,9 @@ const Combo = ({
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
   const [fileModalHeader, setFileModalHeader] = useState("");
   const [isAddComboCode, setIsAddComboCode] = useState(false);
+  const [newValidDiseaseList, setNewValidDiseaseList] = useState([]);
+  const [suggestedHccList, setSuggestedHccList] = useState([]);
+  const [deletedHccList, setDeletedHccList] = useState([]);
   const [fileLoading, setFileLoading] = useState(false);
   const [search, setSearch] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
@@ -73,7 +76,11 @@ const Combo = ({
   const [meatCriteriaList, setMeatCriteriaList] = useState([]);
   const [zIndex, setZIndex] = useState(false);
   const [allMeatList, setAllMeatList] = useState([]);
-
+  const [isBlockRxHcc, setIsBlockRxHcc] = useState([])
+  const [isBlockRxHccCareGap, setIsBlockRxHccCareGap] = useState([])
+  const [isBlockRxHccDeleted, setIsBlockRxHccDeleted] = useState([])
+  const userId = localStorage.getItem('userId')
+ 
   const handleChange = async (e) => {
     const key = e.target.name;
     if (key == "diagnosisCodeQuery") {
@@ -96,9 +103,9 @@ const Combo = ({
       orgId,
       tenId,
       setPatientDocumentResult,
-      "",
-      "",
-      "",
+      setNewValidDiseaseList,
+      setSuggestedHccList,
+      setDeletedHccList,
       setEncounterDateMatching,
       setCaptureSectionMatching,
       setMeatCriteriaList,
@@ -212,6 +219,18 @@ const Combo = ({
     }
   }, [isModalOpenCaptureSection]);
 
+  useEffect(() => {
+    const filterCms = [...newValidDiseaseList, ...suggestedHccList, ...deletedHccList].map(item => item.diagnosisCode)
+    if (comboDiseaseCodesList) {
+      const filterMeat = comboDiseaseCodesList.filter((item) => filterCms.includes(item.diagnosisCode));
+      const filterMeatCare = careGapComboDiseaseCodesList.filter((item) => filterCms.includes(item.diagnosisCode));
+      const filterMeatDeleted = invalidComboDiseaseCodesList.filter((item) => filterCms.includes(item.diagnosisCode));
+      setIsBlockRxHcc(filterMeat)
+      setIsBlockRxHccCareGap(filterMeatCare)
+      setIsBlockRxHccDeleted(filterMeatDeleted)
+    }
+  }, [comboDiseaseCodesList])
+
   return (
     <>
       {fileLoading ? (
@@ -230,7 +249,7 @@ const Combo = ({
               <span>VALID CODES </span>
             </div>
             <ComboCard
-              list={comboDiseaseCodesList}
+              list={userId == "reviewer@3gencogentai.onmicrosoft.com" ? isBlockRxHcc :comboDiseaseCodesList}
               captureSectionMatching={captureSectionMatching}
               encounterDateMatching={encounterDateMatching}
               okText="OK"
@@ -260,7 +279,7 @@ const Combo = ({
               <span>CARE GAP COMBO CODES </span>
             </div>
             <ComboCard
-              list={careGapComboDiseaseCodesList}
+              list={userId == "reviewer@3gencogentai.onmicrosoft.com" ? isBlockRxHccCareGap : careGapComboDiseaseCodesList}
               captureSectionMatching={captureSectionMatching}
               encounterDateMatching={encounterDateMatching}
               okText="OK"
@@ -289,7 +308,7 @@ const Combo = ({
               <span>DELETED COMBO CODES </span>
             </div>
             <ComboCard
-              list={invalidComboDiseaseCodesList}
+              list={userId == "reviewer@3gencogentai.onmicrosoft.com" ? isBlockRxHccDeleted :invalidComboDiseaseCodesList}
               captureSectionMatching={captureSectionMatching}
               encounterDateMatching={encounterDateMatching}
               okText="OK"
@@ -330,7 +349,7 @@ const Combo = ({
             <div className="row">
               <div className="col-xl-5">
                 <ComboCard
-                  list={comboDiseaseCodesList}
+                  list={userId == "reviewer@3gencogentai.onmicrosoft.com" ? isBlockRxHcc :comboDiseaseCodesList}
                   captureSectionMatching={captureSectionMatching}
                   encounterDateMatching={encounterDateMatching}
                   okText="OK"

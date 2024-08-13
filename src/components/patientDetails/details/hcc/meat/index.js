@@ -94,7 +94,10 @@ const Meat = ({
   const [deletedMeatList, setDeletedMeatList] = useState([]);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
+  const [isBlockRxHcc, setIsBlockRxHcc] = useState([])
+  const [isBlockRxHccDeleted, setIsBlockRxHccDeleted] = useState([])
   const [labData, setLabData] = useState("");
+  const userId = localStorage.getItem('userId')
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -116,7 +119,7 @@ const Meat = ({
       "",
       "",
       "",
-      setDeletedMeatList
+      setDeletedMeatList,
     );
   }, [patientDetailsResult]);
 
@@ -311,6 +314,16 @@ const Meat = ({
     }
   }, [hccFileDetails, radiologyFile, labFile, currentDiseaseType]);
 
+  useEffect(() => {
+    const filterCms = [...newValidDiseaseList, ...suggestedHccList, ...deletedHccList].map(item => item.diagnosisCode)
+    if (meatCriteriaList) {
+      const filterMeat = meatCriteriaList.filter((item) => filterCms.includes(item.diagnosisCode));
+      const filterMeatDeleted = deletedMeatList.filter((item) => filterCms.includes(item.diagnosisCode));
+      setIsBlockRxHcc(filterMeat)
+      setIsBlockRxHccDeleted(filterMeatDeleted)
+    }
+  }, [meatCriteriaList])
+
   const onFinishFailed = (form) => {};
 
   return (
@@ -326,7 +339,7 @@ const Meat = ({
       ) : null}
       <div className={visitStyles.meatcontainer}>
         <MeatCard
-          list={meatCriteriaList}
+          list={userId == "reviewer@3gencogentai.onmicrosoft.com" ? isBlockRxHcc : meatCriteriaList}
           captureSectionMatching={captureSectionMatching}
           encounterDateMatching={encounterDateMatching}
           okText="OK"
@@ -361,7 +374,7 @@ const Meat = ({
               <span>Deleted MeatCriteria</span>
             </div>
             <MeatCard
-              list={deletedMeatList}
+              list={userId == "reviewer@3gencogentai.onmicrosoft.com" ? isBlockRxHccDeleted :deletedMeatList}
               captureSectionMatching={captureSectionMatching}
               encounterDateMatching={encounterDateMatching}
               okText="OK"

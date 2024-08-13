@@ -228,8 +228,7 @@ export const getEncounterDateBackgroundLab = ({
               (ite) =>
                 // ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
                 ite.dos == res
-            );console.log(selectedMeatData
-              ,"testing");
+            )
               if (selectedMeatData) {
                 setSearch({
                   value: moment(selectedMeatData?.dos).format("MM/DD/YYYY"),

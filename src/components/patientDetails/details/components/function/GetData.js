@@ -158,6 +158,7 @@ export const getPatientDetails = async (
   setAllMeatList,
   setCareGapComboDiseaseCodesList
 ) => {
+  const userId = localStorage.getItem("userId");
   if (patientDetailsResult?.data?.response) {
     var result = patientDetailsResult?.data?.response;
     // if (NewResponse) {
@@ -190,9 +191,46 @@ export const getPatientDetails = async (
         res.dateOfServices?.map((res) => {
           dosList.push(res.date);
         });
-        if (res.isShow != false && res.riskAdjustmentDtoList?.some((item) =>
-          item?.cmsHcc?.some((hcc) => hcc.value > 1)
-        )) {
+        const isShows =
+          userId == "reviewer@3gencogentai.onmicrosoft.com" &&
+          res.riskAdjustmentDtoList?.some((item) =>
+            item?.cmsHcc?.some((hcc) => hcc.value > 1)
+          );
+        if (res.isShow != false && isShows) {
+          hccDisArray.push({
+            ...res,
+            actualDescription: res.actualDescription,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: res.dateOfServices,
+            isManuallyAdded: getStateIndicators(
+              res.stateIndicators,
+              "MANUALLY_ADDED"
+            ),
+            isHccValid: res.isHccValid,
+            defaultPosition: res.defaultPosition,
+            providerName: providerList,
+            dbDescription: res.dbDescription,
+            isMostSpecific: getStateIndicators(
+              res.stateIndicators,
+              "MOST_SPECIFIC"
+            ),
+            children: res.children,
+            getPlace: "Hcc",
+            isCmsHcc: res.isCmsHcc,
+            isRxHcc: res.isRxHcc,
+            providerDeatils: res.provider,
+            isComboCode: getStateIndicators(res.stateIndicators, "COMBO_CODE"),
+            notes: res.notes,
+            hyperlinks: res?.hyperlinks,
+            suspectType: res.suspectType,
+            dateOfServices: res.dateOfServices,
+          });
+        } else if (
+          res.isShow != false &&
+          userId != "reviewer@3gencogentai.onmicrosoft.com"
+        ) {
           hccDisArray.push({
             ...res,
             actualDescription: res.actualDescription,
@@ -269,9 +307,12 @@ export const getPatientDetails = async (
         array: result?.suggestedHccDiseases,
         sortKey: "diagnosisCode",
       })?.map((res, index) => {
-        if (res.isShow != false && res.riskAdjustmentDtoList?.some((item) =>
-          item?.cmsHcc?.some((hcc) => hcc.value > 1)
-        )) {
+        if (
+          res.isShow != false &&
+          res.riskAdjustmentDtoList?.some((item) =>
+            item?.cmsHcc?.some((hcc) => hcc.value > 1)
+          )
+        ) {
           var providerList = [];
           var dosList = [];
           res.providerNames?.map((res) => {
@@ -320,9 +361,48 @@ export const getPatientDetails = async (
         array: result?.deletedDiseases,
         sortKey: "diagnosisCode",
       })?.map((res, index) => {
-        if (res.isShow != false && res.riskAdjustmentDtoList?.some((item) =>
-          item?.cmsHcc?.some((hcc) => hcc.value > 1)
-        )) {
+        const isShows =
+          userId == "reviewer@3gencogentai.onmicrosoft.com" &&
+          res.riskAdjustmentDtoList?.some((item) =>
+            item?.cmsHcc?.some((hcc) => hcc.value > 1)
+          );
+        if (res.isShow != false && isShows) {
+          const encounterDatearray = res?.encounterDate?.split(",");
+          var providerList = [];
+          res.providerNames?.map((res) => {
+            providerList.push(res);
+          });
+          deleteHccList.push({
+            ...res,
+            actualDescription: res.actualDescription,
+            dbDescription: res.dbDescription,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: res.dateOfServices,
+            isManuallyAdded: getStateIndicators(
+              res.stateIndicators,
+              "MANUALLY_ADDED"
+            ),
+            isHccValid: res.isHccValid,
+            defaultPosition: res.defaultPosition,
+            providerName: providerList,
+            isCmsHcc: res.isCmsHcc,
+            isRxHcc: res.isRxHcc,
+            isComboCode: getStateIndicators(res.stateIndicators, "COMBO_CODE"),
+            isMostSpecific: getStateIndicators(
+              res.stateIndicators,
+              "MOST_SPECIFIC"
+            ),
+            notes: res.notes,
+            hyperlinks: res?.hyperlinks,
+            suspectType: res.suspectType,
+            dateOfServices: res.dateOfServices,
+          });
+        } else if (
+          res.isShow != false &&
+          userId != "reviewer@3gencogentai.onmicrosoft.com"
+        ) {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
           res.providerNames?.map((res) => {
@@ -371,25 +451,25 @@ export const getPatientDetails = async (
           dosList.push(res.date);
         });
         if (res.diseaseSource == "COMBINATION_DISEASES") {
-           combiDisArray.push({
-          ...res,
-          addOnCode: res.addOnCode,
-          addOnCodeTwo: res.addOnCodeTwo,
-          addOnCodeThree: res.addOnCodeThree,
-          diagnosisCodeCombo: res.diagnosisCodeCombo,
-          diseaseName: res.diseaseName,
-          diagnosisCode: res.diagnosisCode,
-          encounterDate: res.encounterDate,
-          encounterDateSplit: res.dateOfServices,
-          providerName: providerList,
-          providers: res.provider ? res.providers : res.provider,
-          ruleType: res.ruleType,
-          capturedSections: res.capturedSections,
-          children: res.children ? res.children : [],
-          expanded: true,
-          hyperlinks: res?.hyperlinks,
-          dateOfServices: res.dateOfServices,
-        });
+          combiDisArray.push({
+            ...res,
+            addOnCode: res.addOnCode,
+            addOnCodeTwo: res.addOnCodeTwo,
+            addOnCodeThree: res.addOnCodeThree,
+            diagnosisCodeCombo: res.diagnosisCodeCombo,
+            diseaseName: res.diseaseName,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: res.dateOfServices,
+            providerName: providerList,
+            providers: res.provider ? res.providers : res.provider,
+            ruleType: res.ruleType,
+            capturedSections: res.capturedSections,
+            children: res.children ? res.children : [],
+            expanded: true,
+            hyperlinks: res?.hyperlinks,
+            dateOfServices: res.dateOfServices,
+          });
         } else if (res.diseaseSource == "COMBINATION_DELETED_DISEASES") {
           combiDisArrayInvalid.push({
             ...res,
@@ -410,7 +490,7 @@ export const getPatientDetails = async (
             hyperlinks: res?.hyperlinks,
             dateOfServices: res.dateOfServices,
           });
-        }else if (res.diseaseSource == "COMBINATION_SUGGESTED_DISEASES") {
+        } else if (res.diseaseSource == "COMBINATION_SUGGESTED_DISEASES") {
           combiDisArrayCareGap.push({
             ...res,
             addOnCode: res.addOnCode,
@@ -431,10 +511,9 @@ export const getPatientDetails = async (
             dateOfServices: res.dateOfServices,
           });
         }
-       
       });
 
-      //responce changed by uvais 
+      //responce changed by uvais
 
       // result?.deletedComboDisease?.map((res, index) => {
       //   var providerList = [];
@@ -474,7 +553,7 @@ export const getPatientDetails = async (
       setComboDiseaseCodesList && setComboDiseaseCodesList(combiDisArray);
       setInvalidComboDiseaseCodesList &&
         setInvalidComboDiseaseCodesList(combiDisArrayInvalid);
-        setCareGapComboDiseaseCodesList &&
+      setCareGapComboDiseaseCodesList &&
         setCareGapComboDiseaseCodesList(combiDisArrayCareGap);
       setDosSummariesList && setDosSummariesList(result?.dosSummaries);
       var capturedSectionsColorsMatching = [];
@@ -799,7 +878,7 @@ export const getPatientDetails = async (
       setDeletedMeatList && setDeletedMeatList(deletedmeatListArr);
       setAllDisList &&
         setAllDisList([...hccDisArray, ...deleteHccList, ...suggestListAll]);
-        setAllMeatList && setAllMeatList([...meatListArr,...deletedmeatListArr])
+      setAllMeatList && setAllMeatList([...meatListArr, ...deletedmeatListArr]);
 
       // if (result.suggestRadiology != null) {
       //   if (result.suggestRadiology.length != 0) {

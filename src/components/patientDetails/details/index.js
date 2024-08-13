@@ -54,6 +54,7 @@ import LogoLoader from "../../logoLoader";
 import FileDetails from "./components/fileDetails";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import ManuallyAddProvider from "./manuallyAddProvider";
+import { getAge } from "../../../utils/reusable";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -63,7 +64,6 @@ export const navigetPageDetails = async (
   setIsLoadingDos,
   setIsLoading
 ) => {
- 
   setSideNavLabelActiveKey(pageTitle);
   var patientId = localStorage.getItem("patientId");
   var orgId = localStorage.getItem("orgId");
@@ -122,7 +122,7 @@ const Details = ({
   activeLabels,
   isDosSelected,
   isActives,
-  getSelectedDos
+  getSelectedDos,
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -193,12 +193,10 @@ const Details = ({
       title: "Lab Report",
       type: "Lab Report",
       iconStyle: IMAGES.visitDataLabreport,
-      defaultComplete: 'LAB',
+      defaultComplete: "LAB",
     },
   ];
- 
   const handleNavigation = (data) => {
- 
     navigetPageDetails(
       data.type,
       setSideNavLabelActiveKey,
@@ -362,8 +360,12 @@ const Details = ({
         result?.hccDiseases?.map((res, index) => {
           if (res?.isShow != false) {
             validDisArray.push({
-              isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc,
+              isCmsHcc: res.riskAdjustmentDtoList?.some((item) =>
+                item?.cmsHcc?.some((hcc) => hcc.value > 1)
+              ),
+              isRxHcc: res.riskAdjustmentDtoList?.some((item) =>
+                item?.rxHcc?.some((hcc) => hcc.value > 1)
+              ),
             });
           }
         });
@@ -401,7 +403,7 @@ const Details = ({
     setPatientResultReload(false);
     setIsLoading(true);
     getPatientDosList(localPatientId, e);
-    getSelectedDos('')
+    getSelectedDos("");
     getpatientDetailsData(localPatientId, e, null, setIsLoading, userRole);
   };
 
@@ -544,7 +546,7 @@ const Details = ({
     } else {
       navigate.back();
     }
-    setSelectDosValue("")
+    setSelectDosValue("");
   };
 
   const splitUserName = (name) => {
@@ -653,10 +655,9 @@ const Details = ({
 
   useEffect(() => {
     if (dosYearDefalutSelect) {
-      getActiveLabels()
+      getActiveLabels();
     }
-    
-  }, [isDosSelected, dosYearDefalutSelect])
+  }, [isDosSelected, dosYearDefalutSelect]);
 
   return (
     <>
@@ -744,7 +745,8 @@ const Details = ({
                                 > */}
                                     <h6 className="ageDtails">
                                       {getMastData(
-                                        patientDocumentResult.patientId
+                                        patientIdDetailsData?.data?.response
+                                          ?.firstName
                                       )}
                                     </h6>
                                     {/* </Tooltip> */}
@@ -767,7 +769,10 @@ const Details = ({
                                       className="ageDtails"
                                       style={{ paddingLeft: "20px" }}
                                     >
-                                      {patientDocumentResult.age}
+                                      {getAge(
+                                        patientIdDetailsData?.data?.response
+                                          ?.dob
+                                      )}
                                     </h6>
                                   </div>
                                   <div className="col-xl-2 col-sm-12">
@@ -777,7 +782,10 @@ const Details = ({
                                       className="ageDtails"
                                       style={{ paddingLeft: "25px" }}
                                     >
-                                      {patientDocumentResult.gender}
+                                      {
+                                        patientIdDetailsData?.data?.response
+                                          ?.gender
+                                      }
                                     </h6>
                                   </div>
                                   <div className="col-xl-2 col-sm-12">
@@ -786,7 +794,10 @@ const Details = ({
                                     </i>
                                     <label>DOB</label>
                                     <h6 className="ageDtails">
-                                      {patientDocumentResult.dob}
+                                      {
+                                        patientIdDetailsData?.data?.response
+                                          ?.dob
+                                      }
                                     </h6>
                                   </div>
                                   <div className="col-xl-1 col-sm-12">
@@ -891,18 +902,29 @@ const Details = ({
                                   {hccCounts.isCmsHcc}
                                 </h6>
                               </div>
-                              <div className={`${visitStyles.hccCountHeader} `}>
-                                <label>RX</label>
+                              {localUserId !=
+                                "reviewer@3gencogentai.onmicrosoft.com" && (
+                                <>
+                                  <div
+                                    className={`${visitStyles.hccCountHeader} `}
+                                  >
+                                    <label>RX</label>
 
-                                <h6 className="ageDtails">
-                                  {hccCounts.isRxHcc}
-                                </h6>
-                              </div>
-                              <div className={`${visitStyles.hccCountHeader} `}>
-                                <label>TOTAL</label>
+                                    <h6 className="ageDtails">
+                                      {hccCounts.isRxHcc}
+                                    </h6>
+                                  </div>
+                                  <div
+                                    className={`${visitStyles.hccCountHeader} `}
+                                  >
+                                    <label>TOTAL</label>
 
-                                <h6 className="ageDtails">{hccValidCount}</h6>
-                              </div>
+                                    <h6 className="ageDtails">
+                                      {hccValidCount}
+                                    </h6>
+                                  </div>
+                                </>
+                              )}
                             </div>
                           </div>
                           <div
@@ -1048,9 +1070,10 @@ const Details = ({
                                         placeholder="Year"
                                         value={dosYearDefalutSelect}
                                         onChange={(e) => {
-                                          dosOnChange(e)
-                                          setSelectDosValue("")
-                                          getSelectedDos("")}}
+                                          dosOnChange(e);
+                                          setSelectDosValue("");
+                                          getSelectedDos("");
+                                        }}
                                         className={`custom_select_type ${visitStyles.custom_select_type}`}
                                         options={dosYear}
                                         style={{
@@ -1210,7 +1233,9 @@ const Details = ({
                                               : ""
                                           }`}
                                         >
-                                          {isActives?.response[data.defaultComplete] ? (
+                                          {isActives?.response[
+                                            data.defaultComplete
+                                          ] ? (
                                             <div className="menu-icon">
                                               <Badge
                                                 count={
@@ -1278,7 +1303,6 @@ const Details = ({
                                 setIsLoading={setIsLoading}
                                 selectDosValue={selectDosValue}
                                 setSelectDosValue={setSelectDosValue}
-
                               />
                             ) : activeTab == 2 ? (
                               <NonHcc

@@ -151,6 +151,8 @@ const HccCards = ({
     });
   };
 
+  const userId = localStorage.getItem('userId')
+
   useEffect(() => {
     if (selectedDos && labFile?.data?.response?.dosSummaries) {
       const res = labFile?.data?.response?.dosSummaries.find(
@@ -665,15 +667,15 @@ const HccCards = ({
 
                                   {/* As of now we command this for 3gen Don't want to show RXHCC */}
 
-                                  {/* {data?.riskAdjustmentDtoList?.some((item) =>
+                                  {data?.riskAdjustmentDtoList?.some((item) =>
                                     item?.rxHcc?.some((hcc) => hcc.value > 1)
-                                  ) && (
+                                  ) && userId != "reviewer@3gencogentai.onmicrosoft.com" && (
                                     <div
                                       className={`${visitStyles.rxStatus} mx-1`}
                                     >
                                       RX
                                     </div>
-                                  )} */}
+                                  )}
                                 </div> 
                                 {data.isLab != true && (
                                   <div

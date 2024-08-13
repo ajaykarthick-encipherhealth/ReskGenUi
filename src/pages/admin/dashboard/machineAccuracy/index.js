@@ -215,7 +215,6 @@ const MachineAccuracy = ({ accuracyDetails }) => {
     setActiveButton(index);
     setCurrentBtn(btn);
   };
-  // console.log(accuracyDetails?.data?.response, "testing");
   const handleTabButtonClick = (index, btn) => {
     setActiveTabButton(index);
     setCurrentTabBtn(btn);
