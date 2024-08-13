@@ -307,11 +307,56 @@ export const getPatientDetails = async (
         array: result?.suggestedHccDiseases,
         sortKey: "diagnosisCode",
       })?.map((res, index) => {
-        if (
-          res.isShow != false &&
+        const isShows =
+          userId == "reviewer@3gencogentai.onmicrosoft.com" &&
           res.riskAdjustmentDtoList?.some((item) =>
             item?.cmsHcc?.some((hcc) => hcc.value > 1)
-          )
+          );
+        if (res.isShow != false && isShows) {
+          var providerList = [];
+          var dosList = [];
+          res.providerNames?.map((res) => {
+            providerList.push(res);
+          });
+          res.dateOfServices?.map((res) => {
+            dosList.push(res.date);
+          });
+          suggestListAll.push({
+            ...res,
+            actualDescription: res.actualDescription,
+            diagnosisCodeFinding: res.diagnosisCode,
+            isHccValid: res.isHccValid,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: res.dateOfServices,
+            getPlace: "Hcc",
+            defaultPosition: res.defaultPosition,
+            providerName: providerList,
+            children: res.children ? res.children : [],
+            isMostSpecific: getStateIndicators(
+              res.stateIndicators,
+              "MOST_SPECIFIC"
+            ),
+            isCmsHcc: res.isCmsHcc,
+            isRxHcc: res.isRxHcc,
+            isManuallyAdded: getStateIndicators(
+              res.stateIndicators,
+              "MANUALLY_ADDED"
+            ),
+            isComboCode: getStateIndicators(res.stateIndicators, "COMBO_CODE"),
+            isRadiology: getStateIndicators(res.stateIndicators, "RADIOLOGY"),
+            isLab: getStateIndicators(res.stateIndicators, "LAB"),
+            providerDeatils: res.provider,
+            notes: res.notes,
+            hyperlinks: res?.hyperlinks,
+            suspectType: res.suspectType,
+            dateOfServices: res.dateOfServices,
+            dbDescription: res.dbDescription,
+          });
+        } else if (
+          res.isShow != false &&
+          userId != "reviewer@3gencogentai.onmicrosoft.com"
         ) {
           var providerList = [];
           var dosList = [];
