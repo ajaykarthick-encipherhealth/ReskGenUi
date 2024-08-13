@@ -613,6 +613,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                               setSortCompleteOrder={setSortCompleteOrder}
                               sortAllocateOrder={sortAllocateOrder}
                               setSortAllocateOrder={setSortAllocateOrder}
+                              userId={localUserId}
                             />
                             <div>
                               <div className="pagination-container">

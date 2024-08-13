@@ -27,10 +27,10 @@ function PatientTable({
   setSortCompleteOrder,
   sortAllocateOrder,
   setSortAllocateOrder,
+  userId
 }) {
   const dispatch = useDispatch();
   const navigate = useRouter();
-  const userId = localStorage.getItem('userId')
   const handlePriorityChange = (patientId, selectedValue) => {
     // setSelectedPriority((prev) => ({
     //   ...prev,

@@ -590,7 +590,7 @@ export const handleTogglePasswordVisibility = (
 
 export const getValidatePassword = (password, setErrors) => {
   const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/;
   if (password.length === 0) {
     setErrors({
       password: "Please enter the password",
@@ -609,13 +609,14 @@ export const getValidatePassword = (password, setErrors) => {
     });
     return false;
   }
-  if (password.length > 0 && !passwordRegex.test(password)) {
-    setErrors({
-      password:
-        "Password must contain at least 1 capital letter, 1 small letter, 1 number, and 1 special character",
-    });
-    return false;
-  }
+  // console.log(passwordRegex.test(password));
+  // if (password.length > 0 && !passwordRegex.test(password)) {
+  //   setErrors({
+  //     password:
+  //       "Password must contain at least 1 capital letter, 1 small letter, 1 number, and 1 special character",
+  //   });
+  //   return false;
+  // }
 
   return true;
 };
