@@ -102,7 +102,7 @@ const Lab = ({
   }, [patientDosResult?.data?.response]);
 
   function getUniqueListBy(arr, key) {
-    return [...new Map(arr.map((item) => [item[key], item])).values()];
+    return [...new Map(arr?.map((item) => [item[key], item])).values()];
   }
 
   useEffect(() => {
