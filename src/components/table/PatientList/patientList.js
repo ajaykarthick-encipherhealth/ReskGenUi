@@ -30,7 +30,7 @@ function PatientTable({
 }) {
   const dispatch = useDispatch();
   const navigate = useRouter();
-
+  const userId = localStorage.getItem('userId')
   const handlePriorityChange = (patientId, selectedValue) => {
     // setSelectedPriority((prev) => ({
     //   ...prev,
@@ -78,13 +78,14 @@ function PatientTable({
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.patientName}
           </td>
+          {userId != "reviewer@3gencogentai.onmicrosoft.com" && 
           <td
             className={TableStyle.childBorder}
             onClick={handleTableRowClick}
             style={{ paddingLeft: "30px" }}
           >
             {data.validDiseaseCount ? data.validDiseaseCount : "---"}
-          </td>
+          </td> }
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.allocatedOn
               ? moment(data.allocatedOn).format("MM-DD-YYYY")
@@ -163,7 +164,7 @@ function PatientTable({
           <tr>
             <th>PATIENT ID</th>
             <th>FILE NAME</th>
-            <th>HCC COUNT</th>
+            {userId != "reviewer@3gencogentai.onmicrosoft.com" && <th>HCC COUNT</th>}
             <th
               onClick={() => {
                 sortFunction(
