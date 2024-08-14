@@ -225,7 +225,7 @@ const File = ({
 
   useEffect(() => {
     getFileDosPageNumber();
-  }, [fileDosPageNumberList]);
+  }, [patientDetailsResult]);
   return (
     <>
       {fileLoading ? <LogoLoader /> : null}
