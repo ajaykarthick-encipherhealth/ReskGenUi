@@ -119,18 +119,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   useEffect(() => {
     const uId = localStorage.getItem("userId");
     setLocalUserId(uId);
-    getFilteApi(
-      pageNo,
-      pageSize,
-      statusSelectedValue,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd,
-      sort,
-      selectedPriority,
-      searchTextValue
-    );
+    getPatientRes();
   }, [
     filteratedDashboardData,
     pageNo,
@@ -143,42 +132,28 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     statusSelectedValue,
   ]);
 
-  useEffect(() => {
-    if (patientsListFilter) {
-      const resultMap = [];
-      const result =
-        patientsListFilter?.data?.response?.patientDTOList?.content;
-      setTotalElements(
-        patientsListFilter?.data?.response?.patientDTOList?.totalElements
+  const getPatientRes = async () => {
+    try {
+      const res = await getFilteApi(
+        pageNo,
+        pageSize,
+        statusSelectedValue,
+        dueDateStart,
+        dueDateEnd,
+        processedStart,
+        processedEnd,
+        sort,
+        selectedPriority,
+        searchTextValue
       );
-
-      result?.map((res) => {
-        resultMap.push({
-          patientId: res.patientId,
-          patientName: res.patientName,
-          fileName: res.fileName,
-          computing: res.computing,
-          createdAt: res.createdAt,
-          lastModifiedDate: res.lastModifiedDate,
-          dueDate: res.dueDate,
-          allocatedBy: res.allocatedBy,
-          allocatedOn: res.allocatedOn,
-          priority: res.priority,
-          processedStatus: res.processedStatus,
-          processedDate: res.processedDate,
-          allocatedByFirstName: res.allocatedByFirstName,
-          allocatedByLastName: res.allocatedByLastName,
-          allocatedByProfileImage: res.allocatedByProfileImage,
-          validDiseaseCount: res.validDiseaseCount,
-          deletedDiseaseCount: res.deletedDiseaseCount,
-          declinedNotes: res.declinedNotes,
-        });
-      });
-      setTrackChart(patientsListFilter?.data?.response?.processStatusCount);
-      setPatinetListAll(resultMap);
-      setIsLoading(false);
-    }
-  }, [patientsListFilter, searchTextValue]);
+      if (res.status == "SUCCESS") {
+        setTotalElements(res.response?.patientDTOList?.totalElements);
+        setTrackChart(res?.response?.processStatusCount);
+        setPatinetListAll(res?.response?.patientDTOList?.content);
+      }
+    } catch (error) {}
+  };
+  
 
   const getFilteApi = async (
     pageNo,
@@ -206,8 +181,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&priority=${
       selectedPriority ? selectedPriority : ""
     }`;
-    // dispatch(getpatientsListFilter(resoureUrl));
-    getpatientsListFilter({ url: resoureUrl });
+    return await getpatientsListFilter({ url: resoureUrl });
   };
 
   const getNameSearch = async (searchtext) => {
