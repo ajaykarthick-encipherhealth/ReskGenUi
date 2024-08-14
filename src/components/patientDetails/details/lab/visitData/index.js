@@ -13,7 +13,7 @@ import AddMeatQuery from "../../components/addMeatQuery";
 import AddHccForm from "../../components/addHccForm";
 import PdfViewer from "../../PdfViewerComponent";
 import EditHccForm from "../../components/editHccForm";
-import HccCards from "../../components/RADIOLOGY";
+import HccCards from "../../components/LAB";
 import ModelIndex from "../../components/model/Index";
 import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
@@ -480,6 +480,7 @@ const VisitData = ({
                               cardTitle="HCC"
                               provided={provided}
                               isVisitData={true}
+                              isMeatBlocked={true}
                             />
                           </div>
                         </div>
@@ -551,6 +552,7 @@ const VisitData = ({
                               cardTitle="DELETED"
                               provided={provided}
                               isVisitData={true}
+                              isMeatBlocked={true}
                             />
                           </div>
                         </div>
