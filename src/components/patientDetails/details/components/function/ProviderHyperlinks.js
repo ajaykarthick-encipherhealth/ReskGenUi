@@ -100,6 +100,7 @@ export const getProviderNameTag = ({
         const sectionMapArr = (
           <Popover
             placement="bottom"
+            overlayStyle={{zIndex:1000}}
             content={
               <>
                 {getProviderPopoverHyperlink({
