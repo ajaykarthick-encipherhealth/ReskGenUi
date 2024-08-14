@@ -27,7 +27,8 @@ function PatientTable({
   setSortCompleteOrder,
   sortAllocateOrder,
   setSortAllocateOrder,
-  userId
+  userId,
+  params
 }) {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -46,7 +47,15 @@ function PatientTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push({ pathname: "/reviewer/patients/details", query: page });
+      const routePrams={...page,...params}
+      // navigate.push({ pathname: "/reviewer/patients/details", query: page });
+      navigate?.push(
+        {
+          pathname: '/reviewer/patients/details',
+          query: routePrams,
+        },
+        '/reviewer/patients/details'
+      )
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
