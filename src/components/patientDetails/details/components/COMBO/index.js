@@ -47,6 +47,7 @@ const ComboCard = ({
   getSelectedDosPageNumber,
   cardTitle,
   isDosSelected,
+  patientDetailsResult
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -260,7 +261,7 @@ const ComboCard = ({
                             {getEncounterDateBackground({
                               value: item?.encounterDateSplit,
                               encounterDateMatching: encounterDateMatching,
-                              fileDosPageNumberList: fileDosPageNumberList,
+                              fileDosPageNumberList: patientDetailsResult?.data?.response?.fileDetailDTO?.dosSummaries,
                               setIsModalOpenValidCodes:
                                 setIsModalOpenCaptureSection,
                               setSearch: setSearch,
@@ -387,6 +388,7 @@ const enhancer = connect(
   (state) => ({
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
   }),
   {
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,
