@@ -543,7 +543,7 @@ const Meat = ({
                         {getEncounterDateBackground({
                           value: selectMeatResult?.encounterDateSplit,
                           encounterDateMatching: encounterDateMatching,
-                          fileDosPageNumberList: fileDosPageNumberList,
+                          fileDosPageNumberList: patientDetailsResult?.data?.response?.fileDetailDTO?.dosSummaries,
                           setIsModalOpenValidCodes: setIsModalOpen
                             ? setIsModalOpen
                             : null,
