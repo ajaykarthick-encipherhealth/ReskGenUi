@@ -30,7 +30,7 @@ export const getProviderNameTag = ({
   return providerNames?.map((res, index) => {
     const normalizedRes = res.toLowerCase().trim();
     const headerResult = hyperlinks?.filter(
-      (res2) => res2.header.toLowerCase().trim() === normalizedRes
+      (res2) => res2?.header?.toLowerCase()?.trim() === normalizedRes
     );
   
     if (index < 2) {
@@ -40,7 +40,7 @@ export const getProviderNameTag = ({
             onClick={() => {
               const patientId = localStorage.getItem("patientId");
               const selectedMeatData = hyperlinks?.find(
-                (item) => item?.header.toLowerCase() === normalizedRes
+                (item) => item?.header?.toLowerCase() === normalizedRes
               );
               if (selectedMeatData?.stateIndicator) {
                 getCurrentDiseaseType && getCurrentDiseaseType(false);
