@@ -682,7 +682,7 @@ const HccCards = ({
                                       </div>
                                     )}
                                 </div>
-                                {data.isLab != true && (
+                                {data.isLab != true && data.isRadiology != true && (
                                   <div
                                     className={`cr-pointer ${styles.meatFoundContainer}`}
                                   >
