@@ -49,10 +49,11 @@ function PatientTable({
       localStorage.setItem("patientId", data.patientId);
       const routePrams={...page,...params}
       // navigate.push({ pathname: "/reviewer/patients/details", query: page });
+      
       navigate?.push(
         {
           pathname: '/reviewer/patients/details',
-          query: routePrams,
+          query: params,
         },
         '/reviewer/patients/details'
       )
@@ -166,6 +167,7 @@ function PatientTable({
       ))
     );
   };
+
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>

@@ -55,10 +55,10 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   );
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [localUserId, setLocalUserId] = useState("");
-  const [searchVal, setSearchVal] = useState(null);
-  const [pageNo, setPageNo] = useState(0);
+  const [searchVal, setSearchVal] = useState(navigate.query.searchTextValue);
+  const [pageNo, setPageNo] = useState(navigate.query?.pageNo);
   const [pageSize, setPageSize] = useState(15);
-  const [paginationFirst, setPaginationFirst] = useState(0);
+  const [paginationFirst, setPaginationFirst] = useState(navigate?.query?.paginationFirst);
   const [totalElements, setTotalElements] = useState(10);
   const [trackChart, setTrackChart] = useState({
     COMPLETED: 0,
@@ -67,7 +67,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     HOLD: 0,
   });
   const [selectedPriority, setSelectedPriority] = useState();
-  const [selectedPriorityValue, setSelectedPriorityValue] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
   const dueStartDate = filteratedDashboardData?.dayDate
     ? moment(filteratedDashboardData?.dayDate)?.format("YYYY-MM-DD") +
@@ -83,13 +82,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const [dueDateEnd, setDueDateEnd] = useState(dueEndDate);
   const [processedStart, setProcessedStart] = useState("");
   const [processedEnd, setProcessedEnd] = useState("");
-  const [statusSelectedValue, setStausSelectedValue] = useState(
-    filteratedDashboardData?.status
-      ? filteratedDashboardData?.status.toUpperCase()
-      : ""
-  );
-  const [statusSelectedStatus, setStatusSelectedStatus] = useState(null);
-  const [searchTextValue, setSearchTextValue] = useState(null);
+  const [statusSelectedStatus, setStatusSelectedStatus] = useState(navigate.query?.statusSelectedStatus);
+  const [searchTextValue, setSearchTextValue] = useState(navigate.query?.searchTextValue);
 
   const dayDateFormated = filteratedDashboardData?.date
     ? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY")
@@ -113,74 +107,77 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     );
   }, [dayDateFormated]);
 
-  useEffect(() => {
-    if (window !== "undefined") {
-      if (navigate.query) {
-        setIsLoading(true);
-        setPageNo(navigate?.query?.pageNo);
-        setPaginationFirst(navigate?.query?.paginationFirst);
-        setSearchVal(navigate.query?.searchTextValue);
-        setSelectedPriorityValue(navigate.query?.selectedPriority);
-        setStatusSelectedStatus(navigate.query?.statusSelectedValue);
-      }
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   if (window !== "undefined") {
+  //     if (navigate.query) {
+  //       setIsLoading(true);
+  //       setPageNo(navigate?.query?.pageNo);
+  //       setPaginationFirst(navigate?.query?.paginationFirst);
+  //       setSearchVal(navigate.query?.searchTextValue);
+  //       setSelectedPriorityValue(navigate.query?.selectedPriority);
+  //       setStatusSelectedStatus(navigate.query?.statusSelectedValue);
+  //     }
+  //   }
+  // }, [navigate]);
 
   useEffect(() => {
-    const uId = localStorage.getItem("userId");
+    const uId = sessionStorage.getItem("userId");
     setLocalUserId(uId);
     if (window !== "undefined") {
-      if (navigate.query && (searchTextValue ===null|| selectedPriority === null || statusSelectedValue === null)) {
+      // if (navigate.query && (searchTextValue ===null|| selectedPriority === null || statusSelectedValue === null)) {
+      //   console.log( navigate.query?.selectedPriority,
+      //     navigate.query?.searchTextValue,navigate.query)
+      //   getFilteApi(
+      //     pageNo,
+      //     pageSize,
+      //     navigate.query?.statusSelectedValue,
+      //     dueDateStart,
+      //     dueDateEnd,
+      //     processedStart,
+      //     processedEnd,
+      //     sort,
+      //     navigate.query?.selectedPriority,
+      //     navigate.query?.searchTextValue
+      //   );
+      //   getPatientRes(
+      //     pageNo,
+      //     pageSize,
+      //     navigate.query?.statusSelectedValue,
+      //     dueDateStart,
+      //     dueDateEnd,
+      //     processedStart,
+      //     processedEnd,
+      //     sort,
+      //     navigate.query?.selectedPriority,
+      //     navigate.query?.searchTextValue
+      //   );
+      // } else {
+      console.log(navigate.query)
         getFilteApi(
           pageNo,
           pageSize,
-          navigate.query?.statusSelectedValue,
-          dueDateStart,
-          dueDateEnd,
-          processedStart,
-          processedEnd,
-          sort,
-          navigate.query?.selectedPriority,
-          navigate.query?.searchTextValue
-        );
-        getPatientRes(
-          pageNo,
-          pageSize,
-          navigate.query?.statusSelectedValue,
-          dueDateStart,
-          dueDateEnd,
-          processedStart,
-          processedEnd,
-          sort,
-          navigate.query?.selectedPriority,
-          navigate.query?.searchTextValue
-        );
-      } else {
-        getFilteApi(
-          pageNo,
-          pageSize,
-          statusSelectedValue,
+          statusSelectedStatus?statusSelectedStatus:navigate.query?.statusSelectedStatus,
           dueDateStart,
           dueDateEnd,
           processedStart,
           processedEnd,
           sort,
           selectedPriority,
-          searchTextValue
+          searchTextValue?searchTextValue:navigate.query?.searchTextValue
         );
-        getPatientRes(
-          pageNo,
-          pageSize,
-          statusSelectedValue,
-          dueDateStart,
-          dueDateEnd,
-          processedStart,
-          processedEnd,
-          sort,
-          selectedPriority,
-          searchTextValue
-        );
-      }
+        // getPatientRes(
+        //   pageNo,
+        //   pageSize,
+        //   statusSelectedValue,
+        //   dueDateStart,
+        //   dueDateEnd,
+        //   processedStart,
+        //   processedEnd,
+        //   sort,
+        //   selectedPriority,
+        //   searchTextValue
+        // );
+      // }
     }
   }, [
     filteratedDashboardData,
@@ -191,7 +188,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     dueDateStart,
     processedStart,
     processedEnd,
-    statusSelectedValue,
+    statusSelectedStatus,
     navigate.query,
     searchVal,
   ]);
@@ -199,7 +196,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const getPatientRes = async (
     pageNo,
     pageSize,
-    statusSelectedValue,
+    statusSelectedStatus,
     dueDateStart,
     dueDateEnd,
     processedStart,
@@ -212,7 +209,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
       const res = await getFilteApi(
         pageNo,
         pageSize,
-        statusSelectedValue,
+        statusSelectedStatus,
         dueDateStart,
         dueDateEnd,
         processedStart,
@@ -241,7 +238,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     selectedPriority,
     searchTextValue
   ) => {
-    console.log(searchTextValue, "searchTextValue");
     const uId = localStorage.getItem("userId");
     const resoureUrl = `patientAllocated=${uId}&page=${
       pageNo ? pageNo : 0
@@ -256,7 +252,12 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&priority=${
       selectedPriority ? selectedPriority : ""
     }`;
-    return await getpatientsListFilter({ url: resoureUrl });
+    const res= await getpatientsListFilter({ url: resoureUrl });
+    if (res.status == "SUCCESS") {
+      setTotalElements(res.response?.patientDTOList?.totalElements);
+      setTrackChart(res?.response?.processStatusCount);
+      setPatinetListAll(res?.response?.patientDTOList?.content);
+    }
   };
 
   const debounceText = useCallback(
@@ -364,7 +365,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     if (value == "ALL") {
       value = "";
     }
-    setStausSelectedValue(value);
     setStatusSelectedStatus(value);
     // getFilteApi(
     //   0,
@@ -382,7 +382,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
       value = "";
     }
     setSelectedPriority(value);
-    setSelectedPriorityValue(value);
   };
   const handleDatePickerChange = (dateString) => {
     if (dateString[0] != "") {
@@ -545,7 +544,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                 />
 
                                 <InputText
-                                  value={searchVal}
+                                  value={searchVal?searchVal:navigate.query.searchTextValue}
                                   onChange={(e) => getNameSearch(e)}
                                   className={
                                     "form-control new-form-control new-item-control"
@@ -594,9 +593,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                     resetPageNumber(setPageNo);
                                   }}
                                   value={
-                                    selectedPriorityValue && {
-                                      label: selectedPriorityValue,
-                                      value: selectedPriorityValue,
+                                    selectedPriority && {
+                                      label: selectedPriority,
+                                      value: selectedPriority,
                                     }
                                   }
                                   options={options}
@@ -708,7 +707,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                               setSortAllocateOrder={setSortAllocateOrder}
                               userId={localUserId}
                               params={{
-                                statusSelectedValue,
+                                statusSelectedStatus,
                                 dueDateStart,
                                 dueDateEnd,
                                 processedStart,
@@ -716,6 +715,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                 sort,
                                 selectedPriority,
                                 searchTextValue,
+                                pageNo, paginationFirst
                               }}
                             />
                             <div>
