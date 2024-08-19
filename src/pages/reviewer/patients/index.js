@@ -88,7 +88,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
       ? filteratedDashboardData?.status.toUpperCase()
       : ""
   );
-  const [statusSelectedStatus,setStatusSelectedStatus]=useState(null)
+  const [statusSelectedStatus, setStatusSelectedStatus] = useState(null);
   const [searchTextValue, setSearchTextValue] = useState(null);
 
   const dayDateFormated = filteratedDashboardData?.date
@@ -143,6 +143,18 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
           navigate.query?.selectedPriority,
           navigate.query?.searchTextValue
         );
+        getPatientRes(
+          pageNo,
+          pageSize,
+          navigate.query?.statusSelectedValue,
+          dueDateStart,
+          dueDateEnd,
+          processedStart,
+          processedEnd,
+          sort,
+          navigate.query?.selectedPriority,
+          navigate.query?.searchTextValue
+        );
       } else {
         getFilteApi(
           pageNo,
@@ -156,9 +168,20 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
           selectedPriority,
           searchTextValue
         );
+        getPatientRes(
+          pageNo,
+          pageSize,
+          statusSelectedValue,
+          dueDateStart,
+          dueDateEnd,
+          processedStart,
+          processedEnd,
+          sort,
+          selectedPriority,
+          searchTextValue
+        );
       }
     }
-    getPatientRes();
   }, [
     filteratedDashboardData,
     pageNo,
@@ -170,9 +193,21 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     processedEnd,
     statusSelectedValue,
     navigate.query,
+    searchVal,
   ]);
 
-  const getPatientRes = async () => {
+  const getPatientRes = async (
+    pageNo,
+    pageSize,
+    statusSelectedValue,
+    dueDateStart,
+    dueDateEnd,
+    processedStart,
+    processedEnd,
+    sort,
+    selectedPriority,
+    searchTextValue
+  ) => {
     try {
       const res = await getFilteApi(
         pageNo,
@@ -193,7 +228,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
       }
     } catch (error) {}
   };
-  
 
   const getFilteApi = async (
     pageNo,
@@ -207,6 +241,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     selectedPriority,
     searchTextValue
   ) => {
+    console.log(searchTextValue, "searchTextValue");
     const uId = localStorage.getItem("userId");
     const resoureUrl = `patientAllocated=${uId}&page=${
       pageNo ? pageNo : 0
@@ -330,7 +365,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
       value = "";
     }
     setStausSelectedValue(value);
-    setStatusSelectedStatus(value)
+    setStatusSelectedStatus(value);
     // getFilteApi(
     //   0,
     //   pageSize,
@@ -347,7 +382,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
       value = "";
     }
     setSelectedPriority(value);
-    setSelectedPriorityValue(value)
+    setSelectedPriorityValue(value);
   };
   const handleDatePickerChange = (dateString) => {
     if (dateString[0] != "") {

@@ -127,12 +127,6 @@ const Details = ({
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
-  // const patientDetailsResult = useSelector(
-  //   (state) => state?.ReviewerReducers?.patientDetails
-  // );
-  const sectionColorList = useSelector(
-    (state) => state?.ReviewerReducers?.sectionColorList
-  );
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [dosYear, setDosYear] = useState("");
