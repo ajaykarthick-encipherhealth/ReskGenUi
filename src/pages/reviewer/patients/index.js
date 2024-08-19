@@ -544,7 +544,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                 />
 
                                 <InputText
-                                  value={searchVal?searchVal:navigate.query.searchTextValue}
+                                  value={searchVal}
                                   onChange={(e) => getNameSearch(e)}
                                   className={
                                     "form-control new-form-control new-item-control"
