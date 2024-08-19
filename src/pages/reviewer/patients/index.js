@@ -158,6 +158,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         );
       }
     }
+    getPatientRes();
   }, [
     filteratedDashboardData,
     pageNo,
@@ -171,43 +172,28 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     navigate.query,
   ]);
 
-  useEffect(() => {
-    const resultMap =
-      patientsListFilter?.data?.response?.patientDTOList?.content;
-    const result = patientsListFilter?.data?.response?.patientDTOList?.content;
-    setTotalElements(
-      patientsListFilter?.data?.response?.patientDTOList?.totalElements
-    );
-
-    // result?.map((res) => {
-    //   resultMap.push({
-    //     patientId: res.patientId,
-    //     patientName: res.patientName,
-    //     fileName: res.fileName,
-    //     computing: res.computing,
-    //     createdAt: res.createdAt,
-    //     lastModifiedDate: res.lastModifiedDate,
-    //     dueDate: res.dueDate,
-    //     allocatedBy: res.allocatedBy,
-    //     allocatedOn: res.allocatedOn,
-    //     priority: res.priority,
-    //     processedStatus: res.processedStatus,
-    //     processedDate: res.processedDate,
-    //     allocatedByFirstName: res.allocatedByFirstName,
-    //     allocatedByLastName: res.allocatedByLastName,
-    //     allocatedByProfileImage: res.allocatedByProfileImage,
-    //     validDiseaseCount: res.validDiseaseCount,
-    //     deletedDiseaseCount: res.deletedDiseaseCount,
-    //     declinedNotes: res.declinedNotes,
-    //   });
-    // });
-    setTrackChart(patientsListFilter?.data?.response?.processStatusCount);
-    setPatinetListAll(
-      patientsListFilter?.data?.response?.patientDTOList?.content
-    );
-    setIsLoading(false);
-    // }
-  }, [patientsListFilter]);
+  const getPatientRes = async () => {
+    try {
+      const res = await getFilteApi(
+        pageNo,
+        pageSize,
+        statusSelectedValue,
+        dueDateStart,
+        dueDateEnd,
+        processedStart,
+        processedEnd,
+        sort,
+        selectedPriority,
+        searchTextValue
+      );
+      if (res.status == "SUCCESS") {
+        setTotalElements(res.response?.patientDTOList?.totalElements);
+        setTrackChart(res?.response?.processStatusCount);
+        setPatinetListAll(res?.response?.patientDTOList?.content);
+      }
+    } catch (error) {}
+  };
+  
 
   const getFilteApi = async (
     pageNo,
@@ -235,7 +221,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&priority=${
       selectedPriority ? selectedPriority : ""
     }`;
-    getpatientsListFilter({ url: resoureUrl });
+    return await getpatientsListFilter({ url: resoureUrl });
   };
 
   const debounceText = useCallback(

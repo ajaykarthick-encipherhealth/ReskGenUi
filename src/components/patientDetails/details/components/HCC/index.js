@@ -74,6 +74,7 @@ const HccCards = ({
   labDetailsResult,
   radiologyFile,
   radiologyDetailsResult,
+  patientDetailsResult,
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -151,7 +152,7 @@ const HccCards = ({
     });
   };
 
-  const userId = localStorage.getItem('userId')
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     if (selectedDos && labFile?.data?.response?.dosSummaries) {
@@ -581,7 +582,8 @@ const HccCards = ({
                                     encounterDateMatching:
                                       encounterDateMatching,
                                     fileDosPageNumberList:
-                                      fileDosPageNumberList,
+                                      patientDetailsResult?.data?.response
+                                        ?.fileDetailDTO?.dosSummaries,
                                     setIsModalOpenValidCodes:
                                       setIsModalOpenValidCodes
                                         ? setIsModalOpenValidCodes
@@ -598,6 +600,7 @@ const HccCards = ({
                                     getCurrentDiseaseType,
                                     hyperlinks: data?.hyperlinks,
                                     setSelectedDos,
+                                    setLabData
                                   })}
                                 </div>
                                 {data.providerName.length == 0 && (
@@ -669,15 +672,17 @@ const HccCards = ({
 
                                   {data?.riskAdjustmentDtoList?.some((item) =>
                                     item?.rxHcc?.some((hcc) => hcc.value > 1)
-                                  ) && userId != "reviewer@3gencogentai.onmicrosoft.com" && (
-                                    <div
-                                      className={`${visitStyles.rxStatus} mx-1`}
-                                    >
-                                      RX
-                                    </div>
-                                  )}
-                                </div> 
-                                {data.isLab != true && (
+                                  ) &&
+                                    userId !=
+                                      "reviewer@3gencogentai.onmicrosoft.com" && (
+                                      <div
+                                        className={`${visitStyles.rxStatus} mx-1`}
+                                      >
+                                        RX
+                                      </div>
+                                    )}
+                                </div>
+                                {data.isLab != true && data.isRadiology != true && (
                                   <div
                                     className={`cr-pointer ${styles.meatFoundContainer}`}
                                   >
@@ -940,6 +945,7 @@ const HccCards = ({
 const enhancer = connect(
   (state) => ({
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
     loading: state?.patientDetails?.details?.loading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     radiologyFile: state?.patientDetails?.details?.radiologyFileResult,

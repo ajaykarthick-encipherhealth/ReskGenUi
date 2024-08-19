@@ -30,6 +30,7 @@ export const getEncounterDateBackground = ({
   getCurrentDiseaseType,
   hyperlinks,
   setSelectedDos,
+  setLabData,
 }) => {
   return value?.map((res, index) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -45,17 +46,19 @@ export const getEncounterDateBackground = ({
                 ite.dateOfService == res
             );
             if (selectedMeatData?.stateIndicator) {
+              setLabData && setLabData(selectedMeatData?.fileId);
               getCurrentDiseaseType && getCurrentDiseaseType(false);
-              selectedMeatData?.stateIndicator === "LAB"
-                ? getLabPDF &&
-                  getLabPDF(
-                    patientId,
-                    "",
-                    selectedMeatData?.dateOfService,
-                    "",
-                    selectedMeatData?.diagnosticTestName
-                  )
-                : getRadiologyPDF &&
+              if (selectedMeatData?.stateIndicator === "LAB") {
+                setSelectedDos && setSelectedDos(res);
+                if (getLabPDF) {
+                  getLabPDF({
+                    fileId: selectedMeatData?.fileId,
+                  });
+                  setSearch({
+                    value: moment(selectedMeatData?.dos).format("MM/DD/YYYY"),
+                    page: selectedMeatData?.startPageNumber,
+                  });
+                } else if (getRadiologyPDF) {
                   getRadiologyPDF(
                     patientId,
                     "",
@@ -63,6 +66,8 @@ export const getEncounterDateBackground = ({
                     "",
                     selectedMeatData?.diagnosticTestName
                   );
+                }
+              }
             } else {
               getCurrentDiseaseType && getCurrentDiseaseType(true);
             }
@@ -218,7 +223,8 @@ export const getEncounterDateBackgroundLab = ({
   return value?.map((res, index) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
     var backColor = result[0]?.colors;
-    const dosSummaries = fileDosPageNumberList.data.response[0].fileDetailDTO.dosSummaries
+    const dosSummaries =
+      fileDosPageNumberList?.data?.response[0]?.fileDetailDTO?.dosSummaries;
     if (index < 2) {
       var sectionMapArr = res ? (
         <span
@@ -228,13 +234,13 @@ export const getEncounterDateBackgroundLab = ({
               (ite) =>
                 // ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
                 ite.dos == res
-            )
-              if (selectedMeatData) {
-                setSearch({
-                  value: moment(selectedMeatData?.dos).format("MM/DD/YYYY"),
-                  page: selectedMeatData?.startPageNumber,
-                });
-              }
+            );
+            if (selectedMeatData) {
+              setSearch({
+                value: moment(selectedMeatData?.dos).format("MM/DD/YYYY"),
+                page: selectedMeatData?.startPageNumber,
+              });
+            }
             // if (selectedMeatData?.stateIndicator) {
             //   getCurrentDiseaseType && getCurrentDiseaseType(false);
             //   selectedMeatData?.stateIndicator === "LAB"
@@ -259,7 +265,7 @@ export const getEncounterDateBackgroundLab = ({
             // }
             getEncounterDetails(
               res,
-              fileDosPageNumberList,
+              dosSummaries,
               setIsModalOpenValidCodes,
               setSearch,
               setFileModalHeader,
@@ -339,7 +345,7 @@ export const getEncounterDateBackgroundLab = ({
                       }
                       getEncounterDetails(
                         item,
-                        fileDosPageNumberList,
+                        dosSummaries,
                         setIsModalOpenValidCodes,
                         setSearch,
                         setFileModalHeader,
@@ -400,11 +406,11 @@ const getEncounterDetails = async (
   datas
 ) => {
   selectMeatResult ? selectMeatResult(datas) : "";
-  const findPageNumber = fileDosPageNumberList?.data?.response?.filter(
+  const findPageNumber = fileDosPageNumberList?.filter(
     (i) =>
       moment(i.dos).format("MM-DD-YYYY") === moment(date).format("MM-DD-YYYY")
   );
-  if (findPageNumber.length != 0) {
+  if (findPageNumber?.length != 0) {
     if (setIsModalOpenValidCodes) {
       setIsModalOpenValidCodes(true);
       var headerName = patientDocumentResult
@@ -1602,9 +1608,9 @@ export const getCaptureSectionBackgroundMeatNew = (
             getCurrentDiseaseType && getCurrentDiseaseType(false);
             selectedMeatData?.stateIndicator === "LAB"
               ? getLabPDF &&
-              getLabPDF({
-                fileId: selectedMeatData?.fileId,
-              })
+                getLabPDF({
+                  fileId: selectedMeatData?.fileId,
+                })
               : getRadiologyPDF &&
                 getRadiologyPDF(
                   patientId,
@@ -1653,8 +1659,9 @@ export const getCaptureSectionBackgroundMeatNew = (
 
 export function removeDuplicatesArray(arr) {
   if (arr) {
-    const headers = arr.map(({ header }) => header);
-    const filtered = arr.filter(
+    const cogentAiFilterb = arr.filter((item) => item.header != "cogent_dos");
+    const headers = cogentAiFilterb.map(({ header }) => header);
+    const filtered = cogentAiFilterb.filter(
       ({ header }, index) => !headers.includes(header, index + 1)
     );
     return filtered;
