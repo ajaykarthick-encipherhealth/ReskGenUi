@@ -14,6 +14,8 @@ export const debounce = (func, delay) => {
   };
 };
 
+export const disallowedCharacters = ['[', '{', ']', '}', '|', '!', ',', '%', '^', "\\", "(", ")", "#"];
+
 const InputField = ({
   isSearch,
   placeholder,
@@ -35,7 +37,7 @@ const InputField = ({
   setPageNo
 }) => {
   const [inputStr, setInputStr] = useState("");
-  const disallowedCharacters = ['[', '{', ']', '}', '|', '!', ',', '%', '^', "\\", "(", ")", "#"];
+  
   const debounceFunc = useCallback(
     debounce((text, activeTab) => {
       if (activeTab === "SentReport") {
@@ -102,7 +104,7 @@ const InputField = ({
             e.preventDefault();
           }
         }}
-        su
+    
       />
     </div>
   );

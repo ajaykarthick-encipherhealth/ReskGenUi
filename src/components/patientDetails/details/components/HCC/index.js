@@ -75,6 +75,7 @@ const HccCards = ({
   labDetailsResult,
   radiologyFile,
   radiologyDetailsResult,
+  patientDetailsResult,
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -92,7 +93,7 @@ const HccCards = ({
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
   const [labData, setLabData] = useState("");
-  const [selectedDos, setSelectedDos] = useState('')
+  const [selectedDos, setSelectedDos] = useState("");
 
   const getPdfEmptyFunction = () => {};
   const getRadiologyPDF =
@@ -157,15 +158,19 @@ const HccCards = ({
     });
   };
 
+  const userId = localStorage.getItem("userId");
+
   useEffect(() => {
     if (selectedDos && labFile?.data?.response?.dosSummaries) {
-      const res = labFile?.data?.response?.dosSummaries.find((item) => item.dos == selectedDos)
-       setSearch({
-         value: moment(selectedDos).format("MM/DD/YYYY"),
-         page: res?.startPageNumber,
-       });
+      const res = labFile?.data?.response?.dosSummaries.find(
+        (item) => item.dos == selectedDos
+      );
+      setSearch({
+        value: moment(selectedDos).format("MM/DD/YYYY"),
+        page: res?.startPageNumber,
+      });
     }
-  }, [selectedDos, labFile?.data?.response?.dosSummaries])
+  }, [selectedDos, labFile?.data?.response?.dosSummaries]);
 
   return (
     <>
@@ -331,7 +336,11 @@ const HccCards = ({
                                     onchangeValid={onchangeValid}
                                     result={data}
                                     setFileLoading={setFileLoading}
-                                    isComboCode={data.isComboCode && data.ruleType != "DIRECT_COMBINATION_RULE_ENGINE"}
+                                    isComboCode={
+                                      data.isComboCode &&
+                                      data.ruleType !=
+                                        "DIRECT_COMBINATION_RULE_ENGINE"
+                                    }
                                   />
                                 )}
                                 <Popover
@@ -590,7 +599,8 @@ const HccCards = ({
                                     encounterDateMatching:
                                       encounterDateMatching,
                                     fileDosPageNumberList:
-                                      fileDosPageNumberList,
+                                      patientDetailsResult?.data?.response
+                                        ?.fileDetailDTO?.dosSummaries,
                                     setIsModalOpenValidCodes:
                                       setIsModalOpenValidCodes
                                         ? setIsModalOpenValidCodes
@@ -606,7 +616,8 @@ const HccCards = ({
                                     getLabPDF,
                                     getCurrentDiseaseType,
                                     hyperlinks: data?.hyperlinks,
-                                    setSelectedDos
+                                    setSelectedDos,
+                                    setLabData
                                   })}
                                 </div>
                                 {data.providerName.length == 0 && (
@@ -664,22 +675,31 @@ const HccCards = ({
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
                                 <div className="d-flex justify-content-end mt-2">
-                                  {cmsList?.length > 0 && (
+                                  {data?.riskAdjustmentDtoList?.some((item) =>
+                                    item?.cmsHcc?.some((hcc) => hcc.value > 1)
+                                  ) && (
                                     <div
                                       className={`${visitStyles.cmsStatus} mx-1`}
                                     >
                                       CMS
                                     </div>
                                   )}
-                                  {rxList?.length > 0 && (
-                                    <div
-                                      className={`${visitStyles.rxStatus} mx-1`}
-                                    >
-                                      RX
-                                    </div>
-                                  )}
+
+                                  {/* As of now we command this for 3gen Don't want to show RXHCC */}
+
+                                  {data?.riskAdjustmentDtoList?.some((item) =>
+                                    item?.rxHcc?.some((hcc) => hcc.value > 1)
+                                  ) &&
+                                    userId !=
+                                      "reviewer@3gencogentai.onmicrosoft.com" && (
+                                      <div
+                                        className={`${visitStyles.rxStatus} mx-1`}
+                                      >
+                                        RX
+                                      </div>
+                                    )}
                                 </div>
-                                {data.isLab != true && (
+                                {data.isLab != true && data.isRadiology != true && (
                                   <div
                                     className={`cr-pointer ${styles.meatFoundContainer}`}
                                   >
@@ -942,6 +962,7 @@ const HccCards = ({
 const enhancer = connect(
   (state) => ({
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
     loading: state?.patientDetails?.details?.loading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     radiologyFile: state?.patientDetails?.details?.radiologyFileResult,

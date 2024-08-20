@@ -27,10 +27,11 @@ function PatientTable({
   setSortCompleteOrder,
   sortAllocateOrder,
   setSortAllocateOrder,
+  userId,
+  params
 }) {
   const dispatch = useDispatch();
   const navigate = useRouter();
-
   const handlePriorityChange = (patientId, selectedValue) => {
     // setSelectedPriority((prev) => ({
     //   ...prev,
@@ -46,7 +47,16 @@ function PatientTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push({ pathname: "/reviewer/patients/details", query: page });
+      const routePrams={...page,...params}
+      // navigate.push({ pathname: "/reviewer/patients/details", query: page });
+      
+      navigate?.push(
+        {
+          pathname: '/reviewer/patients/details',
+          query: params,
+        },
+        '/reviewer/patients/details'
+      )
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
@@ -78,13 +88,14 @@ function PatientTable({
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.patientName}
           </td>
+          {userId != "reviewer@3gencogentai.onmicrosoft.com" && 
           <td
             className={TableStyle.childBorder}
             onClick={handleTableRowClick}
             style={{ paddingLeft: "30px" }}
           >
             {data.validDiseaseCount ? data.validDiseaseCount : "---"}
-          </td>
+          </td> }
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.allocatedOn
               ? moment(data.allocatedOn).format("MM-DD-YYYY")
@@ -156,6 +167,7 @@ function PatientTable({
       ))
     );
   };
+
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -163,7 +175,7 @@ function PatientTable({
           <tr>
             <th>PATIENT ID</th>
             <th>FILE NAME</th>
-            <th>HCC COUNT</th>
+            {userId != "reviewer@3gencogentai.onmicrosoft.com" && <th>HCC COUNT</th>}
             <th
               onClick={() => {
                 sortFunction(

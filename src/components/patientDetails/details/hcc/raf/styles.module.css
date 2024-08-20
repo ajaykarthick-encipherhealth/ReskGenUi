@@ -249,7 +249,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
   height: 20px;
-  width: 75%;
+  width: 65%;
 }
 .stickyHeader {
   min-height: 20vh;

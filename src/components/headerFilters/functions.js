@@ -588,28 +588,29 @@ export const handleTogglePasswordVisibility = (
   setShowPassword(!showPassword);
 };
 
-export const getValidatePassword = (password, setErrors) => {
+export const getValidatePassword = (password,setErrors) => {
   const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
-  console.log(password, !passwordRegex.test(password), "testing");
-  if (password.length === 0) {
-    setErrors({
-      password: "Please enter the password",
-    });
-    return false;
-  }
-  if (password.length < 8) {
-    setErrors({
-      password: "Password should be greater than 8 characters",
-    });
-    return false;
-  }
-  if (password.length > 30) {
-    setErrors({
-      password: "Password should be less than 30 characters",
-    });
-    return false;
-  }
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#<])[A-Za-z\d@$!%*?&#<]+$/;
+  
+  // if (password.length === 0) {
+  //   setErrors({
+  //     password: "Please enter the password",
+  //   });
+  //   return false;
+  // }
+  // if (password.length < 8) {
+  //   setErrors({
+  //     password: "Password should be greater than 8 characters",
+  //   });
+  //   return false;
+  // }
+  // if (password.length > 30) {
+  //   setErrors({
+  //     password: "Password should be less than 30 characters",
+  //   });
+  //   return false;
+  // }
+
   if (password.length > 0 && !passwordRegex.test(password)) {
     setErrors({
       password:

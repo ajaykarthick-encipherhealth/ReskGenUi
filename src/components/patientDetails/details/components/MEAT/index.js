@@ -49,7 +49,8 @@ const MeatCard = ({
   getLabPDFFile,
   labFile,
   setLabData,
-  labData
+  labData,
+  patientDetailsResult
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
@@ -197,7 +198,7 @@ const MeatCard = ({
                         {getEncounterDateBackground({
                           value: item?.encounterDateSplit,
                           encounterDateMatching: encounterDateMatching,
-                          fileDosPageNumberList: fileDosPageNumberList,
+                          fileDosPageNumberList: patientDetailsResult?.data?.response?.fileDetailDTO?.dosSummaries,
                           setIsModalOpenValidCodes: setIsModalOpen,
                           setSearch: setSearch,
                           setFileModalHeader: setFileModalHeader,
@@ -524,6 +525,7 @@ const MeatCard = ({
 
 const enhancer = connect(
   (state) => ({
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
     radiologyResult: state?.patientDetails?.details?.radiologyResult,
     labResult: state?.patientDetails?.details?.labResult,

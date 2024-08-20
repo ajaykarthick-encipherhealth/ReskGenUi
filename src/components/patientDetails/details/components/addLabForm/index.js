@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { notification } from "antd";
+import { notification, Select } from "antd";
 import { connect, useSelector } from "react-redux";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -7,7 +7,7 @@ import axios from "../../../../../utility/axiosConfig";
 import { validateYear } from "../../../../headerFilters/functions";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
-import { getResponePopup } from "../../../../../utils/reusable";
+import { getResponePopup, validateFileName } from "../../../../../utils/reusable";
 
 const AddLabForm = ({
   setOpen,
@@ -18,39 +18,59 @@ const AddLabForm = ({
 }) => {
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [validated, setValidated] = useState(false);
-  const [error, setError] = useState({ year: "" });
+  const [error, setError] = useState({ year: "", emr:"" });
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
     patientId: "",
   });
+  const [emrType, setEmrType] = useState("");
   const [selectFile, setSelectFile] = useState(null);
 
-  const handleChange = async (e) => {
-    const key = e.target.name;
-    if (e.target.name === "year") {
+  const handleChange = async (e, name) => {
+    const key =  name == "dos" ? "dos" : e.target.name;
+    const value = name == "dos" ? e : e.target.value;
+    if (e?.target?.name === "year") {
       const validateYearField = validateYear(e.target.value, setError);
       if (validateYearField) {
-        setError({ year: "" });
+        setError({ ...error, year: "" });
         setInputValue({ ...inputValue, [key]: value });
+      } else {
+        console.log(validateYearField);
       }
+    } else if (name == "dos") {
+      if (value) {
+        setInputValue({ ...inputValue, [key]: value });
+        setError({ ...error, emr: "" });
+      } else {
+        setError({ ...error, emr: "Please Select EMR Type" });
+      }
+    } else {
+      setInputValue({ ...inputValue, [key]: value });
     }
-    const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
   };
 
-  const onChangeReportFile = (e) => {
-    setSelectFile(e[0]);
+  const handleFileChange = (files) => {
+    const file = files[0];
+    if (file && validateFileName(file.name)) {
+      setSelectFile(file);
+    } else {
+      message.error("Invalid files");
+      const fileValue = document.getElementById("fileInput");
+      fileValue.value = "";
+    }
   };
 
   const handleSubmitReport = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
-    if (form.checkValidity() === true) {
+    if (form.checkValidity() === true && emrType) {
       setIsLoadingBtn(true);
       event.preventDefault();
       event.stopPropagation();
       submitReport();
+    } else if (!emrType) {
+      setError({ ...error, emr: "Please Select EMR Type" });
     }
     setValidated(true);
   };
@@ -66,6 +86,7 @@ const AddLabForm = ({
     formData.append("userid", uId);
     formData.append("patientid", inputValue.patientId);
     formData.append("dos", inputValue.year);
+    formData.append("emrtype", emrType);
     const headers = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -99,6 +120,11 @@ const AddLabForm = ({
       setIsLoadingBtn(false);
     }
   };
+  const handleClose = () => {
+    setOpen(false);
+    setError({ year: "", emr: "" })
+    setEmrType('')
+  }
 
   useEffect(() => {
     inputValue.patientId = patientDetailsResult?.data?.response?.patientId;
@@ -119,7 +145,7 @@ const AddLabForm = ({
         <button
           type="button"
           className="btn-close"
-          onClick={() => setOpen(false)}
+          onClick={handleClose}
         >
           <i className="fa-solid fa-xmark"></i>
         </button>
@@ -167,10 +193,64 @@ const AddLabForm = ({
                   type="file"
                   accept="application/pdf,text/plain"
                   required
-                  onChange={(e) => onChangeReportFile(e.target.files)}
+                  onChange={(e) => handleFileChange(e.target.files)}
                   disabled={isLoadingBtn ? true : false}
                 />
               </div>
+              <div className="col-xl-12 mb-3">
+              <Form.Label>
+                EMR Type<span className="text-danger">*</span>
+              </Form.Label>
+              <Select
+                // mode="multiple"
+                showSearch
+                name="emrType"
+                maxTagCount="responsive"
+                className={`ant_select_form hcc_form mb-2`}
+                onChange={(selOption, val) => {
+                  handleChange(selOption, "dos");
+                  setEmrType(selOption);
+                }}
+                value={emrType}
+                options={[
+                  { label: "ADSC", value: "ADSC" },
+                  { label: "Advanced MD", value: "Advanced MD" },
+                  { label: "Amazing Charts", value: "Amazing Charts" },
+                  { label: "Aprima", value: "Aprima" },
+                  { label: "Athena", value: "Athena" },
+                  { label: "Allegiance MD", value: "Allegiance MD" },
+                  { label: "Bizmatics", value: "Bizmatics" },
+                  { label: "Cronos", value: "Cronos" },
+                  { label: "DR RIAZ U HAQUE MD", value: "DR RIAZ U HAQUE MD" },
+                  { label: "Eclinicalworks", value: "Eclinicalworks" },
+                  { label: "EMD", value: "EMD" },
+                  { label: "EpicCare", value: "EpicCare" },
+                  { label: "Glenwood Systems", value: "Glenwood Systems" },
+                  { label: "Happy MD", value: "Happy MD" },
+                  { label: "Insync", value: "Insync" },
+                  { label: "IPatientCare", value: "IPatientCare" },
+                  { label: "NextGen", value: "NextGen" },
+                  { label: "PointClickCare", value: "PointClickCare" },
+                  { label: "Paper", value: "Paper" },
+                  { label: "Power to Practice", value: "Power to Practice" },
+                  { label: "Practice Fusion", value: "Practice Fusion" },
+                  { label: "Prognosis", value: "Prognosis" },
+                  { label: "Tebra", value: "Tebra" },
+                  { label: "Term SVR", value: "Term SVR" },
+                  {
+                    label: "Aprima Facility Portal",
+                    value: "Aprima Facility Portal",
+                  },
+                  { label: "Micro MD", value: "Micro MD" },
+                  { label: "IMS", value: "IMS" },
+                  { label: "Other", value: "-" },
+                ]}
+                required
+              />
+              {error?.emr && (
+                <div className="text-danger fs-12">{error?.emr}</div>
+              )}
+            </div>
             </div>
 
             <div>
@@ -178,7 +258,7 @@ const AddLabForm = ({
                 {isLoadingBtn ? "Loading..." : "Submit"}
               </Button>
               <Button
-                onClick={() => setOpen(false)}
+                onClick={handleClose}
                 className="btn btn-danger btn-sm light ms-1"
               >
                 Cancel

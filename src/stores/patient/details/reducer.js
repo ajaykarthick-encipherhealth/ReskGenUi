@@ -97,6 +97,7 @@ const patientDetailsReducer = combineReducers({
   radiologyFileResult: createReducer(radiologyFileAction),
   labResult: createReducer(labDetailsAction),
   labFileResult: createReducer(labFileAction),
+  labFileResultLoad: getPatientsLoading(labFileAction),
   flagsDetailsResult: createReducer(getFlagDetailsAction),
   sectionDetails: createReducer(getProviderSection),
   isCodeAlready: createReducer(isCodeAlready),

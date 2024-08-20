@@ -87,13 +87,15 @@ const RafScore = ({ patientDetailsResult }) => {
     const v24Entries = [];
     const v28Entries = new Map();
     const output = [];
+    const intractionEntries = [];
+
   
     // Separate V24 and V28 entries
     data?.forEach(item => {
       item?.dx_hccs.forEach(dx => {
         const entry = {
-          dx_code: dx.dx_name,
-          dx_desc: dx.dx_desc,
+          dx_code: dx.dx_name || "Intraction Code",
+          dx_desc: dx.dx_desc || dx.hcc_list[0]?.hcc_desc || null,
           hcc: dx.hcc_list[0]?.hcc_name || null,
           raf: dx.hcc_list[0]?.hcc_raf || null,
           monthly_premium: dx.hcc_list[0]?.premium || null,
@@ -190,8 +192,15 @@ const RafScore = ({ patientDetailsResult }) => {
         }
       });
     });
-  
-    return output;
+    const finalOutput = output?.filter(entry => {
+      if (entry?.dx_code === "Intraction Code") {
+        intractionEntries.push(entry);
+        return false;
+      }
+      return true;
+    });
+    
+    return finalOutput.concat(intractionEntries);
   };
   
   useEffect(() => {
@@ -220,8 +229,6 @@ const RafScore = ({ patientDetailsResult }) => {
     }
   }, [patientDetailsResult?.data?.response?.rafScore]);
 
-  console.log(rafScoreDetails);
-
   return (
     <>
       <div className={style.rafScoreMainContainer}>
@@ -236,8 +243,8 @@ const RafScore = ({ patientDetailsResult }) => {
                       style={{ background: "#73b2f2", color: "#ffffff" }}
                     >
                       <div className="row">
-                        <div className="col-xl-3">DX Code</div>
-                        <div className="col-xl-9">DX Description</div>
+                        <div className="col-xl-4">DX Code</div>
+                        <div className="col-xl-7">DX Description</div>
                       </div>
                     </div>
                     <div className={style.stickyHeader}>
@@ -250,8 +257,8 @@ const RafScore = ({ patientDetailsResult }) => {
                                 : `row`
                             }
                           >
-                            <div className="col-xl-3"> {item.dx_code}</div>
-                            <div className={`col-xl-9 ${style.rafDescription}`}>
+                            <div className="col-xl-4"> {item.dx_code}</div>
+                            <div className={`col-xl-7 ${style.rafDescription}`}>
                               <Popover title={item.dx_desc}>
                                 {item.dx_desc}{" "}
                               </Popover>
@@ -272,8 +279,8 @@ const RafScore = ({ patientDetailsResult }) => {
                       style={{ background: "#8262ce", color: "#ffffff" }}
                     >
                       <div className="row">
-                        <div className="col-xl-3">HCC</div>
-                        <div className="col-xl-3">RAF</div>
+                        <div className="col-xl-4">HCC</div>
+                        <div className="col-xl-2">RAF</div>
                         <div className="col-xl-4">Monthly Premium</div>
                         <div
                           className="col-xl-1 rounded d-flex align-items-center justify-content-center"
@@ -300,11 +307,11 @@ const RafScore = ({ patientDetailsResult }) => {
                           >
                             {/* {rafScoreDetails.map((item) => ( */}
                             <>
-                              <div className="col-xl-3">
+                              <div className="col-xl-4">
                                 <div>{item.v24_hcc ? item.v24_hcc : ""}</div>
                               </div>
 
-                              <div className="col-xl-3">
+                              <div className="col-xl-2">
                                 <div>{item.v24_raf ? item.v24_raf : ""}</div>
                               </div>
 
@@ -354,8 +361,8 @@ const RafScore = ({ patientDetailsResult }) => {
                       style={{ background: "#e47e7e", color: "#ffffff" }}
                     >
                       <div className="row">
-                        <div className="col-xl-3">HCC</div>
-                        <div className="col-xl-3">RAF</div>
+                        <div className="col-xl-4">HCC</div>
+                        <div className="col-xl-2">RAF</div>
                         <div className="col-xl-4">Monthly Premium</div>
                         <div
                           className="col-xl-1 rounded d-flex align-items-center justify-content-center"
@@ -381,11 +388,11 @@ const RafScore = ({ patientDetailsResult }) => {
                             }
                           >
                             <>
-                              <div className="col-xl-3">
+                              <div className="col-xl-4">
                                 <div>{item.v28_hcc ? item.v28_hcc : ""}</div>
                               </div>
 
-                              <div className="col-xl-3">
+                              <div className="col-xl-2">
                                 <div>{item.v28_raf ? item.v28_raf : ""}</div>
                               </div>
 

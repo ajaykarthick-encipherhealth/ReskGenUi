@@ -46,7 +46,8 @@ const File = ({
   getLabFileDetails,
   currentDiseaseType,
   loading,
-  isDosSelected
+  isDosSelected,
+  labFileLoad
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -178,7 +179,7 @@ const File = ({
   };
 
   const getFileDosPageNumber = async () => {
-    setPageNumberOptions(fileDosPageNumberList?.data?.response);
+    setPageNumberOptions(patientDetailsResult?.data?.response?.fileDetailDTO?.dosSummaries);
   };
 
   const showErrorMessage = () => {
@@ -224,7 +225,7 @@ const File = ({
 
   useEffect(() => {
     getFileDosPageNumber();
-  }, [fileDosPageNumberList]);
+  }, [patientDetailsResult]);
   return (
     <>
       {fileLoading ? <LogoLoader /> : null}
@@ -347,7 +348,7 @@ const File = ({
               </div>
             </Popover> */}
             <div className="card-body p-0">
-              {loading ? <div className={visitStyles?.loaderDiv}><Spinner/></div> : (
+              {loading || labFileLoad ? <div className={visitStyles?.loaderDiv}><Spinner/></div> : (
                 <>
                   {selectFileURL && (
                     <PdfViewer
@@ -554,7 +555,7 @@ const File = ({
       {opens && combiTree[0]?.children?.length > 0 ? (
         <ModelIndex
           validated={validated}
-          title={fileModalHeader}
+          title={''}
           openState={opens}
           handleCloseModal={handleCloseModal}
           combiTree={combiTree}
@@ -618,6 +619,7 @@ const enhancer = connect(
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
     radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
     labFile: state?.patientDetails?.details?.labFileResult,
+    labFileLoad: state?.patientDetails?.details?.labFileResultLoad,
     radiologyResult: state?.patientDetails?.details?.radiologyResult,
     labResult: state?.patientDetails?.details?.labPDFDetails,
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
