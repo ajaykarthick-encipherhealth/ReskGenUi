@@ -29,6 +29,7 @@ import ENDPOINTS from "../../../../../utility/enpoints";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import MovementAction from "../movementAction";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
+import TableRisk from "../../../../tableRisk";
 import moment from "moment";
 const HccCards = ({
   list,
@@ -106,42 +107,47 @@ const HccCards = ({
       ? getPdfEmptyFunction
       : getLabPDFFile;
 
-  const PopContentHccVersion = (
-    <div className={styles.innerPop}>
-      <div className={styles.displayDiv}>
-        {hccVersionDetails ? (
-          <>
-            {hccVersionDetails.length != 0 ? (
-              hccVersionDetails?.map((data) => (
-                <div className={styles.hoverDiv} key={data?.id}>
-                  <div className={`row ${styles.selectDetailsContainer}`}>
-                    <div className="col-xl-3">
-                      <span className={styles.selectHead}>{data.name}</span>
-                    </div>
-                    <div className="col-xl-3">
-                      <span className={styles.selectHead}>{data.value}</span>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className={styles.hoverDiv}>
-                <div className={`row ${styles.selectDetailsContainerNoData}`}>
-                  <div className="col-xl-3 text-center">
-                    <span className={styles.selectHead}>NO DATA</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
-        ) : (
-          <div className={visitStyles.loadingFileHeader}>
-            <Spinner />
-          </div>
-        )}
+  const PopContentHccVersion = (data) => {
+    return (
+      // <div className={styles.innerPop}>
+      //   <div className={styles.displayDiv}>
+      //     {hccVersionDetails ? (
+      //       <>
+      //         {hccVersionDetails.length != 0 ? (
+      //           hccVersionDetails?.map((data) => (
+      //             <div className={styles.hoverDiv} key={data?.id}>
+      //               <div className={`row ${styles.selectDetailsContainer}`}>
+      //                 <div className="col-xl-3">
+      //                   <span className={styles.selectHead}>{data.name}</span>
+      //                 </div>
+      //                 <div className="col-xl-3">
+      //                   <span className={styles.selectHead}>{data.value}</span>
+      //                 </div>
+      //               </div>
+      //             </div>
+      //           ))
+      //         ) : (
+      //           <div className={styles.hoverDiv}>
+      //             <div className={`row ${styles.selectDetailsContainerNoData}`}>
+      //               <div className="col-xl-3 text-center">
+      //                 <span className={styles.selectHead}>NO DATA</span>
+      //               </div>
+      //             </div>
+      //           </div>
+      //         )}
+      //       </>
+      //     ) : (
+      //       <div className={visitStyles.loadingFileHeader}>
+      //         <Spinner />
+      //       </div>
+      //     )}
+      //   </div>
+      // </div>
+      <div>
+        <TableRisk data={data} fromPatientDetails={true} />
       </div>
-    </div>
-  );
+    );
+  };
   const handleCloseModal = () => {
     setOpenEdit(false);
     setOpens(false);
@@ -192,6 +198,15 @@ const HccCards = ({
                       draggableData={data.list}
                     >
                       {(provided) => {
+                        const cmsList = data?.riskAdjustmentDtoList
+                          ?.map((item) => item?.cmsHcc)
+                          .filter((cmsHcc) => cmsHcc?.length > 0);
+                        const rxList = data?.riskAdjustmentDtoList
+                          ?.map((item) => item?.rxHcc)
+                          .filter((rxHcc) => rxHcc?.length > 0);
+                        const esrdList = data?.riskAdjustmentDtoList
+                          ?.map((item) => item?.esrd)
+                          .filter((esrd) => esrd?.length > 0);
                         return (
                           <div
                             className={`hccActiveCard ${visitStyles.hcc_card}`}
@@ -352,7 +367,7 @@ const HccCards = ({
                                         />
                                       </div>
 
-                                      <div className="px-1">
+                                      <div className="px-1 patientDetailsPop">
                                         <Popover
                                           onClick={() =>
                                             getValidHccDetails(
@@ -360,8 +375,10 @@ const HccCards = ({
                                               data.diagnosisCode
                                             )
                                           }
-                                          content={PopContentHccVersion}
-                                          title={data.diagnosisCode}
+                                          content={PopContentHccVersion(
+                                            data?.riskAdjustmentDtoList
+                                          )}
+                                          title={data?.diagnosisCode}
                                           placement="bottom"
                                           trigger="click"
                                           overlayStyle={{ zIndex: 1000 }}
