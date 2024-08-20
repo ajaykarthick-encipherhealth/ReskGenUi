@@ -148,7 +148,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         setIsLoading(true);
         setPageNo(navigate?.query?.pageNo?navigate?.query?.pageNo:0);
         setPaginationFirst(navigate?.query?.paginationFirst?navigate?.query?.paginationFirst:0);
-        setSearchVal(navigate.query?.searchTextValue);
+        // setSearchVal(navigate.query?.searchTextValue);
         // setSelectedPriorityValue(navigate.query?.selectedPriority);
         // setStatusSelectedStatus(navigate.query?.statusSelectedValue);
       }
