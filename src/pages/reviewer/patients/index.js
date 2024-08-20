@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Select from "react-select";
 import { useSelector, useDispatch, connect } from "react-redux";
 import { useRouter } from "next/router";
@@ -29,12 +29,52 @@ import Image from "next/image";
 import styles from "../report/report.module.css";
 import filter from "../../../images/svg/filter.svg";
 import { extractLatestData } from "../../supervisor/auditing";
-import InputField from "../../../components/input";
+import InputField, {
+  debounce,
+  disallowedCharacters,
+} from "../../../components/input";
 import { patientDetails } from "../../../stores/authflow/actions";
 // import SkeletonLoading from "../../../jsx/components/skeleton/skeleton";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { InputText } from "primereact/inputtext";
 
 const { RangePicker } = DatePicker;
+
+const statusOptions = [
+  { label: "ALL", value: "ALL" },
+  { label: "COMPLETED", value: "COMPLETED" },
+  { label: "PENDING", value: "PENDING" },
+  // { label: "COMPUTED", value: "COMPUTED" },
+  { label: "DECLINED", value: "DECLINED" },
+  { label: "HOLD", value: "HOLD" },
+  // { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
+];
+const bullets = [
+  {
+    title: "Processed Status",
+    option: [
+      {
+        color: "#5da9e4",
+        name: "Pending",
+      },
+      {
+        color: "red",
+        name: "Declined",
+      },
+      {
+        color: "#3a9b94",
+        name: "Completed",
+      },
+      { color: "#AD94FA", name: "Hold" },
+      {
+        color: "#3B3486",
+        name: "ABORTED BY CRON",
+      },
+    ],
+  },
+];
+
 const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -50,7 +90,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   );
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [localUserId, setLocalUserId] = useState("");
-
+  const [searchVal, setSearchVal] = useState(navigate.query.searchTextValue);
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -77,12 +117,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const [dueDateEnd, setDueDateEnd] = useState(dueEndDate);
   const [processedStart, setProcessedStart] = useState("");
   const [processedEnd, setProcessedEnd] = useState("");
-  const [statusSelectedValue, setStausSelectedValue] = useState(
-    filteratedDashboardData?.status
-      ? filteratedDashboardData?.status.toUpperCase()
-      : ""
-  );
-  const [searchTextValue, setSearchTextValue] = useState("");
+  const [statusSelectedStatus, setStatusSelectedStatus] = useState(navigate.query?.statusSelectedStatus);
+  const [searchTextValue, setSearchTextValue] = useState(navigate.query?.searchTextValue);
 
   const dayDateFormated = filteratedDashboardData?.date
     ? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY")
@@ -108,18 +144,76 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
 
   useEffect(() => {
     if (window !== "undefined") {
-      if (navigate.query.pageNo) {
+      if (navigate.query) {
         setIsLoading(true);
-        setPageNo(navigate?.query?.pageNo);
-        setPaginationFirst(navigate?.query?.paginationFirst);
+        setPageNo(navigate?.query?.pageNo?navigate?.query?.pageNo:0);
+        setPaginationFirst(navigate?.query?.paginationFirst?navigate?.query?.paginationFirst:0);
+        // setSearchVal(navigate.query?.searchTextValue);
+        // setSelectedPriorityValue(navigate.query?.selectedPriority);
+        // setStatusSelectedStatus(navigate.query?.statusSelectedValue);
       }
     }
   }, [navigate]);
 
   useEffect(() => {
-    const uId = localStorage.getItem("userId");
+    const uId = sessionStorage.getItem("userId");
     setLocalUserId(uId);
-    getPatientRes();
+    if (window !== "undefined") {
+      // if (navigate.query && (searchTextValue ===null|| selectedPriority === null || statusSelectedValue === null)) {
+      //   console.log( navigate.query?.selectedPriority,
+      //     navigate.query?.searchTextValue,navigate.query)
+      //   getFilteApi(
+      //     pageNo,
+      //     pageSize,
+      //     navigate.query?.statusSelectedValue,
+      //     dueDateStart,
+      //     dueDateEnd,
+      //     processedStart,
+      //     processedEnd,
+      //     sort,
+      //     navigate.query?.selectedPriority,
+      //     navigate.query?.searchTextValue
+      //   );
+      //   getPatientRes(
+      //     pageNo,
+      //     pageSize,
+      //     navigate.query?.statusSelectedValue,
+      //     dueDateStart,
+      //     dueDateEnd,
+      //     processedStart,
+      //     processedEnd,
+      //     sort,
+      //     navigate.query?.selectedPriority,
+      //     navigate.query?.searchTextValue
+      //   );
+      // } else {
+
+        getFilteApi(
+          pageNo,
+          pageSize,
+          statusSelectedStatus,
+          dueDateStart,
+          dueDateEnd,
+          processedStart,
+          processedEnd,
+          sort,
+          selectedPriority,
+          searchTextValue
+        );
+        // getPatientRes(
+        //   pageNo,
+        //   pageSize,
+        //   statusSelectedValue,
+        //   dueDateStart,
+        //   dueDateEnd,
+        //   processedStart,
+        //   processedEnd,
+        //   sort,
+        //   selectedPriority,
+        //   searchTextValue
+        // );
+      // }
+    }
   }, [
     filteratedDashboardData,
     pageNo,
@@ -129,31 +223,43 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     dueDateStart,
     processedStart,
     processedEnd,
-    statusSelectedValue,
+    statusSelectedStatus,
+    navigate.query,
+    searchVal,
   ]);
 
-  const getPatientRes = async () => {
-    try {
-      const res = await getFilteApi(
-        pageNo,
-        pageSize,
-        statusSelectedValue,
-        dueDateStart,
-        dueDateEnd,
-        processedStart,
-        processedEnd,
-        sort,
-        selectedPriority,
-        searchTextValue
-      );
-      if (res.status == "SUCCESS") {
-        setTotalElements(res.response?.patientDTOList?.totalElements);
-        setTrackChart(res?.response?.processStatusCount);
-        setPatinetListAll(res?.response?.patientDTOList?.content);
-      }
-    } catch (error) {}
-  };
-  
+  // const getPatientRes = async (
+  //   pageNo,
+  //   pageSize,
+  //   statusSelectedStatus,
+  //   dueDateStart,
+  //   dueDateEnd,
+  //   processedStart,
+  //   processedEnd,
+  //   sort,
+  //   selectedPriority,
+  //   searchTextValue
+  // ) => {
+  //   try {
+  //     const res = await getFilteApi(
+  //       pageNo,
+  //       pageSize,
+  //       statusSelectedStatus,
+  //       dueDateStart,
+  //       dueDateEnd,
+  //       processedStart,
+  //       processedEnd,
+  //       sort,
+  //       selectedPriority,
+  //       searchTextValue
+  //     );
+  //     if (res.status == "SUCCESS") {
+  //       setTotalElements(res.response?.patientDTOList?.totalElements);
+  //       setTrackChart(res?.response?.processStatusCount);
+  //       setPatinetListAll(res?.response?.patientDTOList?.content);
+  //     }
+  //   } catch (error) {}
+  // };
 
   const getFilteApi = async (
     pageNo,
@@ -181,15 +287,28 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&priority=${
       selectedPriority ? selectedPriority : ""
     }`;
-    return await getpatientsListFilter({ url: resoureUrl });
+    const res= await getpatientsListFilter({ url: resoureUrl });
+    if (res.status == "SUCCESS") {
+      setTotalElements(res.response?.patientDTOList?.totalElements);
+      setTrackChart(res?.response?.processStatusCount);
+      setPatinetListAll(res?.response?.patientDTOList?.content);
+    }
   };
 
-  const getNameSearch = async (searchtext) => {
+  const debounceText = useCallback(
+    debounce((val) => {
+      return setSearchTextValue(val);
+    }, 700),
+    []
+  );
+  const getNameSearch = async (e) => {
     setIsLoading(true);
-    setSearchTextValue(searchtext);
-    const resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
+    setSearchVal(e.target.value);
+    debounceText(e.target.value);
+
+    // const resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${val}`;
     // dispatch(getpatientsListFilter(resoureUrl));
-    getpatientsListFilter({ url: resoureUrl });
+    // getpatientsListFilter({ url: resoureUrl });
     resetPageNumber(setPageNo);
   };
 
@@ -243,45 +362,12 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     // );
   };
 
-  const statusOptions = [
-    { label: "ALL", value: "ALL" },
-    { label: "COMPLETED", value: "COMPLETED" },
-    { label: "PENDING", value: "PENDING" },
-    // { label: "COMPUTED", value: "COMPUTED" },
-    { label: "DECLINED", value: "DECLINED" },
-    { label: "HOLD", value: "HOLD" },
-    // { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
-  ];
-  const bullets = [
-    {
-      title: "Processed Status",
-      option: [
-        {
-          color: "#5da9e4",
-          name: "Pending",
-        },
-        {
-          color: "red",
-          name: "Declined",
-        },
-        {
-          color: "#3a9b94",
-          name: "Completed",
-        },
-        { color: "#AD94FA", name: "Hold" },
-        {
-          color: "#3B3486",
-          name: "ABORTED BY CRON",
-        },
-      ],
-    },
-  ];
   const onChangeStatus = (selectedOption) => {
     let value = selectedOption.value;
     if (value == "ALL") {
       value = "";
     }
-    setStausSelectedValue(value);
+    setStatusSelectedStatus(value);
     // getFilteApi(
     //   0,
     //   pageSize,
@@ -420,6 +506,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   // );
 
   const options = [{ label: "All", value: "" }, ...priorityOptions];
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -443,7 +530,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                           >
                             <div className="col-xl-2">
                               <label>Search by Name or ID</label>
-                              <InputField
+                              {/* <InputField
                                 inputValue={searchTextValue}
                                 setInputValue={setSearchTextValue}
                                 delay={1000}
@@ -451,7 +538,28 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                 onChange={getNameSearch}
                                 placeholder="Search"
                                 isSearch={true}
-                              />
+                              /> */}
+                              <div className="form-group has-search">
+                                <FontAwesomeIcon
+                                  className="fa fa-search form-control-feedback"
+                                  icon={faSearch}
+                                />
+
+                                <InputText
+                                  value={searchVal}
+                                  onChange={(e) => getNameSearch(e)}
+                                  className={
+                                    "form-control new-form-control new-item-control"
+                                  }
+                                  placeholder={"Search"}
+                                  maxLength={25}
+                                  onKeyDown={(e) => {
+                                    if (disallowedCharacters.includes(e.key)) {
+                                      e.preventDefault();
+                                    }
+                                  }}
+                                />
+                              </div>
                             </div>
                             <div className="col-xl-2">
                               <label>Select Status</label>
@@ -461,6 +569,12 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                     onChangeStatus(selectedOption);
                                     resetPageNumber(setPageNo);
                                   }}
+                                  value={
+                                    statusSelectedStatus && {
+                                      label: statusSelectedStatus,
+                                      value: statusSelectedStatus,
+                                    }
+                                  }
                                   options={statusOptions}
                                   className="custom-react-select"
                                   isSearchable={false}
@@ -480,6 +594,12 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                     onChangePriority(selectedOption);
                                     resetPageNumber(setPageNo);
                                   }}
+                                  value={
+                                    selectedPriority && {
+                                      label: selectedPriority,
+                                      value: selectedPriority,
+                                    }
+                                  }
                                   options={options}
                                   className="custom-react-select"
                                   isSearchable={false}
@@ -588,6 +708,17 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                               sortAllocateOrder={sortAllocateOrder}
                               setSortAllocateOrder={setSortAllocateOrder}
                               userId={localUserId}
+                              params={{
+                                statusSelectedStatus,
+                                dueDateStart,
+                                dueDateEnd,
+                                processedStart,
+                                processedEnd,
+                                sort,
+                                selectedPriority,
+                                searchTextValue,
+                                pageNo, paginationFirst
+                              }}
                             />
                             <div>
                               <div className="pagination-container">

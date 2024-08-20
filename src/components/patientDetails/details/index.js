@@ -127,12 +127,6 @@ const Details = ({
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
-  // const patientDetailsResult = useSelector(
-  //   (state) => state?.ReviewerReducers?.patientDetails
-  // );
-  const sectionColorList = useSelector(
-    (state) => state?.ReviewerReducers?.sectionColorList
-  );
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [dosYear, setDosYear] = useState("");
@@ -536,10 +530,14 @@ const Details = ({
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(queryWithoutUser).toString();
       if (navigate.query && queryString) {
-        const url = queryString
-          ? `/reviewer/patients?${queryString}`
-          : "/reviewer/patients";
-        navigate.push(url);
+        const url = queryString ? `/reviewer/patients` : "/reviewer/patients";
+        navigate.push(
+          {
+            pathname: url,
+            query: queryString ? queryString : "",
+          },
+          url
+        );
       } else {
         navigate.back();
       }
