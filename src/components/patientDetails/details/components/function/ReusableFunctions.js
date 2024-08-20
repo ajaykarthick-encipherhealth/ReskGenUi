@@ -604,7 +604,6 @@ export const truncateString = (str, num) => {
 };
 
 const getUniqueHeadersWithMultipleDates = (hyperlinks, duplicateHeaders) => {
-  console.log(hyperlinks, duplicateHeaders);
   const headerCount = {};
   hyperlinks.forEach((item) => {
     if (!headerCount[item.header]) {
