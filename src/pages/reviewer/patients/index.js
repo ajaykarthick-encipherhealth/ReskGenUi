@@ -506,7 +506,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   // );
 
   const options = [{ label: "All", value: "" }, ...priorityOptions];
-console.log(pageNo,paginationFirst)
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
