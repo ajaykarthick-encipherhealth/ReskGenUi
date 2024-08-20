@@ -40,6 +40,41 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 
 const { RangePicker } = DatePicker;
+
+const statusOptions = [
+  { label: "ALL", value: "ALL" },
+  { label: "COMPLETED", value: "COMPLETED" },
+  { label: "PENDING", value: "PENDING" },
+  // { label: "COMPUTED", value: "COMPUTED" },
+  { label: "DECLINED", value: "DECLINED" },
+  { label: "HOLD", value: "HOLD" },
+  // { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
+];
+const bullets = [
+  {
+    title: "Processed Status",
+    option: [
+      {
+        color: "#5da9e4",
+        name: "Pending",
+      },
+      {
+        color: "red",
+        name: "Declined",
+      },
+      {
+        color: "#3a9b94",
+        name: "Completed",
+      },
+      { color: "#AD94FA", name: "Hold" },
+      {
+        color: "#3B3486",
+        name: "ABORTED BY CRON",
+      },
+    ],
+  },
+];
+
 const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -56,9 +91,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [localUserId, setLocalUserId] = useState("");
   const [searchVal, setSearchVal] = useState(navigate.query.searchTextValue);
-  const [pageNo, setPageNo] = useState(navigate.query?.pageNo);
+  const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
-  const [paginationFirst, setPaginationFirst] = useState(navigate?.query?.paginationFirst);
+  const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
   const [trackChart, setTrackChart] = useState({
     COMPLETED: 0,
@@ -107,18 +142,18 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     );
   }, [dayDateFormated]);
 
-  // useEffect(() => {
-  //   if (window !== "undefined") {
-  //     if (navigate.query) {
-  //       setIsLoading(true);
-  //       setPageNo(navigate?.query?.pageNo);
-  //       setPaginationFirst(navigate?.query?.paginationFirst);
-  //       setSearchVal(navigate.query?.searchTextValue);
-  //       setSelectedPriorityValue(navigate.query?.selectedPriority);
-  //       setStatusSelectedStatus(navigate.query?.statusSelectedValue);
-  //     }
-  //   }
-  // }, [navigate]);
+  useEffect(() => {
+    if (window !== "undefined") {
+      if (navigate.query) {
+        setIsLoading(true);
+        setPageNo(navigate?.query?.pageNo?navigate?.query?.pageNo:0);
+        setPaginationFirst(navigate?.query?.paginationFirst?navigate?.query?.paginationFirst:0);
+        setSearchVal(navigate.query?.searchTextValue);
+        // setSelectedPriorityValue(navigate.query?.selectedPriority);
+        // setStatusSelectedStatus(navigate.query?.statusSelectedValue);
+      }
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const uId = sessionStorage.getItem("userId");
@@ -152,18 +187,18 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
       //     navigate.query?.searchTextValue
       //   );
       // } else {
-      console.log(navigate.query)
+
         getFilteApi(
           pageNo,
           pageSize,
-          statusSelectedStatus?statusSelectedStatus:navigate.query?.statusSelectedStatus,
+          statusSelectedStatus,
           dueDateStart,
           dueDateEnd,
           processedStart,
           processedEnd,
           sort,
           selectedPriority,
-          searchTextValue?searchTextValue:navigate.query?.searchTextValue
+          searchTextValue
         );
         // getPatientRes(
         //   pageNo,
@@ -193,38 +228,38 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     searchVal,
   ]);
 
-  const getPatientRes = async (
-    pageNo,
-    pageSize,
-    statusSelectedStatus,
-    dueDateStart,
-    dueDateEnd,
-    processedStart,
-    processedEnd,
-    sort,
-    selectedPriority,
-    searchTextValue
-  ) => {
-    try {
-      const res = await getFilteApi(
-        pageNo,
-        pageSize,
-        statusSelectedStatus,
-        dueDateStart,
-        dueDateEnd,
-        processedStart,
-        processedEnd,
-        sort,
-        selectedPriority,
-        searchTextValue
-      );
-      if (res.status == "SUCCESS") {
-        setTotalElements(res.response?.patientDTOList?.totalElements);
-        setTrackChart(res?.response?.processStatusCount);
-        setPatinetListAll(res?.response?.patientDTOList?.content);
-      }
-    } catch (error) {}
-  };
+  // const getPatientRes = async (
+  //   pageNo,
+  //   pageSize,
+  //   statusSelectedStatus,
+  //   dueDateStart,
+  //   dueDateEnd,
+  //   processedStart,
+  //   processedEnd,
+  //   sort,
+  //   selectedPriority,
+  //   searchTextValue
+  // ) => {
+  //   try {
+  //     const res = await getFilteApi(
+  //       pageNo,
+  //       pageSize,
+  //       statusSelectedStatus,
+  //       dueDateStart,
+  //       dueDateEnd,
+  //       processedStart,
+  //       processedEnd,
+  //       sort,
+  //       selectedPriority,
+  //       searchTextValue
+  //     );
+  //     if (res.status == "SUCCESS") {
+  //       setTotalElements(res.response?.patientDTOList?.totalElements);
+  //       setTrackChart(res?.response?.processStatusCount);
+  //       setPatinetListAll(res?.response?.patientDTOList?.content);
+  //     }
+  //   } catch (error) {}
+  // };
 
   const getFilteApi = async (
     pageNo,
@@ -327,39 +362,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     // );
   };
 
-  const statusOptions = [
-    { label: "ALL", value: "ALL" },
-    { label: "COMPLETED", value: "COMPLETED" },
-    { label: "PENDING", value: "PENDING" },
-    // { label: "COMPUTED", value: "COMPUTED" },
-    { label: "DECLINED", value: "DECLINED" },
-    { label: "HOLD", value: "HOLD" },
-    // { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
-  ];
-  const bullets = [
-    {
-      title: "Processed Status",
-      option: [
-        {
-          color: "#5da9e4",
-          name: "Pending",
-        },
-        {
-          color: "red",
-          name: "Declined",
-        },
-        {
-          color: "#3a9b94",
-          name: "Completed",
-        },
-        { color: "#AD94FA", name: "Hold" },
-        {
-          color: "#3B3486",
-          name: "ABORTED BY CRON",
-        },
-      ],
-    },
-  ];
   const onChangeStatus = (selectedOption) => {
     let value = selectedOption.value;
     if (value == "ALL") {
@@ -504,7 +506,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   // );
 
   const options = [{ label: "All", value: "" }, ...priorityOptions];
-
+console.log(pageNo,paginationFirst)
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
