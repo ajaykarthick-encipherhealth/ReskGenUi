@@ -603,6 +603,21 @@ export const truncateString = (str, num) => {
   return str;
 };
 
+const getUniqueHeadersWithMultipleDates = (hyperlinks, duplicateHeaders) => {
+  console.log(hyperlinks, duplicateHeaders);
+  const headerCount = {};
+  hyperlinks.forEach((item) => {
+    if (!headerCount[item.header]) {
+      headerCount[item.header] = [];
+    }
+    headerCount[item.header].push(item.dateOfService);
+  });
+
+  return Object.entries(headerCount).filter(
+    ([header, dates]) => dates.length > 1 && duplicateHeaders?.includes(header)
+  );
+};
+
 export const getCaptureSectionBackgroundFile = ({
   value,
   encounterDate,
@@ -645,6 +660,7 @@ export const getCaptureSectionBackgroundFile = ({
     var backColor = result[0]?.backgroundColor;
     var textColor = result[0]?.sectionColor;
     var headerNames = result[0]?.sectionName;
+
     if (index < 2) {
       if (headerResult?.length == 1) {
         var sectionMapArr = (
@@ -852,50 +868,118 @@ export const getCaptureSectionBackgroundFile = ({
       } else {
         var sectionMapArr = (
           <>
-            {dublicateCaptureDelete?.map((item, i) =>
-              i > 1 ? (
-                <Popover
-                  overlayStyle={{ zIndex: 9999 }}
-                  placement="bottom"
-                  content={getHeaderHyperlink(
-                    findSectionHyperlink(hyperlinks, item),
-                    encounterDateMatching,
-                    documentPlace,
-                    setSearch,
-                    setFileLoading,
-                    setIsModalOpenLab,
-                    setIsModalOpenRadiology,
-                    setIsModalOpenValidCodes,
-                    setFileModalHeader,
-                    patientDocumentResult,
-                    fileInitialPage,
-                    setFileInitialPage,
-                    diagnosisCode,
-                    "",
-                    "",
-                    diseaseName,
-                    getSelectedDosPageNumber,
-                    getLabPDF,
-                    getRadiologyPDF,
-                    getCurrentDiseaseType,
-                    setLabData
-                  )}
-                >
-                  {isMulitpleHeader &&
-                    diagnosisCode == isMulitpleHeaderCode && (
-                      <span
-                        style={{
-                          background: stringToColour(item) + 33,
-                          color: stringToColour(item),
-                        }}
-                        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-                      >
-                        {item}
-                      </span>
+            {dublicateCaptureDelete?.map((item, i) => {
+              const duplicateHeaders = hyperlinks?.filter(
+                (info) => info?.header === item
+              );
+              return i > 1 ? (
+                duplicateHeaders?.length > 1 ? (
+                  <Popover
+                    overlayStyle={{ zIndex: 9999 }}
+                    placement="bottom"
+                    content={getHeaderHyperlink(
+                      findSectionHyperlink(hyperlinks, item),
+                      encounterDateMatching,
+                      documentPlace,
+                      setSearch,
+                      setFileLoading,
+                      setIsModalOpenLab,
+                      setIsModalOpenRadiology,
+                      setIsModalOpenValidCodes,
+                      setFileModalHeader,
+                      patientDocumentResult,
+                      fileInitialPage,
+                      setFileInitialPage,
+                      diagnosisCode,
+                      "",
+                      "",
+                      diseaseName,
+                      getSelectedDosPageNumber,
+                      getLabPDF,
+                      getRadiologyPDF,
+                      getCurrentDiseaseType,
+                      setLabData
                     )}
-                </Popover>
-              ) : null
-            )}
+                  >
+                    {isMulitpleHeader &&
+                      diagnosisCode == isMulitpleHeaderCode && (
+                        <span
+                          style={{
+                            background: stringToColour(item) + 33,
+                            color: stringToColour(item),
+                          }}
+                          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+                        >
+                          {item}
+                        </span>
+                      )}
+                  </Popover>
+                ) : (
+                  <>
+                    {isMulitpleHeader &&
+                      diagnosisCode == isMulitpleHeaderCode && (
+                        <span
+                          onClick={() => {
+                            getSelectedDosPageNumber(null);
+                            const patientId = localStorage.getItem("patientId");
+                            const selectedMeatData = hyperlinks?.find(
+                              (it) => it?.header == item
+                            );
+                            if (selectedMeatData?.stateIndicator) {
+                              setLabData &&
+                                setLabData(selectedMeatData?.fileId);
+                              getCurrentDiseaseType &&
+                                getCurrentDiseaseType(false);
+                              selectedMeatData?.stateIndicator === "LAB"
+                                ? getLabPDF &&
+                                  getLabPDF({
+                                    fileId: selectedMeatData?.fileId,
+                                  })
+                                : getRadiologyPDF &&
+                                  getRadiologyPDF(
+                                    patientId,
+                                    "",
+                                    selectedMeatData?.dateOfService,
+                                    "",
+                                    selectedMeatData?.diagnosticTestName
+                                  );
+                            } else {
+                              getCurrentDiseaseType &&
+                                getCurrentDiseaseType(true);
+                            }
+                            newFindValueDocument(
+                              findSectionHyperlink(hyperlinks, item)[0],
+                              documentPlace,
+                              setSearch,
+                              setFileLoading,
+                              setIsModalOpenLab,
+                              setIsModalOpenRadiology,
+                              setIsModalOpenValidCodes,
+                              setFileModalHeader,
+                              patientDocumentResult,
+                              fileInitialPage,
+                              setFileInitialPage,
+                              diagnosisCode,
+                              "",
+                              "",
+                              "",
+                              "",
+                              diseaseName
+                            );
+                          }}
+                          style={{
+                            background: stringToColour(item) + 33,
+                            color: stringToColour(item),
+                          }}
+                          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+                        >
+                          {item}
+                        </span>
+                      )}
+                  </>
+                )
+              ) : null;
+            })}
             <span
               style={{
                 backgroundColor:

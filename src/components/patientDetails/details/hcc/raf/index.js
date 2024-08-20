@@ -229,8 +229,6 @@ const RafScore = ({ patientDetailsResult }) => {
     }
   }, [patientDetailsResult?.data?.response?.rafScore]);
 
-  console.log(rafScoreDetails);
-
   return (
     <>
       <div className={style.rafScoreMainContainer}>
