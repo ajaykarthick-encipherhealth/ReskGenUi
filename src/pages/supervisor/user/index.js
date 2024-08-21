@@ -30,7 +30,7 @@ const UserList = ({getUsers,loader,usersData}) => {
   useEffect(() => {
     getUsers({page:pageCount, search:search});
   }, [pageCount, search]);
-console.log(usersData)
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>

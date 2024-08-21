@@ -513,16 +513,29 @@ const Details = ({
     } else if (user && user.toLowerCase() === "supervisor") {
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(queryWithoutUser).toString();
-      if (navigate.query.isSupervisorAuited) {
-        const url = queryString
-          ? `/supervisor/auditing?${queryString}`
-          : "/supervisor/auditing";
-        navigate.push(url);
-      } else if (navigate.query.isSupervisorUser) {
-        const url = queryString
-          ? `/supervisor/user/userQueue?${queryString}`
-          : "/supervisor/user/userQueue";
-        navigate.push(url);
+      //  console.log(navigate.query)
+      if (navigate.query.isSupervisorAuited === "true") {
+        // const url = queryString
+        //   ? `/supervisor/auditing?${queryString}`
+        //   : "/supervisor/auditing";
+        navigate.push(
+          {
+            pathname: `/supervisor/auditing?userId=${queryWithoutUser?.userName}`,
+            query: queryString ? queryString : "",
+          },
+          `/supervisor/auditing?userId=${queryWithoutUser?.userName}`
+        );
+      } else if (navigate.query.isSupervisorUser === "true") {
+        // const url = queryString
+        //   ? `/supervisor/user/userQueue?${queryString}`
+        //   : "/supervisor/user/userQueue";
+        navigate.push(
+          {
+            pathname: `/supervisor/user/userQueue`,
+            query: queryString ? queryString : "",
+          },
+          `/supervisor/user/userQueue`
+        );
       } else {
         navigate.back();
       }
@@ -530,13 +543,13 @@ const Details = ({
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(queryWithoutUser).toString();
       if (navigate.query && queryString) {
-        const url = queryString ? `/reviewer/patients` : "/reviewer/patients";
+        // const url = queryString ? `/reviewer/patients` : "/reviewer/patients";
         navigate.push(
           {
-            pathname: url,
+            pathname: "/reviewer/patients",
             query: queryString ? queryString : "",
           },
-          url
+          "/reviewer/patients"
         );
       } else {
         navigate.back();

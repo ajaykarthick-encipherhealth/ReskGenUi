@@ -6,7 +6,6 @@ import { Paginator } from "primereact/paginator";
 import { Popover } from "antd";
 import styles from "../../../reviewer/report/report.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
-import SpinnerDots from "../../../../components/spinner";
 import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
 import { extractLatestData } from "../../auditing";
@@ -87,29 +86,29 @@ const Index = ({
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
-  const [selectedOption, setSelectedOption] = useState("");
-  const [completedStartDate, setCompletedStartDate] = useState("");
-  const [completedEndDate, setCompletedEndDate] = useState("");
-  const [dueStartDate, setDueStartDate] = useState("");
-  const [dueEndDate, setDueEndDate] = useState("");
-  const [allocatedStartDate, setAllocatedStartDate] = useState("");
-  const [allocatedEndDate, setAllocatedEndDate] = useState("");
+  const [selectedOption, setSelectedOption] = useState(router?.query?.selectedOption?router?.query?.selectedOption:"");
+  const [completedStartDate, setCompletedStartDate] = useState(router?.query?.completedStartDate?router?.query?.completedStartDate:"");
+  const [completedEndDate, setCompletedEndDate] = useState(router?.query?.completedEndDate?router?.query?.completedEndDate:"");
+  const [dueStartDate, setDueStartDate] = useState(router?.query?.dueStartDate?router?.query?.dueStartDate:"");
+  const [dueEndDate, setDueEndDate] = useState(router?.query?.dueEndDate?router?.query?.dueEndDate:"");
+  const [allocatedStartDate, setAllocatedStartDate] = useState(router?.query?.allocatedStartDate?router?.query?.allocatedStartDate:"");
+  const [allocatedEndDate, setAllocatedEndDate] = useState(router?.query?.allocatedEndDate?router?.query?.allocatedEndDate:"");
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
-  const [auditedStartDate, setAuditedStartDate] = useState("");
-  const [auditedEndDate, setAuditedEnsDate] = useState("");
+  const [auditedStartDate, setAuditedStartDate] = useState(router?.query?.auditedStartDate?router?.query?.auditedStartDate:"");
+  const [auditedEndDate, setAuditedEnsDate] = useState(router?.query?.auditedEndDate?router?.query?.auditedEndDate:"");
   const [totalElements, setTotalElements] = useState(10);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(router?.query?.search?router?.query?.search:"");
   const [userName, setUserName] = useState();
-  const [selectedAuditOption, setSelectedAuditOption] = useState("");
-  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
-  const [aduitCompletedStartDate, setAduitCompletedStartDate] = useState("");
-  const [aduitCompletedEndDate, setAduitCompletedEndDate] = useState("");
-  const [aduitDueStartDate, setAduitDueStartDate] = useState("");
-  const [aduitDueEndDate, setAduitDueEndDate] = useState("");
+  const [selectedAuditOption, setSelectedAuditOption] = useState(router?.query?.selectedAuditOption?router?.query?.selectedAuditOption:"");
+  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState(router?.query?.selAuditAllocatedBy?router?.query?.selAuditAllocatedBy:"");
+  const [aduitCompletedStartDate, setAduitCompletedStartDate] = useState(router?.query?.aduitCompletedStartDate?router?.query?.aduitCompletedStartDate:"");
+  const [aduitCompletedEndDate, setAduitCompletedEndDate] = useState(router?.query?.aduitCompletedEndDate?router?.query?.aduitCompletedEndDate:"");
+  const [aduitDueStartDate, setAduitDueStartDate] = useState(router?.query?.aduitDueStartDate?router?.query?.aduitDueStartDate:"");
+  const [aduitDueEndDate, setAduitDueEndDate] = useState(router?.query?.aduitDueEndDate?router?.query?.aduitDueEndDate:"");
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedDates2, setSelectedDates2] = useState([]);
   const [selectedDates3, setSelectedDates3] = useState([]);
-const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const [sort, setSort] = useState({
     sortDir: "DESC",
     sortField: "auditDueDate",
@@ -128,18 +127,23 @@ const dispatch=useDispatch()
   }, [usersData]);
   useEffect(() => {
     if (window !== "undefined") {
-      if (router.query.pageNo) {
-        setPageNo(router?.query?.pageNo);
-        setPaginationFirst(router?.query?.paginationFirst);
+      if (router.query) {
+        console.log(router.query);
+        setPageNo(router?.query?.pageNo ? router?.query?.pageNo : 0);
+        setPaginationFirst(
+          router?.query?.paginationFirst ? router?.query?.paginationFirst : 0
+        );
       }
     }
   }, [router]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    setUserName(searchParams.get("userId"));
-    if (searchParams.get("userId")) {
-      const uId = searchParams.get("userId");
+    const uId = searchParams.get("userId")
+      ? searchParams.get("userId")
+      : router.query.userId;
+    setUserName(uId);
+    if (uId) {
       const data = {
         uId,
         pageNo,
@@ -273,9 +277,10 @@ const dispatch=useDispatch()
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getFilters("auditAllocatedBy", userName));
-  },[userName])
+  }, [userName]);
+
   return (
     <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
       <Header />
@@ -433,6 +438,29 @@ const dispatch=useDispatch()
                         setAuditAllocatedSort={setAuditAllocatedSort}
                         audirDateSort={audirDateSort}
                         setAuditDateSort={setAuditDateSort}
+                        params={{
+                          pageNo,
+                          search,
+                          selectedOption,
+                          selAllocatedBy,
+                          dueStartDate,
+                          dueEndDate,
+                          completedStartDate,
+                          completedEndDate,
+                          auditedStartDate,
+                          auditedEndDate,
+                          allocatedStartDate,
+                          allocatedEndDate,
+                          selectedAuditOption,
+                          selAuditAllocatedBy,
+                          aduitCompletedStartDate,
+                          aduitCompletedEndDate,
+                          aduitDueStartDate,
+                          aduitDueEndDate,
+                          sort,
+                          paginationFirst,
+                          userName,
+                        }}
                       />
                     )}
                     <div>
