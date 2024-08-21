@@ -534,7 +534,7 @@ const Details = ({
             pathname: `/supervisor/user/userQueue`,
             query: queryString ? queryString : "",
           },
-          `/supervisor/user/userQueue`
+          `/supervisor/user/userQueue?userId=${queryWithoutUser?.userName}`
         );
       } else {
         navigate.back();

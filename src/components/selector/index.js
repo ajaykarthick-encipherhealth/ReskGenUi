@@ -27,7 +27,7 @@ const Selector = ({
               resetPageNumber(setPageNo)
             }
           }}
-          value={selectDefaultValue}
+          value={selectDefaultValue && {label:selectDefaultValue,value:selectDefaultValue}}
         />
       </div>
     </div>
