@@ -229,7 +229,7 @@ const Details = ({
       // );
       getPatientRadiologyDosList(
         selectPatientId ? selectPatientId?.patirntId : patientId,
-        2024
+        dosYearArr[0]?.value
       );
     }
     if (activeTab == 4) {
