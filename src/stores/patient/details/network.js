@@ -52,23 +52,16 @@ export async function radiologyDetails(
   const options = {
     method: "GET",
   };
-  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}`;
-  if (dos) {
-    url = `patientId=${patientId}&role=${
-      roles ? roles?.toUpperCase() : ""
-    }&dateOfService=${dos}&testName=${testName}`;
-  }
+  var url = `patientId=${patientId}&processedYear=${processedYear}&dateOfService=${dos}&stateIndicator=RADIOLOGY`;
   try {
     const data = await requestPortal(
-      `dbservice/radiology/compute/get?${url}
+      `dbservice/patient/compute/get/diagnostic/data?${url}
     `,
       options
     );
     return data;
   } catch (error) {
-    if (setIsSpinnerLoading) {
-      setIsSpinnerLoading(false);
-    }
+    setIsSpinnerLoading(false);
   }
 }
 
@@ -233,9 +226,9 @@ export async function getAllProcessYear(patientId, type) {
     method: "GET",
   };
   var URL = `dbservice/patient/compute/get/allyear?patientId=${patientId}`;
-  if (type == "RADIOLOGY") {
-    URL = `dbservice/radiology/compute/get/allyear?patientId=${patientId}`;
-  }
+  // if (type == "RADIOLOGY") {
+  //   URL = `dbservice/radiology/compute/get/allyear?patientId=${patientId}`;
+  // }
   // if (type == "LAB") {
   //   URL = `dbservice/lab/compute/get/allyear?patientId=${patientId}`;
   // }
@@ -248,7 +241,7 @@ export async function radiologydosWiseList(patientId, year) {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/radiology/compute/get/alldossummaries?patientId=${patientId}&processedYear=${year}`,
+    `dbservice/patient/compute/get/alldos/stateindicator?patientId=${patientId}&processedYear=${year}&stateIndicator=RADIOLOGY`,
     options
   );
   return data;

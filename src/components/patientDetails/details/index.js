@@ -211,12 +211,12 @@ const Details = ({
     if (activeTab == 1) {
       getAllProcessYear(patientId, "HCC");
     }
-    if (activeTab == 3) {
-      getAllProcessYear(patientId, "RADIOLOGY");
-    }
-    if (activeTab == 4) {
-      getAllProcessYear(patientId, "LAB");
-    }
+    // if (activeTab == 3) {
+    //   getAllProcessYear(patientId, "RADIOLOGY");
+    // }
+    // if (activeTab == 4) {
+    //   getAllProcessYear(patientId, "LAB");
+    // }
     var dosYearArr = processedYearResult?.data?.response?.map((res) => {
       return { value: res, label: res };
     });
@@ -229,7 +229,7 @@ const Details = ({
       // );
       getPatientRadiologyDosList(
         selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0]?.value
+        2024
       );
     }
     if (activeTab == 4) {
