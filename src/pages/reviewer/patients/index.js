@@ -102,7 +102,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     HOLD: 0,
   });
   const [selectedPriority, setSelectedPriority] = useState();
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(navigate?.query?true:false);
   const dueStartDate = filteratedDashboardData?.dayDate
     ? moment(filteratedDashboardData?.dayDate)?.format("YYYY-MM-DD") +
       "T00:00:00.000Z"
@@ -117,8 +117,12 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const [dueDateEnd, setDueDateEnd] = useState(dueEndDate);
   const [processedStart, setProcessedStart] = useState("");
   const [processedEnd, setProcessedEnd] = useState("");
-  const [statusSelectedStatus, setStatusSelectedStatus] = useState(navigate.query?.statusSelectedStatus);
-  const [searchTextValue, setSearchTextValue] = useState(navigate.query?.searchTextValue);
+  const [statusSelectedStatus, setStatusSelectedStatus] = useState(
+    navigate.query?.statusSelectedStatus
+  );
+  const [searchTextValue, setSearchTextValue] = useState(
+    navigate.query?.searchTextValue
+  );
 
   const dayDateFormated = filteratedDashboardData?.date
     ? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY")
@@ -129,10 +133,34 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const [defaultEndDate, setDefaultEndDate] = useState(
     dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z"
   );
-  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-  const [sortDueOrder, setSortDueOrder] = useState("DESC");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-  const [sortAllocateOrder, setSortAllocateOrder] = useState("DESC");
+  const [sort, setSort] = useState({
+    sortDir: navigate?.query?.sortDir ? navigate?.query?.sortDir : "",
+    sortField: navigate?.query?.sortField ? navigate?.query?.sortField : "",
+  });
+  const [sortDueOrder, setSortDueOrder] = useState(
+    navigate?.query?.sortDueOrder ? navigate?.query?.sortDueOrder : "DESC"
+  );
+  const [sortCompleteOrder, setSortCompleteOrder] = useState(
+    navigate?.query?.sortCompleteOrder
+      ? navigate?.query?.sortCompleteOrder
+      : "DESC"
+  );
+  const [sortAllocateOrder, setSortAllocateOrder] = useState(
+    navigate?.query?.sortAllocateOrder
+      ? navigate?.query?.sortAllocateOrder
+      : "DESC"
+  );
+
+  const [selectedDates, setSelectedDates] = useState([
+    navigate?.query?.dueDateStart ? dayjs(navigate?.query?.dueDateStart) : "",
+    navigate?.query?.dueDateEnd ? dayjs(navigate?.query?.dueDateEnd) : "",
+  ]);
+  const [selectedDates2, setSelectedDates2] = useState([
+    navigate?.query?.processedStart
+      ? dayjs(navigate?.query?.processedStart)
+      : "",
+    navigate?.query?.processedEnd ? dayjs(navigate?.query?.processedEnd) : "",
+  ]);
   useEffect(() => {
     setDefaultStartDate(
       dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
@@ -146,8 +174,12 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     if (window !== "undefined") {
       if (navigate.query) {
         setIsLoading(true);
-        setPageNo(navigate?.query?.pageNo?navigate?.query?.pageNo:0);
-        setPaginationFirst(navigate?.query?.paginationFirst?navigate?.query?.paginationFirst:0);
+        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
+        setPaginationFirst(
+          navigate?.query?.paginationFirst
+            ? navigate?.query?.paginationFirst
+            : 0
+        );
         // setSearchVal(navigate.query?.searchTextValue);
         // setSelectedPriorityValue(navigate.query?.selectedPriority);
         // setStatusSelectedStatus(navigate.query?.statusSelectedValue);
@@ -159,60 +191,18 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     const uId = sessionStorage.getItem("userId");
     setLocalUserId(uId);
     if (window !== "undefined") {
-      // if (navigate.query && (searchTextValue ===null|| selectedPriority === null || statusSelectedValue === null)) {
-      //   console.log( navigate.query?.selectedPriority,
-      //     navigate.query?.searchTextValue,navigate.query)
-      //   getFilteApi(
-      //     pageNo,
-      //     pageSize,
-      //     navigate.query?.statusSelectedValue,
-      //     dueDateStart,
-      //     dueDateEnd,
-      //     processedStart,
-      //     processedEnd,
-      //     sort,
-      //     navigate.query?.selectedPriority,
-      //     navigate.query?.searchTextValue
-      //   );
-      //   getPatientRes(
-      //     pageNo,
-      //     pageSize,
-      //     navigate.query?.statusSelectedValue,
-      //     dueDateStart,
-      //     dueDateEnd,
-      //     processedStart,
-      //     processedEnd,
-      //     sort,
-      //     navigate.query?.selectedPriority,
-      //     navigate.query?.searchTextValue
-      //   );
-      // } else {
-
-        getFilteApi(
-          pageNo,
-          pageSize,
-          statusSelectedStatus,
-          dueDateStart,
-          dueDateEnd,
-          processedStart,
-          processedEnd,
-          sort,
-          selectedPriority,
-          searchTextValue
-        );
-        // getPatientRes(
-        //   pageNo,
-        //   pageSize,
-        //   statusSelectedValue,
-        //   dueDateStart,
-        //   dueDateEnd,
-        //   processedStart,
-        //   processedEnd,
-        //   sort,
-        //   selectedPriority,
-        //   searchTextValue
-        // );
-      // }
+      getFilteApi(
+        pageNo,
+        pageSize,
+        statusSelectedStatus,
+        dueDateStart,
+        dueDateEnd,
+        processedStart,
+        processedEnd,
+        sort,
+        selectedPriority,
+        searchTextValue
+      );
     }
   }, [
     filteratedDashboardData,
@@ -287,7 +277,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&priority=${
       selectedPriority ? selectedPriority : ""
     }`;
-    const res= await getpatientsListFilter({ url: resoureUrl });
+    const res = await getpatientsListFilter({ url: resoureUrl });
     if (res.status == "SUCCESS") {
       setTotalElements(res.response?.patientDTOList?.totalElements);
       setTrackChart(res?.response?.processStatusCount);
@@ -506,7 +496,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   // );
 
   const options = [{ label: "All", value: "" }, ...priorityOptions];
-
+  console.log(navigate?.query);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -621,6 +611,10 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                     handleDatePickerChange(dateStrings);
                                     resetPageNumber(setPageNo);
                                   }}
+                                  value={selectedDates}
+                                  onCalendarChange={(val) =>
+                                    setSelectedDates(val)
+                                  }
                                   defaultValue={
                                     filteratedDashboardData
                                       ? [
@@ -665,6 +659,10 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                 <div>
                                   <RangePicker
                                     format="MM-DD-YYYY"
+                                    value={selectedDates2}
+                                    onCalendarChange={(val) =>
+                                      setSelectedDates2(val)
+                                    }
                                     onChange={(dates, dateStrings) => {
                                       handleDatePickerChangeProcesseDate(
                                         dateStrings
@@ -717,7 +715,13 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                 sort,
                                 selectedPriority,
                                 searchTextValue,
-                                pageNo, paginationFirst
+                                pageNo,
+                                paginationFirst,
+                                sortDueOrder,
+                                sortCompleteOrder,
+                                sortAllocateOrder,
+                                sortDir: sort?.sortDir,
+                                sortField: sort?.sortField,
                               }}
                             />
                             <div>
