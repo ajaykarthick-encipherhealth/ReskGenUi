@@ -88,7 +88,7 @@ function PatientTable({
       navigate.push({
         pathname: "/supervisor/patients/details",
         query: { ...page, isSupervisorAuited: true },
-      });
+      },"/supervisor/patients/details");
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",

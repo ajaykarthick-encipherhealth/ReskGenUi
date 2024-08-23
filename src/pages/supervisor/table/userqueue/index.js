@@ -36,6 +36,7 @@ const UserQueueTable = ({
   setAuditAllocatedSort,
   audirDateSort,
   setAuditDateSort,
+  params,
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -140,10 +141,13 @@ const UserQueueTable = ({
     if (targetTd) {
       localStorage.setItem("patientId", id);
       // router?.push(`/supervisor/user/details?page=${page}`);
-      router.push({
-        pathname: "/supervisor/user/details",
-        query: { ...page, isSupervisorUser: true },
-      });
+      router?.push(
+        {
+          pathname: "/supervisor/user/details",
+          query: { ...params, isSupervisorUser: true },
+        },
+        "/supervisor/user/details"
+      );
     }
   };
 
