@@ -1,11 +1,11 @@
 import { checkStatus } from "./helper";
 import { getStorage } from "../storages";
-import { tokenKey } from "../config";
+import { portalUrl, tokenKey } from "../config";
 import ENDPOINTS from "../../utility/enpoints";
 
 export async function requestPortal(url, options) {
   const token = await getStorage(tokenKey);
-  const actualUrl = `${ENDPOINTS.apiEndoint}${url}`;
+  const actualUrl = `${portalUrl}${url}`;
   const actualOptions = {
     ...options,
     headers: {
@@ -18,7 +18,7 @@ export async function requestPortal(url, options) {
 
 export async function requestPortalFiles(url, options) {
   const token = await getStorage(tokenKey);
-  const actualUrl = `${ENDPOINTS.apiEndoint}${url}`;
+  const actualUrl = `${portalUrl}${url}`;
   const actualOptions = {
     ...options,
     headers: {
@@ -30,7 +30,7 @@ export async function requestPortalFiles(url, options) {
 }
 
 export async function requestAUthflow(url, options) {
-  const actualUrl = `${ENDPOINTS.apiEndoint}${url}`;
+  const actualUrl = `${portalUrl}${url}`;
   const actualOptions = {
     ...options,
     headers: {

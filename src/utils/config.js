@@ -1,2 +1,2 @@
-export const portalUrl = process.env.COGENTAI_API;
+export const portalUrl = process.env.NEXT_PUBLIC_PORTAL_BASE_URL;
 export const tokenKey = "token";
