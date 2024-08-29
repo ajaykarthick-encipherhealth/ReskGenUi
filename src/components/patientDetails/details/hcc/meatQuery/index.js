@@ -89,7 +89,7 @@ const MeatQuery = ({patientDetailsResult,meatQueryDetails}) => {
             <div className={visitStyles.hccStickey_head}>
               {meatQueryDetails?.data?.response?.map((item) => (
                 <>
-                  {item.currentQuery == true ? (
+                  {item.isShow ? (
                     <div className={`${visitStyles.meat_details_card}`}>
                       <>
                         {item.diagnosisCode == selectPreviousCode ? (
@@ -151,7 +151,7 @@ const MeatQuery = ({patientDetailsResult,meatQueryDetails}) => {
                         </div>
                         <div className="col-xl-2 d-grid">
                           <span className="meat-name-details">
-                            {item.reason}
+                            {item.queryReason}
                           </span>
                         </div>
                         <div className="col-xl-1">
@@ -223,7 +223,7 @@ const MeatQuery = ({patientDetailsResult,meatQueryDetails}) => {
                                 </div>
                                 <div className="col-xl-2 d-grid">
                                   <span className="meat-name-details">
-                                    {item.reason}
+                                    {item.queryReason}
                                   </span>
                                 </div>
                               </div>
@@ -255,21 +255,27 @@ const MeatQuery = ({patientDetailsResult,meatQueryDetails}) => {
           <div className="container-fluid">
             <div className={styles.meatCommentCard}>
               <div className={styles.meatCommentCard2}>
-                <div>
+                {/* <div>
                   <span className={styles.meatQueried_head}>Subject</span>
                   <p className={styles.meatQueried_details}>
                     We've identified the following details that may pertain to
-                    records associated with{" "}
+                    records associated with
                     <b>{patientDetailsResult?.result?.response?.patientName}</b>
                     .
                   </p>
-                </div>
+                </div> */}
                 <div>
                   <span className={styles.meatQueried_head}>
-                    Dear Dr {meatQueryResult.providerName}
+                    Dear,
                   </span>
-                    <p className={styles.meatQueried_details}>
-                      {meatQueryResult.queryComment}
+                  <p className={`${styles.meatQueried_details} m-0 mb-1`}>
+                      <span className="fw-semibold">Providers : </span>{meatQueryResult?.providerNames?.map(item => <span>{item}, </span>)}
+                    </p>  
+                    <p className={`${styles.meatQueried_details} m-0 mb-1`}>
+                    <span className="fw-semibold">DOS : </span>{meatQueryResult?.dateOfServices?.map(item => <span>{item}, </span>)}
+                    </p>  
+                    <p className={`${styles.meatQueried_details} m-0 mb-1`}>
+                    <span className="fw-semibold">Query Comment : </span>{meatQueryResult.queryComment}
                     </p>                 
                 </div>
               </div>
