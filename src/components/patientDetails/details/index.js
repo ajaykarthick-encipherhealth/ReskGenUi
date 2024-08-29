@@ -205,12 +205,12 @@ const Details = ({
     if (activeTab == 1) {
       getAllProcessYear(patientId, "HCC");
     }
-    if (activeTab == 3) {
-      getAllProcessYear(patientId, "RADIOLOGY");
-    }
-    if (activeTab == 4) {
-      getAllProcessYear(patientId, "LAB");
-    }
+    // if (activeTab == 3) {
+    //   getAllProcessYear(patientId, "RADIOLOGY");
+    // }
+    // if (activeTab == 4) {
+    //   getAllProcessYear(patientId, "LAB");
+    // }
     var dosYearArr = processedYearResult?.data?.response?.map((res) => {
       return { value: res, label: res };
     });
