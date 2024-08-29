@@ -318,7 +318,7 @@ const VisitData = ({
           ) : null}
           {!isFileFormShow ? (
             <div className="col-xl-3">
-              <div className="">
+              {/* <div className="">
                 <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                   {(provided) => {
                     return (
@@ -389,9 +389,9 @@ const VisitData = ({
                     );
                   }}
                 </Droppable>
-              </div>
+              </div> */}
 
-              <div className={visitStyles.deleteFileContainer}>
+              <div>
                 <Droppable droppableId={"DELETED"} key={"DELETED"}>
                   {(provided) => {
                     return (
@@ -416,7 +416,7 @@ const VisitData = ({
                             </span>
                           </div>
                         </div>
-                        <div className={visitStyles.deletedContainer}>
+                        <div className={visitStyles.labContainer}>
                           <div className={visitStyles.hccStickey_head}>
                             <HccCards
                               list={deletedHccList}
@@ -556,7 +556,7 @@ const VisitData = ({
                   }}
                 </Droppable>
               </div>
-              <div className="col-xl-4">
+              {/* <div className="col-xl-4">
                 <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                   {(provided) => {
                     return (
@@ -627,7 +627,7 @@ const VisitData = ({
                     );
                   }}
                 </Droppable>
-              </div>
+              </div> */}
               <div className="col-xl-4">
                 <Droppable droppableId={"DELETED"} key={"DELETED"}>
                   {(provided) => {

@@ -362,7 +362,7 @@ style={{height:"73vh"}}>
           ) : null}
           {!isFileFormShow ? (
             <div className="col-xl-3" style={{ height: "74vh" }}>
-              <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
+              {/* <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                 {(provided) => {
                   return (
                     <div
@@ -426,7 +426,7 @@ style={{height:"73vh"}}>
                     </div>
                   );
                 }}
-              </Droppable>
+              </Droppable> */}
 
               {/* <div className={visitStyles.deleteFileContainer}> */}
               <Droppable droppableId={"DELETED"} key={"DELETED"}>
@@ -456,7 +456,7 @@ style={{height:"73vh"}}>
                           </span>
                         </div>
                       </div>
-                      <div className={visitStyles.deletedContainer}>
+                      <div className={visitStyles.labContainer}>
                         <div className={visitStyles.hccStickey_head}>
                           <HccCards
                             list={deletedHccList}

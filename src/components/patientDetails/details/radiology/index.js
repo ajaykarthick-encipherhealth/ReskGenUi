@@ -379,12 +379,12 @@ const Radiology = ({
                       setActiveMeatTitle={setActiveMeatTitle}
                     />
                   </Tab.Pane>
-                  <Tab.Pane id="my-posts" eventKey={3}>
+                  {/* <Tab.Pane id="my-posts" eventKey={3}>
                     <Combo />
                   </Tab.Pane>
                   <Tab.Pane id="my-posts" eventKey={4}>
                     <Meat />
-                  </Tab.Pane>
+                  </Tab.Pane> */}
                 </Tab.Content>
               )}
             </Tab.Container>
