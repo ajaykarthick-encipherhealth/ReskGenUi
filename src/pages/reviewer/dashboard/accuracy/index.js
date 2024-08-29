@@ -322,8 +322,8 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
     currentBtn,
     currentDate
   );
-  const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
-  const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
+  const numericalData = allAverageScore?.length>0 && allAverageScore?.filter((value) => value !== false); // Filter out false values
+  const sum = numericalData&& numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
   const average = sum / numericalData?.length; // Calculate the average
 
   return (

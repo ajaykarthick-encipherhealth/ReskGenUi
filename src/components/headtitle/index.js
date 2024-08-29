@@ -68,7 +68,7 @@ const HeadTitle = ({
              
               className={styles.IMG}
             /> */}
-            <div>
+            <div className="cursor-pointer">
               <FontAwesomeIcon
                 onClick={() => {
                   setOpenPicker(!openPicker);
