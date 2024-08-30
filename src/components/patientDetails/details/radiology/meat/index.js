@@ -121,10 +121,7 @@ const Meat = ({
   }, [radiologyFile?.data?.response]);
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
-    if (
-      radiologyFile?.data?.response &&
-      patientDetailsResult?.data?.response?.patientId
-    ) {
+    if (radiologyFile?.data?.response) {
       setSelectFileURL(radiologyFile?.data?.response);
     }
   };

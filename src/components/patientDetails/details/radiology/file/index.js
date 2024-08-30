@@ -117,10 +117,7 @@ const File = ({
   }, [radiologyFile?.data?.response]);
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
-    if (
-      radiologyFile?.data?.response &&
-      patientDetailsResult?.data?.response?.patientId
-    ) {
+    if (radiologyFile?.data?.response) {
       setSelectFileURL(radiologyFile?.data?.response);
     }
   };
@@ -365,7 +362,7 @@ style={{height:"73vh"}}>
           ) : null}
           {!isFileFormShow ? (
             <div className="col-xl-3" style={{ height: "74vh" }}>
-              <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
+              {/* <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                 {(provided) => {
                   return (
                     <div
@@ -429,7 +426,7 @@ style={{height:"73vh"}}>
                     </div>
                   );
                 }}
-              </Droppable>
+              </Droppable> */}
 
               {/* <div className={visitStyles.deleteFileContainer}> */}
               <Droppable droppableId={"DELETED"} key={"DELETED"}>
@@ -459,7 +456,7 @@ style={{height:"73vh"}}>
                           </span>
                         </div>
                       </div>
-                      <div className={visitStyles.deletedContainer}>
+                      <div className={visitStyles.labContainer}>
                         <div className={visitStyles.hccStickey_head}>
                           <HccCards
                             list={deletedHccList}

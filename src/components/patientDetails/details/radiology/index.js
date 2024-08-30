@@ -45,7 +45,7 @@ const Radiology = ({
 
   const handleOptions = (value) => {
     var selectData = patientDosResult?.data?.response.filter(
-      (i) => i.testName === value
+      (i) => i.dateOfService === value
     );
     setIsLoading(true);
     setSelectDosValue(value);
@@ -54,33 +54,37 @@ const Radiology = ({
     if (value) {
       getRadiologyDetails(
         patientId,
-        null,
-        moment(selectData[0]?.dos).format("YYYY-MM-DD"),
+        processedYearResult?.data?.response[0],
+        moment(value).format("YYYY-MM-DD"),
         "",
         selectData[0]?.testName
       );
+      getRadiologyFileDetails(selectData[0]?.fileDetailDTO?.azureBlobPath);
     } else {
+      setSelectDosValue(dosSummariesList[0]?.value);
       getRadiologyDetails(
         patientId,
-        radiologyDetailsResult?.data?.response?.processedYear,
-        null,
-        "",
-        null
+        labDetailsResult?.data?.response?.processedYear,
+        moment(dosSummariesList[0]?.value).format("YYYY-MM-DD"),
+        ""
       );
     }
   };
 
   useEffect(() => {
-    const patientId = localStorage.getItem("patientId");
-    // getRadiologyDetails(patientId)
-  }, []);
+    if (patientDosResult?.data?.response) {
+      getRadiologyFileDetails(
+        patientDosResult?.data?.response[0]?.fileDetailDTO?.azureBlobPath
+      );
+      setIsLoading(true);
+    }
+  }, [patientDosResult?.data?.response]);
 
   const getAllProcessYearSelect = async (result) => {
     var dosYearArr = [];
     result?.data?.response?.map((res) => {
       dosYearArr.push({ value: res, label: res });
     });
-    // setDosYearDefalutSelect(dosYearArr[0]);
     setSelectedYearValue(dosYearArr[0]?.value);
     setDosYear(dosYearArr);
   };
@@ -109,6 +113,7 @@ const Radiology = ({
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
+      setSelectDosValue();
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
         if (res) {
@@ -116,14 +121,13 @@ const Radiology = ({
             <>
               <div className="d-flex justify-content-between">
                 <span className={styles.dosLable}>
-                  {moment(res.dos).format("MM-DD-YYYY")} -{" "}
-                  {res.testName}
+                  {moment(res.dateOfService).format("MM-DD-YYYY")}
                 </span>
                 {getStatusIcon(res.processStage)}
               </div>
             </>
           );
-          dosList.push({ value: res.testName, label: dosLable });
+          dosList.push({ value: res.dateOfService, label: dosLable });
         }
       });
       setDosSummariesList(dosList);
@@ -132,10 +136,12 @@ const Radiology = ({
         const patientId = localStorage.getItem("patientId");
         getRadiologyDetails(
           patientId,
-          null,
-          moment(patientDosResult?.data?.response[0].dos).format("YYYY-MM-DD"),
+          processedYearResult?.data?.response[0],
+          moment(patientDosResult?.data?.response[0].dateOfService).format(
+            "YYYY-MM-DD"
+          ),
           "",
-          patientDosResult?.data?.response[0].testName
+          patientDosResult?.data?.response[0]?.testName
         );
       }
     }
@@ -297,7 +303,6 @@ const Radiology = ({
                     <Nav.Item as="li" className="nav-item">
                       <Select
                         placeholder="Select Year"
-                        onChange={handleOptions}
                         className="dosSelect"
                         value={selectedYearValue}
                         style={{ marginRight: "10px" }}
@@ -374,12 +379,12 @@ const Radiology = ({
                       setActiveMeatTitle={setActiveMeatTitle}
                     />
                   </Tab.Pane>
-                  <Tab.Pane id="my-posts" eventKey={3}>
+                  {/* <Tab.Pane id="my-posts" eventKey={3}>
                     <Combo />
                   </Tab.Pane>
                   <Tab.Pane id="my-posts" eventKey={4}>
                     <Meat />
-                  </Tab.Pane>
+                  </Tab.Pane> */}
                 </Tab.Content>
               )}
             </Tab.Container>
@@ -393,8 +398,8 @@ const Radiology = ({
 const enhancer = connect(
   (state) => ({
     radiologyDetailsResult: state?.patientDetails?.details?.radiologyResult,
-    patientDosResult: state?.patientDetails?.details?.radiologyDosResult,
     processedYearResult: state?.patientDetails.details?.processedYear,
+    patientDosResult: state?.patientDetails?.details?.radiologyDosResult,
   }),
   {
     getRadiologyDetails: detailsActions.radiologyDetailsAction,
