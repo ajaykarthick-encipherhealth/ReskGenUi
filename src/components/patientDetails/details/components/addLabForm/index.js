@@ -15,6 +15,7 @@ const AddLabForm = ({
   patientDetailsResult,
   getPatientLabDosList,
   processedYearResult,
+  title
 }) => {
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [validated, setValidated] = useState(false);
@@ -92,11 +93,12 @@ const AddLabForm = ({
         "Content-Type": "multipart/form-data",
       },
     };
+    var apiUrl = ENDPOINTS.apiEndoint +`aiservice/ai/upload/radiology`;
+    if(title == "LAB"){
+      apiUrl = ENDPOINTS.apiEndoint +`aiservice/ai/upload/lab`;
+    }
     try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint +
-          `aiservice/ai/upload/lab
-          `,
+      const response = await axios.post(apiUrl,
         formData,
         headers
       );
@@ -139,9 +141,12 @@ const AddLabForm = ({
       placement="end"
     >
       <div className="offcanvas-header">
+        {title == "LAB" ?
         <h5 className="modal-title" id="#gridSystemModal">
           Add Patient Lab Report
-        </h5>
+        </h5>:  <h5 className="modal-title" id="#gridSystemModal">
+        Add Patient Radiology
+        </h5>}
         <button
           type="button"
           className="btn-close"

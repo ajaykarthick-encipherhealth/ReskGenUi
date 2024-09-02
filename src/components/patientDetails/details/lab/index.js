@@ -401,7 +401,7 @@ const Lab = ({
           </div>
         </div>
       </div>
-      <AddLabForm setOpen={setLabForm} open={labForm} />
+      <AddLabForm setOpen={setLabForm} open={labForm} title="LAB"/>
     </>
   );
 };
