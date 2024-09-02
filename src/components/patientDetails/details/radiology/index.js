@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Tab, Nav } from "react-bootstrap";
+import { Tab, Nav ,Button} from "react-bootstrap";
 import { connect } from "react-redux";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import VisitData from "./visitData";
@@ -14,7 +14,9 @@ import { Popover, Select } from "antd";
 import styles from "../hcc/styles.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
-import { SwapOutlined } from "@ant-design/icons";
+import { SwapOutlined, PlusCircleFilled } from "@ant-design/icons";
+import AddRadiologyForm from "../components/addRadiologyForm";
+import AddLabForm from "../components/addLabForm";
 
 const { Option } = Select;
 
@@ -35,6 +37,8 @@ const Radiology = ({
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
   const [selectedYearValue, setSelectedYearValue] = useState(["2023"]);
   const [search, setSearch] = useState();
+  const [radiologyForm, setRadiologyForm] = useState(false);
+
 
   const selectTab = (num) => {
     setActiveTabHead(num);
@@ -255,7 +259,8 @@ const Radiology = ({
             <Tab.Container activeKey={activeTabHead}>
               <div className="row">
                 <div className="col-xl-12">
-                  <Nav as="ul" className="nav nav-tabs">
+                  <Nav as="ul"  className={`nav nav-tabs ${styles.tabsContainer}`}>
+                  <div className={styles.tabslistConatiner}>
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
@@ -278,7 +283,7 @@ const Radiology = ({
                         Visit Data
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
+                    {/* <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
                         eventKey={3}
@@ -299,7 +304,7 @@ const Radiology = ({
                       >
                         MEAT Criteria
                       </Nav.Link>
-                    </Nav.Item>
+                    </Nav.Item> */}
                     <Nav.Item as="li" className="nav-item">
                       <Select
                         placeholder="Select Year"
@@ -358,6 +363,21 @@ const Radiology = ({
                         </div>
                       </Popover>
                     )}
+                    </div>
+                     <div>
+                      <Button
+                        onClick={() => {
+                          setRadiologyForm(true);
+                        }}
+                        style={{
+                          background: "#04306f",
+                          height: "31px !",
+                        }}
+                        className={`btn btn-sm ms-2 flr width-max-conten ${styles.labUploadBtn}`}
+                      >
+                        <PlusCircleFilled /> UPLOAD
+                      </Button>
+                    </div>
                   </Nav>
                 </div>
               </div>
@@ -391,6 +411,8 @@ const Radiology = ({
           </div>
         </div>
       </div>
+      <AddLabForm setOpen={setRadiologyForm} open={radiologyForm} title="RADIOLOGY" />
+
     </>
   );
 };
