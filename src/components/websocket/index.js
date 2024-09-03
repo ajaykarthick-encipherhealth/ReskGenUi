@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { connect } from "react-redux";
 import useWebSocket from "react-use-websocket";
 import { actions as webSocketActions } from "../../stores/websocket";
+import { webpackUrl } from "../../utils/config";
 
 const ConnectWebSocket = ({
   webSocketData,
@@ -14,7 +15,7 @@ const ConnectWebSocket = ({
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const WS_URL =
-    "wss://local.hcc.encipherhealth.com/chatservice/chatservice/websocket?token=Bearer " +
+    `wss://${webpackUrl}chatservice/chatservice/websocket?token=Bearer` +
     token;
 
   const { lastJsonMessage } = useWebSocket(WS_URL, {
