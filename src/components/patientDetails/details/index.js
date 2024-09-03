@@ -659,7 +659,9 @@ const Details = ({
     const patientId = localStorage.getItem("patientId");
     const res = await activeLabels({
       patientId,
-      year: dosYearDefalutSelect.value,
+      year: dosYearDefalutSelect.value
+        ? dosYearDefalutSelect.value
+        : dosYearDefalutSelect,
       dos: isDosSelected,
     });
   };
@@ -1323,9 +1325,27 @@ const Details = ({
                                 setSelectDosValue={setSelectDosValue}
                               />
                             ) : activeTab == 3 ? (
-                              <Radiology />
+                              <Radiology
+                                year={
+                                  dosYearDefalutSelect.value
+                                    ? dosYearDefalutSelect.value
+                                    : dosYearDefalutSelect
+                                }
+                                setDosYearDefalutSelect={
+                                  setDosYearDefalutSelect
+                                }
+                              />
                             ) : (
-                              <Lab />
+                              <Lab
+                                year={
+                                  dosYearDefalutSelect.value
+                                    ? dosYearDefalutSelect.value
+                                    : dosYearDefalutSelect
+                                }
+                                setDosYearDefalutSelect={
+                                  setDosYearDefalutSelect
+                                }
+                              />
                             )}
                           </>
                         </div>

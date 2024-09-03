@@ -236,8 +236,8 @@ const File = ({
                       className="timeline"
                       {...provided.droppableProps}
                       ref={provided.innerRef}
-
-style={{height:"73vh"}}>
+                      style={{ height: "73vh" }}
+                    >
                       <div
                         className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
                       >
@@ -282,6 +282,7 @@ style={{height:"73vh"}}>
                             setIsValidAction={setIsValidAction}
                             cardTitle="HCC"
                             provided={provided}
+                            isMeatBlocked={true}
                           />
                         </div>
                       </div>
@@ -344,7 +345,10 @@ style={{height:"73vh"}}>
             </div>
           </div>
           {isFileFormShow ? (
-            <div className="col-xl-5"  style={{ height: "74.5vh", overflowY: "scroll" }}>
+            <div
+              className="col-xl-5"
+              style={{ height: "74.5vh", overflowY: "scroll" }}
+            >
               {/* <AddHccForm
                 handleCloseModal={handleCloseModal}
                 isAddHccForm={isAddHccForm}
@@ -352,11 +356,11 @@ style={{height:"73vh"}}>
                 isMeatNew={true}
               /> */}
               {/* <div style={{ height: "7vh", overflowY: "scroll" }}> */}
-                <ManuallyAdd
-                  handleCloseModal={handleCloseModal}
-                  setIsFileFormShow={setIsFileFormShow}
-                  year={year}
-                />
+              <ManuallyAdd
+                handleCloseModal={handleCloseModal}
+                setIsFileFormShow={setIsFileFormShow}
+                year={year}
+              />
               {/* </div> */}
             </div>
           ) : null}
@@ -436,7 +440,6 @@ style={{height:"73vh"}}>
                       className="timeline"
                       {...provided.droppableProps}
                       ref={provided.innerRef}
-                      
                     >
                       <div
                         className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
@@ -489,6 +492,7 @@ style={{height:"73vh"}}>
                             setIsValidAction={setIsValidAction}
                             cardTitle="DELETED"
                             provided={provided}
+                            isMeatBlocked={true}
                           />
                         </div>
                       </div>

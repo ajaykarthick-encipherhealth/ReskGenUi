@@ -26,6 +26,9 @@ const Radiology = ({
   radiologyDetailsResult,
   processedYearResult,
   patientDosResult,
+  getPatientRadiologyDosList,
+  year,
+  setDosYearDefalutSelect
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -34,8 +37,7 @@ const Radiology = ({
   const [selectDosValue, setSelectDosValue] = useState("");
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [dosYear, setDosYear] = useState([]);
-  const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
-  const [selectedYearValue, setSelectedYearValue] = useState(["2023"]);
+  const [selectedYearValue, setSelectedYearValue] = useState();
   const [search, setSearch] = useState();
   const [radiologyForm, setRadiologyForm] = useState(false);
 
@@ -46,6 +48,23 @@ const Radiology = ({
       setActiveMeatTitle(null);
     }
   };
+
+  const getDosList = async(year) => {
+    const patientId = localStorage.getItem("patientId")
+    try {
+      const res = await getPatientRadiologyDosList(patientId, year)
+    } catch (error) {
+      
+    }
+  }
+
+  const handleYearOptions = (value) => {
+    setSelectedYearValue(value);
+    getDosList(value)
+    setDosYearDefalutSelect(value)
+  };
+
+
 
   const handleOptions = (value) => {
     var selectData = patientDosResult?.data?.response.filter(
@@ -58,7 +77,7 @@ const Radiology = ({
     if (value) {
       getRadiologyDetails(
         patientId,
-        processedYearResult?.data?.response[0],
+        selectedYearValue,
         moment(value).format("YYYY-MM-DD"),
         "",
         selectData[0]?.testName
@@ -68,7 +87,7 @@ const Radiology = ({
       setSelectDosValue(dosSummariesList[0]?.value);
       getRadiologyDetails(
         patientId,
-        labDetailsResult?.data?.response?.processedYear,
+        selectedYearValue,
         moment(dosSummariesList[0]?.value).format("YYYY-MM-DD"),
         ""
       );
@@ -89,7 +108,9 @@ const Radiology = ({
     result?.data?.response?.map((res) => {
       dosYearArr.push({ value: res, label: res });
     });
-    setSelectedYearValue(dosYearArr[0]?.value);
+    setSelectedYearValue(year);
+    // setDosYearDefalutSelect(dosYearArr[0])
+    getDosList(year);
     setDosYear(dosYearArr);
   };
 
@@ -140,7 +161,7 @@ const Radiology = ({
         const patientId = localStorage.getItem("patientId");
         getRadiologyDetails(
           patientId,
-          processedYearResult?.data?.response[0],
+          selectedYearValue,
           moment(patientDosResult?.data?.response[0].dateOfService).format(
             "YYYY-MM-DD"
           ),
@@ -195,8 +216,8 @@ const Radiology = ({
         <div style={{ paddingLeft: "60px" }}>Page Number</div>
       </div>
       <div className={styles.displayDiv}>
-        {patientDosResult?.data?.response
-          ? patientDosResult?.data?.response?.map((data) => (
+        {patientDosResult?.data?.response[0]?.fileDetailDTO?.dosSummaries
+          ? patientDosResult?.data?.response[0]?.fileDetailDTO?.dosSummaries?.map((data) => (
               <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
                 <div
                   className={` ${styles.selectDetailsContainer}`}
@@ -310,6 +331,7 @@ const Radiology = ({
                         placeholder="Select Year"
                         className="dosSelect"
                         value={selectedYearValue}
+                        onChange={handleYearOptions}
                         style={{ marginRight: "10px" }}
                       >
                         {dosYear?.map((data) => (
@@ -426,6 +448,7 @@ const enhancer = connect(
   {
     getRadiologyDetails: detailsActions.radiologyDetailsAction,
     getRadiologyFileDetails: detailsActions.radiologyFileAction,
+    getPatientRadiologyDosList: detailsActions.radiologyDosDeatilsAction,
   }
 );
 export default enhancer(Radiology);

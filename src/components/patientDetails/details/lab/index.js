@@ -24,6 +24,9 @@ const Lab = ({
   labDetailsResult,
   processedYearResult,
   patientDosResult,
+  getPatientLabDosList,
+  year,
+  setDosYearDefalutSelect
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -32,9 +35,8 @@ const Lab = ({
   const [selectDosValue, setSelectDosValue] = useState("");
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [dosYear, setDosYear] = useState([]);
-  const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
   const [selectedDosValue, setSelectedDosValue] = useState([]);
-  const [selectedYearValue, setSelectedYearValue] = useState([]);
+  const [selectedYearValue, setSelectedYearValue] = useState('');
   const [search, setSearch] = useState();
   const [labForm, setLabForm] = useState(false);
 
@@ -45,10 +47,20 @@ const Lab = ({
     }
   };
 
-  // useEffect(() => {
-  //   const patientId = localStorage.getItem("patientId");
-  //   getLabDetails(patientId);
-  // }, []);
+  const getDosList = async(year) => {
+    const patientId = localStorage.getItem("patientId")
+    try {
+      const res = await getPatientLabDosList(patientId, year)
+    } catch (error) {
+      
+    }
+  }
+
+  const handleYearOptions = (value) => {
+    setSelectedYearValue(value);
+    getDosList(value)
+    setDosYearDefalutSelect(value)
+  }
 
   const handleOptions = (value) => {
     var selectData = patientDosResult?.data?.response.filter(
@@ -61,7 +73,7 @@ const Lab = ({
     if (value) {
       getLabDetails(
         patientId,
-        processedYearResult?.data?.response[0],
+        selectedYearValue,
         moment(value).format("YYYY-MM-DD"),
         "",
         selectData[0]?.testName
@@ -71,7 +83,7 @@ const Lab = ({
       setSelectDosValue(dosSummariesList[0]?.value);
       getLabDetails(
         patientId,
-        labDetailsResult?.data?.response?.processedYear,
+        selectedYearValue,
         moment(dosSummariesList[0]?.value).format("YYYY-MM-DD"),
         ""
       );
@@ -83,8 +95,9 @@ const Lab = ({
     result?.data?.response?.map((res) => {
       dosYearArr.push({ value: res, label: res });
     });
-    setDosYearDefalutSelect(dosYearArr[0]);
-    setSelectedYearValue(dosYearArr[0]?.value);
+    // setDosYearDefalutSelect(dosYearArr[0]);
+    setSelectedYearValue(year);
+    getDosList(year);
     setDosYear(dosYearArr);
   };
 
@@ -131,7 +144,7 @@ const Lab = ({
         const patientId = localStorage.getItem("patientId");
         getLabDetails(
           patientId,
-          processedYearResult?.data?.response[0],
+          selectedYearValue,
           moment(patientDosResult?.data?.response[0].dateOfService).format(
             "YYYY-MM-DD"
           ),
@@ -295,7 +308,7 @@ const Lab = ({
                       <Nav.Item as="li" className="nav-item">
                         <Select
                           placeholder="Select Year"
-                          onChange={handleOptions}
+                          onChange={handleYearOptions}
                           className="dosSelect"
                           value={selectedYearValue}
                           style={{ marginRight: "10px" }}
@@ -311,7 +324,7 @@ const Lab = ({
                         <Select
                           placeholder="Select DOS"
                           onChange={handleOptions}
-                          allowClear
+                          // allowClear
                           style={{ width: "220px" }}
                           value={selectDosValue}
                         >
@@ -415,6 +428,7 @@ const enhancer = connect(
   {
     getLabDetails: detailsActions.labDetailsAction,
     getLabFileDetails: detailsActions.labFileAction,
+    getPatientLabDosList: detailsActions.labDosDeatilsAction,
   }
 );
 export default enhancer(Lab);

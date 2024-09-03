@@ -285,6 +285,7 @@ const VisitData = ({
                             isVisitData={true}
                             provided={provided}
                             popup={zIndex}
+                            isMeatBlocked={true}
                           />
                         </div>
                       </div>
@@ -454,6 +455,7 @@ const VisitData = ({
                               isVisitData={true}
                               provided={provided}
                               popup={zIndex}
+                              isMeatBlocked={true}
                             />
                           </div>
                         </div>
@@ -548,6 +550,7 @@ const VisitData = ({
                               cardTitle="HCC"
                               provided={provided}
                               isVisitData={true}
+                              isMeatBlocked={true}
                             />
                           </div>
                         </div>
@@ -690,6 +693,7 @@ const VisitData = ({
                               cardTitle="DELETED"
                               provided={provided}
                               isVisitData={true}
+                              isMeatBlocked={true}
                             />
                           </div>
                         </div>
