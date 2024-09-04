@@ -849,7 +849,7 @@ const Header = ({
                           </div>
 
                           {items?.length > 0 && userIdDetails != "" ? (
-                            <span className="ms-2 d-flex mt-1">
+                            <span className="ms-2 d-flex mt-1 d-flex">
                               <Dropdown
                                 menu={{
                                   items,
@@ -858,8 +858,8 @@ const Header = ({
                                 trigger={["click"]}
                               >
                                 <span
-                                  className="header-name"
-                                  style={{ marginLeft: "10px" }}
+                                  className="header-name d-flex"
+                                  style={{ margin: "-5px 0px 0 10px" }}
                                 >
                                   {currentRole == "record_analyst"
                                     ? "Analyst"
