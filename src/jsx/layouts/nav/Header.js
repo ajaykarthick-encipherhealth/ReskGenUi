@@ -441,11 +441,6 @@ const Header = ({
     setCurrentRole(userRole);
     setTenentId(tenentId);
     setMenuList(getMenuListByRole(userRoleLocal));
-    // if (screenSize?.width <= 1527) {
-    //   setMenuList(getMenuListByRole(userRoleLocal)?.slice(0, 5));
-    // } else {
-    //   setMenuList(getMenuListByRole(userRoleLocal));
-    // }
 
     if (loginCheck !== "true") {
       Swal.fire({
@@ -471,7 +466,7 @@ const Header = ({
     });
 
     dispatch(getAccuracy());
-  }, [screenSize]);
+  }, []);
 
   const renderMenuItems = (condition) => {
     return condition?.map((data, index) => {
@@ -500,10 +495,14 @@ const Header = ({
           onClick={() => {
             dispatch(getFilteredList(null));
             dispatch(getPatientID(null));
+            router.push({
+              pathname: `${data?.to}`,
+              query: screenSize,
+            });
             localStorage.removeItem("patientId");
           }}
         >
-          <Link href={data.to} className="d-flex">
+          <div className="d-flex cursor-pointer">
             <div
               className="menu-icon"
               style={{ paddingRight: "5px", color: "#04306f" }}
@@ -512,11 +511,23 @@ const Header = ({
             </div>
             <span className={`nav-text header-nav-text`}>{data.title}</span>
             <span></span>
-          </Link>
+          </div>
         </li>
       );
     });
   };
+
+  useEffect(() => {
+    if (window !== "undefined") {
+      if (router) {
+        setScreenSize({
+          width: router?.query?.width,
+          height: router?.query?.height,
+        });
+      }
+    }
+  }, [router]);
+
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -550,26 +561,30 @@ const Header = ({
               <div>
                 <ul className="metismenu header-menu d-flex" id="menu">
                   {renderMenuItems(
-                    screenSize?.width <= 1527 && screenSize?.width !== null
+                    screenSize?.width <= 1527 &&
+                      screenSize?.width != null &&
+                      screenSize?.height != null
                       ? menuList?.slice(0, 5)
                       : menuList
                   )}
 
-                  {screenSize?.width <= 1527 && screenSize?.width !== null && (
-                    <div className="d-flex justify-content-center align-items-center">
-                      <Popover
-                        trigger="click"
-                        className="cursor-pointer"
-                        content={renderMenuItems(menuList?.slice(5))}
-                      >
-                        <div
-                          className={`d-flex justify-content-center align-items-enter cursor-pointer rounded-4 ${styles.addonDiv}`}
+                  {screenSize?.width <= 1527 &&
+                    screenSize?.width != null &&
+                    screenSize?.height != null && (
+                      <div className="d-flex justify-content-center align-items-center">
+                        <Popover
+                          trigger="click"
+                          className="cursor-pointer"
+                          content={renderMenuItems(menuList?.slice(5))}
                         >
-                          {`+${menuList?.slice(5)?.length}`}
-                        </div>
-                      </Popover>
-                    </div>
-                  )}
+                          <div
+                            className={`d-flex justify-content-center align-items-enter cursor-pointer rounded-4 ${styles.addonDiv}`}
+                          >
+                            {`+${menuList?.slice(5)?.length}`}
+                          </div>
+                        </Popover>
+                      </div>
+                    )}
                 </ul>
               </div>
             ) : null}
