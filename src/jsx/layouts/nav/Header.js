@@ -497,8 +497,10 @@ const Header = ({
             dispatch(getPatientID(null));
             router.push({
               pathname: `${data?.to}`,
-              query: screenSize,
-            });
+              query: {...screenSize},
+            },
+            `${data?.to}`
+          );
             localStorage.removeItem("patientId");
           }}
         >
@@ -527,7 +529,6 @@ const Header = ({
       }
     }
   }, [router]);
-
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
