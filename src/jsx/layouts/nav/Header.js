@@ -49,8 +49,7 @@ import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
-import { faBook } from "@fortawesome/free-solid-svg-icons";
-
+import { faBook, faFilter } from "@fortawesome/free-solid-svg-icons";
 import {
   getAccuracy,
   getCoderDetails,
@@ -99,7 +98,10 @@ const Header = ({
   const [drawerWidth, setDrawerWidth] = useState(700);
   const [notificationCount, setNotificationCount] = useState(0);
   const notificationSoundRef = useRef(null);
-
+  const [screenSize, setScreenSize] = useState({
+    width: null,
+    height: null,
+  });
   const showDrawer = () => {
     setOpened(true);
     setPopoverVisible(false);
@@ -326,43 +328,6 @@ const Header = ({
         return [];
     }
   };
-  useEffect(() => {
-    var loginCheck = localStorage.getItem("loginCheck");
-    const userRoleLocal = localStorage.getItem("userRole");
-    const userId = localStorage.getItem("userId");
-    const userRole = localStorage.getItem("role");
-    const tenentId = localStorage.getItem("tenantId");
-    dispatch(getCurrentUser(userId, router));
-    setUserRole(userRoleLocal);
-    setCurrentRole(userRole);
-    setTenentId(tenentId);
-    setMenuList(getMenuListByRole(userRoleLocal));
-
-    if (loginCheck !== "true") {
-      Swal.fire({
-        title: "Error!",
-        text: "Session Expired",
-        icon: "error",
-        confirmButtonText: "Logout",
-        confirmButtonColor: "#DD6B55",
-        closeOnConfirm: false,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          if (userRole != "ehr") {
-            window.location = "/login";
-          } else {
-            window.location = "/ehrlogin";
-          }
-        }
-      });
-    }
-
-    window.addEventListener("scroll", () => {
-      setheaderFix(window.scrollY > 50);
-    });
-
-    dispatch(getAccuracy());
-  }, []);
 
   const gotoChat = () => {
     setOpenMsg(true);
@@ -451,6 +416,107 @@ const Header = ({
     }
   }, [notificationResponse?.data?.response?.totalUnreadCount, open]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    var loginCheck = localStorage.getItem("loginCheck");
+    const userRoleLocal = localStorage.getItem("userRole");
+    const userId = localStorage.getItem("userId");
+    const userRole = localStorage.getItem("role");
+    const tenentId = localStorage.getItem("tenantId");
+    dispatch(getCurrentUser(userId, router));
+    setUserRole(userRoleLocal);
+    setCurrentRole(userRole);
+    setTenentId(tenentId);
+    setMenuList(getMenuListByRole(userRoleLocal));
+    // if (screenSize?.width <= 1527) {
+    //   setMenuList(getMenuListByRole(userRoleLocal)?.slice(0, 5));
+    // } else {
+    //   setMenuList(getMenuListByRole(userRoleLocal));
+    // }
+
+    if (loginCheck !== "true") {
+      Swal.fire({
+        title: "Error!",
+        text: "Session Expired",
+        icon: "error",
+        confirmButtonText: "Logout",
+        confirmButtonColor: "#DD6B55",
+        closeOnConfirm: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (userRole != "ehr") {
+            window.location = "/login";
+          } else {
+            window.location = "/ehrlogin";
+          }
+        }
+      });
+    }
+
+    window.addEventListener("scroll", () => {
+      setheaderFix(window.scrollY > 50);
+    });
+
+    dispatch(getAccuracy());
+  }, [screenSize]);
+
+  const renderMenuItems = (condition) => {
+    return condition?.map((data, index) => {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      let encodedParams = null;
+      if (currentRole == "tenant_admin") {
+        encodedParams = urlParams.get("isTenantAdminTracking");
+      } else {
+        encodedParams = urlParams.get("isAdminTracking");
+      }
+
+      return (
+        <li
+          className={` ${
+            stateActive === data.to ||
+            ((currentRole === "admin" || currentRole === "tenant_admin") &&
+            encodedParams
+              ? stateActive === data.childRoute3
+              : stateActive === data.childRoute) ||
+            stateActive === data.childRoute2
+              ? "header-active"
+              : ""
+          }`}
+          key={index}
+          onClick={() => {
+            dispatch(getFilteredList(null));
+            dispatch(getPatientID(null));
+            localStorage.removeItem("patientId");
+          }}
+        >
+          <Link href={data.to} className="d-flex">
+            <div
+              className="menu-icon"
+              style={{ paddingRight: "5px", color: "#04306f" }}
+            >
+              {stateActive === data.to ? data.activeIcon : data.iconStyle}
+            </div>
+            <span className={`nav-text header-nav-text`}>{data.title}</span>
+            <span></span>
+          </Link>
+        </li>
+      );
+    });
+  };
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -483,53 +549,27 @@ const Header = ({
             {stateActive != "/reviewer/home" ? (
               <div>
                 <ul className="metismenu header-menu d-flex" id="menu">
-                  {menuList?.map((data, index) => {
-                    const queryString = window.location.search;
-                    const urlParams = new URLSearchParams(queryString);
-                    let encodedParams = null;
-                    if (currentRole == "tenant_admin") {
-                      encodedParams = urlParams.get("isTenantAdminTracking");
-                    } else {
-                      encodedParams = urlParams.get("isAdminTracking");
-                    }
+                  {renderMenuItems(
+                    screenSize?.width <= 1527 && screenSize?.width !== null
+                      ? menuList?.slice(0, 5)
+                      : menuList
+                  )}
 
-                    return (
-                      <li
-                        className={` ${
-                          stateActive === data.to ||
-                          ((currentRole === "admin" ||
-                            currentRole === "tenant_admin") &&
-                          encodedParams
-                            ? stateActive === data.childRoute3
-                            : stateActive === data.childRoute) ||
-                          stateActive === data.childRoute2
-                            ? "header-active"
-                            : ""
-                        }`}
-                        key={index}
-                        onClick={() => {
-                          dispatch(getFilteredList(null));
-                          dispatch(getPatientID(null));
-                          localStorage.removeItem("patientId");
-                        }}
+                  {screenSize?.width <= 1527 && screenSize?.width !== null && (
+                    <div className="d-flex justify-content-center align-items-center">
+                      <Popover
+                        trigger="click"
+                        className="cursor-pointer"
+                        content={renderMenuItems(menuList?.slice(5))}
                       >
-                        <Link href={data.to} className="d-flex">
-                          <div
-                            className="menu-icon"
-                            style={{ paddingRight: "5px", color: "#04306f" }}
-                          >
-                            {stateActive === data.to
-                              ? data.activeIcon
-                              : data.iconStyle}
-                          </div>
-                          <span className={`nav-text header-nav-text`}>
-                            {data.title}
-                          </span>
-                          <span></span>
-                        </Link>
-                      </li>
-                    );
-                  })}
+                        <div
+                          className={`d-flex justify-content-center align-items-enter cursor-pointer rounded-4 ${styles.addonDiv}`}
+                        >
+                          {`+${menuList?.slice(5)?.length}`}
+                        </div>
+                      </Popover>
+                    </div>
+                  )}
                 </ul>
               </div>
             ) : null}

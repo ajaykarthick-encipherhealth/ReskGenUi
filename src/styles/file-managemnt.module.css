@@ -408,5 +408,11 @@
 .heading{
   color:#241571;
   
-
+}
+.addonDiv{
+  width:30px;
+  height:30px;
+  border:1px solid #04306f;
+  background-color:#E4EFFE;
+  color:#04306f;
 }
