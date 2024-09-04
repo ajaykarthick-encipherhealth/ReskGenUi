@@ -69,7 +69,7 @@ export const getMFAValidation =
           pathname: `/twofactorAuthentication/Authentication`,
           search: `params=${encodedParams}`,
         });
-      }else{
+      } else {
         dispatch({
           type: ENABLEMFA,
           payload: { data: null, loading: trfalsee },
@@ -85,7 +85,8 @@ export const getMFAValidation =
   };
 
 export const getValidateCode =
-  (username, code, route, validate, userpassword, enableMFA = false) => async (dispatch) => {
+  (username, code, route, validate, userpassword, enableMFA = false) =>
+  async (dispatch) => {
     const datas = {
       username: username,
       code: code?.pass,
@@ -207,7 +208,7 @@ export const loginAction =
             description: response?.data?.message,
           });
         }
-      }else{
+      } else {
         dispatch({
           type: AUTHENTICATION,
           payload: { data: result, loading: false },
@@ -390,11 +391,7 @@ export const preSendURl = (type, file) => async (dispatch) => {
           },
         }
       );
-      if (response.data) {
-        if (response?.data?.response) {
-          dispatch(getUrl(response?.data?.response, type, file));
-        }
-      }
+      return response;
     } catch (error) {
       console.log("error", error);
     }
@@ -417,8 +414,15 @@ export const getUrl = (url, extention, file) => async (dispatch) => {
       });
 
       if (response.status === 201) {
-        dispatch(updateImage(url));
+        dispatch({
+          type: PROFILE_URL,
+          payload: {
+            loading: false,
+          },
+        });
       }
+
+      return response;
     } catch (error) {
       console.log("error", error);
     }
@@ -428,8 +432,6 @@ export const getUrl = (url, extention, file) => async (dispatch) => {
 export const updateImage = (url) => async (dispatch) => {
   const token = localStorage.getItem("token");
   const splitUrl = url?.split("?").shift();
-  const userId = localStorage.getItem("userId");
-
   if (url) {
     try {
       const response = await axiosConfig.put(
@@ -442,15 +444,16 @@ export const updateImage = (url) => async (dispatch) => {
         }
       );
 
-      if (response?.data) {
-        dispatch(getCurrentUser(userId));
-        dispatch({
-          type: PROFILE_URL,
-          payload: {
-            loading: false,
-          },
-        });
-      }
+      // if (response?.data) {
+      //   dispatch(getCurrentUser(userId));
+      //   dispatch({
+      //     type: PROFILE_URL,
+      //     payload: {
+      //       loading: false,
+      //     },
+      //   });
+      // }
+      return response;
     } catch (error) {
       console.log("error", error);
     }
