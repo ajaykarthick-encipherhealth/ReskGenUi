@@ -249,7 +249,7 @@ function TrackingTable({
           <thead className={TableStyle.tenantAdminclassThead}>
             <tr>
               <th>PATIENTS</th>
-              <th style={{ textAlign: "left", paddingLeft: "20px" }}>
+              <th style={{ textAlign: "left", paddingLeft: "20px" }} className="text-truncate">
                 ALLOCATED BY
               </th>
               <th
@@ -261,6 +261,7 @@ function TrackingTable({
                 onClick={() => {
                   sortFunction(sortOrder, setSortOrder, setSort, "allocatedOn");
                 }}
+                className="text-truncate"
               >
                 ALLOCATED DATE{" "}
                 {sortOrder === "ASC" ? (
@@ -281,6 +282,7 @@ function TrackingTable({
                   );
                 }}
                 style={{ textAlign: "center" }}
+                className="text-truncate"
               >
                 REVIEWED DATE
                 <span
@@ -297,7 +299,7 @@ function TrackingTable({
                   )}
                 </span>
               </th>
-              <th style={{ textAlign: "center" }}>AUDIT ALLOCATED BY</th>
+              <th style={{ textAlign: "center" }} className="text-truncate">AUDIT ALLOCATED BY</th>
               <th
                 onClick={() => {
                   sortFunction(
@@ -308,6 +310,7 @@ function TrackingTable({
                   );
                 }}
                 style={{ textAlign: "center" }}
+                className="text-truncate"
               >
                 AUDIT ALLOCATED DATE
                 <span
@@ -324,7 +327,7 @@ function TrackingTable({
                   )}
                 </span>
               </th>
-              <th style={{ textAlign: "center" }}>SUPERVISOR</th>
+              <th style={{ textAlign: "center" }} className="text-truncate">SUPERVISOR</th>
               <th
                 onClick={() => {
                   sortFunction(
@@ -335,6 +338,7 @@ function TrackingTable({
                   );
                 }}
                 style={{ textAlign: "center" }}
+                className="text-truncate"
               >
                 AUDITED DATE
                 <span
@@ -352,8 +356,8 @@ function TrackingTable({
                 </span>
               </th>
 
-              <th style={{ textAlign: "center" }}>PROCESSED STATUS</th>
-              <th style={{ textAlign: "center" }}>AUDIT STATUS</th>
+              <th style={{ textAlign: "center" }} className="text-truncate">PROCESSED STATUS</th>
+              <th style={{ textAlign: "center" }} className="text-truncate">AUDIT STATUS</th>
             </tr>
           </thead>
 

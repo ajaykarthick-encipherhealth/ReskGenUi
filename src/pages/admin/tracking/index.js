@@ -546,7 +546,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
                             setSearch={setSearchTextValue}
                             isSearch={true}
                             search={searchTextValue}
-                            searchlabel="Search By Patient Name / ID"
+                            searchlabel="Patient Name / ID"
                             // select status
                             selectlabel="Select Status"
                             isSelector={true}

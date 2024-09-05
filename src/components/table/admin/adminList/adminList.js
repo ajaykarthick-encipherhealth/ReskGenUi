@@ -195,6 +195,7 @@ const AdminList = ({
               onClick={() => {
                 sortFunction(sortOrder, setSortOrder, setSort, "createdDate");
               }}
+              className="text-truncate"
             >
               DATE CREATED{" "}
               {sortOrder === "ASC" ? (
@@ -205,7 +206,7 @@ const AdminList = ({
             </th>
             <th style={{ textAlign: "center" }}>MFA</th>
             <th style={{ textAlign: "center" }}>ACTION</th>
-            <th style={{ textAlign: "center" }}>USER STATUS</th>
+            <th style={{ textAlign: "center" }} className="text-truncate">USER STATUS</th>
           </tr>
         </thead>
         <tbody>

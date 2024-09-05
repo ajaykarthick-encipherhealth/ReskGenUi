@@ -205,10 +205,10 @@ function AddPatientListTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENT ID</th>
-            <th>FILE NAME</th>
-            <th>EMR TYPE</th>
-            <th>TOTAL PAGES</th>
-            <th style={{ textAlign: "center" }}>CREATED BY</th>
+            <th className="text-truncate">FILE NAME</th>
+            <th className="text-truncate">EMR TYPE</th>
+            <th className="text-truncate">TOTAL PAGES</th>
+            <th style={{ textAlign: "center" }} className="text-truncate">CREATED BY</th>
 
             <th
               style={{
@@ -219,6 +219,7 @@ function AddPatientListTable({
               onClick={() => {
                 sortFunction(sortOrder, setSortOrder, setSort, "computedDate");
               }}
+              className="text-truncate"
             >
               COMPUTED DATE{" "}
               {sortOrder === "ASC" ? (
@@ -237,6 +238,7 @@ function AddPatientListTable({
                 );
               }}
               style={{ textAlign: "center" }}
+              className="text-truncate"
             >
               CREATED DATE
               <span

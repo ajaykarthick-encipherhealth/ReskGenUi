@@ -62,7 +62,7 @@ const MoreFilter = ({
   return (
     <div className="d-flex" style={{ cursor: "pointer" }}>
       <Popover content={PopContent} trigger="click" placement="bottom">
-        <span className={styles.moreStyle}>More Filters</span>
+        <span className={`${styles.moreStyle} text-truncate`}>More Filters</span>
       </Popover>
       <span>
         <Image src={filter} alt="noimg" height="30" />
