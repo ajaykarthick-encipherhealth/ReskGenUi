@@ -861,6 +861,7 @@ const Header = ({
           setOpenUploader(false);
           setOpenContent(false);
         }}
+        closable={false}
         onCancel={() => {
           setOpenContent(false);
           setOpenUploader(false);

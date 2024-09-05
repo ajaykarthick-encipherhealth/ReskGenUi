@@ -464,7 +464,9 @@ const HeaderFilters = ({
                   className="mt-[10px]"
                   style={{ cursor: "pointer" }}
                 /> */}
+                <Tooltip placement="top" title="View List of Status">
                 <InfoCircleFilled className={styles.iconStyleColor2} />
+                </Tooltip>
               </Popover>
             </div>
           )}
