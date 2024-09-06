@@ -1105,7 +1105,6 @@ export const getSectionNameManually = ({
   sectionEdit,
 }) => {
   return data.map((res, index) => {
-    // if (index < 2) {
     var sectionMapArr = (
       <span
         className={`mt-2 text-start ${visitStyles.provider_name_manually} cr-pointer`}
@@ -1141,7 +1140,7 @@ export const getSectionNameManually = ({
         </label>
       </span>
     );
-    return sectionMapArr;
+    return res.section != "cogent_dos" && sectionMapArr;
   });
 };
 export const getProviderNameList = ({ data, captureSectionMatching }) => {

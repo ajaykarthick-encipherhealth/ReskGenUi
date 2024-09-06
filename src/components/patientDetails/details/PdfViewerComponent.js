@@ -3,6 +3,7 @@ import { Spinner } from "react-bootstrap";
 import ENDPOINTS from "../../../utility/enpoints";
 import { connect } from "react-redux";
 import Style from "./style.module.css";
+import { portalPdfUrl } from "../../../utils/config";
 
 const PdfViewer = ({
   src,
@@ -21,7 +22,7 @@ const PdfViewer = ({
     const page = selectedPageNumber ? selectedPageNumber : pageNumber;
     if (!Array.isArray(src)) {
       const pdfUrl = encodeURIComponent(src);
-      let searchUrl = `${ENDPOINTS.PdfViewer}?file=${pdfUrl}`;
+      let searchUrl = `${portalPdfUrl}?file=${pdfUrl}`;
       // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
       if (searchQuery || page || headerContent) {
         const queryParams = [];

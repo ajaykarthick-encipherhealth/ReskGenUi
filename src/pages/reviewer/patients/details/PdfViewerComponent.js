@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ENDPOINTS from "../../../../utility/enpoints";
+import { portalPdfUrl } from "../../../../utils/config";
 
 const PdfViewer = ({ src, searchQuery, pageNumber, headers,headerContent }) => {
   const [iframeSrc, setIframeSrc] = useState("");
@@ -7,7 +7,7 @@ const PdfViewer = ({ src, searchQuery, pageNumber, headers,headerContent }) => {
   useEffect(() => {
     if (!Array.isArray(src)) {
       const pdfUrl = encodeURIComponent(src);
-      let searchUrl = `${ENDPOINTS.PdfViewer}?file=${pdfUrl}`;
+      let searchUrl = `${portalPdfUrl}?file=${pdfUrl}`;
       // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
       if (searchQuery || pageNumber || headerContent) {
         const queryParams = [];
