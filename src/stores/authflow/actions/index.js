@@ -80,7 +80,9 @@ export const getMFAValidation =
         type: ENABLEMFA,
         payload: { data: null, loading: false },
       });
-      getResponePopup(err);
+      if (err?.response?.status == "513") {
+        getResponePopup(err.response);
+      }
     }
   };
 
