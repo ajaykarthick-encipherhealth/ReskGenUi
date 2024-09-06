@@ -15528,3 +15528,16 @@ input::-webkit-inner-spin-button {
   white-space: nowrap;
   overflow: hidden;
 }
+
+  .header-menu li span {
+    font-size: 14px !important;
+    font-size: 700 !important;
+    margin-top: 3px;
+  }
+  .hospitalIcon{
+    font-size: 13px !important;
+  }
+  .custom-patientsSync{
+    width:18px !important;
+    height:18px !important;
+  }

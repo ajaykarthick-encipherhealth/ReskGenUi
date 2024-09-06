@@ -49,7 +49,12 @@ import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
-import { faBook, faFilter } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBook,
+  faChevronLeft,
+  faChevronRight,
+  faFilter,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   getAccuracy,
   getCoderDetails,
@@ -71,6 +76,7 @@ const Header = ({
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const menuItemsPerPage = 5;
   const msgReply = useSelector((state) => state?.workFlow?.chatReply);
   const accuracy = useSelector((state) => state?.auth?.accuracy);
   const currentUserInfo = useSelector((state) => state?.auth?.userInfo);
@@ -98,6 +104,7 @@ const Header = ({
   const [drawerWidth, setDrawerWidth] = useState(700);
   const [notificationCount, setNotificationCount] = useState(0);
   const notificationSoundRef = useRef(null);
+  const [nextMenuList, setNextMenuList] = useState(false);
   const [screenSize, setScreenSize] = useState({
     width: null,
     height: null,
@@ -495,12 +502,13 @@ const Header = ({
           onClick={() => {
             dispatch(getFilteredList(null));
             dispatch(getPatientID(null));
-            router.push({
-              pathname: `${data?.to}`,
-              query: {...screenSize},
-            },
-            `${data?.to}`
-          );
+            router.push(
+              {
+                pathname: `${data?.to}`,
+                query: { ...screenSize },
+              },
+              `${data?.to}`
+            );
             localStorage.removeItem("patientId");
           }}
         >
@@ -529,6 +537,7 @@ const Header = ({
       }
     }
   }, [router]);
+
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -561,29 +570,44 @@ const Header = ({
             {stateActive != "/reviewer/home" ? (
               <div>
                 <ul className="metismenu header-menu d-flex" id="menu">
+                  {nextMenuList && screenSize?.width <= 1527 && (
+                    <div className="d-flex justify-content-center align-items-center">
+                      <div
+                        className={`d-flex justify-content-center align-items-center cursor-pointer rounded-4 ${styles.addonDiv}`}
+                        onClick={() => {
+                          setNextMenuList(false);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                      </div>
+                    </div>
+                  )}
                   {renderMenuItems(
                     screenSize?.width <= 1527 &&
                       screenSize?.width != null &&
                       screenSize?.height != null
-                      ? menuList?.slice(0, 5)
+                      ? nextMenuList
+                        ? menuList?.slice(5)
+                        : menuList?.slice(0, 5)
                       : menuList
                   )}
 
-                  {screenSize?.width <= 1527 &&
+                  {menuList?.length > 5 &&
+                    !nextMenuList &&
+                    screenSize?.width <= 1527 &&
                     screenSize?.width != null &&
-                    screenSize?.height != null && (
+                    screenSize?.height != null &&
+                    menuList?.length > menuItemsPerPage &&
+                    !nextMenuList && (
                       <div className="d-flex justify-content-center align-items-center">
-                        <Popover
-                          trigger="click"
-                          className="cursor-pointer"
-                          content={renderMenuItems(menuList?.slice(5))}
+                        <div
+                          className={`d-flex justify-content-center align-items-center cursor-pointer rounded-4 ${styles.addonDiv}`}
+                          onClick={() => {
+                            setNextMenuList(true);
+                          }}
                         >
-                          <div
-                            className={`d-flex justify-content-center align-items-enter cursor-pointer rounded-4 ${styles.addonDiv}`}
-                          >
-                            {`+${menuList?.slice(5)?.length}`}
-                          </div>
-                        </Popover>
+                          <FontAwesomeIcon icon={faChevronRight} />
+                        </div>
                       </div>
                     )}
                 </ul>
