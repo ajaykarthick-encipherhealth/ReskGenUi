@@ -1140,7 +1140,7 @@ export const getSectionNameManually = ({
         </label>
       </span>
     );
-    return res.section != "cogent_dos" && sectionMapArr;
+    return res?.section?.toLowerCase() != "cogent_dos" && sectionMapArr;
   });
 };
 export const getProviderNameList = ({ data, captureSectionMatching }) => {
