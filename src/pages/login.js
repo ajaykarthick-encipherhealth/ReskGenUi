@@ -38,7 +38,7 @@ export default function Login() {
 
       return false;
     }
-    if (enteredEmail?.length > 0 && !emailRegex.test(enteredEmail)) {
+    if (enteredEmail?.length > 0) {
       setEmailError({
         email: "Invalid email",
       });
