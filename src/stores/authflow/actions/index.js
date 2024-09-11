@@ -464,7 +464,7 @@ export const updateImage = (url) => async (dispatch) => {
 export const getFilters = (field, username, pageQueue) => async (dispatch) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("userRole");
-  const userRole = role.toUpperCase();
+  const userRole = role?.toUpperCase();
   const url = username
     ? `dbservice/patient/filter/field/list?username=${username}&field=${field}&role=${userRole}`
     : `dbservice/patient/filter/field/list?field=${field}&role=${userRole}&page=${
