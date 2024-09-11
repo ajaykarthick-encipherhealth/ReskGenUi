@@ -38,7 +38,7 @@ export default function Login() {
 
       return false;
     }
-    if (enteredEmail?.length > 0) {
+    if (enteredEmail?.length > 0 && !emailRegex.test(enteredEmail)) {
       setEmailError({
         email: "Invalid email",
       });
@@ -50,8 +50,8 @@ export default function Login() {
   const onLogin = async (e) => {
     e.preventDefault();
     const emailValidation = validateEmail(enteredEmail);
-    const passValidation = getValidatePassword(password, setErrors);
-    if (emailValidation && passValidation) {
+    // const passValidation = getValidatePassword(password, setErrors);
+    if (emailValidation) {
       setErrors({
         email: "",
         password: "",
