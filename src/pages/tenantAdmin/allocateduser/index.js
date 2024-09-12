@@ -117,15 +117,11 @@ const Patient = ({
   }) => {
     const uId = localStorage.getItem("userId");
     const orgId = selectOrgList;
-    let resoureUrl = `page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${
-      startDate ? startDate : ""
-    }&computationEnd=${endDate ? endDate : ""}&isAllocation=${
-      allocate ? allocate : ""
-    }&status=${status}&searchString=${search ? search : ""}&sortdirection=${
-      sort?.sortDir ? sort?.sortDir : ""
-    }&sortfield=${sort?.sortField ? sort?.sortField : ""}&priority=${
-      selectedOption ? selectedOption : ""
-    }&batchCount=${batchCount ? batchCount : ""}`;
+    let resoureUrl = `page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate ? startDate : ""
+      }&computationEnd=${endDate ? endDate : ""}&isAllocation=${allocate ? allocate : ""
+      }&status=${status}&searchString=${search ? search : ""}&sortdirection=${sort?.sortDir ? sort?.sortDir : ""
+      }&sortfield=${sort?.sortField ? sort?.sortField : ""}&priority=${selectedOption ? selectedOption : ""
+      }&batchCount=${batchCount ? batchCount : ""}`;
     allocatedGetList({ url: resoureUrl });
     // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     // if (response?.data) {
@@ -154,13 +150,10 @@ const Patient = ({
     setIsLoading(true);
     const uId = localStorage.getItem("userId");
     const orgId = localStorage.getItem("orgId");
-    let resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${
-      batchCount ? batchCount : reviewerResponse?.response?.totalElements
-    }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
-      sort?.sortDir
-    }&sortfield=${sort?.sortField}&priority=${
-      selectedOption ? selectedOption : ""
-    }&batchCount=${batchCount}`;
+    let resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${batchCount ? batchCount : reviewerResponse?.response?.totalElements
+      }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${sort?.sortDir
+      }&sortfield=${sort?.sortField}&priority=${selectedOption ? selectedOption : ""
+      }&batchCount=${batchCount}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       let result = response?.data?.response?.content;
@@ -194,11 +187,11 @@ const Patient = ({
         const formattedDate =
           index === 1
             ? data &&
-              `${moment(data, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+            `${moment(data, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
             : data &&
-              `${moment(data, "MM-DD-YYYY").format(
-                "YYYY-MM-DD"
-              )}T00:00:00.000Z`;
+            `${moment(data, "MM-DD-YYYY").format(
+              "YYYY-MM-DD"
+            )}T00:00:00.000Z`;
         return formattedDate;
       });
     setStartDate(formattedDates[0]);
@@ -214,7 +207,7 @@ const Patient = ({
       data: l2selectUser,
       pageNoL2Patient: e.page,
       sort: sort,
-      selectedOptions:selectedOptions
+      selectedOptions: selectedOptions
     });
     setTableLoading(true);
   };
@@ -445,15 +438,11 @@ const Patient = ({
       userName: data?.userName,
     };
     setL2selectUser(dataMap);
-    let resoureUrl = `dbservice/l2audit/patients?username=${
-      data?.userName
-    }&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${
-      sort?.sortDir ? sort?.sortDir : "DESC"
-    }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
-      searchString ? searchString : ""
-    }&processedStatus=${
-      selectedOptions ? (selectedOptions === "ALL" ? "" : selectedOptions) : ""
-    }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
+    let resoureUrl = `dbservice/l2audit/patients?username=${data?.userName
+      }&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${sort?.sortDir ? sort?.sortDir : "DESC"
+      }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${searchString ? searchString : ""
+      }&processedStatus=${selectedOptions ? (selectedOptions === "ALL" ? "" : selectedOptions) : ""
+      }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
     getSelectedSupervisorList({ url: resoureUrl });
     setIsPatientList(true);
   };
@@ -461,15 +450,11 @@ const Patient = ({
   const getAllCheckListL2 = async (sort) => {
     setCheckedLoading(true);
 
-    let resoureUrl = `dbservice/l2audit/patients?username=${
-      l2selectUser?.userName
-    }&page=${pageNoL2Patient}&size=${15}&sortdirection=${
-      sort?.sortDir ? sort?.sortDir : "DESC"
-    }&sortfield=${
-      sort?.sortField ? sort?.sortField : "dueDate"
-    }&searchstring=${searchString}&processedStatus=${
-      selectedOptions ? selectedOptions : ""
-    }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
+    let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser?.userName
+      }&page=${pageNoL2Patient}&size=${15}&sortdirection=${sort?.sortDir ? sort?.sortDir : "DESC"
+      }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"
+      }&searchstring=${searchString}&processedStatus=${selectedOptions ? selectedOptions : ""
+      }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
     // let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
@@ -563,20 +548,20 @@ const Patient = ({
                           </div>
                           {(activeTab == 1 ||
                             (!isPatientList && activeTab == 2)) && (
-                            <div className="col-xl-2">
-                              <div>
-                                <Selector
-                                  selectlabel={"Select Organization"}
-                                  setSelectedOption={setSelectedOrgList}
-                                  selectOptions={orgAllList}
-                                  selectDefaultValue={defaultOrgValue}
-                                  setDefaultValue={setDefaultOrgValue}
-                                  // isClose={true}
-                                  setPageNo={setPageNo}
-                                />
+                              <div className="col-xl-2">
+                                <div>
+                                  <Selector
+                                    selectlabel={"Select Organization"}
+                                    setSelectedOption={setSelectedOrgList}
+                                    selectOptions={orgAllList}
+                                    selectDefaultValue={defaultOrgValue}
+                                    setDefaultValue={setDefaultOrgValue}
+                                    // isClose={true}
+                                    setPageNo={setPageNo}
+                                  />
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
 
                           {!isPatientList && activeTab == 1 ? (
                             <>
@@ -609,10 +594,7 @@ const Patient = ({
                                     // isClose={true}
                                     setPageNo={setPageNo}
                                     selectDefaultValue={
-                                      selectedOption && {
-                                        label: selectedOption,
-                                        value: selectedOption,
-                                      }
+                                      selectedOption
                                     }
                                   />
                                 </div>
@@ -732,7 +714,7 @@ const Patient = ({
                                     selectOptions={statusOptions}
                                     defaultSelectValue1={""}
                                     setPageNo={setPageNo}
-                                    // isClose={true}
+                                  // isClose={true}
                                   />
                                 </div>
                               </div>
@@ -767,7 +749,7 @@ const Patient = ({
                                     }}
                                     disabled={
                                       selectedRowsId?.length > 0 ||
-                                      selectedRowsId?.data?.length > 0
+                                        selectedRowsId?.data?.length > 0
                                         ? false
                                         : true
                                     }
