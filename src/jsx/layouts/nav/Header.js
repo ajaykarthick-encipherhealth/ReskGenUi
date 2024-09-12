@@ -495,12 +495,13 @@ const Header = ({
           onClick={() => {
             dispatch(getFilteredList(null));
             dispatch(getPatientID(null));
-            router.push({
-              pathname: `${data?.to}`,
-              query: {...screenSize},
-            },
-            `${data?.to}`
-          );
+            router.push(
+              {
+                pathname: `${data?.to}`,
+                query: { ...screenSize },
+              },
+              `${data?.to}`
+            );
             localStorage.removeItem("patientId");
           }}
         >
@@ -561,15 +562,9 @@ const Header = ({
             {stateActive != "/reviewer/home" ? (
               <div>
                 <ul className="metismenu header-menu d-flex" id="menu">
-                  {renderMenuItems(
-                    screenSize?.width <= 1527 &&
-                      screenSize?.width != null &&
-                      screenSize?.height != null
-                      ? menuList?.slice(0, 5)
-                      : menuList
-                  )}
+                  {renderMenuItems(menuList)}
 
-                  {screenSize?.width <= 1527 &&
+                  {/* {screenSize?.width <= 1527 &&
                     screenSize?.width != null &&
                     screenSize?.height != null && (
                       <div className="d-flex justify-content-center align-items-center">
@@ -585,7 +580,7 @@ const Header = ({
                           </div>
                         </Popover>
                       </div>
-                    )}
+                    )} */}
                 </ul>
               </div>
             ) : null}
