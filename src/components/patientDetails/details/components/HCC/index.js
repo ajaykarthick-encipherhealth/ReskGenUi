@@ -912,13 +912,13 @@ const HccCards = ({
                                       </span>
                                     </Tooltip>
                                   )}
-                                  {data.isRadiology == true && (
+                                  {data?.stateIndicators?.includes("CONFLICT_CONDITION") && (
                                     <Tooltip title="RADIOLOGY">
                                       <span
                                         className={` mt-2 ${visitStyles.radiologyStatus}`}
                                         bg={`  mt-2 bg-bg-eight `}
                                       >
-                                        Radiology
+                                        Conflict Condation
                                       </span>
                                     </Tooltip>
                                   )}
