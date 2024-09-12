@@ -82,7 +82,7 @@ const CodesGraph = ({
           ? resultArrayHCC
           : isCargaps
           ? resultArrayCaregaps
-          : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
+          : [2,2,1],
         type: "line",
         lineStyle: { color: borderColor },
         smooth: true,
@@ -101,7 +101,7 @@ const CodesGraph = ({
       },
       {
         name: "Lab",
-        data: isTwoWaves && [10, 30, 16, 33, 13, 78, 6, 76, 65, 23, 11, 56],
+        data: isTwoWaves && [1,2,1,1,2],
         type: "line",
         lineStyle: { color: borderColor2 },
         smooth: true,

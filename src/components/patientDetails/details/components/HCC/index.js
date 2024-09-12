@@ -912,6 +912,16 @@ const HccCards = ({
                                       </span>
                                     </Tooltip>
                                   )}
+                                  {data.isRadiology == true && (
+                                    <Tooltip title="RADIOLOGY">
+                                      <span
+                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                        bg={`  mt-2 bg-bg-eight `}
+                                      >
+                                        Radiology
+                                      </span>
+                                    </Tooltip>
+                                  )}
                                   {data.isLab == true && (
                                     <Tooltip title="LAB">
                                       <span
@@ -922,6 +932,11 @@ const HccCards = ({
                                       </span>
                                     </Tooltip>
                                   )}
+                                  {data?.stateIndicators?.includes("CRITICAL_CONDITION") &&  <Badge
+                                      className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                    >
+                                      Critical Condation
+                                    </Badge>}
                                 </div>
                               </div>
                             )}
