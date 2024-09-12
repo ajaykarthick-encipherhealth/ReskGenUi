@@ -45,7 +45,7 @@ export const getProviderNameTag = ({
               if (selectedMeatData?.stateIndicator) {
                 getCurrentDiseaseType && getCurrentDiseaseType(false);
                 setLabData && setLabData(selectedMeatData?.fileId);
-                selectedMeatData?.stateIndicator === "LAB"
+                selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
                   ? getLabPDF &&
                     getLabPDF({
                       fileId: selectedMeatData?.fileId,
@@ -164,7 +164,7 @@ export const getProviderNameTag = ({
                           );
   
                           if (selectedMeatData?.stateIndicator) {
-                            selectedMeatData?.stateIndicator === "LAB"
+                            selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
                               ? getLabPDF(
                                   patientId,
                                   "",
@@ -353,7 +353,7 @@ export const getProviderPopoverHyperlink = ({
           if (selectedMeatData?.stateIndicator) {
             getCurrentDiseaseType(false);
             setLabData &&  setLabData(selectedMeatData?.fileId)
-            selectedMeatData?.stateIndicator === "LAB"
+            selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
               ? getLabPDF &&
               getLabPDF({
                 fileId: selectedMeatData?.fileId,

@@ -48,7 +48,7 @@ export const getEncounterDateBackground = ({
             if (selectedMeatData?.stateIndicator) {
               setLabData && setLabData(selectedMeatData?.fileId);
               getCurrentDiseaseType && getCurrentDiseaseType(false);
-              if (selectedMeatData?.stateIndicator === "LAB") {
+              if (selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY") {
                 setSelectedDos && setSelectedDos(res);
                 if (getLabPDF) {
                   getLabPDF({
@@ -125,7 +125,7 @@ export const getEncounterDateBackground = ({
                       );
                       if (selectedMeatData?.stateIndicator) {
                         getCurrentDiseaseType && getCurrentDiseaseType(false);
-                        if (selectedMeatData?.stateIndicator === "LAB") {
+                        if (selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY") {
                           setSelectedDos && setSelectedDos(item);
                           if (getLabPDF) {
                             getLabPDF({
@@ -317,7 +317,7 @@ export const getEncounterDateBackgroundLab = ({
                       );
                       if (selectedMeatData?.stateIndicator) {
                         getCurrentDiseaseType && getCurrentDiseaseType(false);
-                        if (selectedMeatData?.stateIndicator === "LAB") {
+                        if (selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY") {
                           setSelectedDos && setSelectedDos(item);
                           if (getLabPDF) {
                             getLabPDF({
@@ -468,7 +468,7 @@ export const getHeaderHyperlink = (
           if (selectedMeatData?.stateIndicator) {
             getCurrentDiseaseType && getCurrentDiseaseType(false);
             setLabData && setLabData(selectedMeatData?.fileId);
-            selectedMeatData?.stateIndicator === "LAB"
+            selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
               ? getLabPDF &&
                 getLabPDF({
                   fileId: selectedMeatData?.fileId,
@@ -670,11 +670,10 @@ export const getCaptureSectionBackgroundFile = ({
               const selectedMeatData = hyperlinks?.find(
                 (item) => item?.header === res
               );
-
               if (selectedMeatData?.stateIndicator) {
                 setLabData && setLabData(selectedMeatData?.fileId);
                 getCurrentDiseaseType && getCurrentDiseaseType(false);
-                selectedMeatData?.stateIndicator === "LAB"
+                selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
                   ? getLabPDF &&
                     getLabPDF &&
                     getLabPDF({
@@ -787,7 +786,7 @@ export const getCaptureSectionBackgroundFile = ({
                             setLabData && setLabData(selectedMeatData?.fileId);
                             getCurrentDiseaseType &&
                               getCurrentDiseaseType(false);
-                            selectedMeatData?.stateIndicator === "LAB"
+                            selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
                               ? getLabPDF &&
                                 getLabPDF({
                                   fileId: selectedMeatData?.fileId,
@@ -929,7 +928,7 @@ export const getCaptureSectionBackgroundFile = ({
                                 setLabData(selectedMeatData?.fileId);
                               getCurrentDiseaseType &&
                                 getCurrentDiseaseType(false);
-                              selectedMeatData?.stateIndicator === "LAB"
+                              selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
                                 ? getLabPDF &&
                                   getLabPDF({
                                     fileId: selectedMeatData?.fileId,
@@ -1688,7 +1687,7 @@ export const getCaptureSectionBackgroundMeatNew = (
           if (selectedMeatData?.stateIndicator) {
             setLabData && setLabData(selectedMeatData?.fileId);
             getCurrentDiseaseType && getCurrentDiseaseType(false);
-            selectedMeatData?.stateIndicator === "LAB"
+            selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
               ? getLabPDF &&
                 getLabPDF({
                   fileId: selectedMeatData?.fileId,

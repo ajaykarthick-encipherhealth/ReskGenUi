@@ -404,7 +404,8 @@ const VisitData = ({
                           className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
                         >
                           <span className={`${visitStyles.deleted_title_name}`}>
-                            DELETED CODES
+                            {/* DELETED CODES */}
+                            POTENTIAL DIAGNOSIS
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
@@ -674,7 +675,8 @@ const VisitData = ({
                           className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
                         >
                           <span className={`${visitStyles.deleted_title_name}`}>
-                            DELETED CODES
+                            {/* DELETED CODES */}
+                            POTENTIAL DIAGNOSIS
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
