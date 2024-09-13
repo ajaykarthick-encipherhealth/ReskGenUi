@@ -237,9 +237,9 @@ const Export = ({
   const handleSearch = (e) => {
     debouncedSearch(e);
   };
-
+  
   const onFinish = (values) => {
-    const patientIds = rowsLength?.map((item) => item?.patientId);
+    const patientIds = rowsLength
     const editUserAndAccess = userList.reduce((result, { user, role }) => {
       if (Array.isArray(user)) {
         user.forEach((info) => {
@@ -261,7 +261,6 @@ const Export = ({
       fileType: activeButton.toUpperCase(),
       reportName: values.ReportName,
       userAndAccess: editUserAndAccess,
-      patientIds: idList,
     };
     const updatedData = {
       reportName: values?.ReportName,
@@ -270,12 +269,12 @@ const Export = ({
       removedUsers: removedUsers,
     };
     console.log(data);
-    // if (!isSent) {
-    //   dispatch(getExportDetails(data));
-    // } else {
-    //   dispatch(updateSentReport(updatedData));
-    //   dispatch(getActiveTab("Sent"));
-    // }
+    if (!isSent) {
+      dispatch(getExportDetails(data));
+    } else {
+      dispatch(updateSentReport(updatedData));
+      dispatch(getActiveTab("Sent"));
+    }
     form.resetFields();
     setUsersList([]);
     setCheckAll((prev) => {
