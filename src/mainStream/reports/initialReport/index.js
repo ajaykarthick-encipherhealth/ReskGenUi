@@ -61,14 +61,38 @@ const InitialCard = ({
     // setSelectedRows(updatedRows);
     if (activeTab === "Reviewer") {
       if (!selectAll) {
+        const {
+          filter,
+          pagenum,
+          size,
+          startDate,
+          endDate,
+          search,
+          sort,
+          flagsList,
+          allPatientIds,
+        } = apiCall.admin;
         try {
           setIsLoading(true);
-          const res = await reviewerReport({
-            pagenum: 0,
-            size: reportListAll?.response?.totalElements,
-          });
-          const seletedAll = res?.response?.response?.data;
+          const url = `dbservice/patient/coderreport?pageno=${pagenum}&size=${
+            size ? size : 7
+          }&startdate=${startDate}&enddate=${endDate}&status=${
+            filter ? filter : ""
+          }&searchstring=${search ? search : ""}&sortfield=${
+            sort?.sortField ? sort?.sortField : ""
+          }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&allPatientIds=${allPatientIds}&patientIds=${
+            flagsList ? flagsList : ""
+          }
+  `;
+          const res = await fetch(
+            ENDPOINTS.apiEndoint + url,
+            // `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
+            {
+              headers: { Authorization: `Bearer ${await getStorage("token")}` },
+            }
+          ).then((res) => res.json());
 
+          const seletedAll = res?.response?.patientIds;
           setSelectedRows(seletedAll ? seletedAll : []);
           setIsLoading(false);
         } catch (error) {}
@@ -112,7 +136,7 @@ const InitialCard = ({
               headers: { Authorization: `Bearer ${await getStorage("token")}` },
             }
           ).then((res) => res.json());
-          
+
           const seletedAll = res?.response?.patientIds;
           setSelectedRows(seletedAll ? seletedAll : []);
           setIsLoading(false);
@@ -302,9 +326,8 @@ const InitialCard = ({
 
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
-    setSelectAll(reportListAll?.response?.totalElements == selectedRows.length)
+    setSelectAll(reportListAll?.response?.totalElements == selectedRows.length);
   }, [selectedRows]);
-
 
   return (
     <>
@@ -337,7 +360,11 @@ const InitialCard = ({
                               styles.checkAlign +
                               (selectAll ? " " + TableStyle.customChecked : "")
                             }
-                            checked={selectAll && reportListAll?.response?.totalElements == selectedRows.length}
+                            checked={
+                              selectAll &&
+                              reportListAll?.response?.totalElements ==
+                                selectedRows.length
+                            }
                           />
                         </div>
                         <span className={`pl-0 text-start ${styles.pName}`}>
