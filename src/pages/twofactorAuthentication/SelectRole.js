@@ -72,7 +72,6 @@ const SelectRole = () => {
       localStorage.setItem("role", selectedRole);
       setLoading(true);
       router?.push(selectedRoleInfo?.route);
-      console.log(selectedRole);
     }
   };
 
