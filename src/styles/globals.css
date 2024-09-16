@@ -15530,7 +15530,7 @@ input::-webkit-inner-spin-button {
   white-space: nowrap;
   overflow: hidden;
 }
-.ant-picker-panel-layout > div {
+.headerCalender .ant-picker-panel-layout > div {
   width: 100%;
 }
 @media (min-width: 1600px) {
@@ -15539,10 +15539,10 @@ input::-webkit-inner-spin-button {
     left: -20%;
     top: 14%;
   }
-  .ant-picker-dropdown .ant-picker-date-panel {
+  .headerCalender .ant-picker-dropdown .ant-picker-date-panel {
     width: 290px !important;
   }
-  .ant-picker-dropdown-range {
+  .headerCalender .ant-picker-dropdown-range {
     display: flex !important;
     justify-content: end !important;
     align-items: end !important;
@@ -15555,10 +15555,10 @@ input::-webkit-inner-spin-button {
     left: -20%;
     top: 14%;
   }
-  .ant-picker-dropdown .ant-picker-date-panel {
+  .headerCalender .ant-picker-dropdown .ant-picker-date-panel {
     width: 290px !important;
   }
-  .ant-picker-dropdown-range {
+  .headerCalender .ant-picker-dropdown-range {
     display: flex !important;
     justify-content: end !important;
     align-items: end !important;
@@ -15571,10 +15571,10 @@ input::-webkit-inner-spin-button {
     left: -10%;
     top: 14%;
   }
-  .ant-picker-dropdown .ant-picker-date-panel {
+  .headerCalender .ant-picker-dropdown .ant-picker-date-panel {
     width: 288px !important;
   }
 }
-.ant-picker-dropdown .ant-picker-panel-container .ant-picker-panels {
+.headerCalender .ant-picker-dropdown .ant-picker-panel-container .ant-picker-panels {
   width: 100% !important;
 }
