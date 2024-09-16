@@ -20,6 +20,7 @@ import Abort from "../../../../src/images/trackingImages/Abort.png";
 import { actions as workqueueActions } from "../../../stores/reviewer/workqueue";
 import {
   disableFutureDate,
+  disableFutureDates,
   priorityOptions,
   resetPageNumber,
 } from "../../../components/headerFilters/functions";
@@ -102,7 +103,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     HOLD: 0,
   });
   const [selectedPriority, setSelectedPriority] = useState();
-  const [showFilters, setShowFilters] = useState(navigate?.query?true:false);
+  const [showFilters, setShowFilters] = useState(
+    navigate?.query ? true : false
+  );
   const dueStartDate = filteratedDashboardData?.dayDate
     ? moment(filteratedDashboardData?.dayDate)?.format("YYYY-MM-DD") +
       "T00:00:00.000Z"
@@ -622,6 +625,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                           dayjs(defaultEndDate, "MM-DD-YYYY"),
                                         ]
                                       : []
+                                  }
+                                  disabledDate={(current) =>
+                                    disableFutureDates(current)
                                   }
                                 />
                               </div>

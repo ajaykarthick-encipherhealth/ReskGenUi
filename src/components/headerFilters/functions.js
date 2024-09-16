@@ -563,7 +563,8 @@ export const getSelectedDaysCount = (DateRanges) => {
 };
 
 export const disableFutureDate = (current) => {
-  return current && current.isAfter(moment());
+  let customDate = moment().format("MM-DD-YYYY");
+  return current && current > moment(customDate, "MM-DD-YYYY");
 };
 export const disableFutureDates = (current) => {
   const oneYearFromNow = moment().add(1, "year");
@@ -588,10 +589,10 @@ export const handleTogglePasswordVisibility = (
   setShowPassword(!showPassword);
 };
 
-export const getValidatePassword = (password,setErrors) => {
+export const getValidatePassword = (password, setErrors) => {
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#<])[A-Za-z\d@$!%*?&#<]+$/;
-  
+
   // if (password.length === 0) {
   //   setErrors({
   //     password: "Please enter the password",

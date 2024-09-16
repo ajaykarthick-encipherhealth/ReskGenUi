@@ -90,9 +90,8 @@ const HeadTitle = ({
       <Modal
         open={openPicker}
         mask={true}
-        width="34.5%"
+        className="headerCalender"
         closable={false}
-        style={{ left: "-20%", top: "14%" }}
         onOk={() => {
           dispatch(getDateRange(dateValues));
           setOpenPicker(false);
@@ -102,7 +101,9 @@ const HeadTitle = ({
           setSelectedDates([]);
         }}
       >
-        <div className={styles.modalDetails}>
+        <div
+          className={`${styles.modalDetails} d-flex justify-content-between`}
+        >
           <RangePicker
             getPopupContainer={() => document.getElementById("date-popup")}
             popupStyle={{
@@ -125,14 +126,10 @@ const HeadTitle = ({
             disabledDate={(current) => disableFutureDate(current)}
             inputReadOnly={true}
           />
-          <div
-            style={{
-              cursor: "pointer",
-              position: "relative",
-              left: "383px",
-              top: "-40px",
-            }}
-            onClick={() => {
+          {/* <div
+            className="cursor-pointer mx-4"
+            onClick={(e) => {
+              e.stopPropagation();
               let dates;
               if (isAdmin) {
                 dates = {
@@ -154,7 +151,7 @@ const HeadTitle = ({
             }}
           >
             <Button>Refresh</Button>
-          </div>
+          </div> */}
         </div>
         <div id="date-popup" style={{ position: "relative" }} />
       </Modal>

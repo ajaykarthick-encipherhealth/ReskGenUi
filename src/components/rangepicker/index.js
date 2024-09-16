@@ -6,6 +6,7 @@ import {
   handleRnagePicker2,
   resetPageNumber,
 } from "../headerFilters/functions";
+import moment from "moment";
 
 const { RangePicker } = DatePicker;
 const DateRangePicker = ({
@@ -73,6 +74,10 @@ const DateRangePicker = ({
               resetPageNumber(setPageNo)
             }
             // setClear(false);
+          }}
+          disabledDate={(current) => {
+            let customDate = moment().format("MM-DD-YYYY");
+            return current && current > moment(customDate, "MM-DD-YYYY");
           }}
         />
       </div>
