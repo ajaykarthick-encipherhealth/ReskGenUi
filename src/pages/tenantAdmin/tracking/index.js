@@ -711,7 +711,7 @@ const Patient = ({
                           />
                         </div>
                         <div className="col-xl-2">
-                          <DailyTask trackChart={trackChart} />
+                          <DailyTask trackChart={patinetListAll} />
                         </div>
                       </div>
 
