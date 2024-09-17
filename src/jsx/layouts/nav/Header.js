@@ -578,7 +578,7 @@ const Header = ({
                           setNextMenuList(false);
                         }}
                       >
-                        <FontAwesomeIcon icon={faChevronLeft} />
+                        <FontAwesomeIcon icon={faChevronLeft} className="fs-6"/>
                       </div>
                     </div>
                   )}
@@ -606,7 +606,7 @@ const Header = ({
                             setNextMenuList(true);
                           }}
                         >
-                          <FontAwesomeIcon icon={faChevronRight} />
+                          <FontAwesomeIcon icon={faChevronRight} className="fs-6" />
                         </div>
                       </div>
                     )}

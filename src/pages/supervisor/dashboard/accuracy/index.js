@@ -261,11 +261,11 @@ const Accuracy = () => {
             "Average Score: " +
             finalData.averageScore +
             "<br/>" +
-            "Total Correct: " +
-            finalData.totalCorrectCount +
+            "NewlyAddedCodesCount: " +
+            finalData.newlyAddedCodesCount +
             "<br/>" +
-            "Total Wrong: " +
-            finalData.totalWrongCount
+            "IncorrectCodesCount: " +
+            finalData.incorrectCodesCount
           );
         } else {
           return "No data available";

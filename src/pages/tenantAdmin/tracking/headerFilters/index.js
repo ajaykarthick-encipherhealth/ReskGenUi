@@ -234,6 +234,7 @@ const HeaderFilters = ({
                   });
                   setClear(false);
                 }}
+                disabledDate={(current) => disableFutureDate(current)}
               />
             </div>
           </div>
@@ -256,6 +257,7 @@ const HeaderFilters = ({
                   });
                   setClear(false);
                 }}
+                disabledDate={(current) => disableFutureDate(current)}
               />
             </div>
           </div>
@@ -329,6 +331,7 @@ const HeaderFilters = ({
 
                   setClear(false);
                 }}
+                disabledDate={(current) => disableFutureDate(current)}
               />
             </div>
           </div>

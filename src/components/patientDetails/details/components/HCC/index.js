@@ -223,7 +223,7 @@ const HccCards = ({
                                     {data.diagnosisCode}
                                   </span>
 
-                                  {!isDeletedCodes && isDosSelected && (
+                                  {!isDeletedCodes && isDosSelected && data?.isLab != true && data?.isRadiology != true && (
                                     <FontAwesomeIcon
                                       icon={faPen}
                                       style={{ cursor: "pointer" }}

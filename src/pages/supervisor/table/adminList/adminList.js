@@ -5,6 +5,7 @@ import { Empty, Tooltip } from "antd";
 import { CircularProgressbar } from "react-circular-progressbar";
 import TableStyle from "../../../../components/table/table.module.css";
 import { storeUserValues } from "../../../../store/actions/l2Action/userActions";
+import { renderUserPrfoile } from "../../../../components/headerFilters/functions";
 
 const AdminList = ({ userList }) => {
   const router = useRouter();
@@ -36,27 +37,23 @@ const AdminList = ({ userList }) => {
                 style={{ height: "35px" }}
                 onClick={() => gotoUserQueue(item)}
               >
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ height: "47px !important" }}
-                >
-                  <img
-                    src={item?.profileImageUrl}
-                    alt="User Avatar"
-                    width={35}
-                    height={35}
-                    style={{
-                      borderRadius: "50%",
-                      marginRight: "10px",
-                    }}
-                  />
-                  <span>
-                    {item?.firstName
-                      ? item?.firstName + " " + item.lastName
-                      : "---"}
-                  </span>
+                <td className={`${TableStyle.firstTdBorder}`}>
+                  <div className="d-flex">
+                    {renderUserPrfoile(
+                      item?.firstName,
+                      item?.lastName,
+                      item?.profileImageUrl,
+                      "",
+                      "35px",
+                      "35px"
+                    )}
+                    <span className="my-2 mx-2">
+                      {item?.firstName
+                        ? item?.firstName + " " + item.lastName
+                        : "---"}
+                    </span>
+                  </div>
                 </td>
-
                 <td
                   className={TableStyle.childBorder}
                   style={{ height: "40px !important" }}

@@ -759,7 +759,7 @@ const Details = ({
                                     <h6 className="ageDtails">
                                       {getMastData(
                                         patientIdDetailsData?.data?.response
-                                          ?.firstName
+                                          ?.patientName
                                       )}
                                     </h6>
                                     {/* </Tooltip> */}

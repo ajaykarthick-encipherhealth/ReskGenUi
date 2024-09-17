@@ -1,7 +1,9 @@
+import { portalUrl } from "../utils/config";
+
 const ENDPOINTS = {
-  apiEndoint: "https://dev.hcc.encipherhealth.ai/secure/",
+  apiEndoint: portalUrl,
   apiEndointFileUpload: "http://13.68.177.51:8082/ai/",
-  apiEndointFileUploadHcc: "https://dev.hcc.encipherhealth.ai/secure/",
+  apiEndointFileUploadHcc: portalUrl,
   apiLocal: "http://localhost:3003/",
   isShow: false,
   PdfViewer: "https://dev.viewer.cogent.encipherhealth.ai/web/viewer.html",
