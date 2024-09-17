@@ -517,7 +517,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
     setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
-    getAllList(response?.response);
+    // getAllList(response?.response);
   };
   useEffect(()=>{
     dispatch(getFilters("createdBy"));
@@ -634,7 +634,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
                           />
                         </div>
                         <div className="col-xl-2">
-                          <DailyTask trackChart={trackChart} />
+                          <DailyTask trackChart={response?.response?.patientDTOList?.content} />
                         </div>
                       </div>
 

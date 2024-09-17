@@ -443,6 +443,8 @@ export const getPatientDetails = async (
             hyperlinks: res?.hyperlinks,
             suspectType: res.suspectType,
             dateOfServices: res.dateOfServices,
+            isRadiology: getStateIndicators(res.stateIndicators, "RADIOLOGY"),
+            isLab: getStateIndicators(res.stateIndicators, "LAB"),
           });
         } else if (
           res.isShow != false &&
@@ -479,6 +481,8 @@ export const getPatientDetails = async (
             hyperlinks: res?.hyperlinks,
             suspectType: res.suspectType,
             dateOfServices: res.dateOfServices,
+            isRadiology: getStateIndicators(res.stateIndicators, "RADIOLOGY"),
+            isLab: getStateIndicators(res.stateIndicators, "LAB"),
           });
         }
       });
