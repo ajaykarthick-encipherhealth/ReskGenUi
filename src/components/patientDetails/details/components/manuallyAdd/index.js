@@ -1001,16 +1001,16 @@ const ManuallyAdd = ({
     }
   }, [isEditMeat, isEditMeatValue]);
 
-  useEffect(() => {
-    if (isDosSelected) {
-      const selectedDos = [{ label: isDosSelected, value: isDosSelected }]
-      setCapturedSections(selectedDos);
-      setCapturedSectionsM(selectedDos);
-      setCapturedSectionsE(selectedDos);
-      setCapturedSectionsA(selectedDos);
-      setCapturedSectionsT(selectedDos);
-    }
-  }, [isDosSelected]);
+  // useEffect(() => {
+  //   if (isDosSelected) {
+  //     const selectedDos = [{ label: isDosSelected, value: isDosSelected }]
+  //     setCapturedSections(selectedDos);
+  //     setCapturedSectionsM(selectedDos);
+  //     setCapturedSectionsE(selectedDos);
+  //     setCapturedSectionsA(selectedDos);
+  //     setCapturedSectionsT(selectedDos);
+  //   }
+  // }, [isDosSelected]);
 
   return (
     <>

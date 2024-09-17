@@ -60,7 +60,7 @@ const Hcc = ({
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
-      setSelectDosValue();
+      setSelectDosValue('');
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
         if (res) {
@@ -121,7 +121,7 @@ const Hcc = ({
       });
       setDosSummariesList(dosList);
       if (patientDetailsResult?.data?.response?.dateOfService) {
-        setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
+        // setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
         if (isDosSelected) {
           const patientId = localStorage.getItem("patientId");
           const role = localStorage.getItem("role");
