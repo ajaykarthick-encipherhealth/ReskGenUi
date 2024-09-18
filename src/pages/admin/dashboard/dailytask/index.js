@@ -159,7 +159,7 @@ const DailyTask = () => {
     );
     return index === firstIndex;
   });
-
+  console.log(selectedDate,"selectedDate")
   const getUser = async () => {
     try {
       const data = await GetUserCount();
