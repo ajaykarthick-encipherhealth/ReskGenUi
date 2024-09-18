@@ -825,15 +825,6 @@
     overflow: hidden;
     margin-top: 0px;
   }
-
-  .deletedContainers {
-    min-height: 18vh;
-    max-height: 18vh;
-    /* min-height: 30vh;
-    max-height: 30vh; */
-    overflow: hidden;
-    margin-top: 0px;
-  }
   
 }
 
