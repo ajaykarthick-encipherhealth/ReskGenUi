@@ -14,6 +14,7 @@ const TableRisk = ({
   };
 
   return (
+
     <div className={style.card}>
       {!fromPatientDetails && (
         <div
@@ -58,6 +59,7 @@ const TableRisk = ({
               </th>
             </tr>
             {data?.map?.((head, i) => (
+            
               <tr>
                 {i == 0 && head?.esrd?.length > 0 ? (
                   head?.esrd?.map((item) => (
@@ -69,15 +71,7 @@ const TableRisk = ({
                     </th>
                   ))
                 ) : (
-                  <th
-                    style={{
-                      background: "rgb(73 128 207 ",
-                      color: "white",
-                    }}
-                    scope="col"
-                  >
-                    V00
-                  </th>
+                 <></>
                 )}
                 {i == 0 && head?.cmsHcc?.length > 0 ? (
                   head?.cmsHcc?.map((item) => (
@@ -92,15 +86,7 @@ const TableRisk = ({
                     </th>
                   ))
                 ) : (
-                  <th
-                    style={{
-                      background: "rgb(73 128 207 ",
-                      color: "white",
-                    }}
-                    scope="col"
-                  >
-                    V00
-                  </th>
+                <></>
                 )}
                 {i == 0 && head?.rxHcc?.length > 0 ? (
                   head?.rxHcc?.map((item) => (
@@ -115,15 +101,7 @@ const TableRisk = ({
                     </th>
                   ))
                 ) : (
-                  <th
-                    style={{
-                      background: "rgb(73 128 207 ",
-                      color: "white",
-                    }}
-                    scope="col"
-                  >
-                    V00
-                  </th>
+                 <></>
                 )}
               </tr>
             ))}
