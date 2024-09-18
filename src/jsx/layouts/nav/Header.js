@@ -367,7 +367,7 @@ const Header = ({
 
   const titleWithIcons = (
     <div className="d-flex align-items-center justify-content-between">
-      <div className={styles.heading}>CODES</div>
+      <div className={styles.heading}>CodeRoot</div>
       <div className="d-flex gap-3">
         <PlusCircleOutlined
           onClick={() => handleExpand()}
