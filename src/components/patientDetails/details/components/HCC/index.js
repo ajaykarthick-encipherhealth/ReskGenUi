@@ -918,7 +918,7 @@ const HccCards = ({
                                         className={` mt-2 ${visitStyles.radiologyStatus}`}
                                         bg={`  mt-2 bg-bg-eight `}
                                       >
-                                        Conflict Condation
+                                        Conflict
                                       </span>
                                     </Tooltip>
                                   )}
@@ -935,7 +935,7 @@ const HccCards = ({
                                   {data?.stateIndicators?.includes("CRITICAL_CONDITION") &&  <Badge
                                       className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
                                     >
-                                      Critical Condation
+                                      Critical
                                     </Badge>}
                                 </div>
                               </div>
