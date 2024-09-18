@@ -127,9 +127,9 @@ const ReceivedReport = ({
                             )
                           )
                         ) : (
-                          <div className={`col-xl-12 ${styles.emptyCard}`}>
-                            <Empty />
-                          </div>
+                          <div className={styles.card}>
+                          <Empty />
+                        </div>
                         )}
                       </div>
                     </div>
