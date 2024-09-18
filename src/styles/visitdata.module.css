@@ -206,6 +206,41 @@
   font-size: 14px;
 }
 
+.potential_title_card {
+  border-radius: 12px;
+  background: #f7f2cb;
+  margin-bottom: 10px;
+  position: sticky;
+  top: 0;
+  height: 40px;
+  /* z-index: 1; */
+}
+
+.potential_title_name {
+  border-radius: 10px;
+  color: #221c1c;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px !important;
+}
+
+.potential_title_badge {
+  background: #beb531;
+  padding: 10px;
+  border-radius: 12px;
+  width: 45px;
+  text-align: center;
+  color: #fff;
+  color: #fff;
+  font-size: 14px;
+}
+
 .hcc_card {
   border-radius: 12px !important;
   border: 1px solid #e1e1e1 !important;
@@ -785,6 +820,15 @@
   .deletedContainer {
     min-height: 28vh;
     max-height: 28vh;
+    /* min-height: 30vh;
+    max-height: 30vh; */
+    overflow: hidden;
+    margin-top: 0px;
+  }
+
+  .deletedContainers {
+    min-height: 18vh;
+    max-height: 18vh;
     /* min-height: 30vh;
     max-height: 30vh; */
     overflow: hidden;

@@ -411,7 +411,7 @@ const File = ({
                       </div>
                       <div
                         className={visitStyles.suggestedcontainer2}
-                        style={{ height: "34vh" }}
+                        style={{ height: "18vh" }}
                       >
                         <div className={visitStyles.hccStickey_head}>
                           <HccCards
@@ -452,7 +452,71 @@ const File = ({
                   );
                 }}
               </Droppable>
-
+              <Droppable droppableId={"POTENTIAL"} key={"POTENTIAL"}>
+                {(provided) => {
+                  return (
+                    <div
+                      className="timeline"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={{ marginTop: "10px" }}
+                    >
+                      <div
+                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.potential_title_card}`}
+                      >
+                        <span className={`${visitStyles.potential_title_name}`}>
+                          {/* DELETED CODES */}
+                          POTENTIAL DIAGNOSIS
+                        </span>
+                        <div className="d-flex justify-content-center">
+                          <span
+                            className={`${visitStyles.potential_title_badge}`}
+                          >
+                            {deletedHccList.length}
+                          </span>
+                        </div>
+                      </div>
+                      <div className={visitStyles.deletedContainers} style={{ height: "18vh" }}>
+                        <div className={visitStyles.hccStickey_head}>
+                          <HccCards
+                            list={deletedHccList}
+                            hccVersionDetails={hccVersionDetails}
+                            captureSectionMatching={captureSectionMatching}
+                            encounterDateMatching={encounterDateMatching}
+                            meatCriteriaList={deletedMeatList}
+                            onchangeValid={onchangeValid}
+                            getValidHccDetails={getValidHccDetails}
+                            setFormValues={setFormValues}
+                            setIsEditHccForm={setIsEditHccForm}
+                            setFormEditPlace={setFormEditPlace}
+                            okText="Move to Suggested"
+                            cancelText="Move to HCC"
+                            isDeletedCodes={true}
+                            setOpens={setOpens}
+                            setCombiTree={setCombiTree}
+                            setActiveTabHead={setActiveTabHead}
+                            setActiveMeatTitle={setActiveMeatTitle}
+                            setActiveComboTree={setActiveComboTree}
+                            setSearch={setSearch}
+                            setFileLoading={setFileLoading}
+                            setIsModalOpenLab={setIsModalOpenLab}
+                            setIsModalOpenRadiology={setIsModalOpenRadiology}
+                            patientDocumentResult={patientDocumentResult}
+                            setFileModalHeader={setFileModalHeader}
+                            setConfirmNotesModalValid={
+                              setConfirmNotesModalValid
+                            }
+                            setIsValidAction={setIsValidAction}
+                            cardTitle="POTENTIAL"
+                            provided={provided}
+                            remove
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }}
+              </Droppable>
               {/* <div className={visitStyles.deleteFileContainer}> */}
               <Droppable droppableId={"DELETED"} key={"DELETED"}>
                 {(provided) => {
@@ -467,8 +531,8 @@ const File = ({
                         className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
                       >
                         <span className={`${visitStyles.deleted_title_name}`}>
-                          {/* DELETED CODES */}
-                          POTENTIAL DIAGNOSIS
+                          DELETED CODES
+                          {/* POTENTIAL DIAGNOSIS */}
                         </span>
                         <div className="d-flex justify-content-center">
                           <span
@@ -478,7 +542,7 @@ const File = ({
                           </span>
                         </div>
                       </div>
-                      <div className={visitStyles.deletedContainer}>
+                      <div className={visitStyles.deletedContainers} style={{ height: "18vh" }}>
                         <div className={visitStyles.hccStickey_head}>
                           <HccCards
                             list={deletedHccList}
