@@ -96,7 +96,7 @@ const AddMeatQuery = ({
     var patientId = localStorage.getItem("patientId");
     var dataformat = {
       patientId: patientId,
-      diagnosisCode: value.diagnosisCode,
+      diagnosisCode: value.diagnosisCode?.toLowerCase(),
       queryReason: value.queryReason,
       providerName: value.providerName
         ? value.providerName
