@@ -31,6 +31,7 @@ const AddMeatQuery = ({
   getMeatQueryList,
   year,
   isDosSelected = "",
+  getpatientDetailsData
 }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -120,6 +121,7 @@ const AddMeatQuery = ({
         form.resetFields();
         // setMeatQueriedDetailsModal(true);
         getMeatQueryList(patientId, year, isDosSelected);
+        getpatientDetailsData(patientId, year, isDosSelected)
       }
     } else {
       var result = await submitMeatQuery(dataformat);
@@ -134,6 +136,7 @@ const AddMeatQuery = ({
         form.resetFields();
         // setMeatQueriedDetailsModal(true);
         getMeatQueryList(patientId, year, isDosSelected);
+        getpatientDetailsData(patientId, year, isDosSelected)
       }
     }
   };
@@ -504,6 +507,7 @@ const enhancer = connect(
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
+    getpatientDetailsData: detailsActions.patientDetailsAction,
     getMeatQueryList: detailsActions.meatQueryAction,
   }
 );
