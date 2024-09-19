@@ -7,7 +7,7 @@ import { Modal } from "antd";
 import styles from "../styles.module.css";
 import AddMeatQuery from "../../components/addMeatQuery";
 
-const MeatQuery = ({patientDetailsResult,meatQueryDetails}) => {
+const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year }) => {
   const [isMeatQueryModal, setIsMeatQueryModal] = useState(false);
   const [meatQueriedDetailsModal, setMeatQueriedDetailsModal] = useState(false);
   const [selectPreviousCode, setSelectPreviousCode] = useState(null);
@@ -29,7 +29,7 @@ const MeatQuery = ({patientDetailsResult,meatQueryDetails}) => {
   const meatQueriedComments = (value) => {
     setMeatQueryResult(value);
     setMeatQueriedDetailsModal(true);
-  }; 
+  };
 
   const getPreviousData = (code, action) => {
     const result = meatQueryDetails?.data?.response.filter(
@@ -87,7 +87,7 @@ const MeatQuery = ({patientDetailsResult,meatQueryDetails}) => {
         {meatQueryDetails?.data?.response?.length != 0 ? (
           <div className={visitStyles.container}>
             <div className={visitStyles.hccStickey_head}>
-              {meatQueryDetails?.data?.response?.map((item) => (
+              {meatQueryDetails?.data?.response?.filter((res) => res.currentQuery)?.map((item) => (
                 <>
                   {item.isShow ? (
                     <div className={`${visitStyles.meat_details_card}`}>
@@ -137,7 +137,7 @@ const MeatQuery = ({patientDetailsResult,meatQueryDetails}) => {
                         <div className="col-xl-2 d-grid">
                           <span className="meat-name-details">
                             {moment(item.createdAt).format(
-                              "MM-DD-YYYY & HH:MM"
+                              "MM-DD-YYYY & HH:mm"
                             )}
                           </span>
                         </div>
@@ -238,8 +238,15 @@ const MeatQuery = ({patientDetailsResult,meatQueryDetails}) => {
             </div>
           </div>
         ) : null}
-      </div>  
-    <AddMeatQuery queryFormValues={queryFormValues} handleCloseModal={handleCloseModal} isMeatQueryModal={isMeatQueryModal} setIsMeatQueryModal={setIsMeatQueryModal}/>
+      </div>
+      <AddMeatQuery
+        queryFormValues={queryFormValues}
+        handleCloseModal={handleCloseModal}
+        isMeatQueryModal={isMeatQueryModal}
+        setIsMeatQueryModal={setIsMeatQueryModal}
+        isUpdate={true}
+        year={year?.value ? year.value : year}
+      />
 
       <Modal
         title="Meat Queried Details"
@@ -249,9 +256,8 @@ const MeatQuery = ({patientDetailsResult,meatQueryDetails}) => {
         onCancel={handleCloseModal}
         footer={null}
         className="meat-queriedmodal visitdata-modalCentent"
-       
       >
-        <div className="offcanvas-body"  style={{width:"auto"}}>
+        <div className="offcanvas-body" style={{ width: "auto" }}>
           <div className="container-fluid">
             <div className={styles.meatCommentCard}>
               <div className={styles.meatCommentCard2}>
@@ -265,18 +271,23 @@ const MeatQuery = ({patientDetailsResult,meatQueryDetails}) => {
                   </p>
                 </div> */}
                 <div>
-                  <span className={styles.meatQueried_head}>
-                    Dear,
-                  </span>
+                  <span className={styles.meatQueried_head}>Dear,</span>
                   <p className={`${styles.meatQueried_details} m-0 mb-1`}>
-                      <span className="fw-semibold">Providers : </span>{meatQueryResult?.providerNames?.map(item => <span>{item}, </span>)}
-                    </p>  
-                    <p className={`${styles.meatQueried_details} m-0 mb-1`}>
-                    <span className="fw-semibold">DOS : </span>{meatQueryResult?.dateOfServices?.map(item => <span>{item}, </span>)}
-                    </p>  
-                    <p className={`${styles.meatQueried_details} m-0 mb-1`}>
-                    <span className="fw-semibold">Query Comment : </span>{meatQueryResult.queryComment}
-                    </p>                 
+                    <span className="fw-semibold">Providers : </span>
+                    {meatQueryResult?.providerNames?.map((item) => (
+                      <span>{item}, </span>
+                    ))}
+                  </p>
+                  <p className={`${styles.meatQueried_details} m-0 mb-1`}>
+                    <span className="fw-semibold">DOS : </span>
+                    {meatQueryResult?.dateOfServices?.map((item) => (
+                      <span>{item}, </span>
+                    ))}
+                  </p>
+                  <p className={`${styles.meatQueried_details} m-0 mb-1`}>
+                    <span className="fw-semibold">Query Comment : </span>
+                    {meatQueryResult.queryComment}
+                  </p>
                 </div>
               </div>
             </div>
@@ -287,10 +298,8 @@ const MeatQuery = ({patientDetailsResult,meatQueryDetails}) => {
   );
 };
 
-const enhancer = connect(
-  (state) => ({
-    patientDetailsResult :state?.patientDetails?.details?.result,
-    meatQueryDetails :state?.patientDetails?.details?.meatQueryResult,
-  })
-);
+const enhancer = connect((state) => ({
+  patientDetailsResult: state?.patientDetails?.details?.result,
+  meatQueryDetails: state?.patientDetails?.details?.meatQueryResult,
+}));
 export default enhancer(MeatQuery);

@@ -399,13 +399,7 @@ const InitialCard = ({
                 <div>
                   <div className=" col-xl-12 d-flex">
                     <div className={`col-xl-6 ${styles.cardDiv}`}>
-                      {reportListAll?.response?.response?.data?.length === 0 ? (
-                        <div className={`col-xl-6 ${styles.card1}`}>
-                          <div className={` ${styles.emptyCard}`}>
-                            <Empty />
-                          </div>
-                        </div>
-                      ) : (
+                      {reportListAll?.response?.data?.length > 0 ?  (
                         <div className={styles.cardContainer}>
                           {reportListAll?.response?.data?.map((item, id) => (
                             <ContentGroupCard
@@ -445,6 +439,10 @@ const InitialCard = ({
                               loading={isLoading}
                             />
                           ))}
+                        </div>
+                      ) : (
+                        <div className={styles.card}>
+                          <Empty />
                         </div>
                       )}
                     </div>

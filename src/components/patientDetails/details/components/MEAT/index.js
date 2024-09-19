@@ -50,7 +50,7 @@ const MeatCard = ({
   labFile,
   setLabData,
   labData,
-  patientDetailsResult
+  patientDetailsResult,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
@@ -198,7 +198,9 @@ const MeatCard = ({
                         {getEncounterDateBackground({
                           value: item?.encounterDateSplit,
                           encounterDateMatching: encounterDateMatching,
-                          fileDosPageNumberList: patientDetailsResult?.data?.response?.fileDetailDTO?.dosSummaries,
+                          fileDosPageNumberList:
+                            patientDetailsResult?.data?.response?.fileDetailDTO
+                              ?.dosSummaries,
                           setIsModalOpenValidCodes: setIsModalOpen,
                           setSearch: setSearch,
                           setFileModalHeader: setFileModalHeader,
@@ -417,7 +419,7 @@ const MeatCard = ({
                         background: "#edf5ff",
                         height: "100%",
                         width: "100%",
-                        borderRadius: "10px",
+                        borderRadius: "14px",
                       }}
                     >
                       <div className="d-flex">
@@ -483,7 +485,23 @@ const MeatCard = ({
                             />
                           </div>
                         </Tooltip>
-                        {item.isMeatCriteriaPresent === false ? (
+                        {item?.stateIndicators?.includes("QUERIED") ? (
+                          <Tooltip placement="top" title={"Already Suggested"}>
+                         <div
+                         className={visitStyles.add_meat_query}
+                         style={{background: "#edbe4e"}}
+                       >
+                         <span
+                           style={{
+                             fontSize: "11px",
+                             fontWeight: "600",
+                             color: "#716969",
+                           }}
+                         >
+                           Q
+                         </span>
+                       </div></Tooltip>
+                        ) : item.isMeatCriteriaPresent === false ? (
                           <div
                             onClick={() => addMeatQuery(item, "Add")}
                             className={visitStyles.add_meat_query}

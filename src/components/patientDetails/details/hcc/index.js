@@ -582,7 +582,7 @@ const Hcc = ({
                 <RafScore />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={6}>
-                <MeatQuery />
+                <MeatQuery year={year}/>
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>

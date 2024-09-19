@@ -346,7 +346,7 @@ const Details = ({
       if (patientId == result.patientId) {
         setIsSpinnerLoading(false);
       }
-      getMeatQueryList(patientId, result?.processedYear);
+      getMeatQueryList(patientId, result?.processedYear, selectDosValue|| "");
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.hccDiseases != null) {

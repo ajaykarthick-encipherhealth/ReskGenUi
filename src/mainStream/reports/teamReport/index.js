@@ -72,13 +72,12 @@ const TeamReport = ({
           setIsLoading(true);
           const res = await fetch(
             ENDPOINTS.apiEndoint +
-              `dbservice/patient/auditor/assinedreport?pageno=0&size=${ReportPatientDetails?.response?.response?.totalElements}&orgid=${orgId}`,
+              `dbservice/patient/auditor/assinedreport?pageno=0&size=${ReportPatientDetails?.response?.response?.totalElements}&orgid=${orgId}&allPatientIds=true`,
             {
               headers: { Authorization: `Bearer ${await getStorage("token")}` },
             }
           ).then((res) => res.json());
-          const seletedAll = res?.response?.response?.data;
-
+          const seletedAll = res?.response?.patientIds;
           setSelectedRows(seletedAll ? seletedAll : []);
           setIsLoading(false);
         } catch (error) {}
@@ -94,12 +93,12 @@ const TeamReport = ({
           setIsLoading(true);
           const res = await fetch(
             ENDPOINTS.apiEndoint +
-              `dbservice/patient/auditorreport?pageno=0&size=${ReportPatientDetails?.response?.response?.totalElements}&orgid=${orgId}`,
+              `dbservice/patient/auditorreport?pageno=0&size=${ReportPatientDetails?.response?.response?.totalElements}&orgid=${orgId}&allPatientIds=true`,
             {
               headers: { Authorization: `Bearer ${await getStorage("token")}` },
             }
           ).then((res) => res.json());
-          const seletedAll = res?.response?.response?.data;
+          const seletedAll = res?.response?.patientIds;
 
           setSelectedRows(seletedAll ? seletedAll : []);
           setIsLoading(false);

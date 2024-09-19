@@ -140,7 +140,7 @@ export async function meatQuery(patientId, year, dos) {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/meatquery/getMeatQueryList?processedYear=${year}&patientId=${patientId}`,
+    `dbservice/meatquery/getMeatQueryList?processedYear=${year}&patientId=${patientId}&dateOfService=${dos}`,
     options
   );
   return data;

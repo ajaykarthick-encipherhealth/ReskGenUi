@@ -156,7 +156,7 @@ const Meat = ({
     var data = {
       diagnosisCode: value.diagnosisCode,
     };
-    setQueryFormValues(data);
+    setQueryFormValues(value);
     setIsMeatQueryModal(true);
   };
 
@@ -886,6 +886,7 @@ const Meat = ({
         handleCloseModal={handleCloseModal}
         isMeatQueryModal={isMeatQueryModal}
         setIsMeatQueryModal={setIsMeatQueryModal}
+        year={year?.value ? year.value : year}
       />
       <ModelIndex
         title={selectDiseasesName}
