@@ -7,6 +7,7 @@ import {
   faArrowLeft,
   faPlus,
   faAngleDown,
+  faAngleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
@@ -230,11 +231,11 @@ const File = ({
   }, [patientDetailsResult]);
 
   const handleShowList = (value) => {
-    if (showList.includes(value) && showList.length > 1) {
+    if (showList.includes(value)) {
       setShowList((prev) => {
-        return prev.filter((item) => item != value)
+        return prev.filter((item) => item != value);
       });
-    } else if (!showList.includes(value) ){
+    } else if (!showList.includes(value)) {
       setShowList((prev) => [...prev, value]);
     }
   };
@@ -413,10 +414,19 @@ const File = ({
                       ref={provided.innerRef}
                     >
                       <div
-                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
-                        onClick={()=>handleShowList('care')}
+                        className={`valid-text d-flex justify-content-sm-between cr-pointer ${visitStyles.suggested_title_card}`}
+                        onClick={() => handleShowList("care")}
                       >
                         <span className={`${visitStyles.suggested_title_name}`}>
+                          <span className="mx-1">
+                            <FontAwesomeIcon
+                              icon={
+                                showList.includes("care")
+                                  ? faAngleDown
+                                  : faAngleRight
+                              }
+                            />
+                          </span>
                           CARE GAP
                         </span>
                         <div className="d-flex justify-content-center">
@@ -427,46 +437,54 @@ const File = ({
                           </span>
                         </div>
                       </div>
-                      {showList.includes('care') && 
-                      <div
-                        className={visitStyles.suggestedcontainer2}
-                        style={{ height: showList.length == 1 ? "55vh" : showList.length == 2 ? "27vh": "18vh" }}
-                      >
-                        <div className={visitStyles.hccStickey_head}>
-                          <HccCards
-                            list={suggestedHccList}
-                            hccVersionDetails={hccVersionDetails}
-                            captureSectionMatching={captureSectionMatching}
-                            encounterDateMatching={encounterDateMatching}
-                            meatCriteriaList={allMeatList}
-                            onchangeValid={onchangeValid}
-                            getValidHccDetails={getValidHccDetails}
-                            setFormValues={setFormValues}
-                            setIsEditHccForm={setIsEditHccForm}
-                            setFormEditPlace={setFormEditPlace}
-                            okText={"Move to Deleted"}
-                            cancelText={"Move to HCC"}
-                            editFormPlace={"SUGGESTED_DISEASE"}
-                            setOpens={setOpens}
-                            setCombiTree={setCombiTree}
-                            setActiveTabHead={setActiveTabHead}
-                            setActiveMeatTitle={setActiveMeatTitle}
-                            setActiveComboTree={setActiveComboTree}
-                            setSearch={setSearch}
-                            setFileLoading={setFileLoading}
-                            setIsModalOpenLab={setIsModalOpenLab}
-                            setIsModalOpenRadiology={setIsModalOpenRadiology}
-                            patientDocumentResult={patientDocumentResult}
-                            setFileModalHeader={setFileModalHeader}
-                            setConfirmNotesModalValid={
-                              setConfirmNotesModalValid
-                            }
-                            setIsValidAction={setIsValidAction}
-                            cardTitle="SUGGESTED"
-                            provided={provided}
-                          />
+                      {showList.includes("care") && (
+                        <div
+                          className={visitStyles.suggestedcontainer2}
+                          style={{
+                            height:
+                              showList.length == 1
+                                ? "58vh"
+                                : showList.length == 2
+                                ? "27vh"
+                                : "18vh",
+                          }}
+                        >
+                          <div className={visitStyles.hccStickey_head}>
+                            <HccCards
+                              list={suggestedHccList}
+                              hccVersionDetails={hccVersionDetails}
+                              captureSectionMatching={captureSectionMatching}
+                              encounterDateMatching={encounterDateMatching}
+                              meatCriteriaList={allMeatList}
+                              onchangeValid={onchangeValid}
+                              getValidHccDetails={getValidHccDetails}
+                              setFormValues={setFormValues}
+                              setIsEditHccForm={setIsEditHccForm}
+                              setFormEditPlace={setFormEditPlace}
+                              okText={"Move to Deleted"}
+                              cancelText={"Move to HCC"}
+                              editFormPlace={"SUGGESTED_DISEASE"}
+                              setOpens={setOpens}
+                              setCombiTree={setCombiTree}
+                              setActiveTabHead={setActiveTabHead}
+                              setActiveMeatTitle={setActiveMeatTitle}
+                              setActiveComboTree={setActiveComboTree}
+                              setSearch={setSearch}
+                              setFileLoading={setFileLoading}
+                              setIsModalOpenLab={setIsModalOpenLab}
+                              setIsModalOpenRadiology={setIsModalOpenRadiology}
+                              patientDocumentResult={patientDocumentResult}
+                              setFileModalHeader={setFileModalHeader}
+                              setConfirmNotesModalValid={
+                                setConfirmNotesModalValid
+                              }
+                              setIsValidAction={setIsValidAction}
+                              cardTitle="SUGGESTED"
+                              provided={provided}
+                            />
+                          </div>
                         </div>
-                      </div> }
+                      )}
                     </div>
                   );
                 }}
@@ -481,11 +499,19 @@ const File = ({
                       style={{ marginTop: "10px" }}
                     >
                       <div
-                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.potential_title_card}`}
-                        onClick={()=>handleShowList('potential')}
+                        className={`valid-text d-flex justify-content-sm-between cr-pointer ${visitStyles.potential_title_card}`}
+                        onClick={() => handleShowList("potential")}
                       >
                         <span className={`${visitStyles.potential_title_name}`}>
-                          {/* DELETED CODES */}
+                        <span className="mx-1">
+                            <FontAwesomeIcon
+                              icon={
+                                showList.includes("potential")
+                                  ? faAngleDown
+                                  : faAngleRight
+                              }
+                            />
+                          </span>
                           POTENTIAL DIAGNOSIS
                         </span>
                         <div className="d-flex justify-content-center">
@@ -496,47 +522,55 @@ const File = ({
                           </span>
                         </div>
                       </div>
-                      {showList.includes('potential') && 
-                      <div
-                        className={visitStyles.deletedContainers}
-                        style={{ height: showList.length == 1 ? "55vh" : showList.length == 2 ? "27vh": "18vh" }}
-                      >
-                        <div className={visitStyles.hccStickey_head}>
-                          <HccCards
-                            list={deletedHccList}
-                            hccVersionDetails={hccVersionDetails}
-                            captureSectionMatching={captureSectionMatching}
-                            encounterDateMatching={encounterDateMatching}
-                            meatCriteriaList={deletedMeatList}
-                            onchangeValid={onchangeValid}
-                            getValidHccDetails={getValidHccDetails}
-                            setFormValues={setFormValues}
-                            setIsEditHccForm={setIsEditHccForm}
-                            setFormEditPlace={setFormEditPlace}
-                            okText="Move to Suggested"
-                            cancelText="Move to HCC"
-                            isDeletedCodes={true}
-                            setOpens={setOpens}
-                            setCombiTree={setCombiTree}
-                            setActiveTabHead={setActiveTabHead}
-                            setActiveMeatTitle={setActiveMeatTitle}
-                            setActiveComboTree={setActiveComboTree}
-                            setSearch={setSearch}
-                            setFileLoading={setFileLoading}
-                            setIsModalOpenLab={setIsModalOpenLab}
-                            setIsModalOpenRadiology={setIsModalOpenRadiology}
-                            patientDocumentResult={patientDocumentResult}
-                            setFileModalHeader={setFileModalHeader}
-                            setConfirmNotesModalValid={
-                              setConfirmNotesModalValid
-                            }
-                            setIsValidAction={setIsValidAction}
-                            cardTitle="POTENTIAL"
-                            provided={provided}
-                            remove
-                          />
+                      {showList.includes("potential") && (
+                        <div
+                          className={visitStyles.deletedContainers}
+                          style={{
+                            height:
+                              showList.length == 1
+                                ? "55vh"
+                                : showList.length == 2
+                                ? "27vh"
+                                : "18vh",
+                          }}
+                        >
+                          <div className={visitStyles.hccStickey_head}>
+                            <HccCards
+                              list={deletedHccList}
+                              hccVersionDetails={hccVersionDetails}
+                              captureSectionMatching={captureSectionMatching}
+                              encounterDateMatching={encounterDateMatching}
+                              meatCriteriaList={deletedMeatList}
+                              onchangeValid={onchangeValid}
+                              getValidHccDetails={getValidHccDetails}
+                              setFormValues={setFormValues}
+                              setIsEditHccForm={setIsEditHccForm}
+                              setFormEditPlace={setFormEditPlace}
+                              okText="Move to Suggested"
+                              cancelText="Move to HCC"
+                              isDeletedCodes={true}
+                              setOpens={setOpens}
+                              setCombiTree={setCombiTree}
+                              setActiveTabHead={setActiveTabHead}
+                              setActiveMeatTitle={setActiveMeatTitle}
+                              setActiveComboTree={setActiveComboTree}
+                              setSearch={setSearch}
+                              setFileLoading={setFileLoading}
+                              setIsModalOpenLab={setIsModalOpenLab}
+                              setIsModalOpenRadiology={setIsModalOpenRadiology}
+                              patientDocumentResult={patientDocumentResult}
+                              setFileModalHeader={setFileModalHeader}
+                              setConfirmNotesModalValid={
+                                setConfirmNotesModalValid
+                              }
+                              setIsValidAction={setIsValidAction}
+                              cardTitle="POTENTIAL"
+                              provided={provided}
+                              remove
+                            />
+                          </div>
                         </div>
-                      </div>}
+                      )}
                     </div>
                   );
                 }}
@@ -551,12 +585,20 @@ const File = ({
                       style={{ marginTop: "10px" }}
                     >
                       <div
-                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
-                        onClick={()=>handleShowList('deleted')}
+                        className={`valid-text d-flex justify-content-sm-between cr-pointer ${visitStyles.deleted_title_card}`}
+                        onClick={() => handleShowList("deleted")}
                       >
                         <span className={`${visitStyles.deleted_title_name}`}>
+                        <span className="mx-1">
+                            <FontAwesomeIcon
+                              icon={
+                                showList.includes("deleted")
+                                  ? faAngleDown
+                                  : faAngleRight
+                              }
+                            />
+                          </span>
                           DELETED CODES
-                          {/* POTENTIAL DIAGNOSIS */}
                         </span>
                         <div className="d-flex justify-content-center">
                           <span
@@ -566,47 +608,55 @@ const File = ({
                           </span>
                         </div>
                       </div>
-                      {showList.includes('deleted') && 
-                      <div
-                        className={visitStyles.deletedContainers}
-                        style={{ height: showList.length == 1 ? "55vh" : showList.length == 2 ? "27vh": "18vh" }}
-                      >
-                        <div className={visitStyles.hccStickey_head}>
-                          <HccCards
-                            list={deletedHccList}
-                            hccVersionDetails={hccVersionDetails}
-                            captureSectionMatching={captureSectionMatching}
-                            encounterDateMatching={encounterDateMatching}
-                            meatCriteriaList={deletedMeatList}
-                            onchangeValid={onchangeValid}
-                            getValidHccDetails={getValidHccDetails}
-                            setFormValues={setFormValues}
-                            setIsEditHccForm={setIsEditHccForm}
-                            setFormEditPlace={setFormEditPlace}
-                            okText="Move to Suggested"
-                            cancelText="Move to HCC"
-                            isDeletedCodes={true}
-                            setOpens={setOpens}
-                            setCombiTree={setCombiTree}
-                            setActiveTabHead={setActiveTabHead}
-                            setActiveMeatTitle={setActiveMeatTitle}
-                            setActiveComboTree={setActiveComboTree}
-                            setSearch={setSearch}
-                            setFileLoading={setFileLoading}
-                            setIsModalOpenLab={setIsModalOpenLab}
-                            setIsModalOpenRadiology={setIsModalOpenRadiology}
-                            patientDocumentResult={patientDocumentResult}
-                            setFileModalHeader={setFileModalHeader}
-                            setConfirmNotesModalValid={
-                              setConfirmNotesModalValid
-                            }
-                            setIsValidAction={setIsValidAction}
-                            cardTitle="DELETED"
-                            provided={provided}
-                            remove
-                          />
+                      {showList.includes("deleted") && (
+                        <div
+                          className={visitStyles.deletedContainers}
+                          style={{
+                            height:
+                              showList.length == 1
+                                ? "55vh"
+                                : showList.length == 2
+                                ? "27vh"
+                                : "18vh",
+                          }}
+                        >
+                          <div className={visitStyles.hccStickey_head}>
+                            <HccCards
+                              list={deletedHccList}
+                              hccVersionDetails={hccVersionDetails}
+                              captureSectionMatching={captureSectionMatching}
+                              encounterDateMatching={encounterDateMatching}
+                              meatCriteriaList={deletedMeatList}
+                              onchangeValid={onchangeValid}
+                              getValidHccDetails={getValidHccDetails}
+                              setFormValues={setFormValues}
+                              setIsEditHccForm={setIsEditHccForm}
+                              setFormEditPlace={setFormEditPlace}
+                              okText="Move to Suggested"
+                              cancelText="Move to HCC"
+                              isDeletedCodes={true}
+                              setOpens={setOpens}
+                              setCombiTree={setCombiTree}
+                              setActiveTabHead={setActiveTabHead}
+                              setActiveMeatTitle={setActiveMeatTitle}
+                              setActiveComboTree={setActiveComboTree}
+                              setSearch={setSearch}
+                              setFileLoading={setFileLoading}
+                              setIsModalOpenLab={setIsModalOpenLab}
+                              setIsModalOpenRadiology={setIsModalOpenRadiology}
+                              patientDocumentResult={patientDocumentResult}
+                              setFileModalHeader={setFileModalHeader}
+                              setConfirmNotesModalValid={
+                                setConfirmNotesModalValid
+                              }
+                              setIsValidAction={setIsValidAction}
+                              cardTitle="DELETED"
+                              provided={provided}
+                              remove
+                            />
+                          </div>
                         </div>
-                      </div>}
+                      )}
                     </div>
                   );
                 }}
