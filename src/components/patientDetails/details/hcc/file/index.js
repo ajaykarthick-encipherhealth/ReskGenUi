@@ -536,7 +536,7 @@ const File = ({
                         >
                           <div className={visitStyles.hccStickey_head}>
                             <HccCards
-                              list={deletedHccList}
+                              list={[]}
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
