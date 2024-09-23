@@ -31,6 +31,7 @@ const RoleList = [
   { value: "ADMIN", label: "ADMIN" },
   { value: "REVIEWER", label: "REVIEWER" },
   { value: "SUPERVISOR", label: "SUPERVISOR" },
+  { value: "TENANT_ADMIN", label: "TENANT ADMIN" },
 ];
 
 const intialValues = {
