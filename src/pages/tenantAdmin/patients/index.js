@@ -628,7 +628,7 @@ const Patient = ({
                             searchlabel="Search By Patient ID / Name"
                             search={search}
                             // select status
-                            selectlabel="Status"
+                            selectlabel="Select Status"
                             isSelector={true}
                             setSelectedOption={SetSelectedOption}
                             selectOptions={statusOptions}
