@@ -60,6 +60,7 @@ const Reports = ({
   supervisorReportDetails,
   teamReport,
   auditeReportLoading,
+  AdminReportDetails,
   tab,
 }) => {
   const dispatch = useDispatch();
@@ -447,7 +448,6 @@ const Reports = ({
       : activeTab === "Audit"
       ? setTeamPageNo
       : setPageNo;
-
   return (
     <div>
       <Header />
