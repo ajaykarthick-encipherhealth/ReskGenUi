@@ -110,9 +110,12 @@ export const HoldStatus = async (router) => {
 
 export const ChatBot = async (msg) => {
   const token = localStorage.getItem("token");
+  var data = {
+    input: msg,
+  };
   try {
     const response = await axios.post(
-      `${ENDPOINTS?.apiEndoint}aiservice/ai/chat?input=${msg}`,
+      `${ENDPOINTS?.apiEndoint}aiservice/ai/chat`,
       {},
       {
         headers: {
