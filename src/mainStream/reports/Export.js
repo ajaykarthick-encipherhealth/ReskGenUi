@@ -152,6 +152,24 @@ export const checkBoxData = [
     heading: "HCC Page Number",
     checked: false,
   },
+  {
+    id: 24,
+    title: "RISK ADJUSTMENT",
+    heading: "Risk Adjustment",
+    checked: false,
+  },
+  {
+    id: 25,
+    title: "PAGE NUMBERS",
+    heading: "Page Numbers",
+    checked: false,
+  },
+  {
+    id: 26,
+    title: "FLAG",
+    heading: "Flag",
+    checked: false,
+  },
 ];
 const Export = ({
   isModalVisible,
