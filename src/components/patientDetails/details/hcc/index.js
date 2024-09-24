@@ -60,55 +60,58 @@ const Hcc = ({
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
-      setSelectDosValue('');
+      setSelectDosValue("");
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
         if (res) {
           var dosLable = (
             <>
               <div className="d-flex justify-content-between">
+                <div>
+                  <span>
+                    {res?.stateIndicators?.includes("CHART") && (
+                      <span
+                        className="p-1 rounded-2 mx-1"
+                        style={{
+                          background: "#87d068",
+                          color: "#fff",
+                          fontSize: "10px",
+                        }}
+                      >
+                        C
+                      </span>
+                    )}
+                    {res?.stateIndicators?.includes("LAB") && (
+                      <span
+                        className="p-1 rounded-2 mx-1 me-2"
+                        style={{
+                          background: "#108ee9",
+                          color: "#fff",
+                          fontSize: "10px",
+                        }}
+                      >
+                        L
+                      </span>
+                    )}
+                    {res?.stateIndicators?.includes("RADIOLOGY") && (
+                      <span
+                        className="p-1 rounded-2 mx-1"
+                        style={{
+                          background: "#f50",
+                          color: "#fff",
+                          fontSize: "10px",
+                        }}
+                      >
+                        R
+                      </span>
+                    )}
+                  </span>
+
+                  <span className={styles.dosLable}>
+                    {moment(res.dateOfService).format("MM-DD-YYYY")}
+                  </span>
+                </div>
                 {getStatusIcon(res.processedStatus)}
-                <span className={styles.dosLable}>
-                  {moment(res.dateOfService).format("MM-DD-YYYY")}
-                </span>
-                <span>
-                  {res?.stateIndicators?.includes("CHART") && (
-                    <span
-                      className="p-1 rounded-2 mx-1"
-                      style={{
-                        background: "#87d068",
-                        color: "#fff",
-                        fontSize: "10px",
-                      }}
-                    >
-                      C
-                    </span>
-                  )}
-                  {res?.stateIndicators?.includes("LAB") && (
-                    <span
-                      className="p-1 rounded-2 mx-1"
-                      style={{
-                        background: "#108ee9",
-                        color: "#fff",
-                        fontSize: "10px",
-                      }}
-                    >
-                      L
-                    </span>
-                  )}
-                  {res?.stateIndicators?.includes("RADIOLOGY") && (
-                    <span
-                      className="p-1 rounded-2 mx-1"
-                      style={{
-                        background: "#f50",
-                        color: "#fff",
-                        fontSize: "10px",
-                      }}
-                    >
-                      R
-                    </span>
-                  )}
-                </span>
               </div>
             </>
           );
@@ -582,7 +585,7 @@ const Hcc = ({
                 <RafScore />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={6}>
-                <MeatQuery year={year}/>
+                <MeatQuery year={year} />
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>
