@@ -39,7 +39,6 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
       testValue: item.noteText,
     };
   });
-  console.log(holdStatusData,"holdStatusData")
   const TableData = (
     <table className={styles.classTable}>
       <thead className={styles.tableHead}>
