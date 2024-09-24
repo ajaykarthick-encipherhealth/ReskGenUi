@@ -25,7 +25,7 @@ import {
   MinusCircleOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
-
+import CodeRoot from "../../../images/menu/coderootv4.png";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES, SVGICON } from "../../constant/theme";
 import {
@@ -592,7 +592,15 @@ const Header = ({
                       <div className="header-info2 d-flex align-items-center">
                         <div className={styles.codify}>
                           {/* <div>{SVGICON.codify}</div> */}
-                          <FontAwesomeIcon onClick={showDrawer} icon={faBook} />
+                          <Tooltip placement="bottom" title={"CodeRoot"}>
+                            <img
+                              src={CodeRoot.src}
+                              width={"35px"}
+                              height={"27px"}
+                              onClick={showDrawer}
+                            />
+                          </Tooltip>
+                          {/* <FontAwesomeIcon onClick={showDrawer} icon={faBook} /> */}
                         </div>
 
                         <Drawer
@@ -666,7 +674,7 @@ const Header = ({
                                 marginTop: "8px",
                                 fontWeight: "700",
                                 marginRight: "10px",
-                                color: "#241572",
+                                color: "#04306F",
                                 fontSize: "30px",
                               }}
                             />
@@ -677,8 +685,8 @@ const Header = ({
                             className="chatheaderIcon"
                             onClick={() => gotoChat()}
                           >
-                            <div style={{ color: "#04306f" }}>
-                              <div style={{ color: "#04306f" }}>
+                            <div style={{ color: "#04306F" }}>
+                              <div style={{ color: "#04306F" }}>
                                 <FontAwesomeIcon
                                   icon={faMessage}
                                   className={styles.bellIcon}
@@ -688,6 +696,7 @@ const Header = ({
                                     marginTop: "8px",
                                     fontWeight: "700",
                                     marginRight: "10px",
+                                    color: "#04306F",
                                   }}
                                 />
                               </div>
@@ -698,11 +707,12 @@ const Header = ({
                           className="notificationIcon"
                           onClick={() => notificationDrawer()}
                         >
-                          <Badge count={notificationCount} color="#04306f">
-                            <div style={{ color: "#04306f" }}>
+                          <Badge count={notificationCount} color="#04306F">
+                            <div style={{ color: "#04306F" }}>
                               <FontAwesomeIcon
                                 icon={faBell}
                                 className={`fa-regular ${styles.bellIcon}`}
+                                styles={{ color: "#04306F" }}
                               />
                             </div>
                           </Badge>
