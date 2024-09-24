@@ -43,7 +43,10 @@ const Flags = ({ reportListAll, styles }) => {
               </div>
               <Popover
                 content={() => (
-                  <div>
+                  <div style={{
+                    maxHeight: "200px",
+                    overflow: "scroll"
+                  }}>
                     {flagItem.patientIds.map((item) => (
                       <label className="d-block">{item}</label>
                     ))}
