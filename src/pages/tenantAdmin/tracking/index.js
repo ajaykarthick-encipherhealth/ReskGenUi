@@ -711,7 +711,7 @@ const Patient = ({
                           />
                         </div>
                         <div className="col-xl-2">
-                          <DailyTask trackChart={patinetListAll} />
+                          <DailyTask trackChart={trackingList?.data?.response?.processStatusCount} />
                         </div>
                       </div>
 

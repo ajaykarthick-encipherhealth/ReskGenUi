@@ -78,7 +78,7 @@ const DailyTask = ({ trackChart }) => {
           label: {
             show: true,
             position: "center",
-            formatter: `{b|${trackChart?.length}}`,
+            formatter: `{b|${pending + hold + decline + completed}}`,
             backgroundColor: "transparent",
 
             rich: {
@@ -95,7 +95,7 @@ const DailyTask = ({ trackChart }) => {
           },
           data: [
             {
-              value: trackChart?.length,
+              value: pending + hold + decline + completed,
               name: "Allocated",
               itemStyle: {
                 color: "#fff",
@@ -111,7 +111,7 @@ const DailyTask = ({ trackChart }) => {
     <>
       {/* <HeadTitle header="" /> */}
       <div className={styles.card2}>
-        <Card borderRadius="28px" style={{ display: "flex" }}>
+        <div className="p-1 rounded" style={{ background: "#fff",maxHeight: "150px" }}>
           <Col span={22}>
             <Row style={{ display: "flex", justifyContent: "space-between" }}>
               <Col span={22} className={styles.sliderdiv}>
@@ -121,18 +121,10 @@ const DailyTask = ({ trackChart }) => {
                       <ReactECharts
                         option={getChartOption(
                           trackChart,
-                          trackChart?.filter(
-                            (item) => item?.processedStatus === "PENDING"
-                          )?.length,
-                          trackChart?.filter(
-                            (item) => item?.processedStatus === "HOLD"
-                          )?.length,
-                          trackChart?.filter(
-                            (item) => item?.processedStatus === "DECLINED"
-                          )?.length,
-                          trackChart?.filter(
-                            (item) => item?.processedStatus === "COMPLETED"
-                          )?.length
+                          trackChart?.PENDING,
+                          trackChart?.HOLD,
+                          trackChart?.DECLINED,
+                          trackChart?.COMPLETED
                         )}
                         style={{ width: "300px", height: "200px" }}
                       />
@@ -171,7 +163,7 @@ const DailyTask = ({ trackChart }) => {
               </Col>
             </Row>
           </Col>
-        </Card>
+        </div>
       </div>
     </>
   );
