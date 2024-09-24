@@ -229,7 +229,7 @@ const Patient = ({
     setSelectedRowsId([]);
     setSelectAllChecked(false);
     setSelectAllCheckedL2(false);
-    setSelectedOption("");
+    setSelectedOption([]);
     setSelectedOptions("");
     if (number == 2) {
       getAuditL2List(pageNoL2User, "");
