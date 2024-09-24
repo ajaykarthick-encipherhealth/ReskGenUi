@@ -34,6 +34,7 @@ import {
   handleFilePost,
   addUser,
 } from "../../services/ChatService";
+import { portalUrl2 } from "../../utils/config";
 
 const ChatCommunication = ({ openMsg, offMsg }) => {
   const messagesEndRef = useRef(null);
@@ -96,7 +97,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   const connect = () => {
     const token = localStorage.getItem("token");
     let Sock = new SockJS(
-      `https://hcc.encipherhealth.com/chatservice/chatservice/ws?token=${token}`
+      `${portalUrl2}chatservice/chatservice/ws?token=${token}`
     );
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
