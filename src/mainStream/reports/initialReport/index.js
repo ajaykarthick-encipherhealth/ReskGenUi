@@ -348,7 +348,6 @@ const InitialCard = ({
                   paddingBottom: "10px",
                 }}
               >
-                {" "}
                 {
                   reportListAll?.response?.data?.length > 0 && (
                     // (isLoading ? (
@@ -413,7 +412,7 @@ const InitialCard = ({
                                 content={reportListAll?.response?.data}
                                 key={item?.id}
                                 item={item}
-                                flag={item?.patientFlagResponseDTOs}
+                                flag={item?.patientFlagResponseDTOs ? item?.patientFlagResponseDTOs : []}
                                 page={page}
                                 handleRowCheckboxChange={
                                   handleRowCheckboxChange

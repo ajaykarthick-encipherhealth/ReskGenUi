@@ -9,7 +9,8 @@ const Selector = ({
   isClose = false,
   selectDefaultValue,
   setDefaultValue,
-  setPageNo
+  setPageNo,
+  onChanges
 }) => {
   return (
     <div>
@@ -26,6 +27,7 @@ const Selector = ({
             if(setPageNo){
               resetPageNumber(setPageNo)
             }
+            onChanges && onChanges()
           }}
           value={selectDefaultValue && {label:selectDefaultValue,value:selectDefaultValue}}
         />

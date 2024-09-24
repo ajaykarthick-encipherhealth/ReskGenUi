@@ -23,7 +23,7 @@ const ContentGroupCard = ({
   selectedRows,
   auditstatusBodyTemplate,
   processstatusBodyTemplate,
-  flag,
+  flag=[],
   rafSum,
   patientName,
   processedDate,

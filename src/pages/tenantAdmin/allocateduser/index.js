@@ -156,7 +156,11 @@ const Patient = ({
     const orgId = localStorage.getItem("orgId");
     let resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${
       batchCount ? batchCount : reviewerResponse?.response?.totalElements
-    }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
+    }&userId=${uId}&computationStart=${
+      startDate ? startDate : ""
+    }&computationEnd=${
+      endDate ? endDate : ""
+    }&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
       sort?.sortDir
     }&sortfield=${sort?.sortField}&priority=${
       selectedOption ? selectedOption : ""
@@ -231,6 +235,7 @@ const Patient = ({
     setSelectAllCheckedL2(false);
     setSelectedOption([]);
     setSelectedOptions("");
+    setPageNo(0);
     if (number == 2) {
       getAuditL2List(pageNoL2User, "");
     } else {
@@ -494,9 +499,10 @@ const Patient = ({
         data: l2selectUser,
         pageNoL2Patient: pageNoL2Patient,
         selectedOptions: selectedOptions,
+        allocatedOption: allocatedOption,
       });
     }
-  }, [selectedOptions]);
+  }, [selectedOptions, allocatedOption]);
 
   return (
     <>
@@ -580,7 +586,11 @@ const Patient = ({
                                   style={{ width: "100%", height: "42px" }}
                                   placeholder={"Select Organization"}
                                   allowClear
-                                  onChange={(e) => setSelectedOrgList(e)}
+                                  onChange={(e) => {
+                                    setSelectedOrgList(e);
+                                    setSelectedRowsId([]);
+                                    setSelectAllChecked(false)
+                                  }}
                                   value={selectOrgList}
                                 />
                               </div>
@@ -601,6 +611,8 @@ const Patient = ({
                                         dates,
                                         dateStrings
                                       );
+                                      setSelectedRowsId([]);
+                                      setSelectAllChecked(false)
                                     }}
                                     disabledDate={(current) =>
                                       disableFutureDate(current)
@@ -625,7 +637,11 @@ const Patient = ({
                                     style={{ width: "100%", height: "42px" }}
                                     placeholder={"Select Priority"}
                                     allowClear
-                                    onChange={(e) => setSelectedOption(e)}
+                                    onChange={(e) => {
+                                      setSelectedOption(e);
+                                      setSelectedRowsId([]);
+                                      setSelectAllChecked(false)
+                                    }}
                                     value={selectedOption}
                                   />
                                 </div>
@@ -734,6 +750,9 @@ const Patient = ({
                                     defaultSelectValue1={""}
                                     // isClose={true}
                                     setPageNo={setPageNo}
+                                    onChanges={() => {
+                                      setPageNoL2Patient(0);
+                                    }}
                                   />
                                 </div>
                               </div>
@@ -746,6 +765,9 @@ const Patient = ({
                                     defaultSelectValue1={""}
                                     setPageNo={setPageNo}
                                     // isClose={true}
+                                    onChanges={() => {
+                                      setPageNoL2Patient(0);
+                                    }}
                                   />
                                 </div>
                               </div>
