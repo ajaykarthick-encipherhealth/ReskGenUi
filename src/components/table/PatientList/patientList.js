@@ -12,6 +12,7 @@ import {
   sortFunction,
   renderUserPrfoileAvatar,
 } from "../../headerFilters/functions";
+import { truncateString } from "../../patientDetails/details/components/function/ReusableFunctions";
 
 function PatientTable({
   patinetListAll,
@@ -83,10 +84,10 @@ function PatientTable({
             className={TableStyle.firstTdBorder}
             onClick={handleTableRowClick}
           >
-            {data.patientId}
+            {truncateString(data.patientId, 30)}
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            {data.patientName}
+            {data.fileName ? truncateString(data.fileName, 30) : "---"}
           </td>
           {userId != "reviewer@3gencogentai.onmicrosoft.com" && 
           <td
