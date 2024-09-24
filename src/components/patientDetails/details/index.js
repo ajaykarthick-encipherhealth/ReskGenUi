@@ -477,7 +477,7 @@ const Details = ({
 
   const backToPatientData = () => {
     dispatch(getPatientID(null));
-    setSelectDosValue("");
+    // setSelectDosValue("");
     getSelectedDos("");
     getCurrentDiseaseType(true);
     const user = localStorage.getItem("userRole");

@@ -60,7 +60,7 @@ const Hcc = ({
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
-      setSelectDosValue("");
+      // setSelectDosValue("");
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
         if (res) {
