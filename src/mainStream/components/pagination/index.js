@@ -5,7 +5,7 @@ const Pagination = ({ first, totalRecords, onPageChange }) => {
     <div className="pagination-container">
       <Paginator
         first={first}
-        rows={8}
+        rows={7}
         totalRecords={totalRecords}
         onPageChange={onPageChange}
       />
