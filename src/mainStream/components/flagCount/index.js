@@ -54,7 +54,7 @@ const Flags = ({ reportListAll, styles }) => {
                 )}
                 trigger="hover"
               >
-                <div className={styles.count}>
+                <div className={`cr-pointer ${styles.count}`}>
                   {flagItem.count ? flagItem.count : 0}
                 </div>
               </Popover>

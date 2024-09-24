@@ -422,7 +422,7 @@ const Hcc = ({
                         )
                       }
                     >
-                      MEAT Suggestion
+                      Query
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item">

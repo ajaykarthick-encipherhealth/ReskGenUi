@@ -3,7 +3,7 @@ import { useSelector, connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import moment, { months } from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
-import { Modal } from "antd";
+import { Empty, Modal } from "antd";
 import styles from "../styles.module.css";
 import AddMeatQuery from "../../components/addMeatQuery";
 
@@ -237,7 +237,7 @@ const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year }) => {
               ))}
             </div>
           </div>
-        ) : null}
+        ) : <Empty />}
       </div>
       <AddMeatQuery
         queryFormValues={queryFormValues}

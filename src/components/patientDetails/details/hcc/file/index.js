@@ -427,7 +427,7 @@ const File = ({
                               }
                             />
                           </span>
-                          CARE GAP
+                          CARE GAP / SUGGESTED CODES
                         </span>
                         <div className="d-flex justify-content-center">
                           <span
@@ -479,7 +479,7 @@ const File = ({
                                 setConfirmNotesModalValid
                               }
                               setIsValidAction={setIsValidAction}
-                              cardTitle="SUGGESTED"
+                              cardTitle="CARE GAP / SUGGESTED"
                               provided={provided}
                             />
                           </div>

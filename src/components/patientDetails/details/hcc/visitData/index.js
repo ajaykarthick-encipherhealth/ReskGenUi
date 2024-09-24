@@ -607,7 +607,7 @@ const VisitData = ({
                           <span
                             className={`${visitStyles.suggested_title_name}`}
                           >
-                            CARE GAP
+                            CARE GAP / SUGGESTED CODES
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
@@ -651,7 +651,7 @@ const VisitData = ({
                                 setConfirmNotesModalValid
                               }
                               setIsValidAction={setIsValidAction}
-                              cardTitle="SUGGESTED"
+                              cardTitle="CARE GAP / SUGGESTED"
                               provided={provided}
                               isVisitData={true}
                             />
