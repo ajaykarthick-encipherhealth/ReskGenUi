@@ -350,8 +350,8 @@ const HeaderFilters = ({
                   handleRnagePicker2({
                     date,
                     dateString,
-                    setStartDate4,
-                    setEndDate4,
+                    setStartDate5,
+                    setEndDate5,
                   });
 
                   setClear(false);
