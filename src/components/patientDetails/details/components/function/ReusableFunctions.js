@@ -1801,12 +1801,12 @@ export const stringToColour = (str) => {
   if (str?.toLocaleLowerCase() === "plan") {
     colour = "#7e00ff";
   }
-  if (str.toLocaleLowerCase() === "examination") {
+  if (str?.toLocaleLowerCase() === "examination") {
     colour = "#9eb875";
   }
   if (
-    str.toLocaleLowerCase() == "assessments" ||
-    str.toLocaleLowerCase() == "assessment"
+    str?.toLocaleLowerCase() == "assessments" ||
+    str?.toLocaleLowerCase() == "assessment"
   ) {
     colour = "#f1a113";
   }
