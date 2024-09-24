@@ -61,6 +61,7 @@ const InitialCard = ({
     // const updatedRows = selectAll ? [] : reportListAll?.response?.data;
     // setSelectedRows(updatedRows);
     if (activeTab === "Reviewer") {
+      setIsLoading(true)
       if (!selectAll) {
         const {
           filter,
@@ -102,6 +103,7 @@ const InitialCard = ({
       } else setSelectedRows([]);
     }
     if (activeTab === "Admin") {
+      setIsLoading(true)
       if (!selectAll) {
         const {
           filter,
@@ -331,7 +333,6 @@ const InitialCard = ({
     dispatch(selectedRow(selectedRows));
     setSelectAll(reportListAll?.response?.totalElements == selectedRows.length);
   }, [selectedRows]);
-
   return (
     <>
       <div>
@@ -398,7 +399,7 @@ const InitialCard = ({
                   // ))
                 }
               </div>
-              {loader ? (
+              {isLoading ? (
                 <SpinnerDots />
               ) : (
                 <div className="row">
