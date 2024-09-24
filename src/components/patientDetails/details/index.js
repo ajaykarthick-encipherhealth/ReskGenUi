@@ -346,7 +346,7 @@ const Details = ({
       if (patientId == result.patientId) {
         setIsSpinnerLoading(false);
       }
-      getMeatQueryList(patientId, result?.processedYear, selectDosValue|| "");
+      getMeatQueryList(patientId, result?.processedYear, selectDosValue || "");
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.hccDiseases != null) {
@@ -477,8 +477,8 @@ const Details = ({
 
   const backToPatientData = () => {
     dispatch(getPatientID(null));
-    setSelectDosValue('');
-    getSelectedDos('')
+    setSelectDosValue("");
+    getSelectedDos("");
     getCurrentDiseaseType(true);
     const user = localStorage.getItem("userRole");
     if (user && user.toLowerCase() === "admin") {
@@ -789,30 +789,66 @@ const Details = ({
                                       )}
                                     </h6>
                                   </div>
-                                  <div className="col-xl-2 col-sm-12">
-                                    <FontAwesomeIcon icon={faVenusMars} />
-                                    <label>Gender</label>
-                                    <h6
-                                      className="ageDtails"
-                                      style={{ paddingLeft: "25px" }}
-                                    >
-                                      {
-                                        patientIdDetailsData?.data?.response
-                                          ?.gender
-                                      }
-                                    </h6>
+                                  <div className="col-xl-3 col-sm-12">
+                                    <div className="d-flex justify-content-between">
+                                      <div>
+                                        <FontAwesomeIcon icon={faVenusMars} />
+                                        <label>Gender</label>
+                                        <h6
+                                          className="ageDtails"
+                                          style={{ paddingLeft: "25px" }}
+                                        >
+                                          {
+                                            patientIdDetailsData?.data?.response
+                                              ?.gender
+                                          }
+                                        </h6>
+                                      </div>
+                                      <div>
+                                        <i className={visitStyles.dob_icon}>
+                                          {SVGICON.DatebirthIcon}
+                                        </i>
+                                        <label>DOB</label>
+                                        <h6 className="ageDtails">
+                                          {
+                                            patientIdDetailsData?.data?.response
+                                              ?.dob
+                                          }
+                                        </h6>
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div className="col-xl-2 col-sm-12">
-                                    <i className={visitStyles.dob_icon}>
-                                      {SVGICON.DatebirthIcon}
-                                    </i>
-                                    <label>DOB</label>
-                                    <h6 className="ageDtails">
-                                      {
-                                        patientIdDetailsData?.data?.response
-                                          ?.dob
-                                      }
-                                    </h6>
+                                  <div className="col-xl-1 col-sm-12">
+                                    {flagsDetailsResult?.response[0] && (
+                                      <div className="mt-2">
+                                        <div className="d-flex align-items-center justify-content-center cr-pointer" onClick={() => setFlagContainerActive('Flag')}>
+                                          <Tooltip
+                                            placement="bottom"
+                                            title={flagsDetailsResult?.response[0]?.flagDetails?.flagName.replaceAll(
+                                              "_",
+                                              " "
+                                            )}
+                                          >
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="30"
+                                              height="30"
+                                              viewBox="0 0 800 800"
+                                              fill={
+                                                flagsDetailsResult?.response[0]
+                                                  ?.flagDetails?.flagColour
+                                              }
+                                            >
+                                              <path
+                                                d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                                                stroke="#000"
+                                                stroke-width="10"
+                                              />
+                                            </svg>
+                                          </Tooltip>
+                                        </div>
+                                      </div>
+                                    )}
                                   </div>
                                   <div className="col-xl-1 col-sm-12">
                                     <div

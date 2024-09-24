@@ -13,8 +13,14 @@ import { connect } from "react-redux";
 import Select from "react-select";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 
-
-const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData ,getFlagDetailsData,flagsDetailsResult}) => {
+const Flag = ({
+  setOpen,
+  open,
+  patientDetailsResult,
+  getFlagsData,
+  getFlagDetailsData,
+  flagsDetailsResult,
+}) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
     comments: "",
@@ -49,7 +55,6 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData ,getFlagDetails
     name: item?.flagName,
   }));
 
-
   const handleSubmitFlag = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -61,30 +66,33 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData ,getFlagDetails
         comment: inputValue.comments,
         processedYear: patientDetailsResult?.data?.response?.processedYear,
         dateOfService: patientDetailsResult?.data?.response?.dateOfService,
-        flagId: inputValue.flagId
+        flagId: inputValue.flagId,
       };
       try {
         const response = await axios.post(
-            ENDPOINTS.apiEndoint + `dbservice/flagdetails`,
-            dataFormatSuggested
+          ENDPOINTS.apiEndoint + `dbservice/flagdetails`,
+          dataFormatSuggested
+        );
+        var result = response.data;
+        if (result.status == "SUCCESS") {
+          inputValue.comments = "";
+          notification.success({
+            message: result.message,
+            placement: "top",
+            duration: 1,
+          });
+          getFlagDetailsData(
+            patientDetailsResult?.data?.response?.patientId,
+            patientDetailsResult?.data?.response?.processedYear,
+            patientDetailsResult?.data?.response?.dateOfService
           );
-          var result = response.data;
-          if (result.status == "SUCCESS") {
-            inputValue.comments = "";
-            notification.success({
-              message: result.message,
-              placement: "top",
-              duration: 1,
-            });
-            getFlagDetailsData(patientDetailsResult?.data?.response?.patientId,patientDetailsResult?.data?.response?.processedYear,patientDetailsResult?.data?.response?.dateOfService)
-            setCommentsTrigger(false);
-            setIsModalComments(false);
-          } else {
-          }
+          setCommentsTrigger(false);
+          setIsModalComments(false);
+        } else {
+        }
       } catch (error) {
         setCommentsTrigger(false);
       }
-    
     }
     setValidated(true);
   };
@@ -147,7 +155,6 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData ,getFlagDetails
   };
 
   const handleChangeFlag = async (e) => {
-    console.log(e)
     setInputValue({
       ...inputValue,
       ["flagId"]: e.value,
@@ -184,7 +191,7 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData ,getFlagDetails
         </button>
       </div>
       <div className="offcanvas-body">
-        <div className="container-fluid">
+        <div className="border rounded p-2 py-3 mb-3">
           <Form noValidate validated={validated} onSubmit={handleSubmitFlag}>
             <div className="row">
               <div className="col-xl-12 mb-3">
@@ -212,17 +219,22 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData ,getFlagDetails
                   // onKeyPress={handleEnterTextNotes}
                   // type="submit"
                 ></textarea>
+              </div>
+            </div>
+            <div className="row">
+              <div className="d-flex justify-content-center">
                 <Button
                   type="submit"
                   disabled={commentsTrigger}
-                  className={visitStyles.commentSendIcon}
+                  // className={visitStyles.commentSendIcon}
                 >
-                  {SVGICON.sentMessageIcon}
-                </Button> 
+                  Save
+                </Button>{" "}
               </div>
             </div>
           </Form>
-
+        </div>{" "}
+        <div>
           {flagsDetailsResult?.response?.map((data, index) => (
             <div className={visitStyles.comments_card} key={index}>
               <div className={`${visitStyles.commentNameHead}`}>
@@ -248,7 +260,10 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData ,getFlagDetails
                     </>
                   )}
                 </span>
-                <Tooltip placement="bottom" title={data?.patientFlagDTO?.createdBy}>
+                <Tooltip
+                  placement="bottom"
+                  title={data?.patientFlagDTO?.createdBy}
+                >
                   <Popover
                     placement="bottom"
                     content={userDetails}
@@ -262,9 +277,13 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData ,getFlagDetails
                   </Popover>
                 </Tooltip>
               </div>
-              <span className={visitStyles.commentsDesc}>{data?.patientFlagDTO?.comment}</span>
+              <span className={visitStyles.commentsDesc}>
+                {data?.patientFlagDTO?.comment}
+              </span>
               <span className={visitStyles.commentsTime}>
-                {moment(data?.patientFlagDTO?.createdDate).format("MM-DD-YYYY hh:mm:A")}
+                {moment(data?.patientFlagDTO?.createdDate).format(
+                  "MM-DD-YYYY hh:mm:A"
+                )}
               </span>
             </div>
           ))}
@@ -274,14 +293,14 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData ,getFlagDetails
   );
 };
 
-const enhancer = connect((state) => ({
-  patientDetailsResult: state?.patientDetails?.details?.patientResult,
-  getFlagsData: state?.reviewer?.workQueue?.flags?.data,
-  flagsDetailsResult: state?.patientDetails.details?.flagsDetailsResult.data,
-
-}),
-{
-  getFlagDetailsData: detailsActions.getFlagDetailsAction,
-}
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+    flagsDetailsResult: state?.patientDetails.details?.flagsDetailsResult.data,
+  }),
+  {
+    getFlagDetailsData: detailsActions.getFlagDetailsAction,
+  }
 );
 export default enhancer(Flag);
