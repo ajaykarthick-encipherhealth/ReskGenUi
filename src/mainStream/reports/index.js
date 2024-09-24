@@ -486,6 +486,7 @@ const Reports = ({
                                     filterChangePatientId(e);
                                     resetPageNumber(resetPageState);
                                   }}
+                                  autoComplete="off"
                                   className="form-control new-form-control new-item-control reportInput"
                                   placeholder="Search"
                                   maxLength={25}
@@ -792,7 +793,9 @@ const Reports = ({
                                   (item) => item.field === "initialSearch"
                                 )?.search
                               : "",
-                            filter: selectedOptions?.Status?.value ? selectedOptions?.Status?.value : '',
+                            filter: selectedOptions?.Status?.value
+                              ? selectedOptions?.Status?.value
+                              : "",
                             userName: selectedOptions?.UserRole?.value
                               ? selectedOptions?.UserRole?.value
                               : "",
