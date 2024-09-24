@@ -332,7 +332,6 @@ const InitialCard = ({
     setSelectAll(reportListAll?.response?.totalElements == selectedRows.length);
   }, [selectedRows]);
 
-
   return (
     <>
       <div>
@@ -400,7 +399,7 @@ const InitialCard = ({
                 }
               </div>
               {loader ? (
-                 <SpinnerDots />
+                <SpinnerDots />
               ) : (
                 <div className="row">
                   <div>
@@ -527,7 +526,7 @@ const InitialCard = ({
                     </div>
                   </div>
                 </div>
-               )} 
+              )}
             </div>
           )}
         </div>
