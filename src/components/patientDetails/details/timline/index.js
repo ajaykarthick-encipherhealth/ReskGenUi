@@ -479,9 +479,9 @@ const Timeline = ({
             );
           }
         case "VALID_DISEASE_ADDED":
-          return `${item.diagnosisCode} - Valid from disease added`;
-        case "MANUALLY_ADDED_DISEASE":
           return `${item.diagnosisCode} - Disease added`;
+        case "MANUALLY_ADDED_DISEASE":
+          return `${item.diagnosisCode} - Disease added manually`;
         case "MOVED_VALID_TO_DELETED":
           return (
             <div className="d-flex">
