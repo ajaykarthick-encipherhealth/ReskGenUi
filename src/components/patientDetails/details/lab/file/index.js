@@ -279,6 +279,7 @@ const File = ({
                             cardTitle="HCC"
                             provided={provided}
                             isMeatBlocked={true}
+                            isBlockedEdit={true}
                           />
                         </div>
                       </div>

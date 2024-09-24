@@ -518,7 +518,7 @@ const File = ({
                           <span
                             className={`${visitStyles.potential_title_badge}`}
                           >
-                            {deletedHccList.length}
+                            0
                           </span>
                         </div>
                       </div>

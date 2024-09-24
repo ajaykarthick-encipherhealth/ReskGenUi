@@ -66,7 +66,8 @@ const LabCards = ({
   popup,
   getSelectedDosPageNumber,
   loading,
-  isMeatBlocked
+  isMeatBlocked,
+  isBlockedEdit
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -170,7 +171,7 @@ const LabCards = ({
                                     {data.diagnosisCode}
                                   </span>
 
-                                  {!isDeletedCodes && (
+                                  {!isDeletedCodes || isBlockedEdit && (
                                     <FontAwesomeIcon
                                       icon={faPen}
                                       style={{ cursor: "pointer" }}
