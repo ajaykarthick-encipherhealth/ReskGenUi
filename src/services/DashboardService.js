@@ -116,7 +116,7 @@ export const ChatBot = async (msg) => {
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}aiservice/ai/chat`,
-      {},
+      data,
       {
         headers: {
           Authorization: `Bearer ${token}`,
