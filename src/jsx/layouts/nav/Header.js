@@ -297,7 +297,7 @@ const Header = ({
     localStorage.setItem("userRole", key);
     if (key === "admin") {
       router.push("/admin/dashboard");
-    } else if (key === "reviewer") {
+    } else if (key === "reviewer") {git 
       router.push("/reviewer/dashboard");
     } else if (key === "supervisor") {
       router.push("/supervisor/dashboard");

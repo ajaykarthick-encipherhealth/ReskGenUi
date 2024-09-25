@@ -303,9 +303,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     // getpatientsListFilter({ url: resoureUrl });
     resetPageNumber(setPageNo);
   };
-  console.log(searchVal,"searchval")
-  console.log(patinetListAll,"patinetListAll")
-
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
     inputValue.name = data.patientName;
