@@ -305,16 +305,15 @@ export const refreshToken = () => async (dispatch) => {
           data: response.data,
         },
       });
+      const newToken = response?.data?.response;
       setStorage("refreshTokenTime", Date.now());
-      const newtoken = response?.data?.response;
-      setStorage("token", newtoken);
+      setStorage("token", newToken); 
       setStorage("loginTime", Date.now());
     }
   } catch (err) {
     console.log(err);
   }
 };
-
 export const submitLogin = async (email, password) => {
   const datas = {
     username: email,
