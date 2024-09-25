@@ -3,7 +3,7 @@ import { getStorage } from "../storages";
 import { portalUrl, tokenKey } from "../config";
 
 export async function requestPortal(url, options) {
-  const token = await getStorage(tokenKey);
+  const token = getStorage(tokenKey);
   const actualUrl = `${portalUrl}${url}`;
   const actualOptions = {
     ...options,
@@ -16,7 +16,7 @@ export async function requestPortal(url, options) {
 }
 
 export async function requestPortalFiles(url, options) {
-  const token = await getStorage(tokenKey);
+  const token = getStorage(tokenKey);
   const actualUrl = `${portalUrl}${url}`;
   const actualOptions = {
     ...options,
