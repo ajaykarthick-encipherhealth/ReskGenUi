@@ -142,7 +142,7 @@ export const enableUser = async ({
       );
       if (response?.status==='SUCCESS') {
         notification.success({
-          description: `${user?.firstName} ${user?.lastName} has ${response?.data?.response?.message} `,
+          description: `${response?.response?.message} `,
         });
       }
       return response
