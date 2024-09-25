@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { notification, Select as AntSelect, Empty } from "antd";
+import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
 import TableStyle from "../../traclingTable.module.css";
 import {
   renderUserPrfoileAvatar,
@@ -66,14 +66,24 @@ function TrackingTable({
       gotoPatientDetails(clickedData);
     }
   };
-
+  const getMaskData = (value) => {
+    if (value) {
+      return value.split("").splice(0, 10).join("") + "....";
+    }
+  };
   const renderRows = () => {
     return patinetListAll?.map((data, index) => (
       <tr key={index}>
-        <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
-          <div> {data.patientId} </div> <div> {data.patientName} </div>
+        <td
+          className={TableStyle.firstTdBorder}
+          style={{ padding: "2px 15px" }}
+          onClick={handleTableRowClick}
+        >
+          <Tooltip title={data.patientId}>
+            <div>{getMaskData(data.patientId)}</div>
+          </Tooltip>
+          <div className={TableStyle.name}> {data.patientName} </div>
         </td>
-
         <td
           className={TableStyle.childBorder}
           style={{ textAlign: "left" }}
@@ -243,13 +253,16 @@ function TrackingTable({
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (
-         renderSkeleton()
+        renderSkeleton()
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.tenantAdminclassThead}>
             <tr>
               <th>PATIENTS</th>
-              <th style={{ textAlign: "left", paddingLeft: "20px" }} className="text-truncate">
+              <th
+                style={{ textAlign: "left", paddingLeft: "20px" }}
+                className="text-truncate"
+              >
                 ALLOCATED BY
               </th>
               <th
@@ -299,7 +312,9 @@ function TrackingTable({
                   )}
                 </span>
               </th>
-              <th style={{ textAlign: "center" }} className="text-truncate">AUDIT ALLOCATED BY</th>
+              <th style={{ textAlign: "center" }} className="text-truncate">
+                AUDIT ALLOCATED BY
+              </th>
               <th
                 onClick={() => {
                   sortFunction(
@@ -327,7 +342,9 @@ function TrackingTable({
                   )}
                 </span>
               </th>
-              <th style={{ textAlign: "center" }} className="text-truncate">SUPERVISOR</th>
+              <th style={{ textAlign: "center" }} className="text-truncate">
+                SUPERVISOR
+              </th>
               <th
                 onClick={() => {
                   sortFunction(
@@ -356,8 +373,12 @@ function TrackingTable({
                 </span>
               </th>
 
-              <th style={{ textAlign: "center" }} className="text-truncate">PROCESSED STATUS</th>
-              <th style={{ textAlign: "center" }} className="text-truncate">AUDIT STATUS</th>
+              <th style={{ textAlign: "center" }} className="text-truncate">
+                PROCESSED STATUS
+              </th>
+              <th style={{ textAlign: "center" }} className="text-truncate">
+                AUDIT STATUS
+              </th>
             </tr>
           </thead>
 

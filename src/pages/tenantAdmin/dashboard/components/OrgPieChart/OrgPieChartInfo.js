@@ -76,7 +76,6 @@ const OrgPieChartInfo = ({ data, orgLoader }) => {
       },
     ],
   };
-
   return (
     <>
       {orgLoader ? (

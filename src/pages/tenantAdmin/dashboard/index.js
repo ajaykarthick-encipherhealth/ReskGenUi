@@ -147,7 +147,7 @@ const Index = ({
 
   const orgData =
     organizationStatusData?.response?.map((org, index) => ({
-      value: index,
+      value: index+1,
       name: org.name,
       itemStyle: {
         color: [
