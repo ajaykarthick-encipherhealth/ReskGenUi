@@ -296,13 +296,13 @@ const Header = ({
   const onClick = ({ key }) => {
     localStorage.setItem("userRole", key);
     if (key === "admin") {
-      router.push("/admin/user");
+      router.push("/admin/dashboard");
     } else if (key === "reviewer") {
       router.push("/reviewer/dashboard");
     } else if (key === "supervisor") {
       router.push("/supervisor/dashboard");
     } else if (key === "tenant_admin") {
-      router.push("/tenant_admin/fhirTable");
+      router.push("/tenantAdmin/dashboard");
     } else if (key === "ehr") {
       router.push("/ehr/patients");
     }

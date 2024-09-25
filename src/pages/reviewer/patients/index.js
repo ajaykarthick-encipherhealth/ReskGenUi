@@ -298,12 +298,13 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     setIsLoading(true);
     setSearchVal(e.target.value);
     debounceText(e.target.value);
-
     // const resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${val}`;
     // dispatch(getpatientsListFilter(resoureUrl));
     // getpatientsListFilter({ url: resoureUrl });
     resetPageNumber(setPageNo);
   };
+  console.log(searchVal,"searchval")
+  console.log(patinetListAll,"patinetListAll")
 
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
