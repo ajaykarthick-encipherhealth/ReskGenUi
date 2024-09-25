@@ -24,7 +24,7 @@ import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patien
 import { connect } from "react-redux";
 import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 const bullets = [
   {
     color: "#34ace8",
@@ -357,7 +357,7 @@ const Patient = ({
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/admin/patients/details");
     } else {
       notification.warning({

@@ -39,7 +39,7 @@ import { patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 
 const { RangePicker } = DatePicker;
 
@@ -318,7 +318,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     if (data.computing == 2) {
       const controller = new AbortController();
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({

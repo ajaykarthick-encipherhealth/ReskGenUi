@@ -31,7 +31,7 @@ import {
 import Tab from "../components/tags";
 import MoreFilter from "../../resusablereport/reports/MoreFilter";
 import TeamReport from "./teamReport";
-import { getStorage } from "../../utils/storages";
+import { getStorage, setStorage } from "../../utils/storages";
 
 const statusOptions = [
   { label: "All", value: "" },
@@ -309,7 +309,7 @@ const Reports = ({
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({

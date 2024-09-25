@@ -26,7 +26,7 @@ import { useSelector } from "react-redux";
 import SentReport from "./sentReport";
 import MoreFilter from "./MoreFilter";
 import Export from "./Export";
-import { getStorage } from "../../utils/storages";
+import { getStorage, setStorage } from "../../utils/storages";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -231,7 +231,7 @@ const Reports = () => {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({

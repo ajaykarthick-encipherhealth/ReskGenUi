@@ -49,7 +49,7 @@ import SubCard from "../../../mainStream/components/cards/subcard";
 import MiniCards from "../../../mainStream/components/miniCards";
 import Flags from "../../../mainStream/components/flagCount";
 import AllocationCount from "../../../mainStream/components/allocationCount";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 
 const TeamReport = ({
   // setModal,
@@ -383,7 +383,7 @@ const TeamReport = ({
       const controller = new AbortController();
       const currentRole = getStorage("userRole");
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push({
         pathname: `/${currentRole}/patients/details`,
         query: page,

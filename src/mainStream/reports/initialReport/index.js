@@ -30,7 +30,7 @@ import {
 } from "../../components/chartUtils";
 import { getReportDetails } from "../../../store/actions/adminAction/ReportActions";
 import ENDPOINTS from "../../../utility/enpoints";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 
 const InitialCard = ({
@@ -285,7 +285,7 @@ const InitialCard = ({
       const controller = new AbortController();
       const currentRole = getStorage("userRole");
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push({
         pathname: `/${currentRole}/patients/details`,
         query: page,

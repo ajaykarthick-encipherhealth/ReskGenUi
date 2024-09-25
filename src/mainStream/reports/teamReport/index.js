@@ -28,7 +28,7 @@ import {
   processstatusBodyTemplate,
 } from "../../components/chartUtils";
 import { actions as supervisorAction } from "../../../stores/supervisor/report";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 import ENDPOINTS from "../../../utility/enpoints";
 
 const TeamReport = ({
@@ -248,7 +248,7 @@ const TeamReport = ({
       const controller = new AbortController();
       const currentRole = getStorage("userRole");
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push({
         pathname: `/${currentRole}/patients/details`,
         query: page,

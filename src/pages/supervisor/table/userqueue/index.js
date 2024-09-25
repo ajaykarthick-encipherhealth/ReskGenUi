@@ -22,6 +22,7 @@ import {
 } from "../../../../components/headerFilters/functions";
 import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAction";
 import { extractLatestData } from "../../auditing";
+import { setStorage } from "../../../../utils/storages";
 
 const UserQueueTable = ({
   userList,
@@ -139,7 +140,7 @@ const UserQueueTable = ({
   const handleTableRowClick = (e, id) => {
     const targetTd = e.target.closest("td");
     if (targetTd) {
-      localStorage.setItem("patientId", id);
+      setStorage("patientId", id);
       // router?.push(`/supervisor/user/details?page=${page}`);
       router?.push(
         {

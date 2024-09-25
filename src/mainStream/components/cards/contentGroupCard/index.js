@@ -15,7 +15,7 @@ import { handleCopyToClipboard } from "../../../../components/commonFunctions";
 import { LoadingOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlag } from "@fortawesome/free-regular-svg-icons";
-import { getStorage } from "../../../../utils/storages";
+import { getStorage, setStorage } from "../../../../utils/storages";
 // import {  } from "@fortawesome/free-solid-svg-icons";
 
 const ContentGroupCard = ({
@@ -57,7 +57,7 @@ const ContentGroupCard = ({
   //     const controller = new AbortController();
   //     const currentRole = getStorage("userRole");
   //     controller.abort();
-  //     localStorage.setItem("patientId", data.patientId);
+  //     setStorage("patientId", data.patientId);
   //     navigate.push({
   //       pathname: `/${currentRole}/patients/details`,
   //       query: page,
@@ -85,7 +85,7 @@ const ContentGroupCard = ({
       } else modifiedRole = "supervisor";
 
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push({
         pathname: `/${modifiedRole}/patients/details`,
         query: page,

@@ -4,7 +4,7 @@ import axiosConfig from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { getResponePopup } from "../../../utils/reusable";
 import exp from "constants";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 
 export const ENABLEMFA = "ENABLEMFA";
 export const VALIDATE_CODE = "VALIDATE_CODE";
@@ -180,14 +180,14 @@ export const loginAction =
           payload: { data: result, loading: false },
         });
         if (response?.data?.status === "SUCCESS") {
-          localStorage.setItem("roles", JSON.stringify(result?.roles));
-          localStorage.setItem("token", result.access_token);
-          localStorage.setItem("refreshToken", result?.refresh_token);
-          localStorage.setItem("tenantId", result.tenantId);
-          localStorage.setItem("userId", result.userEmail);
-          localStorage.setItem("orgId", result.organizationId);
-          localStorage.setItem("userName", emailSplit[0]);
-          localStorage.setItem("loginCheck", true);
+          setStorage("roles", JSON.stringify(result?.roles));
+          setStorage("token", result.access_token);
+          setStorage("refreshToken", result?.refresh_token);
+          setStorage("tenantId", result.tenantId);
+          setStorage("userId", result.userEmail);
+          setStorage("orgId", result.organizationId);
+          setStorage("userName", emailSplit[0]);
+          setStorage("loginCheck", true);
           const encodedParams = btoa(
             JSON.stringify({
               mfa: mfa,
@@ -200,7 +200,7 @@ export const loginAction =
             pathname: `/twofactorAuthentication/SelectRole`,
             search: `params=${encodedParams}`,
           });
-          localStorage.setItem("loginTime", Date.now());
+          setStorage("loginTime", Date.now());
         }
         if (response.data?.response === null) {
           dispatch({
@@ -305,10 +305,10 @@ export const refreshToken = () => async (dispatch) => {
           data: response.data,
         },
       });
-      localStorage.setItem("refreshTokenTime", Date.now());
+      setStorage("refreshTokenTime", Date.now());
       const newtoken = response?.data?.response;
-      localStorage.setItem("token", newtoken);
-      localStorage.setItem("loginTime", Date.now());
+      setStorage("token", newtoken);
+      setStorage("loginTime", Date.now());
     }
   } catch (err) {
     console.log(err);

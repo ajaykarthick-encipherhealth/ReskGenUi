@@ -39,7 +39,7 @@ export function extractLatestData(notes) {
 import Image from "next/image";
 import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 const bullets = [
   {
     color: "#377880",
@@ -239,7 +239,7 @@ const Patient = ({ getWorkListFilter, response, loader }) => {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/supervisor/patients/details");
     } else {
       notification.warning({

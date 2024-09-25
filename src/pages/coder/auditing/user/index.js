@@ -36,7 +36,7 @@ import moment from 'moment';
 import { Paginator } from 'primereact/paginator';
 import { Calendar } from 'primereact/calendar';
 import { patientDetails } from '../../../../stores/authflow/actions';
-import { getStorage } from '../../../../utils/storages';
+import { getStorage, setStorage } from '../../../../utils/storages';
 
 
 
@@ -314,7 +314,7 @@ export default function Patient() {
       const controller = new AbortController()
       const { signal } = controller
       controller.abort()
-      localStorage.setItem("patientId", data.patientId)
+      setStorage("patientId", data.patientId)
       navigate.push('/coder/auditing/details');
     } else {
       notification.warning({

@@ -294,7 +294,7 @@ const Header = ({
     );
 
   const onClick = ({ key }) => {
-    localStorage.setItem("userRole", key);
+    setStorage("userRole", key);
     if (key === "admin") {
       router.push("/admin/user");
     } else if (key === "reviewer") {

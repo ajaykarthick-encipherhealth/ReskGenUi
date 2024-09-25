@@ -16,7 +16,7 @@ import FileProcessingTable from "../../../components/table/tenantTable/FileProce
 import HeaderFilters from "../../../components/headerFilters";
 import { connect } from "react-redux";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 
 const Patient= ({ getAllOrganizationList, organizationList }) => {
   const [validated, setValidated] = useState(false);
@@ -182,7 +182,7 @@ const Patient= ({ getAllOrganizationList, organizationList }) => {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({

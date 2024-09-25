@@ -34,6 +34,7 @@ import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/tracking";
 import { actions as tenantUserAdminAction } from "../../../stores/tenantAdmin/users";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
+import { setStorage } from "../../../utils/storages";
 
 const bullets = [
   {
@@ -354,7 +355,7 @@ const Patient = ({
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({

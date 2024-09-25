@@ -10,7 +10,7 @@ import {
   checkDeviceLogin,
   logoutAllDevice,
 } from "../../stores/authflow/actions";
-import { getStorage } from "../../utils/storages";
+import { getStorage, setStorage } from "../../utils/storages";
 
 const SelectRole = () => {
   const router = useRouter();
@@ -69,8 +69,8 @@ const SelectRole = () => {
     
     const selectedRoleInfo = rolesMapping[selectedRole];
     if (selectedRoleInfo && !roleError) {
-      localStorage.setItem("userRole", selectedRoleInfo?.userRole);
-      localStorage.setItem("role", selectedRole);
+      setStorage("userRole", selectedRoleInfo?.userRole);
+      setStorage("role", selectedRole);
       setLoading(true);
       router?.push(selectedRoleInfo?.route);
     }

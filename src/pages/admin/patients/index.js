@@ -24,7 +24,7 @@ import {
 import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { actions as allActions } from "../../../stores/admin/workqueue";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 const bullets = [
   {
     color: "#34ace8",
@@ -337,7 +337,7 @@ const Patient = ({ getPatients, loader, response }) => {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/admin/patients/details");
     } else {
       notification.warning({

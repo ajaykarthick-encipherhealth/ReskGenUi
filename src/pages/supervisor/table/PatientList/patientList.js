@@ -12,6 +12,7 @@ import {
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../../components/headerFilters/functions";
+import { setStorage } from "../../../../utils/storages";
 
 function PatientTable({
   patinetListAll,
@@ -84,7 +85,7 @@ function PatientTable({
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push({
         pathname: "/supervisor/patients/details",
         query: { ...page, isSupervisorAuited: true },

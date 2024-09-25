@@ -13,7 +13,7 @@ import FileUploading from "./FileUploading";
 import Addpatients from "./Addpatiens";
 import { getPatients } from "../../../store/actions/adminAction/patientsActions";
 import { patientDetails } from "../../../stores/authflow/actions";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 
 export default function Patient() {
   const [validated, setValidated] = useState(false);
@@ -176,7 +176,7 @@ export default function Patient() {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({

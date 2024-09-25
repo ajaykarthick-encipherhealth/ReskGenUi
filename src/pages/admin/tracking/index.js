@@ -33,6 +33,7 @@ import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
 import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
+import { setStorage } from "../../../utils/storages";
 const bullets = [
   {
     title: "Processed Status",
@@ -308,7 +309,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({
