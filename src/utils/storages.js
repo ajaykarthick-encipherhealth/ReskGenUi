@@ -1,6 +1,6 @@
 export const getStorage = (key) => {
   try {
-    return localStorage.getItem(key);
+    return sessionStorage.getItem(key);
   } catch (error) {
     console.error(`Error getting '${key}' from LocalStorage`);
     console.error(error);
@@ -10,7 +10,7 @@ export const getStorage = (key) => {
 
 export const setStorage = (key, value) => {
   try {
-    localStorage.setItem(key, value);
+    sessionStorage.setItem(key, value);
     return Promise.resolve();
   } catch (error) {
     console.error(`Error setting '${key}' in LocalStorage`);
@@ -21,7 +21,7 @@ export const setStorage = (key, value) => {
 
 export const removeStorage = (key) => {
   try {
-    localStorage.removeItem(key);
+    sessionStorage.removeItem(key);
     return Promise.resolve();
   } catch (error) {
     console.error(`Error removing token ${key} from LocalStorage`);
