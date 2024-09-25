@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch, connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { Button, DatePicker, Empty, Input, Space, Tooltip } from "antd";
+import { Button, DatePicker, Empty, Input, Select, Space, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
@@ -37,10 +37,10 @@ import { useCallback } from "react";
 import { actions as tenantAdminUsersAction } from "../../../stores/tenantAdmin/users";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
+import { getStorage } from "../../../utils/storages";
 
 const { RangePicker } = DatePicker;
 const statusOption = [
-  { value: "", label: "ALL" },
   { value: "URGENT", label: "URGENT" },
   { value: "HIGH", label: "HIGH" },
   { value: "NORMAL", label: "NORMAL" },
@@ -85,7 +85,7 @@ const Patient = ({
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [searchString, setSearchString] = useState("");
   const [checkedLoading, setCheckedLoading] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState("");
   const [allocatedOption, setAllocatedOption] = useState("");
   const [batchCount, setBatchCount] = useState("");
@@ -96,7 +96,7 @@ const Patient = ({
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [searchStr, setSearchStr] = useState("");
-  const [selectOrgList, setSelectedOrgList] = useState("");
+  const [selectOrgList, setSelectedOrgList] = useState([]);
   const [orgAllList, setOrgAllList] = useState([]);
   const [defaultOrgValue, setDefaultOrgValue] = useState(null);
 
@@ -112,11 +112,10 @@ const Patient = ({
     search,
     sort,
     selectedOption,
-    selectOrgList,
+    selectOrgList = "",
     batchCount,
   }) => {
-    const uId = localStorage.getItem("userId");
-    const orgId = selectOrgList;
+    const uId = getStorage("userId");
     let resoureUrl = `page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${
       startDate ? startDate : ""
     }&computationEnd=${endDate ? endDate : ""}&isAllocation=${
@@ -125,7 +124,9 @@ const Patient = ({
       sort?.sortDir ? sort?.sortDir : ""
     }&sortfield=${sort?.sortField ? sort?.sortField : ""}&priority=${
       selectedOption ? selectedOption : ""
-    }&batchCount=${batchCount ? batchCount : ""}`;
+    }&batchCount=${
+      batchCount ? batchCount : ""
+    }&organizationId=${selectOrgList}`;
     allocatedGetList({ url: resoureUrl });
     // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     // if (response?.data) {
@@ -152,15 +153,19 @@ const Patient = ({
   };
   const getAllCheckList = async (sort) => {
     setIsLoading(true);
-    const uId = localStorage.getItem("userId");
-    const orgId = localStorage.getItem("orgId");
+    const uId = getStorage("userId");
+    const orgId = getStorage("orgId");
     let resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${
       batchCount ? batchCount : reviewerResponse?.response?.totalElements
-    }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
+    }&userId=${uId}&computationStart=${
+      startDate ? startDate : ""
+    }&computationEnd=${
+      endDate ? endDate : ""
+    }&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
       sort?.sortDir
     }&sortfield=${sort?.sortField}&priority=${
       selectedOption ? selectedOption : ""
-    }&batchCount=${batchCount}`;
+    }&batchCount=${batchCount}&organizationId=${selectOrgList}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       let result = response?.data?.response?.content;
@@ -214,7 +219,7 @@ const Patient = ({
       data: l2selectUser,
       pageNoL2Patient: e.page,
       sort: sort,
-      selectedOptions:selectedOptions
+      selectedOptions: selectedOptions,
     });
     setTableLoading(true);
   };
@@ -229,8 +234,9 @@ const Patient = ({
     setSelectedRowsId([]);
     setSelectAllChecked(false);
     setSelectAllCheckedL2(false);
-    setSelectedOption("");
+    setSelectedOption([]);
     setSelectedOptions("");
+    setPageNo(0);
     if (number == 2) {
       getAuditL2List(pageNoL2User, "");
     } else {
@@ -275,9 +281,9 @@ const Patient = ({
   };
 
   const getAuditL2List = async (pageNo, searchString) => {
-    let orgId = localStorage.getItem("orgId");
-    let tenantid = localStorage.getItem("tenantId");
-    let resoureUrl = `dbservice/l2audit?tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
+    let orgId = getStorage("orgId");
+    let tenantid = getStorage("tenantId");
+    let resoureUrl = `dbservice/l2audit?tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}&orgId=${selectOrgList}`;
     getSupervisorsList({ url: resoureUrl });
   };
 
@@ -331,7 +337,7 @@ const Patient = ({
     }
   }, []);
   useEffect(() => {
-    var orgListArray = [{ value: "", label: "ALL" }];
+    var orgListArray = [];
     organizationList?.response?.map((res) => {
       orgListArray.push({
         value: res.id,
@@ -494,9 +500,10 @@ const Patient = ({
         data: l2selectUser,
         pageNoL2Patient: pageNoL2Patient,
         selectedOptions: selectedOptions,
+        allocatedOption: allocatedOption,
       });
     }
-  }, [selectedOptions]);
+  }, [selectedOptions, allocatedOption]);
 
   return (
     <>
@@ -565,14 +572,27 @@ const Patient = ({
                             (!isPatientList && activeTab == 2)) && (
                             <div className="col-xl-2">
                               <div>
-                                <Selector
-                                  selectlabel={"Select Organization"}
-                                  setSelectedOption={setSelectedOrgList}
-                                  selectOptions={orgAllList}
-                                  selectDefaultValue={defaultOrgValue}
-                                  setDefaultValue={setDefaultOrgValue}
-                                  // isClose={true}
-                                  setPageNo={setPageNo}
+                                {/* <Selector
+                                    selectlabel={"Select Organization"}
+                                    setSelectedOption={setSelectedOrgList}
+                                    selectOptions={orgAllList}
+                                    selectDefaultValue={defaultOrgValue}
+                                    // setDefaultValue={setDefaultOrgValue}
+                                    // isClose={true}
+                                    setPageNo={setPageNo}
+                                  /> */}
+                                <label>Select Organization</label>
+                                <Select
+                                  options={orgAllList}
+                                  style={{ width: "100%", height: "42px" }}
+                                  placeholder={"Select Organization"}
+                                  allowClear
+                                  onChange={(e) => {
+                                    setSelectedOrgList(e);
+                                    setSelectedRowsId([]);
+                                    setSelectAllChecked(false)
+                                  }}
+                                  value={selectOrgList}
                                 />
                               </div>
                             </div>
@@ -592,6 +612,8 @@ const Patient = ({
                                         dates,
                                         dateStrings
                                       );
+                                      setSelectedRowsId([]);
+                                      setSelectAllChecked(false)
                                     }}
                                     disabledDate={(current) =>
                                       disableFutureDate(current)
@@ -601,19 +623,27 @@ const Patient = ({
                               </div>
                               <div className="col-xl-2">
                                 <div>
-                                  <Selector
+                                  {/* <Selector
                                     selectlabel={"Select Priority"}
                                     setSelectedOption={setSelectedOption}
                                     selectOptions={statusOption}
                                     defaultSelectValue1={""}
                                     // isClose={true}
                                     setPageNo={setPageNo}
-                                    selectDefaultValue={
-                                      selectedOption && {
-                                        label: selectedOption,
-                                        value: selectedOption,
-                                      }
-                                    }
+                                    selectDefaultValue={selectedOption}
+                                  /> */}
+                                  <label>Select Priority</label>
+                                  <Select
+                                    options={statusOption}
+                                    style={{ width: "100%", height: "42px" }}
+                                    placeholder={"Select Priority"}
+                                    allowClear
+                                    onChange={(e) => {
+                                      setSelectedOption(e);
+                                      setSelectedRowsId([]);
+                                      setSelectAllChecked(false)
+                                    }}
+                                    value={selectedOption}
                                   />
                                 </div>
                               </div>
@@ -721,6 +751,9 @@ const Patient = ({
                                     defaultSelectValue1={""}
                                     // isClose={true}
                                     setPageNo={setPageNo}
+                                    onChanges={() => {
+                                      setPageNoL2Patient(0);
+                                    }}
                                   />
                                 </div>
                               </div>
@@ -733,6 +766,9 @@ const Patient = ({
                                     defaultSelectValue1={""}
                                     setPageNo={setPageNo}
                                     // isClose={true}
+                                    onChanges={() => {
+                                      setPageNoL2Patient(0);
+                                    }}
                                   />
                                 </div>
                               </div>
@@ -801,6 +837,7 @@ const Patient = ({
                                     setSortDueOrder("DESC");
                                     selectTabClick(1);
                                     setActiveTab(1);
+                                    setSelectedOrgList([]);
                                   }}
                                 >
                                   <Nav.Link
@@ -819,6 +856,7 @@ const Patient = ({
                                     setSortDueOrder("DESC");
                                     selectTabClick(2);
                                     setActiveTab(2);
+                                    setSelectedOrgList([]);
                                   }}
                                 >
                                   <Nav.Link

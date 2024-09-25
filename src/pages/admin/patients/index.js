@@ -24,6 +24,7 @@ import {
 import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { actions as allActions } from "../../../stores/admin/workqueue";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
+import { getStorage, setStorage } from "../../../utils/storages";
 const bullets = [
   {
     color: "#34ace8",
@@ -116,9 +117,9 @@ const Patient = ({ getPatients, loader, response }) => {
   }, [navigate]);
 
   useEffect(() => {
-    var tenId = localStorage.getItem("tenantId");
-    var uId = localStorage.getItem("userId");
-    var orgId = localStorage.getItem("orgId");
+    var tenId = getStorage("tenantId");
+    var uId = getStorage("userId");
+    var orgId = getStorage("orgId");
     // var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
     setTenantId(tenId);
     setLocalOrgId(orgId);
@@ -336,7 +337,7 @@ const Patient = ({ getPatients, loader, response }) => {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/admin/patients/details");
     } else {
       notification.warning({

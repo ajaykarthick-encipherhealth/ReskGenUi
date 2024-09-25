@@ -34,6 +34,7 @@ import ModelIndex from "../../components/model/Index";
 import ManuallyAdd from "../../components/manuallyAdd";
 import { getDateOfServiceBackground } from "../../components/function/DateOfServices";
 import { getProviderNameTag } from "../../components/function/ProviderHyperlinks";
+import { getStorage } from "../../../../../utils/storages";
 const { Option } = Select;
 
 const Meat = ({
@@ -97,11 +98,11 @@ const Meat = ({
   const [isBlockRxHcc, setIsBlockRxHcc] = useState([])
   const [isBlockRxHccDeleted, setIsBlockRxHccDeleted] = useState([])
   const [labData, setLabData] = useState("");
-  const userId = localStorage.getItem('userId')
+  const userId = getStorage('userId')
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
+    var orgId = getStorage("orgId");
+    var tenId = getStorage("tenantId");
     getPatientDetails(
       orgId,
       tenId,
@@ -156,7 +157,7 @@ const Meat = ({
     var data = {
       diagnosisCode: value.diagnosisCode,
     };
-    setQueryFormValues(data);
+    setQueryFormValues(value);
     setIsMeatQueryModal(true);
   };
 
@@ -167,7 +168,7 @@ const Meat = ({
   };
 
   const onFinishMeat = async (form) => {
-    const patientId = localStorage.getItem("patientId");
+    const patientId = getStorage("patientId");
     const data = {
       ...form,
       patientId: patientId,
@@ -886,6 +887,7 @@ const Meat = ({
         handleCloseModal={handleCloseModal}
         isMeatQueryModal={isMeatQueryModal}
         setIsMeatQueryModal={setIsMeatQueryModal}
+        year={year?.value ? year.value : year}
       />
       <ModelIndex
         title={selectDiseasesName}

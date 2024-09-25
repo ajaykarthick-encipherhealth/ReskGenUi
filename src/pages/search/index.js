@@ -9,6 +9,7 @@ import { getResponePopup } from "../../utils/reusable";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { getCurrentUser } from "../../stores/authflow/actions";
+import { getStorage } from "../../utils/storages";
 
 const Searches = ({
   getAllICDCodes,
@@ -253,7 +254,7 @@ const Searches = ({
   }, [search, searchType, page, ruleSelect]);
 
   const selectTab = (e) => {
-    const userId = localStorage.getItem("userId");
+    const userId = getStorage("userId");
     setSearchType(e.target.name);
     serSearch("");
     dispatch(getCurrentUser(userId, router));

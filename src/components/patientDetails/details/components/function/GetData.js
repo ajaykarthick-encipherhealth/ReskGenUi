@@ -4,6 +4,7 @@ import {
 } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
+import { getStorage } from "../../../../../utils/storages";
 import { sortFunction } from "./GetDataLab";
 import { stringToColour } from "./ReusableFunctions";
 import NewResponse from "./newresponse.json";
@@ -84,7 +85,7 @@ const submitSectionColors = async (
 };
 
 const getPatientDetailsRadiologyYear = async (orgId, dispatch) => {
-  var patientId = localStorage.getItem("patientId");
+  var patientId = getStorage("patientId");
   const response = await axios.get(
     ENDPOINTS.apiEndoint +
       `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
@@ -112,7 +113,7 @@ const getPatientDetailsRadiologyYear = async (orgId, dispatch) => {
   }
 };
 const getLabReportDetailsInititalLoad = async (orgId, dispatch) => {
-  var patientId = localStorage.getItem("patientId");
+  var patientId = getStorage("patientId");
 
   const response = await axios.get(
     ENDPOINTS.apiEndoint +
@@ -158,7 +159,7 @@ export const getPatientDetails = async (
   setAllMeatList,
   setCareGapComboDiseaseCodesList
 ) => {
-  const userId = localStorage.getItem("userId");
+  const userId = getStorage("userId");
   if (patientDetailsResult?.data?.response) {
     var result = patientDetailsResult?.data?.response;
     // if (NewResponse) {
@@ -443,6 +444,8 @@ export const getPatientDetails = async (
             hyperlinks: res?.hyperlinks,
             suspectType: res.suspectType,
             dateOfServices: res.dateOfServices,
+            isRadiology: getStateIndicators(res.stateIndicators, "RADIOLOGY"),
+            isLab: getStateIndicators(res.stateIndicators, "LAB"),
           });
         } else if (
           res.isShow != false &&
@@ -479,6 +482,8 @@ export const getPatientDetails = async (
             hyperlinks: res?.hyperlinks,
             suspectType: res.suspectType,
             dateOfServices: res.dateOfServices,
+            isRadiology: getStateIndicators(res.stateIndicators, "RADIOLOGY"),
+            isLab: getStateIndicators(res.stateIndicators, "LAB"),
           });
         }
       });

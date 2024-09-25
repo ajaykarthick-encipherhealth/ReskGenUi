@@ -23,7 +23,7 @@ const DailyTask = ({ trackChart }) => {
     },
   ];
 
-  const getChartOption = (allocated, pending, hold, decline, completed) => {
+  const getChartOption = (trackChart, pending, hold, decline, completed) => {
     return {
       tooltip: {
         trigger: "item",
@@ -78,7 +78,7 @@ const DailyTask = ({ trackChart }) => {
           label: {
             show: true,
             position: "center",
-            formatter: `{b|${allocated}}`,
+            formatter: `{b|${trackChart?.length}}`,
             backgroundColor: "transparent",
 
             rich: {
@@ -95,8 +95,8 @@ const DailyTask = ({ trackChart }) => {
           },
           data: [
             {
-              value: allocated,
-              name: "Alocated",
+              value: trackChart?.length,
+              name: "Allocated",
               itemStyle: {
                 color: "#fff",
               },
@@ -120,14 +120,19 @@ const DailyTask = ({ trackChart }) => {
                     <div className={styles.container}>
                       <ReactECharts
                         option={getChartOption(
-                          trackChart?.PENDING +
-                            trackChart?.HOLD +
-                            trackChart?.DECLINED +
-                            trackChart?.COMPLETED,
-                          trackChart?.PENDING,
-                          trackChart?.HOLD,
-                          trackChart?.DECLINED,
-                          trackChart?.COMPLETED
+                          trackChart,
+                          trackChart?.filter(
+                            (item) => item?.processedStatus === "PENDING"
+                          )?.length,
+                          trackChart?.filter(
+                            (item) => item?.processedStatus === "HOLD"
+                          )?.length,
+                          trackChart?.filter(
+                            (item) => item?.processedStatus === "DECLINED"
+                          )?.length,
+                          trackChart?.filter(
+                            (item) => item?.processedStatus === "COMPLETED"
+                          )?.length
                         )}
                         style={{ width: "300px", height: "200px" }}
                       />

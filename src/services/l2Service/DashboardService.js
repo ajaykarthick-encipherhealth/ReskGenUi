@@ -1,9 +1,10 @@
 import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
+import { getStorage } from "../../utils/storages";
 
 // chnaged
 export async function workStatusApi(startDate, endDate, router) {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/audit/statistics/processed/range?startDate=${startDate}&endDate=${endDate}`,
@@ -21,8 +22,8 @@ export async function workStatusApi(startDate, endDate, router) {
 
 // chnaged
 export const DailyTaskApi = async (date, router) => {
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
+  const token = getStorage("token");
+  const userId = getStorage("userId");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/audit/statistics/processed?username=${userId}&date=${date}`,
@@ -39,7 +40,7 @@ export const DailyTaskApi = async (date, router) => {
 };
 
 export const accuracyScore = async (btn, month, year, router) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   const url =
     btn === "Daily"
       ? `daily?month=${month}&year=${year}`
@@ -63,7 +64,7 @@ export const accuracyScore = async (btn, month, year, router) => {
 };
 
 export const CompletedScore = async (btn, date, month, year, router) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   const url =
     btn === "DAILY"
       ? `daily?month=${month}&year=${year}`
@@ -87,7 +88,7 @@ export const CompletedScore = async (btn, date, month, year, router) => {
 
 // chnaged
 export const HoldStatus = async (router) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/audit/hold/charts`,
@@ -104,7 +105,7 @@ export const HoldStatus = async (router) => {
 };
 
 export const ChatBot = async (msg) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}aiservice/ai/chat?input=${msg}`,
@@ -122,7 +123,7 @@ export const ChatBot = async (msg) => {
 };
 
 export const CompletedScoreNew = async (btn, date, month, year, router) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   const url =
     btn === "DAILY"
       ? `daily?month=${month}&year=${year}`
@@ -153,7 +154,7 @@ export const CompletedScoreNew = async (btn, date, month, year, router) => {
 //   type,
 //   user
 // ) => {
-//   const token = localStorage.getItem("token");
+//   const token = getStorage("token");
 //   switch (btn) {
 //     case "WEEKLY":
 //       btn = "WEEK";
@@ -164,7 +165,7 @@ export const CompletedScoreNew = async (btn, date, month, year, router) => {
 //     default:
 //       null;
 //   }
-//   const orgId=localStorage.getItem("orgId")
+//   const orgId=getStorage("orgId")
 //   var data = {
 //     year: year,
 //     month: month,
@@ -201,8 +202,8 @@ export const accuracyScoreNew = async (
   type,
   user
 ) => {
-  const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
+  const token = getStorage("token");
+  const role = getStorage("role");
   const url =
     btn === "DAILY"
       ? `daily?month=${month}&role=${
@@ -229,8 +230,8 @@ export const accuracyScoreNew = async (
   }
 };
 export const UserByIndividual = async (router) => {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/user/getuserbymanagerid?orgid=${orgId}`,
@@ -247,7 +248,7 @@ export const UserByIndividual = async (router) => {
 };
 
 export const DeliveryScore = async (btn, date, month, year, router) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   const url =
     btn === "DAILY"
       ? `daily?month=${month}&year=${year}`

@@ -55,6 +55,7 @@ import FileDetails from "./components/fileDetails";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import ManuallyAddProvider from "./manuallyAddProvider";
 import { getAge } from "../../../utils/reusable";
+import { getStorage } from "../../../utils/storages";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -65,8 +66,8 @@ export const navigetPageDetails = async (
   setIsLoading
 ) => {
   setSideNavLabelActiveKey(pageTitle);
-  var patientId = localStorage.getItem("patientId");
-  var orgId = localStorage.getItem("orgId");
+  var patientId = getStorage("patientId");
+  var orgId = getStorage("orgId");
   if (pageTitle == "HCC" && patientId) {
     setActiveTab(1);
     // const response = await axios.get(
@@ -201,7 +202,7 @@ const Details = ({
     );
   };
   useEffect(() => {
-    const patientId = localStorage.getItem("patientId");
+    const patientId = getStorage("patientId");
     if (activeTab == 1) {
       getAllProcessYear(patientId, "HCC");
     }
@@ -255,11 +256,11 @@ const Details = ({
   }, []);
 
   useEffect(() => {
-    const orgId = localStorage.getItem("orgId");
-    const tenId = localStorage.getItem("tenantId");
-    const patientId = localStorage.getItem("patientId");
-    const uId = localStorage.getItem("userId");
-    const userRoleLocal = localStorage.getItem("userRole");
+    const orgId = getStorage("orgId");
+    const tenId = getStorage("tenantId");
+    const patientId = getStorage("patientId");
+    const uId = getStorage("userId");
+    const userRoleLocal = getStorage("userRole");
 
     setUserRole(userRoleLocal);
     setLocalOrgId(orgId);
@@ -273,7 +274,7 @@ const Details = ({
   }, [patientDetailsResult?.data?.response]);
 
   useEffect(() => {
-    const patientId = localStorage.getItem("patientId");
+    const patientId = getStorage("patientId");
     setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
     if (activeTab == 3 || activeTab == 4) {
       getPatientDetails(
@@ -290,7 +291,7 @@ const Details = ({
 
   useEffect(() => {
     if (patientDetailsResult?.data?.response?.fileId) {
-      const patientId = localStorage.getItem("patientId");
+      const patientId = getStorage("patientId");
       if (
         isFileCheck == false &&
         patientId == patientDetailsResult?.data?.response.patientId
@@ -306,7 +307,7 @@ const Details = ({
   }, [patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath]);
 
   const getAllProcessYearSelect = async (result) => {
-    const patientId = localStorage.getItem("patientId");
+    const patientId = getStorage("patientId");
 
     var dosYearArr = result?.data?.response?.map((res) => {
       return { value: res, label: res };
@@ -346,7 +347,7 @@ const Details = ({
       if (patientId == result.patientId) {
         setIsSpinnerLoading(false);
       }
-      getMeatQueryList(patientId, result?.processedYear);
+      getMeatQueryList(patientId, result?.processedYear, selectDosValue || "");
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.hccDiseases != null) {
@@ -477,9 +478,10 @@ const Details = ({
 
   const backToPatientData = () => {
     dispatch(getPatientID(null));
-
+    // setSelectDosValue("");
+    getSelectedDos("");
     getCurrentDiseaseType(true);
-    const user = localStorage.getItem("userRole");
+    const user = getStorage("userRole");
     if (user && user.toLowerCase() === "admin") {
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(queryWithoutUser).toString();
@@ -656,7 +658,7 @@ const Details = ({
   };
 
   const getActiveLabels = async () => {
-    const patientId = localStorage.getItem("patientId");
+    const patientId = getStorage("patientId");
     const res = await activeLabels({
       patientId,
       year: dosYearDefalutSelect.value
@@ -759,7 +761,7 @@ const Details = ({
                                     <h6 className="ageDtails">
                                       {getMastData(
                                         patientIdDetailsData?.data?.response
-                                          ?.firstName
+                                          ?.patientName
                                       )}
                                     </h6>
                                     {/* </Tooltip> */}
@@ -788,30 +790,66 @@ const Details = ({
                                       )}
                                     </h6>
                                   </div>
-                                  <div className="col-xl-2 col-sm-12">
-                                    <FontAwesomeIcon icon={faVenusMars} />
-                                    <label>Gender</label>
-                                    <h6
-                                      className="ageDtails"
-                                      style={{ paddingLeft: "25px" }}
-                                    >
-                                      {
-                                        patientIdDetailsData?.data?.response
-                                          ?.gender
-                                      }
-                                    </h6>
+                                  <div className="col-xl-3 col-sm-12">
+                                    <div className="d-flex justify-content-between">
+                                      <div>
+                                        <FontAwesomeIcon icon={faVenusMars} />
+                                        <label>Gender</label>
+                                        <h6
+                                          className="ageDtails"
+                                          style={{ paddingLeft: "25px" }}
+                                        >
+                                          {
+                                            patientIdDetailsData?.data?.response
+                                              ?.gender
+                                          }
+                                        </h6>
+                                      </div>
+                                      <div>
+                                        <i className={visitStyles.dob_icon}>
+                                          {SVGICON.DatebirthIcon}
+                                        </i>
+                                        <label>DOB</label>
+                                        <h6 className="ageDtails">
+                                          {
+                                            patientIdDetailsData?.data?.response
+                                              ?.dob
+                                          }
+                                        </h6>
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div className="col-xl-2 col-sm-12">
-                                    <i className={visitStyles.dob_icon}>
-                                      {SVGICON.DatebirthIcon}
-                                    </i>
-                                    <label>DOB</label>
-                                    <h6 className="ageDtails">
-                                      {
-                                        patientIdDetailsData?.data?.response
-                                          ?.dob
-                                      }
-                                    </h6>
+                                  <div className="col-xl-1 col-sm-12">
+                                    {flagsDetailsResult?.response[0] && (
+                                      <div className="mt-2">
+                                        <div className="d-flex align-items-center justify-content-center cr-pointer" onClick={() => setFlagContainerActive('Flag')}>
+                                          <Tooltip
+                                            placement="bottom"
+                                            title={flagsDetailsResult?.response[0]?.flagDetails?.flagName.replaceAll(
+                                              "_",
+                                              " "
+                                            )}
+                                          >
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="30"
+                                              height="30"
+                                              viewBox="0 0 800 800"
+                                              fill={
+                                                flagsDetailsResult?.response[0]
+                                                  ?.flagDetails?.flagColour
+                                              }
+                                            >
+                                              <path
+                                                d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                                                stroke="#000"
+                                                stroke-width="10"
+                                              />
+                                            </svg>
+                                          </Tooltip>
+                                        </div>
+                                      </div>
+                                    )}
                                   </div>
                                   <div className="col-xl-1 col-sm-12">
                                     <div

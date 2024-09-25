@@ -32,10 +32,10 @@ const index = ({data,header}) => {
           show: true,
           position: "center",
           hoverAnimation: false,
-
           formatter: function () {
             return `{b|${totalSum}}\n {a|Total}`;
           },
+        
           backgroundColor: "transparent",
 
           rich: {
@@ -72,6 +72,7 @@ const index = ({data,header}) => {
       },
     ],
   };
+  console.log(data,"data")
   return (
     <Row>
       <Col span={12}>

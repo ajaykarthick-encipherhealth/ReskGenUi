@@ -17,6 +17,7 @@ import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
 import { SwapOutlined, PlusCircleFilled } from "@ant-design/icons";
 import AddRadiologyForm from "../components/addRadiologyForm";
 import AddLabForm from "../components/addLabForm";
+import { getStorage } from "../../../../utils/storages";
 
 const { Option } = Select;
 
@@ -50,7 +51,7 @@ const Radiology = ({
   };
 
   const getDosList = async(year) => {
-    const patientId = localStorage.getItem("patientId")
+    const patientId = getStorage("patientId")
     try {
       const res = await getPatientRadiologyDosList(patientId, year)
     } catch (error) {
@@ -72,8 +73,8 @@ const Radiology = ({
     );
     setIsLoading(true);
     setSelectDosValue(value);
-    const patientId = localStorage.getItem("patientId");
-    const role = localStorage.getItem("role");
+    const patientId = getStorage("patientId");
+    const role = getStorage("role");
     if (value) {
       getRadiologyDetails(
         patientId,
@@ -158,7 +159,7 @@ const Radiology = ({
       setDosSummariesList(dosList);
       if (dosList?.length != 0) {
         setSelectDosValue(dosList[0]?.value);
-        const patientId = localStorage.getItem("patientId");
+        const patientId = getStorage("patientId");
         getRadiologyDetails(
           patientId,
           selectedYearValue,

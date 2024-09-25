@@ -24,6 +24,7 @@ import {
 import ManuallyAdd from "../../components/manuallyAdd";
 import LogoLoader from "../../../../logoLoader";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
+import { getStorage } from "../../../../../utils/storages";
 
 const VisitData = ({
   setActiveTabHead,
@@ -89,8 +90,8 @@ const VisitData = ({
   const [deletedMeatList, setDeletedMeatList] = useState([]);
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
+    var orgId = getStorage("orgId");
+    var tenId = getStorage("tenantId");
     getPatientDetails(
       orgId,
       tenId,
@@ -159,7 +160,7 @@ const VisitData = ({
     setIsModalOpenValid(true);
   };
   const getValidHccDetails = async (value, code) => {
-    var patientId = localStorage.getItem("patientId");
+    var patientId = getStorage("patientId");
     var result = "";
     var data = "";
 
@@ -404,7 +405,8 @@ const VisitData = ({
                           className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
                         >
                           <span className={`${visitStyles.deleted_title_name}`}>
-                            DELETED CODES
+                            {/* DELETED CODES */}
+                            POTENTIAL DIAGNOSIS
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
@@ -520,7 +522,7 @@ const VisitData = ({
         <div className="my-post-content pt-3">
           <div className="widget-media   ps--active-y">
             <div className="row">
-              <div className="col-xl-4">
+              <div className="col-xl-3">
                 <Droppable droppableId={"HCC"} key={"HCC"}>
                   {(provided) => {
                     return (
@@ -591,7 +593,7 @@ const VisitData = ({
                   }}
                 </Droppable>
               </div>
-              <div className="col-xl-4">
+              <div className="col-xl-3">
                 <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                   {(provided) => {
                     return (
@@ -606,7 +608,7 @@ const VisitData = ({
                           <span
                             className={`${visitStyles.suggested_title_name}`}
                           >
-                            CARE GAP
+                            CARE GAP / SUGGESTED CODES
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
@@ -650,7 +652,7 @@ const VisitData = ({
                                 setConfirmNotesModalValid
                               }
                               setIsValidAction={setIsValidAction}
-                              cardTitle="SUGGESTED"
+                              cardTitle="CARE GAP / SUGGESTED"
                               provided={provided}
                               isVisitData={true}
                             />
@@ -661,7 +663,77 @@ const VisitData = ({
                   }}
                 </Droppable>
               </div>
-              <div className="col-xl-4">
+              <div className="col-xl-3">
+                <Droppable droppableId={"POTENTIAL"} key={"POTENTIAL"}>
+                  {(provided) => {
+                    return (
+                      <div
+                        className="timeline"
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        <div
+                          className={`valid-text d-flex justify-content-sm-between ${visitStyles.potential_title_card}`}
+                        >
+                          <span
+                            className={`${visitStyles.potential_title_name}`}
+                          >
+                            POTENTIAL DIAGNOSIS
+                          </span>
+                          <div className="d-flex justify-content-center">
+                            <span
+                              className={`${visitStyles.potential_title_badge}`}
+                            >
+                              {0}
+                            </span>
+                          </div>
+                        </div>
+                        <div className={visitStyles.HccContainer}>
+                          <div className={visitStyles.hccStickey_head}>
+                            <HccCards
+                              list={[]}
+                              hccVersionDetails={hccVersionDetails}
+                              captureSectionMatching={captureSectionMatching}
+                              encounterDateMatching={encounterDateMatching}
+                              meatCriteriaList={allMeatList}
+                              onchangeValid={onchangeValid}
+                              getValidHccDetails={getValidHccDetails}
+                              setFormValues={setFormValues}
+                              setIsEditHccForm={setIsEditHccForm}
+                              setFormEditPlace={setFormEditPlace}
+                              okText={"Move to Deleted"}
+                              cancelText={"Move to HCC"}
+                              editFormPlace={"SUGGESTED_DISEASE"}
+                              setOpens={setOpens}
+                              setCombiTree={setCombiTree}
+                              setActiveTabHead={setActiveTabHead}
+                              setActiveMeatTitle={setActiveMeatTitle}
+                              setActiveComboTree={setActiveComboTree}
+                              setSearch={setSearch}
+                              setFileLoading={setFileLoading}
+                              setIsModalOpenLab={setIsModalOpenLab}
+                              setIsModalOpenRadiology={setIsModalOpenRadiology}
+                              setIsModalOpenValidCodes={
+                                setIsModalOpenValidCodes
+                              }
+                              setFileModalHeader={setFileModalHeader}
+                              patientDocumentResult={patientDocumentResult}
+                              setConfirmNotesModalValid={
+                                setConfirmNotesModalValid
+                              }
+                              setIsValidAction={setIsValidAction}
+                              cardTitle="POTENTIAL"
+                              provided={provided}
+                              isVisitData={true}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }}
+                </Droppable>
+              </div>
+              <div className="col-xl-3">
                 <Droppable droppableId={"DELETED"} key={"DELETED"}>
                   {(provided) => {
                     return (
@@ -675,6 +747,7 @@ const VisitData = ({
                         >
                           <span className={`${visitStyles.deleted_title_name}`}>
                             DELETED CODES
+                           
                           </span>
                           <div className="d-flex justify-content-center">
                             <span

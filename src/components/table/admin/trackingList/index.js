@@ -9,6 +9,7 @@ import {
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../headerFilters/functions";
+import { getStorage, setStorage } from "../../../../utils/storages";
 
 function TrackingTable({
   patinetListAll,
@@ -36,8 +37,8 @@ function TrackingTable({
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data?.patientId);
-      var role = localStorage.getItem("role");
+      setStorage("patientId", data?.patientId);
+      var role = getStorage("role");
       if (role == "tenant_admin") {
         navigate.push({
           pathname: "/tenantAdmin/patients/details",

@@ -50,8 +50,8 @@ export default function Login() {
   const onLogin = async (e) => {
     e.preventDefault();
     const emailValidation = validateEmail(enteredEmail);
-    const passValidation = getValidatePassword(password, setErrors);
-    if (emailValidation && passValidation) {
+    // const passValidation = getValidatePassword(password, setErrors);
+    if (emailValidation) {
       setErrors({
         email: "",
         password: "",

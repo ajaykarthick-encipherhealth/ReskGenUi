@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import axios from "../../../../../utility/axiosConfig";
 import { validateYear } from "../../../../headerFilters/functions";
 import ENDPOINTS from "../../../../../utility/enpoints";
+import { getStorage } from "../../../../../utils/storages";
 
 const AddRadiologyForm = ({ setOpen, open }) => {
   const patientDetailsResult = useSelector(
@@ -51,9 +52,9 @@ const AddRadiologyForm = ({ setOpen, open }) => {
   };
 
   const submitReport = async () => {
-    const orgId = localStorage.getItem("orgId");
-    const tenId = localStorage.getItem("tenantId");
-    const uId = localStorage.getItem("userId");
+    const orgId = getStorage("orgId");
+    const tenId = getStorage("tenantId");
+    const uId = getStorage("userId");
     const formData = new FormData();
     formData.append("file", selectFile);
     formData.append("orgid", orgId);

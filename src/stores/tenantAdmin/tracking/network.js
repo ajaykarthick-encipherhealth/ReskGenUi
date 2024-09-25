@@ -1,7 +1,8 @@
 import { requestPortal } from "../../../utils/network";
+import { getStorage } from "../../../utils/storages";
 
 export async function getAllTracking(data) {
-  const uId = localStorage.getItem("userId");
+  const uId = getStorage("userId");
   const options = {
     method: "GET",
   };

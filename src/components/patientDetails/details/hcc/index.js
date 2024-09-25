@@ -8,7 +8,16 @@ import Meat from "./meat";
 import RafScore from "./raf";
 import MeatQuery from "./meatQuery";
 import File from "./file";
-import { Button, Dropdown, Popover, Select, Menu, Tooltip, Badge } from "antd";
+import {
+  Button,
+  Dropdown,
+  Popover,
+  Select,
+  Menu,
+  Tooltip,
+  Badge,
+  Tag,
+} from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
 import styles from "../hcc/styles.module.css";
@@ -34,6 +43,8 @@ const Hcc = ({
   isDosSelected,
   selectDosValue,
   setSelectDosValue,
+  getLabPDFFile,
+  getPatientHccFile,
 }) => {
   const dispatch = useDispatch();
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -45,32 +56,78 @@ const Hcc = ({
   const [search, setSearch] = useState();
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [dosSummariesList, setDosSummariesList] = useState([]);
+  const [selectedFile, setSelectedFile] = useState("");
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
-      setSelectDosValue();
+      // setSelectDosValue("");
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
         if (res) {
           var dosLable = (
             <>
               <div className="d-flex justify-content-between">
-                <span className={styles.dosLable}>
-                  {moment(res.dateOfService).format("MM-DD-YYYY")}
-                </span>
+                <div>
+                  <span>
+                    {res?.stateIndicators?.includes("CHART") && (
+                      <span
+                        className="p-1 rounded-2 mx-1"
+                        style={{
+                          background: "#87d068",
+                          color: "#fff",
+                          fontSize: "10px",
+                        }}
+                      >
+                        C
+                      </span>
+                    )}
+                    {res?.stateIndicators?.includes("LAB") && (
+                      <span
+                        className="p-1 rounded-2 mx-1 me-2"
+                        style={{
+                          background: "#108ee9",
+                          color: "#fff",
+                          fontSize: "10px",
+                        }}
+                      >
+                        L
+                      </span>
+                    )}
+                    {res?.stateIndicators?.includes("RADIOLOGY") && (
+                      <span
+                        className="p-1 rounded-2 mx-1"
+                        style={{
+                          background: "#f50",
+                          color: "#fff",
+                          fontSize: "10px",
+                        }}
+                      >
+                        R
+                      </span>
+                    )}
+                  </span>
+
+                  <span className={styles.dosLable}>
+                    {moment(res.dateOfService).format("MM-DD-YYYY")}
+                  </span>
+                </div>
                 {getStatusIcon(res.processedStatus)}
               </div>
             </>
           );
-          dosList.push({ value: res.dateOfService, label: dosLable });
+          dosList.push({
+            value: res.dateOfService,
+            label: dosLable,
+            details: res,
+          });
         }
       });
       setDosSummariesList(dosList);
       if (patientDetailsResult?.data?.response?.dateOfService) {
-        setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
+        // setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
         if (isDosSelected) {
-          const patientId = localStorage.getItem("patientId");
-          const role = localStorage.getItem("role");
+          const patientId = getStorage("patientId");
+          const role = getStorage("role");
           getpatientDetailsData(
             patientId,
             null,
@@ -88,21 +145,46 @@ const Hcc = ({
       setActiveMeatTitle(null);
     }, 10000);
   }, [activeMeatTitle]);
-  
+
   const handleOptions = (value) => {
     setIsLoading(true);
     setSelectDosValue(value);
     const filteredDos = pageNumberOptions?.filter(
       (data) => data?.dos === value
     );
-    getSelectedDosPageNumber(filteredDos?.length>0?filteredDos[0]?.startPageNumber:null);
+    const filteredDos1 = dosSummariesList?.find(
+      (data) => data?.value === value
+    );
+    setSelectedFile(filteredDos1?.details?.fileId || "");
+    if (filteredDos1?.details?.stateIndicators?.includes("LAB")) {
+      getLabPDFFile({ fileId: filteredDos1.details?.fileId });
+    } else if (filteredDos1?.details?.stateIndicators?.includes("RADIOLOGY")) {
+      getLabPDFFile({ fileId: filteredDos1.details?.fileId });
+    } else {
+      if (!filteredDos1?.details?.fileId) {
+        getLabPDFFile({
+          fileId:
+            patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath,
+        });
+        getPatientHccFile(
+          patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
+        );
+      } else {
+        getLabPDFFile({ fileId: filteredDos1?.details?.fileId });
+      }
+
+      getSelectedDosPageNumber(
+        filteredDos?.length > 0 ? filteredDos[0]?.startPageNumber : null
+      );
+    }
+
     if (value) {
       getSelectedDos(value);
     } else {
       getSelectedDos("");
     }
-    const patientId = localStorage.getItem("patientId");
-    const role = localStorage.getItem("role");
+    const patientId = getStorage("patientId");
+    const role = getStorage("role");
 
     if (value) {
       getpatientDetailsData(
@@ -221,9 +303,9 @@ const Hcc = ({
       </div>
     </div>
   );
-useEffect(() => {
-  getSelectedDos("");
-}, [])
+  useEffect(() => {
+    getSelectedDos("");
+  }, []);
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
@@ -237,14 +319,14 @@ useEffect(() => {
                       to="#my-posts"
                       eventKey={1}
                       className={visitStyles.navColor}
-                      onClick={() =>{
+                      onClick={() => {
                         selectTab(
                           1,
                           setFlagTagActive,
                           setActiveTabHead,
                           setActiveComboTree,
                           setPopoverVisible
-                        )
+                        );
                         getCurrentDiseaseType(true);
                       }}
                     >
@@ -340,7 +422,7 @@ useEffect(() => {
                         )
                       }
                     >
-                      MEAT Suggestion
+                      Query
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item">
@@ -349,7 +431,7 @@ useEffect(() => {
                       onChange={handleOptions}
                       className="dosSelect"
                       allowClear
-                      value={selectDosValue?selectDosValue:null}
+                      value={selectDosValue ? selectDosValue : null}
                     >
                       {dosSummariesList?.map((data) => (
                         <Option key={data?.value} value={data?.value}>
@@ -359,7 +441,7 @@ useEffect(() => {
                     </Select>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item mx-2">
-                    {localStorage.getItem("role") != "admin" &&
+                    {getStorage("role") != "admin" &&
                       selectDosValue && (
                         <YearAndDosStatus setIsLoading={setIsLoading} />
                       )}
@@ -503,7 +585,7 @@ useEffect(() => {
                 <RafScore />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={6}>
-                <MeatQuery />
+                <MeatQuery year={year} />
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>
@@ -523,7 +605,9 @@ const enhancer = connect(
     getpatientDetailsData: detailsActions.patientDetailsAction,
     getSelectedDos: detailsActions.getSelectedDos,
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
-    getCurrentDiseaseType:detailsActions.getCurrentDiseaseType
+    getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
+    getLabPDFFile: detailsActions.labPDFDetails,
+    getPatientHccFile: detailsActions.patientHccFileAction,
   }
 );
 export default enhancer(Hcc);

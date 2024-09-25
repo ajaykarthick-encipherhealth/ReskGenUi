@@ -34,8 +34,6 @@ const Index = () => {
     ? new Date(DateRanges.endDate).toISOString()
     : endOfToday.toISOString().split("T")[0] + "T23:59:59.999Z";
 
-  console.log({ startDate, endDate });
-
   useEffect(() => {
     dispatch(getWorkFlow(startDate, endDate, router));
   }, [startDate, endDate]);

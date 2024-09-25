@@ -1,7 +1,6 @@
 import { checkStatus } from "./helper";
 import { getStorage } from "../storages";
 import { portalUrl, tokenKey } from "../config";
-import ENDPOINTS from "../../utility/enpoints";
 
 export async function requestPortal(url, options) {
   const token = await getStorage(tokenKey);

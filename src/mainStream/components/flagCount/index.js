@@ -43,7 +43,10 @@ const Flags = ({ reportListAll, styles }) => {
               </div>
               <Popover
                 content={() => (
-                  <div>
+                  <div style={{
+                    maxHeight: "200px",
+                    overflow: "scroll"
+                  }}>
                     {flagItem.patientIds.map((item) => (
                       <label className="d-block">{item}</label>
                     ))}
@@ -51,7 +54,7 @@ const Flags = ({ reportListAll, styles }) => {
                 )}
                 trigger="hover"
               >
-                <div className={styles.count}>
+                <div className={`cr-pointer ${styles.count}`}>
                   {flagItem.count ? flagItem.count : 0}
                 </div>
               </Popover>

@@ -404,7 +404,10 @@ const Timeline = ({
           return (
             <div className="d-flex">
               {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.suggestedColor}>SUGGESTED</span> to{" "}
+              <span className={visitStyles.suggestedColor}>
+                {/* SUGGESTED */}
+                CAREGAP
+                </span> to{" "}
               <span className={visitStyles.validColor}> VALID</span>
             </div>
           );
@@ -414,7 +417,10 @@ const Timeline = ({
               <div className="d-flex">
                 {item.diagnosisCode} - Moved from{" "}
                 <span className={visitStyles.validColor}>HCC</span> to{" "}
-                <span className={visitStyles.suggestedColor}>SUGGESTED</span>
+                <span className={visitStyles.suggestedColor}>
+                  {/* SUGGESTED */}
+                  CAREGAP
+                </span>
               </div>
             );
           }
@@ -431,7 +437,10 @@ const Timeline = ({
             return (
               <div className="d-flex">
                 {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.suggestedColor}>SUGGESTED</span> to{" "}
+                <span className={visitStyles.suggestedColor}>
+                  {/* SUGGESTED */}
+                  CAREGAP
+                  </span> to{" "}
                 <span className={visitStyles.validColor}> HCC</span>
               </div>
             );
@@ -440,7 +449,10 @@ const Timeline = ({
             return (
               <div className="d-flex w-100">
                 {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.suggestedColor}>SUGGESTED</span> to{" "}
+                <span className={visitStyles.suggestedColor}>
+                  {/* SUGGESTED */}
+                  CAREGAP
+                  </span> to{" "}
                 <span className={visitStyles.deletedColor}> DELETED</span>
               </div>
             );
@@ -459,14 +471,17 @@ const Timeline = ({
               <div className="d-flex">
                 {item.diagnosisCode} - Moved from{" "}
                 <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
-                <span className={visitStyles.suggestedColor}>SUGGESTED</span>
+                <span className={visitStyles.suggestedColor}>
+                  {/* SUGGESTED */}
+                  CAREGAP
+                  </span>
               </div>
             );
           }
         case "VALID_DISEASE_ADDED":
-          return `${item.diagnosisCode} - Valid from disease added`;
-        case "MANUALLY_ADDED_DISEASE":
           return `${item.diagnosisCode} - Disease added`;
+        case "MANUALLY_ADDED_DISEASE":
+          return `${item.diagnosisCode} - Disease added manually`;
         case "MOVED_VALID_TO_DELETED":
           return (
             <div className="d-flex">
@@ -588,14 +603,20 @@ const Timeline = ({
             <div className="d-flex">
               {item.diagnosisCode} - Moved from{" "}
               <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
-              <span className={visitStyles.suggestedColor}>SUGGESTED</span>
+              <span className={visitStyles.suggestedColor}>
+                {/* SUGGESTED */}
+                CAREGAP
+                </span>
             </div>
           );
         case "MOVED_SUGGESTED_TO_DELETED":
           return (
             <div className="d-flex w-100">
               {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.suggestedColor}>SUGGESTED</span> to{" "}
+              <span className={visitStyles.suggestedColor}>
+                {/* SUGGESTED */}
+                CAREGAP
+                </span> to{" "}
               <span className={visitStyles.deletedColor}> DELETED</span>
             </div>
           );

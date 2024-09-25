@@ -31,6 +31,7 @@ import {
 import Tab from "../components/tags";
 import MoreFilter from "../../resusablereport/reports/MoreFilter";
 import TeamReport from "./teamReport";
+import { getStorage, setStorage } from "../../utils/storages";
 
 const statusOptions = [
   { label: "All", value: "" },
@@ -60,6 +61,7 @@ const Reports = ({
   supervisorReportDetails,
   teamReport,
   auditeReportLoading,
+  AdminReportDetails,
   tab,
 }) => {
   const dispatch = useDispatch();
@@ -307,7 +309,7 @@ const Reports = ({
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({
@@ -430,7 +432,7 @@ const Reports = ({
       setSentPageNo(page);
       setPaginationSentFirst(limit);
     }
-    setUserRole(localStorage.getItem("userRole"));
+    setUserRole(getStorage("userRole"));
   }, [activeTab]);
 
   useEffect(() => {
@@ -447,7 +449,6 @@ const Reports = ({
       : activeTab === "Audit"
       ? setTeamPageNo
       : setPageNo;
-
   return (
     <div>
       <Header />
@@ -486,6 +487,7 @@ const Reports = ({
                                     filterChangePatientId(e);
                                     resetPageNumber(resetPageState);
                                   }}
+                                  autoComplete="off"
                                   className="form-control new-form-control new-item-control reportInput"
                                   placeholder="Search"
                                   maxLength={25}
@@ -792,7 +794,9 @@ const Reports = ({
                                   (item) => item.field === "initialSearch"
                                 )?.search
                               : "",
-                            filter: selectedOptions?.Status?.value ? selectedOptions?.Status?.value : '',
+                            filter: selectedOptions?.Status?.value
+                              ? selectedOptions?.Status?.value
+                              : "",
                             userName: selectedOptions?.UserRole?.value
                               ? selectedOptions?.UserRole?.value
                               : "",

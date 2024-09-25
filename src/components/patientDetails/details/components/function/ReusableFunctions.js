@@ -13,6 +13,7 @@ import styles from "../HCC/styles.module.css";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import { getResponePopup } from "../../../../../utils/reusable";
+import { getStorage } from "../../../../../utils/storages";
 
 export const getEncounterDateBackground = ({
   value,
@@ -39,7 +40,7 @@ export const getEncounterDateBackground = ({
       var sectionMapArr = res ? (
         <span
           onClick={() => {
-            const patientId = localStorage.getItem("patientId");
+            const patientId = getStorage("patientId");
             const selectedMeatData = hyperlinks?.find(
               (ite) =>
                 ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
@@ -48,7 +49,7 @@ export const getEncounterDateBackground = ({
             if (selectedMeatData?.stateIndicator) {
               setLabData && setLabData(selectedMeatData?.fileId);
               getCurrentDiseaseType && getCurrentDiseaseType(false);
-              if (selectedMeatData?.stateIndicator === "LAB") {
+              if (selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY") {
                 setSelectedDos && setSelectedDos(res);
                 if (getLabPDF) {
                   getLabPDF({
@@ -117,7 +118,7 @@ export const getEncounterDateBackground = ({
                 i > 1 ? (
                   <span
                     onClick={() => {
-                      const patientId = localStorage.getItem("patientId");
+                      const patientId = getStorage("patientId");
                       const selectedMeatData = hyperlinks?.find(
                         (ite) =>
                           ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
@@ -125,7 +126,7 @@ export const getEncounterDateBackground = ({
                       );
                       if (selectedMeatData?.stateIndicator) {
                         getCurrentDiseaseType && getCurrentDiseaseType(false);
-                        if (selectedMeatData?.stateIndicator === "LAB") {
+                        if (selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY") {
                           setSelectedDos && setSelectedDos(item);
                           if (getLabPDF) {
                             getLabPDF({
@@ -229,7 +230,7 @@ export const getEncounterDateBackgroundLab = ({
       var sectionMapArr = res ? (
         <span
           onClick={() => {
-            const patientId = localStorage.getItem("patientId");
+            const patientId = getStorage("patientId");
             const selectedMeatData = dosSummaries?.find(
               (ite) =>
                 // ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
@@ -309,7 +310,7 @@ export const getEncounterDateBackgroundLab = ({
                 i > 1 ? (
                   <span
                     onClick={() => {
-                      const patientId = localStorage.getItem("patientId");
+                      const patientId = getStorage("patientId");
                       const selectedMeatData = hyperlinks?.find(
                         (ite) =>
                           ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
@@ -317,7 +318,7 @@ export const getEncounterDateBackgroundLab = ({
                       );
                       if (selectedMeatData?.stateIndicator) {
                         getCurrentDiseaseType && getCurrentDiseaseType(false);
-                        if (selectedMeatData?.stateIndicator === "LAB") {
+                        if (selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY") {
                           setSelectedDos && setSelectedDos(item);
                           if (getLabPDF) {
                             getLabPDF({
@@ -461,14 +462,14 @@ export const getHeaderHyperlink = (
       <span
         onClick={() => {
           getSelectedDosPageNumber(null);
-          const patientId = localStorage.getItem("patientId");
+          const patientId = getStorage("patientId");
           const selectedMeatData = value?.find(
             (item) => item?.dateOfService === res?.dateOfService
           );
           if (selectedMeatData?.stateIndicator) {
             getCurrentDiseaseType && getCurrentDiseaseType(false);
             setLabData && setLabData(selectedMeatData?.fileId);
-            selectedMeatData?.stateIndicator === "LAB"
+            selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
               ? getLabPDF &&
                 getLabPDF({
                   fileId: selectedMeatData?.fileId,
@@ -666,15 +667,14 @@ export const getCaptureSectionBackgroundFile = ({
           <span
             onClick={() => {
               getSelectedDosPageNumber(null);
-              const patientId = localStorage.getItem("patientId");
+              const patientId = getStorage("patientId");
               const selectedMeatData = hyperlinks?.find(
                 (item) => item?.header === res
               );
-
               if (selectedMeatData?.stateIndicator) {
                 setLabData && setLabData(selectedMeatData?.fileId);
                 getCurrentDiseaseType && getCurrentDiseaseType(false);
-                selectedMeatData?.stateIndicator === "LAB"
+                selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
                   ? getLabPDF &&
                     getLabPDF &&
                     getLabPDF({
@@ -779,7 +779,7 @@ export const getCaptureSectionBackgroundFile = ({
                       <span
                         onClick={() => {
                           getSelectedDosPageNumber(null);
-                          const patientId = localStorage.getItem("patientId");
+                          const patientId = getStorage("patientId");
                           const selectedMeatData = hyperlinks?.find(
                             (it) => it?.header == item
                           );
@@ -787,7 +787,7 @@ export const getCaptureSectionBackgroundFile = ({
                             setLabData && setLabData(selectedMeatData?.fileId);
                             getCurrentDiseaseType &&
                               getCurrentDiseaseType(false);
-                            selectedMeatData?.stateIndicator === "LAB"
+                            selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
                               ? getLabPDF &&
                                 getLabPDF({
                                   fileId: selectedMeatData?.fileId,
@@ -920,7 +920,7 @@ export const getCaptureSectionBackgroundFile = ({
                         <span
                           onClick={() => {
                             getSelectedDosPageNumber(null);
-                            const patientId = localStorage.getItem("patientId");
+                            const patientId = getStorage("patientId");
                             const selectedMeatData = hyperlinks?.find(
                               (it) => it?.header == item
                             );
@@ -929,7 +929,7 @@ export const getCaptureSectionBackgroundFile = ({
                                 setLabData(selectedMeatData?.fileId);
                               getCurrentDiseaseType &&
                                 getCurrentDiseaseType(false);
-                              selectedMeatData?.stateIndicator === "LAB"
+                              selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
                                 ? getLabPDF &&
                                   getLabPDF({
                                     fileId: selectedMeatData?.fileId,
@@ -1105,7 +1105,6 @@ export const getSectionNameManually = ({
   sectionEdit,
 }) => {
   return data.map((res, index) => {
-    // if (index < 2) {
     var sectionMapArr = (
       <span
         className={`mt-2 text-start ${visitStyles.provider_name_manually} cr-pointer`}
@@ -1141,7 +1140,7 @@ export const getSectionNameManually = ({
         </label>
       </span>
     );
-    return sectionMapArr;
+    return res?.section?.toLowerCase() != "cogent_dos" && sectionMapArr;
   });
 };
 export const getProviderNameList = ({ data, captureSectionMatching }) => {
@@ -1315,7 +1314,7 @@ export const handleSubmitValidNotes = async ({
     apiURL = "management/disease/move/validtosuggested";
   }
   try {
-    var patientId = localStorage.getItem("patientId");
+    var patientId = getStorage("patientId");
     var dataFormatSuggested = {
       patientId: patientId,
       diagnosisCode: selectDisDetails.diagnosisCode
@@ -1682,14 +1681,14 @@ export const getCaptureSectionBackgroundMeatNew = (
       <span
         onClick={() => {
           getSelectedDosPageNumber && getSelectedDosPageNumber(null);
-          const patientId = localStorage.getItem("patientId");
+          const patientId = getStorage("patientId");
           const selectedMeatData = dublicateCaptureRemove?.find(
             (item) => item?.header === res.header
           );
           if (selectedMeatData?.stateIndicator) {
             setLabData && setLabData(selectedMeatData?.fileId);
             getCurrentDiseaseType && getCurrentDiseaseType(false);
-            selectedMeatData?.stateIndicator === "LAB"
+            selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
               ? getLabPDF &&
                 getLabPDF({
                   fileId: selectedMeatData?.fileId,
@@ -1803,12 +1802,12 @@ export const stringToColour = (str) => {
   if (str?.toLocaleLowerCase() === "plan") {
     colour = "#7e00ff";
   }
-  if (str.toLocaleLowerCase() === "examination") {
+  if (str?.toLocaleLowerCase() === "examination") {
     colour = "#9eb875";
   }
   if (
-    str.toLocaleLowerCase() == "assessments" ||
-    str.toLocaleLowerCase() == "assessment"
+    str?.toLocaleLowerCase() == "assessments" ||
+    str?.toLocaleLowerCase() == "assessment"
   ) {
     colour = "#f1a113";
   }

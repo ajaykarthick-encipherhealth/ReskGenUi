@@ -31,6 +31,7 @@ import MovementAction from "../movementAction";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
 import TableRisk from "../../../../tableRisk";
 import moment from "moment";
+import { getStorage } from "../../../../../utils/storages";
 const HccCards = ({
   list,
   hccVersionDetails,
@@ -158,7 +159,7 @@ const HccCards = ({
     });
   };
 
-  const userId = localStorage.getItem("userId");
+  const userId = getStorage("userId");
 
   useEffect(() => {
     if (selectedDos && labFile?.data?.response?.dosSummaries) {
@@ -223,7 +224,7 @@ const HccCards = ({
                                     {data.diagnosisCode}
                                   </span>
 
-                                  {!isDeletedCodes && isDosSelected && (
+                                  {!isDeletedCodes && isDosSelected && data?.isLab != true && data?.isRadiology != true && (
                                     <FontAwesomeIcon
                                       icon={faPen}
                                       style={{ cursor: "pointer" }}
@@ -912,6 +913,16 @@ const HccCards = ({
                                       </span>
                                     </Tooltip>
                                   )}
+                                  {data?.stateIndicators?.includes("CONFLICT_CONDITION") && (
+                                    <Tooltip title="RADIOLOGY">
+                                      <span
+                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                        bg={`  mt-2 bg-bg-eight `}
+                                      >
+                                        Conflict
+                                      </span>
+                                    </Tooltip>
+                                  )}
                                   {data.isLab == true && (
                                     <Tooltip title="LAB">
                                       <span
@@ -922,6 +933,11 @@ const HccCards = ({
                                       </span>
                                     </Tooltip>
                                   )}
+                                  {data?.stateIndicators?.includes("CRITICAL_CONDITION") &&  <Badge
+                                      className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                    >
+                                      Critical
+                                    </Badge>}
                                 </div>
                               </div>
                             )}

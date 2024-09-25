@@ -1,11 +1,12 @@
 import { requestPortal } from "../../../utils/network";
+import { getStorage } from "../../../utils/storages";
 
 export async function PatientsList({ data }) {
   const options = {
     method: "GET",
   };
-  const uId = localStorage.getItem("userId");
-  const orgId = localStorage.getItem("orgId");
+  const uId = getStorage("userId");
+  const orgId = getStorage("orgId");
 
   const url = `page=${
     data?.pageNo
@@ -17,8 +18,8 @@ export async function PatientsList({ data }) {
   return res;
 }
 export const TrackingList = async ({ data }) => {
-  const uId = localStorage.getItem("userId");
-  const orgId = localStorage.getItem("orgId");
+  const uId = getStorage("userId");
+  const orgId = getStorage("orgId");
   const filteredStatus =
     data?.selectedOption === undefined ? "" : data?.selectedOption;
   const filteredDStart =

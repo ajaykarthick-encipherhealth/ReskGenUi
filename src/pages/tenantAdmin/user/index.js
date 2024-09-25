@@ -19,6 +19,7 @@ import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users"
 import SpinnerDots from "../../../components/spinner";
 import UsersList from "../../../components/table/tenantTable/usersList/usersList";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
+import { getStorage } from "../../../utils/storages";
 
 const { Option } = Select;
 const options3 = [
@@ -31,6 +32,7 @@ const RoleList = [
   { value: "ADMIN", label: "ADMIN" },
   { value: "REVIEWER", label: "REVIEWER" },
   { value: "SUPERVISOR", label: "SUPERVISOR" },
+  { value: "TENANT_ADMIN", label: "TENANT ADMIN" },
 ];
 
 const intialValues = {
@@ -189,9 +191,9 @@ const UserList = ({
     }
   }, [usersListData]);
   useEffect(() => {
-    var tenId = localStorage.getItem("tenantId");
-    var uId = localStorage.getItem("userId");
-    var orgId = localStorage.getItem("orgId");
+    var tenId = getStorage("tenantId");
+    var uId = getStorage("userId");
+    var orgId = getStorage("orgId");
     setFormData(intialValues);
     setLocalTenantId(tenId);
     setLocalUserId(uId);

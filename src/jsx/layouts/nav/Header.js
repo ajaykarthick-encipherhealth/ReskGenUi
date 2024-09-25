@@ -25,7 +25,7 @@ import {
   MinusCircleOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
-
+import CodeRoot from "../../../images/menu/coderootv4.png";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES, SVGICON } from "../../constant/theme";
 import {
@@ -64,6 +64,7 @@ import {
 import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
 import Codify from "../../../pages/codify";
 import { actions as webSocketActions } from "../../../stores/websocket";
+import { getStorage } from "../../../utils/storages";
 
 const Header = ({
   notificationResponse,
@@ -139,7 +140,7 @@ const Header = ({
       closeOnConfirm: false,
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const userRole = localStorage.getItem("role");
+        const userRole = getStorage("role");
         await logoutAllDevice();
         localStorage.clear();
         if (userRole != "ehr") {
@@ -152,9 +153,9 @@ const Header = ({
   };
 
   const getUserIdDetails = async (currentUserInfo) => {
-    const token = localStorage.getItem("token");
-    const getUserId = localStorage.getItem("userId");
-    const userRole = localStorage.getItem("role");
+    const token = getStorage("token");
+    const getUserId = getStorage("userId");
+    const userRole = getStorage("role");
 
     setUserIdDetails(currentUserInfo?.data?.response);
     setProfileImg(currentUserInfo?.data?.response?.profileImageUrl);
@@ -301,15 +302,15 @@ const Header = ({
     );
 
   const onClick = ({ key }) => {
-    localStorage.setItem("userRole", key);
+    setStorage("userRole", key);
     if (key === "admin") {
-      router.push("/admin/user");
+      router.push("/admin/dashboard");
     } else if (key === "reviewer") {
       router.push("/reviewer/dashboard");
     } else if (key === "supervisor") {
       router.push("/supervisor/dashboard");
     } else if (key === "tenant_admin") {
-      router.push("/tenant_admin/fhirTable");
+      router.push("/tenantAdmin/dashboard");
     } else if (key === "ehr") {
       router.push("/ehr/patients");
     }
@@ -374,7 +375,7 @@ const Header = ({
 
   const titleWithIcons = (
     <div className="d-flex align-items-center justify-content-between">
-      <div className={styles.heading}>CODES</div>
+      <div className={styles.heading}>CodeRoot</div>
       <div className="d-flex gap-3">
         <PlusCircleOutlined
           onClick={() => handleExpand()}
@@ -438,11 +439,11 @@ const Header = ({
   }, []);
 
   useEffect(() => {
-    var loginCheck = localStorage.getItem("loginCheck");
-    const userRoleLocal = localStorage.getItem("userRole");
-    const userId = localStorage.getItem("userId");
-    const userRole = localStorage.getItem("role");
-    const tenentId = localStorage.getItem("tenantId");
+    var loginCheck = getStorage("loginCheck");
+    const userRoleLocal = getStorage("userRole");
+    const userId = getStorage("userId");
+    const userRole = getStorage("role");
+    const tenentId = getStorage("tenantId");
     dispatch(getCurrentUser(userId, router));
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
@@ -609,7 +610,7 @@ const Header = ({
                           <FontAwesomeIcon icon={faChevronRight} />
                         </div>
                       </div>
-                    )}
+                    )} 
                 </ul>
               </div>
             ) : null}
@@ -621,7 +622,15 @@ const Header = ({
                       <div className="header-info2 d-flex align-items-center">
                         <div className={styles.codify}>
                           {/* <div>{SVGICON.codify}</div> */}
-                          <FontAwesomeIcon onClick={showDrawer} icon={faBook} />
+                          <Tooltip placement="bottom" title={"CodeRoot"}>
+                            <img
+                              src={CodeRoot.src}
+                              width={"35px"}
+                              height={"27px"}
+                              onClick={showDrawer}
+                            />
+                          </Tooltip>
+                          {/* <FontAwesomeIcon onClick={showDrawer} icon={faBook} /> */}
                         </div>
 
                         <Drawer
@@ -695,7 +704,7 @@ const Header = ({
                                 marginTop: "8px",
                                 fontWeight: "700",
                                 marginRight: "10px",
-                                color: "#241572",
+                                color: "#04306F",
                                 fontSize: "30px",
                               }}
                             />
@@ -706,8 +715,8 @@ const Header = ({
                             className="chatheaderIcon"
                             onClick={() => gotoChat()}
                           >
-                            <div style={{ color: "#04306f" }}>
-                              <div style={{ color: "#04306f" }}>
+                            <div style={{ color: "#04306F" }}>
+                              <div style={{ color: "#04306F" }}>
                                 <FontAwesomeIcon
                                   icon={faMessage}
                                   className={styles.bellIcon}
@@ -717,6 +726,7 @@ const Header = ({
                                     marginTop: "8px",
                                     fontWeight: "700",
                                     marginRight: "10px",
+                                    color: "#04306F",
                                   }}
                                 />
                               </div>
@@ -727,11 +737,12 @@ const Header = ({
                           className="notificationIcon"
                           onClick={() => notificationDrawer()}
                         >
-                          <Badge count={notificationCount} color="#04306f">
-                            <div style={{ color: "#04306f" }}>
+                          <Badge count={notificationCount} color="#04306F">
+                            <div style={{ color: "#04306F" }}>
                               <FontAwesomeIcon
                                 icon={faBell}
                                 className={`fa-regular ${styles.bellIcon}`}
+                                styles={{ color: "#04306F" }}
                               />
                             </div>
                           </Badge>

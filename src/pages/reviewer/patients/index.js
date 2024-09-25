@@ -20,6 +20,7 @@ import Abort from "../../../../src/images/trackingImages/Abort.png";
 import { actions as workqueueActions } from "../../../stores/reviewer/workqueue";
 import {
   disableFutureDate,
+  disableFutureDates,
   priorityOptions,
   resetPageNumber,
 } from "../../../components/headerFilters/functions";
@@ -38,6 +39,7 @@ import { patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
+import { getStorage, setStorage } from "../../../utils/storages";
 
 const { RangePicker } = DatePicker;
 
@@ -102,7 +104,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     HOLD: 0,
   });
   const [selectedPriority, setSelectedPriority] = useState();
-  const [showFilters, setShowFilters] = useState(navigate?.query?true:false);
+  const [showFilters, setShowFilters] = useState(
+    navigate?.query ? true : false
+  );
   const dueStartDate = filteratedDashboardData?.dayDate
     ? moment(filteratedDashboardData?.dayDate)?.format("YYYY-MM-DD") +
       "T00:00:00.000Z"
@@ -263,7 +267,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     selectedPriority,
     searchTextValue
   ) => {
-    const uId = localStorage.getItem("userId");
+    const uId = getStorage("userId");
     const resoureUrl = `patientAllocated=${uId}&page=${
       pageNo ? pageNo : 0
     }&size=${pageSize ? pageSize : 15}&processedStatus=${
@@ -295,13 +299,11 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     setIsLoading(true);
     setSearchVal(e.target.value);
     debounceText(e.target.value);
-
     // const resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${val}`;
     // dispatch(getpatientsListFilter(resoureUrl));
     // getpatientsListFilter({ url: resoureUrl });
     resetPageNumber(setPageNo);
   };
-
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
     inputValue.name = data.patientName;
@@ -314,7 +316,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     if (data.computing == 2) {
       const controller = new AbortController();
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({
@@ -622,6 +624,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                           dayjs(defaultEndDate, "MM-DD-YYYY"),
                                         ]
                                       : []
+                                  }
+                                  disabledDate={(current) =>
+                                    disableFutureDates(current)
                                   }
                                 />
                               </div>

@@ -110,7 +110,7 @@ const DailyTask = ({ trackChart }) => {
     <>
       {/* <HeadTitle header="" /> */}
       <div className={styles.card2}>
-        <Card borderRadius="28px" style={{ display: "flex" }}>
+      <div className="p-1 rounded" style={{ background: "#fff",maxHeight: "150px" }}>
           <Col span={22}>
             <Row style={{ display: "flex", justifyContent: "space-between" }}>
               <Col span={22} className={styles.sliderdiv}>
@@ -165,7 +165,7 @@ const DailyTask = ({ trackChart }) => {
               </Col>
             </Row>
           </Col>
-        </Card>
+        </div>
       </div>
     </>
   );

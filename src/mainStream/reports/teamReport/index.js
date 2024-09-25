@@ -28,7 +28,7 @@ import {
   processstatusBodyTemplate,
 } from "../../components/chartUtils";
 import { actions as supervisorAction } from "../../../stores/supervisor/report";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 import ENDPOINTS from "../../../utility/enpoints";
 
 const TeamReport = ({
@@ -61,7 +61,7 @@ const TeamReport = ({
     //   ? []
     //   : reportListAll?.response?.response?.data;
     // setSelectedRows(updatedRows);
-    const orgId = localStorage.getItem("orgId");
+    const orgId = getStorage("orgId");
     if (activeTab === "Audit") {
       // auditReport({
       //   pagenum: 0,
@@ -72,13 +72,12 @@ const TeamReport = ({
           setIsLoading(true);
           const res = await fetch(
             ENDPOINTS.apiEndoint +
-              `dbservice/patient/auditor/assinedreport?pageno=0&size=${ReportPatientDetails?.response?.response?.totalElements}&orgid=${orgId}`,
+              `dbservice/patient/auditor/assinedreport?pageno=0&size=${ReportPatientDetails?.response?.response?.totalElements}&orgid=${orgId}&allPatientIds=true`,
             {
               headers: { Authorization: `Bearer ${await getStorage("token")}` },
             }
           ).then((res) => res.json());
-          const seletedAll = res?.response?.response?.data;
-
+          const seletedAll = res?.response?.patientIds;
           setSelectedRows(seletedAll ? seletedAll : []);
           setIsLoading(false);
         } catch (error) {}
@@ -94,12 +93,12 @@ const TeamReport = ({
           setIsLoading(true);
           const res = await fetch(
             ENDPOINTS.apiEndoint +
-              `dbservice/patient/auditorreport?pageno=0&size=${ReportPatientDetails?.response?.response?.totalElements}&orgid=${orgId}`,
+              `dbservice/patient/auditorreport?pageno=0&size=${ReportPatientDetails?.response?.response?.totalElements}&orgid=${orgId}&allPatientIds=true`,
             {
               headers: { Authorization: `Bearer ${await getStorage("token")}` },
             }
           ).then((res) => res.json());
-          const seletedAll = res?.response?.response?.data;
+          const seletedAll = res?.response?.patientIds;
 
           setSelectedRows(seletedAll ? seletedAll : []);
           setIsLoading(false);
@@ -247,9 +246,9 @@ const TeamReport = ({
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
-      const currentRole = localStorage.getItem("userRole");
+      const currentRole = getStorage("userRole");
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push({
         pathname: `/${currentRole}/patients/details`,
         query: page,

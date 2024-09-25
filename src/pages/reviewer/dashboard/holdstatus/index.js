@@ -54,7 +54,7 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
               key={item?.id}
               className={styles.tabelCell}
               onClick={() => {
-                dispatch(getPatientID({ patirntId: item.patientId }));
+                dispatch(getPatientID({ patientId: item.patientId }));
                 router.push("/reviewer/patients/details");
               }}
             >

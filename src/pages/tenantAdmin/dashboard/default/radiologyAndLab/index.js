@@ -7,13 +7,13 @@ const index = () => {
     {
       id: 1,
       title: "Radiology",
-      count: "12434",
+      count: "5",
       color: "#F8D3E9",
     },
     {
       id: 2,
       title: "lab",
-      count: "62345",
+      count: "7",
       color: "#D0E0FB",
     },
   ];
@@ -55,7 +55,7 @@ const index = () => {
 
         <div>
           <div className={styles.header}>Overall Count</div>
-          <div className={styles.price}>3000</div>
+          <div className={styles.price}>12</div>
         </div>
       </div>
       </div>

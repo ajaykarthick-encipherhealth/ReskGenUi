@@ -34,6 +34,7 @@ import ModelIndex from "../../components/model/Index";
 import ManuallyAdd from "../../components/manuallyAdd";
 import { getDateOfServiceBackground } from "../../components/function/DateOfServices";
 import { getPatientLabDetailsNew } from "../../components/function/GetDataLab";
+import { getStorage } from "../../../../../utils/storages";
 const { Option } = Select;
 
 const Meat = ({
@@ -84,8 +85,8 @@ const Meat = ({
   const [deletedMeatList, setDeletedMeatList] = useState([]);
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
+    var orgId = getStorage("orgId");
+    var tenId = getStorage("tenantId");
     getPatientLabDetailsNew(
       orgId,
       tenId,
@@ -164,7 +165,7 @@ const Meat = ({
   };
 
   const onFinishMeat = async (form) => {
-    const patientId = localStorage.getItem("patientId");
+    const patientId = getStorage("patientId");
     const data = {
       ...form,
       patientId: patientId,

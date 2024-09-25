@@ -1,8 +1,9 @@
 import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
+import { getStorage } from "../../utils/storages";
 
 export async function FihrServices(router) {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(`${ENDPOINTS?.apiLocal}emr/fhir/emr`, {
       headers: {

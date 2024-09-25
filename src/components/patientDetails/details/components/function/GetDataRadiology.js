@@ -1,3 +1,5 @@
+import { getStorage } from "../../../../../utils/storages";
+
 export const getPatientRadiologyDetails = async (
   radiologyDetailsResult,
   sectionColorList,
@@ -14,7 +16,7 @@ export const getPatientRadiologyDetails = async (
   setAllDisList,
   setDeletedDiseasesList
 ) => {
-  var patientId = localStorage.getItem("patientId");
+  var patientId = getStorage("patientId");
   if (radiologyDetailsResult?.data?.response) {
     var result = radiologyDetailsResult?.data?.response;
     setPatientDetailsRadiology(result);

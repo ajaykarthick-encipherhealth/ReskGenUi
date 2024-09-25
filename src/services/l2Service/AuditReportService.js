@@ -1,6 +1,7 @@
 import { checkAutoLogin } from "../../stores/authflow/actions";
 import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
+import { getStorage } from "../../utils/storages";
 
 export const patientDetails = async (
   pagenum,
@@ -10,8 +11,8 @@ export const patientDetails = async (
   filter,
   sort
 ) => {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
 
   const searchValue = filter === "ALL" ? "" : filter;
   const sortField = sort?.sortField === "undefined" ? "" : sort?.sortField;
@@ -37,8 +38,8 @@ export const TeamReport = async (
   search,
   sort
 ) => {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
   const url = `dbservice/patient/auditorreport?pageno=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&orgid=${orgId}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
 
   try {
@@ -60,7 +61,7 @@ export const AuditSentReport = async (
   search,
   sort
 ) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
 
   const url = `dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
   try {
@@ -85,7 +86,7 @@ export const AuditReceivedReport = async (
   search,
   sort
 ) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   const sortField = sort?.sortField === "undefined" ? "" : sort?.sortField;
   const sortDirection = sort?.sortDir === "undefined" ? "" : sort?.sortDir;
   const url = `dbservice/reportdetails/received?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sortField}&sortdirection=${sortDirection}`;
@@ -102,7 +103,7 @@ export const AuditReceivedReport = async (
   }
 };
 export const GetSelectedReport = async (reportId, reportInfo) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/reportdetails/get?reportId=${reportId}`,
@@ -119,7 +120,7 @@ export const GetSelectedReport = async (reportId, reportInfo) => {
 };
 
 export const exportData = (data) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   return axios.post(
     `${ENDPOINTS?.apiEndoint}management/patient/report/export`,
     data,
@@ -132,7 +133,7 @@ export const exportData = (data) => {
 };
 
 export const usersList = (id, search) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   return axios.get(
     `${ENDPOINTS?.apiEndoint}dbservice/user/getUsersByOrgIdAndTenantId?orgid=${id}&searchString=${search}`,
     {
@@ -144,7 +145,7 @@ export const usersList = (id, search) => {
 };
 
 export const getFile = (pathname) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   return axios.get(
     `${ENDPOINTS?.apiEndoint}management/patient/report/getfile?blobName=${pathname}`,
     {

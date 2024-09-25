@@ -17,6 +17,7 @@ import EpicLogo from "../images/ehr/epic_1.png";
 import worksLogo from "../images/ehr/eclinicalworks.png";
 import cernerLogo from "../images/ehr/cerner.png";
 import { submitLogin } from "../stores/authflow/actions";
+import { setStorage } from "../utils/storages";
 
 export default function Login() {
   const router = useRouter();
@@ -63,7 +64,7 @@ export default function Login() {
         email: "",
         password: "",
       });
-      localStorage.setItem("userRole", "ehr");
+      setStorage("userRole", "ehr");
       let response = await submitLogin(enteredEmail, encyptingPass(password));
       console.log(response);
       let result = response?.data?.response;
@@ -74,15 +75,15 @@ export default function Login() {
           duration: 1,
         });
         let rolesArray = ["EHR"];
-        localStorage.setItem("role", "ehr");
-        localStorage.setItem("roles", rolesArray);
-        localStorage.setItem("token", result.access_token);
-        localStorage.setItem("refreshToken", result?.refresh_token);
-        localStorage.setItem("tenantId", result.tenantId);
-        localStorage.setItem("userId", result.userEmail);
-        localStorage.setItem("orgId", result.organizationId);
-        localStorage.setItem("userName", emailSplit[0]);
-        localStorage.setItem("loginCheck", true);
+        setStorage("role", "ehr");
+        setStorage("roles", rolesArray);
+        setStorage("token", result.access_token);
+        setStorage("refreshToken", result?.refresh_token);
+        setStorage("tenantId", result.tenantId);
+        setStorage("userId", result.userEmail);
+        setStorage("orgId", result.organizationId);
+        setStorage("userName", emailSplit[0]);
+        setStorage("loginCheck", true);
         router.push("ehr/patients");
       } else {
         notification.error({

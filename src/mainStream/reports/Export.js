@@ -12,6 +12,7 @@ import { updateSentReport } from "../../services/ReportService";
 import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
 import InputField from "../../components/input";
 import { SVGICON } from "../../jsx/constant/theme";
+import { getStorage } from "../../utils/storages";
 
 export const checkBoxData = [
   {
@@ -152,6 +153,24 @@ export const checkBoxData = [
     heading: "HCC Page Number",
     checked: false,
   },
+  {
+    id: 24,
+    title: "RISK ADJUSTMENT",
+    heading: "Risk Adjustment",
+    checked: false,
+  },
+  {
+    id: 25,
+    title: "PAGE NUMBERS",
+    heading: "Page Numbers",
+    checked: false,
+  },
+  {
+    id: 26,
+    title: "FLAG",
+    heading: "Flag",
+    checked: false,
+  },
 ];
 const Export = ({
   isModalVisible,
@@ -183,8 +202,8 @@ const Export = ({
   const [inputStr, setInputStr] = useState("");
 
   useEffect(() => {
-    setCurrentUser(localStorage.getItem("userId"));
-    var orgId = localStorage.getItem("orgId");
+    setCurrentUser(getStorage("userId"));
+    var orgId = getStorage("orgId");
     dispatch(getUsersLists(orgId, search));
   }, [search]);
 
@@ -237,9 +256,9 @@ const Export = ({
   const handleSearch = (e) => {
     debouncedSearch(e);
   };
-
+  
   const onFinish = (values) => {
-    const patientIds = rowsLength?.map((item) => item?.patientId);
+    const patientIds = rowsLength
     const editUserAndAccess = userList.reduce((result, { user, role }) => {
       if (Array.isArray(user)) {
         user.forEach((info) => {
@@ -261,7 +280,6 @@ const Export = ({
       fileType: activeButton.toUpperCase(),
       reportName: values.ReportName,
       userAndAccess: editUserAndAccess,
-      patientIds: idList,
     };
     const updatedData = {
       reportName: values?.ReportName,
@@ -270,12 +288,12 @@ const Export = ({
       removedUsers: removedUsers,
     };
     console.log(data);
-    // if (!isSent) {
-    //   dispatch(getExportDetails(data));
-    // } else {
-    //   dispatch(updateSentReport(updatedData));
-    //   dispatch(getActiveTab("Sent"));
-    // }
+    if (!isSent) {
+      dispatch(getExportDetails(data));
+    } else {
+      dispatch(updateSentReport(updatedData));
+      dispatch(getActiveTab("Sent"));
+    }
     form.resetFields();
     setUsersList([]);
     setCheckAll((prev) => {

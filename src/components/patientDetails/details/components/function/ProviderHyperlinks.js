@@ -5,6 +5,7 @@ import moment from "moment";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { stringToColour, truncateString } from "./ReusableFunctions";
+import { getStorage } from "../../../../../utils/storages";
 export const getProviderNameTag = ({
   providerNames,
   hyperlinks,
@@ -38,14 +39,14 @@ export const getProviderNameTag = ({
         const sectionMapArr = (
           <span
             onClick={() => {
-              const patientId = localStorage.getItem("patientId");
+              const patientId = getStorage("patientId");
               const selectedMeatData = hyperlinks?.find(
                 (item) => item?.header?.toLowerCase() === normalizedRes
               );
               if (selectedMeatData?.stateIndicator) {
                 getCurrentDiseaseType && getCurrentDiseaseType(false);
                 setLabData && setLabData(selectedMeatData?.fileId);
-                selectedMeatData?.stateIndicator === "LAB"
+                selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
                   ? getLabPDF &&
                     getLabPDF({
                       fileId: selectedMeatData?.fileId,
@@ -158,13 +159,13 @@ export const getProviderNameTag = ({
                     diagnosisCode === isMulitpleHeaderCode && (
                       <span
                         onClick={() => {
-                          const patientId = localStorage.getItem("patientId");
+                          const patientId = getStorage("patientId");
                           const selectedMeatData = hyperlinks?.find(
                             (item) => item?.header === res
                           );
   
                           if (selectedMeatData?.stateIndicator) {
-                            selectedMeatData?.stateIndicator === "LAB"
+                            selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
                               ? getLabPDF(
                                   patientId,
                                   "",
@@ -346,14 +347,14 @@ export const getProviderPopoverHyperlink = ({
     var sectionMapArr = res ? (
       <span
         onClick={() => {
-          const patientId = localStorage.getItem("patientId");
+          const patientId = getStorage("patientId");
           const selectedMeatData = value?.find(
             (item) => item?.dateOfService === res.dateOfService
           );
           if (selectedMeatData?.stateIndicator) {
             getCurrentDiseaseType(false);
             setLabData &&  setLabData(selectedMeatData?.fileId)
-            selectedMeatData?.stateIndicator === "LAB"
+            selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
               ? getLabPDF &&
               getLabPDF({
                 fileId: selectedMeatData?.fileId,

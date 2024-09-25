@@ -5,6 +5,7 @@ import Image from "next/image";
 import arrow from "../../images/workingstatus/downArrow.png";
 import dayjs from "dayjs";
 import { monthNames } from "../../pages/admin/dashboard/accuracy";
+import moment from "moment";
 
 const YearPicker = ({
   onChangeMonth,
@@ -22,31 +23,35 @@ const YearPicker = ({
 
   return (
     <>
-      <div className={hideMonth ? "" :styles.pickerBox}>
-      {hideMonth ? (
-        <DatePicker
-          onChange={onChangeYear}
-          picker={"year"}
-          value={ val1 && dayjs(val1 ? val1 : currentDate, "YYYY")}
-          format={"YYYY"}
-          className={className}
-          suffixIcon={<Image src={arrow} />}
-          disabledDate={disabledDate}
-        />
-      ) : (
-        <div className={styles.pickerBox}>
-        <DatePicker
-          onChange={onChangeYear}
-          picker={"year"}
-          allowClear={false}
-          value={dayjs(val1 ? val1 : currentYearDate, "YYYY")}
-          format={"YYYY"}
-          className={`${styles.picker} pickerChnages`}
-          style={{ backgroundColor: bgColor }}
-          suffixIcon={<Image src={arrow} />}
-        />
-      </div>
-      )}
+      <div className={hideMonth ? "" : styles.pickerBox}>
+        {hideMonth ? (
+          <DatePicker
+            onChange={onChangeYear}
+            picker={"year"}
+            value={val1 && dayjs(val1 ? val1 : currentDate, "YYYY")}
+            format={"YYYY"}
+            className={className}
+            suffixIcon={<Image src={arrow} />}
+            disabledDate={disabledDate}
+          />
+        ) : (
+          <div className={styles.pickerBox}>
+            <DatePicker
+              onChange={onChangeYear}
+              picker={"year"}
+              allowClear={false}
+              value={dayjs(val1 ? val1 : currentYearDate, "YYYY")}
+              format={"YYYY"}
+              className={`${styles.picker} pickerChnages`}
+              style={{ backgroundColor: bgColor }}
+              suffixIcon={<Image src={arrow} />}
+              disabledDate={(current) => {
+                let customDate = moment().format("YYYY");
+                return current && current > moment(customDate, "YYYY");
+              }}
+            />
+          </div>
+        )}
       </div>
       {type !== "Monthly" && !hideMonth && (
         <div style={{ marginRight: "10px" }}>

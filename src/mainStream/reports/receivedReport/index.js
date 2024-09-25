@@ -22,6 +22,7 @@ import {
 } from "../../../mainStream/components/chartUtils";
 import GroupCard from "../../../mainStream/components/cards/groupCard";
 import Pagination from "../../components/pagination";
+import { getStorage } from "../../../utils/storages";
 const ReceivedReport = ({
   details,
   onPageChange,
@@ -52,7 +53,7 @@ const ReceivedReport = ({
       receivedEndDate: receivedEndDate,
     };
     dispatch(selectedReport(info));
-    const userRole = localStorage.getItem("userRole");
+    const userRole = getStorage("userRole");
     const currentRole=userRole?.split("_").map((item,index)=>index===0?item:item.charAt(0).toUpperCase()+item?.slice(1)).join("")
     router?.push(
       `/${currentRole}/report/individualreport?reportId=${
@@ -127,9 +128,9 @@ const ReceivedReport = ({
                             )
                           )
                         ) : (
-                          <div className={`col-xl-12 ${styles.emptyCard}`}>
-                            <Empty />
-                          </div>
+                          <div className={styles.card}>
+                          <Empty />
+                        </div>
                         )}
                       </div>
                     </div>

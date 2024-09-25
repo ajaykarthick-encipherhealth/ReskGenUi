@@ -17,6 +17,7 @@ import ManuallyAdd from "../../components/manuallyAdd";
 import LogoLoader from "../../../../logoLoader";
 import { getPatientRadiologyDetailsNew } from "../../components/function/GetDataRadiology";
 import Select from "react-select";
+import { getStorage } from "../../../../../utils/storages";
 
 const File = ({
   patientDetailsResult,
@@ -83,8 +84,8 @@ const File = ({
     useState("");
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
+    var orgId = getStorage("orgId");
+    var tenId = getStorage("tenantId");
     getPatientRadiologyDetailsNew(
       orgId,
       tenId,

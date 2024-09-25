@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch,connect } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import { Modal } from "antd";
 import { Button } from "react-bootstrap";
 import { Offcanvas } from "react-bootstrap";
@@ -16,6 +16,8 @@ import styles from "../../hcc/styles.module.css";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import RegularButton from "../../../../../components/button";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
+import { getResponePopup } from "../../../../../utils/reusable";
+import { getStorage } from "../../../../../utils/storages";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -24,9 +26,13 @@ const AddMeatQuery = ({
   handleCloseModal,
   isMeatQueryModal,
   setIsMeatQueryModal,
-  meatEditQueryRes,
+  isUpdate,
   queryFormValues,
-  patientDetailsResult
+  patientDetailsResult,
+  getMeatQueryList,
+  year,
+  isDosSelected = "",
+  getpatientDetailsData
 }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -57,7 +63,14 @@ const AddMeatQuery = ({
     { value: "More Specific Diagnosis", label: "More Specific Diagnosis" },
     { value: "OTHERS", label: "OTHERS" },
   ];
+
   const imagingtest = [
+    { value: "A/P", label: "A/P" },
+    { value: "PMH", label: "PMH" },
+    { value: "HPI", label: "HPI" },
+    { value: "Physical Exam", label: "Physical Exam" },
+    { value: "VITALS", label: "VITALS" },
+    // { value: "OTHERS", label: "OTHERS" },
     { value: "X-ray", label: "X-ray" },
     { value: "CT Scan", label: "CT Scan" },
     { value: "MRI", label: "MRI" },
@@ -81,31 +94,56 @@ const AddMeatQuery = ({
     { value: "OTHERS", label: "OTHERS" },
   ];
 
-  const onFinish = async (form) => {
-    var patientId = localStorage.getItem("patientId");
+  const onFinish = async (value) => {
+    var patientId = getStorage("patientId");
     var dataformat = {
       patientId: patientId,
-      dosYear: patientDetailsResult?.data?.response?.dos,
-      diagnosisCode: form.diagnosisCode,
-      queryReason: form.queryReason,
-      providerName: form.providerName,
-      imagingTestHeader: form.imagingTestHeader,
-      headerName: form.headerName,
-      description: form.description,
-      Reason: form.reason,
+      diagnosisCode: value.diagnosisCode?.toLowerCase(),
+      queryReason: value.queryReason,
+      providerName: value.providerName
+        ? value.providerName
+        : queryFormValues?.providerNames[0],
+      headerName: value.headerName,
+      description: value.description,
+      dateOfService: value.dateOfService
+        ? value.dateOfService
+        : queryFormValues?.dateOfServices[0],
     };
-    var result = await submitMeatQuery(dataformat);
-    if (result.status == "SUCCESS") {
-      setIsMeatQueryModal(false);
-      inputValue.queryComment = result.response.queryComment;
-      setMeatQueryResult(result.response);
-      setMeatQueriedDetailsModal(true);
-        getMeatQueryList(patientId,patientDetailsResult?.data?.response?.dos)
+    if (isUpdate) {
+      var result = await updateMeatQuery(dataformat);
+      if (result.status == "SUCCESS") {
+        getResponePopup({
+          message: "Query updated successfully.",
+          status: "SUCCESS",
+        });
+        setIsMeatQueryModal(false);
+        inputValue.queryComment = result.response.queryComment;
+        setMeatQueryResult(result.response);
+        form.resetFields();
+        // setMeatQueriedDetailsModal(true);
+        getMeatQueryList(patientId, year, isDosSelected);
+        getpatientDetailsData(patientId, year, isDosSelected)
+      }
+    } else {
+      var result = await submitMeatQuery(dataformat);
+      if (result.status == "SUCCESS") {
+        getResponePopup({
+          message: "Query submitted successfully.",
+          status: "SUCCESS",
+        });
+        setIsMeatQueryModal(false);
+        inputValue.queryComment = result.response.queryComment;
+        setMeatQueryResult(result.response);
+        form.resetFields();
+        // setMeatQueriedDetailsModal(true);
+        getMeatQueryList(patientId, year, isDosSelected);
+        getpatientDetailsData(patientId, year, isDosSelected)
+      }
     }
   };
 
   const updateMeatQueryComments = async () => {
-    var patientId = localStorage.getItem("patientId");
+    var patientId = getStorage("patientId");
     var updateDataformat = {
       patientId: patientId,
       diagnosisCode: formInitialValues?.diagnosisCode,
@@ -174,12 +212,17 @@ const AddMeatQuery = ({
   useEffect(() => {
     var initalForm = {
       diagnosisCode: queryFormValues?.diagnosisCode,
-      providerName: queryFormValues?.providerName,
+      providerName: queryFormValues?.providerName
+        ? queryFormValues?.providerNames[0]
+        : "",
+      dateOfService: queryFormValues?.dateOfService
+        ? queryFormValues?.dateOfServices[0]
+        : "",
       headerName: queryFormValues?.headerName,
-      imagingTestHeader: queryFormValues?.imagingTestHeader,
       queryReason: queryFormValues?.queryReason,
-      description: queryFormValues?.description,
-      reason: queryFormValues?.reason,
+      description: queryFormValues?.diseaseName
+        ? queryFormValues?.diseaseName
+        : queryFormValues?.description,
     };
     if (queryFormValues?.providerName) {
       setMeatQueryUpdate(true);
@@ -198,7 +241,7 @@ const AddMeatQuery = ({
       >
         <div className="offcanvas-header">
           <h5 className="modal-title" id="#gridSystemModal">
-            Meat Suggestion 
+            Meat Query
           </h5>
           <button
             type="button"
@@ -218,64 +261,65 @@ const AddMeatQuery = ({
               initialValues={formInitialValues}
               onFinish={onFinish}
             >
-              <Form.Item
-                label="DX Code *"
-                name="diagnosisCode"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter diagnosis code",
-                  },
-                ]}
-              >
+              <Form.Item label="DX Code" name="diagnosisCode">
                 <Input
                   name="diagnosisCode"
                   onChange={handleChangeCode}
                   className={styles.formControl}
+                  disabled
                 />
               </Form.Item>
-              {addValidCodeCheck == false ? (
-                <span className={visitStyles.invalidHccCodeError}>
-                  Invalid Hcc Code
-                </span>
-              ) : addValidCodeCheck == true ? (
-                <span className={visitStyles.validHccCodeError}>
-                  Valid Hcc Code
-                </span>
-              ) : null}
-
-              <Form.Item
-                label="Provider name *"
-                name="providerName"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter provider name",
-                  },
-                ]}
-              >
-                <Input name="diagnosisCode" className={styles.formControl} />
+              <Form.Item label="Description" name="description">
+                <Input
+                  name="description"
+                  className={styles.formControl}
+                  disabled
+                />
               </Form.Item>
               <Form.Item>
                 <Form.Item
-                  label="Suggest Header *"
+                  label={
+                    <label>
+                      Quick Query<span className="text-danger">*</span>
+                    </label>
+                  }
                   name="headerName"
                   rules={[
                     {
                       required: true,
-                      message: "Please select suggest header",
+                      message: "Please select Quick Query",
                     },
                   ]}
                 >
-                  <Select className={`ant_select_form hcc_form mb-2`} allowClear>
-                    {headersList?.map((data) => (
-                      <Option key={data?.value} value={data?.value}>
-                        {data?.label}
-                      </Option>
-                    ))}
-                  </Select>
+                  <Select
+                    allowClear
+                    maxTagCount="responsive"
+                    className={`ant_select_form hcc_form mb-2`}
+                    options={imagingtest}
+                  />
                 </Form.Item>
                 <Form.Item
+                  label={
+                    <label>
+                      Query Reason<span className="text-danger">*</span>
+                    </label>
+                  }
+                  name="queryReason"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select Query Reason",
+                    },
+                  ]}
+                >
+                  <Select
+                    allowClear
+                    maxTagCount="responsive"
+                    className={`ant_select_form hcc_form mb-2`}
+                    options={queryReasons}
+                  />
+                </Form.Item>
+                {/* <Form.Item
                   label="Radiology Suggest"
                   name="imagingTestHeader"
                   rules={[
@@ -285,7 +329,10 @@ const AddMeatQuery = ({
                     },
                   ]}
                 >
-                  <Select className={`ant_select_form hcc_form mb-2`} allowClear>
+                  <Select
+                    className={`ant_select_form hcc_form mb-2`}
+                    allowClear
+                  >
                     {imagingtest?.map((data) => (
                       <Option key={data?.value} value={data?.value}>
                         {data?.label}
@@ -303,7 +350,10 @@ const AddMeatQuery = ({
                     },
                   ]}
                 >
-                  <Select className={`ant_select_form hcc_form mb-2`} allowClear>
+                  <Select
+                    className={`ant_select_form hcc_form mb-2`}
+                    allowClear
+                  >
                     {queryReasons?.map((data) => (
                       <Option key={data?.value} value={data?.value}>
                         {data?.label}
@@ -345,7 +395,7 @@ const AddMeatQuery = ({
                       autoSize={{ minRows: 3, maxRows: 5 }}
                     />
                   </Form.Item>
-                )}
+                )} */}
 
                 <Space>
                   <RegularButton type="submit" name="Save" width={100} />
@@ -413,8 +463,7 @@ const AddMeatQuery = ({
                   <p className={styles.meatQueried_details}>
                     We've identified the following details that may pertain to
                     records associated with{" "}
-                    <b>{patientDetailsResult?.data?.response?.patientName}</b>
-                    .
+                    <b>{patientDetailsResult?.data?.response?.patientName}</b>.
                   </p>
                 </div>
                 <div>
@@ -455,11 +504,12 @@ const AddMeatQuery = ({
 
 const enhancer = connect(
   (state) => ({
-    patientDetailsResult :state?.patientDetails?.details?.result
+    patientDetailsResult: state?.patientDetails?.details?.result,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
-    getMeatQueryList:detailsActions.meatQueryAction
-
+    getpatientDetailsData: detailsActions.patientDetailsAction,
+    getMeatQueryList: detailsActions.meatQueryAction,
   }
 );
 export default enhancer(AddMeatQuery);

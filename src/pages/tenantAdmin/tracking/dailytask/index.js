@@ -23,7 +23,7 @@ const DailyTask = ({ trackChart }) => {
     },
   ];
 
-  const getChartOption = (allocated, pending, hold, decline, completed) => {
+  const getChartOption = (trackChart, pending, hold, decline, completed) => {
     return {
       tooltip: {
         trigger: "item",
@@ -78,7 +78,7 @@ const DailyTask = ({ trackChart }) => {
           label: {
             show: true,
             position: "center",
-            formatter: `{b|${allocated}}`,
+            formatter: `{b|${pending + hold + decline + completed}}`,
             backgroundColor: "transparent",
 
             rich: {
@@ -95,8 +95,8 @@ const DailyTask = ({ trackChart }) => {
           },
           data: [
             {
-              value: allocated,
-              name: "Alocated",
+              value: pending + hold + decline + completed,
+              name: "Allocated",
               itemStyle: {
                 color: "#fff",
               },
@@ -111,7 +111,7 @@ const DailyTask = ({ trackChart }) => {
     <>
       {/* <HeadTitle header="" /> */}
       <div className={styles.card2}>
-        <Card borderRadius="28px" style={{ display: "flex" }}>
+        <div className="p-1 rounded" style={{ background: "#fff",maxHeight: "150px" }}>
           <Col span={22}>
             <Row style={{ display: "flex", justifyContent: "space-between" }}>
               <Col span={22} className={styles.sliderdiv}>
@@ -120,10 +120,7 @@ const DailyTask = ({ trackChart }) => {
                     <div className={styles.container}>
                       <ReactECharts
                         option={getChartOption(
-                          trackChart?.PENDING +
-                            trackChart?.HOLD +
-                            trackChart?.DECLINED +
-                            trackChart?.COMPLETED,
+                          trackChart,
                           trackChart?.PENDING,
                           trackChart?.HOLD,
                           trackChart?.DECLINED,
@@ -166,7 +163,7 @@ const DailyTask = ({ trackChart }) => {
               </Col>
             </Row>
           </Col>
-        </Card>
+        </div>
       </div>
     </>
   );

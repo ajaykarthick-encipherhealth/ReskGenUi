@@ -12,6 +12,7 @@ import { getPatientDetails } from "../../components/function/GetData";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import ComboCard from "../../components/COMBO";
 import ModelIndex from "../../components/model/Index";
+import { getStorage } from "../../../../../utils/storages";
 
 const Combo = ({
   activeComboTree,
@@ -79,7 +80,7 @@ const Combo = ({
   const [isBlockRxHcc, setIsBlockRxHcc] = useState([])
   const [isBlockRxHccCareGap, setIsBlockRxHccCareGap] = useState([])
   const [isBlockRxHccDeleted, setIsBlockRxHccDeleted] = useState([])
-  const userId = localStorage.getItem('userId')
+  const userId = getStorage('userId')
  
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -97,8 +98,8 @@ const Combo = ({
   };
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
+    var orgId = getStorage("orgId");
+    var tenId = getStorage("tenantId");
     getPatientDetails(
       orgId,
       tenId,

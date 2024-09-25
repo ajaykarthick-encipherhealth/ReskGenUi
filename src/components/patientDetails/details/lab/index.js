@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
 import { SwapOutlined, PlusCircleFilled } from "@ant-design/icons";
 import AddLabForm from "../components/addLabForm";
+import { getStorage } from "../../../../utils/storages";
 
 const { Option } = Select;
 
@@ -48,7 +49,7 @@ const Lab = ({
   };
 
   const getDosList = async(year) => {
-    const patientId = localStorage.getItem("patientId")
+    const patientId = getStorage("patientId")
     try {
       const res = await getPatientLabDosList(patientId, year)
     } catch (error) {
@@ -68,8 +69,8 @@ const Lab = ({
     );
     setIsLoading(true);
     setSelectDosValue(value);
-    const patientId = localStorage.getItem("patientId");
-    const role = localStorage.getItem("role");
+    const patientId = getStorage("patientId");
+    const role = getStorage("role");
     if (value) {
       getLabDetails(
         patientId,
@@ -141,7 +142,7 @@ const Lab = ({
       if (dosList?.length != 0) {
         setSelectedDosValue(dosList[0]?.value);
         setSelectDosValue(dosList[0]?.value);
-        const patientId = localStorage.getItem("patientId");
+        const patientId = getStorage("patientId");
         getLabDetails(
           patientId,
           selectedYearValue,

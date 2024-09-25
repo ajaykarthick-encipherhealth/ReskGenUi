@@ -20,6 +20,7 @@ import HeaderFilters from "../../../components/headerFilters";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 import { useRouter } from "next/router";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
+import { getStorage } from "../../../utils/storages";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -193,7 +194,7 @@ const Index = () => {
   }, [reportActiveTab]);
 
   const backRender = () => {
-    const user = localStorage.getItem("userRole");
+    const user = getStorage("userRole");
     if (user == "reviewer") {
       route.push("/reviewer/report?page=0&limit=0");
     }

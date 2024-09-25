@@ -234,6 +234,7 @@ const HeaderFilters = ({
                   });
                   setClear(false);
                 }}
+                disabledDate={(current) => disableFutureDate(current)}
               />
             </div>
           </div>
@@ -256,6 +257,7 @@ const HeaderFilters = ({
                   });
                   setClear(false);
                 }}
+                disabledDate={(current) => disableFutureDate(current)}
               />
             </div>
           </div>
@@ -329,6 +331,7 @@ const HeaderFilters = ({
 
                   setClear(false);
                 }}
+                disabledDate={(current) => disableFutureDate(current)}
               />
             </div>
           </div>
@@ -347,8 +350,8 @@ const HeaderFilters = ({
                   handleRnagePicker2({
                     date,
                     dateString,
-                    setStartDate4,
-                    setEndDate4,
+                    setStartDate5,
+                    setEndDate5,
                   });
 
                   setClear(false);

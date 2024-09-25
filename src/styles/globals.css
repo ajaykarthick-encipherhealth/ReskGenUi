@@ -553,7 +553,8 @@ textarea.form-control-lg {
   background-size: contain;
   border: 1px solid rgba(0, 0, 0, 0.25);
   appearance: none;
-  print-color-adjust: exact;
+  /* print-color-adjust: exact; */
+  -webkit-print-color-adjust: exact;
 }
 
 .form-check-input[type="checkbox"] {
@@ -13015,6 +13016,7 @@ tbody > tr {
 } */
 .ant-picker-dropdown .ant-picker-panel-container {
   box-shadow: none !important;
+  width: 100%;
 }
 
 .ant-ribbon.ant-ribbon-placement-start {
@@ -14543,7 +14545,7 @@ input::-webkit-inner-spin-button {
   width: 88%;
 } */
 #date-popup .ant-picker-dropdown .ant-picker-content {
-  width: 85%;
+  width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
 }
@@ -14748,7 +14750,7 @@ input::-webkit-inner-spin-button {
   scrollbar-width: none;
 }
 .dosSelect > .ant-select-selector {
-  width: 150px !important;
+  width: 200px !important;
   text-align: center;
   font-size: 13px !important;
   font-weight: 600;
@@ -15528,16 +15530,66 @@ input::-webkit-inner-spin-button {
   white-space: nowrap;
   overflow: hidden;
 }
+.header-menu li span {
+  font-size: 14px !important;
+  font-size: 700 !important;
+  margin-top: 3px;
+}
+.hospitalIcon {
+  font-size: 13px !important;
+}
+.custom-patientsSync {
+  width: 18px !important;
+  height: 18px !important;
+}
+.headerCalender .ant-picker-panel-layout > div {
+  width: 100%;
+}
+@media (min-width: 1600px) {
+  .headerCalender {
+    width: 37.5% !important;
+    left: -20%;
+    top: 14%;
+  }
+  .headerCalender .ant-picker-dropdown .ant-picker-date-panel {
+    width: 290px !important;
+  }
+  .headerCalender .ant-picker-dropdown-range {
+    display: flex !important;
+    justify-content: end !important;
+    align-items: end !important;
+    left: 40px !important;
+  }
+}
+@media (min-width: 1527px) {
+  .headerCalender {
+    width: 41.5% !important;
+    left: -20%;
+    top: 14%;
+  }
+  .headerCalender .ant-picker-dropdown .ant-picker-date-panel {
+    width: 290px !important;
+  }
+  .headerCalender .ant-picker-dropdown-range {
+    display: flex !important;
+    justify-content: end !important;
+    align-items: end !important;
+  }
+}
 
-  .header-menu li span {
-    font-size: 14px !important;
-    font-size: 700 !important;
-    margin-top: 3px;
+@media (max-width: 1344px) {
+  .headerCalender {
+    width: 47.5% !important;
+    left: -10%;
+    top: 14%;
   }
-  .hospitalIcon{
-    font-size: 13px !important;
+  .headerCalender .ant-picker-dropdown .ant-picker-date-panel {
+    width: 288px !important;
   }
-  .custom-patientsSync{
-    width:18px !important;
-    height:18px !important;
-  }
+}
+.headerCalender
+  .ant-picker-dropdown
+  .ant-picker-panel-container
+  .ant-picker-panels {
+  width: 100% !important;
+}

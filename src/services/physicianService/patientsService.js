@@ -1,8 +1,9 @@
 import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
+import { getStorage } from "../../utils/storages";
 export const PatientsList = async (physicianId, from, to, priority, search) => {
-  const token = localStorage.getItem("token");
-  const uId = localStorage.getItem("userId");
+  const token = getStorage("token");
+  const uId = getStorage("userId");
 
   // const filteredStatus = status === undefined ? "" : status;
   try {

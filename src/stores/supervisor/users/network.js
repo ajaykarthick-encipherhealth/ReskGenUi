@@ -1,10 +1,11 @@
 import { requestPortal } from "../../../utils/network";
+import { getStorage } from "../../../utils/storages";
 
 export async function usersList({ page, search }) {
   const options = {
     method: "GET",
   };
-  const orgId = localStorage.getItem("orgId");
+  const orgId = getStorage("orgId");
   const data = await requestPortal(
     `dbservice/user/getuserbymanageridbypage?orgid=${orgId}&searchstring=${search}&page=${page}&size=15`,
     options

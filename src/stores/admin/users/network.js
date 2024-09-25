@@ -1,5 +1,6 @@
 import { notification } from "antd";
 import { requestPortal } from "../../../utils/network";
+import { getStorage } from "../../../utils/storages";
 
 export async function getAllOrganization() {
   const options = {
@@ -110,8 +111,8 @@ export const enableUser = async ({
   selectedManager,
   field
 }) => {
-  var tenId = localStorage.getItem("tenantId");
-  var orgId = localStorage.getItem("orgId");
+  var tenId = getStorage("tenantId");
+  var orgId = getStorage("orgId");
   const checkedVal = checked === "yes" ? true : false;
   const data = {
     orgId: orgId,

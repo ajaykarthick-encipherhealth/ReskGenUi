@@ -34,6 +34,8 @@ import {
   handleFilePost,
   addUser,
 } from "../../services/ChatService";
+import { portalUrl2 } from "../../utils/config";
+import { getStorage } from "../../utils/storages";
 
 const ChatCommunication = ({ openMsg, offMsg }) => {
   const messagesEndRef = useRef(null);
@@ -71,7 +73,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   };
 
   useEffect(() => {
-    let userName = localStorage.getItem("userId");
+    let userName = getStorage("userId");
     handleUsername(userName);
     if (message && chatAction === "load") {
       scrollToBottom();
@@ -94,9 +96,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     setSearchedUsers(temp);
   };
   const connect = () => {
-    const token = localStorage.getItem("token");
+    const token = getStorage("token");
     let Sock = new SockJS(
-      `https://hcc.encipherhealth.com/chatservice/chatservice/ws?token=${token}`
+      `${portalUrl2}chatservice/chatservice/ws?token=${token}`
     );
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
