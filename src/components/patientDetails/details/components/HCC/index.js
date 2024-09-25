@@ -952,7 +952,7 @@ const HccCards = ({
           ) : (
             <div className={styles.noMsContainer}>
               {`${
-                cardTitle == "SUGGESTED" ? "CARE GAP" : cardTitle
+                cardTitle == "SUGGESTED" ? "CARE GAP / SUGGESTED" : cardTitle
               } Codes Not Found`}
             </div>
           )}

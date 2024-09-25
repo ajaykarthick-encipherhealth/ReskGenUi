@@ -480,7 +480,7 @@ const File = ({
                                 setConfirmNotesModalValid
                               }
                               setIsValidAction={setIsValidAction}
-                              cardTitle="CARE GAP / SUGGESTED"
+                              cardTitle="SUGGESTED"
                               provided={provided}
                             />
                           </div>
