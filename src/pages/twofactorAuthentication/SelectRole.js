@@ -10,6 +10,7 @@ import {
   checkDeviceLogin,
   logoutAllDevice,
 } from "../../stores/authflow/actions";
+import { getStorage } from "../../utils/storages";
 
 const SelectRole = () => {
   const router = useRouter();
@@ -92,8 +93,8 @@ const SelectRole = () => {
     );
     setDecodedParams(encodeParams);
 
-    let rolesArray = JSON.parse(localStorage.getItem("roles"));
-    let getUserId = localStorage.getItem("userId");
+    let rolesArray = JSON.parse(getStorage("roles"));
+    let getUserId = getStorage("userId");
     if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
       rolesArray = ["TENANT ADMIN"];
     }

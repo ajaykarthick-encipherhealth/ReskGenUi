@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
 import { getResponePopup } from "../../utils/reusable";
+import { getStorage } from "../../utils/storages";
 
 const AddCode = () => {
   const [first, setFirst] = useState("");
@@ -9,7 +10,7 @@ const AddCode = () => {
 
   const setCode = async () => {
     if (first && sec) {
-        const token = localStorage.getItem("token");
+        const token = getStorage("token");
         try {
           const response = await axios.post(
             `${ENDPOINTS?.apiEndoint}dbservice/disease/addicdcode`,

@@ -12,6 +12,7 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import SelectButton from "../../../../../components/btnSelect";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import path from "path";
+import { getStorage } from "../../../../../utils/storages";
 
 const { TextArea } = Input;
 
@@ -123,7 +124,7 @@ const AddHccForm = ({
     setHccFormDetails(form);
   };
   const onFinishMeat = async (form) => {
-    var patientId = localStorage.getItem("patientId");
+    var patientId = getStorage("patientId");
     var providerGet = [];
     if (providerInfoAllDetails) {
       providerGet = providerInfoAllDetails?.filter((o1) =>
@@ -148,10 +149,6 @@ const AddHccForm = ({
       treatmentHyperLink:thyperlinkList,
 
     }
-
-    console.log(newDataFormat)   
-
-   
     form.encounterDate = hccFormDetails.encounterDate;
     form.diagnosisCode = hccFormDetails.diagnosisCode;
     form.radiology = false;

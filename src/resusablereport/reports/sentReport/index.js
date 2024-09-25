@@ -14,6 +14,7 @@ import EditButton from "../../../images/adminUsers/EditButton";
 import SpinnerDots from "../../../components/spinner";
 import Export from "../Export";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
+import { getStorage } from "../../../utils/storages";
 
 export const colors = {
   A: "#8A2BE2",
@@ -154,7 +155,7 @@ const SentReport = ({
       receivedEndDate: receivedEndDate,
     };
     dispatch(selectedReport(info));
-    const currentpath=localStorage.getItem("userRole")
+    const currentpath=getStorage("userRole")
     router?.push(
       `/${currentpath}/report/individualreport?reportId=${
         item?._id

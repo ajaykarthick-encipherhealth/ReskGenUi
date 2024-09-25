@@ -13,6 +13,7 @@ import SpinnerDots from "../../../components/spinner";
 import { Empty } from "antd";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
 import { useDispatch } from "react-redux";
+import { getStorage } from "../../../utils/storages";
 
 const ReceivedReport = ({
   details,
@@ -308,7 +309,7 @@ const ReceivedReport = ({
       receivedEndDate: receivedEndDate,
     };
     dispatch(selectedReport(info));
-    const currentpath = localStorage.getItem("userRole");
+    const currentpath = getStorage("userRole");
     router?.push(
       `/${currentpath}/report/individualreport?reportId=${
         item?.reportId

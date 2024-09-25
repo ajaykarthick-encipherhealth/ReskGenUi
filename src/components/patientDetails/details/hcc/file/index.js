@@ -24,6 +24,7 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { onDragEnd } from "../../components/function/ReusableFunctions";
 import ManuallyAdd from "../../components/manuallyAdd";
 import LogoLoader from "../../../../logoLoader";
+import { getStorage } from "../../../../../utils/storages";
 
 const File = ({
   patientDetailsResult,
@@ -95,8 +96,8 @@ const File = ({
   const [showList, setShowList] = useState(["care"]);
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
+    var orgId = getStorage("orgId");
+    var tenId = getStorage("tenantId");
     getPatientDetails(
       orgId,
       tenId,

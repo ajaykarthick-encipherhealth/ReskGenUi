@@ -13,6 +13,7 @@ import FileUploading from "./FileUploading";
 import Addpatients from "./Addpatiens";
 import { getPatients } from "../../../store/actions/adminAction/patientsActions";
 import { patientDetails } from "../../../stores/authflow/actions";
+import { getStorage } from "../../../utils/storages";
 
 export default function Patient() {
   const [validated, setValidated] = useState(false);
@@ -46,9 +47,9 @@ export default function Patient() {
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
   useEffect(() => {
-    let tenId = localStorage.getItem("tenantId");
-    let uId = localStorage.getItem("userId");
-    let orgId = localStorage.getItem("orgId");
+    let tenId = getStorage("tenantId");
+    let uId = getStorage("userId");
+    let orgId = getStorage("orgId");
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);

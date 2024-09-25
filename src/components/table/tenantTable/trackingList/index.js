@@ -11,6 +11,7 @@ import {
 } from "../../../headerFilters/functions";
 import SpinnerDots from "../../../spinner";
 import { renderSkeleton } from "../../../reuseableFunctions";
+import { getStorage } from "../../../../utils/storages";
 
 function TrackingTable({
   patinetListAll,
@@ -39,7 +40,7 @@ function TrackingTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data?.patientId);
-      var role = localStorage.getItem("role");
+      var role = getStorage("role");
       if (role == "tenant_admin") {
         navigate.push({
           pathname: "/tenantAdmin/patients/details",

@@ -10,6 +10,7 @@ import { updateSentReport } from "../../../services/adminServices/ReportService"
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 import InputField from "../../../components/input";
 import { checkBoxData } from "../../../mainStream/reports/Export";
+import { getStorage } from "../../../utils/storages";
 
 const { Option } = Select;
 
@@ -49,9 +50,9 @@ const Export = ({
   const [checkall, setCheckAll] = useState(checkBoxData);
 
   useEffect(() => {
-    setCurrentUser(localStorage.getItem("userId"));
+    setCurrentUser(getStorage("userId"));
 
-    var orgId = localStorage.getItem("orgId");
+    var orgId = getStorage("orgId");
     dispatch(getUsersList(orgId, search));
   }, [search]);
 

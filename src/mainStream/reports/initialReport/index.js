@@ -120,8 +120,8 @@ const InitialCard = ({
         } = apiCall.admin;
         try {
           setIsLoading(true);
-          const orgId = localStorage.getItem("orgId");
-          const role = localStorage.getItem("role");
+          const orgId = getStorage("orgId");
+          const role = getStorage("role");
           const searchValue = filter === "ALL" ? "" : filter;
           const url = `dbservice/patient/adminreport?pageno=${0}&size=${
             size ? size : 7
@@ -283,7 +283,7 @@ const InitialCard = ({
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
-      const currentRole = localStorage.getItem("userRole");
+      const currentRole = getStorage("userRole");
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
       navigate.push({

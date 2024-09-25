@@ -1,10 +1,11 @@
 import { requestPortal } from "../../../utils/network";
+import { getStorage } from "../../../utils/storages";
 
 export async function PatientsList({ page, url }) {
   const options = {
     method: "GET",
   };
-  var uId = localStorage.getItem("userId");
+  var uId = getStorage("userId");
   const data = await requestPortal(
     `dbservice/patient/filter?userId=${uId}&page=${page}&size=10&${url}`,
     options

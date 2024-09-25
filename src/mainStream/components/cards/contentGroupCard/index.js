@@ -15,6 +15,7 @@ import { handleCopyToClipboard } from "../../../../components/commonFunctions";
 import { LoadingOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlag } from "@fortawesome/free-regular-svg-icons";
+import { getStorage } from "../../../../utils/storages";
 // import {  } from "@fortawesome/free-solid-svg-icons";
 
 const ContentGroupCard = ({
@@ -54,7 +55,7 @@ const ContentGroupCard = ({
 
   //   if (data.processedStatus === "COMPLETED") {
   //     const controller = new AbortController();
-  //     const currentRole = localStorage.getItem("userRole");
+  //     const currentRole = getStorage("userRole");
   //     controller.abort();
   //     localStorage.setItem("patientId", data.patientId);
   //     navigate.push({
@@ -72,7 +73,7 @@ const ContentGroupCard = ({
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
-      const currentRole = localStorage.getItem("userRole");
+      const currentRole = getStorage("userRole");
       let modifiedRole = currentRole;
 
       if (currentRole === "tenant_admin") {

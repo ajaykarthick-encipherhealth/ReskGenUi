@@ -1,4 +1,5 @@
 import { requestPortal } from "../../../utils/network";
+import { getStorage } from "../../../utils/storages";
 
 export async function workFlow({ startDate, endDate }) {
   const options = {
@@ -23,7 +24,7 @@ export const dailyTask = async ({ date }) => {
   return data;
 };
 export const accuracy = async ({ btn, month, year, isAdmin = false }) => {
-  const role = localStorage.getItem('role')
+  const role = getStorage('role')
   const url = isAdmin
     ? btn === "Daily"
       ? `daily?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
@@ -74,7 +75,7 @@ export const holdStatus=async()=>{
 }
 
 export const notification=async()=>{
-  const userId= localStorage.getItem("userId");
+  const userId= getStorage("userId");
   const options = {
     method: "GET",
   };
@@ -85,7 +86,7 @@ export const notification=async()=>{
 }
 
 export const tenentLogo = async() => {
-  const orgId= localStorage.getItem("orgId");
+  const orgId= getStorage("orgId");
   const options = {
     method: "GET",
   };

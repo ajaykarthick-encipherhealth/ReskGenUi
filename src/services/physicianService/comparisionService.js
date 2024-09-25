@@ -1,12 +1,13 @@
 import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
+import { getStorage } from "../../utils/storages";
 
 export const COMPARISON = "COMPARISON";
 export const COLORS = "COLORS";
 
 export const getComparisionData =
   (physicianId, patientId) => async (dispatch) => {
-    const token = localStorage.getItem("token");
+    const token = getStorage("token");
     dispatch({
       type: COMPARISON,
       payload: {
@@ -38,7 +39,7 @@ export const getComparisionData =
   };
 
 export const getColors = () => async (dispatch) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   dispatch({
     type: COLORS,
     payload: {

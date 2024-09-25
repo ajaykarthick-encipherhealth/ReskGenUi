@@ -132,7 +132,7 @@ const Header = ({
       closeOnConfirm: false,
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const userRole = localStorage.getItem("role");
+        const userRole = getStorage("role");
         await logoutAllDevice();
         localStorage.clear();
         if (userRole != "ehr") {
@@ -145,9 +145,9 @@ const Header = ({
   };
 
   const getUserIdDetails = async (currentUserInfo) => {
-    const token = localStorage.getItem("token");
-    const getUserId = localStorage.getItem("userId");
-    const userRole = localStorage.getItem("role");
+    const token = getStorage("token");
+    const getUserId = getStorage("userId");
+    const userRole = getStorage("role");
 
     setUserIdDetails(currentUserInfo?.data?.response);
     setProfileImg(currentUserInfo?.data?.response?.profileImageUrl);
@@ -431,11 +431,11 @@ const Header = ({
   }, []);
 
   useEffect(() => {
-    var loginCheck = localStorage.getItem("loginCheck");
-    const userRoleLocal = localStorage.getItem("userRole");
-    const userId = localStorage.getItem("userId");
-    const userRole = localStorage.getItem("role");
-    const tenentId = localStorage.getItem("tenantId");
+    var loginCheck = getStorage("loginCheck");
+    const userRoleLocal = getStorage("userRole");
+    const userId = getStorage("userId");
+    const userRole = getStorage("role");
+    const tenentId = getStorage("tenantId");
     dispatch(getCurrentUser(userId, router));
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);

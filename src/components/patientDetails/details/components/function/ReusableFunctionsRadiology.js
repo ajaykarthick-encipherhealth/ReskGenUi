@@ -7,6 +7,7 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
+import { getStorage } from "../../../../../utils/storages";
 
 
 export const getEncounterDateBackground = ({
@@ -311,8 +312,8 @@ export const handleSubmitValidNotes = async ({
     apiURL = "dbservice/update/move/radiologydeletedtovalid";
   }
   try {
-    var patientId = localStorage.getItem("patientId");
-    var userId = localStorage.getItem("userId");
+    var patientId = getStorage("patientId");
+    var userId = getStorage("userId");
     var dataFormatSuggested = {
       userId: userId,
       patientId: patientId,

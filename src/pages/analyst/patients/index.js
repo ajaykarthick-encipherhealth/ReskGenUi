@@ -24,6 +24,7 @@ import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patien
 import { connect } from "react-redux";
 import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
+import { getStorage } from "../../../utils/storages";
 const bullets = [
   {
     color: "#34ace8",
@@ -126,9 +127,9 @@ const Patient = ({
   }, [navigate]);
 
   useEffect(() => {
-    var tenId = localStorage.getItem("tenantId");
-    var uId = localStorage.getItem("userId");
-    var orgId = localStorage.getItem("orgId");
+    var tenId = getStorage("tenantId");
+    var uId = getStorage("userId");
+    var orgId = getStorage("orgId");
     // var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
     setTenantId(tenId);
     setLocalOrgId(orgId);

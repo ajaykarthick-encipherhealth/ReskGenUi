@@ -39,6 +39,7 @@ import { patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
+import { getStorage } from "../../../utils/storages";
 
 const { RangePicker } = DatePicker;
 
@@ -266,7 +267,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     selectedPriority,
     searchTextValue
   ) => {
-    const uId = localStorage.getItem("userId");
+    const uId = getStorage("userId");
     const resoureUrl = `patientAllocated=${uId}&page=${
       pageNo ? pageNo : 0
     }&size=${pageSize ? pageSize : 15}&processedStatus=${

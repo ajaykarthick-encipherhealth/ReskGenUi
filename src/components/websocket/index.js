@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import useWebSocket from "react-use-websocket";
 import { actions as webSocketActions } from "../../stores/websocket";
 import { webpackUrl } from "../../utils/config";
+import { getStorage } from "../../utils/storages";
 
 const ConnectWebSocket = ({
   webSocketData,
@@ -12,7 +13,7 @@ const ConnectWebSocket = ({
   notificationResponse,
 }) => {
   const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    typeof window !== "undefined" ? getStorage("token") : null;
 
   const WS_URL =
     `wss://${webpackUrl}chatservice/chatservice/websocket?token=Bearer` +

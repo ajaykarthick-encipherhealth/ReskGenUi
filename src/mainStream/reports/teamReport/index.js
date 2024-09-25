@@ -61,7 +61,7 @@ const TeamReport = ({
     //   ? []
     //   : reportListAll?.response?.response?.data;
     // setSelectedRows(updatedRows);
-    const orgId = localStorage.getItem("orgId");
+    const orgId = getStorage("orgId");
     if (activeTab === "Audit") {
       // auditReport({
       //   pagenum: 0,
@@ -246,7 +246,7 @@ const TeamReport = ({
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
-      const currentRole = localStorage.getItem("userRole");
+      const currentRole = getStorage("userRole");
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
       navigate.push({

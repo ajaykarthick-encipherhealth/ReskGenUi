@@ -16,6 +16,7 @@ import FileProcessingTable from "../../../components/table/tenantTable/FileProce
 import HeaderFilters from "../../../components/headerFilters";
 import { connect } from "react-redux";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
+import { getStorage } from "../../../utils/storages";
 
 const Patient= ({ getAllOrganizationList, organizationList }) => {
   const [validated, setValidated] = useState(false);
@@ -52,9 +53,9 @@ const Patient= ({ getAllOrganizationList, organizationList }) => {
   const [orgAllList, setOrgAllList] = useState([]);
 
   useEffect(() => {
-    let tenId = localStorage.getItem("tenantId");
-    let uId = localStorage.getItem("userId");
-    let orgId = localStorage.getItem("orgId");
+    let tenId = getStorage("tenantId");
+    let uId = getStorage("userId");
+    let orgId = getStorage("orgId");
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);

@@ -8,6 +8,7 @@ import { validateYear } from "../../../../headerFilters/functions";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getResponePopup, validateFileName } from "../../../../../utils/reusable";
+import { getStorage } from "../../../../../utils/storages";
 
 const AddLabForm = ({
   setOpen,
@@ -77,9 +78,9 @@ const AddLabForm = ({
   };
 
   const submitReport = async () => {
-    const orgId = localStorage.getItem("orgId");
-    const tenId = localStorage.getItem("tenantId");
-    const uId = localStorage.getItem("userId");
+    const orgId = getStorage("orgId");
+    const tenId = getStorage("tenantId");
+    const uId = getStorage("userId");
     const formData = new FormData();
     formData.append("file", selectFile);
     formData.append("orgid", orgId);

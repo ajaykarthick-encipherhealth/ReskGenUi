@@ -37,6 +37,7 @@ import { useCallback } from "react";
 import { actions as tenantAdminUsersAction } from "../../../stores/tenantAdmin/users";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
+import { getStorage } from "../../../utils/storages";
 
 const { RangePicker } = DatePicker;
 const statusOption = [
@@ -114,7 +115,7 @@ const Patient = ({
     selectOrgList = "",
     batchCount,
   }) => {
-    const uId = localStorage.getItem("userId");
+    const uId = getStorage("userId");
     let resoureUrl = `page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${
       startDate ? startDate : ""
     }&computationEnd=${endDate ? endDate : ""}&isAllocation=${
@@ -152,8 +153,8 @@ const Patient = ({
   };
   const getAllCheckList = async (sort) => {
     setIsLoading(true);
-    const uId = localStorage.getItem("userId");
-    const orgId = localStorage.getItem("orgId");
+    const uId = getStorage("userId");
+    const orgId = getStorage("orgId");
     let resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${
       batchCount ? batchCount : reviewerResponse?.response?.totalElements
     }&userId=${uId}&computationStart=${
@@ -280,8 +281,8 @@ const Patient = ({
   };
 
   const getAuditL2List = async (pageNo, searchString) => {
-    let orgId = localStorage.getItem("orgId");
-    let tenantid = localStorage.getItem("tenantId");
+    let orgId = getStorage("orgId");
+    let tenantid = getStorage("tenantId");
     let resoureUrl = `dbservice/l2audit?tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}&orgId=${selectOrgList}`;
     getSupervisorsList({ url: resoureUrl });
   };

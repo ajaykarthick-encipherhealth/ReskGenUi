@@ -49,6 +49,7 @@ import SubCard from "../../../mainStream/components/cards/subcard";
 import MiniCards from "../../../mainStream/components/miniCards";
 import Flags from "../../../mainStream/components/flagCount";
 import AllocationCount from "../../../mainStream/components/allocationCount";
+import { getStorage } from "../../../utils/storages";
 
 const TeamReport = ({
   // setModal,
@@ -380,7 +381,7 @@ const TeamReport = ({
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
-      const currentRole = localStorage.getItem("userRole");
+      const currentRole = getStorage("userRole");
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
       navigate.push({

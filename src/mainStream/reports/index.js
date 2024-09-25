@@ -31,6 +31,7 @@ import {
 import Tab from "../components/tags";
 import MoreFilter from "../../resusablereport/reports/MoreFilter";
 import TeamReport from "./teamReport";
+import { getStorage } from "../../utils/storages";
 
 const statusOptions = [
   { label: "All", value: "" },
@@ -431,7 +432,7 @@ const Reports = ({
       setSentPageNo(page);
       setPaginationSentFirst(limit);
     }
-    setUserRole(localStorage.getItem("userRole"));
+    setUserRole(getStorage("userRole"));
   }, [activeTab]);
 
   useEffect(() => {

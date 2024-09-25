@@ -10,6 +10,7 @@ import {
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../headerFilters/functions";
+import { getStorage } from "../../../../utils/storages";
 
 function AddPatientListTable({
   patinetListAll,
@@ -34,7 +35,7 @@ function AddPatientListTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data?.patientId);
-      var role = localStorage.getItem("role");
+      var role = getStorage("role");
       if (role == "tenant_admin") {
         navigate.push({
           pathname: "/tenantAdmin/patients/details",

@@ -126,8 +126,8 @@ const Hcc = ({
       if (patientDetailsResult?.data?.response?.dateOfService) {
         // setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
         if (isDosSelected) {
-          const patientId = localStorage.getItem("patientId");
-          const role = localStorage.getItem("role");
+          const patientId = getStorage("patientId");
+          const role = getStorage("role");
           getpatientDetailsData(
             patientId,
             null,
@@ -183,8 +183,8 @@ const Hcc = ({
     } else {
       getSelectedDos("");
     }
-    const patientId = localStorage.getItem("patientId");
-    const role = localStorage.getItem("role");
+    const patientId = getStorage("patientId");
+    const role = getStorage("role");
 
     if (value) {
       getpatientDetailsData(
@@ -441,7 +441,7 @@ const Hcc = ({
                     </Select>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item mx-2">
-                    {localStorage.getItem("role") != "admin" &&
+                    {getStorage("role") != "admin" &&
                       selectDosValue && (
                         <YearAndDosStatus setIsLoading={setIsLoading} />
                       )}

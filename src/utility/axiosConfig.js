@@ -1,5 +1,6 @@
 const axios = require("axios");
 import Swal from "sweetalert2";
+import { getStorage } from "../utils/storages";
 
 axios.interceptors.request.use(
   (config) => {
@@ -10,7 +11,7 @@ axios.interceptors.request.use(
     ];
     const currentUrl = config?.url?.split("/secure")[1];
     if (!_list.includes(currentUrl)) {
-      config.headers["Authorization"] = `Bearer ${localStorage.getItem(
+      config.headers["Authorization"] = `Bearer ${getStorage(
         "token"
       )}`;
     }

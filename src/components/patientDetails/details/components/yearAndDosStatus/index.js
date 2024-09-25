@@ -8,6 +8,7 @@ import { Modal, Tooltip, notification, Dropdown, Menu } from "antd";
 import { connect } from "react-redux";
 import { DownOutlined } from "@ant-design/icons";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
+import { getStorage } from "../../../../../utils/storages";
 
 const YearAndDosStatus = ({
   patientDetailsResult,
@@ -450,9 +451,9 @@ const YearAndDosStatus = ({
   };
 
   useEffect(() => {
-    const userRoleLocal = localStorage.getItem("userRole");
-    const uId = localStorage.getItem("userId");
-    const orgId = localStorage.getItem("orgId");
+    const userRoleLocal = getStorage("userRole");
+    const uId = getStorage("userId");
+    const orgId = getStorage("orgId");
     setUserRole(userRoleLocal);
     setLocalOrgId(orgId);
     setLocalUserId(uId);

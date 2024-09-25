@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./styles.module.css";
 import upload from "../../images/fihr/upload.png";
 import { getCurrentUser, getUrl, preSendURl, updateImage } from "../../stores/authflow/actions";
+import { getStorage } from "../../utils/storages";
 
 const ImageUploader = ({ setOpenUploader, setOpenContent,height, isFolderUplaod }) => {
   const fileInputRef = useRef(null);
@@ -53,7 +54,7 @@ const ImageUploader = ({ setOpenUploader, setOpenContent,height, isFolderUplaod 
     }
   };
   const getBlobImageUrl = async (data, type, file) => {
-    const userId = localStorage.getItem("userId");
+    const userId = getStorage("userId");
     try {
       const res = await dispatch(getUrl(data,type,file));
       if (res.status == 201) {

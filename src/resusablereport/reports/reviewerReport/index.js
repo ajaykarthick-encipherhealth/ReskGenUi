@@ -44,6 +44,7 @@ import dayjs from "dayjs";
 import { getFlag, getFlags } from "../../../components/reuseableFunctions";
 import { connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
+import { getStorage } from "../../../utils/storages";
 
 const ReviewerReport = ({
   // setModal,
@@ -358,7 +359,7 @@ const ReviewerReport = ({
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
-      const currentRole = localStorage.getItem("userRole");
+      const currentRole = getStorage("userRole");
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
       navigate.push({

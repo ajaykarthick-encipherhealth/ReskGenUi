@@ -1,9 +1,10 @@
 import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
+import { getStorage } from "../../utils/storages";
 
 export async function PatientDetails(patientId,year) {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
   var apiurl = `patientid=${patientId}&orgid=${orgId}`;
   if(year){
     apiurl = `patientid=${patientId}&orgid=${orgId}&year=${year}`
@@ -24,8 +25,8 @@ export async function PatientDetails(patientId,year) {
 }
 
 export async function PatientDetailsNew(patientId,year,dos) {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
    var apiurl = `patientId=${patientId}&processedYear=${year}` 
    if(dos){
     apiurl = `patientId=${patientId}&dateOfService=${dos}` 
@@ -46,8 +47,8 @@ export async function PatientDetailsNew(patientId,year,dos) {
 
 
 export async function RadiologyDeatils(patientId) {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`,
@@ -63,8 +64,8 @@ export async function RadiologyDeatils(patientId) {
 }
 
 export async function LabDeatils(patientId) {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`,
@@ -80,8 +81,8 @@ export async function LabDeatils(patientId) {
 }
 
 export async function MeatQuery(dos,patientId) {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/meatquery/getMeatQueryList?processedYear=${dos}&patientId=${patientId}`,
@@ -97,7 +98,7 @@ export async function MeatQuery(dos,patientId) {
 }
 
 export async function SectionColor() {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/section/color/getallsections`,
@@ -113,8 +114,8 @@ export async function SectionColor() {
 }
 
 export async function HccFileDeatils(fileId) {
-  const token = localStorage.getItem("token");
-  const tenId = localStorage.getItem("tenantId");
+  const token = getStorage("token");
+  const tenId = getStorage("tenantId");
   try {
     if (fileId) {
        const response = await axios.get(
@@ -132,7 +133,7 @@ export async function HccFileDeatils(fileId) {
   }
 }
 export async function DosPageNumber(patientId,year) {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/get/alldossummaries?patientId=${patientId}&processedYear=${year}`,
@@ -148,7 +149,7 @@ export async function DosPageNumber(patientId,year) {
 }
 
 export async function DosWiseList(patientId,year) {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   var apiurl = `dbservice/patient/compute/get/alldos?patientId=${patientId}&processedYear=${year}` 
   try {
     const response = await axios.get(

@@ -17,6 +17,7 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import RegularButton from "../../../../../components/button";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getResponePopup } from "../../../../../utils/reusable";
+import { getStorage } from "../../../../../utils/storages";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -94,7 +95,7 @@ const AddMeatQuery = ({
   ];
 
   const onFinish = async (value) => {
-    var patientId = localStorage.getItem("patientId");
+    var patientId = getStorage("patientId");
     var dataformat = {
       patientId: patientId,
       diagnosisCode: value.diagnosisCode?.toLowerCase(),
@@ -142,7 +143,7 @@ const AddMeatQuery = ({
   };
 
   const updateMeatQueryComments = async () => {
-    var patientId = localStorage.getItem("patientId");
+    var patientId = getStorage("patientId");
     var updateDataformat = {
       patientId: patientId,
       diagnosisCode: formInitialValues?.diagnosisCode,

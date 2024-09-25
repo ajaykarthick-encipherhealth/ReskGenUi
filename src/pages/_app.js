@@ -13,6 +13,7 @@ import Footer from "../jsx/layouts/Footer";
 import AICHAT from "../components/aiChat";
 import { refreshToken } from "../stores/authflow/actions";
 import ConnectWebSocket from "../components/websocket";
+import { getStorage } from "../utils/storages";
 
 config.autoAddCss = false;
 
@@ -20,7 +21,7 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [showTerminal, setShowTerminal] = useState(false);
-  let loginCheck =  typeof window !== 'undefined' ? localStorage.getItem('loginCheck') : null
+  let loginCheck =  typeof window !== 'undefined' ? getStorage('loginCheck') : null
 
   useEffect(() => {
     const currentPath = window.location.pathname;
@@ -53,7 +54,7 @@ function MyApp({ Component, pageProps }) {
     let pauseTime = 0;
 
     const checkLoginTime = () => {
-      const loginTimeStr = localStorage.getItem("loginTime");
+      const loginTimeStr = getStorage("loginTime");
       const loginTime = parseInt(loginTimeStr);
 
       if (!isNaN(loginTime)) {
@@ -109,7 +110,7 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const currentPath = window.location.pathname;
-    const userRole = localStorage.getItem("userRole");
+    const userRole = getStorage("userRole");
     // if (userRole && !currentPath.includes(`/${userRole}/`) || "/search") {
     //   router.replace("/_error");
     // }

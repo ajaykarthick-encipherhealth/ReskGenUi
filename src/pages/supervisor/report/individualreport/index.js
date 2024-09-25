@@ -30,6 +30,7 @@ import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportActi
 import { useRouter } from "next/router";
 import { debounce } from "../../../admin/reports/Export";
 import { getReportActiveTab } from "../../../../store/actions/adminAction/ReportActions";
+import { getStorage } from "../../../../utils/storages";
 
 const IndividualReceiverReport = () => {
   const dispatch = useDispatch();
@@ -114,7 +115,7 @@ const IndividualReceiverReport = () => {
       dispatch(getReceivedDetails(0, "", "", searchValue, sort));
       dispatch(getSelectedReportDetails(id));
     }
-    setCurrentRole(localStorage.getItem("userRole"));
+    setCurrentRole(getStorage("userRole"));
   }, [searchValue, sort, router]);
   useEffect(() => {
     if (url) {

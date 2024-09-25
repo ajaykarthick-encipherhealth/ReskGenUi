@@ -1,6 +1,7 @@
 import axios from "axios";
 import dayjs from "dayjs";
 import ENDPOINTS from "../../utility/enpoints";
+import { getStorage } from "../../utils/storages";
 
 export const DASHBOARDCHART = "DASHBOARDCHART";
 export const GRAPHDATA = "GRAPHDATA";
@@ -9,7 +10,7 @@ export const CALENDER = "CALENDER";
 export const DashbaoudContent =
   (physicianId = "ID-001") =>
   async (dispatch) => {
-    const token = localStorage.getItem("token");
+    const token = getStorage("token");
     dispatch({
       type: DASHBOARDCHART,
       payload: {
@@ -43,7 +44,7 @@ export const DashbaoudContent =
 export const GraphContent =
   (physicianId, currentBtn, selectedMonth, selectedYear) =>
   async (dispatch) => {
-    const token = localStorage.getItem("token");
+    const token = getStorage("token");
     dispatch({
       type: GRAPHDATA,
       payload: {
@@ -76,7 +77,7 @@ export const GraphContent =
   };
 
 export const CalenderData = (physicianId, month, year) => async (dispatch) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   dispatch({
     type: CALENDER,
     payload: {

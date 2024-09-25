@@ -1,4 +1,5 @@
 import { requestPortal } from "../../../utils/network";
+import { getStorage } from "../../../utils/storages";
 
 export async function patientDetails(
   patientId,
@@ -7,7 +8,7 @@ export async function patientDetails(
   setIsSpinnerLoading,
   role
 ) {
-  const roles = localStorage.getItem("role");
+  const roles = getStorage("role");
   const options = {
     method: "GET",
   };
@@ -30,7 +31,7 @@ export async function patientDetails(
 }
 
 export async function patientIdDetails(patientId) {
-  const orgId = localStorage.getItem("orgId");
+  const orgId = getStorage("orgId");
   const options = {
     method: "GET",
   };
@@ -48,7 +49,7 @@ export async function radiologyDetails(
   setIsSpinnerLoading,
   testName
 ) {
-  const roles = localStorage.getItem("role");
+  const roles = getStorage("role");
   const options = {
     method: "GET",
   };
@@ -72,7 +73,7 @@ export async function labDetails(
   setIsSpinnerLoading,
   testName
 ) {
-  const roles = localStorage.getItem("role");
+  const roles = getStorage("role");
   const options = {
     method: "GET",
   };
@@ -102,7 +103,7 @@ export async function labPDFData({fileId}) {
 }
 
 export async function patientHccFile(fileId) {
-  const tenId = localStorage.getItem("tenantId");
+  const tenId = getStorage("tenantId");
   const options = {
     method: "GET",
   };

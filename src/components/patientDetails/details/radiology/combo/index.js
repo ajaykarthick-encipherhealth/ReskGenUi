@@ -13,6 +13,7 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import ComboCard from "../../components/COMBO";
 import ModelIndex from "../../components/model/Index";
 import { getPatientRadiologyDetailsNew } from "../../components/function/GetDataRadiology";
+import { getStorage } from "../../../../../utils/storages";
 
 const Combo = ({
   activeComboTree,
@@ -91,8 +92,8 @@ const Combo = ({
   };
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
+    var orgId = getStorage("orgId");
+    var tenId = getStorage("tenantId");
     getPatientRadiologyDetailsNew(
       orgId,
       tenId,

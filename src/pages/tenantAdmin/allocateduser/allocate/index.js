@@ -8,6 +8,7 @@ import { faSearch, faXmark, faUser } from "@fortawesome/free-solid-svg-icons";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
 import { disablePastDate } from "../../../../components/headerFilters/functions";
+import { getStorage } from "../../../../utils/storages";
 
 const AllocateModal = ({
   open,
@@ -40,7 +41,7 @@ const AllocateModal = ({
   };
 
   const getUserList = async (search) => {
-    const orgId = localStorage.getItem("orgId");
+    const orgId = getStorage("orgId");
     let resoureUrl = `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=${orgId}&searchString=${search}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {

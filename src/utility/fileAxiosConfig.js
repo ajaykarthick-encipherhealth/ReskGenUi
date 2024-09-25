@@ -8,7 +8,7 @@
 //     let _list = 'auth/login'
 //     const currentUrl = config?.url;
 //     if(_list !== currentUrl) {
-//       config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+//       config.headers['Authorization'] = `Bearer ${getStorage('token')}`;
 //     }
 //     return config;
 //   }, (error) => {

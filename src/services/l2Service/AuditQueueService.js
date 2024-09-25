@@ -1,9 +1,10 @@
 import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
+import { getStorage } from "../../utils/storages";
 
 // export const PatientsList = async (page, url) => {
-//   var uId = localStorage.getItem("userId");
-//   const token = localStorage.getItem("token");
+//   var uId = getStorage("userId");
+//   const token = getStorage("token");
 //   try {
 //     const response = await axios.get(
 //       `
@@ -21,7 +22,7 @@ import ENDPOINTS from "../../utility/enpoints";
 // };
 
 // export const SearchPatientsList = async (pagenum, search) => {
-//   const token = localStorage.getItem("token");
+//   const token = getStorage("token");
 //   try {
 //     const response = await axios.get(
 //       `
@@ -38,7 +39,7 @@ import ENDPOINTS from "../../utility/enpoints";
 //   }
 // };
 // export const ChangePriority = async (patientId, year, priority) => {
-//   const token = localStorage.getItem("token");
+//   const token = getStorage("token");
 //   try {
 //     const response = await axios.put(
 //       `${ENDPOINTS?.apiEndoint}dbservice/change/priority?patientId=${patientId}&year=${year}&priority=${priority}`,
@@ -60,7 +61,7 @@ import ENDPOINTS from "../../utility/enpoints";
 // export const GetWorkListFilters = async (
 //     datas
 //   ) => {
-//     const token = localStorage.getItem("token");
+//     const token = getStorage("token");
 //     try {
 //       const response = await axios.get(
 //         `${ENDPOINTS?.apiEndoint}dbservice/auditor/patient/workqueue/filter?&page=${datas?.pageNo}&size=15&auditedStatus=${datas?.selectedOption}&auditDueDateStart=${datas?.computedStartDate}&auditDueDateEnd=${datas?.computedEndDate}&auditedDateStart=${datas?.completedStartDate}&auditedDateEnd=${datas?.completedEndDate}&searchString=${datas?.search}&sortField=${datas?.sort?.sortField}&sortdirection=${datas?.sort?.sortDir}&patientAllocated=${datas?.selCreatedBy}`,
@@ -77,7 +78,7 @@ import ENDPOINTS from "../../utility/enpoints";
 //   };
 
 export const getFilePageNumber = async (fileId) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/pageNumber/startAndStopPageNo?fileId=${fileId}`,
@@ -95,7 +96,7 @@ export const getFilePageNumber = async (fileId) => {
 };
 
 export const getMeatQueryList = async (dos,patientId) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/meatquery/getMeatQueryList?dosYear=${dos}&patientId=${patientId}`,
@@ -113,7 +114,7 @@ export const getMeatQueryList = async (dos,patientId) => {
 };
 
 export const submitMeatQuery = async (data) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}dbservice/meatquery/storequery`,
@@ -132,7 +133,7 @@ export const submitMeatQuery = async (data) => {
 };
 
 export const updateMeatQuery = async (data) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.put(
       `${ENDPOINTS?.apiEndoint}dbservice/meatquery/updateQueryComment`,

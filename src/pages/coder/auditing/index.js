@@ -34,6 +34,7 @@ import moment from 'moment';
 // import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Paginator } from 'primereact/paginator';
 import { Calendar } from 'primereact/calendar';
+import { getStorage } from '../../../utils/storages';
 
 
 
@@ -145,9 +146,9 @@ export default function Patient() {
 
 
   useEffect(() => {
-    var tenId = localStorage.getItem("tenantId");
-    var uId = localStorage.getItem("userId");
-    var orgId = localStorage.getItem("orgId");
+    var tenId = getStorage("tenantId");
+    var uId = getStorage("userId");
+    var orgId = getStorage("orgId");
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
@@ -356,9 +357,9 @@ export default function Patient() {
 
 
   const subscribe = async (patientResult) => {
-    const accessToken = localStorage.getItem("token");
-    var uId = localStorage.getItem("userId");
-    var tenId = localStorage.getItem("tenantId");
+    const accessToken = getStorage("token");
+    var uId = getStorage("userId");
+    var tenId = getStorage("tenantId");
     var processedList = [];
 
 

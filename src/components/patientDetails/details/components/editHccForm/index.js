@@ -10,6 +10,7 @@ import styles from "../../hcc/styles.module.css";
 import RegularButton from "../../../../../components/button";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
+import { getStorage } from "../../../../../utils/storages";
 
 const { TextArea } = Input;
 
@@ -50,7 +51,7 @@ const EditHccForm = ({
   ];
   const onFinishHcc = async (form) => {
     if (addValidCodeCheck == true || addValidCodeCheck == null) {
-      var patientId = localStorage.getItem("patientId");
+      var patientId = getStorage("patientId");
       const dateList = form.encounterDates;
       var providerGet = [];
       if (providerInfoAllDetails) {
