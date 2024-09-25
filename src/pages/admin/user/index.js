@@ -19,6 +19,7 @@ import {
 import SpinnerDots from "../../../components/spinner";
 import { actions as adminAction } from "../../../stores/admin/users";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
+import { getStorage } from "../../../utils/storages";
 
 const options3 = [
   { value: "ALL", label: "ALL" },
@@ -188,9 +189,9 @@ const UserList = ({
     }
   }, [usersListData]);
   useEffect(() => {
-    var tenId = localStorage.getItem("tenantId");
-    var uId = localStorage.getItem("userId");
-    var orgId = localStorage.getItem("orgId");
+    var tenId = getStorage("tenantId");
+    var uId = getStorage("userId");
+    var orgId = getStorage("orgId");
     setFormData(intialValues);
     setLocalTenantId(tenId);
     setLocalUserId(uId);

@@ -1,6 +1,6 @@
-export const getStorage = async (key) => {
+export const getStorage = (key) => {
   try {
-    return await localStorage.getItem(key);
+    return localStorage.getItem(key);
   } catch (error) {
     console.error(`Error getting '${key}' from LocalStorage`);
     console.error(error);
@@ -8,9 +8,9 @@ export const getStorage = async (key) => {
   }
 };
 
-export const setStorage = async (key, value) => {
+export const setStorage = (key, value) => {
   try {
-    await localStorage.setItem(key, value);
+    localStorage.setItem(key, value);
     return Promise.resolve();
   } catch (error) {
     console.error(`Error setting '${key}' in LocalStorage`);
@@ -19,7 +19,7 @@ export const setStorage = async (key, value) => {
   }
 };
 
-export const removeStorage = async (key) => {
+export const removeStorage = (key) => {
   try {
     localStorage.removeItem(key);
     return Promise.resolve();

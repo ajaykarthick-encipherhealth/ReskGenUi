@@ -27,9 +27,9 @@ import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin/tra
 //   selAllocatedBy,
 //   selCreatedBy
 // ) => {
-//   const id = localStorage.getItem("userId");
-//   const token = localStorage.getItem("token");
-//   const orgId = localStorage.getItem("orgId");
+//   const id = getStorage("userId");
+//   const token = getStorage("token");
+//   const orgId = getStorage("orgId");
 //   const sse = new EventSource(
 //     `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=`
 //   );

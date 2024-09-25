@@ -1,9 +1,10 @@
 import axios from "../utility/axiosConfig";
 import ENDPOINTS from "../utility/enpoints";
+import { getStorage } from "../utils/storages";
 
 export const NotificationList = async (Id) => {
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
+  const token = getStorage("token");
+  const userId = getStorage("userId");
   try {
     const response = await axios.get(
       `
@@ -23,7 +24,7 @@ export const NotificationList = async (Id) => {
 };
 
 export const postNotification = async (data) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}communication/push-notifications/admin/send`,
@@ -42,7 +43,7 @@ export const postNotification = async (data) => {
 };
 
 export const getNotificationList = async (Id) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `

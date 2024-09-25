@@ -12,6 +12,7 @@ import { SVGICON } from "../../../../../jsx/constant/theme";
 import { connect } from "react-redux";
 import Select from "react-select";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
+import { getStorage } from "../../../../../utils/storages";
 
 const Flag = ({
   setOpen,
@@ -60,7 +61,7 @@ const Flag = ({
     event.preventDefault();
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
-      const orgId = localStorage.getItem("orgId");
+      const orgId = getStorage("orgId");
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
         comment: inputValue.comments,
@@ -164,7 +165,7 @@ const Flag = ({
   };
 
   useEffect(() => {
-    const patientId = localStorage.getItem("patientId");
+    const patientId = getStorage("patientId");
     setLocalPatientId(patientId);
   }, []);
 

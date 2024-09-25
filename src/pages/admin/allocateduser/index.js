@@ -33,6 +33,7 @@ import { debounce } from "../../../components/input";
 import { useCallback } from "react";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
+import { getStorage } from "../../../utils/storages";
 const { RangePicker } = DatePicker;
 const statusOption = [
   { value: "", label: "ALL" },
@@ -109,8 +110,8 @@ const Patient = ({
     selectOrgList,
     batchCount,
   }) => {
-    const uId = localStorage.getItem("userId");
-    const orgId = localStorage.getItem("orgId");
+    const uId = getStorage("userId");
+    const orgId = getStorage("orgId");
     let resoureUrl = `page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
       startDate ? startDate : ""
     }&computationEnd=${endDate ? endDate : ""}&isAllocation=${
@@ -124,8 +125,8 @@ const Patient = ({
   };
   const getAllCheckList = async (sort) => {
     setIsLoading(true);
-    const uId = localStorage.getItem("userId");
-    const orgId = localStorage.getItem("orgId");
+    const uId = getStorage("userId");
+    const orgId = getStorage("orgId");
     let resoureUrl = `dbservice/patient/admin/computation/filter?&organizationId=${orgId}&
     page=${0}&size=${
       batchCount ? batchCount : reviewerResponse?.response?.totalElements
@@ -238,8 +239,8 @@ const Patient = ({
   };
 
   const getAuditL2List = async (pageNo, searchString) => {
-    let orgId = localStorage.getItem("orgId");
-    let tenantid = localStorage.getItem("tenantId");
+    let orgId = getStorage("orgId");
+    let tenantid = getStorage("tenantId");
     let resoureUrl = `dbservice/l2audit?organizationId=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
     getSupervisorsList({ url: resoureUrl });
 
@@ -387,7 +388,7 @@ const Patient = ({
       userName: data?.userName,
     };
     setL2selectUser(dataMap);
-    let orgId = localStorage.getItem("orgId");
+    let orgId = getStorage("orgId");
     let resoureUrl = `dbservice/l2audit/patients?organizationId=${orgId}&username=${
       data?.userName
     }&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${
@@ -403,7 +404,7 @@ const Patient = ({
 
   const getAllCheckListL2 = async (sort) => {
     setCheckedLoading(true);
-    let orgId = localStorage.getItem("orgId");
+    let orgId = getStorage("orgId");
     let resoureUrl = `dbservice/l2audit/patients?organizationId=${orgId}&username=${
       l2selectUser?.userName
     }&page=${pageNoL2Patient}&size=${15}&sortdirection=${

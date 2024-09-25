@@ -10,6 +10,7 @@ import { faUserCircle, faClock } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { connect } from "react-redux";
+import { getStorage } from "../../../../../utils/storages";
 
 const Comments = ({ setOpen, open, patientDetailsResult }) => {
   const [inputValue, setInputValue] = useState({
@@ -41,7 +42,7 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
     event.preventDefault();
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
-      // const orgId = localStorage.getItem("orgId");
+      // const orgId = getStorage("orgId");
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
         // orgId: orgId,
@@ -72,7 +73,7 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
   const handleEnterText = async (event) => {
     if (event.charCode == 13) {
       if (inputValue.comments.trim() != "") {
-        // const orgId = localStorage.getItem("orgId");
+        // const orgId = getStorage("orgId");
         var dataFormatSuggested = {
           patientId: patientDetailsResult?.data?.response?.patientId,
           // orgId: orgId,
@@ -157,7 +158,7 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
   };
 
   useEffect(() => {
-    const patientId = localStorage.getItem("patientId");
+    const patientId = getStorage("patientId");
     setLocalPatientId(patientId);
 
     getCommentsList();

@@ -13,6 +13,7 @@ import {
   renderUserPrfoileAvatar,
 } from "../../headerFilters/functions";
 import { truncateString } from "../../patientDetails/details/components/function/ReusableFunctions";
+import { setStorage } from "../../../utils/storages";
 
 function PatientTable({
   patinetListAll,
@@ -47,7 +48,7 @@ function PatientTable({
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       const routePrams={...page,...params}
       // navigate.push({ pathname: "/reviewer/patients/details", query: page });
       

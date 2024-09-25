@@ -10,6 +10,7 @@ import {
   checkDeviceLogin,
   logoutAllDevice,
 } from "../../stores/authflow/actions";
+import { getStorage, setStorage } from "../../utils/storages";
 
 const SelectRole = () => {
   const router = useRouter();
@@ -68,8 +69,8 @@ const SelectRole = () => {
     
     const selectedRoleInfo = rolesMapping[selectedRole];
     if (selectedRoleInfo && !roleError) {
-      localStorage.setItem("userRole", selectedRoleInfo?.userRole);
-      localStorage.setItem("role", selectedRole);
+      setStorage("userRole", selectedRoleInfo?.userRole);
+      setStorage("role", selectedRole);
       setLoading(true);
       router?.push(selectedRoleInfo?.route);
     }
@@ -92,8 +93,8 @@ const SelectRole = () => {
     );
     setDecodedParams(encodeParams);
 
-    let rolesArray = JSON.parse(localStorage.getItem("roles"));
-    let getUserId = localStorage.getItem("userId");
+    let rolesArray = JSON.parse(getStorage("roles"));
+    let getUserId = getStorage("userId");
     if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
       rolesArray = ["TENANT ADMIN"];
     }

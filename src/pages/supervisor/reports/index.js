@@ -28,6 +28,7 @@ import { disableFutureDate } from "../../../components/headerFilters/functions";
 import { debounce } from "../../admin/reports/Export";
 import { useRouter } from "next/router";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
+import { getStorage } from "../../../utils/storages";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -321,7 +322,7 @@ const Index = () => {
   }, [reportActiveTab]);
 
   const backRender = () => {
-    const user = localStorage.getItem("userRole");
+    const user = getStorage("userRole");
     if (user == "supervisor") {
       route.push("/supervisor/report?page=0&limit=0");
     }

@@ -39,6 +39,7 @@ export function extractLatestData(notes) {
 import Image from "next/image";
 import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
+import { getStorage, setStorage } from "../../../utils/storages";
 const bullets = [
   {
     color: "#377880",
@@ -118,9 +119,9 @@ const Patient = ({ getWorkListFilter, response, loader }) => {
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
   useEffect(() => {
-    let tenId = localStorage.getItem("tenantId");
-    let uId = localStorage.getItem("userId");
-    let orgId = localStorage.getItem("orgId");
+    let tenId = getStorage("tenantId");
+    let uId = getStorage("userId");
+    let orgId = getStorage("orgId");
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
@@ -238,7 +239,7 @@ const Patient = ({ getWorkListFilter, response, loader }) => {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/supervisor/patients/details");
     } else {
       notification.warning({

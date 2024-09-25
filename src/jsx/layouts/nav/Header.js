@@ -59,6 +59,7 @@ import {
 import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
 import Codify from "../../../pages/codify";
 import { actions as webSocketActions } from "../../../stores/websocket";
+import { getStorage } from "../../../utils/storages";
 
 const Header = ({
   notificationResponse,
@@ -132,7 +133,7 @@ const Header = ({
       closeOnConfirm: false,
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const userRole = localStorage.getItem("role");
+        const userRole = getStorage("role");
         await logoutAllDevice();
         localStorage.clear();
         if (userRole != "ehr") {
@@ -145,9 +146,9 @@ const Header = ({
   };
 
   const getUserIdDetails = async (currentUserInfo) => {
-    const token = localStorage.getItem("token");
-    const getUserId = localStorage.getItem("userId");
-    const userRole = localStorage.getItem("role");
+    const token = getStorage("token");
+    const getUserId = getStorage("userId");
+    const userRole = getStorage("role");
 
     setUserIdDetails(currentUserInfo?.data?.response);
     setProfileImg(currentUserInfo?.data?.response?.profileImageUrl);
@@ -294,7 +295,7 @@ const Header = ({
     );
 
   const onClick = ({ key }) => {
-    localStorage.setItem("userRole", key);
+    setStorage("userRole", key);
     if (key === "admin") {
       router.push("/admin/user");
     } else if (key === "reviewer") {
@@ -431,11 +432,11 @@ const Header = ({
   }, []);
 
   useEffect(() => {
-    var loginCheck = localStorage.getItem("loginCheck");
-    const userRoleLocal = localStorage.getItem("userRole");
-    const userId = localStorage.getItem("userId");
-    const userRole = localStorage.getItem("role");
-    const tenentId = localStorage.getItem("tenantId");
+    var loginCheck = getStorage("loginCheck");
+    const userRoleLocal = getStorage("userRole");
+    const userId = getStorage("userId");
+    const userRole = getStorage("role");
+    const tenentId = getStorage("tenantId");
     dispatch(getCurrentUser(userId, router));
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);

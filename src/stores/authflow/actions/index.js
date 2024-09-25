@@ -4,6 +4,7 @@ import axiosConfig from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { getResponePopup } from "../../../utils/reusable";
 import exp from "constants";
+import { getStorage, setStorage } from "../../../utils/storages";
 
 export const ENABLEMFA = "ENABLEMFA";
 export const VALIDATE_CODE = "VALIDATE_CODE";
@@ -179,14 +180,14 @@ export const loginAction =
           payload: { data: result, loading: false },
         });
         if (response?.data?.status === "SUCCESS") {
-          localStorage.setItem("roles", JSON.stringify(result?.roles));
-          localStorage.setItem("token", result.access_token);
-          localStorage.setItem("refreshToken", result?.refresh_token);
-          localStorage.setItem("tenantId", result.tenantId);
-          localStorage.setItem("userId", result.userEmail);
-          localStorage.setItem("orgId", result.organizationId);
-          localStorage.setItem("userName", emailSplit[0]);
-          localStorage.setItem("loginCheck", true);
+          setStorage("roles", JSON.stringify(result?.roles));
+          setStorage("token", result.access_token);
+          setStorage("refreshToken", result?.refresh_token);
+          setStorage("tenantId", result.tenantId);
+          setStorage("userId", result.userEmail);
+          setStorage("orgId", result.organizationId);
+          setStorage("userName", emailSplit[0]);
+          setStorage("loginCheck", true);
           const encodedParams = btoa(
             JSON.stringify({
               mfa: mfa,
@@ -199,7 +200,7 @@ export const loginAction =
             pathname: `/twofactorAuthentication/SelectRole`,
             search: `params=${encodedParams}`,
           });
-          localStorage.setItem("loginTime", Date.now());
+          setStorage("loginTime", Date.now());
         }
         if (response.data?.response === null) {
           dispatch({
@@ -246,7 +247,7 @@ export const getQrCode = (username) => async (dispatch) => {
   }
 };
 export const checkDeviceLogin = async () => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}securityservice/gateway/login`,
@@ -266,7 +267,7 @@ export const checkDeviceLogin = async () => {
 };
 
 export const logoutAllDevice = async () => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}securityservice/gateway/logout`,
@@ -284,8 +285,8 @@ export const logoutAllDevice = async () => {
 };
 
 export const refreshToken = () => async (dispatch) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const token = localStorage.getItem("token");
+  const refreshToken = getStorage("refreshToken");
+  const token = getStorage("token");
   try {
     const response = await axiosConfig.post(
       `${ENDPOINTS.apiEndoint}securityservice/token/refreshtoken`,
@@ -304,16 +305,15 @@ export const refreshToken = () => async (dispatch) => {
           data: response.data,
         },
       });
-      localStorage.setItem("refreshTokenTime", Date.now());
-      const newtoken = response?.data?.response;
-      localStorage.setItem("token", newtoken);
-      localStorage.setItem("loginTime", Date.now());
+      const newToken = response?.data?.response;
+      setStorage("refreshTokenTime", Date.now());
+      setStorage("token", newToken); 
+      setStorage("loginTime", Date.now());
     }
   } catch (err) {
     console.log(err);
   }
 };
-
 export const submitLogin = async (email, password) => {
   const datas = {
     username: email,
@@ -332,7 +332,7 @@ export const submitLogin = async (email, password) => {
 };
 
 export const getAccuracy = () => async (dispatch) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axiosConfig.get(
       `${ENDPOINTS?.apiEndoint}dbservice/l2dashboard/loggedinuseraccuracy`,
@@ -354,7 +354,7 @@ export const getAccuracy = () => async (dispatch) => {
 };
 
 export const getCurrentUser = (userId) => async (dispatch) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axiosConfig.get(
       `${ENDPOINTS?.apiEndoint}dbservice/user/get?userName=${userId}`,
@@ -376,7 +376,7 @@ export const getCurrentUser = (userId) => async (dispatch) => {
   }
 };
 export const preSendURl = (type, file) => async (dispatch) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   dispatch({
     type: PROFILE_URL,
     payload: {
@@ -432,7 +432,7 @@ export const getUrl = (url, extention, file) => async (dispatch) => {
 };
 
 export const updateImage = (url) => async (dispatch) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   const splitUrl = url?.split("?").shift();
   if (url) {
     try {
@@ -462,8 +462,8 @@ export const updateImage = (url) => async (dispatch) => {
   }
 };
 export const getFilters = (field, username, pageQueue) => async (dispatch) => {
-  const token = localStorage.getItem("token");
-  const role = localStorage.getItem("userRole");
+  const token = getStorage("token");
+  const role = getStorage("userRole");
   const userRole = role?.toUpperCase();
   const url = username
     ? `dbservice/patient/filter/field/list?username=${username}&field=${field}&role=${userRole}`
@@ -502,7 +502,7 @@ export const getFilters = (field, username, pageQueue) => async (dispatch) => {
 export const getCoderDetails =
   ({ name, search, selectedOption, router }) =>
   async (dispatch) => {
-    const token = localStorage.getItem("token");
+    const token = getStorage("token");
     const codeName = name === "icd-10" ? "icd" : name;
     try {
       const response = await axiosConfig.get(
@@ -529,7 +529,7 @@ export const getCoderDetails =
   };
 
 export function checkAutoLogin(dispatch, navigate) {
-  const tokenDetailsString = localStorage.getItem("userDetails");
+  const tokenDetailsString = getStorage("userDetails");
   let tokenDetails = "";
   if (!tokenDetailsString) {
     dispatch(Logout(navigate));
@@ -552,7 +552,7 @@ export function checkAutoLogin(dispatch, navigate) {
 }
 
 export function isLogin() {
-  const tokenDetailsString = localStorage.getItem("userDetails");
+  const tokenDetailsString = getStorage("userDetails");
   if (tokenDetailsString) {
     return true;
   } else {

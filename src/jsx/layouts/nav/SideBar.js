@@ -22,7 +22,7 @@ export default function SideBar() {
   };
 
   useEffect(() => {
-    const item = localStorage.getItem("userRole");
+    const item = getStorage("userRole");
     setUserRole(item);
   }, []);
 

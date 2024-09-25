@@ -1,9 +1,10 @@
 import axios from "../utility/axiosConfig";
 import ENDPOINTS from "../utility/enpoints";
+import { getStorage } from "../utils/storages";
 
 export const PatientsList = async (page, url) => {
-  var uId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
+  var uId = getStorage("userId");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `
@@ -21,7 +22,7 @@ export const PatientsList = async (page, url) => {
 };
 
 export const SearchPatientsList = async (pagenum, search) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `
@@ -38,7 +39,7 @@ export const SearchPatientsList = async (pagenum, search) => {
   }
 };
 export const ChangePriority = async (patientId, year, priority) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.put(
       `${ENDPOINTS?.apiEndoint}dbservice/change/priority?patientId=${patientId}&year=${year}&priority=${priority}`,
@@ -57,7 +58,7 @@ export const ChangePriority = async (patientId, year, priority) => {
 };
 
 export const PatientsListFilter = async (url) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
       headers: {
@@ -71,7 +72,7 @@ export const PatientsListFilter = async (url) => {
 };
 
 export const getFilePageNumber = async (fileId) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/pageNumber/startAndStopPageNo?fileId=${fileId}`,
@@ -89,7 +90,7 @@ export const getFilePageNumber = async (fileId) => {
 };
 
 export const getMeatQueryList = async (dos, patientId) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/meatquery/getMeatQueryList?dosYear=${dos}&patientId=${patientId}`,
@@ -107,7 +108,7 @@ export const getMeatQueryList = async (dos, patientId) => {
 };
 
 export const submitMeatQuery = async (data) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}dbservice/meatquery/storequery`,
@@ -126,7 +127,7 @@ export const submitMeatQuery = async (data) => {
 };
 
 export const updateMeatQuery = async (data) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.put(
       `${ENDPOINTS?.apiEndoint}dbservice/meatquery/updateQueryComment`,
@@ -154,7 +155,7 @@ export const patientListFilter = async (
   processedEnd,
   pageNo
 ) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${
@@ -173,7 +174,7 @@ export const patientListFilter = async (
 };
 
 export const getProviderDetails = async (patiendId, encounterDate) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/provider?patientId=${patiendId}&encounterDate=${encounterDate}`,
@@ -190,7 +191,7 @@ export const getProviderDetails = async (patiendId, encounterDate) => {
 };
 
 export const auditPatientupdate = async (data) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}dbservice/patient/status/audit`,
@@ -209,7 +210,7 @@ export const auditPatientupdate = async (data) => {
 };
 
 export const reAuditupdate = async (data) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}dbservice/patient/status/reaudit`,
@@ -228,7 +229,7 @@ export const reAuditupdate = async (data) => {
 };
 
 export const auditPending = async (data) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}dbservice/patient/status/auditPending`,
@@ -247,7 +248,7 @@ export const auditPending = async (data) => {
 };
 
 export const auditHold = async (data) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}dbservice/patient/status/auditHold`,
@@ -266,7 +267,7 @@ export const auditHold = async (data) => {
 };
 
 export const auditDecline = async (data) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}dbservice/patient/status/auditDecline`,
@@ -284,7 +285,7 @@ export const auditDecline = async (data) => {
   }
 };
 export const manuallyAddComboCode = async (data) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.put(
       `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/combo/manuallyAdded`,
@@ -303,7 +304,7 @@ export const manuallyAddComboCode = async (data) => {
 };
 
 export const deleteMeatQuery = async (patientId, code) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.delete(
       `${ENDPOINTS?.apiEndoint}dbservice/meatquery/delete?patientId=${patientId}&diagnosisCode=${code}`,
@@ -321,7 +322,7 @@ export const deleteMeatQuery = async (patientId, code) => {
 };
 
 export const getProviderEncounterDetails = async (patientId, name) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.delete(
       `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/provider/encounters?patientId=${patientId}&name=${name}`,

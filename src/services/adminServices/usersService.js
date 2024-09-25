@@ -2,6 +2,7 @@ import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
 import { notification } from "antd";
 import { ENABLE, getUsers } from "../../store/actions/adminAction/usersAction";
+import { getStorage } from "../../utils/storages";
 
 export const UsersList = async ({
   pageCount = 0,
@@ -12,9 +13,9 @@ export const UsersList = async ({
   role = "",
   sort,
 }) => {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
-  const roles = localStorage.getItem("role");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
+  const roles = getStorage("role");
   const selectedStatus = status === "ALL" ? "" : status;
   try {
     const response = await axios.get(
@@ -36,7 +37,7 @@ export const UsersList = async ({
 };
 
 export const AddUser = async (data,setFormData) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   delete data?.confirmPassword;
   try {
     const response = await axios.post(
@@ -107,9 +108,9 @@ export const enableUser = (
   field
 ) => {
   return async (dispatch) => {
-    const token = localStorage.getItem("token");
-    var tenId = localStorage.getItem("tenantId");
-    var orgId = localStorage.getItem("orgId");
+    const token = getStorage("token");
+    var tenId = getStorage("tenantId");
+    var orgId = getStorage("orgId");
     const checkedVal = checked === "yes" ? true : false;
     const data = {
       orgId: orgId,

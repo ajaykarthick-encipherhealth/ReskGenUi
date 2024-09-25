@@ -10,6 +10,7 @@ import { actions as detailsActions } from "../../../../stores/patient/details";
 import { connect } from "react-redux";
 import { getStatusIcon } from "../../../reuseableFunctions";
 import YearAndDosStatus from "../components/yearAndDosStatus";
+import { getStorage } from "../../../../utils/storages";
 
 const { Option } = Select;
 
@@ -38,8 +39,8 @@ const NonHcc = ({
     } else {
       getSelectedDos("");
     }
-    const patientId = localStorage.getItem("patientId");
-    const role = localStorage.getItem("role");
+    const patientId = getStorage("patientId");
+    const role = getStorage("role");
 
     if (value) {
       getpatientDetailsData(
@@ -137,7 +138,7 @@ const NonHcc = ({
                   </Select>
                 </Nav.Item>
                 <Nav.Item as="li" className="nav-item mx-2">
-                  {localStorage.getItem("role") != "admin" &&
+                  {getStorage("role") != "admin" &&
                     selectDosValue && (
                       <YearAndDosStatus setIsLoading={setIsLoading} />
                     )}

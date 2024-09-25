@@ -1,9 +1,10 @@
 import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
+import { getStorage } from "../../utils/storages";
 
 export const l2Users = async (page, search) => {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/user/getuserbymanageridbypage?orgid=${orgId}&searchstring=${search}&page=${page}&size=15`,
@@ -20,7 +21,7 @@ export const l2Users = async (page, search) => {
 };
 
 export const L2IndividualUser = async (datas) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   const filteredStatus =
     datas?.selectedOption === undefined
       ? ""
@@ -44,7 +45,7 @@ export const L2IndividualUser = async (datas) => {
   }
 };
 export const CurrentUserInfo = async (userId, router) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/user/get?userName=${userId}`,

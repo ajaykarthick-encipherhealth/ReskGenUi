@@ -31,6 +31,7 @@ import MovementAction from "../movementAction";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
 import TableRisk from "../../../../tableRisk";
 import moment from "moment";
+import { getStorage } from "../../../../../utils/storages";
 const HccCards = ({
   list,
   hccVersionDetails,
@@ -158,7 +159,7 @@ const HccCards = ({
     });
   };
 
-  const userId = localStorage.getItem("userId");
+  const userId = getStorage("userId");
 
   useEffect(() => {
     if (selectedDos && labFile?.data?.response?.dosSummaries) {

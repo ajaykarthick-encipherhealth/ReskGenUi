@@ -11,6 +11,7 @@ import AddLabForm from "../addLabForm";
 import AddRadiologyForm from "../addRadiologyForm";
 import AllocateModal from "../../../../../pages/admin/allocateduser/allocate";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
+import { getStorage } from "../../../../../utils/storages";
 
 const StatusAction = ({
   patientDetailsResult,
@@ -125,7 +126,7 @@ const StatusAction = ({
   };
 
   const getPatientIdDetails = async (result) => {
-    const userRoleLocal = localStorage.getItem("userRole");
+    const userRoleLocal = getStorage("userRole");
     var data = [
       {
         id: result?.patientId,
@@ -622,9 +623,9 @@ const StatusAction = ({
   };
 
   useEffect(() => {
-    const userRoleLocal = localStorage.getItem("userRole");
-    const uId = localStorage.getItem("userId");
-    const orgId = localStorage.getItem("orgId");
+    const userRoleLocal = getStorage("userRole");
+    const uId = getStorage("userId");
+    const orgId = getStorage("orgId");
     setUserRole(userRoleLocal);
     setLocalOrgId(orgId);
     setLocalUserId(uId);

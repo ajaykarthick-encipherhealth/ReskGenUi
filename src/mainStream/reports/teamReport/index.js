@@ -28,7 +28,7 @@ import {
   processstatusBodyTemplate,
 } from "../../components/chartUtils";
 import { actions as supervisorAction } from "../../../stores/supervisor/report";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 import ENDPOINTS from "../../../utility/enpoints";
 
 const TeamReport = ({
@@ -61,7 +61,7 @@ const TeamReport = ({
     //   ? []
     //   : reportListAll?.response?.response?.data;
     // setSelectedRows(updatedRows);
-    const orgId = localStorage.getItem("orgId");
+    const orgId = getStorage("orgId");
     if (activeTab === "Audit") {
       // auditReport({
       //   pagenum: 0,
@@ -246,9 +246,9 @@ const TeamReport = ({
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
-      const currentRole = localStorage.getItem("userRole");
+      const currentRole = getStorage("userRole");
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push({
         pathname: `/${currentRole}/patients/details`,
         query: page,

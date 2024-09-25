@@ -26,6 +26,7 @@ import { useSelector } from "react-redux";
 import SentReport from "./sentReport";
 import MoreFilter from "./MoreFilter";
 import Export from "./Export";
+import { getStorage, setStorage } from "../../utils/storages";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -154,9 +155,9 @@ const Reports = () => {
       (item) => item.field === "initialSearch"
     )?.search;
     setIsLoading(false);
-    const userRole = localStorage.getItem("userRole");
+    const userRole = getStorage("userRole");
     setActiveRole(userRole);
-    const activeTabFromStorage = localStorage.getItem("activeTab");
+    const activeTabFromStorage = getStorage("activeTab");
     const activeTab = activeTabFromStorage ? activeTabFromStorage : "Reviewer";
     dispatch(getActiveTab(activeTab));
 
@@ -230,7 +231,7 @@ const Reports = () => {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({

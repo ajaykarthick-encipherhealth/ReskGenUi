@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { getNotificationAlert } from "../../store/actions/NotificationAction";
 import { actions as webSocketActions } from "../../stores/websocket";
 import { actions as dashbaordActions } from "../../stores/reviewer/dashboard";
+import { getStorage } from "../../utils/storages";
 
 const Notification = ({
   open,
@@ -27,7 +28,7 @@ const Notification = ({
 
   useEffect(() => {
     if (open) {
-      const userId = localStorage.getItem("userId");
+      const userId = getStorage("userId");
       getNotificationList(userId);
     }
   }, [open]);

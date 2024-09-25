@@ -1,5 +1,6 @@
 import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
+import { getStorage } from "../../utils/storages";
 
 export const PatientsList = async (
   pageNo,
@@ -14,9 +15,9 @@ export const PatientsList = async (
   selCreatedBy,
   sort
 ) => {
-  const token = localStorage.getItem("token");
-  const uId = localStorage.getItem("userId");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const uId = getStorage("userId");
+  const orgId = getStorage("orgId");
 
 
   const filteredStatus = status === undefined ? "" : status;
@@ -46,9 +47,9 @@ export const PatientsList = async (
 };
 
 export const TrackingList = async (datas) => {
-  const token = localStorage.getItem("token");
-  const uId = localStorage.getItem("userId");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const uId = getStorage("userId");
+  const orgId = getStorage("orgId");
   const filteredStatus =
     datas?.selectedOption === undefined ? "" : datas?.selectedOption;
   const filteredDStart =

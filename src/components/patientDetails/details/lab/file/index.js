@@ -16,6 +16,7 @@ import { onDragEnd } from "../../components/function/ReusableFunctions";
 import ManuallyAdd from "../../components/manuallyAdd";
 import LogoLoader from "../../../../logoLoader";
 import { getPatientLabDetailsNew } from "../../components/function/GetDataLab";
+import { getStorage } from "../../../../../utils/storages";
 
 const File = ({
   patientDetailsResult,
@@ -81,8 +82,8 @@ const File = ({
   const [labFileFilterList, setLabFileFilterList] = useState(10);
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
+    var orgId = getStorage("orgId");
+    var tenId = getStorage("tenantId");
     getPatientLabDetailsNew(
       orgId,
       tenId,

@@ -24,6 +24,7 @@ import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { onDragEnd } from "../../components/function/ReusableFunctions";
 import NonHccCards from "../../components/NONHCC";
+import { getStorage } from "../../../../../utils/storages";
 
 const File = ({
   setActiveTabHead,
@@ -79,8 +80,8 @@ const File = ({
 
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
+    var orgId = getStorage("orgId");
+    var tenId = getStorage("tenantId");
     getPatientDetails(
       orgId,
       tenId,

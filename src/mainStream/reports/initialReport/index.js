@@ -30,7 +30,7 @@ import {
 } from "../../components/chartUtils";
 import { getReportDetails } from "../../../store/actions/adminAction/ReportActions";
 import ENDPOINTS from "../../../utility/enpoints";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 
 const InitialCard = ({
@@ -120,8 +120,8 @@ const InitialCard = ({
         } = apiCall.admin;
         try {
           setIsLoading(true);
-          const orgId = localStorage.getItem("orgId");
-          const role = localStorage.getItem("role");
+          const orgId = getStorage("orgId");
+          const role = getStorage("role");
           const searchValue = filter === "ALL" ? "" : filter;
           const url = `dbservice/patient/adminreport?pageno=${0}&size=${
             size ? size : 7
@@ -283,9 +283,9 @@ const InitialCard = ({
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
-      const currentRole = localStorage.getItem("userRole");
+      const currentRole = getStorage("userRole");
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      setStorage("patientId", data.patientId);
       navigate.push({
         pathname: `/${currentRole}/patients/details`,
         query: page,

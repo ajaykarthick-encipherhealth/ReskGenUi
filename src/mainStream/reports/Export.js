@@ -12,6 +12,7 @@ import { updateSentReport } from "../../services/ReportService";
 import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
 import InputField from "../../components/input";
 import { SVGICON } from "../../jsx/constant/theme";
+import { getStorage } from "../../utils/storages";
 
 export const checkBoxData = [
   {
@@ -201,8 +202,8 @@ const Export = ({
   const [inputStr, setInputStr] = useState("");
 
   useEffect(() => {
-    setCurrentUser(localStorage.getItem("userId"));
-    var orgId = localStorage.getItem("orgId");
+    setCurrentUser(getStorage("userId"));
+    var orgId = getStorage("orgId");
     dispatch(getUsersLists(orgId, search));
   }, [search]);
 

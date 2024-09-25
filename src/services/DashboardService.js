@@ -1,8 +1,9 @@
 import axios from "../utility/axiosConfig";
 import ENDPOINTS from "../utility/enpoints";
+import { getStorage } from "../utils/storages";
 
 export async function workStatusApi(startDate, endDate, router) {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}management/dashboard/tile/statistics?start=${startDate}&end=${endDate}`,
@@ -19,7 +20,7 @@ export async function workStatusApi(startDate, endDate, router) {
 }
 
 export const DailyTaskApi = async (date, router) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}management/dashboard/daily/statistics?date=${date}`,
@@ -44,8 +45,8 @@ export const accuracyScore = async (
   router,
   isAdmin = false
 ) => {
-  const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
+  const token = getStorage("token");
+  const role = getStorage("role");
   const url = isAdmin
     ? btn === "Daily"
       ? `daily?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
@@ -74,7 +75,7 @@ export const accuracyScore = async (
 };
 
 export const CompletedScore = async (btn, date, month, year, router) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   const url = `year=${year}&month=${month}&date=${date}&range=${btn}`;
   try {
     const response = await axios.get(
@@ -92,7 +93,7 @@ export const CompletedScore = async (btn, date, month, year, router) => {
 };
 
 export const HoldStatus = async (router) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/dashboard/hold/charts`,
@@ -109,7 +110,7 @@ export const HoldStatus = async (router) => {
 };
 
 export const ChatBot = async (msg) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   var data = {
     input: msg,
   };

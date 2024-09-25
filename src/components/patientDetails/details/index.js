@@ -55,6 +55,7 @@ import FileDetails from "./components/fileDetails";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import ManuallyAddProvider from "./manuallyAddProvider";
 import { getAge } from "../../../utils/reusable";
+import { getStorage } from "../../../utils/storages";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -65,8 +66,8 @@ export const navigetPageDetails = async (
   setIsLoading
 ) => {
   setSideNavLabelActiveKey(pageTitle);
-  var patientId = localStorage.getItem("patientId");
-  var orgId = localStorage.getItem("orgId");
+  var patientId = getStorage("patientId");
+  var orgId = getStorage("orgId");
   if (pageTitle == "HCC" && patientId) {
     setActiveTab(1);
     // const response = await axios.get(
@@ -201,7 +202,7 @@ const Details = ({
     );
   };
   useEffect(() => {
-    const patientId = localStorage.getItem("patientId");
+    const patientId = getStorage("patientId");
     if (activeTab == 1) {
       getAllProcessYear(patientId, "HCC");
     }
@@ -255,11 +256,11 @@ const Details = ({
   }, []);
 
   useEffect(() => {
-    const orgId = localStorage.getItem("orgId");
-    const tenId = localStorage.getItem("tenantId");
-    const patientId = localStorage.getItem("patientId");
-    const uId = localStorage.getItem("userId");
-    const userRoleLocal = localStorage.getItem("userRole");
+    const orgId = getStorage("orgId");
+    const tenId = getStorage("tenantId");
+    const patientId = getStorage("patientId");
+    const uId = getStorage("userId");
+    const userRoleLocal = getStorage("userRole");
 
     setUserRole(userRoleLocal);
     setLocalOrgId(orgId);
@@ -273,7 +274,7 @@ const Details = ({
   }, [patientDetailsResult?.data?.response]);
 
   useEffect(() => {
-    const patientId = localStorage.getItem("patientId");
+    const patientId = getStorage("patientId");
     setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
     if (activeTab == 3 || activeTab == 4) {
       getPatientDetails(
@@ -290,7 +291,7 @@ const Details = ({
 
   useEffect(() => {
     if (patientDetailsResult?.data?.response?.fileId) {
-      const patientId = localStorage.getItem("patientId");
+      const patientId = getStorage("patientId");
       if (
         isFileCheck == false &&
         patientId == patientDetailsResult?.data?.response.patientId
@@ -306,7 +307,7 @@ const Details = ({
   }, [patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath]);
 
   const getAllProcessYearSelect = async (result) => {
-    const patientId = localStorage.getItem("patientId");
+    const patientId = getStorage("patientId");
 
     var dosYearArr = result?.data?.response?.map((res) => {
       return { value: res, label: res };
@@ -480,7 +481,7 @@ const Details = ({
     // setSelectDosValue("");
     getSelectedDos("");
     getCurrentDiseaseType(true);
-    const user = localStorage.getItem("userRole");
+    const user = getStorage("userRole");
     if (user && user.toLowerCase() === "admin") {
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(queryWithoutUser).toString();
@@ -657,7 +658,7 @@ const Details = ({
   };
 
   const getActiveLabels = async () => {
-    const patientId = localStorage.getItem("patientId");
+    const patientId = getStorage("patientId");
     const res = await activeLabels({
       patientId,
       year: dosYearDefalutSelect.value

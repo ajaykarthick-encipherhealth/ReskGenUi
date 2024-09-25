@@ -1,4 +1,5 @@
 import { requestPortal } from "../../../utils/network";
+import { getStorage } from "../../../utils/storages";
 
 export async function auditApi({
   pagenum,
@@ -16,7 +17,7 @@ export async function auditApi({
   const searchValue = filter === "ALL" ? "" : filter;
   const sortField = sort?.sortField === "undefined" ? "" : sort?.sortField;
   const sortDirection = sort?.sortDir === "undefined" ? "" : sort?.sortDir;
-  const orgId = localStorage.getItem("orgId");
+  const orgId = getStorage("orgId");
   const data = await requestPortal(
     `dbservice/patient/auditor/assinedreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&status=${searchValue?searchValue:""}&searchstring=${search?search:""}&orgid=${orgId}&sortfield=${sortField}&sortdirection=${sortDirection}&patientIds=${flagsList?flagsList:""}
   `,
@@ -39,7 +40,7 @@ export async function teamApi({
     method: "GET",
   };
   const searchValue = filter === "ALL" ? "" : filter;
-  const orgId = localStorage.getItem("orgId");
+  const orgId = getStorage("orgId");
   const data = await requestPortal(
     `dbservice/patient/auditorreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&status=${searchValue?searchValue:""}&searchstring=${search?search:""}&orgid=${orgId}&sortfield=${sort?.sortField?sort?.sortField:""}&sortdirection=${sort?.sortDir?sort?.sortDir:""}&patientIds=${flagsList?flagsList:""}
   `,

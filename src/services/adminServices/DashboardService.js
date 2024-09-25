@@ -1,5 +1,6 @@
 import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
+import { getStorage } from "../../utils/storages";
 
 export const TEAM_CHART = "TEAM_CHART";
 export const MANAGERS = "MANAGERS";
@@ -9,9 +10,9 @@ export const ACCURACY_WEEKLY = "ACCURACY_WEEKLY";
 export const ACCURACY_DAILY = "ACCURACY_DAILY";
 // chnaged
 export async function workStatusApiAdmin(startDate = "", endDate = "", router) {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
-  const role = localStorage.getItem("role");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
+  const role = getStorage("role");
 
   try {
     const response = await axios.get(
@@ -33,7 +34,7 @@ export async function workStatusApiTenantAdmin(
   endDate = "",
   router
 ) {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/overallchart?allocatedOnStartDate=${startDate}&allocatedOnEndDate=${endDate}`,
@@ -51,8 +52,8 @@ export async function workStatusApiTenantAdmin(
 
 // chnaged
 export const DailyTaskApi = async (date, router) => {
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
+  const token = getStorage("token");
+  const userId = getStorage("userId");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/audit/statistics/processed?username=${userId}&date=${date}`,
@@ -71,8 +72,8 @@ export const DailyTaskApi = async (date, router) => {
 };
 
 export const accuracyScore = async (btn, month, year, router) => {
-  const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
+  const token = getStorage("token");
+  const role = getStorage("role");
   const url =
     btn === "Daily"
       ? `daily?month=${month}&role=${role ? role.toUpperCase() : ""}&year=${year}`
@@ -96,7 +97,7 @@ export const accuracyScore = async (btn, month, year, router) => {
 };
 
 export const CompletedScore = async (btn, date, month, year, router) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   const url =
     btn === "DAILY"
       ? `daily?month=${month}&year=${year}`
@@ -120,7 +121,7 @@ export const CompletedScore = async (btn, date, month, year, router) => {
 
 // chnaged
 export const HoldStatus = async (router) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/audit/hold/charts`,
@@ -137,7 +138,7 @@ export const HoldStatus = async (router) => {
 };
 
 export const ChatBot = async (msg) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}aiservice/ai/chat?input=${msg}`,
@@ -155,7 +156,7 @@ export const ChatBot = async (msg) => {
 };
 
 export const CompletedScoreNew = async (btn, date, month, year, router) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   const url =
     btn === "DAILY"
       ? `daily?month=${month}&year=${year}`
@@ -186,7 +187,7 @@ export const accuracyScoreNew = async (
   type,
   user
 ) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   switch (btn) {
     case "WEEKLY":
       btn = "WEEK";
@@ -197,7 +198,7 @@ export const accuracyScoreNew = async (
     default:
       null;
   }
-  const orgId=localStorage.getItem("orgId")
+  const orgId=getStorage("orgId")
   var data = {
     year: year,
     month: month,
@@ -226,8 +227,8 @@ export const accuracyScoreNew = async (
 };
 
 export const UserByIndividual = async (router) => {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/user/getuserbymanagerid?orgid=${orgId}`,
@@ -244,8 +245,8 @@ export const UserByIndividual = async (router) => {
 };
 
 export const TeamChart = () => async (dispatch) => {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
   try {
     dispatch({
       type: TEAM_CHART,
@@ -279,8 +280,8 @@ export const TeamChart = () => async (dispatch) => {
 };
 
 export const getManagers = () => async (dispatch) => {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
   const role = "REVIEWER";
   try {
     dispatch({
@@ -315,8 +316,8 @@ export const getManagers = () => async (dispatch) => {
 };
 
 export const getSppedoMeterDatas = (managerId) => async (dispatch) => {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
 
   try {
     dispatch({
@@ -349,7 +350,7 @@ export const getSppedoMeterDatas = (managerId) => async (dispatch) => {
 };
 
 export const getAccuracyMOnthly = (year) => async (dispatch) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     dispatch({
       type: ACCURACY_MONTHLY,
@@ -381,7 +382,7 @@ export const getAccuracyMOnthly = (year) => async (dispatch) => {
 };
 
 export const getAccuracyWeekly = (year, month) => async (dispatch) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     dispatch({
       type: ACCURACY_WEEKLY,
@@ -412,7 +413,7 @@ export const getAccuracyWeekly = (year, month) => async (dispatch) => {
   }
 };
 export const getAccuracyDaily = (year, month) => async (dispatch) => {
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   try {
     dispatch({
       type: ACCURACY_DAILY,
@@ -453,7 +454,7 @@ export const CompletedStatus = async (
   selectMemberType
 ) => {
   const isManage = selectMemberType == "SUPERVISOR";
-  const token = localStorage.getItem("token");
+  const token = getStorage("token");
   const url =
     btn === "DAILY"
       ? `daily?month=${month}&year=${year}&userName=${userName}&isManager=${isManage}`
@@ -476,8 +477,8 @@ export const CompletedStatus = async (
 };
 
 export const GetUserCount = async (role) => {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/user/getusercountbyrole?organizationId=${orgId}`,
@@ -494,8 +495,8 @@ export const GetUserCount = async (role) => {
 };
 
 export const GetTenantAdminUserCount = async (role) => {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/user/getusercountbyrole`,
@@ -512,9 +513,9 @@ export const GetTenantAdminUserCount = async (role) => {
 };
 
 export const SelectUserList = async (role) => {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
-  const roles = localStorage.getItem("role");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
+  const roles = getStorage("role");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=${orgId}`,
@@ -530,9 +531,9 @@ export const SelectUserList = async (role) => {
   }
 };
 export const tenantAdminSelectUserList = async (role) => {
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
-  const roles = localStorage.getItem("role");
+  const token = getStorage("token");
+  const orgId = getStorage("orgId");
+  const roles = getStorage("role");
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=`,

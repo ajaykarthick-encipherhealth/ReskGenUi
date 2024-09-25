@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FilterMatchMode } from "primereact/api";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
+import { getStorage } from "../../../utils/storages";
 
 export default function Patient() {
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -43,7 +44,7 @@ export default function Patient() {
   };
 
   useEffect(() => {
-    const uId = localStorage.getItem("userId");
+    const uId = getStorage("userId");
     getAllList(uId);
   }, []);
 

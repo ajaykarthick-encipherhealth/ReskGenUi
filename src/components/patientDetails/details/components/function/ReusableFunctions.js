@@ -13,6 +13,7 @@ import styles from "../HCC/styles.module.css";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import { getResponePopup } from "../../../../../utils/reusable";
+import { getStorage } from "../../../../../utils/storages";
 
 export const getEncounterDateBackground = ({
   value,
@@ -39,7 +40,7 @@ export const getEncounterDateBackground = ({
       var sectionMapArr = res ? (
         <span
           onClick={() => {
-            const patientId = localStorage.getItem("patientId");
+            const patientId = getStorage("patientId");
             const selectedMeatData = hyperlinks?.find(
               (ite) =>
                 ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
@@ -117,7 +118,7 @@ export const getEncounterDateBackground = ({
                 i > 1 ? (
                   <span
                     onClick={() => {
-                      const patientId = localStorage.getItem("patientId");
+                      const patientId = getStorage("patientId");
                       const selectedMeatData = hyperlinks?.find(
                         (ite) =>
                           ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
@@ -229,7 +230,7 @@ export const getEncounterDateBackgroundLab = ({
       var sectionMapArr = res ? (
         <span
           onClick={() => {
-            const patientId = localStorage.getItem("patientId");
+            const patientId = getStorage("patientId");
             const selectedMeatData = dosSummaries?.find(
               (ite) =>
                 // ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
@@ -309,7 +310,7 @@ export const getEncounterDateBackgroundLab = ({
                 i > 1 ? (
                   <span
                     onClick={() => {
-                      const patientId = localStorage.getItem("patientId");
+                      const patientId = getStorage("patientId");
                       const selectedMeatData = hyperlinks?.find(
                         (ite) =>
                           ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
@@ -461,7 +462,7 @@ export const getHeaderHyperlink = (
       <span
         onClick={() => {
           getSelectedDosPageNumber(null);
-          const patientId = localStorage.getItem("patientId");
+          const patientId = getStorage("patientId");
           const selectedMeatData = value?.find(
             (item) => item?.dateOfService === res?.dateOfService
           );
@@ -666,7 +667,7 @@ export const getCaptureSectionBackgroundFile = ({
           <span
             onClick={() => {
               getSelectedDosPageNumber(null);
-              const patientId = localStorage.getItem("patientId");
+              const patientId = getStorage("patientId");
               const selectedMeatData = hyperlinks?.find(
                 (item) => item?.header === res
               );
@@ -778,7 +779,7 @@ export const getCaptureSectionBackgroundFile = ({
                       <span
                         onClick={() => {
                           getSelectedDosPageNumber(null);
-                          const patientId = localStorage.getItem("patientId");
+                          const patientId = getStorage("patientId");
                           const selectedMeatData = hyperlinks?.find(
                             (it) => it?.header == item
                           );
@@ -919,7 +920,7 @@ export const getCaptureSectionBackgroundFile = ({
                         <span
                           onClick={() => {
                             getSelectedDosPageNumber(null);
-                            const patientId = localStorage.getItem("patientId");
+                            const patientId = getStorage("patientId");
                             const selectedMeatData = hyperlinks?.find(
                               (it) => it?.header == item
                             );
@@ -1313,7 +1314,7 @@ export const handleSubmitValidNotes = async ({
     apiURL = "management/disease/move/validtosuggested";
   }
   try {
-    var patientId = localStorage.getItem("patientId");
+    var patientId = getStorage("patientId");
     var dataFormatSuggested = {
       patientId: patientId,
       diagnosisCode: selectDisDetails.diagnosisCode
@@ -1680,7 +1681,7 @@ export const getCaptureSectionBackgroundMeatNew = (
       <span
         onClick={() => {
           getSelectedDosPageNumber && getSelectedDosPageNumber(null);
-          const patientId = localStorage.getItem("patientId");
+          const patientId = getStorage("patientId");
           const selectedMeatData = dublicateCaptureRemove?.find(
             (item) => item?.header === res.header
           );

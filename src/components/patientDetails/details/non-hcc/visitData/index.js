@@ -8,6 +8,7 @@ import PdfViewer from "../../PdfViewerComponent";
 import ModelIndex from "../../components/model/Index";
 import { getPatientDetails } from "../../components/function/GetData";
 import NonHccCards from "../../components/NONHCC";
+import { getStorage } from "../../../../../utils/storages";
 
 const VisitData = ({
   setActiveTabHead,
@@ -65,8 +66,8 @@ const VisitData = ({
 
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
+    var orgId = getStorage("orgId");
+    var tenId = getStorage("tenantId");
     getPatientDetails(
       orgId,
       tenId,
@@ -121,7 +122,7 @@ const VisitData = ({
     setIsModalOpenValid(true);
   };
   const getValidHccDetails = async (value, code) => {
-    var patientId = localStorage.getItem("patientId");
+    var patientId = getStorage("patientId");
     var result = "";
     var data = "";
 

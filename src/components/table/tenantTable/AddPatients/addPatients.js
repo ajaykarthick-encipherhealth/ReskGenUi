@@ -10,6 +10,7 @@ import {
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../headerFilters/functions";
+import { getStorage, setStorage } from "../../../../utils/storages";
 
 function AddPatientListTable({
   patinetListAll,
@@ -34,8 +35,8 @@ function AddPatientListTable({
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data?.patientId);
-      var role = localStorage.getItem("role");
+      setStorage("patientId", data?.patientId);
+      var role = getStorage("role");
       if (role == "tenant_admin") {
         navigate.push({
           pathname: "/tenantAdmin/patients/details",
@@ -44,7 +45,7 @@ function AddPatientListTable({
       } else {
         navigate.push({ pathname: "/admin/patients/details", query: page });
       }
-      // localStorage.setItem('paginations', JSON.stringify(page))
+      // setStorage('paginations', JSON.stringify(page))
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
