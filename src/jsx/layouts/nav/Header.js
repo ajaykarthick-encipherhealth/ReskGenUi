@@ -610,11 +610,7 @@ const Header = ({
                           <FontAwesomeIcon icon={faChevronRight} className="fs-6" />
                         </div>
                       </div>
-<<<<<<< HEAD
                     )} 
-=======
-                    )}
->>>>>>> 9900281fb2e22c2bca7174394ed3231b9e1cc2f4
                 </ul>
               </div>
             ) : null}
