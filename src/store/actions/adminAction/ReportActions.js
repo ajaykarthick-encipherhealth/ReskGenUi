@@ -52,6 +52,10 @@ export const getReportDetails = ({
   allPatientIds
 }) => {
   return (dispatch) => {
+    dispatch({
+      type: REPORT_PATIENTS_DETAILS,
+      payload:{data: null,loading:true},
+    });
     try {
       patientDetails({
         pagenum,
@@ -69,12 +73,15 @@ export const getReportDetails = ({
         if (response) {
           dispatch({
             type: REPORT_PATIENTS_DETAILS,
-            payload: response.data,
+            payload:{data: response.data,loading:false},
           });
         }
       });
     } catch (err) {
-      console.log(err);
+      dispatch({
+        type: REPORT_PATIENTS_DETAILS,
+        payload:{data: null,loading:false},
+      });
     }
   };
 };

@@ -73,6 +73,7 @@ const Reports = ({
   const AdminReportPatientDetails = useSelector(
     (state) => state.report?.details
   );
+
   const selectUserList = useSelector(
     (state) => state?.adminReport?.selectedUsers
   );
@@ -289,7 +290,7 @@ const Reports = ({
     } else if (activeTab === "Admin") {
       const updatedRows = selectAllFlags
         ? []
-        : AdminReportPatientDetails?.response?.flagIdCountDTOs?.flatMap(
+        : AdminReportPatientDetails?.data?.response?.flagIdCountDTOs?.flatMap(
             (item) => item?.patientIds
           );
       setFlagPatientsList(updatedRows?.join(","));
@@ -419,7 +420,7 @@ const Reports = ({
   }, [ReportPatientDetails]);
 
   useEffect(() => {
-    setFilteredCoder(AdminReportPatientDetails?.response);
+    setFilteredCoder(AdminReportPatientDetails?.data?.response);
   }, [AdminReportPatientDetails]);
 
   useEffect(() => {
@@ -751,7 +752,6 @@ const Reports = ({
                     </div>
                   </div>
                 </div>
-
                 <div>
                   {(activeTab === "Reviewer" || activeTab === "Admin") && (
                     <div>
@@ -774,7 +774,7 @@ const Reports = ({
                         setSort={setSort}
                         gotoPatientDetails={gotoPatientDetails}
                         page={{ pageNo, paginationFirst }}
-                        loader={reviewerLoader}
+                        loader={AdminReportPatientDetails?.loading}
                         activeTab={activeTab}
                         handleHeaderCheckbox={handleHeaderCheckboxChange}
                         selectAllFlags={selectAllFlags}
@@ -810,6 +810,7 @@ const Reports = ({
                             allPatientIds: true,
                           },
                         }}
+                       
                       />
                     </div>
                   )}
