@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Popover, Avatar, Tooltip, notification } from "antd";
+import { Popover, Avatar, Tooltip, notification, message } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle, faClock } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import Select from "react-select";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
+import { DeleteOutlined } from '@ant-design/icons';
 
 const Flag = ({
   setOpen,
@@ -55,6 +56,39 @@ const Flag = ({
     ),
     name: item?.flagName,
   }));
+
+  const handleDelete = async () => {
+    try {
+      // API call configuration
+      const headers = {
+        'X-Tenant': 'cc540702-7b8e-48eb-8a54-abd2c24c7ea4',
+        'Content-Type': 'application/json',
+      };
+
+      const payload = {
+        flagId: inputValue.flagId,
+        patientId: patientDetailsResult?.data?.response?.patientId,
+        comment: inputValue.comments,
+        processedYear:  patientDetailsResult?.data?.response?.processedYear,
+        dateOfService: patientDetailsResult?.data?.response?.dateOfService,
+      };
+
+      // Send API request
+      const response = await axios.post('https://dev.hcc.encipherhealth.ai/secure/dbservice/flagdetails/removeFlag', payload, {
+        headers,
+      });
+
+      // Handle success or failure
+      if (response.status === 200 && response.data.status === 'SUCCESS') {
+        message.success('Flag deleted successfully!');
+      } else {
+        message.error('Failed to delete flag');
+      }
+    } catch (error) {
+      message.error('An error occurred while deleting');
+      console.error(error);
+    }
+  };
 
   const handleSubmitFlag = async (event) => {
     const form = event.currentTarget;
@@ -277,6 +311,7 @@ const Flag = ({
                     </Avatar>
                   </Popover>
                 </Tooltip>
+                <DeleteOutlined style={{ color: 'red', fontSize: '18px' }} onClick={handleDelete}/>
               </div>
               <span className={visitStyles.commentsDesc}>
                 {data?.patientFlagDTO?.comment}
