@@ -107,7 +107,7 @@ const Header = ({
   const notificationSoundRef = useRef(null);
   const [nextMenuList, setNextMenuList] = useState(false);
   const [screenSize, setScreenSize] = useState({
-    width: null,
+    width: 0,
     height: null,
   });
   const showDrawer = () => {
@@ -530,12 +530,15 @@ const Header = ({
 
   useEffect(() => {
     if (window !== "undefined") {
-      if (router) {
+      const updateScreenSize = () => {
         setScreenSize({
-          width: router?.query?.width,
-          height: router?.query?.height,
+          width: window.innerWidth,
+          height: window.innerHeight,
         });
-      }
+      };
+      updateScreenSize();
+      window.addEventListener("resize", updateScreenSize);
+
       const currentPath = menuList?.find(
         (item) => item?.to === window.location?.pathname
       );
@@ -548,6 +551,9 @@ const Header = ({
       } else {
         setNextMenuList(false);
       }
+      return () => {
+        window.removeEventListener("resize", updateScreenSize);
+      };
     }
   }, [router, menuList]);
 
