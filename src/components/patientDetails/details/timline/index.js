@@ -766,8 +766,6 @@ const Timeline = ({
         <div className="timeline-panel text-muted">
           <span className={`${visitStyles.timelineheading} d-flex`}>
             {getTimelineHeading()}
-
-{console.log(item.action)}
           </span>
           <span className={visitStyles.timelineDate}>
             {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
