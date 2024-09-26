@@ -8,12 +8,7 @@ const index = ({data,header}) => {
   const option = {
     tooltip: {
       trigger: "item",
-      // formatter: function (params) {
-      //   if (params.seriesName) {
-      //     return `${params.name}: ${params.value} (${params.percent}%)`;
-      //   }
-      //   return "";
-      // },
+      confine: true,
     },
     legend: {
       top: "5%",
@@ -25,7 +20,8 @@ const index = ({data,header}) => {
       {
         name: header,
         type: "pie",
-        radius: ["65%", "45%"],
+        radius: ["60%", "40%"],
+        center: ["50%", "50%"],
         avoidLabelOverlap: false,
         hoverAnimation: false,
         label: {
@@ -35,9 +31,7 @@ const index = ({data,header}) => {
           formatter: function () {
             return `{b|${totalSum}}\n {a|Total}`;
           },
-        
           backgroundColor: "transparent",
-
           rich: {
             a: {
               fontSize: 17,
@@ -49,36 +43,31 @@ const index = ({data,header}) => {
               fontWeight: 700,
             },
           },
+          silent: true,
         },
         itemStyle: {
           borderRadius: 0,
           borderColor: "#fff",
           borderWidth: 5,
         },
-        // emphasis: {
-        //   scale: false,
-        //   label: {
-        //     show: true,
-        //     fontSize: 40,
-        //     fontWeight: "bold",
-            
-        //   },
-        // },
+        emphasis: {
+          focus: 'series',
+         
+        },
         labelLine: {
           show: false,
         },
-
         data: data,
       },
     ],
   };
-  console.log(data,"data")
+ 
   return (
     <Row>
       <Col span={12}>
         <div
           className={`tenantPie ${styles.container}`}
-          style={{ width: "100%" }}
+          style={{ width: "100%" }} 
         >
           <ReactECharts
             option={option}
