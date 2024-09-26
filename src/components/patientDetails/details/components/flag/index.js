@@ -293,7 +293,7 @@ const Flag = ({
                 <FontAwesomeIcon
                   icon={faXmarkCircle}
                   onClick={handleDelete}
-                  style={{ color: "red"}}
+                  style={{ color: "#be3144"}}
                 />
               </div>
 
