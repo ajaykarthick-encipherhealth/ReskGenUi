@@ -5,7 +5,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import { wrapper, store } from "../stores/index";
 import { Provider, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { PrimeReactProvider } from "primereact/api";
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -21,7 +21,8 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [showTerminal, setShowTerminal] = useState(false);
-  let loginCheck =  typeof window !== 'undefined' ? getStorage('loginCheck') : null
+  let loginCheck =
+    typeof window !== "undefined" ? getStorage("loginCheck") : null;
 
   useEffect(() => {
     const currentPath = window.location.pathname;
@@ -122,14 +123,27 @@ function MyApp({ Component, pageProps }) {
     "/tenantAdmin/patients/details",
   ];
   const showFooter = !hideFooterPaths.includes(router.pathname);
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        (event.key === "a" || event.key === "s")
+      ) {
+        event.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <PrimeReactProvider>
       <Provider store={store}>
         {showTerminal && <AICHAT openMsg={true} />}
         <Component {...pageProps} />
-        {loginCheck == "true" &&
-        <ConnectWebSocket/>}
+        {loginCheck == "true" && <ConnectWebSocket />}
         {showFooter && showTerminal && <Footer />}
       </Provider>
     </PrimeReactProvider>
