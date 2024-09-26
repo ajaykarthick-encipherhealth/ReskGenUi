@@ -105,15 +105,13 @@ const Codify = ({
     fetchTreeData();
     fetchCodeData();
     fetchIndexData();
-  }
-
+  };
   const handleIndexClick = (clickedWord) => {
     const IndexWord = clickedWord.split(", ")[0];
     setSearchInput(IndexWord);
     fetchIndexData(IndexWord);
     setData(null);
     setCodeData(null);
-    setParentCode(null);
   };
   const handleIndexCodeClick = (value) => {
     const code = value.split("-")[0];
@@ -498,12 +496,18 @@ const Codify = ({
 
             {currentButton === "Indexes" && indexData?.length ? (
               <div className=" mt-1 antdstyle">
-                <Tree
-                  showLine={true}
-                  treeData={indexData}
-                  onExpand={onExpand}
-                  expandedKeys={expandedKeys}
-                />
+                {codifyDataLoading ? (
+                  <div className="d-flex justify-content-center align-items-center">
+                    <Spin size="large" />
+                  </div>
+                ) : (
+                  <Tree
+                    showLine={true}
+                    treeData={indexData}
+                    onExpand={onExpand}
+                    expandedKeys={expandedKeys}
+                  />
+                )}
               </div>
             ) : (
               <div></div>
