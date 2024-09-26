@@ -1314,6 +1314,11 @@
   padding: 0 5px;
 }
 
+.nonHcc {
+  color: #4338ca;
+  padding: 0 5px;
+}
+
 .nonhccFlag {
   height: 15px;
   width: 14px;

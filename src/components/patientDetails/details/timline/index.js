@@ -338,6 +338,7 @@ const Timeline = ({
   function renderTimelineItem(item, index) {
     const getBadgeClassName = () => {
       switch (item.action) {
+     
         case "MOVED":
           if (item?.fromState == "VALID" && item?.toState == "DELETED") {
             return "timeline-badge MOVED_VALID_TO_DELETED";
@@ -391,7 +392,10 @@ const Timeline = ({
     };
 
     const getTimelineHeading = () => {
+      
       switch (item.action) {
+
+
         case "MOVED_INVALID_TO_VALID":
           return (
             <div className="d-flex">
@@ -442,6 +446,18 @@ const Timeline = ({
                   CAREGAP
                   </span> to{" "}
                 <span className={visitStyles.validColor}> HCC</span>
+              </div>
+            );
+          }
+          if (item?.fromState == "INVALID" && item?.toState == "DELETED") {
+            return (
+              <div className="d-flex">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.nonHcc}>
+                  {/* NON HCC */}
+                  NON HCC
+                  </span> to{" "}
+                <span className={visitStyles.deletedColor}> DELETED</span>
               </div>
             );
           }
@@ -506,7 +522,8 @@ const Timeline = ({
               to <span className={visitStyles.audited}>AUDITED</span>
             </div>
           );
-        case "REAUDIT":
+    
+          case "REAUDIT":
           return (
             <div className="d-flex">
               Changed from{" "}
@@ -749,6 +766,8 @@ const Timeline = ({
         <div className="timeline-panel text-muted">
           <span className={`${visitStyles.timelineheading} d-flex`}>
             {getTimelineHeading()}
+
+{console.log(item.action)}
           </span>
           <span className={visitStyles.timelineDate}>
             {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
@@ -760,8 +779,8 @@ const Timeline = ({
   return (
 <div className={visitStyles.timeLines}>
   {!filterDataLoading ? (
-    <div className="widget-timeline">
-      <ul className="timeline" style={{ height: "99vh", overflow: "scroll" }}>
+    <div className="widget-timeline" style={{ height: "99vh", overflow: "scroll" }}>
+      <ul className="timeline" >
         {timelineData?.length > 0 ? (
           timelineData?.map((item, index) => renderTimelineItem(item, index))
         ) : (
