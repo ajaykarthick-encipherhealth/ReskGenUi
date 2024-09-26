@@ -171,6 +171,19 @@ export async function getProviderAndCaptured(obj) {
   return data;
 }
 
+export async function deleteflag(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/flagdetails/removeFlag`,
+    options
+  );
+  return data;
+}
+
+
 export async function isValideCode(code) {
   const options = {
     method: "GET",

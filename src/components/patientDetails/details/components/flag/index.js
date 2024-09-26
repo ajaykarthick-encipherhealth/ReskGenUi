@@ -6,14 +6,20 @@ import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Popover, Avatar, Tooltip, notification, message } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle, faClock } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUserCircle,
+  faClock,
+  faTrash,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { connect } from "react-redux";
 import Select from "react-select";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from "@ant-design/icons";
+import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
 
 const Flag = ({
   setOpen,
@@ -22,6 +28,7 @@ const Flag = ({
   getFlagsData,
   getFlagDetailsData,
   flagsDetailsResult,
+  isdeleteFlag
 }) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
@@ -59,33 +66,43 @@ const Flag = ({
 
   const handleDelete = async () => {
     try {
-      // API call configuration
-      const headers = {
-        'X-Tenant': 'cc540702-7b8e-48eb-8a54-abd2c24c7ea4',
-        'Content-Type': 'application/json',
-      };
-
       const payload = {
         flagId: inputValue.flagId,
         patientId: patientDetailsResult?.data?.response?.patientId,
         comment: inputValue.comments,
-        processedYear:  patientDetailsResult?.data?.response?.processedYear,
+        processedYear: patientDetailsResult?.data?.response?.processedYear,
         dateOfService: patientDetailsResult?.data?.response?.dateOfService,
       };
 
-      // Send API request
-      const response = await axios.post('https://dev.hcc.encipherhealth.ai/secure/dbservice/flagdetails/removeFlag', payload, {
-        headers,
-      });
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/flagdetails/removeFlag`,
+        payload
+      );
 
-      // Handle success or failure
-      if (response.status === 200 && response.data.status === 'SUCCESS') {
-        message.success('Flag deleted successfully!');
+      if (response.status === 200 && response.data.status === "SUCCESS") {
+        notification.success({
+          message: "Deleted successfully",
+          placement: "top",
+          duration: 1,
+        });
+        getFlagDetailsData(
+          patientDetailsResult?.data?.response?.patientId,
+          patientDetailsResult?.data?.response?.processedYear,
+          patientDetailsResult?.data?.response?.dateOfService
+        );
       } else {
-        message.error('Failed to delete flag');
+        notification.error({
+          message: "Failed to delete flag",
+          placement: "top",
+          duration: 1,
+        });
       }
     } catch (error) {
-      message.error('An error occurred while deleting');
+      notification.error({
+        message: "An error occurred while deleting",
+        placement: "top",
+        duration: 1,
+      });
       console.error(error);
     }
   };
@@ -272,6 +289,14 @@ const Flag = ({
         <div>
           {flagsDetailsResult?.response?.map((data, index) => (
             <div className={visitStyles.comments_card} key={index}>
+            <div className="d-flex justify-content-end p-1">
+                <FontAwesomeIcon
+                  icon={faXmarkCircle}
+                  onClick={handleDelete}
+                  style={{ color: "red"}}
+                />
+              </div>
+
               <div className={`${visitStyles.commentNameHead}`}>
                 <span className={visitStyles.commentsName}>
                   {data?.flagDetails?.flagName && (
@@ -295,23 +320,28 @@ const Flag = ({
                     </>
                   )}
                 </span>
-                <Tooltip
-                  placement="bottom"
-                  title={data?.patientFlagDTO?.createdBy}
-                >
-                  <Popover
+                <div>
+                  <Tooltip
                     placement="bottom"
-                    content={userDetails}
-                    onOpenChange={() =>
-                      renderUserDetails(data?.patientFlagDTO?.createdBy)
-                    }
+                    title={data?.patientFlagDTO?.createdBy}
                   >
-                    <Avatar className={visitStyles.timeLineUsername}>
-                      {splitUserName(data?.patientFlagDTO?.createdBy)}
-                    </Avatar>
-                  </Popover>
-                </Tooltip>
-                <DeleteOutlined style={{ color: 'red', fontSize: '18px' }} onClick={handleDelete}/>
+                    <Popover
+                      placement="bottom"
+                      content={userDetails}
+                      onOpenChange={() =>
+                        renderUserDetails(data?.patientFlagDTO?.createdBy)
+                      }
+                    >
+                      <Avatar className={visitStyles.timeLineUsername}>
+                        {splitUserName(data?.patientFlagDTO?.createdBy)}
+                      </Avatar>
+                    </Popover>
+                  </Tooltip>
+                  {/* <DeleteOutlined
+                  style={{ color: "red", fontSize: "18px" , padding:"2px"}}
+                  onClick={handleDelete}
+                /> */}
+                </div>
               </div>
               <span className={visitStyles.commentsDesc}>
                 {data?.patientFlagDTO?.comment}
@@ -337,6 +367,7 @@ const enhancer = connect(
   }),
   {
     getFlagDetailsData: detailsActions.getFlagDetailsAction,
+    isdeleteFlag : detailsActions.isDeleteFlag
   }
 );
 export default enhancer(Flag);
