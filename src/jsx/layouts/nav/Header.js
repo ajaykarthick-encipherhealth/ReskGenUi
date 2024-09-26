@@ -536,8 +536,20 @@ const Header = ({
           height: router?.query?.height,
         });
       }
+      const currentPath = menuList?.find(
+        (item) => item?.to === window.location?.pathname
+      );
+      if (
+        currentPath &&
+        currentPath &&
+        menuList?.slice(5).some((item) => item.title === currentPath?.title)
+      ) {
+        setNextMenuList(true);
+      } else {
+        setNextMenuList(false);
+      }
     }
-  }, [router]);
+  }, [router, menuList]);
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -579,7 +591,10 @@ const Header = ({
                           setNextMenuList(false);
                         }}
                       >
-                        <FontAwesomeIcon icon={faChevronLeft} className="fs-6"/>
+                        <FontAwesomeIcon
+                          icon={faChevronLeft}
+                          className="fs-6"
+                        />
                       </div>
                     </div>
                   )}
@@ -607,10 +622,13 @@ const Header = ({
                             setNextMenuList(true);
                           }}
                         >
-                          <FontAwesomeIcon icon={faChevronRight} className="fs-6" />
+                          <FontAwesomeIcon
+                            icon={faChevronRight}
+                            className="fs-6"
+                          />
                         </div>
                       </div>
-                    )} 
+                    )}
                 </ul>
               </div>
             ) : null}
