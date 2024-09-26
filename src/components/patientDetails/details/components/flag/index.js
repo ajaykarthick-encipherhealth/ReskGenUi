@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Popover, Avatar, Tooltip, notification, message } from "antd";
+import { Popover, Avatar, Tooltip, notification } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserCircle,
