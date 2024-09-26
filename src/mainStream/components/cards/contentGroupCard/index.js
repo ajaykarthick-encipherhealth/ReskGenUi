@@ -217,7 +217,7 @@ const ContentGroupCard = ({
                 </Tooltip>
               </div>
               <div className={styles.avatarAlign}>
-                <Tooltip title={flag[0]?.flagDetails?.flagName}>
+                <Tooltip title={flag?.length>0 && flag[0]?.flagDetails?.flagName}>
                   {/* <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="23"
@@ -239,8 +239,8 @@ const ContentGroupCard = ({
                   <FontAwesomeIcon
                     icon={faFlag}
                     style={{
-                      color: flag[0]?.flagDetails?.flagColour
-                        ? flag[0]?.flagDetails?.flagColour
+                      color: flag?.length>0 && flag[0]?.flagDetails?.flagColour
+                        ? flag?.length>0 && flag[0]?.flagDetails?.flagColour
                         : "#C0C0C0",
                       fontSize:"20px",
                     marginTop:"5px"

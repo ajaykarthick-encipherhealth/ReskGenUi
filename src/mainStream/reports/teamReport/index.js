@@ -50,7 +50,7 @@ const TeamReport = ({
   teamReport,
   handleHeaderCheckbox,
   selectAllFlags,
-  userRole
+  userRole,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -67,43 +67,45 @@ const TeamReport = ({
       //   pagenum: 0,
       //   size: ReportPatientDetails?.response?.response?.totalElements,
       // });
-      if (!selectAll) {
-        try {
-          setIsLoading(true);
-          const res = await fetch(
-            ENDPOINTS.apiEndoint +
-              `dbservice/patient/auditor/assinedreport?pageno=0&size=${ReportPatientDetails?.response?.response?.totalElements}&orgid=${orgId}&allPatientIds=true`,
-            {
-              headers: { Authorization: `Bearer ${await getStorage("token")}` },
-            }
-          ).then((res) => res.json());
-          const seletedAll = res?.response?.patientIds;
-          setSelectedRows(seletedAll ? seletedAll : []);
-          setIsLoading(false);
-        } catch (error) {}
-      } else setSelectedRows([]);
+
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          ENDPOINTS.apiEndoint +
+            `dbservice/patient/auditor/assinedreport?pageno=0&size=${
+              ReportPatientDetails?.response?.response?.totalElements
+            }&orgid=${orgId}allPatientIds=${selectAll ? false : true}`,
+          {
+            headers: { Authorization: `Bearer ${await getStorage("token")}` },
+          }
+        ).then((res) => res.json());
+        const seletedAll = res?.response?.patientIds;
+        setSelectedRows(seletedAll ? seletedAll : []);
+        setIsLoading(false);
+      } catch (error) {}
     }
     if (activeTab === "Team") {
       // teamReport({
       //   pagenum: 0,
       //   size: ReportPatientDetails?.response?.response?.totalElements,
       // });
-      if (!selectAll) {
-        try {
-          setIsLoading(true);
-          const res = await fetch(
-            ENDPOINTS.apiEndoint +
-              `dbservice/patient/auditorreport?pageno=0&size=${ReportPatientDetails?.response?.response?.totalElements}&orgid=${orgId}&allPatientIds=true`,
-            {
-              headers: { Authorization: `Bearer ${await getStorage("token")}` },
-            }
-          ).then((res) => res.json());
-          const seletedAll = res?.response?.patientIds;
 
-          setSelectedRows(seletedAll ? seletedAll : []);
-          setIsLoading(false);
-        } catch (error) {}
-      } else setSelectedRows([]);
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          ENDPOINTS.apiEndoint +
+            `dbservice/patient/auditorreport?pageno=0&size=${
+              ReportPatientDetails?.response?.response?.totalElements
+            }&orgid=${orgId}allPatientIds=${selectAll ? false : true}`,
+          {
+            headers: { Authorization: `Bearer ${await getStorage("token")}` },
+          }
+        ).then((res) => res.json());
+        const seletedAll = res?.response?.patientIds;
+
+        setSelectedRows(seletedAll ? seletedAll : []);
+        setIsLoading(false);
+      } catch (error) {}
     }
   };
 
@@ -343,12 +345,10 @@ const TeamReport = ({
                 <div>
                   <div className=" col-xl-12 d-flex" style={{ height: "100%" }}>
                     {reportListAll?.response?.response?.data?.length === 0 ? (
-
-                       <div className={`col-xl-6 ${styles.card1}`}>
-                      <div className={` ${styles.emptyCard}`}>
-
-                        <Empty />
-                      </div>
+                      <div className={`col-xl-6 ${styles.card1}`}>
+                        <div className={` ${styles.emptyCard}`}>
+                          <Empty />
+                        </div>
                       </div>
                     ) : (
                       <div className={`col-xl-6 ${styles.cardDiv}`}>
@@ -435,7 +435,7 @@ const TeamReport = ({
                               styles={styles}
                             />
                             {allocationCountData.map((item, index) =>
-                              userRole==="supervisor" ? (
+                              userRole === "supervisor" ? (
                                 ""
                               ) : (
                                 <AllocationCount
