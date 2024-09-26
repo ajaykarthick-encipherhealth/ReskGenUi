@@ -15025,10 +15025,10 @@ input::-webkit-inner-spin-button {
 @media only screen and (min-width: 600px) {
   .tenantPie > div > div > canvas {
     position: absolute;
-    left: -36px !important;
-    top: -34px !important;
-    width: 268px !important;
-    height: 239px !important;
+    left: 0px !important;
+    top: 0px !important;
+    width: 100% !important;
+    height: 100% !important;
     user-select: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     padding: 0px;
@@ -15036,7 +15036,18 @@ input::-webkit-inner-spin-button {
     border-width: 0px;
   }
 }
-
+@media only screen and (min-width: 600px) {
+  .tenantPie > div  {
+      height: 209px !important;
+      user-select: none;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      position: relative;
+      width: 100%;
+      margin-left: -10px;
+      margin-top: -20px !important;
+      width: 292px;
+  }
+}
 .totalCodesPies > div > div > canvas {
   position: absolute;
   left: 0px;
