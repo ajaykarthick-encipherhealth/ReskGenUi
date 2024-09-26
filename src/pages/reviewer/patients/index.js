@@ -156,14 +156,20 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   );
 
   const [selectedDates, setSelectedDates] = useState([
-    navigate?.query?.dueDateStart ? dayjs(navigate?.query?.dueDateStart) : "",
-    navigate?.query?.dueDateEnd ? dayjs(navigate?.query?.dueDateEnd) : "",
+    navigate?.query?.dueDateStart
+      ? dayjs(navigate?.query?.dueDateStart)
+      : dayjs(filteratedDashboardData?.date),
+    navigate?.query?.dueDateEnd
+      ? dayjs(navigate?.query?.dueDateEnd)
+      : dayjs(filteratedDashboardData?.date),
   ]);
   const [selectedDates2, setSelectedDates2] = useState([
     navigate?.query?.processedStart
       ? dayjs(navigate?.query?.processedStart)
-      : "",
-    navigate?.query?.processedEnd ? dayjs(navigate?.query?.processedEnd) : "",
+      : dayjs(filteratedDashboardData?.date),
+    navigate?.query?.processedEnd
+      ? dayjs(navigate?.query?.processedEnd)
+      : dayjs(filteratedDashboardData?.date),
   ]);
   useEffect(() => {
     setDefaultStartDate(
@@ -595,11 +601,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                   options={options}
                                   className="custom-react-select"
                                   isSearchable={false}
-                                  placeholder={
-                                    filteratedDashboardData
-                                      ? filteratedDashboardData?.status?.toUpperCase()
-                                      : "Select Status"
-                                  }
+                                  placeholder={"Select Status"}
                                 />
                               </div>
                             </div>
