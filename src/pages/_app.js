@@ -14,6 +14,7 @@ import AICHAT from "../components/aiChat";
 import { refreshToken } from "../stores/authflow/actions";
 import ConnectWebSocket from "../components/websocket";
 import { getStorage } from "../utils/storages";
+import { serverControl } from "../utils/config";
 
 config.autoAddCss = false;
 
@@ -22,6 +23,19 @@ function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
   const [showTerminal, setShowTerminal] = useState(false);
   let loginCheck =  typeof window !== 'undefined' ? getStorage('loginCheck') : null
+
+  useEffect(() => {
+    if (serverControl === "production") {
+      const handleContextmenu = (e) => {
+        e.preventDefault();
+      };
+      document.addEventListener("contextmenu", handleContextmenu);
+
+      return () => {
+        document.removeEventListener("contextmenu", handleContextmenu);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     const currentPath = window.location.pathname;
