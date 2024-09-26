@@ -287,69 +287,70 @@ const Flag = ({
           </Form>
         </div>{" "}
         <div>
-          {flagsDetailsResult?.response?.map((data, index) => (
-            <div className={visitStyles.comments_card} key={index}>
-            <div className="d-flex justify-content-end p-1">
-                <FontAwesomeIcon
-                  icon={faXmarkCircle}
-                  onClick={handleDelete}
-                  style={{ color: "#be3144"}}
-                />
-              </div>
+  {flagsDetailsResult?.response?.map((data, index) => (
+    <div className={`${visitStyles.comments_card} position-relative`} key={index}>
+      <div
+        className="position-absolute"
+        style={{ top: "10px", right: "10px", cursor: "pointer" }}
+      >
+        <FontAwesomeIcon
+          icon={faXmarkCircle}
+          onClick={handleDelete}
+          style={{ color: "#be3144" }}
+        />
+      </div>
 
-              <div className={`${visitStyles.commentNameHead}`}>
-                <span className={visitStyles.commentsName}>
-                  {data?.flagDetails?.flagName && (
-                    <>
-                      {data?.flagDetails?.flagName
-                        ? data?.flagDetails?.flagName.replaceAll("_", " ")
-                        : ""}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="23"
-                        height="23"
-                        viewBox="0 0 800 800"
-                        fill={data?.flagDetails?.flagColour}
-                      >
-                        <path
-                          d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-                          stroke="#000"
-                          stroke-width="10"
-                        />
-                      </svg>
-                    </>
-                  )}
-                </span>
-                <div>
-                  <Tooltip
-                    placement="bottom"
-                    title={data?.patientFlagDTO?.createdBy}
-                  >
-                    <Popover
-                      placement="bottom"
-                      content={userDetails}
-                      onOpenChange={() =>
-                        renderUserDetails(data?.patientFlagDTO?.createdBy)
-                      }
-                    >
-                      <Avatar className={visitStyles.timeLineUsername}>
-                        {splitUserName(data?.patientFlagDTO?.createdBy)}
-                      </Avatar>
-                    </Popover>
-                  </Tooltip>
-                </div>
-              </div>
-              <span className={visitStyles.commentsDesc}>
-                {data?.patientFlagDTO?.comment}
-              </span>
-              <span className={visitStyles.commentsTime}>
-                {moment(data?.patientFlagDTO?.createdDate).format(
-                  "MM-DD-YYYY hh:mm:A"
-                )}
-              </span>
-            </div>
-          ))}
+      <div className={`${visitStyles.commentNameHead}`} style={{paddingTop:"20px"}}> 
+        <span className={visitStyles.commentsName}>
+          {data?.flagDetails?.flagName && (
+            <>
+              {data?.flagDetails?.flagName
+                ? data?.flagDetails?.flagName.replaceAll("_", " ")
+                : ""}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="23"
+                height="23"
+                viewBox="0 0 800 800"
+                fill={data?.flagDetails?.flagColour}
+              >
+                <path
+                  d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                  stroke="#000"
+                  strokeWidth="10"
+                />
+              </svg>
+            </>
+          )}
+        </span>
+        <div>
+          <Tooltip placement="bottom" title={data?.patientFlagDTO?.createdBy}>
+            <Popover
+              placement="bottom"
+              content={userDetails}
+              onOpenChange={() =>
+                renderUserDetails(data?.patientFlagDTO?.createdBy)
+              }
+            >
+              <Avatar className={visitStyles.timeLineUsername}>
+                {splitUserName(data?.patientFlagDTO?.createdBy)}
+              </Avatar>
+            </Popover>
+          </Tooltip>
         </div>
+      </div>
+      <span className={visitStyles.commentsDesc}>
+        {data?.patientFlagDTO?.comment}
+      </span>
+      <span className={visitStyles.commentsTime}>
+        {moment(data?.patientFlagDTO?.createdDate).format(
+          "MM-DD-YYYY hh:mm:A"
+        )}
+      </span>
+    </div>
+  ))}
+</div>
+
       </div>
     </Offcanvas>
   );
