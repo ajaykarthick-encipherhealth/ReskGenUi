@@ -49,7 +49,12 @@ import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
-import { faBook, faFilter } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBook,
+  faChevronLeft,
+  faChevronRight,
+  faFilter,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   getAccuracy,
   getCoderDetails,
@@ -72,6 +77,7 @@ const Header = ({
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const menuItemsPerPage = 5;
   const msgReply = useSelector((state) => state?.workFlow?.chatReply);
   const accuracy = useSelector((state) => state?.auth?.accuracy);
   const currentUserInfo = useSelector((state) => state?.auth?.userInfo);
@@ -99,10 +105,13 @@ const Header = ({
   const [drawerWidth, setDrawerWidth] = useState(700);
   const [notificationCount, setNotificationCount] = useState(0);
   const notificationSoundRef = useRef(null);
+  const [nextMenuList, setNextMenuList] = useState(false);
   const [screenSize, setScreenSize] = useState({
-    width: null,
+    width: 0,
     height: null,
   });
+  const [animate, setAnimate] = useState(false);
+
   const showDrawer = () => {
     setOpened(true);
     setPopoverVisible(false);
@@ -490,8 +499,9 @@ const Header = ({
               : stateActive === data.childRoute) ||
             stateActive === data.childRoute2
               ? "header-active"
-              : ""
-          }`}
+              : `${styles.menuListItems}`
+          }
+          } ${styles.transformed}`}
           key={index}
           onClick={() => {
             dispatch(getFilteredList(null));
@@ -523,14 +533,36 @@ const Header = ({
 
   useEffect(() => {
     if (window !== "undefined") {
-      if (router) {
+      const updateScreenSize = () => {
         setScreenSize({
-          width: router?.query?.width,
-          height: router?.query?.height,
+          width: window.innerWidth,
+          height: window.innerHeight,
         });
+      };
+      updateScreenSize();
+      window.addEventListener("resize", updateScreenSize);
+      const currentPath = menuList?.find(
+        (item) =>
+          item?.to === window.location?.pathname ||
+          item?.childRoute === window.location?.pathname ||
+          item?.childRoute2 === window.location?.pathname ||
+          item?.childRoute3 === window.location?.pathname
+      );
+      if (
+        currentPath &&
+        currentPath &&
+        menuList?.slice(5).some((item) => item.title === currentPath?.title)
+      ) {
+        setNextMenuList(true);
+      } else {
+        setNextMenuList(false);
       }
+      return () => {
+        window.removeEventListener("resize", updateScreenSize);
+      };
     }
-  }, [router]);
+  }, [router, menuList]);
+
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -562,26 +594,53 @@ const Header = ({
             </div>
             {stateActive != "/reviewer/home" ? (
               <div>
-                <ul className="metismenu header-menu d-flex" id="menu">
-                  {renderMenuItems(menuList)}
-
-                  {/* {screenSize?.width <= 1527 &&
-                    screenSize?.width != null &&
-                    screenSize?.height != null && (
-                      <div className="d-flex justify-content-center align-items-center">
-                        <Popover
-                          trigger="click"
-                          className="cursor-pointer"
-                          content={renderMenuItems(menuList?.slice(5))}
-                        >
-                          <div
-                            className={`d-flex justify-content-center align-items-enter cursor-pointer rounded-4 ${styles.addonDiv}`}
-                          >
-                            {`+${menuList?.slice(5)?.length}`}
-                          </div>
-                        </Popover>
+                <ul className={`metismenu header-menu d-flex`} id="menu">
+                  {nextMenuList && screenSize?.width <= 1527 && (
+                    <div className="d-flex justify-content-center align-items-center">
+                      <div
+                        className={`d-flex justify-content-center align-items-center cursor-pointer rounded-4 ${styles.addonDiv}`}
+                        onClick={() => {
+                          setNextMenuList(false);
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faChevronLeft}
+                          className="fs-6"
+                        />
                       </div>
-                    )} */}
+                    </div>
+                  )}
+                  {renderMenuItems(
+                    screenSize?.width <= 1527 &&
+                      screenSize?.width != null &&
+                      screenSize?.height != null
+                      ? nextMenuList
+                        ? menuList?.slice(5)
+                        : menuList?.slice(0, 5)
+                      : menuList
+                  )}
+
+                  {menuList?.length > 5 &&
+                    !nextMenuList &&
+                    screenSize?.width <= 1527 &&
+                    screenSize?.width != null &&
+                    screenSize?.height != null &&
+                    menuList?.length > menuItemsPerPage &&
+                    !nextMenuList && (
+                      <div className="d-flex justify-content-center align-items-center">
+                        <div
+                          className={`d-flex justify-content-center align-items-center cursor-pointer rounded-4 ${styles.addonDiv}`}
+                          onClick={() => {
+                            setNextMenuList(true);
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faChevronRight}
+                            className="fs-6"
+                          />
+                        </div>
+                      </div>
+                    )}
                 </ul>
               </div>
             ) : null}

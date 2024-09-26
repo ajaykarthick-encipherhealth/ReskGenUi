@@ -15541,6 +15541,30 @@ input::-webkit-inner-spin-button {
   white-space: nowrap;
   overflow: hidden;
 }
+.header-menu li span {
+  font-size: 14px !important;
+  font-size: 700 !important;
+  margin-top: 3px;
+}
+.hospitalIcon {
+  font-size: 13px !important;
+}
+.custom-patientsSync {
+  width: 18px !important;
+  height: 18px !important;
+}
+.header-menu li span {
+  font-size: 14px !important;
+  font-size: 700 !important;
+  margin-top: 3px;
+}
+.hospitalIcon {
+  font-size: 13px !important;
+}
+.custom-patientsSync {
+  width: 18px !important;
+  height: 18px !important;
+}
 .headerCalender .ant-picker-panel-layout > div {
   width: 100%;
 }
@@ -15586,6 +15610,9 @@ input::-webkit-inner-spin-button {
     width: 288px !important;
   }
 }
-.headerCalender .ant-picker-dropdown .ant-picker-panel-container .ant-picker-panels {
+.headerCalender
+  .ant-picker-dropdown
+  .ant-picker-panel-container
+  .ant-picker-panels {
   width: 100% !important;
 }

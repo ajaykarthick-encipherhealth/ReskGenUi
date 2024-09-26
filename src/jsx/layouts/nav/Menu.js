@@ -249,8 +249,8 @@ export const ProviderMenuList = [
   },
   {
     title: "Patients",
-    iconStyle: <FontAwesomeIcon icon={faHospital} />,
-    activeIcon: <FontAwesomeIcon icon={faHospitalAlt} />,
+    iconStyle: <FontAwesomeIcon icon={faHospital} className="hospitalIcon"/>,
+    activeIcon: <FontAwesomeIcon icon={faHospitalAlt} className="hospitalIcon"/>,
     to: "/tenantAdmin/patients",
     childRoute: "/tenantAdmin/patients/details",
   },
