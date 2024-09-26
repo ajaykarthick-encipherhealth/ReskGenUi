@@ -39,6 +39,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   useEffect(() => {
+    if (serverControl === "production") {
     const handleKeydown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "a") {
         e.preventDefault();
@@ -48,6 +49,7 @@ function MyApp({ Component, pageProps }) {
     return () => {
       document.removeEventListener("keydown", handleKeydown);
     };
+  }
   }, []);
 
   useEffect(() => {
