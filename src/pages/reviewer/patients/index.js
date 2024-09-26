@@ -122,7 +122,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const [processedStart, setProcessedStart] = useState("");
   const [processedEnd, setProcessedEnd] = useState("");
   const [statusSelectedStatus, setStatusSelectedStatus] = useState(
-    navigate.query?.statusSelectedStatus
+    navigate.query?.statusSelectedStatus ||
+      filteratedDashboardData?.status?.toUpperCase()
   );
   const [searchTextValue, setSearchTextValue] = useState(
     navigate.query?.searchTextValue
@@ -277,7 +278,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     const resoureUrl = `patientAllocated=${uId}&page=${
       pageNo ? pageNo : 0
     }&size=${pageSize ? pageSize : 15}&processedStatus=${
-      statusValue ? statusValue : ""
+      statusValue ? statusValue.toUpperCase() : ""
     }&dueDateStart=${dStart ? dStart : ""}&dueDateEnd=${
       dEnd ? dEnd : ""
     }&processedStart=${pStart ? pStart : ""}&processedEnd=${
@@ -568,10 +569,15 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                     resetPageNumber(setPageNo);
                                   }}
                                   value={
-                                    statusSelectedStatus && {
-                                      label: statusSelectedStatus,
-                                      value: statusSelectedStatus,
-                                    }
+                                    statusSelectedStatus
+                                      ? {
+                                          label: statusSelectedStatus,
+                                          value: statusSelectedStatus,
+                                        }
+                                      : {
+                                          label: "ALL",
+                                          value: "",
+                                        }
                                   }
                                   options={statusOptions}
                                   className="custom-react-select"
