@@ -337,10 +337,6 @@ const Flag = ({
                       </Avatar>
                     </Popover>
                   </Tooltip>
-                  {/* <DeleteOutlined
-                  style={{ color: "red", fontSize: "18px" , padding:"2px"}}
-                  onClick={handleDelete}
-                /> */}
                 </div>
               </div>
               <span className={visitStyles.commentsDesc}>
