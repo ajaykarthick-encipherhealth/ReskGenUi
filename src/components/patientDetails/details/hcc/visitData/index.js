@@ -1,7 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch, connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faPlus,
+  faAngleDown,
+  faAngleRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { Drawer, notification } from "antd";
 import { Offcanvas } from "react-bootstrap";
 import axios from "../../../../../utility/axiosConfig";
@@ -40,7 +45,7 @@ const VisitData = ({
   getRadiologyFileDetails,
   getLabFileDetails,
   currentDiseaseType,
-  isDosSelected
+  isDosSelected,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -88,6 +93,7 @@ const VisitData = ({
   const [zIndex, setZIndex] = useState(false);
   const [allMeatList, setAllMeatList] = useState([]);
   const [deletedMeatList, setDeletedMeatList] = useState([]);
+  const [showList, setShowList] = useState(["care"]);
 
   useEffect(() => {
     var orgId = getStorage("orgId");
@@ -203,7 +209,15 @@ const VisitData = ({
     notification.destroy();
     notification.info({ message: "Tree Not Available", duration: 1 });
   };
-
+  const handleShowList = (value) => {
+    if (showList.includes(value)) {
+      setShowList((prev) => {
+        return prev.filter((item) => item != value);
+      });
+    } else if (!showList.includes(value)) {
+      setShowList((prev) => [...prev, value]);
+    }
+  };
   useEffect(() => {
     if (isModalOpenValidCodes) {
       setInterval(() => {
@@ -346,21 +360,125 @@ const VisitData = ({
                             </span>
                           </div>
                         </div>
-                        <div className={visitStyles.suggestedcontainer2}>
+                        {showList.includes("care") && (
+                          <div
+                            className={visitStyles.suggestedcontainer2}
+                            style={{
+                              height:
+                                showList.length == 1
+                                  ? "58vh"
+                                  : showList.length == 2
+                                  ? "27vh"
+                                  : "18vh",
+                            }}
+                          >
+                            <div className={visitStyles.hccStickey_head}>
+                              <HccCards
+                                list={suggestedHccList}
+                                hccVersionDetails={hccVersionDetails}
+                                captureSectionMatching={captureSectionMatching}
+                                encounterDateMatching={encounterDateMatching}
+                                meatCriteriaList={allMeatList}
+                                onchangeValid={onchangeValid}
+                                getValidHccDetails={getValidHccDetails}
+                                setFormValues={setFormValues}
+                                setIsEditHccForm={setIsEditHccForm}
+                                setFormEditPlace={setFormEditPlace}
+                                okText={"Move to Deleted"}
+                                editFormPlace={"SUGGESTED_DISEASE"}
+                                setOpens={setOpens}
+                                setCombiTree={setCombiTree}
+                                setActiveTabHead={setActiveTabHead}
+                                setActiveMeatTitle={setActiveMeatTitle}
+                                setActiveComboTree={setActiveComboTree}
+                                setSearch={setSearch}
+                                setFileLoading={setFileLoading}
+                                setIsModalOpenLab={setIsModalOpenLab}
+                                setIsModalOpenRadiology={
+                                  setIsModalOpenRadiology
+                                }
+                                setIsModalOpenValidCodes={
+                                  setIsModalOpenValidCodes
+                                }
+                                setFileModalHeader={setFileModalHeader}
+                                patientDocumentResult={patientDocumentResult}
+                                setConfirmNotesModalValid={
+                                  setConfirmNotesModalValid
+                                }
+                                setIsValidAction={setIsValidAction}
+                                cardTitle="SUGGESTED"
+                                isVisitData={true}
+                                provided={provided}
+                                popup={zIndex}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }}
+                </Droppable>
+              </div>
+              <Droppable droppableId={"POTENTIAL"} key={"POTENTIAL"}>
+                {(provided) => {
+                  return (
+                    <div
+                      className="timeline"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={{ marginTop: "10px" }}
+                    >
+                      <div
+                        className={`valid-text d-flex justify-content-sm-between cr-pointer ${visitStyles.potential_title_card}`}
+                        onClick={() => handleShowList("potential")}
+                      >
+                        <span className={`${visitStyles.potential_title_name}`}>
+                          <span className="mx-1">
+                            <FontAwesomeIcon
+                              icon={
+                                showList.includes("potential")
+                                  ? faAngleDown
+                                  : faAngleRight
+                              }
+                            />
+                          </span>
+                          POTENTIAL DIAGNOSIS
+                        </span>
+                        <div className="d-flex justify-content-center">
+                          <span
+                            className={`${visitStyles.potential_title_badge}`}
+                          >
+                            0
+                          </span>
+                        </div>
+                      </div>
+                      {showList.includes("potential") && (
+                        <div
+                          className={visitStyles.deletedContainers}
+                          style={{
+                            height:
+                              showList.length == 1
+                                ? "55vh"
+                                : showList.length == 2
+                                ? "27vh"
+                                : "18vh",
+                          }}
+                        >
                           <div className={visitStyles.hccStickey_head}>
                             <HccCards
-                              list={suggestedHccList}
+                              list={[]}
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={allMeatList}
+                              meatCriteriaList={deletedMeatList}
                               onchangeValid={onchangeValid}
                               getValidHccDetails={getValidHccDetails}
                               setFormValues={setFormValues}
                               setIsEditHccForm={setIsEditHccForm}
                               setFormEditPlace={setFormEditPlace}
-                              okText={"Move to Deleted"}
-                              editFormPlace={"SUGGESTED_DISEASE"}
+                              okText="Move to Suggested"
+                              cancelText="Move to HCC"
+                              isDeletedCodes={true}
                               setOpens={setOpens}
                               setCombiTree={setCombiTree}
                               setActiveTabHead={setActiveTabHead}
@@ -370,53 +488,68 @@ const VisitData = ({
                               setFileLoading={setFileLoading}
                               setIsModalOpenLab={setIsModalOpenLab}
                               setIsModalOpenRadiology={setIsModalOpenRadiology}
-                              setIsModalOpenValidCodes={
-                                setIsModalOpenValidCodes
-                              }
-                              setFileModalHeader={setFileModalHeader}
                               patientDocumentResult={patientDocumentResult}
+                              setFileModalHeader={setFileModalHeader}
                               setConfirmNotesModalValid={
                                 setConfirmNotesModalValid
                               }
                               setIsValidAction={setIsValidAction}
-                              cardTitle="SUGGESTED"
-                              isVisitData={true}
+                              cardTitle="POTENTIAL"
                               provided={provided}
-                              popup={zIndex}
+                              remove
                             />
                           </div>
                         </div>
-                      </div>
-                    );
-                  }}
-                </Droppable>
-              </div>
-
-              <div className={visitStyles.deleteFileContainer}>
-                <Droppable droppableId={"DELETED"} key={"DELETED"}>
-                  {(provided) => {
-                    return (
+                      )}
+                    </div>
+                  );
+                }}
+              </Droppable>
+              <Droppable droppableId={"DELETED"} key={"DELETED"}>
+                {(provided) => {
+                  return (
+                    <div
+                      className="timeline"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={{ marginTop: "10px" }}
+                    >
                       <div
-                        className="timeline"
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
+                        className={`valid-text d-flex justify-content-sm-between cr-pointer ${visitStyles.deleted_title_card}`}
+                        onClick={() => handleShowList("deleted")}
                       >
-                        <div
-                          className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
-                        >
-                          <span className={`${visitStyles.deleted_title_name}`}>
-                            {/* DELETED CODES */}
-                            POTENTIAL DIAGNOSIS
+                        <span className={`${visitStyles.deleted_title_name}`}>
+                          <span className="mx-1">
+                            <FontAwesomeIcon
+                              icon={
+                                showList.includes("deleted")
+                                  ? faAngleDown
+                                  : faAngleRight
+                              }
+                            />
                           </span>
-                          <div className="d-flex justify-content-center">
-                            <span
-                              className={`${visitStyles.deleted_title_badge}`}
-                            >
-                              {deletedHccList.length}
-                            </span>
-                          </div>
+                          DELETED CODES
+                        </span>
+                        <div className="d-flex justify-content-center">
+                          <span
+                            className={`${visitStyles.deleted_title_badge}`}
+                          >
+                            {deletedHccList.length}
+                          </span>
                         </div>
-                        <div className={visitStyles.deletedContainer}>
+                      </div>
+                      {showList.includes("deleted") && (
+                        <div
+                          className={visitStyles.deletedContainers}
+                          style={{
+                            height:
+                              showList.length == 1
+                                ? "55vh"
+                                : showList.length == 2
+                                ? "27vh"
+                                : "18vh",
+                          }}
+                        >
                           <div className={visitStyles.hccStickey_head}>
                             <HccCards
                               list={deletedHccList}
@@ -441,27 +574,23 @@ const VisitData = ({
                               setFileLoading={setFileLoading}
                               setIsModalOpenLab={setIsModalOpenLab}
                               setIsModalOpenRadiology={setIsModalOpenRadiology}
-                              setIsModalOpenValidCodes={
-                                setIsModalOpenValidCodes
-                              }
-                              setFileModalHeader={setFileModalHeader}
                               patientDocumentResult={patientDocumentResult}
+                              setFileModalHeader={setFileModalHeader}
                               setConfirmNotesModalValid={
                                 setConfirmNotesModalValid
                               }
                               setIsValidAction={setIsValidAction}
                               cardTitle="DELETED"
-                              isVisitData={true}
                               provided={provided}
-                              popup={zIndex}
+                              remove
                             />
                           </div>
                         </div>
-                      </div>
-                    );
-                  }}
-                </Droppable>
-              </div>
+                      )}
+                    </div>
+                  );
+                }}
+              </Droppable>
             </div>
           ) : null}
         </div>
@@ -536,11 +665,12 @@ const VisitData = ({
                         >
                           <span className={`${visitStyles.hcc_title_name}`}>
                             HCC
-                            {isDosSelected && 
-                            <FontAwesomeIcon
-                              onClick={() => addValidDiseases()}
-                              icon={faPlus}
-                            />}
+                            {isDosSelected && (
+                              <FontAwesomeIcon
+                                onClick={() => addValidDiseases()}
+                                icon={faPlus}
+                              />
+                            )}
                           </span>
                           <div className="d-flex justify-content-center">
                             <span className={`${visitStyles.hcc_title_badge}`}>
@@ -733,7 +863,7 @@ const VisitData = ({
                   }}
                 </Droppable>
               </div>
-              <div className="col-xl-3">
+              {/* <div className="col-xl-3">
                 <Droppable droppableId={"DELETED"} key={"DELETED"}>
                   {(provided) => {
                     return (
@@ -801,7 +931,7 @@ const VisitData = ({
                     );
                   }}
                 </Droppable>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
