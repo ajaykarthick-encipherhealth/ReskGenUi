@@ -14,6 +14,7 @@ import AICHAT from "../components/aiChat";
 import { refreshToken } from "../stores/authflow/actions";
 import ConnectWebSocket from "../components/websocket";
 import { getStorage } from "../utils/storages";
+import { portalUrl } from "../utils/config";
 
 config.autoAddCss = false;
 
@@ -24,16 +25,18 @@ function MyApp({ Component, pageProps }) {
   let loginCheck =  typeof window !== 'undefined' ? getStorage('loginCheck') : null
 
   useEffect(() => {
-    const handleContextmenu = (e) => {
-      e.preventDefault(); 
-    };
-    document.addEventListener("contextmenu", handleContextmenu);
-    
-    return () => {
-      document.removeEventListener("contextmenu", handleContextmenu);
-    };
+    if(!portalUrl) {
+      const handleContextmenu = (e) => {
+        e.preventDefault(); 
+      };
+      document.addEventListener("contextmenu", handleContextmenu);
+      
+      return () => {
+        document.removeEventListener("contextmenu", handleContextmenu);
+      };
+    }  
   }, []);
-  
+
   useEffect(() => {
     const currentPath = window.location.pathname;
     fetch(currentPath)
