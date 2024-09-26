@@ -27,39 +27,60 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     if (serverControl === "production") {
-      const handleKeyDown = (event) => {
-        if (
-          (event.ctrlKey || event.metaKey) &&
-          (event.key === "a" || event.key === "s")
-        ) {
-          event.preventDefault();
-        }
-      };
-      const handleContextmenu = (e) => {
+    const handleKeyDown = (event) => {
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        (event.key === "a" || event.key === "s")
+      ) {
+        event.preventDefault();
+      }
+    };
+    const handleContextmenu = (e) => {
+      e.preventDefault();
+    };
+    document.addEventListener("contextmenu", handleContextmenu);
+    window.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "Shift") {
         e.preventDefault();
-      };
-      document.addEventListener("contextmenu", handleContextmenu);
-      window.addEventListener("keydown", handleKeyDown);
+        e.stopPropagation();
 
-      return () => {
-        document.removeEventListener("contextmenu", handleContextmenu);
-        window.removeEventListener("keydown", handleKeyDown);
-      };
+        // Create an overlay element
+        const overlay = document.createElement("div");
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100%";
+        overlay.style.height = "100%";
+        overlay.style.backgroundColor = "rgba(255, 255, 255, 0.8)";
+        overlay.style.zIndex = "9999";
+        document.body.style.filter = "blur(10px)";
+        document.body.appendChild(overlay);
+        setTimeout(() => {
+          document.body.removeChild(overlay);
+          document.body.style.filter = "none";
+        }, 2000);
+      }
+    });
+    return () => {
+      document.removeEventListener("contextmenu", handleContextmenu);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
     }
   }, []);
 
   useEffect(() => {
     if (serverControl === "production") {
-    const handleKeydown = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "a") {
-        e.preventDefault();
-      }
-    };
-    document.addEventListener("keydown", handleKeydown);
-    return () => {
-      document.removeEventListener("keydown", handleKeydown);
-    };
-  }
+      const handleKeydown = (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "a") {
+          e.preventDefault();
+        }
+      };
+      document.addEventListener("keydown", handleKeydown);
+      return () => {
+        document.removeEventListener("keydown", handleKeydown);
+      };
+    }
   }, []);
 
   useEffect(() => {
