@@ -14,7 +14,7 @@ import AICHAT from "../components/aiChat";
 import { refreshToken } from "../stores/authflow/actions";
 import ConnectWebSocket from "../components/websocket";
 import { getStorage } from "../utils/storages";
-import { confidential } from "../utils/config";
+import { serverControl } from "../utils/config";
 
 config.autoAddCss = false;
 
@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
   let loginCheck =  typeof window !== 'undefined' ? getStorage('loginCheck') : null
 
   useEffect(() => {
-    if (confidential === "production") {
+    if (serverControl === "production") {
       const handleContextmenu = (e) => {
         e.preventDefault();
       };
