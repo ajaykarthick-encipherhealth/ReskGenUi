@@ -338,7 +338,6 @@ const Timeline = ({
   function renderTimelineItem(item, index) {
     const getBadgeClassName = () => {
       switch (item.action) {
-     
         case "MOVED":
           if (item?.fromState == "VALID" && item?.toState == "DELETED") {
             return "timeline-badge MOVED_VALID_TO_DELETED";
@@ -392,10 +391,7 @@ const Timeline = ({
     };
 
     const getTimelineHeading = () => {
-      
       switch (item.action) {
-
-
         case "MOVED_INVALID_TO_VALID":
           return (
             <div className="d-flex">
@@ -777,7 +773,7 @@ const Timeline = ({
   return (
 <div className={visitStyles.timeLines}>
   {!filterDataLoading ? (
-    <div className="widget-timeline" style={{ height: "99vh", overflow: "scroll" }}>
+    <div className={`widget-timeline ${visitStyles.timeLineScroll}`}>
       <ul className="timeline" >
         {timelineData?.length > 0 ? (
           timelineData?.map((item, index) => renderTimelineItem(item, index))
