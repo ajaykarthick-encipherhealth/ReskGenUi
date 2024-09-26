@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [showTerminal, setShowTerminal] = useState(false);
-  let loginCheck =  typeof window !== 'undefined' ? getStorage('loginCheck') : null;
+  let loginCheck =  typeof window !== 'undefined' ? getStorage('loginCheck') : null
 
   useEffect(() => {
     const handleContextmenu = (e) => {
@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }) {
       document.removeEventListener("contextmenu", handleContextmenu);
     };
   }, []);
-
+  
   useEffect(() => {
     const currentPath = window.location.pathname;
     fetch(currentPath)
@@ -84,13 +84,14 @@ function MyApp({ Component, pageProps }) {
       if (showTerminal && document.visibilityState === "visible") {
         checkLoginTime();
       } else {
-        clearInterval(intervalId);
-        pauseTime = Date.now();
+        clearInterval(intervalId); // Clear the interval when showTerminal is false or tab is hidden
+        pauseTime = Date.now(); // Store the timestamp when the timer was paused
       }
     }, 30 * 60 * 1000);
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
+        // If tab becomes visible, calculate remaining time and start the timer
         if (showTerminal) {
           const remainingTime = 30 * 60 * 1000 - (Date.now() - pauseTime);
           if (remainingTime > 0) {
@@ -104,6 +105,7 @@ function MyApp({ Component, pageProps }) {
           }
         }
       } else {
+        // If tab becomes hidden, pause the timer and store the pause time
         clearInterval(intervalId);
         pauseTime = Date.now();
       }
@@ -120,8 +122,10 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     const currentPath = window.location.pathname;
     const userRole = getStorage("userRole");
+    // if (userRole && !currentPath.includes(`/${userRole}/`) || "/search") {
+    //   router.replace("/_error");
+    // }
   }, [showTerminal]);
-
   const hideFooterPaths = [
     "/admin/patients/details",
     "/reviewer/patients/details",
@@ -135,7 +139,8 @@ function MyApp({ Component, pageProps }) {
       <Provider store={store}>
         {showTerminal && <AICHAT openMsg={true} />}
         <Component {...pageProps} />
-        {loginCheck == "true" && <ConnectWebSocket />}
+        {loginCheck == "true" &&
+        <ConnectWebSocket/>}
         {showFooter && showTerminal && <Footer />}
       </Provider>
     </PrimeReactProvider>
