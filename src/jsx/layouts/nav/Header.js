@@ -110,6 +110,8 @@ const Header = ({
     width: 0,
     height: null,
   });
+  const [animate, setAnimate] = useState(false);
+
   const showDrawer = () => {
     setOpened(true);
     setPopoverVisible(false);
@@ -497,8 +499,9 @@ const Header = ({
               : stateActive === data.childRoute) ||
             stateActive === data.childRoute2
               ? "header-active"
-              : ""
-          }`}
+              : `${styles.menuListItems}`
+          }
+          } ${styles.transformed}`}
           key={index}
           onClick={() => {
             dispatch(getFilteredList(null));
@@ -538,9 +541,12 @@ const Header = ({
       };
       updateScreenSize();
       window.addEventListener("resize", updateScreenSize);
-
       const currentPath = menuList?.find(
-        (item) => item?.to === window.location?.pathname
+        (item) =>
+          item?.to === window.location?.pathname ||
+          item?.childRoute === window.location?.pathname ||
+          item?.childRoute2 === window.location?.pathname ||
+          item?.childRoute3 === window.location?.pathname
       );
       if (
         currentPath &&
@@ -588,7 +594,7 @@ const Header = ({
             </div>
             {stateActive != "/reviewer/home" ? (
               <div>
-                <ul className="metismenu header-menu d-flex" id="menu">
+                <ul className={`metismenu header-menu d-flex`} id="menu">
                   {nextMenuList && screenSize?.width <= 1527 && (
                     <div className="d-flex justify-content-center align-items-center">
                       <div

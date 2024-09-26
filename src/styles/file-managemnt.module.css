@@ -410,9 +410,10 @@
   
 }
 .addonDiv{
-  width:20px;
-  height:20px;
-  border:1px solid #04306f;
-  background-color:#E4EFFE;
+  width:18px;
+  height:18px;
+  /* border:1px solid #04306f; */
+  /* background-color:#E4EFFE; */
   color:#04306f;
+
 }
