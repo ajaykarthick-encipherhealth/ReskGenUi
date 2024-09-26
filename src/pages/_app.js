@@ -22,7 +22,8 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [showTerminal, setShowTerminal] = useState(false);
-  let loginCheck =  typeof window !== 'undefined' ? getStorage('loginCheck') : null
+  let loginCheck =
+    typeof window !== "undefined" ? getStorage("loginCheck") : null;
 
   useEffect(() => {
     if (serverControl === "production") {
@@ -35,6 +36,18 @@ function MyApp({ Component, pageProps }) {
         document.removeEventListener("contextmenu", handleContextmenu);
       };
     }
+  }, []);
+
+  useEffect(() => {
+    const handleKeydown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "a") {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener("keydown", handleKeydown);
+    return () => {
+      document.removeEventListener("keydown", handleKeydown);
+    };
   }, []);
 
   useEffect(() => {
@@ -142,8 +155,7 @@ function MyApp({ Component, pageProps }) {
       <Provider store={store}>
         {showTerminal && <AICHAT openMsg={true} />}
         <Component {...pageProps} />
-        {loginCheck == "true" &&
-        <ConnectWebSocket/>}
+        {loginCheck == "true" && <ConnectWebSocket />}
         {showFooter && showTerminal && <Footer />}
       </Provider>
     </PrimeReactProvider>
