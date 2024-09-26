@@ -445,6 +445,18 @@ const Timeline = ({
               </div>
             );
           }
+          if (item?.fromState == "INVALID" && item?.toState == "DELETED") {
+            return (
+              <div className="d-flex">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.nonHcc}>
+                  {/* NON HCC */}
+                  NON HCC
+                  </span> to{" "}
+                <span className={visitStyles.deletedColor}> DELETED</span>
+              </div>
+            );
+          }
           if (item?.fromState == "SUGGESTED" && item?.toState == "DELETED") {
             return (
               <div className="d-flex w-100">
@@ -506,7 +518,8 @@ const Timeline = ({
               to <span className={visitStyles.audited}>AUDITED</span>
             </div>
           );
-        case "REAUDIT":
+    
+          case "REAUDIT":
           return (
             <div className="d-flex">
               Changed from{" "}
@@ -760,8 +773,8 @@ const Timeline = ({
   return (
 <div className={visitStyles.timeLines}>
   {!filterDataLoading ? (
-    <div className="widget-timeline">
-      <ul className="timeline" style={{ height: "99vh", overflow: "scroll" }}>
+    <div className={`widget-timeline ${visitStyles.timeLineScroll}`}>
+      <ul className="timeline" >
         {timelineData?.length > 0 ? (
           timelineData?.map((item, index) => renderTimelineItem(item, index))
         ) : (
