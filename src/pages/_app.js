@@ -5,7 +5,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import { wrapper, store } from "../stores/index";
 import { Provider, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { PrimeReactProvider } from "primereact/api";
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -27,13 +27,23 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     if (serverControl === "production") {
+      const handleKeyDown = (event) => {
+        if (
+          (event.ctrlKey || event.metaKey) &&
+          (event.key === "a" || event.key === "s")
+        ) {
+          event.preventDefault();
+        }
+      };
       const handleContextmenu = (e) => {
         e.preventDefault();
       };
       document.addEventListener("contextmenu", handleContextmenu);
+      window.addEventListener("keydown", handleKeyDown);
 
       return () => {
         document.removeEventListener("contextmenu", handleContextmenu);
+        window.removeEventListener("keydown", handleKeyDown);
       };
     }
   }, []);
