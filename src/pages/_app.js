@@ -14,6 +14,7 @@ import AICHAT from "../components/aiChat";
 import { refreshToken } from "../stores/authflow/actions";
 import ConnectWebSocket from "../components/websocket";
 import { getStorage } from "../utils/storages";
+import { serverControl } from "../utils/config";
 
 config.autoAddCss = false;
 
@@ -23,6 +24,29 @@ function MyApp({ Component, pageProps }) {
   const [showTerminal, setShowTerminal] = useState(false);
   let loginCheck =
     typeof window !== "undefined" ? getStorage("loginCheck") : null;
+
+  useEffect(() => {
+    if (serverControl === "production") {
+      const handleKeyDown = (event) => {
+        if (
+          (event.ctrlKey || event.metaKey) &&
+          (event.key === "a" || event.key === "s")
+        ) {
+          event.preventDefault();
+        }
+      };
+      const handleContextmenu = (e) => {
+        e.preventDefault();
+      };
+      document.addEventListener("contextmenu", handleContextmenu);
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        document.removeEventListener("contextmenu", handleContextmenu);
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     const currentPath = window.location.pathname;
@@ -123,20 +147,6 @@ function MyApp({ Component, pageProps }) {
     "/tenantAdmin/patients/details",
   ];
   const showFooter = !hideFooterPaths.includes(router.pathname);
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (
-        (event.ctrlKey || event.metaKey) &&
-        (event.key === "a" || event.key === "s")
-      ) {
-        event.preventDefault();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
 
   return (
     <PrimeReactProvider>
