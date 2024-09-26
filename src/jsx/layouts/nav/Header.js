@@ -59,7 +59,7 @@ import {
 import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
 import Codify from "../../../pages/codify";
 import { actions as webSocketActions } from "../../../stores/websocket";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 
 const Header = ({
   notificationResponse,
