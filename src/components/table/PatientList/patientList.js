@@ -178,7 +178,7 @@ function PatientTable({
             <th>PATIENT ID</th>
             <th>FILE NAME</th>
             {userId != "reviewer@3gencogentai.onmicrosoft.com" && <th>HCC COUNT</th>}
-            <th
+            <th className="text-truncate"
               onClick={() => {
                 sortFunction(
                   sortAllocateOrder,
@@ -197,7 +197,7 @@ function PatientTable({
                 )}
               </span>
             </th>
-            <th
+            <th className="text-truncate"
               onClick={() => {
                 sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
               }}
@@ -211,7 +211,7 @@ function PatientTable({
                 )}
               </span>
             </th>
-            <th
+            <th className="text-truncate"
               onClick={() => {
                 sortFunction(
                   sortCompleteOrder,
