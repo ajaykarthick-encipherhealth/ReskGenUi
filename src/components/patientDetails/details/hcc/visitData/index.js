@@ -558,6 +558,7 @@ const VisitData = ({
                                 : showList.length == 2
                                 ? "27vh"
                                 : "18vh",
+                                overflow:"scroll"
                           }}
                         >
                           <div className={visitStyles.hccStickey_head}>
