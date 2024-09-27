@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }) {
     typeof window !== "undefined" ? getStorage("loginCheck") : null;
 
   useEffect(() => {
-    if (serverControl === "dev") {
+    if (serverControl === "production") {
     const handleKeyDown = (event) => {
       if (
         (event.ctrlKey || event.metaKey) &&
