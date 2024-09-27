@@ -273,9 +273,7 @@ export const TeamChart = () => async (dispatch) => {
       });
     }
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router?.push("/login");
-    }
+    return err;
   }
 };
 
