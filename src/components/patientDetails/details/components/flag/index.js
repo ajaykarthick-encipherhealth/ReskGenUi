@@ -6,13 +6,24 @@ import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Popover, Avatar, Tooltip, notification } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle, faClock } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUserCircle,
+  faClock,
+  faTrash,
+  faXmark,
+  faFlag,
+} from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { connect } from "react-redux";
 import Select from "react-select";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
+import { DeleteOutlined } from "@ant-design/icons";
+import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
+import { deleteflag } from "../../../../../stores/patient/details/network";
+import SvgFlag from "../svg/svg";
+import { getResponePopup } from "../../../../../utils/reusable";
 
 const Flag = ({
   setOpen,
@@ -21,6 +32,7 @@ const Flag = ({
   getFlagsData,
   getFlagDetailsData,
   flagsDetailsResult,
+  isdeleteFlag,
 }) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
@@ -38,23 +50,34 @@ const Flag = ({
     label: (
       <>
         {item?.flagName ? item?.flagName.replaceAll("_", " ") : ""}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="23"
-          height="23"
-          viewBox="0 0 800 800"
-          fill={item?.flagColour}
-        >
-          <path
-            d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-            stroke="#000"
-            stroke-width="10"
-          />
-        </svg>
+        <SvgFlag fillColor={item?.flagColour} />
       </>
     ),
     name: item?.flagName,
   }));
+
+  const handleDelete = async () => {
+    const payload = {
+      flagId: inputValue.flagId,
+      patientId: patientDetailsResult?.data?.response?.patientId,
+      comment: inputValue.comments,
+      processedYear: patientDetailsResult?.data?.response?.processedYear,
+      dateOfService: patientDetailsResult?.data?.response?.dateOfService,
+    };
+    try {
+      const response = await isdeleteFlag(payload);
+
+      getResponePopup(response);
+      getFlagDetailsData(
+        patientDetailsResult?.data?.response?.patientId,
+        patientDetailsResult?.data?.response?.processedYear,
+        patientDetailsResult?.data?.response?.dateOfService
+      );
+    } catch (error) {
+      getResponePopup(response);
+      console.error(error);
+    }
+  };
 
   const handleSubmitFlag = async (event) => {
     const form = event.currentTarget;
@@ -237,46 +260,53 @@ const Flag = ({
         </div>{" "}
         <div>
           {flagsDetailsResult?.response?.map((data, index) => (
-            <div className={visitStyles.comments_card} key={index}>
-              <div className={`${visitStyles.commentNameHead}`}>
+            <div
+              className={`${visitStyles.comments_card} position-relative`}
+              key={index}
+            >
+              <div
+                className="position-absolute top-0 end-0 mt-2 me-2"
+                style={{ cursor: "pointer" }}
+              >
+                <FontAwesomeIcon
+                  icon={faXmarkCircle}
+                  onClick={handleDelete}
+                  style={{ color: "#be3144" }}
+                />
+              </div>
+
+              <div
+                className={`${visitStyles.commentNameHead}`}
+                style={{ paddingTop: "20px" }}
+              >
                 <span className={visitStyles.commentsName}>
                   {data?.flagDetails?.flagName && (
                     <>
                       {data?.flagDetails?.flagName
                         ? data?.flagDetails?.flagName.replaceAll("_", " ")
                         : ""}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="23"
-                        height="23"
-                        viewBox="0 0 800 800"
-                        fill={data?.flagDetails?.flagColour}
-                      >
-                        <path
-                          d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-                          stroke="#000"
-                          stroke-width="10"
-                        />
-                      </svg>
+                      <SvgFlag fillColor={data?.flagDetails?.flagColour} />
                     </>
                   )}
                 </span>
-                <Tooltip
-                  placement="bottom"
-                  title={data?.patientFlagDTO?.createdBy}
-                >
-                  <Popover
+                <div>
+                  <Tooltip
                     placement="bottom"
-                    content={userDetails}
-                    onOpenChange={() =>
-                      renderUserDetails(data?.patientFlagDTO?.createdBy)
-                    }
+                    title={data?.patientFlagDTO?.createdBy}
                   >
-                    <Avatar className={visitStyles.timeLineUsername}>
-                      {splitUserName(data?.patientFlagDTO?.createdBy)}
-                    </Avatar>
-                  </Popover>
-                </Tooltip>
+                    <Popover
+                      placement="bottom"
+                      content={userDetails}
+                      onOpenChange={() =>
+                        renderUserDetails(data?.patientFlagDTO?.createdBy)
+                      }
+                    >
+                      <Avatar className={visitStyles.timeLineUsername}>
+                        {splitUserName(data?.patientFlagDTO?.createdBy)}
+                      </Avatar>
+                    </Popover>
+                  </Tooltip>
+                </div>
               </div>
               <span className={visitStyles.commentsDesc}>
                 {data?.patientFlagDTO?.comment}
@@ -302,6 +332,7 @@ const enhancer = connect(
   }),
   {
     getFlagDetailsData: detailsActions.getFlagDetailsAction,
+    isdeleteFlag: detailsActions.isDeleteFlag,
   }
 );
 export default enhancer(Flag);

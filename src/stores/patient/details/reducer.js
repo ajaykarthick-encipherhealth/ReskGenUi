@@ -25,8 +25,10 @@ import {
   getSelectedDosPageNumber,
   getCurrentDiseaseType,
   activeLabels,
-  labPDFDetails
+  labPDFDetails,
+  isDeleteFlag
 } from "./actions";
+import { deleteFlag } from "../../tenantAdmin/settings/network";
 
 const initialState = {
   loading: true,
@@ -100,6 +102,7 @@ const patientDetailsReducer = combineReducers({
   labFileResultLoad: getPatientsLoading(labFileAction),
   flagsDetailsResult: createReducer(getFlagDetailsAction),
   sectionDetails: createReducer(getProviderSection),
+  deleteFlag : createReducer(isDeleteFlag),
   isCodeAlready: createReducer(isCodeAlready),
   getValidCode: createReducer(getValideCode),
   getSelectedDosDetails: getSelectedDosDetails,

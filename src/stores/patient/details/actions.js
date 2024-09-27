@@ -54,6 +54,10 @@ export const getProviderSection = createActionThunk(
   "GET_PROVIDER",
   network.getProviderAndCaptured
 );
+export const isDeleteFlag = createActionThunk(
+  "DELETE_FLAG",
+  network.deleteflag
+);
 export const getValideCode = createActionThunk(
   "GET_VALID_CODE",
   network.isValideCode
