@@ -280,28 +280,28 @@ const Reports = ({
   const handleHeaderCheckboxChange = () => {
     resetPageNumber(resetPageState);
     setSelectAllFlags(!selectAllFlags);
-    if (activeTab === "Team" || activeTab === "Audit") {
-      const updatedRows = selectAllFlags
-        ? []
-        : TeamReportDetails?.data?.response?.flagIdCountDTOs?.flatMap(
-            (item) => item?.patientIds
-          );
-      setFlagPatientsList(updatedRows?.join(","));
-    } else if (activeTab === "Admin") {
-      const updatedRows = selectAllFlags
-        ? []
-        : AdminReportPatientDetails?.data?.response?.flagIdCountDTOs?.flatMap(
-            (item) => item?.patientIds
-          );
-      setFlagPatientsList(updatedRows?.join(","));
-    } else {
-      const updatedRows = selectAllFlags
-        ? []
-        : ReportPatientDetails?.response?.flagIdCountDTOs?.flatMap(
-            (item) => item?.patientIds
-          );
-      setFlagPatientsList(updatedRows?.join(","));
-    }
+    // if (activeTab === "Team" || activeTab === "Audit") {
+    //   const updatedRows = selectAllFlags
+    //     ? []
+    //     : TeamReportDetails?.data?.response?.flagIdCountDTOs?.flatMap(
+    //         (item) => item?.patientIds
+    //       );
+    //   setFlagPatientsList(updatedRows?.join(","));
+    // } else if (activeTab === "Admin") {
+    //   const updatedRows = selectAllFlags
+    //     ? []
+    //     : AdminReportPatientDetails?.data?.response?.flagIdCountDTOs?.flatMap(
+    //         (item) => item?.patientIds
+    //       );
+    //   setFlagPatientsList(updatedRows?.join(","));
+    // } else {
+    //   const updatedRows = selectAllFlags
+    //     ? []
+    //     : ReportPatientDetails?.response?.flagIdCountDTOs?.flatMap(
+    //         (item) => item?.patientIds
+    //       );
+    //   setFlagPatientsList(updatedRows?.join(","));
+    // }
   };
 
   const gotoPatientDetails = (data) => {
@@ -359,7 +359,7 @@ const Reports = ({
             selectedOptions?.UserRole?.value !== "All"
               ? selectedOptions?.User?.value
               : "",
-          flagsList: flagPatientsList ? flagPatientsList : "",
+          flagsList: selectAllFlags,
           allPatientIds: false,
         })
       );
@@ -373,7 +373,7 @@ const Reports = ({
           ? selectedOptions?.reviewerStatus?.value
           : "",
         sort: sort,
-        flagsList: flagPatientsList ? flagPatientsList : "",
+        flagsList: selectAllFlags,
       });
     } else if (activeTab === "Team") {
       teamReport({
@@ -385,7 +385,7 @@ const Reports = ({
           ? selectedOptions?.reviewerStatus?.value
           : "",
         sort: sort,
-        flagsList: flagPatientsList ? flagPatientsList : "",
+        flagsList: selectAllFlags,
       });
     } else if (activeTab === "Reviewer") {
       reviewerReport({
@@ -395,7 +395,7 @@ const Reports = ({
         search: coderSearchString ? coderSearchString : "",
         filter: selectedOptions?.reviewerStatus?.value,
         sort: sort,
-        flagsList: flagPatientsList ? flagPatientsList : "",
+        flagsList: selectAllFlags,
       });
     }
     if (ExportResponse) {
@@ -808,9 +808,9 @@ const Reports = ({
                                 : "",
                             flagsList: flagPatientsList ? flagPatientsList : "",
                             allPatientIds: true,
+                            
                           },
                         }}
-                       
                       />
                     </div>
                   )}

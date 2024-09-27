@@ -83,7 +83,7 @@ const InitialCard = ({
           sort?.sortField ? sort?.sortField : ""
         }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&allPatientIds=${
           selectAll ? false : true
-        }&patientIds=${flagsList ? flagsList : ""}`;
+        }&allFlags=${selectAllFlags}`;
         const res = await fetch(
           ENDPOINTS.apiEndoint + url,
           // `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
@@ -126,9 +126,9 @@ const InitialCard = ({
           userName === "REVIEWER" ? selectManager : ""
         }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${
           role == "tenant_admin" ? "" : orgId
-        }&patientIds=${flagsList ? flagsList : ""}&allPatientIds=${
+        }&allPatientIds=${
           selectAll ? false : true
-        }`;
+        }&allFlags=${selectAllFlags}`;
         const res = await fetch(
           ENDPOINTS.apiEndoint + url,
           // `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
@@ -358,8 +358,7 @@ const InitialCard = ({
                           }
                           checked={
                             selectAll &&
-                            reportListAll?.response?.totalElements ==
-                              selectedRows.length
+                              selectedRows?.length>0
                           }
                         />
                       </div>

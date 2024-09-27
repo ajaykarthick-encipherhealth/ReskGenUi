@@ -74,7 +74,9 @@ const TeamReport = ({
           ENDPOINTS.apiEndoint +
             `dbservice/patient/auditor/assinedreport?pageno=0&size=${
               ReportPatientDetails?.response?.response?.totalElements
-            }&orgid=${orgId}allPatientIds=${selectAll ? false : true}`,
+            }&orgid=${orgId}&allPatientIds=${
+              selectAll ? false : true
+            }&allFlags=${selectAllFlags}`,
           {
             headers: { Authorization: `Bearer ${await getStorage("token")}` },
           }
@@ -96,7 +98,9 @@ const TeamReport = ({
           ENDPOINTS.apiEndoint +
             `dbservice/patient/auditorreport?pageno=0&size=${
               ReportPatientDetails?.response?.response?.totalElements
-            }&orgid=${orgId}allPatientIds=${selectAll ? false : true}`,
+            }&orgid=${orgId}allPatientIds=${
+              selectAll ? false : true
+            }&allFlags=${selectAllFlags}`,
           {
             headers: { Authorization: `Bearer ${await getStorage("token")}` },
           }
@@ -311,7 +315,7 @@ const TeamReport = ({
                               styles.checkAlign +
                               (selectAll ? " " + TableStyle.customChecked : "")
                             }
-                            checked={selectAll}
+                            checked={selectAll && selectedRows?.length > 0}
                           />
                         </div>
                         <span className={`pl-0 text-start ${styles.pName}`}>
