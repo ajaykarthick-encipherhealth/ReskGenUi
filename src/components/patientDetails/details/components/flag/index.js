@@ -23,6 +23,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
 import { deleteflag } from "../../../../../stores/patient/details/network";
 import SvgFlag from "../svg/svg";
+import { getResponePopup } from "../../../../../utils/reusable";
 
 const Flag = ({
   setOpen,
@@ -66,30 +67,14 @@ const Flag = ({
     try {
       const response = await isdeleteFlag(payload);
 
-      if (response.status === "SUCCESS") {
-        notification.success({
-          message: "Deleted successfully",
-          placement: "top",
-          duration: 1,
-        });
-        getFlagDetailsData(
-          patientDetailsResult?.data?.response?.patientId,
-          patientDetailsResult?.data?.response?.processedYear,
-          patientDetailsResult?.data?.response?.dateOfService
-        );
-      } else {
-        notification.error({
-          message: "Failed to delete flag",
-          placement: "top",
-          duration: 1,
-        });
-      }
+      getResponePopup(response);
+      getFlagDetailsData(
+        patientDetailsResult?.data?.response?.patientId,
+        patientDetailsResult?.data?.response?.processedYear,
+        patientDetailsResult?.data?.response?.dateOfService
+      );
     } catch (error) {
-      notification.error({
-        message: "An error occurred while deleting",
-        placement: "top",
-        duration: 1,
-      });
+      getResponePopup(response);
       console.error(error);
     }
   };
