@@ -756,7 +756,7 @@ const File = ({
       </Drawer>
 
       <Modal
-        title="You want to move  HCC please added add a MEATcondition."
+        title="You want to move  HCC? please add a MEAT condition."
         open={suggestedMeatForm}
         footer={false}
         width="75%"
