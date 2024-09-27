@@ -74,11 +74,6 @@ function PatientTable({
       gotoPatientDetails(clickedData);
     }
   };
-  const getMaskData = (value) => {
-    if (value) {
-      return value.split("").splice(0, 14).join("") + "....";
-    }
-  };
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
       <Empty />
@@ -89,14 +84,10 @@ function PatientTable({
             className={TableStyle.firstTdBorder}
             onClick={handleTableRowClick}
           >
-            <Tooltip title={data.patientId}>
-              <div>{getMaskData(data.patientId)}</div>
-            </Tooltip>
+             <Tooltip title={data.patientId}> {truncateString(data.patientId, 30)}</Tooltip>
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            <Tooltip title={data.fileName}>
-              <div>{getMaskData(data.fileName)}</div>
-            </Tooltip>
+             <Tooltip title={data.fileName}> {truncateString(data.fileName, 30)}</Tooltip>
           </td>
           {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
             <td
@@ -184,8 +175,8 @@ function PatientTable({
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th style={{ paddingLeft: "35px" }}>PATIENT ID</th>
-            <th style={{ paddingLeft: "35px" }}>FILE NAME</th>
+            <th style={{ paddingLeft: "60px" }}>PATIENT ID</th>
+            <th style={{ paddingLeft: "60px" }}>FILE NAME</th>
             {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
               <th>HCC COUNT</th>
             )}

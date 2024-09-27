@@ -508,7 +508,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   // );
 
   const options = [{ label: "All", value: "" }, ...priorityOptions];
-console.log(selectedPriority,"selectedPriority")
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -603,10 +602,10 @@ console.log(selectedPriority,"selectedPriority")
                                   }}
                                   value={
                                     selectedPriority 
-                                    // && {
-                                    //   label: selectedPriority,
-                                    //   value: selectedPriority,
-                                    // }
+                                    && {
+                                      label: selectedPriority,
+                                      value: selectedPriority,
+                                    }
                                   }
                                   options={options}
                                   className="custom-react-select"
