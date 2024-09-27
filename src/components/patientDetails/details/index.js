@@ -55,7 +55,7 @@ import FileDetails from "./components/fileDetails";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import ManuallyAddProvider from "./manuallyAddProvider";
 import { getAge } from "../../../utils/reusable";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -297,6 +297,10 @@ const Details = ({
         patientId == patientDetailsResult?.data?.response.patientId
       ) {
         getPatientHccFile(
+          patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
+        );
+        setStorage(
+          "fileId",
           patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
         );
         setIsFileCheck(true);
@@ -822,7 +826,12 @@ const Details = ({
                                   <div className="col-xl-1 col-sm-12">
                                     {flagsDetailsResult?.response[0] && (
                                       <div className="mt-2">
-                                        <div className="d-flex align-items-center justify-content-center cr-pointer" onClick={() => setFlagContainerActive('Flag')}>
+                                        <div
+                                          className="d-flex align-items-center justify-content-center cr-pointer"
+                                          onClick={() =>
+                                            setFlagContainerActive("Flag")
+                                          }
+                                        >
                                           <Tooltip
                                             placement="bottom"
                                             title={flagsDetailsResult?.response[0]?.flagDetails?.flagName.replaceAll(
