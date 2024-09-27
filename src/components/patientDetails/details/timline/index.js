@@ -450,9 +450,8 @@ const Timeline = ({
               <div className="d-flex">
                 {item.diagnosisCode} - Moved from{" "}
                 <span className={visitStyles.nonHcc}>
-                  {/* NON HCC */}
                   NON HCC
-                  </span> to{" "}
+                  </span> to
                 <span className={visitStyles.deletedColor}> DELETED</span>
               </div>
             );
@@ -518,8 +517,7 @@ const Timeline = ({
               to <span className={visitStyles.audited}>AUDITED</span>
             </div>
           );
-    
-          case "REAUDIT":
+        case "REAUDIT":
           return (
             <div className="d-flex">
               Changed from{" "}
@@ -725,6 +723,48 @@ const Timeline = ({
                 {item?.previousProcessedState}
               </span>{" "}
               to <span className={visitStyles.pendingColor}> PENDING</span>{" "}
+            </div>
+          );
+          case "FLAG_ADDED":
+          return (
+            <div className="d-flex">
+              <>
+                Flag Added - {item?.flagDetails?.flagName ? item?.flagDetails?.flagName.replaceAll("_", " ") : ""}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="23"
+                  height="23"
+                  viewBox="0 0 800 800"
+                  fill={item?.flagDetails?.flagColour}
+                >
+                  <path
+                    d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                    stroke="#000"
+                    stroke-width="10"
+                  />
+                </svg>
+              </>
+            </div>
+          );
+          case "FLAG_REMOVED":
+          return (
+            <div className="d-flex">
+              <>
+                Flag Removed -  {item?.flagDetails?.flagName ? item?.flagDetails?.flagName.replaceAll("_", " ") : ""}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="23"
+                  height="23"
+                  viewBox="0 0 800 800"
+                  fill={item?.flagDetails?.flagColour}
+                >
+                  <path
+                    d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                    stroke="#000"
+                    stroke-width="10"
+                  />
+                </svg>
+              </>
             </div>
           );
         default:

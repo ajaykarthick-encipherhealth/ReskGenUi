@@ -1328,6 +1328,15 @@
   border-radius: 2px;
 }
 
+.potentialFlag {
+  height: 15px;
+  width: 14px;
+  background: #beb531;
+  margin-right: 3px;
+  margin-top: 5px;
+  border-radius: 2px;
+}
+
 .invalidColor {
   color: #fada5e;
   padding: 0 5px;
