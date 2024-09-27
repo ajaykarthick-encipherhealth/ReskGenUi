@@ -407,8 +407,8 @@ const Timeline = ({
               <span className={visitStyles.suggestedColor}>
                 {/* SUGGESTED */}
                 CAREGAP
-              </span>{" "}
-              to <span className={visitStyles.validColor}> VALID</span>
+                </span> to{" "}
+              <span className={visitStyles.validColor}> VALID</span>
             </div>
           );
         case "MOVED":
@@ -440,8 +440,8 @@ const Timeline = ({
                 <span className={visitStyles.suggestedColor}>
                   {/* SUGGESTED */}
                   CAREGAP
-                </span>{" "}
-                to <span className={visitStyles.validColor}> HCC</span>
+                  </span> to{" "}
+                <span className={visitStyles.validColor}> HCC</span>
               </div>
             );
           }
@@ -452,8 +452,8 @@ const Timeline = ({
                 <span className={visitStyles.suggestedColor}>
                   {/* SUGGESTED */}
                   CAREGAP
-                </span>{" "}
-                to <span className={visitStyles.deletedColor}> DELETED</span>
+                  </span> to{" "}
+                <span className={visitStyles.deletedColor}> DELETED</span>
               </div>
             );
           }
@@ -474,7 +474,7 @@ const Timeline = ({
                 <span className={visitStyles.suggestedColor}>
                   {/* SUGGESTED */}
                   CAREGAP
-                </span>
+                  </span>
               </div>
             );
           }
@@ -606,7 +606,7 @@ const Timeline = ({
               <span className={visitStyles.suggestedColor}>
                 {/* SUGGESTED */}
                 CAREGAP
-              </span>
+                </span>
             </div>
           );
         case "MOVED_SUGGESTED_TO_DELETED":
@@ -616,8 +616,8 @@ const Timeline = ({
               <span className={visitStyles.suggestedColor}>
                 {/* SUGGESTED */}
                 CAREGAP
-              </span>{" "}
-              to <span className={visitStyles.deletedColor}> DELETED</span>
+                </span> to{" "}
+              <span className={visitStyles.deletedColor}> DELETED</span>
             </div>
           );
         case "ENCOUNTER_FILE_UPDATED":
@@ -714,7 +714,7 @@ const Timeline = ({
               to <span className={visitStyles.pendingColor}> PENDING</span>{" "}
             </div>
           );
-        case "FLAG_ADDED":
+          case "FLAG_ADDED":
           return (
             <div className="d-flex">
               <>
