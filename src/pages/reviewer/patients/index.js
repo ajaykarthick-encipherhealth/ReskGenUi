@@ -601,11 +601,15 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                     resetPageNumber(setPageNo);
                                   }}
                                   value={
-                                    selectedPriority 
-                                    && {
-                                      label: selectedPriority,
-                                      value: selectedPriority,
-                                    }
+                                    selectedPriority
+                                      ? {
+                                          label: selectedPriority,
+                                          value: selectedPriority,
+                                        }
+                                      : {
+                                          label: "ALL",
+                                          value: "",
+                                        }
                                   }
                                   options={options}
                                   className="custom-react-select"
