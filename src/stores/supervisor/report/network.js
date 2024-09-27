@@ -19,7 +19,7 @@ export async function auditApi({
   const sortDirection = sort?.sortDir === "undefined" ? "" : sort?.sortDir;
   const orgId = getStorage("orgId");
   const data = await requestPortal(
-    `dbservice/patient/auditor/assinedreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&status=${searchValue?searchValue:""}&searchstring=${search?search:""}&orgid=${orgId}&sortfield=${sortField}&sortdirection=${sortDirection}&patientIds=${flagsList?flagsList:""}
+    `dbservice/patient/auditor/assinedreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&status=${searchValue?searchValue:""}&searchstring=${search?search:""}&orgid=${orgId}&sortfield=${sortField}&sortdirection=${sortDirection}&allFlags=${flagsList}
   `,
     options
   );
@@ -42,7 +42,7 @@ export async function teamApi({
   const searchValue = filter === "ALL" ? "" : filter;
   const orgId = getStorage("orgId");
   const data = await requestPortal(
-    `dbservice/patient/auditorreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&status=${searchValue?searchValue:""}&searchstring=${search?search:""}&orgid=${orgId}&sortfield=${sort?.sortField?sort?.sortField:""}&sortdirection=${sort?.sortDir?sort?.sortDir:""}&patientIds=${flagsList?flagsList:""}
+    `dbservice/patient/auditorreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&status=${searchValue?searchValue:""}&searchstring=${search?search:""}&orgid=${orgId}&sortfield=${sort?.sortField?sort?.sortField:""}&sortdirection=${sort?.sortDir?sort?.sortDir:""}&allFlags=${flagsList}
   `,
     options
   );
