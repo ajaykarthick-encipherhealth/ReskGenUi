@@ -79,9 +79,8 @@ const TeamReport = ({
             headers: { Authorization: `Bearer ${await getStorage("token")}` },
           }
         ).then((res) => res.json());
-        const seletedAll = res?.response?.patientIds;
-        setSelectedRows(seletedAll ? seletedAll : []);
-        setIsLoading(false);
+        const seletedAll =res?.response?.response?.data?.map(item=>item?.patientId);
+        setSelectedRows(seletedAll.length>0 ? seletedAll : []);
       } catch (error) {}
     }
     if (activeTab === "Team") {
@@ -101,9 +100,8 @@ const TeamReport = ({
             headers: { Authorization: `Bearer ${await getStorage("token")}` },
           }
         ).then((res) => res.json());
-        const seletedAll = res?.response?.patientIds;
-
-        setSelectedRows(seletedAll ? seletedAll : []);
+        const seletedAll = res?.response?.response?.data?.map(item=>item?.patientId);
+        setSelectedRows(seletedAll.length>0 ? seletedAll : []);
         setIsLoading(false);
       } catch (error) {}
     }

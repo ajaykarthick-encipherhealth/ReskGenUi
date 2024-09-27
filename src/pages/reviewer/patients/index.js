@@ -610,7 +610,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                   options={options}
                                   className="custom-react-select"
                                   isSearchable={false}
-                                  placeholder={"Select Status"}
+                                  placeholder={"Select Priority"}
                                 />
                               </div>
                             </div>
