@@ -292,6 +292,10 @@ export const handleSubmitValidNotes = async ({
     apiURL = "dbservice/update/move/deletedtovalid";
   }
 
+  if (isValidAction.name == "Move to NON HCC" && isValidAction.title == "DELETED") {
+    apiURL = "dbservice/update/move/deletedtoinvalid";
+  }
+
   if (
     isValidAction.name == "Move to Suggested" &&
     isValidAction.title == "RADIOLOGY_HCC"
