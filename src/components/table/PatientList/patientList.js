@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import TableStyle from "../table.module.css";
-import { notification, Select as AntSelect, Empty } from "antd";
+import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { getPriorityChange } from "../../../store/actions/PatientsActions";
@@ -30,7 +30,7 @@ function PatientTable({
   sortAllocateOrder,
   setSortAllocateOrder,
   userId,
-  params
+  params,
 }) {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -49,16 +49,16 @@ function PatientTable({
       const { signal } = controller;
       controller.abort();
       setStorage("patientId", data.patientId);
-      const routePrams={...page,...params}
+      const routePrams = { ...page, ...params };
       // navigate.push({ pathname: "/reviewer/patients/details", query: page });
-      
+
       navigate?.push(
         {
-          pathname: '/reviewer/patients/details',
+          pathname: "/reviewer/patients/details",
           query: params,
         },
-        '/reviewer/patients/details'
-      )
+        "/reviewer/patients/details"
+      );
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
@@ -74,7 +74,6 @@ function PatientTable({
       gotoPatientDetails(clickedData);
     }
   };
-
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
       <Empty />
@@ -85,19 +84,20 @@ function PatientTable({
             className={TableStyle.firstTdBorder}
             onClick={handleTableRowClick}
           >
-            {truncateString(data.patientId, 30)}
+             <Tooltip title={data.patientId}> {truncateString(data.patientId, 30)}</Tooltip>
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            {data.fileName ? truncateString(data.fileName, 30) : "---"}
+             <Tooltip title={data.fileName}> {truncateString(data.fileName, 30)}</Tooltip>
           </td>
-          {userId != "reviewer@3gencogentai.onmicrosoft.com" && 
-          <td
-            className={TableStyle.childBorder}
-            onClick={handleTableRowClick}
-            style={{ paddingLeft: "30px" }}
-          >
-            {data.validDiseaseCount ? data.validDiseaseCount : "---"}
-          </td> }
+          {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
+            <td
+              className={TableStyle.childBorder}
+              onClick={handleTableRowClick}
+              style={{ paddingLeft: "30px" }}
+            >
+              {data.validDiseaseCount ? data.validDiseaseCount : "---"}
+            </td>
+          )}
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.allocatedOn
               ? moment(data.allocatedOn).format("MM-DD-YYYY")
@@ -175,10 +175,13 @@ function PatientTable({
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>PATIENT ID</th>
-            <th>FILE NAME</th>
-            {userId != "reviewer@3gencogentai.onmicrosoft.com" && <th>HCC COUNT</th>}
-            <th className="text-truncate"
+            <th style={{ paddingLeft: "60px" }}>PATIENT ID</th>
+            <th style={{ paddingLeft: "60px" }}>FILE NAME</th>
+            {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
+              <th>HCC COUNT</th>
+            )}
+            <th
+              className="text-truncate"
               onClick={() => {
                 sortFunction(
                   sortAllocateOrder,
@@ -197,7 +200,8 @@ function PatientTable({
                 )}
               </span>
             </th>
-            <th className="text-truncate"
+            <th
+              className="text-truncate"
               onClick={() => {
                 sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
               }}
@@ -211,7 +215,8 @@ function PatientTable({
                 )}
               </span>
             </th>
-            <th className="text-truncate"
+            <th
+              className="text-truncate"
               onClick={() => {
                 sortFunction(
                   sortCompleteOrder,

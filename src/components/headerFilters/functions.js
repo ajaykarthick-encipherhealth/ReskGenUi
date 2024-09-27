@@ -207,45 +207,45 @@ export const priorityOptions = [
   {
     value: "URGENT",
     label: (
-      <>
+      <div className="d-flex gap-1">
         <i>
           <FontAwesomeIcon icon={faTriangleExclamation} />
-        </i>{" "}
+        </i>
         <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
-      </>
+      </div>
     ),
   },
   {
     value: "HIGH",
     label: (
-      <>
+      <div className="d-flex gap-1">
         <i className={TableStyle.highFlag}>
           <FontAwesomeIcon icon={faTriangleExclamation} />
         </i>
         <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
-      </>
+      </div>
     ),
   },
   {
     value: "NORMAL",
     label: (
-      <>
+      <div className="d-flex gap-1">
         <i className={TableStyle.normalFlag}>
           <FontAwesomeIcon icon={faTriangleExclamation} />
         </i>
         <span style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>{" "}
-      </>
+      </div>
     ),
   },
   {
     value: "LOW",
     label: (
-      <>
+      <div className="d-flex gap-1">
         <i className={TableStyle.lowFlag}>
           <FontAwesomeIcon icon={faTriangleExclamation} />
-        </i>{" "}
+        </i>
         <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
-      </>
+      </div>
     ),
   },
 ];
