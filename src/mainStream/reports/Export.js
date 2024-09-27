@@ -270,12 +270,9 @@ const Export = ({
       return result;
     }, {});
 
-    const fields = checkall?.reduce((acc, data) => {
-      acc[data?.title] = data?.checked;
-      return acc;
-    }, {});
+    const filteredId=checkall?.filter(item=>item?.checked)
     const data = {
-      fields: fields,
+      reportFields: filteredId?.map(info=>info?.heading),
       patientIds: patientIds,
       fileType: activeButton.toUpperCase(),
       reportName: values.ReportName,
@@ -287,7 +284,7 @@ const Export = ({
       userAndAccess: editUserAndAccess,
       removedUsers: removedUsers,
     };
-    console.log(data);
+
     if (!isSent) {
       dispatch(getExportDetails(data));
     } else {
