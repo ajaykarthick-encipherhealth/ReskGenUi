@@ -1325,7 +1325,9 @@ export const handleSubmitValidNotes = async ({
       // reason: values?.reason,
       processedYear: selectDisDetails.processedYear,
       dateOfServices: selectDisDetails.dateOfServices,
-      chartProcessType: "DATE_OF_SERVICE",
+      chartProcessType: selectDisDetails.dateOfService
+        ? "DATE_OF_SERVICE"
+        : "YEAR",
     };
     const response = await axios.put(
       ENDPOINTS.apiEndoint + apiURL,
