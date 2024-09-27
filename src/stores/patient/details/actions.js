@@ -120,7 +120,7 @@ export const activeLabels = createActionThunk(
 );
 
 export const suggestedToValidMove = createActionThunk(
-  "DISEASE_EDIT",
+  "MEAT_VALID_MOVE",
   network.suggestedToValid
 );
 
