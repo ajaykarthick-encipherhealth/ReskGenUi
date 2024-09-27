@@ -257,6 +257,7 @@ const ReceivedReport = ({
           first={receivedPageNo===0?0:paginationFirst}
           totalRecords={details?.reportStatusDTOList?.totalElements}
           onPageChange={onPageChange}
+          row={8}
         />
       ) : null}
     </>

@@ -292,6 +292,7 @@ const SentReport = ({
           first={receivedPageNo === 0 ? 0 : paginationFirst}
           totalRecords={details?.receivedReportDTOList?.totalElements}
           onPageChange={onSentPageChange}
+          row={8}
         />
       ) : null}
 
