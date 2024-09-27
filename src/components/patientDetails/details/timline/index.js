@@ -407,8 +407,8 @@ const Timeline = ({
               <span className={visitStyles.suggestedColor}>
                 {/* SUGGESTED */}
                 CAREGAP
-                </span> to{" "}
-              <span className={visitStyles.validColor}> VALID</span>
+              </span>{" "}
+              to <span className={visitStyles.validColor}> VALID</span>
             </div>
           );
         case "MOVED":
@@ -440,20 +440,8 @@ const Timeline = ({
                 <span className={visitStyles.suggestedColor}>
                   {/* SUGGESTED */}
                   CAREGAP
-                  </span> to{" "}
-                <span className={visitStyles.validColor}> HCC</span>
-              </div>
-            );
-          }
-          if (item?.fromState == "INVALID" && item?.toState == "DELETED") {
-            return (
-              <div className="d-flex">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.nonHcc}>
-                  {/* NON HCC */}
-                  NON HCC
-                  </span> to{" "}
-                <span className={visitStyles.deletedColor}> DELETED</span>
+                </span>{" "}
+                to <span className={visitStyles.validColor}> HCC</span>
               </div>
             );
           }
@@ -464,8 +452,8 @@ const Timeline = ({
                 <span className={visitStyles.suggestedColor}>
                   {/* SUGGESTED */}
                   CAREGAP
-                  </span> to{" "}
-                <span className={visitStyles.deletedColor}> DELETED</span>
+                </span>{" "}
+                to <span className={visitStyles.deletedColor}> DELETED</span>
               </div>
             );
           }
@@ -486,7 +474,7 @@ const Timeline = ({
                 <span className={visitStyles.suggestedColor}>
                   {/* SUGGESTED */}
                   CAREGAP
-                  </span>
+                </span>
               </div>
             );
           }
@@ -518,8 +506,7 @@ const Timeline = ({
               to <span className={visitStyles.audited}>AUDITED</span>
             </div>
           );
-    
-          case "REAUDIT":
+        case "REAUDIT":
           return (
             <div className="d-flex">
               Changed from{" "}
@@ -619,7 +606,7 @@ const Timeline = ({
               <span className={visitStyles.suggestedColor}>
                 {/* SUGGESTED */}
                 CAREGAP
-                </span>
+              </span>
             </div>
           );
         case "MOVED_SUGGESTED_TO_DELETED":
@@ -629,8 +616,8 @@ const Timeline = ({
               <span className={visitStyles.suggestedColor}>
                 {/* SUGGESTED */}
                 CAREGAP
-                </span> to{" "}
-              <span className={visitStyles.deletedColor}> DELETED</span>
+              </span>{" "}
+              to <span className={visitStyles.deletedColor}> DELETED</span>
             </div>
           );
         case "ENCOUNTER_FILE_UPDATED":
@@ -727,6 +714,48 @@ const Timeline = ({
               to <span className={visitStyles.pendingColor}> PENDING</span>{" "}
             </div>
           );
+        case "FLAG_ADDED":
+          return (
+            <div className="d-flex">
+              <>
+                Flag Added - {item?.flagDetails?.flagName ? item?.flagDetails?.flagName.replaceAll("_", " ") : ""}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="23"
+                  height="23"
+                  viewBox="0 0 800 800"
+                  fill={item?.flagDetails?.flagColour}
+                >
+                  <path
+                    d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                    stroke="#000"
+                    stroke-width="10"
+                  />
+                </svg>
+              </>
+            </div>
+          );
+          case "FLAG_REMOVED":
+          return (
+            <div className="d-flex">
+              <>
+                Flag Removed -  {item?.flagDetails?.flagName ? item?.flagDetails?.flagName.replaceAll("_", " ") : ""}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="23"
+                  height="23"
+                  viewBox="0 0 800 800"
+                  fill={item?.flagDetails?.flagColour}
+                >
+                  <path
+                    d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                    stroke="#000"
+                    stroke-width="10"
+                  />
+                </svg>
+              </>
+            </div>
+          );
         default:
           return (
             <div className="d-flex">
@@ -773,8 +802,8 @@ const Timeline = ({
   return (
 <div className={visitStyles.timeLines}>
   {!filterDataLoading ? (
-    <div className={`widget-timeline ${visitStyles.timeLineScroll}`}>
-      <ul className="timeline" >
+    <div className="widget-timeline">
+      <ul className="timeline" style={{ height: "99vh", overflow: "scroll" }}>
         {timelineData?.length > 0 ? (
           timelineData?.map((item, index) => renderTimelineItem(item, index))
         ) : (
