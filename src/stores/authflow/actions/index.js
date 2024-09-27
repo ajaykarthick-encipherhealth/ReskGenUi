@@ -307,7 +307,7 @@ export const refreshToken = () => async (dispatch) => {
       });
       const newToken = response?.data?.response;
       setStorage("refreshTokenTime", Date.now());
-      setStorage("token", newToken); 
+      setStorage("token", newToken);
       setStorage("loginTime", Date.now());
     }
   } catch (err) {
@@ -465,10 +465,14 @@ export const getFilters = (field, username, pageQueue) => async (dispatch) => {
   const token = getStorage("token");
   const role = getStorage("userRole");
   const userRole = role?.toUpperCase();
+  const customPage =
+    field === "patientAllocated" && role === "supervisor"
+      ? "auditedqueue"
+      : pageQueue;
   const url = username
     ? `dbservice/patient/filter/field/list?username=${username}&field=${field}&role=${userRole}`
     : `dbservice/patient/filter/field/list?field=${field}&role=${userRole}&page=${
-        pageQueue ? pageQueue : 0
+        customPage ? customPage : 0
       }`;
 
   dispatch({

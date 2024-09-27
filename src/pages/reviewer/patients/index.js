@@ -122,7 +122,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const [processedStart, setProcessedStart] = useState("");
   const [processedEnd, setProcessedEnd] = useState("");
   const [statusSelectedStatus, setStatusSelectedStatus] = useState(
-    navigate.query?.statusSelectedStatus
+    navigate.query?.statusSelectedStatus ||
+      filteratedDashboardData?.status?.toUpperCase()
   );
   const [searchTextValue, setSearchTextValue] = useState(
     navigate.query?.searchTextValue
@@ -156,14 +157,20 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   );
 
   const [selectedDates, setSelectedDates] = useState([
-    navigate?.query?.dueDateStart ? dayjs(navigate?.query?.dueDateStart) : "",
-    navigate?.query?.dueDateEnd ? dayjs(navigate?.query?.dueDateEnd) : "",
+    navigate?.query?.dueDateStart
+      ? dayjs(navigate?.query?.dueDateStart)
+      : dayjs(filteratedDashboardData?.date),
+    navigate?.query?.dueDateEnd
+      ? dayjs(navigate?.query?.dueDateEnd)
+      : dayjs(filteratedDashboardData?.date),
   ]);
   const [selectedDates2, setSelectedDates2] = useState([
     navigate?.query?.processedStart
       ? dayjs(navigate?.query?.processedStart)
-      : "",
-    navigate?.query?.processedEnd ? dayjs(navigate?.query?.processedEnd) : "",
+      : dayjs(filteratedDashboardData?.date),
+    navigate?.query?.processedEnd
+      ? dayjs(navigate?.query?.processedEnd)
+      : dayjs(filteratedDashboardData?.date),
   ]);
   useEffect(() => {
     setDefaultStartDate(
@@ -271,7 +278,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     const resoureUrl = `patientAllocated=${uId}&page=${
       pageNo ? pageNo : 0
     }&size=${pageSize ? pageSize : 15}&processedStatus=${
-      statusValue ? statusValue : ""
+      statusValue ? statusValue.toUpperCase() : ""
     }&dueDateStart=${dStart ? dStart : ""}&dueDateEnd=${
       dEnd ? dEnd : ""
     }&processedStart=${pStart ? pStart : ""}&processedEnd=${
@@ -562,10 +569,15 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                     resetPageNumber(setPageNo);
                                   }}
                                   value={
-                                    statusSelectedStatus && {
-                                      label: statusSelectedStatus,
-                                      value: statusSelectedStatus,
-                                    }
+                                    statusSelectedStatus
+                                      ? {
+                                          label: statusSelectedStatus,
+                                          value: statusSelectedStatus,
+                                        }
+                                      : {
+                                          label: "ALL",
+                                          value: "",
+                                        }
                                   }
                                   options={statusOptions}
                                   className="custom-react-select"
@@ -595,11 +607,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                   options={options}
                                   className="custom-react-select"
                                   isSearchable={false}
-                                  placeholder={
-                                    filteratedDashboardData
-                                      ? filteratedDashboardData?.status?.toUpperCase()
-                                      : "Select Status"
-                                  }
+                                  placeholder={"Select Status"}
                                 />
                               </div>
                             </div>
