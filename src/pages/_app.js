@@ -41,7 +41,8 @@ function MyApp({ Component, pageProps }) {
     document.addEventListener("contextmenu", handleContextmenu);
     window.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keydown", (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "Shift") {
+      console.log(e,"ee")
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "Shift"||e.key==="p"||e.key==="Print") {
         e.preventDefault();
         e.stopPropagation();
 
