@@ -512,6 +512,14 @@ const Hcc = ({
                                     NON HCC
                                   </span>
                                 </div>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.potentialFlag}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                  POTENTIAL DIAGNOSIS
+                                  </span>
+                                </div>
                               </div>
                             </>
                           }
