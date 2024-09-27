@@ -1,6 +1,8 @@
 export const getStorage = (key) => {
   try {
-    return sessionStorage.getItem(key);
+    const encryptedKey = btoa(JSON.stringify(key));
+    const data = sessionStorage.getItem(encryptedKey);
+    return JSON.parse(atob(data));
   } catch (error) {
     console.error(`Error getting '${key}' from LocalStorage`);
     console.error(error);
@@ -10,7 +12,9 @@ export const getStorage = (key) => {
 
 export const setStorage = (key, value) => {
   try {
-    sessionStorage.setItem(key, value);
+    const encryptedKey = btoa(JSON.stringify(key));
+    const encryptedValue = btoa(JSON.stringify(value));
+    sessionStorage.setItem(encryptedKey, encryptedValue);
     return Promise.resolve();
   } catch (error) {
     console.error(`Error setting '${key}' in LocalStorage`);
@@ -21,7 +25,8 @@ export const setStorage = (key, value) => {
 
 export const removeStorage = (key) => {
   try {
-    sessionStorage.removeItem(key);
+    const encryptedKey = btoa(JSON.stringify(key));
+    sessionStorage.removeItem(encryptedKey);
     return Promise.resolve();
   } catch (error) {
     console.error(`Error removing token ${key} from LocalStorage`);
