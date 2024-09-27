@@ -187,7 +187,7 @@ export const loginAction =
           setStorage("userId", result.userEmail);
           setStorage("orgId", result.organizationId);
           setStorage("userName", emailSplit[0]);
-          setStorage("loginCheck", true);
+          setStorage("loginCheck", "true");
           const encodedParams = btoa(
             JSON.stringify({
               mfa: mfa,
