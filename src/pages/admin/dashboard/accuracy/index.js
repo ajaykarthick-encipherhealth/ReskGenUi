@@ -111,7 +111,7 @@ export function getHighlightedIndex(
 }
 
 export const getGraphData = (
-  param,
+  param = [], 
   text,
   month,
   year,
@@ -122,14 +122,14 @@ export const getGraphData = (
     currentBtn === "Monthly" &&
     parseInt(year) <= parseInt(currentDate.getFullYear())
   ) {
-    if (parseInt(year) <= parseInt(currentDate.getFullYear())) {
-      return param?.map((item) => item[text]);
-    }
-  } else if (currentBtn !== "Monthly") {
-    if (parseInt(month) <= parseInt(currentDate?.getMonth() + 1)) {
-      return param?.map((item) => item[text]);
+    return param?.map((item) => item?.[text] ?? 0); 
+  } 
+  else if (currentBtn !== "Monthly") {
+    if (parseInt(month) <= parseInt(currentDate.getMonth() + 1)) {
+      return param?.map((item) => item?.[text] ?? 0);
     }
   }
+  return [];
 };
 export const chartBlockedDates = (
   year,

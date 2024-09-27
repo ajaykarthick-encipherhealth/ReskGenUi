@@ -155,7 +155,7 @@ const Accuracy = () => {
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(
       accuracyDatas?.data?.response &&
-      Object.keys(accuracyDatas?.data?.response)?.length
+        Object.keys(accuracyDatas?.data?.response)?.length
     );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
@@ -286,10 +286,12 @@ const Accuracy = () => {
     },
     series: [
       {
-        name: "totalCorrectCount",
+        name: "newlyAddedCodesCount",
         data: getGraphData(
-          accuracyDatas?.data?.response,
-          "totalCorrectCount",
+          accuracyDatas?.data?.response?.length > 0
+            ? accuracyDatas?.data?.response
+            : [],
+          "newlyAddedCodesCount",
           selectedMonth,
           selectedYear,
           currentBtn,
@@ -299,10 +301,10 @@ const Accuracy = () => {
         yAxis: 1,
       },
       {
-        name: "totalWrongCount",
+        name: "incorrectCodesCount",
         data: getGraphData(
           accuracyDatas?.data?.response,
-          "totalWrongCount",
+          "incorrectCodesCount",
           selectedMonth,
           selectedYear,
           currentBtn,
@@ -343,10 +345,15 @@ const Accuracy = () => {
     currentBtn,
     currentDate
   );
-  const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
-  const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
-  const average = sum / numericalData?.length; // Calculate the average
-
+  const numericalData =
+    allAverageScore?.length > 0
+      ? allAverageScore?.filter((value) => value)?.flat()
+      : [];
+  const sum =
+    numericalData?.length > 0
+      ? numericalData?.reduce((acc, value) => acc + value, 0)
+      : 0;
+  const average = sum > 0 ? sum / numericalData?.length : 0;
   return (
     <>
       <HeadTitle header="Team Quality Score" />
@@ -430,8 +437,9 @@ const Accuracy = () => {
               )}
             </div>
             {accuracyDatas?.loading ? (
-              <div className={styles.accuracy}>{renderCardSkeleton(230, 250)}</div>
-
+              <div className={styles.accuracy}>
+                {renderCardSkeleton(230, 250)}
+              </div>
             ) : (
               <div className={styles.accuracy}>
                 <div className={styles.header}>
@@ -469,6 +477,7 @@ const Accuracy = () => {
                             ?.averageScore
                         }%`
                     : "0%"} */}
+
                     {average ? `${average?.toFixed(2)}%` : `0%`}
                   </span>
                 </div>
