@@ -21,7 +21,8 @@ export const setStorage = (key, value) => {
 
 export const removeStorage = (key) => {
   try {
-    sessionStorage.removeItem(key);
+    const encryptedKey = btoa(JSON.stringify(key));
+    sessionStorage.removeItem(encryptedKey);
     return Promise.resolve();
   } catch (error) {
     console.error(`Error removing token ${key} from LocalStorage`);

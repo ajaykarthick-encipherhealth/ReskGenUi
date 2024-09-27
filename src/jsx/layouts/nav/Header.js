@@ -452,7 +452,7 @@ const Header = ({
     setTenentId(tenentId);
     setMenuList(getMenuListByRole(userRoleLocal));
 
-    if (loginCheck !== "true") {
+    if (!loginCheck) {
       Swal.fire({
         title: "Error!",
         text: "Session Expired",

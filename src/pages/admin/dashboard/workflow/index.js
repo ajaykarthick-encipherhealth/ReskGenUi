@@ -96,9 +96,7 @@ const WorkFlow = () => {
       id: 2,
       icon: <FontAwesomeIcon icon={faUsers} />,
       title: "Allocated",
-      charts: chartValue.totalPatientsAllocated
-        ? chartValue.totalPatientsAllocated
-        : "0",
+      charts: worlFlowData?.data?.response?.totalPatientsAllocated || "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -109,9 +107,9 @@ const WorkFlow = () => {
       id: 3,
       icon: <FontAwesomeIcon icon={faCircleCheck} />,
       title: "Completed",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.COMPLETED
-        : "0",
+      charts:
+        worlFlowData?.data?.response?.processedStatusCount?.processedStatus
+          ?.COMPLETED || "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -121,9 +119,9 @@ const WorkFlow = () => {
       id: 4,
       icon: <FontAwesomeIcon icon={faClockRotateLeft} />,
       title: "Pending",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.PENDING
-        : "0",
+      charts:
+        worlFlowData?.data?.response?.processedStatusCount?.processedStatus
+          ?.PENDING || "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -143,9 +141,9 @@ const WorkFlow = () => {
       id: 5,
       icon: <FontAwesomeIcon icon={faCircleXmark} />,
       title: "Declined",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.DECLINED
-        : "0",
+      charts:
+        worlFlowData?.data?.response?.processedStatusCount?.processedStatus
+          ?.DECLINED || "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -155,7 +153,9 @@ const WorkFlow = () => {
       id: 6,
       icon: <FontAwesomeIcon icon={faFileCircleCheck} />,
       title: "Audited",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITED : "0",
+      charts:
+        worlFlowData?.data?.response?.processedStatusCount?.auditedStatus
+          ?.AUDITED || "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -165,9 +165,9 @@ const WorkFlow = () => {
       id: 7,
       icon: <FontAwesomeIcon icon={faFileCircleExclamation} />,
       title: "Audit Pending",
-      charts: dateRange.auditedStatus
-        ? dateRange.auditedStatus.AUDIT_PENDING
-        : "0",
+      charts:
+        worlFlowData?.data?.response?.processedStatusCount?.auditedStatus
+          ?.AUDIT_PENDING || "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -177,7 +177,9 @@ const WorkFlow = () => {
       id: 8,
       icon: <FontAwesomeIcon icon={faCirclePause} />,
       title: "Audit Hold",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITHOLD : "0",
+      charts:
+        worlFlowData?.data?.response?.processedStatusCount?.auditedStatus
+          ?.AUDIT_HOLD || "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -188,9 +190,9 @@ const WorkFlow = () => {
       id: 9,
       icon: <FontAwesomeIcon icon={faCircleXmark} />,
       title: "Audit Declined",
-      charts: dateRange.auditedStatus
-        ? dateRange.auditedStatus.AUDIT_DECLINED
-        : "0",
+      charts:
+        worlFlowData?.data?.response?.processedStatusCount?.auditedStatus
+          ?.AUDIT_DECLINED || "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -202,7 +204,7 @@ const WorkFlow = () => {
       id: 1,
       icon: <FontAwesomeIcon icon={faFile} />,
       title: "Total charts",
-      charts: chartValue.totalPatients ? chartValue.totalPatients : "0",
+      charts: worlFlowData?.data?.response?.totalPatients || "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -210,15 +212,15 @@ const WorkFlow = () => {
     },
   ];
 
-  const getWorkFlow = async () => {
-    try {
-      const data = await workStatusApiTenantAdmin(startDate, endDate, router);
-      setDateRange(data.response?.processedStatusCount);
-      setChartValue(data.response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getWorkFlow = async () => {
+  //   try {
+  //     const data = await workStatusApiTenantAdmin(startDate, endDate, router);
+  //     setDateRange(data.response?.processedStatusCount);
+  //     setChartValue(data.response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   const renderCardSkeleton = () => (
     <Row className={styles.carddiv}>
       {Array.from({ length: 4 }).map((_, index) => (
@@ -269,9 +271,9 @@ const WorkFlow = () => {
       ))}
     </Row>
   );
-  useEffect(() => {
-    getWorkFlow();
-  }, [startDate, endDate, router]);
+  // useEffect(() => {
+  //   getWorkFlow();
+  // }, [startDate, endDate, router]);
 
   return (
     <div className={styles.card1} style={{ height: "75%" }}>

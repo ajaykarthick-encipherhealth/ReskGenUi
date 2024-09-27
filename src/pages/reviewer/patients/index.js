@@ -508,7 +508,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   // );
 
   const options = [{ label: "All", value: "" }, ...priorityOptions];
-console.log(selectedPriority,"selectedPriority")
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -602,16 +601,20 @@ console.log(selectedPriority,"selectedPriority")
                                     resetPageNumber(setPageNo);
                                   }}
                                   value={
-                                    selectedPriority 
-                                    // && {
-                                    //   label: selectedPriority,
-                                    //   value: selectedPriority,
-                                    // }
+                                    selectedPriority
+                                      ? {
+                                          label: selectedPriority,
+                                          value: selectedPriority,
+                                        }
+                                      : {
+                                          label: "ALL",
+                                          value: "",
+                                        }
                                   }
                                   options={options}
                                   className="custom-react-select"
                                   isSearchable={false}
-                                  placeholder={"Select Status"}
+                                  placeholder={"Select Priority"}
                                 />
                               </div>
                             </div>
