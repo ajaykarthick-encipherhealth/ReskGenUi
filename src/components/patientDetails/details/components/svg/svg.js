@@ -1,4 +1,4 @@
-// SvgFlag.js
+
 import React from 'react';
 
 const SvgFlag = ({ fillColor }) => (
