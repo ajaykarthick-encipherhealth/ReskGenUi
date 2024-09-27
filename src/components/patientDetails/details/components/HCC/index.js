@@ -77,6 +77,7 @@ const HccCards = ({
   radiologyFile,
   radiologyDetailsResult,
   patientDetailsResult,
+  setSuggestedMeatForm
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -342,6 +343,7 @@ const HccCards = ({
                                       data.ruleType !=
                                         "DIRECT_COMBINATION_RULE_ENGINE"
                                     }
+                                    setSuggestedMeatForm={setSuggestedMeatForm}
                                   />
                                 )}
                                 <Popover

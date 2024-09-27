@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch, connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Drawer, notification } from "antd";
+import { Drawer, Modal, notification } from "antd";
 import { Offcanvas } from "react-bootstrap";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
@@ -88,6 +88,7 @@ const VisitData = ({
   const [zIndex, setZIndex] = useState(false);
   const [allMeatList, setAllMeatList] = useState([]);
   const [deletedMeatList, setDeletedMeatList] = useState([]);
+  const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
 
   useEffect(() => {
     var orgId = getStorage("orgId");
@@ -383,6 +384,7 @@ const VisitData = ({
                               isVisitData={true}
                               provided={provided}
                               popup={zIndex}
+                              setSuggestedMeatForm={setSuggestedMeatForm}
                             />
                           </div>
                         </div>
@@ -410,7 +412,7 @@ const VisitData = ({
                                 : showList.length == 2
                                 ? "27vh"
                                 : "18vh",
-                                overflow:"scroll"
+                            overflow: "scroll",
                           }}
                         >
                           <span className={`${visitStyles.deleted_title_name}`}>
@@ -664,6 +666,7 @@ const VisitData = ({
                               cardTitle="SUGGESTED"
                               provided={provided}
                               isVisitData={true}
+                              setSuggestedMeatForm={setSuggestedMeatForm}
                             />
                           </div>
                         </div>
@@ -734,6 +737,7 @@ const VisitData = ({
                               cardTitle="POTENTIAL"
                               provided={provided}
                               isVisitData={true}
+                              setSuggestedMeatForm={setSuggestedMeatForm}
                             />
                           </div>
                         </div>
@@ -962,6 +966,51 @@ const VisitData = ({
           </div>
         </div>
       </Drawer>
+      <Modal
+        title="You want to move  HCC please added add a MEATcondition."
+        open={suggestedMeatForm}
+        footer={false}
+        width="75%"
+        height={200}
+        onCancel={() => setSuggestedMeatForm(false)}
+      >
+        <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
+          <div className="col-8">
+            {hccFileDetails?.loading != true ? (
+              <>
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
+                    fileHeight={true}
+                    fileHeightFrames={window.screen.availHeight - 50}
+                    fileHeights={"100vh"}
+                  />
+                )}
+              </>
+            ) : null}
+          </div>
+          <div className="col-4">
+            <div
+              className="px-4"
+              style={{ height: "90vh", overflowY: "scroll" }}
+            >
+              <ManuallyAdd
+                handleCloseModal={handleCloseModal}
+                setIsFileFormShow={setIsFileFormShow}
+                year={year}
+                isEditPage={true}
+                isEditValue={formValues}
+                meatFormDisplay={true}
+                setSuggestedMeatForm={setSuggestedMeatForm}
+                selectDisDetails={selectDisDetails}
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };

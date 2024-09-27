@@ -53,6 +53,10 @@ const ManuallyAdd = ({
   diseaseEditMeat,
   reset,
   isDosSelected,
+  meatFormDisplay = false,
+  setSuggestedMeatForm,
+  suggestedToValidMove,
+  selectDisDetails,
 }) => {
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(true);
@@ -96,6 +100,7 @@ const ManuallyAdd = ({
   const [capturedSectionsT, setCapturedSectionsT] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const [editSection, setEditSection] = useState();
+  const [isBtnLoading,setIsBtnLoading]=useState(false);
 
   const dosList = patientDosResult?.data?.response?.map(
     (item) =>
@@ -431,7 +436,17 @@ const ManuallyAdd = ({
 
     setListOfSection[selectMeat]((prev) => [
       ...prev,
-      ...[{ section: selectedSection, hyperlinks: res, count: selectedCount }],
+      ...[
+        {
+          section: selectedSection,
+          hyperlinks: res,
+          count: selectedCount,
+          monitorAspect: form?.MonitorAspect,
+          evaluateAspect: form?.EvaluationAspect,
+          assessmentAspect: form?.AssessmentAspect,
+          treatmentAspect: form?.TreatmentAspect,
+        },
+      ],
     ]);
   };
 
@@ -597,6 +612,7 @@ const ManuallyAdd = ({
     let data = {};
     const forms = form.getFieldsValue();
     if (isEditPage) {
+      setIsBtnLoading(true);
       const filterData =
         patientDetailsResult?.data?.response?.meatCriteria?.find(
           (item) => item.diagnosisCode == isEditValue.diagnosisCode
@@ -605,6 +621,7 @@ const ManuallyAdd = ({
       data = {
         patientId: await getStorage("patientId"),
         oldDiagnosisCode: isEditValue.diagnosisCode,
+        diagnosisCode: selectDisDetails?.diagnosisCode,
         newDiagnosisCode: code,
         description: forms.description ? forms.description : description,
         dateOfServices: forms.dos,
@@ -612,6 +629,14 @@ const ManuallyAdd = ({
         hyperlinks: listOfSection
           .map((item) => item.hyperlinks)
           .flat(capturedSections.length + 1),
+        monitorAspect:
+          listOfSectionM.length > 0 ? listOfSectionM[0].monitorAspect : null,
+        evaluateAspect:
+          listOfSectionE.length > 0 ? listOfSectionE[0].evaluateAspect : null,
+        assessmentAspect:
+          listOfSectionA.length > 0 ? listOfSectionA[0].assessmentAspect : null,
+        treatmentAspect:
+          listOfSectionT.length > 0 ? listOfSectionT[0].treatmentAspect : null,
         monitorHyperLink:
           listOfSectionM.length > 0
             ? listOfSectionM
@@ -702,7 +727,11 @@ const ManuallyAdd = ({
       try {
         let res = {};
         if (isEditPage) {
-          res = await diseaseEdit(data);
+          if (meatFormDisplay) {
+            res = await suggestedToValidMove(data);
+          } else {
+            res = await diseaseEdit(data);
+          }
         } else if (isEditMeat) {
           res = await diseaseEditMeat(data);
         } else {
@@ -712,19 +741,38 @@ const ManuallyAdd = ({
           handleCloseModal(false);
           getResponePopup(res);
           resetForms({ reload: true });
+          setIsBtnLoading(false);
         } else if (res?.status == "CUSTOM_EXCEPTION") {
           getResponePopup(res);
+          setIsBtnLoading(false);
         } else if (res?.status == "USER_DEFINED_ERROR") {
           getResponePopup(res);
+          setIsBtnLoading(false);
         }
       } catch (error) {}
+    }else{
+      if (meatFormDisplay) {
+        const res = await suggestedToValidMove(data);
+        if (res?.status == "SUCCESS") {
+          handleCloseModal(false);
+          getResponePopup(res);
+          resetForms({ reload: true });
+          setIsBtnLoading(false);
+        } else if (res?.status == "CUSTOM_EXCEPTION") {
+          getResponePopup(res);
+          setIsBtnLoading(false);
+        } else if (res?.status == "USER_DEFINED_ERROR") {
+          getResponePopup(res);
+          setIsBtnLoading(false);
+        }
+      }
     }
   };
 
   const resetForms = ({ reload = false }) => {
     handleCloseModal(false);
     form.resetFields();
-    getPatient(reload)
+    getPatient(reload);
 
     setValidCode("");
     setProviderDetails([]);
@@ -763,11 +811,12 @@ const ManuallyAdd = ({
     setListOfSectionT([]);
     setShowSectionT(false);
     setCapturedSectionsT([]);
+    setSuggestedMeatForm && setSuggestedMeatForm(false)
   };
 
   const getPatient = async (reload) => {
     // if (reload) {
-      const res = await getpatientDetailsData(
+    const res = await getpatientDetailsData(
       patientDetailsResult?.data?.response?.patientId,
       patientDetailsResult?.data?.response?.processedYear,
       patientDetailsResult?.data?.response?.dateOfService,
@@ -775,7 +824,6 @@ const ManuallyAdd = ({
       await getStorage("role")
     );
     // }
-    
   };
 
   const sectionDelete = (item) => {
@@ -916,7 +964,7 @@ const ManuallyAdd = ({
   };
 
   useEffect(() => {
-    if (isEditPage) {
+    if (isEditPage && !meatFormDisplay) {
       const filterData =
         patientDetailsResult?.data?.response?.meatCriteria?.find(
           (item) => item.diagnosisCode == isEditValue.diagnosisCode
@@ -961,7 +1009,8 @@ const ManuallyAdd = ({
       setListOfSectionA(transformData(sectionListA));
       setListOfSectionT(transformData(sectionListT));
     }
-  }, [isEditPage, isEditValue, reset]);
+      handleSelectChange(isEditValue.dateOfServices, "dos");
+  }, [isEditPage, isEditValue, reset,meatFormDisplay]);
 
   useEffect(() => {
     if (isEditMeat) {
@@ -1012,12 +1061,20 @@ const ManuallyAdd = ({
   //   }
   // }, [isDosSelected]);
 
+  useEffect(() => {
+    if(meatFormDisplay){
+      setMeatDisplay(true);
+    }
+  }, [meatFormDisplay]);
+
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
         <div className="font-bold text-[16px]">
           {isEditPage
-            ? "Edit Valid Code"
+            ? meatFormDisplay
+              ? "Suggested Meat Add"
+              : "Edit Valid Code"
             : isEditMeat
             ? "Meat Edit"
             : "Add Valid Code"}{" "}
@@ -1030,12 +1087,13 @@ const ManuallyAdd = ({
             resetForms({ reload: false });
             form.resetFields();
             setProviderDetails([]);
+            setSuggestedMeatForm && setSuggestedMeatForm(false);
           }}
         >
           <CloseOutlined />
         </div>
       </div>
-      {!meatDisplay ? (
+      {!meatDisplay && !meatFormDisplay ? (
         <>
           <Form
             form={form}
@@ -1047,7 +1105,7 @@ const ManuallyAdd = ({
               handledSave(form);
             }}
             onFinishFailed={() => {}}
-            onChange={(e) =>{
+            onChange={(e) => {
               console.log(e);
             }}
           >
@@ -1389,6 +1447,8 @@ const ManuallyAdd = ({
               isEditMeatValue={isEditMeatValue}
               form={form}
               disabled={false}
+              meatFormDisplay={meatFormDisplay}
+              isBtnLoading={isBtnLoading}
             />
           </Form>
         </>
@@ -1412,6 +1472,7 @@ const enhancer = connect(
     diseaseEdit: patientDetailsAction.diseaseEdit,
     diseaseEditMeat: patientDetailsAction.diseaseEditMeat,
     getpatientDetailsData: patientDetailsAction.patientDetailsAction,
+    suggestedToValidMove: patientDetailsAction.suggestedToValidMove,
   }
 );
 

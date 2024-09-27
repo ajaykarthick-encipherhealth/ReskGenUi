@@ -119,6 +119,11 @@ export const activeLabels = createActionThunk(
   network.activeLabel
 );
 
+export const suggestedToValidMove = createActionThunk(
+  "DISEASE_EDIT",
+  network.suggestedToValid
+);
+
 export const getSelectedDosPageNumber = createAction("GET_SELECTED_DOS_PAGE_NUMBER");
 
 export const getCurrentDiseaseType = createAction("GET_CURRENT_DISEASE_TYPE");

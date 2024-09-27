@@ -12,6 +12,7 @@ import {
   moveToStrightAction,
 } from "../function/ReusableFunctions";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
+import { suggestedMeatCheck } from "../../../../../stores/patient/details/network";
 
 const MovementAction = ({
   validAction,
@@ -25,6 +26,7 @@ const MovementAction = ({
   patientDetailsResult,
   getpatientDetailsData,
   isComboCode,
+  setSuggestedMeatForm
 }) => {
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const onChangeValues = (data) => {
@@ -35,6 +37,12 @@ const MovementAction = ({
   };
   const [isValidAction, setIsValidAction] = useState("");
 
+
+  const meatSuggestedApi = async (code)=>{
+   const result = await suggestedMeatCheck(code);
+   return result?.response;
+  }
+
   const handleCloseModal = () => {};
   return (
     <>
@@ -42,6 +50,8 @@ const MovementAction = ({
         {validAction && (
           <Popconfirm
             onConfirm={() => {
+              meatSuggestedApi(selectDisDetails?.diagnosisCode) ?
+              setSuggestedMeatForm(true) :
               handleSubmitValidNotes({
                 values: null,
                 setFileLoading,
