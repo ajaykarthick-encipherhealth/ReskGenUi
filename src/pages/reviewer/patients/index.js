@@ -304,6 +304,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     // getpatientsListFilter({ url: resoureUrl });
     resetPageNumber(setPageNo);
   };
+
+
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
     inputValue.name = data.patientName;
@@ -377,6 +379,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     }
     setSelectedPriority(value);
   };
+
   const handleDatePickerChange = (dateString) => {
     if (dateString[0] != "") {
       let convertStartDate =
@@ -498,7 +501,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   // );
 
   const options = [{ label: "All", value: "" }, ...priorityOptions];
-
+console.log(selectedPriority,"selectedPriority")
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -587,10 +590,11 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                     resetPageNumber(setPageNo);
                                   }}
                                   value={
-                                    selectedPriority && {
-                                      label: selectedPriority,
-                                      value: selectedPriority,
-                                    }
+                                    selectedPriority 
+                                    // && {
+                                    //   label: selectedPriority,
+                                    //   value: selectedPriority,
+                                    // }
                                   }
                                   options={options}
                                   className="custom-react-select"
