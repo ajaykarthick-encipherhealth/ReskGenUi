@@ -512,7 +512,7 @@ const Codify = ({
             ) : (
               <div></div>
             )}
-            {currentButton === "Codes" && noData?.data  (
+            {currentButton === "Codes" && noData?.data && (
               <p className="d-flex justify-content-center">
                 "Uh oh! It seems there might be a typo. Please review your
                 spelling or try a different keyword."
