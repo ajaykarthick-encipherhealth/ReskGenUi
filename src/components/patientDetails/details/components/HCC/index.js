@@ -344,6 +344,7 @@ const HccCards = ({
                                         "DIRECT_COMBINATION_RULE_ENGINE"
                                     }
                                     setSuggestedMeatForm={setSuggestedMeatForm}
+                                    meatCriteriaList={meatCriteriaList}
                                   />
                                 )}
                                 <Popover

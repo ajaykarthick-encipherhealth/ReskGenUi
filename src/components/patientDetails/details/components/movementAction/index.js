@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 import { Tooltip, Popconfirm, message } from "antd";
 import {
+  getMeatAnyOneFindCheck,
   handleSubmitValidNotes,
   moveToStrightAction,
 } from "../function/ReusableFunctions";
@@ -26,7 +27,8 @@ const MovementAction = ({
   patientDetailsResult,
   getpatientDetailsData,
   isComboCode,
-  setSuggestedMeatForm
+  setSuggestedMeatForm,
+  meatCriteriaList,
 }) => {
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const onChangeValues = (data) => {
@@ -37,11 +39,57 @@ const MovementAction = ({
   };
   const [isValidAction, setIsValidAction] = useState("");
 
-
-  const meatSuggestedApi = async (code)=>{
-   const result = await suggestedMeatCheck(code);
-   return result?.response;
-  }
+  const onConfirmValidMove = async () => {
+    if (cardTitle == "SUGGESTED") {
+      var meatFoundResult = getMeatAnyOneFindCheck(
+        selectDisDetails?.diagnosisCode,
+        meatCriteriaList
+      );
+      if (!meatFoundResult) {
+        setFileLoading(true);
+        const result = await suggestedMeatCheck(
+          selectDisDetails?.diagnosisCode
+        );
+        if (result?.response) {
+          setSuggestedMeatForm && setSuggestedMeatForm(true);
+          setFileLoading(false);
+        } else {
+          handleSubmitValidNotes({
+            values: null,
+            setFileLoading,
+            setConfirmNotesModalValid,
+            isValidAction,
+            selectDisDetails,
+            getpatientDetailsData,
+            patientDetailsResult,
+            handleCloseModal,
+          });
+        }
+      } else {
+        handleSubmitValidNotes({
+          values: null,
+          setFileLoading,
+          setConfirmNotesModalValid,
+          isValidAction,
+          selectDisDetails,
+          getpatientDetailsData,
+          patientDetailsResult,
+          handleCloseModal,
+        });
+      }
+    } else {
+      handleSubmitValidNotes({
+        values: null,
+        setFileLoading,
+        setConfirmNotesModalValid,
+        isValidAction,
+        selectDisDetails,
+        getpatientDetailsData,
+        patientDetailsResult,
+        handleCloseModal,
+      });
+    }
+  };
 
   const handleCloseModal = () => {};
   return (
@@ -50,18 +98,7 @@ const MovementAction = ({
         {validAction && (
           <Popconfirm
             onConfirm={() => {
-              meatSuggestedApi(selectDisDetails?.diagnosisCode) ?
-              setSuggestedMeatForm(true) :
-              handleSubmitValidNotes({
-                values: null,
-                setFileLoading,
-                setConfirmNotesModalValid,
-                isValidAction,
-                selectDisDetails,
-                getpatientDetailsData,
-                patientDetailsResult,
-                handleCloseModal,
-              });
+              onConfirmValidMove();
             }}
             title="You want move to valid?"
             placement="bottom"
@@ -143,15 +180,13 @@ const MovementAction = ({
               }}
             />
           </Popconfirm>
-
-        ) : 
-      //   <CloseCircleFilled
-      //   className={styles.deleteIcon}
-      //   onClick={() => message.warning("Delete only formed codes")}
-      // />
-      ""
-      }
-
+        ) : (
+          //   <CloseCircleFilled
+          //   className={styles.deleteIcon}
+          //   onClick={() => message.warning("Delete only formed codes")}
+          // />
+          ""
+        )}
       </div>
     </>
   );
