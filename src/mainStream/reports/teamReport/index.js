@@ -81,8 +81,10 @@ const TeamReport = ({
             headers: { Authorization: `Bearer ${await getStorage("token")}` },
           }
         ).then((res) => res.json());
-        const seletedAll =res?.response?.response?.data?.map(item=>item?.patientId);
-        setSelectedRows(seletedAll.length>0 ? seletedAll : []);
+        const seletedAll = res?.response?.response?.data?.map(
+          (item) => item?.patientId
+        );
+        setSelectedRows(seletedAll.length > 0 ? seletedAll : []);
       } catch (error) {}
     }
     if (activeTab === "Team") {
@@ -104,8 +106,10 @@ const TeamReport = ({
             headers: { Authorization: `Bearer ${await getStorage("token")}` },
           }
         ).then((res) => res.json());
-        const seletedAll = res?.response?.response?.data?.map(item=>item?.patientId);
-        setSelectedRows(seletedAll.length>0 ? seletedAll : []);
+        const seletedAll = res?.response?.response?.data?.map(
+          (item) => item?.patientId
+        );
+        setSelectedRows(seletedAll.length > 0 ? seletedAll : []);
         setIsLoading(false);
       } catch (error) {}
     }
@@ -297,51 +301,36 @@ const TeamReport = ({
                   paddingBottom: "10px",
                 }}
               >
-                {" "}
-                {
-                  reportListAll?.response?.response?.data?.length > 0 && (
-                    // (isLoading ? (
-                    //   <Spin />
-                    // ) : (
-                    <>
-                      <div className="col-xl-1 d-flex">
-                        <div>
-                          <input
-                            type="checkbox"
-                            onChange={handleHeaderCheckboxChange}
-                            className={
-                              styles.checkAlign +
-                              (selectAll ? " " + TableStyle.customChecked : "")
-                            }
-                            checked={selectAll && selectedRows?.length > 0}
-                          />
-                        </div>
-                        <span className={`pl-0 text-start ${styles.pName}`}>
-                          All
-                        </span>
-                      </div>
-                      <div className="col-xl-1 d-flex pt-0">
-                        <div>
-                          <input
-                            type="checkbox"
-                            onChange={handleHeaderCheckbox}
-                            className={
-                              styles.checkAlign +
-                              (selectAllFlags
-                                ? " " + TableStyle.customChecked
-                                : "")
-                            }
-                            checked={selectAllFlags}
-                          />
-                        </div>
-                        <span className={`pl-4 text-start ${styles.pName}`}>
-                          All Flags
-                        </span>
-                      </div>
-                    </>
-                  )
-                  // ))
-                }
+                <div className="col-xl-1 d-flex">
+                  <div>
+                    <input
+                      type="checkbox"
+                      onChange={handleHeaderCheckboxChange}
+                      className={
+                        styles.checkAlign +
+                        (selectAll ? " " + TableStyle.customChecked : "")
+                      }
+                      checked={selectAll && selectedRows?.length > 0}
+                    />
+                  </div>
+                  <span className={`pl-0 text-start ${styles.pName}`}>All</span>
+                </div>
+                <div className="col-xl-1 d-flex pt-0">
+                  <div>
+                    <input
+                      type="checkbox"
+                      onChange={handleHeaderCheckbox}
+                      className={
+                        styles.checkAlign +
+                        (selectAllFlags ? " " + TableStyle.customChecked : "")
+                      }
+                      checked={selectAllFlags}
+                    />
+                  </div>
+                  <span className={`pl-4 text-start ${styles.pName}`}>
+                    All Flags
+                  </span>
+                </div>
               </div>
               <div className="row">
                 <div>

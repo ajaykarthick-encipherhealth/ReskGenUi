@@ -345,8 +345,8 @@ const InitialCard = ({
                   paddingBottom: "10px",
                 }}
               >
-                {reportListAll?.response?.data?.length > 0 && (
-                  <>
+                {/* {reportListAll?.response?.data?.length > 0 && (
+                  <> */}
                     <div className="col-xl-1 d-flex">
                       <div>
                         <input
@@ -385,8 +385,8 @@ const InitialCard = ({
                         All Flags
                       </span>
                     </div>
-                  </>
-                )}
+                  {/* </>
+                )} */}
               </div>
 
               <div className="row">

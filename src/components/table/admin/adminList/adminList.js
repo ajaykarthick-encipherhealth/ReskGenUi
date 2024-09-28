@@ -94,7 +94,7 @@ const AdminList = ({
             mode={"multiple"}
             onChange={(e) => handleRows(e, data?.role)}
             options={items}
-            placeholder={!data?.role[0] && "Select Role"}
+            placeholder={data?.role?.length > 0 ? data?.role[0] : "Select Role"}
             defaultValue={isMultiple ? data.role : data?.role}
             // open={open}
             onDropdownVisibleChange={(visible) => setOpen(visible)}
