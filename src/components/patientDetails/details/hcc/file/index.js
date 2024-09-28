@@ -244,15 +244,6 @@ const File = ({
     }
   };
   
-  // useEffect(() => {
-  //   if(isValidAction?.title == "SUGGESTED" || isValidAction?.title == "DELETED"){
-  //     setSelectCardTitle(isValidAction);
-  //     console.log(isValidAction);
-  //     console.log(selectDisDetails)
-  //   }
-
-   
-  // }, [isValidAction]);
   return (
     <>
       {fileLoading ? <LogoLoader /> : null}
