@@ -1814,6 +1814,19 @@ export const stringToColour = (str) => {
   return colour;
 };
 
+export const getMeatAnyOneFindCheck = (code, data) => {
+  const result = data?.filter(
+    (res2) => res2?.diagnosisCode?.replace(".", "") == code?.replace(".", "")
+  );
+  if (result?.length != 0) {
+    if (result[0]?.monitorAspect || result[0]?.evaluateAspect || result[0]?.assessmentAspect || result[0]?.treatmentAspect) {
+      return true;
+    }else{
+      return false;
+    }   
+  }
+};
+
 const findSectionHyperlink = (hyperlinks, header) => {
   const headerResult = hyperlinks?.filter((res2) => res2.header === header);
   return headerResult;

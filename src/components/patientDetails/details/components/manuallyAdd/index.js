@@ -57,6 +57,7 @@ const ManuallyAdd = ({
   setSuggestedMeatForm,
   suggestedToValidMove,
   selectDisDetails,
+  selectCardTitle
 }) => {
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(true);
@@ -728,7 +729,7 @@ const ManuallyAdd = ({
         let res = {};
         if (isEditPage) {
           if (meatFormDisplay) {
-            res = await suggestedToValidMove(data);
+            res = await suggestedToValidMove(data,selectCardTitle);
           } else {
             res = await diseaseEdit(data);
           }
@@ -752,7 +753,7 @@ const ManuallyAdd = ({
       } catch (error) {}
     }else{
       if (meatFormDisplay) {
-        const res = await suggestedToValidMove(data);
+        const res = await suggestedToValidMove(data,selectCardTitle);
         if (res?.status == "SUCCESS") {
           handleCloseModal(false);
           getResponePopup(res);
