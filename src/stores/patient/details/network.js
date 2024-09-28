@@ -183,6 +183,30 @@ export async function deleteflag(obj) {
   return data;
 }
 
+export async function deleteNotes(obj) {
+  const options = {
+    method: "DELETE",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/notes/delete`,
+    options
+  );
+  return data;
+}
+
+export async function deleteComments(obj) {
+  const options = {
+    method: "DELETE",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/comment/delete`,
+    options
+  );
+  return data;
+}
+
 
 export async function isValideCode(code) {
   const options = {

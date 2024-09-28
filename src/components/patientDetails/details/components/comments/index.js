@@ -6,13 +6,15 @@ import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Popover, Avatar, Tooltip, notification } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle, faClock } from "@fortawesome/free-solid-svg-icons";
+import { faUserCircle, faClock, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { connect } from "react-redux";
 import { getStorage } from "../../../../../utils/storages";
+import { getResponePopup } from "../../../../../utils/reusable";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
 
-const Comments = ({ setOpen, open, patientDetailsResult }) => {
+const Comments = ({ setOpen, open, patientDetailsResult,isDeleteComments }) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
     comments: "",
@@ -23,6 +25,8 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
   const [validated, setValidated] = useState(false);
   const [localPatientId, setLocalPatientId] = useState("");
   const [userDetails, setUserDetails] = useState("");
+
+  console.log(patientDetailsResult?.data?.response,'patientDetailsResult')
   const getCommentsList = async () => {
     const yearData = patientDetailsResult?.data?.response;
 
@@ -33,7 +37,8 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
         yearData?.dateOfService || ""
       }`
     );
-    setCommentList(response.data.response);
+    console.log(response,"commentList")
+    setCommentList(response);
     setFilterDataLoading(false);
   };
 
@@ -97,6 +102,25 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
         } else {
         }
       }
+    }
+  };
+
+  const handleDelete = async () => {
+    const payload = {
+      flagId: inputValue.flagId,
+      patientId: patientDetailsResult?.data?.response?.patientId,
+      comment: inputValue.comments,
+      processedYear: patientDetailsResult?.data?.response?.processedYear,
+      dateOfService: patientDetailsResult?.data?.response?.dateOfService,
+    };
+
+    try {
+      const response = await isDeleteComments(payload);
+      getResponePopup(response);
+      getCommentsList();
+    } catch (error) {
+      getResponePopup(response);
+      console.error(error);
     }
   };
 
@@ -218,9 +242,26 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
             </div>
           </Form>
 
-          {commentList.map((data, index) => (
-            <div className={visitStyles.comments_card}>
-              <div className={`${visitStyles.commentNameHead}`}>
+          {commentList?.map((data, index) => (
+            <div
+              className={`${visitStyles.comments_card} position-relative`}
+              key={index}
+            >
+              <div
+                className="position-absolute top-0 end-0 mt-2 me-2 p-9"
+                style={{ cursor: "pointer" }}
+              >
+                <FontAwesomeIcon
+                  icon={faXmarkCircle}
+                  onClick={handleDelete}
+                  style={{ color: "#be3144" }}
+                />
+              </div>
+
+              <div
+                className={`${visitStyles.commentNameHead}`}
+                style={{ paddingTop: "20px" }}
+              >
                 <span className={visitStyles.commentsName}>{data.comment}</span>
                 <Tooltip placement="bottom" title={data.commentCreatedBy}>
                   <Popover
@@ -262,5 +303,8 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
 
 const enhancer = connect((state) => ({
   patientDetailsResult: state?.patientDetails?.details?.patientResult,
-}));
+}),
+{
+  isDeleteComments: detailsActions.isDeleteComments,
+});
 export default enhancer(Comments);

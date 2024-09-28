@@ -58,6 +58,17 @@ export const isDeleteFlag = createActionThunk(
   "DELETE_FLAG",
   network.deleteflag
 );
+
+export const isDeleteNotes = createActionThunk(
+  "DELETE_NOTES",
+  network.deleteNotes
+);
+
+export const isDeleteComments = createActionThunk(
+  "DELETE_COMMENTS",
+  network.deleteComments
+);
+
 export const getValideCode = createActionThunk(
   "GET_VALID_CODE",
   network.isValideCode
