@@ -30,7 +30,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
   const [validated, setValidated] = useState(false);
   const [userDetails, setUserDetails] = useState();
   const [localPatientId, setLocalPatientId] = useState("");
-  console.log(patientDetailsResult, "patientDetailsResult");
+
   const handleSubmitNotes = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -88,7 +88,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
 
   const handleEnterTextNotes = async (event) => {
     const yearData = patientDetailsResult?.data?.response;
-    console.log(yearData, "yearData");
+
     if (event.charCode == 13) {
       if (inputValue.comments.trim() != "") {
         const orgId = getStorage("orgId");
@@ -124,7 +124,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
 
   const getNotesList = async () => {
     const yearData = patientDetailsResult?.data?.response;
-    console.log(yearData, "");
+
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
         `dbservice/notes?patientId=${
@@ -201,7 +201,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
     setLocalPatientId(patientId);
     getNotesList();
   }, []);
-  console.log(notesList, "notesList");
+
   return (
     <Offcanvas
       onHide={setOpen}
