@@ -155,6 +155,7 @@ const AdminList = ({
       }
     } catch (err) {
       setRoleChangeLoader(false);
+      setPopoverVisible(null);
       getResponePopup(err?.response);
     }
   };
