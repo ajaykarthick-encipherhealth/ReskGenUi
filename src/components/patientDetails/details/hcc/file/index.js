@@ -95,6 +95,8 @@ const File = ({
   const [deletedMeatList, setDeletedMeatList] = useState([]);
   const [showList, setShowList] = useState(["care"]);
   const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
+  const [selectCardTitle, setSelectCardTitle] = useState('');
+
 
   useEffect(() => {
     var orgId = getStorage("orgId");
@@ -241,6 +243,16 @@ const File = ({
       setShowList((prev) => [...prev, value]);
     }
   };
+  
+  // useEffect(() => {
+  //   if(isValidAction?.title == "SUGGESTED" || isValidAction?.title == "DELETED"){
+  //     setSelectCardTitle(isValidAction);
+  //     console.log(isValidAction);
+  //     console.log(selectDisDetails)
+  //   }
+
+   
+  // }, [isValidAction]);
   return (
     <>
       {fileLoading ? <LogoLoader /> : null}
@@ -484,6 +496,7 @@ const File = ({
                               cardTitle="SUGGESTED"
                               provided={provided}
                               setSuggestedMeatForm={setSuggestedMeatForm}
+                              setSelectCardTitle={setSelectCardTitle}
                             />
                           </div>
                         </div>
@@ -656,6 +669,8 @@ const File = ({
                               setIsValidAction={setIsValidAction}
                               cardTitle="DELETED"
                               provided={provided}
+                              setSuggestedMeatForm={setSuggestedMeatForm}
+                              setSelectCardTitle={setSelectCardTitle}
                               remove
                             />
                           </div>
@@ -679,6 +694,9 @@ const File = ({
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
         dragMovemntAction={true}
+        setSuggestedMeatForm={setSuggestedMeatForm}
+        meatCriteriaList={allMeatList}
+        setSelectCardTitle={setSelectCardTitle}
       />
 
       <ModelIndex
@@ -795,6 +813,7 @@ const File = ({
                 meatFormDisplay={true}
                 setSuggestedMeatForm={setSuggestedMeatForm}
                 selectDisDetails={selectDisDetails}
+                selectCardTitle={selectCardTitle}
               />
             </div>
           </div>

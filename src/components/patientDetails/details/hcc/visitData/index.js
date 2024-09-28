@@ -89,6 +89,8 @@ const VisitData = ({
   const [allMeatList, setAllMeatList] = useState([]);
   const [deletedMeatList, setDeletedMeatList] = useState([]);
   const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
+  const [selectCardTitle, setSelectCardTitle] = useState('');
+
 
   useEffect(() => {
     var orgId = getStorage("orgId");
@@ -385,6 +387,7 @@ const VisitData = ({
                               provided={provided}
                               popup={zIndex}
                               setSuggestedMeatForm={setSuggestedMeatForm}
+                              setSelectCardTitle={setSelectCardTitle}
                             />
                           </div>
                         </div>
@@ -464,6 +467,8 @@ const VisitData = ({
                               isVisitData={true}
                               provided={provided}
                               popup={zIndex}
+                              setSuggestedMeatForm={setSuggestedMeatForm}
+                              setSelectCardTitle={setSelectCardTitle}
                             />
                           </div>
                         </div>
@@ -667,6 +672,7 @@ const VisitData = ({
                               provided={provided}
                               isVisitData={true}
                               setSuggestedMeatForm={setSuggestedMeatForm}
+                              setSelectCardTitle={setSelectCardTitle}
                             />
                           </div>
                         </div>
@@ -806,6 +812,8 @@ const VisitData = ({
                               cardTitle="DELETED"
                               provided={provided}
                               isVisitData={true}
+                              setSuggestedMeatForm={setSuggestedMeatForm}
+                              setSelectCardTitle={setSelectCardTitle}
                             />
                           </div>
                         </div>
@@ -857,6 +865,9 @@ const VisitData = ({
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
         dragMovemntAction={true}
+        setSuggestedMeatForm={setSuggestedMeatForm}
+        meatCriteriaList={allMeatList}
+        setSelectCardTitle={setSelectCardTitle}
       />
 
       {opens && combiTree[0]?.children?.length > 0 ? (
@@ -1006,6 +1017,7 @@ const VisitData = ({
                 meatFormDisplay={true}
                 setSuggestedMeatForm={setSuggestedMeatForm}
                 selectDisDetails={selectDisDetails}
+                selectCardTitle={selectCardTitle}
               />
             </div>
           </div>

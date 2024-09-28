@@ -29,6 +29,7 @@ const MovementAction = ({
   isComboCode,
   setSuggestedMeatForm,
   meatCriteriaList,
+  setSelectCardTitle
 }) => {
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const onChangeValues = (data) => {
@@ -40,7 +41,7 @@ const MovementAction = ({
   const [isValidAction, setIsValidAction] = useState("");
 
   const onConfirmValidMove = async () => {
-    if (cardTitle == "SUGGESTED") {
+    setSelectCardTitle && setSelectCardTitle(isValidAction);
       var meatFoundResult = getMeatAnyOneFindCheck(
         selectDisDetails?.diagnosisCode,
         meatCriteriaList
@@ -77,18 +78,6 @@ const MovementAction = ({
           handleCloseModal,
         });
       }
-    } else {
-      handleSubmitValidNotes({
-        values: null,
-        setFileLoading,
-        setConfirmNotesModalValid,
-        isValidAction,
-        selectDisDetails,
-        getpatientDetailsData,
-        patientDetailsResult,
-        handleCloseModal,
-      });
-    }
   };
 
   const handleCloseModal = () => {};

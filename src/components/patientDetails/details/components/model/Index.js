@@ -3,10 +3,11 @@ import { Modal, Form, Input, Space } from "antd";
 import { Button } from "react-bootstrap";
 import CamboTree from "../../hcc/org";
 import PdfViewer from "../../PdfViewerComponent";
-import { handleSubmitValidNotes } from "../function/ReusableFunctions";
+import { getMeatAnyOneFindCheck, handleSubmitValidNotes } from "../function/ReusableFunctions";
 import { useDispatch, connect } from "react-redux";
 import EditForm from "./EditForm";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
+import { suggestedMeatCheck } from "../../../../../stores/patient/details/network";
 
 const ModelIndex = ({
   validated,
@@ -36,10 +37,61 @@ const ModelIndex = ({
   dragMovemntAction,
   setOpens,
   setCombiTree,
+  setSuggestedMeatForm,
+  meatCriteriaList,
+  setSelectCardTitle
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
   const dispatch = useDispatch();
+
+  const onConfirmValidMove = async (openState) => {
+    handleCloseModal();
+    setSelectCardTitle && setSelectCardTitle(isValidAction);
+      var meatFoundResult = getMeatAnyOneFindCheck(
+        selectDisDetails?.diagnosisCode,
+        meatCriteriaList
+      );
+      console.log(meatFoundResult)
+      if (!meatFoundResult) {
+        setFileLoading(true);
+        const result = await suggestedMeatCheck(
+          selectDisDetails?.diagnosisCode
+        );
+        if (result?.response) {
+          setSuggestedMeatForm && setSuggestedMeatForm(true);
+          setFileLoading(false);
+        } else {
+          handleSubmitValidNotes({
+            setFileLoading,
+            setConfirmNotesModalValid,
+            getPatientDetailsReload,
+            isValidAction,
+            selectDisDetails,
+            getpatientDetailsData,
+            patientDetailsResult,
+            getLabDetails,
+            getRadiologyDetails,
+            handleCloseModal,
+          })
+        }
+      } else {
+        handleSubmitValidNotes({
+          setFileLoading,
+          setConfirmNotesModalValid,
+          getPatientDetailsReload,
+          isValidAction,
+          selectDisDetails,
+          getpatientDetailsData,
+          patientDetailsResult,
+          getLabDetails,
+          getRadiologyDetails,
+          handleCloseModal,
+        })
+      }
+  };
+
+
   return (
     <>
       {dragMovemntAction ? (
@@ -49,18 +101,7 @@ const ModelIndex = ({
             open={openState}
             centered
             onOk={() =>
-              handleSubmitValidNotes({
-                setFileLoading,
-                setConfirmNotesModalValid,
-                getPatientDetailsReload,
-                isValidAction,
-                selectDisDetails,
-                getpatientDetailsData,
-                patientDetailsResult,
-                getLabDetails,
-                getRadiologyDetails,
-                handleCloseModal,
-              })
+              onConfirmValidMove(openState)
             }
             onCancel={() => handleCloseModal()}
           ></Modal>

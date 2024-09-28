@@ -77,7 +77,8 @@ const HccCards = ({
   radiologyFile,
   radiologyDetailsResult,
   patientDetailsResult,
-  setSuggestedMeatForm
+  setSuggestedMeatForm,
+  setSelectCardTitle
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -319,7 +320,7 @@ const HccCards = ({
                                     ) : null}
                                   </>
                                 ) : null}
-                                {isDosSelected && (
+                                {/* {isDosSelected && ( */}
                                   <MovementAction
                                     validAction={
                                       cardTitle == "HCC" ? false : true
@@ -345,8 +346,9 @@ const HccCards = ({
                                     }
                                     setSuggestedMeatForm={setSuggestedMeatForm}
                                     meatCriteriaList={meatCriteriaList}
+                                    setSelectCardTitle={setSelectCardTitle}
                                   />
-                                )}
+                                {/* )} */}
                                 <Popover
                                   placement="bottom"
                                   title={""}
