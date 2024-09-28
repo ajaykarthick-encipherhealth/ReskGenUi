@@ -71,11 +71,9 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
 
   const handleDelete = async () => {
     const payload = {
-      flagId: inputValue.flagId,
-      patientId: patientDetailsResult?.data?.response?.patientId,
-      comment: inputValue.comments,
-      processedYear: patientDetailsResult?.data?.response?.processedYear,
-      dateOfService: patientDetailsResult?.data?.response?.dateOfService,
+      patientId: notesList?.patientId,
+      noteId: notesList?.notes?.[0]?.noteId,
+      active: false,
     };
 
     try {
@@ -83,7 +81,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
       getResponePopup(response);
       getNotesList();
     } catch (error) {
-      getResponePopup(response);
+      getResponePopup(error?.response);
       console.error(error);
     }
   };
@@ -137,7 +135,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
           yearData?.dateOfService ? yearData?.dateOfService : ""
         }`
     );
-    setNotesList(response?.data?.response?.notes);
+    setNotesList(response?.data?.response);
     setFilterDataLoading(false);
   };
 
@@ -253,7 +251,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
               </div>
             </div>
           </Form>
-          {notesList?.map((data, index) => (
+          {notesList?.notes?.map((data, index) => (
             <div
               className={`${visitStyles.comments_card} position-relative`}
               key={index}
@@ -268,7 +266,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
                   style={{ color: "#be3144" }}
                 />
               </div>
-          
+
               <div
                 className={`${visitStyles.commentNameHead}`}
                 style={{ paddingTop: "20px" }}

@@ -6,7 +6,11 @@ import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Popover, Avatar, Tooltip, notification } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle, faClock, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUserCircle,
+  faClock,
+  faXmarkCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { connect } from "react-redux";
@@ -14,7 +18,12 @@ import { getStorage } from "../../../../../utils/storages";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 
-const Comments = ({ setOpen, open, patientDetailsResult,isDeleteComments }) => {
+const Comments = ({
+  setOpen,
+  open,
+  patientDetailsResult,
+  isDeleteComments,
+}) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
     comments: "",
@@ -26,7 +35,6 @@ const Comments = ({ setOpen, open, patientDetailsResult,isDeleteComments }) => {
   const [localPatientId, setLocalPatientId] = useState("");
   const [userDetails, setUserDetails] = useState("");
 
-  console.log(patientDetailsResult?.data?.response,'patientDetailsResult')
   const getCommentsList = async () => {
     const yearData = patientDetailsResult?.data?.response;
 
@@ -37,8 +45,7 @@ const Comments = ({ setOpen, open, patientDetailsResult,isDeleteComments }) => {
         yearData?.dateOfService || ""
       }`
     );
-    console.log(response,"commentList")
-    setCommentList(response);
+    setCommentList(response?.data?.response);
     setFilterDataLoading(false);
   };
 
@@ -107,11 +114,9 @@ const Comments = ({ setOpen, open, patientDetailsResult,isDeleteComments }) => {
 
   const handleDelete = async () => {
     const payload = {
-      flagId: inputValue.flagId,
-      patientId: patientDetailsResult?.data?.response?.patientId,
-      comment: inputValue.comments,
-      processedYear: patientDetailsResult?.data?.response?.processedYear,
-      dateOfService: patientDetailsResult?.data?.response?.dateOfService,
+      patientId: commentList?.patientId,
+      commentId: commentList?.comments?.[0]?.commentId,
+      active: false,
     };
 
     try {
@@ -242,7 +247,7 @@ const Comments = ({ setOpen, open, patientDetailsResult,isDeleteComments }) => {
             </div>
           </Form>
 
-          {commentList?.map((data, index) => (
+          {commentList?.comments?.map((data, index) => (
             <div
               className={`${visitStyles.comments_card} position-relative`}
               key={index}
@@ -301,10 +306,12 @@ const Comments = ({ setOpen, open, patientDetailsResult,isDeleteComments }) => {
   );
 };
 
-const enhancer = connect((state) => ({
-  patientDetailsResult: state?.patientDetails?.details?.patientResult,
-}),
-{
-  isDeleteComments: detailsActions.isDeleteComments,
-});
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
+  }),
+  {
+    isDeleteComments: detailsActions.isDeleteComments,
+  }
+);
 export default enhancer(Comments);
