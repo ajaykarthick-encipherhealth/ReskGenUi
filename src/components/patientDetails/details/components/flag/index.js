@@ -340,7 +340,6 @@ const enhancer = connect(
   {
     getFlagDetailsData: detailsActions.getFlagDetailsAction,
     isdeleteFlag: detailsActions.isDeleteFlag,
-    flagsDetailsResult:detailsActions
   }
 );
 export default enhancer(Flag);
