@@ -281,3 +281,23 @@ export async function activeLabel({patientId, year, dos}) {
   );
   return data;
 }
+
+export async function suggestedToValid(obj) {
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`management/disease/move/suggestedtovalid`, options);
+  return data;
+}
+
+export async function suggestedMeatCheck(diagnosisCode) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/meat/conformation?diagnosisCode=${diagnosisCode}`,
+    options
+  );
+  return data;
+}
