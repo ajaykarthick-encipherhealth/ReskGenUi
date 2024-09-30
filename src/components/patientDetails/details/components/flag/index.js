@@ -106,7 +106,6 @@ const Flag = ({
           patientDetailsResult?.data?.response?.dateOfService
         );
         
-        // Reset input values after successful submission
         setInputValue({
           flagId: "", 
           comments: "", 
