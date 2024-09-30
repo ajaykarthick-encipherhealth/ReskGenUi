@@ -277,7 +277,7 @@ const HccCards = ({
                                       onClick={() => {
                                         setOpens(true);
                                         setCombiTree([
-                                          { ...data, expanded: true },
+                                          { ...data, expanded: true, isDisabled: true },
                                         ]);
                                       }}
                                     >

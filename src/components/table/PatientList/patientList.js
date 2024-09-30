@@ -44,11 +44,11 @@ function PatientTable({
 
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
-    if (data.computing === 2) {
+    if (data?.computing === 2) {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      setStorage("patientId", data.patientId);
+      setStorage("patientId", data?.patientId);
       const routePrams = { ...page, ...params };
       // navigate.push({ pathname: "/reviewer/patients/details", query: page });
 
@@ -61,7 +61,7 @@ function PatientTable({
       );
     } else {
       notification.warning({
-        message: data.patientId + " file not processed. Please wait.",
+        message: data?.patientId + " file not processed. Please wait.",
       });
     }
   };
@@ -84,10 +84,10 @@ function PatientTable({
             className={TableStyle.firstTdBorder}
             onClick={handleTableRowClick}
           >
-             <Tooltip title={data.patientId}> {truncateString(data.patientId, 30)}</Tooltip>
+             <Tooltip title={data?.patientId}> {truncateString(data?.patientId, 30)}</Tooltip>
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-             <Tooltip title={data.fileName}> {truncateString(data.fileName, 30)}</Tooltip>
+             <Tooltip title={data?.fileName}> {truncateString(data?.fileName, 30)}</Tooltip>
           </td>
           {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
             <td
@@ -95,20 +95,20 @@ function PatientTable({
               onClick={handleTableRowClick}
               style={{ paddingLeft: "30px" }}
             >
-              {data.validDiseaseCount ? data.validDiseaseCount : "---"}
+              {data?.validDiseaseCount ? data?.validDiseaseCount : "---"}
             </td>
           )}
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            {data.allocatedOn
-              ? moment(data.allocatedOn).format("MM-DD-YYYY")
+            {data?.allocatedOn
+              ? moment(data?.allocatedOn).format("MM-DD-YYYY")
               : "---"}
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
+            {data?.dueDate ? moment(data?.dueDate).format("MM-DD-YYYY") : "---"}
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            {data.processedDate
-              ? moment(data.processedDate).format("MM-DD-YYYY")
+            {data?.processedDate
+              ? moment(data?.processedDate).format("MM-DD-YYYY")
               : "---"}
           </td>
 
@@ -117,22 +117,22 @@ function PatientTable({
             style={{ textAlign: "center" }}
             onClick={handleTableRowClick}
           >
-            {data.allocatedByFirstName ||
-            data.allocatedBylastName ||
+            {data?.allocatedByFirstName ||
+            data?.allocatedBylastName ||
             data?.allocatedByProfileImage ? (
               <div style={{ display: "flex", alignItems: "center" }}>
                 {" "}
                 <span style={{ marginRight: "10px" }}>
                   {" "}
                   {renderUserPrfoileAvatar(
-                    data.allocatedByFirstName,
-                    data.allocatedBylastName,
+                    data?.allocatedByFirstName,
+                    data?.allocatedBylastName,
                     data?.allocatedByProfileImage,
                     "header"
                   )}
                 </span>
                 <span>
-                  {data.allocatedByFirstName} {data.allocatedBylastName}
+                  {data?.allocatedByFirstName} {data?.allocatedBylastName}
                 </span>
               </div>
             ) : (
@@ -145,7 +145,7 @@ function PatientTable({
               placeholder="Set priority"
               className={`custom-ant-select ${TableStyle.customAntSelect}`}
               showSearch={false}
-              value={data?.priority ? data.priority : "Set Priority"}
+              value={data?.priority ? data?.priority : "Set Priority"}
               // disabled={!data?.priority ? true : false}
               onChange={(value) => {
                 handlePriorityChange(data?.patientId, value);

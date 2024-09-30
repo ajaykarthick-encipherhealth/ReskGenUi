@@ -412,8 +412,7 @@ const Header = ({
         console.error("Error playing notification sound:", error);
       });
     }
-  }, [webSocketNotificationData, notificationResponse]);
-
+  }, [webSocketNotificationData, notificationResponse]); 
   useEffect(() => {
     if (
       !open &&
