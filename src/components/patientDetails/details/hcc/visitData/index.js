@@ -403,15 +403,15 @@ const VisitData = ({
                       >
                         <div
                           className={visitStyles.deletedContainers}
-                          style={{
-                            height:
-                              showList.length == 1
-                                ? "55vh"
-                                : showList.length == 2
-                                ? "27vh"
-                                : "18vh",
-                                overflow:"scroll"
-                          }}
+                          // style={{
+                          //   height:
+                          //     showList.length == 1
+                          //       ? "55vh"
+                          //       : showList.length == 2
+                          //       ? "27vh"
+                          //       : "18vh",
+                          //       overflow:"scroll"
+                          // }}
                         >
                           <span className={`${visitStyles.deleted_title_name}`}>
                             DELETED CODES
