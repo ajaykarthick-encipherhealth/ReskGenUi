@@ -226,7 +226,7 @@ const Flag = ({
                     flagPostList.find(
                       (option) => option.value === inputValue.flagId
                     ) || null
-                  } // Ensuring flagId reset
+                  } 
                   onChange={handleChangeFlag}
                 />
               </div>
