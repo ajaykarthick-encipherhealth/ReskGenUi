@@ -11,6 +11,10 @@ import {
   sortFunction,
 } from "../../../headerFilters/functions";
 import { getStorage, setStorage } from "../../../../utils/storages";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
 
 function AddPatientListTable({
   patinetListAll,
@@ -21,16 +25,16 @@ function AddPatientListTable({
   setSortOrder,
   setSort,
   page,
-  sortCompleteOrder, 
-  setSortCompleteOrder
+  sortCompleteOrder,
+  setSortCompleteOrder,
 }) {
-  const [detailsContent, setDetailsContent] = useState(patinetListAll)
+  const [detailsContent, setDetailsContent] = useState(patinetListAll);
   const dispatch = useDispatch();
   const navigate = useRouter();
 
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
-    if (data.computing === 2) {
+    if (data?.computing === 2) {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
@@ -47,7 +51,7 @@ function AddPatientListTable({
       // setStorage('paginations', JSON.stringify(page))
     } else {
       notification.warning({
-        message: data.patientId + " file not processed. Please wait.",
+        message: data?.patientId + " file not processed. Please wait.",
       });
     }
   };
@@ -86,47 +90,50 @@ function AddPatientListTable({
               className={TableStyle.firstTdBorder}
               onClick={handleTableRowClick}
             >
-              {data.patientId ? data.patientId : "---"}
+              {data?.isFlagShow === true ? (
+                <span className="p-1">
+                  <FontAwesomeIcon
+                    icon={faStar}
+                    style={{ color: "gold", fontSize: "10px" }}
+                  />
+                </span>
+              ) : (
+                <span className="p-2">&nbsp;</span>
+              )}
+
+              {data?.patientId ? data?.patientId : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.fileName ? (
-                data.fileName
-              ) : (
-               "---"
-              )}
+              {data?.fileName ? data?.fileName : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.totalPages ? (
-                data.totalPages
-              ) : (
-               "---"
-              )}
+              {data?.totalPages ? data?.totalPages : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
               style={{ textAlign: "left" }}
               onClick={handleTableRowClick}
             >
-              {data.createdByFirstName ||
-              data.createdByLastName ||
-              data.createdByProfileImage ? (
+              {data?.createdByFirstName ||
+              data?.createdByLastName ||
+              data?.createdByProfileImage ? (
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <span style={{ marginRight: "10px" }}>
                     {renderUserPrfoileAvatar(
-                      data.createdByFirstName,
-                      data.createdByLastName,
-                      data.createdByProfileImage,
+                      data?.createdByFirstName,
+                      data?.createdByLastName,
+                      data?.createdByProfileImage,
                       "header"
                     )}
                   </span>
                   <span>
-                    {data.createdByFirstName} {data.createdByLastName}
+                    {data?.createdByFirstName} {data?.createdByLastName}
                   </span>
                 </div>
               ) : (
@@ -138,8 +145,8 @@ function AddPatientListTable({
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.computedDate
-                ? moment(data.computedDate).format("MM-DD-YYYY, h:mm a")
+              {data?.computedDate
+                ? moment(data?.computedDate).format("MM-DD-YYYY, h:mm a")
                 : "---"}
             </td>
             <td
@@ -147,8 +154,8 @@ function AddPatientListTable({
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.createdDate
-                ? moment(data.createdDate).format("MM-DD-YYYY, h:mm a")
+              {data?.createdDate
+                ? moment(data?.createdDate).format("MM-DD-YYYY, h:mm a")
                 : "---"}
             </td>
             <td
@@ -176,9 +183,11 @@ function AddPatientListTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENT ID</th>
-            <th >FILE NAME</th>
+            <th>FILE NAME</th>
             <th className="text-truncate">TOTAL PAGES</th>
-            <th style={{ textAlign: "center" }} className="text-truncate">CREATED BY</th>
+            <th style={{ textAlign: "center" }} className="text-truncate">
+              CREATED BY
+            </th>
 
             <th
               style={{
