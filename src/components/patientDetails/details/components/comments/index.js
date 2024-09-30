@@ -114,9 +114,11 @@ const Comments = ({
 
   const handleDelete = async () => {
     const payload = {
-      patientId: commentList?.patientId,
+      patientId: patientDetailsResult?.data?.response?.patientId,
       commentId: commentList?.comments?.[0]?.commentId,
       active: false,
+      processedYear: patientDetailsResult?.data?.response?.processedYear,
+      dateOfService: patientDetailsResult?.data?.response?.dateOfService,
     };
 
     try {
@@ -124,7 +126,7 @@ const Comments = ({
       getResponePopup(response);
       getCommentsList();
     } catch (error) {
-      getResponePopup(response);
+      getResponePopup(error.response);
       console.error(error);
     }
   };

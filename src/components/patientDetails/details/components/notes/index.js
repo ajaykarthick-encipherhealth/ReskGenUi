@@ -71,9 +71,11 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
 
   const handleDelete = async () => {
     const payload = {
-      patientId: notesList?.patientId,
+      patientId: patientDetailsResult?.data?.response?.patientId,
       noteId: notesList?.notes?.[0]?.noteId,
       active: false,
+      processedYear: patientDetailsResult?.data?.response?.processedYear,
+      dateOfService: patientDetailsResult?.data?.response?.dateOfService,
     };
 
     try {

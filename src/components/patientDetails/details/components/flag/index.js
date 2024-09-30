@@ -35,7 +35,7 @@ const Flag = ({
   isdeleteFlag,
 }) => {
   const [inputValue, setInputValue] = useState({
-    patientId: "",
+    flagId: "",
     comments: "",
   });
   const [flagResultList, setFlagResultList] = useState([]);
@@ -87,7 +87,7 @@ const Flag = ({
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
       const orgId = getStorage("orgId");
-      var dataFormatSuggested = {
+      const dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
         comment: inputValue.comments,
         processedYear: patientDetailsResult?.data?.response?.processedYear,
@@ -99,21 +99,21 @@ const Flag = ({
           ENDPOINTS.apiEndoint + `dbservice/flagdetails`,
           dataFormatSuggested
         );
-        var result = response.data;
         getResponePopup(response);
-          getFlagDetailsData(
-            patientDetailsResult?.data?.response?.patientId,
-            patientDetailsResult?.data?.response?.processedYear,
-            patientDetailsResult?.data?.response?.dateOfService
-          );
-          setInputValue({
-            flagId: "", 
-            comments: "", 
-          });
-  
-          setCommentsTrigger(false);
-          setIsModalComments(false);
-      
+        getFlagDetailsData(
+          patientDetailsResult?.data?.response?.patientId,
+          patientDetailsResult?.data?.response?.processedYear,
+          patientDetailsResult?.data?.response?.dateOfService
+        );
+        
+        // Reset input values after successful submission
+        setInputValue({
+          flagId: "", 
+          comments: "", 
+        });
+        setCommentsTrigger(false);
+        setIsModalComments(false);
+        
       } catch (error) {
         getResponePopup(error.response);
         setCommentsTrigger(false);
@@ -121,6 +121,7 @@ const Flag = ({
     }
     setValidated(true);
   };
+  
 
   const splitUserName = (name) => {
     if (name) {
@@ -224,15 +225,15 @@ const Flag = ({
           <Form noValidate validated={validated} onSubmit={handleSubmitFlag}>
             <div className="row">
               <div className="col-xl-12 mb-3">
-                <Select
-                  options={flagPostList}
-                  className="customize-react-select"
-                  isSearchable={false}
-                  id="flag"
-                  name="flag"   
-                  value={flagPostList.find(option => option.value === inputValue.flagId)} 
-                  onChange={handleChangeFlag}
-                />
+              <Select
+  options={flagPostList}
+  className="customize-react-select"
+  isSearchable={false}
+  id="flag"
+  name="flag"   
+  value={flagPostList.find(option => option.value === inputValue.flagId) || null}  // Ensuring flagId reset
+  onChange={handleChangeFlag}
+/>
               </div>
             </div>
             <div className="row">
