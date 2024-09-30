@@ -115,8 +115,7 @@ const Comments = ({
   const handleDelete = async () => {
     const payload = {
       patientId: patientDetailsResult?.data?.response?.patientId,
-      commentId: commentList?.comments?.[0]?.commentId,
-      active: false,
+      commentId: commentList?.[0]?.commentId,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
     };
@@ -249,7 +248,7 @@ const Comments = ({
             </div>
           </Form>
 
-          {commentList?.comments?.map((data, index) => (
+          {commentList?.map((data, index) => (
             <div
               className={`${visitStyles.comments_card} position-relative`}
               key={index}

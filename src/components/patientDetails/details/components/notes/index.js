@@ -72,8 +72,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
   const handleDelete = async () => {
     const payload = {
       patientId: patientDetailsResult?.data?.response?.patientId,
-      noteId: notesList?.notes?.[0]?.noteId,
-      active: false,
+      noteId: notesList?.[0]?.noteId,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
     };
@@ -253,7 +252,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
               </div>
             </div>
           </Form>
-          {notesList?.notes?.map((data, index) => (
+          {notesList?.map((data, index) => (
             <div
               className={`${visitStyles.comments_card} position-relative`}
               key={index}
