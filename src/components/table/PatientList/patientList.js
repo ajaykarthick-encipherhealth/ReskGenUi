@@ -84,10 +84,10 @@ function PatientTable({
             className={TableStyle.firstTdBorder}
             onClick={handleTableRowClick}
           >
-             <Tooltip title={data.patientId}> {truncateString(data.patientId, 30)}</Tooltip>
+             <Tooltip title={data?.patientId}> {truncateString(data?.patientId, 30)}</Tooltip>
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-             <Tooltip title={data.fileName}> {truncateString(data.fileName, 30)}</Tooltip>
+             <Tooltip title={data?.fileName}> {truncateString(data?.fileName, 30)}</Tooltip>
           </td>
           {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
             <td

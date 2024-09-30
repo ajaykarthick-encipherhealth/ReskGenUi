@@ -163,7 +163,7 @@ const UserQueueTable = ({
             className={TableStyle.firstTdBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
-         <Tooltip title={data.patientId}> {truncateString(data.patientId, 20)}</Tooltip>
+         <Tooltip title={data?.patientId}> {truncateString(data?.patientId, 20)}</Tooltip>
           </td>
           <td
             className={TableStyle.childBorder}
