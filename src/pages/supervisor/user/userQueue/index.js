@@ -141,6 +141,9 @@ const Index = ({
   const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState(
     router?.query?.selAuditAllocatedBy ? router?.query?.selAuditAllocatedBy : ""
   );
+  const [selAuditAllocatedByVal, setSelAuditAllocatedByVal] = useState(
+    router?.query?.selAuditAllocatedBy ? router?.query?.selAuditAllocatedBy : ""
+  );
   const [aduitCompletedStartDate, setAduitCompletedStartDate] = useState(
     router?.query?.aduitCompletedStartDate
       ? router?.query?.aduitCompletedStartDate
@@ -498,6 +501,8 @@ const Index = ({
                       setPageNo={setPageNo}
                       bulletsTitle="Reviewed Status"
                       badgesTitle="Audited Status"
+                      selAuditAllocatedByVal={selAuditAllocatedByVal}
+                      setSelAuditAllocatedByVal={setSelAuditAllocatedByVal}
                     />
                   </div>
                   <div
