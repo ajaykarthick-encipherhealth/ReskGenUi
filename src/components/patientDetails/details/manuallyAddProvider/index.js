@@ -43,7 +43,7 @@ export const viewProvidersList = ({ list, isDeletable, handleDelete }) => (
     ))}
   </div>
 );
-const ManuallyAddProvider = ({ hccFileDetails }) => {
+const ManuallyAddProvider = ({ hccFileDetails,selectDosValue }) => {
   const [form] = Form.useForm();
   const [selectFileURL, setSelectFileURL] = useState([]);
   const [showAddForm, setShowAddForm] = useState(true);
@@ -101,6 +101,7 @@ const ManuallyAddProvider = ({ hccFileDetails }) => {
             setProvidersList={setProvidersList}
             showAddForm={showAddForm}
             setShowAddForm={setShowAddForm}
+            selectDosValue={selectDosValue}
           />
         </div>
 

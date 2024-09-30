@@ -329,3 +329,15 @@ export async function suggestedMeatCheck(diagnosisCode) {
   );
   return data;
 }
+// manuallyAddDosAndProvider
+export async function manuallyAddDosAndProvider(data) {
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(data),
+  };
+  const res = await requestPortal(
+    `management/dos-provider/add-update`,
+    options
+  );
+  return res;
+}

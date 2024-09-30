@@ -142,3 +142,7 @@ export const suggestedToValidMove = createActionThunk(
 export const getSelectedDosPageNumber = createAction("GET_SELECTED_DOS_PAGE_NUMBER");
 
 export const getCurrentDiseaseType = createAction("GET_CURRENT_DISEASE_TYPE");
+
+export const getAddProviderAndDOS = createAction("GET_MANUALLY_ADD_PROVIDER_AND_DOS",
+  network.manuallyAddDosAndProvider
+);
