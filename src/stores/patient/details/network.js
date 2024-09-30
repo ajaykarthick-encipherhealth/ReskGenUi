@@ -90,8 +90,7 @@ export async function labDetails(
   }
 }
 
-
-export async function labPDFData({fileId}) {
+export async function labPDFData({ fileId }) {
   const options = {
     method: "GET",
   };
@@ -111,16 +110,13 @@ export async function patientHccFile(fileId) {
     `dbservice/fileDetail/findbyid?fileId=${fileId}`,
     options
   );
-  setStorage(
-          "fileId",
-          result?.response?.azureBlobPath
-        );
-  const data = await requestPortal(
-    // `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`,
-    `management/patient/report/getfile/validator?blobName=${result?.response?.azureBlobPath}`,
-    options
-  );
-  return data;
+  setStorage("fileId", result?.response?.azureBlobPath);
+  // const data = await requestPortal(
+  //   // `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`,
+  //   `management/patient/report/getfile/validator?blobName=${result?.response?.azureBlobPath}`,
+  //   options
+  // );
+  return result;
 }
 
 export async function dosWiseList(patientId, year) {
@@ -184,13 +180,9 @@ export async function deleteflag(obj) {
     method: "POST",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(
-    `dbservice/flagdetails/removeFlag`,
-    options
-  );
+  const data = await requestPortal(`dbservice/flagdetails/removeFlag`, options);
   return data;
 }
-
 
 export async function isValideCode(code) {
   const options = {
@@ -279,7 +271,7 @@ export async function labdosWiseList(patientId, year) {
   );
   return data;
 }
-export async function activeLabel({patientId, year, dos}) {
+export async function activeLabel({ patientId, year, dos }) {
   const options = {
     method: "GET",
   };
