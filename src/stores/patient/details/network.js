@@ -1,5 +1,5 @@
 import { requestPortal } from "../../../utils/network";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 
 export async function patientDetails(
   patientId,
@@ -107,9 +107,17 @@ export async function patientHccFile(fileId) {
   const options = {
     method: "GET",
   };
+  const result = await requestPortal(
+    `dbservice/fileDetail/findbyid?fileId=${fileId}`,
+    options
+  );
+  setStorage(
+          "fileId",
+          result?.response?.azureBlobPath
+        );
   const data = await requestPortal(
     // `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`,
-    `management/patient/report/getfile/validator?blobName=${fileId}`,
+    `management/patient/report/getfile/validator?blobName=${result?.response?.azureBlobPath}`,
     options
   );
   return data;
