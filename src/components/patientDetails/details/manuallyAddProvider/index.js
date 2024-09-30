@@ -43,7 +43,7 @@ export const viewProvidersList = ({ list, isDeletable, handleDelete }) => (
     ))}
   </div>
 );
-const ManuallyAddProvider = ({ hccFileDetails,selectDosValue }) => {
+const ManuallyAddProvider = ({ hccFileDetails, selectDosValue }) => {
   const [form] = Form.useForm();
   const [selectFileURL, setSelectFileURL] = useState([]);
   const [showAddForm, setShowAddForm] = useState(true);
@@ -79,34 +79,31 @@ const ManuallyAddProvider = ({ hccFileDetails,selectDosValue }) => {
   }, [hccFileDetails]);
 
   return (
-    <div className="d-flex p-2">
-      <div style={{ width: "60%" }}>
+    <div className="d-flex p-2 h-100">
+      <div style={{ width: "50%" }}>
         <PdfViewer
           src={selectFileURL}
           searchQuery={""}
           pageNumber={1}
           headers={""}
-          height="100vh"
-          // heightFrame='100vh'
         />
       </div>
-      <div style={{ width: "40%", margin: "20px 20px 0px 20px" }}>
-        <div>
-          <AddForm
-            form={form}
-            setDOSList={setDOSList}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            providersList={providersList}
-            setProvidersList={setProvidersList}
-            showAddForm={showAddForm}
-            setShowAddForm={setShowAddForm}
-            selectDosValue={selectDosValue}
-          />
-        </div>
-
+      <div style={{ width: "30%" }} className="mx-4 h-100 overflow-scroll">
+        <AddForm
+          form={form}
+          setDOSList={setDOSList}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          providersList={providersList}
+          setProvidersList={setProvidersList}
+          showAddForm={showAddForm}
+          setShowAddForm={setShowAddForm}
+          selectDosValue={selectDosValue}
+        />
+      </div>
+      <div style={{ width: "20%" }} className="h-100 overflow-scroll">
         {DOSList?.map((item) => (
-          <button className={style.providerButton}>
+          <button className={`${style.providerButton} my-2`}>
             <span className={style.dateField}>{item?.date}</span>
             <span className={style.providerText}>Provider</span>
             <Popover content={viewProvidersList({ list: item?.providersList })}>

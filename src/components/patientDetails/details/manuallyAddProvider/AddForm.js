@@ -218,6 +218,7 @@ const AddForm = ({
           >
             <Select
               placeholder="Provider Credentials"
+              style={{height:"40px"}}
               options={[{ label: "MD", value: "MD" }]}
             />
           </Form.Item>
