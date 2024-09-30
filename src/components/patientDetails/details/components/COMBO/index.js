@@ -102,7 +102,7 @@ const ComboCard = ({
         {list?.length != 0 ? (
           <div className={visitStyles.container}>
             <div className={visitStyles.hccStickey_head}>
-              {list?.map((item) => {
+              {list?.map((item, ind) => {
                 return item.isShow && (
                   <div
                     className={visitStyles.combo_details_card}
@@ -205,7 +205,7 @@ const ComboCard = ({
                             style={{ background: "#c7f3c6" }}
                             onClick={() => {
                               setOpens(true);
-                              setCombiTree([{ ...item, expanded: true }]);
+                              setCombiTree([{ ...item, expanded: true, isDisabled: true }]);
                             }}
                           >
                             <FontAwesomeIcon

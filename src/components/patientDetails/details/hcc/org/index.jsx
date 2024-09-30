@@ -53,7 +53,7 @@ const CamboTree = ({
   isDosSelected,
   setFileLoading
 }) => {
-  const [background, setBackground] = useState([]);
+  const [count, setCount] = useState(0);
   const [trees, setTrees] = useState(Tree);
   const [isLoading, setLoading] = useState(tree);
   const [zoom, setZoom] = useState({ width: 350, height: 185 });
@@ -217,8 +217,7 @@ const CamboTree = ({
       );
     }
   };
-
-  const nodeTemplate = (node) => {
+  const nodeTemplate = (node, index) => { 
     return (
       <div
         className={Style.cards}
@@ -233,7 +232,7 @@ const CamboTree = ({
               ? node.diagnosisCodeCombo
               : node.diagnosisCode}
           </div>
-          {trees?.diagnosisCodeCombo == node.diagnosisCodeCombo && isDosSelected && (
+          {trees?.diagnosisCodeCombo == node.diagnosisCodeCombo && isDosSelected && !node.isDisabled && (
             <div>
               <Popconfirm
                 title="Do you want to move to Delete?"
