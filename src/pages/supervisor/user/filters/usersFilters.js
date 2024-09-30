@@ -116,7 +116,9 @@ const UserFilters = ({
   selectedDates4,
   setSelectedDates4,
   setSelectedDates2,
-  selectedOption
+  selectedOption,
+  selAuditAllocatedByVal,
+  setSelAuditAllocatedByVal,
 }) => {
   const router = useRouter();
   const [showFilters, setShowFilters] = useState(router.query ? true : false);
@@ -181,9 +183,7 @@ const UserFilters = ({
                 setStartDate={audisetStartDate}
                 setEndDate={audisetEndDate}
                 disabled={true}
-                selectedDates={
-                  selectedDates
-                }
+                selectedDates={selectedDates}
                 setSelectedDates={setSelectedDates}
                 setPageNo={setPageNo}
               />
@@ -198,9 +198,7 @@ const UserFilters = ({
                 setStartDate={audisetStartDate2}
                 setEndDate={audisetEndDate2}
                 selectedDates={selectedDates2}
-                setSelectedDates={
-                  setSelectedDates2
-                }
+                setSelectedDates={setSelectedDates2}
                 setPageNo={setPageNo}
               />
             </div>
@@ -216,15 +214,20 @@ const UserFilters = ({
               <div class="form-group has-search">
                 <Select
                   onChange={(selectedOption) => {
-                    audisetSelAllocatedBy(selectedOption?.value);
+                    audisetSelAllocatedBy(
+                      selectedOption?.value === "All"
+                        ? ""
+                        : selectedOption?.value
+                    );
+                    setSelAuditAllocatedByVal(selectedOption?.label);
                     if (setPageNo) {
                       resetPageNumber(setPageNo);
                     }
                   }}
                   options={auditallocatedByOptions}
                   value={
-                    selAuditAllocatedBy && {
-                      label: selAuditAllocatedBy,
+                    selAuditAllocatedByVal && {
+                      label: selAuditAllocatedByVal,
                       value: selAuditAllocatedBy,
                     }
                   }
@@ -316,9 +319,7 @@ const UserFilters = ({
                   selectOptions={selectOptions}
                   defaultSelectValue1={defaultSelectValue1}
                   setPageNo={setPageNo}
-                  selectDefaultValue={
-                    selectedOption
-                  }
+                  selectDefaultValue={selectedOption}
                 />
               </div>
             ) : null}
