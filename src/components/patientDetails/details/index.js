@@ -794,7 +794,7 @@ const Details = ({
                                           {truncateString(
                                             patientDocumentResult?.fileDetailDTO
                                               ?.fileName,
-                                            8
+                                            7
                                           )}
                                         </Tooltip>
                                       </h6>
