@@ -1003,14 +1003,14 @@ const ManuallyAdd = ({
         section: item.header,
         hyperlinks: item,
       }));
-      handleSelectChange(isEditValue.dateOfServices, "dos");
+      handleSelectChange(isEditValue?.dateOfServices, "dos");
       setListOfSection(transformData(sectionList));
       setListOfSectionM(transformData(sectionListM));
       setListOfSectionE(transformData(sectionListE));
       setListOfSectionA(transformData(sectionListA));
       setListOfSectionT(transformData(sectionListT));
     }
-      handleSelectChange(isEditValue.dateOfServices, "dos");
+      handleSelectChange(isEditValue?.dateOfServices, "dos");
   }, [isEditPage, isEditValue, reset,meatFormDisplay]);
 
   useEffect(() => {
