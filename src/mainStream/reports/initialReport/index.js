@@ -386,7 +386,7 @@ const InitialCard = ({
                       </span>
                     </div>
                   {/* </>
-                )} */}
+                // )} */}
               </div>
 
               <div className="row">

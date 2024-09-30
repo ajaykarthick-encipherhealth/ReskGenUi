@@ -15616,3 +15616,19 @@ input::-webkit-inner-spin-button {
   .ant-picker-panels {
   width: 100% !important;
 }
+@media (min-width: 600px) and (max-width: 950px) {
+  .headerCalender {
+    width: 41.5% !important;
+    left: -20%;
+    top: 14%;
+  }
+  .headerCalender .ant-picker-dropdown .ant-picker-date-panel {
+    width: 290px !important;
+  }
+  .headerCalender .ant-picker-dropdown-range {
+    display: flex !important;
+    justify-content: end !important;
+    align-items: end !important;
+    left: 20px !important;
+  }
+}
