@@ -414,7 +414,6 @@ const Header = ({
     }
   }, [webSocketNotificationData, notificationResponse]);
  
-
   useEffect(() => {
     if (
       !open &&
