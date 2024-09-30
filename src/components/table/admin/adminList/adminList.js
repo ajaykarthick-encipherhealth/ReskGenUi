@@ -99,7 +99,7 @@ const AdminList = ({
             // open={open}
             onDropdownVisibleChange={(visible) => setOpen(visible)}
           />
-          {selectedRoles?.length ===1 && selectedRoles[0] === "REVIEWER" && (
+          {selectedRoles?.length ==1 && selectedRoles[0] === "REVIEWER" && (
             <>
               <div className="mt-4 my-2">Change Manager</div>
               <Select
@@ -135,22 +135,27 @@ const AdminList = ({
   };
 
   const handleSave = async () => {
-    if (selectedRoles?.length > 0) {
-      setRoleChangeLoader(true);
-      const res = await getEnableUser({
-        checked: null,
-        user: rowData,
-        role: selectedRoles,
-        setPopoverVisible: setPopoverVisible,
-        selectedManager: selectedManager,
-        field: "addRole",
-      });
-      if (res?.status === "SUCCESS") {
-        getAllUsersList({ pageCount: 0 });
-        setPopoverVisible(null);
-        setPageCount(0);
-        setRoleChangeLoader(false);
+    try {
+      if (selectedRoles?.length > 0) {
+        const res = await getEnableUser({
+          checked: null,
+          user: rowData,
+          role: selectedRoles,
+          setPopoverVisible: setPopoverVisible,
+          selectedManager: selectedManager,
+          field: "addRole",
+        });
+        if (res?.status === "SUCCESS") {
+          getAllUsersList({ pageCount: 0 });
+          setPopoverVisible(null);
+          setPageCount(0);
+          setRoleChangeLoader(false);
+        }
       }
+    } catch (err) {
+      setRoleChangeLoader(false);
+      setPopoverVisible(null);
+      getResponePopup(err?.response);
     }
   };
   useEffect(() => {
@@ -205,7 +210,9 @@ const AdminList = ({
             </th>
             <th style={{ textAlign: "center" }}>MFA</th>
             <th style={{ textAlign: "center" }}>ACTION</th>
-            <th style={{ textAlign: "center" }} className="text-truncate">USER STATUS</th>
+            <th style={{ textAlign: "center" }} className="text-truncate">
+              USER STATUS
+            </th>
           </tr>
         </thead>
         <tbody>

@@ -12,6 +12,7 @@ import AddRadiologyForm from "../addRadiologyForm";
 import AllocateModal from "../../../../../pages/admin/allocateduser/allocate";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
+import { getResponePopup } from "../../../../../utils/reusable";
 
 const StatusAction = ({
   patientDetailsResult,
@@ -107,18 +108,26 @@ const StatusAction = ({
       case 2:
         setIsValidAction("reAuditFunction");
         setConfirmNotesModal(true);
+        setInputValue({ notes: "" });
+        setValidated(false);
         break;
       case 3:
         setIsValidAction("auditPendingFunction");
         setConfirmNotesModal(true);
+        setInputValue({ notes: "" });
+        setValidated(false);
         break;
       case 4:
         setIsValidAction("auditHoldFunction");
         setConfirmNotesModal(true);
+        setInputValue({ notes: "" });
+        setValidated(false);
         break;
       case 5:
         setIsValidAction("auditDeclineFunction");
         setConfirmNotesModal(true);
+        setInputValue({ notes: "" });
+        setValidated(false);
         break;
       default:
         null;
@@ -200,33 +209,36 @@ const StatusAction = ({
             </div>
           </Menu.Item>
         ) : null}
-        {userRoleLocal == "tenant_admin" &&
-        <>
-        <Menu.Item
-          key="5"
-          onClick={() => {
-            handleActionClick("ADD RADIOLOGY");
-            setMenuIsOpen(false);
-          }}
-        >
-          <div className="patient-status">
-            <span className={`badge  ${visitStyles.add_text}`}>
-              + ADD RADIOLOGY
-            </span>
-          </div>
-        </Menu.Item>
-        <Menu.Item
-          key="6"
-          onClick={() => {
-            handleActionClick("ADD LAB");
-            setMenuIsOpen(false);
-          }}
-        >
-          <div className="patient-status">
-            <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>
-          </div>
-        </Menu.Item>
-        </>}
+        {userRoleLocal == "tenant_admin" && (
+          <>
+            <Menu.Item
+              key="5"
+              onClick={() => {
+                handleActionClick("ADD RADIOLOGY");
+                setMenuIsOpen(false);
+              }}
+            >
+              <div className="patient-status">
+                <span className={`badge  ${visitStyles.add_text}`}>
+                  + ADD RADIOLOGY
+                </span>
+              </div>
+            </Menu.Item>
+            <Menu.Item
+              key="6"
+              onClick={() => {
+                handleActionClick("ADD LAB");
+                setMenuIsOpen(false);
+              }}
+            >
+              <div className="patient-status">
+                <span className={`badge  ${visitStyles.add_text}`}>
+                  + ADD LAB
+                </span>
+              </div>
+            </Menu.Item>
+          </>
+        )}
       </Menu>
     );
 
@@ -438,14 +450,19 @@ const StatusAction = ({
     if (value == "HOLD") {
       setConfirmNotesModal(true);
       setIsValidAction("holdFunction");
+      setInputValue({ notes: "" });
+      setValidated(false);
     }
     if (value == "DECLINE") {
       setConfirmNotesModal(true);
       setIsValidAction("declineFunction");
+      setInputValue({ notes: "" });
+      setValidated(false);
     }
     if (value == "PENDING") {
       setConfirmNotesModal(true);
       setIsValidAction("pendingFunction");
+      setValidated(false);
     }
     if (value == "COMPLETE") {
       setConfirmCompleteModal(true);
@@ -472,6 +489,8 @@ const StatusAction = ({
   const handleCloseModal = () => {
     setConfirmCompleteModal(false);
     setConfirmNotesModal(false);
+    setInputValue({ notes: "" });
+    setValidated(false);
   };
 
   const handleSubmitValidNotes = async (event) => {
@@ -480,8 +499,9 @@ const StatusAction = ({
     if (form.checkValidity() === true) {
       setConfirmNotesModal(false);
       updateStatus(isValidAction);
+      setInputValue({ notes: "" });
+      setValidated(true);
     }
-    setValidated(true);
   };
 
   const handleSubmitHccComplete = async () => {
@@ -599,7 +619,7 @@ const StatusAction = ({
         postData
       );
       var result = response.data;
-      if (result.status == "SUCCESS") {
+      if (result?.status == "SUCCESS") {
         notification.success({
           message: result.message,
           placement: "top",
@@ -613,7 +633,9 @@ const StatusAction = ({
       setInputValue({
         notes: "",
       });
-    } catch (e) {}
+    } catch (e) {
+      getResponePopup(e?.response);
+    }
   };
 
   const handleChange = async (e) => {
