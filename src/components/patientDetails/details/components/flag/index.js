@@ -87,7 +87,7 @@ const Flag = ({
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
       const orgId = getStorage("orgId");
-      const dataFormatSuggested = {
+      var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
         comment: inputValue.comments,
         processedYear: patientDetailsResult?.data?.response?.processedYear,
