@@ -35,7 +35,7 @@ const Flag = ({
   isdeleteFlag,
 }) => {
   const [inputValue, setInputValue] = useState({
-    patientId: "",
+    flagId: "",
     comments: "",
   });
   const [flagResultList, setFlagResultList] = useState([]);
@@ -58,12 +58,9 @@ const Flag = ({
 
   const handleDelete = async () => {
     const payload = {
-      flagId: flagsDetailsResult?.response[0]?.patientFlagDTO?.
-      flagId
-       || "",
+      flagId: flagsDetailsResult?.response[0]?.patientFlagDTO?.flagId || "",
       patientId: patientDetailsResult?.data?.response?.patientId,
-      comment: flagsDetailsResult?.response[0]?.patientFlagDTO?.
-      comment,
+      comment: flagsDetailsResult?.response[0]?.patientFlagDTO?.comment,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
     };
@@ -99,21 +96,19 @@ const Flag = ({
           ENDPOINTS.apiEndoint + `dbservice/flagdetails`,
           dataFormatSuggested
         );
-        var result = response.data;
         getResponePopup(response);
-          getFlagDetailsData(
-            patientDetailsResult?.data?.response?.patientId,
-            patientDetailsResult?.data?.response?.processedYear,
-            patientDetailsResult?.data?.response?.dateOfService
-          );
-          setInputValue({
-            flagId: "", 
-            comments: "", 
-          });
-  
-          setCommentsTrigger(false);
-          setIsModalComments(false);
-      
+        getFlagDetailsData(
+          patientDetailsResult?.data?.response?.patientId,
+          patientDetailsResult?.data?.response?.processedYear,
+          patientDetailsResult?.data?.response?.dateOfService
+        );
+
+        setInputValue({
+          flagId: "",
+          comments: "",
+        });
+        setCommentsTrigger(false);
+        setIsModalComments(false);
       } catch (error) {
         getResponePopup(error.response);
         setCommentsTrigger(false);
@@ -185,12 +180,9 @@ const Flag = ({
     setInputValue((prevState) => ({
       ...prevState,
       flagId: selectedOption.value,
-      flag: selectedOption.label, 
+      flag: selectedOption.label,
     }));
   };
-  
-
-
 
   useEffect(() => {
     const patientId = getStorage("patientId");
@@ -229,8 +221,12 @@ const Flag = ({
                   className="customize-react-select"
                   isSearchable={false}
                   id="flag"
-                  name="flag"   
-                  value={flagPostList.find(option => option.value === inputValue.flagId)} 
+                  name="flag"
+                  value={
+                    flagPostList.find(
+                      (option) => option.value === inputValue.flagId
+                    ) || null
+                  } 
                   onChange={handleChangeFlag}
                 />
               </div>
