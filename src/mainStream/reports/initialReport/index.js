@@ -366,7 +366,6 @@ const InitialCard = ({
                         All
                       </span>
                     </div>
-
                     <div className="col-xl-1 d-flex">
                       <div>
                         <input
@@ -388,7 +387,6 @@ const InitialCard = ({
                   {/* </>
                 // )} */}
               </div>
-
               <div className="row">
                 <div>
                   <div className=" col-xl-12 d-flex">

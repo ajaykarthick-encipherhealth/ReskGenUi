@@ -99,7 +99,7 @@ const AdminList = ({
             // open={open}
             onDropdownVisibleChange={(visible) => setOpen(visible)}
           />
-          {selectedRoles?.length ===1 && selectedRoles[0] === "REVIEWER" && (
+          {selectedRoles?.length ==1 && selectedRoles[0] === "REVIEWER" && (
             <>
               <div className="mt-4 my-2">Change Manager</div>
               <Select
