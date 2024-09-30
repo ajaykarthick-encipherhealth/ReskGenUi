@@ -183,6 +183,30 @@ export async function deleteflag(obj) {
   return data;
 }
 
+export async function deleteNotes(obj) {
+  const options = {
+    method: "DELETE",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/notes/delete`,
+    options
+  );
+  return data;
+}
+
+export async function deleteComments(obj) {
+  const options = {
+    method: "DELETE",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/comment/delete`,
+    options
+  );
+  return data;
+}
+
 
 export async function isValideCode(code) {
   const options = {
@@ -282,12 +306,16 @@ export async function activeLabel({patientId, year, dos}) {
   return data;
 }
 
-export async function suggestedToValid(obj) {
+export async function suggestedToValid(obj,cardTitle) {
   const options = {
     method: "PUT",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(`management/disease/move/suggestedtovalid`, options);
+  var apiUrl = "management/disease/move/suggestedtovalid"
+  if (cardTitle.name == "Move to HCC" && cardTitle.title == "DELETED") {
+    apiUrl = "management/disease/move/deletedtovalid";
+  }
+  const data = await requestPortal(apiUrl, options);
   return data;
 }
 

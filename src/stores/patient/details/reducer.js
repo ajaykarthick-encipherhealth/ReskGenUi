@@ -26,7 +26,9 @@ import {
   getCurrentDiseaseType,
   activeLabels,
   labPDFDetails,
-  isDeleteFlag
+  isDeleteFlag,
+  isDeleteNotes,
+  isDeleteComments
 } from "./actions";
 import { deleteFlag } from "../../tenantAdmin/settings/network";
 
@@ -103,6 +105,8 @@ const patientDetailsReducer = combineReducers({
   flagsDetailsResult: createReducer(getFlagDetailsAction),
   sectionDetails: createReducer(getProviderSection),
   deleteFlag : createReducer(isDeleteFlag),
+  deleteNotes: createReducer(isDeleteNotes),
+  deleteComments: createReducer(isDeleteComments),
   isCodeAlready: createReducer(isCodeAlready),
   getValidCode: createReducer(getValideCode),
   getSelectedDosDetails: getSelectedDosDetails,
