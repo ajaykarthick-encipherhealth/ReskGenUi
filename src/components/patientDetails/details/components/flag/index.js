@@ -58,12 +58,9 @@ const Flag = ({
 
   const handleDelete = async () => {
     const payload = {
-      flagId: flagsDetailsResult?.response[0]?.patientFlagDTO?.
-      flagId
-       || "",
+      flagId: flagsDetailsResult?.response[0]?.patientFlagDTO?.flagId || "",
       patientId: patientDetailsResult?.data?.response?.patientId,
-      comment: flagsDetailsResult?.response[0]?.patientFlagDTO?.
-      comment,
+      comment: flagsDetailsResult?.response[0]?.patientFlagDTO?.comment,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
     };
@@ -105,14 +102,13 @@ const Flag = ({
           patientDetailsResult?.data?.response?.processedYear,
           patientDetailsResult?.data?.response?.dateOfService
         );
-        
+
         setInputValue({
-          flagId: "", 
-          comments: "", 
+          flagId: "",
+          comments: "",
         });
         setCommentsTrigger(false);
         setIsModalComments(false);
-        
       } catch (error) {
         getResponePopup(error.response);
         setCommentsTrigger(false);
@@ -120,7 +116,6 @@ const Flag = ({
     }
     setValidated(true);
   };
-  
 
   const splitUserName = (name) => {
     if (name) {
@@ -185,12 +180,9 @@ const Flag = ({
     setInputValue((prevState) => ({
       ...prevState,
       flagId: selectedOption.value,
-      flag: selectedOption.label, 
+      flag: selectedOption.label,
     }));
   };
-  
-
-
 
   useEffect(() => {
     const patientId = getStorage("patientId");
@@ -224,15 +216,19 @@ const Flag = ({
           <Form noValidate validated={validated} onSubmit={handleSubmitFlag}>
             <div className="row">
               <div className="col-xl-12 mb-3">
-              <Select
-  options={flagPostList}
-  className="customize-react-select"
-  isSearchable={false}
-  id="flag"
-  name="flag"   
-  value={flagPostList.find(option => option.value === inputValue.flagId) || null}  // Ensuring flagId reset
-  onChange={handleChangeFlag}
-/>
+                <Select
+                  options={flagPostList}
+                  className="customize-react-select"
+                  isSearchable={false}
+                  id="flag"
+                  name="flag"
+                  value={
+                    flagPostList.find(
+                      (option) => option.value === inputValue.flagId
+                    ) || null
+                  } // Ensuring flagId reset
+                  onChange={handleChangeFlag}
+                />
               </div>
             </div>
             <div className="row">
