@@ -304,12 +304,12 @@ const TeamReport = ({
                 }}
               >
                 {" "}
-                {
-                  reportListAll?.response?.response?.data?.length > 0 && (
+                {/* { */}
+                  {/* reportListAll?.response?.response?.data?.length > 0 && (
                     // (isLoading ? (
                     //   <Spin />
                     // ) : (
-                    <>
+                    <> */}
                       <div className="col-xl-1 d-flex">
                         <div>
                           <input
@@ -344,10 +344,10 @@ const TeamReport = ({
                           All Flags
                         </span>
                       </div>
-                    </>
+                    {/* </>
                   )
                   // ))
-                }
+                } */}
               </div>
               <div className="row">
                 <div>
