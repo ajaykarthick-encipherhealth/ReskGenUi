@@ -38,26 +38,13 @@ const ExcelDisplay = ({ tableData, loading, extention }) => {
   return (
     <div style={{ width: "100%", height: "100%" }}>
       {loading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <div className="d-flex align-items-center justify-content-center">
           Loading....
         </div>
       ) : Array.isArray(data) && data?.length > 0 ? (
         <Spreadsheet data={data} onChange={setData} />
       ) : (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {" "}
+        <div className="d-flex align-items-center justify-content-center">
           <Empty />
         </div>
       )}

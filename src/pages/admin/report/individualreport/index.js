@@ -210,15 +210,6 @@ const IndividualReceiverReport = () => {
 
             {/* users */}
             <div className={styles.list}>
-              {/* {!searchValue && detailsContent?.length === 0 ? (
-                <div style={{ marginTop: "60px" }}>
-                  <SpinnerDots />
-                </div>
-              ) : (
-                <>
-                  {searchValue && detailsContent?.length === 0 ? (
-                    <div>No data</div>
-                  ) : ( */}
               {detailsContent?.length > 0 ? (
                 detailsContent?.map((item) => (
                   <div
@@ -284,9 +275,6 @@ const IndividualReceiverReport = () => {
               ) : (
                 <div>No data</div>
               )}
-              {/* )}
-                </>
-              )} */}
             </div>
           </div>
         </div>
