@@ -13,8 +13,6 @@ import {
 import { getStorage, setStorage } from "../../../../utils/storages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFlag,
-  faFontAwesome,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -36,7 +34,7 @@ function AddPatientListTable({
 
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
-    if (data.computing === 2) {
+    if (data?.computing === 2) {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
@@ -53,7 +51,7 @@ function AddPatientListTable({
       // setStorage('paginations', JSON.stringify(page))
     } else {
       notification.warning({
-        message: data.patientId + " file not processed. Please wait.",
+        message: data?.patientId + " file not processed. Please wait.",
       });
     }
   };
@@ -92,7 +90,7 @@ function AddPatientListTable({
               className={TableStyle.firstTdBorder}
               onClick={handleTableRowClick}
             >
-              {data.isFlagShow === true ? (
+              {data?.isFlagShow === true ? (
                 <span className="p-1">
                   <FontAwesomeIcon
                     icon={faStar}
@@ -103,39 +101,39 @@ function AddPatientListTable({
                 <span className="p-2">&nbsp;</span>
               )}
 
-              {data.patientId ? data.patientId : "---"}
+              {data?.patientId ? data?.patientId : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.fileName ? data.fileName : "---"}
+              {data?.fileName ? data?.fileName : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.totalPages ? data.totalPages : "---"}
+              {data?.totalPages ? data?.totalPages : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
               style={{ textAlign: "left" }}
               onClick={handleTableRowClick}
             >
-              {data.createdByFirstName ||
-              data.createdByLastName ||
-              data.createdByProfileImage ? (
+              {data?.createdByFirstName ||
+              data?.createdByLastName ||
+              data?.createdByProfileImage ? (
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <span style={{ marginRight: "10px" }}>
                     {renderUserPrfoileAvatar(
-                      data.createdByFirstName,
-                      data.createdByLastName,
-                      data.createdByProfileImage,
+                      data?.createdByFirstName,
+                      data?.createdByLastName,
+                      data?.createdByProfileImage,
                       "header"
                     )}
                   </span>
                   <span>
-                    {data.createdByFirstName} {data.createdByLastName}
+                    {data?.createdByFirstName} {data?.createdByLastName}
                   </span>
                 </div>
               ) : (
@@ -147,8 +145,8 @@ function AddPatientListTable({
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.computedDate
-                ? moment(data.computedDate).format("MM-DD-YYYY, h:mm a")
+              {data?.computedDate
+                ? moment(data?.computedDate).format("MM-DD-YYYY, h:mm a")
                 : "---"}
             </td>
             <td
@@ -156,8 +154,8 @@ function AddPatientListTable({
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.createdDate
-                ? moment(data.createdDate).format("MM-DD-YYYY, h:mm a")
+              {data?.createdDate
+                ? moment(data?.createdDate).format("MM-DD-YYYY, h:mm a")
                 : "---"}
             </td>
             <td
