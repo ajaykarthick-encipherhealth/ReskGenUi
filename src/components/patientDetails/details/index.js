@@ -771,20 +771,8 @@ const Details = ({
                                     <FontAwesomeIcon icon={faFile} />
 
                                     <label>File Name</label>
-                                    <div
-                                      style={{
-                                        width: "80px",
-                                        textOverflow: "ellipsis",
-                                      }}
-                                      className="text-truncate"
-                                    >
-                                      {/* <h6 >
-                                      {
-                                        patientDocumentResult?.fileDetailDTO
-                                          ?.fileName
-                                      }
-                                    </h6> */}
-                                      <h6>
+                                    <div>
+                                      <h6>                                  
                                         <Tooltip
                                           title={
                                             patientDocumentResult?.fileDetailDTO
