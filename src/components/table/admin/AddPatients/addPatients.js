@@ -11,6 +11,12 @@ import {
   sortFunction,
 } from "../../../headerFilters/functions";
 import { getStorage, setStorage } from "../../../../utils/storages";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFlag,
+  faFontAwesome,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
 
 function AddPatientListTable({
   patinetListAll,
@@ -21,10 +27,10 @@ function AddPatientListTable({
   setSortOrder,
   setSort,
   page,
-  sortCompleteOrder, 
-  setSortCompleteOrder
+  sortCompleteOrder,
+  setSortCompleteOrder,
 }) {
-  const [detailsContent, setDetailsContent] = useState(patinetListAll)
+  const [detailsContent, setDetailsContent] = useState(patinetListAll);
   const dispatch = useDispatch();
   const navigate = useRouter();
 
@@ -86,27 +92,30 @@ function AddPatientListTable({
               className={TableStyle.firstTdBorder}
               onClick={handleTableRowClick}
             >
+              {data.isFlagShow === true ? (
+                <span className="p-1">
+                  <FontAwesomeIcon
+                    icon={faStar}
+                    style={{ color: "gold", fontSize: "10px" }}
+                  />
+                </span>
+              ) : (
+                <span className="p-2">&nbsp;</span>
+              )}
+
               {data.patientId ? data.patientId : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.fileName ? (
-                data.fileName
-              ) : (
-               "---"
-              )}
+              {data.fileName ? data.fileName : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.totalPages ? (
-                data.totalPages
-              ) : (
-               "---"
-              )}
+              {data.totalPages ? data.totalPages : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
@@ -176,9 +185,11 @@ function AddPatientListTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENT ID</th>
-            <th >FILE NAME</th>
+            <th>FILE NAME</th>
             <th className="text-truncate">TOTAL PAGES</th>
-            <th style={{ textAlign: "center" }} className="text-truncate">CREATED BY</th>
+            <th style={{ textAlign: "center" }} className="text-truncate">
+              CREATED BY
+            </th>
 
             <th
               style={{
