@@ -108,6 +108,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const [showFilters, setShowFilters] = useState(
     navigate?.query ? true : false
   );
+
   const dueStartDate = navigate?.query?.dueDateStart
     ? moment(navigate?.query?.dueDateStart)?.format("YYYY-MM-DD") +
       "T00:00:00.000Z"
@@ -520,6 +521,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         dayjs(decodedParams?.dueDateStart),
         dayjs(decodedParams?.dueDateEnd),
       ]);
+      setDueDateStart(decodedParams?.dueDateStart);
+      setDueDateEnd(decodedParams?.dueDateEnd);
     }
   }, [navigate.query]);
   return (
