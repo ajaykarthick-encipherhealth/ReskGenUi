@@ -76,7 +76,14 @@ const AICHAT = ({ openMsg, offMsg }) => {
               >
                 <div className={styles.chatMainHead}>
                   <div className={styles.chatHead}>
-                  {!currentUserInfo ?"Loading..": IMAGES.loginPageLogo3? <Image src={IMAGES.loginPageLogo3} /> :"Loading"}
+                    {/* {!currentUserInfo ? (
+                      "Loading.."
+                    ) : IMAGES.loginPageLogo3 ? (
+                      <Image src={IMAGES.loginPageLogo3} />
+                    ) : (
+                      "Loading"
+                    )} */}
+                    <Image src={IMAGES.loginPageLogo3} />
                     <h4 className={styles.chatTitle}>Chat with CogentAI</h4>
                   </div>
                 </div>
