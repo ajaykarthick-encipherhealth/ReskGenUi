@@ -53,7 +53,7 @@ const CamboTree = ({
   isDosSelected,
   setFileLoading
 }) => {
-  const [count, setCount] = useState(0);
+
   const [trees, setTrees] = useState(Tree);
   const [isLoading, setLoading] = useState(tree);
   const [zoom, setZoom] = useState({ width: 350, height: 185 });
