@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { Empty, Select, Badge, Popover } from "antd";
+import { Empty, Select, Badge, Popover, Tooltip } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
@@ -23,6 +23,7 @@ import {
 import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAction";
 import { extractLatestData } from "../../auditing";
 import { setStorage } from "../../../../utils/storages";
+import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 
 const UserQueueTable = ({
   userList,
@@ -162,7 +163,7 @@ const UserQueueTable = ({
             className={TableStyle.firstTdBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
-            <span>{data?.patientId}</span>
+         <Tooltip title={data.patientId}> {truncateString(data.patientId, 20)}</Tooltip>
           </td>
           <td
             className={TableStyle.childBorder}
