@@ -211,67 +211,62 @@ const IndividualReceiverReport = () => {
             {/* users */}
             <div className={styles.list}>
               {detailsContent?.length > 0 ? (
-                detailsContent?.map((item) => (
-                  <div
-                    key={item.reportId ? item.reportId : item._d}
-                    onClick={() => {
-                      dispatch(selectedReport({ reportUser: item }));
-                      dispatch(
-                        getSelectedReportDetails(
-                          isSentReport ? item?._id : item?.reportId,
-                          item
-                        )
-                      );
-                      setReportInfo(item);
-                    }}
-                  >
-                    <div className="d-flex cursor-pointer mb-2">
-                      <div className={styles.user}>
-                        <div
-                          style={{
-                            color:
-                              reportInfo?.reportId === item?.reportId
-                                ? "#04306f"
-                                : "black",
-                            fontWeight:
-                              reportInfo?.reportId === item?.reportId
-                                ? "bold"
-                                : "normal",
-                          }}
-                        >
-                          {item?.reportName}
-                        </div>
+                detailsContent?.map((item) => {
+                  const id = item?._id ? item?._id : item?.reportId;
+                  const reportId = reportInfo?._id
+                    ? reportInfo?._id
+                    : reportInfo?.reportId;
+                  return (
+                    <div
+                      key={id}
+                      onClick={() => {
+                        dispatch(selectedReport({ reportUser: item }));
+                        dispatch(getSelectedReportDetails(id, item));
+                        setReportInfo(item);
+                      }}
+                    >
+                      <div className="d-flex cursor-pointer mb-2">
+                        <div className={styles.user}>
+                          <div
+                            style={{
+                              color: reportId === id ? "#04306f" : "black",
+                              fontWeight: reportId === id ? "bold" : "normal",
+                            }}
+                          >
+                            {item?.reportName}
+                          </div>
 
-                        {item?.type && (
-                          <div
-                            style={{ margin: "5px 0 0 5px" }}
-                            className={
-                              item.type === "EXCEL"
-                                ? styles.excelStyle
-                                : styles.csvSTyle
-                            }
-                          >
-                            {item?.type}
-                          </div>
-                        )}
-                        {item?.role && (
-                          <div
-                            className={
-                              item.role.toLowerCase() === "download"
-                                ? styles.download1
-                                : styles.read
-                            }
-                          >
-                            {item?.role.toLowerCase()}
-                          </div>
-                        )}
+                          {item?.type && (
+                            <div
+                              style={{ margin: "5px 0 0 5px" }}
+                              className={
+                                item.type === "EXCEL"
+                                  ? styles.excelStyle
+                                  : styles.csvSTyle
+                              }
+                            >
+                              {item?.type}
+                            </div>
+                          )}
+                          {item?.role && (
+                            <div
+                              className={
+                                item.role.toLowerCase() === "download"
+                                  ? styles.download1
+                                  : styles.read
+                              }
+                            >
+                              {item?.role.toLowerCase()}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className={styles.date}>
+                        {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
                       </div>
                     </div>
-                    <div className={styles.date}>
-                      {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
-                    </div>
-                  </div>
-                ))
+                  );
+                })
               ) : (
                 <div>No data</div>
               )}
