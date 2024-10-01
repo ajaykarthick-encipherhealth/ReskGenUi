@@ -87,46 +87,43 @@ const HeadTitle = ({
           View All
         </span>
       )}
-      <Modal
-        open={openPicker}
-        mask={true}
-        className="headerCalender"
-        closable={false}
-        onOk={() => {
-          dispatch(getDateRange(dateValues));
-          setOpenPicker(false);
-        }}
-        onCancel={() => {
-          setOpenPicker(false);
-          setSelectedDates([]);
-        }}
-      >
-        <div
-          className={`${styles.modalDetails} d-flex justify-content-between`}
+      <div className="calendar">
+        <Modal
+          open={openPicker}
+          mask={true}
+          width={640}
+          closable={false}
+          onOk={() => {
+            dispatch(getDateRange(dateValues));
+            setOpenPicker(false);
+          }}
+          onCancel={() => {
+            setOpenPicker(false);
+            setSelectedDates([]);
+          }}
         >
-          <RangePicker
-            getPopupContainer={() => document.getElementById("date-popup")}
-            popupStyle={{
-              marginTop: "-259px",
-              marginLeft: "-78px",
-            }}
-            placeholder={[
-              dayjs(currentDate).format("MM-DD-YYYY"),
-              dayjs(startOfMonth).format("MM-DD-YYYY"),
-            ]}
-            open={openPicker}
-            value={selectedDates?.length > 0 ? selectedDates : ""}
-            onChange={(dates, dateStrings) => {
-              setSelectedDates(dates);
-              handleDatePickerChange(dateStrings);
-            }}
-            format="MM-DD-YYYY"
-            suffixIcon={false}
-            className={styles.datepicker}
-            disabledDate={(current) => disableFutureDate(current)}
-            inputReadOnly={true}
-          />
-          {/* <div
+          <div
+            className={`${styles.modalDetails} d-flex justify-content-between`}
+          >
+            <RangePicker
+              getPopupContainer={() => document.getElementById("date-popup")}
+              placeholder={[
+                dayjs(currentDate).format("MM-DD-YYYY"),
+                dayjs(startOfMonth).format("MM-DD-YYYY"),
+              ]}
+              open={openPicker}
+              value={selectedDates?.length > 0 ? selectedDates : ""}
+              onChange={(dates, dateStrings) => {
+                setSelectedDates(dates);
+                handleDatePickerChange(dateStrings);
+              }}
+              format="MM-DD-YYYY"
+              suffixIcon={false}
+              // className={styles.datepicker}
+              disabledDate={(current) => disableFutureDate(current)}
+              inputReadOnly={true}
+            />
+            {/* <div
             className="cursor-pointer mx-4"
             onClick={(e) => {
               e.stopPropagation();
@@ -152,9 +149,10 @@ const HeadTitle = ({
           >
             <Button>Refresh</Button>
           </div> */}
-        </div>
-        <div id="date-popup" style={{ position: "relative" }} />
-      </Modal>
+          </div>
+          <div id="date-popup" style={{ position: "relative" }} />
+        </Modal>
+      </div>
     </div>
   );
 };
