@@ -6,7 +6,7 @@ const ENDPOINTS = {
   apiEndointFileUploadHcc: portalUrl,
   apiLocal: "http://localhost:3003/",
   isShow: false,
-  PdfViewer: "http://localhost:8888/web/viewer.html",
+  PdfViewer: "https://dev.viewer.cogent.encipherhealth.ai/web/viewer.html",
   isLocalEdit:true,
   localApi:"http://localhost:9003/",
 };
