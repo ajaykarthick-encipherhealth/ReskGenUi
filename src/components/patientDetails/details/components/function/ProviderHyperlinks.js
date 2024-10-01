@@ -25,15 +25,15 @@ export const getProviderNameTag = ({
   getRadiologyPDF,
   getLabPDF,
   getCurrentDiseaseType,
-  setLabData
+  setLabData,
+  storeFileDetails,
 }) => {
-  
   return providerNames?.map((res, index) => {
     const normalizedRes = res.toLowerCase().trim();
     const headerResult = hyperlinks?.filter(
       (res2) => res2?.header?.toLowerCase()?.trim() === normalizedRes
     );
-  
+
     if (index < 2) {
       if (headerResult?.length === 1) {
         const sectionMapArr = (
@@ -43,24 +43,25 @@ export const getProviderNameTag = ({
               const selectedMeatData = hyperlinks?.find(
                 (item) => item?.header?.toLowerCase() === normalizedRes
               );
-              if (selectedMeatData?.stateIndicator) {
-                getCurrentDiseaseType && getCurrentDiseaseType(false);
-                setLabData && setLabData(selectedMeatData?.fileId);
-                selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
-                  ? getLabPDF &&
-                    getLabPDF({
-                      fileId: selectedMeatData?.fileId,
-                    })
-                  : getRadiologyPDF(
-                      patientId,
-                      "",
-                      selectedMeatData?.dateOfService,
-                      "",
-                      selectedMeatData?.diagnosticTestName
-                    );
-              } else {
-                getCurrentDiseaseType && getCurrentDiseaseType(true);
-              }
+              // if (selectedMeatData?.stateIndicator) {
+              //   getCurrentDiseaseType && getCurrentDiseaseType(false);
+              //   setLabData && setLabData(selectedMeatData?.fileId);
+              //   selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
+              //     ? getLabPDF &&
+              //       getLabPDF({
+              //         fileId: selectedMeatData?.fileId,
+              //       })
+              //     : getRadiologyPDF(
+              //         patientId,
+              //         "",
+              //         selectedMeatData?.dateOfService,
+              //         "",
+              //         selectedMeatData?.diagnosticTestName
+              //       );
+              // } else {
+              //   getCurrentDiseaseType && getCurrentDiseaseType(true);
+              // }
+              // storeFileDetails(headerResult[0]?.fileId)
               findProviderNameDocument({
                 data: headerResult[0],
                 diagnosisCode: diagnosisCode,
@@ -72,7 +73,8 @@ export const getProviderNameTag = ({
                 setSelectMeatResult: setSelectMeatResult,
                 meatresult: meatresult,
                 getSelectedDosPageNumber: getSelectedDosPageNumber,
-                setLabData: setLabData
+                setLabData: setLabData,
+                storeFileDetails: storeFileDetails,
               });
             }}
             className={`mt-2 text-start ${visitStyles.provider_name} truncate-text`}
@@ -101,7 +103,7 @@ export const getProviderNameTag = ({
         const sectionMapArr = (
           <Popover
             placement="bottom"
-            overlayStyle={{zIndex:1000}}
+            overlayStyle={{ zIndex: 1000 }}
             content={
               <>
                 {getProviderPopoverHyperlink({
@@ -118,7 +120,8 @@ export const getProviderNameTag = ({
                   getRadiologyPDF,
                   getLabPDF,
                   getCurrentDiseaseType,
-                  setLabData
+                  setLabData,
+                  storeFileDetails: storeFileDetails,
                 })}
               </>
             }
@@ -163,28 +166,32 @@ export const getProviderNameTag = ({
                           const selectedMeatData = hyperlinks?.find(
                             (item) => item?.header === res
                           );
-  
-                          if (selectedMeatData?.stateIndicator) {
-                            selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
-                              ? getLabPDF(
-                                  patientId,
-                                  "",
-                                  selectedMeatData?.dateOfService,
-                                  "",
-                                  selectedMeatData?.diagnosticTestName
-                                )
-                              : getRadiologyPDF(
-                                  patientId,
-                                  "",
-                                  selectedMeatData?.dateOfService,
-                                  "",
-                                  selectedMeatData?.diagnosticTestName
-                                );
-                          } else {
-                            getCurrentDiseaseType(false);
-                          }
+
+                          // if (selectedMeatData?.stateIndicator) {
+                          //   selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
+                          //     ? getLabPDF(
+                          //         patientId,
+                          //         "",
+                          //         selectedMeatData?.dateOfService,
+                          //         "",
+                          //         selectedMeatData?.diagnosticTestName
+                          //       )
+                          //     : getRadiologyPDF(
+                          //         patientId,
+                          //         "",
+                          //         selectedMeatData?.dateOfService,
+                          //         "",
+                          //         selectedMeatData?.diagnosticTestName
+                          //       );
+                          // } else {
+                          //   getCurrentDiseaseType(false);
+                          // }
+                          // storeFileDetails(findSectionHyperlink(hyperlinks, item.toLowerCase())[0]?.fileId);
                           findProviderNameDocument({
-                            data: findSectionHyperlink(hyperlinks, item.toLowerCase())[0],
+                            data: findSectionHyperlink(
+                              hyperlinks,
+                              item.toLowerCase()
+                            )[0],
                             diagnosisCode: diagnosisCode,
                             diseaseName: diseaseName,
                             setSearch: setSearch,
@@ -194,6 +201,7 @@ export const getProviderNameTag = ({
                             setSelectMeatResult: setSelectMeatResult,
                             meatresult: meatresult,
                             getSelectedDosPageNumber: getSelectedDosPageNumber,
+                            storeFileDetails: storeFileDetails,
                           });
                         }}
                         className={`mt-2 text-start ${visitStyles.provider_name}`}
@@ -218,7 +226,7 @@ export const getProviderNameTag = ({
                 </>
               ) : null
             )}
-  
+
             <span
               style={{
                 backgroundColor:
@@ -293,7 +301,7 @@ export const getProviderNameTag = ({
                 </Popover>
               ) : null
             )}
-  
+
             <span
               style={{
                 backgroundColor:
@@ -324,7 +332,6 @@ export const getProviderNameTag = ({
       }
     }
   });
-  
 };
 
 export const getProviderPopoverHyperlink = ({
@@ -341,7 +348,8 @@ export const getProviderPopoverHyperlink = ({
   getRadiologyPDF,
   getLabPDF,
   getCurrentDiseaseType,
-  setLabData
+  setLabData,
+  storeFileDetails,
 }) => {
   return value?.map((res) => {
     var sectionMapArr = res ? (
@@ -351,24 +359,25 @@ export const getProviderPopoverHyperlink = ({
           const selectedMeatData = value?.find(
             (item) => item?.dateOfService === res.dateOfService
           );
-          if (selectedMeatData?.stateIndicator) {
-            getCurrentDiseaseType(false);
-            setLabData &&  setLabData(selectedMeatData?.fileId)
-            selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
-              ? getLabPDF &&
-              getLabPDF({
-                fileId: selectedMeatData?.fileId,
-              })
-              : getRadiologyPDF(
-                  patientId,
-                  "",
-                  selectedMeatData?.dateOfService,
-                  "",
-                  selectedMeatData?.diagnosticTestName
-                );
-          } else {
-            getCurrentDiseaseType && getCurrentDiseaseType(true);
-          }
+          // if (selectedMeatData?.stateIndicator) {
+          //   getCurrentDiseaseType(false);
+          //   setLabData &&  setLabData(selectedMeatData?.fileId)
+          //   selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
+          //     ? getLabPDF &&
+          //     getLabPDF({
+          //       fileId: selectedMeatData?.fileId,
+          //     })
+          //     : getRadiologyPDF(
+          //         patientId,
+          //         "",
+          //         selectedMeatData?.dateOfService,
+          //         "",
+          //         selectedMeatData?.diagnosticTestName
+          //       );
+          // } else {
+          //   getCurrentDiseaseType && getCurrentDiseaseType(true);
+          // }
+          // storeFileDetails(res?.fileId);
           findProviderNameDocument({
             data: res,
             diagnosisCode: diagnosisCode,
@@ -380,6 +389,7 @@ export const getProviderPopoverHyperlink = ({
             setSelectMeatResult: setSelectMeatResult,
             meatresult: meatresult,
             getSelectedDosPageNumber: getSelectedDosPageNumber,
+            storeFileDetails: storeFileDetails,
           });
         }}
         style={{
@@ -411,8 +421,10 @@ const findProviderNameDocument = ({
   setSelectMeatResult,
   meatresult,
   getSelectedDosPageNumber,
-  setLabData
+  setLabData,
+  storeFileDetails,
 }) => {
+  storeFileDetails(data?.fileId);
   setSelectMeatResult && setSelectMeatResult(meatresult);
   var disName = diseaseName ? diseaseName : meatresult?.diseaseName;
   var headerName = patientDocumentResult

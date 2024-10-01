@@ -78,7 +78,8 @@ const HccCards = ({
   radiologyDetailsResult,
   patientDetailsResult,
   setSuggestedMeatForm,
-  setSelectCardTitle
+  setSelectCardTitle,
+  storeFileDetails
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -595,6 +596,7 @@ const HccCards = ({
                                     getLabPDF,
                                     getCurrentDiseaseType,
                                     setLabData,
+                                    storeFileDetails:storeFileDetails
                                   })}
                                 </div>
                                 <div
@@ -623,7 +625,8 @@ const HccCards = ({
                                     getCurrentDiseaseType,
                                     hyperlinks: data?.hyperlinks,
                                     setSelectedDos,
-                                    setLabData
+                                    setLabData,
+                                    storeFileDetails:storeFileDetails
                                   })}
                                 </div>
                                 {data.providerName.length == 0 && (
@@ -673,6 +676,7 @@ const HccCards = ({
                                       getSelectedDosPageNumber:
                                         getSelectedDosPageNumber,
                                       setLabData: setLabData,
+                                      storeFileDetails:storeFileDetails
                                     })}
                                   </div>
                                 )}
@@ -875,6 +879,7 @@ const HccCards = ({
                                     getSelectedDosPageNumber:
                                       getSelectedDosPageNumber,
                                     setLabData: setLabData,
+                                    storeFileDetails:storeFileDetails
                                   })}
                                 </div>
 
@@ -996,6 +1001,7 @@ const enhancer = connect(
     getLabPDFFile: detailsActions.labPDFDetails,
     getRadiologyPDFFile: detailsActions.radiologyDetailsAction,
     getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
+    storeFileDetails: detailsActions.storeFileIdAction,
   }
 );
 export default enhancer(HccCards);
