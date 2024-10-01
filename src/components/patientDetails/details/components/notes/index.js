@@ -73,10 +73,10 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes 
     setValidated(true);
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (noteId) => {
     const payload = {
       patientId: patientDetailsResult?.data?.response?.patientId,
-      noteId: notesList?.[0]?.noteId,
+      noteId: noteId,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
     };
@@ -269,7 +269,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes 
               >
                 <FontAwesomeIcon
                   icon={faXmarkCircle}
-                  onClick={handleDelete}
+                  onClick={() => handleDelete(data.noteId)} 
                   style={{ color: "#be3144" }}
                 />
               </div>

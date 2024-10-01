@@ -117,10 +117,10 @@ const Comments = ({
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (commentId) => {
     const payload = {
       patientId: patientDetailsResult?.data?.response?.patientId,
-      commentId: commentList?.[0]?.commentId,
+      commentId:commentId,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
     };
@@ -264,7 +264,7 @@ const Comments = ({
               >
                 <FontAwesomeIcon
                   icon={faXmarkCircle}
-                  onClick={handleDelete}
+                  onClick={() => handleDelete(data.commentId)} 
                   style={{ color: "#be3144" }}
                 />
               </div>
