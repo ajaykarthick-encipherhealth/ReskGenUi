@@ -35,7 +35,7 @@ const Flag = ({
   isdeleteFlag,
 }) => {
   const [inputValue, setInputValue] = useState({
-    patientId: "",
+    flagId: "",
     comments: "",
   });
   const [flagResultList, setFlagResultList] = useState([]);
@@ -58,15 +58,14 @@ const Flag = ({
 
   const handleDelete = async () => {
     const payload = {
-      flagId: inputValue.flagId,
+      flagId: flagsDetailsResult?.response[0]?.patientFlagDTO?.flagId || "",
       patientId: patientDetailsResult?.data?.response?.patientId,
-      comment: inputValue.comments,
+      comment: flagsDetailsResult?.response[0]?.patientFlagDTO?.comment,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
     };
     try {
       const response = await isdeleteFlag(payload);
-
       getResponePopup(response);
       getFlagDetailsData(
         patientDetailsResult?.data?.response?.patientId,
@@ -74,7 +73,7 @@ const Flag = ({
         patientDetailsResult?.data?.response?.dateOfService
       );
     } catch (error) {
-      getResponePopup(response);
+      getResponePopup(error?.response);
       console.error(error);
     }
   };
@@ -97,24 +96,21 @@ const Flag = ({
           ENDPOINTS.apiEndoint + `dbservice/flagdetails`,
           dataFormatSuggested
         );
-        var result = response.data;
-        if (result.status == "SUCCESS") {
-          inputValue.comments = "";
-          notification.success({
-            message: result.message,
-            placement: "top",
-            duration: 1,
-          });
-          getFlagDetailsData(
-            patientDetailsResult?.data?.response?.patientId,
-            patientDetailsResult?.data?.response?.processedYear,
-            patientDetailsResult?.data?.response?.dateOfService
-          );
-          setCommentsTrigger(false);
-          setIsModalComments(false);
-        } else {
-        }
+        getResponePopup(response);
+        getFlagDetailsData(
+          patientDetailsResult?.data?.response?.patientId,
+          patientDetailsResult?.data?.response?.processedYear,
+          patientDetailsResult?.data?.response?.dateOfService
+        );
+
+        setInputValue({
+          flagId: "",
+          comments: "",
+        });
+        setCommentsTrigger(false);
+        setIsModalComments(false);
       } catch (error) {
+        getResponePopup(error.response);
         setCommentsTrigger(false);
       }
     }
@@ -172,19 +168,20 @@ const Flag = ({
     setUserDetails(data);
   };
 
-  const handleChange = async (e) => {
-    const key = e.target.name;
-    const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setInputValue((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  const handleChangeFlag = async (e) => {
-    setInputValue({
-      ...inputValue,
-      ["flagId"]: e.value,
-      ["flag"]: e.name,
-      flagId: e.value,
-    });
+  const handleChangeFlag = (selectedOption) => {
+    setInputValue((prevState) => ({
+      ...prevState,
+      flagId: selectedOption.value,
+      flag: selectedOption.label,
+    }));
   };
 
   useEffect(() => {
@@ -225,6 +222,11 @@ const Flag = ({
                   isSearchable={false}
                   id="flag"
                   name="flag"
+                  value={
+                    flagPostList.find(
+                      (option) => option.value === inputValue.flagId
+                    ) || null
+                  } 
                   onChange={handleChangeFlag}
                 />
               </div>
@@ -238,6 +240,7 @@ const Flag = ({
                   required
                   id="comments"
                   name="comments"
+                  value={inputValue.comments}
                   placeholder="Add Comments"
                   onChange={handleChange}
                   // onKeyPress={handleEnterTextNotes}

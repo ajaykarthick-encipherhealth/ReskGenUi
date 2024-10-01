@@ -58,6 +58,17 @@ export const isDeleteFlag = createActionThunk(
   "DELETE_FLAG",
   network.deleteflag
 );
+
+export const isDeleteNotes = createActionThunk(
+  "DELETE_NOTES",
+  network.deleteNotes
+);
+
+export const isDeleteComments = createActionThunk(
+  "DELETE_COMMENTS",
+  network.deleteComments
+);
+
 export const getValideCode = createActionThunk(
   "GET_VALID_CODE",
   network.isValideCode
@@ -121,6 +132,11 @@ export const labDosDeatilsAction = createActionThunk(
 export const activeLabels = createActionThunk(
   "ACTIVE_LABEL",
   network.activeLabel
+);
+
+export const suggestedToValidMove = createActionThunk(
+  "MEAT_VALID_MOVE",
+  network.suggestedToValid
 );
 
 export const getSelectedDosPageNumber = createAction("GET_SELECTED_DOS_PAGE_NUMBER");

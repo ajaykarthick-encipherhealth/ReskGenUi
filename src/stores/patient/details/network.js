@@ -184,6 +184,31 @@ export async function deleteflag(obj) {
   return data;
 }
 
+export async function deleteNotes(obj) {
+  const options = {
+    method: "DELETE",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/notes/delete`,
+    options
+  );
+  return data;
+}
+
+export async function deleteComments(obj) {
+  const options = {
+    method: "DELETE",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/comment/delete`,
+    options
+  );
+  return data;
+}
+
+
 export async function isValideCode(code) {
   const options = {
     method: "GET",
@@ -277,6 +302,30 @@ export async function activeLabel({ patientId, year, dos }) {
   };
   const data = await requestPortal(
     `dbservice/patient/compute/get/diseasegroup?patientId=${patientId}&processedYear=${year}&dateOfService=${dos}`,
+    options
+  );
+  return data;
+}
+
+export async function suggestedToValid(obj,cardTitle) {
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(obj),
+  };
+  var apiUrl = "management/disease/move/suggestedtovalid"
+  if (cardTitle.name == "Move to HCC" && cardTitle.title == "DELETED") {
+    apiUrl = "management/disease/move/deletedtovalid";
+  }
+  const data = await requestPortal(apiUrl, options);
+  return data;
+}
+
+export async function suggestedMeatCheck(diagnosisCode) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/meat/conformation?diagnosisCode=${diagnosisCode}`,
     options
   );
   return data;

@@ -6,13 +6,20 @@ import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Popover, Avatar, Tooltip, notification } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle, faClock } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUserCircle,
+  faClock,
+  faXmarkCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { connect } from "react-redux";
 import { getStorage } from "../../../../../utils/storages";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
+import { isDeleteNotes } from "../../../../../stores/patient/details/actions";
+import { getResponePopup } from "../../../../../utils/reusable";
 
-const Notes = ({ setOpen, open, patientDetailsResult }) => {
+const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
     comments: "",
@@ -62,8 +69,27 @@ const Notes = ({ setOpen, open, patientDetailsResult }) => {
     setValidated(true);
   };
 
+  const handleDelete = async () => {
+    const payload = {
+      patientId: patientDetailsResult?.data?.response?.patientId,
+      noteId: notesList?.[0]?.noteId,
+      processedYear: patientDetailsResult?.data?.response?.processedYear,
+      dateOfService: patientDetailsResult?.data?.response?.dateOfService,
+    };
+
+    try {
+      const response = await isDeleteNotes(payload);
+      getResponePopup(response);
+      getNotesList();
+    } catch (error) {
+      getResponePopup(error?.response);
+      console.error(error);
+    }
+  };
+
   const handleEnterTextNotes = async (event) => {
     const yearData = patientDetailsResult?.data?.response;
+
     if (event.charCode == 13) {
       if (inputValue.comments.trim() != "") {
         const orgId = getStorage("orgId");
@@ -99,6 +125,7 @@ const Notes = ({ setOpen, open, patientDetailsResult }) => {
 
   const getNotesList = async () => {
     const yearData = patientDetailsResult?.data?.response;
+
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
         `dbservice/notes?patientId=${
@@ -109,7 +136,7 @@ const Notes = ({ setOpen, open, patientDetailsResult }) => {
           yearData?.dateOfService ? yearData?.dateOfService : ""
         }`
     );
-    setNotesList(response.data.response);
+    setNotesList(response?.data?.response);
     setFilterDataLoading(false);
   };
 
@@ -139,7 +166,7 @@ const Notes = ({ setOpen, open, patientDetailsResult }) => {
       );
 
       if (response.data) {
-        result = response.data.response;
+        result = response?.response;
         data = (
           <div className={visitStyles.userDetailsCard}>
             <div className={visitStyles.avatarStyle}>
@@ -226,8 +253,25 @@ const Notes = ({ setOpen, open, patientDetailsResult }) => {
             </div>
           </Form>
           {notesList?.map((data, index) => (
-            <div className={visitStyles.comments_card}>
-              <div className={`${visitStyles.commentNameHead}`}>
+            <div
+              className={`${visitStyles.comments_card} position-relative`}
+              key={index}
+            >
+              <div
+                className="position-absolute top-0 end-0 mt-2 me-2 p-9"
+                style={{ cursor: "pointer" }}
+              >
+                <FontAwesomeIcon
+                  icon={faXmarkCircle}
+                  onClick={handleDelete}
+                  style={{ color: "#be3144" }}
+                />
+              </div>
+
+              <div
+                className={`${visitStyles.commentNameHead}`}
+                style={{ paddingTop: "20px" }}
+              >
                 <span className={visitStyles.commentsName}>{data?.note}</span>
                 <Tooltip placement="bottom" title={data?.createdBy}>
                   <Popover
@@ -263,7 +307,12 @@ const Notes = ({ setOpen, open, patientDetailsResult }) => {
   );
 };
 
-const enhancer = connect((state) => ({
-  patientDetailsResult: state?.patientDetails?.details?.patientResult,
-}));
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
+  }),
+  {
+    isDeleteNotes: detailsActions.isDeleteNotes,
+  }
+);
 export default enhancer(Notes);

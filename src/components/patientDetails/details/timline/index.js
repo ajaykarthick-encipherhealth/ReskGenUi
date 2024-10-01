@@ -771,6 +771,134 @@ const Timeline = ({
               </>
             </div>
           );
+        case "COMMENT_ADDED":
+          return (
+            <div className="d-flex w-100 justify-content-between">
+              <>
+                <strong>Comment Added </strong>
+                <Popover
+                  open={popClickDisCode === index}
+                  trigger={["hover"]}
+                  placement="bottom"
+                  overlayStyle={{ zIndex: 9999 }}
+                  content={
+                    <div
+                    className="d-flex justify-content-between"
+                    >
+                      <span className={`${styles.textContent}`}>{item?.actionNotes}</span>
+                      <CloseCircleFilled
+                        onClick={() => onClickPopup(null)}
+                        className={`${styles.closeIcon}`}
+                      />
+                    </div>
+                  }
+                >
+                  <span
+                    className={styles.viewTag}
+                    onClick={() => onClickPopup(index)}
+                  >
+                    View
+                  </span>
+                </Popover>
+              </>
+            </div>
+          );
+        case "COMMENT_REMOVED":
+          return (
+            <div className="d-flex w-100 justify-content-between">
+              <>
+                <strong>Comment Removed </strong>
+                <Popover
+                  open={popClickDisCode === index}
+                  trigger={["hover"]}
+                  placement="bottom"
+                  overlayStyle={{ zIndex: 9999 }}
+                  content={
+                    <div
+                    className="d-flex justify-content-between"
+                    >
+                      <span className={`${styles.textContent}`}>{item?.actionNotes}</span>
+                      <CloseCircleFilled
+                        onClick={() => onClickPopup(null)}
+                        className={`${styles.closeIcon}`}
+                      />
+                    </div>
+                  }
+                >
+                  <span
+                    className={styles.viewTag}
+                    onClick={() => onClickPopup(index)}
+                  >
+                    View
+                  </span>
+                </Popover>
+              </>
+            </div>
+          );
+        case "NOTES_ADDED,":
+          return (
+            <div className="d-flex w-100 justify-content-between">
+            <>
+              <strong>Notes Added </strong>
+              <Popover
+                open={popClickDisCode === index}
+                trigger={["hover"]}
+                placement="bottom"
+                overlayStyle={{ zIndex: 9999 }}
+                content={
+                  <div
+                  className="d-flex justify-content-between"
+                  >
+                    <span className={`${styles.textContent}`}>{item?.actionNotes}</span>
+                    <CloseCircleFilled
+                      onClick={() => onClickPopup(null)}
+                      className={`${styles.closeIcon}`}
+                    />
+                  </div>
+                }
+              >
+                <span
+                  className={styles.viewTag}
+                  onClick={() => onClickPopup(index)}
+                >
+                  View
+                </span>
+              </Popover>
+            </>
+          </div>
+          );
+        case "NOTES_REMOVED":
+          return (
+            <div className="d-flex w-100 justify-content-between">
+            <>
+              <strong>Notes Removed </strong>
+              <Popover
+                open={popClickDisCode === index}
+                trigger={["hover"]}
+                placement="bottom"
+                overlayStyle={{ zIndex: 9999 }}
+                content={
+                  <div
+                  className="d-flex justify-content-between"
+                  >
+                    <span className={`${styles.textContent}`}>{item?.actionNotes}</span>
+                    <CloseCircleFilled
+                      onClick={() => onClickPopup(null)}
+                      className={`${styles.closeIcon}`}
+                    />
+                  </div>
+                }
+              >
+                <span
+                  className={styles.viewTag}
+                  onClick={() => onClickPopup(index)}
+                >
+                  View
+                </span>
+              </Popover>
+            </>
+          </div>
+          );
         default:
           return (
             <div className="d-flex">

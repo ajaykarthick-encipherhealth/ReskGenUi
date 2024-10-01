@@ -56,6 +56,7 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import ManuallyAddProvider from "./manuallyAddProvider";
 import { getAge } from "../../../utils/reusable";
 import { getStorage, setStorage } from "../../../utils/storages";
+import { truncateString } from "./components/function/ReusableFunctions";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -796,12 +797,22 @@ const Details = ({
                                     <FontAwesomeIcon icon={faFile} />
 
                                     <label>File Name</label>
-                                    <h6 className="ageDtails">
-                                      {
-                                        patientDocumentResult?.fileDetailDTO
-                                          ?.fileName
-                                      }
-                                    </h6>
+                                    <div>
+                                      <h6>                                  
+                                        <Tooltip
+                                          title={
+                                            patientDocumentResult?.fileDetailDTO
+                                              ?.fileName
+                                          }
+                                        >
+                                          {truncateString(
+                                            patientDocumentResult?.fileDetailDTO
+                                              ?.fileName,
+                                            7
+                                          )}
+                                        </Tooltip>
+                                      </h6>
+                                    </div>
                                   </div>
                                   <div className="col-xl-1 col-sm-12">
                                     <FontAwesomeIcon icon={faCalendarAlt} />

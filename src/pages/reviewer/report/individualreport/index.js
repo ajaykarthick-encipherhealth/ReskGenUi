@@ -207,82 +207,70 @@ const IndividualReceiverReport = () => {
 
             {/* users */}
             <div className={styles.list}>
-              {!searchValue && detailsContent?.length === 0 ? (
-                <div style={{ marginTop: "60px" }}>
-                  <SpinnerDots />
-                </div>
-              ) : (
-                <>
-                  {searchValue && detailsContent?.length === 0 ? (
-                    <div>No data</div>
-                  ) : (
-                    detailsContent?.map((item) => (
-                      <div key={item.reportId ? item.reportId : item._d}>
+              {detailsContent?.length > 0 ? (
+                detailsContent?.map((item) => (
+                  <div
+                    key={item.reportId ? item.reportId : item._d}
+                    onClick={() => {
+                      dispatch(selectedReport({ reportUser: item }));
+                      dispatch(
+                        getSelectedReportDetails(
+                          isSentReport ? item?._id : item?.reportId,
+                          item
+                        )
+                      );
+                      setReportInfo(item);
+                    }}
+                  >
+                    <div className="d-flex cursor-pointer mb-2">
+                      <div className={styles.user}>
                         <div
                           style={{
-                            display: "flex",
-                            cursor: "pointer",
-                            marginBottom: "10px",
-                          }}
-                          onClick={() => {
-                            dispatch(selectedReport({ reportUser: item }));
-                            setReportInfo(item);
-                            dispatch(
-                              getSelectedReportDetails(
-                                isSentReport ? item?._id : item?.reportId,
-                                item
-                              )
-                            );
+                            color:
+                              reportInfo?.reportId === item?.reportId
+                                ? "#04306f"
+                                : "black",
+                            fontWeight:
+                              reportInfo?.reportId === item?.reportId
+                                ? "bold"
+                                : "normal",
                           }}
                         >
-                          <div className={styles.user}>
-                            <div
-                              style={{
-                                color:
-                                  reportInfo?.reportName === item?.reportName
-                                    ? "#04306f"
-                                    : "black",
-                                fontWeight:
-                                  reportInfo?.reportName === item?.reportName
-                                    ? "bold"
-                                    : "normal",
-                              }}
-                            >
-                              {item?.reportName}
-                            </div>
+                          {item?.reportName}
+                        </div>
 
-                            {item?.type && (
-                              <div
-                                style={{ margin: "5px 0 0 5px" }}
-                                className={
-                                  item.type === "EXCEL"
-                                    ? styles.excelStyle
-                                    : styles.csvSTyle
-                                }
-                              >
-                                {item?.type}
-                              </div>
-                            )}
-                            {item?.role && (
-                              <div
-                                className={
-                                  item.role.toLowerCase() === "download"
-                                    ? styles.download1
-                                    : styles.read
-                                }
-                              >
-                                {item?.role.toLowerCase()}
-                              </div>
-                            )}
+                        {item?.type && (
+                          <div
+                            style={{ margin: "5px 0 0 5px" }}
+                            className={
+                              item.type === "EXCEL"
+                                ? styles.excelStyle
+                                : styles.csvSTyle
+                            }
+                          >
+                            {item?.type}
                           </div>
-                        </div>
-                        <div className={styles.date}>
-                          {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
-                        </div>
+                        )}
+                        {item?.role && (
+                          <div
+                            className={
+                              item.role.toLowerCase() === "download"
+                                ? styles.download1
+                                : styles.read
+                            }
+                          >
+                            {item?.role.toLowerCase()}
+                          </div>
+                        )}
                       </div>
-                    ))
-                  )}
-                </>
+                    </div>
+                    <div className={styles.date}>
+                      {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div>No data</div>
               )}
             </div>
           </div>
@@ -355,18 +343,7 @@ const IndividualReceiverReport = () => {
                 overflowX: "scroll",
               }}
             >
-              {loading && (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  loading....
-                </div>
-              )}
-              {url?.extention === "csv" && !loading && (
+              {url?.extention === "csv" && (
                 <CSVDisplay
                   tableData={csvTableData}
                   fileUrl={url?.path}
@@ -374,16 +351,14 @@ const IndividualReceiverReport = () => {
                   loading={loading}
                 />
               )}
-              {url?.extention === "xlsx" &&
-                tableData?.length > 0 &&
-                !loading && (
-                  <ExcelDisplay
-                    tableData={tableData}
-                    fileUrl={url?.path}
-                    extention={url?.extention}
-                    loading={loading}
-                  />
-                )}
+              {url?.extention === "xlsx" && (
+                <ExcelDisplay
+                  tableData={tableData}
+                  fileUrl={url?.path}
+                  extention={url?.extention}
+                  loading={loading}
+                />
+              )}
             </div>
           </div>
         </div>

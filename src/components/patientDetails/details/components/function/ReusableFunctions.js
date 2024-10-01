@@ -608,8 +608,8 @@ const newFindValueDocument = (
 };
 
 export const truncateString = (str, num) => {
-  if (str.length > num) {
-    return str.slice(0, num) + "...";
+  if (str?.length > num) {
+    return str?.slice(0, num) + "...";
   }
   return str;
 };
@@ -1828,6 +1828,19 @@ export const stringToColour = (str) => {
     colour = "#f1a113";
   }
   return colour;
+};
+
+export const getMeatAnyOneFindCheck = (code, data) => {
+  const result = data?.filter(
+    (res2) => res2?.diagnosisCode?.replace(".", "") == code?.replace(".", "")
+  );
+  if (result?.length != 0) {
+    if (result[0]?.monitorAspect || result[0]?.evaluateAspect || result[0]?.assessmentAspect || result[0]?.treatmentAspect) {
+      return true;
+    }else{
+      return false;
+    }   
+  }
 };
 
 const findSectionHyperlink = (hyperlinks, header) => {

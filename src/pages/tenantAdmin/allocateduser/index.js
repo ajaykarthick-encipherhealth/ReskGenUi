@@ -41,10 +41,11 @@ import { getStorage } from "../../../utils/storages";
 
 const { RangePicker } = DatePicker;
 const statusOption = [
-  { value: "URGENT", label: "URGENT" },
-  { value: "HIGH", label: "HIGH" },
-  { value: "NORMAL", label: "NORMAL" },
-  { value: "LOW", label: "LOW" },
+  { value: "", label: "All" },
+  { value: "URGENT", label: "Urgent" },
+  { value: "HIGH", label: "High" },
+  { value: "NORMAL", label: "Normal" },
+  { value: "LOW", label: "Low" },
 ];
 
 const Patient = ({
@@ -87,7 +88,7 @@ const Patient = ({
   const [checkedLoading, setCheckedLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState("");
-  const [allocatedOption, setAllocatedOption] = useState("");
+  const [allocatedOption, setAllocatedOption] = useState(null);
   const [batchCount, setBatchCount] = useState("");
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
@@ -337,13 +338,23 @@ const Patient = ({
     }
   }, []);
   useEffect(() => {
-    var orgListArray = [];
-    organizationList?.response?.map((res) => {
-      orgListArray.push({
-        value: res.id,
-        label: res.name,
-      });
-    });
+    // var orgListArray = [];
+    const orgListArray =
+      organizationList?.response?.length > 0
+        ? [
+            { label: "All", value: "All" },
+            ...organizationList?.response?.map((res) => ({
+              value: res.id,
+              label: res.name,
+            })),
+          ].filter(Boolean)
+        : [];
+    // organizationList?.response?.map((res) => {
+    //   orgListArray.push({
+    //     value: res.id,
+    //     label: res.name,
+    //   });
+    // });
     setOrgAllList(orgListArray);
   }, [organizationList]);
   const renderRows = () => {
@@ -430,9 +441,9 @@ const Patient = ({
     );
   };
   const statusOptions = [
-    { label: "COMPLETED", value: "COMPLETED" },
-    { label: "DECLINED", value: "DECLINED" },
-    { label: "ALL", value: "ALL" },
+    { label: "Completed", value: "COMPLETED" },
+    { label: "Declined", value: "DECLINED" },
+    { label: "All", value: "ALL" },
   ];
 
   const getL2PatientList = async ({
@@ -459,7 +470,9 @@ const Patient = ({
       searchString ? searchString : ""
     }&processedStatus=${
       selectedOptions ? (selectedOptions === "ALL" ? "" : selectedOptions) : ""
-    }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
+    }&patientAllocated=${
+      allocatedOption ? (allocatedOption === "All" ? "" : allocatedOption) : ""
+    }`;
     getSelectedSupervisorList({ url: resoureUrl });
     setIsPatientList(true);
   };
@@ -495,7 +508,7 @@ const Patient = ({
   }, []);
 
   useEffect(() => {
-    if (selectedOptions?.length > 0) {
+    if (selectedOptions?.length > 0 || allocatedOption) {
       getL2PatientList({
         data: l2selectUser,
         pageNoL2Patient: pageNoL2Patient,
@@ -590,7 +603,7 @@ const Patient = ({
                                   onChange={(e) => {
                                     setSelectedOrgList(e);
                                     setSelectedRowsId([]);
-                                    setSelectAllChecked(false)
+                                    setSelectAllChecked(false);
                                   }}
                                   value={selectOrgList}
                                 />
@@ -613,7 +626,7 @@ const Patient = ({
                                         dateStrings
                                       );
                                       setSelectedRowsId([]);
-                                      setSelectAllChecked(false)
+                                      setSelectAllChecked(false);
                                     }}
                                     disabledDate={(current) =>
                                       disableFutureDate(current)
@@ -641,7 +654,7 @@ const Patient = ({
                                     onChange={(e) => {
                                       setSelectedOption(e);
                                       setSelectedRowsId([]);
-                                      setSelectAllChecked(false)
+                                      setSelectAllChecked(false);
                                     }}
                                     value={selectedOption}
                                   />

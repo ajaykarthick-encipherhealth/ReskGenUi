@@ -77,6 +77,8 @@ const HccCards = ({
   radiologyFile,
   radiologyDetailsResult,
   patientDetailsResult,
+  setSuggestedMeatForm,
+  setSelectCardTitle,
   storeFileDetails
 }) => {
   const fileId = useSelector(
@@ -276,7 +278,7 @@ const HccCards = ({
                                       onClick={() => {
                                         setOpens(true);
                                         setCombiTree([
-                                          { ...data, expanded: true },
+                                          { ...data, expanded: true, isDisabled: true },
                                         ]);
                                       }}
                                     >
@@ -343,6 +345,9 @@ const HccCards = ({
                                       data.ruleType !=
                                         "DIRECT_COMBINATION_RULE_ENGINE"
                                     }
+                                    setSuggestedMeatForm={setSuggestedMeatForm}
+                                    meatCriteriaList={meatCriteriaList}
+                                    setSelectCardTitle={setSelectCardTitle}
                                   />
                                 )}
                                 <Popover

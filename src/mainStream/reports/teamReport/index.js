@@ -67,7 +67,7 @@ const TeamReport = ({
       //   pagenum: 0,
       //   size: ReportPatientDetails?.response?.response?.totalElements,
       // });
-
+      setIsLoading(true);
       try {
         setIsLoading(true);
         const res = await fetch(
@@ -81,31 +81,37 @@ const TeamReport = ({
             headers: { Authorization: `Bearer ${await getStorage("token")}` },
           }
         ).then((res) => res.json());
-        const seletedAll =res?.response?.response?.data?.map(item=>item?.patientId);
-        setSelectedRows(seletedAll.length>0 ? seletedAll : []);
-      } catch (error) {}
+        // const seletedAll =res?.response?.response?.data?.map(item=>item?.patientId);
+        const seletedAll = res?.response?.patientIds;
+        setSelectedRows(seletedAll ? seletedAll : []);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+      }
     }
     if (activeTab === "Team") {
       // teamReport({
       //   pagenum: 0,
       //   size: ReportPatientDetails?.response?.response?.totalElements,
       // });
-
+      setIsLoading(true);
       try {
-        setIsLoading(true);
         const res = await fetch(
           ENDPOINTS.apiEndoint +
             `dbservice/patient/auditorreport?pageno=0&size=${
               ReportPatientDetails?.response?.response?.totalElements
-            }&orgid=${orgId}allPatientIds=${
+            }&orgid=${orgId}&allPatientIds=${
               selectAll ? false : true
             }&allFlags=${selectAllFlags}`,
           {
             headers: { Authorization: `Bearer ${await getStorage("token")}` },
           }
         ).then((res) => res.json());
-        const seletedAll = res?.response?.response?.data?.map(item=>item?.patientId);
-        setSelectedRows(seletedAll.length>0 ? seletedAll : []);
+        const seletedAll = res?.response?.patientIds
+        //  res?.response?.response?.data?.map(
+        //   (item) => item?.patientId
+        // );
+        setSelectedRows(seletedAll ? seletedAll : []);
         setIsLoading(false);
       } catch (error) {}
     }
@@ -113,15 +119,15 @@ const TeamReport = ({
 
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows?.some(
-      (selectedRow) => selectedRow.patientId === row?.patientId
+      (selectedRow) => selectedRow === row?.patientId
     );
     let updatedRows;
     if (isSelected) {
       updatedRows = selectedRows?.filter(
-        (selectedRow) => selectedRow.patientId !== row?.patientId
+        (selectedRow) => selectedRow !== row?.patientId
       );
     } else {
-      updatedRows = [...selectedRows, row];
+      updatedRows = [...selectedRows, row?.patientId];
     }
 
     setSelectedRows(updatedRows);
@@ -298,12 +304,12 @@ const TeamReport = ({
                 }}
               >
                 {" "}
-                {
-                  reportListAll?.response?.response?.data?.length > 0 && (
+                {/* { */}
+                  {/* reportListAll?.response?.response?.data?.length > 0 && (
                     // (isLoading ? (
                     //   <Spin />
                     // ) : (
-                    <>
+                    <> */}
                       <div className="col-xl-1 d-flex">
                         <div>
                           <input
@@ -338,10 +344,10 @@ const TeamReport = ({
                           All Flags
                         </span>
                       </div>
-                    </>
+                    {/* </>
                   )
                   // ))
-                }
+                } */}
               </div>
               <div className="row">
                 <div>
