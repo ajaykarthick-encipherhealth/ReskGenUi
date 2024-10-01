@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Tag, message } from "antd";
+import { Badge, Popconfirm, Popover, Tooltip, Tag, message } from "antd";
 import styles from "../../hcc/styles.module.css";
 import {
+  faArrowsAlt,
   faSitemap,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { CloseCircleFilled } from "@ant-design/icons";
 import {
   getCaptureSectionBackgroundFile,
   getEncounterDateBackground,
-  getMeatFound
+  getMeatFound,
+  getProviderNameList,
+  moveToAnotherAction,
 } from "../function/ReusableFunctions";
 import { connect } from "react-redux";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
@@ -318,8 +322,7 @@ const ComboCard = ({
                                 "",
                                 "",
                                 "",
-                                storeFileDetails
-                              )}
+                                storeFileDetails                              )}
                             </div>
                           </div>
                           <div
@@ -389,6 +392,7 @@ const ComboCard = ({
                         </div>
                       </div>
                     </div>
+                  )
                 );
               })}
             </div>
@@ -413,7 +417,6 @@ const enhancer = connect(
   }),
   {
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,
-    storeFileDetails: detailsAction.storeFileIdAction,
   }
 );
 export default enhancer(ComboCard);
