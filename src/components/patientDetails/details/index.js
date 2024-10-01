@@ -1486,7 +1486,7 @@ const Details = ({
                         )}
                       </>
                     ) : flagContainerActive === "Add DOS & Provider" ? (
-                      <ManuallyAddProvider selectDosValue={selectDosValue} />
+                      <ManuallyAddProvider selectDosValue={selectDosValue} dosYear={dosYear} />
                     ) : null}
                   </Drawer>
                 </div>

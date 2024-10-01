@@ -1,82 +1,58 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import PdfViewer from "../PdfViewerComponent";
 import { connect } from "react-redux";
 import style from "./styles.module.css";
 import { EditOutlined, DeleteOutlined, CloseOutlined } from "@ant-design/icons";
-import { Form, Popover } from "antd";
+import { Button, Form, Popover } from "antd";
 import { stringToColour } from "../components/function/ReusableFunctions";
 import AddForm from "./AddForm";
+import { actions as allActions } from "../../../../stores/patient/details";
 
-export const viewProvidersList = ({ list, isDeletable, handleDelete }) => (
+export const viewProvidersList = ({ list }) => (
   <div
-    className={`row`}
+    className={`${style.listShow}`}
     style={{
-      width: !isDeletable && "350px",
-      margin: !isDeletable && "0px 2px",
+      backgroundColor: stringToColour(list?.providerName) + 33,
+      color: stringToColour(list?.providerName),
     }}
   >
-    {list?.map((item) => (
-      <div className={`col-lg-6 my-2`}>
-        <div
-          className={`${style.listShow}`}
-          style={{
-            backgroundColor: stringToColour(item?.name) + 33,
-            color: stringToColour(item?.name),
-          }}
-        >
-          <div style={{ textAlign: !isDeletable && "center", width: "100%" }}>
-            {item?.name}
-          </div>
-          {isDeletable && (
-            <div onClick={() => handleDelete(item?.id)}>
-              <CloseOutlined
-                style={{
-                  fontSize: "12px",
-                  color: stringToColour(item?.name),
-                  cursor: "pointer",
-                }}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-    ))}
+    <div className="text-center w-100">{list?.providerName}</div>
   </div>
 );
-const ManuallyAddProvider = ({ hccFileDetails, selectDosValue }) => {
+const ManuallyAddProvider = ({
+  hccFileDetails,
+  selectDosValue,
+  dosYear,
+  getAddProviderAndDOSList,
+  dosAndProvidersList,
+}) => {
   const [form] = Form.useForm();
   const [selectFileURL, setSelectFileURL] = useState([]);
-  const [showAddForm, setShowAddForm] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [providersList, setProvidersList] = useState([]);
-  const [DOSList, setDOSList] = useState([
-    {
-      id: 1,
-      date: "05-20-2024",
-      providersList: [
-        {
-          id: 1,
-          name: "Nancy Cristoforo, MD",
-        },
-      ],
-    },
-  ]);
-  const handleDelete = (e, id) => {
+  const [providersList, setProvidersList] = useState(null);
+  const handleEdit = (e, data) => {
     e.stopPropagation();
-    setDOSList((prev) => prev?.filter((item) => item?.id !== id));
-  };
-  const handleEdit = (e, id) => {
-    e.stopPropagation();
-    const data = DOSList?.find((item) => item?.id === id);
-    setSelectedDate(data?.date);
-    setProvidersList(data?.providersList);
+    form.setFieldsValue({
+      dosSubstring: data?.dosSubstring || "",
+      dosStartPageNumber: data?.dosStartPageNumber || "",
+      dosEndPageNumber: data?.dosEndPageNumber || "",
+      providerName: data?.providerName || "",
+      providerPageNumber: data?.hyperlinks[0]?.pageNumber || "",
+      providerCredentials: data?.providerCredentials || "",
+      providerReference: data?.hyperlinks[0]?.substring || "",
+      isProviderSigned: data?.unSigned || false,
+      fileType: data?.fileType || "",
+    });
+    setProvidersList(data);
   };
 
   useEffect(() => {
     if (hccFileDetails?.data?.response) {
       setSelectFileURL(hccFileDetails?.data?.response);
     }
-  }, [hccFileDetails]);
+    if (dosYear) {
+      getAddProviderAndDOSList(dosYear?.length > 0 ? dosYear[0]?.value : "");
+    }
+  }, [hccFileDetails, dosYear]);
 
   return (
     <div className="d-flex p-2 h-100">
@@ -88,45 +64,60 @@ const ManuallyAddProvider = ({ hccFileDetails, selectDosValue }) => {
           headers={""}
         />
       </div>
-      <div style={{ width: "30%" }} className="mx-4 h-100 overflow-scroll">
+
+      <div style={{ width: "30%" }} className="mx-2 h-100 overflow-scroll">
         <AddForm
           form={form}
-          setDOSList={setDOSList}
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-          providersList={providersList}
-          setProvidersList={setProvidersList}
-          showAddForm={showAddForm}
-          setShowAddForm={setShowAddForm}
           selectDosValue={selectDosValue}
+          providersList={providersList}
         />
       </div>
-      <div style={{ width: "20%" }} className="h-100 overflow-scroll">
-        {DOSList?.map((item) => (
-          <button className={`${style.providerButton} my-2`}>
-            <span className={style.dateField}>{item?.date}</span>
-            <span className={style.providerText}>Provider</span>
-            <Popover content={viewProvidersList({ list: item?.providersList })}>
-              <span className={style.count}>
-                {item?.providersList?.length < 10
-                  ? `0${item?.providersList?.length}`
-                  : item?.providersList?.length}
+      <div style={{ width: "20%" }}>
+        {providersList && (
+          <div className="d-flex justify-content-end align-items-center">
+            {" "}
+            <Button
+              className={style.cancelBtn}
+              onClick={(e) => {
+                handleEdit(e, null);
+                setProvidersList(null);
+              }}
+            >
+              cancel
+            </Button>
+          </div>
+        )}
+        <div className="w-100 h-100 overflow-scroll">
+          {dosAndProvidersList?.map((item) => (
+            <button className={`${style.providerButton} my-2`}>
+              <span className={style.dateField}>{item?.dateOfService}</span>
+              <span className={style.providerText}>Provider</span>
+              <Popover content={viewProvidersList({ list: item })}>
+                <span className={style.count}>
+                  {item?.hyperlinks?.length < 10
+                    ? `0${item?.hyperlinks?.length}`
+                    : item?.hyperlinks?.length}
+                </span>
+              </Popover>
+              <span onClick={(e) => handleEdit(e, item)}>
+                <EditOutlined style={{ color: "#06439D", fontSize: "16px" }} />
               </span>
-            </Popover>
-            <span onClick={(e) => handleEdit(e, item?.id)}>
-              <EditOutlined style={{ color: "#06439D", fontSize: "16px" }} />
-            </span>
-            <span onClick={(e) => handleDelete(e, item?.id)}>
-              <DeleteOutlined style={{ color: "#06439D", fontSize: "16px" }} />
-            </span>
-          </button>
-        ))}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
-const enhancer = connect((state) => ({
-  hccFileDetails: state?.patientDetails?.details?.hccFileResult,
-}));
+const enhancer = connect(
+  (state) => ({
+    hccFileDetails: state.patientDetails?.details?.hccFileResult,
+    dosAndProvidersList:
+      state.patientDetails?.details?.dosAndProvidersList?.data?.response,
+  }),
+  {
+    getAddProviderAndDOSList: allActions.getAddProviderAndDOSList,
+  }
+);
 
 export default enhancer(ManuallyAddProvider);

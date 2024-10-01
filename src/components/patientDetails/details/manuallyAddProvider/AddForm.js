@@ -1,66 +1,25 @@
-import { Button, DatePicker, Form, Input, Select, Switch, Tooltip } from "antd";
+import { Button, Form, Input, Radio, Select, Switch } from "antd";
 import React from "react";
-import dayjs from "dayjs";
 import style from "./styles.module.css";
-import { viewProvidersList } from ".";
 import { getStorage } from "../../../../utils/storages";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/patient/details";
 
-const dateFormat = "MM-DD-YYYY";
-
-const AddForm = ({
-  setDOSList,
-  form,
-  selectedDate,
-  setSelectedDate,
-  providersList,
-  setProvidersList,
-  showAddForm,
-  setShowAddForm,
-  getAddProviderAndDOS,
-  selectDosValue,
-}) => {
+const AddForm = ({ form, selectDosValue, providersList }) => {
   const validateThreeDigitNumber = (_, value) => {
     if (!value || /^\d{1,3}$/.test(value)) {
       return Promise.resolve();
     }
     return Promise.reject(new Error("Please enter a valid 3-digit number"));
   };
-  const handleDatePicker = (date, dateString) => {
-    setSelectedDate(dateString);
-  };
-  const handleDelete = (id) => {
-    setProvidersList((prev) => prev?.filter((item) => item?.id !== id));
-  };
-  const submitProviderForm = () => {
-    setDOSList((prev) => {
-      const maxId =
-        prev?.length > 0 ? Math.max(...prev.map((item) => item?.id)) : 0;
-      return [
-        ...prev,
-        {
-          id: maxId + 1,
-          date: selectedDate,
-          providersList: providersList,
-        },
-      ];
-    });
-    setProvidersList([]);
-    setSelectedDate(null);
-  };
 
-  const AddProvider = (values) => {
-    // setProvidersList((prev) => {
-    //   const maxId =
-    //     prev?.length > 0 ? Math.max(...prev.map((item) => item?.id)) : 0;
-    //   return [...prev, { id: maxId + 1, name: values?.providerName }];
-    // });
+  const AddProvider = (values, providersList) => {
     const patientId = getStorage("patientId");
     const data = {
       patientId: patientId,
       dos: selectDosValue,
       ...values,
+      fileId: providersList?.fileId ||"",
     };
     console.log(data);
     // form.resetFields();
@@ -178,14 +137,28 @@ const AddForm = ({
             <Input placeholder="Date Of Service" />
           </Form.Item>
           <Form.Item
-            label={<label className={style.dateField}>DOS Page Number</label>}
-            name="dosPageNumber"
+            label={
+              <label className={style.dateField}>DOS Start Page Number</label>
+            }
+            name="dosStartPageNumber"
             rules={[
-              { required: true, message: "Please enter DOS Page Number" },
+              { required: true, message: "Please enter DOS Start Page Number" },
               { validator: validateThreeDigitNumber },
             ]}
           >
-            <Input maxLength={3} placeholder="DOS Page Number" />
+            <Input maxLength={3} placeholder="DOS Start Page Number" />
+          </Form.Item>
+          <Form.Item
+            label={
+              <label className={style.dateField}>DOS End Page Number</label>
+            }
+            name="dosEndPageNumber"
+            rules={[
+              { required: true, message: "Please enter DOS End Page Number" },
+              { validator: validateThreeDigitNumber },
+            ]}
+          >
+            <Input maxLength={3} placeholder="DOS End Page Number" />
           </Form.Item>
           {/* provider */}
           <Form.Item
@@ -213,14 +186,10 @@ const AddForm = ({
             }
             name="providerCredentials"
             rules={[
-              { required: true, message: "Please Select Provider Credentials" },
+              { required: true, message: "Please Enter Provider Credentials" },
             ]}
           >
-            <Select
-              placeholder="Provider Credentials"
-              style={{height:"40px"}}
-              options={[{ label: "MD", value: "MD" }]}
-            />
+            <Input placeholder="Provider Credentials" />
           </Form.Item>
           <Form.Item
             label={
@@ -229,10 +198,9 @@ const AddForm = ({
             name="providerReference"
             rules={[
               { required: true, message: "Please enter Provider Reference" },
-              { validator: validateThreeDigitNumber },
             ]}
           >
-            <Input maxLength={3} placeholder="Provider Reference" />
+            <Input placeholder="Provider Reference" />
           </Form.Item>
           <Form.Item
             label={
@@ -240,24 +208,28 @@ const AddForm = ({
             }
             name="isProviderSigned"
             rules={[
-              { required: true, message: "Please switch Provider Sign Status" },
+              { required: true, message: "Please Switch Provider Sign Status" },
             ]}
           >
             <Switch />
           </Form.Item>
+          <Form.Item
+            label={<label className={style.dateField}>File Type</label>}
+            name="fileType"
+            rules={[{ required: true, message: "Please Select File Type" }]}
+          >
+            <Radio.Group>
+              <Radio value={"LAB"}>Lab</Radio>
+              <Radio value={"RADIOLOGY"}>Radiology</Radio>
+              <Radio value={"CHART"}>Chart</Radio>
+            </Radio.Group>
+          </Form.Item>
           <Form.Item className="d-flex justify-content-center">
             <Button htmlType="submit" type="primary">
-              ADD
+              {providersList ? "UPDATE" : "ADD"}
             </Button>
           </Form.Item>
         </Form>
-        <div className={`row`} style={{ padding: "0px 10px" }}>
-          {viewProvidersList({
-            list: providersList,
-            isDeletable: true,
-            handleDelete: handleDelete,
-          })}
-        </div>
       </div>
     </div>
   );

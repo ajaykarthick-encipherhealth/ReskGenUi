@@ -28,9 +28,9 @@ import {
   labPDFDetails,
   isDeleteFlag,
   isDeleteNotes,
-  isDeleteComments
+  isDeleteComments,
+  getAddProviderAndDOSList
 } from "./actions";
-import { deleteFlag } from "../../tenantAdmin/settings/network";
 
 const initialState = {
   loading: true,
@@ -119,7 +119,8 @@ const patientDetailsReducer = combineReducers({
   radiologyDosResult: createReducer(radiologyDosDeatilsAction),
   labDosResult: createReducer(labDosDeatilsAction),
   activeLabel: createReducer(activeLabels),
-  labPDFDetails: createReducer(labPDFDetails)
+  labPDFDetails: createReducer(labPDFDetails),
+  dosAndProvidersList:createReducer(getAddProviderAndDOSList)
 });
 
 export default patientDetailsReducer;
