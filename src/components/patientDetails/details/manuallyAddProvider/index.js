@@ -70,6 +70,7 @@ const ManuallyAddProvider = ({
           form={form}
           selectDosValue={selectDosValue}
           providersList={providersList}
+          dosYear={dosYear}
         />
       </div>
       <div style={{ width: "20%" }}>

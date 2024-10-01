@@ -5,7 +5,15 @@ import { getStorage } from "../../../../utils/storages";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/patient/details";
 
-const AddForm = ({ form, selectDosValue, providersList }) => {
+const AddForm = ({
+  form,
+  selectDosValue,
+  providersList,
+  patientDetailsResult,
+  getAddProviderAndDOS,
+  dosYear,
+  getAddProviderAndDOSList,
+}) => {
   const validateThreeDigitNumber = (_, value) => {
     if (!value || /^\d{1,3}$/.test(value)) {
       return Promise.resolve();
@@ -13,16 +21,32 @@ const AddForm = ({ form, selectDosValue, providersList }) => {
     return Promise.reject(new Error("Please enter a valid page number"));
   };
 
-  const AddProvider = (values, providersList) => {
+  const AddProvider = async (values, providersList) => {
+    const customFileId =
+      values?.fileType === "CHART"
+        ? patientDetailsResult?.fileId
+        : patientDetailsResult?.fileInfos?.find(
+            (data) => data?.stateIndicator === values?.fileType
+          )?.fileId;
+    // const customFileId =
+    //   patientDetailsResult?.fileInfos?.length > 0
+    //     ? patientDetailsResult?.fileInfos?.find(
+    //         (data) => data?.stateIndicator === values?.fileType
+    //       )?.fileId
+    //     : patientDetailsResult?.fileId;
     const patientId = getStorage("patientId");
     const data = {
       patientId: patientId,
       dos: selectDosValue,
       ...values,
-      fileId: providersList?.fileId || "",
+      fileId: providersList ? providersList?.fileId : customFileId || "",
     };
     console.log(data);
-    // form.resetFields();
+    const res = await getAddProviderAndDOS(data);
+    if (res.status == "SUCCESS") {
+      getAddProviderAndDOSList(dosYear?.length > 0 ? dosYear?.value : "");
+      form.resetFields();
+    }
   };
 
   return (
@@ -236,8 +260,28 @@ const AddForm = ({ form, selectDosValue, providersList }) => {
             rules={[{ required: true, message: "Please Select File Type" }]}
           >
             <Radio.Group>
-              <Radio value={"LAB"}>Lab</Radio>
-              <Radio value={"RADIOLOGY"}>Radiology</Radio>
+              <Radio
+                value={"LAB"}
+                disabled={
+                  patientDetailsResult?.fileInfos?.length > 0 &&
+                  providersList?.fileType
+                    ? false
+                    : true
+                }
+              >
+                Lab
+              </Radio>
+              <Radio
+                value={"RADIOLOGY"}
+                disabled={
+                  patientDetailsResult?.fileInfos?.length > 0 &&
+                  providersList?.fileType
+                    ? false
+                    : true
+                }
+              >
+                Radiology
+              </Radio>
               <Radio value={"CHART"}>Chart</Radio>
             </Radio.Group>
           </Form.Item>
@@ -252,7 +296,14 @@ const AddForm = ({ form, selectDosValue, providersList }) => {
   );
 };
 
-const connector = connect((state) => ({ state }), {
-  getAddProviderAndDOS: allActions.getAddProviderAndDOS,
-});
+const connector = connect(
+  (state) => ({
+    patientDetailsResult:
+      state?.patientDetails?.details?.patientResult?.data?.response,
+  }),
+  {
+    getAddProviderAndDOS: allActions.getAddProviderAndDOS,
+    getAddProviderAndDOSList: allActions.getAddProviderAndDOSList,
+  }
+);
 export default connector(AddForm);
