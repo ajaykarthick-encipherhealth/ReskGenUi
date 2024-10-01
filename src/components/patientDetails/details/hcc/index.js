@@ -303,9 +303,9 @@ const Hcc = ({
       </div>
     </div>
   );
-  useEffect(() => {
-    getSelectedDos("");
-  }, []);
+  // useEffect(() => {
+  //   getSelectedDos("");
+  // }, []);
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
