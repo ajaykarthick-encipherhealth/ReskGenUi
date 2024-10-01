@@ -45,9 +45,7 @@ const CardComponent = ({
               >
                 <div className={`${styles.pName}`}>
                   {item.reportName}
-
                   <div className={`${styles.headText}`}>{item._id}</div>
-
                   <div className="d-flex">
                     <div className={`${styles.dateText}`}>
                       {handleDateFormat(item.sendDate)}
