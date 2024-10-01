@@ -82,10 +82,11 @@ const Flag = ({
     const form = event.currentTarget;
     event.preventDefault();
     if (inputValue.comments.trim() === "") {
-      notification.warning({
-        message: "Comment cannot be empty",
-        placement: "top",
-        duration: 1,
+      getResponePopup({
+        data: {
+          status: "USER_DEFINED_ERROR",
+          message: "Comment cannot be empty",
+        },
       });
       return; 
     }

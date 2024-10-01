@@ -55,10 +55,11 @@ const Comments = ({
     event.preventDefault();
 
     if (inputValue.comments.trim() === "") {
-      notification.warning({
-        message: "Comment cannot be empty",
-        placement: "top",
-        duration: 1,
+      getResponePopup({
+        data: {
+          status: "USER_DEFINED_ERROR",
+          message: "Comment cannot be empty",
+        },
       });
       return;
     }
@@ -91,10 +92,11 @@ const Comments = ({
   const handleEnterText = async (event) => {
     if (event.charCode === 13) {
       if (inputValue.comments.trim() === "") {
-        notification.warning({
-          message: "Comment cannot be empty",
-          placement: "top",
-          duration: 1,
+        getResponePopup({
+          data: {
+            status: "USER_DEFINED_ERROR",
+            message: "Comment cannot be empty",
+          },
         });
         return;
       }
