@@ -56,9 +56,9 @@ const Flag = ({
     name: item?.flagName,
   }));
 
-  const handleDelete = async () => {
+  const handleDelete = async (flagId) => {
     const payload = {
-      flagId: flagsDetailsResult?.response[0]?.patientFlagDTO?.flagId || "",
+      flagId: flagId || "",
       patientId: patientDetailsResult?.data?.response?.patientId,
       comment: flagsDetailsResult?.response[0]?.patientFlagDTO?.comment,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
@@ -81,12 +81,21 @@ const Flag = ({
   const handleSubmitFlag = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
+    if (inputValue.comments.trim() === "") {
+      getResponePopup({
+        data: {
+          status: "USER_DEFINED_ERROR",
+          message: "Comment cannot be empty",
+        },
+      });
+      return; 
+    }
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
       const orgId = getStorage("orgId");
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
-        comment: inputValue.comments,
+        comment: inputValue.comments.trim(),
         processedYear: patientDetailsResult?.data?.response?.processedYear,
         dateOfService: patientDetailsResult?.data?.response?.dateOfService,
         flagId: inputValue.flagId,
@@ -273,7 +282,7 @@ const Flag = ({
               >
                 <FontAwesomeIcon
                   icon={faXmarkCircle}
-                  onClick={handleDelete}
+                  onClick={() => handleDelete(data?.patientFlagDTO?.flagId)}
                   style={{ color: "#be3144" }}
                 />
               </div>

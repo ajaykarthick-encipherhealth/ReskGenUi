@@ -50,6 +50,7 @@ const File = ({
   loading,
   isDosSelected,
   labFileLoad,
+  fileLoadingStatus
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -367,7 +368,7 @@ const File = ({
               </div>
             </Popover> */}
             <div className="card-body p-0">
-              {loading || labFileLoad ? (
+            {fileLoadingStatus ? (
                 <div className={visitStyles?.loaderDiv}>
                   <Spinner />
                 </div>
@@ -827,6 +828,7 @@ const enhancer = connect(
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
     loading: state?.patientDetails?.details?.loading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
+    fileLoadingStatus:state.patientDetails.details?.fileLoading,
   }),
   {
     getRadiologyFileDetails: detailsActions.radiologyFileAction,

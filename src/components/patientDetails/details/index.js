@@ -55,7 +55,7 @@ import FileDetails from "./components/fileDetails";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import ManuallyAddProvider from "./manuallyAddProvider";
 import { getAge } from "../../../utils/reusable";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 import { truncateString } from "./components/function/ReusableFunctions";
 
 export const navigetPageDetails = async (
@@ -125,6 +125,10 @@ const Details = ({
   isDosSelected,
   isActives,
   getSelectedDos,
+  storeFileDetails,
+  preStoreFileDetails,
+  storePrePatientFileId,
+  storeCurrentFile
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -293,19 +297,41 @@ const Details = ({
   useEffect(() => {
     if (patientDetailsResult?.data?.response?.fileId) {
       const patientId = getStorage("patientId");
+      // if(patientDetailsResult?.data?.response?.fileId != preStoreFileDetails){
+      //   storeCurrentFile(patientDetailsResult?.data?.response?.fileId)
+      // }
       if (
         isFileCheck == false &&
         patientId == patientDetailsResult?.data?.response.patientId
       ) {
         getPatientHccFile(
-          patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
+          patientDetailsResult?.data?.response?.fileId
         );
+        // setStorage(
+        //   "fileId",
+        //   patientDetailsResult?.data?.response?.fileId
+        // );
+        storePrePatientFileId(patientDetailsResult?.data?.response?.fileId);
         setIsFileCheck(true);
       }
     } else {
       setIsSpinnerLoading(false);
     }
   }, [patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath]);
+
+  useEffect(() => {
+    console.log(storeFileDetails,"selectFileID")
+    if (storeFileDetails) {
+      if(storeFileDetails != preStoreFileDetails){
+          setStorage(
+            "fileId",
+            storeFileDetails
+          );
+          getPatientHccFile(storeFileDetails);
+          storePrePatientFileId(storeFileDetails);
+        }
+      }
+  }, [storeFileDetails]);
 
   const getAllProcessYearSelect = async (result) => {
     const patientId = getStorage("patientId");
@@ -771,8 +797,16 @@ const Details = ({
                                     <FontAwesomeIcon icon={faFile} />
 
                                     <label>File Name</label>
-                                    <div>
-                                      <h6>                                  
+                                    <div className="cr-pointer">
+                                      <h6
+                                        onClick={() =>
+                                          handleCopyToClipboard({
+                                            text: patientDocumentResult
+                                              ?.fileDetailDTO?.fileName,
+                                            setCopied: setCopied,
+                                          })
+                                        }
+                                      >
                                         <Tooltip
                                           title={
                                             patientDocumentResult?.fileDetailDTO
@@ -1454,7 +1488,7 @@ const Details = ({
                       flagContainerActiveTitle === "Timeline"
                         ? "460px"
                         : flagContainerActiveTitle === "Add DOS & Provider"
-                        ? "1200px"
+                        ? "1400px"
                         : null
                     }
                     title={flagContainerActiveTitle}
@@ -1502,7 +1536,7 @@ const Details = ({
                         )}
                       </>
                     ) : flagContainerActive === "Add DOS & Provider" ? (
-                      <ManuallyAddProvider />
+                      <ManuallyAddProvider selectDosValue={selectDosValue} dosYear={dosYear} />
                     ) : null}
                   </Drawer>
                 </div>
@@ -1547,6 +1581,8 @@ const enhancer = connect(
     labDetailsResult: state?.patientDetails?.details?.labResult,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     isActives: state.patientDetails.details.activeLabel?.data,
+    storeFileDetails: state.patientDetails?.details?.getStoreFileIdDetails,
+    preStoreFileDetails: state.patientDetails?.details?.getStoreFileIdDetailsPre
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -1570,6 +1606,8 @@ const enhancer = connect(
     activeLabels: detailsActions.activeLabels,
     getSelectedDos: detailsActions.getSelectedDos,
     getCurrentProcessYearAction: detailsActions.getCurrentProcessYearAction,
+    storePrePatientFileId: detailsActions.stroeFileIdPreAction,
+    storeCurrentFile: detailsActions.storeFileIdAction,
   }
 );
 export default enhancer(Details);

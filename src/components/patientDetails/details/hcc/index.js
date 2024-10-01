@@ -45,6 +45,7 @@ const Hcc = ({
   setSelectDosValue,
   getLabPDFFile,
   getPatientHccFile,
+  storeFileDetails
 }) => {
   const dispatch = useDispatch();
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -155,23 +156,24 @@ const Hcc = ({
     const filteredDos1 = dosSummariesList?.find(
       (data) => data?.value === value
     );
+    storeFileDetails(filteredDos1?.details?.fileId || null)
     setSelectedFile(filteredDos1?.details?.fileId || "");
     if (filteredDos1?.details?.stateIndicators?.includes("LAB")) {
-      getLabPDFFile({ fileId: filteredDos1.details?.fileId });
+      // getLabPDFFile({ fileId: filteredDos1.details?.fileId });
     } else if (filteredDos1?.details?.stateIndicators?.includes("RADIOLOGY")) {
-      getLabPDFFile({ fileId: filteredDos1.details?.fileId });
+      // getLabPDFFile({ fileId: filteredDos1.details?.fileId });
     } else {
-      if (!filteredDos1?.details?.fileId) {
-        getLabPDFFile({
-          fileId:
-            patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath,
-        });
-        getPatientHccFile(
-          patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
-        );
-      } else {
-        getLabPDFFile({ fileId: filteredDos1?.details?.fileId });
-      }
+      // if (!filteredDos1?.details?.fileId) {
+      //   getLabPDFFile({
+      //     fileId:
+      //       patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath,
+      //   });
+      //   getPatientHccFile(
+      //     patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
+      //   );
+      // } else {
+      //   getLabPDFFile({ fileId: filteredDos1?.details?.fileId });
+      // }
 
       getSelectedDosPageNumber(
         filteredDos?.length > 0 ? filteredDos[0]?.startPageNumber : null
@@ -616,6 +618,7 @@ const enhancer = connect(
     getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
     getLabPDFFile: detailsActions.labPDFDetails,
     getPatientHccFile: detailsActions.patientHccFileAction,
+    storeFileDetails: detailsActions.storeFileIdAction,
   }
 );
 export default enhancer(Hcc);
