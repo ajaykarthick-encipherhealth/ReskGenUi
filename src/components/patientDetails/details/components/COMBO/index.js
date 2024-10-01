@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Tag, message } from "antd";
+import { Badge, Popconfirm, Popover, Tooltip, Tag, message } from "antd";
 import styles from "../../hcc/styles.module.css";
 import {
+  faArrowsAlt,
   faSitemap,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { CloseCircleFilled } from "@ant-design/icons";
 import {
   getCaptureSectionBackgroundFile,
   getEncounterDateBackground,
-  getMeatFound
+  getMeatFound,
+  getProviderNameList,
+  moveToAnotherAction,
 } from "../function/ReusableFunctions";
 import { connect } from "react-redux";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
@@ -100,43 +104,44 @@ const ComboCard = ({
           <div className={visitStyles.container}>
             <div className={visitStyles.hccStickey_head}>
               {list?.map((item, ind) => {
-                return item.isShow && (
-                  <div
-                    className={visitStyles.combo_details_card}
-                    key={item?.id}
-                  >
-                    <div className="row">
-                      <div className="col-xl-3 d-grid">
-                        <span className="font-bold ms-3">
-                          {item.diagnosisCode}
-                        </span>
-                      </div>
-                      <div className="col-xl-3">
-                        {item.addOnCodes?.map(
-                          (addCombo, index) =>
-                            addCombo && (
-                              <span
-                                className="font-bold"
-                                key={addOnCodeColor[index]}
-                              >
-                                <Tag
-                                  color={addOnCodeColor[index]}
-                                  style={{ fontSize: "10px" }}
+                return (
+                  item.isShow && (
+                    <div
+                      className={visitStyles.combo_details_card}
+                      key={item?.id}
+                    >
+                      <div className="row">
+                        <div className="col-xl-3 d-grid">
+                          <span className="font-bold ms-3">
+                            {item.diagnosisCode}
+                          </span>
+                        </div>
+                        <div className="col-xl-3">
+                          {item.addOnCodes?.map(
+                            (addCombo, index) =>
+                              addCombo && (
+                                <span
+                                  className="font-bold"
+                                  key={addOnCodeColor[index]}
                                 >
-                                  {addCombo}
-                                </Tag>
-                              </span>
-                            )
-                        )}
-                      </div>
-                      <div className="col-xl-5">
-                        <span>{item.actualDescription}</span>
-                      </div>
-                      <div
-                        className="col-xl-1"
-                        style={{ position: "relative", right: "18px" }}
-                      >
-                        {/* <div>
+                                  <Tag
+                                    color={addOnCodeColor[index]}
+                                    style={{ fontSize: "10px" }}
+                                  >
+                                    {addCombo}
+                                  </Tag>
+                                </span>
+                              )
+                          )}
+                        </div>
+                        <div className="col-xl-5">
+                          <span>{item.actualDescription}</span>
+                        </div>
+                        <div
+                          className="col-xl-1"
+                          style={{ position: "relative", right: "18px" }}
+                        >
+                          {/* <div>
                           <Popconfirm
                             title={popConfirmTitle}
                             onConfirm={() =>
@@ -168,76 +173,90 @@ const ComboCard = ({
                           </Popconfirm>
                         </div> */}
 
-                        <div className={styles.comcoActionIcon}>
-                          {item?.children?.length > 0 && isDosSelected ? (
-                            <CloseCircleFilled
-                              className={styles.deleteIcon}
-                              onClick={() =>
-                                message.warning("Delete only formed codes")
-                              }
-                            />
-                          ) : isDosSelected ? (
-                            <MovementAction
-                              validAction={cardTitle == "HCC" ? false : true}
-                              suggestedAction={
-                                cardTitle == "SUGGESTED" ? false : true
-                              }
-                              deleteAction={
-                                cardTitle == "DELETED" ? false : true
-                              }
-                              setIsValidAction={setIsValidAction}
-                              cardTitle={cardTitle}
-                              setConfirmNotesModalValid={
-                                setConfirmNotesModalValid
-                              }
-                              onchangeValid={onchangeCombo}
-                              result={item}
-                              setFileLoading={setFileLoading}
-                            />
-                          ) : null}
-                        </div>
-                        {item?.children?.length > 0 && (
-                          <div
-                            className={visitStyles.close_icon}
-                            style={{ background: "#c7f3c6" }}
-                            onClick={() => {
-                              setOpens(true);
-                              setCombiTree([{ ...item, expanded: true, isDisabled: true }]);
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faSitemap}
-                              style={{
-                                size: 8,
-                                color: "#088f39",
-                              }}
-                            />
+                          <div className={styles.comcoActionIcon}>
+                            {item?.children?.length > 0 &&
+                            isDosSelected &&
+                            !item.stateIndicators?.includes("COMBO_CODE") &&
+                            item.ruleType ==
+                              "DIRECT_COMBINATION_RULE_ENGINE" ? (
+                              <CloseCircleFilled
+                                className={styles.deleteIcon}
+                                onClick={() =>
+                                  message.warning("Delete only formed codes")
+                                }
+                              />
+                            ) : isDosSelected ? (
+                              <MovementAction
+                                validAction={cardTitle == "HCC" ? false : true}
+                                suggestedAction={
+                                  cardTitle == "SUGGESTED" ? false : true
+                                }
+                                deleteAction={
+                                  cardTitle == "DELETED" ? false : true
+                                }
+                                setIsValidAction={setIsValidAction}
+                                cardTitle={cardTitle}
+                                setConfirmNotesModalValid={
+                                  setConfirmNotesModalValid
+                                }
+                                onchangeValid={onchangeCombo}
+                                result={item}
+                                setFileLoading={setFileLoading}
+                                isComboCode={
+                                  item.stateIndicators?.includes(
+                                    "COMBO_CODE"
+                                  ) &&
+                                  item.ruleType !==
+                                    "DIRECT_COMBINATION_RULE_ENGINE"
+                                }
+                              />
+                            ) : null}
                           </div>
-                        )}
-                      </div>
-                      <div className={styles.comboDetailsHeaders}>
-                        <div>
-                          <div
-                            className={`${visitStyles.encounterAndSectionHeader}`}
-                          >
-                            {getProviderNameTag({
-                              providerNames: item?.providerName,
-                              hyperlinks: item?.providerHyperlinks,
-                              setSearch: setSearch,
-                              diagnosisCode: item.diagnosisCodeCombo,
-                              diseaseName: item.diseaseName,
-                              setIsModalOpen: setIsModalOpenCaptureSection,
-                              setFileModalHeader: setFileModalHeader,
-                              patientDocumentResult: patientDocumentResult,
-                              setIsMulitpleHeader: setIsMulitpleProvider,
-                              isMulitpleHeader: isMulitpleProvider,
-                              setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
-                              isMulitpleHeaderCode: isMulitpleHeaderCode,
-                              setSelectMeatResult: "",
-                              getSelectedDosPageNumber:
-                                getSelectedDosPageNumber,
-                            })}
-                            {/* {getProviderNameTag(
+
+                          {item?.children?.length > 0 && (
+                            <div
+                              className={visitStyles.close_icon}
+                              style={{ background: "#c7f3c6" }}
+                              onClick={() => {
+                                setOpens(true);
+                                setCombiTree([
+                                  { ...item, expanded: true, isDisabled: true },
+                                ]);
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faSitemap}
+                                style={{
+                                  size: 8,
+                                  color: "#088f39",
+                                }}
+                              />
+                            </div>
+                          )}
+                        </div>
+                        <div className={styles.comboDetailsHeaders}>
+                          <div>
+                            <div
+                              className={`${visitStyles.encounterAndSectionHeader}`}
+                            >
+                              {getProviderNameTag({
+                                providerNames: item?.providerName,
+                                hyperlinks: item?.providerHyperlinks,
+                                setSearch: setSearch,
+                                diagnosisCode: item.diagnosisCodeCombo,
+                                diseaseName: item.diseaseName,
+                                setIsModalOpen: setIsModalOpenCaptureSection,
+                                setFileModalHeader: setFileModalHeader,
+                                patientDocumentResult: patientDocumentResult,
+                                setIsMulitpleHeader: setIsMulitpleProvider,
+                                isMulitpleHeader: isMulitpleProvider,
+                                setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
+                                isMulitpleHeaderCode: isMulitpleHeaderCode,
+                                setSelectMeatResult: "",
+                                getSelectedDosPageNumber:
+                                  getSelectedDosPageNumber,
+                              })}
+                              {/* {getProviderNameTag(
                               item?.providerName,
                               item?.providerHyperlinks,
                               setSearch,
@@ -303,8 +322,7 @@ const ComboCard = ({
                                 "",
                                 "",
                                 "",
-                                storeFileDetails
-                              )}
+                                storeFileDetails                              )}
                             </div>
                           </div>
                           <div
@@ -374,6 +392,7 @@ const ComboCard = ({
                         </div>
                       </div>
                     </div>
+                  )
                 );
               })}
             </div>
@@ -398,7 +417,6 @@ const enhancer = connect(
   }),
   {
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,
-    storeFileDetails: detailsAction.storeFileIdAction,
   }
 );
 export default enhancer(ComboCard);
