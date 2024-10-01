@@ -771,8 +771,16 @@ const Details = ({
                                     <FontAwesomeIcon icon={faFile} />
 
                                     <label>File Name</label>
-                                    <div>
-                                      <h6>                                  
+                                    <div className="cr-pointer">
+                                      <h6
+                                        onClick={() =>
+                                          handleCopyToClipboard({
+                                            text: patientDocumentResult
+                                              ?.fileDetailDTO?.fileName,
+                                            setCopied: setCopied,
+                                          })
+                                        }
+                                      >
                                         <Tooltip
                                           title={
                                             patientDocumentResult?.fileDetailDTO
