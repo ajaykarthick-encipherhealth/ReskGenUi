@@ -19,7 +19,7 @@ const AddForm = ({ form, selectDosValue, providersList }) => {
       patientId: patientId,
       dos: selectDosValue,
       ...values,
-      fileId: providersList?.fileId ||"",
+      fileId: providersList?.fileId || "",
     };
     console.log(data);
     // form.resetFields();
@@ -131,10 +131,27 @@ const AddForm = ({ form, selectDosValue, providersList }) => {
             label={<label className={style.dateField}>Date Of Service</label>}
             name="dosSubstring"
             rules={[
-              { required: true, message: "Please Enter Date Of Service" },
+              {
+                required: true,
+                message: "Please Enter Date Of Service",
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value) {
+                    return Promise.reject(
+                      new Error("Please Enter Date Of Service")
+                    );
+                  } else if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+                    return Promise.reject(
+                      new Error("Date must be in the format YYYY-MM-DD")
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              }),
             ]}
           >
-            <Input placeholder="Date Of Service" />
+            <Input placeholder="YYYY-MM-DD" />
           </Form.Item>
           <Form.Item
             label={
