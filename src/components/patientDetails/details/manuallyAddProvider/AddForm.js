@@ -1,10 +1,11 @@
-import { Button, Form, Input, Radio, Select, Switch } from "antd";
+import { Button, DatePicker, Form, Input, Radio, Select, Switch } from "antd";
 import React from "react";
 import style from "./styles.module.css";
 import { getStorage } from "../../../../utils/storages";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/patient/details";
-
+import { disableFutureDate } from "../../../headerFilters/functions";
+import dayjs from "dayjs";
 const AddForm = ({
   form,
   selectDosValue,
@@ -37,11 +38,11 @@ const AddForm = ({
     const patientId = getStorage("patientId");
     const data = {
       patientId: patientId,
-      dos: selectDosValue,
       ...values,
+      dos: dayjs(values.dos).format("MM-DD-YYYY") + "T00:00:00.000Z",
       fileId: providersList ? providersList?.fileId : customFileId || "",
     };
-    console.log(data);
+
     const res = await getAddProviderAndDOS(data);
     if (res.status == "SUCCESS") {
       getAddProviderAndDOSList(dosYear?.length > 0 ? dosYear?.value : "");
@@ -153,29 +154,31 @@ const AddForm = ({
           {/* dos */}
           <Form.Item
             label={<label className={style.dateField}>Date Of Service</label>}
+            name="dos"
+            rules={[
+              {
+                required: true,
+                message: "Please Enter DOS",
+              },
+            ]}
+            className="manuallyAddPicker"
+          >
+            <DatePicker
+              disabledDate={(current) => disableFutureDate(current)}
+              getPopupContainer={(triggerNode) => triggerNode.parentNode}
+            />
+          </Form.Item>
+          <Form.Item
+            label={<label className={style.dateField}>DOS Substring</label>}
             name="dosSubstring"
             rules={[
               {
                 required: true,
-                message: "Please Enter Date Of Service",
+                message: "Please Enter DOS Substring",
               },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value) {
-                    return Promise.reject(
-                      new Error("Please Enter Date Of Service")
-                    );
-                  } else if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-                    return Promise.reject(
-                      new Error("Date must be in the format YYYY-MM-DD")
-                    );
-                  }
-                  return Promise.resolve();
-                },
-              }),
             ]}
           >
-            <Input placeholder="YYYY-MM-DD" />
+            <Input placeholder="DOS Substring" />
           </Form.Item>
           <Form.Item
             label={

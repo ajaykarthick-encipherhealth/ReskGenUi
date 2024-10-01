@@ -7,7 +7,7 @@ import { Button, Form, Popover } from "antd";
 import { stringToColour } from "../components/function/ReusableFunctions";
 import AddForm from "./AddForm";
 import { actions as allActions } from "../../../../stores/patient/details";
-
+import dayjs from 'dayjs'
 export const viewProvidersList = ({ list }) => (
   <div
     className={`${style.listShow}`}
@@ -32,6 +32,7 @@ const ManuallyAddProvider = ({
   const handleEdit = (e, data) => {
     e.stopPropagation();
     form.setFieldsValue({
+      dos:dayjs(data?.dateOfService)||"",
       dosSubstring: data?.dosSubstring || "",
       dosStartPageNumber: data?.dosStartPageNumber || "",
       dosEndPageNumber: data?.dosEndPageNumber || "",

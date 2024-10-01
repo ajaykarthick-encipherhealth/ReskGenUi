@@ -15632,3 +15632,13 @@ input::-webkit-inner-spin-button {
     left: 20px !important;
   }
 }
+.manuallyAddPicker .ant-picker,
+.manuallyAddPicker .ant-picker:hover{
+  border:1px solid #d9d9d9 !important;
+  box-shadow:none !important;
+}
+
+.manuallyAddPicker .ant-picker-dropdown .ant-picker-date-panel{
+  width:379px !important;
+  border:1px solid red !important;
+}
