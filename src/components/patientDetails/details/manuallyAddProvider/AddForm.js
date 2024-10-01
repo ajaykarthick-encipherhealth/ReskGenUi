@@ -10,7 +10,7 @@ const AddForm = ({ form, selectDosValue, providersList }) => {
     if (!value || /^\d{1,3}$/.test(value)) {
       return Promise.resolve();
     }
-    return Promise.reject(new Error("Please enter a valid 3-digit number"));
+    return Promise.reject(new Error("Please enter a valid page number"));
   };
 
   const AddProvider = (values, providersList) => {
