@@ -15565,39 +15565,9 @@ input::-webkit-inner-spin-button {
   width: 18px !important;
   height: 18px !important;
 }
-.headerCalender .ant-picker-panel-layout > div {
-  width: 100%;
-}
-@media (min-width: 1600px) {
-  .headerCalender {
-    width: 37.5% !important;
-    left: -20%;
-    top: 14%;
-  }
-  .headerCalender .ant-picker-dropdown .ant-picker-date-panel {
-    width: 290px !important;
-  }
-  .headerCalender .ant-picker-dropdown-range {
-    display: flex !important;
-    justify-content: end !important;
-    align-items: end !important;
-    left: 40px !important;
-  }
-}
-@media (min-width: 1527px) {
-  .headerCalender {
-    width: 41.5% !important;
-    left: -20%;
-    top: 14%;
-  }
-  .headerCalender .ant-picker-dropdown .ant-picker-date-panel {
-    width: 290px !important;
-  }
-  .headerCalender .ant-picker-dropdown-range {
-    display: flex !important;
-    justify-content: end !important;
-    align-items: end !important;
-  }
+.calendar .ant-modal .ant-modal-content {
+  right:40% !important;
+  top:25px !important;
 }
 
 @media (max-width: 1344px) {
