@@ -28,7 +28,7 @@ import {
   labPDFDetails,
   isDeleteNotes,
   isDeleteComments,
-  getAddProviderAndDOSList
+  getAddProviderAndDOSList,
   isAddNotes,
   isAddComments,
   isDeleteFlag,
