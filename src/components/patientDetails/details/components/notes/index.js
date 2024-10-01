@@ -34,6 +34,14 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
   const handleSubmitNotes = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
+    if (inputValue.comments.trim() === "") {
+      notification.warning({
+        message: "Comment cannot be empty",
+        placement: "top",
+        duration: 1,
+      });
+      return; 
+    }
     const yearData = patientDetailsResult?.data?.response;
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
@@ -55,12 +63,13 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
       );
       var result = response.data;
       if (result.status == "SUCCESS") {
-        inputValue.comments = "";
+        inputValue.comments.trim() === "";
         notification.success({
           message: result.message,
           placement: "top",
           duration: 1,
         });
+        setInputValue({ ...inputValue, comments: "" }); 
         getNotesList();
         setCommentsTrigger(false);
       } else {
@@ -91,6 +100,14 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
     const yearData = patientDetailsResult?.data?.response;
 
     if (event.charCode == 13) {
+         if (inputValue.comments.trim() === "") {
+        notification.warning({
+          message: "Comment cannot be empty",
+          placement: "top",
+          duration: 1,
+        });
+        return; 
+      }
       if (inputValue.comments.trim() != "") {
         const orgId = getStorage("orgId");
         var dataFormatSuggested = {
@@ -110,7 +127,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
         );
         var result = response.data;
         if (result.status == "SUCCESS") {
-          inputValue.comments = "";
+          setInputValue({ ...inputValue, comments: "" }); 
           notification.success({
             message: result.message,
             placement: "top",

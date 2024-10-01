@@ -52,65 +52,84 @@ const Comments = ({
   const handleSubmitCommnets = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
+
+    if (inputValue.comments.trim() === "") {
+      notification.warning({
+        message: "Comment cannot be empty",
+        placement: "top",
+        duration: 1,
+      });
+      return; 
+    }
+  
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
-      // const orgId = getStorage("orgId");
+  
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
-        // orgId: orgId,
         comment: inputValue.comments,
         processedYear: patientDetailsResult?.data?.response?.processedYear,
         dateOfService: patientDetailsResult?.data?.response?.dateOfService,
       };
+  
       const response = await axios.post(
         ENDPOINTS.apiEndoint + `dbservice/comment`,
         dataFormatSuggested
       );
+      
       var result = response.data;
       if (result.status == "SUCCESS") {
-        inputValue.comments = "";
+        setInputValue({ ...inputValue, comments: "" }); 
         notification.success({
           message: result.message,
           placement: "top",
           duration: 1,
         });
         getCommentsList();
-        setCommentsTrigger(false);
-      } else {
       }
+      setCommentsTrigger(false);
     }
+  
     setValidated(true);
   };
 
   const handleEnterText = async (event) => {
     if (event.charCode == 13) {
-      if (inputValue.comments.trim() != "") {
-        // const orgId = getStorage("orgId");
-        var dataFormatSuggested = {
-          patientId: patientDetailsResult?.data?.response?.patientId,
-          // orgId: orgId,
-          comment: inputValue.comments,
-          processedYear: patientDetailsResult?.data?.response?.processedYear,
-          dateOfService: patientDetailsResult?.data?.response?.dateOfService,
-        };
-        const response = await axios.post(
-          ENDPOINTS.apiEndoint + `dbservice/comment`,
-          dataFormatSuggested
-        );
-        var result = response.data;
-        if (result.status == "SUCCESS") {
-          inputValue.comments = "";
-          notification.success({
-            message: result.message,
-            placement: "top",
-            duration: 1,
-          });
-          getCommentsList();
-        } else {
-        }
+
+      if (inputValue.comments.trim() === "") {
+        notification.warning({
+          message: "Comment cannot be empty",
+          placement: "top",
+          duration: 1,
+        });
+        return; 
+      }
+  
+      var dataFormatSuggested = {
+        patientId: patientDetailsResult?.data?.response?.patientId,
+        comment: inputValue.comments, 
+        processedYear: patientDetailsResult?.data?.response?.processedYear,
+        dateOfService: patientDetailsResult?.data?.response?.dateOfService,
+      };
+  
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/comment`,
+        dataFormatSuggested
+      );
+      
+      var result = response.data;
+      if (result.status == "SUCCESS") {
+        setInputValue({ ...inputValue, comments: "" }); 
+        notification.success({
+          message: result.message,
+          placement: "top",
+          duration: 1,
+        });
+        getCommentsList();
       }
     }
   };
+  
 
   const handleDelete = async () => {
     const payload = {

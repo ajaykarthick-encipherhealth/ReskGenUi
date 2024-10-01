@@ -81,12 +81,20 @@ const Flag = ({
   const handleSubmitFlag = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
+    if (inputValue.comments.trim() === "") {
+      notification.warning({
+        message: "Comment cannot be empty",
+        placement: "top",
+        duration: 1,
+      });
+      return; 
+    }
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
       const orgId = getStorage("orgId");
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
-        comment: inputValue.comments,
+        comment: inputValue.comments.trim(),
         processedYear: patientDetailsResult?.data?.response?.processedYear,
         dateOfService: patientDetailsResult?.data?.response?.dateOfService,
         flagId: inputValue.flagId,
