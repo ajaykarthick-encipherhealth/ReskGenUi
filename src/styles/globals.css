@@ -15565,7 +15565,7 @@ input::-webkit-inner-spin-button {
   width: 18px !important;
   height: 18px !important;
 }
-.calendar.ant-modal .ant-modal-content {
+.calendar .ant-modal .ant-modal-content {
   right:40% !important;
   top:25px !important;
 }
