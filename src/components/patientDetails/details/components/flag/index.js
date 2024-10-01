@@ -56,9 +56,9 @@ const Flag = ({
     name: item?.flagName,
   }));
 
-  const handleDelete = async () => {
+  const handleDelete = async (flagId) => {
     const payload = {
-      flagId: flagsDetailsResult?.response[0]?.patientFlagDTO?.flagId || "",
+      flagId: flagId || "",
       patientId: patientDetailsResult?.data?.response?.patientId,
       comment: flagsDetailsResult?.response[0]?.patientFlagDTO?.comment,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
@@ -282,7 +282,7 @@ const Flag = ({
               >
                 <FontAwesomeIcon
                   icon={faXmarkCircle}
-                  onClick={handleDelete}
+                  onClick={() => handleDelete(data?.patientFlagDTO?.flagId)}
                   style={{ color: "#be3144" }}
                 />
               </div>
