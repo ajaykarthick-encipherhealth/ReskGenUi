@@ -89,7 +89,6 @@ const Comments = ({
       }
       setCommentsTrigger(false);
     }
-  
     setValidated(true);
   };
 
