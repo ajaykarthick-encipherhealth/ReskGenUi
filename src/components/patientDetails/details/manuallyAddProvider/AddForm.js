@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/patient/details";
 import { disableFutureDate } from "../../../headerFilters/functions";
 import dayjs from "dayjs";
+import { getResponePopup } from "../../../../utils/reusable";
 const AddForm = ({
   form,
   selectDosValue,
@@ -14,6 +15,7 @@ const AddForm = ({
   getAddProviderAndDOS,
   dosYear,
   getAddProviderAndDOSList,
+  dosDeatilsAction
 }) => {
   const validateThreeDigitNumber = (_, value) => {
     if (!value || /^\d{1,3}$/.test(value)) {
@@ -39,13 +41,15 @@ const AddForm = ({
     const data = {
       patientId: patientId,
       ...values,
-      dos: dayjs(values.dos).format("MM-DD-YYYY") + "T00:00:00.000Z",
+      dos: dayjs(values.dos).format("YYYY-MM-DD"),
       fileId: providersList ? providersList?.fileId : customFileId || "",
     };
 
     const res = await getAddProviderAndDOS(data);
     if (res.status == "SUCCESS") {
-      getAddProviderAndDOSList(dosYear?.length > 0 ? dosYear?.value : "");
+      getResponePopup(res);
+      getAddProviderAndDOSList(dosYear?.length > 0 ? dosYear[0]?.value : "");
+      dosDeatilsAction(patientId,dosYear?.length > 0 ? dosYear[0]?.value : "")
       form.resetFields();
     }
   };
@@ -307,6 +311,7 @@ const connector = connect(
   {
     getAddProviderAndDOS: allActions.getAddProviderAndDOS,
     getAddProviderAndDOSList: allActions.getAddProviderAndDOSList,
+    dosDeatilsAction: allActions.dosDeatilsAction,
   }
 );
 export default connector(AddForm);
