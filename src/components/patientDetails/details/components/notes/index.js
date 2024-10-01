@@ -82,7 +82,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes 
     };
 
     try {
-      const response = await isDeleteNotes(dataFormatSuggested);
+      const response = await isDeleteNotes(payload);
       getResponePopup(response);
       getNotesList();
     } catch (error) {
