@@ -1,20 +1,16 @@
 import React, { useState } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Badge, Popconfirm, Popover, Tooltip, Tag, message } from "antd";
+import { Tag, message } from "antd";
 import styles from "../../hcc/styles.module.css";
 import {
-  faArrowsAlt,
   faSitemap,
-  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { CloseCircleFilled } from "@ant-design/icons";
 import {
   getCaptureSectionBackgroundFile,
   getEncounterDateBackground,
-  getMeatFound,
-  getProviderNameList,
-  moveToAnotherAction,
+  getMeatFound
 } from "../function/ReusableFunctions";
 import { connect } from "react-redux";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
@@ -47,7 +43,8 @@ const ComboCard = ({
   getSelectedDosPageNumber,
   cardTitle,
   isDosSelected,
-  patientDetailsResult
+  patientDetailsResult,
+  storeFileDetails,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -254,120 +251,129 @@ const ComboCard = ({
                               setIsMulitpleHeadeCode,
                               isMulitpleHeaderCode
                             )} */}
-                          </div>
-                          <div
-                            className={`${visitStyles.encounterAndSectionHeader}`}
-                          >
-                            {getEncounterDateBackground({
-                              value: item?.encounterDateSplit,
-                              encounterDateMatching: encounterDateMatching,
-                              fileDosPageNumberList: patientDetailsResult?.data?.response?.fileDetailDTO?.dosSummaries,
-                              setIsModalOpenValidCodes:
+                            </div>
+                            <div
+                              className={`${visitStyles.encounterAndSectionHeader}`}
+                            >
+                              {getEncounterDateBackground({
+                                value: item?.encounterDateSplit,
+                                encounterDateMatching: encounterDateMatching,
+                                fileDosPageNumberList:
+                                  patientDetailsResult?.data?.response
+                                    ?.fileDetailDTO?.dosSummaries,
+                                setIsModalOpenValidCodes:
+                                  setIsModalOpenCaptureSection,
+                                setSearch: setSearch,
+                                setFileModalHeader: setFileModalHeader,
+                                patientDocumentResult: patientDocumentResult,
+                                popup,
+                                storeFileDetails: storeFileDetails,
+                              })}
+                            </div>
+                            <div
+                              className={`${visitStyles.encounterAndSectionHeader}`}
+                            >
+                              {getCaptureSectionBackgroundFile(
+                                item?.capturedSections,
+                                item?.encounterDate,
+                                item?.actualDescription,
+                                item?.diagnosisCodeCombo,
+                                item?.getPlace,
+                                captureSectionMatching,
+                                setSearch,
+                                setFileLoading,
+                                "",
+                                "",
                                 setIsModalOpenCaptureSection,
-                              setSearch: setSearch,
-                              setFileModalHeader: setFileModalHeader,
-                              patientDocumentResult: patientDocumentResult,
-                              popup,
-                            })}
+                                setFileModalHeader,
+                                "",
+                                patientDocumentResult,
+                                fileInitialPage,
+                                setFileInitialPage,
+                                item?.hyperlinks,
+                                encounterDateMatching,
+                                setIsMulitpleHeader,
+                                isMulitpleHeader,
+                                setIsMulitpleHeadeCode,
+                                isMulitpleHeaderCode,
+                                item.diseaseName,
+                                popup,
+                                getSelectedDosPageNumber,
+                                "",
+                                "",
+                                "",
+                                "",
+                                storeFileDetails
+                              )}
+                            </div>
                           </div>
                           <div
-                            className={`${visitStyles.encounterAndSectionHeader}`}
+                            className={`cr-pointer ${styles.meatFoundContainer}`}
                           >
-                            {getCaptureSectionBackgroundFile(
-                              item?.capturedSections,
-                              item?.encounterDate,
-                              item?.actualDescription,
-                              item?.diagnosisCodeCombo,
-                              item?.getPlace,
-                              captureSectionMatching,
-                              setSearch,
-                              setFileLoading,
-                              "",
-                              "",
-                              setIsModalOpenCaptureSection,
-                              setFileModalHeader,
-                              "",
-                              patientDocumentResult,
-                              fileInitialPage,
-                              setFileInitialPage,
-                              item?.hyperlinks,
-                              encounterDateMatching,
-                              setIsMulitpleHeader,
-                              isMulitpleHeader,
-                              setIsMulitpleHeadeCode,
-                              isMulitpleHeaderCode,
-                              item.diseaseName,
-                              popup
-                            )}
-                          </div>
-                        </div>
-                        <div
-                          className={`cr-pointer ${styles.meatFoundContainer}`}
-                        >
-                          <div
-                            onClick={() => {
-                              setActiveTabHead(4);
-                              setActiveMeatTitle({
-                                header: "M",
-                                diagnosisCode: item?.diagnosisCode,
-                              });
-                            }}
-                          >
-                            {getMeatFound(
-                              item?.diagnosisCode,
-                              meatCriteriaList,
-                              "M"
-                            )}
-                          </div>
-                          <div
-                            onClick={() => {
-                              setActiveTabHead(4);
-                              setActiveMeatTitle({
-                                header: "E",
-                                diagnosisCode: item?.diagnosisCode,
-                              });
-                            }}
-                          >
-                            {getMeatFound(
-                              item?.diagnosisCode,
-                              meatCriteriaList,
-                              "E"
-                            )}
-                          </div>
-                          <div
-                            onClick={() => {
-                              setActiveTabHead(4);
-                              setActiveMeatTitle({
-                                header: "A",
-                                diagnosisCode: item?.diagnosisCode,
-                              });
-                            }}
-                          >
-                            {getMeatFound(
-                              item?.diagnosisCode,
-                              meatCriteriaList,
-                              "A"
-                            )}
-                          </div>
-                          <div
-                            onClick={() => {
-                              setActiveTabHead(4);
-                              setActiveMeatTitle({
-                                header: "T",
-                                diagnosisCode: item?.diagnosisCode,
-                              });
-                            }}
-                          >
-                            {getMeatFound(
-                              item?.diagnosisCode,
-                              meatCriteriaList,
-                              "T"
-                            )}
+                            <div
+                              onClick={() => {
+                                setActiveTabHead(4);
+                                setActiveMeatTitle({
+                                  header: "M",
+                                  diagnosisCode: item?.diagnosisCode,
+                                });
+                              }}
+                            >
+                              {getMeatFound(
+                                item?.diagnosisCode,
+                                meatCriteriaList,
+                                "M"
+                              )}
+                            </div>
+                            <div
+                              onClick={() => {
+                                setActiveTabHead(4);
+                                setActiveMeatTitle({
+                                  header: "E",
+                                  diagnosisCode: item?.diagnosisCode,
+                                });
+                              }}
+                            >
+                              {getMeatFound(
+                                item?.diagnosisCode,
+                                meatCriteriaList,
+                                "E"
+                              )}
+                            </div>
+                            <div
+                              onClick={() => {
+                                setActiveTabHead(4);
+                                setActiveMeatTitle({
+                                  header: "A",
+                                  diagnosisCode: item?.diagnosisCode,
+                                });
+                              }}
+                            >
+                              {getMeatFound(
+                                item?.diagnosisCode,
+                                meatCriteriaList,
+                                "A"
+                              )}
+                            </div>
+                            <div
+                              onClick={() => {
+                                setActiveTabHead(4);
+                                setActiveMeatTitle({
+                                  header: "T",
+                                  diagnosisCode: item?.diagnosisCode,
+                                });
+                              }}
+                            >
+                              {getMeatFound(
+                                item?.diagnosisCode,
+                                meatCriteriaList,
+                                "T"
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
                 );
               })}
             </div>
@@ -392,6 +398,7 @@ const enhancer = connect(
   }),
   {
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,
+    storeFileDetails: detailsAction.storeFileIdAction,
   }
 );
 export default enhancer(ComboCard);

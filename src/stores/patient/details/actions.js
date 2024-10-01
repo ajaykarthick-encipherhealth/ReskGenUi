@@ -142,3 +142,7 @@ export const suggestedToValidMove = createActionThunk(
 export const getSelectedDosPageNumber = createAction("GET_SELECTED_DOS_PAGE_NUMBER");
 
 export const getCurrentDiseaseType = createAction("GET_CURRENT_DISEASE_TYPE");
+
+export const storeFileIdAction = createAction("STORE_FILE_ID");
+
+export const stroeFileIdPreAction = createAction("STORE_FILE_ID_PRE");
