@@ -208,7 +208,30 @@ export async function deleteComments(obj) {
   return data;
 }
 
+export async function addNotes(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/notes`,
+    options
+  );
+  return data;
+}
 
+
+export async function addComments(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/comment`,
+    options
+  );
+  return data;
+}
 export async function isValideCode(code) {
   const options = {
     method: "GET",

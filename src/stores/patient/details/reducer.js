@@ -28,9 +28,12 @@ import {
   labPDFDetails,
   isDeleteNotes,
   isDeleteComments,
+  isAddNotes,
+  isAddComments,
   isDeleteFlag,
   storeFileIdAction,
   stroeFileIdPreAction,
+
 } from "./actions";
 
 const initialState = {
@@ -122,6 +125,8 @@ const patientDetailsReducer = combineReducers({
   deleteFlag : createReducer(isDeleteFlag),
   deleteNotes: createReducer(isDeleteNotes),
   deleteComments: createReducer(isDeleteComments),
+  addNotes: createReducer(isAddNotes),
+  addComments: createReducer(isAddComments),
   isCodeAlready: createReducer(isCodeAlready),
   getValidCode: createReducer(getValideCode),
   getSelectedDosDetails: getSelectedDosDetails,

@@ -19,7 +19,7 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import { isDeleteNotes } from "../../../../../stores/patient/details/actions";
 import { getResponePopup } from "../../../../../utils/reusable";
 
-const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
+const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes }) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
     comments: "",
@@ -34,38 +34,42 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
   const handleSubmitNotes = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
+    if (inputValue.comments.trim() === "") {
+      getResponePopup({
+        data: {
+          status: "USER_DEFINED_ERROR",
+          message: "Comment cannot be empty",
+        },
+      });
+      return;
+    }
     const yearData = patientDetailsResult?.data?.response;
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
       const orgId = getStorage("orgId");
+
       var dataFormatSuggested = {
         patientId: yearData?.patientId,
-        // orgId: orgId,
         note: inputValue.comments,
         processedYear: yearData?.processedYear
           ? yearData?.processedYear
           : yearData?.dateOfService
           ? yearData?.dateOfService
           : "",
-        // dateOfService: yearData?.dateOfService ? yearData?.dateOfService : ""
       };
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/notes`,
-        dataFormatSuggested
-      );
-      var result = response.data;
-      if (result.status == "SUCCESS") {
-        inputValue.comments = "";
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
+      try {
+        const response = await isAddNotes(dataFormatSuggested)
+        getResponePopup(response);
+        setInputValue({ ...inputValue, comments: "" });
         getNotesList();
         setCommentsTrigger(false);
-      } else {
+      } catch (error) {
+        getResponePopup(error?.response);
+
+        setCommentsTrigger(false);
       }
     }
+
     setValidated(true);
   };
 
@@ -89,35 +93,37 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
 
   const handleEnterTextNotes = async (event) => {
     const yearData = patientDetailsResult?.data?.response;
+    if (event.charCode === 13) {
+      if (inputValue.comments.trim() === "") {
+        getResponePopup({
+          data: {
+            status: "USER_DEFINED_ERROR",
+            message: "Comment cannot be empty",
+          },
+        });
+        return;
+      }
 
-    if (event.charCode == 13) {
-      if (inputValue.comments.trim() != "") {
+      if (inputValue.comments.trim() !== "") {
         const orgId = getStorage("orgId");
+
         var dataFormatSuggested = {
           patientId: yearData?.patientId,
-          // orgId: orgId,
           note: inputValue.comments,
           processedYear: yearData?.processedYear
             ? yearData?.processedYear
             : yearData?.dateOfService
             ? yearData?.dateOfService
             : "",
-          // dateOfService: yearData?.dateOfService ? yearData?.dateOfService : ""
         };
-        const response = await axios.post(
-          ENDPOINTS.apiEndoint + `dbservice/notes`,
-          dataFormatSuggested
-        );
-        var result = response.data;
-        if (result.status == "SUCCESS") {
-          inputValue.comments = "";
-          notification.success({
-            message: result.message,
-            placement: "top",
-            duration: 1,
-          });
+
+        try {
+          const response = await isAddNotes(dataFormatSuggested)
+          getResponePopup(response);
+          setInputValue({ ...inputValue, comments: "" });
           getNotesList();
-        } else {
+        } catch (error) {
+          getResponePopup(error?.response);
         }
       }
     }
@@ -313,6 +319,7 @@ const enhancer = connect(
   }),
   {
     isDeleteNotes: detailsActions.isDeleteNotes,
+    isAddNotes: detailsActions.isAddNotes,
   }
 );
 export default enhancer(Notes);
