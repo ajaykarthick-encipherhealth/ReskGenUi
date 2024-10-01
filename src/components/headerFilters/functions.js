@@ -681,12 +681,12 @@ const encryptData = (data, key, iv) => {
 
   return encrypted.toString();
 };
-function generateRandomString() {
+function generateRandomString(count = 16) {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let randomString = "";
 
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < count; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
     randomString += characters.charAt(randomIndex);
   }
@@ -698,6 +698,29 @@ export const encyptingPass = (password) => {
   const plaintextData = password;
   const encryptionKey = "B27AA05B9A2490D1AE59B33B45CFD4B0"; // Should be 16, 24, or 32 bytes
   const initializationVector = generateRandomString(); // Should be 16 bytes
+  const encryptedData = encryptData(
+    plaintextData,
+    encryptionKey,
+    initializationVector
+  );
+  const values = { pass: encryptedData, iv: initializationVector };
+  return values;
+};
+
+export const pdfEncrypt = (value) => {
+  const plaintextData = value;
+  let now = new Date();
+  let date = Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+    now.getUTCHours(),
+    now.getUTCMinutes(),
+    now.getUTCSeconds(),
+    now.getUTCMilliseconds()
+  );
+  const encryptionKey = "B27AA05B9A2490D1AE59B33B45CFD4B0"; // Should be 16, 24, or 32 bytes
+  const initializationVector = date + ":" + "vg"; // Should be 16 bytes
   const encryptedData = encryptData(
     plaintextData,
     encryptionKey,

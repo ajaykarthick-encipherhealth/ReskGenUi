@@ -4,6 +4,8 @@ import ENDPOINTS from "../../../utility/enpoints";
 import { connect } from "react-redux";
 import Style from "./style.module.css";
 import { portalPdfUrl } from "../../../utils/config";
+import { pdfEncrypt } from "../../headerFilters/functions";
+import { getStorage } from "../../../utils/storages";
 
 const PdfViewer = ({
   src,
@@ -18,27 +20,60 @@ const PdfViewer = ({
 }) => {
   const [iframeSrc, setIframeSrc] = useState("");
   const [emptyText, setEmptyText] = useState(false);
+  const [fileId, setFileId] = useState("");
+  const [url, setUrl] = useState("");
+  const [ids, setIds] = useState()
   useEffect(() => {
     const page = selectedPageNumber ? selectedPageNumber : pageNumber;
     if (!Array.isArray(src)) {
-      const pdfUrl = encodeURIComponent(src);
-      let searchUrl = `${portalPdfUrl}?file=${pdfUrl}`;
-      // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
-      if (searchQuery || page || headerContent) {
-        const queryParams = [];
-        if (searchQuery) {
-          const encodedSearchQuery = encodeURIComponent(`${searchQuery}`);
-          queryParams.push(
-            `search=${encodedSearchQuery.toLocaleLowerCase()}&casesensitive=true&phrase=true&wholeword=true&entireword=true&headers=${headers}`
-          );
+      const getData = pdfEncrypt(getStorage("fileId"));
+      const pdfUrl = encodeURIComponent(getData.pass);
+      let searchUrl = "";
+      if (fileId != getStorage("fileId")) {
+        setFileId(getStorage("fileId"));
+        setUrl(pdfUrl)
+        setIds(getData.iv)
+        searchUrl = `${portalPdfUrl}?file=${pdfUrl}&salt=${
+          getData.iv
+        }&token=${getStorage("token")}`;
+        // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
+        if (searchQuery || page || headerContent) {
+          const queryParams = [];
+          if (searchQuery) {
+            const encodedSearchQuery = encodeURIComponent(`${searchQuery}`);
+            queryParams.push(
+              `search=${encodedSearchQuery.toLocaleLowerCase()}&casesensitive=true&phrase=true&wholeword=true&entireword=true&headers=${headers}`
+            );
+          }
+          if (page) {
+            queryParams.push(`page=${page}`);
+          }
+          if (headerContent) {
+            queryParams.push(`headerContent=${headerContent}`);
+          }
+          searchUrl += `#${queryParams.join("&")}`;
         }
-        if (page) {
-          queryParams.push(`page=${page}`);
+      } else {
+        searchUrl = `${portalPdfUrl}?file=${url}&salt=${
+          ids
+        }&token=${getStorage("token")}`;
+        // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
+        if (searchQuery || page || headerContent) {
+          const queryParams = [];
+          if (searchQuery) {
+            const encodedSearchQuery = encodeURIComponent(`${searchQuery}`);
+            queryParams.push(
+              `search=${encodedSearchQuery.toLocaleLowerCase()}&casesensitive=true&phrase=true&wholeword=true&entireword=true&headers=${headers}`
+            );
+          }
+          if (page) {
+            queryParams.push(`page=${page}`);
+          }
+          if (headerContent) {
+            queryParams.push(`headerContent=${headerContent}`);
+          }
+          searchUrl += `#${queryParams.join("&")}`;
         }
-        if (headerContent) {
-          queryParams.push(`headerContent=${headerContent}`);
-        }
-        searchUrl += `#${queryParams.join("&")}`;
       }
       setIframeSrc(searchUrl);
     } else {
