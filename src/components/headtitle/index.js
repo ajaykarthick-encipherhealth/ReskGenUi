@@ -62,12 +62,6 @@ const HeadTitle = ({
         </div>
         {icon && (
           <div className={styles.imgContainer}>
-            {/* <Image
-              src={icon}
-              alt="Calendar Icon"
-             
-              className={styles.IMG}
-            /> */}
             <div className="cursor-pointer">
               <FontAwesomeIcon
                 onClick={() => {
@@ -119,36 +113,9 @@ const HeadTitle = ({
               }}
               format="MM-DD-YYYY"
               suffixIcon={false}
-              // className={styles.datepicker}
               disabledDate={(current) => disableFutureDate(current)}
               inputReadOnly={true}
             />
-            {/* <div
-            className="cursor-pointer mx-4"
-            onClick={(e) => {
-              e.stopPropagation();
-              let dates;
-              if (isAdmin) {
-                dates = {
-                  startDate: "",
-                  endDate: "",
-                  clear: true,
-                };
-              } else {
-                dates = {
-                  startDate: last3thDate.toISOString(),
-                  endDate: lastDateWithTime,
-                  clear: true,
-                };
-              }
-
-              dispatch(getDateRange(dates));
-              // setOpenPicker(false);
-              setSelectedDates([]);
-            }}
-          >
-            <Button>Refresh</Button>
-          </div> */}
           </div>
           <div id="date-popup" style={{ position: "relative" }} />
         </Modal>
