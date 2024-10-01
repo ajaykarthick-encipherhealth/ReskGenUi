@@ -81,7 +81,6 @@ const HeadTitle = ({
           View All
         </span>
       )}
-      <div className="calendar">
         <Modal
           open={openPicker}
           mask={true}
@@ -119,7 +118,6 @@ const HeadTitle = ({
           </div>
           <div id="date-popup" style={{ position: "relative" }} />
         </Modal>
-      </div>
     </div>
   );
 };
