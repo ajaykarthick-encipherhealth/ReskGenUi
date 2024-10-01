@@ -28,12 +28,12 @@ import {
   labPDFDetails,
   isDeleteNotes,
   isDeleteComments,
+  getAddProviderAndDOSList,
   isAddNotes,
   isAddComments,
   isDeleteFlag,
   storeFileIdAction,
   stroeFileIdPreAction,
-
 } from "./actions";
 
 const initialState = {
@@ -140,6 +140,7 @@ const patientDetailsReducer = combineReducers({
   labDosResult: createReducer(labDosDeatilsAction),
   activeLabel: createReducer(activeLabels),
   labPDFDetails: createReducer(labPDFDetails),
+  dosAndProvidersList:createReducer(getAddProviderAndDOSList),
   getStoreFileIdDetails:getStoreFileIdDetails,
   getStoreFileIdDetailsPre:getStoreFileIdDetailsPre,
   fileLoading:getPatientsLoading(patientHccFileAction),
