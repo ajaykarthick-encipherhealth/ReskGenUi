@@ -50,7 +50,7 @@ const File = ({
   loading,
   isDosSelected,
   labFileLoad,
-  fileLoadingStatus
+  fileLoadingStatus,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -96,9 +96,9 @@ const File = ({
   const [deletedMeatList, setDeletedMeatList] = useState([]);
   const [showList, setShowList] = useState(["care"]);
   const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
-  const [selectCardTitle, setSelectCardTitle] = useState('');
-
-
+  const [selectCardTitle, setSelectCardTitle] = useState("");
+  const [dragItem, setDragItem] = useState(null);
+  
   useEffect(() => {
     var orgId = getStorage("orgId");
     var tenId = getStorage("tenantId");
@@ -244,12 +244,12 @@ const File = ({
       setShowList((prev) => [...prev, value]);
     }
   };
-  
+
   return (
     <>
       {fileLoading ? <LogoLoader /> : null}
       <DragDropContext
-        onDragEnd={(result) =>
+        onDragEnd={(result) => {
           onDragEnd(
             result,
             allDisList,
@@ -258,8 +258,9 @@ const File = ({
             setConfirmNotesModalValid,
             setIsValidAction,
             patientDetailsResult
-          )
-        }
+          );
+          setDragItem(result);
+        }}
       >
         <div className="my-post-content row pt-3" style={{ height: "100%" }}>
           {!isFileFormShow ? (
@@ -368,7 +369,7 @@ const File = ({
               </div>
             </Popover> */}
             <div className="card-body p-0">
-            {fileLoadingStatus ? (
+              {fileLoadingStatus ? (
                 <div className={visitStyles?.loaderDiv}>
                   <Spinner />
                 </div>
@@ -689,6 +690,7 @@ const File = ({
         setSuggestedMeatForm={setSuggestedMeatForm}
         meatCriteriaList={allMeatList}
         setSelectCardTitle={setSelectCardTitle}
+        dragItem={dragItem}
       />
 
       <ModelIndex
@@ -828,7 +830,7 @@ const enhancer = connect(
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
     loading: state?.patientDetails?.details?.loading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
-    fileLoadingStatus:state.patientDetails.details?.fileLoading,
+    fileLoadingStatus: state.patientDetails.details?.fileLoading,
   }),
   {
     getRadiologyFileDetails: detailsActions.radiologyFileAction,
