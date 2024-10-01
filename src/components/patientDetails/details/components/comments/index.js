@@ -23,6 +23,7 @@ const Comments = ({
   open,
   patientDetailsResult,
   isDeleteComments,
+  isAddComments
 }) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
@@ -59,76 +60,60 @@ const Comments = ({
         placement: "top",
         duration: 1,
       });
-      return; 
+      return;
     }
-  
+
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
-  
+
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
         comment: inputValue.comments,
         processedYear: patientDetailsResult?.data?.response?.processedYear,
         dateOfService: patientDetailsResult?.data?.response?.dateOfService,
       };
-  
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/comment`,
-        dataFormatSuggested
-      );
-      
-      var result = response.data;
-      if (result.status == "SUCCESS") {
-        setInputValue({ ...inputValue, comments: "" }); 
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
+
+      try {
+        const response = await isAddComments(dataFormatSuggested)
+        getResponePopup(response);
+        setInputValue({ ...inputValue, comments: "" });
         getCommentsList();
+      } catch (error) {
+        getResponePopup(error?.response);
+      } finally {
+        setCommentsTrigger(false);
       }
-      setCommentsTrigger(false);
     }
+
     setValidated(true);
   };
 
   const handleEnterText = async (event) => {
-    if (event.charCode == 13) {
-
+    if (event.charCode === 13) {
       if (inputValue.comments.trim() === "") {
         notification.warning({
           message: "Comment cannot be empty",
           placement: "top",
           duration: 1,
         });
-        return; 
+        return;
       }
-  
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
-        comment: inputValue.comments, 
+        comment: inputValue.comments,
         processedYear: patientDetailsResult?.data?.response?.processedYear,
         dateOfService: patientDetailsResult?.data?.response?.dateOfService,
       };
-  
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/comment`,
-        dataFormatSuggested
-      );
-      
-      var result = response.data;
-      if (result.status == "SUCCESS") {
-        setInputValue({ ...inputValue, comments: "" }); 
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
+      try {
+        const response = await isAddComments(dataFormatSuggested)
+        getResponePopup(response);
+        setInputValue({ ...inputValue, comments: "" });
         getCommentsList();
+      } catch (error) {
+        getResponePopup(error?.response);
       }
     }
   };
-  
 
   const handleDelete = async () => {
     const payload = {
@@ -331,6 +316,8 @@ const enhancer = connect(
   }),
   {
     isDeleteComments: detailsActions.isDeleteComments,
+    isAddComments: detailsActions.isAddComments,
+
   }
 );
 export default enhancer(Comments);

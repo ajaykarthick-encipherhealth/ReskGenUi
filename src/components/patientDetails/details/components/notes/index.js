@@ -19,7 +19,7 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import { isDeleteNotes } from "../../../../../stores/patient/details/actions";
 import { getResponePopup } from "../../../../../utils/reusable";
 
-const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
+const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes }) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
     comments: "",
@@ -40,41 +40,35 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
         placement: "top",
         duration: 1,
       });
-      return; 
+      return;
     }
     const yearData = patientDetailsResult?.data?.response;
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
       const orgId = getStorage("orgId");
+
       var dataFormatSuggested = {
         patientId: yearData?.patientId,
-        // orgId: orgId,
         note: inputValue.comments,
         processedYear: yearData?.processedYear
           ? yearData?.processedYear
           : yearData?.dateOfService
           ? yearData?.dateOfService
           : "",
-        // dateOfService: yearData?.dateOfService ? yearData?.dateOfService : ""
       };
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/notes`,
-        dataFormatSuggested
-      );
-      var result = response.data;
-      if (result.status == "SUCCESS") {
-        inputValue.comments.trim() === "";
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
-        setInputValue({ ...inputValue, comments: "" }); 
+      try {
+        const response = await isAddNotes(dataFormatSuggested)
+        getResponePopup(response);
+        setInputValue({ ...inputValue, comments: "" });
         getNotesList();
         setCommentsTrigger(false);
-      } else {
+      } catch (error) {
+        getResponePopup(error?.response);
+
+        setCommentsTrigger(false);
       }
     }
+
     setValidated(true);
   };
 
@@ -87,7 +81,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
     };
 
     try {
-      const response = await isDeleteNotes(payload);
+      const response = await isDeleteNotes(dataFormatSuggested);
       getResponePopup(response);
       getNotesList();
     } catch (error) {
@@ -98,43 +92,36 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes }) => {
 
   const handleEnterTextNotes = async (event) => {
     const yearData = patientDetailsResult?.data?.response;
-
-    if (event.charCode == 13) {
-         if (inputValue.comments.trim() === "") {
+    if (event.charCode === 13) {
+      if (inputValue.comments.trim() === "") {
         notification.warning({
           message: "Comment cannot be empty",
           placement: "top",
           duration: 1,
         });
-        return; 
+        return;
       }
-      if (inputValue.comments.trim() != "") {
+
+      if (inputValue.comments.trim() !== "") {
         const orgId = getStorage("orgId");
+
         var dataFormatSuggested = {
           patientId: yearData?.patientId,
-          // orgId: orgId,
           note: inputValue.comments,
           processedYear: yearData?.processedYear
             ? yearData?.processedYear
             : yearData?.dateOfService
             ? yearData?.dateOfService
             : "",
-          // dateOfService: yearData?.dateOfService ? yearData?.dateOfService : ""
         };
-        const response = await axios.post(
-          ENDPOINTS.apiEndoint + `dbservice/notes`,
-          dataFormatSuggested
-        );
-        var result = response.data;
-        if (result.status == "SUCCESS") {
-          setInputValue({ ...inputValue, comments: "" }); 
-          notification.success({
-            message: result.message,
-            placement: "top",
-            duration: 1,
-          });
+
+        try {
+          const response = await isAddNotes(dataFormatSuggested)
+          getResponePopup(response);
+          setInputValue({ ...inputValue, comments: "" });
           getNotesList();
-        } else {
+        } catch (error) {
+          getResponePopup(error?.response);
         }
       }
     }
@@ -330,6 +317,7 @@ const enhancer = connect(
   }),
   {
     isDeleteNotes: detailsActions.isDeleteNotes,
+    isAddNotes: detailsActions.isAddNotes,
   }
 );
 export default enhancer(Notes);

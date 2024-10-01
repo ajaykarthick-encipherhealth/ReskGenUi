@@ -69,6 +69,16 @@ export const isDeleteComments = createActionThunk(
   network.deleteComments
 );
 
+export const isAddNotes = createActionThunk(
+  "ADD_NOTES",
+  network.addNotes
+);
+
+export const isAddComments = createActionThunk(
+  "ADD_COMMENTS",
+  network.addComments
+);
+
 export const getValideCode = createActionThunk(
   "GET_VALID_CODE",
   network.isValideCode
