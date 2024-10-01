@@ -166,10 +166,12 @@ const AddForm = ({
               },
             ]}
             className="manuallyAddPicker"
+           
           >
             <DatePicker
               disabledDate={(current) => disableFutureDate(current)}
               getPopupContainer={(triggerNode) => triggerNode.parentNode}
+              disabled={providersList?.dateOfService?true:false}
             />
           </Form.Item>
           <Form.Item
@@ -181,8 +183,9 @@ const AddForm = ({
                 message: "Please Enter DOS Substring",
               },
             ]}
+            
           >
-            <Input placeholder="DOS Substring" />
+            <Input placeholder="DOS Substring" disabled={providersList?.dosSubstring?true:false}/>
           </Form.Item>
           <Form.Item
             label={
@@ -193,8 +196,9 @@ const AddForm = ({
               { required: true, message: "Please enter DOS Start Page Number" },
               { validator: validateThreeDigitNumber },
             ]}
+
           >
-            <Input maxLength={3} placeholder="DOS Start Page Number" />
+            <Input maxLength={3} placeholder="DOS Start Page Number"  disabled={providersList?.dosStartPageNumber?true:false}/>
           </Form.Item>
           <Form.Item
             label={
@@ -205,8 +209,9 @@ const AddForm = ({
               { required: true, message: "Please enter DOS End Page Number" },
               { validator: validateThreeDigitNumber },
             ]}
+           
           >
-            <Input maxLength={3} placeholder="DOS End Page Number" />
+            <Input maxLength={3} placeholder="DOS End Page Number"  disabled={providersList?.dosEndPageNumber?true:false}/>
           </Form.Item>
           {/* provider */}
           <Form.Item
