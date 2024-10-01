@@ -1,20 +1,16 @@
 import React, { useState } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Badge, Popconfirm, Popover, Tooltip, Tag, message } from "antd";
+import { Tag, message } from "antd";
 import styles from "../../hcc/styles.module.css";
 import {
-  faArrowsAlt,
   faSitemap,
-  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { CloseCircleFilled } from "@ant-design/icons";
 import {
   getCaptureSectionBackgroundFile,
   getEncounterDateBackground,
-  getMeatFound,
-  getProviderNameList,
-  moveToAnotherAction,
+  getMeatFound
 } from "../function/ReusableFunctions";
 import { connect } from "react-redux";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
@@ -48,6 +44,7 @@ const ComboCard = ({
   cardTitle,
   isDosSelected,
   patientDetailsResult,
+  storeFileDetails,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -285,6 +282,7 @@ const ComboCard = ({
                                 setFileModalHeader: setFileModalHeader,
                                 patientDocumentResult: patientDocumentResult,
                                 popup,
+                                storeFileDetails: storeFileDetails,
                               })}
                             </div>
                             <div
@@ -314,7 +312,13 @@ const ComboCard = ({
                                 setIsMulitpleHeadeCode,
                                 isMulitpleHeaderCode,
                                 item.diseaseName,
-                                popup
+                                popup,
+                                getSelectedDosPageNumber,
+                                "",
+                                "",
+                                "",
+                                "",
+                                storeFileDetails
                               )}
                             </div>
                           </div>
@@ -385,7 +389,6 @@ const ComboCard = ({
                         </div>
                       </div>
                     </div>
-                  )
                 );
               })}
             </div>
@@ -410,6 +413,7 @@ const enhancer = connect(
   }),
   {
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,
+    storeFileDetails: detailsAction.storeFileIdAction,
   }
 );
 export default enhancer(ComboCard);

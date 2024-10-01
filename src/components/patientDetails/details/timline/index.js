@@ -807,35 +807,11 @@ const Timeline = ({
           return (
             <div className="d-flex w-100 justify-content-between">
               <>
-                <strong>Comment Removed </strong>
-                <Popover
-                  open={popClickDisCode === index}
-                  trigger={["hover"]}
-                  placement="bottom"
-                  overlayStyle={{ zIndex: 9999 }}
-                  content={
-                    <div
-                    className="d-flex justify-content-between"
-                    >
-                      <span className={`${styles.textContent}`}>{item?.actionNotes}</span>
-                      <CloseCircleFilled
-                        onClick={() => onClickPopup(null)}
-                        className={`${styles.closeIcon}`}
-                      />
-                    </div>
-                  }
-                >
-                  <span
-                    className={styles.viewTag}
-                    onClick={() => onClickPopup(index)}
-                  >
-                    View
-                  </span>
-                </Popover>
+                <strong>Comment Removed </strong>            
               </>
             </div>
           );
-        case "NOTES_ADDED,":
+        case "NOTES_ADDED":
           return (
             <div className="d-flex w-100 justify-content-between">
             <>
@@ -872,30 +848,6 @@ const Timeline = ({
             <div className="d-flex w-100 justify-content-between">
             <>
               <strong>Notes Removed </strong>
-              <Popover
-                open={popClickDisCode === index}
-                trigger={["hover"]}
-                placement="bottom"
-                overlayStyle={{ zIndex: 9999 }}
-                content={
-                  <div
-                  className="d-flex justify-content-between"
-                  >
-                    <span className={`${styles.textContent}`}>{item?.actionNotes}</span>
-                    <CloseCircleFilled
-                      onClick={() => onClickPopup(null)}
-                      className={`${styles.closeIcon}`}
-                    />
-                  </div>
-                }
-              >
-                <span
-                  className={styles.viewTag}
-                  onClick={() => onClickPopup(index)}
-                >
-                  View
-                </span>
-              </Popover>
             </>
           </div>
           );
