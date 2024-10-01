@@ -32,8 +32,8 @@ const ManuallyAddProvider = ({
   const handleEdit = (e, data) => {
     e.stopPropagation();
     form.setFieldsValue({
-      dos:dayjs(data?.dateOfService)||"",
-      dosSubstring: data?.dosSubstring || "",
+      dos:data?.dateOfService?dayjs(data?.dateOfService):null,
+      dosSubstring: data?.dosSubstring||"",
       dosStartPageNumber: data?.dosStartPageNumber || "",
       dosEndPageNumber: data?.dosEndPageNumber || "",
       providerName: data?.providerName || "",
