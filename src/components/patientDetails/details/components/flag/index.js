@@ -35,7 +35,7 @@ const Flag = ({
   isdeleteFlag,
 }) => {
   const [inputValue, setInputValue] = useState({
-    patientId: "",
+    flagId: "",
     comments: "",
   });
   const [flagResultList, setFlagResultList] = useState([]);
@@ -56,14 +56,11 @@ const Flag = ({
     name: item?.flagName,
   }));
 
-  const handleDelete = async () => {
+  const handleDelete = async (flagId) => {
     const payload = {
-      flagId: flagsDetailsResult?.response[0]?.patientFlagDTO?.
-      flagId
-       || "",
+      flagId: flagId || "",
       patientId: patientDetailsResult?.data?.response?.patientId,
-      comment: flagsDetailsResult?.response[0]?.patientFlagDTO?.
-      comment,
+      comment: flagsDetailsResult?.response[0]?.patientFlagDTO?.comment,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
     };
@@ -84,12 +81,21 @@ const Flag = ({
   const handleSubmitFlag = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
+    if (inputValue.comments.trim() === "") {
+      getResponePopup({
+        data: {
+          status: "USER_DEFINED_ERROR",
+          message: "Comment cannot be empty",
+        },
+      });
+      return; 
+    }
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
       const orgId = getStorage("orgId");
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
-        comment: inputValue.comments,
+        comment: inputValue.comments.trim(),
         processedYear: patientDetailsResult?.data?.response?.processedYear,
         dateOfService: patientDetailsResult?.data?.response?.dateOfService,
         flagId: inputValue.flagId,
@@ -99,21 +105,19 @@ const Flag = ({
           ENDPOINTS.apiEndoint + `dbservice/flagdetails`,
           dataFormatSuggested
         );
-        var result = response.data;
         getResponePopup(response);
-          getFlagDetailsData(
-            patientDetailsResult?.data?.response?.patientId,
-            patientDetailsResult?.data?.response?.processedYear,
-            patientDetailsResult?.data?.response?.dateOfService
-          );
-          setInputValue({
-            flagId: "", 
-            comments: "", 
-          });
-  
-          setCommentsTrigger(false);
-          setIsModalComments(false);
-      
+        getFlagDetailsData(
+          patientDetailsResult?.data?.response?.patientId,
+          patientDetailsResult?.data?.response?.processedYear,
+          patientDetailsResult?.data?.response?.dateOfService
+        );
+
+        setInputValue({
+          flagId: "",
+          comments: "",
+        });
+        setCommentsTrigger(false);
+        setIsModalComments(false);
       } catch (error) {
         getResponePopup(error.response);
         setCommentsTrigger(false);
@@ -185,12 +189,9 @@ const Flag = ({
     setInputValue((prevState) => ({
       ...prevState,
       flagId: selectedOption.value,
-      flag: selectedOption.label, 
+      flag: selectedOption.label,
     }));
   };
-  
-
-
 
   useEffect(() => {
     const patientId = getStorage("patientId");
@@ -229,8 +230,12 @@ const Flag = ({
                   className="customize-react-select"
                   isSearchable={false}
                   id="flag"
-                  name="flag"   
-                  value={flagPostList.find(option => option.value === inputValue.flagId)} 
+                  name="flag"
+                  value={
+                    flagPostList.find(
+                      (option) => option.value === inputValue.flagId
+                    ) || null
+                  } 
                   onChange={handleChangeFlag}
                 />
               </div>
@@ -277,7 +282,7 @@ const Flag = ({
               >
                 <FontAwesomeIcon
                   icon={faXmarkCircle}
-                  onClick={handleDelete}
+                  onClick={() => handleDelete(data?.patientFlagDTO?.flagId)}
                   style={{ color: "#be3144" }}
                 />
               </div>

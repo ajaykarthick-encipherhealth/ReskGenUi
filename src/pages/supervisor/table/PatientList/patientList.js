@@ -13,6 +13,7 @@ import {
   sortFunction,
 } from "../../../../components/headerFilters/functions";
 import { setStorage } from "../../../../utils/storages";
+import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 
 function PatientTable({
   patinetListAll,
@@ -116,7 +117,7 @@ function PatientTable({
             className={TableStyle.firstTdBorder}
             onClick={handleTableRowClick}
           >
-            <div> {data.patientId ? data.patientId : "---"} </div>
+            <div> <Tooltip title={data.patientId}> {truncateString(data.patientId, 20)}</Tooltip></div>
             <div> {data.patientName ? data.patientName : ""}</div>
           </td>
 
@@ -265,7 +266,7 @@ function PatientTable({
               </Tooltip>
             </th>
 
-            <th
+            <th className="text-truncate"
               onClick={() => {
                 sortFunction(
                   sortAuditOrder,
@@ -285,7 +286,7 @@ function PatientTable({
                 )}
               </span>
             </th>
-            <th
+            <th className="text-truncate"
               onClick={() => {
                
                 sortFunction(
@@ -305,7 +306,7 @@ function PatientTable({
                 )}
               </span>
             </th>
-            <th
+            <th className="text-truncate"
               onClick={() => {
                 sortFunction(
                   sortCompleteOrder,
@@ -325,9 +326,9 @@ function PatientTable({
               </span>
             </th>
 
-            <th style={{ paddingLeft: "30px" }}>AUDIT ALLOCATED BY</th>
-            <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
-            <th className={TableStyle.rowStyle2}>AUDIT STATUS</th>
+            <th className="text-truncate" style={{ paddingLeft: "30px" }}>AUDIT ALLOCATED BY</th>
+            <th  className="text-truncate"style={{ paddingLeft: "30px" }}>PRIORITY</th>
+            <th  className={TableStyle.rowStyle2}>AUDIT STATUS</th>
           </tr>
         </thead>
 

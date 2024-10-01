@@ -1,5 +1,5 @@
 import { requestPortal } from "../../../utils/network";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 
 export async function patientDetails(
   patientId,
@@ -106,12 +106,17 @@ export async function patientHccFile(fileId) {
   const options = {
     method: "GET",
   };
-  const data = await requestPortal(
-    // `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`,
-    `management/patient/report/getfile/validator?blobName=${fileId}`,
+  const result = await requestPortal(
+    `dbservice/fileDetail/findbyid?fileId=${fileId}`,
     options
   );
-  return data;
+  setStorage("fileId", result?.response?.azureBlobPath);
+  // const data = await requestPortal(
+  //   // `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`,
+  //   `management/patient/report/getfile/validator?blobName=${result?.response?.azureBlobPath}`,
+  //   options
+  // );
+  return result;
 }
 
 export async function dosWiseList(patientId, year) {
@@ -194,6 +199,30 @@ export async function deleteComments(obj) {
     body: JSON.stringify(obj),
   };
   const data = await requestPortal(`dbservice/comment/delete`, options);
+  return data;
+}
+
+export async function addNotes(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/notes`,
+    options
+  );
+  return data;
+}
+
+export async function addComments(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/comment`,
+    options
+  );
   return data;
 }
 

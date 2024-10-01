@@ -90,9 +90,9 @@ const NonHcc = ({
   useEffect(() => {
     if (isDosSelected) {
       setSelectDosValue(isDosSelected)
+      getSelectedDos(isDosSelected)
     }
   }, [isDosSelected])
-
   return (
     <>
       <div className={visitStyles.visitdata_tab_body}>

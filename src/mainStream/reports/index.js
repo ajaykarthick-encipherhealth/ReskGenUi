@@ -188,10 +188,18 @@ const Reports = ({
   };
   const dosOnChange = (selectedOption, name) => {
     const nameString = name?.split(" ").join("");
-    setSelectedOptions((prevOptions) => ({
-      ...prevOptions,
-      [nameString]: selectedOption,
-    }));
+    if (selectedOption?.label === "All") {
+      setSelectedOptions((prevOptions) => ({
+        ...prevOptions,
+        UserRole: "",
+        User: "",
+      }));
+    } else {
+      setSelectedOptions((prevOptions) => ({
+        ...prevOptions,
+        [nameString]: selectedOption,
+      }));
+    }
   };
 
   const debouncedSearch = useCallback(
@@ -601,7 +609,11 @@ const Reports = ({
                                         }
                                         className={`custom-react-report-select`}
                                         isSearchable={false}
-                                        value={selectedOptions[info?.name]}
+                                        value={
+                                          selectedOptions[info?.name] == "All"
+                                            ? ""
+                                            : selectedOptions[info?.name]
+                                        }
                                       />
                                     )}
                                     {info?.isRangePikcer && (
@@ -808,7 +820,6 @@ const Reports = ({
                                 : "",
                             flagsList: flagPatientsList ? flagPatientsList : "",
                             allPatientIds: true,
-                            
                           },
                         }}
                       />

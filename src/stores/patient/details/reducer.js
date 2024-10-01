@@ -26,10 +26,14 @@ import {
   getCurrentDiseaseType,
   activeLabels,
   labPDFDetails,
-  isDeleteFlag,
   isDeleteNotes,
   isDeleteComments,
   getAddProviderAndDOSList
+  isAddNotes,
+  isAddComments,
+  isDeleteFlag,
+  storeFileIdAction,
+  stroeFileIdPreAction,
 } from "./actions";
 
 const initialState = {
@@ -60,6 +64,19 @@ const createReducer = (actionType) =>
     initialState
   );
 
+const getStoreFileIdDetails = handleActions(
+  {
+    [storeFileIdAction.toString()]: (state, { payload }) => payload,
+  },
+  null
+);
+const getStoreFileIdDetailsPre = handleActions(
+  {
+    [stroeFileIdPreAction.toString()]: (state, { payload }) => payload,
+  },
+  null
+);
+
 const getSelectedDosDetails = handleActions(
   {
     [getSelectedDos.toString()]: (state, { payload }) => payload,
@@ -73,15 +90,16 @@ const getSelectedDetails = (action) =>
     },
     ""
   );
-  // const getCurrentDiseaseDetails = (action) =>
-  //   handleActions(
-  //     {
-  //       [action.toString()]: (state, { payload }) => payload,
-  //     },
-  //     true
-  //   );
+// const getCurrentDiseaseDetails = (action) =>
+//   handleActions(
+//     {
+//       [action.toString()]: (state, { payload }) => payload,
+//     },
+//     true
+//   );
 
-  const getPatientsLoading=(type) => handleActions(
+const getPatientsLoading = (type) =>
+  handleActions(
     {
       [type.START]: () => true,
       [type.SUCCEEDED]: () => false,
@@ -92,7 +110,7 @@ const getSelectedDetails = (action) =>
 const patientDetailsReducer = combineReducers({
   patientResult: createReducer(patientDetailsAction),
   patientIdResult: createReducer(patientIdDetailsAction),
-  loading:getPatientsLoading(patientDetailsAction),
+  loading: getPatientsLoading(patientDetailsAction),
   hccFileResult: createReducer(patientHccFileAction),
   dosResult: createReducer(dosDeatilsAction),
   dosPageNumberResult: createReducer(dosPageNumberAction),
@@ -107,11 +125,13 @@ const patientDetailsReducer = combineReducers({
   deleteFlag : createReducer(isDeleteFlag),
   deleteNotes: createReducer(isDeleteNotes),
   deleteComments: createReducer(isDeleteComments),
+  addNotes: createReducer(isAddNotes),
+  addComments: createReducer(isAddComments),
   isCodeAlready: createReducer(isCodeAlready),
   getValidCode: createReducer(getValideCode),
   getSelectedDosDetails: getSelectedDosDetails,
-  selectedDosPageNumber:getSelectedDetails(getSelectedDosPageNumber),
-  currentDiseaseType:getSelectedDetails(getCurrentDiseaseType),
+  selectedDosPageNumber: getSelectedDetails(getSelectedDosPageNumber),
+  currentDiseaseType: getSelectedDetails(getCurrentDiseaseType),
   manuallyAdd: createReducer(manuallyAdd),
   diseaseEdit: createReducer(diseaseEdit),
   diseaseEditMeat: createReducer(diseaseEditMeat),
@@ -120,7 +140,10 @@ const patientDetailsReducer = combineReducers({
   labDosResult: createReducer(labDosDeatilsAction),
   activeLabel: createReducer(activeLabels),
   labPDFDetails: createReducer(labPDFDetails),
-  dosAndProvidersList:createReducer(getAddProviderAndDOSList)
+  dosAndProvidersList:createReducer(getAddProviderAndDOSList),
+  getStoreFileIdDetails:getStoreFileIdDetails,
+  getStoreFileIdDetailsPre:getStoreFileIdDetailsPre,
+  fileLoading:getPatientsLoading(patientHccFileAction),
 });
 
 export default patientDetailsReducer;
