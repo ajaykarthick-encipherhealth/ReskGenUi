@@ -52,7 +52,6 @@ const ModelIndex = ({
         selectDisDetails?.diagnosisCode,
         meatCriteriaList
       );
-      console.log(meatFoundResult)
       if (!meatFoundResult) {
         setFileLoading(true);
         const result = await suggestedMeatCheck(

@@ -3,11 +3,11 @@
   border-radius: 5px;
   align-items: center;
   padding: 5px;
-  margin: 10px 0px;
+  margin: 0px 0px;
   border: none;
   display: flex;
   justify-content: space-between;
-  width: 55%;
+  width: 100%;
 }
 .count {
   width: 30px;
@@ -40,7 +40,7 @@
   height: 100%;
   padding: 10px;
   border-radius: 7px;
-  margin: 20px 0px 0px;
+  margin: 0px 0px 0px;
 }
 .cancelBtn,
 .cancelBtn:hover .cancelBtn:active,

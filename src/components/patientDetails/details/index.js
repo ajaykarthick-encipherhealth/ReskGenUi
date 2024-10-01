@@ -1488,7 +1488,7 @@ const Details = ({
                       flagContainerActiveTitle === "Timeline"
                         ? "460px"
                         : flagContainerActiveTitle === "Add DOS & Provider"
-                        ? "1200px"
+                        ? "1400px"
                         : null
                     }
                     title={flagContainerActiveTitle}
@@ -1536,7 +1536,7 @@ const Details = ({
                         )}
                       </>
                     ) : flagContainerActive === "Add DOS & Provider" ? (
-                      <ManuallyAddProvider />
+                      <ManuallyAddProvider selectDosValue={selectDosValue} dosYear={dosYear} />
                     ) : null}
                   </Drawer>
                 </div>

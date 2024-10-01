@@ -149,10 +149,20 @@ export const suggestedToValidMove = createActionThunk(
   network.suggestedToValid
 );
 
-export const getSelectedDosPageNumber = createAction("GET_SELECTED_DOS_PAGE_NUMBER");
+export const getSelectedDosPageNumber = createAction(
+  "GET_SELECTED_DOS_PAGE_NUMBER"
+);
 
 export const getCurrentDiseaseType = createAction("GET_CURRENT_DISEASE_TYPE");
 
+export const getAddProviderAndDOS = createActionThunk(
+  "GET_MANUALLY_ADD_PROVIDER_AND_DOS",
+  network.manuallyAddDosAndProvider
+);
+export const getAddProviderAndDOSList = createActionThunk(
+  "PROVIDER_AND_DOS_LIST_IN_MANUALLY_ADD",
+  network.manuallyAddDosAndProviderList
+);
 export const storeFileIdAction = createAction("STORE_FILE_ID");
 
 export const stroeFileIdPreAction = createAction("STORE_FILE_ID_PRE");
