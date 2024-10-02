@@ -475,6 +475,7 @@ const MeatCard = ({
                             onchangeValid={onchangeMeat}
                             result={item}
                             setFileLoading={setFileLoading}
+                            meatCriteriaList={list}
                           />
                         </div>
 

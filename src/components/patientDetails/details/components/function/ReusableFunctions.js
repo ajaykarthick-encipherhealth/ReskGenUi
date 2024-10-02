@@ -1834,7 +1834,7 @@ export const getMeatAnyOneFindCheck = (code, data) => {
   const result = data?.filter(
     (res2) => res2?.diagnosisCode?.replace(".", "") == code?.replace(".", "")
   );
-  if (result?.length != 0) {
+  if (result && result?.length != 0) {
     if (result[0]?.monitorAspect || result[0]?.evaluateAspect || result[0]?.assessmentAspect || result[0]?.treatmentAspect) {
       return true;
     }else{
