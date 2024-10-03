@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
-import { notification, Select as AntSelect, Empty } from "antd";
+import { notification, Select as AntSelect, Empty, Popover } from "antd";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import {
   renderUserPrfoileAvatar,
@@ -12,9 +12,8 @@ import {
 } from "../../../headerFilters/functions";
 import { getStorage, setStorage } from "../../../../utils/storages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faStar,
-} from "@fortawesome/free-solid-svg-icons";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import SvgFlag from "../../../patientDetails/details/components/svg/svg";
 
 function AddPatientListTable({
   patinetListAll,
@@ -90,13 +89,34 @@ function AddPatientListTable({
               className={TableStyle.firstTdBorder}
               onClick={handleTableRowClick}
             >
-              {data?.isFlagShow === true ? (
-                <span className="p-1">
-                  <FontAwesomeIcon
-                    icon={faStar}
-                    style={{ color: "gold", fontSize: "10px" }}
-                  />
-                </span>
+              {data?.flagList && data?.flagList.length > 0 ? (
+                <Popover
+                  content={
+                    <div style={{height:"auto", overflow:"scroll"}}>
+                      <strong>Flag details</strong>
+                      {data?.flagList?.map((flag, flagIndex) => (
+                        <div key={flagIndex}>
+                          <span className="p-1">
+                            <SvgFlag fillColor={flag?.flagColour} />
+                          </span>
+                          {flag?.flagName}
+                        </div>
+                      ))}
+                    </div>
+                  }
+                  placement="right"
+                >
+                  <span className="p-1">
+                    <FontAwesomeIcon
+                      icon={faStar}
+                      style={{
+                        color: "#ff5050",
+                        fontSize: "10px",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </span>
+                </Popover>
               ) : (
                 <span className="p-2">&nbsp;</span>
               )}
