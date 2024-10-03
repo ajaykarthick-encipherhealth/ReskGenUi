@@ -20,7 +20,8 @@ export const getStorage = (key) => {
 export const setStorage = (key, value) => {
   try {
     const hashedKey = hashKey(key);
-    const encryptedValue = CryptoJS.AES.encrypt(value, secretKey).toString();
+    const stringValue = typeof value === 'string' ? value : JSON.stringify(value); 
+    const encryptedValue = CryptoJS.AES.encrypt(stringValue, secretKey).toString();
     sessionStorage.setItem(hashedKey, encryptedValue);
     return Promise.resolve();
   } catch (error) {
@@ -28,6 +29,8 @@ export const setStorage = (key, value) => {
     return null;
   }
 };
+
+
 
 export const removeStorage = (key) => {
   try {
