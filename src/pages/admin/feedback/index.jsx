@@ -15,13 +15,7 @@ const FeedBack = () => {
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [page, setPage] = useState(0);
   const [activeTab, setActiveTab] = useState("myfeedback");
-  const handleModalOk = () => {
-    setIsModalOpen(false);
-  };
 
-  const handleModalCancel = () => {
-    setIsModalOpen(false);
-  };
 
   const column = [
     { name: "feedback id", value: "feedBackId" },
@@ -53,6 +47,13 @@ const FeedBack = () => {
   const handleRowClick = (item) => {
     setModalData(item);
     setIsModalOpen(true);
+  };
+  const handleModalOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
   };
 
   return (
