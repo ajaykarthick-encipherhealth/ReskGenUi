@@ -937,6 +937,16 @@ const HccCards = ({
                                       </span>
                                     </Tooltip>
                                   )}
+                                  {data?.stateIndicators?.includes("EDITED") && (
+                                    <Tooltip title="EDITED">
+                                      <span
+                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                        bg={`  mt-2 bg-bg-eight `}
+                                      >
+                                        Edited
+                                      </span>
+                                    </Tooltip>
+                                  )}
                                   {data.isLab == true && (
                                     <Tooltip title="LAB">
                                       <span
