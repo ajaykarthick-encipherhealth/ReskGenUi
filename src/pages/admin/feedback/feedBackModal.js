@@ -106,7 +106,7 @@ const FeedBackModalContent = ({
                 <div>{modalData?.feedBackId}</div>
               </div>
               <div className="col-6 mt-3">
-                <div className={styles.txt}>Created by</div>
+                <div className={styles.txt}>Managar</div>
                 <div className="d-flex align-items-center">
                   {modalData?.firstName} {modalData?.lastName}
                 </div>
