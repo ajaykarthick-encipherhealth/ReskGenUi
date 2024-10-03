@@ -1,8 +1,6 @@
 import React from "react";
-import { Avatar, Steps } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { Steps } from "antd";
 import styles from "./styles.module.css";
-import ResuableModal from "../../../components/modal";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 import { getButtonStatus } from "../../../components/commonFunctions";
 import { IMAGES } from "../../../jsx/constant/theme";
@@ -94,12 +92,7 @@ const FeedBackModalContent = ({
   ];
 
   return (
-    <ResuableModal
-      isModalOpen={isModalOpen}
-      handleCancel={handleCancel}
-      handleOk={handleOk}
-      width={900}
-    >
+    <div>
       {modalData && (
         <div className="row">
           <div className="col-7">
@@ -142,12 +135,12 @@ const FeedBackModalContent = ({
           <div className={`col-5 ${styles.modalborder}`}>
             <div className={styles.heading}>Activity</div>
             <div className="mt-3 customstepper">
-              <Steps direction="vertical" current={3} items={stepsData} />
+              <Steps direction="vertical" current={4} items={stepsData} />
             </div>
           </div>
         </div>
       )}
-    </ResuableModal>
+    </div>
   );
 };
 

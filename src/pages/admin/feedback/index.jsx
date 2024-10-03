@@ -6,6 +6,7 @@ import AppTable from "../../../components/tables";
 import mockdata from "./mockdata.json";
 import { getButtonStatus } from "../../../components/commonFunctions";
 import FeedBackModalContent from "./feedBackModal";
+import { Modal } from "antd";
 
 const FeedBack = () => {
   const totalElements = 100;
@@ -15,7 +16,6 @@ const FeedBack = () => {
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [page, setPage] = useState(0);
   const [activeTab, setActiveTab] = useState("myfeedback");
-
 
   const column = [
     { name: "feedback id", value: "feedBackId" },
@@ -99,11 +99,7 @@ const FeedBack = () => {
         <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
           <div className="profile-tab " style={{ marginTop: "20px" }}>
             <div className="custom-tab-1">
-              <Tab.Container
-                defaultActiveKey={
-                  activeTab
-                }
-              >
+              <Tab.Container defaultActiveKey={activeTab}>
                 <Nav as="ul" className="nav nav-tabs">
                   <Nav.Item
                     as="li"
@@ -141,12 +137,16 @@ const FeedBack = () => {
                         paginationFirst={paginationFirst}
                       />
                     </div>
-                    <FeedBackModalContent
-                      isModalOpen={isModalOpen}
-                      modalData={modalData}
-                      handleOk={handleModalOk}
-                      handleCancel={handleModalCancel}
-                    />
+                    <Modal
+                      footer={null}
+                      destroyOnClose={true}
+                      open={isModalOpen}
+                      onCancel={handleModalCancel}
+                      onOk={handleModalOk}
+                      width={900}
+                    >
+                      <FeedBackModalContent modalData={modalData} />
+                    </Modal>
                   </Tab.Pane>
                   <Tab.Pane id="my-posts" eventKey="approvalrequest">
                     <AppTable
