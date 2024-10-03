@@ -102,11 +102,6 @@ const FeedBack = () => {
               <Tab.Container
                 defaultActiveKey={
                   activeTab
-                  //   "ReceivedReport" === "ReceivedReport"
-                  //     ? "meatCriteria"
-                  //     : reportActiveTab === "SentReport"
-                  //     ? "comboDiseases"
-                  //     : "validDiseases"
                 }
               >
                 <Nav as="ul" className="nav nav-tabs">

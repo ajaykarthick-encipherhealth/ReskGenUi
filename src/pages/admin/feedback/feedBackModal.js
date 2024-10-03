@@ -3,9 +3,10 @@ import { Avatar, Steps } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import styles from "./styles.module.css";
 import ResuableModal from "../../../components/modal";
-import { allButtons } from "../../../utils/reusable";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 import { getButtonStatus } from "../../../components/commonFunctions";
+import { IMAGES } from "../../../jsx/constant/theme";
+import Image from "next/image";
 
 const FeedBackModalContent = ({
   isModalOpen,
@@ -23,27 +24,72 @@ const FeedBackModalContent = ({
           {getButtonStatus(modalData?.status)}
         </div>
       ),
-       icon: <Avatar icon={<UserOutlined />} />,
+      icon: (
+        <Image
+          style={{
+            width: "30px",
+            height: "30px",
+            borderRadius: "50%",
+          }}
+          src={IMAGES.profileImage}
+        />
+      ),
     },
     {
       title: "Technical Support Team",
       description,
-       icon: <Avatar icon={<UserOutlined />} />,
+      icon: (
+        <Image
+          style={{
+            width: "30px",
+            height: "30px",
+            borderRadius: "50%",
+          }}
+          src={IMAGES.profileImage}
+        />
+      ),
     },
     {
       title: "Medical Coding Team",
       description,
-      icon: <Avatar icon={<UserOutlined />} />,
+      icon: (
+        <Image
+          style={{
+            width: "30px",
+            height: "30px",
+            borderRadius: "50%",
+          }}
+          src={IMAGES.profileImage}
+        />
+      ),
     },
     {
       title: "Manager",
       description,
-     icon: <Avatar icon={<UserOutlined />} />,
+      icon: (
+        <Image
+          style={{
+            width: "30px",
+            height: "30px",
+            borderRadius: "50%",
+          }}
+          src={IMAGES.profileImage}
+        />
+      ),
     },
     {
       title: "Created the Feedback",
       description,
-      icon: <Avatar icon={<UserOutlined />} />,
+      icon: (
+        <Image
+          style={{
+            width: "30px",
+            height: "30px",
+            borderRadius: "50%",
+          }}
+          src={IMAGES.profileImage}
+        />
+      ),
     },
   ];
 
@@ -96,7 +142,7 @@ const FeedBackModalContent = ({
           <div className={`col-5 ${styles.modalborder}`}>
             <div className={styles.heading}>Activity</div>
             <div className="mt-3 customstepper">
-              <Steps direction="vertical" current={1} items={stepsData} />
+              <Steps direction="vertical" current={3} items={stepsData} />
             </div>
           </div>
         </div>
