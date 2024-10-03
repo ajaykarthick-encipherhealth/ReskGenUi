@@ -4,12 +4,11 @@ import modalStyle from "./style.module.css";
 import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
 import Router from "next/router";
-import { faSearch, faXmark, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faXmark, faUser, faCircle } from "@fortawesome/free-solid-svg-icons";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
 import { disablePastDate } from "../../../../components/headerFilters/functions";
 import { getStorage } from "../../../../utils/storages";
-import ReusableDot from "../reusableDotIcon/reusableDotIcon";
 
 const AllocateModal = ({
   open,
@@ -228,7 +227,8 @@ const AllocateModal = ({
                             <div key={status.id}>
                               <div className="d-flex my-3">
                                 <div>
-                                  <ReusableDot color="#3276CD" />
+                                <FontAwesomeIcon icon={faCircle} color="#3276CD" style={{ fontSize: "8px" }}/>
+                                  
                                   <span className="p-2">Allocated</span>
                                 </div>
                                 <span>{status.totalFileAllocated ?status.totalFileAllocated  : 0}</span>
@@ -236,7 +236,7 @@ const AllocateModal = ({
 
                               <div className="d-flex my-3">
                                 <div>
-                                  <ReusableDot color="#00BC13" />
+                                <FontAwesomeIcon icon={faCircle} color="#00BC13" style={{ fontSize: "8px" }}/>
                                   <span className="p-2">Completed</span>
                                 </div>
                                 <span>{status.totalFileProcessed ? status.totalFileProcessed : 0}</span>
@@ -244,7 +244,7 @@ const AllocateModal = ({
 
                               <div className="d-flex my-3">
                                 <div>
-                                  <ReusableDot color="#EA8715" />
+                                <FontAwesomeIcon icon={faCircle} color="#EA8715" style={{ fontSize: "8px" }}/>
                                   <span className="p-2">Pending</span>
                                 </div>
                                 <span>{status.totalFilePending ? status.totalFilePending : 0}</span>
@@ -252,7 +252,7 @@ const AllocateModal = ({
 
                               <div className="d-flex my-3">
                                 <div>
-                                  <ReusableDot color="#BCA7FB" />
+                                <FontAwesomeIcon icon={faCircle} color="#BCA7FB" style={{ fontSize: "8px" }}/>
                                   <span className="p-2">Hold</span>
                                 </div>
                                 <span>{status.totalFileHold ? status.totalFileHold  : 0}</span>
@@ -260,7 +260,7 @@ const AllocateModal = ({
 
                               <div className="d-flex my-3">
                                 <div>
-                                  <ReusableDot color="#EB5252" />
+                                <FontAwesomeIcon icon={faCircle} color="#EB5252" style={{ fontSize: "8px" }}/>
                                   <span className="p-2">Declined</span>
                                 </div>
                                 <span>{status.totalFileDeclined ? status.totalFileDeclined : 0}</span>
