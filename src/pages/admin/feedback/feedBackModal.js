@@ -4,6 +4,7 @@ import styles from "./styles.module.css";
 import { getButtonStatus } from "../../../components/commonFunctions";
 import { IMAGES } from "../../../jsx/constant/theme";
 import Image from "next/image";
+import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 
 const FeedBackModalContent = ({
   isModalOpen,
@@ -89,7 +90,7 @@ const FeedBackModalContent = ({
       ),
     },
   ];
-
+console.log(modalData,"modalData")
   return (
     <div>
       {modalData && (
@@ -107,7 +108,8 @@ const FeedBackModalContent = ({
               </div>
               <div className="col-6 mt-3">
                 <div className={styles.txt}>Managar</div>
-                <div className="d-flex align-items-center">
+                <div className="d-flex align-items-center gap-2">
+                {renderUserPrfoileAvatar(modalData?.firstName,modalData?.lastName,modalData?.profileImageUrl)}
                   {modalData?.firstName} {modalData?.lastName}
                 </div>
               </div>
