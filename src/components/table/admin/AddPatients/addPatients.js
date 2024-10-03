@@ -54,7 +54,6 @@ function AddPatientListTable({
       });
     }
   };
-  console.log(patinetListAll, "patinetListAll");
 
   const handleTableRowClick = (e) => {
     const targetTd = e.target.closest("td");
