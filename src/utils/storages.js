@@ -8,10 +8,8 @@ export const getStorage = (key) => {
     const hashedKey = hashKey(key);
     const encryptedValue = sessionStorage.getItem(hashedKey);
     if (!encryptedValue) return null;
-
     const decryptedBytes = CryptoJS.AES.decrypt(encryptedValue, secretKey);
     const decryptedValue = decryptedBytes.toString(CryptoJS.enc.Utf8);
-
     return decryptedValue;
   } catch (error) {
     console.error(error);
