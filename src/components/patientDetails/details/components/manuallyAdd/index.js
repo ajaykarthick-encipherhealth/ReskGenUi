@@ -1191,6 +1191,7 @@ const ManuallyAdd = ({
                         ? [{ label: getSelectedDos, value: getSelectedDos }]
                         : dosList
                     }
+                    disabled={isEditPage}
                   />
                 </Form.Item>
               </div>
