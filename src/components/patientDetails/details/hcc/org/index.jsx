@@ -71,7 +71,6 @@ const CamboTree = ({
   setIsFileFormShow,
   editFormPlace,
   formValues,
-  setFormValues
 }) => {
   const [trees, setTrees] = useState(Tree);
   const [isLoading, setLoading] = useState(tree);
@@ -87,7 +86,7 @@ const CamboTree = ({
   const [formEditPlace, setFormEditPlace] = useState("");
   const [selectFileURL, setSelectFileURL] = useState([]);
   const [search, setSearch] = useState();
-   const [data, setData] = useState('')
+  const [data, setData] = useState("");
 
   const zoomIn = () => {
     if (zoom.width < 500 && zoom.width > 200) {
@@ -102,7 +101,6 @@ const CamboTree = ({
       setZoom((prev) => ({ width: prev.width + 30, height: prev.height + 10 }));
     }
   };
-  console.log(formValues,'formValues')
 
   const confirmComboDelete = () => {
     moveToAnotherAction(
@@ -167,6 +165,10 @@ const CamboTree = ({
     setConfirmNotesModalValid(false);
     setOpens(false);
     setCombiTree([]);
+  };
+
+  const handleCloseModalAdd = () => {
+    setIsEditHccForm(false);
   };
 
   const getEncounterDateBackground = (value) => {
@@ -243,7 +245,7 @@ const CamboTree = ({
       );
     }
   };
-  console.log(data,"data")
+
   const nodeTemplate = (node, index) => {
     return (
       <div
@@ -263,59 +265,62 @@ const CamboTree = ({
             isDosSelected &&
             !node.isDisabled && (
               <>
-            
-              <div  className="d-flex" >
-                <div className="p-1">
-                <FontAwesomeIcon
-              icon={faPen}
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                setData(node),
-                setIsEditHccForm(true), 
-                setFormEditPlace(editFormPlace);
-              } } />
-                </div>
-            
-                <Popconfirm
-                  title="Do you want to move to Delete?"
-                  description={node.diseaseName}
-                  onConfirm={handleDeleteDisease}
-                  placement="leftTop"
-                  okText="Yes"
-                  cancelText="No"
-                  // onOk={() =>
-                  //   handleSubmitValidNotes({
-                  //     setFileLoading,
-                  //     setConfirmNotesModalValid,
-                  //     getPatientDetailsReload,
-                  //     isValidAction,
-                  //     selectDisDetails,
-                  //     getpatientDetailsData,
-                  //     patientDetailsResult,
-                  //     getLabDetails,
-                  //     getRadiologyDetails,
-                  //     handleCloseModal,
-                  //   })
-                  // }
-                  onOpenChange={() => onchangeCombo(
-                    node,
-                    node.diagnosisCodeCombo
-                      ? node.diagnosisCodeCombo
-                      : node.diagnosisCode,
-                    node.diseaseSource
-                  )}
-                >
-
-                  <div className={visitStyles.close_icon}>
+                <div className="d-flex">
+                  <div className="p-1">
                     <FontAwesomeIcon
-                      icon={faXmark}
-                      style={{
-                        size: 8,
-                        color: "#a80404",
-                      }} />
+                      icon={faPen}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setData(node),
+                          setIsEditHccForm(true),
+                          setFormEditPlace(editFormPlace);
+                      }}
+                    />
                   </div>
-                </Popconfirm>
-              </div></>
+
+                  <Popconfirm
+                    title="Do you want to move to Delete?"
+                    description={node.diseaseName}
+                    onConfirm={handleDeleteDisease}
+                    placement="leftTop"
+                    okText="Yes"
+                    cancelText="No"
+                    // onOk={() =>
+                    //   handleSubmitValidNotes({
+                    //     setFileLoading,
+                    //     setConfirmNotesModalValid,
+                    //     getPatientDetailsReload,
+                    //     isValidAction,
+                    //     selectDisDetails,
+                    //     getpatientDetailsData,
+                    //     patientDetailsResult,
+                    //     getLabDetails,
+                    //     getRadiologyDetails,
+                    //     handleCloseModal,
+                    //   })
+                    // }
+                    onOpenChange={() =>
+                      onchangeCombo(
+                        node,
+                        node.diagnosisCodeCombo
+                          ? node.diagnosisCodeCombo
+                          : node.diagnosisCode,
+                        node.diseaseSource
+                      )
+                    }
+                  >
+                    <div className={visitStyles.close_icon}>
+                      <FontAwesomeIcon
+                        icon={faXmark}
+                        style={{
+                          size: 8,
+                          color: "#a80404",
+                        }}
+                      />
+                    </div>
+                  </Popconfirm>
+                </div>
+              </>
             )}
         </div>
         <Tooltip
@@ -420,7 +425,7 @@ const CamboTree = ({
 
       <Drawer
         title=""
-        onClose={handleCloseModal}
+        onClose={handleCloseModalAdd}
         closeIcon={false}
         open={isEditHccForm}
         width={"80vw"}
@@ -449,7 +454,7 @@ const CamboTree = ({
               style={{ height: "90vh", overflowY: "scroll" }}
             >
               <ManuallyAdd
-                handleCloseModal={handleCloseModal}
+                handleCloseModal={handleCloseModalAdd}
                 setIsFileFormShow={setIsFileFormShow}
                 year={year}
                 isEditPage={true}
