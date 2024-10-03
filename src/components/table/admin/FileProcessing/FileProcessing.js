@@ -645,7 +645,6 @@ const FileProcessingTable = ({
                     failedList || errStages[data?.processStageChart] ? 0 : count
                   }
                   finishIconBorderColor="#000"
-                  // className={errStages[data?.processStageChart]?"errStages":""}
                 />
               </div>
             </div>

@@ -1,7 +1,6 @@
 import React from "react";
 import { Steps } from "antd";
 import styles from "./styles.module.css";
-import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 import { getButtonStatus } from "../../../components/commonFunctions";
 import { IMAGES } from "../../../jsx/constant/theme";
 import Image from "next/image";
@@ -109,12 +108,6 @@ const FeedBackModalContent = ({
               <div className="col-6 mt-3">
                 <div className={styles.txt}>Created by</div>
                 <div className="d-flex align-items-center">
-                  {/* {renderUserPrfoileAvatar({
-                    firstName: modalData?.firstName,
-                    lastName: modalData?.lastName,
-                    imageUrl: modalData?.imageUrl,
-                    field: null,
-                  })} */}
                   {modalData?.firstName} {modalData?.lastName}
                 </div>
               </div>
