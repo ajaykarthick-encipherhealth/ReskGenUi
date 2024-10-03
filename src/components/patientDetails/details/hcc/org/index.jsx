@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { OrganizationChart } from "primereact/organizationchart";
 import Style from "./style.module.css";
-import { Badge, Popconfirm, Popover, notification, Tag, Tooltip } from "antd";
+import {
+  Badge,
+  Popconfirm,
+  Popover,
+  notification,
+  Tag,
+  Tooltip,
+  Drawer,
+} from "antd";
 import Tree from "./data.json";
 import Header from "../../../../../jsx/layouts/nav/Header";
 import { Card } from "react-bootstrap";
@@ -16,6 +24,7 @@ import {
   faCircleUser,
   faArrowsAlt,
   faXmark,
+  faPen,
 } from "@fortawesome/free-solid-svg-icons";
 import SpinnerDots from "../../../../../components/spinner";
 import ModelIndex from "../../components/model/Index";
@@ -30,6 +39,8 @@ import { getDateOfServiceBackground } from "../../components/function/DateOfServ
 import { getSectionHeaderBackground } from "../../components/function/SectionHeader";
 import { getStateIndicators } from "../../components/function/GetData";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
+import PdfViewer from "../../PdfViewerComponent";
+import ManuallyAdd from "../../components/manuallyAdd";
 
 const addOnCodeColor = [
   "magenta",
@@ -51,9 +62,16 @@ const CamboTree = ({
   getPatientDetailsReload,
   getpatientDetailsData,
   isDosSelected,
-  setFileLoading
+  setFileLoading,
+  hccFileDetails,
+  radiologyFile,
+  labFile,
+  currentDiseaseType,
+  year,
+  setIsFileFormShow,
+  editFormPlace,
+  formValues,
 }) => {
-
   const [trees, setTrees] = useState(Tree);
   const [isLoading, setLoading] = useState(tree);
   const [zoom, setZoom] = useState({ width: 350, height: 185 });
@@ -64,6 +82,11 @@ const CamboTree = ({
     title: "",
   });
   const [selectDisDetails, setSelectDisDetails] = useState(false);
+  const [isEditHccForm, setIsEditHccForm] = useState(false);
+  const [formEditPlace, setFormEditPlace] = useState("");
+  const [selectFileURL, setSelectFileURL] = useState([]);
+  const [search, setSearch] = useState();
+  const [data, setData] = useState("");
 
   const zoomIn = () => {
     if (zoom.width < 500 && zoom.width > 200) {
@@ -91,6 +114,7 @@ const CamboTree = ({
         : "COMBO"
     );
   };
+
   useEffect(() => {
     if (selectDisDetails && selectDisDetails.diseaseSource) {
       const title =
@@ -141,6 +165,10 @@ const CamboTree = ({
     setConfirmNotesModalValid(false);
     setOpens(false);
     setCombiTree([]);
+  };
+
+  const handleCloseModalAdd = () => {
+    setIsEditHccForm(false);
   };
 
   const getEncounterDateBackground = (value) => {
@@ -217,7 +245,8 @@ const CamboTree = ({
       );
     }
   };
-  const nodeTemplate = (node, index) => { 
+
+  const nodeTemplate = (node, index) => {
     return (
       <div
         className={Style.cards}
@@ -232,51 +261,67 @@ const CamboTree = ({
               ? node.diagnosisCodeCombo
               : node.diagnosisCode}
           </div>
-          {trees?.diagnosisCodeCombo == node.diagnosisCodeCombo && isDosSelected && !node.isDisabled && (
-            <div>
-              <Popconfirm
-                title="Do you want to move to Delete?"
-                description={node.diseaseName}
-                onConfirm={handleDeleteDisease}
-                placement="leftTop"
-                okText="Yes"
-                cancelText="No"
-                // onOk={() =>
-                //   handleSubmitValidNotes({
-                //     setFileLoading,
-                //     setConfirmNotesModalValid,
-                //     getPatientDetailsReload,
-                //     isValidAction,
-                //     selectDisDetails,
-                //     getpatientDetailsData,
-                //     patientDetailsResult,
-                //     getLabDetails,
-                //     getRadiologyDetails,
-                //     handleCloseModal,
-                //   })
-                // }
-                onOpenChange={() =>
-                  onchangeCombo(
-                    node,
-                    node.diagnosisCodeCombo
-                      ? node.diagnosisCodeCombo
-                      : node.diagnosisCode,
-                    node.diseaseSource
-                  )
-                }
-              >
-                <div className={visitStyles.close_icon}>
-                  <FontAwesomeIcon
-                    icon={faXmark}
-                    style={{
-                      size: 8,
-                      color: "#a80404",
-                    }}
-                  />
+          {trees?.diagnosisCodeCombo == node.diagnosisCodeCombo &&
+            isDosSelected &&
+            !node.isDisabled && (
+              <>
+                <div className="d-flex">
+                  <div className="p-1">
+                    <FontAwesomeIcon
+                      icon={faPen}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setData(node),
+                          setIsEditHccForm(true),
+                          setFormEditPlace(editFormPlace);
+                      }}
+                    />
+                  </div>
+
+                  <Popconfirm
+                    title="Do you want to move to Delete?"
+                    description={node.diseaseName}
+                    onConfirm={handleDeleteDisease}
+                    placement="leftTop"
+                    okText="Yes"
+                    cancelText="No"
+                    // onOk={() =>
+                    //   handleSubmitValidNotes({
+                    //     setFileLoading,
+                    //     setConfirmNotesModalValid,
+                    //     getPatientDetailsReload,
+                    //     isValidAction,
+                    //     selectDisDetails,
+                    //     getpatientDetailsData,
+                    //     patientDetailsResult,
+                    //     getLabDetails,
+                    //     getRadiologyDetails,
+                    //     handleCloseModal,
+                    //   })
+                    // }
+                    onOpenChange={() =>
+                      onchangeCombo(
+                        node,
+                        node.diagnosisCodeCombo
+                          ? node.diagnosisCodeCombo
+                          : node.diagnosisCode,
+                        node.diseaseSource
+                      )
+                    }
+                  >
+                    <div className={visitStyles.close_icon}>
+                      <FontAwesomeIcon
+                        icon={faXmark}
+                        style={{
+                          size: 8,
+                          color: "#a80404",
+                        }}
+                      />
+                    </div>
+                  </Popconfirm>
                 </div>
-              </Popconfirm>
-            </div>
-          )}
+              </>
+            )}
         </div>
         <Tooltip
           title={node.diseaseName ? node.diseaseName : node.actualDescription}
@@ -332,6 +377,22 @@ const CamboTree = ({
     }, 1000);
   }, []);
 
+  useEffect(() => {
+    if (
+      hccFileDetails?.data?.response &&
+      patientDetailsResult?.data?.response?.fileDetailDTO &&
+      (currentDiseaseType || currentDiseaseType === "")
+    ) {
+      setSelectFileURL(hccFileDetails?.data?.response);
+    }
+    if (radiologyFile?.data?.response && !currentDiseaseType) {
+      setSelectFileURL(radiologyFile?.data?.response);
+    }
+    if (labFile?.data?.response && !currentDiseaseType) {
+      setSelectFileURL(labFile?.data?.response);
+    }
+  }, [hccFileDetails, radiologyFile, labFile, currentDiseaseType]);
+
   return (
     <>
       <div style={{ backgroundColor: "#fbfdff" }}>
@@ -361,6 +422,48 @@ const CamboTree = ({
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
       /> */}
+
+      <Drawer
+        title=""
+        onClose={handleCloseModalAdd}
+        closeIcon={false}
+        open={isEditHccForm}
+        width={"80vw"}
+      >
+        <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
+          <div className="col-8">
+            {hccFileDetails?.loading != true ? (
+              <>
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
+                    fileHeight={true}
+                    fileHeightFrames={window.screen.availHeight - 50}
+                    fileHeights={"100vh"}
+                  />
+                )}
+              </>
+            ) : null}
+          </div>
+          <div className="col-4">
+            <div
+              className="px-4"
+              style={{ height: "90vh", overflowY: "scroll" }}
+            >
+              <ManuallyAdd
+                handleCloseModal={handleCloseModalAdd}
+                setIsFileFormShow={setIsFileFormShow}
+                year={year}
+                isEditPage={true}
+                isEditValue={data}
+              />
+            </div>
+          </div>
+        </div>
+      </Drawer>
     </>
   );
 };
@@ -369,6 +472,10 @@ const enhancer = connect(
   (state) => ({
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
+    hccFileDetails: state?.patientDetails?.details?.hccFileResult,
+    radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
+    labFile: state?.patientDetails?.details?.labFileResult,
+    currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,

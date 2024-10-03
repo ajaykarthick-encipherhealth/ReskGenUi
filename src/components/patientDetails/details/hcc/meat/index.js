@@ -99,6 +99,8 @@ const Meat = ({
   const [isBlockRxHcc, setIsBlockRxHcc] = useState([]);
   const [isBlockRxHccDeleted, setIsBlockRxHccDeleted] = useState([]);
   const [labData, setLabData] = useState("");
+  const [formValues, setFormValues] = useState(false);
+
   const userId = getStorage("userId");
 
   useEffect(() => {
