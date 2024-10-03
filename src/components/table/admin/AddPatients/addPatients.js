@@ -54,7 +54,7 @@ function AddPatientListTable({
       });
     }
   };
-  console.log(patinetListAll,"patinetListAll")
+  console.log(patinetListAll, "patinetListAll");
 
   const handleTableRowClick = (e) => {
     const targetTd = e.target.closest("td");
@@ -81,7 +81,6 @@ function AddPatientListTable({
           ))}
         </div>
       ))}
-    
     </div>
   );
 
@@ -110,10 +109,10 @@ function AddPatientListTable({
               className={TableStyle.firstTdBorder}
               onClick={handleTableRowClick}
             >
-            {data?.isFlagShow === true ? (
+              {data?.flagList && data?.flagList.length > 0 ? (
                 <Popover
                   content={
-                    <div>
+                    <div style={{height:"auto", overflow:"scroll"}}>
                       <strong>Flag details</strong>
                       {data?.flagList?.map((flag, flagIndex) => (
                         <div key={flagIndex}>
