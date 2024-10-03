@@ -87,6 +87,7 @@ const CamboTree = ({
   const [formEditPlace, setFormEditPlace] = useState("");
   const [selectFileURL, setSelectFileURL] = useState([]);
   const [search, setSearch] = useState();
+   const [data, setData] = useState('')
 
   const zoomIn = () => {
     if (zoom.width < 500 && zoom.width > 200) {
@@ -242,6 +243,7 @@ const CamboTree = ({
       );
     }
   };
+  console.log(data,"data")
   const nodeTemplate = (node, index) => {
     return (
       <div
@@ -268,7 +270,7 @@ const CamboTree = ({
               icon={faPen}
               style={{ cursor: "pointer" }}
               onClick={() => {
-                setFormValues(node),
+                setData(node),
                 setIsEditHccForm(true), 
                 setFormEditPlace(editFormPlace);
               } } />
@@ -451,7 +453,7 @@ const CamboTree = ({
                 setIsFileFormShow={setIsFileFormShow}
                 year={year}
                 isEditPage={true}
-                isEditValue={formValues}
+                isEditValue={data}
               />
             </div>
           </div>
