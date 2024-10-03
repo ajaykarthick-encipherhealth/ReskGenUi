@@ -65,25 +65,6 @@ function AddPatientListTable({
     }
   };
 
-  const popoverContent = (
-    <div>
-      <strong>Flag details</strong>
-
-      {patinetListAll?.map((patient, patientIndex) => (
-        <div key={patientIndex} className="patient-details">
-          {patient?.flagList?.map((flag, flagIndex) => (
-            <div key={flagIndex}>
-              <span className="p-1">
-                <SvgFlag fillColor={flag?.flagColour} />
-              </span>
-              {flag?.flagName}
-            </div>
-          ))}
-        </div>
-      ))}
-    </div>
-  );
-
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
       <tr>
