@@ -1,6 +1,7 @@
 :root {
   --app-primary: #04306f;
   --app-primary-hover: #6c9ddd;
+  --borderColor: #b6b6b6;
 }
 
 .btns-primary {
@@ -13794,11 +13795,11 @@ tbody > tr {
 }
 
 /*ant stepper  */
-.ant-steps.ant-steps-label-vertical .ant-steps-item-tail {
+.fileprocessingstepper .ant-steps.ant-steps-label-vertical .ant-steps-item-tail {
   background: #04306f !important;
 }
 
-.ant-steps .ant-steps-item-tail {
+.fileprocessingstepper .ant-steps .ant-steps-item-tail {
   position: absolute;
   top: 20px !important;
   width: 100%;
@@ -13806,7 +13807,7 @@ tbody > tr {
   padding: 0px !important;
   /* background: #04306f !important; */
 }
-.ant-steps
+.fileprocessingstepper .ant-steps
   .ant-steps-item-finish
   > .ant-steps-item-container
   > .ant-steps-item-tail::after {
@@ -15351,10 +15352,10 @@ input::-webkit-inner-spin-button {
 .customSteps .anticon svg {
   color: black;
 }
-.ant-steps-item-wait .ant-steps-item-icon {
+.customSteps .ant-steps-item-wait .ant-steps-item-icon {
   background-color: #6c99dc !important;
 }
-.ant-steps-item-finish .ant-steps-item-icon {
+.customSteps .ant-steps-item-finish .ant-steps-item-icon {
   background-color: white !important;
 }
 
@@ -15490,28 +15491,28 @@ input::-webkit-inner-spin-button {
   background-color: gray !important;
   border: 1px solid gray !important;
 }
-.ant-steps .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+.fileprocessingstepper .ant-steps .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
   color: white !important;
 }
-.ant-steps.ant-steps-label-vertical .ant-steps-item-icon {
+.fileprocessingstepper .ant-steps.ant-steps-label-vertical .ant-steps-item-icon {
   background-color: gray !important;
 }
-.ant-steps .ant-steps-item-finish .ant-steps-item-icon {
+.fileprocessingstepper .ant-steps .ant-steps-item-finish .ant-steps-item-icon {
   background-color: green !important;
   color: white !important;
   border: 1px solid green !important;
 }
-.ant-steps .ant-steps-item-error .ant-steps-item-icon {
+.fileprocessingstepper .ant-steps .ant-steps-item-error .ant-steps-item-icon {
   background-color: red !important;
   border: 1px solid red !important;
 }
-.ant-steps.ant-steps-with-progress
+.fileprocessingstepper .ant-steps.ant-steps-with-progress
   .ant-steps-item-process
   .ant-steps-item-container
   .ant-steps-item-icon {
   background-color: #04306f !important;
 }
-.ant-steps.ant-steps-with-progress
+.fileprocessingstepper .ant-steps.ant-steps-with-progress
   .ant-steps-item-process
   .ant-steps-item-container
   .ant-steps-item-icon
@@ -15519,7 +15520,7 @@ input::-webkit-inner-spin-button {
   color: white !important;
   font-weight: 500 !important;
 }
-.ant-steps .ant-steps-item-wait .ant-steps-item-icon .ant-steps-icon {
+.fileprocessingstepper .ant-steps .ant-steps-item-wait .ant-steps-item-icon .ant-steps-icon {
   color: white !important;
 }
 .providerAddPicker .ant-picker {
@@ -15613,4 +15614,71 @@ input::-webkit-inner-spin-button {
 
 .manuallyAddPicker .ant-picker-dropdown .ant-picker-date-panel{
   width:379px !important;
+}
+.customstepper
+  .ant-steps
+  .ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title {
+  font-size: 14px !important;
+}
+
+.customstepper
+  .ant-steps
+  .ant-steps-item-process
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title {
+  font-size: 14px !important;
+}
+
+.customstepper
+  .ant-steps
+  .ant-steps-item-wait
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title {
+  font-size: 14px !important;
+}
+
+.customstepper
+  .ant-steps
+  .ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-tail::after {
+  background-color: var(--borderColor) !important;
+}
+
+.customstepper
+  .ant-steps
+  .ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-description {
+  width: 150px !important;
+  font-size: 12px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.customstepper
+  .ant-steps
+  .ant-steps-item-process
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-description {
+  width: 150px !important;
+  font-size: 12px !important;
+}
+
+.customstepper
+  .ant-steps
+  .ant-steps-item-wait
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-description {
+  width: 150px !important;
+  font-size: 12px !important;
 }

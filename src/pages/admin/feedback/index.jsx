@@ -3,12 +3,16 @@ import { Tab, Nav } from "react-bootstrap";
 import Header from "../../../jsx/layouts/nav/Header";
 import InputField from "../../../components/input";
 import AppTable from "../../../components/tables";
-import Data from "./data.json";
+import mockdata from "./mockdata.json";
 import { getButtonStatus } from "../../../components/commonFunctions";
+import FeedBackModalContent from "./feedBackModal";
+import { Modal } from "antd";
 
 const FeedBack = () => {
   const totalElements = 100;
   const [search, setSearch] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalData, setModalData] = useState(null);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [page, setPage] = useState(0);
   const [activeTab, setActiveTab] = useState("myfeedback");
@@ -24,11 +28,11 @@ const FeedBack = () => {
       isSingleRow: true,
     },
     {
-      name: "manager",
+      name: "managar",
       value: {
-        first: "managerFirstName",
-        last: "managerLastName",
-        img: "managerProfileImage",
+        first: "firstName",
+        last: "lastName",
+        img: "profileImageUrl",
       },
       isImage: true,
     },
@@ -39,6 +43,17 @@ const FeedBack = () => {
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPage(e.page);
+  };
+  const handleRowClick = (item) => {
+    setModalData(item);
+    setIsModalOpen(true);
+  };
+  const handleModalOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -84,16 +99,7 @@ const FeedBack = () => {
         <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
           <div className="profile-tab " style={{ marginTop: "20px" }}>
             <div className="custom-tab-1">
-              <Tab.Container
-                defaultActiveKey={
-                  activeTab
-                  //   "ReceivedReport" === "ReceivedReport"
-                  //     ? "meatCriteria"
-                  //     : reportActiveTab === "SentReport"
-                  //     ? "comboDiseases"
-                  //     : "validDiseases"
-                }
-              >
+              <Tab.Container defaultActiveKey={activeTab}>
                 <Nav as="ul" className="nav nav-tabs">
                   <Nav.Item
                     as="li"
@@ -122,24 +128,36 @@ const FeedBack = () => {
                   <Tab.Pane id="my-posts" eventKey="myfeedback">
                     <div>
                       <AppTable
-                        data={Data}
+                        data={mockdata}
                         column={column}
+                        onRowClick={handleRowClick}
                         status={getButtonStatus}
                         onPageChange={onPageChange}
                         totalElements={totalElements}
                         paginationFirst={paginationFirst}
                       />
                     </div>
+                    <Modal
+                      footer={null}
+                      destroyOnClose={true}
+                      open={isModalOpen}
+                      onCancel={handleModalCancel}
+                      onOk={handleModalOk}
+                      width={900}
+                    >
+                      <FeedBackModalContent modalData={modalData} />
+                    </Modal>
                   </Tab.Pane>
                   <Tab.Pane id="my-posts" eventKey="approvalrequest">
-                  <AppTable
-                        data={Data}
-                        column={column}
-                        status={getButtonStatus}
-                        onPageChange={onPageChange}
-                        totalElements={totalElements}
-                        paginationFirst={paginationFirst}
-                      />
+                    <AppTable
+                      data={mockdata}
+                      column={column}
+                      onRowClick={handleRowClick}
+                      status={getButtonStatus}
+                      onPageChange={onPageChange}
+                      totalElements={totalElements}
+                      paginationFirst={paginationFirst}
+                    />
                   </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>

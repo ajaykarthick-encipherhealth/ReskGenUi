@@ -632,20 +632,21 @@ const FileProcessingTable = ({
               }}
               className={errStages[data?.processStageChart] ? "errStages" : ""}
             >
-              <Steps
-                current={
-                  currentIndex
-                    ? currentIndex + 1
-                    : stageChartMap[findPreviousStep(data?.processStageChart)]
-                }
-                labelPlacement="vertical"
-                items={mappedSteps}
-                percent={
-                  failedList || errStages[data?.processStageChart] ? 0 : count
-                }
-                finishIconBorderColor="#000"
-                // className={errStages[data?.processStageChart]?"errStages":""}
-              />
+              <div className="fileprocessingstepper">
+                <Steps
+                  current={
+                    currentIndex
+                      ? currentIndex + 1
+                      : stageChartMap[findPreviousStep(data?.processStageChart)]
+                  }
+                  labelPlacement="vertical"
+                  items={mappedSteps}
+                  percent={
+                    failedList || errStages[data?.processStageChart] ? 0 : count
+                  }
+                  finishIconBorderColor="#000"
+                />
+              </div>
             </div>
           </>
           <div
