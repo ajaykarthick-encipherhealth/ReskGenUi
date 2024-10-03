@@ -6,7 +6,7 @@ import Style from "./style.module.css";
 import { portalPdfUrl } from "../../../utils/config";
 import { pdfEncrypt } from "../../headerFilters/functions";
 import { getStorage } from "../../../utils/storages";
-
+import { serverControl } from "../../..//utils/config";
 const PdfViewer = ({
   src,
   searchQuery,
@@ -35,7 +35,7 @@ const PdfViewer = ({
         setIds(getData.iv)
         searchUrl = `${portalPdfUrl}?file=${pdfUrl}&salt=${
           getData.iv
-        }&token=${getStorage("token")}`;
+        }&token=${getStorage("token")}&baseEnv=${serverControl}`;
         // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
         if (searchQuery || page || headerContent) {
           const queryParams = [];
@@ -56,7 +56,7 @@ const PdfViewer = ({
       } else {
         searchUrl = `${portalPdfUrl}?file=${url}&salt=${
           ids
-        }&token=${getStorage("token")}`;
+        }&token=${getStorage("token")}&baseEnv=${serverControl}`;
         // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
         if (searchQuery || page || headerContent) {
           const queryParams = [];
