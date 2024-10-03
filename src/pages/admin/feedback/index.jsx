@@ -157,6 +157,7 @@ const FeedBack = () => {
                     <AppTable
                       data={mockdata}
                       column={column}
+                      onRowClick={handleRowClick}
                       status={getButtonStatus}
                       onPageChange={onPageChange}
                       totalElements={totalElements}
