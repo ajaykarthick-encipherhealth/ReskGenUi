@@ -200,6 +200,7 @@ const HccCards = ({
                       draggableId={data.diagnosisCode}
                       index={i}
                       draggableData={data.list}
+                      isDragDisabled={isDosSelected ? false : true}
                     >
                       {(provided) => {
                         const cmsList = data?.riskAdjustmentDtoList

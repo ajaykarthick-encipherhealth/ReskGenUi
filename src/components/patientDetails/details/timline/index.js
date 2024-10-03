@@ -433,6 +433,15 @@ const Timeline = ({
               </div>
             );
           }
+          if (item?.fromState == "VALID" && item?.toState == "POTENTIAL") {
+            return (
+              <div className="d-flex">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.validColor}>HCC</span> to{" "}
+                <span className={visitStyles.potentialColor}>POTENTIAL</span>
+              </div>
+            );
+          }
           if (item?.fromState == "SUGGESTED" && item?.toState == "VALID") {
             return (
               <div className="d-flex">
@@ -466,6 +475,17 @@ const Timeline = ({
               </div>
             );
           }
+          if (item?.fromState == "SUGGESTED" && item?.toState == "POTENTIAL") {
+            return (
+              <div className="d-flex w-100">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.suggestedColor}>
+                  CAREGAP
+                </span>
+                to <span className={visitStyles.potentialColor}>POTENTIAL</span>
+              </div>
+            );
+          }
           if (item?.fromState == "DELETED" && item?.toState == "VALID") {
             return (
               <div className="d-flex">
@@ -483,6 +503,48 @@ const Timeline = ({
                 <span className={visitStyles.suggestedColor}>
                   {/* SUGGESTED */}
                   CAREGAP
+                </span>
+              </div>
+            );
+          }
+          if (item?.fromState == "DELETED" && item?.toState == "POTENTIAL") {
+            return (
+              <div className="d-flex">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
+                <span className={visitStyles.potentialColor}>
+                POTENTIAL
+                </span>
+              </div>
+            );
+          }
+          if (item?.fromState == "POTENTIAL" && item?.toState == "VALID") {
+            return (
+              <div className="d-flex">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.potentialColor}>POTENTIAL</span> to{" "}
+                <span className={visitStyles.validColor}> HCC</span>
+              </div>
+            );
+          }
+          if (item?.fromState == "POTENTIAL" && item?.toState == "SUGGESTED") {
+            return (
+              <div className="d-flex">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.potentialColor}>POTENTIAL</span> to{" "}
+                <span className={visitStyles.suggestedColor}>
+                  CAREGAP
+                </span>
+              </div>
+            );
+          }
+          if (item?.fromState == "POTENTIAL" && item?.toState == "DELETED") {
+            return (
+              <div className="d-flex">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.potentialColor}>POTENTIAL</span> to{" "}
+                <span className={visitStyles.deletedColor}>
+                DELETED
                 </span>
               </div>
             );
