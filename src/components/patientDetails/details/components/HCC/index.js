@@ -321,7 +321,7 @@ const HccCards = ({
                                     ) : null}
                                   </>
                                 ) : null}
-                                {/* {isDosSelected && ( */}
+                                {isDosSelected && (
                                   <MovementAction
                                     validAction={
                                       cardTitle == "HCC" ? false : true
@@ -352,7 +352,7 @@ const HccCards = ({
                                     meatCriteriaList={meatCriteriaList}
                                     setSelectCardTitle={setSelectCardTitle}
                                   />
-                                {/* )} */}
+                                 )}
                                 <Popover
                                   placement="bottom"
                                   title={""}
