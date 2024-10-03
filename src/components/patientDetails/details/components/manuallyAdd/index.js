@@ -1129,7 +1129,7 @@ const ManuallyAdd = ({
                   <Input
                     name="diagnosisCode"
                     onChange={(e) => handleCodeVaildate(e)}
-                    value={code.toUpperCase()}
+                    value={code?.toUpperCase()}
                     className="text-uppercase"
                   />
                 </Form.Item>

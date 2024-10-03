@@ -29,7 +29,7 @@ export const getProviderNameTag = ({
   storeFileDetails,
 }) => {
   return providerNames?.map((res, index) => {
-    const normalizedRes = res.toLowerCase().trim();
+    const normalizedRes = res?.toLowerCase().trim();
     const headerResult = hyperlinks?.filter(
       (res2) => res2?.header?.toLowerCase()?.trim() === normalizedRes
     );

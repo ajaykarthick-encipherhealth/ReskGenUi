@@ -709,7 +709,7 @@ const Meat = ({
           onCancel={() => setOpens(false)}
           footer={null}
         >
-          <CamboTree tree={combiTree} />
+          <CamboTree tree={combiTree} setFormValues={setFormValues}/>
         </Modal>
       ) : (
         opens && showErrorMessage()

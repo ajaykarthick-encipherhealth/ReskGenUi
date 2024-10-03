@@ -99,6 +99,8 @@ const Meat = ({
   const [isBlockRxHcc, setIsBlockRxHcc] = useState([]);
   const [isBlockRxHccDeleted, setIsBlockRxHccDeleted] = useState([]);
   const [labData, setLabData] = useState("");
+  const [formValues, setFormValues] = useState(false);
+
   const userId = getStorage("userId");
 
   useEffect(() => {
@@ -846,7 +848,7 @@ const Meat = ({
           onCancel={() => setOpens(false)}
           footer={null}
         >
-          <CamboTree tree={combiTree} />
+          <CamboTree tree={combiTree} setFormValues={setFormValues} />
         </Modal>
       ) : (
         opens && showErrorMessage()

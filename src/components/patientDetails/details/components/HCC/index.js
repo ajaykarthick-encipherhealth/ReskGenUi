@@ -221,13 +221,13 @@ const HccCards = ({
                             <div
                               className={` justify-content-between ${visitStyles.hcc_card_nameHead}`}
                             >
-                              <div>
+                              <div className="d-flex">
                                 <span className="disease-name d-flex mb-1">
                                   <span className="valid-dis-name">
                                     {data.diagnosisCode}
                                   </span>
 
-                                  {!isDeletedCodes && isDosSelected && data?.isLab != true && data?.isRadiology != true && (
+                                  {!isDeletedCodes && isDosSelected && data?.isLab != true && data?.isRadiology != true &&  data?.isComboCode !=true &&  (
                                     <FontAwesomeIcon
                                       icon={faPen}
                                       style={{ cursor: "pointer" }}
