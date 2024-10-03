@@ -98,7 +98,7 @@ const FeedBackModalContent = ({
           <div className="col-7">
             <div className={styles.heading}>Patient feedback</div>
             <div className="d-flex justify-content-between mt-2">
-              {modalData?.PATIENT}
+             <div className={styles.name}> {modalData?.patientId}-{modalData?.patientName}</div>
               <div>{getButtonStatus(modalData?.status)}</div>
             </div>
             <div className="row">

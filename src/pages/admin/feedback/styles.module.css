@@ -1,5 +1,5 @@
 .heading {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 500;
 }
 .btncolor {
@@ -17,4 +17,7 @@
 .modalborder {
   height: 440px;
   border-left: 1px solid var(--borderColor);
+}
+.name{
+  font-size: 17px;
 }
