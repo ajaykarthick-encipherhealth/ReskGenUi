@@ -3,5 +3,4 @@ const ReusableDot = ({ color = "#000", size = 8 }) => (
       <circle cx="4" cy="4" r="4" fill={color} />
     </svg>
   );
-  
-  export default ReusableDot;
+export default ReusableDot;
