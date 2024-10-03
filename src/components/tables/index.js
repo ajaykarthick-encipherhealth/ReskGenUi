@@ -15,6 +15,7 @@ const AppTable = ({
   onPageChange,
   setAction,
   count = 30,
+  onRowClick,
   isPagination = true
 }) => {
   return (
@@ -28,14 +29,15 @@ const AppTable = ({
           </tr>
         </thead>
         <tbody>
-        {data.length > 0 ? 
-          data.map((item, index) => (
+        {data?.length > 0 ? 
+          data?.map((item, index) => (
             <TableRow
               item={item}
               column={column}
               status={status}
               setAction={setAction}
               count={count}
+              onRowClick={onRowClick}
             />
           )) : <tr> <td colSpan={column.length ?  column.length : 10}><Empty /></td></tr>}
         </tbody>
@@ -51,9 +53,11 @@ const AppTable = ({
 };
 
 const TableHeadItem = ({ item }) => <th align="center">{item.name}</th>;
-const TableRow = ({ item, column, status, setAction, count }) => {
+const TableRow = ({ item, column, status, setAction, count,onRowClick }) => {
   return (
-    <tr>
+    <tr  onClick={(e) => {
+      onRowClick && onRowClick(item);
+    }}>
       {column.map((columnItem, index) => {
         if (columnItem.isImage) {
           return (

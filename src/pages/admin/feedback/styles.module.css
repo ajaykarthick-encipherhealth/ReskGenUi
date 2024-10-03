@@ -1,0 +1,20 @@
+.heading {
+  font-size: 18px;
+  font-weight: 500;
+}
+.btncolor {
+  color: #235952;
+  width: 100px;
+  height: 25px;
+  font-size: 12px;
+}
+.txt {
+  color: #04306f;
+}
+.para {
+  font-size: 12px;
+}
+.modalborder {
+    height: 440px;
+    border-left: 1px solid var(--borderColor);
+  }

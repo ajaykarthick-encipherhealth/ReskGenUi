@@ -1,6 +1,7 @@
 :root {
   --app-primary: #04306f;
   --app-primary-hover: #6c9ddd;
+  --borderColor: #b6b6b6;
 }
 
 .btns-primary {
@@ -15610,4 +15611,71 @@ input::-webkit-inner-spin-button {
 
 .manuallyAddPicker .ant-picker-dropdown .ant-picker-date-panel{
   width:379px !important;
+}
+.customstepper
+  .ant-steps
+  .ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title {
+  font-size: 14px !important;
+}
+
+.customstepper
+  .ant-steps
+  .ant-steps-item-process
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title {
+  font-size: 14px !important;
+}
+
+.customstepper
+  .ant-steps
+  .ant-steps-item-wait
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title {
+  font-size: 14px !important;
+}
+
+.customstepper
+  .ant-steps
+  .ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-tail::after {
+  background-color: var(--borderColor) !important;
+}
+
+.customstepper
+  .ant-steps
+  .ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-description {
+  width: 150px !important;
+  font-size: 12px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.customstepper
+  .ant-steps
+  .ant-steps-item-process
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-description {
+  width: 150px !important;
+  font-size: 12px !important;
+}
+
+.customstepper
+  .ant-steps
+  .ant-steps-item-wait
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-description {
+  width: 150px !important;
+  font-size: 12px !important;
 }
