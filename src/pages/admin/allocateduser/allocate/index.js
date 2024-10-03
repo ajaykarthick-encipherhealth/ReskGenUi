@@ -241,7 +241,7 @@ const AllocateModal = ({
                                   <ReusableDot color="#3276CD" />
                                   <span className="p-2">Allocated</span>
                                 </div>
-                                <span>{status.totalFileAllocated ?? 0}</span>
+                                <span>{status.totalFileAllocated ?status.totalFileAllocated  : 0}</span>
                               </div>
 
                               <div className="d-flex my-3">
@@ -249,7 +249,7 @@ const AllocateModal = ({
                                   <ReusableDot color="#00BC13" />
                                   <span className="p-2">Completed</span>
                                 </div>
-                                <span>{status.totalFileProcessed ?? 0}</span>
+                                <span>{status.totalFileProcessed ? status.totalFileProcessed : 0}</span>
                               </div>
 
                               <div className="d-flex my-3">
@@ -257,7 +257,7 @@ const AllocateModal = ({
                                   <ReusableDot color="#EA8715" />
                                   <span className="p-2">Pending</span>
                                 </div>
-                                <span>{status.totalFilePending ?? 0}</span>
+                                <span>{status.totalFilePending ? status.totalFilePending : 0}</span>
                               </div>
 
                               <div className="d-flex my-3">
@@ -265,7 +265,7 @@ const AllocateModal = ({
                                   <ReusableDot color="#BCA7FB" />
                                   <span className="p-2">Hold</span>
                                 </div>
-                                <span>{status.totalFileHold ?? 0}</span>
+                                <span>{status.totalFileHold ? status.totalFileHold  : 0}</span>
                               </div>
 
                               <div className="d-flex my-3">
@@ -273,7 +273,7 @@ const AllocateModal = ({
                                   <ReusableDot color="#EB5252" />
                                   <span className="p-2">Declined</span>
                                 </div>
-                                <span>{status.totalFileDeclined ?? 0}</span>
+                                <span>{status.totalFileDeclined ? status.totalFileDeclined : 0}</span>
                               </div>
                             </div>
                           ))}
