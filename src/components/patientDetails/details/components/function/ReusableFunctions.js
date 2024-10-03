@@ -32,7 +32,7 @@ export const getEncounterDateBackground = ({
   hyperlinks,
   setSelectedDos,
   setLabData,
-  storeFileDetails
+  storeFileDetails,
 }) => {
   return value?.map((res, index) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -73,18 +73,17 @@ export const getEncounterDateBackground = ({
             // } else {
             //   getCurrentDiseaseType && getCurrentDiseaseType(true);
             // }
-            getEncounterDetails(
-             { date: res,
-              fileDosPageNumberList:  fileDosPageNumberList,
-               setIsModalOpenValidCodes: setIsModalOpenValidCodes,
-              setSearch:  setSearch,
-               setFileModalHeader: setFileModalHeader,
-             patientDocumentResult:   patientDocumentResult,
-              selectMeatResult:  selectMeatResult,
-                datas:datas,
-                storeFileDetails:storeFileDetails
-              }
-            );
+            getEncounterDetails({
+              date: res,
+              fileDosPageNumberList: fileDosPageNumberList,
+              setIsModalOpenValidCodes: setIsModalOpenValidCodes,
+              setSearch: setSearch,
+              setFileModalHeader: setFileModalHeader,
+              patientDocumentResult: patientDocumentResult,
+              selectMeatResult: selectMeatResult,
+              datas: datas,
+              storeFileDetails: storeFileDetails,
+            });
           }}
           style={{
             borderColor: stringToColour(res) + 33,
@@ -154,18 +153,17 @@ export const getEncounterDateBackground = ({
                       //   setSelectedDos && setSelectedDos("");
                       //   getCurrentDiseaseType && getCurrentDiseaseType(true);
                       // }
-                      getEncounterDetails(
-                        { date: item,
-                          fileDosPageNumberList:  fileDosPageNumberList,
-                           setIsModalOpenValidCodes: setIsModalOpenValidCodes,
-                          setSearch:  setSearch,
-                           setFileModalHeader: setFileModalHeader,
-                         patientDocumentResult:   patientDocumentResult,
-                          selectMeatResult:  selectMeatResult,
-                            datas:datas,
-                            storeFileDetails:storeFileDetails
-                          }
-                      );
+                      getEncounterDetails({
+                        date: item,
+                        fileDosPageNumberList: fileDosPageNumberList,
+                        setIsModalOpenValidCodes: setIsModalOpenValidCodes,
+                        setSearch: setSearch,
+                        setFileModalHeader: setFileModalHeader,
+                        patientDocumentResult: patientDocumentResult,
+                        selectMeatResult: selectMeatResult,
+                        datas: datas,
+                        storeFileDetails: storeFileDetails,
+                      });
                     }}
                     style={{
                       borderColor: stringToColour(item) + 33,
@@ -321,7 +319,10 @@ export const getEncounterDateBackgroundLab = ({
                       );
                       if (selectedMeatData?.stateIndicator) {
                         getCurrentDiseaseType && getCurrentDiseaseType(false);
-                        if (selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY") {
+                        if (
+                          selectedMeatData?.stateIndicator === "LAB" ||
+                          selectedMeatData?.stateIndicator === "RADIOLOGY"
+                        ) {
                           setSelectedDos && setSelectedDos(item);
                           if (getLabPDF) {
                             getLabPDF({
@@ -399,8 +400,8 @@ export const getEncounterDateBackgroundLab = ({
   });
 };
 
-const getEncounterDetails = async (
- { date,
+const getEncounterDetails = async ({
+  date,
   fileDosPageNumberList,
   setIsModalOpenValidCodes,
   setSearch,
@@ -408,16 +409,15 @@ const getEncounterDetails = async (
   patientDocumentResult,
   selectMeatResult,
   datas,
-  storeFileDetails
-}
-) => {
+  storeFileDetails,
+}) => {
   selectMeatResult ? selectMeatResult(datas) : "";
   const findPageNumber = fileDosPageNumberList?.filter(
     (i) =>
       moment(i.dos).format("MM-DD-YYYY") === moment(date).format("MM-DD-YYYY")
   );
   if (findPageNumber?.length != 0) {
-    storeFileDetails(findPageNumber[0]?.fileId)
+    storeFileDetails(findPageNumber[0]?.fileId);
     if (setIsModalOpenValidCodes) {
       setIsModalOpenValidCodes(true);
       var headerName = patientDocumentResult
@@ -555,7 +555,7 @@ const newFindValueDocument = (
   diseaseName,
   storeFileDetails
 ) => {
-  storeFileDetails && storeFileDetails(data?.fileId)
+  storeFileDetails && storeFileDetails(data?.fileId);
   setFileLoading(true);
   setSelectMeatResult && setSelectMeatResult(meatresult);
   setSelectHyperlink &&
@@ -658,7 +658,7 @@ export const getCaptureSectionBackgroundFile = ({
   getRadiologyPDF,
   getCurrentDiseaseType,
   setLabData,
-  storeFileDetails
+  storeFileDetails,
 }) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res, index) => {
@@ -1253,7 +1253,7 @@ export const handleSubmitValidNotes = async ({
   patientDetailsResult,
   handleCloseModal,
 }) => {
-  setFileLoading(true);
+  // setFileLoading(true);
   setConfirmNotesModalValid(false);
   handleCloseModal();
 
@@ -1329,49 +1329,88 @@ export const handleSubmitValidNotes = async ({
   ) {
     apiURL = "management/disease/move/validtosuggested";
   }
-  try {
-    var patientId = getStorage("patientId");
-    var dataFormatSuggested = {
-      patientId: patientId,
-      diagnosisCode: selectDisDetails.diagnosisCode
-        ? selectDisDetails.diagnosisCode
-        : selectDisDetails.diagnosisCodeCombo,
-      // description: selectDisDetails.actualDescription,
-      // dbDescription: selectDisDetails.dbDescription,
-      // reason: values?.reason,
-      processedYear: selectDisDetails.processedYear,
-      dateOfServices: selectDisDetails.dateOfServices,
-      chartProcessType: selectDisDetails.dateOfService
-        ? "DATE_OF_SERVICE"
-        : "YEAR",
-    };
-    const response = await axios.put(
-      ENDPOINTS.apiEndoint + apiURL,
-      dataFormatSuggested
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
-      setFileLoading(false);
-      notification.success({
-        message: result.response,
-        placement: "top",
-        duration: 1,
-      });
-      getpatientDetailsData(
-        patientId,
-        patientDetailsResult?.data?.response?.processedYear,
-        patientDetailsResult?.data?.response?.dateOfService,
-        setFileLoading,
-        ""
-      );
-    } else {
-      setFileLoading(false);
-      getResponePopup(result);
-    }
-  } catch (err) {
-    setFileLoading(false);
-    getResponePopup(err?.response);
+  if (
+    isValidAction.name == "Move to HCC" &&
+    isValidAction.title == "POTENTIAL"
+  ) {
+    apiURL = "management/disease/move/potentialtovalid";
   }
+  if (
+    isValidAction.name == "Move to Suggested" &&
+    isValidAction.title == "POTENTIAL"
+  ) {
+    apiURL = "management/disease/move/potentialtosuggested";
+  }
+  if (
+    isValidAction.name == "Move to Deleted" &&
+    isValidAction.title == "POTENTIAL"
+  ) {
+    apiURL = "management/disease/move/potentialtodeleted";
+  }
+  if (
+    isValidAction.name == "Move to Potential" &&
+    isValidAction.title == "HCC"
+  ) {
+    apiURL = "management/disease/move/validtopotential";
+  }
+  if (
+    isValidAction.name == "Move to Potential" &&
+    isValidAction.title == "SUGGESTED"
+  ) {
+    apiURL = "management/disease/move/suggestedtopotential";
+  }
+  if (
+    isValidAction.name == "Move to Potential" &&
+    isValidAction.title == "DELETED"
+  ) {
+    apiURL = "management/disease/move/deletedtopotential";
+  }
+
+  console.log(isValidAction);
+  console.log(apiURL);
+  // try {
+  //   var patientId = getStorage("patientId");
+  //   var dataFormatSuggested = {
+  //     patientId: patientId,
+  //     diagnosisCode: selectDisDetails.diagnosisCode
+  //       ? selectDisDetails.diagnosisCode
+  //       : selectDisDetails.diagnosisCodeCombo,
+  //     // description: selectDisDetails.actualDescription,
+  //     // dbDescription: selectDisDetails.dbDescription,
+  //     // reason: values?.reason,
+  //     processedYear: selectDisDetails.processedYear,
+  //     dateOfServices: selectDisDetails.dateOfServices,
+  //     chartProcessType: selectDisDetails.dateOfService
+  //       ? "DATE_OF_SERVICE"
+  //       : "YEAR",
+  //   };
+  //   const response = await axios.put(
+  //     ENDPOINTS.apiEndoint + apiURL,
+  //     dataFormatSuggested
+  //   );
+  //   var result = response.data;
+  //   if (result.status == "SUCCESS") {
+  //     setFileLoading(false);
+  //     notification.success({
+  //       message: result.response,
+  //       placement: "top",
+  //       duration: 1,
+  //     });
+  //     getpatientDetailsData(
+  //       patientId,
+  //       patientDetailsResult?.data?.response?.processedYear,
+  //       patientDetailsResult?.data?.response?.dateOfService,
+  //       setFileLoading,
+  //       ""
+  //     );
+  //   } else {
+  //     setFileLoading(false);
+  //     getResponePopup(result);
+  //   }
+  // } catch (err) {
+  //   setFileLoading(false);
+  //   getResponePopup(err?.response);
+  // }
 };
 
 const findValueDocuments = async (
@@ -1656,6 +1695,53 @@ export const onDragEnd = (
         "DELETED"
       );
       break;
+    case "HCC to POTENTIAL":
+      moveToAnotherAction(
+        setConfirmNotesModalValid,
+        setIsValidAction,
+        "Move to Potential",
+        "HCC"
+      );
+      break;
+    case "POTENTIAL to HCC":
+      moveToAnotherAction(
+        setConfirmNotesModalValid,
+        setIsValidAction,
+        "Move to HCC",
+        "POTENTIAL"
+      );
+      break;
+    case "SUGGESTED to POTENTIAL":
+      moveToAnotherAction(
+        setConfirmNotesModalValid,
+        setIsValidAction,
+        "Move to Potential",
+        "SUGGESTED"
+      );
+      break;
+    case "POTENTIAL to SUGGESTED":
+      moveToAnotherAction(
+        setConfirmNotesModalValid,
+        setIsValidAction,
+        "Move to Suggested",
+        "POTENTIAL"
+      );
+      break;
+    case "DELETED to POTENTIAL":
+      moveToAnotherAction(
+        setConfirmNotesModalValid,
+        setIsValidAction,
+        "Move to Potential",
+        "DELETED"
+      );
+      break;
+    case "POTENTIAL to DELETED":
+      moveToAnotherAction(
+        setConfirmNotesModalValid,
+        setIsValidAction,
+        "Move to Deleted",
+        "POTENTIAL"
+      );
     default:
       null;
   }
@@ -1704,7 +1790,8 @@ export const getCaptureSectionBackgroundMeatNew = (
           if (selectedMeatData?.stateIndicator) {
             setLabData && setLabData(selectedMeatData?.fileId);
             getCurrentDiseaseType && getCurrentDiseaseType(false);
-            selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY"
+            selectedMeatData?.stateIndicator === "LAB" ||
+            selectedMeatData?.stateIndicator === "RADIOLOGY"
               ? getLabPDF &&
                 getLabPDF({
                   fileId: selectedMeatData?.fileId,
@@ -1835,11 +1922,16 @@ export const getMeatAnyOneFindCheck = (code, data) => {
     (res2) => res2?.diagnosisCode?.replace(".", "") == code?.replace(".", "")
   );
   if (result && result?.length != 0) {
-    if (result[0]?.monitorAspect || result[0]?.evaluateAspect || result[0]?.assessmentAspect || result[0]?.treatmentAspect) {
+    if (
+      result[0]?.monitorAspect ||
+      result[0]?.evaluateAspect ||
+      result[0]?.assessmentAspect ||
+      result[0]?.treatmentAspect
+    ) {
       return true;
-    }else{
+    } else {
       return false;
-    }   
+    }
   }
 };
 

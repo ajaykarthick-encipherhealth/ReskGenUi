@@ -333,6 +333,9 @@ export async function suggestedToValid(obj, cardTitle) {
   if (cardTitle.name == "Move to HCC" && cardTitle.title == "DELETED") {
     apiUrl = "management/disease/move/deletedtovalid";
   }
+  if (cardTitle.name == "Move to HCC" && cardTitle.title == "POTENTIAL") {
+    apiUrl = "management/disease/move/potentialtovalid";
+  }
   const data = await requestPortal(apiUrl, options);
   return data;
 }

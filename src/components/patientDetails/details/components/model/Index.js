@@ -67,7 +67,7 @@ const ModelIndex = ({
     );
 
 
-    if (!meatFoundResult) {
+    if (!meatFoundResult && customValidAction?.name == "Move to HCC") {
       setFileLoading(true);
       const result = await suggestedMeatCheck(selectDisDetails?.diagnosisCode);
       if (result?.response) {
