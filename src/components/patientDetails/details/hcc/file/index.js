@@ -143,7 +143,7 @@ const File = ({
     setIsModalOpenRadiology(false);
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
-    setFileLoading(false);
+    // setFileLoading(false);
     setIsEditHccForm(false);
     setOpens(false);
   };

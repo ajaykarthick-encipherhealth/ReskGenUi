@@ -1253,7 +1253,7 @@ export const handleSubmitValidNotes = async ({
   patientDetailsResult,
   handleCloseModal,
 }) => {
-  // setFileLoading(true);
+  setFileLoading(true);
   setConfirmNotesModalValid(false);
   handleCloseModal();
 
@@ -1365,52 +1365,49 @@ export const handleSubmitValidNotes = async ({
   ) {
     apiURL = "management/disease/move/deletedtopotential";
   }
-
-  console.log(isValidAction);
-  console.log(apiURL);
-  // try {
-  //   var patientId = getStorage("patientId");
-  //   var dataFormatSuggested = {
-  //     patientId: patientId,
-  //     diagnosisCode: selectDisDetails.diagnosisCode
-  //       ? selectDisDetails.diagnosisCode
-  //       : selectDisDetails.diagnosisCodeCombo,
-  //     // description: selectDisDetails.actualDescription,
-  //     // dbDescription: selectDisDetails.dbDescription,
-  //     // reason: values?.reason,
-  //     processedYear: selectDisDetails.processedYear,
-  //     dateOfServices: selectDisDetails.dateOfServices,
-  //     chartProcessType: selectDisDetails.dateOfService
-  //       ? "DATE_OF_SERVICE"
-  //       : "YEAR",
-  //   };
-  //   const response = await axios.put(
-  //     ENDPOINTS.apiEndoint + apiURL,
-  //     dataFormatSuggested
-  //   );
-  //   var result = response.data;
-  //   if (result.status == "SUCCESS") {
-  //     setFileLoading(false);
-  //     notification.success({
-  //       message: result.response,
-  //       placement: "top",
-  //       duration: 1,
-  //     });
-  //     getpatientDetailsData(
-  //       patientId,
-  //       patientDetailsResult?.data?.response?.processedYear,
-  //       patientDetailsResult?.data?.response?.dateOfService,
-  //       setFileLoading,
-  //       ""
-  //     );
-  //   } else {
-  //     setFileLoading(false);
-  //     getResponePopup(result);
-  //   }
-  // } catch (err) {
-  //   setFileLoading(false);
-  //   getResponePopup(err?.response);
-  // }
+  try {
+    var patientId = getStorage("patientId");
+    var dataFormatSuggested = {
+      patientId: patientId,
+      diagnosisCode: selectDisDetails.diagnosisCode
+        ? selectDisDetails.diagnosisCode
+        : selectDisDetails.diagnosisCodeCombo,
+      // description: selectDisDetails.actualDescription,
+      // dbDescription: selectDisDetails.dbDescription,
+      // reason: values?.reason,
+      processedYear: selectDisDetails.processedYear,
+      dateOfServices: selectDisDetails.dateOfServices,
+      chartProcessType: selectDisDetails.dateOfService
+        ? "DATE_OF_SERVICE"
+        : "YEAR",
+    };
+    const response = await axios.put(
+      ENDPOINTS.apiEndoint + apiURL,
+      dataFormatSuggested
+    );
+    var result = response.data;
+    if (result.status == "SUCCESS") {
+      setFileLoading(false);
+      notification.success({
+        message: result.response,
+        placement: "top",
+        duration: 1,
+      });
+      getpatientDetailsData(
+        patientId,
+        patientDetailsResult?.data?.response?.processedYear,
+        patientDetailsResult?.data?.response?.dateOfService,
+        setFileLoading,
+        ""
+      );
+    } else {
+      setFileLoading(false);
+      getResponePopup(result);
+    }
+  } catch (err) {
+    setFileLoading(false);
+    getResponePopup(err?.response);
+  }
 };
 
 const findValueDocuments = async (

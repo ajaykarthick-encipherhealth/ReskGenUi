@@ -1038,6 +1038,7 @@ export const getPatientDetails = async (
       setAllDisList &&
         setAllDisList([...hccDisArray, ...deleteHccList, ...suggestListAll]);
       setAllMeatList && setAllMeatList([...meatListArr, ...deletedmeatListArr]);
+      setPotentialList && setPotentialList(potentialListAll)
 
       // if (result.suggestRadiology != null) {
       //   if (result.suggestRadiology.length != 0) {
