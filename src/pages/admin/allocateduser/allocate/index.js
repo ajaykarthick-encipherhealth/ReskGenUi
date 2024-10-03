@@ -163,7 +163,6 @@ const AllocateModal = ({
                     } else {
                       setActiveCard(item.id);
                       setActiveEmail(item.email);
-
                       setAllocateDate("");
                     }
                   }}
