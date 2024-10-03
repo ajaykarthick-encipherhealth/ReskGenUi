@@ -54,7 +54,8 @@ const Meat = ({
   currentDiseaseType,
   getCurrentDiseaseType,
   getRadiologyPDF,
-  getLabPDFFile
+  getLabPDFFile,
+  storeFileDetails,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -95,10 +96,10 @@ const Meat = ({
   const [deletedMeatList, setDeletedMeatList] = useState([]);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
-  const [isBlockRxHcc, setIsBlockRxHcc] = useState([])
-  const [isBlockRxHccDeleted, setIsBlockRxHccDeleted] = useState([])
+  const [isBlockRxHcc, setIsBlockRxHcc] = useState([]);
+  const [isBlockRxHccDeleted, setIsBlockRxHccDeleted] = useState([]);
   const [labData, setLabData] = useState("");
-  const userId = getStorage('userId')
+  const userId = getStorage("userId");
 
   useEffect(() => {
     var orgId = getStorage("orgId");
@@ -120,7 +121,7 @@ const Meat = ({
       "",
       "",
       "",
-      setDeletedMeatList,
+      setDeletedMeatList
     );
   }, [patientDetailsResult]);
 
@@ -134,6 +135,8 @@ const Meat = ({
   }, [selectHyperlink]);
 
   const onchangeMeat = (code, data) => {
+    console.log(code, data, "testingsss");
+    
     var title = data.diagnosisCode + " - " + data.diseaseName;
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
     data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
@@ -197,9 +200,9 @@ const Meat = ({
   };
   const getPdfEmptyFunction = () => {};
   const getLabPDF =
-  labFile?.data?.response && labData == labFile?.data?.response?.fileId
-    ? getPdfEmptyFunction
-    : getLabPDFFile;
+    labFile?.data?.response && labData == labFile?.data?.response?.fileId
+      ? getPdfEmptyFunction
+      : getLabPDFFile;
 
   const getDisTitlePopover = (title, value, subString, result) => {
     var popOver = "";
@@ -253,6 +256,7 @@ const Meat = ({
   };
 
   const gotoPageNumber = (data, result, value) => {
+    storeFileDetails(data?.fileId);
     setSelectHyperlink({ allHeaderResult: value, selectHeaderResult: data });
     var splitSpace = data?.substring
       ?.replace(/\s{2,}/g, " ")
@@ -316,14 +320,22 @@ const Meat = ({
   }, [hccFileDetails, radiologyFile, labFile, currentDiseaseType]);
 
   useEffect(() => {
-    const filterCms = [...newValidDiseaseList, ...suggestedHccList, ...deletedHccList].map(item => item.diagnosisCode)
+    const filterCms = [
+      ...newValidDiseaseList,
+      ...suggestedHccList,
+      ...deletedHccList,
+    ].map((item) => item.diagnosisCode);
     if (meatCriteriaList) {
-      const filterMeat = meatCriteriaList.filter((item) => filterCms.includes(item.diagnosisCode));
-      const filterMeatDeleted = deletedMeatList.filter((item) => filterCms.includes(item.diagnosisCode));
-      setIsBlockRxHcc(filterMeat)
-      setIsBlockRxHccDeleted(filterMeatDeleted)
+      const filterMeat = meatCriteriaList.filter((item) =>
+        filterCms.includes(item.diagnosisCode)
+      );
+      const filterMeatDeleted = deletedMeatList.filter((item) =>
+        filterCms.includes(item.diagnosisCode)
+      );
+      setIsBlockRxHcc(filterMeat);
+      setIsBlockRxHccDeleted(filterMeatDeleted);
     }
-  }, [meatCriteriaList])
+  }, [meatCriteriaList]);
 
   const onFinishFailed = (form) => {};
 
@@ -340,7 +352,11 @@ const Meat = ({
       ) : null}
       <div className={visitStyles.meatcontainer}>
         <MeatCard
-          list={userId == "reviewer@3gencogentai.onmicrosoft.com" ? isBlockRxHcc : meatCriteriaList}
+          list={
+            userId == "reviewer@3gencogentai.onmicrosoft.com"
+              ? isBlockRxHcc
+              : meatCriteriaList
+          }
           captureSectionMatching={captureSectionMatching}
           encounterDateMatching={encounterDateMatching}
           okText="OK"
@@ -375,7 +391,11 @@ const Meat = ({
               <span>Deleted MeatCriteria</span>
             </div>
             <MeatCard
-              list={userId == "reviewer@3gencogentai.onmicrosoft.com" ? isBlockRxHccDeleted :deletedMeatList}
+              list={
+                userId == "reviewer@3gencogentai.onmicrosoft.com"
+                  ? isBlockRxHccDeleted
+                  : deletedMeatList
+              }
               captureSectionMatching={captureSectionMatching}
               encounterDateMatching={encounterDateMatching}
               okText="OK"
@@ -535,7 +555,8 @@ const Meat = ({
                           getSelectedDosPageNumber: getSelectedDosPageNumber,
                           getRadiologyPDF: getRadiologyPDF,
                           getLabPDF: getLabPDF,
-                          getCurrentDiseaseType:getCurrentDiseaseType
+                          getCurrentDiseaseType: getCurrentDiseaseType,
+                          storeFileDetails: storeFileDetails,
                         })}
                       </div>
                       <div
@@ -544,7 +565,9 @@ const Meat = ({
                         {getEncounterDateBackground({
                           value: selectMeatResult?.encounterDateSplit,
                           encounterDateMatching: encounterDateMatching,
-                          fileDosPageNumberList: patientDetailsResult?.data?.response?.fileDetailDTO?.dosSummaries,
+                          fileDosPageNumberList:
+                            patientDetailsResult?.data?.response?.fileDetailDTO
+                              ?.dosSummaries,
                           setIsModalOpenValidCodes: setIsModalOpen
                             ? setIsModalOpen
                             : null,
@@ -552,6 +575,7 @@ const Meat = ({
                           setFileModalHeader: setFileModalHeader,
                           patientDocumentResult: patientDocumentResult,
                           getCurrentDiseaseType: getCurrentDiseaseType,
+                          storeFileDetails: storeFileDetails,
                         })}
                       </div>
                     </div>
@@ -594,7 +618,8 @@ const Meat = ({
                             getRadiologyPDF,
                             getLabPDF,
                             getCurrentDiseaseType,
-                            setLabData
+                            setLabData,
+                            storeFileDetails
                           )}
                         </div>
                       </div>
@@ -651,7 +676,8 @@ const Meat = ({
                             getRadiologyPDF,
                             getLabPDF,
                             getCurrentDiseaseType,
-                            setLabData
+                            setLabData,
+                            storeFileDetails
                           )}
                         </div>
                       </div>
@@ -708,7 +734,8 @@ const Meat = ({
                             getRadiologyPDF,
                             getLabPDF,
                             getCurrentDiseaseType,
-                            setLabData
+                            setLabData,
+                            storeFileDetails
                           )}
                         </div>
                       </div>
@@ -765,7 +792,8 @@ const Meat = ({
                             getRadiologyPDF,
                             getLabPDF,
                             getCurrentDiseaseType,
-                            setLabData
+                            setLabData,
+                            storeFileDetails
                           )}
                         </div>
                       </div>
@@ -922,6 +950,7 @@ const enhancer = connect(
     getLabPDF: detailsActions.labDetailsAction,
     getLabPDFFile: detailsActions.labPDFDetails,
     getRadiologyPDF: detailsActions.radiologyDetailsAction,
+    storeFileDetails: detailsActions.storeFileIdAction,
   }
 );
 export default enhancer(Meat);

@@ -13,9 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
-import spinSTYles from "../../../../styles/auth.module.css";
-
-
 
 const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
@@ -225,43 +222,49 @@ const DailyTask = () => {
     );
     return index === firstIndex;
   });
-   const renderCardSkeleton = () => (
-    <Row gutter={[16, 16]} style={{ display: 'flex', justifyContent: 'space-between' }}>
-    {Array.from({ length: 3 }).map((_, index) => (
-      <Col
-        key={index}
-        xs={24} sm={12} md={8} lg={7} 
-        className={styles.sliderdiv}
-        style={{
-          backgroundColor: '#f0f0f0',
-          borderRadius: '12px',
-          padding: '5px',
-          marginBottom: '16px',
-          height: '260px',
-        }}
-      >
-        <Row>
-          <Col span={12}>
-            <div>
-              <Skeleton.Input
-                style={{ width: '100%', height: '200px' }} 
-                active
-              />
-            </div>
-          </Col>
-          <Col span={12} className={styles.headerTitle}>
-            <div style={{ paddingLeft: '10px' }}>
-              {Array.from({ length: bullets.length }).map((_, i) => (
-                <div className={styles.container} key={i}>
-                  <Skeleton.Input style={{ width: 30 }} active />
-                </div>
-              ))}
-            </div>
-          </Col>
-        </Row>
-      </Col>
-    ))}
-  </Row>
+  const renderCardSkeleton = () => (
+    <Row
+      gutter={[16, 16]}
+      style={{ display: "flex", justifyContent: "space-between" }}
+    >
+      {Array.from({ length: 3 }).map((_, index) => (
+        <Col
+          key={index}
+          xs={24}
+          sm={12}
+          md={8}
+          lg={7}
+          className={styles.sliderdiv}
+          style={{
+            backgroundColor: "#f0f0f0",
+            borderRadius: "12px",
+            padding: "5px",
+            marginBottom: "16px",
+            height: "260px",
+          }}
+        >
+          <Row>
+            <Col span={12}>
+              <div>
+                <Skeleton.Input
+                  style={{ width: "100%", height: "200px" }}
+                  active
+                />
+              </div>
+            </Col>
+            <Col span={12} className={styles.headerTitle}>
+              <div style={{ paddingLeft: "10px" }}>
+                {Array.from({ length: bullets.length }).map((_, i) => (
+                  <div className={styles.container} key={i}>
+                    <Skeleton.Input style={{ width: 30 }} active />
+                  </div>
+                ))}
+              </div>
+            </Col>
+          </Row>
+        </Col>
+      ))}
+    </Row>
   );
   return (
     <>
@@ -290,12 +293,17 @@ const DailyTask = () => {
                         className={styles.headerTitle}
                         style={{ fontSize: "16px" }}
                         onClick={() => {
-                          dispatch(
-                            getFilteredList({
-                              dayDate: data?.dateString,
-                            })
-                          );
-                          router?.push("/reviewer/patients");
+                          const params = {
+                            // processedStart: data?.dateString,
+                            // processedEnd: data?.dateString,
+                            dueDateStart: data?.dateString,
+                            dueDateEnd: data?.dateString,
+                          };
+                          dispatch(getFilteredList(params));
+                          router?.push({
+                            pathname: "/reviewer/patients",
+                            query: params,
+                          });
                         }}
                       >
                         <div className={styles.headerDisplay}>
@@ -329,13 +337,20 @@ const DailyTask = () => {
                                   <div
                                     style={{ display: "flex" }}
                                     onClick={() => {
-                                      dispatch(
-                                        getFilteredList({
-                                          date: data?.dateString,
-                                          status: item?.name,
+                                      const params = btoa(
+                                        JSON.stringify({
+                                          // processedStart: data?.dateString,
+                                          // processedEnd: data?.dateString,
+                                          dueDateStart: data?.dateString,
+                                          dueDateEnd: data?.dateString,
+                                          statusSelectedStatus: item?.name,
                                         })
                                       );
-                                      router?.push("/reviewer/patients");
+                                      dispatch(getFilteredList(params));
+                                      router?.push({
+                                        pathname: "/reviewer/patients",
+                                        search: `params=${params}`,
+                                      });
                                     }}
                                   >
                                     <div

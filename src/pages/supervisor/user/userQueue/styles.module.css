@@ -1,4 +1,6 @@
 .userNameContainer {
   margin-left: 25px;
   margin-top: 5px;
+  display: flex;
+  gap: 7px;
 }

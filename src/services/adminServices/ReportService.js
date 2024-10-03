@@ -29,7 +29,7 @@ export const patientDetails = async ({
     userName === "REVIEWER" ? selectManager : ""
   }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${
     role == "tenant_admin" ? "" : orgId
-  }&patientIds=${flagsList ? flagsList : ""}&allPatientIds=${allPatientIds}`;
+  }&allFlags=${flagsList}`;
 
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {

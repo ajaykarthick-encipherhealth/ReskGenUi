@@ -52,9 +52,10 @@ const Meat = ({
   setCapturedSections,
   isEditMeatValue,
   form,
-  disabled
+  disabled,
+  meatFormDisplay,
+  isBtnLoading
 }) => {
-  console.log(isEditMeat, disabled);
   return (
     <div>
       <div className="row">
@@ -105,7 +106,30 @@ const Meat = ({
               </Form.Item>
             </div>
           </>}
+          {meatFormDisplay &&
         <div className="col-12">
+        <Form.Item
+          label={
+            <label>
+              {checkMeatType(selectMeat)} Aspect{" "}
+              <span style={{ color: "red" }}>*</span>
+            </label>
+          }
+          name={`${checkMeatType(selectMeat)}Aspect`}
+          rules={[
+            {
+              required: true,
+              message: "Please enter aspect",
+            },
+          ]}
+        >
+          <Input name={`${checkMeatType(selectMeat)}Aspect`} />
+        </Form.Item>
+      </div>
+            }
+        {!meatFormDisplay &&
+        <>
+           <div className="col-12">
           <Form.Item
             label={
               <label>
@@ -149,6 +173,9 @@ const Meat = ({
             </div>
           )}
         </div>
+        </>
+     
+        }
         <div className="col-12">
           {listOfSection?.length > 0 && (
             <div className="py-4">
@@ -300,10 +327,11 @@ const Meat = ({
             <RegularButton
               type=""
               name="Submit"
-              width="100px"
+              width="140px"
               method={"button"}
               onClick={handleMeatSubmit}
               disabled={isMeat ? !(isMeat && isActive) : isMeat}
+              loading={isBtnLoading}
             />
 
 {/* {isEditMeat && showSection &&  <RegularButton

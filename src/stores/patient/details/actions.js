@@ -54,6 +54,31 @@ export const getProviderSection = createActionThunk(
   "GET_PROVIDER",
   network.getProviderAndCaptured
 );
+export const isDeleteFlag = createActionThunk(
+  "DELETE_FLAG",
+  network.deleteflag
+);
+
+export const isDeleteNotes = createActionThunk(
+  "DELETE_NOTES",
+  network.deleteNotes
+);
+
+export const isDeleteComments = createActionThunk(
+  "DELETE_COMMENTS",
+  network.deleteComments
+);
+
+export const isAddNotes = createActionThunk(
+  "ADD_NOTES",
+  network.addNotes
+);
+
+export const isAddComments = createActionThunk(
+  "ADD_COMMENTS",
+  network.addComments
+);
+
 export const getValideCode = createActionThunk(
   "GET_VALID_CODE",
   network.isValideCode
@@ -119,6 +144,25 @@ export const activeLabels = createActionThunk(
   network.activeLabel
 );
 
-export const getSelectedDosPageNumber = createAction("GET_SELECTED_DOS_PAGE_NUMBER");
+export const suggestedToValidMove = createActionThunk(
+  "MEAT_VALID_MOVE",
+  network.suggestedToValid
+);
+
+export const getSelectedDosPageNumber = createAction(
+  "GET_SELECTED_DOS_PAGE_NUMBER"
+);
 
 export const getCurrentDiseaseType = createAction("GET_CURRENT_DISEASE_TYPE");
+
+export const getAddProviderAndDOS = createActionThunk(
+  "GET_MANUALLY_ADD_PROVIDER_AND_DOS",
+  network.manuallyAddDosAndProvider
+);
+export const getAddProviderAndDOSList = createActionThunk(
+  "PROVIDER_AND_DOS_LIST_IN_MANUALLY_ADD",
+  network.manuallyAddDosAndProviderList
+);
+export const storeFileIdAction = createAction("STORE_FILE_ID");
+
+export const stroeFileIdPreAction = createAction("STORE_FILE_ID_PRE");

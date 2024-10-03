@@ -47,7 +47,7 @@ export async function getHandleChatHistory(
   const token = getStorage("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}chatservice/api/messages/private?sender=${secondaryUser}&receiver=${userName}&pageNo=${pageNumber}&pageSize=${pageSize}`,
+      `${ENDPOINTS?.apiEndoint}chatservice/api/messages/private?sender=${getStorage('userId')}&receiver=${userName}&pageNo=${pageNumber}&pageSize=${pageSize}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

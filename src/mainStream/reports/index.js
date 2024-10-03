@@ -188,10 +188,18 @@ const Reports = ({
   };
   const dosOnChange = (selectedOption, name) => {
     const nameString = name?.split(" ").join("");
-    setSelectedOptions((prevOptions) => ({
-      ...prevOptions,
-      [nameString]: selectedOption,
-    }));
+    if (selectedOption?.label === "All") {
+      setSelectedOptions((prevOptions) => ({
+        ...prevOptions,
+        UserRole: "",
+        User: "",
+      }));
+    } else {
+      setSelectedOptions((prevOptions) => ({
+        ...prevOptions,
+        [nameString]: selectedOption,
+      }));
+    }
   };
 
   const debouncedSearch = useCallback(
@@ -280,28 +288,28 @@ const Reports = ({
   const handleHeaderCheckboxChange = () => {
     resetPageNumber(resetPageState);
     setSelectAllFlags(!selectAllFlags);
-    if (activeTab === "Team" || activeTab === "Audit") {
-      const updatedRows = selectAllFlags
-        ? []
-        : TeamReportDetails?.data?.response?.flagIdCountDTOs?.flatMap(
-            (item) => item?.patientIds
-          );
-      setFlagPatientsList(updatedRows?.join(","));
-    } else if (activeTab === "Admin") {
-      const updatedRows = selectAllFlags
-        ? []
-        : AdminReportPatientDetails?.data?.response?.flagIdCountDTOs?.flatMap(
-            (item) => item?.patientIds
-          );
-      setFlagPatientsList(updatedRows?.join(","));
-    } else {
-      const updatedRows = selectAllFlags
-        ? []
-        : ReportPatientDetails?.response?.flagIdCountDTOs?.flatMap(
-            (item) => item?.patientIds
-          );
-      setFlagPatientsList(updatedRows?.join(","));
-    }
+    // if (activeTab === "Team" || activeTab === "Audit") {
+    //   const updatedRows = selectAllFlags
+    //     ? []
+    //     : TeamReportDetails?.data?.response?.flagIdCountDTOs?.flatMap(
+    //         (item) => item?.patientIds
+    //       );
+    //   setFlagPatientsList(updatedRows?.join(","));
+    // } else if (activeTab === "Admin") {
+    //   const updatedRows = selectAllFlags
+    //     ? []
+    //     : AdminReportPatientDetails?.data?.response?.flagIdCountDTOs?.flatMap(
+    //         (item) => item?.patientIds
+    //       );
+    //   setFlagPatientsList(updatedRows?.join(","));
+    // } else {
+    //   const updatedRows = selectAllFlags
+    //     ? []
+    //     : ReportPatientDetails?.response?.flagIdCountDTOs?.flatMap(
+    //         (item) => item?.patientIds
+    //       );
+    //   setFlagPatientsList(updatedRows?.join(","));
+    // }
   };
 
   const gotoPatientDetails = (data) => {
@@ -359,7 +367,7 @@ const Reports = ({
             selectedOptions?.UserRole?.value !== "All"
               ? selectedOptions?.User?.value
               : "",
-          flagsList: flagPatientsList ? flagPatientsList : "",
+          flagsList: selectAllFlags,
           allPatientIds: false,
         })
       );
@@ -373,7 +381,7 @@ const Reports = ({
           ? selectedOptions?.reviewerStatus?.value
           : "",
         sort: sort,
-        flagsList: flagPatientsList ? flagPatientsList : "",
+        flagsList: selectAllFlags,
       });
     } else if (activeTab === "Team") {
       teamReport({
@@ -385,7 +393,7 @@ const Reports = ({
           ? selectedOptions?.reviewerStatus?.value
           : "",
         sort: sort,
-        flagsList: flagPatientsList ? flagPatientsList : "",
+        flagsList: selectAllFlags,
       });
     } else if (activeTab === "Reviewer") {
       reviewerReport({
@@ -395,7 +403,7 @@ const Reports = ({
         search: coderSearchString ? coderSearchString : "",
         filter: selectedOptions?.reviewerStatus?.value,
         sort: sort,
-        flagsList: flagPatientsList ? flagPatientsList : "",
+        flagsList: selectAllFlags,
       });
     }
     if (ExportResponse) {
@@ -601,7 +609,11 @@ const Reports = ({
                                         }
                                         className={`custom-react-report-select`}
                                         isSearchable={false}
-                                        value={selectedOptions[info?.name]}
+                                        value={
+                                          selectedOptions[info?.name] == "All"
+                                            ? ""
+                                            : selectedOptions[info?.name]
+                                        }
                                       />
                                     )}
                                     {info?.isRangePikcer && (
@@ -810,7 +822,6 @@ const Reports = ({
                             allPatientIds: true,
                           },
                         }}
-                       
                       />
                     </div>
                   )}

@@ -6,13 +6,25 @@ import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Popover, Avatar, Tooltip, notification } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle, faClock } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUserCircle,
+  faClock,
+  faXmarkCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { connect } from "react-redux";
 import { getStorage } from "../../../../../utils/storages";
+import { getResponePopup } from "../../../../../utils/reusable";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
 
-const Comments = ({ setOpen, open, patientDetailsResult }) => {
+const Comments = ({
+  setOpen,
+  open,
+  patientDetailsResult,
+  isDeleteComments,
+  isAddComments
+}) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
     comments: "",
@@ -23,6 +35,7 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
   const [validated, setValidated] = useState(false);
   const [localPatientId, setLocalPatientId] = useState("");
   const [userDetails, setUserDetails] = useState("");
+
   const getCommentsList = async () => {
     const yearData = patientDetailsResult?.data?.response;
 
@@ -33,70 +46,92 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
         yearData?.dateOfService || ""
       }`
     );
-    setCommentList(response.data.response);
+    setCommentList(response?.data?.response);
     setFilterDataLoading(false);
   };
 
   const handleSubmitCommnets = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
+
+    if (inputValue.comments.trim() === "") {
+      getResponePopup({
+        data: {
+          status: "USER_DEFINED_ERROR",
+          message: "Comment cannot be empty",
+        },
+      });
+      return;
+    }
+
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
-      // const orgId = getStorage("orgId");
+
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
-        // orgId: orgId,
         comment: inputValue.comments,
         processedYear: patientDetailsResult?.data?.response?.processedYear,
         dateOfService: patientDetailsResult?.data?.response?.dateOfService,
       };
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/comment`,
-        dataFormatSuggested
-      );
-      var result = response.data;
-      if (result.status == "SUCCESS") {
-        inputValue.comments = "";
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
+
+      try {
+        const response = await isAddComments(dataFormatSuggested)
+        getResponePopup(response);
+        setInputValue({ ...inputValue, comments: "" });
         getCommentsList();
+      } catch (error) {
+        getResponePopup(error?.response);
+      } finally {
         setCommentsTrigger(false);
-      } else {
       }
     }
+
     setValidated(true);
   };
 
   const handleEnterText = async (event) => {
-    if (event.charCode == 13) {
-      if (inputValue.comments.trim() != "") {
-        // const orgId = getStorage("orgId");
-        var dataFormatSuggested = {
-          patientId: patientDetailsResult?.data?.response?.patientId,
-          // orgId: orgId,
-          comment: inputValue.comments,
-          processedYear: patientDetailsResult?.data?.response?.processedYear,
-          dateOfService: patientDetailsResult?.data?.response?.dateOfService,
-        };
-        const response = await axios.post(
-          ENDPOINTS.apiEndoint + `dbservice/comment`,
-          dataFormatSuggested
-        );
-        var result = response.data;
-        if (result.status == "SUCCESS") {
-          inputValue.comments = "";
-          notification.success({
-            message: result.message,
-            placement: "top",
-            duration: 1,
-          });
-          getCommentsList();
-        } else {
-        }
+    if (event.charCode === 13) {
+      if (inputValue.comments.trim() === "") {
+        getResponePopup({
+          data: {
+            status: "USER_DEFINED_ERROR",
+            message: "Comment cannot be empty",
+          },
+        });
+        return;
       }
+      var dataFormatSuggested = {
+        patientId: patientDetailsResult?.data?.response?.patientId,
+        comment: inputValue.comments,
+        processedYear: patientDetailsResult?.data?.response?.processedYear,
+        dateOfService: patientDetailsResult?.data?.response?.dateOfService,
+      };
+      try {
+        const response = await isAddComments(dataFormatSuggested)
+        getResponePopup(response);
+        setInputValue({ ...inputValue, comments: "" });
+        getCommentsList();
+      } catch (error) {
+        getResponePopup(error?.response);
+      }
+    }
+  };
+
+  const handleDelete = async (commentId) => {
+    const payload = {
+      patientId: patientDetailsResult?.data?.response?.patientId,
+      commentId:commentId,
+      processedYear: patientDetailsResult?.data?.response?.processedYear,
+      dateOfService: patientDetailsResult?.data?.response?.dateOfService,
+    };
+
+    try {
+      const response = await isDeleteComments(payload);
+      getResponePopup(response);
+      getCommentsList();
+    } catch (error) {
+      getResponePopup(error.response);
+      console.error(error);
     }
   };
 
@@ -218,9 +253,26 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
             </div>
           </Form>
 
-          {commentList.map((data, index) => (
-            <div className={visitStyles.comments_card}>
-              <div className={`${visitStyles.commentNameHead}`}>
+          {commentList?.map((data, index) => (
+            <div
+              className={`${visitStyles.comments_card} position-relative`}
+              key={index}
+            >
+              <div
+                className="position-absolute top-0 end-0 mt-2 me-2 p-9"
+                style={{ cursor: "pointer" }}
+              >
+                <FontAwesomeIcon
+                  icon={faXmarkCircle}
+                  onClick={() => handleDelete(data.commentId)} 
+                  style={{ color: "#be3144" }}
+                />
+              </div>
+
+              <div
+                className={`${visitStyles.commentNameHead}`}
+                style={{ paddingTop: "20px" }}
+              >
                 <span className={visitStyles.commentsName}>{data.comment}</span>
                 <Tooltip placement="bottom" title={data.commentCreatedBy}>
                   <Popover
@@ -260,7 +312,14 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
   );
 };
 
-const enhancer = connect((state) => ({
-  patientDetailsResult: state?.patientDetails?.details?.patientResult,
-}));
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
+  }),
+  {
+    isDeleteComments: detailsActions.isDeleteComments,
+    isAddComments: detailsActions.isAddComments,
+
+  }
+);
 export default enhancer(Comments);

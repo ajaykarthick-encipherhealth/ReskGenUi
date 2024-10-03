@@ -1,11 +1,11 @@
 import React from "react";
 import { Paginator } from "primereact/paginator";
-const Pagination = ({ first, totalRecords, onPageChange }) => {
+const Pagination = ({ first, totalRecords, onPageChange ,row}) => {
   return (
     <div className="pagination-container">
       <Paginator
         first={first}
-        rows={7}
+        rows={row? row:7}
         totalRecords={totalRecords}
         onPageChange={onPageChange}
       />

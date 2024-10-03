@@ -53,32 +53,19 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
                     <Popover
                       key={index}
                       content={
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            flexDirection: "column",
-                          }}
-                        >
-                          <div
-                            style={{
-                              padding: "10px",
-                            }}
-                          >
-                            {item?.senderDetails?.firstName}{" "}
-                            {item?.senderDetails?.lastName}
-                          </div>
-                          {item?.senderDetails?.profileImageUrl && (
-                            <img
-                              src={item.senderDetails.profileImageUrl}
-                              alt="Profile"
-                              style={{
-                                maxWidth: "100px",
-                                maxHeight: "100px",
-                              }}
-                            />
-                          )}
+                        <div className="d-flex justify-content-center align-items-center gap-2">
+                          {item?.senderDetails?.firstName ||
+                          item?.senderDetails?.lastName ||
+                          item?.senderDetails?.profileImageUrl
+                            ? renderUserPrfoileAvatar(
+                                item?.senderDetails?.firstName,
+                                item?.senderDetails?.lastName,
+                                item?.senderDetails?.profileImageUrl,
+                                "header"
+                              )
+                            : "---"}
+                          {item?.senderDetails?.firstName}{" "}
+                          {item?.senderDetails?.lastName}
                         </div>
                       }
                     >
@@ -94,12 +81,16 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
                               marginRight: "10px",
                             }}
                           >
-                            {renderUserPrfoileAvatar(
-                              item?.senderDetails?.firstName,
-                              item?.senderDetails?.lastName,
-                              item?.senderDetails?.profileImageUrl,
-                              "header"
-                            )}
+                            {item?.senderDetails?.firstName ||
+                            item?.senderDetails?.lastName ||
+                            item?.senderDetails?.profileImageUrl
+                              ? renderUserPrfoileAvatar(
+                                  item?.senderDetails?.firstName,
+                                  item?.senderDetails?.lastName,
+                                  item?.senderDetails?.profileImageUrl,
+                                  "header"
+                                )
+                              : "---"}
                           </div>
 
                           <div>

@@ -554,7 +554,7 @@ const HeaderFilters = ({
                 <div class="form-group has-search">
                   <Select
                     onChange={(selectedOption) => {
-                      setSelAllocatedBy(selectedOption?.value);
+                      setSelAllocatedBy(selectedOption?.value==="All"?"":selectedOption?.value);
                       if(setPageNo){
                         resetPageNumber(setPageNo)
                       }
