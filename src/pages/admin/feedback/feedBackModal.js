@@ -23,27 +23,27 @@ const FeedBackModalContent = ({
           {getButtonStatus(modalData?.status)}
         </div>
       ),
-      // icon: <Avatar icon={<UserOutlined />} />,
+       icon: <Avatar icon={<UserOutlined />} />,
     },
     {
       title: "Technical Support Team",
       description,
-      // icon: <Avatar icon={<UserOutlined />} />,
+       icon: <Avatar icon={<UserOutlined />} />,
     },
     {
       title: "Medical Coding Team",
       description,
-      // icon: <Avatar icon={<UserOutlined />} />,
+      icon: <Avatar icon={<UserOutlined />} />,
     },
     {
       title: "Manager",
       description,
-      // icon: <Avatar icon={<UserOutlined />} />,
+     icon: <Avatar icon={<UserOutlined />} />,
     },
     {
       title: "Created the Feedback",
       description,
-      // icon: <Avatar icon={<UserOutlined />} />,
+      icon: <Avatar icon={<UserOutlined />} />,
     },
   ];
 
