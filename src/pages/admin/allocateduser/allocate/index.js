@@ -56,16 +56,6 @@ const AllocateModal = ({
           id: item.id,
           role: item.role,
           email: item.userName,
-          totalFileAllocated: item.totalFileAllocated,
-          totalFileAuditAllocated: item.totalFileAuditAllocated,
-          totalFileAuditDeclined: item.totalFileAuditDeclined,
-          totalFileAuditHold: item.totalFileAuditHold,
-          totalFileAuditPending: item.totalFileAuditPending,
-          totalFileAudited: item.totalFileAudited,
-          totalFileDeclined: item.totalFileDeclined,
-          totalFileHold: item.totalFileHold,
-          totalFilePending: item.totalFilePending,
-          totalFileProcessed: item.totalFileProcessed,
         };
       });
       setStatusCount(response?.data?.response);
