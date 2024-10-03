@@ -535,7 +535,7 @@ const File = ({
                       </div>
                       {showList.includes("potential") && (
                         <div
-                          className={visitStyles.deletedContainers}
+                          className={visitStyles.suggestedcontainer2}
                           style={{
                             height:
                               showList.length == 1

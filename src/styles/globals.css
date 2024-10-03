@@ -8932,6 +8932,9 @@ button:focus {
   .login-account .login-form .login-title {
     margin-bottom: 25px;
   }
+  .profile-tab .nav-item .nav-link {
+    font-size: 12px !important;
+  }
 }
 
 .login-account .login-form .secure-input {

@@ -258,9 +258,9 @@
 }
 
 .actionbtnContainer {
-  position: relative;
+  /* position: relative; */
   right: 70px;
-  padding-top: 1.25rem;
+  /* padding-top: 1.25rem; */
 }
 
 .backArrowBtn {
@@ -2122,10 +2122,10 @@
   background-color: rgba(209, 218, 250, 1);
   color: rgba(22, 64, 214, 1);
   padding: 2px 0px;
-  width: 45px !important;
+  width: 30px !important;
   height: 20px;
   text-align: center;
-  font-size: 12px;
+  font-size: 10px;
   border-radius: 5px;
 }
 
@@ -2133,10 +2133,10 @@
   background-color: rgba(212, 247, 245, 1);
   color: rgba(34, 170, 166, 1);
   padding: 2px 0px;
-  width: 45px;
+  width: 30px;
   height: 20px;
   text-align: center;
-  font-size: 12px;
+  font-size: 10px;
   border-radius: 5px;
 }
 
@@ -2177,7 +2177,7 @@
   height: 45px;
   margin-right: 10px;
   background: #f3f3ff !important;
-  position: relative;
+  /* position: relative; */
   right: 70px;
 }
 

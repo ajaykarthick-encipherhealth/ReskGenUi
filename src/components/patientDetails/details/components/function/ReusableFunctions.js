@@ -727,7 +727,7 @@ export const getCaptureSectionBackgroundFile = ({
             style={{ backgroundColor: backColor, color: textColor }}
             className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
           >
-            {truncateString(res, 30)}
+            <Tooltip title={res}>{truncateString(res, 20)}</Tooltip>
           </span>
         );
         if (res != "") {

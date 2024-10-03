@@ -128,7 +128,7 @@ const Details = ({
   storeFileDetails,
   preStoreFileDetails,
   storePrePatientFileId,
-  storeCurrentFile
+  storeCurrentFile,
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -304,9 +304,7 @@ const Details = ({
         isFileCheck == false &&
         patientId == patientDetailsResult?.data?.response.patientId
       ) {
-        getPatientHccFile(
-          patientDetailsResult?.data?.response?.fileId
-        );
+        getPatientHccFile(patientDetailsResult?.data?.response?.fileId);
         // setStorage(
         //   "fileId",
         //   patientDetailsResult?.data?.response?.fileId
@@ -320,17 +318,14 @@ const Details = ({
   }, [patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath]);
 
   useEffect(() => {
-    console.log(storeFileDetails,"selectFileID")
+    console.log(storeFileDetails, "selectFileID");
     if (storeFileDetails) {
-      if(storeFileDetails != preStoreFileDetails){
-          setStorage(
-            "fileId",
-            storeFileDetails
-          );
-          getPatientHccFile(storeFileDetails);
-          storePrePatientFileId(storeFileDetails);
-        }
+      if (storeFileDetails != preStoreFileDetails) {
+        setStorage("fileId", storeFileDetails);
+        getPatientHccFile(storeFileDetails);
+        storePrePatientFileId(storeFileDetails);
       }
+    }
   }, [storeFileDetails]);
 
   const getAllProcessYearSelect = async (result) => {
@@ -719,452 +714,305 @@ const Details = ({
             ) : ( */}
               <div className={`${visitStyles.container_fluid_patient}`}>
                 <div className="row patient-file-container">
-                  <div className="col-xl-12">
-                    <div className="row">
-                      {activeTab == 1 || activeTab == 2 ? (
-                        <>
-                          <div
-                            className="col-xl-1 col-sm-12"
-                            style={{ zIndex: "1" }}
+                  <div className="row">
+                    {activeTab == "2" || activeTab == "1" ? (
+                      <div className="d-flex">
+                        <div
+                          style={{ zIndex: "1" }}
+                        >
+                          <Button
+                            onClick={backToPatientData}
+                            className={`ms-2 ${visitStyles.backArrowBtn}`}
                           >
-                            <Button
-                              onClick={backToPatientData}
-                              className={`ms-2 ${visitStyles.backArrowBtn}`}
-                            >
-                              <FontAwesomeIcon
-                                icon={faArrowLeft}
-                                style={{
-                                  color: "rgb(38 50 107)",
-                                }}
-                              />
-                            </Button>
-                          </div>
+                            <FontAwesomeIcon
+                              icon={faArrowLeft}
+                              style={{
+                                color: "rgb(38 50 107)",
+                              }}
+                            />
+                          </Button>
+                        </div>
+                        <div className="w-100">
                           <div
-                            className={`${
-                              !screenWidth || screenWidth > 1500
-                                ? "col-xl-7"
-                                : "col-xl-10"
-                            } col-sm-12`}
+                            className={`${visitStyles.patient_info_details}`}
                           >
-                            <div
-                              className={`${visitStyles.patient_info_details}`}
-                            >
-                              <div className="card-body">
-                                <div className="row">
-                                  <div className="col-xl-2 col-sm-12">
-                                    <FontAwesomeIcon icon={faIdCardClip} />
-                                    <label>Patient ID</label>
-                                    {/* <Tooltip
-                                  placement="bottom"
-                                  title={patientDocumentResult.patientId}
-                                > */}
+                            <div className="card-body w-100">
+                              <div className="d-flex justify-content-between">
+                                <div className="">
+                                  <FontAwesomeIcon icon={faIdCardClip} />
+                                  <label>Patient ID</label>
+
+                                  <h6
+                                    onClick={() =>
+                                      handleCopyToClipboard({
+                                        text: patientDocumentResult.patientId,
+                                        setCopied: setCopied,
+                                      })
+                                    }
+                                    className="ageDtails"
+                                    style={{
+                                      paddingLeft: "25px",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {getMastData(
+                                      patientDocumentResult.patientId
+                                    )}
+                                  </h6>
+                                </div>
+                                <div className="">
+                                  <FontAwesomeIcon icon={faUserCircle} />
+
+                                  <label>Patient Name</label>
+
+                                  <h6 className="ageDtails">
+                                    {getMastData(
+                                      patientIdDetailsData?.data?.response
+                                        ?.patientName
+                                    )}
+                                  </h6>
+                                </div>
+                                <div className="">
+                                  <FontAwesomeIcon icon={faFile} />
+
+                                  <label>File Name</label>
+                                  <div className="cr-pointer">
                                     <h6
                                       onClick={() =>
                                         handleCopyToClipboard({
-                                          text: patientDocumentResult.patientId,
+                                          text: patientDocumentResult
+                                            ?.fileDetailDTO?.fileName,
                                           setCopied: setCopied,
                                         })
                                       }
-                                      className="ageDtails"
-                                      style={{
-                                        paddingLeft: "25px",
-                                        cursor: "pointer",
-                                      }}
                                     >
-                                      {getMastData(
-                                        patientDocumentResult.patientId
-                                      )}
+                                      <Tooltip
+                                        title={
+                                          patientDocumentResult?.fileDetailDTO
+                                            ?.fileName
+                                        }
+                                      >
+                                        {truncateString(
+                                          patientDocumentResult?.fileDetailDTO
+                                            ?.fileName,
+                                          7
+                                        )}
+                                      </Tooltip>
                                     </h6>
-                                    {/* </Tooltip> */}
                                   </div>
-                                  <div className="col-xl-2 col-sm-12">
-                                    <FontAwesomeIcon icon={faUserCircle} />
-
-                                    <label>Patient Name</label>
-                                    {/* <Tooltip
-                                  placement="bottom"
-                                  title={patientDocumentResult.patientId}
-                                > */}
-                                    <h6 className="ageDtails">
-                                      {getMastData(
+                                </div>
+                                <div className="">
+                                  <FontAwesomeIcon icon={faCalendarAlt} />
+                                  <label>Age</label>
+                                  <h6
+                                    className="ageDtails"
+                                    style={{ paddingLeft: "20px" }}
+                                  >
+                                    {getAge(
+                                      patientIdDetailsData?.data?.response?.dob
+                                    )}
+                                  </h6>
+                                </div>
+                                <div className="">
+                                  <div>
+                                    <FontAwesomeIcon icon={faVenusMars} />
+                                    <label>Gender</label>
+                                    <h6
+                                      className="ageDtails"
+                                      style={{ paddingLeft: "25px" }}
+                                    >
+                                      {
                                         patientIdDetailsData?.data?.response
-                                          ?.patientName
-                                      )}
+                                          ?.gender
+                                      }
                                     </h6>
-                                    {/* </Tooltip> */}
                                   </div>
-                                  <div className="col-xl-2 col-sm-12">
-                                    <FontAwesomeIcon icon={faFile} />
-
-                                    <label>File Name</label>
-                                    <div className="cr-pointer">
-                                      <h6
+                                </div>
+                                <div>
+                                  <i className={visitStyles.dob_icon}>
+                                    {SVGICON.DatebirthIcon}
+                                  </i>
+                                  <label>DOB</label>
+                                  <h6 className="ageDtails">
+                                    {patientIdDetailsData?.data?.response?.dob}
+                                  </h6>
+                                </div>
+                                <div className="">
+                                  {flagsDetailsResult?.response[0] && (
+                                    <div className="mt-2">
+                                      <div
+                                        className="d-flex align-items-center justify-content-center cr-pointer"
                                         onClick={() =>
-                                          handleCopyToClipboard({
-                                            text: patientDocumentResult
-                                              ?.fileDetailDTO?.fileName,
-                                            setCopied: setCopied,
-                                          })
+                                          setFlagContainerActive("Flag")
                                         }
                                       >
                                         <Tooltip
-                                          title={
-                                            patientDocumentResult?.fileDetailDTO
-                                              ?.fileName
-                                          }
-                                        >
-                                          {truncateString(
-                                            patientDocumentResult?.fileDetailDTO
-                                              ?.fileName,
-                                            7
+                                          placement="bottom"
+                                          title={flagsDetailsResult?.response[0]?.flagDetails?.flagName.replaceAll(
+                                            "_",
+                                            " "
                                           )}
-                                        </Tooltip>
-                                      </h6>
-                                    </div>
-                                  </div>
-                                  <div className="col-xl-1 col-sm-12">
-                                    <FontAwesomeIcon icon={faCalendarAlt} />
-                                    <label>Age</label>
-                                    <h6
-                                      className="ageDtails"
-                                      style={{ paddingLeft: "20px" }}
-                                    >
-                                      {getAge(
-                                        patientIdDetailsData?.data?.response
-                                          ?.dob
-                                      )}
-                                    </h6>
-                                  </div>
-                                  <div className="col-xl-3 col-sm-12">
-                                    <div className="d-flex justify-content-between">
-                                      <div>
-                                        <FontAwesomeIcon icon={faVenusMars} />
-                                        <label>Gender</label>
-                                        <h6
-                                          className="ageDtails"
-                                          style={{ paddingLeft: "25px" }}
                                         >
-                                          {
-                                            patientIdDetailsData?.data?.response
-                                              ?.gender
-                                          }
-                                        </h6>
-                                      </div>
-                                      <div>
-                                        <i className={visitStyles.dob_icon}>
-                                          {SVGICON.DatebirthIcon}
-                                        </i>
-                                        <label>DOB</label>
-                                        <h6 className="ageDtails">
-                                          {
-                                            patientIdDetailsData?.data?.response
-                                              ?.dob
-                                          }
-                                        </h6>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="col-xl-1 col-sm-12">
-                                    {flagsDetailsResult?.response[0] && (
-                                      <div className="mt-2">
-                                        <div
-                                          className="d-flex align-items-center justify-content-center cr-pointer"
-                                          onClick={() =>
-                                            setFlagContainerActive("Flag")
-                                          }
-                                        >
-                                          <Tooltip
-                                            placement="bottom"
-                                            title={flagsDetailsResult?.response[0]?.flagDetails?.flagName.replaceAll(
-                                              "_",
-                                              " "
-                                            )}
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="30"
+                                            height="30"
+                                            viewBox="0 0 800 800"
+                                            fill={
+                                              flagsDetailsResult?.response[0]
+                                                ?.flagDetails?.flagColour
+                                            }
                                           >
-                                            <svg
-                                              xmlns="http://www.w3.org/2000/svg"
-                                              width="30"
-                                              height="30"
-                                              viewBox="0 0 800 800"
-                                              fill={
-                                                flagsDetailsResult?.response[0]
-                                                  ?.flagDetails?.flagColour
-                                              }
-                                            >
-                                              <path
-                                                d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-                                                stroke="#000"
-                                                stroke-width="10"
-                                              />
-                                            </svg>
-                                          </Tooltip>
-                                        </div>
+                                            <path
+                                              d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                                              stroke="#000"
+                                              stroke-width="10"
+                                            />
+                                          </svg>
+                                        </Tooltip>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="">
+                                  <div
+                                    className={`${visitStyles.priorityStatus} p-0`}
+                                  >
+                                    {patienIdDetails?.priority == "URGENT" ? (
+                                      <div
+                                        className={
+                                          visitStyles.priorityStatusIcon
+                                        }
+                                      >
+                                        <i>{SVGICON.alert}</i>
+                                        <span
+                                          style={{
+                                            fontSize: "13px",
+                                            fontWeight: 500,
+                                            color: "red",
+                                          }}
+                                        >
+                                          Urgent
+                                        </span>
+                                      </div>
+                                    ) : patienIdDetails?.priority == "HIGH" ? (
+                                      <div
+                                        className={
+                                          visitStyles.priorityStatusIcon
+                                        }
+                                      >
+                                        <i className={TableStyle.highFlag}>
+                                          {SVGICON.alert}
+                                        </i>
+                                        <span
+                                          style={{
+                                            fontSize: "13px",
+                                            fontWeight: 500,
+                                            color: "#cf940a",
+                                          }}
+                                        >
+                                          High
+                                        </span>
+                                      </div>
+                                    ) : patienIdDetails?.priority ==
+                                      "NORMAL" ? (
+                                      <div
+                                        className={
+                                          visitStyles.priorityStatusIcon
+                                        }
+                                      >
+                                        <i className={TableStyle.normalFlag}>
+                                          {SVGICON.alert}
+                                        </i>
+                                        <span
+                                          style={{
+                                            fontSize: "13px",
+                                            fontWeight: 500,
+                                            color: "#4466ff ",
+                                          }}
+                                        >
+                                          Normal
+                                        </span>
+                                      </div>
+                                    ) : (
+                                      <div
+                                        className={
+                                          visitStyles.priorityStatusIcon
+                                        }
+                                      >
+                                        <i className={TableStyle.lowFlag}>
+                                          {SVGICON.alert}
+                                        </i>
+                                        <span
+                                          style={{
+                                            fontSize: "13px",
+                                            fontWeight: 500,
+                                            color: "#87909e",
+                                          }}
+                                        >
+                                          Low
+                                        </span>
                                       </div>
                                     )}
                                   </div>
-                                  <div className="col-xl-1 col-sm-12">
+                                </div>
+                                <div>
+                                  <div
+                                    className={`${visitStyles.priorityStatus} p-0`}
+                                  >
                                     <div
-                                      className={`${visitStyles.priorityStatus} p-0`}
+                                      className={`${visitStyles.hccCountHeader} `}
                                     >
-                                      {patienIdDetails?.priority == "URGENT" ? (
-                                        <div
-                                          className={
-                                            visitStyles.priorityStatusIcon
-                                          }
-                                        >
-                                          <i>{SVGICON.alert}</i>
-                                          <span
-                                            style={{
-                                              fontSize: "13px",
-                                              fontWeight: 500,
-                                              color: "red",
-                                            }}
-                                          >
-                                            Urgent
-                                          </span>
-                                        </div>
-                                      ) : patienIdDetails?.priority ==
-                                        "HIGH" ? (
-                                        <div
-                                          className={
-                                            visitStyles.priorityStatusIcon
-                                          }
-                                        >
-                                          <i className={TableStyle.highFlag}>
-                                            {SVGICON.alert}
-                                          </i>
-                                          <span
-                                            style={{
-                                              fontSize: "13px",
-                                              fontWeight: 500,
-                                              color: "#cf940a",
-                                            }}
-                                          >
-                                            High
-                                          </span>
-                                        </div>
-                                      ) : patienIdDetails?.priority ==
-                                        "NORMAL" ? (
-                                        <div
-                                          className={
-                                            visitStyles.priorityStatusIcon
-                                          }
-                                        >
-                                          <i className={TableStyle.normalFlag}>
-                                            {SVGICON.alert}
-                                          </i>
-                                          <span
-                                            style={{
-                                              fontSize: "13px",
-                                              fontWeight: 500,
-                                              color: "#4466ff ",
-                                            }}
-                                          >
-                                            Normal
-                                          </span>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          className={
-                                            visitStyles.priorityStatusIcon
-                                          }
-                                        >
-                                          <i className={TableStyle.lowFlag}>
-                                            {SVGICON.alert}
-                                          </i>
-                                          <span
-                                            style={{
-                                              fontSize: "13px",
-                                              fontWeight: 500,
-                                              color: "#87909e",
-                                            }}
-                                          >
-                                            Low
-                                          </span>
-                                        </div>
-                                      )}
+                                      <label>CMS</label>
+
+                                      <h6 className="ageDtails">
+                                        {hccCounts.isCmsHcc}
+                                      </h6>
                                     </div>
+                                    {localUserId !=
+                                      "reviewer@3gencogentai.onmicrosoft.com" && (
+                                      <>
+                                        <div
+                                          className={`${visitStyles.hccCountHeader} `}
+                                        >
+                                          <label>RX</label>
+
+                                          <h6 className="ageDtails">
+                                            {hccCounts.isRxHcc}
+                                          </h6>
+                                        </div>
+                                        <div
+                                          className={`${visitStyles.hccCountHeader} `}
+                                        >
+                                          <label>TOTAL</label>
+
+                                          <h6 className="ageDtails">
+                                            {hccValidCount}
+                                          </h6>
+                                        </div>
+                                      </>
+                                    )}
                                   </div>
                                 </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div
-                            className={`${
-                              !screenWidth || screenWidth > 1500
-                                ? "col-xl-1"
-                                : "col-xl-2"
-                            } col-sm-12`}
-                          >
-                            <div className={visitStyles.priorityStatus}>
-                              <div className={`${visitStyles.hccCountHeader} `}>
-                                <label>CMS</label>
-
-                                <h6 className="ageDtails">
-                                  {hccCounts.isCmsHcc}
-                                </h6>
-                              </div>
-                              {localUserId !=
-                                "reviewer@3gencogentai.onmicrosoft.com" && (
-                                <>
+                                <div>
                                   <div
-                                    className={`${visitStyles.hccCountHeader} `}
+                                    className={`${visitStyles.rafscoreheader} p-0`}
                                   >
-                                    <label>RX</label>
-
-                                    <h6 className="ageDtails">
-                                      {hccCounts.isRxHcc}
-                                    </h6>
+                                    <label>Score</label>
+                                    {patientDetails?.rafScore?.rafVersionDTO
+                                      ?.overAllScore != null ? (
+                                      <h6 className="ageDtails">
+                                        {patientDetails?.rafScore?.rafVersionDTO?.overAllScore?.toFixed(
+                                          3
+                                        )}
+                                      </h6>
+                                    ) : (
+                                      <h6 className="ageDtails">0.00</h6>
+                                    )}
                                   </div>
-                                  <div
-                                    className={`${visitStyles.hccCountHeader} `}
-                                  >
-                                    <label>TOTAL</label>
+                                </div>
 
-                                    <h6 className="ageDtails">
-                                      {hccValidCount}
-                                    </h6>
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                          <div
-                            className={`${
-                              !screenWidth || screenWidth > 1500
-                                ? "col-xl-1"
-                                : "col-xl-2"
-                            } col-sm-12 px-4 d-flex`}
-                          >
-                            <div className={`${visitStyles.rafscoreheader} `}>
-                              <label>Score</label>
-                              {patientDetails?.rafScore?.rafVersionDTO
-                                ?.overAllScore != null ? (
-                                <h6 className="ageDtails">
-                                  {patientDetails?.rafScore?.rafVersionDTO?.overAllScore?.toFixed(
-                                    3
-                                  )}
-                                </h6>
-                              ) : (
-                                <h6 className="ageDtails">0.00</h6>
-                              )}
-                            </div>
-                            <span
-                              className={`${visitStyles.commentsName} ${visitStyles.statusFLag}`}
-                            >
-                              {/* {flagFirstData.flag} */}
-                              {flagFirstData?.flag == "PATIENT_NAME_MISSED" ? (
-                                <Tooltip
-                                  title="PATIENT_NAME_MISSED"
-                                  placement="bottom"
-                                >
-                                  <i className={visitStyles.name_missed}>
-                                    {SVGICON.emptyFlagSmallLarge}
-                                  </i>
-                                </Tooltip>
-                              ) : flagFirstData?.flag ==
-                                "PATIENT_DOB_MISSED" ? (
-                                <Tooltip
-                                  title="PATIENT_DOB_MISSED"
-                                  placement="bottom"
-                                >
-                                  <i className={visitStyles.dob_missed}>
-                                    {SVGICON.emptyFlagSmallLarge}
-                                  </i>
-                                </Tooltip>
-                              ) : flagFirstData?.flag == "MRN_ID_MISMATCH" ? (
-                                <Tooltip
-                                  title="MRN_ID_MISMATCH"
-                                  placement="bottom"
-                                >
-                                  <i className={visitStyles.id_missed}>
-                                    {SVGICON.emptyFlagSmallLarge}
-                                  </i>
-                                </Tooltip>
-                              ) : flagFirstData?.flag ==
-                                "PROVIDER_SIGN_MISSED" ? (
-                                <Tooltip
-                                  title="PROVIDER_SIGN_MISSED"
-                                  placement="bottom"
-                                >
-                                  <i className={visitStyles.sign_missed}>
-                                    {SVGICON.emptyFlagSmallLarge}
-                                  </i>
-                                </Tooltip>
-                              ) : flagFirstData?.flag ==
-                                "PROVIDER_SIGNATURE_MISSED" ? (
-                                <Tooltip
-                                  title="PROVIDER_SIGNATURE_MISSED"
-                                  placement="bottom"
-                                >
-                                  <i className={visitStyles.signature_missed}>
-                                    {SVGICON.emptyFlagSmallLarge}
-                                  </i>
-                                </Tooltip>
-                              ) : flagFirstData?.flag ==
-                                "PROVIDER_CREDENTIAL_MISSED" ? (
-                                <Tooltip
-                                  title="PROVIDER_CREDENTIAL_MISSED"
-                                  placement="bottom"
-                                >
-                                  <i className={visitStyles.cred_missed}>
-                                    {SVGICON.emptyFlagSmallLarge}
-                                  </i>
-                                </Tooltip>
-                              ) : flagFirstData?.flag ==
-                                "PROVIDER_SIGN_STATUS_PENDING" ? (
-                                <Tooltip
-                                  title="PROVIDER_SIGN_STATUS_PENDING"
-                                  placement="bottom"
-                                >
-                                  <i className={visitStyles.sign_status}>
-                                    {SVGICON.emptyFlagSmallLarge}
-                                  </i>
-                                </Tooltip>
-                              ) : flagFirstData?.flag == "NO_HCC_FOUND" ? (
-                                <Tooltip
-                                  title="NO_HCC_FOUND"
-                                  placement="bottom"
-                                >
-                                  <i className={visitStyles.no_hcc_found}>
-                                    {SVGICON.emptyFlagSmallLarge}
-                                  </i>
-                                </Tooltip>
-                              ) : flagFirstData?.flag ==
-                                "NO_VALID_DOCUMENT_FOUND" ? (
-                                <Tooltip
-                                  title="NO_VALID_DOCUMENT_FOUND"
-                                  placement="bottom"
-                                >
-                                  <i className={visitStyles.no_doc_found}>
-                                    {SVGICON.emptyFlagSmallLarge}
-                                  </i>
-                                </Tooltip>
-                              ) : flagFirstData?.flag == "PATIENT_DECEASED" ? (
-                                <Tooltip
-                                  title="PATIENT_DECEASED"
-                                  placement="bottom"
-                                >
-                                  <i className={visitStyles.patient_diseased}>
-                                    {SVGICON.emptyFlagSmallLarge}
-                                  </i>
-                                </Tooltip>
-                              ) : flagFirstData?.flag == "PATIENT_INACTIVE" ? (
-                                <Tooltip
-                                  title="PATIENT_INACTIVE"
-                                  placement="bottom"
-                                >
-                                  <i className={visitStyles.patient_inactive}>
-                                    {SVGICON.emptyFlagSmallLarge}
-                                  </i>
-                                </Tooltip>
-                              ) : null}
-                            </span>
-                          </div>
-
-                          <div className="col-xl-1 col-sm-2">
-                            <div className="card-body">
-                              <div className="row">
-                                <div className="col-xl-12 col-sm-12">
+                                <div className="">
                                   {!isLoadingDos ? (
                                     <>
                                       <Select
@@ -1182,102 +1030,88 @@ const Details = ({
                                           width: "120px",
                                         }}
                                       />
-                                      {/* <Select
-                                    onChange={(e) => dosOnChange(e)}
-                                    options={dosYear}
-                                    className={`custom-react-select ${visitStyles.dosSelectPicker}`}
-                                    defaultValue={dosYearDefalutSelect}
-                                    isSearchable={false}
-                                  /> */}
                                     </>
                                   ) : null}
+                                </div>
+                                <div>
+                                  <StatusAction />
                                 </div>
                               </div>
                             </div>
                           </div>
-                          <div
-                            className={`${
-                              !screenWidth || screenWidth > 1500
-                                ? "col-xl-1"
-                                : "col-xl-2"
-                            } col-sm-12`}
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div
+                          className="col-xl-1 col-sm-12"
+                          style={{ zIndex: "1", marginTop: "20px" }}
+                        >
+                          <Button
+                            onClick={backToPatientData}
+                            className={`ms-2 ${visitStyles.backArrowBtn}`}
                           >
-                            <StatusAction />
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div
-                            className="col-xl-1 col-sm-12"
-                            style={{ zIndex: "1", marginTop: "20px" }}
-                          >
-                            <Button
-                              onClick={backToPatientData}
-                              className={`ms-2 ${visitStyles.backArrowBtn}`}
-                            >
-                              <FontAwesomeIcon
-                                icon={faArrowLeft}
-                                style={{
-                                  color: "rgb(38 50 107)",
-                                }}
-                              />
-                            </Button>
-                          </div>
-                          <div className="col-xl-11">
-                            <FileDetails
-                              title={activeTab == 3 ? "Radiology" : "LAB"}
-                              patienIdDetails={patienIdDetails}
-                              patientDetails={patientDetails}
-                              fileResult={patientDocumentResult}
-                              hccCounts={hccCounts}
-                              hccValidCount={hccValidCount}
-                              flagFirstData={flagFirstData}
+                            <FontAwesomeIcon
+                              icon={faArrowLeft}
+                              style={{
+                                color: "rgb(38 50 107)",
+                              }}
                             />
-                          </div>
-                        </>
-                      )}
-                      <div
-                        className={
-                          isSideNavShow
-                            ? `${visitStyles.visitDataMain}`
-                            : `${visitStyles.visitDataMainClose}`
-                        }
-                      >
-                        <div className={`${visitStyles.firstContainer}`}>
-                          <div
-                            className={
-                              isSideNavShow
-                                ? `${visitStyles.sideTab}`
-                                : `${visitStyles.sideTabClose}`
-                            }
-                          >
-                            <div className={`${visitStyles.sideNav}`}>
-                              <div className="sideNavscroll">
-                                <div
-                                  className="nav-control"
-                                  onClick={() => {
-                                    handleToogleCloseNav();
-                                  }}
-                                >
-                                  <div
-                                    className={`${visitStyles.sideNavArrow}`}
-                                  >
-                                    <span className="line">
-                                      <FontAwesomeIcon
-                                        className="fa fa-search form-control-feedback"
-                                        icon={
-                                          isSideNavShow
-                                            ? faAngleDoubleLeft
-                                            : faAngleDoubleRight
-                                        }
-                                        style={{
-                                          fontSize: "16px",
-                                        }}
-                                      />
-                                    </span>
-                                  </div>
+                          </Button>
+                        </div>
+                        <div className="col-xl-11">
+                          <FileDetails
+                            title={activeTab == 3 ? "Radiology" : "LAB"}
+                            patienIdDetails={patienIdDetails}
+                            patientDetails={patientDetails}
+                            fileResult={patientDocumentResult}
+                            hccCounts={hccCounts}
+                            hccValidCount={hccValidCount}
+                            flagFirstData={flagFirstData}
+                          />
+                        </div>
+                      </>
+                    )}
+                    <div
+                      className={
+                        isSideNavShow
+                          ? `${visitStyles.visitDataMain}`
+                          : `${visitStyles.visitDataMainClose}`
+                      }
+                    >
+                      <div className={`${visitStyles.firstContainer}`}>
+                        <div
+                          className={
+                            isSideNavShow
+                              ? `${visitStyles.sideTab}`
+                              : `${visitStyles.sideTabClose}`
+                          }
+                        >
+                          <div className={`${visitStyles.sideNav}`}>
+                            <div className="sideNavscroll">
+                              <div
+                                className="nav-control"
+                                onClick={() => {
+                                  handleToogleCloseNav();
+                                }}
+                              >
+                                <div className={`${visitStyles.sideNavArrow}`}>
+                                  <span className="line">
+                                    <FontAwesomeIcon
+                                      className="fa fa-search form-control-feedback"
+                                      icon={
+                                        isSideNavShow
+                                          ? faAngleDoubleLeft
+                                          : faAngleDoubleRight
+                                      }
+                                      style={{
+                                        fontSize: "16px",
+                                      }}
+                                    />
+                                  </span>
                                 </div>
-                                {/* <ul>
+                              </div>
+                              {/* <ul>
                                   {tabList.map((data, index) => (
                                     <Tooltip
                                       title={data.title}
@@ -1316,168 +1150,164 @@ const Details = ({
                                     </Tooltip>
                                   ))}
                                 </ul> */}
-                                <ul>
-                                  {tabList.map((data, index) => (
-                                    <Tooltip
-                                      key={index}
-                                      title={data.title}
-                                      placement="right"
+                              <ul>
+                                {tabList.map((data, index) => (
+                                  <Tooltip
+                                    key={index}
+                                    title={data.title}
+                                    placement="right"
+                                  >
+                                    <li
+                                      className={`${visitStyles.sideNavLabel}`}
+                                      onClick={() => handleNavigation(data)}
                                     >
-                                      <li
-                                        className={`${visitStyles.sideNavLabel}`}
-                                        onClick={() => handleNavigation(data)}
+                                      <a
+                                        className={`${
+                                          sideNavLabelActiveKey === data.title
+                                            ? visitStyles.sideNavLabelActive
+                                            : ""
+                                        }`}
                                       >
-                                        <a
-                                          className={`${
-                                            sideNavLabelActiveKey === data.title
-                                              ? visitStyles.sideNavLabelActive
-                                              : ""
-                                          }`}
-                                        >
-                                          {isActives?.response[
-                                            data.defaultComplete
-                                          ] ? (
-                                            <div className="menu-icon">
-                                              <Badge
-                                                count={
-                                                  <svg
-                                                    width="20"
-                                                    height="20"
-                                                    viewBox="0 0 20 20"
-                                                    fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                  >
-                                                    <circle
-                                                      cx="10"
-                                                      cy="10"
-                                                      r="5"
-                                                      fill="green"
-                                                    />
-                                                  </svg>
-                                                }
-                                                style={{
-                                                  background: "transparent",
-                                                  margin: "8px",
-                                                }}
-                                                offset={[10, 10]}
-                                                size="large"
-                                              >
-                                                <Image
-                                                  src={data.iconStyle}
-                                                  alt={data.title}
-                                                />
-                                              </Badge>
-                                            </div>
-                                          ) : (
-                                            <div className="menu-icon">
+                                        {isActives?.response[
+                                          data.defaultComplete
+                                        ] ? (
+                                          <div className="menu-icon">
+                                            <Badge
+                                              count={
+                                                <svg
+                                                  width="20"
+                                                  height="20"
+                                                  viewBox="0 0 20 20"
+                                                  fill="none"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                  <circle
+                                                    cx="10"
+                                                    cy="10"
+                                                    r="5"
+                                                    fill="green"
+                                                  />
+                                                </svg>
+                                              }
+                                              style={{
+                                                background: "transparent",
+                                                margin: "8px",
+                                              }}
+                                              offset={[10, 10]}
+                                              size="large"
+                                            >
                                               <Image
                                                 src={data.iconStyle}
                                                 alt={data.title}
                                               />
-                                            </div>
-                                          )}
+                                            </Badge>
+                                          </div>
+                                        ) : (
+                                          <div className="menu-icon">
+                                            <Image
+                                              src={data.iconStyle}
+                                              alt={data.title}
+                                            />
+                                          </div>
+                                        )}
 
-                                          <span
-                                            className={`${visitStyles.sideNavText}`}
-                                          >
-                                            {data.title}
-                                          </span>
-                                        </a>
-                                      </li>
-                                    </Tooltip>
-                                  ))}
-                                </ul>
-                              </div>
+                                        <span
+                                          className={`${visitStyles.sideNavText}`}
+                                        >
+                                          {data.title}
+                                        </span>
+                                      </a>
+                                    </li>
+                                  </Tooltip>
+                                ))}
+                              </ul>
                             </div>
                           </div>
                         </div>
+                      </div>
 
-                        <div
-                          className={`${visitStyles.secondContainer}`}
-                          style={{ height: "100%" }}
-                        >
-                          <>
-                            {activeTab == 1 ? (
-                              <Hcc
-                                patientHccResult={patientDocumentResult}
-                                year={dosYearDefalutSelect}
-                                setIsLoading={setIsLoading}
-                                selectDosValue={selectDosValue}
-                                setSelectDosValue={setSelectDosValue}
-                              />
-                            ) : activeTab == 2 ? (
-                              <NonHcc
-                                patientNonHccResult={patientDocumentResult}
-                                setIsLoading={setIsLoading}
-                                selectDosValue={selectDosValue}
-                                setSelectDosValue={setSelectDosValue}
-                              />
-                            ) : activeTab == 3 ? (
-                              <Radiology
-                                year={
-                                  dosYearDefalutSelect.value
-                                    ? dosYearDefalutSelect.value
-                                    : dosYearDefalutSelect
-                                }
-                                setDosYearDefalutSelect={
-                                  setDosYearDefalutSelect
-                                }
-                              />
-                            ) : (
-                              <Lab
-                                year={
-                                  dosYearDefalutSelect.value
-                                    ? dosYearDefalutSelect.value
-                                    : dosYearDefalutSelect
-                                }
-                                setDosYearDefalutSelect={
-                                  setDosYearDefalutSelect
-                                }
-                              />
-                            )}
-                          </>
-                        </div>
+                      <div
+                        className={`${visitStyles.secondContainer}`}
+                        style={{ height: "100%" }}
+                      >
+                        <>
+                          {activeTab == 1 ? (
+                            <Hcc
+                              patientHccResult={patientDocumentResult}
+                              year={dosYearDefalutSelect}
+                              setIsLoading={setIsLoading}
+                              selectDosValue={selectDosValue}
+                              setSelectDosValue={setSelectDosValue}
+                            />
+                          ) : activeTab == 2 ? (
+                            <NonHcc
+                              patientNonHccResult={patientDocumentResult}
+                              setIsLoading={setIsLoading}
+                              selectDosValue={selectDosValue}
+                              setSelectDosValue={setSelectDosValue}
+                            />
+                          ) : activeTab == 3 ? (
+                            <Radiology
+                              year={
+                                dosYearDefalutSelect.value
+                                  ? dosYearDefalutSelect.value
+                                  : dosYearDefalutSelect
+                              }
+                              setDosYearDefalutSelect={setDosYearDefalutSelect}
+                            />
+                          ) : (
+                            <Lab
+                              year={
+                                dosYearDefalutSelect.value
+                                  ? dosYearDefalutSelect.value
+                                  : dosYearDefalutSelect
+                              }
+                              setDosYearDefalutSelect={setDosYearDefalutSelect}
+                            />
+                          )}
+                        </>
+                      </div>
 
-                        <div className={`${visitStyles.thirdContainer}`}>
-                          <div className={`${visitStyles.flag_container}`}>
-                            <ul className="">
-                              {flagList?.map((data) => {
-                                return (
-                                  <Tooltip title={data.name} placement="left">
-                                    <li
-                                      className={
-                                        flagContainerActive == data.name
-                                          ? `${visitStyles.commentsTagActive}`
-                                          : `${visitStyles.commentsTag}`
-                                      }
-                                      onClick={() => addComments(data.name)}
-                                    >
-                                      {data.name === "Flag" ? (
-                                        <Badge
-                                          count={
-                                            flagsDetailsResult?.response?.length
-                                          }
-                                          style={{
-                                            background: "#04306f",
-                                            margin: "-2px",
-                                          }}
-                                          size="large"
-                                        >
-                                          <i>{data.icon}</i>
-                                        </Badge>
-                                      ) : (
+                      <div className={`${visitStyles.thirdContainer}`}>
+                        <div className={`${visitStyles.flag_container}`}>
+                          <ul className="">
+                            {flagList?.map((data) => {
+                              return (
+                                <Tooltip title={data.name} placement="left">
+                                  <li
+                                    className={
+                                      flagContainerActive == data.name
+                                        ? `${visitStyles.commentsTagActive}`
+                                        : `${visitStyles.commentsTag}`
+                                    }
+                                    onClick={() => addComments(data.name)}
+                                  >
+                                    {data.name === "Flag" ? (
+                                      <Badge
+                                        count={
+                                          flagsDetailsResult?.response?.length
+                                        }
+                                        style={{
+                                          background: "#04306f",
+                                          margin: "-2px",
+                                        }}
+                                        size="large"
+                                      >
                                         <i>{data.icon}</i>
-                                      )}
-                                    </li>
-                                  </Tooltip>
-                                );
-                              })}
-                            </ul>
-                          </div>
+                                      </Badge>
+                                    ) : (
+                                      <i>{data.icon}</i>
+                                    )}
+                                  </li>
+                                </Tooltip>
+                              );
+                            })}
+                          </ul>
                         </div>
                       </div>
                     </div>
                   </div>
+                 
 
                   {/* Modals */}
 
@@ -1536,7 +1366,10 @@ const Details = ({
                         )}
                       </>
                     ) : flagContainerActive === "Add DOS & Provider" ? (
-                      <ManuallyAddProvider selectDosValue={selectDosValue} dosYear={dosYear} />
+                      <ManuallyAddProvider
+                        selectDosValue={selectDosValue}
+                        dosYear={dosYear}
+                      />
                     ) : null}
                   </Drawer>
                 </div>
@@ -1582,7 +1415,8 @@ const enhancer = connect(
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     isActives: state.patientDetails.details.activeLabel?.data,
     storeFileDetails: state.patientDetails?.details?.getStoreFileIdDetails,
-    preStoreFileDetails: state.patientDetails?.details?.getStoreFileIdDetailsPre
+    preStoreFileDetails:
+      state.patientDetails?.details?.getStoreFileIdDetailsPre,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,

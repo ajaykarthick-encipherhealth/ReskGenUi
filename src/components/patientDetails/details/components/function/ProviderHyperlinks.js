@@ -93,7 +93,7 @@ export const getProviderNameTag = ({
                 }}
               />
             </i>
-            <Tooltip title={res}> {truncateString(res, 30)}</Tooltip>
+            <Tooltip title={res}> {truncateString(res, 20)}</Tooltip>
           </span>
         );
         if (res !== "") {
@@ -106,6 +106,7 @@ export const getProviderNameTag = ({
             overlayStyle={{ zIndex: 1000 }}
             content={
               <>
+              {res?.length > 20 && <div>{res}</div>}
                 {getProviderPopoverHyperlink({
                   value: headerResult,
                   diagnosisCode: diagnosisCode,
@@ -143,7 +144,7 @@ export const getProviderNameTag = ({
                   }}
                 />
               </i>
-              {res}
+              {truncateString(res, 20)}
             </span>
           </Popover>
         );
