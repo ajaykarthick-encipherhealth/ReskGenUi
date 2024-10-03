@@ -296,7 +296,7 @@ export const priorityStatus = (value) => {
 export const generateOptionsList = (items) => {
   if (items?.data?.data?.response?.length > 0) {
     const options = [
-      { label: "All", value: "All" },
+      { label: "All", value: "" },
       ...items?.data?.data?.response?.map((item) => ({
         label: (
           <span>
