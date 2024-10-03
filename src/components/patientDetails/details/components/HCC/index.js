@@ -928,7 +928,7 @@ const HccCards = ({
                                     </Tooltip>
                                   )}
                                   {data?.stateIndicators?.includes("CONFLICT_CONDITION") && (
-                                    <Tooltip title="RADIOLOGY">
+                                    <Tooltip title="CONFLICT CONDITION">
                                       <span
                                         className={` mt-2 ${visitStyles.radiologyStatus}`}
                                         bg={`  mt-2 bg-bg-eight `}
