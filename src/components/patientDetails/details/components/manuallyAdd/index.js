@@ -175,7 +175,7 @@ const ManuallyAdd = ({
       } else {
         try {
           const res = await getProviderSection({
-            processedYear: year.value,
+            processedYear: year?.value,
             patientId: await getStorage("patientId"),
             dateOfService: val,
             fileId: patientDetailsResult?.data?.response?.fileId
@@ -664,7 +664,7 @@ const ManuallyAdd = ({
             : null,
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
-        processedYear: year.value,
+        processedYear: year?.value,
       };
     } else if (isEditMeat) {
       data = {
@@ -696,7 +696,7 @@ const ManuallyAdd = ({
             : null,
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
-        processedYear: year.value,
+        processedYear: year?.value,
       };
     } else {
       data = {
@@ -721,7 +721,7 @@ const ManuallyAdd = ({
           .map((item) => item.hyperlinks)
           .flat(capturedSections.length + 1),
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
-        processedYear: year.value,
+        processedYear: year?.value,
       };
     }
     if (validCode.toLowerCase() == "valid code") {
