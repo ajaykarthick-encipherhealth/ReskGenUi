@@ -337,13 +337,22 @@ const VisitData = ({
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                       >
-                        <div
+                        <div  onClick={() => handleShowList("care")}
                           className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
                         >
                           <span
                             className={`${visitStyles.suggested_title_name}`}
                           >
-                            CARE GAP
+                             <span className="mx-1">
+                            <FontAwesomeIcon
+                              icon={
+                                showList.includes("care")
+                                  ? faAngleDown
+                                  : faAngleRight
+                              }
+                            />
+                          </span>
+                            CARE GAP  / SUGGESTED CODES
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
@@ -752,15 +761,6 @@ const VisitData = ({
                           <span
                             className={`${visitStyles.suggested_title_name}`}
                           >
-                             <span className="mx-1">
-                            <FontAwesomeIcon
-                              icon={
-                                showList.includes("care")
-                                  ? faAngleDown
-                                  : faAngleRight
-                              }
-                            />
-                          </span>
                             CARE GAP / SUGGESTED CODES
                           </span>
                           <div className="d-flex justify-content-center">
