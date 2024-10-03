@@ -91,6 +91,7 @@ const VisitData = ({
   const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
   const [showList, setShowList] = useState(["care"]);
   const [selectCardTitle, setSelectCardTitle] = useState('');
+  const [potentialList, setPotentialList] = useState([]);
 
 
   useEffect(() => {
@@ -115,7 +116,9 @@ const VisitData = ({
       "",
       setDeletedMeatList,
       "",
-      setAllMeatList
+      setAllMeatList,
+      "",
+      setPotentialList
     );
 
     var dotLoading = (
@@ -155,7 +158,7 @@ const VisitData = ({
     setIsModalOpenValidCodes(false);
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
-    setFileLoading(false);
+    // setFileLoading(false);
     setIsEditHccForm(false);
     setOpens(false);
   };
@@ -438,7 +441,7 @@ const VisitData = ({
                           <span
                             className={`${visitStyles.potential_title_badge}`}
                           >
-                            0
+                          {potentialList?.length}
                           </span>
                         </div>
                       </div>
@@ -457,7 +460,7 @@ const VisitData = ({
                         >
                           <div className={visitStyles.hccStickey_head}>
                             <HccCards
-                              list={[]}
+                              list={potentialList}
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
@@ -487,6 +490,8 @@ const VisitData = ({
                               setIsValidAction={setIsValidAction}
                               cardTitle="POTENTIAL"
                               provided={provided}
+                              setSuggestedMeatForm={setSuggestedMeatForm}
+                              setSelectCardTitle={setSelectCardTitle}
                               remove
                             />
                           </div>
@@ -834,14 +839,14 @@ const VisitData = ({
                             <span
                               className={`${visitStyles.potential_title_badge}`}
                             >
-                              {0}
+                              {potentialList?.length}
                             </span>
                           </div>
                         </div>
                         <div className={visitStyles.HccContainer}>
                           <div className={visitStyles.hccStickey_head}>
                             <HccCards
-                              list={[]}
+                              list={potentialList}
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
@@ -876,6 +881,7 @@ const VisitData = ({
                               provided={provided}
                               isVisitData={true}
                               setSuggestedMeatForm={setSuggestedMeatForm}
+                              setSelectCardTitle={setSelectCardTitle}
                             />
                           </div>
                         </div>

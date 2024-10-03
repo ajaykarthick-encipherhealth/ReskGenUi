@@ -5,6 +5,7 @@ import {
   CloseCircleFilled,
   CheckCircleFilled,
   RightCircleOutlined,
+  IssuesCloseOutlined
 } from "@ant-design/icons";
 import { Tooltip, Popconfirm, message } from "antd";
 import {
@@ -19,6 +20,7 @@ const MovementAction = ({
   validAction,
   suggestedAction,
   deleteAction,
+  potentialAction,
   cardTitle,
   setConfirmNotesModalValid,
   onchangeValid,
@@ -131,6 +133,26 @@ const MovementAction = ({
                   "Move to Suggested",
                   cardTitle
                 ),
+                  onchangeValid(result.diagnosisCode, result),
+                  onChangeValues(result);
+              }}
+            />
+          </Popconfirm>
+        )}
+        {potentialAction && (
+          <Popconfirm
+            onConfirm={() => {
+              onConfirmValidMove();
+            }}
+            title="You want move to potential?"
+            placement="bottom"
+            okText="Yes"
+            cancelText="No"
+          >
+            <IssuesCloseOutlined
+              className={styles.suggestedIcon}
+              onClick={() => {
+                moveToStrightAction(setIsValidAction, "Move to Potential", cardTitle),
                   onchangeValid(result.diagnosisCode, result),
                   onChangeValues(result);
               }}

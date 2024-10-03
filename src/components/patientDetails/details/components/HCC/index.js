@@ -332,6 +332,9 @@ const HccCards = ({
                                     deleteAction={
                                       cardTitle == "DELETED" ? false : true
                                     }
+                                    potentialAction={
+                                      cardTitle == "POTENTIAL" ? false : true
+                                    }
                                     setIsValidAction={setIsValidAction}
                                     cardTitle={cardTitle}
                                     setConfirmNotesModalValid={
@@ -349,7 +352,7 @@ const HccCards = ({
                                     meatCriteriaList={meatCriteriaList}
                                     setSelectCardTitle={setSelectCardTitle}
                                   />
-                                )}
+                                 )}
                                 <Popover
                                   placement="bottom"
                                   title={""}

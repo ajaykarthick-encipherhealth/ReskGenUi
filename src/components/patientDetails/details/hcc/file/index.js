@@ -97,6 +97,7 @@ const File = ({
   const [showList, setShowList] = useState(["care"]);
   const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
   const [selectCardTitle, setSelectCardTitle] = useState('');
+  const [potentialList, setPotentialList] = useState([]);
 
 
   useEffect(() => {
@@ -121,7 +122,9 @@ const File = ({
       "",
       setDeletedMeatList,
       "",
-      setAllMeatList
+      setAllMeatList,
+      "",
+      setPotentialList
     );
   }, [patientDetailsResult]);
 
@@ -140,7 +143,7 @@ const File = ({
     setIsModalOpenRadiology(false);
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
-    setFileLoading(false);
+    // setFileLoading(false);
     setIsEditHccForm(false);
     setOpens(false);
   };
@@ -526,7 +529,7 @@ const File = ({
                           <span
                             className={`${visitStyles.potential_title_badge}`}
                           >
-                            0
+                             {potentialList?.length}
                           </span>
                         </div>
                       </div>
@@ -544,7 +547,7 @@ const File = ({
                         >
                           <div className={visitStyles.hccStickey_head}>
                             <HccCards
-                              list={[]}
+                              list={potentialList}
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
@@ -574,6 +577,8 @@ const File = ({
                               setIsValidAction={setIsValidAction}
                               cardTitle="POTENTIAL"
                               provided={provided}
+                              setSuggestedMeatForm={setSuggestedMeatForm}
+                              setSelectCardTitle={setSelectCardTitle}
                               remove
                             />
                           </div>

@@ -157,7 +157,8 @@ export const getPatientDetails = async (
   setDeletedMeatList,
   setInvalidComboDiseaseCodesList,
   setAllMeatList,
-  setCareGapComboDiseaseCodesList
+  setCareGapComboDiseaseCodesList,
+  setPotentialList
 ) => {
   const userId = getStorage("userId");
   if (patientDetailsResult?.data?.response) {
@@ -176,6 +177,7 @@ export const getPatientDetails = async (
       var meatHeaderList = [];
       var deletedmeatListArr = [];
       var rafScore = [];
+      var potentialListAll = [];
 
       if (result.scoreDetailVersionDTO != null) {
         rafScore = result.scoreDetailVersionDTO;
@@ -368,6 +370,105 @@ export const getPatientDetails = async (
             dosList.push(res.date);
           });
           suggestListAll.push({
+            ...res,
+            actualDescription: res.actualDescription,
+            diagnosisCodeFinding: res.diagnosisCode,
+            isHccValid: res.isHccValid,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: res.dateOfServices,
+            getPlace: "Hcc",
+            defaultPosition: res.defaultPosition,
+            providerName: providerList,
+            children: res.children ? res.children : [],
+            isMostSpecific: getStateIndicators(
+              res.stateIndicators,
+              "MOST_SPECIFIC"
+            ),
+            isCmsHcc: res.isCmsHcc,
+            isRxHcc: res.isRxHcc,
+            isManuallyAdded: getStateIndicators(
+              res.stateIndicators,
+              "MANUALLY_ADDED"
+            ),
+            isComboCode: getStateIndicators(res.stateIndicators, "COMBO_CODE"),
+            isRadiology: getStateIndicators(res.stateIndicators, "RADIOLOGY"),
+            isLab: getStateIndicators(res.stateIndicators, "LAB"),
+            providerDeatils: res.provider,
+            notes: res.notes,
+            hyperlinks: res?.hyperlinks,
+            suspectType: res.suspectType,
+            dateOfServices: res.dateOfServices,
+            dbDescription: res.dbDescription,
+          });
+        }
+      });
+
+      sortFunction({
+        array: result?.potentialDiseases,
+        sortKey: "diagnosisCode",
+      })?.map((res, index) => {
+        const isShows =
+          userId == "reviewer@3gencogentai.onmicrosoft.com" &&
+          res.riskAdjustmentDtoList?.some((item) =>
+            item?.cmsHcc?.some((hcc) => hcc.value > 1)
+          );
+        if (res.isShow != false && isShows) {
+          var providerList = [];
+          var dosList = [];
+          res.providerNames?.map((res) => {
+            providerList.push(res);
+          });
+          res.dateOfServices?.map((res) => {
+            dosList.push(res.date);
+          });
+          potentialListAll.push({
+            ...res,
+            actualDescription: res.actualDescription,
+            diagnosisCodeFinding: res.diagnosisCode,
+            isHccValid: res.isHccValid,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: res.dateOfServices,
+            getPlace: "Hcc",
+            defaultPosition: res.defaultPosition,
+            providerName: providerList,
+            children: res.children ? res.children : [],
+            isMostSpecific: getStateIndicators(
+              res.stateIndicators,
+              "MOST_SPECIFIC"
+            ),
+            isCmsHcc: res.isCmsHcc,
+            isRxHcc: res.isRxHcc,
+            isManuallyAdded: getStateIndicators(
+              res.stateIndicators,
+              "MANUALLY_ADDED"
+            ),
+            isComboCode: getStateIndicators(res.stateIndicators, "COMBO_CODE"),
+            isRadiology: getStateIndicators(res.stateIndicators, "RADIOLOGY"),
+            isLab: getStateIndicators(res.stateIndicators, "LAB"),
+            providerDeatils: res.provider,
+            notes: res.notes,
+            hyperlinks: res?.hyperlinks,
+            suspectType: res.suspectType,
+            dateOfServices: res.dateOfServices,
+            dbDescription: res.dbDescription,
+          });
+        } else if (
+          res.isShow != false &&
+          userId != "reviewer@3gencogentai.onmicrosoft.com"
+        ) {
+          var providerList = [];
+          var dosList = [];
+          res.providerNames?.map((res) => {
+            providerList.push(res);
+          });
+          res.dateOfServices?.map((res) => {
+            dosList.push(res.date);
+          });
+          potentialListAll.push({
             ...res,
             actualDescription: res.actualDescription,
             diagnosisCodeFinding: res.diagnosisCode,
@@ -710,6 +811,14 @@ export const getPatientDetails = async (
         });
       });
 
+      result?.potentialDiseases?.map((res) => {
+        res?.dateOfServices.map((res2) => {
+          encounterDateArr.push({
+            name: res2,
+          });
+        });
+      });
+
       var encounterDateArrDublicatesRemove = getUniqueListBy(
         encounterDateArr,
         "name"
@@ -929,6 +1038,7 @@ export const getPatientDetails = async (
       setAllDisList &&
         setAllDisList([...hccDisArray, ...deleteHccList, ...suggestListAll]);
       setAllMeatList && setAllMeatList([...meatListArr, ...deletedmeatListArr]);
+      setPotentialList && setPotentialList(potentialListAll)
 
       // if (result.suggestRadiology != null) {
       //   if (result.suggestRadiology.length != 0) {
