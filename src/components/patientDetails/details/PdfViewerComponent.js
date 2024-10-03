@@ -6,7 +6,7 @@ import Style from "./style.module.css";
 import { portalPdfUrl } from "../../../utils/config";
 import { pdfEncrypt } from "../../headerFilters/functions";
 import { getStorage } from "../../../utils/storages";
-import { serverControl } from "../../utils/config";
+import { serverControl } from "../../..//utils/config";
 const PdfViewer = ({
   src,
   searchQuery,
