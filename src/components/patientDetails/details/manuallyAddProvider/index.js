@@ -40,7 +40,7 @@ const ManuallyAddProvider = ({
       providerPageNumber: data?.hyperlinks[0]?.pageNumber || "",
       providerCredentials: data?.providerCredentials || "",
       providerReference: data?.hyperlinks[0]?.substring || "",
-      isProviderSigned: data?.unSigned || false,
+      isProviderSigned: !data?.noCredential?true:false || false,
       fileType: data?.fileType || "",
     });
     setProvidersList(data);
