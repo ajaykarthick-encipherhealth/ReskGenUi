@@ -761,15 +761,6 @@ const VisitData = ({
                           <span
                             className={`${visitStyles.suggested_title_name}`}
                           >
-                             <span className="mx-1">
-                            <FontAwesomeIcon
-                              icon={
-                                showList.includes("care")
-                                  ? faAngleDown
-                                  : faAngleRight
-                              }
-                            />
-                          </span>
                             CARE GAP / SUGGESTED CODES
                           </span>
                           <div className="d-flex justify-content-center">
