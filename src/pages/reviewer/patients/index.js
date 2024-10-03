@@ -69,10 +69,10 @@ const bullets = [
         name: "Completed",
       },
       { color: "#AD94FA", name: "Hold" },
-      {
-        color: "#3B3486",
-        name: "ABORTED BY CRON",
-      },
+      // {
+      //   color: "#3B3486",
+      //   name: "ABORTED BY CRON",
+      // },
     ],
   },
 ];
@@ -87,9 +87,10 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     name: "",
     patientId: "",
   };
-  const filteratedDashboardData = useSelector(
-    (state) => state.patients.filteredList
-  );
+  // const filteratedDashboardData = useSelector(
+  //   (state) => state.patients.filteredList
+  // );
+
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [localUserId, setLocalUserId] = useState("");
   const [searchVal, setSearchVal] = useState(navigate.query.searchTextValue);
@@ -107,31 +108,32 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const [showFilters, setShowFilters] = useState(
     navigate?.query ? true : false
   );
-  const dueStartDate = filteratedDashboardData?.dayDate
-    ? moment(filteratedDashboardData?.dayDate)?.format("YYYY-MM-DD") +
+
+  const dueStartDate = navigate?.query?.dueDateStart
+    ? moment(navigate?.query?.dueDateStart)?.format("YYYY-MM-DD") +
       "T00:00:00.000Z"
     : "";
 
-  const dueEndDate = filteratedDashboardData?.dayDate
-    ? moment(filteratedDashboardData?.dayDate)?.format("YYYY-MM-DD") +
+  const dueEndDate = navigate?.query?.dueDateStart
+    ? moment(navigate?.query?.dueDateStart)?.format("YYYY-MM-DD") +
       "T23:59:59.000Z"
     : "";
-
   const [dueDateStart, setDueDateStart] = useState(dueStartDate);
   const [dueDateEnd, setDueDateEnd] = useState(dueEndDate);
   const [processedStart, setProcessedStart] = useState("");
   const [processedEnd, setProcessedEnd] = useState("");
   const [statusSelectedStatus, setStatusSelectedStatus] = useState(
-    navigate.query?.statusSelectedStatus ||
-      filteratedDashboardData?.status?.toUpperCase()
+    navigate.query?.statusSelectedStatus
+      ? navigate.query?.statusSelectedStatus?.toUpperCase()
+      : ""
   );
   const [searchTextValue, setSearchTextValue] = useState(
     navigate.query?.searchTextValue
   );
 
-  const dayDateFormated = filteratedDashboardData?.date
-    ? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY")
-    : dayjs(filteratedDashboardData?.dayDate).format("MM-DD-YYYY");
+  const dayDateFormated = navigate?.query?.dueDateStart
+    ? dayjs(navigate?.query?.dueDateStart).format("MM-DD-YYYY")
+    : dayjs(navigate?.query?.dueDateStart).format("MM-DD-YYYY");
   const [defaultStartDate, setDefaultStartDate] = useState(
     dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
   );
@@ -158,19 +160,19 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
 
   const [selectedDates, setSelectedDates] = useState([
     navigate?.query?.dueDateStart
-      ? dayjs(navigate?.query?.dueDateStart)
-      : dayjs(filteratedDashboardData?.date),
+      ? dayjs(JSON.parse(navigate?.query?.dueDateStart))
+      : undefined,
     navigate?.query?.dueDateEnd
       ? dayjs(navigate?.query?.dueDateEnd)
-      : dayjs(filteratedDashboardData?.date),
+      : undefined,
   ]);
   const [selectedDates2, setSelectedDates2] = useState([
     navigate?.query?.processedStart
       ? dayjs(navigate?.query?.processedStart)
-      : dayjs(filteratedDashboardData?.date),
+      : undefined,
     navigate?.query?.processedEnd
       ? dayjs(navigate?.query?.processedEnd)
-      : dayjs(filteratedDashboardData?.date),
+      : undefined,
   ]);
   useEffect(() => {
     setDefaultStartDate(
@@ -216,7 +218,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
       );
     }
   }, [
-    filteratedDashboardData,
     pageNo,
     sort,
     selectedPriority,
@@ -311,6 +312,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     // getpatientsListFilter({ url: resoureUrl });
     resetPageNumber(setPageNo);
   };
+
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
     inputValue.name = data.patientName;
@@ -384,6 +386,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     }
     setSelectedPriority(value);
   };
+
   const handleDatePickerChange = (dateString) => {
     if (dateString[0] != "") {
       let convertStartDate =
@@ -505,7 +508,23 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   // );
 
   const options = [{ label: "All", value: "" }, ...priorityOptions];
-
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const encodedParams = urlParams.get("params");
+    if (encodedParams) {
+      const decodedParams = JSON.parse(atob(encodedParams));
+      setStatusSelectedStatus(
+        decodedParams?.statusSelectedStatus?.toUpperCase()
+      );
+      setSelectedDates([
+        dayjs(decodedParams?.dueDateStart),
+        dayjs(decodedParams?.dueDateEnd),
+      ]);
+      setDueDateStart(decodedParams?.dueDateStart);
+      setDueDateEnd(decodedParams?.dueDateEnd);
+    }
+  }, [navigate.query]);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -582,11 +601,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                   options={statusOptions}
                                   className="custom-react-select"
                                   isSearchable={false}
-                                  placeholder={
-                                    filteratedDashboardData
-                                      ? filteratedDashboardData?.status?.toUpperCase()
-                                      : "Select Status"
-                                  }
+                                  placeholder={"Select Status"}
                                 />
                               </div>
                             </div>
@@ -599,15 +614,20 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                     resetPageNumber(setPageNo);
                                   }}
                                   value={
-                                    selectedPriority && {
-                                      label: selectedPriority,
-                                      value: selectedPriority,
-                                    }
+                                    selectedPriority
+                                      ? {
+                                          label: selectedPriority,
+                                          value: selectedPriority,
+                                        }
+                                      : {
+                                          label: "ALL",
+                                          value: "",
+                                        }
                                   }
                                   options={options}
                                   className="custom-react-select"
                                   isSearchable={false}
-                                  placeholder={"Select Status"}
+                                  placeholder={"Select Priority"}
                                 />
                               </div>
                             </div>
@@ -625,14 +645,14 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                   onCalendarChange={(val) =>
                                     setSelectedDates(val)
                                   }
-                                  defaultValue={
-                                    filteratedDashboardData
-                                      ? [
-                                          dayjs(defaultStartDate, "MM-DD-YYYY"),
-                                          dayjs(defaultEndDate, "MM-DD-YYYY"),
-                                        ]
-                                      : []
-                                  }
+                                  // defaultValue={
+                                  //   navigate?.query
+                                  //     ? [
+                                  //         dayjs(defaultStartDate, "MM-DD-YYYY"),
+                                  //         dayjs(defaultEndDate, "MM-DD-YYYY"),
+                                  //       ]
+                                  //     : []
+                                  // }
                                   disabledDate={(current) =>
                                     disableFutureDates(current)
                                   }

@@ -9,7 +9,11 @@ import Header from "../../../../jsx/layouts/nav/Header";
 import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
 import { extractLatestData } from "../../auditing";
-import { generateOptionsList } from "../../../../components/headerFilters/functions";
+import {
+  generateOptionsList,
+  renderUserPrfoile,
+  renderUserPrfoileAvatar,
+} from "../../../../components/headerFilters/functions";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import dayjs from "dayjs";
 import userStyles from "./styles.module.css";
@@ -135,6 +139,9 @@ const Index = ({
     router?.query?.selectedAuditOption ? router?.query?.selectedAuditOption : ""
   );
   const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState(
+    router?.query?.selAuditAllocatedBy ? router?.query?.selAuditAllocatedBy : ""
+  );
+  const [selAuditAllocatedByVal, setSelAuditAllocatedByVal] = useState(
     router?.query?.selAuditAllocatedBy ? router?.query?.selAuditAllocatedBy : ""
   );
   const [aduitCompletedStartDate, setAduitCompletedStartDate] = useState(
@@ -383,16 +390,12 @@ const Index = ({
                 <Image src={leftArrow} />
               </button>
               <div className={userStyles.userNameContainer}>
-                <img
-                  src={currentUser?.data?.response?.profileImageUrl}
-                  alt="User Avatar"
-                  width={35}
-                  height={35}
-                  style={{
-                    borderRadius: "50%",
-                    marginRight: "5px",
-                  }}
-                />
+                {renderUserPrfoileAvatar(
+                  currentUser?.data?.response?.firstName,
+                  currentUser?.data?.response?.lastName,
+                  currentUser?.data?.response?.profileImageUrl,
+                  "header"
+                )}
                 <span>
                   {currentUser?.data?.response?.firstName}{" "}
                   {currentUser?.data?.response?.lastName}
@@ -498,6 +501,8 @@ const Index = ({
                       setPageNo={setPageNo}
                       bulletsTitle="Reviewed Status"
                       badgesTitle="Audited Status"
+                      selAuditAllocatedByVal={selAuditAllocatedByVal}
+                      setSelAuditAllocatedByVal={setSelAuditAllocatedByVal}
                     />
                   </div>
                   <div

@@ -24,7 +24,7 @@ const ContentGroupCard = ({
   selectedRows,
   auditstatusBodyTemplate,
   processstatusBodyTemplate,
-  flag=[],
+  flag = [],
   rafSum,
   patientName,
   processedDate,
@@ -125,9 +125,12 @@ const ContentGroupCard = ({
               type="checkbox"
               onChange={() => handleRowCheckboxChange(item)}
               className={TableStyle.customChecked}
-              checked={selectedRows?.some(
-                (selectedRow) => selectedRow === patientId
-              )}
+              checked={
+                selectedRows?.length > 0 &&
+                selectedRows?.some(
+                  (selectedRow) => selectedRow === item?.patientId
+                )
+              }
             />
           )}
         </div>
@@ -217,7 +220,9 @@ const ContentGroupCard = ({
                 </Tooltip>
               </div>
               <div className={styles.avatarAlign}>
-                <Tooltip title={flag?.length>0 && flag[0]?.flagDetails?.flagName}>
+                <Tooltip
+                  title={flag?.length > 0 && flag[0]?.flagDetails?.flagName}
+                >
                   {/* <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="23"
@@ -239,11 +244,12 @@ const ContentGroupCard = ({
                   <FontAwesomeIcon
                     icon={faFlag}
                     style={{
-                      color: flag?.length>0 && flag[0]?.flagDetails?.flagColour
-                        ? flag?.length>0 && flag[0]?.flagDetails?.flagColour
-                        : "#C0C0C0",
-                      fontSize:"20px",
-                    marginTop:"5px"
+                      color:
+                        flag?.length > 0 && flag[0]?.flagDetails?.flagColour
+                          ? flag?.length > 0 && flag[0]?.flagDetails?.flagColour
+                          : "#C0C0C0",
+                      fontSize: "20px",
+                      marginTop: "5px",
                     }}
                   />
                 </Tooltip>

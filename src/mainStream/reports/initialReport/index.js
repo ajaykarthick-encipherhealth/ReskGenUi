@@ -83,7 +83,7 @@ const InitialCard = ({
           sort?.sortField ? sort?.sortField : ""
         }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&allPatientIds=${
           selectAll ? false : true
-        }&patientIds=${flagsList ? flagsList : ""}`;
+        }&allFlags=${selectAllFlags}`;
         const res = await fetch(
           ENDPOINTS.apiEndoint + url,
           // `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
@@ -126,9 +126,9 @@ const InitialCard = ({
           userName === "REVIEWER" ? selectManager : ""
         }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${
           role == "tenant_admin" ? "" : orgId
-        }&patientIds=${flagsList ? flagsList : ""}&allPatientIds=${
+        }&allPatientIds=${
           selectAll ? false : true
-        }`;
+        }&allFlags=${selectAllFlags}`;
         const res = await fetch(
           ENDPOINTS.apiEndoint + url,
           // `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
@@ -345,8 +345,8 @@ const InitialCard = ({
                   paddingBottom: "10px",
                 }}
               >
-                {reportListAll?.response?.data?.length > 0 && (
-                  <>
+                {/* {reportListAll?.response?.data?.length > 0 && (
+                  <> */}
                     <div className="col-xl-1 d-flex">
                       <div>
                         <input
@@ -358,8 +358,7 @@ const InitialCard = ({
                           }
                           checked={
                             selectAll &&
-                            reportListAll?.response?.totalElements ==
-                              selectedRows.length
+                              selectedRows?.length>0
                           }
                         />
                       </div>
@@ -367,7 +366,6 @@ const InitialCard = ({
                         All
                       </span>
                     </div>
-
                     <div className="col-xl-1 d-flex">
                       <div>
                         <input
@@ -386,10 +384,9 @@ const InitialCard = ({
                         All Flags
                       </span>
                     </div>
-                  </>
-                )}
+                  {/* </>
+                // )} */}
               </div>
-
               <div className="row">
                 <div>
                   <div className=" col-xl-12 d-flex">

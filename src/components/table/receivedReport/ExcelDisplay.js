@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Spreadsheet from "react-spreadsheet";
 import { Empty } from "antd";
 
-const ExcelDisplay = ({ tableData, loading,extention }) => {
+const ExcelDisplay = ({ tableData, loading, extention }) => {
   const [data, setData] = useState();
 
   useEffect(() => {
@@ -37,32 +37,14 @@ const ExcelDisplay = ({ tableData, loading,extention }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {!data && tableData?.length===0 && loading && !extention && tableData?.length &&(
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          loading....
+      {loading ? (
+        <div className="d-flex align-items-center justify-content-center">
+          Loading....
         </div>
-      ) }
-      {Array.isArray(data) &&
-        data?.length > 0 &&
-        !allEmpty &&
-        !loading &&
-        tableData?.length !== 0 ? (
-        !allEmpty && <Spreadsheet data={data} onChange={setData} />
+      ) : Array.isArray(data) && data?.length > 0 ? (
+        <Spreadsheet data={data} onChange={setData} />
       ) : (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {" "}
+        <div className="d-flex align-items-center justify-content-center">
           <Empty />
         </div>
       )}

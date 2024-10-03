@@ -1,5 +1,5 @@
 import { requestPortal } from "../../../utils/network";
-import { getStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 
 export async function patientDetails(
   patientId,
@@ -90,8 +90,7 @@ export async function labDetails(
   }
 }
 
-
-export async function labPDFData({fileId}) {
+export async function labPDFData({ fileId }) {
   const options = {
     method: "GET",
   };
@@ -107,12 +106,17 @@ export async function patientHccFile(fileId) {
   const options = {
     method: "GET",
   };
-  const data = await requestPortal(
-    // `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`,
-    `management/patient/report/getfile/validator?blobName=${fileId}`,
+  const result = await requestPortal(
+    `dbservice/fileDetail/findbyid?fileId=${fileId}`,
     options
   );
-  return data;
+  setStorage("fileId", result?.response?.azureBlobPath);
+  // const data = await requestPortal(
+  //   // `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`,
+  //   `management/patient/report/getfile/validator?blobName=${result?.response?.azureBlobPath}`,
+  //   options
+  // );
+  return result;
 }
 
 export async function dosWiseList(patientId, year) {
@@ -166,6 +170,57 @@ export async function getProviderAndCaptured(obj) {
   };
   const data = await requestPortal(
     `dbservice/provider/getProviderAndCapturedSection`,
+    options
+  );
+  return data;
+}
+
+export async function deleteflag(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`dbservice/flagdetails/removeFlag`, options);
+  return data;
+}
+
+export async function deleteNotes(obj) {
+  const options = {
+    method: "DELETE",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`dbservice/notes/delete`, options);
+  return data;
+}
+
+export async function deleteComments(obj) {
+  const options = {
+    method: "DELETE",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`dbservice/comment/delete`, options);
+  return data;
+}
+
+export async function addNotes(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/notes`,
+    options
+  );
+  return data;
+}
+
+export async function addComments(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/comment`,
     options
   );
   return data;
@@ -258,7 +313,7 @@ export async function labdosWiseList(patientId, year) {
   );
   return data;
 }
-export async function activeLabel({patientId, year, dos}) {
+export async function activeLabel({ patientId, year, dos }) {
   const options = {
     method: "GET",
   };
@@ -267,4 +322,51 @@ export async function activeLabel({patientId, year, dos}) {
     options
   );
   return data;
+}
+
+export async function suggestedToValid(obj, cardTitle) {
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(obj),
+  };
+  var apiUrl = "management/disease/move/suggestedtovalid";
+  if (cardTitle.name == "Move to HCC" && cardTitle.title == "DELETED") {
+    apiUrl = "management/disease/move/deletedtovalid";
+  }
+  const data = await requestPortal(apiUrl, options);
+  return data;
+}
+
+export async function suggestedMeatCheck(diagnosisCode) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/meat/conformation?diagnosisCode=${diagnosisCode}`,
+    options
+  );
+  return data;
+}
+// manuallyAddDosAndProvider
+export async function manuallyAddDosAndProvider(data) {
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(data),
+  };
+  const res = await requestPortal(
+    `management/dos-provider/add-update`,
+    options
+  );
+  return res;
+}
+export async function manuallyAddDosAndProviderList(year) {
+  const patientId = getStorage("patientId");
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(
+    `management/dos-provider/get-dos-and-provider-information?patientId=${patientId}&processedYear=${year}`,
+    options
+  );
+  return res;
 }

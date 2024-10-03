@@ -12,7 +12,7 @@ import {
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Drawer, Popover, notification } from "antd";
+import { Drawer, Modal, Popover, notification } from "antd";
 import { Button, Offcanvas, Spinner } from "react-bootstrap";
 import styles from "../styles.module.css";
 import PdfViewer from "../../PdfViewerComponent";
@@ -50,6 +50,7 @@ const File = ({
   loading,
   isDosSelected,
   labFileLoad,
+  fileLoadingStatus
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -94,6 +95,9 @@ const File = ({
   const [allMeatList, setAllMeatList] = useState([]);
   const [deletedMeatList, setDeletedMeatList] = useState([]);
   const [showList, setShowList] = useState(["care"]);
+  const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
+  const [selectCardTitle, setSelectCardTitle] = useState('');
+
 
   useEffect(() => {
     var orgId = getStorage("orgId");
@@ -240,6 +244,7 @@ const File = ({
       setShowList((prev) => [...prev, value]);
     }
   };
+  
   return (
     <>
       {fileLoading ? <LogoLoader /> : null}
@@ -363,7 +368,7 @@ const File = ({
               </div>
             </Popover> */}
             <div className="card-body p-0">
-              {loading || labFileLoad ? (
+            {fileLoadingStatus ? (
                 <div className={visitStyles?.loaderDiv}>
                   <Spinner />
                 </div>
@@ -482,6 +487,8 @@ const File = ({
                               setIsValidAction={setIsValidAction}
                               cardTitle="SUGGESTED"
                               provided={provided}
+                              setSuggestedMeatForm={setSuggestedMeatForm}
+                              setSelectCardTitle={setSelectCardTitle}
                             />
                           </div>
                         </div>
@@ -504,7 +511,7 @@ const File = ({
                         onClick={() => handleShowList("potential")}
                       >
                         <span className={`${visitStyles.potential_title_name}`}>
-                        <span className="mx-1">
+                          <span className="mx-1">
                             <FontAwesomeIcon
                               icon={
                                 showList.includes("potential")
@@ -590,7 +597,7 @@ const File = ({
                         onClick={() => handleShowList("deleted")}
                       >
                         <span className={`${visitStyles.deleted_title_name}`}>
-                        <span className="mx-1">
+                          <span className="mx-1">
                             <FontAwesomeIcon
                               icon={
                                 showList.includes("deleted")
@@ -619,7 +626,7 @@ const File = ({
                                 : showList.length == 2
                                 ? "27vh"
                                 : "18vh",
-                                overflow:"scroll"
+                            overflow: "scroll",
                           }}
                         >
                           <div className={visitStyles.hccStickey_head}>
@@ -654,6 +661,8 @@ const File = ({
                               setIsValidAction={setIsValidAction}
                               cardTitle="DELETED"
                               provided={provided}
+                              setSuggestedMeatForm={setSuggestedMeatForm}
+                              setSelectCardTitle={setSelectCardTitle}
                               remove
                             />
                           </div>
@@ -677,6 +686,9 @@ const File = ({
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
         dragMovemntAction={true}
+        setSuggestedMeatForm={setSuggestedMeatForm}
+        meatCriteriaList={allMeatList}
+        setSelectCardTitle={setSelectCardTitle}
       />
 
       <ModelIndex
@@ -752,6 +764,53 @@ const File = ({
           </div>
         </div>
       </Drawer>
+
+      <Modal
+        title="You want to move  HCC? please add a MEAT condition."
+        open={suggestedMeatForm}
+        footer={false}
+        width="75%"
+        height={200}
+        onCancel={() => setSuggestedMeatForm(false)}
+      >
+        <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
+          <div className="col-8">
+            {hccFileDetails?.loading != true ? (
+              <>
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
+                    fileHeight={true}
+                    fileHeightFrames={window.screen.availHeight - 50}
+                    fileHeights={"100vh"}
+                  />
+                )}
+              </>
+            ) : null}
+          </div>
+          <div className="col-4">
+            <div
+              className="px-4"
+              style={{ height: "90vh", overflowY: "scroll" }}
+            >
+              <ManuallyAdd
+                handleCloseModal={handleCloseModal}
+                setIsFileFormShow={setIsFileFormShow}
+                year={year}
+                isEditPage={true}
+                isEditValue={formValues}
+                meatFormDisplay={true}
+                setSuggestedMeatForm={setSuggestedMeatForm}
+                selectDisDetails={selectDisDetails}
+                selectCardTitle={selectCardTitle}
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };
@@ -769,6 +828,7 @@ const enhancer = connect(
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
     loading: state?.patientDetails?.details?.loading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
+    fileLoadingStatus:state.patientDetails.details?.fileLoading,
   }),
   {
     getRadiologyFileDetails: detailsActions.radiologyFileAction,

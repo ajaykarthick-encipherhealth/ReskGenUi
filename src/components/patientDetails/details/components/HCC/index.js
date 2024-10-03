@@ -77,6 +77,9 @@ const HccCards = ({
   radiologyFile,
   radiologyDetailsResult,
   patientDetailsResult,
+  setSuggestedMeatForm,
+  setSelectCardTitle,
+  storeFileDetails
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -275,7 +278,7 @@ const HccCards = ({
                                       onClick={() => {
                                         setOpens(true);
                                         setCombiTree([
-                                          { ...data, expanded: true },
+                                          { ...data, expanded: true, isDisabled: true },
                                         ]);
                                       }}
                                     >
@@ -342,6 +345,9 @@ const HccCards = ({
                                       data.ruleType !=
                                         "DIRECT_COMBINATION_RULE_ENGINE"
                                     }
+                                    setSuggestedMeatForm={setSuggestedMeatForm}
+                                    meatCriteriaList={meatCriteriaList}
+                                    setSelectCardTitle={setSelectCardTitle}
                                   />
                                 )}
                                 <Popover
@@ -590,6 +596,7 @@ const HccCards = ({
                                     getLabPDF,
                                     getCurrentDiseaseType,
                                     setLabData,
+                                    storeFileDetails:storeFileDetails
                                   })}
                                 </div>
                                 <div
@@ -618,7 +625,8 @@ const HccCards = ({
                                     getCurrentDiseaseType,
                                     hyperlinks: data?.hyperlinks,
                                     setSelectedDos,
-                                    setLabData
+                                    setLabData,
+                                    storeFileDetails:storeFileDetails
                                   })}
                                 </div>
                                 {data.providerName.length == 0 && (
@@ -668,6 +676,7 @@ const HccCards = ({
                                       getSelectedDosPageNumber:
                                         getSelectedDosPageNumber,
                                       setLabData: setLabData,
+                                      storeFileDetails:storeFileDetails
                                     })}
                                   </div>
                                 )}
@@ -870,6 +879,7 @@ const HccCards = ({
                                     getSelectedDosPageNumber:
                                       getSelectedDosPageNumber,
                                     setLabData: setLabData,
+                                    storeFileDetails:storeFileDetails
                                   })}
                                 </div>
 
@@ -991,6 +1001,7 @@ const enhancer = connect(
     getLabPDFFile: detailsActions.labPDFDetails,
     getRadiologyPDFFile: detailsActions.radiologyDetailsAction,
     getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
+    storeFileDetails: detailsActions.storeFileIdAction,
   }
 );
 export default enhancer(HccCards);

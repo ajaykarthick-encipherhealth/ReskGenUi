@@ -15,7 +15,7 @@ import {
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
-import {getTenantAdminSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
+import { getTenantAdminSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
 import { connect } from "react-redux";
 import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin/users";
 const items = [
@@ -90,15 +90,14 @@ const UserList = ({
             mode={"multiple"}
             onChange={(e) => handleRows(e, data?.role)}
             options={items}
-            placeholder={!data?.role[0] && "Select Role"}
+            placeholder={"Select Role"}
             defaultValue={isMultiple ? data.role : data?.role}
             // open={open}
             onDropdownVisibleChange={(visible) => setOpen(visible)}
           />
-          {selectedRoles?.length <= 1 && selectedRoles[0] === "REVIEWER" && (
+          {selectedRoles?.length == 1 && selectedRoles[0] === "REVIEWER" && (
             <>
               <div className="mt-4 my-2">Change Manager</div>
-
               <Select
                 style={{ width: "300px" }}
                 onChange={handleManager}
@@ -202,7 +201,9 @@ const UserList = ({
             </th>
             <th style={{ textAlign: "center" }}>MFA</th>
             <th style={{ textAlign: "center" }}>ACTION</th>
-            <th style={{ textAlign: "center" }} className="text-truncate">USER STATUS</th>
+            <th style={{ textAlign: "center" }} className="text-truncate">
+              USER STATUS
+            </th>
           </tr>
         </thead>
         <tbody>

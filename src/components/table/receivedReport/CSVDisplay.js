@@ -17,36 +17,21 @@ const CSVDisplay = ({ tableData, fileUrl, extention, loading }) => {
   const dataRows = tableHead;
 
   const renderRows = () => {
-    return dataRows?.length > 0 ? (
-      dataRows?.map((row, rowIndex) => (
-        <tr key={rowIndex}>
-          {headers.map((header, cellIndex) => (
-            <td key={cellIndex}>{row[header]}</td>
-          ))}
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td style={{ textAlign: "center" }}>
-          <Empty />
-        </td>
+    return dataRows?.map((row, rowIndex) => (
+      <tr key={rowIndex}>
+        {headers.map((header, cellIndex) => (
+          <td key={cellIndex}>{row[header]}</td>
+        ))}
       </tr>
-    );
+    ));
   };
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {!fileUrl || dataRows?.length > 0 && loading && !extention && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          loading....
+      {loading ? (
+        <div className="d-flex align-items-center justify-content-center">
+          Loading....
         </div>
-      )}
-      {fileUrl && extention && dataRows?.length > 0 ? (
+      ) : fileUrl && extention && dataRows?.length > 0 ? (
         <table className={styles.exceltable}>
           <thead>
             <tr>
@@ -58,14 +43,7 @@ const CSVDisplay = ({ tableData, fileUrl, extention, loading }) => {
           <tbody className={styles.csvBody}>{renderRows()}</tbody>
         </table>
       ) : (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {" "}
+        <div className="d-flex align-items-center justify-content-center">
           <Empty />
         </div>
       )}

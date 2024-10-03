@@ -61,7 +61,9 @@ const NonHccCards = ({
   provided,
   isVisitData,
   fileDosPageNumberList,
-  getSelectedDosPageNumber
+  getSelectedDosPageNumber,
+  storeFileDetails,
+  patientDetailsResult
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -188,19 +190,22 @@ const NonHccCards = ({
                       setSelectMeatResult: "",
                       getSelectedDosPageNumber:
                       getSelectedDosPageNumber,
+                      storeFileDetails:storeFileDetails
                     })}
                   </div>
                   <div className={`${visitStyles.encounterAndSectionHeader}`}>
                     {getEncounterDateBackground({
                       value: data?.encounterDateSplit,
                       encounterDateMatching: encounterDateMatching,
-                      fileDosPageNumberList: fileDosPageNumberList,
+                      fileDosPageNumberList:  patientDetailsResult?.data?.response
+                      ?.fileDetailDTO?.dosSummaries,
                       setIsModalOpenValidCodes: setIsModalOpenValidCodes
                         ? setIsModalOpenValidCodes
                         : null,
                       setSearch: setSearch,
                       setFileModalHeader: setFileModalHeader,
                       patientDocumentResult: patientDocumentResult,
+                      storeFileDetails:storeFileDetails
                     })}
                   </div>
                   <div className={`${visitStyles.encounterAndSectionHeader}`}>
@@ -230,6 +235,7 @@ const NonHccCards = ({
                       diseaseName: data.dbDescription,
                       popup: "",
                       getSelectedDosPageNumber,
+                      storeFileDetails:storeFileDetails
                     })}
                   </div>
                 </div>
@@ -254,9 +260,11 @@ const NonHccCards = ({
 
 const enhancer = connect((state) => ({
   fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+  patientDetailsResult: state?.patientDetails?.details?.patientResult,
 }),
 {
   getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
+  storeFileDetails: detailsActions.storeFileIdAction,
 }
 );
 export default enhancer(NonHccCards);

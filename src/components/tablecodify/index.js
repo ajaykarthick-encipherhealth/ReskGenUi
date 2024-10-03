@@ -267,7 +267,7 @@ const Tables = (props) => {
           </div>
         )}
         <>
-          {parentCode?.length &&
+          {parentCode?.length ?
             parentCode?.map((data) => {
               return (
                 (data?.includes ||
@@ -379,7 +379,7 @@ const Tables = (props) => {
                   </div>
                 )
               );
-            })}
+            }):<></>}
         </>
         <div></div>
 

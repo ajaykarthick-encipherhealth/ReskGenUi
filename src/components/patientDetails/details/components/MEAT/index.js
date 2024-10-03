@@ -51,6 +51,7 @@ const MeatCard = ({
   setLabData,
   labData,
   patientDetailsResult,
+  storeFileDetails
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
@@ -174,6 +175,7 @@ const MeatCard = ({
                           getRadiologyPDF: getRadiologyPDF,
                           getLabPDF: getLabPDF,
                           getCurrentDiseaseType: getCurrentDiseaseType,
+                          storeFileDetails:storeFileDetails
                         })}
                         {/* {getProviderNameTag(
                               item?.providerName,
@@ -210,6 +212,7 @@ const MeatCard = ({
                           getRadiologyPDF: getRadiologyPDF,
                           getLabPDF: getLabPDF,
                           getCurrentDiseaseType: getCurrentDiseaseType,
+                          storeFileDetails:storeFileDetails
                         })}
                       </div>
                     </div>
@@ -263,7 +266,8 @@ const MeatCard = ({
                       getRadiologyPDF,
                       getLabPDF,
                       getCurrentDiseaseType,
-                      setLabData
+                      setLabData,
+                      storeFileDetails
                     )}
                   </div>
                 </div>
@@ -311,7 +315,8 @@ const MeatCard = ({
                       getRadiologyPDF,
                       getLabPDF,
                       getCurrentDiseaseType,
-                      setLabData
+                      setLabData,
+                      storeFileDetails
                     )}
                   </div>
                 </div>
@@ -359,7 +364,8 @@ const MeatCard = ({
                       getRadiologyPDF,
                       getLabPDF,
                       getCurrentDiseaseType,
-                      setLabData
+                      setLabData,
+                      storeFileDetails
                     )}
                   </div>
                 </div>
@@ -407,7 +413,8 @@ const MeatCard = ({
                       getRadiologyPDF,
                       getLabPDF,
                       getCurrentDiseaseType,
-                      setLabData
+                      setLabData,
+                      storeFileDetails
                     )}
                   </div>
                 </div>
@@ -468,6 +475,7 @@ const MeatCard = ({
                             onchangeValid={onchangeMeat}
                             result={item}
                             setFileLoading={setFileLoading}
+                            meatCriteriaList={list}
                           />
                         </div>
 
@@ -556,6 +564,7 @@ const enhancer = connect(
     getRadiologyPDF: detailsAction.radiologyDetailsAction,
     getLabPDFFile: detailsAction.labPDFDetails,
     getCurrentDiseaseType: detailsAction.getCurrentDiseaseType,
+    storeFileDetails: detailsAction.storeFileIdAction,
   }
 );
 export default enhancer(MeatCard);

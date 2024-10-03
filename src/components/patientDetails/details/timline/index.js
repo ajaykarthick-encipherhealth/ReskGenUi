@@ -407,8 +407,8 @@ const Timeline = ({
               <span className={visitStyles.suggestedColor}>
                 {/* SUGGESTED */}
                 CAREGAP
-                </span> to{" "}
-              <span className={visitStyles.validColor}> VALID</span>
+              </span>{" "}
+              to <span className={visitStyles.validColor}> VALID</span>
             </div>
           );
         case "MOVED":
@@ -440,8 +440,8 @@ const Timeline = ({
                 <span className={visitStyles.suggestedColor}>
                   {/* SUGGESTED */}
                   CAREGAP
-                  </span> to{" "}
-                <span className={visitStyles.validColor}> HCC</span>
+                </span>{" "}
+                to <span className={visitStyles.validColor}> HCC</span>
               </div>
             );
           }
@@ -449,9 +449,7 @@ const Timeline = ({
             return (
               <div className="d-flex">
                 {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.nonHcc}>
-                  NON HCC
-                  </span> to
+                <span className={visitStyles.nonHcc}>NON HCC</span> to
                 <span className={visitStyles.deletedColor}> DELETED</span>
               </div>
             );
@@ -463,8 +461,8 @@ const Timeline = ({
                 <span className={visitStyles.suggestedColor}>
                   {/* SUGGESTED */}
                   CAREGAP
-                  </span> to{" "}
-                <span className={visitStyles.deletedColor}> DELETED</span>
+                </span>{" "}
+                to <span className={visitStyles.deletedColor}> DELETED</span>
               </div>
             );
           }
@@ -485,7 +483,7 @@ const Timeline = ({
                 <span className={visitStyles.suggestedColor}>
                   {/* SUGGESTED */}
                   CAREGAP
-                  </span>
+                </span>
               </div>
             );
           }
@@ -617,7 +615,7 @@ const Timeline = ({
               <span className={visitStyles.suggestedColor}>
                 {/* SUGGESTED */}
                 CAREGAP
-                </span>
+              </span>
             </div>
           );
         case "MOVED_SUGGESTED_TO_DELETED":
@@ -627,8 +625,8 @@ const Timeline = ({
               <span className={visitStyles.suggestedColor}>
                 {/* SUGGESTED */}
                 CAREGAP
-                </span> to{" "}
-              <span className={visitStyles.deletedColor}> DELETED</span>
+              </span>{" "}
+              to <span className={visitStyles.deletedColor}> DELETED</span>
             </div>
           );
         case "ENCOUNTER_FILE_UPDATED":
@@ -725,11 +723,14 @@ const Timeline = ({
               to <span className={visitStyles.pendingColor}> PENDING</span>{" "}
             </div>
           );
-          case "FLAG_ADDED":
+        case "FLAG_ADDED":
           return (
             <div className="d-flex">
               <>
-                Flag Added - {item?.flagDetails?.flagName ? item?.flagDetails?.flagName.replaceAll("_", " ") : ""}
+                Flag Added -{" "}
+                {item?.flagDetails?.flagName
+                  ? item?.flagDetails?.flagName.replaceAll("_", " ")
+                  : ""}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="23"
@@ -746,11 +747,14 @@ const Timeline = ({
               </>
             </div>
           );
-          case "FLAG_REMOVED":
+        case "FLAG_REMOVED":
           return (
             <div className="d-flex">
               <>
-                Flag Removed -  {item?.flagDetails?.flagName ? item?.flagDetails?.flagName.replaceAll("_", " ") : ""}
+                Flag Removed -{" "}
+                {item?.flagDetails?.flagName
+                  ? item?.flagDetails?.flagName.replaceAll("_", " ")
+                  : ""}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="23"
@@ -766,6 +770,86 @@ const Timeline = ({
                 </svg>
               </>
             </div>
+          );
+        case "COMMENT_ADDED":
+          return (
+            <div className="d-flex w-100 justify-content-between">
+              <>
+                <strong>Comment Added </strong>
+                <Popover
+                  open={popClickDisCode === index}
+                  trigger={["hover"]}
+                  placement="bottom"
+                  overlayStyle={{ zIndex: 9999 }}
+                  content={
+                    <div
+                    className="d-flex justify-content-between"
+                    >
+                      <span className={`${styles.textContent}`}>{item?.actionNotes}</span>
+                      <CloseCircleFilled
+                        onClick={() => onClickPopup(null)}
+                        className={`${styles.closeIcon}`}
+                      />
+                    </div>
+                  }
+                >
+                  <span
+                    className={styles.viewTag}
+                    onClick={() => onClickPopup(index)}
+                  >
+                    View
+                  </span>
+                </Popover>
+              </>
+            </div>
+          );
+        case "COMMENT_REMOVED":
+          return (
+            <div className="d-flex w-100 justify-content-between">
+              <>
+                <strong>Comment Removed </strong>            
+              </>
+            </div>
+          );
+        case "NOTES_ADDED":
+          return (
+            <div className="d-flex w-100 justify-content-between">
+            <>
+              <strong>Notes Added </strong>
+              <Popover
+                open={popClickDisCode === index}
+                trigger={["hover"]}
+                placement="bottom"
+                overlayStyle={{ zIndex: 9999 }}
+                content={
+                  <div
+                  className="d-flex justify-content-between"
+                  >
+                    <span className={`${styles.textContent}`}>{item?.actionNotes}</span>
+                    <CloseCircleFilled
+                      onClick={() => onClickPopup(null)}
+                      className={`${styles.closeIcon}`}
+                    />
+                  </div>
+                }
+              >
+                <span
+                  className={styles.viewTag}
+                  onClick={() => onClickPopup(index)}
+                >
+                  View
+                </span>
+              </Popover>
+            </>
+          </div>
+          );
+        case "NOTES_REMOVED":
+          return (
+            <div className="d-flex w-100 justify-content-between">
+            <>
+              <strong>Notes Removed </strong>
+            </>
+          </div>
           );
         default:
           return (
@@ -803,6 +887,11 @@ const Timeline = ({
           <span className={`${visitStyles.timelineheading} d-flex`}>
             {getTimelineHeading()}
           </span>
+          {item?.dos && (
+            <span
+              className={`${visitStyles.timelineDate} mt-1`}
+            >{`DOS: ${item?.dos}`}</span>
+          )}
           <span className={visitStyles.timelineDate}>
             {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
           </span>
@@ -811,30 +900,31 @@ const Timeline = ({
     );
   }
   return (
-<div className={visitStyles.timeLines}>
-  {!filterDataLoading ? (
-    <div className={`widget-timeline ${visitStyles.timeLineScroll}`}>
-      <ul className="timeline" >
-        {timelineData?.length > 0 ? (
-          timelineData?.map((item, index) => renderTimelineItem(item, index))
-        ) : (
-          <div className="no-data-container">
-            <h6 className="text-center">NO DATA</h6>
+    <div className={visitStyles.timeLines}>
+      {!filterDataLoading ? (
+        <div className={`widget-timeline ${visitStyles.timeLineScroll}`}>
+          <ul className="timeline">
+            {timelineData?.length > 0 ? (
+              timelineData?.map((item, index) =>
+                renderTimelineItem(item, index)
+              )
+            ) : (
+              <div className="no-data-container">
+                <h6 className="text-center">NO DATA</h6>
+              </div>
+            )}
+          </ul>
+        </div>
+      ) : (
+        <div className={visitStyles.userDetailsCard}>
+          <div className="bouncing-loader">
+            <div></div>
+            <div></div>
+            <div></div>
           </div>
-        )}
-      </ul>
+        </div>
+      )}
     </div>
-  ) : (
-    <div className={visitStyles.userDetailsCard}>
-      <div className="bouncing-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
-  )}
-</div>
-
   );
 };
 
