@@ -9,6 +9,7 @@ import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
 import { disablePastDate } from "../../../../components/headerFilters/functions";
 import { getStorage } from "../../../../utils/storages";
+import ReusableDot from "../reusableDotIcon/reusableDotIcon";
 
 const AllocateModal = ({
   open,
@@ -18,13 +19,14 @@ const AllocateModal = ({
   setAllocateClicked,
   selectedChart,
   setSelectedChart,
-  getAllList
+  getAllList,
 }) => {
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
   const [userDetails, setUserDetails] = useState([]);
   const [allocateDate, setAllocateDate] = useState("");
   const [activeEmail, setActiveEmail] = useState("");
+  const [statusCount, setStatusCount] = useState([]);
   const [chart, setChart] = useState({
     date: null,
     completed: null,
@@ -46,6 +48,7 @@ const AllocateModal = ({
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       let result = response?.data?.response;
+
       const user = result?.map((item) => {
         return {
           firstName: item.firstName,
@@ -53,8 +56,19 @@ const AllocateModal = ({
           id: item.id,
           role: item.role,
           email: item.userName,
+          totalFileAllocated: item.totalFileAllocated,
+          totalFileAuditAllocated: item.totalFileAuditAllocated,
+          totalFileAuditDeclined: item.totalFileAuditDeclined,
+          totalFileAuditHold: item.totalFileAuditHold,
+          totalFileAuditPending: item.totalFileAuditPending,
+          totalFileAudited: item.totalFileAudited,
+          totalFileDeclined: item.totalFileDeclined,
+          totalFileHold: item.totalFileHold,
+          totalFilePending: item.totalFilePending,
+          totalFileProcessed: item.totalFileProcessed,
         };
       });
+      setStatusCount(response?.data?.response);
       setUserDetails(user);
     }
   };
@@ -87,14 +101,14 @@ const AllocateModal = ({
     }
   };
 
-  const getAllCheckList = async (selectEmail) => {
-    let resoureUrl = `/management/admin/getProcessedStatus?userName=${selectEmail}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
-      let result = response?.data?.response;
-      setChart(result);
-    }
-  };
+  // const getAllCheckList = async (selectEmail) => {
+  //   let resoureUrl = `/management/admin/getProcessedStatus?userName=${selectEmail}`;
+  //   const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+  //   if (response.data) {
+  //     let result = response?.data?.response;
+  //     setChart(result);
+  //   }
+  // };
 
   useEffect(() => {
     getUserList(search);
@@ -140,230 +154,203 @@ const AllocateModal = ({
           }}
         />
       </div>
-      <div className="overflow-auto"style={{height:"640px"}}>
-      {userDetails.length > 0 ? (
-        userDetails?.map((item) => (
-          <div className="mt-4 pe-auto">
-            <div
-              className={`form-control new-item-control my-2 p-0 ${
-                item.id == activeCard
-                  ? modalStyle.listContentLarge
-                  : modalStyle.listContent
-              }`}
-            >
+      <div className="overflow-auto" style={{ height: "640px" }}>
+        {userDetails.length > 0 ? (
+          userDetails?.map((item) => (
+            <div className="mt-4 pe-auto">
               <div
-                className="d-flex justify-content-between"
-                onClick={() => {
-                  if (activeCard == item.id) {
-                    setActiveCard("");
-                    setActiveEmail(item.email);
-                  } else {
-                    setActiveCard(item.id);
-                    setActiveEmail(item.email);
-                    getAllCheckList(item.email);
-                    setAllocateDate("");
-                  }
-                }}
+                className={`form-control new-item-control my-2 p-0 ${
+                  item.id == activeCard
+                    ? modalStyle.listContentLarge
+                    : modalStyle.listContent
+                }`}
               >
-                <div className="d-flex">
-                  <Avatar
-                    size={65}
-                    shape="square"
-                    style={{ backgroundColor: "#04306F" }}
-                  >
-                    {item.firstName || item.lastName ? (
-                      getInitials(item.firstName, item.lastName)
-                    ) : (
-                      <FontAwesomeIcon className="fa fa-search" icon={faUser} />
-                    )}
-                  </Avatar>
-                  <div className="p-3">
-                    <p className={`${modalStyle.listName} mb-1`}>
-                      {item.firstName + " " + item.lastName}
-                    </p>
-                    <p className={`${modalStyle.listRole}`}>
-                      {item.role
-                        ? item.role.map((item) => (
-                            <span className="px-1">{item}</span>
-                          ))
-                        : null}
-                    </p>
+                <div
+                  className="d-flex justify-content-between"
+                  onClick={() => {
+                    if (activeCard == item.id) {
+                      setActiveCard("");
+                      setActiveEmail(item.email);
+                    } else {
+                      setActiveCard(item.id);
+                      setActiveEmail(item.email);
+
+                      setAllocateDate("");
+                    }
+                  }}
+                >
+                  <div className="d-flex">
+                    <Avatar
+                      size={65}
+                      shape="square"
+                      style={{ backgroundColor: "#04306F" }}
+                    >
+                      {item.firstName || item.lastName ? (
+                        getInitials(item.firstName, item.lastName)
+                      ) : (
+                        <FontAwesomeIcon
+                          className="fa fa-search"
+                          icon={faUser}
+                        />
+                      )}
+                    </Avatar>
+                    <div className="p-3">
+                      <p className={`${modalStyle.listName} mb-1`}>
+                        {item.firstName + " " + item.lastName}
+                      </p>
+                      <p className={`${modalStyle.listRole}`}>
+                        {item.role
+                          ? item.role.map((item) => (
+                              <span className="px-1">{item}</span>
+                            ))
+                          : null}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              {activeCard == item.id && (
-                <>
-                  <div className="row px-3">
-                    <div className={`col-5 ${modalStyle.activeRow1}`}>
-                      <span>
-                        Charts Selected:{" "}
-                        {selectedChart.length > 0 ? selectedChart.length : 0}
-                      </span>
-                      <div className="d-flex py-2">
-                        <span className={`${modalStyle.title} py-3`}>
-                          Due Date
+                {activeCard == item.id && (
+                  <>
+                    <div className="row px-3">
+                      <div className={`col-5 ${modalStyle.activeRow1}`}>
+                        <span>
+                          Charts Selected:{" "}
+                          {selectedChart.length > 0 ? selectedChart.length : 0}
                         </span>
-                        <DatePicker
-                          style={{ width: "150px", marginLeft: "5px" }}
-                          onChange={(date, dateS) => {
-                            if (dateS) {
-                              setAllocateDate(dateS);
-                            } else {
-                              setAllocateDate("");
-                            }
-                          }}
-                          disabledDate={(current) => disablePastDate(current)}
-                        />
-                      </div>
-                      <div className="d-flex my-3">
-                        <div>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="8"
-                            height="8"
-                            viewBox="0 0 8 8"
-                            fill="none"
-                          >
-                            <circle cx="4" cy="4" r="4" fill="#3276CD" />
-                          </svg>
-                          <span className="p-2">Allocated</span>
-                        </div>
-                        <span>{chart.allocated ? chart.allocated : 0}</span>
-                      </div>
-                      <div className="d-flex my-3">
-                        <div>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="8"
-                            height="8"
-                            viewBox="0 0 8 8"
-                            fill="none"
-                          >
-                            <circle cx="4" cy="4" r="4" fill="#00BC13" />
-                          </svg>
-                          <span className="p-2">Completed</span>
-                        </div>
-                        <span>{chart.completed ? chart.completed : 0}</span>
-                      </div>
-                      <div className="d-flex my-3">
-                        <div>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="8"
-                            height="8"
-                            viewBox="0 0 8 8"
-                            fill="none"
-                          >
-                            <circle cx="4" cy="4" r="4" fill="#EA8715" />
-                          </svg>
-                          <span className="p-2">Pending</span>
-                        </div>
-                        <span>{chart.pending ? chart.pending : 0}</span>
-                      </div>
-                      <div className="d-flex my-3">
-                        <div>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="8"
-                            height="8"
-                            viewBox="0 0 8 8"
-                            fill="none"
-                          >
-                            <circle cx="4" cy="4" r="4" fill="#BCA7FB" />
-                          </svg>
-                          <span className="p-2">Hold</span>
-                        </div>
-                        <span>{chart.hold ? chart.hold : 0}</span>
-                      </div>
-                      <div className="d-flex my-3">
-                        <div>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="8"
-                            height="8"
-                            viewBox="0 0 8 8"
-                            fill="none"
-                          >
-                            <circle cx="4" cy="4" r="4" fill="#EB5252" />
-                          </svg>
-                          <span className="p-2">Decline</span>
-                        </div>
-                        <span>{chart.declined ? chart.declined : 0}</span>
-                      </div>
-                    </div>
-                    <div className={`col-7 ${modalStyle.activeRow1}`}>
-                      <span className={`${modalStyle.title} text-danger`}>
-                        {selectedChart.length + chart.hold + chart.pending >
-                          100 && "Maximum upto 100 charts to pending"}
-                      </span>
-                      <p>Selected Charts</p>
-
-                      <ul className={`${modalStyle.selectChart}`}>
-                        {selectedChart.map((item) => (
-                          <li
-                            className={`${modalStyle.listing} ${modalStyle.listings}`}
-                            key={item.id}
-                            onClick={() => {
-                              let remove = selectedChart.filter(
-                                (chart) => chart.id != item.id
-                              );
-                              setSelectedChart(remove);
+                        <div className="d-flex py-2">
+                          <span className={`${modalStyle.title} py-3`}>
+                            Due Date
+                          </span>
+                          <DatePicker
+                            style={{ width: "150px", marginLeft: "5px" }}
+                            onChange={(date, dateS) => {
+                              if (dateS) {
+                                setAllocateDate(dateS);
+                              } else {
+                                setAllocateDate("");
+                              }
                             }}
-                          >
-                            <span>{item.name}</span>
-                            <button className="btn p-1">
-                              <Avatar
-                                size={21}
-                                shape="square"
-                                style={{
-                                  backgroundColor: "#F99F9F",
-                                  color: "#F01010",
-                                }}
-                                icon={
-                                  <FontAwesomeIcon
-                                    className="fa fa-search"
-                                    icon={faXmark}
-                                  />
-                                }
-                              ></Avatar>
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
+                            disabledDate={(current) => disablePastDate(current)}
+                          />
+                        </div>
+                        {statusCount
+                          ?.filter((status) => status.id === item.id)
+                          ?.map((status) => (
+                            <div key={status.id}>
+                              <div className="d-flex my-3">
+                                <div>
+                                  <ReusableDot color="#3276CD" />
+                                  <span className="p-2">Allocated</span>
+                                </div>
+                                <span>{status.totalFileAllocated ?? 0}</span>
+                              </div>
+
+                              <div className="d-flex my-3">
+                                <div>
+                                  <ReusableDot color="#00BC13" />
+                                  <span className="p-2">Completed</span>
+                                </div>
+                                <span>{status.totalFileProcessed ?? 0}</span>
+                              </div>
+
+                              <div className="d-flex my-3">
+                                <div>
+                                  <ReusableDot color="#EA8715" />
+                                  <span className="p-2">Pending</span>
+                                </div>
+                                <span>{status.totalFilePending ?? 0}</span>
+                              </div>
+
+                              <div className="d-flex my-3">
+                                <div>
+                                  <ReusableDot color="#BCA7FB" />
+                                  <span className="p-2">Hold</span>
+                                </div>
+                                <span>{status.totalFileHold ?? 0}</span>
+                              </div>
+
+                              <div className="d-flex my-3">
+                                <div>
+                                  <ReusableDot color="#EB5252" />
+                                  <span className="p-2">Declined</span>
+                                </div>
+                                <span>{status.totalFileDeclined ?? 0}</span>
+                              </div>
+                            </div>
+                          ))}
+                      </div>
+                      <div className={`col-7 ${modalStyle.activeRow1}`}>
+                        <span className={`${modalStyle.title} text-danger`}>
+                          {selectedChart.length + chart.hold + chart.pending >
+                            100 && "Maximum upto 100 charts to pending"}
+                        </span>
+                        <p>Selected Charts</p>
+
+                        <ul className={`${modalStyle.selectChart}`}>
+                          {selectedChart.map((item) => (
+                            <li
+                              className={`${modalStyle.listing} ${modalStyle.listings}`}
+                              key={item.id}
+                              onClick={() => {
+                                let remove = selectedChart.filter(
+                                  (chart) => chart.id != item.id
+                                );
+                                setSelectedChart(remove);
+                              }}
+                            >
+                              <span>{item.name}</span>
+                              <button className="btn p-1">
+                                <Avatar
+                                  size={21}
+                                  shape="square"
+                                  style={{
+                                    backgroundColor: "#F99F9F",
+                                    color: "#F01010",
+                                  }}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      className="fa fa-search"
+                                      icon={faXmark}
+                                    />
+                                  }
+                                ></Avatar>
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
-                  </div>
-                  <div className={`d-flex justify-content-center`}>
-                    <button
-                      className={`btn btn-primary px-5 p-1 ${modalStyle.modalBtn}`}
-                      disabled={
-                        !selectedChart.length > 0 ||
-                        allocateDate == "" ||
-                        selectedChart.length + chart.hold + chart.pending > 100
-                      }
-                      onClick={setAllocate}
-                    >
-                      Allocate
-                    </button>
-                  </div>
-                </>
-              )}
+                    <div className={`d-flex justify-content-center`}>
+                      <button
+                        className={`btn btn-primary px-5 p-1 ${modalStyle.modalBtn}`}
+                        disabled={
+                          !selectedChart.length > 0 ||
+                          allocateDate == "" ||
+                          selectedChart.length + chart.hold + chart.pending >
+                            100
+                        }
+                        onClick={setAllocate}
+                      >
+                        Allocate
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
+          ))
+        ) : (
+          <div className="m-4">
+            <button
+              onClick={() => {
+                Router.push("/admin/user");
+              }}
+              className={`btn btn-outline-primary btn-sm ms-2 ${modalStyle.modalBtn}`}
+            >
+              Add User
+            </button>
           </div>
-        ))
-      ) : (
-        <div className="m-4">
-          <button
-            onClick={() => {
-              Router.push("/admin/user");
-            }}
-            className={`btn btn-outline-primary btn-sm ms-2 ${modalStyle.modalBtn}`}
-          >
-            Add User
-          </button>
-        </div>
-      )}
+        )}
       </div>
-   
     </Modal>
   );
 };
