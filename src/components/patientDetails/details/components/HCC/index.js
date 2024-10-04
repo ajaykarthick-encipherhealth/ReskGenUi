@@ -227,18 +227,28 @@ const HccCards = ({
                                   <span className="valid-dis-name">
                                     {data.diagnosisCode}
                                   </span>
-
-                                  {!isDeletedCodes && isDosSelected && data?.isLab != true && data?.isRadiology != true &&  data?.isComboCode !=true &&  (
-                                    <FontAwesomeIcon
-                                      icon={faPen}
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() => {
-                                        setFormValues(data),
-                                          setIsEditHccForm(true),
+                                    {!isDeletedCodes &&
+                                    isDosSelected &&
+                                    data?.isLab !== true &&
+                                    data?.isRadiology !== true &&
+                                    ((data.ruleType ===
+                                      "DIRECT_COMBINATION_RULE_ENGINE" &&
+                                      data.stateIndicators?.includes(
+                                        "COMBO_CODE"
+                                      )) ||
+                                      !data.stateIndicators?.includes(
+                                        "COMBO_CODE"
+                                      )) && (
+                                      <FontAwesomeIcon
+                                        icon={faPen}
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                          setFormValues(data);
+                                          setIsEditHccForm(true);
                                           setFormEditPlace(editFormPlace);
-                                      }}
-                                    />
-                                  )}
+                                        }}
+                                      />
+                                    )}
 
                                   <Popover
                                     content={
