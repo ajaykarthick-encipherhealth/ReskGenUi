@@ -34,7 +34,6 @@ const AllocateModal = ({
     allocated: null,
   });
   const [statusCount, setStatusCount] = useState([]);
-
   const getInitials = (firstName, lastName) => {
     const firstNameInitial = firstName?.charAt(0) || "";
     const secondNameInitial = lastName?.charAt(0) || "";
@@ -163,7 +162,6 @@ const AllocateModal = ({
                     } else {
                       setActiveCard(item.id);
                       setActiveEmail(item.email);
-                   
                       setAllocateDate("");
                     }
                   }}
