@@ -25,4 +25,14 @@
 .steps{
   font-size: 10px;
 }
+.createBtn {
+  border: none;
+  background-color: var(--navBarBG);
+  color: var(--defaultColor);
+  padding: 5px 20px;
+  border-radius: 5px;
+}
+.icon{
+  font-size: 13px;
+}
 
