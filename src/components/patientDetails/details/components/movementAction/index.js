@@ -15,6 +15,8 @@ import {
 } from "../function/ReusableFunctions";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { suggestedMeatCheck } from "../../../../../stores/patient/details/network";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHandHoldingMedical } from "@fortawesome/free-solid-svg-icons";
 
 const MovementAction = ({
   validAction,
@@ -156,8 +158,8 @@ const MovementAction = ({
               okText="Yes"
               cancelText="No"
             >
-              <IssuesCloseOutlined
-                className={styles.potentialIcon}
+            <span className={`d-flex align-items-center justify-content-center ${styles.potentialIcon}`}>
+            <FontAwesomeIcon icon={faHandHoldingMedical}  style={{ fontSize: "9px" }}
                 onClick={() => {
                   moveToStrightAction(
                     setIsValidAction,
@@ -166,8 +168,8 @@ const MovementAction = ({
                   ),
                     onchangeValid(result.diagnosisCode, result),
                     onChangeValues(result);
-                }}
-              />
+                }} />
+              </span>
             </Popconfirm>
           </Tooltip>
         )}
