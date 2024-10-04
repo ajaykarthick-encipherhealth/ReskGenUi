@@ -5,10 +5,14 @@ import InputField from "../../../components/input";
 import AppTable from "../../../components/tables";
 import Data from "./data.json";
 import { getButtonStatus } from "../../../components/commonFunctions";
+import { Modal } from "antd";
+import FeedBackModalContent from "../../admin/feedback/feedBackModal";
 
 const FeedBack = () => {
   const totalElements = 100;
   const [search, setSearch] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalData, setModalData] = useState(null);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [page, setPage] = useState(0);
   const [activeTab, setActiveTab] = useState("myfeedback");
@@ -24,11 +28,11 @@ const FeedBack = () => {
       isSingleRow: true,
     },
     {
-      name: "manager",
+      name: "managar",
       value: {
-        first: "managerFirstName",
-        last: "managerLastName",
-        img: "managerProfileImage",
+        first: "firstName",
+        last: "lastName",
+        img: "profileImageUrl",
       },
       isImage: true,
     },
@@ -39,6 +43,17 @@ const FeedBack = () => {
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPage(e.page);
+  };
+  const handleRowClick = (item) => {
+    setModalData(item);
+    setIsModalOpen(true);
+  };
+  const handleModalOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -124,6 +139,7 @@ const FeedBack = () => {
                       <AppTable
                         data={Data}
                         column={column}
+                        onRowClick={handleRowClick}
                         status={getButtonStatus}
                         onPageChange={onPageChange}
                         totalElements={totalElements}
@@ -132,14 +148,25 @@ const FeedBack = () => {
                     </div>
                   </Tab.Pane>
                   <Tab.Pane id="my-posts" eventKey="approvalrequest">
-                  <AppTable
-                        data={Data}
-                        column={column}
-                        status={getButtonStatus}
-                        onPageChange={onPageChange}
-                        totalElements={totalElements}
-                        paginationFirst={paginationFirst}
-                      />
+                    <AppTable
+                      data={Data}
+                      onRowClick={handleRowClick}
+                      column={column}
+                      status={getButtonStatus}
+                      onPageChange={onPageChange}
+                      totalElements={totalElements}
+                      paginationFirst={paginationFirst}
+                    />
+                    <Modal
+                      footer={null}
+                      destroyOnClose={true}
+                      open={isModalOpen}
+                      onCancel={handleModalCancel}
+                      onOk={handleModalOk}
+                      width={900}
+                    >
+                      <FeedBackModalContent modalData={modalData} />
+                    </Modal>
                   </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
