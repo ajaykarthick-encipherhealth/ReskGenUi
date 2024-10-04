@@ -61,7 +61,6 @@ const AllocateModal = ({
       setUserDetails(user);
     }
   };
-console.log(statusCount,"statusCount")
   const setAllocate = async () => {
     let resoureUrl = `dbservice/patient/admin/assignPatients`;
     const response = await axios.post(ENDPOINTS.apiEndoint + resoureUrl, {
