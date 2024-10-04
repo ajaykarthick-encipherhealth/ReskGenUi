@@ -301,7 +301,9 @@ const HccCards = ({
                                  />
                               </div> */}
                                 {cardTitle == "SUGGESTED" ||
-                                cardTitle == "DELETED" ? (
+                                cardTitle == "DELETED" ||
+                                 cardTitle == "POTENTIAL"
+                                 ? (
                                   <>
                                     {data.defaultPosition == "VALID" ? (
                                       <span
@@ -319,7 +321,11 @@ const HccCards = ({
                                       <span
                                         className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
                                       ></span>
-                                    ) : null}
+                                    )  : data.defaultPosition == "POTENTIAL" ? (
+                                      <span
+                                        className={`${visitStyles.potentialFlag} ${visitStyles.flagDetailsChange}`}
+                                      ></span>
+                                    ): null}
                                   </>
                                 ) : null}
                                 {isDosSelected && (
