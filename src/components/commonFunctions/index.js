@@ -27,7 +27,9 @@ export const getButtonStatus = (value) => {
 };
 export const handleCopyToClipboard = ({ text, setCopied }) => {
   navigator.clipboard.writeText(text);
-  setCopied(true);
+  if(setCopied){
+    setCopied(true);
+  }
   notification.success({
     message: "Copied to clipboard",
     placement: "topRight",

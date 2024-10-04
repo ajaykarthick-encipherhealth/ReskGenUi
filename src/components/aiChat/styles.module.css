@@ -26,7 +26,7 @@
 .detailsContainer {
   height: 500px !important;
   overflow-y: scroll !important;
-  padding: 20px !important;
+  /* padding: 20px !important; */
 }
 .scrollBottom {
   height: 200px;
@@ -42,18 +42,25 @@
 .chatHead {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: start;
 }
 .chatHead img {
   width: 12%;
-  height: 100%;
-  background: #fff;
+  /* height: 100%; */
+  /* background: #fff; */
   border-radius: 100%;
+  font-size: 14px;
+}
+.subText{
+  font-size: 12px;
+  display: flex;
+  justify-content: start;
+  align-items: start;
 }
 .chatTitleCard {
-  background: #04306f !important;
-  display: flex;
-  justify-content: center !important;
+  background: #263E50 !important;
+  display: block;
+  /* justify-content: center !important; */
 }
 .chatTitle {
   color: #fff !important;
@@ -76,3 +83,6 @@
   border-radius: 10px;
   background: rgb(173, 162, 162);
 } */
+.copyIcon{
+  font-size: 12px;
+}
