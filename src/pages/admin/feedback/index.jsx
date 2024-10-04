@@ -107,105 +107,121 @@ const FeedBack = () => {
               isInputFiled={false}
             />
           </div>
-          <div className="col-6 d-flex justify-content-end mt-4">
-            <button
-              type="button"
-              className={styles.createBtn}
-              onClick={showDrawer}
-            >
-              <PlusCircleOutlined className={styles.icon} /> Create
-            </button>
-            <Drawer title="Create Feedback" onClose={onClose} open={open}>
-              <div className="mt-3">
-              <Form
-                form={form}
-                className="customInput"
-                onFinish={handleSubmit}
-                layout="vertical"
+          <div className="col-6 d-flex justify-content-end mt-5">
+            <div>
+              <button
+                type="button"
+                className={styles.createBtn}
+                onClick={showDrawer}
               >
-                <Form.Item
-                  label="Feedback ID"
-                  name="feedbackId"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter Feedback ID",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Feedback ID" />
-                </Form.Item>
-                <Form.Item
-                  label="Patient Name"
-                  name="patientName"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter Patient Name",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Patient Name" />
-                </Form.Item>
-                <Form.Item
-                  label="Diagnosis Code"
-                  name="diagnosiscode"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter Diagnosis Code",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Diagnosis Code" />
-                </Form.Item>
-                <Form.Item
-                  label="Description"
-                  name="description"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter Description",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Description" />
-                </Form.Item>
-                <Form.Item
-                  label="Reason"
-                  name="reason"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Enter Reason",
-                    },
-                  ]}
-                >
-                  <Input.TextArea
-                    placeholder="Reason"
-                    style={{ resize: "none" }}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label="Manager"
-                  name="manager"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Enter Manager Name",
-                    },
-                  ]}
-                >
-                  <Select placeholder="Manager" />
-                </Form.Item>
-                <Form.Item>
-                  <div className="d-flex justify-content-center align-items-center">
-                    <Button>Proceed</Button>
-                  </div>
-                </Form.Item>
-              </Form>
-              </div>
-            </Drawer>
+                <PlusCircleOutlined className={styles.icon} /> Create
+              </button>
+            </div>
+
+            <div className="customDrawer">
+              <Drawer
+                title="Create Feedback"
+                destroyOnClose={true}
+                onClose={onClose}
+                open={open}
+              >
+                <div className="mt-3">
+                  <Form
+                    form={form}
+                    className="customInput"
+                    onFinish={handleSubmit}
+                    layout="vertical"
+                  >
+                    <Form.Item
+                      label="Feedback ID"
+                      name="feedbackId"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter Feedback ID",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Feedback ID" />
+                    </Form.Item>
+                    <Form.Item
+                      label="Patient Name"
+                      name="patientName"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter Patient Name",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Patient Name" />
+                    </Form.Item>
+                    <Form.Item
+                      label="Diagnosis Code"
+                      name="diagnosiscode"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter Diagnosis Code",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Diagnosis Code" />
+                    </Form.Item>
+                    <Form.Item
+                      label="Description"
+                      name="description"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter Description",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Description" />
+                    </Form.Item>
+                    <Form.Item
+                      label="Reason"
+                      name="reason"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Enter Reason",
+                        },
+                      ]}
+                    >
+                      <Input.TextArea
+                        placeholder="Reason"
+                        style={{ resize: "none" }}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Manager"
+                      name="manager"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Enter Manager Name",
+                        },
+                      ]}
+                    >
+                      <Select placeholder="Manager" />
+                    </Form.Item>
+                    <Form.Item>
+                      <div className="d-flex justify-content-center align-items-center">
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          className={styles.btn}
+                        >
+                          Proceed
+                        </Button>
+                      </div>
+                    </Form.Item>
+                  </Form>
+                </div>
+              </Drawer>
+            </div>
           </div>
         </div>
 
