@@ -13735,7 +13735,7 @@ tbody > tr {
   content: "";
   position: absolute;
   right: -0.625rem;
-  border-left: 0.625rem solid #f3f0ec;
+  border-left: 0.625rem solid  #263E50;
   border-bottom: 0.625rem solid transparent;
   border-top: 0rem solid;
   top: 0;

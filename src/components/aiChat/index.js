@@ -11,6 +11,7 @@ import { IMAGES } from "../../jsx/constant/theme";
 import { faComments, faCopy } from "@fortawesome/free-regular-svg-icons"; // Import the desired icon
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"; // Import the close icon if needed
 import chatAssistant from "../../images/chat/chatAssistant.svg";
+import { handleCopyToClipboard } from "../commonFunctions";
 const AICHAT = ({ openMsg, offMsg }) => {
   const dispatch = useDispatch();
   const msgReply = useSelector((state) => state?.auth?.chatReply);
@@ -119,19 +120,35 @@ const AICHAT = ({ openMsg, offMsg }) => {
                         <div name="test1" className="element">
                           <div className="d-flex justify-content-end mb-1">
                             <div className="msg_cotainer_send">
-                              {data.question}
+                              {data?.question}
                               {/* <span className="msg_time_send">8:55 AM, Today</span> */}
                             </div>
                           </div>
-                          {/* <div className="d-flex justify-content-end align-items-end my-1">
-                            <FontAwesomeIcon icon={faCopy} className="fs-10" />
-                          </div> */}
-                          <div className="d-flex justify-content-start my-2">
-                            <div className="msg_cotainer">{data.details}</div>
+                          <div
+                            className="d-flex justify-content-end align-items-end my-1 cursor-pointer mx-2"
+                            onClick={() =>
+                              handleCopyToClipboard({ text: data?.question })
+                            }
+                          >
+                            <FontAwesomeIcon
+                              icon={faCopy}
+                              className={styles.copyIcon}
+                            />
                           </div>
-                          {/* <div className="d-flex justify-content-start align-items-start my-1 mx-3">
-                            <FontAwesomeIcon icon={faCopy} className="fs-10" />
-                          </div> */}
+                          <div className="d-flex justify-content-start my-2">
+                            <div className="msg_cotainer">{data?.details}</div>
+                          </div>
+                          <div
+                            className="d-flex justify-content-start align-items-start my-1 mx-1 cursor-pointer"
+                            onClick={() =>
+                              handleCopyToClipboard({ text: data?.details })
+                            }
+                          >
+                            <FontAwesomeIcon
+                              icon={faCopy}
+                              className={styles.copyIcon}
+                            />
+                          </div>
                         </div>
                         <div ref={messagesEndRef} />
                       </>
