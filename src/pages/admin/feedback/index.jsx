@@ -116,6 +116,7 @@ const FeedBack = () => {
               <PlusCircleOutlined className={styles.icon} /> Create
             </button>
             <Drawer title="Create Feedback" onClose={onClose} open={open}>
+              <div className="mt-3">
               <Form
                 form={form}
                 className="customInput"
@@ -199,10 +200,11 @@ const FeedBack = () => {
                 </Form.Item>
                 <Form.Item>
                   <div className="d-flex justify-content-center align-items-center">
-                    <Button />
+                    <Button>Proceed</Button>
                   </div>
                 </Form.Item>
               </Form>
+              </div>
             </Drawer>
           </div>
         </div>

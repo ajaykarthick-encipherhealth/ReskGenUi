@@ -15682,3 +15682,6 @@ input::-webkit-inner-spin-button {
   width: 150px !important;
   font-size: 12px !important;
 }
+.customInput .ant-input{
+  border-radius: none !important;
+}
