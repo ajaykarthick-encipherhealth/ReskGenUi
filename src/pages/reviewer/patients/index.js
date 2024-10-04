@@ -547,7 +547,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                             }}
                           >
                             <div className="col-xl-2">
-                              <label>Search by Name or ID</label>
+                              <label className="responsiveLabel">Search by Name or ID</label>
                               {/* <InputField
                                 inputValue={searchTextValue}
                                 setInputValue={setSearchTextValue}
@@ -580,7 +580,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                               </div>
                             </div>
                             <div className="col-xl-2">
-                              <label>Select Status</label>
+                              <label  className="responsiveLabel">Select Status</label>
                               <div class="form-group has-search">
                                 <Select
                                   onChange={(selectedOption) => {
@@ -606,7 +606,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                               </div>
                             </div>
                             <div className="col-xl-2">
-                              <label>Select Priority</label>
+                              <label  className="responsiveLabel">Select Priority</label>
                               <div class="form-group has-search">
                                 <Select
                                   onChange={(selectedOption) => {
@@ -633,7 +633,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                             </div>
 
                             <div className="col-xl-2">
-                              <label>Due Date</label>
+                              <label  className="responsiveLabel">Due Date</label>
                               <div>
                                 <RangePicker
                                   format="MM-DD-YYYY"
@@ -675,8 +675,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                             </div>
                             <HeaderFilters bullets={bullets} />
 
-                            <div className="col-xl-2">
-                              <DailyTask trackChart={trackChart} />
+                            <div className="col-xl-2 mt-4 mb-5">
+                            <DailyTask trackChart={trackChart} />
                             </div>
                           </div>
                           {showFilters && (
@@ -685,10 +685,11 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                 display: "flex",
                                 marginTop: "-30px",
                                 flexDirection: "row",
+                                marginBottom: "30px"
                               }}
                             >
                               <div className="col-xl-2 ">
-                                <label>Completed Date</label>
+                                <label  className="responsiveLabel">Completed Date</label>
                                 <div>
                                   <RangePicker
                                     format="MM-DD-YYYY"

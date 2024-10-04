@@ -243,25 +243,6 @@ const DailyTask = () => {
             height: "260px",
           }}
         >
-          <Row>
-            <Col span={12}>
-              <div>
-                <Skeleton.Input
-                  style={{ width: "100%", height: "200px" }}
-                  active
-                />
-              </div>
-            </Col>
-            <Col span={12} className={styles.headerTitle}>
-              <div style={{ paddingLeft: "10px" }}>
-                {Array.from({ length: bullets.length }).map((_, i) => (
-                  <div className={styles.container} key={i}>
-                    <Skeleton.Input style={{ width: 30 }} active />
-                  </div>
-                ))}
-              </div>
-            </Col>
-          </Row>
         </Col>
       ))}
     </Row>
@@ -330,7 +311,7 @@ const DailyTask = () => {
                           </div>
                         </Col>
                         <Col span={12} className={styles.headerTitle}>
-                          <div style={{ paddingLeft: "10px" }}>
+                          <div>
                             {bullets?.map((item) => {
                               return (
                                 <div className={styles.container}>
