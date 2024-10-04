@@ -159,8 +159,7 @@ const MovementAction = ({
               cancelText="No"
             >
             <span className={`d-flex align-items-center justify-content-center ${styles.potentialIcon}`}>
-            <FontAwesomeIcon icon={faHandHoldingMedical}  style={{ fontSize: "9px"
-            }}
+            <FontAwesomeIcon icon={faHandHoldingMedical}  style={{ fontSize: "9px" }}
                 onClick={() => {
                   moveToStrightAction(
                     setIsValidAction,
