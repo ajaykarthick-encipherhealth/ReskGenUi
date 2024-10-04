@@ -6,7 +6,7 @@ import AppTable from "../../../components/tables";
 import mockdata from "./mockdata.json";
 import { getButtonStatus } from "../../../components/commonFunctions";
 import FeedBackModalContent from "./feedBackModal";
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
 
 const FeedBack = () => {
   const totalElements = 100;
@@ -59,9 +59,9 @@ const FeedBack = () => {
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
-      <div className="m-5">
-        <div className="d-flex" style={{ marginTop: "65px" }}>
-          <div className="col-lg-2 mx-2">
+      <div style={{ marginTop: "65px" }}>
+        <div className="row mx-3">
+          <div className="col-2">
             <label>Search by Name or ID</label>
             <InputField
               isSearch={true}
@@ -72,7 +72,7 @@ const FeedBack = () => {
               isInputFiled={false}
             />
           </div>
-          <div className="col-lg-2 mx-2">
+          <div className="col-2">
             <label>Search by Name or ID</label>
             <InputField
               isSearch={true}
@@ -83,7 +83,7 @@ const FeedBack = () => {
               isInputFiled={false}
             />
           </div>
-          <div className="col-lg-2 mx-2">
+          <div className="col-2">
             <label>Search by Name or ID</label>
             <InputField
               isSearch={true}
@@ -93,6 +93,9 @@ const FeedBack = () => {
               type={"text"}
               isInputFiled={false}
             />
+          </div>
+          <div className="col-6 d-flex justify-content-end mt-4">
+            <Button>Create</Button>
           </div>
         </div>
 

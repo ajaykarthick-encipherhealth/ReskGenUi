@@ -1,17 +1,13 @@
 import React from "react";
-import { Steps } from "antd";
+import { Avatar, Steps } from "antd";
 import styles from "./styles.module.css";
 import { getButtonStatus } from "../../../components/commonFunctions";
 import { IMAGES } from "../../../jsx/constant/theme";
 import Image from "next/image";
+import { UserOutlined } from "@ant-design/icons";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 
-const FeedBackModalContent = ({
-  isModalOpen,
-  modalData,
-  handleOk,
-  handleCancel,
-}) => {
+const FeedBackModalContent = ({ modalData }) => {
   const description = "Approved  John Smith 03/21/2024 13.30";
 
   const stepsData = [
@@ -35,7 +31,12 @@ const FeedBackModalContent = ({
     },
     {
       title: "Technical Support Team",
-      description,
+      description: (
+        <div className={styles.steps}>
+          Approved <Avatar size={"small"} icon={<UserOutlined />}></Avatar> Megan Meyers
+          03/21/2024 13.30
+        </div>
+      ),
       icon: (
         <Image
           style={{
@@ -49,7 +50,12 @@ const FeedBackModalContent = ({
     },
     {
       title: "Medical Coding Team",
-      description,
+      description: (
+        <div className={styles.steps}>
+          Approved <Avatar size={"small"}  icon={<UserOutlined />}></Avatar> Megan Meyers
+          03/21/2024 13.30
+        </div>
+      ),
       icon: (
         <Image
           style={{
@@ -63,7 +69,12 @@ const FeedBackModalContent = ({
     },
     {
       title: "Manager",
-      description,
+      description: (
+        <div className={styles.steps}>
+          Approved <Avatar size={"small"}  icon={<UserOutlined />}></Avatar> Megan Meyers
+          03/21/2024 13.30
+        </div>
+      ),
       icon: (
         <Image
           style={{
@@ -77,7 +88,7 @@ const FeedBackModalContent = ({
     },
     {
       title: "Created the Feedback",
-      description,
+      description: "03/21/2024 13.30",
       icon: (
         <Image
           style={{
@@ -90,7 +101,7 @@ const FeedBackModalContent = ({
       ),
     },
   ];
-console.log(modalData,"modalData")
+
   return (
     <div>
       {modalData && (
@@ -98,7 +109,10 @@ console.log(modalData,"modalData")
           <div className="col-7">
             <div className={styles.heading}>Patient feedback</div>
             <div className="d-flex justify-content-between mt-2">
-             <div className={styles.name}> {modalData?.patientId}-{modalData?.patientName}</div>
+              <div className={styles.name}>
+                {" "}
+                {modalData?.patientId}-{modalData?.patientName}
+              </div>
               <div>{getButtonStatus(modalData?.status)}</div>
             </div>
             <div className="row">
@@ -109,7 +123,11 @@ console.log(modalData,"modalData")
               <div className="col-6 mt-3">
                 <div className={styles.txt}>Managar</div>
                 <div className="d-flex align-items-center gap-2">
-                {renderUserPrfoileAvatar(modalData?.firstName,modalData?.lastName,modalData?.profileImageUrl)}
+                  {renderUserPrfoileAvatar(
+                    modalData?.firstName,
+                    modalData?.lastName,
+                    modalData?.profileImageUrl
+                  )}
                   {modalData?.firstName} {modalData?.lastName}
                 </div>
               </div>
