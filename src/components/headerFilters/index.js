@@ -435,7 +435,7 @@ const HeaderFilters = ({
           {bullets && (
             <div
               className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
-              style={{ margin: "30px 0 0 0px", marginLeft: "39px" }}
+              style={{ margin: "30px 0 0 0px" }}
             >
               <Popover
                 content={

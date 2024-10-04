@@ -675,7 +675,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                             </div>
                             <HeaderFilters bullets={bullets} />
 
-                            <div className="col-xl-2 mt-4 mb-5">
+                            <div className="col-xl-2 mt-4 mb-1">
                             <DailyTask trackChart={trackChart} />
                             </div>
                           </div>
@@ -685,7 +685,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                 display: "flex",
                                 marginTop: "-30px",
                                 flexDirection: "row",
-                                marginBottom: "30px"
+                                
                               }}
                             >
                               <div className="col-xl-2 ">
