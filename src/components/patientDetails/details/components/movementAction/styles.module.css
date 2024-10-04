@@ -26,3 +26,14 @@
   border-radius: 100%;
   cursor: pointer;
 }
+.potentialIcon {
+  background: #beb531;
+  color: #fff;
+  font-size: 19px !important;
+  margin-right: 2px;
+  cursor: pointer;
+  border-radius: 100%;
+  height: 19px;
+  width: 19px;
+  margin-top: 2px;
+}

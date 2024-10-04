@@ -5,7 +5,7 @@ import {
   CloseCircleFilled,
   CheckCircleFilled,
   RightCircleOutlined,
-  IssuesCloseOutlined
+  IssuesCloseOutlined,
 } from "@ant-design/icons";
 import { Tooltip, Popconfirm, message } from "antd";
 import {
@@ -31,7 +31,7 @@ const MovementAction = ({
   isComboCode,
   setSuggestedMeatForm,
   meatCriteriaList,
-  setSelectCardTitle
+  setSelectCardTitle,
 }) => {
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const onChangeValues = (data) => {
@@ -44,30 +44,16 @@ const MovementAction = ({
 
   const onConfirmValidMove = async () => {
     setSelectCardTitle && setSelectCardTitle(isValidAction);
-      var meatFoundResult = getMeatAnyOneFindCheck(
-        selectDisDetails?.diagnosisCode,
-        meatCriteriaList
-      );
-      if (!meatFoundResult) {
-        setFileLoading(true);
-        const result = await suggestedMeatCheck(
-          selectDisDetails?.diagnosisCode
-        );
-        if (result?.response) {
-          setSuggestedMeatForm && setSuggestedMeatForm(true);
-          setFileLoading(false);
-        } else {
-          handleSubmitValidNotes({
-            values: null,
-            setFileLoading,
-            setConfirmNotesModalValid,
-            isValidAction,
-            selectDisDetails,
-            getpatientDetailsData,
-            patientDetailsResult,
-            handleCloseModal,
-          });
-        }
+    var meatFoundResult = getMeatAnyOneFindCheck(
+      selectDisDetails?.diagnosisCode,
+      meatCriteriaList
+    );
+    if (!meatFoundResult) {
+      setFileLoading(true);
+      const result = await suggestedMeatCheck(selectDisDetails?.diagnosisCode);
+      if (result?.response) {
+        setSuggestedMeatForm && setSuggestedMeatForm(true);
+        setFileLoading(false);
       } else {
         handleSubmitValidNotes({
           values: null,
@@ -80,6 +66,18 @@ const MovementAction = ({
           handleCloseModal,
         });
       }
+    } else {
+      handleSubmitValidNotes({
+        values: null,
+        setFileLoading,
+        setConfirmNotesModalValid,
+        isValidAction,
+        selectDisDetails,
+        getpatientDetailsData,
+        patientDetailsResult,
+        handleCloseModal,
+      });
+    }
   };
 
   const handleCloseModal = () => {};
@@ -87,110 +85,126 @@ const MovementAction = ({
     <>
       <div className={styles.container}>
         {validAction && (
-          <Popconfirm
-            onConfirm={() => {
-              onConfirmValidMove();
-            }}
-            title="You want move to valid?"
-            placement="bottom"
-            okText="Yes"
-            cancelText="No"
-          >
-            <CheckCircleFilled
-              className={styles.validIcon}
-              onClick={() => {
-                moveToStrightAction(setIsValidAction, "Move to HCC", cardTitle),
-                  onchangeValid(result.diagnosisCode, result),
-                  onChangeValues(result);
+          <Tooltip title="Move to valid" placement="bottom">
+            <Popconfirm
+              onConfirm={() => {
+                onConfirmValidMove();
               }}
-            />
-          </Popconfirm>
+              title="You want move to valid?"
+              placement="bottom"
+              okText="Yes"
+              cancelText="No"
+            >
+              <CheckCircleFilled
+                className={styles.validIcon}
+                onClick={() => {
+                  moveToStrightAction(
+                    setIsValidAction,
+                    "Move to HCC",
+                    cardTitle
+                  ),
+                    onchangeValid(result.diagnosisCode, result),
+                    onChangeValues(result);
+                }}
+              />
+            </Popconfirm>
+          </Tooltip>
         )}
         {suggestedAction && (
-          <Popconfirm
-            onConfirm={() => {
-              handleSubmitValidNotes({
-                values: null,
-                setFileLoading,
-                setConfirmNotesModalValid,
-                isValidAction,
-                selectDisDetails,
-                getpatientDetailsData,
-                patientDetailsResult,
-                handleCloseModal,
-              });
-            }}
-            title="You want move to suggested?"
-            placement="bottom"
-            okText="Yes"
-            cancelText="No"
-          >
-            <RightCircleOutlined
-              className={styles.suggestedIcon}
-              onClick={() => {
-                moveToStrightAction(
-                  setIsValidAction,
-                  "Move to Suggested",
-                  cardTitle
-                ),
-                  onchangeValid(result.diagnosisCode, result),
-                  onChangeValues(result);
+          <Tooltip title="Move to suggested" placement="bottom">
+            <Popconfirm
+              onConfirm={() => {
+                handleSubmitValidNotes({
+                  values: null,
+                  setFileLoading,
+                  setConfirmNotesModalValid,
+                  isValidAction,
+                  selectDisDetails,
+                  getpatientDetailsData,
+                  patientDetailsResult,
+                  handleCloseModal,
+                });
               }}
-            />
-          </Popconfirm>
+              title="You want move to suggested?"
+              placement="bottom"
+              okText="Yes"
+              cancelText="No"
+            >
+              <RightCircleOutlined
+                className={styles.suggestedIcon}
+                onClick={() => {
+                  moveToStrightAction(
+                    setIsValidAction,
+                    "Move to Suggested",
+                    cardTitle
+                  ),
+                    onchangeValid(result.diagnosisCode, result),
+                    onChangeValues(result);
+                }}
+              />
+            </Popconfirm>
+          </Tooltip>
         )}
         {potentialAction && (
-          <Popconfirm
-            onConfirm={() => {
-              onConfirmValidMove();
-            }}
-            title="You want move to potential?"
-            placement="bottom"
-            okText="Yes"
-            cancelText="No"
-          >
-            <IssuesCloseOutlined
-              className={styles.suggestedIcon}
-              onClick={() => {
-                moveToStrightAction(setIsValidAction, "Move to Potential", cardTitle),
-                  onchangeValid(result.diagnosisCode, result),
-                  onChangeValues(result);
+          <Tooltip title="Move to potential" placement="bottom">
+            <Popconfirm
+              onConfirm={() => {
+                onConfirmValidMove();
               }}
-            />
-          </Popconfirm>
+              title="You want move to potential?"
+              placement="bottom"
+              okText="Yes"
+              cancelText="No"
+            >
+              <IssuesCloseOutlined
+                className={styles.potentialIcon}
+                onClick={() => {
+                  moveToStrightAction(
+                    setIsValidAction,
+                    "Move to Potential",
+                    cardTitle
+                  ),
+                    onchangeValid(result.diagnosisCode, result),
+                    onChangeValues(result);
+                }}
+              />
+            </Popconfirm>
+          </Tooltip>
         )}
         {deleteAction && !isComboCode ? (
-          <Popconfirm
-            onConfirm={() => {
-              handleSubmitValidNotes({
-                values: null,
-                setFileLoading,
-                setConfirmNotesModalValid,
-                isValidAction,
-                selectDisDetails,
-                getpatientDetailsData,
-                patientDetailsResult,
-                handleCloseModal,
-              });
-            }}
-            title="Do you want to move to Delete?"
-            placement="bottom"
-            okText="Yes"
-            cancelText="No"
-          >
-            <CloseCircleFilled
-              className={styles.deleteIcon}
-              onClick={() => {
-                moveToStrightAction(
-                  setIsValidAction,
-                  "Move to Deleted",
-                  cardTitle
-                ),
-                  onchangeValid(result.diagnosisCode, result),
-                  onChangeValues(result);
+          <Tooltip title="Move to delete" placement="bottom">
+            <Popconfirm
+              onConfirm={() => {
+                handleSubmitValidNotes({
+                  values: null,
+                  setFileLoading,
+                  setConfirmNotesModalValid,
+                  isValidAction,
+                  selectDisDetails,
+                  getpatientDetailsData,
+                  patientDetailsResult,
+                  handleCloseModal,
+                });
               }}
-            />
-          </Popconfirm>
+              title="Do you want to move to delete?"
+              placement="bottom"
+              okText="Yes"
+              cancelText="No"
+            >
+              <CloseCircleFilled
+                className={styles.deleteIcon}
+                onClick={() => {
+                  moveToStrightAction(
+                    setIsValidAction,
+                    "Move to Deleted",
+                    cardTitle
+                  ),
+                    onchangeValid(result.diagnosisCode, result),
+                    onChangeValues(result);
+                }}
+              />
+            </Popconfirm>
+          </Tooltip>
         ) : (
           //   <CloseCircleFilled
           //   className={styles.deleteIcon}
