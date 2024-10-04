@@ -16,9 +16,13 @@
   overflow: scroll;
 }
 .modalborder {
-  height: 440px;
+  height: 450px;
   border-left: 1px solid var(--borderColor);
 }
 .name{
   font-size: 17px;
 }
+.steps{
+  font-size: 10px;
+}
+
