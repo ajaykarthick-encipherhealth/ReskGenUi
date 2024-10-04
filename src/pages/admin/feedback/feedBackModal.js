@@ -33,7 +33,7 @@ const FeedBackModalContent = ({ modalData }) => {
       title: "Technical Support Team",
       description: (
         <div className={styles.steps}>
-          Approved <Avatar icon={<UserOutlined />}></Avatar> Megan Meyers
+          Approved <Avatar size={"small"} icon={<UserOutlined />}></Avatar> Megan Meyers
           03/21/2024 13.30
         </div>
       ),
@@ -52,7 +52,7 @@ const FeedBackModalContent = ({ modalData }) => {
       title: "Medical Coding Team",
       description: (
         <div className={styles.steps}>
-          Approved <Avatar icon={<UserOutlined />}></Avatar> Megan Meyers
+          Approved <Avatar size={"small"}  icon={<UserOutlined />}></Avatar> Megan Meyers
           03/21/2024 13.30
         </div>
       ),
@@ -71,7 +71,7 @@ const FeedBackModalContent = ({ modalData }) => {
       title: "Manager",
       description: (
         <div className={styles.steps}>
-          Approved <Avatar icon={<UserOutlined />}></Avatar> Megan Meyers
+          Approved <Avatar size={"small"}  icon={<UserOutlined />}></Avatar> Megan Meyers
           03/21/2024 13.30
         </div>
       ),

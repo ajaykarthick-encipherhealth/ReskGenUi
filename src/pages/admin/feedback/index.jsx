@@ -94,6 +94,17 @@ const FeedBack = () => {
               isInputFiled={false}
             />
           </div>
+          <div className="">
+            <label>Search by Name or ID</label>
+            <InputField
+              isSearch={true}
+              placeholder={"Search"}
+              inputValue={search}
+              setInputValue={setSearch}
+              type={"text"}
+              isInputFiled={false}
+            />
+          </div>
         </div>
 
         <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
