@@ -450,7 +450,7 @@ const MachineAccuracy = ({ accuracyDetails }) => {
   const average = 0;
   return (
     <>
-      <HeadTitle header="Accuracy and Quality Insights" />
+      <HeadTitle header="Accuracy and Quality Insights" height="20px" margin="15px 0px" fontSize="18px" />
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>

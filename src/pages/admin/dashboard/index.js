@@ -47,7 +47,7 @@ const Index = () => {
                 </Col>
               </Row>
 
-              <Row>
+              <Row >
                 <Col span={23}>
                   <MachineAccuracy />
                 </Col>

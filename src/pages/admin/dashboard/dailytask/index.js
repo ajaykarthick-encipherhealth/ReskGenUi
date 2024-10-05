@@ -17,7 +17,6 @@ const DailyTask = () => {
   const dailyStatusData = useSelector((state) => state?.l2Dashboard?.dailyTask);
   const dispatch = useDispatch();
   const router = useRouter();
-
   const [roles, setRoles] = useState({
     REVIEWER: 0,
     SUPERVISOR: 0,
@@ -198,12 +197,11 @@ const DailyTask = () => {
       getDays(selectedDate, dailyStatusData);
     }
   }, [dailyStatusData, selectedDate]);
-
   return (
     <>
       <HeadTitle header="Total Users" />
       <div className={styles.card2} style={{ height: "75%" }}>
-        <Card style={{ borderRadius: "28px", display: "flex" }}>
+        <Card height="200px" style={{ borderRadius: "28px", display: "flex" }}>
           <Row>
             <Col span={1}></Col>
             <Col span={22}>
@@ -224,7 +222,7 @@ const DailyTask = () => {
                         <Col span={12}>
                           <div
                             className={styles.container}
-                            style={{ width: "100%" }}
+                            style={{ width: "100%",margin:"-20px 0 0px -10px" }}
                           >
                             <ReactECharts
                               option={getChartOption(
@@ -240,7 +238,7 @@ const DailyTask = () => {
                           </div>
                         </Col>
                         <Col span={12} className={styles.headerTitle}>
-                          <div style={{ paddingLeft: "10px" }}>
+                          <div style={{ paddingLeft: "10px",marginTop:"-20px" }}>
                             {bullets?.map((item, bulletIndex) => (
                               <div
                                 key={bulletIndex}

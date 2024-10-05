@@ -213,7 +213,7 @@ const CompletedStatus = () => {
 
   return (
     <>
-      <HeadTitle header="Productivity Status" />
+      <HeadTitle header="Productivity Status" height="20px" margin="-40px 0px 20px 0" fontSize="18px"/>
       <div className={styles.card5}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>

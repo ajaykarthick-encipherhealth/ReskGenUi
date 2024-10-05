@@ -291,7 +291,7 @@ const WorkFlow = () => {
         setOpenPicker={setOpenPicker}
         isAdmin={true}
       />
-      <Card borderRadius="28px" style={{ width: "100%", height: "75%" }}>
+      <Card borderRadius="28px" height="200px"style={{ width: "100%"}}>
         {worlFlowData?.loading ? (
           renderCardSkeleton()
         ) : worlFlowData?.data?.response ? (
