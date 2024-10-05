@@ -34,7 +34,7 @@ import {
   handleFilePost,
   addUser,
 } from "../../services/ChatService";
-import { portalUrl2 } from "../../utils/config";
+import { portalUrl2, webSocketUrl } from "../../utils/config";
 import { getStorage } from "../../utils/storages";
 
 const ChatCommunication = ({ openMsg, offMsg }) => {
@@ -98,7 +98,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   const connect = () => {
     const token = getStorage("token");
     let Sock = new SockJS(
-      `${portalUrl2}chatservice/chatservice/ws?token=${token}`
+      `https://${webSocketUrl}chatservice/chatservice/ws?token=${token}`
     );
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
@@ -286,7 +286,11 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
         };
       }
 
-      stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
+      stompClient.send(
+        `/app/private-message?token=${getStorage("token")}`,
+        {},
+        JSON.stringify(chatMessage)
+      );
       messagesRef.current = [...message, chatMessage];
       setMessages([...message, chatMessage]);
       setFileModal(false);
