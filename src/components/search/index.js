@@ -14,7 +14,7 @@ const Search = ({
 }) => {
   return (
     <div>
-      <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
+      <label style={{ marginLeft: "8px" }} className="responsiveLabel">{searchlabel}</label>
       <InputField
         delay={1000}
         type="text"

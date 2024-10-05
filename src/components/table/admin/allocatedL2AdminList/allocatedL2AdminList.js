@@ -225,7 +225,7 @@ function AllocatedL2AdminList({
   };
 
   return (
-    <div className={TableStyle.classContaineer}>
+    // <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
@@ -331,8 +331,7 @@ function AllocatedL2AdminList({
           )}
         </tbody>
       </table>
-      <div></div>
-    </div>
+    // </div>
   );
 }
 

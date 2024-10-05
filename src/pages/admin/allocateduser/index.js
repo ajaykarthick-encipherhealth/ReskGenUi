@@ -455,7 +455,7 @@ const Patient = ({
                               <div className={reportStyles.backDiv}>
                                 <button
                                   style={{ width: "40px", height: "40px" }}
-                                  className={reportStyles.filterBtn}
+                                  className={`${reportStyles.filterBtn} d-flex justify-content-center align-items-center`}
                                   onClick={() => {
                                     setIsPatientList(false);
                                     setAllocatedOption("");

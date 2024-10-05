@@ -9188,9 +9188,9 @@ button.btn.btn-danger.btn-sm.light.ms-1.btn.btn-primary {
   box-shadow: 0 0 13px 0 #523f690d !important;
 }
 
-.dataTables_wrapper {
+/* .dataTables_wrapper {
   padding: 0 20px 0 20px !important;
-}
+} */
 
 /* thead>tr>th{
   border: 1px solid #a6c9ed;
@@ -10285,9 +10285,9 @@ p,
   font-size: 14px !important;
 }
 
-.dataTables_wrapper {
-  padding: 0 20px 0 20px !important;
-}
+/* .dataTables_wrapper {
+  padding: 0 20px 0 0px !important;
+} */
 
 .profile-tab .nav-item .nav-link {
   font-size: 1rem;
@@ -10342,7 +10342,7 @@ p,
 }
 
 .active-projects .tbl-caption {
-  padding: 20px;
+  padding: 20px 0px;
 }
 .active-projects .tbl-caption2 {
   padding: 0px 20px 20px 20px;
@@ -11188,9 +11188,9 @@ h6 {
   text-align: left;
 }
 
-.menu-toggle .content-body {
+/* .menu-toggle .content-body {
   margin-left: 4.7rem !important;
-}
+} */
 
 .deznav .metismenu a {
   padding: 10px 0px 10px 23px !important;
@@ -15687,4 +15687,11 @@ input::-webkit-inner-spin-button {
 }
 .customDrawer.ant-drawer .ant-drawer-body{
   margin-left: 20px;
+}
+@media screen and (max-width:1500px){
+  .responsiveLabel{
+    font-size:12px !important;
+    font-weight: 400;
+  }
+  
 }

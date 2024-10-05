@@ -22,7 +22,7 @@ const Search = ({
   }, [activeTab]);
   return (
     <div>
-      <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
+      <label style={{ marginLeft: "8px" }} className="responsiveLabel">{searchlabel}</label>
       <InputField
         inputValue={
           activeTab === "CoderReport"

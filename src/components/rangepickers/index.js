@@ -24,7 +24,7 @@ const DateRangePicker = ({
 }) => {
   return (
     <div  style={{display:"flex"}}>
-      <label className="labelStyle">{pickerlabel}</label>
+      <label className="labelStyle responsiveLabel">{pickerlabel}</label>
       <div>
         <RangePicker
           value={selectedDates ? selectedDates : ""}
