@@ -13,6 +13,7 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import ComboCard from "../../components/COMBO";
 import ModelIndex from "../../components/model/Index";
 import { getStorage } from "../../../../../utils/storages";
+import ManuallyAdd from "../../components/manuallyAdd";
 
 const Combo = ({
   activeComboTree,
@@ -22,6 +23,7 @@ const Combo = ({
   fileDosPageNumberList,
   setActiveTabHead,
   setActiveMeatTitle,
+  year
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -81,7 +83,12 @@ const Combo = ({
   const [isBlockRxHccCareGap, setIsBlockRxHccCareGap] = useState([])
   const [isBlockRxHccDeleted, setIsBlockRxHccDeleted] = useState([])
   const userId = getStorage('userId')
- 
+  const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
+  const [isFileFormShow, setIsFileFormShow] = useState(false);
+  const [selectCardTitle, setSelectCardTitle] = useState('');
+  const [formValues, setFormValues] = useState(false);
+
+  
   const handleChange = async (e) => {
     const key = e.target.name;
     if (key == "diagnosisCodeQuery") {
@@ -149,6 +156,7 @@ const Combo = ({
     setIsAddComboCode(false);
     setFileLoading(false);
     setOpens(false);
+    setSuggestedMeatForm(false);
   };
 
   const handleChangeSuggested = async (e) => {
@@ -301,6 +309,8 @@ const Combo = ({
               setActiveMeatTitle={setActiveMeatTitle}
               meatCriteriaList={allMeatList}
               cardTitle="SUGGESTED"
+              setSuggestedMeatForm={setSuggestedMeatForm}
+              setSelectCardTitle={setSelectCardTitle}
             />
           </div>
 
@@ -330,6 +340,8 @@ const Combo = ({
               setActiveMeatTitle={setActiveMeatTitle}
               meatCriteriaList={allMeatList}
               cardTitle="DELETED"
+              setSuggestedMeatForm={setSuggestedMeatForm}
+              setSelectCardTitle={setSelectCardTitle}
             />
           </div>
         </div>
@@ -500,6 +512,52 @@ const Combo = ({
           </div>
         </div>
       </Offcanvas>
+      <Modal
+        title="You want to move  valid? please add a MEAT condition."
+        open={suggestedMeatForm}
+        footer={false}
+        width="75%"
+        height={200}
+        onCancel={() => setSuggestedMeatForm(false)}
+      >
+        <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
+          <div className="col-8">
+            {hccFileDetails?.loading != true ? (
+              <>
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
+                    fileHeight={true}
+                    fileHeightFrames={window.screen.availHeight - 50}
+                    fileHeights={"100vh"}
+                  />
+                )}
+              </>
+            ) : null}
+          </div>
+          <div className="col-4">
+            <div
+              className="px-4"
+              style={{ height: "90vh", overflowY: "scroll" }}
+            >
+              <ManuallyAdd
+                handleCloseModal={handleCloseModal}
+                setIsFileFormShow={setIsFileFormShow}
+                year={year}
+                isEditPage={true}
+                isEditValue={formValues}
+                meatFormDisplay={true}
+                setSuggestedMeatForm={setSuggestedMeatForm}
+                selectDisDetails={selectDisDetails}
+                selectCardTitle={selectCardTitle}
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };

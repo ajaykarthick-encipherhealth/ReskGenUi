@@ -49,6 +49,8 @@ const ComboCard = ({
   isDosSelected,
   patientDetailsResult,
   storeFileDetails,
+  setSuggestedMeatForm,
+  setSelectCardTitle,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -209,6 +211,9 @@ const ComboCard = ({
                                   item.ruleType !==
                                     "DIRECT_COMBINATION_RULE_ENGINE"
                                 }
+                                meatCriteriaList={meatCriteriaList}
+                                setSuggestedMeatForm={setSuggestedMeatForm}
+                                setSelectCardTitle={setSelectCardTitle}
                               />
                             ) : null}
                           </div>
