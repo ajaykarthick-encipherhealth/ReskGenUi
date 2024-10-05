@@ -427,7 +427,7 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                     <div className="table-responsive active-projects task-table">
                       <div
                         className="d-flex justify-content-between"
-                        style={{ width: "98%", margin: "auto" }}
+                        style={{ width: "100%", margin: "auto" }}
                       >
                         <div className="d-flex">
                           <div className="col-lg-4 mx-2">
