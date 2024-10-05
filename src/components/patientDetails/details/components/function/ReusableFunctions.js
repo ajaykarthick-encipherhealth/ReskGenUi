@@ -1365,6 +1365,9 @@ export const handleSubmitValidNotes = async ({
   ) {
     apiURL = "management/disease/move/deletedtopotential";
   }
+  if (isValidAction.name == "Move to HCC" && isValidAction.title == "DELETED" && selectDisDetails?.defaultPosition == "INVALID") {
+    apiURL = "management/disease/move/deletedtoinvalid";
+  }
   try {
     var patientId = getStorage("patientId");
     var dataFormatSuggested = {

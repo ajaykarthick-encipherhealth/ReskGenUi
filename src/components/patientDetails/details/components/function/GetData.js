@@ -1036,7 +1036,7 @@ export const getPatientDetails = async (
       setMeatCriteriaList && setMeatCriteriaList(meatListArr);
       setDeletedMeatList && setDeletedMeatList(deletedmeatListArr);
       setAllDisList &&
-        setAllDisList([...hccDisArray, ...deleteHccList, ...suggestListAll]);
+        setAllDisList([...hccDisArray, ...deleteHccList, ...suggestListAll,...potentialListAll]);
       setAllMeatList && setAllMeatList([...meatListArr, ...deletedmeatListArr]);
       setPotentialList && setPotentialList(potentialListAll)
 
