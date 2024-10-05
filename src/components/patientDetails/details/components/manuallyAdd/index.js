@@ -753,7 +753,21 @@ const ManuallyAdd = ({
       } catch (error) {}
     }else{
       if (meatFormDisplay) {
-        const res = await suggestedToValidMove(data,selectCardTitle);
+        var movemetData = {};
+        movemetData.patientId = await getStorage("patientId"),
+        movemetData.diagnosisCode= selectDisDetails.diagnosisCode,
+        movemetData.processedYear = year?.value,
+        movemetData.chartProcessType = getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
+        movemetData.dateOfServices = selectDisDetails.dateOfServices;
+        movemetData.monitorAspect = data.monitorAspect,
+        movemetData.monitorHyperLink = data.monitorHyperLink,
+        movemetData.evaluateAspect = data.evaluateAspect,
+        movemetData.evaluateHyperLink  = data.evaluateHyperLink,
+        movemetData.assessmentAspect = data.assessmentAspect,
+        movemetData.assessmentHyperLink = data.assessmentHyperLink,
+        movemetData.treatmentAspect = data.treatmentAspect,
+        movemetData.treatmentHyperLink = data.treatmentHyperLink;
+        const res = await suggestedToValidMove(movemetData,selectCardTitle);
         if (res?.status == "SUCCESS") {
           handleCloseModal(false);
           getResponePopup(res);
