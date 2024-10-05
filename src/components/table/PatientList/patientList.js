@@ -84,10 +84,10 @@ function PatientTable({
             className={TableStyle.firstTdBorder}
             onClick={handleTableRowClick}
           >
-             <Tooltip title={data?.patientId}> {truncateString(data?.patientId, 30)}</Tooltip>
+             <Tooltip title={data?.patientId}> {truncateString(data?.patientId, 20)}</Tooltip>
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-             <Tooltip title={data?.fileName}> {truncateString(data?.fileName, 30)}</Tooltip>
+             <Tooltip title={data?.fileName}> {truncateString(data?.fileName, 20)}</Tooltip>
           </td>
           {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
             <td
@@ -158,7 +158,7 @@ function PatientTable({
                   )
                 );
               }}
-              style={{ width: "80%" }}
+           
             />
           </td>
 
@@ -238,7 +238,7 @@ function PatientTable({
 
             <th className={TableStyle.rowStyle}> ALLOCATED BY</th>
             <th style={{ paddingLeft: "35px" }}>PRIORITY</th>
-            <th style={{ paddingLeft: "60px" }}>STATUS</th>
+            <th >STATUS</th>
           </tr>
         </thead>
 

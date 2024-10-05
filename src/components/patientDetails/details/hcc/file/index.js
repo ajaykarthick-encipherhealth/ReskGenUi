@@ -492,6 +492,7 @@ const File = ({
                               provided={provided}
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
+                              year={year}
                             />
                           </div>
                         </div>
@@ -580,6 +581,7 @@ const File = ({
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
                               remove
+                              year={year}
                             />
                           </div>
                         </div>
@@ -669,6 +671,7 @@ const File = ({
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
                               remove
+                              year={year}
                             />
                           </div>
                         </div>

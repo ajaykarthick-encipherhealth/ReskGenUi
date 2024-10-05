@@ -423,7 +423,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Completed} style={{ height: "18%", width: "18%" }} />
+              <Image src={Completed} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -432,7 +432,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -447,7 +447,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
             }`}
           >
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Declined} style={{ height: "18%", width: "18%" }} />
+              <Image src={Declined} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -455,7 +455,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: NOT COMPUTED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -463,7 +463,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: COMPUTED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -471,7 +471,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: HOLD">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Hold} style={{ height: "18%", width: "18%" }} />
+              <Image src={Hold} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -479,7 +479,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: ABORTED BY CRON">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Abort} style={{ height: "18%", width: "18%" }} />
+              <Image src={Abort} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -487,7 +487,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );

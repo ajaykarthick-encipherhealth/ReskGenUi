@@ -110,11 +110,10 @@ const DailyTask = ({ trackChart }) => {
     <>
       {/* <HeadTitle header="" /> */}
       <div className={styles.card2}>
-        
-      <Card borderRadius="28px" className="d-flex">
-      <Col span={22}>
-      <Row className="d-flex justify-content-between">
-      <Col span={22} className={styles.sliderdiv}>
+        <Card borderRadius="28px" className="d-flex">
+          <Col span={22}>
+            <Row className="d-flex justify-content-between">
+              <Col span={22} className={styles.sliderdiv}>
                 <Row>
                   <Col span={12}>
                     <div className={styles.container}>
@@ -140,14 +139,15 @@ const DailyTask = ({ trackChart }) => {
                           <div className={styles.container}>
                             <div className="d-flex">
                               <div
-                                className={styles.bgColor}
+                                className={`reusableFont ${styles.bgColor}`}
                                 style={{
                                   backgroundColor: item.color,
+                                  fontSize: "10px",
                                 }}
                               ></div>
                               {item?.name}
                             </div>
-                            <div className={styles.subText}>
+                            <div className={` reusableFont ${styles.subText}`}>
                               {item?.name === "Pending"
                                 ? trackChart?.PENDING
                                 : item?.name === "Declined"
@@ -166,8 +166,8 @@ const DailyTask = ({ trackChart }) => {
               </Col>
             </Row>
           </Col>
-          </Card>
-          </div>
+        </Card>
+      </div>
     </>
   );
 };
