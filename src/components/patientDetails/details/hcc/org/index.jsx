@@ -324,10 +324,10 @@ const CamboTree = ({
             )}
         </div>
         <Tooltip
-          title={node.diseaseName ? node.diseaseName : node.actualDescription}
+          title={node.diseaseName ? node.diseaseName : node.dbDescription}
         >
           <div className={Style.codeAlign}>
-            {node.diseaseName ? node.diseaseName : node.actualDescription}
+            {node.diseaseName ? node.diseaseName : node.dbDescription}
           </div>
         </Tooltip>
         <div className="text-start">
