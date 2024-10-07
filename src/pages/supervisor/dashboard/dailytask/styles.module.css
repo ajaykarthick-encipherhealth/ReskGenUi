@@ -54,8 +54,10 @@
   align-items: center;
   font-weight: 500;
   font-size: 14px;
+  right: 10px;
   color: #000000;
   padding-top: 10px;
+  
 }
 .ImgDIv {
   height: 80%;
@@ -70,4 +72,24 @@
   justify-content: end;
   align-items: end;
   margin-left: 20px;
+}
+@media screen and (min-width: 768px) and( max-width: 1024px) {
+  .headerTitle {
+    font-size: 10px;
+    right: 15px;
+  }
+}
+
+@media screen and (max-width: 1404px) {
+  .headerTitle {
+    font-size: 12px;
+    right: 15px;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .headerTitle {
+    font-size: 10px;
+    right: 15px;
+  }
 }

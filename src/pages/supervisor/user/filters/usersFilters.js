@@ -138,9 +138,9 @@ const UserFilters = ({
     <>
       <div style={{ display: "flex" }}>
         <div className="row filter-contain" style={{ width: "100%" }}>
-          <div className="col-xl-2">
+          <div className="col-xl-2 col-md-4">
             {" "}
-            <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
+            <label className="text-truncate" style={{ marginLeft: "8px" }}>{searchlabel}</label>
             <div className="form-group has-search">
               <FontAwesomeIcon
                 className="fa fa-search form-control-feedback"
@@ -163,7 +163,7 @@ const UserFilters = ({
           </div>
 
           {isSelector2 ? (
-            <div className="col-xl-2">
+            <div className="col-xl-2 col-md-4">
               {" "}
               <Selector
                 selectlabel={selectlabel2}
@@ -175,7 +175,7 @@ const UserFilters = ({
             </div>
           ) : null}
           {isAduitDueDate && (
-            <div className="col-xl-2">
+            <div className="col-xl-2 col-md-4">
               <DateRangePicker
                 pickerlabel={audipickerlabel1}
                 defaultStartDate={audidefaultStartDate}
@@ -190,7 +190,7 @@ const UserFilters = ({
             </div>
           )}
           {isAuditCompleteDate && (
-            <div className="col-xl-2">
+            <div className="col-xl-2 col-md-4">
               <DateRangePicker
                 pickerlabel={audipickerlabe2}
                 defaultStartDate={audidefaultStartDate2}
@@ -205,7 +205,7 @@ const UserFilters = ({
           )}
           {isAuditAllocatedBy && (
             <div
-              className="col-xl-2"
+              className="col-xl-2 col-md-4"
               // onClick={() => {
               //   dispatch(getFilters("auditAllocatedBy", username));
               // }}
@@ -240,9 +240,9 @@ const UserFilters = ({
           )}
           {isNextRow && (
             <div
-              className={"col-xl-1"}
+              className={"col-xl-1 col-md-4"}
               style={{
-                margin: "30px 0 0 0px",
+                margin: "15px 0 0 0px",
                 cursor: "pointer",
                 width: "107px",
               }}
@@ -255,7 +255,7 @@ const UserFilters = ({
           )}
           {bullets && (
             <div
-              className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
+              className={`${bullets ? "col-xl-1  col-md-4" : "col-xl-4"}`}
               style={{ margin: "30px 0 0 20px", cursor: "pointer" }}
             >
               <Popover
@@ -311,7 +311,7 @@ const UserFilters = ({
         <div style={{ margin: "50px 0px 0px -4px" }}>
           <div className="row filter-contain">
             {isSelector ? (
-              <div className="col-xl-2">
+              <div className="col-xl-2 col-md-4">
                 {" "}
                 <Selector
                   selectlabel={selectlabel}
@@ -325,7 +325,7 @@ const UserFilters = ({
             ) : null}
 
             {isRangePicker && (
-              <div className="col-xl-2">
+              <div className="col-xl-2 col-md-4">
                 <DateRangePicker
                   pickerlabel={pickerlabel}
                   defaultStartDate={defaultStartDate}
@@ -343,7 +343,7 @@ const UserFilters = ({
 
             {isAnotherPicker && (
               <>
-                <div className="col-xl-2">
+                <div className="col-xl-2 col-md-4">
                   <label className={styles.label}>{pickerlabe2}</label>
                   <div>
                     <RangePicker
@@ -377,7 +377,7 @@ const UserFilters = ({
             )}
             {isAllocatedDate && (
               <>
-                <div className="col-xl-2">
+                <div className="col-xl-2 col-md-3">
                   <label className={styles.label}>{pickerlabe3}</label>
                   <div>
                     <RangePicker
@@ -401,7 +401,7 @@ const UserFilters = ({
             )}
             {isAllocatedBySelector && (
               <div
-                className="col-xl-2"
+                className="col-xl-2 col-md-3"
                 // onClick={() => {
                 //   dispatch(getFilters("allocatedBy", username));
                 // }}
