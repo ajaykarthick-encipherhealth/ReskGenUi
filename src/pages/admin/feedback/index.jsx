@@ -125,12 +125,13 @@ const FeedBack = () => {
                 onClose={onClose}
                 open={open}
               >
-                <div className="mt-3">
+                <div className="mt-3 mx-4">
                   <Form
                     form={form}
                     className="customInput"
                     onFinish={handleSubmit}
                     layout="vertical"
+                    autoComplete="off"
                   >
                     <Form.Item
                       label="Feedback ID"
