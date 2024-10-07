@@ -221,7 +221,7 @@ const ManuallyAdd = ({
     const isCodeCheck = await isCodeAlready({
       code: value,
       patientId: await getStorage("patientId"),
-      dos: year?.value,
+      dos: year?.value||"",
       date: getSelectedDos,
     });
     if (isCodeCheck?.response) {
@@ -1017,7 +1017,7 @@ const ManuallyAdd = ({
         section: item.header,
         hyperlinks: item,
       }));
-      handleSelectChange(isEditValue?.dateOfServices, "dos");
+      handleSelectChange(isEditValue?.dateOfServices||year, "dos");
       setListOfSection(transformData(sectionList));
       setListOfSectionM(transformData(sectionListM));
       setListOfSectionE(transformData(sectionListE));
