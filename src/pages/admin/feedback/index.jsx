@@ -125,12 +125,13 @@ const FeedBack = () => {
                 onClose={onClose}
                 open={open}
               >
-                <div className="mt-3">
+                <div className="mt-3 mx-4">
                   <Form
                     form={form}
                     className="customInput"
                     onFinish={handleSubmit}
                     layout="vertical"
+                    autoComplete="off"
                   >
                     <Form.Item
                       label="Feedback ID"
@@ -205,7 +206,23 @@ const FeedBack = () => {
                         },
                       ]}
                     >
-                      <Select placeholder="Manager" />
+                      <Select
+                        placeholder="Manager"
+                        options={[
+                          {
+                            value: "jack",
+                            label: "Jack",
+                          },
+                          {
+                            value: "lucy",
+                            label: "Lucy",
+                          },
+                          {
+                            value: "tom",
+                            label: "Tom",
+                          },
+                        ]}
+                      />
                     </Form.Item>
                     <Form.Item>
                       <div className="d-flex justify-content-center align-items-center">
