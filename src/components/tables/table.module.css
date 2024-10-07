@@ -249,3 +249,8 @@
   font-size: 18px;
   margin-top: -2px;
 }
+@media screen and (max-width: 1024px) {
+  .classContaineer {
+   overflow:scroll;
+  }
+}
