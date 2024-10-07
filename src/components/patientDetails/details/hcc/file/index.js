@@ -50,7 +50,7 @@ const File = ({
   loading,
   isDosSelected,
   labFileLoad,
-  fileLoadingStatus
+  fileLoadingStatus,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -96,9 +96,8 @@ const File = ({
   const [deletedMeatList, setDeletedMeatList] = useState([]);
   const [showList, setShowList] = useState(["care"]);
   const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
-  const [selectCardTitle, setSelectCardTitle] = useState('');
+  const [selectCardTitle, setSelectCardTitle] = useState("");
   const [potentialList, setPotentialList] = useState([]);
-
 
   useEffect(() => {
     var orgId = getStorage("orgId");
@@ -247,7 +246,7 @@ const File = ({
       setShowList((prev) => [...prev, value]);
     }
   };
-  
+
   return (
     <>
       {fileLoading ? <LogoLoader /> : null}
@@ -325,6 +324,7 @@ const File = ({
                             setIsValidAction={setIsValidAction}
                             cardTitle="HCC"
                             provided={provided}
+                            year={year}
                           />
                         </div>
                       </div>
@@ -371,7 +371,7 @@ const File = ({
               </div>
             </Popover> */}
             <div className="card-body p-0">
-            {fileLoadingStatus ? (
+              {fileLoadingStatus ? (
                 <div className={visitStyles?.loaderDiv}>
                   <Spinner />
                 </div>
@@ -492,6 +492,7 @@ const File = ({
                               provided={provided}
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
+                              year={year}
                             />
                           </div>
                         </div>
@@ -529,7 +530,7 @@ const File = ({
                           <span
                             className={`${visitStyles.potential_title_badge}`}
                           >
-                             {potentialList?.length}
+                            {potentialList?.length}
                           </span>
                         </div>
                       </div>
@@ -580,6 +581,7 @@ const File = ({
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
                               remove
+                              year={year}
                             />
                           </div>
                         </div>
@@ -694,6 +696,7 @@ const File = ({
         setSuggestedMeatForm={setSuggestedMeatForm}
         meatCriteriaList={allMeatList}
         setSelectCardTitle={setSelectCardTitle}
+        year={year}
       />
 
       <ModelIndex
@@ -703,6 +706,7 @@ const File = ({
         handleCloseModal={handleCloseModal}
         labReportFile={labReportFile}
         search={search}
+        year={year}
       />
 
       <ModelIndex
@@ -712,6 +716,7 @@ const File = ({
         handleCloseModal={handleCloseModal}
         labReportFile={selectFileURLRadiology}
         search={search}
+        year={year}
       />
       {opens && combiTree[0]?.children?.length > 0 ? (
         <ModelIndex
@@ -724,6 +729,7 @@ const File = ({
           setCombiTree={setCombiTree}
           fileLoading={fileLoading}
           setFileLoading={setFileLoading}
+          year={year}
         />
       ) : (
         opens && showErrorMessage()
@@ -833,7 +839,7 @@ const enhancer = connect(
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
     loading: state?.patientDetails?.details?.loading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
-    fileLoadingStatus:state.patientDetails.details?.fileLoading,
+    fileLoadingStatus: state.patientDetails.details?.fileLoading,
   }),
   {
     getRadiologyFileDetails: detailsActions.radiologyFileAction,

@@ -44,11 +44,11 @@ const ModelIndex = ({
   meatCriteriaList,
   setSelectCardTitle,
   dragItem,
+  year
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
   const dispatch = useDispatch();
-
   const onConfirmValidMove = async (openState) => {
     handleCloseModal();
     const customValidAction =
@@ -147,6 +147,7 @@ const ModelIndex = ({
                 setOpens={setOpens}
                 setCombiTree={setCombiTree}
                 setFileLoading={setFileLoading}
+                year={year}
               />
             )}
             {labReportFile && (
