@@ -425,7 +425,7 @@ const findProviderNameDocument = ({
   setLabData,
   storeFileDetails,
 }) => {
-  storeFileDetails(data?.fileId);
+  storeFileDetails && storeFileDetails(data?.fileId);
   setSelectMeatResult && setSelectMeatResult(meatresult);
   var disName = diseaseName ? diseaseName : meatresult?.diseaseName;
   var headerName = patientDocumentResult
@@ -458,7 +458,7 @@ const findProviderNameDocument = ({
 };
 
 const findSectionHyperlink = (hyperlinks, header) => {
-  const headerResult = hyperlinks?.filter((res2) => res2.header === header);
+  const headerResult = hyperlinks?.filter((res2) => res2?.header?.toLowerCase() === header?.toLowerCase());
   return headerResult;
 };
 
