@@ -98,7 +98,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   const connect = () => {
     const token = getStorage("token");
     let Sock = new SockJS(
-      `http://${webSocketUrl}chatservice/ws?token=${token}`
+      `https://${webSocketUrl}chatservice/chatservice/ws?token=${token}`
     );
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
@@ -391,7 +391,6 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   };
 
   const handleGetChatHistory = async (sender, status, pageNumber) => {
-    console.log(sender)
     const data = await getHandleChatHistory(
       sender?.secondaryUser || sender,
       userData?.username,
