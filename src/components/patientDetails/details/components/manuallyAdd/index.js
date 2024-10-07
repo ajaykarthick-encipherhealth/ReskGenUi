@@ -609,8 +609,6 @@ const ManuallyAdd = ({
     selected.setShow(true);
   };
 
-  
-
   const handleMeatSubmit = async () => {
     let data = {};
     const forms = form.getFieldsValue();
