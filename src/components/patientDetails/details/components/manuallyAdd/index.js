@@ -786,9 +786,10 @@ const ManuallyAdd = ({
 
   const resetForms = ({ reload = false }) => {
     handleCloseModal(false);
-    // form.resetFields();
+    if (!isEditPage) {
+        form.resetFields();
+    }
     getPatient(reload);
-
     setValidCode("");
     setProviderDetails([]);
     setCode("");
