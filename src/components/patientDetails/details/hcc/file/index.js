@@ -696,7 +696,6 @@ const File = ({
         setSuggestedMeatForm={setSuggestedMeatForm}
         meatCriteriaList={allMeatList}
         setSelectCardTitle={setSelectCardTitle}
-        year={year}
       />
 
       <ModelIndex
@@ -706,7 +705,6 @@ const File = ({
         handleCloseModal={handleCloseModal}
         labReportFile={labReportFile}
         search={search}
-        year={year}
       />
 
       <ModelIndex
@@ -716,7 +714,6 @@ const File = ({
         handleCloseModal={handleCloseModal}
         labReportFile={selectFileURLRadiology}
         search={search}
-        year={year}
       />
       {opens && combiTree[0]?.children?.length > 0 ? (
         <ModelIndex
