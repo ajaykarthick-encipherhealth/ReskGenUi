@@ -77,7 +77,6 @@ const PdfDrawer = ({
   };
 
   const onFinish = async (formVal) => {
-    console.log(formVal);
     if (reportActiveTab === "PDF") {
       if (uploadType !== "upload") {
         const res = await getCreateBatch({ info: formVal });
