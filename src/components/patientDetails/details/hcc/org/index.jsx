@@ -455,10 +455,10 @@ const CamboTree = ({
             >
               <ManuallyAdd
                 handleCloseModal={handleCloseModalAdd}
-                setIsFileFormShow={setIsFileFormShow}
                 year={year}
                 isEditPage={true}
                 isEditValue={data}
+                
               />
             </div>
           </div>

@@ -786,7 +786,7 @@ const ManuallyAdd = ({
 
   const resetForms = ({ reload = false }) => {
     handleCloseModal(false);
-    form.resetFields();
+    // form.resetFields();
     getPatient(reload);
 
     setValidCode("");
@@ -1100,7 +1100,7 @@ const ManuallyAdd = ({
             handleCloseModal(false);
             setMeatDisplay(false);
             resetForms({ reload: false });
-            form.resetFields();
+            // form.resetFields();
             setProviderDetails([]);
             setSuggestedMeatForm && setSuggestedMeatForm(false);
           }}
