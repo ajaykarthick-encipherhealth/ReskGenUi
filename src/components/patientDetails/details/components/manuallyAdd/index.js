@@ -58,7 +58,6 @@ const ManuallyAdd = ({
   suggestedToValidMove,
   selectDisDetails,
   selectCardTitle,
-  isAddPage,
 }) => {
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(true);
@@ -1218,7 +1217,7 @@ const ManuallyAdd = ({
                         ? [{ label: getSelectedDos, value: getSelectedDos }]
                         : dosList
                     }
-                    disabled={isEditPage || isAddPage}
+                    disabled
                   />
                 </Form.Item>
               </div>

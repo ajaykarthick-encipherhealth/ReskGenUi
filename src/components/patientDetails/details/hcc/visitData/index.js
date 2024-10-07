@@ -1054,7 +1054,6 @@ const VisitData = ({
               setIsFileFormShow={setIsModalOpenValid}
               year={year}
               reset={isModalOpenValid}
-              isAddPage={true}
             />
           </div>
         </div>

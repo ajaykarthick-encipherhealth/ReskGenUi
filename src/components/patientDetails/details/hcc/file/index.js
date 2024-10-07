@@ -408,8 +408,7 @@ const File = ({
               <ManuallyAdd
                 handleCloseModal={handleCloseModal}
                 setIsFileFormShow={setIsFileFormShow}
-                year={year}
-                isAddPage={true}
+                year={year}           
               />
             </div>
           ) : null}
