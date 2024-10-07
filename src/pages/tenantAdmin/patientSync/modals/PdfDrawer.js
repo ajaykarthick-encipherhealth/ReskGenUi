@@ -1,14 +1,22 @@
-import React from "react";
-import { Offcanvas, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button } from "react-bootstrap";
 import { actions as tenantActions } from "../../../../stores/tenantAdmin/patientSync";
 import { connect } from "react-redux";
-import { Form, Input, Select } from "antd";
+import { Drawer, Form, Input, Select } from "antd";
+import style from "../fhir.module.css";
+import downloadImg from "../../../../images/fihr/download.png";
+import uploaderImg from "../../../../images/fihr/uploaderImg.png";
 import { getYears } from "../../../../utils/reusable";
 import UploadFile from "../uploadFile";
 import { useSelector } from "react-redux";
-import { useState } from "react";
 import ENDPOINTS from "../../../../utility/enpoints";
 import axios from "../../../../utility/axiosConfig";
+const inputTypeOptions = [
+  { label: "FireZilla", value: "FireZilla" },
+  { label: "GoogleDrive", value: "GoogleDrive" },
+  { label: "DropBox", value: "DropBox" },
+  { label: "CogentUpload", value: "CogentUpload" },
+];
 
 const PdfDrawer = ({
   isDrawerOpen,
@@ -22,9 +30,13 @@ const PdfDrawer = ({
   setSelectedBatch,
 }) => {
   const [form] = Form.useForm();
+  const [selectedType, setSelectedType] = useState(null);
+
   const handleClose = (form) => {
     setIsDrawerOpen(false);
     form.resetFields();
+    setFileList([]);
+    setSelectedType(null);
     if (setSelectedBatch) {
       setSelectedBatch();
     }
@@ -65,12 +77,16 @@ const PdfDrawer = ({
   };
 
   const onFinish = async (formVal) => {
+    console.log(formVal);
     if (reportActiveTab === "PDF") {
       if (uploadType !== "upload") {
         const res = await getCreateBatch({ info: formVal });
         if (res.status === "SUCCESS") {
           await getAllBatches({ page: 0 });
           form.resetFields();
+          setFileList([]);
+          setSelectedType(null);
+          setIsDrawerOpen(false);
         }
       } else {
         handleFileUpload();
@@ -79,97 +95,172 @@ const PdfDrawer = ({
   };
 
   return (
-    <Offcanvas show={isDrawerOpen} className="offcanvas-end" placement="end">
-      <Offcanvas.Header closeButton onClick={() => handleClose(form)}>
-        <Offcanvas.Title>
-          {" "}
-          {uploadType === "upload" ? "Upload New Batch" : "Create batch"}{" "}
-        </Offcanvas.Title>
-      </Offcanvas.Header>
-      <Offcanvas.Body>
-        <div className="container-fluid">
-          <Form form={form} name="basic" layout="vertical" onFinish={onFinish}>
-            {uploadType !== "upload" && (
+    <Drawer
+      open={isDrawerOpen}
+      onClose={() => handleClose(form)}
+      title={uploadType === "upload" ? "Upload New Batch" : "Create batch"}
+    >
+      <div className="container-fluid">
+        <Form form={form} name="basic" layout="vertical" onFinish={onFinish}>
+          {uploadType !== "upload" && (
+            <Form.Item
+              label={<label>Batch Name</label>}
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: "Please Enter Batch Name ",
+                },
+              ]}
+            >
+              <Input placeholder="Batch Name" />
+            </Form.Item>
+          )}
+          {uploadType !== "upload" && (
+            <>
               <Form.Item
-                label={
-                  <label>
-                    Batch Name <span className="text-danger">*</span>{" "}
-                  </label>
-                }
-                name="name"
+                label={<label>EMR Type</label>}
+                name="emrType"
                 rules={[
                   {
                     required: true,
-                    message: "Please Enter Batch Name ",
+                    message: "Please Enter EMR Type",
                   },
                 ]}
               >
-                <Input name="batchid" />
+                <Input placeholder="EMR Type" />
               </Form.Item>
-            )}
-            {uploadType !== "upload" && (
               <Form.Item
-                label={
-                  <label>
-                    TotalFile Count <span className="text-danger">*</span>{" "}
-                  </label>
-                }
-                name="totalFileCount"
+                label={<label> File Count</label>}
+                name="fileCount"
                 rules={[
                   {
-                    required: true,
-                    message: "Please Enter TotalFile Count ",
+                    validator: (_, value) => {
+                      if (!value) {
+                        return Promise.reject(
+                          new Error("Please enter the file count")
+                        );
+                      }
+                      if (isNaN(value)) {
+                        return Promise.reject(
+                          new Error("File count must be a number")
+                        );
+                      }
+                      if (value && (value.length < 0 || value.length >= 7)) {
+                        return Promise.reject(
+                          new Error("File count length must be less than 7")
+                        );
+                      }
+                      return Promise.resolve();
+                    },
                   },
                 ]}
               >
-                <Input name="totalFileCount" maxLength={10} />
+                <Input placeholder="File Count" />
               </Form.Item>
-            )}
-            {uploadType == "upload" && (
               <Form.Item
-                label={
-                  <label>
-                    Upload File <span className="text-danger">*</span>
-                  </label>
-                }
-                name="upload"
-              >
-                <UploadFile filelList={fileList} setFileList={setFileList} />
-              </Form.Item>
-            )}
-            {uploadType !== "upload" && (
-              <Form.Item
-                label={
-                  <label>
-                    Year of Service <span className="text-danger">*</span>{" "}
-                  </label>
-                }
-                name="yearOfService"
+                label={<label>Source</label>}
+                name="source"
                 rules={[
                   {
                     required: true,
-                    message: "Please Enter Year of Service ",
+                    message: "Please Enter source",
                   },
                 ]}
               >
                 <Select
-                  mode="tags"
-                  name="dos"
+                  name="source"
                   style={{ width: "100%" }}
-                  options={getYears()}
+                  options={inputTypeOptions}
                   size="large"
+                  onChange={(value) => {
+                    setSelectedType(value);
+                    setFileList([]);
+                  }}
+                  placeholder="Source"
+                  allowClear={true}
                 />
               </Form.Item>
-            )}
-            <Form.Item>
-              <div className="col-xl-12 mb-3 d-grid justify-content-center">
-                <Button type="submit">Proceed</Button>
-              </div>
+
+              {selectedType === "CogentUpload" ? (
+                <Form.Item
+                  label={
+                    <label>
+                      Upload File <span className="text-danger">*</span>
+                    </label>
+                  }
+                  name="upload"
+                  rules={[
+                    {
+                      required: false,
+                      message: "Please Upload File",
+                    },
+                  ]}
+                >
+                  <UploadFile
+                    filesList={fileList}
+                    setFilesList={setFileList}
+                    uploaderImg={uploaderImg}
+                    subText={"Upload Excel, CSV, Json files"}
+                  />
+                </Form.Item>
+              ) : (
+                selectedType && (
+                  <Form.Item
+                    label={<label>FilePath / FolderPath</label>}
+                    name="FilePath"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter FilePath / FolderPath",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="FilePath / FolderPath" />
+                  </Form.Item>
+                )
+              )}
+            </>
+          )}
+          {uploadType == "upload" && (
+            <Form.Item
+              label={
+                <label>
+                  Upload File <span className="text-danger">*</span>
+                </label>
+              }
+              name="upload"
+            >
+              <UploadFile filesList={fileList} setFilesList={setFileList} />
             </Form.Item>
-          </Form>
-        </div>
-      </Offcanvas.Body>
-    </Offcanvas>
+          )}
+          <Form.Item
+            label={<label>YearOf Service</label>}
+            name="yearOfService"
+            rules={[
+              {
+                required: true,
+                message: "Please Enter yearOfService ",
+              },
+            ]}
+          >
+            <Select
+              mode="tags"
+              name="yearOfService"
+              style={{ width: "100%" }}
+              options={getYears()}
+              size="large"
+              placeholder="year Of Service"
+            />
+          </Form.Item>
+          <Form.Item>
+            <div className="col-xl-12 mb-3 d-grid justify-content-center">
+              <Button type="submit">{uploadType === "upload" ? "Upload" : "Create" }</Button>
+            </div>
+          </Form.Item>
+        </Form>
+      </div>
+    </Drawer>
   );
 };
 const enhancer = connect((state) => ({}), {

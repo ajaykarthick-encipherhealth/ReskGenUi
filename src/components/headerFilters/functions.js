@@ -192,7 +192,7 @@ export const handleRnagePicker2 = ({
 };
 
 export const dateFormate = (dayjs, date) => {
-  return date ? dayjs(date).format("MM-DD-YYYY hh:mm A") : <div>---</div>;
+  return date ? dayjs(date).format("MM-DD-YYYY hh:mm A") : <div className="w-100 text-center">---</div>;
 };
 
 //sorting

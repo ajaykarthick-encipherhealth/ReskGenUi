@@ -21,7 +21,7 @@ export const getYears = () => {
   }
   return year;
 };
-const inputTypeOptions = [
+export const inputTypeOptions = [
   { label: "Excel", value: "EXCEL" },
   { label: "Csv", value: "CSV" },
   { label: "Json", value: "JSON" },
@@ -257,8 +257,8 @@ const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch }) => {
                 ]}
               >
                 <UploadFile
-                  filelList={fileList}
-                  setFileList={setFileList}
+                  filesList={fileList}
+                  setFilesList={setFileList}
                   uploaderImg={uploaderImg}
                   subText={
                     fileList?.length > 0
