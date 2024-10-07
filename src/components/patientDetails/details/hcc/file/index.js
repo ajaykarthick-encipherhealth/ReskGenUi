@@ -409,6 +409,7 @@ const File = ({
                 handleCloseModal={handleCloseModal}
                 setIsFileFormShow={setIsFileFormShow}
                 year={year}
+                isAddPage={true}
               />
             </div>
           ) : null}

@@ -57,7 +57,8 @@ const ManuallyAdd = ({
   setSuggestedMeatForm,
   suggestedToValidMove,
   selectDisDetails,
-  selectCardTitle
+  selectCardTitle,
+  isAddPage,
 }) => {
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(true);
@@ -101,7 +102,7 @@ const ManuallyAdd = ({
   const [capturedSectionsT, setCapturedSectionsT] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const [editSection, setEditSection] = useState();
-  const [isBtnLoading,setIsBtnLoading]=useState(false);
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
 
   const dosList = patientDosResult?.data?.response?.map(
     (item) =>
@@ -221,7 +222,7 @@ const ManuallyAdd = ({
     const isCodeCheck = await isCodeAlready({
       code: value,
       patientId: await getStorage("patientId"),
-      dos: year?.value||"",
+      dos: year?.value || "",
       date: getSelectedDos,
     });
     if (isCodeCheck?.response) {
@@ -729,7 +730,7 @@ const ManuallyAdd = ({
         let res = {};
         if (isEditPage) {
           if (meatFormDisplay) {
-            res = await suggestedToValidMove(data,selectCardTitle);
+            res = await suggestedToValidMove(data, selectCardTitle);
           } else {
             res = await diseaseEdit(data);
           }
@@ -751,23 +752,25 @@ const ManuallyAdd = ({
           setIsBtnLoading(false);
         }
       } catch (error) {}
-    }else{
+    } else {
       if (meatFormDisplay) {
         var movemetData = {};
-        movemetData.patientId = await getStorage("patientId"),
-        movemetData.diagnosisCode= selectDisDetails.diagnosisCode,
-        movemetData.processedYear = year?.value,
-        movemetData.chartProcessType = getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
-        movemetData.dateOfServices = selectDisDetails.dateOfServices;
-        movemetData.monitorAspect = data.monitorAspect,
-        movemetData.monitorHyperLink = data.monitorHyperLink,
-        movemetData.evaluateAspect = data.evaluateAspect,
-        movemetData.evaluateHyperLink  = data.evaluateHyperLink,
-        movemetData.assessmentAspect = data.assessmentAspect,
-        movemetData.assessmentHyperLink = data.assessmentHyperLink,
-        movemetData.treatmentAspect = data.treatmentAspect,
-        movemetData.treatmentHyperLink = data.treatmentHyperLink;
-        const res = await suggestedToValidMove(movemetData,selectCardTitle);
+        (movemetData.patientId = await getStorage("patientId")),
+          (movemetData.diagnosisCode = selectDisDetails.diagnosisCode),
+          (movemetData.processedYear = year?.value),
+          (movemetData.chartProcessType = getSelectedDos
+            ? "DATE_OF_SERVICE"
+            : "YEAR"),
+          (movemetData.dateOfServices = selectDisDetails.dateOfServices);
+        (movemetData.monitorAspect = data.monitorAspect),
+          (movemetData.monitorHyperLink = data.monitorHyperLink),
+          (movemetData.evaluateAspect = data.evaluateAspect),
+          (movemetData.evaluateHyperLink = data.evaluateHyperLink),
+          (movemetData.assessmentAspect = data.assessmentAspect),
+          (movemetData.assessmentHyperLink = data.assessmentHyperLink),
+          (movemetData.treatmentAspect = data.treatmentAspect),
+          (movemetData.treatmentHyperLink = data.treatmentHyperLink);
+        const res = await suggestedToValidMove(movemetData, selectCardTitle);
         if (res?.status == "SUCCESS") {
           handleCloseModal(false);
           getResponePopup(res);
@@ -787,7 +790,7 @@ const ManuallyAdd = ({
   const resetForms = ({ reload = false }) => {
     handleCloseModal(false);
     if (!isEditPage) {
-        form.resetFields();
+      form.resetFields();
     }
     getPatient(reload);
     setValidCode("");
@@ -827,7 +830,7 @@ const ManuallyAdd = ({
     setListOfSectionT([]);
     setShowSectionT(false);
     setCapturedSectionsT([]);
-    setSuggestedMeatForm && setSuggestedMeatForm(false)
+    setSuggestedMeatForm && setSuggestedMeatForm(false);
   };
 
   const getPatient = async (reload) => {
@@ -978,6 +981,7 @@ const ManuallyAdd = ({
 
     return Array.from(sectionsMap.values());
   };
+  
 
   useEffect(() => {
     if (isEditPage && !meatFormDisplay) {
@@ -1018,15 +1022,15 @@ const ManuallyAdd = ({
         section: item.header,
         hyperlinks: item,
       }));
-      handleSelectChange(isEditValue?.dateOfServices||year, "dos");
+      handleSelectChange(isEditValue?.dateOfServices || year, "dos");
       setListOfSection(transformData(sectionList));
       setListOfSectionM(transformData(sectionListM));
       setListOfSectionE(transformData(sectionListE));
       setListOfSectionA(transformData(sectionListA));
       setListOfSectionT(transformData(sectionListT));
     }
-      handleSelectChange(isEditValue?.dateOfServices, "dos");
-  }, [isEditPage, isEditValue, reset,meatFormDisplay]);
+    handleSelectChange(isEditValue?.dateOfServices, "dos");
+  }, [isEditPage, isEditValue, reset, meatFormDisplay]);
 
   useEffect(() => {
     if (isEditMeat) {
@@ -1066,6 +1070,14 @@ const ManuallyAdd = ({
     }
   }, [isEditMeat, isEditMeatValue]);
 
+    useEffect(() => {
+      if (isAddPage) {          
+          form.setFieldsValue({
+            dos: [dosList[0].value],
+          });
+      }
+    }, [isAddPage]);
+
   // useEffect(() => {
   //   if (isDosSelected) {
   //     const selectedDos = [{ label: isDosSelected, value: isDosSelected }]
@@ -1078,7 +1090,7 @@ const ManuallyAdd = ({
   // }, [isDosSelected]);
 
   useEffect(() => {
-    if(meatFormDisplay){
+    if (meatFormDisplay) {
       setMeatDisplay(true);
     }
   }, [meatFormDisplay]);
@@ -1141,6 +1153,7 @@ const ManuallyAdd = ({
                     },
                   ]}
                 >
+                  {console.log(dosList, "dosList")}
                   <Input
                     name="diagnosisCode"
                     onChange={(e) => handleCodeVaildate(e)}
@@ -1206,10 +1219,11 @@ const ManuallyAdd = ({
                         ? [{ label: getSelectedDos, value: getSelectedDos }]
                         : dosList
                     }
-                    disabled={isEditPage}
+                    disabled={ isAddPage}
                   />
                 </Form.Item>
               </div>
+
               <div className="col-12">
                 {providerDetails.length > 0 && (
                   <div>
@@ -1332,7 +1346,7 @@ const ManuallyAdd = ({
                       date={
                         getSelectedDos
                           ? [{ label: getSelectedDos, value: getSelectedDos }]
-                          : dosList
+                          : getSelectedDos
                       }
                       isEditPage={isEditPage}
                     />
