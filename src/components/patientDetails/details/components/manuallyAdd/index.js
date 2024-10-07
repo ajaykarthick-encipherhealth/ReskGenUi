@@ -1068,15 +1068,13 @@ const ManuallyAdd = ({
       setListOfSectionA(transformData(sectionListA));
       setListOfSectionT(transformData(sectionListT));
     }
-  }, [isEditMeat, isEditMeatValue]);
+    if (isAddPage) {
+      form.setFieldsValue({
+        dos: [dosList[0].value],
+      });
+    }
+  }, [isEditMeat, isEditMeatValue, isAddPage]);
 
-    useEffect(() => {
-      if (isAddPage) {          
-          form.setFieldsValue({
-            dos: [dosList[0].value],
-          });
-      }
-    }, [isAddPage]);
 
   // useEffect(() => {
   //   if (isDosSelected) {
