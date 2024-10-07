@@ -206,7 +206,23 @@ const FeedBack = () => {
                         },
                       ]}
                     >
-                      <Select placeholder="Manager" />
+                      <Select
+                        placeholder="Manager"
+                        options={[
+                          {
+                            value: "jack",
+                            label: "Jack",
+                          },
+                          {
+                            value: "lucy",
+                            label: "Lucy",
+                          },
+                          {
+                            value: "tom",
+                            label: "Tom",
+                          },
+                        ]}
+                      />
                     </Form.Item>
                     <Form.Item>
                       <div className="d-flex justify-content-center align-items-center">
