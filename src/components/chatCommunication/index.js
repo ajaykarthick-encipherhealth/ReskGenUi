@@ -98,7 +98,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   const connect = () => {
     const token = getStorage("token");
     let Sock = new SockJS(
-      `https://${webSocketUrl}chatservice/chatservice/ws?token=${token}`
+      `http://${webSocketUrl}chatservice/ws?token=${token}`
     );
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
@@ -389,10 +389,12 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     fetchUsers();
     // Check if the entered username exists in the messagedMembersList
   };
+
   const handleGetChatHistory = async (sender, status, pageNumber) => {
+    console.log(sender)
     const data = await getHandleChatHistory(
-      sender?.secondaryUser,
-      userData.username,
+      sender?.secondaryUser || sender,
+      userData?.username,
       pageNumber,
       pageSize
     );
@@ -496,7 +498,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
         )
       : [];
     if (isAlreadyMember.length === 0) {
-      handleGetChatHistory({ senderName: newUser.userName }, "load", 0);
+      handleGetChatHistory(newUser?.userName, "load", 0);
       setCurrentChatMember({
         index: null,
         isNewMember: true,
