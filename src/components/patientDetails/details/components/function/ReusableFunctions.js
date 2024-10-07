@@ -417,7 +417,7 @@ const getEncounterDetails = async ({
       moment(i.dos).format("MM-DD-YYYY") === moment(date).format("MM-DD-YYYY")
   );
   if (findPageNumber?.length != 0) {
-    storeFileDetails(findPageNumber[0]?.fileId);
+    storeFileDetails && storeFileDetails(findPageNumber[0]?.fileId);
     if (setIsModalOpenValidCodes) {
       setIsModalOpenValidCodes(true);
       var headerName = patientDocumentResult
