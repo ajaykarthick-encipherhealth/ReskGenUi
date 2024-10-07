@@ -479,9 +479,7 @@ const Timeline = ({
             return (
               <div className="d-flex w-100">
                 {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.suggestedColor}>
-                  CAREGAP
-                </span>
+                <span className={visitStyles.suggestedColor}>CAREGAP</span>
                 to <span className={visitStyles.potentialColor}>POTENTIAL</span>
               </div>
             );
@@ -512,9 +510,7 @@ const Timeline = ({
               <div className="d-flex">
                 {item.diagnosisCode} - Moved from{" "}
                 <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
-                <span className={visitStyles.potentialColor}>
-                POTENTIAL
-                </span>
+                <span className={visitStyles.potentialColor}>POTENTIAL</span>
               </div>
             );
           }
@@ -532,9 +528,7 @@ const Timeline = ({
               <div className="d-flex">
                 {item.diagnosisCode} - Moved from{" "}
                 <span className={visitStyles.potentialColor}>POTENTIAL</span> to{" "}
-                <span className={visitStyles.suggestedColor}>
-                  CAREGAP
-                </span>
+                <span className={visitStyles.suggestedColor}>CAREGAP</span>
               </div>
             );
           }
@@ -543,9 +537,7 @@ const Timeline = ({
               <div className="d-flex">
                 {item.diagnosisCode} - Moved from{" "}
                 <span className={visitStyles.potentialColor}>POTENTIAL</span> to{" "}
-                <span className={visitStyles.deletedColor}>
-                DELETED
-                </span>
+                <span className={visitStyles.deletedColor}>DELETED</span>
               </div>
             );
           }
@@ -844,10 +836,10 @@ const Timeline = ({
                   placement="bottom"
                   overlayStyle={{ zIndex: 9999 }}
                   content={
-                    <div
-                    className="d-flex justify-content-between"
-                    >
-                      <span className={`${styles.textContent}`}>{item?.actionNotes}</span>
+                    <div className="d-flex justify-content-between">
+                      <span className={`${styles.textContent}`}>
+                        {item?.actionNotes}
+                      </span>
                       <CloseCircleFilled
                         onClick={() => onClickPopup(null)}
                         className={`${styles.closeIcon}`}
@@ -869,64 +861,74 @@ const Timeline = ({
           return (
             <div className="d-flex w-100 justify-content-between">
               <>
-                <strong>Comment Removed </strong>            
+                <strong>Comment Removed </strong>
               </>
             </div>
           );
         case "NOTES_ADDED":
           return (
             <div className="d-flex w-100 justify-content-between">
-            <>
-              <strong>Notes Added </strong>
-              <Popover
-                open={popClickDisCode === index}
-                trigger={["hover"]}
-                placement="bottom"
-                overlayStyle={{ zIndex: 9999 }}
-                content={
-                  <div
-                  className="d-flex justify-content-between"
-                  >
-                    <span className={`${styles.textContent}`}>{item?.actionNotes}</span>
-                    <CloseCircleFilled
-                      onClick={() => onClickPopup(null)}
-                      className={`${styles.closeIcon}`}
-                    />
-                  </div>
-                }
-              >
-                <span
-                  className={styles.viewTag}
-                  onClick={() => onClickPopup(index)}
+              <>
+                <strong>Notes Added </strong>
+                <Popover
+                  open={popClickDisCode === index}
+                  trigger={["hover"]}
+                  placement="bottom"
+                  overlayStyle={{ zIndex: 9999 }}
+                  content={
+                    <div className="d-flex justify-content-between">
+                      <span className={`${styles.textContent}`}>
+                        {item?.actionNotes}
+                      </span>
+                      <CloseCircleFilled
+                        onClick={() => onClickPopup(null)}
+                        className={`${styles.closeIcon}`}
+                      />
+                    </div>
+                  }
                 >
-                  View
-                </span>
-              </Popover>
-            </>
-          </div>
+                  <span
+                    className={styles.viewTag}
+                    onClick={() => onClickPopup(index)}
+                  >
+                    View
+                  </span>
+                </Popover>
+              </>
+            </div>
           );
         case "NOTES_REMOVED":
           return (
             <div className="d-flex w-100 justify-content-between">
-            <>
-              <strong>Notes Removed </strong>
-            </>
-          </div>
+              <>
+                <strong>Notes Removed </strong>
+              </>
+            </div>
           );
         default:
           return (
             <div className="d-flex">
-              Changed from
-              <span
-                style={{
-                  color: getStatusColors(item?.previousProcessedState),
-                  fontSize: "12px",
-                  padding: "0 5px",
-                }}
-              >
-                {item?.previousProcessedState}
-              </span>
-              to {underScoreRemove(item.action)}
+              {item?.action === "PROVIDER_EDITED" ? (
+                item?.htmlContent ? (
+                  item?.htmlContent
+                ) : (
+                  underScoreRemove(item.action)
+                )
+              ) : (
+                <div>
+                  Changed from
+                  <span
+                    style={{
+                      color: getStatusColors(item?.previousProcessedState),
+                      fontSize: "12px",
+                      padding: "0 5px",
+                    }}
+                  >
+                    {item?.previousProcessedState}
+                  </span>
+                  to {underScoreRemove(item.action)}
+                </div>
+              )}
             </div>
           );
       }
