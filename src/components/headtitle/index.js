@@ -81,43 +81,44 @@ const HeadTitle = ({
           View All
         </span>
       )}
-        <Modal
-          open={openPicker}
-          mask={true}
-          width={640}
-          closable={false}
-          onOk={() => {
-            dispatch(getDateRange(dateValues));
-            setOpenPicker(false);
-          }}
-          onCancel={() => {
-            setOpenPicker(false);
-            setSelectedDates([]);
-          }}
+      <Modal
+        open={openPicker}
+        mask={true}
+        width={640}
+        closable={false}
+        onOk={() => {
+          dispatch(getDateRange(dateValues));
+          setOpenPicker(false);
+        }}
+        onCancel={() => {
+          setOpenPicker(false);
+          setSelectedDates([]);
+        }}
+        className={`${styles.customModalPosition} `}
+      >
+        <div
+          className={`${styles.modalDetails} d-flex justify-content-between`}
         >
-          <div
-            className={`${styles.modalDetails} d-flex justify-content-between`}
-          >
-            <RangePicker
-              getPopupContainer={() => document.getElementById("date-popup")}
-              placeholder={[
-                dayjs(currentDate).format("MM-DD-YYYY"),
-                dayjs(startOfMonth).format("MM-DD-YYYY"),
-              ]}
-              open={openPicker}
-              value={selectedDates?.length > 0 ? selectedDates : ""}
-              onChange={(dates, dateStrings) => {
-                setSelectedDates(dates);
-                handleDatePickerChange(dateStrings);
-              }}
-              format="MM-DD-YYYY"
-              suffixIcon={false}
-              disabledDate={(current) => disableFutureDate(current)}
-              inputReadOnly={true}
-            />
-          </div>
-          <div id="date-popup" style={{ position: "relative" }} />
-        </Modal>
+          <RangePicker
+            getPopupContainer={() => document.getElementById("date-popup")}
+            placeholder={[
+              dayjs(currentDate).format("MM-DD-YYYY"),
+              dayjs(startOfMonth).format("MM-DD-YYYY"),
+            ]}
+            open={openPicker}
+            value={selectedDates?.length > 0 ? selectedDates : ""}
+            onChange={(dates, dateStrings) => {
+              setSelectedDates(dates);
+              handleDatePickerChange(dateStrings);
+            }}
+            format="MM-DD-YYYY"
+            suffixIcon={false}
+            disabledDate={(current) => disableFutureDate(current)}
+            inputReadOnly={true}
+          />
+        </div>
+        <div id="date-popup" style={{ position: "relative" }} />
+      </Modal>
     </div>
   );
 };
