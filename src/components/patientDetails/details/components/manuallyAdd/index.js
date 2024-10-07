@@ -1028,6 +1028,9 @@ const ManuallyAdd = ({
       setListOfSectionE(transformData(sectionListE));
       setListOfSectionA(transformData(sectionListA));
       setListOfSectionT(transformData(sectionListT));
+         form.setFieldsValue({
+           dos: [dosList[0].value],
+         });
     }
     handleSelectChange(isEditValue?.dateOfServices, "dos");
   }, [isEditPage, isEditValue, reset, meatFormDisplay]);
@@ -1068,12 +1071,11 @@ const ManuallyAdd = ({
       setListOfSectionA(transformData(sectionListA));
       setListOfSectionT(transformData(sectionListT));
     }
-    if (isAddPage) {
       form.setFieldsValue({
         dos: [dosList[0].value],
       });
-    }
-  }, [isEditMeat, isEditMeatValue, isAddPage]);
+
+  }, [isEditMeat, isEditMeatValue]);
 
 
   // useEffect(() => {
