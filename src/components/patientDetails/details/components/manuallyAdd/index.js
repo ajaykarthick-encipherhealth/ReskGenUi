@@ -1026,10 +1026,7 @@ const ManuallyAdd = ({
       setListOfSectionM(transformData(sectionListM));
       setListOfSectionE(transformData(sectionListE));
       setListOfSectionA(transformData(sectionListA));
-      setListOfSectionT(transformData(sectionListT));
-         form.setFieldsValue({
-           dos: [dosList[0].value],
-         });
+      setListOfSectionT(transformData(sectionListT));     
     }
     handleSelectChange(isEditValue?.dateOfServices, "dos");
   }, [isEditPage, isEditValue, reset, meatFormDisplay]);
