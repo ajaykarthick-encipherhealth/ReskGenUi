@@ -93,30 +93,37 @@ const Timeline = ({
                   {viewValue?.previousDiseaseFormat?.dbDescription}
                 </span>
               </div>
-              <div className={styles.detailsHeader}>
-                <span className={styles.disCode}>Provider</span>
-                <div>
-                  {getProviderNameTagList({
-                    data: viewValue?.previousDiseaseFormat?.providerNames,
-                  })}
+              {viewValue?.previousDiseaseFormat?.providerNames && (
+                <div className={styles.detailsHeader}>
+                  <span className={styles.disCode}>Provider</span>
+                  <div>
+                    {getProviderNameTagList({
+                      data: viewValue?.previousDiseaseFormat?.providerNames,
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>Encounter Date</span>
                 <div>
                   {getDateOfServiceBackground({
-                    value: viewValue?.previousDiseaseFormat?.dateOfServices,
+                    value:
+                      viewValue?.previousDiseaseFormat?.dateOfServices ||
+                      viewValue?.previousProviderInfo?.dateOfService||[],
                   })}
                 </div>
               </div>
-              <div className={styles.detailsHeader}>
-                <span className={styles.disCode}>Section</span>
-                <div>
-                  {getSectionHeaderBackground({
-                    value: viewValue?.previousDiseaseFormat?.capturedSections,
-                  })}
+
+              {viewValue?.previousDiseaseFormat?.capturedSections && (
+                <div className={styles.detailsHeader}>
+                  <span className={styles.disCode}>Section</span>
+                  <div>
+                    {getSectionHeaderBackground({
+                      value: viewValue?.previousDiseaseFormat?.capturedSections,
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
           <div className={styles.editCodeContainer}>
@@ -131,30 +138,36 @@ const Timeline = ({
                   {viewValue?.changedDiseaseFormat?.dbDescription}
                 </span>
               </div>
-              <div className={styles.detailsHeader}>
-                <span className={styles.disCode}>Provider</span>
-                <div>
-                  {getProviderNameTagList({
-                    data: viewValue?.changedDiseaseFormat?.providerNames,
-                  })}
+              {viewValue?.changedDiseaseFormat?.providerNames && (
+                <div className={styles.detailsHeader}>
+                  <span className={styles.disCode}>Provider</span>
+                  <div>
+                    {getProviderNameTagList({
+                      data: viewValue?.changedDiseaseFormat?.providerNames,
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>Encounter Date</span>
                 <div>
                   {getDateOfServiceBackground({
-                    value: viewValue?.changedDiseaseFormat?.dateOfServices,
+                    value:
+                      viewValue?.changedDiseaseFormat?.dateOfServices ||
+                      viewValue?.changedProviderInfo?.dateOfService ||[],
                   })}
                 </div>
               </div>
-              <div className={styles.detailsHeader}>
-                <span className={styles.disCode}>Section</span>
-                <div>
-                  {getSectionHeaderBackground({
-                    value: viewValue?.changedDiseaseFormat?.capturedSections,
-                  })}
+              {viewValue?.changedDiseaseFormat?.capturedSections && (
+                <div className={styles.detailsHeader}>
+                  <span className={styles.disCode}>Section</span>
+                  <div>
+                    {getSectionHeaderBackground({
+                      value: viewValue?.changedDiseaseFormat?.capturedSections,
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -390,6 +403,9 @@ const Timeline = ({
       }
     };
 
+    const getHtmlContent=(item)=>{
+      return <div dangerouslySetInnerHTML={{ __html: item }} />
+    }
     const getTimelineHeading = () => {
       switch (item.action) {
         case "MOVED_INVALID_TO_VALID":
@@ -729,6 +745,26 @@ const Timeline = ({
               </Popover>
             </div>
           );
+        case "PROVIDER_EDITED":
+          return (
+            <div className="d-flex w-100 justify-content-between">
+              {getHtmlContent(item?.htmlContent)}
+              <Popover
+                open={popClickDisCode === index ? true : false}
+                trigger={["hover"]}
+                placement="bottom"
+                overlayStyle={{ zIndex: 9999 }}
+                content={<>{getEditDeatils(item)}</>}
+              >
+                <span
+                  className={styles.viewTag}
+                  onClick={() => onClickPopup(index)}
+                >
+                  View
+                </span>{" "}
+              </Popover>
+            </div>
+          );
         case "HOLD":
           return (
             <div className="d-flex">
@@ -908,27 +944,17 @@ const Timeline = ({
         default:
           return (
             <div className="d-flex">
-              {item?.action === "PROVIDER_EDITED" ? (
-                item?.htmlContent ? (
-                  item?.htmlContent
-                ) : (
-                  underScoreRemove(item.action)
-                )
-              ) : (
-                <div>
-                  Changed from
-                  <span
-                    style={{
-                      color: getStatusColors(item?.previousProcessedState),
-                      fontSize: "12px",
-                      padding: "0 5px",
-                    }}
-                  >
-                    {item?.previousProcessedState}
-                  </span>
-                  to {underScoreRemove(item.action)}
-                </div>
-              )}
+              Changed from
+              <span
+                style={{
+                  color: getStatusColors(item?.previousProcessedState),
+                  fontSize: "12px",
+                  padding: "0 5px",
+                }}
+              >
+                {item?.previousProcessedState}
+              </span>
+              to {underScoreRemove(item.action)}
             </div>
           );
       }

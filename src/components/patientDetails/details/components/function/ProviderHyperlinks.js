@@ -463,7 +463,7 @@ const findSectionHyperlink = (hyperlinks, header) => {
 };
 
 export const getProviderNameTagList = ({ data }) => {
-  return data.map((res, index) => {
+  return Array.isArray(data)&& data?.map((res, index) => {
     if (index < 2) {
       var sectionMapArr = (
         <span
@@ -487,7 +487,7 @@ export const getProviderNameTagList = ({ data }) => {
         </span>
       );
       return sectionMapArr;
-    } else if (data.length - 1 == index) {
+    } else if (Array.isArray(data) &&data?.length - 1 == index) {
       var sectionMapArr = (
         <Popover
           content={
