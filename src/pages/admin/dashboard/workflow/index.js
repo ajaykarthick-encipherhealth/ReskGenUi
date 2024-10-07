@@ -234,13 +234,13 @@ const WorkFlow = () => {
               padding: "16px",
               marginBottom: "30px",
               width: "100px",
-              height: "100px",
+              height: "80px",
             }}
           >
             <Skeleton.Avatar
               size={30}
               style={{
-                marginBottom: "16px",
+                marginBottom: "5px",
                 borderRadius: "50%",
               }}
             />
@@ -255,13 +255,13 @@ const WorkFlow = () => {
               padding: "16px",
               marginBottom: "30px",
               width: "100px",
-              height: "100px",
+              height: "80px",
             }}
           >
             <Skeleton.Avatar
               size={30}
               style={{
-                marginBottom: "16px",
+                marginBottom: "5px",
                 borderRadius: "50%",
               }}
             />
@@ -291,7 +291,7 @@ const WorkFlow = () => {
         setOpenPicker={setOpenPicker}
         isAdmin={true}
       />
-      <Card borderRadius="28px" height="200px"style={{ width: "100%"}}>
+      <Card borderRadius="28px" height="200px" style={{ width: "100%" }}>
         {worlFlowData?.loading ? (
           renderCardSkeleton()
         ) : worlFlowData?.data?.response ? (
