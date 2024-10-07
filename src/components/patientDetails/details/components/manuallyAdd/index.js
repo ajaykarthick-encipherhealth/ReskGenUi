@@ -1153,7 +1153,6 @@ const ManuallyAdd = ({
                     },
                   ]}
                 >
-                  {console.log(dosList, "dosList")}
                   <Input
                     name="diagnosisCode"
                     onChange={(e) => handleCodeVaildate(e)}
@@ -1219,7 +1218,7 @@ const ManuallyAdd = ({
                         ? [{ label: getSelectedDos, value: getSelectedDos }]
                         : dosList
                     }
-                    disabled={ isAddPage}
+                    disabled={isEditPage || isAddPage}
                   />
                 </Form.Item>
               </div>
