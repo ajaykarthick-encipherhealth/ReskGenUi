@@ -106,6 +106,7 @@ const FileUploading = ({
                   required
                   type="number"
                   onChange={(e) => handleChange(e)}
+                  onWheel={(e) => e.target.blur()}
                 />
               </div>
               {errors?.year && (
