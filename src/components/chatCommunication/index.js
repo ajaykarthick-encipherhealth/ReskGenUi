@@ -34,7 +34,7 @@ import {
   handleFilePost,
   addUser,
 } from "../../services/ChatService";
-import { portalUrl2, webSocketUrl } from "../../utils/config";
+import { webSocketUrl } from "../../utils/config";
 import { getStorage } from "../../utils/storages";
 
 const ChatCommunication = ({ openMsg, offMsg }) => {
@@ -87,7 +87,8 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   };
 
   const fetchUsers = async () => {
-    let data = await getUsers({searchString:userData.searchNewUserMessage});
+    {console.log(userData?.searchNewUserMessage,"userData?.searchNewUserMessage")}
+    let data = await getUsers({searchString:userData?.searchNewUserMessage?userData?.searchNewUserMessage:""});
     const temp = [];
     data?.forEach((item) => {
       temp.push(item);
@@ -248,14 +249,14 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   };
 
   useEffect(() => {
-    users.length > 0 &&
-      userData.username &&
+    users?.length > 0 &&
+      userData?.username &&
       stompClient === null &&
       connectingFunction();
-  }, [users, userData,]);
+  }, [users, userData]);
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (userData.message === "") {
+    if (userData?.message === "") {
       return;
     }
     if (stompClient) {
@@ -263,22 +264,22 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
 
       if (userData.fileUrl) {
         chatMessage = {
-          senderName: currentChatMember.sender.primaryUser,
-          receiverName: currentChatMember.sender.secondaryUser,
-          message: userData.message,
+          senderName: currentChatMember.sender?.primaryUser,
+          receiverName: currentChatMember.sender?.secondaryUser,
+          message: userData?.message,
           messageStatus: "DELIVERED",
-          fileUrl: userData.fileUrl,
-          fileName: userData.fileName,
-          fileType: userData.fileType,
+          fileUrl: userData?.fileUrl,
+          fileName: userData?.fileName,
+          fileType: userData?.fileType,
           date: getCurrentTimestamp(),
           status: "MESSAGE",
           token:getStorage("token")
         };
       } else {
         chatMessage = {
-          senderName: currentChatMember.sender.primaryUser,
-          receiverName: currentChatMember.sender.secondaryUser,
-          message: userData.message,
+          senderName: currentChatMember.sender?.primaryUser,
+          receiverName: currentChatMember.sender?.secondaryUser,
+          message: userData?.message,
           messageStatus: "DELIVERED",
           id: uuidv4(),
           date: getCurrentTimestamp(),
@@ -317,11 +318,11 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       ) {
         if (currentChatMember.isNewMember) {
           setSearchedInMembersList([
-            currentChatMember.sender,
+            currentChatMember?.sender,
             ...searchedInMembersList,
           ]);
           searchedInMembersListRef.current = [
-            currentChatMember.sender,
+            currentChatMember?.sender,
             ...searchedInMembersList,
           ];
         } else {
@@ -339,8 +340,8 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
           searchedInMembersListRef.current = data;
         }
       } else if (searchedInMembersList.length === 0) {
-        setSearchedInMembersList([currentChatMember.sender]);
-        searchedInMembersListRef.current = [currentChatMember.sender];
+        setSearchedInMembersList([currentChatMember?.sender]);
+        searchedInMembersListRef.current = [currentChatMember?.sender];
       }
     } else {
       connect();
@@ -362,7 +363,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     if (e.target.value.length > 0) {
       const regexp = new RegExp(e.target.value, "i");
       const filteredUsers = users
-        .filter((user) => user.userName !== userData.username)
+        .filter((user) => user?.userName !== userData?.username)
         .filter((user) => regexp.test(user));
       setSearchedUsers([...filteredUsers]);
     } else {
@@ -417,8 +418,8 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       let dataBody = {
         messageIds: messageIds,
         messageStatus: "READ",
-        primaryUser: userData.username,
-        secondaryUser: sender.secondaryUser || sender
+        primaryUser: userData?.username,
+        secondaryUser: sender?.secondaryUser || sender
         ,
       };
       await getHandleResetReadHistory(dataBody);

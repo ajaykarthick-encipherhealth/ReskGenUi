@@ -6,7 +6,7 @@ export async function getChatHistory(userName) {
   const token = getStorage("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint1}chatservice/api/get/history?receiver=${userName}`,
+      `${ENDPOINTS?.apiEndoint}chatservice/api/get/history?receiver=${userName}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -20,11 +20,11 @@ export async function getChatHistory(userName) {
   }
 }
 
-export async function getUsers(searchString) {
+export async function getUsers({searchString = ""}) {
   const token = getStorage("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint1}chatservice/api/users?searchString=${searchString}`,
+      `${ENDPOINTS?.apiEndoint}chatservice/api/users?searchString=${searchString}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -47,7 +47,7 @@ export async function getHandleChatHistory(
   const token = getStorage("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint1}chatservice/api/messages/private?sender=${userName}&receiver=${secondaryUser}&pageNo=${pageNumber}&pageSize=${pageSize}`,
+      `${ENDPOINTS?.apiEndoint}chatservice/api/messages/private?sender=${userName}&receiver=${secondaryUser}&pageNo=${pageNumber}&pageSize=${pageSize}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -68,7 +68,7 @@ export async function getHandleResetReadHistory(data) {
   const token = getStorage("token");
   try {
     const response = await axios.post(
-      `${ENDPOINTS?.apiEndoint1}chatservice/api/change/status`,
+      `${ENDPOINTS?.apiEndoint}chatservice/api/change/status`,
       data,
       {
         headers: {
@@ -87,7 +87,7 @@ export async function handleFilePost(data) {
     const token = getStorage("token");
     try {
       const response = await axios.post(
-        `${ENDPOINTS?.apiEndoint1}chatservice/api/uploadFile`,
+        `${ENDPOINTS?.apiEndoint}chatservice/api/uploadFile`,
         data,
         {
           headers: {
@@ -106,7 +106,7 @@ export async function handleFilePost(data) {
     const token = getStorage("token");
     try {
       const response = await axios.post(
-        `${ENDPOINTS?.apiEndoint1}chatservice/api/uploadFile`,
+        `${ENDPOINTS?.apiEndoint}chatservice/api/uploadFile`,
         data,
         {
           headers: {
