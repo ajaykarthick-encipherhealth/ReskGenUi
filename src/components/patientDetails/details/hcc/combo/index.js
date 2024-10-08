@@ -14,6 +14,9 @@ import ComboCard from "../../components/COMBO";
 import ModelIndex from "../../components/model/Index";
 import { getStorage } from "../../../../../utils/storages";
 import ManuallyAdd from "../../components/manuallyAdd";
+import { onDragEnd } from "../../components/function/ReusableFunctions";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import LogoLoader from "../../../../logoLoader";
 
 const Combo = ({
   activeComboTree,
@@ -23,7 +26,7 @@ const Combo = ({
   fileDosPageNumberList,
   setActiveTabHead,
   setActiveMeatTitle,
-  year
+  year,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -79,16 +82,16 @@ const Combo = ({
   const [meatCriteriaList, setMeatCriteriaList] = useState([]);
   const [zIndex, setZIndex] = useState(false);
   const [allMeatList, setAllMeatList] = useState([]);
-  const [isBlockRxHcc, setIsBlockRxHcc] = useState([])
-  const [isBlockRxHccCareGap, setIsBlockRxHccCareGap] = useState([])
-  const [isBlockRxHccDeleted, setIsBlockRxHccDeleted] = useState([])
-  const userId = getStorage('userId')
+  const [isBlockRxHcc, setIsBlockRxHcc] = useState([]);
+  const [isBlockRxHccCareGap, setIsBlockRxHccCareGap] = useState([]);
+  const [isBlockRxHccDeleted, setIsBlockRxHccDeleted] = useState([]);
+  const userId = getStorage("userId");
   const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
   const [isFileFormShow, setIsFileFormShow] = useState(false);
-  const [selectCardTitle, setSelectCardTitle] = useState('');
+  const [selectCardTitle, setSelectCardTitle] = useState("");
   const [formValues, setFormValues] = useState(false);
+  const [allDisList, setAllDisList] = useState([]);
 
-  
   const handleChange = async (e) => {
     const key = e.target.name;
     if (key == "diagnosisCodeQuery") {
@@ -120,7 +123,7 @@ const Combo = ({
       patientDetailsResult,
       dispatch,
       sectionColorList,
-      "",
+      setAllDisList,
       setComboDiseaseCodesList,
       "",
       "",
@@ -154,7 +157,7 @@ const Combo = ({
     setValidated(false);
     setIsModalOpenCaptureSection(false);
     setIsAddComboCode(false);
-    setFileLoading(false);
+    // setFileLoading(false);
     setOpens(false);
     setSuggestedMeatForm(false);
   };
@@ -229,123 +232,186 @@ const Combo = ({
   }, [isModalOpenCaptureSection]);
 
   useEffect(() => {
-    const filterCms = [...newValidDiseaseList, ...suggestedHccList, ...deletedHccList].map(item => item.diagnosisCode)
+    const filterCms = [
+      ...newValidDiseaseList,
+      ...suggestedHccList,
+      ...deletedHccList,
+    ].map((item) => item.diagnosisCode);
     if (comboDiseaseCodesList) {
-      const filterMeat = comboDiseaseCodesList.filter((item) => filterCms.includes(item.diagnosisCode));
-      const filterMeatCare = careGapComboDiseaseCodesList.filter((item) => filterCms.includes(item.diagnosisCode));
-      const filterMeatDeleted = invalidComboDiseaseCodesList.filter((item) => filterCms.includes(item.diagnosisCode));
-      setIsBlockRxHcc(filterMeat)
-      setIsBlockRxHccCareGap(filterMeatCare)
-      setIsBlockRxHccDeleted(filterMeatDeleted)
+      const filterMeat = comboDiseaseCodesList.filter((item) =>
+        filterCms.includes(item.diagnosisCode)
+      );
+      const filterMeatCare = careGapComboDiseaseCodesList.filter((item) =>
+        filterCms.includes(item.diagnosisCode)
+      );
+      const filterMeatDeleted = invalidComboDiseaseCodesList.filter((item) =>
+        filterCms.includes(item.diagnosisCode)
+      );
+      setIsBlockRxHcc(filterMeat);
+      setIsBlockRxHccCareGap(filterMeatCare);
+      setIsBlockRxHccDeleted(filterMeatDeleted);
     }
-  }, [comboDiseaseCodesList])
+  }, [comboDiseaseCodesList]);
 
   return (
     <>
-      {fileLoading ? (
-        <div className={styles.overlay_style}>
-          <div className={styles.overlay__inner_style}>
-            <div className={styles.overlay__content_style}>
-              <span className={styles.spinner_style}></span>
+      {fileLoading ? <LogoLoader /> : null}
+      <DragDropContext
+        onDragEnd={(result) =>
+          onDragEnd(
+            result,
+            allDisList,
+            setSelectDiseasesName,
+            setSelectDisDetails,
+            setConfirmNotesModalValid,
+            setIsValidAction,
+            patientDetailsResult
+          )
+        }
+      >
+        <div className={`${visitStyles.comboContainer}`}>
+          <div className={`row ${visitStyles.comboContainer2}`}>
+            <div className="col-xl-4">
+              <Droppable droppableId={"HCC"} key={"HCC"}>
+                {(provided) => {
+                  return (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                      <div className={`${visitStyles.comboTitle}`}>
+                        <span>VALID CODES </span>
+                      </div>
+                      <ComboCard
+                        list={
+                          userId == "reviewer@3gencogentai.onmicrosoft.com"
+                            ? isBlockRxHcc
+                            : comboDiseaseCodesList
+                        }
+                        captureSectionMatching={captureSectionMatching}
+                        encounterDateMatching={encounterDateMatching}
+                        okText="OK"
+                        cancelText="Cancel"
+                        popConfirmTitle="Do you want to move to Delete?"
+                        setOpens={setOpens}
+                        setCombiTree={setCombiTree}
+                        setSearch={setSearch}
+                        setFileLoading={setFileLoading}
+                        setFileModalHeader={setFileModalHeader}
+                        onchangeCombo={onchangeCombo}
+                        setIsModalOpenCaptureSection={
+                          setIsModalOpenCaptureSection
+                        }
+                        isAddComboCode={true}
+                        addComboCode={addComboCode}
+                        setConfirmNotesModalValid={setConfirmNotesModalValid}
+                        setIsValidAction={setIsValidAction}
+                        patientDocumentResult={patientDocumentResult}
+                        setActiveTabHead={setActiveTabHead}
+                        setActiveMeatTitle={setActiveMeatTitle}
+                        meatCriteriaList={allMeatList}
+                        cardTitle="HCC"
+                      />
+                    </div>
+                  );
+                }}
+              </Droppable>
+            </div>
+
+            <div className="col-xl-4">
+              <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
+                {(provided) => {
+                  return (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                      <div className={`${visitStyles.comboTitle}`}>
+                        <span>CARE GAP COMBO CODES </span>
+                      </div>
+                      <ComboCard
+                        list={
+                          userId == "reviewer@3gencogentai.onmicrosoft.com"
+                            ? isBlockRxHccCareGap
+                            : careGapComboDiseaseCodesList
+                        }
+                        captureSectionMatching={captureSectionMatching}
+                        encounterDateMatching={encounterDateMatching}
+                        okText="OK"
+                        cancelText="Cancel"
+                        popConfirmTitle="You want move to valid?"
+                        setOpens={setOpens}
+                        setCombiTree={setCombiTree}
+                        setSearch={setSearch}
+                        setFileLoading={setFileLoading}
+                        setFileModalHeader={setFileModalHeader}
+                        onchangeCombo={onchangeCombo}
+                        setIsModalOpenCaptureSection={
+                          setIsModalOpenCaptureSection
+                        }
+                        isAddComboCode={false}
+                        setConfirmNotesModalValid={setConfirmNotesModalValid}
+                        setIsValidAction={setIsValidAction}
+                        patientDocumentResult={patientDocumentResult}
+                        setActiveTabHead={setActiveTabHead}
+                        setActiveMeatTitle={setActiveMeatTitle}
+                        meatCriteriaList={allMeatList}
+                        cardTitle="SUGGESTED"
+                        setSuggestedMeatForm={setSuggestedMeatForm}
+                        setSelectCardTitle={setSelectCardTitle}
+                      />
+                    </div>
+                  );
+                }}
+              </Droppable>
+            </div>
+
+            <div className="col-xl-4">
+              <Droppable droppableId={"DELETED"} key={"DELETED"}>
+                {(provided) => {
+                  return (
+                    <div
+                      className="timeline"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={{ marginTop: "10px" }}
+                    >
+                      <div className={`${visitStyles.comboTitle}`}>
+                        <span>DELETED COMBO CODES </span>
+                      </div>
+                      <ComboCard
+                        list={
+                          userId == "reviewer@3gencogentai.onmicrosoft.com"
+                            ? isBlockRxHccDeleted
+                            : invalidComboDiseaseCodesList
+                        }
+                        captureSectionMatching={captureSectionMatching}
+                        encounterDateMatching={encounterDateMatching}
+                        okText="OK"
+                        cancelText="Cancel"
+                        popConfirmTitle="You want move to valid?"
+                        setOpens={setOpens}
+                        setCombiTree={setCombiTree}
+                        setSearch={setSearch}
+                        setFileLoading={setFileLoading}
+                        setFileModalHeader={setFileModalHeader}
+                        onchangeCombo={onchangeCombo}
+                        setIsModalOpenCaptureSection={
+                          setIsModalOpenCaptureSection
+                        }
+                        isAddComboCode={false}
+                        setConfirmNotesModalValid={setConfirmNotesModalValid}
+                        setIsValidAction={setIsValidAction}
+                        patientDocumentResult={patientDocumentResult}
+                        setActiveTabHead={setActiveTabHead}
+                        setActiveMeatTitle={setActiveMeatTitle}
+                        meatCriteriaList={allMeatList}
+                        cardTitle="DELETED"
+                        setSuggestedMeatForm={setSuggestedMeatForm}
+                        setSelectCardTitle={setSelectCardTitle}
+                      />
+                    </div>
+                  );
+                }}
+              </Droppable>
             </div>
           </div>
         </div>
-      ) : null}
-      <div className={`${visitStyles.comboContainer}`}>
-        <div className={`row ${visitStyles.comboContainer2}`}>
-          <div className="col-xl-4">
-            <div className={`${visitStyles.comboTitle}`}>
-              <span>VALID CODES </span>
-            </div>
-            <ComboCard
-              list={userId == "reviewer@3gencogentai.onmicrosoft.com" ? isBlockRxHcc :comboDiseaseCodesList}
-              captureSectionMatching={captureSectionMatching}
-              encounterDateMatching={encounterDateMatching}
-              okText="OK"
-              cancelText="Cancel"
-              popConfirmTitle="Do you want to move to Delete?"
-              setOpens={setOpens}
-              setCombiTree={setCombiTree}
-              setSearch={setSearch}
-              setFileLoading={setFileLoading}
-              setFileModalHeader={setFileModalHeader}
-              onchangeCombo={onchangeCombo}
-              setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
-              isAddComboCode={true}
-              addComboCode={addComboCode}
-              setConfirmNotesModalValid={setConfirmNotesModalValid}
-              setIsValidAction={setIsValidAction}
-              patientDocumentResult={patientDocumentResult}
-              setActiveTabHead={setActiveTabHead}
-              setActiveMeatTitle={setActiveMeatTitle}
-              meatCriteriaList={allMeatList}
-              cardTitle="HCC"
-            />
-          </div>
-
-          <div className="col-xl-4">
-            <div className={`${visitStyles.comboTitle}`}>
-              <span>CARE GAP COMBO CODES </span>
-            </div>
-            <ComboCard
-              list={userId == "reviewer@3gencogentai.onmicrosoft.com" ? isBlockRxHccCareGap : careGapComboDiseaseCodesList}
-              captureSectionMatching={captureSectionMatching}
-              encounterDateMatching={encounterDateMatching}
-              okText="OK"
-              cancelText="Cancel"
-              popConfirmTitle="You want move to valid?"
-              setOpens={setOpens}
-              setCombiTree={setCombiTree}
-              setSearch={setSearch}
-              setFileLoading={setFileLoading}
-              setFileModalHeader={setFileModalHeader}
-              onchangeCombo={onchangeCombo}
-              setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
-              isAddComboCode={false}
-              setConfirmNotesModalValid={setConfirmNotesModalValid}
-              setIsValidAction={setIsValidAction}
-              patientDocumentResult={patientDocumentResult}
-              setActiveTabHead={setActiveTabHead}
-              setActiveMeatTitle={setActiveMeatTitle}
-              meatCriteriaList={allMeatList}
-              cardTitle="SUGGESTED"
-              setSuggestedMeatForm={setSuggestedMeatForm}
-              setSelectCardTitle={setSelectCardTitle}
-            />
-          </div>
-
-          <div className="col-xl-4">
-            <div className={`${visitStyles.comboTitle}`}>
-              <span>DELETED COMBO CODES </span>
-            </div>
-            <ComboCard
-              list={userId == "reviewer@3gencogentai.onmicrosoft.com" ? isBlockRxHccDeleted :invalidComboDiseaseCodesList}
-              captureSectionMatching={captureSectionMatching}
-              encounterDateMatching={encounterDateMatching}
-              okText="OK"
-              cancelText="Cancel"
-              popConfirmTitle="You want move to valid?"
-              setOpens={setOpens}
-              setCombiTree={setCombiTree}
-              setSearch={setSearch}
-              setFileLoading={setFileLoading}
-              setFileModalHeader={setFileModalHeader}
-              onchangeCombo={onchangeCombo}
-              setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
-              isAddComboCode={false}
-              setConfirmNotesModalValid={setConfirmNotesModalValid}
-              setIsValidAction={setIsValidAction}
-              patientDocumentResult={patientDocumentResult}
-              setActiveTabHead={setActiveTabHead}
-              setActiveMeatTitle={setActiveMeatTitle}
-              meatCriteriaList={allMeatList}
-              cardTitle="DELETED"
-              setSuggestedMeatForm={setSuggestedMeatForm}
-              setSelectCardTitle={setSelectCardTitle}
-            />
-          </div>
-        </div>
-      </div>
+      </DragDropContext>
 
       {isModalOpenCaptureSection && (
         <Modal
@@ -362,7 +428,11 @@ const Combo = ({
             <div className="row">
               <div className="col-xl-5">
                 <ComboCard
-                  list={userId == "reviewer@3gencogentai.onmicrosoft.com" ? isBlockRxHcc :comboDiseaseCodesList}
+                  list={
+                    userId == "reviewer@3gencogentai.onmicrosoft.com"
+                      ? isBlockRxHcc
+                      : comboDiseaseCodesList
+                  }
                   captureSectionMatching={captureSectionMatching}
                   encounterDateMatching={encounterDateMatching}
                   okText="OK"
@@ -433,6 +503,10 @@ const Combo = ({
         setConfirmNotesModalValid={setConfirmNotesModalValid}
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
+        dragMovemntAction={true}
+        setSuggestedMeatForm={setSuggestedMeatForm}
+        meatCriteriaList={allMeatList}
+        setSelectCardTitle={setSelectCardTitle}
       />
 
       <Offcanvas
