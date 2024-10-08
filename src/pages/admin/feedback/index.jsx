@@ -66,7 +66,7 @@ const FeedBack = () => {
     setOpen(false);
   };
   const handleSubmit = (values) => {
-    console.info(values); 
+    console.info(values);
     form.resetFields();
     onClose();
   };
@@ -111,13 +111,17 @@ const FeedBack = () => {
           </div>
           <div className="col-6 d-flex justify-content-end mt-5">
             <div>
-              <button
-                type="button"
-                className={styles.createBtn}
-                onClick={showDrawer}
-              >
-                <PlusCircleOutlined className={styles.icon} /> Create
-              </button>
+              {activeTab === "myfeedback" && (
+                <div>
+                  <button
+                    type="button"
+                    className={styles.createBtn}
+                    onClick={showDrawer}
+                  >
+                    <PlusCircleOutlined className={styles.icon} /> Create
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="customDrawer">
@@ -164,15 +168,16 @@ const FeedBack = () => {
                       name="diagnosiscode"
                       rules={[
                         {
-                            max: 7,
-                            required: true,
-                            message: 'Please enter diagnosis code',
+                          max: 7,
+                          required: true,
+                          message: "Please enter diagnosis code",
                         },
                         {
-                            pattern: /^[A-Za-z]\d{2}[A-Za-z0-9]{0,4}$/,
-                            message: 'Enter Valid Code: First alphabet, Second and Third Numbers ',
+                          pattern: /^[A-Za-z]\d{2}[A-Za-z0-9]{0,4}$/,
+                          message:
+                            "Enter Valid Code: First alphabet, Second and Third Numbers ",
                         },
-                    ]}
+                      ]}
                     >
                       <Input placeholder="Diagnosis Code" />
                     </Form.Item>

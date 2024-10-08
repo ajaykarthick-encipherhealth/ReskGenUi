@@ -8,7 +8,7 @@ import { getButtonStatus } from "../../../components/commonFunctions";
 import { Modal, Drawer, Form, Input, Select, Button } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import FeedBackModalContent from "../../admin/feedback/feedBackModal";
-import styles from "../../admin/feedback/styles.module.css"
+import styles from "../../admin/feedback/styles.module.css";
 
 const FeedBack = () => {
   const totalElements = 100;
@@ -66,220 +66,246 @@ const FeedBack = () => {
     setOpen(false);
   };
   const handleSubmit = (values) => {
-    console.info(values); 
+    console.info(values);
     form.resetFields();
     onClose();
   };
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
-    <Header />
-    <div style={{ marginTop: "65px" }}>
-      <div className="row mx-3">
-        <div className="col-2">
-          <label>Search by Name or ID</label>
-          <InputField
-            isSearch={true}
-            placeholder={"Search"}
-            inputValue={search}
-            setInputValue={setSearch}
-            type={"text"}
-            isInputFiled={false}
-          />
-        </div>
-        <div className="col-2">
-          <label>Date Created</label>
-          <InputField
-            isSearch={true}
-            placeholder={"Search"}
-            inputValue={search}
-            setInputValue={setSearch}
-            type={"text"}
-            isInputFiled={false}
-          />
-        </div>
-        <div className="col-2">
-          <label>Status</label>
-          <InputField
-            isSearch={true}
-            placeholder={"Search"}
-            inputValue={search}
-            setInputValue={setSearch}
-            type={"text"}
-            isInputFiled={false}
-          />
-        </div>
-        <div className="col-6 d-flex justify-content-end mt-5">
-          <div>
-            <button
-              type="button"
-              className={styles.createBtn}
-              onClick={showDrawer}
-            >
-              <PlusCircleOutlined className={styles.icon} /> Create
-            </button>
+      <Header />
+      <div style={{ marginTop: "65px" }}>
+        <div className="row mx-3">
+          <div className="col-2">
+            <label>Search by Name or ID</label>
+            <InputField
+              isSearch={true}
+              placeholder={"Search"}
+              inputValue={search}
+              setInputValue={setSearch}
+              type={"text"}
+              isInputFiled={false}
+            />
           </div>
-
-          <div className="customDrawer">
-            <Drawer
-              title="Create Feedback"
-              destroyOnClose={true}
-              onClose={onClose}
-              open={open}
-            >
-              <div className="mt-3 mx-4">
-                <Form
-                  form={form}
-                  className="customInput"
-                  onFinish={handleSubmit}
-                  layout="vertical"
-                  autoComplete="off"
-                >
-                  <Form.Item
-                    label="Feedback ID"
-                    name="feedbackId"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter Feedback ID",
-                      },
-                    ]}
+          <div className="col-2">
+            <label>Date Created</label>
+            <InputField
+              isSearch={true}
+              placeholder={"Search"}
+              inputValue={search}
+              setInputValue={setSearch}
+              type={"text"}
+              isInputFiled={false}
+            />
+          </div>
+          <div className="col-2">
+            <label>Status</label>
+            <InputField
+              isSearch={true}
+              placeholder={"Search"}
+              inputValue={search}
+              setInputValue={setSearch}
+              type={"text"}
+              isInputFiled={false}
+            />
+          </div>
+          <div className="col-6 d-flex justify-content-end mt-5">
+            <div>
+              {activeTab === "myfeedback" && (
+                <div>
+                  <button
+                    type="button"
+                    className={styles.createBtn}
+                    onClick={showDrawer}
                   >
-                    <Input placeholder="Feedback ID" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Patient Name"
-                    name="patientName"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter Patient Name",
-                      },
-                    ]}
+                    <PlusCircleOutlined className={styles.icon} /> Create
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="customDrawer">
+              <Drawer
+                title="Create Feedback"
+                destroyOnClose={true}
+                onClose={onClose}
+                open={open}
+              >
+                <div className="mt-3 mx-4">
+                  <Form
+                    form={form}
+                    className="customInput"
+                    onFinish={handleSubmit}
+                    layout="vertical"
+                    autoComplete="off"
                   >
-                    <Input placeholder="Patient Name" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Diagnosis Code"
-                    name="diagnosiscode"
-                    rules={[
-                      {
-                          max: 7,
+                    <Form.Item
+                      label="Feedback ID"
+                      name="feedbackId"
+                      rules={[
+                        {
                           required: true,
-                          message: 'Please enter diagnosis code',
-                      },
-                      {
-                          pattern: /^[A-Za-z]\d{2}[A-Za-z0-9]{0,4}$/,
-                          message: 'Enter Valid Code: First alphabet, Second and Third Numbers ',
-                      },
-                  ]}
-                  >
-                    <Input placeholder="Diagnosis Code" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Description"
-                    name="description"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter Description",
-                      },
-                    ]}
-                  >
-                    <Input placeholder="Description" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Reason"
-                    name="reason"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please Enter Reason",
-                      },
-                    ]}
-                  >
-                    <Input.TextArea
-                      placeholder="Reason"
-                      style={{ resize: "none" }}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Manager"
-                    name="manager"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please Enter Manager Name",
-                      },
-                    ]}
-                  >
-                    <Select
-                      placeholder="Manager"
-                      options={[
-                        {
-                          value: "jack",
-                          label: "Jack",
-                        },
-                        {
-                          value: "lucy",
-                          label: "Lucy",
-                        },
-                        {
-                          value: "tom",
-                          label: "Tom",
+                          message: "Please enter Feedback ID",
                         },
                       ]}
-                    />
-                  </Form.Item>
-                  <Form.Item>
-                    <div className="d-flex justify-content-center align-items-center">
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        className={styles.btn}
-                      >
-                        Proceed
-                      </Button>
-                    </div>
-                  </Form.Item>
-                </Form>
-              </div>
-            </Drawer>
+                    >
+                      <Input placeholder="Feedback ID" />
+                    </Form.Item>
+                    <Form.Item
+                      label="Patient Name"
+                      name="patientName"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter Patient Name",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Patient Name" />
+                    </Form.Item>
+                    <Form.Item
+                      label="Diagnosis Code"
+                      name="diagnosiscode"
+                      rules={[
+                        {
+                          max: 7,
+                          required: true,
+                          message: "Please enter diagnosis code",
+                        },
+                        {
+                          pattern: /^[A-Za-z]\d{2}[A-Za-z0-9]{0,4}$/,
+                          message:
+                            "Enter Valid Code: First alphabet, Second and Third Numbers ",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Diagnosis Code" />
+                    </Form.Item>
+                    <Form.Item
+                      label="Description"
+                      name="description"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter Description",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Description" />
+                    </Form.Item>
+                    <Form.Item
+                      label="Reason"
+                      name="reason"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Enter Reason",
+                        },
+                      ]}
+                    >
+                      <Input.TextArea
+                        placeholder="Reason"
+                        style={{ resize: "none" }}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Manager"
+                      name="manager"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Enter Manager Name",
+                        },
+                      ]}
+                    >
+                      <Select
+                        placeholder="Manager"
+                        options={[
+                          {
+                            value: "jack",
+                            label: "Jack",
+                          },
+                          {
+                            value: "lucy",
+                            label: "Lucy",
+                          },
+                          {
+                            value: "tom",
+                            label: "Tom",
+                          },
+                        ]}
+                      />
+                    </Form.Item>
+                    <Form.Item>
+                      <div className="d-flex justify-content-center align-items-center">
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          className={styles.btn}
+                        >
+                          Proceed
+                        </Button>
+                      </div>
+                    </Form.Item>
+                  </Form>
+                </div>
+              </Drawer>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-        <div className="profile-tab " style={{ marginTop: "20px" }}>
-          <div className="custom-tab-1">
-            <Tab.Container defaultActiveKey={activeTab}>
-              <Nav as="ul" className="nav nav-tabs">
-                <Nav.Item
-                  as="li"
-                  className="nav-item"
-                  onClick={() => {
-                    setActiveTab("myfeedback");
-                  }}
-                >
-                  <Nav.Link to="#my-posts" eventKey="myfeedback">
-                    My Feedback
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item
-                  as="li"
-                  className="nav-item"
-                  onClick={() => {
-                    setActiveTab("approvalrequest");
-                  }}
-                >
-                  <Nav.Link to="#my-posts" eventKey="approvalrequest">
-                    Approval Request
-                  </Nav.Link>
-                </Nav.Item>
-              </Nav>
-              <Tab.Content>
-                <Tab.Pane id="my-posts" eventKey="myfeedback">
-                  <div>
+        <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
+          <div className="profile-tab " style={{ marginTop: "20px" }}>
+            <div className="custom-tab-1">
+              <Tab.Container defaultActiveKey={activeTab}>
+                <Nav as="ul" className="nav nav-tabs">
+                  <Nav.Item
+                    as="li"
+                    className="nav-item"
+                    onClick={() => {
+                      setActiveTab("myfeedback");
+                    }}
+                  >
+                    <Nav.Link to="#my-posts" eventKey="myfeedback">
+                      My Feedback
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item
+                    as="li"
+                    className="nav-item"
+                    onClick={() => {
+                      setActiveTab("approvalrequest");
+                    }}
+                  >
+                    <Nav.Link to="#my-posts" eventKey="approvalrequest">
+                      Approval Request
+                    </Nav.Link>
+                  </Nav.Item>
+                </Nav>
+                <Tab.Content>
+                  <Tab.Pane id="my-posts" eventKey="myfeedback">
+                    <div>
+                      <AppTable
+                        data={Data}
+                        column={column}
+                        onRowClick={handleRowClick}
+                        status={getButtonStatus}
+                        onPageChange={onPageChange}
+                        totalElements={totalElements}
+                        paginationFirst={paginationFirst}
+                      />
+                    </div>
+                    <Modal
+                      footer={null}
+                      destroyOnClose={true}
+                      open={isModalOpen}
+                      onCancel={handleModalCancel}
+                      onOk={handleModalOk}
+                      width={900}
+                    >
+                      <FeedBackModalContent modalData={modalData} />
+                    </Modal>
+                  </Tab.Pane>
+                  <Tab.Pane id="my-posts" eventKey="approvalrequest">
                     <AppTable
                       data={Data}
                       column={column}
@@ -289,36 +315,14 @@ const FeedBack = () => {
                       totalElements={totalElements}
                       paginationFirst={paginationFirst}
                     />
-                  </div>
-                  <Modal
-                    footer={null}
-                    destroyOnClose={true}
-                    open={isModalOpen}
-                    onCancel={handleModalCancel}
-                    onOk={handleModalOk}
-                    width={900}
-                  >
-                    <FeedBackModalContent modalData={modalData} />
-                  </Modal>
-                </Tab.Pane>
-                <Tab.Pane id="my-posts" eventKey="approvalrequest">
-                  <AppTable
-                    data={Data}
-                    column={column}
-                    onRowClick={handleRowClick}
-                    status={getButtonStatus}
-                    onPageChange={onPageChange}
-                    totalElements={totalElements}
-                    paginationFirst={paginationFirst}
-                  />
-                </Tab.Pane>
-              </Tab.Content>
-            </Tab.Container>
+                  </Tab.Pane>
+                </Tab.Content>
+              </Tab.Container>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   );
 };
 

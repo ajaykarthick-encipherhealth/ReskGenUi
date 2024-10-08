@@ -112,15 +112,18 @@ const FeedBack = () => {
         </div>
         <div className="col-6 d-flex justify-content-end mt-5">
           <div>
-            <button
-              type="button"
-              className={styles.createBtn}
-              onClick={showDrawer}
-            >
-              <PlusCircleOutlined className={styles.icon} /> Create
-            </button>
+          {activeTab === "myfeedback" && (
+              <div>
+                <button
+                  type="button"
+                  className={styles.createBtn}
+                  onClick={showDrawer}
+                >
+                  <PlusCircleOutlined className={styles.icon} /> Create
+                </button>
+              </div>
+            )}
           </div>
-
           <div className="customDrawer">
             <Drawer
               title="Create Feedback"
