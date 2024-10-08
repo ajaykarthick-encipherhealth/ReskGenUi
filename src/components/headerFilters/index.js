@@ -164,7 +164,9 @@ const HeaderFilters = ({
   isRangePickerUsers,
   form,
   setMobileNumber,
-  setPageNo
+  setPageNo,
+  selectDefaultValue,
+  orgValue
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -216,6 +218,7 @@ const HeaderFilters = ({
                 setSelectedOption={setSelectedOption}
                 selectOptions={selectOptions}
                 defaultSelectValue1={defaultSelectValue1}
+                selectDefaultValue={selectDefaultValue}
                 // selectedValue={selectedValue}
                 setPageNo={setPageNo}
               />
@@ -330,6 +333,7 @@ const HeaderFilters = ({
               <label className={styles.label}>{selectlabelOrg}</label>
               <div class="form-group has-search">
                 <Select
+                value={orgValue&&orgValue}
                   onChange={(selectOrg) => {
                     if(setPageNo){
                       resetPageNumber(setPageNo)
