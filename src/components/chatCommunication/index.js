@@ -115,7 +115,6 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       onUpdatedUsersHistory
     );
   };
-
   const getCurrentTimestamp = () => {
     const now = new Date();
     const hours = now.getHours();
@@ -273,6 +272,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
           fileType: userData.fileType,
           date: getCurrentTimestamp(),
           status: "MESSAGE",
+          token:getStorage("token")
         };
       } else {
         chatMessage = {
@@ -283,14 +283,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
           id: uuidv4(),
           date: getCurrentTimestamp(),
           status: "MESSAGE",
+          token:getStorage("token")
         };
       }
-
-      stompClient.send(
-        `/app/private-message?token=${getStorage("token")}`,
-        {},
-        JSON.stringify(chatMessage)
-      );
+      stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
       messagesRef.current = [...message, chatMessage];
       setMessages([...message, chatMessage]);
       setFileModal(false);
@@ -421,8 +417,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       let dataBody = {
         messageIds: messageIds,
         messageStatus: "READ",
-        primaryUser: sender.primaryUser,
-        secondaryUser: sender.secondaryUser,
+        primaryUser: userData.username,
+        secondaryUser: sender.secondaryUser || sender
+        ,
       };
       await getHandleResetReadHistory(dataBody);
     }
