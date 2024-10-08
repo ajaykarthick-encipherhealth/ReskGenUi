@@ -20,11 +20,11 @@ export async function getChatHistory(userName) {
   }
 }
 
-export async function getUsers(userName) {
+export async function getUsers(searchString) {
   const token = getStorage("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint1}chatservice/api/users`,
+      `${ENDPOINTS?.apiEndoint1}chatservice/api/users?searchString=${searchString}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

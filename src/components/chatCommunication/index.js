@@ -87,7 +87,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   };
 
   const fetchUsers = async () => {
-    let data = await getUsers();
+    let data = await getUsers({searchString:userData.searchNewUserMessage});
     const temp = [];
     data?.forEach((item) => {
       temp.push(item);
@@ -252,7 +252,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       userData.username &&
       stompClient === null &&
       connectingFunction();
-  }, [users, userData]);
+  }, [users, userData,]);
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (userData.message === "") {
