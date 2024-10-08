@@ -89,7 +89,7 @@ const FeedBack = () => {
           />
         </div>
         <div className="col-2">
-          <label>Search by Name or ID</label>
+          <label>Date Created</label>
           <InputField
             isSearch={true}
             placeholder={"Search"}
@@ -100,7 +100,7 @@ const FeedBack = () => {
           />
         </div>
         <div className="col-2">
-          <label>Search by Name or ID</label>
+          <label>Status</label>
           <InputField
             isSearch={true}
             placeholder={"Search"}
