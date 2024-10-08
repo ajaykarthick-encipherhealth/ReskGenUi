@@ -352,7 +352,6 @@ const ComboCard = ({
                                       <div
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
-                                        {console.log(item?.capturedSections)}
                                         {getCaptureSectionBackgroundFile({
                                           value: item?.capturedSections,
                                           encounterDate: item?.encounterDate,
