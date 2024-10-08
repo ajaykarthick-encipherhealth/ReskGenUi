@@ -65,7 +65,9 @@ const FeedBack = () => {
     setIsModalOpen(false);
   };
   const handleSubmit = (values) => {
-    console.log(values);
+    console.info(values); 
+    form.resetFields();
+    onClose();
   };
 
   return (
@@ -85,7 +87,7 @@ const FeedBack = () => {
             />
           </div>
           <div className="col-2">
-            <label>Search by Name or ID</label>
+            <label>Date Created</label>
             <InputField
               isSearch={true}
               placeholder={"Search"}
@@ -96,7 +98,7 @@ const FeedBack = () => {
             />
           </div>
           <div className="col-2">
-            <label>Search by Name or ID</label>
+            <label>Status</label>
             <InputField
               isSearch={true}
               placeholder={"Search"}
@@ -108,15 +110,18 @@ const FeedBack = () => {
           </div>
           <div className="col-6 d-flex justify-content-end mt-5">
             <div>
-              <button
-                type="button"
-                className={styles.createBtn}
-                onClick={showDrawer}
-              >
-                <PlusCircleOutlined className={styles.icon} /> Create
-              </button>
+            {activeTab === "myfeedback" && (
+              <div>
+                <button
+                  type="button"
+                  className={styles.createBtn}
+                  onClick={showDrawer}
+                >
+                  <PlusCircleOutlined className={styles.icon} /> Create
+                </button>
+              </div>
+            )}
             </div>
-
             <div className="customDrawer">
               <Drawer
                 title="Create Feedback"
@@ -161,10 +166,15 @@ const FeedBack = () => {
                       name="diagnosiscode"
                       rules={[
                         {
-                          required: true,
-                          message: "Please enter Diagnosis Code",
+                            max: 7,
+                            required: true,
+                            message: 'Please enter diagnosis code',
                         },
-                      ]}
+                        {
+                            pattern: /^[A-Za-z]\d{2}[A-Za-z0-9]{0,4}$/,
+                            message: 'Enter Valid Code: First alphabet, Second and Third Numbers ',
+                        },
+                    ]}
                     >
                       <Input placeholder="Diagnosis Code" />
                     </Form.Item>
