@@ -66,7 +66,7 @@ const FeedBack = () => {
     setOpen(false);
   };
   const handleSubmit = (values) => {
-    console.log(values); 
+    console.info(values); 
     form.resetFields();
     onClose();
   };
