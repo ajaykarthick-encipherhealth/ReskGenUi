@@ -165,10 +165,15 @@ const FeedBack = () => {
                     name="diagnosiscode"
                     rules={[
                       {
-                        required: true,
-                        message: "Please enter Diagnosis Code",
+                          max: 7,
+                          required: true,
+                          message: 'Please enter diagnosis code',
                       },
-                    ]}
+                      {
+                          pattern: /^[A-Za-z]\d{2}[A-Za-z0-9]{0,4}$/,
+                          message: 'Enter Valid Code: First alphabet, Second and Third Numbers ',
+                      },
+                  ]}
                   >
                     <Input placeholder="Diagnosis Code" />
                   </Form.Item>
