@@ -122,7 +122,7 @@ const ComboCard = ({
                       draggableId={item?.diagnosisCode}
                       index={ind}
                       draggableData={item?.list}
-                      // isDragDisabled={isDosSelected ? false : true}
+                      isDragDisabled={isDosSelected ? false : true}
                     >
                       {(provided) => {
                         return (
