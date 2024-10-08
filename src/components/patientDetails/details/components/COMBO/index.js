@@ -352,38 +352,43 @@ const ComboCard = ({
                                       <div
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
-                                        {getCaptureSectionBackgroundFile(
-                                          item?.capturedSections,
-                                          item?.encounterDate,
-                                          item?.actualDescription,
-                                          item?.diagnosisCodeCombo,
-                                          item?.getPlace,
-                                          captureSectionMatching,
-                                          setSearch,
-                                          setFileLoading,
-                                          "",
-                                          "",
-                                          setIsModalOpenCaptureSection,
-                                          setFileModalHeader,
-                                          "",
-                                          patientDocumentResult,
-                                          fileInitialPage,
-                                          setFileInitialPage,
-                                          item?.hyperlinks,
-                                          encounterDateMatching,
-                                          setIsMulitpleHeader,
-                                          isMulitpleHeader,
-                                          setIsMulitpleHeadeCode,
-                                          isMulitpleHeaderCode,
-                                          item.diseaseName,
-                                          popup,
-                                          getSelectedDosPageNumber,
-                                          "",
-                                          "",
-                                          "",
-                                          "",
-                                          storeFileDetails
-                                        )}
+                                        {getCaptureSectionBackgroundFile({
+                                          value: item?.capturedSections,
+                                          encounterDate: item?.encounterDate,
+                                          actualDescription:
+                                            item?.actualDescription,
+                                          diagnosisCodeCombo:
+                                            item?.diagnosisCodeCombo,
+                                          getPlace: item?.getPlace,
+                                          captureSectionMatching:
+                                            captureSectionMatching,
+                                          setSearch: setSearch,
+                                          setFileLoading: setFileLoading,
+                                          setIsModalOpenCaptureSection:
+                                            setIsModalOpenCaptureSection,
+                                          setFileModalHeader:
+                                            setFileModalHeader,
+                                          patientDocumentResult:
+                                            patientDocumentResult,
+                                          fileInitialPage: fileInitialPage,
+                                          setFileInitialPage:
+                                            setFileInitialPage,
+                                          hyperlinks: item?.hyperlinks,
+                                          encounterDateMatching:
+                                            encounterDateMatching,
+                                          setIsMulitpleHeader:
+                                            setIsMulitpleHeader,
+                                          isMulitpleHeader: isMulitpleHeader,
+                                          setIsMulitpleHeadeCode:
+                                            setIsMulitpleHeadeCode,
+                                          isMulitpleHeaderCode:
+                                            isMulitpleHeaderCode,
+                                          diseaseName: item.diseaseName,
+                                          popup: popup,
+                                          getSelectedDosPageNumber:
+                                            getSelectedDosPageNumber,
+                                          storeFileDetails: storeFileDetails,
+                                        })}
                                       </div>
                                     </div>
                                     <div
