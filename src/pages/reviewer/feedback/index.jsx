@@ -59,8 +59,11 @@ const FeedBack = () => {
   const handleModalCancel = () => {
     setIsModalOpen(false);
   };
+ 
   const handleSubmit = (values) => {
-    console.log(values);
+    console.log(values); 
+    form.resetFields();
+    onClose();
   };
   const showDrawer = () => {
     setOpen(true);
