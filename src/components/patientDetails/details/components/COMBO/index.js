@@ -56,6 +56,7 @@ const ComboCard = ({
   setSuggestedMeatForm,
   setSelectCardTitle,
   loading,
+  provided
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -75,6 +76,8 @@ const ComboCard = ({
   ];
   return (
     <>
+    {provided && (
+        <div ref={provided?.innerRef} {...provided?.droppableProps}>
       <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
         <div className={visitStyles.combo_head_card}>
           <div className="row">
@@ -454,6 +457,8 @@ const ComboCard = ({
           </div>
         ) : null}
       </div>
+      </div>
+       )}
     </>
   );
 };

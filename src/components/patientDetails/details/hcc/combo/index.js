@@ -308,6 +308,7 @@ const Combo = ({
                         setActiveMeatTitle={setActiveMeatTitle}
                         meatCriteriaList={allMeatList}
                         cardTitle="HCC"
+                        provided={provided}
                       />
                     </div>
                   );
@@ -353,6 +354,7 @@ const Combo = ({
                         cardTitle="SUGGESTED"
                         setSuggestedMeatForm={setSuggestedMeatForm}
                         setSelectCardTitle={setSelectCardTitle}
+                        provided={provided}
                       />
                     </div>
                   );
@@ -403,6 +405,7 @@ const Combo = ({
                         cardTitle="DELETED"
                         setSuggestedMeatForm={setSuggestedMeatForm}
                         setSelectCardTitle={setSelectCardTitle}
+                        provided={provided}
                       />
                     </div>
                   );
