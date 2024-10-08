@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector, useDispatch, connect } from "react-redux";
 import axios from "../../../utility/axiosConfig";
+import dayjs from "dayjs";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -99,19 +100,48 @@ const Patient = ({ getPatients, loader, response }) => {
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   const [selecteddates, setSelectedDates] = useState([]);
   const [selecteddates2, setSelectedDate2s] = useState([]);
-
+  const [searchVal, setSearchVal] = useState("");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [errors, setErrors] = useState({ year: "" });
 
   useEffect(() => {
     if (window !== "undefined") {
-      if (navigate) {
-        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
-        setPaginationFirst(
-          navigate?.query?.paginationFirst
-            ? navigate?.query?.paginationFirst
-            : 0
-        );
+      if (window.location.search) {
+        try {
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const encodedParams = urlParams.get("params");
+          const decodedParams = JSON.parse(atob(encodedParams));
+          setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
+          setPaginationFirst(
+            decodedParams?.paginationFirst ? decodedParams?.paginationFirst : 0
+          );
+          setCompletedStartDate(decodedParams?.completedStartDate || "");
+          setCompletedEndDate(decodedParams?.completedEndDate || "");
+          SetSelectedOption(decodedParams?.selectedOption || "");
+          setSearch(decodedParams?.search || "");
+          setSearchVal(decodedParams?.search || "");
+          setComputedStartDate(decodedParams?.computedStartDate || "");
+          setComputedEndDate(decodedParams?.computedEndDate || "");
+          setSelAllocatedBy(decodedParams?.selAllocatedBy || "");
+          setSelAllocatedTo(decodedParams?.setSelAllocatedTo || "");
+          setSelCreatedBy(decodedParams?.createdBy || "");
+          setSelectedDates(
+            decodedParams?.completedStartDate && [
+              dayjs(decodedParams?.completedStartDate),
+              dayjs(decodedParams?.completedEndDate),
+            ]
+          );
+          setSelectedDate2s(
+            (decodedParams?.computedStartDate && [
+              dayjs(decodedParams?.computedStartDate),
+              dayjs(decodedParams?.computedEndDate),
+            ]) ||
+              []
+          );
+        } catch (error) {
+          console.error("Error decoding Base64 string: ", error.message);
+        }
       }
     }
   }, [navigate]);
@@ -359,12 +389,12 @@ const Patient = ({ getPatients, loader, response }) => {
       rowData?.computing === 0 && parsedData?.length === 0
         ? "Not Computed"
         : rowData?.computing == 1
-          ? "Processing"
-          : isFinished || rowData?.computing == 2
-            ? "Computed"
-            : rowData?.computing == 3
-              ? "Failed"
-              : "Not Computed";
+        ? "Processing"
+        : isFinished || rowData?.computing == 2
+        ? "Computed"
+        : rowData?.computing == 3
+        ? "Failed"
+        : "Not Computed";
     return (
       <div className="patient-status">
         <div
@@ -374,18 +404,18 @@ const Patient = ({ getPatients, loader, response }) => {
               rowStatus === "Computed"
                 ? "#cceeff "
                 : rowStatus === "Processing"
-                  ? "#dfd8f3"
-                  : rowStatus === "Failed"
-                    ? "#e88d8d"
-                    : "#F1DEDA",
+                ? "#dfd8f3"
+                : rowStatus === "Failed"
+                ? "#e88d8d"
+                : "#F1DEDA",
             color:
               rowStatus === "Computed"
                 ? " #285563"
                 : rowStatus === "Processing"
-                  ? "#452b90"
-                  : rowStatus === "Failed"
-                    ? "red"
-                    : "#BA704F",
+                ? "#452b90"
+                : rowStatus === "Failed"
+                ? "red"
+                : "#BA704F",
           }}
         >
           {rowStatus === "Processing" && (
@@ -420,7 +450,10 @@ const Patient = ({ getPatients, loader, response }) => {
             fontSize={11}
             style={{ color: "#ffff" }}
           /> */}
-          <FontAwesomeIcon icon={faFileArrowUp} className={visitStyles.fontAwesomeIconColor} />
+          <FontAwesomeIcon
+            icon={faFileArrowUp}
+            className={visitStyles.fontAwesomeIconColor}
+          />
         </button>
       </div>
     );
@@ -445,7 +478,7 @@ const Patient = ({ getPatients, loader, response }) => {
     setSelectFile(formData);
     const response = await axios.post(
       ENDPOINTS.apiEndoint +
-      `aiservice/ai/upload
+        `aiservice/ai/upload
       `,
       formData,
       headers
@@ -516,7 +549,7 @@ const Patient = ({ getPatients, loader, response }) => {
     setSelectFile(formData);
     const response = await axios.post(
       ENDPOINTS.apiEndoint +
-      `aiservice/ai/upload/radiology
+        `aiservice/ai/upload/radiology
     `,
       formData,
       headers
@@ -534,7 +567,6 @@ const Patient = ({ getPatients, loader, response }) => {
   };
 
   const onPageChange = (e) => {
-    console.log(e.first, e.page);
     setIsLoading(true);
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -542,9 +574,10 @@ const Patient = ({ getPatients, loader, response }) => {
     setTableLoading(true);
     // getAllList(response?.response);
   };
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getFilters("createdBy"));
-  },[])
+  }, []);
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -563,12 +596,20 @@ const Patient = ({ getPatients, loader, response }) => {
                             isSearch={true}
                             searchlabel="Search By Patient ID / Name"
                             search={search}
+                            searchVal={searchVal}
+                            setSearchVal={setSearchVal}
+                            activeTab={"pateints"}
                             // select status
                             selectlabel="Status"
                             isSelector={true}
                             setSelectedOption={SetSelectedOption}
                             selectOptions={statusOptions}
                             defaultSelectValue1={"Select Status"}
+                            selectDefaultValue={
+                              statusOptions?.find(
+                                (item) => item?.value === selectedOption
+                              )?.label
+                            }
                             // computation date
                             pickerlabel="Computed Date"
                             defaultStartDate={""}
@@ -627,16 +668,30 @@ const Patient = ({ getPatients, loader, response }) => {
                               setSortOrder={setComputedSortOrder}
                               sortOrder={computedSortOrder}
                               setSort={setSort}
-                              page={{ pageNo, paginationFirst }}
+                              page={{
+                                pageNo,
+                                paginationFirst,
+                                computedStartDate,
+                                computedEndDate,
+                                selectedOption,
+                                search,
+                                completedStartDate,
+                                completedEndDate,
+                                selAllocatedTo,
+                                selAllocatedBy,
+                                selCreatedBy,
+                              }}
                               sortCompleteOrder={sortCompleteOrder}
                               setSortCompleteOrder={setSortCompleteOrder}
-
-                              
                             />
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                  first={pageNo === 0 ? 0 : paginationFirst}
+                                  first={
+                                    paginationFirst == 0
+                                      ? pageNo
+                                      : paginationFirst
+                                  }
                                   rows={15}
                                   totalRecords={
                                     response?.response?.totalElements
