@@ -106,7 +106,7 @@ export const getProviderNameTag = ({
             overlayStyle={{ zIndex: 1000 }}
             content={
               <>
-              {res?.length > 20 && <div>{res}</div>}
+                {res?.length > 20 && <div>{res}</div>}
                 {getProviderPopoverHyperlink({
                   value: headerResult,
                   diagnosisCode: diagnosisCode,
@@ -458,81 +458,105 @@ const findProviderNameDocument = ({
 };
 
 const findSectionHyperlink = (hyperlinks, header) => {
-  const headerResult = hyperlinks?.filter((res2) => res2?.header?.toLowerCase() === header?.toLowerCase());
+  const headerResult = hyperlinks?.filter(
+    (res2) => res2?.header?.toLowerCase() === header?.toLowerCase()
+  );
   return headerResult;
 };
 
 export const getProviderNameTagList = ({ data }) => {
-  return data.map((res, index) => {
-    if (index < 2) {
-      var sectionMapArr = (
-        <span
-          className={`mt-2 text-start ${visitStyles.provider_name}`}
-          style={{
-            backgroundColor: stringToColour(res) + 33,
-            color: stringToColour(res),
-          }}
-        >
-          <i>
-            {" "}
-            <FontAwesomeIcon
-              icon={faCircleUser}
-              style={{
-                size: 10,
-                color: stringToColour(res),
-              }}
-            />
-          </i>
-          {res}
-        </span>
-      );
-      return sectionMapArr;
-    } else if (data.length - 1 == index) {
-      var sectionMapArr = (
-        <Popover
-          content={
-            <>
-              {data?.map((item, i) =>
-                i > 1 ? (
-                  <span
-                    className={`mt-2 text-start ${visitStyles.provider_name}`}
-                    style={{
-                      backgroundColor: stringToColour(item) + 33,
-                      color: stringToColour(item),
-                    }}
-                  >
-                    <i>
-                      {" "}
-                      <FontAwesomeIcon
-                        icon={faCircleUser}
-                        style={{
-                          size: 10,
-                          color: stringToColour(item),
-                        }}
-                      />
-                    </i>
-                    {item}
-                  </span>
-                ) : null
-              )}
-            </>
-          }
-          trigger={["hover"]}
-          placement="bottom"
-          overlayStyle={{ zIndex: 9999 }}
-        >
+  return Array.isArray(data) ? (
+    data?.map((res, index) => {
+      if (index < 2) {
+        var sectionMapArr = (
           <span
-            style={{ background: "#a6cfa6", color: "#fff" }}
-            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+            className={`mt-2 text-start ${visitStyles.provider_name}`}
+            style={{
+              backgroundColor: stringToColour(res) + 33,
+              color: stringToColour(res),
+            }}
           >
-            {data.length - 2}+
+            <i>
+              {" "}
+              <FontAwesomeIcon
+                icon={faCircleUser}
+                style={{
+                  size: 10,
+                  color: stringToColour(res),
+                }}
+              />
+            </i>
+            {res}
           </span>
-        </Popover>
-      );
+        );
+        return sectionMapArr;
+      } else if (Array.isArray(data) && data?.length - 1 == index) {
+        var sectionMapArr = (
+          <Popover
+            content={
+              <>
+                {data?.map((item, i) =>
+                  i > 1 ? (
+                    <span
+                      className={`mt-2 text-start ${visitStyles.provider_name}`}
+                      style={{
+                        backgroundColor: stringToColour(item) + 33,
+                        color: stringToColour(item),
+                      }}
+                    >
+                      <i>
+                        {" "}
+                        <FontAwesomeIcon
+                          icon={faCircleUser}
+                          style={{
+                            size: 10,
+                            color: stringToColour(item),
+                          }}
+                        />
+                      </i>
+                      {item}
+                    </span>
+                  ) : null
+                )}
+              </>
+            }
+            trigger={["hover"]}
+            placement="bottom"
+            overlayStyle={{ zIndex: 9999 }}
+          >
+            <span
+              style={{ background: "#a6cfa6", color: "#fff" }}
+              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+            >
+              {data.length - 2}+
+            </span>
+          </Popover>
+        );
 
-      return sectionMapArr;
-    }
-  });
+        return sectionMapArr;
+      }
+    })
+  ) : (
+    <span
+      className={`mt-2 text-start ${visitStyles.provider_name}`}
+      style={{
+        backgroundColor: stringToColour(data) + 33,
+        color: stringToColour(data),
+      }}
+    >
+      <i>
+        {" "}
+        <FontAwesomeIcon
+          icon={faCircleUser}
+          style={{
+            size: 10,
+            color: stringToColour(data),
+          }}
+        />
+      </i>
+      {data}
+    </span>
+  );
 };
 
 const ProviderHyperlinks = () => {
