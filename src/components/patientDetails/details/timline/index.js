@@ -82,7 +82,7 @@ const Timeline = ({
         </div>
         <div className={styles.detailsContainer}>
           <div className={styles.oldCodeContiner}>
-            <span className={styles.codeTitle}>OLD CODE</span>
+            <span className={styles.codeTitle}>OLD</span>
             <div className={styles.details}>
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>
@@ -93,23 +93,27 @@ const Timeline = ({
                   {viewValue?.previousDiseaseFormat?.dbDescription}
                 </span>
               </div>
-              {viewValue?.previousDiseaseFormat?.providerNames && (
-                <div className={styles.detailsHeader}>
-                  <span className={styles.disCode}>Provider</span>
-                  <div>
-                    {getProviderNameTagList({
-                      data: viewValue?.previousDiseaseFormat?.providerNames,
-                    })}
-                  </div>
+
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Provider</span>
+                <div>
+                  {getProviderNameTagList({
+                    data:
+                      viewValue?.previousDiseaseFormat?.providerNames ||
+                      viewValue?.previousProviderInfo?.providerName ||
+                      [],
+                  })}
                 </div>
-              )}
+              </div>
+
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>Encounter Date</span>
                 <div>
                   {getDateOfServiceBackground({
                     value:
                       viewValue?.previousDiseaseFormat?.dateOfServices ||
-                      viewValue?.previousProviderInfo?.dateOfService||[],
+                      viewValue?.previousProviderInfo?.dateOfService ||
+                      [],
                   })}
                 </div>
               </div>
@@ -127,7 +131,7 @@ const Timeline = ({
             </div>
           </div>
           <div className={styles.editCodeContainer}>
-            <span className={styles.editTitle}>NEW CODE</span>
+            <span className={styles.editTitle}>NEW</span>
             <div className={styles.details}>
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>
@@ -138,23 +142,27 @@ const Timeline = ({
                   {viewValue?.changedDiseaseFormat?.dbDescription}
                 </span>
               </div>
-              {viewValue?.changedDiseaseFormat?.providerNames && (
-                <div className={styles.detailsHeader}>
-                  <span className={styles.disCode}>Provider</span>
-                  <div>
-                    {getProviderNameTagList({
-                      data: viewValue?.changedDiseaseFormat?.providerNames,
-                    })}
-                  </div>
+
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Provider</span>
+                <div>
+                  {getProviderNameTagList({
+                    data:
+                      viewValue?.changedDiseaseFormat?.providerNames ||
+                      viewValue?.changedProviderInfo?.providerName ||
+                      [],
+                  })}
                 </div>
-              )}
+              </div>
+
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>Encounter Date</span>
                 <div>
                   {getDateOfServiceBackground({
                     value:
                       viewValue?.changedDiseaseFormat?.dateOfServices ||
-                      viewValue?.changedProviderInfo?.dateOfService ||[],
+                      viewValue?.changedProviderInfo?.dateOfService ||
+                      [],
                   })}
                 </div>
               </div>
@@ -190,7 +198,7 @@ const Timeline = ({
         </div>
         <div className={styles.detailsContainer}>
           <div className={styles.oldCodeContiner}>
-            <span className={styles.codeTitle}>OLD CODE</span>
+            <span className={styles.codeTitle}>OLD</span>
             <div className={styles.details}>
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>
@@ -264,7 +272,7 @@ const Timeline = ({
             </div>
           </div>
           <div className={styles.editCodeContainer}>
-            <span className={styles.editTitle}>NEW CODE</span>
+            <span className={styles.editTitle}>NEW</span>
             <div className={styles.details}>
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>
@@ -403,9 +411,9 @@ const Timeline = ({
       }
     };
 
-    const getHtmlContent=(item)=>{
-      return <div dangerouslySetInnerHTML={{ __html: item }} />
-    }
+    const getHtmlContent = (item) => {
+      return <div dangerouslySetInnerHTML={{ __html: item }} />;
+    };
     const getTimelineHeading = () => {
       switch (item.action) {
         case "MOVED_INVALID_TO_VALID":
