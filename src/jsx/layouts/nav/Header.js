@@ -291,11 +291,17 @@ const Header = ({
     postUnReadCount();
     setPopoverVisible(false);
   };
+  const formattedRoles = dropdownContent?.map((role) =>
+    role
+      .toLowerCase()
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase())
+  );
 
-  const items = dropdownContent
+  const items = formattedRoles
     ?.map((data) => ({
-      key: data.toLowerCase(),
-      label: data.charAt(0).toUpperCase() + data.slice(1).toLowerCase(),
+      key: data,
+      label: data,
     }))
     .filter(
       (info) =>
@@ -305,33 +311,33 @@ const Header = ({
 
   const onClick = ({ key }) => {
     setStorage("userRole", key);
-    if (key === "admin") {
+    if (key === "Admin") {
       router.push("/admin/dashboard");
-    } else if (key === "reviewer") {
+    } else if (key === "Reviewer") {
       router.push("/reviewer/dashboard");
-    } else if (key === "supervisor") {
+    } else if (key === "Supervisor") {
       router.push("/supervisor/dashboard");
-    } else if (key === "tenant_admin") {
+    } else if (key === "Tenant Admin") {
       router.push("/tenantAdmin/dashboard");
-    } else if (key === "ehr") {
+    } else if (key === "Ehr") {
       router.push("/ehr/patients");
     }
   };
   const getMenuListByRole = (role) => {
     switch (role) {
-      case "admin":
+      case "Admin":
         return AdminMenuList;
-      case "reviewer":
+      case "Reviewer":
         return PhysicanMenuList;
-      case "supervisor":
+      case "Supervisor":
         return L2AuditorMenuList;
-      case "tenant_admin":
+      case "Tenant Admin":
         return ProviderMenuList;
       case "ehr":
         return EHRMenuList;
-      case "record_analyst":
+      case "Record Analyst":
         return Analyst;
-      case "physician":
+      case "Physician":
         // return PhysicianMenuList;
         return PhysicanMenu;
       default:
@@ -412,7 +418,7 @@ const Header = ({
         console.error("Error playing notification sound:", error);
       });
     }
-  }, [webSocketNotificationData, notificationResponse]); 
+  }, [webSocketNotificationData, notificationResponse]);
   useEffect(() => {
     if (
       !open &&
@@ -482,7 +488,7 @@ const Header = ({
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       let encodedParams = null;
-      if (currentRole == "tenant_admin") {
+      if (currentRole == "Tenant Admin") {
         encodedParams = urlParams.get("isTenantAdminTracking");
       } else {
         encodedParams = urlParams.get("isAdminTracking");
@@ -492,7 +498,7 @@ const Header = ({
         <li
           className={` ${
             stateActive === data.to ||
-            ((currentRole === "admin" || currentRole === "tenant_admin") &&
+            ((currentRole === "Admin" || currentRole === "Tenant Admin") &&
             encodedParams
               ? stateActive === data.childRoute3
               : stateActive === data.childRoute) ||
@@ -695,7 +701,7 @@ const Header = ({
                             </Button>
                           </Popover>
                         )} */}
-                        {userRole === "reviewer" && (
+                        {userRole === "Reviewer" && (
                           <Tooltip
                             title={` Quality : ${
                               accuracy?.data?.response
@@ -721,7 +727,7 @@ const Header = ({
                             </div>
                           </Tooltip>
                         )}
-                        {userRole === "tenant_admin" && (
+                        {userRole === "Tenant Admin" && (
                           <div
                             className="chatheaderIcon"
                             onClick={() => router.push("/tenantAdmin/settings")}
@@ -846,17 +852,7 @@ const Header = ({
                                         fontSize: "6px",
                                       }}
                                     >
-                                      {currentRole == "reviewer"
-                                        ? "Reviewer"
-                                        : currentRole == "supervisor"
-                                        ? "Supervisor"
-                                        : currentRole == "tenant_admin"
-                                        ? "Tenant Admin"
-                                        : currentRole == "record_analyst"
-                                        ? "Analyst"
-                                        : currentRole == "ehr"
-                                        ? "EHR"
-                                        : "Admin"}
+                                      {currentRole}
                                     </span>
                                   </div>
                                 </div>
@@ -926,7 +922,7 @@ const Header = ({
                                   className="header-name d-flex"
                                   style={{ margin: "-5px 0px 0 10px" }}
                                 >
-                                  {currentRole == "record_analyst"
+                                  {currentRole == "Record Analyst"
                                     ? "Analyst"
                                     : userRole}
                                   <DownOutlined
@@ -940,17 +936,7 @@ const Header = ({
                               className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3"
                               style={{ fontWeight: "500", fontSize: "6px" }}
                             >
-                              {currentRole == "reviewer"
-                                ? "Reviewer"
-                                : currentRole == "supervisor"
-                                ? "Supervisor"
-                                : currentRole == "tenant_admin"
-                                ? "Tenant"
-                                : currentRole == "record_analyst"
-                                ? "Analyst"
-                                : currentRole == "ehr"
-                                ? "EHR"
-                                : "Admin"}
+                              {currentRole}
                             </span>
                           )}
                         </div>
