@@ -788,9 +788,8 @@ const ManuallyAdd = ({
 
   const resetForms = ({ reload = false }) => {
     handleCloseModal(false);
-    if (!isEditPage) {
-      form.resetFields();
-    }
+  
+    form.resetFields();
     getPatient(reload);
     setValidCode("");
     setProviderDetails([]);
@@ -1068,7 +1067,7 @@ const ManuallyAdd = ({
       setListOfSectionT(transformData(sectionListT));
     }
       form.setFieldsValue({
-        dos: [dosList[0].value],
+        dos: [isDosSelected],
       });
 
   }, [isEditMeat, isEditMeatValue]);

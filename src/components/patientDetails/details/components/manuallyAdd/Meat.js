@@ -158,6 +158,7 @@ const Meat = ({
                   ? [{ label: getSelectedDos, value: getSelectedDos }]
                   : dosList
               }
+              disabled
             />
           </Form.Item>
         </div>
