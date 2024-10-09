@@ -34,7 +34,7 @@ import {
   handleFilePost,
   addUser,
 } from "../../services/ChatService";
-import { webSocketUrl } from "../../utils/config";
+import { portalUrl, portalUrl1 } from "../../utils/config";
 import { getStorage } from "../../utils/storages";
 
 const ChatCommunication = ({ openMsg, offMsg }) => {
@@ -99,7 +99,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   const connect = () => {
     const token = getStorage("token");
     let Sock = new SockJS(
-      `https://${webSocketUrl}chatservice/chatservice/ws?token=${token}`
+      `${portalUrl}chatservice/ws?token=${token}`
     );
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
