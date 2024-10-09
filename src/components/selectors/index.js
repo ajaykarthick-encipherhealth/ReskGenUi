@@ -11,7 +11,7 @@ const Selector = ({
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
       <label
-        className="labelStyle"
+        className="labelStyle responsiveLabel"
       >
         {selectlabel}
       </label>

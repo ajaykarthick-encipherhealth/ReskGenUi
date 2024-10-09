@@ -101,6 +101,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
         header="Notifications"
         anchorTag="anchor"
         handleOpen={handleOpen}
+         height="20px" margin="-35px 0px 15px 0" fontSize="18px"
       />
 
       <div className={styles.card4}>

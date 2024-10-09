@@ -18,7 +18,7 @@ import { connect } from "react-redux";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
 import { getStorage, setStorage } from "../../../utils/storages";
 
-const Patient= ({ getAllOrganizationList, organizationList }) => {
+const Patient = ({ getAllOrganizationList, organizationList }) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
@@ -325,13 +325,12 @@ const Patient= ({ getAllOrganizationList, organizationList }) => {
     setSelectFileRadiology(null);
   };
 
-
   useEffect(() => {
-    if(!organizationList?.response){
+    if (!organizationList?.response) {
       getAllOrganizationList();
     }
   }, []);
-  
+
   useEffect(() => {
     var orgListArray = [{ value: "ALL", label: "ALL" }];
     organizationList?.response?.map((res) => {
@@ -343,7 +342,6 @@ const Patient= ({ getAllOrganizationList, organizationList }) => {
     setOrgAllList(orgListArray);
   }, [organizationList]);
 
-  
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -356,33 +354,26 @@ const Patient= ({ getAllOrganizationList, organizationList }) => {
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
-                      <HeaderFilters
-                        // selectOrg
-                        selectlabelOrg="Select Organization"
-                        isSelectOrg={true}
-                        setSelectedOptionOrg={setSelectedOrgList}
-                        selectOptionsOrg={orgAllList}
-                        defaultSelectValueOrg={""}
-                        selectedValueOrg={selectOrgList}                       
-                      />
+                        <HeaderFilters
+                          // selectOrg
+                          selectlabelOrg="Select Organization"
+                          isSelectOrg={true}
+                          setSelectedOptionOrg={setSelectedOrgList}
+                          selectOptionsOrg={orgAllList}
+                          defaultSelectValueOrg={""}
+                          selectedValueOrg={selectOrgList}
+                        />
                       </div>
-                      <div
-                        id="task-tbl_wrapper"
-                        className="dataTables_wrapper no-footer"
-                      >
-                        {patinetListAll?.length === 0 && tableLoading ? (
-                          ""
-                        ) : (
-                          <FileProcessingTable
-                            patinetListAll={patinetListAll}
-                            actionBodyTemplate={actionBodyTemplate}
-                            statusBodyTemplate={processstatusBodyTemplate}
-                            gotoPatientDetails={gotoPatientDetails}
-                            patientDetails={patientDetails}
-                            loading={tableLoading}
-                            selectOrgList={selectOrgList}
-                          />
-                        )}
+                      <div id="task-tbl_wrapper">
+                        <FileProcessingTable
+                          patinetListAll={patinetListAll}
+                          actionBodyTemplate={actionBodyTemplate}
+                          statusBodyTemplate={processstatusBodyTemplate}
+                          gotoPatientDetails={gotoPatientDetails}
+                          patientDetails={patientDetails}
+                          loading={tableLoading}
+                          selectOrgList={selectOrgList}
+                        />
                       </div>
                     </div>
                   </div>
@@ -412,7 +403,7 @@ const Patient= ({ getAllOrganizationList, organizationList }) => {
       </div>
     </>
   );
-}
+};
 
 const enhancer = connect(
   (state) => ({

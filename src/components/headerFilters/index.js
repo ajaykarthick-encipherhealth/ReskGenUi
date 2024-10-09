@@ -182,15 +182,15 @@ const HeaderFilters = ({
   }
   return (
     <>
-      <div style={{ height: atCorner && "45px" }}>
+      <div style={{ height:"auto" }}>
         <div
           className="row filter-contain"
-          style={{ width: atCorner ? "110%" : "100%" }}
+          style={{ width:"100%" }}
         >
           {isSearch && (
             <div
               className={defaultSize}
-              style={{ margin: atCorner && "0 0 0 -20px" }}
+              // style={{ margin: atCorner && "0 0 0 -20px" }}
             >
               {" "}
               <Search
@@ -238,7 +238,7 @@ const HeaderFilters = ({
               //   );
               // }}
             >
-              <label className={styles.label}>{createdTolabel}</label>
+              <label className={`${styles.label} responsiveLabel`}>{createdTolabel}</label>
               <div class="form-group has-search">
                 <Select
                   onChange={(selectedOption) => {
@@ -258,7 +258,7 @@ const HeaderFilters = ({
 
           {selectReportOptions && (
             <div className={defaultSize}>
-              <label className={styles.label}>{selectlabel2}</label>
+              <label className={`${styles.label} responsiveLabel`}>{selectlabel2}</label>
               <div class="form-group has-search">
                 <Select
                   value={defaultSelectValue2 ? defaultSelectValue2 : ""}
@@ -282,7 +282,7 @@ const HeaderFilters = ({
 
           {selectOptions2 && (
             <div className={defaultSize}>
-              <label className={styles.label}>{selectlabel2}</label>
+              <label className={`${styles.label} responsiveLabel`}>{selectlabel2}</label>
               <div class="form-group has-search">
                 <Select
                   // value={defaultSelectValue2}
@@ -303,7 +303,7 @@ const HeaderFilters = ({
           )}
           {isSelector3 && (
             <div className={defaultSize}>
-              <label className={styles.label}>{selectlabel3}</label>
+              <label className={`${styles.label} responsiveLabel`}>{selectlabel3}</label>
               <div class="form-group has-search">
                 <Select
                   showSearch
@@ -330,7 +330,7 @@ const HeaderFilters = ({
           )}
           {isSelectOrg && (
             <div className={defaultSize}>
-              <label className={styles.label}>{selectlabelOrg}</label>
+              <label className={`${styles.label} responsiveLabel`}>{selectlabelOrg}</label>
               <div class="form-group has-search">
                 <Select
                 value={orgValue&&orgValue}
@@ -374,7 +374,7 @@ const HeaderFilters = ({
           {isRangeTimePicker && (
             <>
               <div className={defaultSize} style={{ width: "20%" }}>
-                <label className={styles.label}>{timePickerlabel}</label>
+                <label className={`${styles.label} responsiveLabel`}>{timePickerlabel}</label>
                 <div>
                   <RangePicker
                     showTime={{ format: "HH:mm" }} // Specify the time format
@@ -423,23 +423,22 @@ const HeaderFilters = ({
 
           {isNextRow && (
             <div
-              className={"col-xl-1"}
+              className={"col-xl-1 d-flex"}
               style={{
-                margin: "30px 0 0 10px",
+                margin: "30px 0 0 0px",
                 cursor: "pointer",
-                width: "120px",
+                // width: "120px",
               }}
               onClick={() => setShowFilters(!showFilters)}
             >
-              <button className={styles.filterBtn}>
-                <FilterFilled  src={filter}  className={styles.iconStyleColor}/> {showFilters ? "Hide" : "Filter"}
+              <button className={`${styles.filterBtn} d-flex`}>
+                <FilterFilled  src={filter}  className={`${styles.iconStyleColor} py-1 px-1`}/> {showFilters ? "Hide" : "Filter"}
               </button>
             </div>
           )}
           {bullets && (
             <div
-              className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
-              style={{ margin: "30px 0 0 0px" }}
+              className={`${(bullets&&addUser)?"col-xl-2":bullets ? "col-xl-1" : "col-xl-4"} d-flex justify-content-center align-items-center`}
             >
               <Popover
                 content={
@@ -469,7 +468,7 @@ const HeaderFilters = ({
                   style={{ cursor: "pointer" }}
                 /> */}
                 <Tooltip placement="top" title="View List of Status">
-                <InfoCircleFilled className={styles.iconStyleColor2} />
+                <InfoCircleFilled className={`${styles.iconStyleColor2} mt-4`} />
                 </Tooltip>
               </Popover>
             </div>
@@ -539,22 +538,22 @@ const HeaderFilters = ({
         </div>
       </div>
       {showFilters && (
-        <div style={{ marginTop: "50px" }}>
+        <div style={{ marginTop: "20px" }}>
           <div
             className="row filter-contain"
-            style={{ width: atCorner ? "110%" : "100%" }}
+            style={{ width: "100%" }}
           >
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
-                style={{ position: "relative", left: atCorner && "-20px" }}
+                // style={{ position: "relative", left: atCorner && "-20px" }}
                 // onClick={() => {
                 //   dispatch(
                 //     getFilters(selectorField ? selectorField : "allocatedBy")
                 //   );
                 // }}
               >
-                <label className={styles.label}>{allocatedBylabel}</label>
+                <label className={`${styles.label} responsiveLabel`}>{allocatedBylabel}</label>
                 <div class="form-group has-search">
                   <Select
                     onChange={(selectedOption) => {
@@ -602,7 +601,7 @@ const HeaderFilters = ({
                 //   dispatch(getFilters("patientAllocated"));
                 // }}
               >
-                <label className={styles.label}>{allocatedTolabel}</label>
+                <label className={`${styles.label} responsiveLabel`}>{allocatedTolabel}</label>
                 <div class="form-group has-search">
                   <Select
                     onChange={(selectedOption) => {
@@ -632,7 +631,7 @@ const HeaderFilters = ({
                 //   );
                 // }}
               >
-                <label className={styles.label}>{createdTolabel}</label>
+                <label className={`${styles.label} responsiveLabel`}>{createdTolabel}</label>
                 <div class="form-group has-search">
                   <Select
                     onChange={(selectedOption) => {
@@ -652,7 +651,7 @@ const HeaderFilters = ({
             {isAnotherPicker2 && (
               <>
                 <div className={defaultSize}>
-                  <label className={styles.label}>{pickerlabe3}</label>
+                  <label className={`${styles.label} responsiveLabel`}>{pickerlabe3}</label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
@@ -675,7 +674,7 @@ const HeaderFilters = ({
             {isAnotherPicker3 && (
               <>
                 <div className={defaultSize}>
-                  <label className={styles.label}>{pickerlabe4}</label>
+                  <label className={`${styles.label} responsiveLabel`}>{pickerlabe4}</label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
@@ -699,7 +698,7 @@ const HeaderFilters = ({
             {isAnotherPicker5 && (
               <>
                 <div className={defaultSize}>
-                  <label className={styles.label}>{pickerlabe5}</label>
+                  <label className={`${styles.label} responsiveLabel`}>{pickerlabe5}</label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
@@ -723,7 +722,7 @@ const HeaderFilters = ({
             {isAnotherPicker6 && (
               <>
                 <div className={defaultSize}>
-                  <label className={styles.label}>{pickerlabe6}</label>
+                  <label className={`${styles.label} responsiveLabel`}>{pickerlabe6}</label>
                   <div>
                     <Select
                       onChange={(selectedOption) => {

@@ -22,6 +22,7 @@ const HeadTitle = ({
   isAdmin = false,
   margin,
   fontSize,
+  height
 }) => {
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
@@ -53,7 +54,7 @@ const HeadTitle = ({
         style={{
           display: "flex",
           with: "100%",
-          height: "100%",
+          height: height?height:"100%",
           justifyContent: "space-between",
         }}
       >

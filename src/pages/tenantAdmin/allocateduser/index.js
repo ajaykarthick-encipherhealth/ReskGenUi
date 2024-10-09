@@ -538,7 +538,7 @@ const Patient = ({
                               <div className={reportStyles.backDiv}>
                                 <button
                                   style={{ width: "40px", height: "40px" }}
-                                  className={reportStyles.filterBtn}
+                                  className={`${reportStyles.filterBtn} d-flex justify-content-center align-item-end`}
                                   onClick={() => {
                                     setIsPatientList(false);
                                     setAllocatedOption("");
@@ -550,7 +550,7 @@ const Patient = ({
                             )}
 
                             <div>
-                              <label>
+                              <label className="responsiveLabel">
                                 {!isPatientList && activeTab == 2
                                   ? "Search by Name"
                                   : "Search by Name or ID"}

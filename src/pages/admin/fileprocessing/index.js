@@ -330,26 +330,15 @@ export default function Patient() {
                 <div className="">
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
-                      <div className="tbl-caption  align-items-center">
-                        <div className="row filter-contain"></div>
-                      </div>
-
-                      <div
-                        id="task-tbl_wrapper"
-                        className="dataTables_wrapper no-footer"
-                      >
-                        {patinetListAll?.length === 0 && tableLoading ? (
-                          ""
-                        ) : (
-                          <FileProcessingTable
-                            patinetListAll={patinetListAll}
-                            actionBodyTemplate={actionBodyTemplate}
-                            statusBodyTemplate={processstatusBodyTemplate}
-                            gotoPatientDetails={gotoPatientDetails}
-                            patientDetails={patientDetails}
-                            loading={tableLoading}
-                          />
-                        )}
+                      <div id="task-tbl_wrapper">
+                        <FileProcessingTable
+                          patinetListAll={patinetListAll}
+                          actionBodyTemplate={actionBodyTemplate}
+                          statusBodyTemplate={processstatusBodyTemplate}
+                          gotoPatientDetails={gotoPatientDetails}
+                          patientDetails={patientDetails}
+                          loading={tableLoading}
+                        />
                       </div>
                     </div>
                   </div>

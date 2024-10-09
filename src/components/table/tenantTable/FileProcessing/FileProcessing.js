@@ -151,6 +151,7 @@ const FileProcessingTable = ({
   const [toggle, setToggle] = useState(patinetListAll);
   const [failedList, setFiledList] = useState();
   const [finished, setIsFInished] = useState(false);
+  const[stepperStyle,setStepperStyle]=useState("flex")
   const selectedRowTime = useSelector(
     (state) => state?.adminPatient?.patientsList
   );
@@ -573,6 +574,7 @@ const FileProcessingTable = ({
                     failedList || errStages[data?.processStageChart] ? 0 : count
                   }
                   finishIconBorderColor="#000"
+                  style={{display:stepperStyle}}
                 />
               </div>
             </div>
@@ -610,6 +612,19 @@ const FileProcessingTable = ({
     ));
   };
 
+  useEffect(()=>{
+    const handlereSize=()=>{
+      if(window.innerWidth<=1229){
+        setStepperStyle("block")
+      }else{
+        setStepperStyle("flex")
+      }
+    }
+    handlereSize()
+    window.addEventListener("resize",handlereSize);
+    return ()=>window.removeEventListener("resize",handlereSize)
+    },[])
+
   return (
     <div className={TableStyle.classContaineer}>
       {fileProcessingData?.loading ? (
@@ -620,7 +635,7 @@ const FileProcessingTable = ({
             <tr>
               <th>PATIENT ID</th>
               <th>PATIENT NAME</th>
-              <th style={{ paddingLeft: "27%" }}>UPLOAD STATUS</th>
+              <th className="text-center">UPLOAD STATUS</th>
             </tr>
           </thead>
 

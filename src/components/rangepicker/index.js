@@ -26,8 +26,8 @@ const DateRangePicker = ({
   setPageNo
 }) => {
   return (
-    <div>
-      <label style={{ marginLeft: "8px" }}>{pickerlabel}</label>
+    <>
+      <label style={{ marginLeft: "8px" }} className="responsiveLabel">{pickerlabel}</label>
       <div>
         {/* <RangePicker
           value={selectedDates ? selectedDates : ""}
@@ -81,7 +81,7 @@ const DateRangePicker = ({
           }}
         />
       </div>
-    </div>
+    </>
   );
 };
 

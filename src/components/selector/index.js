@@ -14,7 +14,7 @@ const Selector = ({
 }) => {
   return (
     <div>
-      <label style={{ marginLeft: "10px" }}>{selectlabel}</label>
+      <label style={{ marginLeft: "10px" }} className="responsiveLabel">{selectlabel}</label>
       <div class="form-group has-search">
         <Select
           options={selectOptions}
