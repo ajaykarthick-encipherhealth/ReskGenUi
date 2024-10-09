@@ -87,7 +87,6 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   };
 
   const fetchUsers = async () => {
-    {console.log(userData?.searchNewUserMessage,"userData?.searchNewUserMessage")}
     let data = await getUsers({searchString:userData?.searchNewUserMessage?userData?.searchNewUserMessage:""});
     const temp = [];
     data?.forEach((item) => {
