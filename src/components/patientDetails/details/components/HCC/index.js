@@ -79,7 +79,8 @@ const HccCards = ({
   patientDetailsResult,
   setSuggestedMeatForm,
   setSelectCardTitle,
-  storeFileDetails
+  storeFileDetails,
+  year
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -1010,6 +1011,7 @@ const HccCards = ({
         setInitialValues={setInitialValues}
         setOpenContent={setOpenContent}
         selectedData={selectedData}
+        year={year}
       />
     </>
   );

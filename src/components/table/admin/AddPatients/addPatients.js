@@ -4,7 +4,13 @@ import { useRouter } from "next/router";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
-import { notification, Select as AntSelect, Empty, Popover } from "antd";
+import {
+  notification,
+  Select as AntSelect,
+  Empty,
+  Popover,
+  Tooltip,
+} from "antd";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import {
   renderUserPrfoileAvatar,
@@ -14,6 +20,7 @@ import { getStorage, setStorage } from "../../../../utils/storages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import SvgFlag from "../../../patientDetails/details/components/svg/svg";
+import { truncateString } from "../../../patientDetails/details/components/function/ReusableFunctions";
 
 function AddPatientListTable({
   patinetListAll,
@@ -40,12 +47,14 @@ function AddPatientListTable({
       setStorage("patientId", data?.patientId);
       var role = getStorage("role");
       if (role == "tenant_admin") {
+        const encodedValue = btoa(JSON.stringify(page));
         navigate.push({
           pathname: "/tenantAdmin/patients/details",
-          query: page,
+          search: `params=${encodedValue}`,
         });
       } else {
-        navigate.push({ pathname: "/admin/patients/details", query: page });
+        const encodedValue = btoa(JSON.stringify(page));
+        navigate.push({ pathname: "/admin/patients/details", search:`params=${encodedValue}`});
       }
       // setStorage('paginations', JSON.stringify(page))
     } else {
@@ -92,7 +101,7 @@ function AddPatientListTable({
               {data?.flagList && data?.flagList.length > 0 ? (
                 <Popover
                   content={
-                    <div style={{height:"auto", overflow:"scroll"}}>
+                    <div style={{ height: "auto", overflow: "scroll" }}>
                       <strong>Flag details</strong>
                       {data?.flagList?.map((flag, flagIndex) => (
                         <div key={flagIndex}>
@@ -121,13 +130,25 @@ function AddPatientListTable({
                 <span className="p-2">&nbsp;</span>
               )}
 
-              {data?.patientId ? data?.patientId : "---"}
+              {data?.patientId ? (
+                <Tooltip placement="top" title={data?.patientId}>
+                  {truncateString(data?.patientId, 20)}
+                </Tooltip>
+              ) : (
+                "---"
+              )}
             </td>
             <td
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data?.fileName ? data?.fileName : "---"}
+              {data?.fileName ? (
+                <Tooltip placement="top" title={data?.fileName}>
+                  {truncateString(data?.fileName, 30)}
+                </Tooltip>
+              ) : (
+                "---"
+              )}
             </td>
             <td
               className={TableStyle.childBorder}
@@ -203,7 +224,7 @@ function AddPatientListTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENT ID</th>
-            <th>FILE NAME</th>
+            <th className="text-start px-3">FILE NAME</th>
             <th className="text-truncate">TOTAL PAGES</th>
             <th style={{ textAlign: "center" }} className="text-truncate">
               CREATED BY

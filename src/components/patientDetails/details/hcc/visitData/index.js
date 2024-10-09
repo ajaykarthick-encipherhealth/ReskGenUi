@@ -684,7 +684,7 @@ const VisitData = ({
                         ref={provided.innerRef}
                       >
                         <div
-                          className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}` }
+                          className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
                         >
                           <span className={`${visitStyles.hcc_title_name}`}>
                             HCC
@@ -755,8 +755,9 @@ const VisitData = ({
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                       >
-                        <div className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
-                         onClick={() => handleShowList("care")}
+                        <div
+                          className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                          onClick={() => handleShowList("care")}
                         >
                           <span
                             className={`${visitStyles.suggested_title_name}`}

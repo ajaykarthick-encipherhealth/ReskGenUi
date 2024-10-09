@@ -112,16 +112,47 @@ const Patient = ({
   const [errors, setErrors] = useState({ year: "", emr: "" });
   const [selectOrgList, setSelectedOrgList] = useState("");
   const [orgAllList, setOrgAllList] = useState([]);
+  const [searchVal, setSearchVal] = useState("");
 
   useEffect(() => {
     if (window !== "undefined") {
-      if (navigate) {
-        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
-        setPaginationFirst(
-          navigate?.query?.paginationFirst
-            ? navigate?.query?.paginationFirst
-            : 0
-        );
+      if (window.location.search) {
+        try {
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const encodedParams = urlParams.get("params");
+          const decodedParams = JSON.parse(atob(encodedParams));
+          setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
+          setPaginationFirst(
+            decodedParams?.paginationFirst ? decodedParams?.paginationFirst : 0
+          );
+          setCompletedStartDate(decodedParams?.completedStartDate || "");
+          setCompletedEndDate(decodedParams?.completedEndDate || "");
+          SetSelectedOption(decodedParams?.selectedOption || "");
+          setSearch(decodedParams?.search || "");
+          setSearchVal(decodedParams?.search || "");
+          setComputedStartDate(decodedParams?.computedStartDate || "");
+          setComputedEndDate(decodedParams?.computedEndDate || "");
+          setSelAllocatedBy(decodedParams?.selAllocatedBy || "");
+          setSelAllocatedTo(decodedParams?.setSelAllocatedTo || "");
+          setSelCreatedBy(decodedParams?.createdBy || "");
+          setSelectedDates(
+            decodedParams?.completedStartDate && [
+              dayjs(decodedParams?.completedStartDate),
+              dayjs(decodedParams?.completedEndDate),
+            ]
+          );
+          setSelectedDate2s(
+            (decodedParams?.computedStartDate && [
+              dayjs(decodedParams?.computedStartDate),
+              dayjs(decodedParams?.computedEndDate),
+            ]) ||
+              []
+          );
+          setSelectedOrgList(decodedParams?.selectOrgList || "");
+        } catch (error) {
+          console.error("Error decoding Base64 string: ", error.message);
+        }
       }
     }
   }, [navigate]);
@@ -259,7 +290,7 @@ const Patient = ({
   };
 
   const handleChange = async (e, name) => {
-    const key =  name == "dos" ? "dos" : e.target.name;
+    const key = name == "dos" ? "dos" : e.target.name;
     const value = name == "dos" ? e : e.target.value;
     if (e?.target?.name === "year") {
       const validateYearField = validateYear(e.target.value, setErrors);
@@ -491,7 +522,7 @@ const Patient = ({
         sort,
         orgId
       );
-      handleClose()
+      handleClose();
       setAddPatient(false);
       setAddPatient(false);
       setIsLoadingBtn(false);
@@ -539,9 +570,9 @@ const Patient = ({
 
   const handleClose = () => {
     setAddPatient(false);
-    setErrors({ year: "", emr: "" })
-    setEmrType('')
-  }
+    setErrors({ year: "", emr: "" });
+    setEmrType("");
+  };
 
   const onPageChange = (e) => {
     setIsLoading(true);
@@ -628,12 +659,19 @@ const Patient = ({
                             isSearch={true}
                             searchlabel="Search By Patient ID / Name"
                             search={search}
+                            searchVal={searchVal}
+                            setSearchVal={setSearchVal}
                             // select status
                             selectlabel="Select Status"
                             isSelector={true}
                             setSelectedOption={SetSelectedOption}
                             selectOptions={statusOptions}
                             defaultSelectValue1={"Select Status"}
+                            selectDefaultValue={
+                              statusOptions?.find(
+                                (item) => item?.value === selectedOption
+                              )?.label
+                            }
                             // computation date
                             pickerlabel="Computed Date"
                             defaultStartDate={""}
@@ -678,6 +716,7 @@ const Patient = ({
                             defaultSelectValueOrg={""}
                             selectedValueOrg={selectOrgList}
                             setPageNo={setPageNo}
+                            orgValue={selectOrgList}
                           />
                         </div>
                       </div>
@@ -701,14 +740,31 @@ const Patient = ({
                               setSortOrder={setComputedSortOrder}
                               sortOrder={computedSortOrder}
                               setSort={setSort}
-                              page={{ pageNo, paginationFirst }}
+                              page={{
+                                pageNo,
+                                paginationFirst,
+                                computedStartDate,
+                                computedEndDate,
+                                selectedOption,
+                                search,
+                                completedStartDate,
+                                completedEndDate,
+                                selAllocatedTo,
+                                selAllocatedBy,
+                                selCreatedBy,
+                                selectOrgList,
+                              }}
                               sortCompleteOrder={sortCompleteOrder}
                               setSortCompleteOrder={setSortCompleteOrder}
                             />
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                  first={pageNo === 0 ? 0 : paginationFirst}
+                                  first={
+                                    paginationFirst == 0
+                                      ? pageNo
+                                      : paginationFirst
+                                  }
                                   rows={15}
                                   totalRecords={
                                     allPatientList?.data?.response
