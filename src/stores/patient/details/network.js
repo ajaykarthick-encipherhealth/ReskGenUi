@@ -336,6 +336,9 @@ export async function suggestedToValid(obj, cardTitle) {
   if (cardTitle.name == "Move to HCC" && cardTitle.title == "POTENTIAL") {
     apiUrl = "management/disease/move/potentialtovalid";
   }
+  if (cardTitle.name == "Move to HCC" && cardTitle.title == "NON_MEAT") {
+    apiUrl = "management/disease/move/suggestedtovalid";
+  }
   const data = await requestPortal(apiUrl, options);
   return data;
 }

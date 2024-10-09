@@ -315,6 +315,7 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
   const [search, setSearch] = useState();
   const [selectedDateRanges, setSelecteddateRanges] = useState([]);
   const [isOpenFhirDrawer, setIsOpenFhirDrawer] = useState(false);
+  const [fileList, setFileList] = useState([]); 
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
     setUploadType(e.target.name);
@@ -614,6 +615,8 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                             uploadType={uploadType}
                             setUploadType={setUploadType}
                             selectedBatch={selectedBatch}
+                            setFileList={setFileList}
+                            fileList={fileList}
                           />
                         )}
 

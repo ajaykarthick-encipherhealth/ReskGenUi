@@ -50,7 +50,7 @@ const File = ({
   loading,
   isDosSelected,
   labFileLoad,
-  fileLoadingStatus
+  fileLoadingStatus,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -96,9 +96,8 @@ const File = ({
   const [deletedMeatList, setDeletedMeatList] = useState([]);
   const [showList, setShowList] = useState(["care"]);
   const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
-  const [selectCardTitle, setSelectCardTitle] = useState('');
+  const [selectCardTitle, setSelectCardTitle] = useState("");
   const [potentialList, setPotentialList] = useState([]);
-
 
   useEffect(() => {
     var orgId = getStorage("orgId");
@@ -247,7 +246,7 @@ const File = ({
       setShowList((prev) => [...prev, value]);
     }
   };
-  
+
   return (
     <>
       {fileLoading ? <LogoLoader /> : null}
@@ -325,6 +324,7 @@ const File = ({
                             setIsValidAction={setIsValidAction}
                             cardTitle="HCC"
                             provided={provided}
+                            year={year}
                           />
                         </div>
                       </div>
@@ -371,7 +371,7 @@ const File = ({
               </div>
             </Popover> */}
             <div className="card-body p-0">
-            {fileLoadingStatus ? (
+              {fileLoadingStatus ? (
                 <div className={visitStyles?.loaderDiv}>
                   <Spinner />
                 </div>
@@ -408,7 +408,7 @@ const File = ({
               <ManuallyAdd
                 handleCloseModal={handleCloseModal}
                 setIsFileFormShow={setIsFileFormShow}
-                year={year}
+                year={year}           
               />
             </div>
           ) : null}
@@ -530,7 +530,7 @@ const File = ({
                           <span
                             className={`${visitStyles.potential_title_badge}`}
                           >
-                             {potentialList?.length}
+                            {potentialList?.length}
                           </span>
                         </div>
                       </div>
@@ -727,6 +727,7 @@ const File = ({
           setCombiTree={setCombiTree}
           fileLoading={fileLoading}
           setFileLoading={setFileLoading}
+          year={year}
         />
       ) : (
         opens && showErrorMessage()
@@ -836,7 +837,7 @@ const enhancer = connect(
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
     loading: state?.patientDetails?.details?.loading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
-    fileLoadingStatus:state.patientDetails.details?.fileLoading,
+    fileLoadingStatus: state.patientDetails.details?.fileLoading,
   }),
   {
     getRadiologyFileDetails: detailsActions.radiologyFileAction,

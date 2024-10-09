@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./styles.module.css";
-import { Button, DatePicker, Modal } from "antd";
+import { Button, DatePicker, Modal, Popover } from "antd";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { getDateRange } from "../../store/actions/DashboardActions";
@@ -63,15 +63,48 @@ const HeadTitle = ({
         {icon && (
           <div className={styles.imgContainer}>
             <div className="cursor-pointer">
-              <FontAwesomeIcon
-                onClick={() => {
-                  setOpenPicker(!openPicker);
-                  if (!openPicker) {
-                    setSelectedDates([]);
-                  }
-                }}
-                icon={faCalendar}
-              />
+              <Popover
+                placement="bottom"
+                trigger="click"
+                content={
+                  <>
+                    <div
+                      className={`w-100 ${styles.modalDetails} d-flex justify-content-between`}
+                    >
+                      <RangePicker
+                        getPopupContainer={() =>
+                          document.getElementById("date-popup")
+                        }
+                        placeholder={[
+                          dayjs(currentDate).format("MM-DD-YYYY"),
+                          dayjs(startOfMonth).format("MM-DD-YYYY"),
+                        ]}
+                        open={true}
+                        value={selectedDates?.length > 0 ? selectedDates : null}
+                        onChange={(dates, dateStrings) => {
+                          setSelectedDates(dates);
+                          handleDatePickerChange(dateStrings);
+                        }}
+                        format="MM-DD-YYYY"
+                        suffixIcon={false}
+                        disabledDate={(current) => disableFutureDate(current)}
+                        inputReadOnly={true}
+                      />
+                    </div>
+                    <div id="date-popup" style={{ position: "relative" }} />
+                  </>
+                }
+              >
+                <FontAwesomeIcon
+                  onClick={() => {
+                    setOpenPicker(!openPicker);
+                    if (!openPicker) {
+                      setSelectedDates([]);
+                    }
+                  }}
+                  icon={faCalendar}
+                />
+              </Popover>
             </div>
           </div>
         )}
@@ -81,44 +114,6 @@ const HeadTitle = ({
           View All
         </span>
       )}
-      <Modal
-        open={openPicker}
-        mask={true}
-        width={640}
-        closable={false}
-        onOk={() => {
-          dispatch(getDateRange(dateValues));
-          setOpenPicker(false);
-        }}
-        onCancel={() => {
-          setOpenPicker(false);
-          setSelectedDates([]);
-        }}
-        className={`${styles.customModalPosition} `}
-      >
-        <div
-          className={`${styles.modalDetails} d-flex justify-content-between`}
-        >
-          <RangePicker
-            getPopupContainer={() => document.getElementById("date-popup")}
-            placeholder={[
-              dayjs(currentDate).format("MM-DD-YYYY"),
-              dayjs(startOfMonth).format("MM-DD-YYYY"),
-            ]}
-            open={openPicker}
-            value={selectedDates?.length > 0 ? selectedDates : ""}
-            onChange={(dates, dateStrings) => {
-              setSelectedDates(dates);
-              handleDatePickerChange(dateStrings);
-            }}
-            format="MM-DD-YYYY"
-            suffixIcon={false}
-            disabledDate={(current) => disableFutureDate(current)}
-            inputReadOnly={true}
-          />
-        </div>
-        <div id="date-popup" style={{ position: "relative" }} />
-      </Modal>
     </div>
   );
 };

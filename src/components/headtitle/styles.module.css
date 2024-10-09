@@ -21,7 +21,7 @@
 }
 
 .modalDetails {
-  width: 100%;
+  width: 600px !important;
   height: 380px !important;
 }
 .datepicker {

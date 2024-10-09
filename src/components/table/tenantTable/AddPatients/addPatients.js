@@ -38,12 +38,17 @@ function AddPatientListTable({
       setStorage("patientId", data?.patientId);
       var role = getStorage("role");
       if (role == "tenant_admin") {
+        const encodedValue = btoa(JSON.stringify(page));
         navigate.push({
           pathname: "/tenantAdmin/patients/details",
-          query: page,
+          search: `params=${encodedValue}`,
         });
       } else {
-        navigate.push({ pathname: "/admin/patients/details", query: page });
+        const encodedValue = btoa(JSON.stringify(page));
+        navigate.push({
+          pathname: "/admin/patients/details",
+          search: `params=${encodedValue}`,
+        });
       }
       // setStorage('paginations', JSON.stringify(page))
     } else {
@@ -209,7 +214,9 @@ function AddPatientListTable({
             <th className="text-truncate">FILE NAME</th>
             <th className="text-truncate">EMR TYPE</th>
             <th className="text-truncate">TOTAL PAGES</th>
-            <th style={{ textAlign: "center" }} className="text-truncate">CREATED BY</th>
+            <th style={{ textAlign: "center" }} className="text-truncate">
+              CREATED BY
+            </th>
 
             <th
               style={{
