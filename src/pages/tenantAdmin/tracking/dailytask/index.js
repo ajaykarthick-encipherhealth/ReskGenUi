@@ -111,7 +111,7 @@ const DailyTask = ({ trackChart }) => {
     <>
       {/* <HeadTitle header="" /> */}
       <div className={styles.card2}>
-        <div className="p-1 rounded" style={{ background: "#fff",maxHeight: "150px" }}>
+        <Card borderRadius="28px" style={{ display: "flex" }}>
           <Col span={22}>
             <Row style={{ display: "flex", justifyContent: "space-between" }}>
               <Col span={22} className={styles.sliderdiv}>
@@ -126,7 +126,7 @@ const DailyTask = ({ trackChart }) => {
                           trackChart?.DECLINED,
                           trackChart?.COMPLETED
                         )}
-                        style={{ width: "300px", height: "200px" }}
+                        style={{ width: "250px", height: "200px",marginLeft:"-10px" }}
                       />
                     </div>
                   </Col>
@@ -135,7 +135,7 @@ const DailyTask = ({ trackChart }) => {
                       {bullets?.map((item) => {
                         return (
                           <div className={styles.container}>
-                            <div style={{ display: "flex" }}>
+                            <div style={{ display: "flex",fontSize:"12px" }}>
                               <div
                                 className={styles.bgColor}
                                 style={{
@@ -163,7 +163,7 @@ const DailyTask = ({ trackChart }) => {
               </Col>
             </Row>
           </Col>
-        </div>
+        </Card>
       </div>
     </>
   );

@@ -326,7 +326,7 @@ const TeamReport = ({
                           All
                         </span>
                       </div>
-                      <div className="col-xl-1 d-flex pt-0">
+                      <div className="col-xl-2 d-flex pt-0">
                         <div>
                           <input
                             type="checkbox"

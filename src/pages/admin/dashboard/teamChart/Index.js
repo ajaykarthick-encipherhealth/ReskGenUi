@@ -238,12 +238,12 @@ const BarChart = () => {
   useEffect(() => {
     dispatch(TeamChart(router));
   }, [router]);
-
+ 
   return (
     <>
       <HeadTitle header="Team Chart Status" />
       <div className={styles.card5}>
-        <Card borderRadius="28px" padding="0px">
+        <Card borderRadius="28px" padding="0px" height="auto">
           <div className={styles.buttonDiv}>
             <div className={styles.select}></div>
             <div className={styles.header}>
@@ -262,7 +262,7 @@ const BarChart = () => {
                       options={options2}
                       series={series2}
                       type="bar"
-                      height={630}
+                      height={590}
                     />
                   )
                 ) : (

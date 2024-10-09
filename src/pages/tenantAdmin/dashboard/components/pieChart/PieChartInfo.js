@@ -63,7 +63,7 @@ const index = ({data,header}) => {
   };
  
   return (
-    <Row>
+    <Row  className="h-75">
       <Col span={12}>
         <div
           className={`tenantPie ${styles.container}`}
