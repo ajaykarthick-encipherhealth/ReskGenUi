@@ -381,7 +381,6 @@ const Index = ({
               }}
             >
               <button
-                style={{ width: "40px", height: "40px" }}
                 className={styles.filterBtn}
                 onClick={() => {
                   router.push("/supervisor/user");

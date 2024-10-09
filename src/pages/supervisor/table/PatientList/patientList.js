@@ -109,7 +109,11 @@ function PatientTable({
 
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
-      <Empty />
+      <tr>
+      <td colSpan="9">
+        <Empty />
+      </td>
+    </tr>
     ) : (
       patinetListAll?.map((data, index) => (
         <tr key={index}>
@@ -253,14 +257,14 @@ function PatientTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENTS</th>
-            <th style={{ paddingLeft: "60px" }}>REVIEWER</th>
+            <th >REVIEWER</th>
             <th style={{ cursor: "pointer", textAlign: "center" }}>
               <Tooltip placement="bottom" title="REVIEWER CHANGES">
                 RC
               </Tooltip>
             </th>
             <th style={{ cursor: "pointer", textAlign: "center" }}>
-              {" "}
+
               <Tooltip placement="bottom" title="REVIEWER CHANGES REJECTION">
                 RCR
               </Tooltip>

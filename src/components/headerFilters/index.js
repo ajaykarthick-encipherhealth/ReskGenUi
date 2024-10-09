@@ -145,7 +145,7 @@ const HeaderFilters = ({
   selectorField,
   defaultShow = false,
   setSelect,
-  defaultSize = "col-xl-2",
+  defaultSize = "col-xl-2 col-md-3",
   adminReport,
   addBtn,
   atCorner,

@@ -308,7 +308,7 @@ const DailyTask = () => {
                         </div>
                       </h4>
                       <Row>
-                        <Col span={12}>
+                        <Col span={11}>
                           <div className={styles.container}>
                             <ReactECharts
                               option={getChartOption(

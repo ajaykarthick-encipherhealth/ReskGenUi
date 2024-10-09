@@ -363,7 +363,7 @@ const UserQueueTable = ({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th
+            <th className="text-truncate"
               onClick={() => {
                 sortFunction(
                   processSort,
@@ -382,7 +382,7 @@ const UserQueueTable = ({
                 )}
               </span>
             </th>
-            <th
+            <th className="text-truncate" 
               onClick={() => {
                 sortFunction(
                   auditAllocatedSort,
@@ -401,7 +401,7 @@ const UserQueueTable = ({
                 )}
               </span>
             </th>
-            <th
+            <th className="text-truncate"
               onClick={() => {
                 sortFunction(
                   auditDueSort,
@@ -420,8 +420,8 @@ const UserQueueTable = ({
                 )}
               </span>
             </th>
-            <th>AUDIT ALLOCATED BY</th>
-            <th
+            <th className="text-truncate" >AUDIT ALLOCATED BY</th>
+            <th className="text-truncate"
               onClick={() => {
                 sortFunction(
                   audirDateSort,

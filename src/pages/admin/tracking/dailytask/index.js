@@ -139,7 +139,7 @@ const DailyTask = ({ trackChart }) => {
                     </div>
                   </Col>
                   <Col span={12} className={styles.headerTitle}>
-                    <div style={{ paddingLeft: "10px" }}>
+                    <div style={{ paddingLeft: "70px" }}>
                       {bullets?.map((item) => {
                         return (
                           <div className={styles.container}>
