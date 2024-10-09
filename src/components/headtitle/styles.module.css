@@ -80,9 +80,9 @@
     color: #000000;
   }
 }
-@media screen and (max-width: 1140px) {
+@media screen and (max-width: 1404px) {
   .header {
-    margin: 0px;
+    margin: 10px;
     color: #000;
     font-size: 16px;
   }
@@ -95,3 +95,21 @@
     width: 25%;
   }
 }
+
+.customModalPosition {
+  top: 130px;
+  left: 100px;
+  position: absolute;
+  margin: 0;
+}
+
+@media screen and (max-width: 1404px) {
+  .customModalPosition {
+    top: 115px;
+    left: 50px; 
+    position: absolute;
+    margin: 0;
+  }
+}
+
+

@@ -439,7 +439,6 @@ const HeaderFilters = ({
           {bullets && (
             <div
               className={`${(bullets&&addUser)?"col-xl-2":bullets ? "col-xl-1" : "col-xl-4"} d-flex justify-content-center align-items-center`}
-             
             >
               <Popover
                 content={

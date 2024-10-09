@@ -3,7 +3,7 @@ import React from "react";
 
 const Flags = ({ reportListAll, styles }) => {
   return (
-    <div className={`col-xl-4 ${styles.flags}`}>
+    <div className={`col-xl-6 ${styles.flags}`}>
       <div className={styles.cardHead}>Flags</div>
       <div className={styles.contentOverFlow}>
         {reportListAll?.flagIdCountDTOs?.length > 0 ? (

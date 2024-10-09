@@ -395,7 +395,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
             </div>
             {accuracyLoading ? (
               <div className={styles.accuracy}>
-                {renderCardSkeleton(220, 250)}
+                {renderCardSkeleton(200, 250)}
               </div>
             ) : (
               <div className={styles.accuracy}>

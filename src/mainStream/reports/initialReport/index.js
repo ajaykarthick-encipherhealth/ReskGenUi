@@ -366,7 +366,7 @@ const InitialCard = ({
                         All
                       </span>
                     </div>
-                    <div className="col-xl-2 d-flex">
+                    <div className="col-xl-4 d-flex">
                       <div>
                         <input
                           type="checkbox"

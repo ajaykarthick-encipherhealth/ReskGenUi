@@ -423,7 +423,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Completed} style={{ height: "18%", width: "18%" }} />
+              <Image src={Completed} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -432,7 +432,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -447,7 +447,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
             }`}
           >
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Declined} style={{ height: "18%", width: "18%" }} />
+              <Image src={Declined} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -455,7 +455,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: NOT COMPUTED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -463,7 +463,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: COMPUTED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -471,7 +471,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: HOLD">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Hold} style={{ height: "18%", width: "18%" }} />
+              <Image src={Hold} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -479,7 +479,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: ABORTED BY CRON">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Abort} style={{ height: "18%", width: "18%" }} />
+              <Image src={Abort} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -487,7 +487,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -547,7 +547,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                             }}
                           >
                             <div className="col-xl-2">
-                              <label>Search by Name or ID</label>
+                              <label className="responsiveLabel">Search by Name or ID</label>
                               {/* <InputField
                                 inputValue={searchTextValue}
                                 setInputValue={setSearchTextValue}
@@ -580,7 +580,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                               </div>
                             </div>
                             <div className="col-xl-2">
-                              <label>Select Status</label>
+                              <label  className="responsiveLabel">Select Status</label>
                               <div class="form-group has-search">
                                 <Select
                                   onChange={(selectedOption) => {
@@ -606,7 +606,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                               </div>
                             </div>
                             <div className="col-xl-2">
-                              <label>Select Priority</label>
+                              <label  className="responsiveLabel">Select Priority</label>
                               <div class="form-group has-search">
                                 <Select
                                   onChange={(selectedOption) => {
@@ -633,7 +633,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                             </div>
 
                             <div className="col-xl-2">
-                              <label>Due Date</label>
+                              <label  className="responsiveLabel">Due Date</label>
                               <div>
                                 <RangePicker
                                   format="MM-DD-YYYY"
@@ -675,8 +675,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                             </div>
                             <HeaderFilters bullets={bullets} />
 
-                            <div className="col-xl-2">
-                              <DailyTask trackChart={trackChart} />
+                            <div className="col-xl-2 mt-4 mb-1">
+                            <DailyTask trackChart={trackChart} />
                             </div>
                           </div>
                           {showFilters && (
@@ -685,10 +685,11 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                 display: "flex",
                                 marginTop: "-30px",
                                 flexDirection: "row",
+                                
                               }}
                             >
                               <div className="col-xl-2 ">
-                                <label>Completed Date</label>
+                                <label  className="responsiveLabel">Completed Date</label>
                                 <div>
                                   <RangePicker
                                     format="MM-DD-YYYY"
