@@ -114,7 +114,7 @@ const MeatCard = ({
                     draggableId={item?.diagnosisCode}
                     index={i}
                     draggableData={item?.list}
-                    // isDragDisabled={isDosSelected ? false : true}
+                    isDragDisabled={isDosSelected ? false : true}
                   >
                     {(provided) => {
                       return (
