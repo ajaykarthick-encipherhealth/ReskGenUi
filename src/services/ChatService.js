@@ -51,9 +51,6 @@ export async function getHandleChatHistory(
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Accept': 'application/json, text/plain',
-          'Content-Type': 'application/json',
-          'X-Tenant':'default'
         },
       }
     );
