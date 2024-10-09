@@ -20,6 +20,10 @@ import { connect } from "react-redux";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
 import MovementAction from "../movementAction";
 import { actions as detailsAction } from "../../../../../stores/patient/details";
+import { Draggable } from "react-beautiful-dnd";
+import { Spinner } from "react-bootstrap";
+import hccstyles from "../HCC/styles.module.css";
+
 const ComboCard = ({
   list,
   captureSectionMatching,
@@ -49,6 +53,10 @@ const ComboCard = ({
   isDosSelected,
   patientDetailsResult,
   storeFileDetails,
+  setSuggestedMeatForm,
+  setSelectCardTitle,
+  loading,
+  provided,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -68,20 +76,22 @@ const ComboCard = ({
   ];
   return (
     <>
-      <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
-        <div className={visitStyles.combo_head_card}>
-          <div className="row">
-            <div className="col-xl-3">
-              <label htmlFor="combo">Combo Codes</label>
-            </div>
-            <div className="col-xl-3">
-              <label htmlFor="additional">Addons</label>
-            </div>
-            <div className="col-xl-5">
-              <label htmlFor="description">Description</label>
-            </div>
-            <div className="col-xl-1">
-              {/* {isAddComboCode && (
+      {provided && (
+        <div ref={provided?.innerRef} {...provided?.droppableProps}>
+          <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
+            <div className={visitStyles.combo_head_card}>
+              <div className="row">
+                <div className="col-xl-3">
+                  <label htmlFor="combo">Combo Codes</label>
+                </div>
+                <div className="col-xl-3">
+                  <label htmlFor="additional">Addons</label>
+                </div>
+                <div className="col-xl-5">
+                  <label htmlFor="description">Description</label>
+                </div>
+                <div className="col-xl-1">
+                  {/* {isAddComboCode && (
                 <div className="d-flex justify-content-center">
                   <button
                     onClick={() => addComboCode()}
@@ -97,51 +107,70 @@ const ComboCard = ({
                   </button>
                 </div>
               )} */}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        {list?.length != 0 ? (
-          <div className={visitStyles.container}>
-            <div className={visitStyles.hccStickey_head}>
-              {list?.map((item, ind) => {
-                return (
-                  item.isShow && (
-                    <div
-                      className={visitStyles.combo_details_card}
-                      key={item?.id}
-                    >
-                      <div className="row">
-                        <div className="col-xl-3 d-grid">
-                          <span className="font-bold ms-3">
-                            {item.diagnosisCode}
-                          </span>
-                        </div>
-                        <div className="col-xl-3">
-                          {item.addOnCodes?.map(
-                            (addCombo, index) =>
-                              addCombo && (
-                                <span
-                                  className="font-bold"
-                                  key={addOnCodeColor[index]}
-                                >
-                                  <Tag
-                                    color={addOnCodeColor[index]}
-                                    style={{ fontSize: "10px" }}
-                                  >
-                                    {addCombo}
-                                  </Tag>
-                                </span>
-                              )
-                          )}
-                        </div>
-                        <div className="col-xl-5">
-                          <span>{item.actualDescription}</span>
-                        </div>
-                        <div
-                          className="col-xl-1"
-                          style={{ position: "relative", right: "18px" }}
+            {loading ? (
+              <div className={hccstyles.noMsContainer}>
+                <Spinner />
+              </div>
+            ) : list?.length != 0 ? (
+              <div className={visitStyles.container}>
+                <div className={visitStyles.hccStickey_head}>
+                  {list?.map((item, ind) => {
+                    return (
+                      item.isShow && (
+                        <Draggable
+                          key={item?.diagnosisCode}
+                          draggableId={item?.diagnosisCode}
+                          index={ind}
+                          draggableData={item?.list}
+                          isDragDisabled={isDosSelected ? false : true}
                         >
-                          {/* <div>
+                          {(provided) => {
+                            return (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className={visitStyles.combo_details_card}
+                                key={item?.id}
+                              >
+                                <div className="row">
+                                  <div className="col-xl-3 d-grid">
+                                    <span className="font-bold ms-3">
+                                      {item.diagnosisCode}
+                                    </span>
+                                  </div>
+                                  <div className="col-xl-3">
+                                    {item.addOnCodes?.map(
+                                      (addCombo, index) =>
+                                        addCombo && (
+                                          <span
+                                            className="font-bold"
+                                            key={addOnCodeColor[index]}
+                                          >
+                                            <Tag
+                                              color={addOnCodeColor[index]}
+                                              style={{ fontSize: "10px" }}
+                                            >
+                                              {addCombo}
+                                            </Tag>
+                                          </span>
+                                        )
+                                    )}
+                                  </div>
+                                  <div className="col-xl-5">
+                                    <span>{item.actualDescription}</span>
+                                  </div>
+                                  <div
+                                    className="col-xl-1"
+                                    style={{
+                                      position: "relative",
+                                      right: "18px",
+                                    }}
+                                  >
+                                    {/* <div>
                           <Popconfirm
                             title={popConfirmTitle}
                             onConfirm={() =>
@@ -173,90 +202,118 @@ const ComboCard = ({
                           </Popconfirm>
                         </div> */}
 
-                          <div className={styles.comcoActionIcon}>
-                            {item?.children?.length > 0 &&
-                            isDosSelected &&
-                            !item.stateIndicators?.includes("COMBO_CODE") &&
-                            item.ruleType ==
-                              "DIRECT_COMBINATION_RULE_ENGINE" ? (
-                              <CloseCircleFilled
-                                className={styles.deleteIcon}
-                                onClick={() =>
-                                  message.warning("Delete only formed codes")
-                                }
-                              />
-                            ) : isDosSelected ? (
-                              <MovementAction
-                                validAction={cardTitle == "HCC" ? false : true}
-                                suggestedAction={
-                                  cardTitle == "SUGGESTED" ? false : true
-                                }
-                                deleteAction={
-                                  cardTitle == "DELETED" ? false : true
-                                }
-                                setIsValidAction={setIsValidAction}
-                                cardTitle={cardTitle}
-                                setConfirmNotesModalValid={
-                                  setConfirmNotesModalValid
-                                }
-                                onchangeValid={onchangeCombo}
-                                result={item}
-                                setFileLoading={setFileLoading}
-                                isComboCode={
-                                  item.stateIndicators?.includes(
-                                    "COMBO_CODE"
-                                  ) &&
-                                  item.ruleType !==
-                                    "DIRECT_COMBINATION_RULE_ENGINE"
-                                }
-                              />
-                            ) : null}
-                          </div>
+                                    <div className={styles.comcoActionIcon}>
+                                      {item?.children?.length > 0 &&
+                                      isDosSelected &&
+                                      !item.stateIndicators?.includes(
+                                        "COMBO_CODE"
+                                      ) &&
+                                      item.ruleType ==
+                                        "DIRECT_COMBINATION_RULE_ENGINE" ? (
+                                        <CloseCircleFilled
+                                          className={styles.deleteIcon}
+                                          onClick={() =>
+                                            message.warning(
+                                              "Delete only formed codes"
+                                            )
+                                          }
+                                        />
+                                      ) : isDosSelected ? (
+                                        <MovementAction
+                                          validAction={
+                                            cardTitle == "HCC" ? false : true
+                                          }
+                                          suggestedAction={
+                                            cardTitle == "SUGGESTED"
+                                              ? false
+                                              : true
+                                          }
+                                          deleteAction={
+                                            cardTitle == "DELETED"
+                                              ? false
+                                              : true
+                                          }
+                                          setIsValidAction={setIsValidAction}
+                                          cardTitle={cardTitle}
+                                          setConfirmNotesModalValid={
+                                            setConfirmNotesModalValid
+                                          }
+                                          onchangeValid={onchangeCombo}
+                                          result={item}
+                                          setFileLoading={setFileLoading}
+                                          isComboCode={
+                                            item.stateIndicators?.includes(
+                                              "COMBO_CODE"
+                                            ) &&
+                                            item.ruleType !==
+                                              "DIRECT_COMBINATION_RULE_ENGINE"
+                                          }
+                                          meatCriteriaList={meatCriteriaList}
+                                          setSuggestedMeatForm={
+                                            setSuggestedMeatForm
+                                          }
+                                          setSelectCardTitle={
+                                            setSelectCardTitle
+                                          }
+                                        />
+                                      ) : null}
+                                    </div>
 
-                          {item?.children?.length > 0 && (
-                            <div
-                              className={visitStyles.close_icon}
-                              style={{ background: "#c7f3c6" }}
-                              onClick={() => {
-                                setOpens(true);
-                                setCombiTree([
-                                  { ...item, expanded: true, isDisabled: true },
-                                ]);
-                              }}
-                            >
-                              <FontAwesomeIcon
-                                icon={faSitemap}
-                                style={{
-                                  size: 8,
-                                  color: "#088f39",
-                                }}
-                              />
-                            </div>
-                          )}
-                        </div>
-                        <div className={styles.comboDetailsHeaders}>
-                          <div>
-                            <div
-                              className={`${visitStyles.encounterAndSectionHeader}`}
-                            >
-                              {getProviderNameTag({
-                                providerNames: item?.providerName,
-                                hyperlinks: item?.providerHyperlinks,
-                                setSearch: setSearch,
-                                diagnosisCode: item.diagnosisCodeCombo,
-                                diseaseName: item.diseaseName,
-                                setIsModalOpen: setIsModalOpenCaptureSection,
-                                setFileModalHeader: setFileModalHeader,
-                                patientDocumentResult: patientDocumentResult,
-                                setIsMulitpleHeader: setIsMulitpleProvider,
-                                isMulitpleHeader: isMulitpleProvider,
-                                setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
-                                isMulitpleHeaderCode: isMulitpleHeaderCode,
-                                setSelectMeatResult: "",
-                                getSelectedDosPageNumber:
-                                  getSelectedDosPageNumber,
-                              })}
-                              {/* {getProviderNameTag(
+                                    {item?.children?.length > 0 && (
+                                      <div
+                                        className={visitStyles.close_icon}
+                                        style={{ background: "#c7f3c6" }}
+                                        onClick={() => {
+                                          setOpens(true);
+                                          setCombiTree([
+                                            {
+                                              ...item,
+                                              expanded: true,
+                                              isDisabled: true,
+                                            },
+                                          ]);
+                                        }}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faSitemap}
+                                          style={{
+                                            size: 8,
+                                            color: "#088f39",
+                                          }}
+                                        />
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className={styles.comboDetailsHeaders}>
+                                    <div>
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        {getProviderNameTag({
+                                          providerNames: item?.providerName,
+                                          hyperlinks: item?.providerHyperlinks,
+                                          setSearch: setSearch,
+                                          diagnosisCode:
+                                            item.diagnosisCodeCombo,
+                                          diseaseName: item.diseaseName,
+                                          setIsModalOpen:
+                                            setIsModalOpenCaptureSection,
+                                          setFileModalHeader:
+                                            setFileModalHeader,
+                                          patientDocumentResult:
+                                            patientDocumentResult,
+                                          setIsMulitpleHeader:
+                                            setIsMulitpleProvider,
+                                          isMulitpleHeader: isMulitpleProvider,
+                                          setIsMulitpleHeadeCode:
+                                            setIsMulitpleHeadeCode,
+                                          isMulitpleHeaderCode:
+                                            isMulitpleHeaderCode,
+                                          setSelectMeatResult: "",
+                                          getSelectedDosPageNumber:
+                                            getSelectedDosPageNumber,
+                                        })}
+                                        {/* {getProviderNameTag(
                               item?.providerName,
                               item?.providerHyperlinks,
                               setSearch,
@@ -270,141 +327,155 @@ const ComboCard = ({
                               setIsMulitpleHeadeCode,
                               isMulitpleHeaderCode
                             )} */}
-                            </div>
-                            <div
-                              className={`${visitStyles.encounterAndSectionHeader}`}
-                            >
-                              {getEncounterDateBackground({
-                                value: item?.encounterDateSplit,
-                                encounterDateMatching: encounterDateMatching,
-                                fileDosPageNumberList:
-                                  patientDetailsResult?.data?.response
-                                    ?.fileDetailDTO?.dosSummaries,
-                                setIsModalOpenValidCodes:
-                                  setIsModalOpenCaptureSection,
-                                setSearch: setSearch,
-                                setFileModalHeader: setFileModalHeader,
-                                patientDocumentResult: patientDocumentResult,
-                                popup,
-                                storeFileDetails: storeFileDetails,
-                              })}
-                            </div>
-                            <div
-                              className={`${visitStyles.encounterAndSectionHeader}`}
-                            >
-                              {getCaptureSectionBackgroundFile(
-                                item?.capturedSections,
-                                item?.encounterDate,
-                                item?.actualDescription,
-                                item?.diagnosisCodeCombo,
-                                item?.getPlace,
-                                captureSectionMatching,
-                                setSearch,
-                                setFileLoading,
-                                "",
-                                "",
-                                setIsModalOpenCaptureSection,
-                                setFileModalHeader,
-                                "",
-                                patientDocumentResult,
-                                fileInitialPage,
-                                setFileInitialPage,
-                                item?.hyperlinks,
-                                encounterDateMatching,
-                                setIsMulitpleHeader,
-                                isMulitpleHeader,
-                                setIsMulitpleHeadeCode,
-                                isMulitpleHeaderCode,
-                                item.diseaseName,
-                                popup,
-                                getSelectedDosPageNumber,
-                                "",
-                                "",
-                                "",
-                                "",
-                                storeFileDetails                              )}
-                            </div>
-                          </div>
-                          <div
-                            className={`cr-pointer ${styles.meatFoundContainer}`}
-                          >
-                            <div
-                              onClick={() => {
-                                setActiveTabHead(4);
-                                setActiveMeatTitle({
-                                  header: "M",
-                                  diagnosisCode: item?.diagnosisCode,
-                                });
-                              }}
-                            >
-                              {getMeatFound(
-                                item?.diagnosisCode,
-                                meatCriteriaList,
-                                "M"
-                              )}
-                            </div>
-                            <div
-                              onClick={() => {
-                                setActiveTabHead(4);
-                                setActiveMeatTitle({
-                                  header: "E",
-                                  diagnosisCode: item?.diagnosisCode,
-                                });
-                              }}
-                            >
-                              {getMeatFound(
-                                item?.diagnosisCode,
-                                meatCriteriaList,
-                                "E"
-                              )}
-                            </div>
-                            <div
-                              onClick={() => {
-                                setActiveTabHead(4);
-                                setActiveMeatTitle({
-                                  header: "A",
-                                  diagnosisCode: item?.diagnosisCode,
-                                });
-                              }}
-                            >
-                              {getMeatFound(
-                                item?.diagnosisCode,
-                                meatCriteriaList,
-                                "A"
-                              )}
-                            </div>
-                            <div
-                              onClick={() => {
-                                setActiveTabHead(4);
-                                setActiveMeatTitle({
-                                  header: "T",
-                                  diagnosisCode: item?.diagnosisCode,
-                                });
-                              }}
-                            >
-                              {getMeatFound(
-                                item?.diagnosisCode,
-                                meatCriteriaList,
-                                "T"
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                );
-              })}
-            </div>
-          </div>
-        ) : null}
+                                      </div>
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        {getEncounterDateBackground({
+                                          value: item?.encounterDateSplit,
+                                          encounterDateMatching:
+                                            encounterDateMatching,
+                                          fileDosPageNumberList:
+                                            patientDetailsResult?.data?.response
+                                              ?.fileDetailDTO?.dosSummaries,
+                                          setIsModalOpenValidCodes:
+                                            setIsModalOpenCaptureSection,
+                                          setSearch: setSearch,
+                                          setFileModalHeader:
+                                            setFileModalHeader,
+                                          patientDocumentResult:
+                                            patientDocumentResult,
+                                          popup,
+                                          storeFileDetails: storeFileDetails,
+                                        })}
+                                      </div>
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        {getCaptureSectionBackgroundFile({
+                                          value: item?.capturedSections,
+                                          encounterDate: item?.encounterDate,
+                                          actualDescription:
+                                            item?.actualDescription,
+                                          diagnosisCodeCombo:
+                                            item?.diagnosisCodeCombo,
+                                          getPlace: item?.getPlace,
+                                          captureSectionMatching:
+                                            captureSectionMatching,
+                                          setSearch: setSearch,
+                                          setFileLoading: setFileLoading,
+                                          setIsModalOpenCaptureSection:
+                                            setIsModalOpenCaptureSection,
+                                          setFileModalHeader:
+                                            setFileModalHeader,
+                                          patientDocumentResult:
+                                            patientDocumentResult,
+                                          fileInitialPage: fileInitialPage,
+                                          setFileInitialPage:
+                                            setFileInitialPage,
+                                          hyperlinks: item?.hyperlinks,
+                                          encounterDateMatching:
+                                            encounterDateMatching,
+                                          setIsMulitpleHeader:
+                                            setIsMulitpleHeader,
+                                          isMulitpleHeader: isMulitpleHeader,
+                                          setIsMulitpleHeadeCode:
+                                            setIsMulitpleHeadeCode,
+                                          isMulitpleHeaderCode:
+                                            isMulitpleHeaderCode,
+                                          diseaseName: item.diseaseName,
+                                          popup: popup,
+                                          getSelectedDosPageNumber:
+                                            getSelectedDosPageNumber,
+                                          storeFileDetails: storeFileDetails,
+                                        })}
+                                      </div>
+                                    </div>
+                                    <div
+                                      className={`cr-pointer ${styles.meatFoundContainer}`}
+                                    >
+                                      <div
+                                        onClick={() => {
+                                          setActiveTabHead(4);
+                                          setActiveMeatTitle({
+                                            header: "M",
+                                            diagnosisCode: item?.diagnosisCode,
+                                          });
+                                        }}
+                                      >
+                                        {getMeatFound(
+                                          item?.diagnosisCode,
+                                          meatCriteriaList,
+                                          "M"
+                                        )}
+                                      </div>
+                                      <div
+                                        onClick={() => {
+                                          setActiveTabHead(4);
+                                          setActiveMeatTitle({
+                                            header: "E",
+                                            diagnosisCode: item?.diagnosisCode,
+                                          });
+                                        }}
+                                      >
+                                        {getMeatFound(
+                                          item?.diagnosisCode,
+                                          meatCriteriaList,
+                                          "E"
+                                        )}
+                                      </div>
+                                      <div
+                                        onClick={() => {
+                                          setActiveTabHead(4);
+                                          setActiveMeatTitle({
+                                            header: "A",
+                                            diagnosisCode: item?.diagnosisCode,
+                                          });
+                                        }}
+                                      >
+                                        {getMeatFound(
+                                          item?.diagnosisCode,
+                                          meatCriteriaList,
+                                          "A"
+                                        )}
+                                      </div>
+                                      <div
+                                        onClick={() => {
+                                          setActiveTabHead(4);
+                                          setActiveMeatTitle({
+                                            header: "T",
+                                            diagnosisCode: item?.diagnosisCode,
+                                          });
+                                        }}
+                                      >
+                                        {getMeatFound(
+                                          item?.diagnosisCode,
+                                          meatCriteriaList,
+                                          "T"
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          }}
+                        </Draggable>
+                      )
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
 
-        {list?.length == 0 ? (
-          <div>
-            <span className="no-patient-data">No Combination Codes</span>
+            {list?.length == 0 ? (
+              <div>
+                <span className="no-patient-data">No Combination Codes</span>
+              </div>
+            ) : null}
           </div>
-        ) : null}
-      </div>
+        </div>
+      )}
     </>
   );
 };
@@ -414,6 +485,7 @@ const enhancer = connect(
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    loading: state?.patientDetails?.details?.loading,
   }),
   {
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,

@@ -82,7 +82,7 @@ const Timeline = ({
         </div>
         <div className={styles.detailsContainer}>
           <div className={styles.oldCodeContiner}>
-            <span className={styles.codeTitle}>OLD CODE</span>
+            <span className={styles.codeTitle}>OLD</span>
             <div className={styles.details}>
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>
@@ -93,34 +93,45 @@ const Timeline = ({
                   {viewValue?.previousDiseaseFormat?.dbDescription}
                 </span>
               </div>
+
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>Provider</span>
                 <div>
                   {getProviderNameTagList({
-                    data: viewValue?.previousDiseaseFormat?.providerNames,
+                    data:
+                      viewValue?.previousDiseaseFormat?.providerNames ||
+                      viewValue?.previousProviderInfo?.providerName ||
+                      [],
                   })}
                 </div>
               </div>
+
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>Encounter Date</span>
                 <div>
                   {getDateOfServiceBackground({
-                    value: viewValue?.previousDiseaseFormat?.dateOfServices,
+                    value:
+                      viewValue?.previousDiseaseFormat?.dateOfServices ||
+                      viewValue?.previousProviderInfo?.dateOfService ||
+                      [],
                   })}
                 </div>
               </div>
-              <div className={styles.detailsHeader}>
-                <span className={styles.disCode}>Section</span>
-                <div>
-                  {getSectionHeaderBackground({
-                    value: viewValue?.previousDiseaseFormat?.capturedSections,
-                  })}
+
+              {viewValue?.previousDiseaseFormat?.capturedSections && (
+                <div className={styles.detailsHeader}>
+                  <span className={styles.disCode}>Section</span>
+                  <div>
+                    {getSectionHeaderBackground({
+                      value: viewValue?.previousDiseaseFormat?.capturedSections,
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
           <div className={styles.editCodeContainer}>
-            <span className={styles.editTitle}>NEW CODE</span>
+            <span className={styles.editTitle}>NEW</span>
             <div className={styles.details}>
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>
@@ -131,30 +142,40 @@ const Timeline = ({
                   {viewValue?.changedDiseaseFormat?.dbDescription}
                 </span>
               </div>
+
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>Provider</span>
                 <div>
                   {getProviderNameTagList({
-                    data: viewValue?.changedDiseaseFormat?.providerNames,
+                    data:
+                      viewValue?.changedDiseaseFormat?.providerNames ||
+                      viewValue?.changedProviderInfo?.providerName ||
+                      [],
                   })}
                 </div>
               </div>
+
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>Encounter Date</span>
                 <div>
                   {getDateOfServiceBackground({
-                    value: viewValue?.changedDiseaseFormat?.dateOfServices,
+                    value:
+                      viewValue?.changedDiseaseFormat?.dateOfServices ||
+                      viewValue?.changedProviderInfo?.dateOfService ||
+                      [],
                   })}
                 </div>
               </div>
-              <div className={styles.detailsHeader}>
-                <span className={styles.disCode}>Section</span>
-                <div>
-                  {getSectionHeaderBackground({
-                    value: viewValue?.changedDiseaseFormat?.capturedSections,
-                  })}
+              {viewValue?.changedDiseaseFormat?.capturedSections && (
+                <div className={styles.detailsHeader}>
+                  <span className={styles.disCode}>Section</span>
+                  <div>
+                    {getSectionHeaderBackground({
+                      value: viewValue?.changedDiseaseFormat?.capturedSections,
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -177,7 +198,7 @@ const Timeline = ({
         </div>
         <div className={styles.detailsContainer}>
           <div className={styles.oldCodeContiner}>
-            <span className={styles.codeTitle}>OLD CODE</span>
+            <span className={styles.codeTitle}>OLD</span>
             <div className={styles.details}>
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>
@@ -251,7 +272,7 @@ const Timeline = ({
             </div>
           </div>
           <div className={styles.editCodeContainer}>
-            <span className={styles.editTitle}>NEW CODE</span>
+            <span className={styles.editTitle}>NEW</span>
             <div className={styles.details}>
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>
@@ -390,6 +411,9 @@ const Timeline = ({
       }
     };
 
+    const getHtmlContent = (item) => {
+      return <div dangerouslySetInnerHTML={{ __html: item }} />;
+    };
     const getTimelineHeading = () => {
       switch (item.action) {
         case "MOVED_INVALID_TO_VALID":
@@ -479,9 +503,7 @@ const Timeline = ({
             return (
               <div className="d-flex w-100">
                 {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.suggestedColor}>
-                  CAREGAP
-                </span>
+                <span className={visitStyles.suggestedColor}>CAREGAP</span>
                 to <span className={visitStyles.potentialColor}>POTENTIAL</span>
               </div>
             );
@@ -512,9 +534,7 @@ const Timeline = ({
               <div className="d-flex">
                 {item.diagnosisCode} - Moved from{" "}
                 <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
-                <span className={visitStyles.potentialColor}>
-                POTENTIAL
-                </span>
+                <span className={visitStyles.potentialColor}>POTENTIAL</span>
               </div>
             );
           }
@@ -532,9 +552,7 @@ const Timeline = ({
               <div className="d-flex">
                 {item.diagnosisCode} - Moved from{" "}
                 <span className={visitStyles.potentialColor}>POTENTIAL</span> to{" "}
-                <span className={visitStyles.suggestedColor}>
-                  CAREGAP
-                </span>
+                <span className={visitStyles.suggestedColor}>CAREGAP</span>
               </div>
             );
           }
@@ -543,9 +561,7 @@ const Timeline = ({
               <div className="d-flex">
                 {item.diagnosisCode} - Moved from{" "}
                 <span className={visitStyles.potentialColor}>POTENTIAL</span> to{" "}
-                <span className={visitStyles.deletedColor}>
-                DELETED
-                </span>
+                <span className={visitStyles.deletedColor}>DELETED</span>
               </div>
             );
           }
@@ -737,6 +753,26 @@ const Timeline = ({
               </Popover>
             </div>
           );
+        case "PROVIDER_EDITED":
+          return (
+            <div className="d-flex w-100 justify-content-between">
+              {getHtmlContent(item?.htmlContent)}
+              <Popover
+                open={popClickDisCode === index ? true : false}
+                trigger={["hover"]}
+                placement="bottom"
+                overlayStyle={{ zIndex: 9999 }}
+                content={<>{getEditDeatils(item)}</>}
+              >
+                <span
+                  className={styles.viewTag}
+                  onClick={() => onClickPopup(index)}
+                >
+                  View
+                </span>{" "}
+              </Popover>
+            </div>
+          );
         case "HOLD":
           return (
             <div className="d-flex">
@@ -844,10 +880,10 @@ const Timeline = ({
                   placement="bottom"
                   overlayStyle={{ zIndex: 9999 }}
                   content={
-                    <div
-                    className="d-flex justify-content-between"
-                    >
-                      <span className={`${styles.textContent}`}>{item?.actionNotes}</span>
+                    <div className="d-flex justify-content-between">
+                      <span className={`${styles.textContent}`}>
+                        {item?.actionNotes}
+                      </span>
                       <CloseCircleFilled
                         onClick={() => onClickPopup(null)}
                         className={`${styles.closeIcon}`}
@@ -869,49 +905,49 @@ const Timeline = ({
           return (
             <div className="d-flex w-100 justify-content-between">
               <>
-                <strong>Comment Removed </strong>            
+                <strong>Comment Removed </strong>
               </>
             </div>
           );
         case "NOTES_ADDED":
           return (
             <div className="d-flex w-100 justify-content-between">
-            <>
-              <strong>Notes Added </strong>
-              <Popover
-                open={popClickDisCode === index}
-                trigger={["hover"]}
-                placement="bottom"
-                overlayStyle={{ zIndex: 9999 }}
-                content={
-                  <div
-                  className="d-flex justify-content-between"
-                  >
-                    <span className={`${styles.textContent}`}>{item?.actionNotes}</span>
-                    <CloseCircleFilled
-                      onClick={() => onClickPopup(null)}
-                      className={`${styles.closeIcon}`}
-                    />
-                  </div>
-                }
-              >
-                <span
-                  className={styles.viewTag}
-                  onClick={() => onClickPopup(index)}
+              <>
+                <strong>Notes Added </strong>
+                <Popover
+                  open={popClickDisCode === index}
+                  trigger={["hover"]}
+                  placement="bottom"
+                  overlayStyle={{ zIndex: 9999 }}
+                  content={
+                    <div className="d-flex justify-content-between">
+                      <span className={`${styles.textContent}`}>
+                        {item?.actionNotes}
+                      </span>
+                      <CloseCircleFilled
+                        onClick={() => onClickPopup(null)}
+                        className={`${styles.closeIcon}`}
+                      />
+                    </div>
+                  }
                 >
-                  View
-                </span>
-              </Popover>
-            </>
-          </div>
+                  <span
+                    className={styles.viewTag}
+                    onClick={() => onClickPopup(index)}
+                  >
+                    View
+                  </span>
+                </Popover>
+              </>
+            </div>
           );
         case "NOTES_REMOVED":
           return (
             <div className="d-flex w-100 justify-content-between">
-            <>
-              <strong>Notes Removed </strong>
-            </>
-          </div>
+              <>
+                <strong>Notes Removed </strong>
+              </>
+            </div>
           );
         default:
           return (

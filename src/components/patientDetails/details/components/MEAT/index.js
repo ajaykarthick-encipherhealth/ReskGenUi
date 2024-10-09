@@ -51,7 +51,9 @@ const MeatCard = ({
   setLabData,
   labData,
   patientDetailsResult,
-  storeFileDetails
+  storeFileDetails,
+  setSuggestedMeatForm,
+  setSelectCardTitle,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
@@ -476,6 +478,8 @@ const MeatCard = ({
                             result={item}
                             setFileLoading={setFileLoading}
                             meatCriteriaList={list}
+                            setSuggestedMeatForm={setSuggestedMeatForm}
+                            setSelectCardTitle={setSelectCardTitle}
                           />
                         </div>
 

@@ -147,7 +147,7 @@ const MovementAction = ({
             </Popconfirm>
           </Tooltip>
         )}
-        {potentialAction && (
+        {(potentialAction && !isComboCode) && (
           <Tooltip title="Move to potential" placement="bottom">
             <Popconfirm
               onConfirm={() => {

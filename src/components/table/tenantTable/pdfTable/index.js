@@ -33,39 +33,45 @@ function PdfTable({
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
 
-  const dateFormateAlign = (dates) => {
-    return dates?.map((res, index) => {
-      if (index < 3) {
-        // let sectionMapArr = <span>{dayjs(res).format("YYYY")}</span>;
-        return `${res}${index / 2 == 0 ? "," : ""}`;
-      } else if (dates.length - 1 == index) {
-        let sectionMapArr = (
-          <Popover
-            content={
-              <>
-                {dates?.map((item, i) =>
-                  i > 0 ? (
-                    <div className="text-center">{`${item}${
-                      i / 2 == 0 ? "," : ""
-                    }`}</div>
-                  ) : null
-                )}
-              </>
-            }
-            placement="bottom"
-          >
-            <span
-              style={{ fontSize: "10px" }}
-              className={`border border-success-subtle mx-1 p-1 rounded-circle font`}
+  const dateFormateAlign = (dates) => (
+    <div className="d-flex justify-content-center align-items-center">
+      {dates?.map((res, index) => {
+        if (index < 1) {
+          // let sectionMapArr = <span>{dayjs(res).format("YYYY")}</span>;
+          return (
+            <div className="text-center">{`${res}${
+              (index + 1) / 2 == 0 ? "," : ""
+            }`}</div>
+          );
+        } else if (dates?.length - 1 == index) {
+          let sectionMapArr = (
+            <Popover
+              content={
+                <>
+                  {dates?.map((item, i) =>
+                    i > 0 ? (
+                      <div className="text-center">{`${item}${
+                        i / 2 == 0 ? "," : ""
+                      }`}</div>
+                    ) : null
+                  )}
+                </>
+              }
+              placement="bottom"
             >
-              {dates.length - 1}+
-            </span>
-          </Popover>
-        );
-        return sectionMapArr;
-      }
-    });
-  };
+              <span
+                style={{ fontSize: "10px" }}
+                className={`border border-success-subtle mx-1 p-1 rounded-circle font`}
+              >
+                {dates.length - 1}+
+              </span>
+            </Popover>
+          );
+          return sectionMapArr;
+        }
+      })}
+    </div>
+  );
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleUploadButtonClick = (e, row) => {
@@ -77,7 +83,7 @@ function PdfTable({
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (
-         renderSkeleton()
+        renderSkeleton()
       ) : (
         <>
           {tableData?.content?.length === 0 ? (
@@ -89,10 +95,12 @@ function PdfTable({
                   <>
                     <th>BATCH NAME</th>
                     <th>PATIENT COUNT</th>
-                    <th>STATUS </th>
-                    <th>YEAR OF SERVICE</th>
-                    <th className={TableStyle.rowAudited}>INITIATED BY </th>
-                    <th>BATCH INITIATED DATE </th>
+                    <th className="text-center">STATUS </th>
+                    <th className="text-center">YEAR OF SERVICE</th>
+                    <th className={`${TableStyle.rowAudited} text-center`}>
+                      INITIATED BY{" "}
+                    </th>
+                    <th className="text-center">BATCH INITIATED DATE </th>
                   </>
                 </tr>
               </thead>
@@ -124,8 +132,9 @@ function PdfTable({
                         <td className={TableStyle.childBorder}>
                           {row?.totalFileCount ? row?.totalFileCount : "---"}
                         </td>
+
                         <td className={TableStyle.childBorder}>
-                          <div>
+                          <div className="text-center">
                             <span
                               className="text-capitalize mx-2"
                               style={{
@@ -143,7 +152,6 @@ function PdfTable({
                             </span>
                           </div>
                         </td>
-
                         <td className={TableStyle.childBorder}>
                           {row?.yearOfService
                             ? dateFormateAlign(row?.yearOfService)
@@ -151,7 +159,7 @@ function PdfTable({
                         </td>
                         <td
                           className={TableStyle.childBorder}
-                          style={{ textAlign: "left", paddingLeft: "110px" }}
+                          // style={{ textAlign: "left", paddingLeft: "110px" }}
                         >
                           {row.initiatedByFirstName ||
                           row.initiatedByLastName ||
@@ -175,7 +183,7 @@ function PdfTable({
                               </span>
                             </div>
                           ) : (
-                            <div style={{ paddingLeft: "70px" }}>---</div>
+                            <div className="text-center">---</div>
                           )}
                         </td>
                         <td className={TableStyle.childBorder}>

@@ -3,7 +3,7 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import { stringToColour } from "./ReusableFunctions";
 
 export const getSectionHeaderBackground = ({ value }) => {
-  return value?.map((res, index) => {
+  return Array.isArray(value)&&value?.map((res, index) => {
     if (index < 2) {
       var sectionMapArr = res ? (
         <span
@@ -19,7 +19,7 @@ export const getSectionHeaderBackground = ({ value }) => {
         ""
       );
       return sectionMapArr;
-    } else if (value.length - 1 == index) {
+    } else if (Array.isArray(value)&&value.length - 1 == index) {
       var sectionMapArr = (
         <Popover
           content={

@@ -10,7 +10,6 @@ import failed from "../.././../../images/fihr/failed.svg";
 import TableStyle from "../../table.module.css";
 import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
 import PropTypes from "prop-types";
-import SpinnerDots from "../../../spinner";
 import { renderSkeleton } from "../../../reuseableFunctions";
 
 export const getColors = (rowStatus) => {
@@ -61,8 +60,6 @@ const DetailedPdfTable = ({
     onPageChange: PropTypes.func.isRequired,
     tableData: PropTypes.array.isRequired,
   };
-
-
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (
