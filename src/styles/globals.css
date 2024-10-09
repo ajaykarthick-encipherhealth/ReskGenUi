@@ -15685,7 +15685,6 @@ input::-webkit-inner-spin-button {
 .customInput .ant-input{
   border-radius: none !important;
 }
-
 .customDrawer.ant-drawer .ant-drawer-body{
   margin-left: 20px;
 }
@@ -15694,5 +15693,4 @@ input::-webkit-inner-spin-button {
     font-size:12px !important;
     font-weight: 400;
   }
-  
 }

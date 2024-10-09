@@ -169,6 +169,7 @@ const CamboTree = ({
 
   const handleCloseModalAdd = () => {
     setIsEditHccForm(false);
+    setData("")
   };
 
   const getEncounterDateBackground = (value) => {
