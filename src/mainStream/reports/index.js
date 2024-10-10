@@ -185,8 +185,7 @@ const Reports = ({
   };
   const dosOnChange = (selectedOption, name) => {
     const nameString = name?.split(" ").join("");
-    console.log(selectedOption)
-    if (selectedOption==""||!selectedOption) {
+    if (name == "User Role" && !selectedOption) {
       setSelectedOptions((prevOptions) => ({
         ...prevOptions,
         UserRole: undefined,
@@ -197,13 +196,6 @@ const Reports = ({
         ...prevOptions,
         [nameString]: selectedOption,
       }));
-      if(name=="UserRole" && !selectedOption){
-        setSelectedOptions((prevOptions) => ({
-          ...prevOptions,
-          UserRole: undefined,
-          User: undefined,
-        }));
-      }
     }
   };
 
@@ -261,11 +253,12 @@ const Reports = ({
 
   const tabs = getTabsForRole(userRole);
 
-  const optionsUser =
-    selectUserList?.data?.response?.map((res) => ({
-      value: res.userName,
-      label: res.firstName + " " + res.lastName,
-    })) || [];
+  const optionsUser = selectedOptions?.UserRole
+    ? selectUserList?.data?.response?.map((res) => ({
+        value: res.userName,
+        label: res.firstName + " " + res.lastName,
+      }))
+    : [];
 
   const checkedList = [
     {
@@ -361,13 +354,10 @@ const Reports = ({
           endDate: selectedDateRanges?.Admin?.to,
           search: coderSearchString ? coderSearchString : "",
           filter: selectedOptions?.Status,
-          userName: selectedOptions?.UserRole
-            ? selectedOptions?.UserRole
-            : "",
+          userName: selectedOptions?.UserRole ? selectedOptions?.UserRole : "",
           sort: sort,
           selectManager:
-            (selectedOptions?.User&&
-            selectedOptions?.UserRole!== "")
+            selectedOptions?.User && selectedOptions?.UserRole !== ""
               ? selectedOptions?.User
               : "",
           flagsList: selectAllFlags,
@@ -449,7 +439,7 @@ const Reports = ({
 
   useEffect(() => {
     if (selectedOptions?.UserRole) {
-      dispatch(getSelectUserListReport(selectedOptions?.UserRole||""));
+      dispatch(getSelectUserListReport(selectedOptions?.UserRole || ""));
     }
   }, [selectedOptions?.UserRole]);
 
@@ -522,27 +512,26 @@ const Reports = ({
                           userRole == "supervisor" ? (
                             <div className="col-xl-2">
                               {/* <div className="d-flex w-100"> */}
-                                <label className="labelStyle d-flex m-auto  p-2">
-                                  {" "}
-                                  Status
-                                </label>
-                                <div className="form-group has-search w-100 custom-react-report-select">
-                                  <Select
-                                    onChange={(selectedOption) => {
-                                      dosOnChange(
-                                        selectedOption,
-                                        "reviewer Status"
-                                      );
-                                      resetPageNumber(resetPageState);
-                                    }}
-                                    placeholder="Select Status"
-                                    options={statusOptions}
-                                    // className={`custom-react-report-select`}
-                                    isSearchable={false}
-                                    allowClear={true}
-
-                                  />
-                                </div>
+                              <label className="labelStyle d-flex m-auto  p-2">
+                                {" "}
+                                Status
+                              </label>
+                              <div className="form-group has-search w-100 custom-react-report-select">
+                                <Select
+                                  onChange={(selectedOption) => {
+                                    dosOnChange(
+                                      selectedOption,
+                                      "reviewer Status"
+                                    );
+                                    resetPageNumber(resetPageState);
+                                  }}
+                                  placeholder="Select Status"
+                                  options={statusOptions}
+                                  // className={`custom-react-report-select`}
+                                  isSearchable={false}
+                                  allowClear={true}
+                                />
+                              </div>
                               {/* </div> */}
                             </div>
                           ) : null}
@@ -616,9 +605,7 @@ const Reports = ({
                                         }
                                         // className={`custom-react-report-select`}
                                         isSearchable={false}
-                                        value={
-                                           selectedOptions[info?.name]
-                                        }
+                                        value={selectedOptions[info?.name]}
                                         allowClear={true}
                                       />
                                     )}
