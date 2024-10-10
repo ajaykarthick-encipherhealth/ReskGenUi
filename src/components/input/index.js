@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from "react";
-import { InputText } from "primereact/inputtext";
+// import { InputText } from "primereact/inputtext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { resetPageNumber } from "../headerFilters/functions";
+import { Input } from "antd";
 
 export const debounce = (func, delay) => {
   let timeoutId;
@@ -14,7 +15,21 @@ export const debounce = (func, delay) => {
   };
 };
 
-export const disallowedCharacters = ['[', '{', ']', '}', '|', '!', ',', '%', '^', "\\", "(", ")", "#"];
+export const disallowedCharacters = [
+  "[",
+  "{",
+  "]",
+  "}",
+  "|",
+  "!",
+  ",",
+  "%",
+  "^",
+  "\\",
+  "(",
+  ")",
+  "#",
+];
 
 const InputField = ({
   isSearch,
@@ -34,10 +49,10 @@ const InputField = ({
   setSearchVal,
   searchVal,
   isReport,
-  setPageNo
+  setPageNo,
 }) => {
   const [inputStr, setInputStr] = useState("");
-  
+
   const debounceFunc = useCallback(
     debounce((text, activeTab) => {
       if (activeTab === "SentReport") {
@@ -64,21 +79,15 @@ const InputField = ({
         setInputStr(text);
       }
     }
-    if(setPageNo){
-      resetPageNumber(setPageNo)
+    if (setPageNo) {
+      resetPageNumber(setPageNo);
     }
     debounceFunc(text, activeTab);
   };
 
   return (
-    <div className="form-group has-search">
-      {isSearch && (
-        <FontAwesomeIcon
-          className="fa fa-search form-control-feedback"
-          icon={faSearch}
-        />
-      )}
-      <InputText
+    <div>
+      <Input
         type={type}
         value={
           isTracking
@@ -90,11 +99,7 @@ const InputField = ({
             : inputStr
         }
         onChange={handleChange}
-        className={
-          isInputFiled
-            ? "form-control new-inputform-control"
-            : "form-control new-form-control new-item-control"
-        }
+        className={"w-100 new-search-control border-none"}
         placeholder={placeholder}
         maxLength={25}
         disabled={isDisabled ? true : false}
@@ -104,7 +109,12 @@ const InputField = ({
             e.preventDefault();
           }
         }}
-    
+        prefix={
+          isSearch && (
+            <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
+          )
+        }
+        allowClear={true}
       />
     </div>
   );
