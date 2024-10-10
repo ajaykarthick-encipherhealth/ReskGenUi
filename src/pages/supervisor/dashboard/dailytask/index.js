@@ -13,13 +13,14 @@ import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
-const DailyTask = () => {
+import { connect } from "react-redux";
+const DailyTask = ({ dailyStatusDatas }) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
 
   const dailyStatusData = useSelector((state) => state?.l2Dashboard?.dailyTask);
   const dispatch = useDispatch();
-
+console.log(dailyStatusDatas, "dailyStatusData");
   const bullets = [
     {
       color: "#64B4BE",
@@ -240,42 +241,48 @@ const DailyTask = () => {
     return index === firstIndex;
   });
   const renderCardSkeleton = () => (
-    <Row gutter={[16, 16]} style={{ display: 'flex', justifyContent: 'space-between' }}>
-    {Array.from({ length: 3 }).map((_, index) => (
-      <Col
-        key={index}
-        xs={24} sm={12} md={8} lg={7} 
-        className={styles.sliderdiv}
-        style={{
-          backgroundColor: '#f0f0f0',
-          borderRadius: '12px',
-          padding: '5px',
-          marginBottom: '16px',
-          height: '260px',
-        }}
-      >
-        <Row>
-          <Col span={12}>
-            <div>
-              <Skeleton.Input
-                style={{ width: '100%', height: '200px' }} 
-                active
-              />
-            </div>
-          </Col>
-          <Col span={12} className={styles.headerTitle}>
-            <div style={{ paddingLeft: '10px' }}>
-              {Array.from({ length: bullets.length }).map((_, i) => (
-                <div className={styles.container} key={i}>
-                  <Skeleton.Input style={{ width: 30 }} active />
-                </div>
-              ))}
-            </div>
-          </Col>
-        </Row>
-      </Col>
-    ))}
-  </Row>
+    <Row
+      gutter={[16, 16]}
+      style={{ display: "flex", justifyContent: "space-between" }}
+    >
+      {Array.from({ length: 3 }).map((_, index) => (
+        <Col
+          key={index}
+          xs={24}
+          sm={12}
+          md={8}
+          lg={7}
+          className={styles.sliderdiv}
+          style={{
+            backgroundColor: "#f0f0f0",
+            borderRadius: "12px",
+            padding: "5px",
+            marginBottom: "16px",
+            height: "260px",
+          }}
+        >
+          <Row>
+            <Col span={12}>
+              <div>
+                <Skeleton.Input
+                  style={{ width: "100%", height: "200px" }}
+                  active
+                />
+              </div>
+            </Col>
+            <Col span={12} className={styles.headerTitle}>
+              <div style={{ paddingLeft: "10px" }}>
+                {Array.from({ length: bullets.length }).map((_, i) => (
+                  <div className={styles.container} key={i}>
+                    <Skeleton.Input style={{ width: 30 }} active />
+                  </div>
+                ))}
+              </div>
+            </Col>
+          </Row>
+        </Col>
+      ))}
+    </Row>
   );
   return (
     <>
@@ -379,4 +386,12 @@ const DailyTask = () => {
   );
 };
 
-export default DailyTask;
+
+const connector = connect(
+  (state) => ({
+    dailyStatusDatas: state?.supervisor?.dashboard?.workFlow,
+    loader: state.admin?.workqueue?.patientsLoading,
+  }),
+  {}
+);
+export default connector(DailyTask);

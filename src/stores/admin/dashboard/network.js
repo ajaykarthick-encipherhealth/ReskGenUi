@@ -46,7 +46,7 @@ export const accuracy = async ({ btn, month, year, isAdmin = false }) => {
   return data;
 };
 
-export const completedScrore = async ({ btn, date, month, year }) => {
+export const completedScore = async ({ btn, date, month, year }) => {
   const options = {
     method: "GET",
   };

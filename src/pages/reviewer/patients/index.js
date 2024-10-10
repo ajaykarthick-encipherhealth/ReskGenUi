@@ -321,7 +321,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   };
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    // dispatch(patientDetails(data));
+    getpatientsListFilter(data);
     if (data.computing == 2) {
       const controller = new AbortController();
       controller.abort();
@@ -525,6 +526,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
       setDueDateEnd(decodedParams?.dueDateEnd);
     }
   }, [navigate.query]);
+  console.log(patientsListFilter, "patientsListFilter");
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>

@@ -31,6 +31,7 @@ function PatientTable({
   setSortAllocateOrder,
   userId,
   params,
+  gotoPatientDetails,
 }) {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -42,36 +43,12 @@ function PatientTable({
     // }));
   };
 
-  const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
-    if (data?.computing === 2) {
-      const controller = new AbortController();
-      const { signal } = controller;
-      controller.abort();
-      setStorage("patientId", data?.patientId);
-      const routePrams = { ...page, ...params };
-      // navigate.push({ pathname: "/reviewer/patients/details", query: page });
-
-      navigate?.push(
-        {
-          pathname: "/reviewer/patients/details",
-          query: params,
-        },
-        "/reviewer/patients/details"
-      );
-    } else {
-      notification.warning({
-        message: data?.patientId + " file not processed. Please wait.",
-      });
-    }
-  };
-
   const handleTableRowClick = (e) => {
     const targetTd = e.target.closest("td");
     if (targetTd) {
       const dataIndex = targetTd.parentElement.rowIndex - 1;
       const clickedData = patinetListAll[dataIndex];
-      gotoPatientDetails(clickedData);
+      gotoPatientDetails(clickedData);     
     }
   };
   const renderRows = () => {
@@ -84,10 +61,16 @@ function PatientTable({
             className={TableStyle.firstTdBorder}
             onClick={handleTableRowClick}
           >
-             <Tooltip title={data?.patientId}> {truncateString(data?.patientId, 30)}</Tooltip>
+            <Tooltip title={data?.patientId}>
+              {" "}
+              {truncateString(data?.patientId, 30)}
+            </Tooltip>
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-             <Tooltip title={data?.fileName}> {truncateString(data?.fileName, 30)}</Tooltip>
+            <Tooltip title={data?.fileName}>
+              {" "}
+              {truncateString(data?.fileName, 30)}
+            </Tooltip>
           </td>
           {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
             <td

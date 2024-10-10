@@ -46,6 +46,7 @@ import { reducer as tenantAminNotificationReducer } from "./tenantAdmin/notifica
 import { reducer as tenantAminSettingsReducer } from "./tenantAdmin/settings";
 import { reducer as tenantOnBoarding } from "./tenantOnBoarding";
 import { reducer as adminUsersReducer } from "./admin/users";
+import { reducer as supervisorDashboardReducer } from "./supervisor/dashboard";
 
 const reducers = combineReducers({
   // old reducers
@@ -84,6 +85,7 @@ const reducers = combineReducers({
     report: updatedReportReducer,
     users: UsersReducer,
     audited: AuditedReducer,
+    dashboard: supervisorDashboardReducer
   }),
   admin: combineReducers({
     report: updatedAdminReportReducer,

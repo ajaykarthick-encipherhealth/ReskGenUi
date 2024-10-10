@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import { Col, Row } from "antd";
@@ -11,9 +11,9 @@ import Accuracy from "./accuracy";
 import Notifications from "./notifications";
 import CompletedStatus from "./completedstatus";
 import HoldStatus from "./holdstatus";
-import { getWorkFlow } from "../../../store/actions/l2Action/DashboardAction";
+import { actions as supervisorAction } from "../../../stores/supervisor/dashboard";
 
-const Index = () => {
+const Index = ({ getAllWorkFlow }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
@@ -35,7 +35,7 @@ const Index = () => {
     : endOfToday.toISOString().split("T")[0] + "T23:59:59.999Z";
 
   useEffect(() => {
-    dispatch(getWorkFlow(startDate, endDate, router));
+    getAllWorkFlow(startDate, endDate, router);
   }, [startDate, endDate]);
 
   return (
@@ -75,4 +75,9 @@ const Index = () => {
   );
 };
 
-export default Index;
+
+
+const connector = connect(() => ({}), {
+  getAllWorkFlow: supervisorAction.supervisorWorkFlowAction,
+});
+export default connector(Index);

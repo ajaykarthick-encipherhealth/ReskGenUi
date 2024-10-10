@@ -2,11 +2,11 @@ import { createActionThunk } from "../../../utils/redux";
 import * as network from "./network";
 
 export const workFlowAction = createActionThunk(
-  "WORKFLOWDATA",
+  "WORKFLOW_DATA",
   network.workFlow
 );
 export const dailyTaskAction = createActionThunk(
-  "DAILYTASK",
+  "DAILY_TASK",
   network.dailyTask
 );
 export const accuracyAction = createActionThunk(
@@ -16,7 +16,7 @@ export const accuracyAction = createActionThunk(
 
 export const completedScoreAction = createActionThunk(
   "COMPLETED",
-  network.completedScrore
+  network.completedScore
 );
 
 export const holdStatusAction = createActionThunk(
@@ -30,6 +30,6 @@ export const notificationAction = createActionThunk(
 );
 
 export const tenentLogoAction = createActionThunk(
-  "TENENTLOGO",
+  "TENANT_LOGO",
   network.tenentLogo
 );

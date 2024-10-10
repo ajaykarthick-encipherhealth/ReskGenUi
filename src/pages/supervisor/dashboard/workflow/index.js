@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -25,12 +25,15 @@ import {
   faCircleXmark,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
-const WorkFlow = () => {
+import { connect } from "react-redux";
+import { actions as allActions } from "../../../../stores/supervisor/dashboard";
+
+const WorkFlow = ({ worlFlowData, getSupervisorDashboard }) => {
   const currentDate = dayjs();
-  const worlFlowData = useSelector((state) => state?.l2Dashboard?.data);
+  // const worlFlowData = useSelector((state) => state?.l2Dashboard?.data);
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const [openPicker, setOpenPicker] = useState(false);
-
+  console.log(worlFlowData, "worlFlowData");
   const last30thDate = currentDate?.subtract(31, "day");
   const lastDateWithTime = currentDate?.endOf("day");
 
@@ -44,6 +47,7 @@ const WorkFlow = () => {
   const handleOpen = () => {
     setOpenPicker(!openPicker);
   };
+
   const card1Data = [
     {
       id: 1,
@@ -173,7 +177,7 @@ const WorkFlow = () => {
       />
       <Card borderRadius="28px">
         {worlFlowData?.loading ? (
-       renderCardSkeleton()
+          renderCardSkeleton()
         ) : worlFlowData?.data?.response ? (
           <Row className={styles.carddiv}>
             {card1Data?.map((data) => (
@@ -207,4 +211,13 @@ const WorkFlow = () => {
   );
 };
 
-export default WorkFlow;
+
+const connector = connect(
+  (state) => ({
+    worlFlowData: state?.supervisor?.dashboard?.workFlow,
+    loader: state.admin?.workqueue?.patientsLoading,
+  }),
+  {    
+  }
+);
+export default connector(WorkFlow);

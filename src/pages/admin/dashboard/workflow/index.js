@@ -38,7 +38,6 @@ import TC from "../../.../../../../images/dashboard/TC.png";
 import auditedIcon from "../../.../../../../images/trackingImages/AuditedTrack.png";
 import tci from "../../.../../../../images/dashboard/tci.png";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
-import { workStatusApiAdmin } from "../../../../services/adminServices/DashboardService";
 import Hold from "../../.../../../../images/trackingImages/HoldTrack.png";
 import HoldBg from "../../.../../../../images/dashboard/holdbg.png";
 import AuditedDecline from "../../.../../../../images/trackingImages/AuditDeclined.png";
