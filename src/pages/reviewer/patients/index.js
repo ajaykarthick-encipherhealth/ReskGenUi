@@ -1,11 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Select from "react-select";
 import { useSelector, useDispatch, connect } from "react-redux";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { DatePicker, Popover, Skeleton, notification } from "antd";
+import {
+  DatePicker,
+  Input,
+  Popover,
+  Select,
+  Skeleton,
+  notification,
+} from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
@@ -44,7 +50,6 @@ import { getStorage, setStorage } from "../../../utils/storages";
 const { RangePicker } = DatePicker;
 
 const statusOptions = [
-  { label: "ALL", value: "ALL" },
   { label: "COMPLETED", value: "COMPLETED" },
   { label: "PENDING", value: "PENDING" },
   // { label: "COMPUTED", value: "COMPUTED" },
@@ -364,10 +369,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   };
 
   const onChangeStatus = (selectedOption) => {
-    let value = selectedOption.value;
-    if (value == "ALL") {
-      value = "";
-    }
+    let value = selectedOption;
     setStatusSelectedStatus(value);
     // getFilteApi(
     //   0,
@@ -380,10 +382,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     // );
   };
   const onChangePriority = (selectedOption) => {
-    let value = selectedOption?.value;
-    if (value == "All") {
-      value = "";
-    }
+    let value = selectedOption;
     setSelectedPriority(value);
   };
 
@@ -507,7 +506,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   //   </div>
   // );
 
-  const options = [{ label: "All", value: "" }, ...priorityOptions];
+  const options = [...priorityOptions];
   useEffect(() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -547,7 +546,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                             }}
                           >
                             <div className="col-xl-2">
-                              <label className="responsiveLabel">Search by Name or ID</label>
+                              <label className="responsiveLabel">
+                                Search by Name or ID
+                              </label>
                               {/* <InputField
                                 inputValue={searchTextValue}
                                 setInputValue={setSearchTextValue}
@@ -557,17 +558,12 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                 placeholder="Search"
                                 isSearch={true}
                               /> */}
-                              <div className="form-group has-search">
-                                <FontAwesomeIcon
-                                  className="fa fa-search form-control-feedback"
-                                  icon={faSearch}
-                                />
-
-                                <InputText
+                              <div style={{ height: "45px" }}>
+                                <Input
                                   value={searchVal}
                                   onChange={(e) => getNameSearch(e)}
                                   className={
-                                    "form-control new-form-control new-item-control"
+                                    "w-100 new-search-control border-none"
                                   }
                                   placeholder={"Search"}
                                   maxLength={25}
@@ -576,12 +572,21 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                       e.preventDefault();
                                     }
                                   }}
+                                  prefix={
+                                    <FontAwesomeIcon
+                                      className="searchPrefix"
+                                      icon={faSearch}
+                                    />
+                                  }
+                                  allowClear={true}
                                 />
                               </div>
                             </div>
                             <div className="col-xl-2">
-                              <label  className="responsiveLabel">Select Status</label>
-                              <div class="form-group has-search">
+                              <label className="responsiveLabel">
+                                Select Status
+                              </label>
+                              <div class="form-group has-search custom-react-select">
                                 <Select
                                   onChange={(selectedOption) => {
                                     onChangeStatus(selectedOption);
@@ -589,51 +594,41 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                   }}
                                   value={
                                     statusSelectedStatus
-                                      ? {
-                                          label: statusSelectedStatus,
-                                          value: statusSelectedStatus,
-                                        }
-                                      : {
-                                          label: "ALL",
-                                          value: "",
-                                        }
+                                      ? statusSelectedStatus
+                                      : null
                                   }
                                   options={statusOptions}
-                                  className="custom-react-select"
                                   isSearchable={false}
                                   placeholder={"Select Status"}
+                                  allowClear
                                 />
                               </div>
                             </div>
                             <div className="col-xl-2">
-                              <label  className="responsiveLabel">Select Priority</label>
-                              <div class="form-group has-search">
+                              <label className="responsiveLabel">
+                                Select Priority
+                              </label>
+                              <div class="form-group has-search custom-react-select">
                                 <Select
                                   onChange={(selectedOption) => {
                                     onChangePriority(selectedOption);
                                     resetPageNumber(setPageNo);
                                   }}
                                   value={
-                                    selectedPriority
-                                      ? {
-                                          label: selectedPriority,
-                                          value: selectedPriority,
-                                        }
-                                      : {
-                                          label: "ALL",
-                                          value: "",
-                                        }
+                                    selectedPriority ? selectedPriority : null
                                   }
                                   options={options}
-                                  className="custom-react-select"
                                   isSearchable={false}
                                   placeholder={"Select Priority"}
+                                  allowClear
                                 />
                               </div>
                             </div>
 
                             <div className="col-xl-2">
-                              <label  className="responsiveLabel">Due Date</label>
+                              <label className="responsiveLabel">
+                                Due Date
+                              </label>
                               <div>
                                 <RangePicker
                                   format="MM-DD-YYYY"
@@ -676,7 +671,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                             <HeaderFilters bullets={bullets} />
 
                             <div className="col-xl-2 mt-4 mb-1">
-                            <DailyTask trackChart={trackChart} />
+                              <DailyTask trackChart={trackChart} />
                             </div>
                           </div>
                           {showFilters && (
@@ -685,11 +680,12 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                 display: "flex",
                                 marginTop: "-30px",
                                 flexDirection: "row",
-                                
                               }}
                             >
                               <div className="col-xl-2 ">
-                                <label  className="responsiveLabel">Completed Date</label>
+                                <label className="responsiveLabel">
+                                  Completed Date
+                                </label>
                                 <div>
                                   <RangePicker
                                     format="MM-DD-YYYY"
