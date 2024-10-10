@@ -2,7 +2,7 @@ import React from "react";
 import filter from "../../images/svg/newReport/filter.svg";
 import Image from "next/image";
 import styles from "./report.module.css";
-import { Popover } from "antd";
+import { Divider, Popover } from "antd";
 
 const MoreFilter = ({
   checkedList,
@@ -34,13 +34,18 @@ const MoreFilter = ({
   };
   const PopContent = (
     <>
-      <input
-        type="checkbox"
-        onChange={handleHeaderCheckboxChange}
-        className={`${styles.customChecked}`}
-        checked={selectAll}
-      />{" "}
-      <span style={{ margin: "0 5px" }}>Select All</span>
+      <div className="d-flex my-2">
+        <input
+          type="checkbox"
+          onChange={handleHeaderCheckboxChange}
+          className={`${styles.customChecked}`}
+          checked={selectAll}
+        />{" "}
+        <div style={{ margin: "0 5px" }} className="mx-2">
+          Select All
+        </div>
+      </div>
+      <Divider className="p-0 m-0" />
       {checkedList?.map((item, index) => (
         <div key={item?.id} style={{ margin: "10px 0px" }}>
           <input
@@ -62,7 +67,9 @@ const MoreFilter = ({
   return (
     <div className="d-flex" style={{ cursor: "pointer" }}>
       <Popover content={PopContent} trigger="click" placement="bottom">
-        <span className={`${styles.moreStyle} text-truncate`}>More Filters</span>
+        <span className={`${styles.moreStyle} text-truncate`}>
+          More Filters
+        </span>
       </Popover>
       <span>
         <Image src={filter} alt="noimg" height="30" />

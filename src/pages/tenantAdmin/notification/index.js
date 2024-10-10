@@ -285,6 +285,7 @@ const Notification = ({ getAllCustomUsers, allCustomUsers }) => {
                           }
                           maxTagCount={3}
                           style={{ height: "42px", width: "515px" }}
+                          allowClear={true}
                         >
                           {filteredOptions?.map((data) => (
                             <Option key={data?.value} value={data?.value}>

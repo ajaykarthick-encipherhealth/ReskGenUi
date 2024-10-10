@@ -88,7 +88,6 @@ const bullets = [
 ];
 
 const statusOptions = [
-  { label: "ALL", value: "" },
   { label: "COMPLETED", value: "COMPLETED", status: 2 },
   { label: "PENDING", value: "PENDING", status: 0 },
   { label: "DECLINED", value: "DECLINED", status: 0 },
@@ -97,7 +96,6 @@ const statusOptions = [
 ];
 
 const auditStatusOptions = [
-  { label: "ALL", value: "" },
   { label: "AUDITHOLD", value: "AUDITHOLD", status: 2 },
   { label: "REAUDIT", value: "REAUDIT", status: 0 },
   { label: "AUDIT_PENDING", value: "AUDIT_PENDING", status: 0 },

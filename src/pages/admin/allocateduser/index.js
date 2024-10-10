@@ -36,7 +36,6 @@ import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
 const { RangePicker } = DatePicker;
 const statusOption = [
-  { value: "", label: "ALL" },
   { value: "URGENT", label: "URGENT" },
   { value: "HIGH", label: "HIGH" },
   { value: "NORMAL", label: "NORMAL" },
@@ -294,6 +293,7 @@ const Patient = ({
           key={index}
           onClick={() => {
             getL2PatientList({data:data, pageNoL2Patient:pageNoL2Patient, sort:sort});
+            setIsPatientList(true)
           }}
         >
           <td
@@ -367,7 +367,6 @@ const Patient = ({
   };
 
   const statusOptions = [
-    { label: "ALL", value: "ALL" },
     { label: "COMPLETED", value: "COMPLETED" },
     { label: "DECLINED", value: "DECLINED" },
   ];
@@ -380,6 +379,7 @@ const Patient = ({
     selectedOptions,
     allocatedOption
   }) => {
+  
     setTableLoading(true);
     setIsLoading(true);
     let dataMap = {
@@ -396,10 +396,10 @@ const Patient = ({
     }&sortfield=${
       sort?.sortField ? sort?.sortField : "dueDate"
     }&searchstring=${searchString?searchString:""}&processedStatus=${
-      selectedOptions ? selectedOptions==='ALL'?"":selectedOptions : ""
+      selectedOptions?selectedOptions:""
     }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
     getSelectedSupervisorList({ url: resoureUrl });
-    setIsPatientList(true);
+    // setIsPatientList(true);
   };
 
   const getAllCheckListL2 = async (sort) => {
@@ -431,10 +431,10 @@ const Patient = ({
     dispatch(getFilters("patientAllocated"));
   }, []);
   useEffect(() => {
-    if (selectedOptions?.length > 0) {
-      getL2PatientList({data:l2selectUser,pageNoL2Patient:pageNoL2Patient, selectedOptions: selectedOptions });
+    if (!selectedOptions || !allocatedOption) {
+      getL2PatientList({data:l2selectUser,pageNoL2Patient:pageNoL2Patient, selectedOptions: selectedOptions,allocatedOption:allocatedOption });
     }
-  }, [selectedOptions]);
+  }, [selectedOptions,allocatedOption]);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -451,7 +451,7 @@ const Patient = ({
                           <div
                             className={`${isPatientList && "d-flex"} col-xl-2`}
                           >
-                            {isPatientList && (
+                            {isPatientList && activeTab!=1 && (
                               <div className={reportStyles.backDiv}>
                                 <button
                                   style={{ width: "40px", height: "40px" }}
@@ -619,7 +619,7 @@ const Patient = ({
                                 </div>
                               </div>
                             </>
-                          ) : !isPatientList && activeTab == 2 ? (
+                          ) : !isPatientList && activeTab == 2  ? (
                             <div className="col-xl-6"></div>
                           ) : (
                             <>
@@ -750,7 +750,7 @@ const Patient = ({
                                   id="my-posts"
                                   eventKey="validDiseases"
                                 >
-                                  {loader ? (
+                                  {loader && activeTab==1 ? (
                                     renderSkeleton()
                                   ) : (
                                     <>
@@ -797,7 +797,7 @@ const Patient = ({
                                 </Tab.Pane>
 
                                 <Tab.Pane id="my-posts" eventKey="team">
-                                  {loader2 ? (
+                                  {loader2 && activeTab==2 ? (
                                     renderSkeleton()
                                   ) : (
                                     <>
@@ -885,7 +885,7 @@ const Patient = ({
                                               </div>
                                             </div>
                                           </>
-                                        ) : !loader2 && loader3 ? (
+                                        ) : !loader2 && loader3 && activeTab==2 ? (
                                           renderSkeleton()
                                         ) : (
                                           <>

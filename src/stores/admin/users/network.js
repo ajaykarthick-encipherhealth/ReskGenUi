@@ -26,19 +26,17 @@ export async function getallUsers({
   const options = {
     method: "GET",
   };
-  const selectedStatus = status === "ALL" ? "" : status;
-  const selectOrgId = orgId === "ALL" ? "" : orgId;
 
   const data = await requestPortal(
     `dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${
       search ? search : ""
-    }&organizationId=${selectOrgId ? selectOrgId : ""}&createdDateStart=${
+    }&organizationId=${orgId}&createdDateStart=${
       startDate ? startDate : ""
-    }&createdDateEnd=${endDate ? endDate : ""}&isEnabled=${
-      selectedStatus ? selectedStatus : ""
-    }&role=${role ? role : ""}&sortdirection=${
-      sort?.sortDir ? sort?.sortDir : ""
-    }&sortfield=${sort?.sortField ? sort?.sortField : ""}`,
+    }&createdDateEnd=${endDate ? endDate : ""}&isEnabled=${status}&role=${
+      role ? role : ""
+    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&sortfield=${
+      sort?.sortField ? sort?.sortField : ""
+    }`,
     options
   );
   return data;
@@ -109,7 +107,7 @@ export const enableUser = async ({
   role,
   setPopoverVisible,
   selectedManager,
-  field
+  field,
 }) => {
   var tenId = getStorage("tenantId");
   var orgId = getStorage("orgId");
@@ -140,12 +138,12 @@ export const enableUser = async ({
         `management/admin/updateuser`,
         options
       );
-      if (response?.status==='SUCCESS') {
+      if (response?.status === "SUCCESS") {
         notification.success({
           description: response?.response?.message,
         });
       }
-      return response
+      return response;
     } catch (err) {
       console.log(err);
     }

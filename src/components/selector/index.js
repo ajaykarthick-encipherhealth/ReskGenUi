@@ -1,6 +1,6 @@
 import React from "react";
-import Select from "react-select";
 import { handleSelector, resetPageNumber } from "../headerFilters/functions";
+import { Select } from "antd";
 
 const Selector = ({
   selectlabel,
@@ -10,26 +10,29 @@ const Selector = ({
   selectDefaultValue,
   setDefaultValue,
   setPageNo,
-  onChanges
+  onChanges,
+  
 }) => {
   return (
     <div>
       <label style={{ marginLeft: "10px" }} className="responsiveLabel">{selectlabel}</label>
-      <div class="form-group has-search">
+      <div class="form-group has-search custom-react-select">
         <Select
+          // className="custom-react-select"
           options={selectOptions}
-          className="custom-react-select"
-          isSearchable={false}
-          isClearable={isClose}
+          // isSearchable={false}
+          // isClearable={isClose}
+          placeholder={selectlabel}
           onChange={(value) => {
             handleSelector(value, setSelectedOption);
-            setDefaultValue && setDefaultValue(value)
+            setDefaultValue && setDefaultValue(value?value:"")
             if(setPageNo){
               resetPageNumber(setPageNo)
             }
             onChanges && onChanges()
           }}
-          value={selectDefaultValue && {label:selectDefaultValue,value:selectDefaultValue}}
+          value={selectDefaultValue !=="" ?selectDefaultValue:undefined}
+          allowClear={true}
         />
       </div>
     </div>

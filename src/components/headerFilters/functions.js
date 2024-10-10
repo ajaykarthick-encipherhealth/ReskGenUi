@@ -28,7 +28,7 @@ export const searchFunction = (
 
 // for select
 export const handleSelector = (option, setSelectedOption) => {
-  setSelectedOption(option?.value);
+  setSelectedOption(option?option:"");
 };
 
 export const processstatusBodyTemplate = (rowData) => {
@@ -296,7 +296,7 @@ export const priorityStatus = (value) => {
 export const generateOptionsList = (items) => {
   if (items?.data?.data?.response?.length > 0) {
     const options = [
-      { label: "All", value: "" },
+     
       ...items?.data?.data?.response?.map((item) => ({
         label: (
           <span>
@@ -316,7 +316,7 @@ export const generateOptionsLists = (items) => {
     return [{ label: "Loading...", value: "", isDisabled: true }];
   } else {
     const options = [
-      { label: "All", value: "" },
+      
       ...items?.data?.data?.response?.map((item) => ({
         label: (
           <span>
