@@ -46,7 +46,6 @@ const bullets = [
 ];
 
 const statusOptions = [
-  { label: "ALL", value: "" },
   { label: "PROCESSING", value: "1", status: 1 },
   { label: "COMPUTED", value: "2", status: 2 },
   { label: "FAILED", value: "3", status: 3 },
@@ -639,6 +638,7 @@ const Patient = ({ getPatients, loader, response }) => {
                             setSelAllocatedBy={setSelAllocatedBy}
                             selectorField="CreatedBy"
                             // defaultAllocatedBy={"All"}
+                            defaultAllocatedBy={"Select CreatedBy"}
                             setSelCreatedBy={setSelCreatedBy}
                             addUser={true}
                             addUserForm={addPatientFormId}

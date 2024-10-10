@@ -22,12 +22,10 @@ import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
 
 const options3 = [
-  { value: "ALL", label: "ALL" },
   { value: "true", label: "Enabled" },
   { value: "false", label: "Disabled" },
 ];
 const RoleList = [
-  { value: "", label: "ALL" },
   { value: "ADMIN", label: "ADMIN" },
   { value: "REVIEWER", label: "REVIEWER" },
   { value: "SUPERVISOR", label: "SUPERVISOR" },
@@ -197,12 +195,13 @@ const UserList = ({
     setLocalUserId(uId);
     setLocalOrgId(orgId);
     setUseAdd(false);
+  
     getAllUsersList({
       pageCount,
       search,
       startDate,
       endDate,
-      status,
+      status:status||"",
       role,
       orgId: selectOrgList?.value,
       sort: sort,

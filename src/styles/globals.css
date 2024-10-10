@@ -9236,8 +9236,19 @@ tr>td{
 
 /* select style ? */
 
-.custom-react-select > div:nth-child(3) {
-  height: 2.813rem !important;
+.custom-react-select .ant-select{
+
+  width:100%;
+
+}
+.custom-react-select .ant-select .ant-select-selector ,
+.custom-react-select .ant-select .ant-select-selector:hover,
+.custom-react-select .ant-select .ant-select-selector:focus{
+  height: 2.7rem !important;
+  border: none !important;
+  width: 100% !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 10px;
 }
 
 .custom-react-select1 .ant-select {
@@ -9259,7 +9270,9 @@ tr>td{
   .ant-select-selector {
   border-color: red !important;
 }
-
+.ant-select .ant-select-arrow {
+  margin-top:0px !important
+}
 .ant-select-outlined {
   border: none !important;
 }
@@ -11813,14 +11826,15 @@ li.p-dropdown-item {
 }
 
 .has-search .new-form-control {
-  padding-left: 2.375rem;
+  /* padding-left: 2.375rem; */
   font-size: 14px;
 }
 .has-search .input-form-control {
-  padding-left: 2.375rem;
+  /* padding-left: 2.375rem; */
   font-size: 14px;
 }
 .has-search2 .new-form-control {
+  width:100%;
   padding-left: 2.375rem;
   font-size: 14px;
   border-top-right-radius: 5px !important;
@@ -12574,7 +12588,15 @@ tbody > tr {
 }
 
 /* report */
-.custom-react-report-select > div:nth-child(4) > div {
+.custom-react-report-select .ant-select .ant-select-selector{
+  height: 2.7rem !important;
+  border: none !important;
+  width: 100% !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 0px 10px 10px 0px !important ;
+
+}
+/* .custom-react-report-select > div:nth-child(4) > div {
   background-color: #fff;
 }
 
@@ -12618,7 +12640,7 @@ tbody > tr {
   background-color: #fff;
   border-radius: 0px 5px 5px 0px;
   border: none !important;
-}
+} */
 
 .p-datepicker.p-component.p-ripple-disabled.p-connected-overlay-enter-done {
   width: 440px !important;
@@ -14746,6 +14768,7 @@ input::-webkit-inner-spin-button {
 /* border:1px solid gray !important */
 /* } */
 .ant-select-single {
+  width:100% ;
   font-size: 14px;
   /* height: 42px !important; */
   /* width: 100% !important; */
