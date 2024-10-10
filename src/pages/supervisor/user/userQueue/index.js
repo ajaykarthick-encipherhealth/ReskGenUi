@@ -61,12 +61,10 @@ const badges = [
 ];
 
 const statusOptions = [
-  { label: "ALL", value: "" },
   { label: "COMPLETED", value: "COMPLETED" },
   { label: "DECLINED", value: "DECLINED" },
 ];
 const AuditOptions = [
-  { label: "ALL", value: "" },
   { label: "AUDITED", value: "AUDITED" },
   { label: "AUDIT HOLD", value: "AUDITHOLD" },
   { label: "REAUDIT", value: "REAUDIT" },
@@ -100,7 +98,7 @@ const Index = ({
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
   const [selectedOption, setSelectedOption] = useState(
-    router?.query?.selectedOption ? router?.query?.selectedOption : ""
+    router?.query?.selectedOption ? router?.query?.selectedOption : null
   );
   const [completedStartDate, setCompletedStartDate] = useState(
     router?.query?.completedStartDate ? router?.query?.completedStartDate : ""
@@ -445,6 +443,7 @@ const Index = ({
                       )}
                       audisetSelAllocatedBy={setSelAuditAllocatedBy}
                       selAuditAllocatedBy={selAuditAllocatedBy}
+                      audidefaultAllocatedBy="Select Audit AllocatedBy"
                       // select status
                       selectlabel="Reviewed Status"
                       isSelector={true}
@@ -452,6 +451,8 @@ const Index = ({
                       selectOptions={statusOptions}
                       defaultSelectValue1={"Select Status"}
                       selectedOption={selectedOption}
+                      
+
                       // due date
                       pickerlabel="Due Date"
                       defaultStartDate={""}
