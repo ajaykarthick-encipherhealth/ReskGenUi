@@ -163,6 +163,7 @@ const Header = ({
     setProfileImg(currentUserInfo?.data?.response?.profileImageUrl);
     setUserName(currentUserInfo?.data?.response?.firstName);
     setLastName(currentUserInfo?.data?.response?.lastName);
+
     setDropdownContent(currentUserInfo?.data?.response?.role);
     if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
       setDropdownContent(["TENANT"]);
@@ -305,12 +306,12 @@ const Header = ({
     }))
     .filter(
       (info) =>
-        info.key.toLowerCase() !== userRole?.toLowerCase() &&
-        info.label.toLowerCase() !== userRole?.toLowerCase()
+        info.key.toLowerCase() !== userRole.replace(/_/g," ")?.toLowerCase() &&
+        info.label.toLowerCase() !== userRole.replace(/_/g," ")?.toLowerCase()
     );
 
   const onClick = ({ key }) => {
-    setStorage("userRole", key);
+    setStorage("userRole", key.replace(/ /g, "_"));
     if (key === "Admin") {
       router.push("/admin/dashboard");
     } else if (key === "Reviewer") {
@@ -324,7 +325,7 @@ const Header = ({
     }
   };
   const getMenuListByRole = (role) => {
-    switch (role?.toLowerCase()) {
+    switch (role?.replace(/_/g, " ")?.toLowerCase()) {
       case "admin":
         return AdminMenuList;
       case "reviewer":
@@ -924,7 +925,7 @@ const Header = ({
                                 >
                                   {currentRole == "Record Analyst"
                                     ? "Analyst"
-                                    : userRole}
+                                    : userRole?.replace(/_/g, " ")?.toLowerCase()}
                                   <DownOutlined
                                     style={{ margin: "0 0 0 5px" }}
                                   />

@@ -31,7 +31,7 @@ const Selector = ({
             }
             onChanges && onChanges()
           }}
-          value={selectDefaultValue !=="" ?selectDefaultValue:undefined}
+          value={selectDefaultValue !=="" ?selectDefaultValue:null}
           allowClear={true}
         />
       </div>

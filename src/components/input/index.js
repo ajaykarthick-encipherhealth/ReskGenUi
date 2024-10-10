@@ -86,7 +86,7 @@ const InputField = ({
   };
 
   return (
-    <div>
+    <div style={{height:"45px"}}>
       <Input
         type={type}
         value={

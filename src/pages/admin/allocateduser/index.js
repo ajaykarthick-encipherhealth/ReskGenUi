@@ -5,7 +5,6 @@ import "react-facebook-loading/dist/react-facebook-loading.css";
 import { DatePicker, Empty, Input, Space, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
 import moment from "moment/moment";
 import { Tab, Nav } from "react-bootstrap";
@@ -134,7 +133,7 @@ const Patient = ({
     }&sortfield=${sort?.sortField}&priority=${
       selectedOption ? selectedOption : ""
     }&batchCount=${batchCount}`;
-   
+
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response?.data) {
       let result = response?.data?.response?.content;
@@ -184,7 +183,12 @@ const Patient = ({
     setPaginationFirst(e.first);
     setPageNoL2Patient(e.page);
     setPageSize(e.rows);
-    getL2PatientList({data:l2selectUser, pageNoL2Patient:e.page, sort:sort, selectedOptions:selectedOptions});
+    getL2PatientList({
+      data: l2selectUser,
+      pageNoL2Patient: e.page,
+      sort: sort,
+      selectedOptions: selectedOptions,
+    });
     setTableLoading(true);
   };
   const selectTabClick = (number) => {
@@ -214,7 +218,12 @@ const Patient = ({
       if (!isPatientList) {
         getAuditL2List(pageNo, search);
       } else {
-        getL2PatientList({data:l2selectUser, pageNoL2Patient:pageNoL2Patient, sort:sort, searchString:search});
+        getL2PatientList({
+          data: l2selectUser,
+          pageNoL2Patient: pageNoL2Patient,
+          sort: sort,
+          searchString: search,
+        });
       }
     }
   };
@@ -242,7 +251,6 @@ const Patient = ({
     let tenantid = getStorage("tenantId");
     let resoureUrl = `dbservice/l2audit?organizationId=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
     getSupervisorsList({ url: resoureUrl });
-
   };
 
   useEffect(() => {
@@ -292,8 +300,12 @@ const Patient = ({
           style={{ height: "35px" }}
           key={index}
           onClick={() => {
-            getL2PatientList({data:data, pageNoL2Patient:pageNoL2Patient, sort:sort});
-            setIsPatientList(true)
+            getL2PatientList({
+              data: data,
+              pageNoL2Patient: pageNoL2Patient,
+              sort: sort,
+            });
+            setIsPatientList(true);
           }}
         >
           <td
@@ -377,9 +389,8 @@ const Patient = ({
     sort,
     searchString,
     selectedOptions,
-    allocatedOption
+    allocatedOption,
   }) => {
-  
     setTableLoading(true);
     setIsLoading(true);
     let dataMap = {
@@ -393,10 +404,10 @@ const Patient = ({
       data?.userName
     }&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${
       sort?.sortDir ? sort?.sortDir : "DESC"
-    }&sortfield=${
-      sort?.sortField ? sort?.sortField : "dueDate"
-    }&searchstring=${searchString?searchString:""}&processedStatus=${
-      selectedOptions?selectedOptions:""
+    }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
+      searchString ? searchString : ""
+    }&processedStatus=${
+      selectedOptions ? selectedOptions : ""
     }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
     getSelectedSupervisorList({ url: resoureUrl });
     // setIsPatientList(true);
@@ -432,9 +443,14 @@ const Patient = ({
   }, []);
   useEffect(() => {
     if (!selectedOptions || !allocatedOption) {
-      getL2PatientList({data:l2selectUser,pageNoL2Patient:pageNoL2Patient, selectedOptions: selectedOptions,allocatedOption:allocatedOption });
+      getL2PatientList({
+        data: l2selectUser,
+        pageNoL2Patient: pageNoL2Patient,
+        selectedOptions: selectedOptions,
+        allocatedOption: allocatedOption,
+      });
     }
-  }, [selectedOptions,allocatedOption]);
+  }, [selectedOptions, allocatedOption]);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -451,7 +467,7 @@ const Patient = ({
                           <div
                             className={`${isPatientList && "d-flex"} col-xl-2`}
                           >
-                            {isPatientList && activeTab!=1 && (
+                            {isPatientList && activeTab != 1 && (
                               <div className={reportStyles.backDiv}>
                                 <button
                                   style={{ width: "40px", height: "40px" }}
@@ -472,12 +488,8 @@ const Patient = ({
                                   ? "Search by Name"
                                   : "Search by Name or ID"}
                               </label>
-                              <div class="form-group has-search">
-                                <FontAwesomeIcon
-                                  className="fa fa-search form-control-feedback"
-                                  icon={faSearch}
-                                />
-                                <InputText
+                              <div style={{height:"42px"}}>
+                                <Input
                                   type="text"
                                   onChange={(e) => {
                                     getNameSearch(e.target.value);
@@ -485,7 +497,9 @@ const Patient = ({
                                     resetPageNumber(setPageNo);
                                   }}
                                   value={searchString}
-                                  className="form-control new-form-control new-item-control"
+                                  className={
+                                    "w-100 new-search-control border-none"
+                                  }
                                   placeholder="Search"
                                   maxLength={25}
                                   onKeyDown={(e) => {
@@ -494,6 +508,15 @@ const Patient = ({
                                       e.preventDefault();
                                     }
                                   }}
+                                  prefix={
+                                    (
+                                      <FontAwesomeIcon
+                                        className="searchPrefix"
+                                        icon={faSearch}
+                                      />
+                                    )
+                                  }
+                                  allowClear={true}
                                 />
                               </div>
                             </div>
@@ -619,7 +642,7 @@ const Patient = ({
                                 </div>
                               </div>
                             </>
-                          ) : !isPatientList && activeTab == 2  ? (
+                          ) : !isPatientList && activeTab == 2 ? (
                             <div className="col-xl-6"></div>
                           ) : (
                             <>
@@ -750,7 +773,7 @@ const Patient = ({
                                   id="my-posts"
                                   eventKey="validDiseases"
                                 >
-                                  {loader && activeTab==1 ? (
+                                  {loader && activeTab == 1 ? (
                                     renderSkeleton()
                                   ) : (
                                     <>
@@ -768,7 +791,9 @@ const Patient = ({
                                         setSort={setSort}
                                         loading={isLoading}
                                         sortCompleteOrder={sortCompleteOrder}
-                                        setSortCompleteOrder={setSortCompleteOrder}
+                                        setSortCompleteOrder={
+                                          setSortCompleteOrder
+                                        }
                                       />
                                       <div>
                                         <div className="pagination-container">
@@ -797,7 +822,7 @@ const Patient = ({
                                 </Tab.Pane>
 
                                 <Tab.Pane id="my-posts" eventKey="team">
-                                  {loader2 && activeTab==2 ? (
+                                  {loader2 && activeTab == 2 ? (
                                     renderSkeleton()
                                   ) : (
                                     <>
@@ -885,7 +910,9 @@ const Patient = ({
                                               </div>
                                             </div>
                                           </>
-                                        ) : !loader2 && loader3 && activeTab==2 ? (
+                                        ) : !loader2 &&
+                                          loader3 &&
+                                          activeTab == 2 ? (
                                           renderSkeleton()
                                         ) : (
                                           <>

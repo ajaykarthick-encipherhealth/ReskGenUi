@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Select from "react-select";
-import { DatePicker, Popover } from "antd";
+import { DatePicker, Popover, Select } from "antd";
 import Image from "next/image";
 import styles from "../../../../pages/reviewer/report/report.module.css";
 import warning from "../../../../images/svg/warning.svg";
@@ -140,25 +139,26 @@ const HeaderFilters = ({
         <div className="row filter-contain" style={{ width: "100%" }}>
           {isAllocatedToSelector && (
             <div
-              className={defaultSize}
+              className={`${defaultSize} `}
               style={{ zIndex: tracking && "2" }}
               // onClick={() => {
               //   dispatch(getFilters("patientAllocated"));
               // }}
             >
               <label className={styles.label}>Reviewer</label>
-              <div class="form-group has-search">
+              <div class="form-group has-search custom-react-select">
                 <Select
-                  value={selectorValue ? selectorValue : ""}
+                  value={selectorValue ? selectorValue : null}
                   onChange={(selectedOption) => {
                     resetPageNumber(setPageNo);
                     setClear(false);
                     setSelAllocatedTo(selectedOption);
                   }}
                   options={allocatedToOptoons}
-                  className="custom-react-select"
                   isSearchable={false}
+                  placeholder="Select Reviewer"
                   // placeholder={defaultAllocateTo}
+                  allowClear={true}
                 />
               </div>
             </div>
@@ -173,18 +173,18 @@ const HeaderFilters = ({
               // }}
             >
               <label className={styles.label}>Supervisor</label>
-              <div class="form-group has-search">
+              <div class="form-group has-search custom-react-select">
                 <Select
-                  value={auditSelAllocatedTo ? auditSelAllocatedTo : ""}
+                  value={auditSelAllocatedTo ? auditSelAllocatedTo : null}
                   onChange={(selectedOption) => {
                     resetPageNumber(setPageNo);
                     setClear(false);
                     setAuditSelAllocatedTo(selectedOption);
                   }}
                   options={auditallocatedToOptoons}
-                  className="custom-react-select"
                   isSearchable={false}
-                  placeholder={defaultAllocateTo}
+                  placeholder={"Select Supervisor"}
+                  allowClear={true}
                 />
               </div>
             </div>
@@ -273,18 +273,19 @@ const HeaderFilters = ({
           {selectOptions2 && (
             <div className={defaultSize}>
               <label className={styles.label}>{selectlabel2}</label>
-              <div class="form-group has-search">
+              <div class="form-group has-search custom-react-select">
                 <Select
-                  value={clear ? "" : selector3Value}
+                  value={clear ? null : selector3Value}
                   onChange={(selectedOption) => {
                     resetPageNumber(setPageNo);
                     setSelectedOption2(selectedOption);
                     setClear(false);
                   }}
                   options={selectOptions2}
-                  placeholder={defaultSelectValue2?.label}
-                  className="custom-react-select"
+                  placeholder={"Select"}
+              
                   isSearchable={false}
+                  allowClear={true}
                 />
               </div>
             </div>
@@ -293,17 +294,18 @@ const HeaderFilters = ({
           {isSelector ? (
             <div className={defaultSize}>
               <label className={styles.label}>Processed Status</label>
-              <div class="form-group has-search">
+              <div class="form-group has-search custom-react-select">
                 <Select
-                  value={clear ? "" : selector4value}
+                  value={clear ? null : selector4value}
                   onChange={(selectedOption) => {
                     resetPageNumber(setPageNo);
                     setSelectedOption(selectedOption);
                     setClear(false);
                   }}
                   options={selectOptions}
-                  className="custom-react-select"
                   isSearchable={false}
+                  allowClear={true}
+                  placeholder='Select Processed Status'
                 />
               </div>
             </div>
@@ -313,17 +315,18 @@ const HeaderFilters = ({
             <div className={defaultSize}>
               {" "}
               <label className={styles.label}>Audit Status</label>
-              <div class="form-group has-search">
+              <div class="form-group has-search custom-react-select">
                 <Select
-                  value={clear ? "" : selector5value}
+                  value={clear ? null : selector5value}
                   onChange={(selectedOption) => {
                     resetPageNumber(setPageNo);
                     setAuditSelectedOption(selectedOption);
                     setClear(false);
                   }}
                   options={auditStatusOptions}
-                  className="custom-react-select"
                   isSearchable={false}
+                  allowClear={true}
+                  placeholder="Select Audit Status"
                 />
               </div>
             </div>
@@ -408,18 +411,18 @@ const HeaderFilters = ({
                 // }}
               >
                 <label className={styles.label}>{allocatedBylabel}</label>
-                <div class="form-group has-search">
+                <div class="form-group has-search custom-react-select">
                   <Select
-                    value={clear ? "" : selector6value}
+                    value={clear ? null : selector6value}
                     onChange={(selectedOption) => {
                       resetPageNumber(setPageNo);
                       setSelAllocatedBy(selectedOption);
                       setClear(false);
                     }}
                     options={allocatedByOptoons}
-                    className="custom-react-select"
                     isSearchable={false}
-                    placeholder={defaultAllocatedBy}
+                    placeholder={"Select Allocated By"}
+                    allowClear={true}
                   />
                 </div>
               </div>
@@ -433,18 +436,18 @@ const HeaderFilters = ({
                 // }}
               >
                 <label className={styles.label}>{"Audit Allocated By"}</label>
-                <div class="form-group has-search">
+                <div class="form-group has-search custom-react-select">
                   <Select
-                    value={clear ? "" : selector7value}
+                    value={clear ? null : selector7value}
                     onChange={(selectedOption) => {
                       resetPageNumber(setPageNo);
                       setSelAuditAllocatedBy(selectedOption);
                       setClear(false);
                     }}
                     options={auditAllocatedByOptoons}
-                    className="custom-react-select"
                     isSearchable={false}
-                    placeholder={defaultAllocatedBy}
+                    placeholder={'Select Audit Allocated By'}
+                    allowClear={true}
                   />
                 </div>
               </div>
@@ -526,13 +529,13 @@ const HeaderFilters = ({
                   setSelectedDates3([]);
                   setSelectedDates4([]);
                   setSelectedDates5([]);
-                  setSelAllocatedTo("");
-                  setAuditSelAllocatedTo("");
-                  setSelectedOption("");
-                  setAuditSelectedOption("");
-                  setSelAllocatedBy("");
-                  setSelAuditAllocatedBy("");
-                  setTrackInput("");
+                  setSelAllocatedTo(null);
+                  setAuditSelAllocatedTo(null);
+                  setSelectedOption(null);
+                  setAuditSelectedOption(null);
+                  setSelAllocatedBy(null);
+                  setSelAuditAllocatedBy(null);
+                  setTrackInput(null);
                   resetPageNumber(setPageNo);
                 }}
               >

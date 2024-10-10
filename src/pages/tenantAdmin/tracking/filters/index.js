@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "../../../../resusablereport/reports/report.module.css";
-import { Popover, Tooltip } from "antd";
+import { Divider, Popover, Tooltip } from "antd";
 import Tracking from "../tracking.module.css";
 
 const MoreFilter = ({
@@ -37,13 +37,16 @@ const MoreFilter = ({
 
   const PopContent = (
     <>
-      <input
+    <div className="d-flex my-2">
+    <input
         type="checkbox"
         onChange={handleHeaderCheckboxChange}
         className={`${styles.customChecked}`}
         checked={selectAll}
       />{" "}
       <span style={{ margin: "0 5px" }}>Select All</span>
+    </div>
+      <Divider className="m-0 p-0"/>
       {allFilters?.map((filter, index) => (
         <div key={filter} style={{ margin: "10px 0px" }}>
           <input

@@ -28,7 +28,7 @@ import Completed from "../../../../src/images/trackingImages/CompletedTrack.png"
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 import Abort from "../../../../src/images/trackingImages/Abort.png";
-import { actions as allActions } from '../../../stores/admin/workqueue'
+import { actions as allActions } from "../../../stores/admin/workqueue";
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
 import { getFilters, patientDetails } from "../../../stores/authflow/actions";
@@ -112,7 +112,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
-  const [selectedOption, SetSelectedOption] = useState("");
+  const [selectedOption, SetSelectedOption] = useState(null);
   const [searchTextValue, setSearchTextValue] = useState("");
   const [dueDateStart, setDueDateStart] = useState("");
   const [dueDateEnd, setDueDateEnd] = useState("");
@@ -137,16 +137,16 @@ const Patient = ({ getTrackingList, loader, response }) => {
   const [auditedEndDate, setAuditedEnsDate] = useState("");
   const [auditedDueStartDate, setAuditedDueStartDate] = useState("");
   const [auditedDueEndDate, setAuditedDueEndDate] = useState("");
-  const [selAllocatedBy, setSelAllocatedBy] = useState("");
+  const [selAllocatedBy, setSelAllocatedBy] = useState(null);
   const [trackChart, setTrackChart] = useState({
     COMPLETED: 0,
     PENDING: 0,
     DECLINED: 0,
     HOLD: 0,
   });
-  const [selAllocatedTo, setSelAllocatedTo] = useState("");
-  const [auditSelectedOption, setAuditSelectedOption] = useState("");
-  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
+  const [selAllocatedTo, setSelAllocatedTo] = useState(null);
+  const [auditSelectedOption, setAuditSelectedOption] = useState(null);
+  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState(null);
   const [allocatedSortOrder, setAllocatedSortOrder] = useState("DESC");
   const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
@@ -161,19 +161,22 @@ const Patient = ({ getTrackingList, loader, response }) => {
 
   // new changes
 
-  const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
+  const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState(null);
 
   useEffect(() => {
-
     if (window !== "undefined") {
-      setIsLoading(true)
+      setIsLoading(true);
       if (navigate) {
-        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0)
-        setPaginationFirst(navigate?.query?.paginationFirst ? navigate?.query?.paginationFirst : 0)
+        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
+        setPaginationFirst(
+          navigate?.query?.paginationFirst
+            ? navigate?.query?.paginationFirst
+            : 0
+        );
       }
     }
-    setIsLoading(false)
-  }, [navigate])
+    setIsLoading(false);
+  }, [navigate]);
 
   useEffect(() => {
     const data = {
@@ -184,32 +187,32 @@ const Patient = ({ getTrackingList, loader, response }) => {
       selectedOption: clear ? "" : selectedOption ? selectedOption?.value : "",
       processedStart: clear ? "" : processedStart,
       processedEnd: clear ? "" : processedEnd,
-      selAllocatedTo: clear ? "" : selAllocatedTo ? selAllocatedTo?.value : "",
+      selAllocatedTo: clear ? "" : selAllocatedTo ? selAllocatedTo : "",
       auditedStartDate: clear ? "" : auditedStartDate,
       auditedEndDate: clear ? "" : auditedEndDate,
       allocatedStartDate: clear ? "" : allocatedStartDate,
       allocatedEndDate: clear ? "" : allocatedEndDate,
-      selAllocatedBy: clear ? "" : selAllocatedBy ? selAllocatedBy?.value : "",
+      selAllocatedBy: clear ? "" : selAllocatedBy ? selAllocatedBy : "",
       auditedDueStartDate: clear ? "" : auditedDueStartDate,
       auditedDueEndDate: clear ? "" : auditedDueEndDate,
       auditSelectedOption: clear
         ? ""
         : auditSelectedOption
-          ? auditSelectedOption?.value
-          : "",
+        ? auditSelectedOption
+        : "",
       selAuditAllocatedBy: clear
         ? ""
         : selAuditAllocatedBy
-          ? selAuditAllocatedBy?.value
-          : "",
+        ? selAuditAllocatedBy
+        : "",
       auditSelAllocatedTo: clear
         ? ""
         : auditSelAllocatedTo
-          ? auditSelAllocatedTo?.value
-          : "",
+        ? auditSelAllocatedTo
+        : "",
       sort,
     };
-    setIsLoading(true)
+    setIsLoading(true);
     getTrackingList({ data: data });
   }, [
     pageNo,
@@ -518,9 +521,9 @@ const Patient = ({ getTrackingList, loader, response }) => {
     setTableLoading(true);
     // getAllList(response?.response);
   };
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getFilters("createdBy"));
-  },[])
+  }, []);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -633,7 +636,11 @@ const Patient = ({ getTrackingList, loader, response }) => {
                           />
                         </div>
                         <div className="col-xl-2">
-                          <DailyTask trackChart={response?.response?.patientDTOList?.content} />
+                          <DailyTask
+                            trackChart={
+                              response?.response?.patientDTOList?.content
+                            }
+                          />
                         </div>
                       </div>
 
@@ -646,7 +653,9 @@ const Patient = ({ getTrackingList, loader, response }) => {
                         ) : (
                           <>
                             <TrackingTable
-                              patinetListAll={response?.response?.patientDTOList?.content}
+                              patinetListAll={
+                                response?.response?.patientDTOList?.content
+                              }
                               actionBodyTemplate={actionBodyTemplate}
                               statusBodyTemplate={processstatusBodyTemplate}
                               auditBodyTemplate={auditstatusBodyTemplate}
@@ -660,7 +669,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
                               setSortAuditOrder={setSortAuditOrder}
                               sortDueOrder={sortDueOrder}
                               setSortDueOrder={setSortDueOrder}
-                              sortAuditDueOrder={sortAuditDueOrder} 
+                              sortAuditDueOrder={sortAuditDueOrder}
                               setSortAuditDueOrder={setSortAuditDueOrder}
                             />
                             <div>
@@ -668,11 +677,18 @@ const Patient = ({ getTrackingList, loader, response }) => {
                                 <Paginator
                                   first={pageNo === 0 ? 0 : paginationFirst}
                                   rows={15}
-                                  totalRecords={response?.response?.patientDTOList?.totalElements}
+                                  totalRecords={
+                                    response?.response?.patientDTOList
+                                      ?.totalElements
+                                  }
                                   onPageChange={onPageChange}
                                 />
                                 <div className="total-pages">
-                                  Total count: {response?.response?.patientDTOList?.totalElements}
+                                  Total count:{" "}
+                                  {
+                                    response?.response?.patientDTOList
+                                      ?.totalElements
+                                  }
                                 </div>
                               </div>
                             </div>
@@ -689,7 +705,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
       </div>
     </>
   );
-}
+};
 
 const connector = connect(
   (state) => ({
@@ -700,4 +716,4 @@ const connector = connect(
     getTrackingList: allActions.getTrackingList,
   }
 );
-export default connector(Patient)
+export default connector(Patient);

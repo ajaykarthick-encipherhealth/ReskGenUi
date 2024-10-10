@@ -4,9 +4,8 @@ import styles from "./report.module.css";
 import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faFileExport } from "@fortawesome/free-solid-svg-icons";
-import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
-import { Modal, DatePicker, Tooltip, Select } from "antd";
+import { Modal, DatePicker, Tooltip, Select,Input } from "antd";
 import { debounce } from "../../../src/pages/admin/reports/Export";
 import {
   disableFutureDate,
@@ -476,13 +475,9 @@ const Reports = ({
                                 {" "}
                                 Search
                               </label>
-                              <div className="form-group has-search2 w-100">
-                                <FontAwesomeIcon
-                                  className="fa fa-search form-control-feedback"
-                                  icon={faSearch}
-                                />
-
-                                <InputText
+                              <div style={{height:"43px"}}>
+                
+                                <Input
                                   name="initialSearch"
                                   type="text"
                                   onChange={(e) => {
@@ -490,7 +485,7 @@ const Reports = ({
                                     resetPageNumber(resetPageState);
                                   }}
                                   autoComplete="off"
-                                  className="form-control new-form-control new-item-control reportInput"
+                                  className={"w-100 new-search-control2 border-none "}
                                   placeholder="Search"
                                   maxLength={25}
                                   value={search ? search?.searchVal : ""}
@@ -500,6 +495,12 @@ const Reports = ({
                                       e.preventDefault();
                                     }
                                   }}
+                                  prefix={
+                                    (
+                                      <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
+                                    )
+                                  }
+                                  allowClear={true}
                                 />
 
                                 {/* )} */}

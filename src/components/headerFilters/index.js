@@ -348,7 +348,7 @@ const HeaderFilters = ({
               </label>
               <div class="form-group has-search custom-react-select">
                 <Select
-                  value={orgValue && orgValue}
+                  value={orgValue? orgValue:null}
                   onChange={(selectOrg) => {
                     if (setPageNo) {
                       resetPageNumber(setPageNo);
@@ -357,6 +357,7 @@ const HeaderFilters = ({
                   }}
                   options={selectOptionsOrg}
                   isSearchable={false}
+                  placeholder="Select Organization"
                   allowClear={true}
                 />
               </div>
