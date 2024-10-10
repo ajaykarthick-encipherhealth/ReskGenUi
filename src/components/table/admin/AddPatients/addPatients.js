@@ -108,7 +108,7 @@ function AddPatientListTable({
                           <span className="p-1">
                             <SvgFlag fillColor={flag?.flagColour} />
                           </span>
-                          {flag?.flagName}
+                          {flag?.flagName.replace(/_/g, " ")}
                         </div>
                       ))}
                     </div>
