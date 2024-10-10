@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DatePicker } from "antd";
+import { DatePicker, Input } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -21,7 +21,6 @@ import calender from "../../../../images/fihr/calender.svg";
 import DetailedFhirTable from "../../../../components/table/tenantTable/fhirPatient/DetailedFhirTable";
 
 const statusOptions = [
-  { label: "All", value: "ALL" },
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
@@ -140,7 +139,7 @@ const Index = () => {
 
   const handleHeaderTrigger = async () => {
     setTrigger(!trigger);
-    setSelectAll(!selectAll)
+    setSelectAll(!selectAll);
     if (!trigger) {
       try {
         const selected = FIHRData?.content?.filter(
@@ -246,16 +245,11 @@ const Index = () => {
                       <div className={styles.topHeader}>
                         <div className="col-lg-2 mx-2">
                           <label htmlFor="search">Search by Name or ID</label>
-                          <div className="form-group has-search">
-                            <FontAwesomeIcon
-                              className="fa fa-search form-control-feedback"
-                              icon={faSearch}
-                            />
-                            <InputText
+                          <div style={{ height: "45px" }}>
+                            <Input
                               type="text"
                               onChange={(e) => setSearch(e.target.value)}
-                              value={""}
-                              className="form-control new-form-control"
+                              className={"w-100 new-search-control border-none"}
                               placeholder="Search"
                               maxLength={25}
                               onKeyDown={(e) => {
@@ -264,6 +258,13 @@ const Index = () => {
                                   e.preventDefault();
                                 }
                               }}
+                              prefix={
+                                <FontAwesomeIcon
+                                  className="searchPrefix"
+                                  icon={faSearch}
+                                />
+                              }
+                              allowClear={true}
                             />
                           </div>
                         </div>

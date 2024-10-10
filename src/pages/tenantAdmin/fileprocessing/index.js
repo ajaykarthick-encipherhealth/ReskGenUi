@@ -49,7 +49,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
-  const [selectOrgList, setSelectedOrgList] = useState("");
+  const [selectOrgList, setSelectedOrgList] = useState(null);
   const [orgAllList, setOrgAllList] = useState([]);
 
   useEffect(() => {
@@ -332,7 +332,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
   }, []);
 
   useEffect(() => {
-    var orgListArray = [{ value: "ALL", label: "ALL" }];
+    var orgListArray = [];
     organizationList?.response?.map((res) => {
       orgListArray.push({
         value: res.id,
@@ -361,6 +361,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                           setSelectedOptionOrg={setSelectedOrgList}
                           selectOptionsOrg={orgAllList}
                           defaultSelectValueOrg={""}
+                          orgValue={selectOrgList}
                           selectedValueOrg={selectOrgList}
                         />
                       </div>

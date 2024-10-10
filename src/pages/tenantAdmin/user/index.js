@@ -23,12 +23,10 @@ import { getStorage } from "../../../utils/storages";
 
 const { Option } = Select;
 const options3 = [
-  { value: "ALL", label: "ALL" },
   { value: "true", label: "Enabled" },
   { value: "false", label: "Disabled" },
 ];
 const RoleList = [
-  { value: "", label: "ALL" },
   { value: "ADMIN", label: "ADMIN" },
   { value: "REVIEWER", label: "REVIEWER" },
   { value: "SUPERVISOR", label: "SUPERVISOR" },
@@ -73,8 +71,8 @@ const UserList = ({
   const [pageCount, setPageCount] = useState(0);
   const [addPatientId, setAddPatientId] = useState(false);
   const [search, setSearch] = useState("");
-  const [role, setRole] = useState("");
-  const [status, setSelectedStatus] = useState("");
+  const [role, setRole] = useState(null);
+  const [status, setSelectedStatus] = useState(null);
   const [selectedDates, setSelectedDates] = useState();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -84,7 +82,7 @@ const UserList = ({
     patientId: "",
     patientName: "",
   });
-  const [selectOrgList, setSelectedOrgList] = useState("");
+  const [selectOrgList, setSelectedOrgList] = useState(null);
   const [orgAllList, setOrgAllList] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
 
@@ -206,7 +204,7 @@ const UserList = ({
       endDate,
       status,
       role,
-      orgId: selectOrgList?.value,
+      orgId: selectOrgList || "",
       sort: sort,
     });
   }, [
@@ -283,6 +281,7 @@ const UserList = ({
                         selectOptionsOrg={orgAllList}
                         defaultSelectValueOrg={""}
                         selectedValueOrg={selectOrgList}
+                        orgValue={selectOrgList}
                         // computation date
                         pickerlabel="Created date Range"
                         selectedDates={selectedDates}

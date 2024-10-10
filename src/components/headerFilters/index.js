@@ -174,6 +174,7 @@ const HeaderFilters = ({
   setPageNo,
   selectDefaultValue,
   orgValue,
+  fromTenantPatients
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -348,15 +349,16 @@ const HeaderFilters = ({
               </label>
               <div class="form-group has-search custom-react-select">
                 <Select
-                  value={orgValue && orgValue}
+                  value={orgValue? orgValue:null}
                   onChange={(selectOrg) => {
                     if (setPageNo) {
                       resetPageNumber(setPageNo);
                     }
-                    setSelectedOptionOrg(selectOrg ? selectOrg : "");
+                    setSelectedOptionOrg(selectOrg ? selectOrg : null);
                   }}
                   options={selectOptionsOrg}
                   isSearchable={false}
+                  placeholder="Select Organization"
                   allowClear={true}
                 />
               </div>
@@ -583,7 +585,7 @@ const HeaderFilters = ({
                 <div class="form-group has-search custom-react-select">
                   <Select
                     onChange={(selectedOption) => {
-                      setSelAllocatedBy(selectedOption ? selectedOption : "");
+                      setSelAllocatedBy(selectedOption ? selectedOption : null);
                       if (setPageNo) {
                         resetPageNumber(setPageNo);
                       }
@@ -599,7 +601,7 @@ const HeaderFilters = ({
             {isRangePicker && (
               <div
                 className={defaultSize}
-                style={{ position: "relative", right: "20px" }}
+                style={{ position: "relative", right:fromTenantPatients?"0px":"20px" }}
               >
                 <DateRangePicker
                   selectedDates={selectedDates}

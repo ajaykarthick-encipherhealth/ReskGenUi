@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
-import Select from "react-select";
-import { DatePicker, Popover } from "antd";
+import { DatePicker, Popover, Input, Select } from "antd";
 import Image from "next/image";
 import dayjs from "dayjs";
 import filter from "../../../../images/svg/filter.svg";
@@ -16,7 +15,6 @@ import {
 } from "../../../../components/headerFilters/functions";
 import { debounce, disallowedCharacters } from "../../../../components/input";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { InputText } from "primereact/inputtext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 
@@ -140,17 +138,14 @@ const UserFilters = ({
         <div className="row filter-contain" style={{ width: "100%" }}>
           <div className="col-xl-2 col-md-4">
             {" "}
-            <label className="text-truncate" style={{ marginLeft: "8px" }}>{searchlabel}</label>
-            <div className="form-group has-search">
-              <FontAwesomeIcon
-                className="fa fa-search form-control-feedback"
-                icon={faSearch}
-              />
-
-              <InputText
+            <label className="text-truncate" style={{ marginLeft: "8px" }}>
+              {searchlabel}
+            </label>
+            <div style={{ height: "42px" }}>
+              <Input
                 value={searchVal}
                 onChange={(e) => getNameSearch(e)}
-                className={"form-control new-form-control new-item-control"}
+                className={"w-100 new-search-control border-none"}
                 placeholder={"Search"}
                 maxLength={25}
                 onKeyDown={(e) => {
@@ -158,6 +153,10 @@ const UserFilters = ({
                     e.preventDefault();
                   }
                 }}
+                prefix={
+                  <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
+                }
+                allowClear={true}
               />
             </div>
           </div>
@@ -211,13 +210,11 @@ const UserFilters = ({
               // }}
             >
               <label className={styles.label}>{audiallocatedBylabel}</label>
-              <div class="form-group has-search">
+              <div class="form-group has-search custom-react-select">
                 <Select
                   onChange={(selectedOption) => {
                     audisetSelAllocatedBy(
-                      selectedOption?.value === "All"
-                        ? ""
-                        : selectedOption?.value
+                      selectedOption ? selectedOption : null
                     );
                     setSelAuditAllocatedByVal(selectedOption?.label);
                     if (setPageNo) {
@@ -225,26 +222,36 @@ const UserFilters = ({
                     }
                   }}
                   options={auditallocatedByOptions}
-                  value={
-                    selAuditAllocatedByVal && {
-                      label: selAuditAllocatedByVal,
-                      value: selAuditAllocatedBy,
-                    }
-                  }
+                  value={selAuditAllocatedByVal ? selAuditAllocatedBy : null}
                   className="custom-react-select"
                   isSearchable={false}
                   placeholder={audidefaultAllocatedBy}
+                  allowClear={true}
                 />
               </div>
             </div>
           )}
+          {isSelector ? (
+            <div className="col-xl-2 col-md-4">
+              <Selector
+                selectlabel={selectlabel}
+                setSelectedOption={setSelectedOption}
+                selectOptions={selectOptions}
+                defaultSelectValue1={defaultSelectValue1}
+                setPageNo={setPageNo}
+                selectDefaultValue={selectedOption}
+              />
+            </div>
+          ) : null}
           {isNextRow && (
             <div
-              className={"col-xl-1 col-md-4"}
+              className={
+                "col-xl-1 col-md-4 d-flex justify-content-center align-items-end py-0 px-0"
+              }
               style={{
-                margin: "15px 0 0 0px",
+                // margin: "15px 0 0 0px",
                 cursor: "pointer",
-                width: "107px",
+                // width: "107px",
               }}
               onClick={() => setShowFilters(!showFilters)}
             >
@@ -255,8 +262,10 @@ const UserFilters = ({
           )}
           {bullets && (
             <div
-              className={`${bullets ? "col-xl-1  col-md-4" : "col-xl-4"}`}
-              style={{ margin: "30px 0 0 20px", cursor: "pointer" }}
+              className={`${
+                bullets ? "col-xl-1  col-md-4" : "col-xl-4"
+              } d-flex justify-content-center align-items-end cursor-pointer py-0 px-0`}
+              // style={{ margin: "30px 0 0 20px", cursor: "pointer" }}
             >
               <Popover
                 content={
@@ -310,7 +319,7 @@ const UserFilters = ({
       {showFilters && (
         <div style={{ margin: "50px 0px 0px -4px" }}>
           <div className="row filter-contain">
-            {isSelector ? (
+            {/* {isSelector ? (
               <div className="col-xl-2 col-md-4">
                 {" "}
                 <Selector
@@ -322,7 +331,7 @@ const UserFilters = ({
                   selectDefaultValue={selectedOption}
                 />
               </div>
-            ) : null}
+            ) : null} */}
 
             {isRangePicker && (
               <div className="col-xl-2 col-md-4">

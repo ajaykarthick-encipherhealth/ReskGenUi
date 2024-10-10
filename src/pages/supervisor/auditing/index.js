@@ -65,7 +65,6 @@ const bullets = [
 ];
 
 const statusOptions = [
-  { label: "ALL", value: "" },
   { label: "AUDITED", value: "AUDITED" },
   { label: "AUDIT_PENDING", value: "AUDIT_PENDING" },
   { label: "RE AUDIT", value: "REAUDIT" },
@@ -409,6 +408,7 @@ const Patient = ({ getWorkListFilter, response, loader }) => {
                           addUserForm={addPatientFormId}
                           bullets={bullets}
                           setPageNo={setPageNo}
+                          defaultCreatedBy={"Select Reviewer"}
                           // isNextRow={true}
                         />
                       </div>

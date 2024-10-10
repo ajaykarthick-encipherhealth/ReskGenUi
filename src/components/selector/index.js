@@ -11,6 +11,7 @@ const Selector = ({
   setDefaultValue,
   setPageNo,
   onChanges,
+  defaultSelectValue1
   
 }) => {
   return (
@@ -22,7 +23,7 @@ const Selector = ({
           options={selectOptions}
           // isSearchable={false}
           // isClearable={isClose}
-          placeholder={selectlabel}
+          placeholder={selectlabel||defaultSelectValue1}
           onChange={(value) => {
             handleSelector(value, setSelectedOption);
             setDefaultValue && setDefaultValue(value?value:"")
@@ -31,7 +32,7 @@ const Selector = ({
             }
             onChanges && onChanges()
           }}
-          value={selectDefaultValue !=="" ?selectDefaultValue:undefined}
+          value={selectDefaultValue ?selectDefaultValue:null}
           allowClear={true}
         />
       </div>

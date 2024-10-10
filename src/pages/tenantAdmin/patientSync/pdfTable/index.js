@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { DatePicker, Select } from "antd";
+import { DatePicker, Input, Select } from "antd";
 import { useSelector, useDispatch, connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -17,13 +17,12 @@ import profile from "../../../../images/fihr/profile.svg";
 import person from "../../../../images/fihr/person.svg";
 import statusIcon from "../../../../images/fihr/status.svg";
 import calender from "../../../../images/fihr/calender.svg";
-import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";;
+import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";
 import { debounce } from "../../../../components/input";
 import moment from "moment";
 import DetailedPdfTable from "../../../../components/table/tenantTable/pdfTable/detailPdfTable";
 
 export const statusOptions = [
-  { label: "All", value: "" },
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
@@ -246,17 +245,13 @@ const Index = ({
                       <div className={styles.topHeader}>
                         <div className="col-lg-2 mx-2">
                           <label htmlFor="search">Search by Name or ID</label>
-                          <div className="form-group has-search">
-                            <FontAwesomeIcon
-                              className="fa fa-search form-control-feedback"
-                              icon={faSearch}
-                            />
-                            <InputText
+                          <div style={{ height: "45px" }}>
+                            <Input
                               type="text"
-                              name='initialSearch'
+                              name="initialSearch"
                               onChange={(e) => getNameSearch(e)}
                               value={search ? search?.searchVal : ""}
-                              className="form-control new-form-control"
+                              className={"w-100 new-search-control border-none"}
                               placeholder="Search"
                               maxLength={25}
                               onKeyDown={(e) => {
@@ -265,6 +260,13 @@ const Index = ({
                                   e.preventDefault();
                                 }
                               }}
+                              prefix={
+                                <FontAwesomeIcon
+                                  className="searchPrefix"
+                                  icon={faSearch}
+                                />
+                              }
+                              allowClear={true}
                             />
                           </div>
                         </div>
@@ -272,11 +274,11 @@ const Index = ({
                           <label htmlFor="date">Date</label>
                           <div>
                             <RangePicker
-                            value={
-                              selectedDates
-                                ? selectedDates[reportActiveTab]
-                                : undefined
-                            }
+                              value={
+                                selectedDates
+                                  ? selectedDates[reportActiveTab]
+                                  : undefined
+                              }
                               format="MM-DD-YYYY"
                               onChange={(dates, dateStrings) => {
                                 handleRangePicker(dates, dateStrings, "batch");

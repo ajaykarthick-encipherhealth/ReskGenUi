@@ -90,7 +90,6 @@ const bullets = [
 ];
 
 const statusOptions = [
-  { label: "ALL", value: "" },
   { label: "COMPLETED", value: "COMPLETED", status: 2 },
   { label: "PENDING", value: "PENDING", status: 0 },
   { label: "DECLINED", value: "DECLINED", status: 0 },
@@ -99,7 +98,6 @@ const statusOptions = [
 ];
 
 const auditStatusOptions = [
-  { label: "ALL", value: "" },
   { label: "AUDITHOLD", value: "AUDITHOLD", status: 2 },
   { label: "REAUDIT", value: "REAUDIT", status: 0 },
   { label: "AUDIT_PENDING", value: "AUDIT_PENDING", status: 0 },
@@ -123,7 +121,7 @@ const Patient = ({
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
-  const [selectedOption, SetSelectedOption] = useState("");
+  const [selectedOption, SetSelectedOption] = useState(null);
   const [searchTextValue, setSearchTextValue] = useState("");
   const [dueDateStart, setDueDateStart] = useState("");
   const [dueDateEnd, setDueDateEnd] = useState("");
@@ -149,7 +147,7 @@ const Patient = ({
   const [auditedEndDate, setAuditedEnsDate] = useState("");
   const [auditedDueStartDate, setAuditedDueStartDate] = useState("");
   const [auditedDueEndDate, setAuditedDueEndDate] = useState("");
-  const [selAllocatedBy, setSelAllocatedBy] = useState("");
+  const [selAllocatedBy, setSelAllocatedBy] = useState(null);
   const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortAuditDueOrder, setSortAuditDueOrder] = useState("DESC");
@@ -159,9 +157,9 @@ const Patient = ({
     DECLINED: 0,
     HOLD: 0,
   });
-  const [selAllocatedTo, setSelAllocatedTo] = useState("");
-  const [auditSelectedOption, setAuditSelectedOption] = useState("");
-  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
+  const [selAllocatedTo, setSelAllocatedTo] = useState(null);
+  const [auditSelectedOption, setAuditSelectedOption] = useState(null);
+  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState(null);
   const [allocatedSortOrder, setAllocatedSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [clear, setClear] = useState(false);
@@ -170,7 +168,7 @@ const Patient = ({
   const [selectedDates3, setSelectedDates3] = useState();
   const [selectedDates4, setSelectedDates4] = useState();
   const [selectedDates5, setSelectedDates5] = useState();
-  const [selectOrgList, setSelectedOrgList] = useState("");
+  const [selectOrgList, setSelectedOrgList] = useState(null);
   const [orgAllList, setOrgAllList] = useState([]);
   const [defaultOrgValue, setDefaultOrgValue] = useState(null);
   const [trackInput, setTrackInput] = useState("");
@@ -217,37 +215,37 @@ const Patient = ({
       dueDateStart: clear ? "" : dueDateStart,
       dueDateEnd: clear ? "" : dueDateEnd,
       searchTextValue: clear ? "" : searchTextValue,
-      selectedOption: clear ? "" : selectedOption ? selectedOption?.value : "",
+      selectedOption: clear ? "" : selectedOption ? selectedOption: "",
       processedStart: clear ? "" : processedStart,
       processedEnd: clear ? "" : processedEnd,
-      selAllocatedTo: clear ? "" : selAllocatedTo ? selAllocatedTo?.value : "",
+      selAllocatedTo: clear ? "" : selAllocatedTo ? selAllocatedTo: "",
       auditedStartDate: clear ? "" : auditedStartDate,
       auditedEndDate: clear ? "" : auditedEndDate,
       allocatedStartDate: clear ? "" : allocatedStartDate,
       allocatedEndDate: clear ? "" : allocatedEndDate,
-      selAllocatedBy: clear ? "" : selAllocatedBy ? selAllocatedBy?.value : "",
+      selAllocatedBy: clear ? "" : selAllocatedBy ? selAllocatedBy: "",
       auditedDueStartDate: clear ? "" : auditedDueStartDate,
       auditedDueEndDate: clear ? "" : auditedDueEndDate,
       auditSelectedOption: clear
         ? ""
         : auditSelectedOption
-        ? auditSelectedOption?.value
+        ? auditSelectedOption
         : "",
       selAuditAllocatedBy: clear
         ? ""
         : selAuditAllocatedBy
-        ? selAuditAllocatedBy?.value
+        ? selAuditAllocatedBy
         : "",
       auditSelAllocatedTo: clear
         ? ""
         : auditSelAllocatedTo
-        ? auditSelAllocatedTo?.value
+        ? auditSelAllocatedTo
         : "",
       sort,
       selectOrgId: clear
         ? ""
-        : selectOrgList && selectOrgList?.value != "ALL"
-        ? selectOrgList?.value
+        : selectOrgList 
+        ? selectOrgList
         : "",
     };
     setIsLoading(true);
@@ -575,7 +573,7 @@ const Patient = ({
   }, []);
 
   useEffect(() => {
-    var orgListArray = [{ value: "ALL", label: "ALL" }];
+    var orgListArray = [];
     organizationList?.response?.map((res) => {
       orgListArray.push({
         value: res.id,
