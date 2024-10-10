@@ -324,20 +324,20 @@ const Header = ({
     }
   };
   const getMenuListByRole = (role) => {
-    switch (role) {
-      case "Admin":
+    switch (role?.toLowerCase()) {
+      case "admin":
         return AdminMenuList;
-      case "Reviewer":
+      case "reviewer":
         return PhysicanMenuList;
-      case "Supervisor":
+      case "supervisor":
         return L2AuditorMenuList;
-      case "Tenant Admin":
+      case "tenant admin":
         return ProviderMenuList;
       case "ehr":
         return EHRMenuList;
-      case "Record Analyst":
+      case "record analyst":
         return Analyst;
-      case "Physician":
+      case "physician":
         // return PhysicianMenuList;
         return PhysicanMenu;
       default:
