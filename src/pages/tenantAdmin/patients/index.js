@@ -45,7 +45,6 @@ const bullets = [
 ];
 
 const statusOptions = [
-  { label: "ALL", value: "" },
   { label: "PROCESSING", value: "1", status: 1 },
   { label: "COMPUTED", value: "2", status: 2 },
   { label: "FAILED", value: "3", status: 3 },
@@ -100,9 +99,9 @@ const Patient = ({
   const [tableLoading, setTableLoading] = useState(true);
   const [parsedData, setParsedData] = useState([]);
   const [search, setSearch] = useState("");
-  const [selAllocatedTo, setSelAllocatedTo] = useState("");
-  const [selAllocatedBy, setSelAllocatedBy] = useState("");
-  const [selCreatedBy, setSelCreatedBy] = useState("");
+  const [selAllocatedTo, setSelAllocatedTo] = useState(null);
+  const [selAllocatedBy, setSelAllocatedBy] = useState(null);
+  const [selCreatedBy, setSelCreatedBy] = useState(null);
   const [computedSortOrder, setComputedSortOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   const [selecteddates, setSelectedDates] = useState([]);
@@ -110,7 +109,7 @@ const Patient = ({
   const [emrType, setEmrType] = useState("");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [errors, setErrors] = useState({ year: "", emr: "" });
-  const [selectOrgList, setSelectedOrgList] = useState("");
+  const [selectOrgList, setSelectedOrgList] = useState(null);
   const [orgAllList, setOrgAllList] = useState([]);
   const [searchVal, setSearchVal] = useState("");
 
@@ -173,11 +172,11 @@ const Patient = ({
       search,
       completedStartDate,
       completedEndDate,
-      selAllocatedTo,
-      selAllocatedBy,
-      selCreatedBy,
+      selAllocatedTo||"",
+      selAllocatedBy||"",
+      selCreatedBy||"",
       sort,
-      (orgId = selectOrgList?.value)
+      (orgId = selectOrgList)
     );
     dispatch(getFilters("createdBy"));
   }, [
@@ -206,9 +205,9 @@ const Patient = ({
       getAllOrganizationList();
     }
   }, []);
-
+console.log(selectOrgList,"selectOrgList")
   useEffect(() => {
-    var orgListArray = [{ value: "", label: "ALL" }];
+    var orgListArray = [];
     organizationList?.response?.map((res) => {
       orgListArray.push({
         value: res.id,
@@ -338,7 +337,7 @@ const Patient = ({
   };
 
   const handleSubmitPatientId = async (form) => {
-    var orgId = selectOrgList?.value;
+    var orgId = selectOrgList;
     form.allocatedBy = localUserId;
     form.computing = 0;
     form.patientId = form.patientId.trim();
@@ -357,9 +356,9 @@ const Patient = ({
           search,
           completedStartDate,
           completedEndDate,
-          selAllocatedTo,
-          selAllocatedBy,
-          selCreatedBy,
+          selAllocatedTo||"",
+          selAllocatedBy||"",
+          selCreatedBy||"",
           sort,
           orgId
         );
@@ -507,7 +506,7 @@ const Patient = ({
       notification.success({
         message: "Patient File Upload Successfully!",
       });
-      var orgId = selectOrgList?.value;
+      var orgId = selectOrgList;
       getAllPatients(
         pageNo,
         computedStartDate,
@@ -698,8 +697,10 @@ const Patient = ({
                             allocatedByOptoons={generateOptionsList(
                               filteredList
                             )}
+                            defaultAllocatedBy={"Select Created By"}
                             setSelAllocatedBy={setSelAllocatedBy}
                             selectorField="CreatedBy"
+                            fromTenantPatients={true}
                             // defaultAllocatedBy={"All"}
                             setSelCreatedBy={setSelCreatedBy}
                             addUser={true}

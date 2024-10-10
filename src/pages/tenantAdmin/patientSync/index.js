@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { DatePicker, Select } from "antd";
+import { DatePicker, Input, Select } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { InputText } from "primereact/inputtext";
 import "react-circular-progressbar/dist/styles.css";
 import styles from "./fhir.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
@@ -315,7 +314,7 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
   const [search, setSearch] = useState();
   const [selectedDateRanges, setSelecteddateRanges] = useState([]);
   const [isOpenFhirDrawer, setIsOpenFhirDrawer] = useState(false);
-  const [fileList, setFileList] = useState([]); 
+  const [fileList, setFileList] = useState([]);
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
     setUploadType(e.target.name);
@@ -433,17 +432,15 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                         <div className="d-flex">
                           <div className="col-lg-4 mx-2">
                             <label>Search by Name or ID</label>
-                            <div class="form-group has-search">
-                              <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={faSearch}
-                              />
-                              <InputText
+                            <div style={{ height: "45px" }}>
+                              <Input
                                 type="text"
                                 name="initialSearch"
                                 onChange={(e) => getNameSearch(e)}
                                 value={search ? search?.searchVal : ""}
-                                className="form-control new-form-control new-item-control"
+                                className={
+                                  "w-100 new-search-control border-none"
+                                }
                                 placeholder="Search"
                                 maxLength={25}
                                 onKeyDown={(e) => {
@@ -452,11 +449,17 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                     e.preventDefault();
                                   }
                                 }}
-                               
+                                prefix={
+                                  <FontAwesomeIcon
+                                    className="searchPrefix"
+                                    icon={faSearch}
+                                  />
+                                }
+                                allowClear={true}
                               />
                             </div>
                           </div>
-                          <div className="col-xl-4 mx-2">
+                          <div className="col-xl-6 mx-2">
                             <label>Date</label>
                             <div class="form-group has-search">
                               <RangePicker
@@ -493,21 +496,25 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                               />
                             </div>
                           </div>
-                          {!reportActiveTab || reportActiveTab==="FHIR" && (
-                             <div className="col-xl-4 mx-2">
-                             <label>Initiated By</label>
-                             <div className={`custom-react-select1`}>
-                               <Select
-                                 placeholder={"Select"}
-                                 options={statusOptions}
-                                 onChange={(selectedOption) => {
-                                   dosOnChange(selectedOption, reportActiveTab);
-                                 }}
-                                 allowClear
-                               />
-                             </div>
-                           </div>
-                          )}
+                          {!reportActiveTab ||
+                            (reportActiveTab === "FHIR" && (
+                              <div className="col-xl-4 mx-2">
+                                <label>Initiated By</label>
+                                <div className={`custom-react-select1`}>
+                                  <Select
+                                    placeholder={"Select"}
+                                    options={statusOptions}
+                                    onChange={(selectedOption) => {
+                                      dosOnChange(
+                                        selectedOption,
+                                        reportActiveTab
+                                      );
+                                    }}
+                                    allowClear
+                                  />
+                                </div>
+                              </div>
+                            ))}
                         </div>
                         <div className="d-flex mx-1 justify-content-end">
                           {!reportActiveTab || reportActiveTab === "FHIR" ? (
@@ -621,12 +628,12 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                         )}
 
                         <FhirDrawer
-                            isDrawerOpen={isOpenFhirDrawer}
-                            setIsDrawerOpen={setIsOpenFhirDrawer}
-                            uploadType={uploadType}
-                            setUploadType={setUploadType}
-                            selectedBatch={selectedBatch}
-                          />
+                          isDrawerOpen={isOpenFhirDrawer}
+                          setIsDrawerOpen={setIsOpenFhirDrawer}
+                          uploadType={uploadType}
+                          setUploadType={setUploadType}
+                          selectedBatch={selectedBatch}
+                        />
                       </div>
                     </div>
                   </div>
