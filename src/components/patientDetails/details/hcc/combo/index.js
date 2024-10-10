@@ -429,37 +429,64 @@ const Combo = ({
         >
           <div className="section-container">
             <div className="row">
-              <div className="col-xl-5">
-                <ComboCard
-                  list={
-                    userId == "reviewer@3gencogentai.onmicrosoft.com"
-                      ? isBlockRxHcc
-                      : comboDiseaseCodesList
-                  }
-                  captureSectionMatching={captureSectionMatching}
-                  encounterDateMatching={encounterDateMatching}
-                  okText="OK"
-                  cancelText="Cancel"
-                  popConfirmTitle="Do you want to move to Delete?"
-                  setOpens={setOpens}
-                  setCombiTree={setCombiTree}
-                  setSearch={setSearch}
-                  setFileLoading={setFileLoading}
-                  setFileModalHeader={setFileModalHeader}
-                  onchangeCombo={onchangeCombo}
-                  setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
-                  isAddComboCode={false}
-                  addComboCode={addComboCode}
-                  setConfirmNotesModalValid={setConfirmNotesModalValid}
-                  setIsValidAction={setIsValidAction}
-                  patientDocumentResult={patientDocumentResult}
-                  setActiveTabHead={setActiveTabHead}
-                  setActiveMeatTitle={setActiveMeatTitle}
-                  meatCriteriaList={allMeatList}
-                  popup={zIndex}
-                  cardTitle="VALID_COMBO"
-                />
-              </div>
+              <DragDropContext
+                onDragEnd={(result) =>
+                  onDragEnd(
+                    result,
+                    allDisList,
+                    setSelectDiseasesName,
+                    setSelectDisDetails,
+                    setConfirmNotesModalValid,
+                    setIsValidAction,
+                    patientDetailsResult
+                  )
+                }
+              >
+                <Droppable droppableId={"DELETED"} key={"DELETED"}>
+                  {(provided) => {
+                    return (
+                      <div
+                        className="col-xl-5"
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        <ComboCard
+                          list={
+                            userId == "reviewer@3gencogentai.onmicrosoft.com"
+                              ? isBlockRxHcc
+                              : comboDiseaseCodesList
+                          }
+                          captureSectionMatching={captureSectionMatching}
+                          encounterDateMatching={encounterDateMatching}
+                          okText="OK"
+                          cancelText="Cancel"
+                          popConfirmTitle="Do you want to move to Delete?"
+                          setOpens={setOpens}
+                          setCombiTree={setCombiTree}
+                          setSearch={setSearch}
+                          setFileLoading={setFileLoading}
+                          setFileModalHeader={setFileModalHeader}
+                          onchangeCombo={onchangeCombo}
+                          setIsModalOpenCaptureSection={
+                            setIsModalOpenCaptureSection
+                          }
+                          isAddComboCode={false}
+                          addComboCode={addComboCode}
+                          setConfirmNotesModalValid={setConfirmNotesModalValid}
+                          setIsValidAction={setIsValidAction}
+                          patientDocumentResult={patientDocumentResult}
+                          setActiveTabHead={setActiveTabHead}
+                          setActiveMeatTitle={setActiveMeatTitle}
+                          meatCriteriaList={allMeatList}
+                          popup={zIndex}
+                          cardTitle="VALID_COMBO"
+                          provided={provided}
+                        />
+                      </div>
+                    );
+                  }}
+                </Droppable>
+              </DragDropContext>
               <div className="col-xl-7">
                 {selectFileURL && (
                   <PdfViewer
