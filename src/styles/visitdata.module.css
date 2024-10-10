@@ -2249,3 +2249,8 @@
   height: 99vh;
   overflow: scroll
 }
+
+.drag_and_drop_movement_bg {
+  background-color: #f6f6ff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}

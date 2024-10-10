@@ -203,7 +203,7 @@ const HccCards = ({
                       draggableData={data.list}
                       isDragDisabled={isDosSelected ? false : true}
                     >
-                      {(provided) => {
+                      {(provided,snapshot) => {
                         const cmsList = data?.riskAdjustmentDtoList
                           ?.map((item) => item?.cmsHcc)
                           .filter((cmsHcc) => cmsHcc?.length > 0);
@@ -215,7 +215,10 @@ const HccCards = ({
                           .filter((esrd) => esrd?.length > 0);
                         return (
                           <div
-                            className={`hccActiveCard ${visitStyles.hcc_card}`}
+                            className={`hccActiveCard ${visitStyles.hcc_card} ${
+                              snapshot?.isDragging &&
+                              visitStyles.drag_and_drop_movement_bg
+                            }`}
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}

@@ -127,13 +127,16 @@ const ComboCard = ({
                           draggableData={item?.list}
                           isDragDisabled={isDosSelected ? false : true}
                         >
-                          {(provided) => {
+                          {(provided, snapshot) => {
                             return (
                               <div
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
-                                className={visitStyles.combo_details_card}
+                                className={`${visitStyles.combo_details_card} ${
+                                  snapshot?.isDragging &&
+                                  visitStyles.drag_and_drop_movement_bg
+                                }`}
                                 key={item?.id}
                               >
                                 <div className="row">
@@ -468,7 +471,7 @@ const ComboCard = ({
               </div>
             ) : null}
 
-            {list?.length == 0 ? (
+            {list?.length == 0 && !loading ? (
               <div>
                 <span className="no-patient-data">No Combination Codes</span>
               </div>

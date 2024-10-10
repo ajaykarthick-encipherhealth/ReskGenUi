@@ -116,16 +116,17 @@ const MeatCard = ({
                     draggableData={item?.list}
                     isDragDisabled={isDosSelected ? false : true}
                   >
-                    {(provided) => {
+                    {(provided,snapshot) => {
                       return (
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className={
-                            item.isMeatCriteriaPresent === true
+                            `${item.isMeatCriteriaPresent === true
                               ? `${visitStyles.meat_details_card_table}`
-                              : `${visitStyles.meat_details_card_false_table}`
+                              : `${visitStyles.meat_details_card_false_table}`}
+                              ${snapshot?.isDragging && visitStyles.drag_and_drop_movement_bg}`
                           }
                         >
                           <div className="row">
