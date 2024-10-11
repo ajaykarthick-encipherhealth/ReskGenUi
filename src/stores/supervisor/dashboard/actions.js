@@ -27,6 +27,11 @@ export const holdStatusAction = createActionThunk(
   network.holdStatus
 );
 
+export const accuracyAction = createActionThunk(
+  "ACCURACY",
+  network.accuracy
+);
+
 export const notificationAction = createActionThunk(
   "NOTIFICATION",
   network.notification

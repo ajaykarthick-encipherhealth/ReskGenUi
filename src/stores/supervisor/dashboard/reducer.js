@@ -3,6 +3,7 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import {
+  accuracyAction,
   dailyTaskAction,
   dailyTaskData,
   getDailyTaskData,
@@ -60,8 +61,8 @@ const dashboardReducer = combineReducers({
   workFlowLoading: getUsersDetailsLoading(supervisorWorkFlowAction),
   dailyTask: createReducer(dailyTaskAction),
   dailyTaskDatas: getDailyTaskDatas(dailyTaskData),
-  // accuracyLoading: getUsersDetailsLoading(accuracyAction),
-  // accuracy: createReducer(accuracyAction),
+  accuracyLoading: getUsersDetailsLoading(accuracyAction),
+  accuracy: createReducer(accuracyAction),
   // completedScore: createReducer(completedScoreAction),
   // completedScoreLoading: getUsersDetailsLoading(completedScoreAction),
   holdStatus: createReducer(holdStatusAction),
