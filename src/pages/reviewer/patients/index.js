@@ -46,6 +46,7 @@ import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { getStorage, setStorage } from "../../../utils/storages";
+import { actions as allActions } from '../../../stores/reviewer/workqueue'
 
 const { RangePicker } = DatePicker;
 
@@ -82,7 +83,7 @@ const bullets = [
   },
 ];
 
-const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
+const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientDetails, }) => {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
@@ -325,7 +326,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   };
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails(data);
     if (data.computing == 2) {
       const controller = new AbortController();
       controller.abort();
@@ -787,6 +788,7 @@ const enhancer = connect(
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,
+    patientDetails: allActions.getPatientDetails,
   }
 );
 export default enhancer(Patient);
