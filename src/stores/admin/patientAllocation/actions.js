@@ -15,3 +15,7 @@ export const getSelectedSupervisorList = createActionThunk(
   "SELECTED_SUPERVISOR",
   network.selectedList
 );
+export const getFiltersList = createActionThunk(
+  "FILTERS_LIST",
+  network.filters
+);

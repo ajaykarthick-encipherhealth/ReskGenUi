@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { getAllList ,getSupervisorsList,getSelectedSupervisorList} from "./actions";
+import { getAllList ,getSupervisorsList,getSelectedSupervisorList, getFiltersList} from "./actions";
 
 const initialState = {
   loading: true,
@@ -43,7 +43,8 @@ const allocatedReducer = combineReducers({
   l2AllocatedList: createReducer(getSupervisorsList),
   l2Loader:getReportLoading(getSupervisorsList),
   selectedSupervisors:createReducer(getSelectedSupervisorList),
-  supervisorLoader:getReportLoading(getSelectedSupervisorList)
+  supervisorLoader:getReportLoading(getSelectedSupervisorList),
+  filtersList:createReducer(getFiltersList)
 });
 
 export default allocatedReducer;
