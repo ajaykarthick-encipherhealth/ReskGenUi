@@ -454,7 +454,7 @@ const Patient = ({
     allocatedOption,
   }) => {
     setTableLoading(true);
-    setIsLoading(true);
+    // setIsLoading(true);
     let dataMap = {
       firstName: data?.firstName,
       lastName: data?.lastName,
@@ -506,7 +506,7 @@ const Patient = ({
   }, []);
 
   useEffect(() => {
-    if (!selectedOptions || !allocatedOption) {
+    if (activeTab == 1 && (!selectedOptions || !allocatedOption)) {
       getL2PatientList({
         data: l2selectUser,
         pageNoL2Patient: pageNoL2Patient,
