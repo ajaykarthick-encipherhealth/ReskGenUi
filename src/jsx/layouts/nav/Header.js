@@ -853,7 +853,7 @@ const Header = ({
                                         fontSize: "6px",
                                       }}
                                     >
-                                       {currentRole.charAt(0).toUpperCase() + currentRole.slice(1)}
+                                       {currentRole?.charAt(0).toUpperCase() + currentRole?.slice(1)}
                                     </span>
                                   </div>
                                 </div>
