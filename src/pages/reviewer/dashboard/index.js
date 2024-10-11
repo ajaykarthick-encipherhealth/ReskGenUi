@@ -8,14 +8,12 @@ import Accuracy from "./accuracy";
 import Notifications from "./notifications";
 import CompletedStatus from "./completedstatus";
 import HoldStatus from "./holdstatus";
-import {useSelector ,connect} from "react-redux";
+import {  connect } from "react-redux";
 import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
 
-const Index = ({workFlowData,DateRanges}) => {
+const Index = ({ workFlowData, DateRanges }) => {
 
   // const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
-
-
 
   const currentDate = new Date();
 
@@ -34,8 +32,8 @@ const Index = ({workFlowData,DateRanges}) => {
     : endOfToday.toISOString().split("T")[0] + "T23:59:59.999Z";
 
   useEffect(() => {
-    workFlowData({startDate, endDate})
-  }, [startDate,endDate]);
+    workFlowData({ startDate, endDate })
+  }, [startDate, endDate]);
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
@@ -75,10 +73,10 @@ const Index = ({workFlowData,DateRanges}) => {
 const enhancer = connect(
   (state) => ({
     DateRanges: state?.workFlow?.dateRange,
-    dfcgvhb:console.log(state,"state")
+    dfcgvhb: console.log(state, "state")
   }),
   {
-    workFlowData:dashbaordActions.workFlowAction
+    workFlowData: dashbaordActions.workFlowAction
   }
 );
 export default enhancer(Index);

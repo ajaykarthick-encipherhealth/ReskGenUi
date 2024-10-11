@@ -12,9 +12,6 @@ import { renderSkeletonHold } from "../../../../components/reuseableFunctions";
 const HoldStatus = ({ getHoldStatusData, holdStatusData ,getPatientID}) => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
   const router = useRouter();
-  useEffect(() => {
-    getHoldStatusData();
-  }, []);
 
   const handleOpen = () => {
     setOpenHoldStatus(!openHoldStatus);
@@ -78,6 +75,10 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData ,getPatientID}) => {
       </tbody>
     </table>
   );
+  useEffect(() => {
+    getHoldStatusData();
+  }, []);
+
   return (
     <>
       <HeadTitle
