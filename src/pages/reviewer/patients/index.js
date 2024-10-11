@@ -165,7 +165,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
 
   const [selectedDates, setSelectedDates] = useState([
     navigate?.query?.dueDateStart
-      ? dayjs(JSON.parse(navigate?.query?.dueDateStart))
+      ? dayjs(navigate?.query?.dueDateStart)
       : undefined,
     navigate?.query?.dueDateEnd
       ? dayjs(navigate?.query?.dueDateEnd)
