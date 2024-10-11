@@ -236,7 +236,7 @@ const Reports = ({
   };
 
   const getTabsForRole = (role) => {
-    switch (role) {
+    switch (role?.toLowerCase()) {
       case "reviewer":
         return ["Reviewer", "Sent", "Received"];
       case "admin":
