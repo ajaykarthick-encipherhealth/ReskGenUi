@@ -10,7 +10,7 @@ export async function supervisorWorkFlow({ startDate = "", endDate = "" }) {
   `,
     options
   );
-console.log(startdataDate, "startDate");
+  console.log(startdataDate, "startDate");
   return data;
 }
 
@@ -83,4 +83,24 @@ export const accuracy = async ({ btn, month, year, isAdmin = false }) => {
   return data;
 };
 
-
+export const CompletedStatus = async ({
+  btn,
+  month,
+  year,
+}) => {
+  const url =
+    btn === "Daily"
+      ? `daily?month=${month}&year=${year}`
+      : btn === "Weekly"
+      ? `weekly?month=${month}&year=${year}`
+      : `monthyly?year=${year}`;
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/l2dashboard/productivity/status/${url}`,
+    options
+  );
+  console.log(data,"complete")
+  return data;
+};

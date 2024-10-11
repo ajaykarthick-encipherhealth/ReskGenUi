@@ -36,5 +36,9 @@ export const notificationAction = createActionThunk(
   "NOTIFICATION",
   network.notification
 );
+export const completedChartAction = createActionThunk(
+  "COMPLETEDCHART",
+  network.CompletedStatus
+);
 
 export const dailyTaskData = createAction("GET_DAILY_TASK_DATA");

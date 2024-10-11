@@ -9,6 +9,7 @@ import {
   getDailyTaskData,
   holdStatusAction,
   supervisorWorkFlowAction,
+  completedChartAction
 } from "./actions";
 
 const initialState = {
@@ -63,6 +64,8 @@ const dashboardReducer = combineReducers({
   dailyTaskDatas: getDailyTaskDatas(dailyTaskData),
   accuracyLoading: getUsersDetailsLoading(accuracyAction),
   accuracy: createReducer(accuracyAction),
+  completedChart: createReducer(completedChartAction),
+  completedChartLoading: getUsersDetailsLoading(completedChartAction),
   // completedScore: createReducer(completedScoreAction),
   // completedScoreLoading: getUsersDetailsLoading(completedScoreAction),
   holdStatus: createReducer(holdStatusAction),
