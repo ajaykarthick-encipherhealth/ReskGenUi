@@ -9,12 +9,13 @@ import Notifications from "./notifications";
 import CompletedStatus from "./completedstatus";
 import HoldStatus from "./holdstatus";
 import {useSelector ,connect} from "react-redux";
-import dayjs from "dayjs";
 import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
 
-const Index = ({workFlowData}) => {
+const Index = ({workFlowData,DateRanges}) => {
 
-  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
+  // const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
+
+
 
   const currentDate = new Date();
 
@@ -73,7 +74,8 @@ const Index = ({workFlowData}) => {
 
 const enhancer = connect(
   (state) => ({
-    WorlFlow: state
+    DateRanges: state?.workFlow?.dateRange,
+    dfcgvhb:console.log(state,"state")
   }),
   {
     workFlowData:dashbaordActions.workFlowAction

@@ -2,17 +2,15 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
-import { Empty, Modal, Spin } from "antd";
-import { connect, useDispatch } from "react-redux";
+import { Empty, Modal } from "antd";
+import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import spinSTYles from "../../../../styles/auth.module.css";
-import { getPatientID } from "../../../../store/actions/PatientsActions";
 import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
 import { renderSkeletonHold } from "../../../../components/reuseableFunctions";
 
-const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
+const HoldStatus = ({ getHoldStatusData, holdStatusData ,getPatientID}) => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
-  const dispatch = useDispatch();
   const router = useRouter();
   useEffect(() => {
     getHoldStatusData();
@@ -52,9 +50,9 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
           processedData?.map((item) => (
             <tr
               key={item?.id}
-              className={styles.tabelCell}
+              className={styles.tabelCell}  
               onClick={() => {
-                dispatch(getPatientID({ patientId: item.patientId }));
+              getPatientID({ patientId: item.patientId })
                 router.push("/reviewer/patients/details");
               }}
             >
@@ -135,6 +133,7 @@ const enhancer = connect(
   }),
   {
     getHoldStatusData: dashbaordActions.holdStatusAction,
+    getPatientID: dashbaordActions.getPatientIdAction
   }
 );
 export default enhancer(HoldStatus);

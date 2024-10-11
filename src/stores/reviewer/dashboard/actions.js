@@ -1,3 +1,4 @@
+import { createAction } from "redux-actions";
 import { createActionThunk } from "../../../utils/redux";
 import * as network from "./network";
 
@@ -6,7 +7,7 @@ export const workFlowAction = createActionThunk(
   network.workFlow
 );
 export const dailyTaskAction = createActionThunk(
-  "DAILYTASK",
+  "DAILY_TASK_REVIEWER",
   network.dailyTask
 );
 export const accuracyAction = createActionThunk(
@@ -36,4 +37,11 @@ export const tenentLogoAction = createActionThunk(
 export const unReadCountPostAction = createActionThunk(
   "UNREAD_COUNT",
   network.unReadCountPost
+);
+export const getPatientIdAction = createAction(
+  "GET_REVIEWER_PATIENT_ID"
+);
+
+export const getDailyTaskDates = createAction(
+  "GET_DAILY_TASK_DATES"
 );

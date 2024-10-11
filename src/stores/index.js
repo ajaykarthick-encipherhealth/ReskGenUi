@@ -22,7 +22,6 @@ import { PhysicianComparisonReducer } from "../store/reducers/physicianReducers/
 import { TanantAdminService } from "../store/reducers/tanantAdminReducers/fihrReducers";
 import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerReducers";
 import filterReducer, { AuthReducer } from "./authflow/reducers";
-import { reducer as UpdateDashboardReducer } from "./reviewer/dashboard";
 import { reducer as updatedPatientsReducer } from "./reviewer/workqueue";
 import { reducer as searchReducer } from "./search";
 import { reducer as physicianReducer } from "./physician/dashboard";
@@ -46,6 +45,7 @@ import { reducer as tenantAminNotificationReducer } from "./tenantAdmin/notifica
 import { reducer as tenantAminSettingsReducer } from "./tenantAdmin/settings";
 import { reducer as tenantOnBoarding } from "./tenantOnBoarding";
 import { reducer as adminUsersReducer } from "./admin/users";
+import dashbaordReducer from "./reviewer/dashboard/reducer";
 
 const reducers = combineReducers({
   // old reducers
@@ -75,7 +75,7 @@ const reducers = combineReducers({
   ReviewerReducers: ReviewerReducers,
 
   reviewer: combineReducers({
-    dashboard: UpdateDashboardReducer,
+    dashboard: dashbaordReducer,
     workQueue: updatedPatientsReducer,
     report: reportReducer,
   }),
