@@ -11,7 +11,7 @@ import {
 } from "../../../services/NotificationService";
 import { SelectUserList } from "../../../services/adminServices/DashboardService";
 import { actions as tenantAdminActions } from "../../../stores/tenantAdmin/notification";
-import { Actions as adminActions } from "../../../stores/admin/users";
+import { actions as adminActions } from "../../../stores/admin/users";
 const { Option } = Select;
 
 export const debounce = (func, delay) => {
