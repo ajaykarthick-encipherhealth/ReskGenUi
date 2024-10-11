@@ -10,7 +10,21 @@ export async function PatientsList({ data }) {
 
   const url = `page=${
     data?.pageNo
-  }&size=15&userId=${uId}&organizationId=${orgId}&isAllocation=false&computationStart=${data?.computedStartDate}&computationEnd=${data?.computedEndDate}&status=${data?.selectedOption}&searchString=${data?.search}&createdStartDate=${data?.completedStartDate}&createdEndDate=${data?.completedEndDate}&patientCreatedBy=${data?.selAllocatedBy === "All" ? "" : data?.selAllocatedBy}&patientAllocatedTo=${data?.selAllocatedTo === "All" ? "" : data?.selAllocatedTo}&patientAllocatedBy=${data?.selCreatedBy === "All" ? "" : data?.selCreatedBy}&sortfield=${data?.sort?.sortField ? data?.sort?.sortField : ""}&sortdirection=${data?.sort?.sortDir ? data?.sort?.sortDir : ""}`;
+  }&size=15&userId=${uId}&organizationId=${orgId}&isAllocation=false&computationStart=${
+    data?.computedStartDate
+  }&computationEnd=${data?.computedEndDate}&status=${
+    data?.selectedOption
+  }&searchString=${data?.search}&createdStartDate=${
+    data?.completedStartDate
+  }&createdEndDate=${data?.completedEndDate}&patientCreatedBy=${
+    data?.selAllocatedBy === "All" ? "" : data?.selAllocatedBy
+  }&patientAllocatedTo=${
+    data?.selAllocatedTo === "All" ? "" : data?.selAllocatedTo
+  }&patientAllocatedBy=${
+    data?.selCreatedBy === "All" ? "" : data?.selCreatedBy
+  }&sortfield=${
+    data?.sort?.sortField ? data?.sort?.sortField : ""
+  }&sortdirection=${data?.sort?.sortDir ? data?.sort?.sortDir : ""}`;
   const res = await requestPortal(
     `dbservice/patient/admin/computation/filter?${url}`,
     options
@@ -56,3 +70,13 @@ export const TrackingList = async ({ data }) => {
   );
   return res;
 };
+
+// addPatient
+export async function addPatient({ data }) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+  const res = await requestPortal(`dbservice/patient`, options);
+  return res;
+}

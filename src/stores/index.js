@@ -45,8 +45,9 @@ import { reducer as tenantAminNotificationReducer } from "./tenantAdmin/notifica
 import { reducer as tenantAminSettingsReducer } from "./tenantAdmin/settings";
 import { reducer as tenantOnBoarding } from "./tenantOnBoarding";
 import { reducer as adminUsersReducer } from "./admin/users";
-import dashbaordReducer from "./reviewer/dashboard/reducer";
+import { reducer as dashbaordReducer } from "./reviewer/dashboard";
 
+import {reducer as dashboardReducer} from './admin/dashboard'
 const reducers = combineReducers({
   // old reducers
   sideMenu: toggleMenu,
@@ -90,6 +91,7 @@ const reducers = combineReducers({
     workqueue: adminPatientsReducer,
     patientAllocate: allocatedReducer,
     users: adminUsersReducer,
+    dashboard:dashboardReducer
   }),
   codify: combineReducers({
     codify: codifyReducer,

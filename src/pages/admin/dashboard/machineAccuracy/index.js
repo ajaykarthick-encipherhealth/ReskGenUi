@@ -1,25 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Buttonscroller from "../../../../components/buttonSroller";
 import { Buttons } from "../../../reviewer/workingstatus";
-import ReactECharts from "echarts-for-react";
 import accuracy from "../../../../images/dashboard/accuracy.png";
 import Image from "next/image";
 import Card from "../../../../components/card/index";
 import styles from "./styles.module.css";
 import HeadTitle from "../../../../components/headtitle";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 import { Empty, Skeleton, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
-import {
-  getAccuracyDaily,
-  getAccuracyMOnthly,
-  getAccuracyWeekly,
-} from "../../../../services/adminServices/DashboardService";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
-import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
+import { actions as allActions } from "../../../../stores/admin/dashboard";
 import { renderCardSkeleton } from "../../../reviewer/dashboard/accuracy";
 
 export const TabButtons = [
@@ -116,7 +110,6 @@ export const getGraphData = (
   currentBtn,
   currentDate
 ) => {
-
   // if (data) {
   // const param = Object.values(data);
   if (
@@ -182,7 +175,7 @@ export const chartBlockedDates = (
     }
   }
 };
-const MachineAccuracy = ({ accuracyDetails }) => {
+const MachineAccuracy = ({ accuracyDetails, loading, getAccuracyScore }) => {
   const [activeButton, setActiveButton] = useState(0);
   const [initialAccuracyData, setInitialAccuracyData] = useState(null);
   const [initialQualityData, setInitialQualityData] = useState(null);
@@ -196,10 +189,9 @@ const MachineAccuracy = ({ accuracyDetails }) => {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
-  const dispatch = useDispatch();
-  const accuracyDatas = useSelector(
-    (state) => state?.AdminDashboardReducers?.accuracy
-  );
+  // const accuracyDatas = useSelector(
+  //   (state) => state?.AdminDashboardReducers?.accuracy
+  // );
 
   const numberOfWeeks =
     accuracyDetails?.data?.response &&
@@ -267,9 +259,9 @@ const MachineAccuracy = ({ accuracyDetails }) => {
   }
 
   let data = [];
-  if (currentBtn && accuracyDatas?.data?.response) {
-    data = Object.values(accuracyDatas?.data?.response);
-  }
+  // if (currentBtn && accuracyDatas?.data?.response) {
+  //   data = Object.values(accuracyDatas?.data?.response);
+  // }
 
   const config = {
     chart: {
@@ -421,19 +413,24 @@ const MachineAccuracy = ({ accuracyDetails }) => {
 
   useEffect(() => {
     const isAdmin = true;
-    dispatch(
-      getAccuracyScore(currentBtn, selectedMonth, selectedYear, router, isAdmin)
-    );
+
+    getAccuracyScore({
+      btn: currentBtn,
+      month: selectedMonth,
+      year: selectedYear,
+      isAdmin: isAdmin,
+    });
+
     // }
   }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
-  useEffect(() => {
-    if (accuracyDatas?.data?.response) {
-      setInitialAccuracyData(accuracyDatas?.data?.response);
-    }
-    if (accuracyDetails?.data?.response) {
-      setInitialQualityData(Object.values(accuracyDetails?.data?.response));
-    }
-  }, [accuracyDatas, accuracyDetails]);
+  // useEffect(() => {
+  //   if (accuracyDatas?.data?.response) {
+  //     setInitialAccuracyData(accuracyDatas?.data?.response);
+  //   }
+  //   if (accuracyDetails?.data?.response) {
+  //     setInitialQualityData(Object.values(accuracyDetails?.data?.response));
+  //   }
+  // }, [accuracyDatas, accuracyDetails]);
 
   // const allAverageScore = chartBlockedDates(
   //   selectedYear,
@@ -448,9 +445,15 @@ const MachineAccuracy = ({ accuracyDetails }) => {
   // const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
   // const average = sum / numericalData?.length; // Calculate the average
   const average = 0;
+  console.log(accuracyDetails);
   return (
     <>
-      <HeadTitle header="Accuracy and Quality Insights" height="20px" margin="15px 0px" fontSize="18px" />
+      <HeadTitle
+        header="Accuracy and Quality Insights"
+        height="20px"
+        margin="15px 0px"
+        fontSize="18px"
+      />
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
@@ -502,7 +505,7 @@ const MachineAccuracy = ({ accuracyDetails }) => {
           </div>
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
-              {accuracyDatas?.loading || accuracyDetails?.loading ? (
+              {loading ? (
                 <div>
                   <Skeleton
                     active
@@ -510,8 +513,7 @@ const MachineAccuracy = ({ accuracyDetails }) => {
                     style={{ width: "800px", padding: "30px" }}
                   />
                 </div>
-              ) : accuracyDetails?.loading === false &&
-                accuracyDetails?.data?.response ? (
+              ) : accuracyDetails?.data?.response ? (
                 currentTabBtn === "CogentAI Accuracy" ? (
                   <div className={styles.highchartStyle}>
                     <HighchartsReact
@@ -556,8 +558,10 @@ const MachineAccuracy = ({ accuracyDetails }) => {
                 </div>
               )}
             </div>
-            {accuracyDatas?.loading || accuracyDetails?.loading ? (
-              <div className={styles.accuracy}>{renderCardSkeleton(265, 250)}</div>
+            {loading ? (
+              <div className={styles.accuracy}>
+                {renderCardSkeleton(265, 250)}
+              </div>
             ) : (
               <div className={styles.accuracy}>
                 <div className={styles.header}>
@@ -626,9 +630,12 @@ const MachineAccuracy = ({ accuracyDetails }) => {
 
 const enhancer = connect(
   (state) => ({
-    accuracyDetails: state.workFlow.accuracy,
+    accuracyDetails: state.admin.dashboard.accuracy,
+    loading: state.admin.dashboard.accuracyLoading,
   }),
-  {}
+  {
+    getAccuracyScore: allActions.accuracyAction,
+  }
 );
 
 export default enhancer(MachineAccuracy);

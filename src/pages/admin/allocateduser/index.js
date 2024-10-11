@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { DatePicker, Empty, Input, Space, Tooltip } from "antd";
@@ -16,17 +16,15 @@ import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2Adm
 import L2AllocateModal from "./l2allocate";
 import styles from "../report/report.module.css";
 import reportStyles from "../../reviewer/report/report.module.css";
-import SpinnerDots from "../../../components/spinner";
 import TableStyle from "../../../components/table/table.module.css";
 import leftArrow from "../../../images/svg/leftArrow.svg";
 import {
-  generateOptionsList,
   disableFutureDate,
   renderUserPrfoile,
   resetPageNumber,
+  generateOptionsForNewStore,
 } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
-import { getFilters } from "../../../stores/authflow/actions";
 import AllocateModal from "./allocate";
 import { debounce } from "../../../components/input";
 import { useCallback } from "react";
@@ -51,6 +49,8 @@ const Patient = ({
   getSelectedSupervisorList,
   selectedSupervisors,
   loader3,
+  getFilters,
+  filteredList,
 }) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -89,11 +89,9 @@ const Patient = ({
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-  const filteredList = useSelector((state) => state.filters?.patientAllocated);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [searchStr, setSearchStr] = useState("");
-  const dispatch = useDispatch();
 
   const getAllList = async ({
     pageNo = 0,
@@ -439,7 +437,7 @@ const Patient = ({
     setCheckedLoading(false);
   };
   useEffect(() => {
-    dispatch(getFilters("patientAllocated"));
+    getFilters({ field: "patientAllocated" });
   }, []);
   useEffect(() => {
     if (activeTab == 1 && (!selectedOptions || !allocatedOption)) {
@@ -489,7 +487,7 @@ const Patient = ({
                                   ? "Search by Name"
                                   : "Search by Name or ID"}
                               </label>
-                              <div style={{height:"42px"}}>
+                              <div style={{ height: "42px" }}>
                                 <Input
                                   type="text"
                                   onChange={(e) => {
@@ -510,12 +508,10 @@ const Patient = ({
                                     }
                                   }}
                                   prefix={
-                                    (
-                                      <FontAwesomeIcon
-                                        className="searchPrefix"
-                                        icon={faSearch}
-                                      />
-                                    )
+                                    <FontAwesomeIcon
+                                      className="searchPrefix"
+                                      icon={faSearch}
+                                    />
                                   }
                                   allowClear={true}
                                 />
@@ -652,8 +648,8 @@ const Patient = ({
                                   <Selector
                                     selectlabel={"Reviewer"}
                                     setSelectedOption={setAllocatedOption}
-                                    selectOptions={generateOptionsList(
-                                      filteredList
+                                    selectOptions={generateOptionsForNewStore(
+                                      filteredList?.data?.response
                                     )}
                                     defaultSelectValue1={""}
                                     // isClose={true}
@@ -1030,11 +1026,13 @@ const connector = connect(
     loader3: state.admin?.patientAllocate?.supervisorLoader,
     supervisorResponse: state.admin.patientAllocate?.l2AllocatedList?.data,
     selectedSupervisors: state.admin.patientAllocate?.selectedSupervisors?.data,
+    filteredList: state.admin.patientAllocate?.filtersList,
   }),
   {
     allocatedGetList: allActions.getAllList,
     getSupervisorsList: allActions.getSupervisorsList,
     getSelectedSupervisorList: allActions.getSelectedSupervisorList,
+    getFilters: allActions.getFiltersList,
   }
 );
 export default connector(Patient);

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
-import Image from "next/image";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faClockRotateLeft  } from "@fortawesome/free-regular-svg-icons";
@@ -17,10 +16,8 @@ import {
 import { useSelector } from "react-redux";
 import { Col, Empty, Row, Skeleton, Spin } from "antd";
 import { useRouter } from "next/router";
-import completed from "../../../../images/trackingImages/CompletedTrack.png";
 import calender from "../../../../images/dashboard/calender.png";
 import Card from "../../../../components/card";
-import allocated from "../../../../images/dashboard/allocation.png";
 import HeadTitle from "../../../../components/headtitle";
 import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.png";
 import reAuditbg from "../../.../../../../images/dashboard/reAuditbg.png";
@@ -29,20 +26,9 @@ import auditHold from "../../.../../../../images/dashboard/auditHold.png";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import auditDecliendbg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
 import spinSTYles from "../../../../styles/auth.module.css";
-import pendingIcon from "../../.../../../../images/trackingImages/PendingTrack.png";
-import declineIcon from "../../.../../../../images/trackingImages/DeclineTrack.png";
-import reAuditIcon from "../../.../../../../images/trackingImages/AuditPending.png";
-import auditHoldIcon from "../../.../../../../images/trackingImages/AuditHoldTrack.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import TC from "../../.../../../../images/dashboard/TC.png";
-import auditedIcon from "../../.../../../../images/trackingImages/AuditedTrack.png";
-import tci from "../../.../../../../images/dashboard/tci.png";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
-import { workStatusApiAdmin } from "../../../../services/adminServices/DashboardService";
-import Hold from "../../.../../../../images/trackingImages/HoldTrack.png";
-import HoldBg from "../../.../../../../images/dashboard/holdbg.png";
-import AuditedDecline from "../../.../../../../images/trackingImages/AuditDeclined.png";
-
 const WorkFlow = () => {
   const router = useRouter();
   const worlFlowData = useSelector(
