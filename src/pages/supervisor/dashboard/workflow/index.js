@@ -28,7 +28,7 @@ import {
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/supervisor/dashboard";
 
-const WorkFlow = ({ worlFlowData, getSupervisorDashboard }) => {
+const WorkFlow = ({ worlFlowData }) => {
   const currentDate = dayjs();
   // const worlFlowData = useSelector((state) => state?.l2Dashboard?.data);
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);

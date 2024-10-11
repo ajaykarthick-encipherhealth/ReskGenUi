@@ -14,13 +14,15 @@ import { useRouter } from "next/router";
 import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { connect } from "react-redux";
-const DailyTask = ({ dailyStatusDatas }) => {
+import { actions as supervisorAction } from "../../../../stores/supervisor/dashboard";
+
+const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData }) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
 
   const dailyStatusData = useSelector((state) => state?.l2Dashboard?.dailyTask);
-  const dispatch = useDispatch();
-console.log(dailyStatusDatas, "dailyStatusData");
+
+  console.log(dailyStatusDatas, "dailyStatusData");
   const bullets = [
     {
       color: "#64B4BE",
@@ -70,15 +72,15 @@ console.log(dailyStatusDatas, "dailyStatusData");
     setSelectedDate(days);
 
     days?.map((data, index) => {
-      return dispatch(getDailyTaskDatas(data?.dateString, router));
+      return getDailyTaskData(data?.dateString, router);
     });
   }, []);
 
   useEffect(() => {
-    if (dailyStatusData && selectedDate) {
-      getDays(selectedDate, dailyStatusData);
+    if (dailyStatusDatas && selectedDate) {
+      getDays(selectedDate, dailyStatusDatas);
     }
-  }, [dailyStatusData, selectedDate]);
+  }, [dailyStatusDatas, selectedDate]);
 
   const showPrevious = () => {
     const lastData = currentDays[0];
@@ -93,7 +95,7 @@ console.log(dailyStatusDatas, "dailyStatusData");
     ];
     setSelectedDate((prev) => [...prev, ...datas]);
     datas?.map((data, index) => {
-      return dispatch(getDailyTaskDatas(data?.dateString, router));
+      return getAllDailyTask(data?.dateString, router);
     });
   };
 
@@ -102,6 +104,7 @@ console.log(dailyStatusDatas, "dailyStatusData");
       const matchingStatusData = statusData?.find((status) => {
         return status?.data?.response?.date === dayInfo?.dateString;
       });
+
       return {
         id: index + 1,
         day: dayInfo?.day,
@@ -386,12 +389,14 @@ console.log(dailyStatusDatas, "dailyStatusData");
   );
 };
 
-
 const connector = connect(
   (state) => ({
-    dailyStatusDatas: state?.supervisor?.dashboard?.workFlow,
+    dailyStatusDatas: state?.workFlow?.dailyTask,
     loader: state.admin?.workqueue?.patientsLoading,
   }),
-  {}
+  {
+    getAllDailyTask: supervisorAction.dailyTaskAction,
+    getDailyTaskData: supervisorAction.dailyTaskData,
+  }
 );
 export default connector(DailyTask);

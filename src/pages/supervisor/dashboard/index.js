@@ -46,7 +46,7 @@ const Index = ({ getAllWorkFlow }) => {
         <div className={styles.rowCOntainer}>
           <Row className={styles.RowCon} gutter={8}>
             <Col span={7} className={styles.column1}>
-              <WorkFlow />
+              <WorkFlow getAllWorkFlow ={getAllWorkFlow}/>
             </Col>
             <Col span={18} offset={1} className={styles.first_column}>
               <DailyTask />
