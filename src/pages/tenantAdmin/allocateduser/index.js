@@ -289,7 +289,7 @@ const Patient = ({
 
   useEffect(() => {
     if (selectAllChecked) {
-      if (isPatientList) {
+      if (isPatientList && activeTab==2) {
         getAllCheckListL2(sort);
       } else {
         getAllCheckList(sort);
@@ -297,7 +297,7 @@ const Patient = ({
     } else {
       setSelectedRowsId([]);
     }
-  }, [selectAllChecked, sort, isPatientList, pageNoL2Patient]);
+  }, [selectAllChecked, sort, isPatientList, pageNoL2Patient,activeTab]);
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
@@ -476,6 +476,7 @@ const Patient = ({
   };
 
   const getAllCheckListL2 = async (sort) => {
+    console.log("hbhj")
     setCheckedLoading(true);
 
     let resoureUrl = `dbservice/l2audit/patients?username=${
@@ -540,6 +541,7 @@ const Patient = ({
                                   onClick={() => {
                                     setIsPatientList(false);
                                     setAllocatedOption("");
+                                    setSelectAllChecked(false);
                                   }}
                                 >
                                   <Image src={leftArrow} />

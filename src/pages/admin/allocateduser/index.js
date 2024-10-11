@@ -475,6 +475,7 @@ const Patient = ({
                                   onClick={() => {
                                     setIsPatientList(false);
                                     setAllocatedOption("");
+                                    setSelectAllChecked(false);
                                   }}
                                 >
                                   <Image src={leftArrow} />
