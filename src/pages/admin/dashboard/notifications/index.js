@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import moment from "moment";
 import Image from "next/image";
 import { Col, Modal, Row, Skeleton, Spin } from "antd";
@@ -10,43 +10,58 @@ import { SVGICON } from "../../../../jsx/constant/theme";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
 import spinSTYles from "../../../../styles/auth.module.css";
 
-
 export const NotifiAvatar = () => {
   return (
-    <div style={{ width: '100%', maxWidth: '600px', margin: '0 auto' }}>
-    <Row gutter={16} align="top" style={{ marginBottom: '16px' }}>
-      <Col>
-        <Skeleton.Avatar active size="large" shape="circle" />
-      </Col>
-      <Col flex="auto">
-        <Skeleton active title={false} paragraph={{ rows: 2, width: '80%' }} />
-      </Col>
-    </Row>
-    <Row gutter={16} align="top" style={{ marginBottom: '16px' }}>
-      <Col>
-        <Skeleton.Avatar active size="large" shape="circle" />
-      </Col>
-      <Col flex="auto">
-        <Skeleton active title={false} paragraph={{ rows: 2, width: '60%' }} />
-      </Col>
-    </Row>
-    <Row gutter={16} align="top" style={{ marginBottom: '16px' }}>
-      <Col>
-        <Skeleton.Avatar active size="large" shape="circle" />
-      </Col>
-      <Col flex="auto">
-        <Skeleton active title={false} paragraph={{ rows: 2, width: '70%' }} />
-      </Col>
-    </Row>
-    <Row gutter={16} align="top" style={{ marginBottom: '16px' }}>
-      <Col>
-        <Skeleton.Avatar active size="large" shape="circle" />
-      </Col>
-      <Col flex="auto">
-        <Skeleton active title={false} paragraph={{ rows: 2, width: '70%' }} />
-      </Col>
-    </Row>
-  </div>
+    <div style={{ width: "100%", maxWidth: "600px", margin: "0 auto" }}>
+      <Row gutter={16} align="top" style={{ marginBottom: "16px" }}>
+        <Col>
+          <Skeleton.Avatar active size="large" shape="circle" />
+        </Col>
+        <Col flex="auto">
+          <Skeleton
+            active
+            title={false}
+            paragraph={{ rows: 2, width: "80%" }}
+          />
+        </Col>
+      </Row>
+      <Row gutter={16} align="top" style={{ marginBottom: "16px" }}>
+        <Col>
+          <Skeleton.Avatar active size="large" shape="circle" />
+        </Col>
+        <Col flex="auto">
+          <Skeleton
+            active
+            title={false}
+            paragraph={{ rows: 2, width: "60%" }}
+          />
+        </Col>
+      </Row>
+      <Row gutter={16} align="top" style={{ marginBottom: "16px" }}>
+        <Col>
+          <Skeleton.Avatar active size="large" shape="circle" />
+        </Col>
+        <Col flex="auto">
+          <Skeleton
+            active
+            title={false}
+            paragraph={{ rows: 2, width: "70%" }}
+          />
+        </Col>
+      </Row>
+      <Row gutter={16} align="top" style={{ marginBottom: "16px" }}>
+        <Col>
+          <Skeleton.Avatar active size="large" shape="circle" />
+        </Col>
+        <Col flex="auto">
+          <Skeleton
+            active
+            title={false}
+            paragraph={{ rows: 2, width: "70%" }}
+          />
+        </Col>
+      </Row>
+    </div>
   );
 };
 const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
@@ -94,14 +109,15 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       </div>
     );
 
-
   return (
     <>
       <HeadTitle
         header="Notifications"
         anchorTag="anchor"
         handleOpen={handleOpen}
-         height="20px" margin="-35px 0px 15px 0" fontSize="18px"
+        height="20px"
+        margin="-35px 0px 15px 0"
+        fontSize="18px"
       />
 
       <div className={styles.card4}>

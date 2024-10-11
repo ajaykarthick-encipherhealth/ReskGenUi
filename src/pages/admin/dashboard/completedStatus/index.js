@@ -10,24 +10,24 @@ import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
 import Legends from "../../../../components/legends";
 import { monthNames, getDays } from "../accuracy";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
-import {
-  getCompletedStatus,
-  getSelectUserList,
-} from "../../../../store/actions/adminAction/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
+import { actions as allActions } from "../../../../stores/admin/dashboard";
 
-const CompletedStatus = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const managersList = useSelector(
-    (state) => state?.AdminDashboardReducers?.selectedUsers
-  );
-  const completedDatas = useSelector(
-    (state) => state?.AdminDashboardReducers?.completedStatus
-  );
-
+const CompletedStatus = ({
+  getCompletedStatus,
+  completedDatas,
+  loading,
+  getSelectUserList,
+  managersList,
+}) => {
+  // const managersList = useSelector(
+  //   (state) => state?.AdminDashboardReducers?.selectedUsers
+  // );
+  // const completedDatas = useSelector(
+  //   (state) => state?.AdminDashboardReducers?.completedStatus
+  // );
 
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
@@ -38,7 +38,7 @@ const CompletedStatus = () => {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [selectUser, setSelectUser] = useState([]);
   const [isindividual, setIsindividual] = useState(false);
-  const [selectMemberType, setSelectMemberType] = useState("");
+  const [selectMemberType, setSelectMemberType] = useState(null);
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
 
@@ -167,7 +167,6 @@ const CompletedStatus = () => {
   ];
 
   const options = [
-    { value: "", label: "ALL" },
     { value: "REVIEWER", label: "REVIEWER" },
     { value: "SUPERVISOR", label: "SUPERVISOR" },
   ];
@@ -187,24 +186,21 @@ const CompletedStatus = () => {
   };
 
   useEffect(() => {
-    dispatch(getSelectUserList(selectMemberType));
+    getSelectUserList(selectMemberType);
   }, [selectMemberType]);
 
   useEffect(() => {
-    dispatch(
-      getCompletedStatus(
-        currentBtn.toUpperCase(),
-        currentDate.getDate(),
-        selectedMonth,
-        selectedYear,
-        router,
-        selectUser,
-        selectMemberType
-      )
-    );
+    getCompletedStatus({
+      bth: currentBtn.toUpperCase(),
+
+      month: selectedMonth,
+      year: selectedYear,
+
+      userName: selectUser,
+      selectMemberType,
+    });
   }, [currentBtn, selectedMonth, selectedYear, selectUser]);
   const optionsUser = [
-    { value: "", label: "All" },
     ...(managersList?.data?.response || []).map((item) => ({
       value: item?.userName,
       label: `${item?.firstName} ${item?.lastName}`,
@@ -213,7 +209,12 @@ const CompletedStatus = () => {
 
   return (
     <>
-      <HeadTitle header="Productivity Status" height="20px" margin="-40px 0px 20px 0" fontSize="18px"/>
+      <HeadTitle
+        header="Productivity Status"
+        height="20px"
+        margin="-40px 0px 20px 0"
+        fontSize="18px"
+      />
       <div className={styles.card5}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
@@ -221,12 +222,14 @@ const CompletedStatus = () => {
               <div className={styles.select}>
                 <Select
                   value={
-                    selectMemberType?.length === 0 ? "All" : selectMemberType
+                    selectMemberType?.length === 0 ? null : selectMemberType
                   }
                   onChange={(e) => memberTypeChanges(e)}
                   className={`custom_select_type ${styles.custom_select_type}`}
                   options={options}
                   style={{ backgroundColor: "#F3F3FF", width: "140px" }}
+                  placeholder="Select Member Type"
+                  allowClear
                 />
               </div>
               {isindividual && selectMemberType?.length === 0 ? (
@@ -240,6 +243,7 @@ const CompletedStatus = () => {
                     className={`custom_select_user ${styles.custom_select_user}`}
                     onChange={(e) => onChangeUser(e)}
                     options={optionsUser}
+                    allowClear
                   />
                 </div>
               ) : null}
@@ -269,7 +273,7 @@ const CompletedStatus = () => {
             </div>
           </div>
 
-          {completedDatas?.loading ? (
+          {loading ? (
             <div className={spinSTYles.spinStyle}>
               <Skeleton
                 active
@@ -277,8 +281,7 @@ const CompletedStatus = () => {
                 style={{ padding: "40px" }}
               />
             </div>
-          ) : completedDatas?.loading === false &&
-            completedDatas?.data?.response ? (
+          ) : completedDatas?.data?.response ? (
             <>
               <ReactECharts
                 option={option}
@@ -300,4 +303,15 @@ const CompletedStatus = () => {
   );
 };
 
-export default CompletedStatus;
+const connector = connect(
+  (state) => ({
+    completedDatas: state.admin.dashboard?.completedScore,
+    loading: state.admin.dashboard.completedScoreLoading,
+    managersList: state.admin.dashboard?.managersList,
+  }),
+  {
+    getCompletedStatus: allActions.completedScoreAction,
+    getSelectUserList: allActions.getSelectUserList,
+  }
+);
+export default connector(CompletedStatus);

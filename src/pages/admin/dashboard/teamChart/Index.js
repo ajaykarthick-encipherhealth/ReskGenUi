@@ -1,26 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import HeadTitle from "../../../../components/headtitle";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card";
-import { Empty, Skeleton, Spin } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { Empty } from "antd";
 import { useRouter } from "next/router";
 import spinSTYles from "../../../../styles/auth.module.css";
-import { TeamChart } from "../../../../services/adminServices/DashboardService";
 import dynamic from "next/dynamic";
 import { renderCardSkeleton } from "../../../reviewer/dashboard/accuracy";
+import { actions as allActions } from "../../../../stores/admin/dashboard";
+import { connect } from "react-redux";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-const BarChart = () => {
-  const dispatch = useDispatch();
+const BarChart = ({ TeamChart, teamChartData, loading }) => {
   const router = useRouter();
-  const teamChartData = useSelector(
-    (state) => state?.AdminDashboardReducers?.teamData
-  );
-
   const datas = teamChartData?.data ? teamChartData?.data : [];
 
   const teams = datas?.response?.map((info) => {
@@ -236,9 +231,9 @@ const BarChart = () => {
   };
 
   useEffect(() => {
-    dispatch(TeamChart(router));
+    TeamChart();
   }, [router]);
- 
+
   return (
     <>
       <HeadTitle header="Team Chart Status" />
@@ -254,7 +249,7 @@ const BarChart = () => {
                 }}
                 className={styles.chartContainer}
               >
-                {teamChartData?.loading ? (
+                {loading ? (
                   renderCardSkeleton(365, 650, 30)
                 ) : teamChartData?.data?.response?.length > 0 ? (
                   option && (
@@ -282,4 +277,13 @@ const BarChart = () => {
   );
 };
 
-export default BarChart;
+const connector = connect(
+  (state) => ({
+    teamChartData: state.admin.dashboard?.teamChartData,
+    loading: state.admin.dashboard?.teamChartLoader,
+  }),
+  {
+    TeamChart: allActions.teamChartAction,
+  }
+);
+export default connector(BarChart);
