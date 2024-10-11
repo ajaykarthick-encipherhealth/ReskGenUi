@@ -459,7 +459,7 @@ const CamboTree = ({
                 year={year}
                 isEditPage={true}
                 isEditValue={data}
-                
+                setOpens={setOpens}
               />
             </div>
           </div>
