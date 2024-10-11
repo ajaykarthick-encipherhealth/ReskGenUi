@@ -336,6 +336,7 @@ console.log(selectOrgList,"selectOrgList")
     setValidated(true);
   };
 
+
   const handleSubmitPatientId = async (form) => {
     var orgId = selectOrgList;
     form.allocatedBy = localUserId;
@@ -515,9 +516,9 @@ console.log(selectOrgList,"selectOrgList")
         search,
         completedStartDate,
         completedEndDate,
-        selAllocatedTo,
-        selAllocatedBy,
-        selCreatedBy,
+        selAllocatedTo||"",
+        selAllocatedBy||"",
+        selCreatedBy||"",
         sort,
         orgId
       );
