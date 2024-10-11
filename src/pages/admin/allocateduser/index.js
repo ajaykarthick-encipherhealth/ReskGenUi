@@ -255,7 +255,7 @@ const Patient = ({
 
   useEffect(() => {
     if (selectAllChecked) {
-      if (isPatientList == true) {
+      if (isPatientList) {
         getAllCheckListL2(sort);
       } else {
         getAllCheckList(sort);
@@ -392,7 +392,7 @@ const Patient = ({
     allocatedOption,
   }) => {
     setTableLoading(true);
-    setIsLoading(true);
+    // setIsLoading(true);
     let dataMap = {
       firstName: data?.firstName,
       lastName: data?.lastName,
@@ -442,7 +442,7 @@ const Patient = ({
     dispatch(getFilters("patientAllocated"));
   }, []);
   useEffect(() => {
-    if (!selectedOptions || !allocatedOption) {
+    if (activeTab == 1 && (!selectedOptions || !allocatedOption)) {
       getL2PatientList({
         data: l2selectUser,
         pageNoL2Patient: pageNoL2Patient,
