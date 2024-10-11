@@ -38,3 +38,14 @@ export const notification = async () => {
   return data;
 };
 
+export const holdStatus = async () => {
+  const userId = getStorage("userId");
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`dbservice/audit/hold/charts`, options);
+  return data;
+};
+
+
+

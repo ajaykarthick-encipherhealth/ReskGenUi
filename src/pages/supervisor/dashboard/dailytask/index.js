@@ -15,6 +15,7 @@ import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardA
 import spinSTYles from "../../../../styles/auth.module.css";
 import { connect } from "react-redux";
 import { actions as supervisorAction } from "../../../../stores/supervisor/dashboard";
+import { dailyTaskData } from "../../../../stores/supervisor/dashboard/actions";
 
 const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData }) => {
   const [selectedDate, setSelectedDate] = useState();
@@ -72,7 +73,7 @@ const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData }) => {
     setSelectedDate(days);
 
     days?.map((data, index) => {
-      return getDailyTaskData(data?.dateString, router);
+      return dailyTaskData(data?.dateString, router);
     });
   }, []);
 
@@ -396,7 +397,7 @@ const connector = connect(
   }),
   {
     getAllDailyTask: supervisorAction.dailyTaskAction,
-    getDailyTaskData: supervisorAction.dailyTaskData,
+    // getDailyTaskData: supervisorAction.dailyTaskData,
   }
 );
 export default connector(DailyTask);
