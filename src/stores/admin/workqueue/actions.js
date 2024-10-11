@@ -14,3 +14,7 @@ export const getTrackingList = createActionThunk(
 export const getPatientDetails = createAction(
   "GET_ALL_PATIENTS_FILES"
 );
+export const getAddPatient= createActionThunk(
+  "GET_ADD_PATIENT",
+  network.addPatient
+);
