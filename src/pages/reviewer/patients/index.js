@@ -232,7 +232,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     processedEnd,
     statusSelectedStatus,
     navigate.query,
-    searchVal,
   ]);
 
   // const getPatientRes = async (
