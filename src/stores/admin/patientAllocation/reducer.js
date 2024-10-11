@@ -1,6 +1,14 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { getAllList ,getSupervisorsList,getSelectedSupervisorList, getFiltersList} from "./actions";
+import {
+  getAllList,
+  getSupervisorsList,
+  getSelectedSupervisorList,
+  getFiltersList,
+  getPatientAllocatedList,
+  getAuditAssignedList,
+  getAllocatedByList,
+} from "./actions";
 
 const initialState = {
   loading: true,
@@ -29,7 +37,8 @@ const createReducer = (actionType) =>
     },
     initialState
   );
-  const getReportLoading=(type) => handleActions(
+const getReportLoading = (type) =>
+  handleActions(
     {
       [type.START]: () => true,
       [type.SUCCEEDED]: () => false,
@@ -39,12 +48,15 @@ const createReducer = (actionType) =>
   );
 const allocatedReducer = combineReducers({
   allocatedList: createReducer(getAllList),
-  loader:getReportLoading(getAllList),
+  loader: getReportLoading(getAllList),
   l2AllocatedList: createReducer(getSupervisorsList),
-  l2Loader:getReportLoading(getSupervisorsList),
-  selectedSupervisors:createReducer(getSelectedSupervisorList),
-  supervisorLoader:getReportLoading(getSelectedSupervisorList),
-  filtersList:createReducer(getFiltersList)
+  l2Loader: getReportLoading(getSupervisorsList),
+  selectedSupervisors: createReducer(getSelectedSupervisorList),
+  supervisorLoader: getReportLoading(getSelectedSupervisorList),
+  filtersList: createReducer(getFiltersList),
+  patientAllocatedFilters: createReducer(getPatientAllocatedList),
+  auditAssignedFilters: createReducer(getAuditAssignedList),
+  allocatedByFilters: createReducer(getAllocatedByList),
 });
 
 export default allocatedReducer;

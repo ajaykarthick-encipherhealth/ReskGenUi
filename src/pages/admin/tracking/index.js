@@ -2,20 +2,17 @@ import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import { connect, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import styles from "../../../pages/supervisor/dashboard/styles.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
 import { Popover, Tooltip, notification } from "antd";
 import { Paginator } from "primereact/paginator";
-import Footer from "../../../jsx/layouts/Footer";
-import visitStyles from "../../../styles/visitdata.module.css";
-import SpinnerDots from "../../../components/spinner";
-import { LoadingOutlined } from "@ant-design/icons";
 import HeaderFilters from "./headerFilters";
 import TrackingTable from "../../../components/table/admin/trackingList";
-import { generateOptionsList } from "../../../components/headerFilters/functions";
+import {
+  generateOptionsForNewStore,
+  generateOptionsList,
+} from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
 import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
@@ -31,9 +28,10 @@ import Abort from "../../../../src/images/trackingImages/Abort.png";
 import { actions as allActions } from "../../../stores/admin/workqueue";
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
-import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { setStorage } from "../../../utils/storages";
+import { actions as allocationActions } from "../../../stores/admin/patientAllocation";
+import { actions as workFlowActions } from "../../../stores/admin/workqueue";
 const bullets = [
   {
     title: "Processed Status",
@@ -104,10 +102,15 @@ const auditStatusOptions = [
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED", status: 0 },
 ];
 
-const Patient = ({ getTrackingList, loader, response }) => {
+const Patient = ({
+  getTrackingList,
+  loader,
+  response,
+  filteredList,
+  getFilters,
+  patientDetails,
+}) => {
   const navigate = useRouter();
-  const dispatch = useDispatch();
-  const filteredList = useSelector((state) => state.filters.createdBy);
   const sideMenu = useSelector((state) => state.sideMenu);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -128,9 +131,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-  const [parsedData, setParsedData] = useState([]);
   const [allocatedStartDate, setAllocatedStartDate] = useState("");
   const [allocatedEndDate, setAllocatedEndDate] = useState("");
   const [auditedStartDate, setAuditedStartDate] = useState("");
@@ -138,12 +139,6 @@ const Patient = ({ getTrackingList, loader, response }) => {
   const [auditedDueStartDate, setAuditedDueStartDate] = useState("");
   const [auditedDueEndDate, setAuditedDueEndDate] = useState("");
   const [selAllocatedBy, setSelAllocatedBy] = useState(null);
-  const [trackChart, setTrackChart] = useState({
-    COMPLETED: 0,
-    PENDING: 0,
-    DECLINED: 0,
-    HOLD: 0,
-  });
   const [selAllocatedTo, setSelAllocatedTo] = useState(null);
   const [auditSelectedOption, setAuditSelectedOption] = useState(null);
   const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState(null);
@@ -305,7 +300,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
   };
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails({ data: data });
     if (data.computing == 2) {
       const controller = new AbortController();
       const { signal } = controller;
@@ -522,7 +517,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
     // getAllList(response?.response);
   };
   useEffect(() => {
-    dispatch(getFilters("createdBy"));
+    getFilters({ field: "createdBy" });
   }, []);
   return (
     <>
@@ -541,8 +536,8 @@ const Patient = ({ getTrackingList, loader, response }) => {
                             // audioAllocatedTo
                             isAuditAllocatedToSelector={true}
                             auditAllocatedTolabel="Audit Allocated to"
-                            auditallocatedToOptoons={generateOptionsList(
-                              filteredList
+                            auditallocatedToOptoons={generateOptionsForNewStore(
+                              filteredList?.data?.response
                             )}
                             setAuditSelAllocatedTo={setAuditSelAllocatedTo}
                             setSearch={setSearchTextValue}
@@ -711,9 +706,12 @@ const connector = connect(
   (state) => ({
     response: state.admin.workqueue?.trackingList?.data,
     loader: state.admin?.workqueue?.trackingLoader,
+    filteredList: state.admin.patientAllocate?.filtersList,
   }),
   {
     getTrackingList: allActions.getTrackingList,
+    getFilters: allocationActions.getFiltersList,
+    patientDetails: workFlowActions.getPatientDetails,
   }
 );
 export default connector(Patient);
