@@ -512,7 +512,7 @@ const Reports = ({
                           activeTab === "Reviewer" ||
                           userRole == "supervisor" ? (
                             <div className="col-xl-2">
-                              {/* <div className="d-flex w-100"> */}
+                              <div className="d-flex w-100">
                               <label className="labelStyle d-flex m-auto  p-2">
                                 {" "}
                                 Status
@@ -534,6 +534,7 @@ const Reports = ({
                                 />
                               </div>
                               {/* </div> */}
+                            </div>
                             </div>
                           ) : null}
 
