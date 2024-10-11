@@ -10,6 +10,7 @@ import {
   Empty,
   Popover,
   Tooltip,
+  Badge,
 } from "antd";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import {
@@ -99,37 +100,50 @@ function AddPatientListTable({
               onClick={handleTableRowClick}
             >
               {data?.flagList && data?.flagList.length > 0 ? (
-                <Popover
-                  content={
-                    <div style={{ height: "auto", overflow: "scroll" }}>
-                      <strong>Flag details</strong>
-                      {data?.flagList?.map((flag, flagIndex) => (
-                        <div key={flagIndex}>
-                          <span className="p-1">
-                            <SvgFlag fillColor={flag?.flagColour} />
-                          </span>
-                          {flag?.flagName.replace(/_/g, " ")}
-                        </div>
-                      ))}
-                    </div>
-                  }
-                  placement="right"
-                >
-                  <span className="p-1">
-                    <FontAwesomeIcon
-                      icon={faStar}
-                      style={{
-                        color: "#ff5050",
-                        fontSize: "10px",
-                        cursor: "pointer",
-                      }}
-                    />
-                  </span>
-                </Popover>
-              ) : (
-                <span className="p-2">&nbsp;</span>
-              )}
+                (() => {
+                  const sortedFlags = [...data.flagList].sort((a, b) => {
+                    if (a.priority === null) return 1;
+                    if (b.priority === null) return -1;
+                    return b.priority - a.priority;
+                  });
+                  const priorityFlag = sortedFlags[0];
 
+                  return (
+                    <Popover
+                      content={
+                        <div style={{ height: "auto", overflow: "scroll" }}>
+                          <strong>Flag details</strong>
+                          {data?.flagList?.map((flag, flagIndex) => (
+                            <div key={flagIndex}>
+                              <span className="p-1">
+                                <SvgFlag fillColor={flag?.flagColour} />
+                              </span>
+                              {flag?.flagName.replace(/_/g, " ")}
+                            </div>
+                          ))}
+                        </div>
+                      }
+                      placement="right"
+                    >
+                      <Badge
+                        
+                        count={data.flagList.length}
+                        offset={[5, 5]}
+                        size="small"
+                      >
+                        <SvgFlag fillColor={priorityFlag?.flagColour} />
+                      </Badge>
+                    </Popover>
+                  );
+                })()
+              ) : (
+                <span>&nbsp;</span>
+              )}
+            </td>
+            <td
+              className={TableStyle.childBorder}
+              onClick={handleTableRowClick}
+            >
               {data?.patientId ? (
                 <Tooltip placement="top" title={data?.patientId}>
                   {truncateString(data?.patientId, 20)}
@@ -223,6 +237,7 @@ function AddPatientListTable({
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
+            <th>Flag </th>
             <th>PATIENT ID</th>
             <th className="text-start px-3">FILE NAME</th>
             <th className="text-truncate">TOTAL PAGES</th>
