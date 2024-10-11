@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { notification } from "antd";
@@ -10,15 +10,19 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import FileUploading from "./FileUploading";
 import Addpatients from "./Addpatiens";
-import { getPatients } from "../../../store/actions/adminAction/patientsActions";
-import { patientDetails } from "../../../stores/authflow/actions";
 import FileProcessingTable from "../../../components/table/tenantTable/FileProcessing/FileProcessing";
 import HeaderFilters from "../../../components/headerFilters";
 import { connect } from "react-redux";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
+import { actions as adminActions } from "../../../stores/admin/workqueue";
 import { getStorage, setStorage } from "../../../utils/storages";
 
-const Patient = ({ getAllOrganizationList, organizationList }) => {
+const Patient = ({
+  getAllOrganizationList,
+  organizationList,
+  patientDetails,
+  getPatients,
+}) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
@@ -39,14 +43,10 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
-
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
-
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-
-  const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
   const [selectOrgList, setSelectedOrgList] = useState(null);
@@ -151,7 +151,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
         inputValuePatientId
       );
       if (response?.status === 200) {
-        dispatch(getPatients(0));
+        getPatients({ data: { pageNo: 0 } });
         if (response.data.message == "patient Already Present") {
           setIsLoadingBtn(false);
           notification.warning({
@@ -177,7 +177,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
   };
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails(data);
     if (data.computing == 2) {
       const controller = new AbortController();
       const { signal } = controller;
@@ -412,6 +412,8 @@ const enhancer = connect(
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
+    patientDetails: adminActions.getPatientDetails,
+    getPatients: adminActions.patientsAction,
   }
 );
 export default enhancer(Patient);

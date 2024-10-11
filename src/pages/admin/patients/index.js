@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import axios from "../../../utility/axiosConfig";
 import dayjs from "dayjs";
 import ENDPOINTS from "../../../utility/enpoints";
@@ -14,18 +14,17 @@ import visitStyles from "../../../styles/visitdata.module.css";
 import AddPatientListTable from "../../../components/table/admin/AddPatients/addPatients";
 import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
-import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
-import { eventStreming } from "../../../components/table/admin/FileProcessing/FileProcessing";
 import HeaderFilters from "../../../components/headerFilters";
 import {
-  generateOptionsList,
+  generateOptionsForNewStore,
   validateYear,
 } from "../../../components/headerFilters/functions";
-import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { actions as allActions } from "../../../stores/admin/workqueue";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
+import { actions as allocationAction } from "../../../stores/admin/patientAllocation";
+import { getResponePopup } from "../../../utils/reusable";
 const bullets = [
   {
     color: "#34ace8",
@@ -52,12 +51,17 @@ const statusOptions = [
   { label: "NOT COMPUTED", value: "0", status: 0 },
 ];
 
-const Patient = ({ getPatients, loader, response }) => {
+const Patient = ({
+  getPatients,
+  loader,
+  response,
+  patientDetails,
+  getFilters,
+  filteredList,
+  getAddPatient,
+}) => {
   const navigate = useRouter();
-  const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
-  // const response = useSelector((state) => state.adminList.patients);
-  const filteredList = useSelector((state) => state?.filters?.createdBy);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
@@ -81,14 +85,12 @@ const Patient = ({ getPatients, loader, response }) => {
     patientId: "",
     patientName: "",
   });
-  const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [parsedData, setParsedData] = useState([]);
   const [search, setSearch] = useState("");
@@ -306,22 +308,8 @@ const Patient = ({ getPatients, loader, response }) => {
     if (form.checkValidity() === true) {
       try {
         setIsLoadingBtn(true);
-        const response = await axios.post(
-          ENDPOINTS.apiEndoint + `dbservice/patient`,
-          inputValuePatientId
-        );
-        if (response?.status == 200) {
-          // if (response.data.message == "patient Already Present") {
-          //   setIsLoadingBtn(false);
-          //   notification.warning({
-          //     message: "Patient ID Already Present",
-          //     duration: 1,
-          //   });
-          // } else {
-          //   notification.success({
-          //     message: "Patient ID Created Successfully!",
-          //     duration: 1,
-          //   });
+        const response = await getAddPatient({ data: inputValuePatientId });
+        if (response?.status == "SUCCESS") {
           const data = {
             pageNo,
             computedStartDate,
@@ -336,24 +324,14 @@ const Patient = ({ getPatients, loader, response }) => {
             sort,
           };
           getPatients({ data: data });
-
           setAddPatientId(false);
           setIsLoadingBtn(false);
-          notification.success({
-            message: response?.data?.message,
-            duration: 1,
-          });
-          // }
+          getResponePopup(response);
         } else {
           setIsLoadingBtn(false);
         }
-        // setAddPatientId(false);
-        // getAllList(response?.response);
       } catch (Err) {
-        notification.error({
-          message: Err?.response?.data?.message,
-          duration: 1,
-        });
+        getResponePopup(Err);
       }
     }
 
@@ -361,10 +339,9 @@ const Patient = ({ getPatients, loader, response }) => {
   };
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails(data);
     if (data.computing == 2) {
       const controller = new AbortController();
-      const { signal } = controller;
       controller.abort();
       setStorage("patientId", data.patientId);
       navigate.push("/admin/patients/details");
@@ -502,29 +479,9 @@ const Patient = ({ getPatients, loader, response }) => {
         sort,
       };
       getPatients({ data: data });
-
-      eventStreming(
-        ENDPOINTS,
-        setParsedData,
-        pageNo,
-        pageSize,
-        getPatients,
-        dispatch,
-        computedStartDate,
-        computedEndDate,
-        selectedOption,
-        search,
-        completedStartDate,
-        completedEndDate,
-        selAllocatedTo,
-        selAllocatedBy,
-        selCreatedBy,
-        sort
-      );
       setAddPatient(false);
       setAddPatient(false);
       setIsLoadingBtn(false);
-      // dispatch(getMessagesList())
     } else {
       setIsLoadingBtn(false);
     }
@@ -574,7 +531,7 @@ const Patient = ({ getPatients, loader, response }) => {
     // getAllList(response?.response);
   };
   useEffect(() => {
-    dispatch(getFilters("createdBy"));
+    getFilters({ field: "createdBy" });
   }, []);
 
   return (
@@ -632,8 +589,8 @@ const Patient = ({ getPatients, loader, response }) => {
                             // allocated by
                             isAllocatedBySelector={true}
                             allocatedBylabel="Created By"
-                            allocatedByOptoons={generateOptionsList(
-                              filteredList
+                            allocatedByOptoons={generateOptionsForNewStore(
+                              filteredList?.data?.response
                             )}
                             setSelAllocatedBy={setSelAllocatedBy}
                             selectorField="CreatedBy"
@@ -741,9 +698,13 @@ const connector = connect(
   (state) => ({
     response: state.admin.workqueue?.patients?.data,
     loader: state.admin?.workqueue?.patientsLoading,
+    filteredList: state.admin.patientAllocate?.filtersList,
   }),
   {
     getPatients: allActions.patientsAction,
+    patientDetails: allActions.getPatientDetails,
+    getFilters: allocationAction.getFiltersList,
+    getAddPatient: allActions.getAddPatient,
   }
 );
 export default connector(Patient);

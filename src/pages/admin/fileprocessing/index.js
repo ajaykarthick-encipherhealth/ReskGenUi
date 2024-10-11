@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { connect, useSelector} from "react-redux";
 import { useRouter } from "next/navigation";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { notification } from "antd";
@@ -11,11 +11,10 @@ import ENDPOINTS from "../../../utility/enpoints";
 import FileProcessingTable from "../../../components/table/admin/FileProcessing/FileProcessing";
 import FileUploading from "./FileUploading";
 import Addpatients from "./Addpatiens";
-import { getPatients } from "../../../store/actions/adminAction/patientsActions";
-import { patientDetails } from "../../../stores/authflow/actions";
+import { actions as adminActions } from "../../../stores/admin/workqueue";
 import { getStorage, setStorage } from "../../../utils/storages";
 
-export default function Patient() {
+function Patient({ patientDetails, getPatients }) {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
@@ -42,8 +41,6 @@ export default function Patient() {
 
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-
-  const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
   useEffect(() => {
@@ -145,7 +142,7 @@ export default function Patient() {
         inputValuePatientId
       );
       if (response?.status === 200) {
-        dispatch(getPatients(0));
+        getPatients({data:{pageNo:0}});
         if (response.data.message == "patient Already Present") {
           setIsLoadingBtn(false);
           notification.warning({
@@ -171,7 +168,7 @@ export default function Patient() {
   };
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails(data);
     if (data.computing == 2) {
       const controller = new AbortController();
       const { signal } = controller;
@@ -369,3 +366,14 @@ export default function Patient() {
     </>
   );
 }
+
+const enhancer = connect(
+  (state) => ({
+   state
+  }),
+  {
+    patientDetails: adminActions.getPatientDetails, 
+    getPatients: adminActions.patientsAction,
+  }
+);
+export default enhancer(Patient);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Form, Input, Button, Select, Row, Col, notification } from "antd";
@@ -8,20 +8,14 @@ import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
 import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
-import { getUsers } from "../../../store/actions/adminAction/usersAction";
-import { AddUser } from "../../../services/adminServices/usersService";
 import { Paginator } from "primereact/paginator";
-import {
-  encyptingPass,
-  getValidatePassword,
-} from "../../../components/headerFilters/functions";
+import { encyptingPass } from "../../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
-import SpinnerDots from "../../../components/spinner";
 import UsersList from "../../../components/table/tenantTable/usersList/usersList";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
+import { getResponePopup } from "../../../utils/reusable";
 
-const { Option } = Select;
 const options3 = [
   { value: "true", label: "Enabled" },
   { value: "false", label: "Disabled" },
@@ -49,9 +43,8 @@ const UserList = ({
   getAllUsersList,
   usersListData,
   loading,
+  AddUser,
 }) => {
-  const dispatch = useDispatch();
-  const usersData = useSelector((state) => state.adminUsers.usersData);
   const sideMenu = useSelector((state) => state.sideMenu);
   const [localUserId, setLocalUserId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -76,8 +69,6 @@ const UserList = ({
   const [selectedDates, setSelectedDates] = useState();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [inputValuePatientId, setInputValuePatientId] = useState({
     patientId: "",
     patientName: "",
@@ -120,6 +111,7 @@ const UserList = ({
       setUseAdd(true);
       form.resetFields();
       setIsLoadingBtn(false);
+      getResponePopup(response);
     }
     setRoleValue([]);
     setValidated(true);
@@ -737,6 +729,7 @@ const enhancer = connect(
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     getAllUsersList: tenantAdminAction.getAllUsersAction,
+    AddUser: tenantAdminAction.getAddUser,
   }
 );
 export default enhancer(UserList);
