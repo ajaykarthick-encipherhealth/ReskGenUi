@@ -58,6 +58,7 @@ const ManuallyAdd = ({
   suggestedToValidMove,
   selectDisDetails,
   selectCardTitle,
+  setOpens
 }) => {
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(true);
@@ -743,6 +744,7 @@ const ManuallyAdd = ({
           getResponePopup(res);
           resetForms({ reload: true });
           setIsBtnLoading(false);
+          setOpens(false)
         } else if (res?.status == "CUSTOM_EXCEPTION") {
           getResponePopup(res);
           setIsBtnLoading(false);
@@ -788,7 +790,7 @@ const ManuallyAdd = ({
 
   const resetForms = ({ reload = false }) => {
     handleCloseModal(false);
-  
+
     form.resetFields();
     getPatient(reload);
     setValidCode("");
@@ -979,7 +981,6 @@ const ManuallyAdd = ({
 
     return Array.from(sectionsMap.values());
   };
-  
 
   useEffect(() => {
     if (isEditPage && !meatFormDisplay) {
@@ -1025,7 +1026,7 @@ const ManuallyAdd = ({
       setListOfSectionM(transformData(sectionListM));
       setListOfSectionE(transformData(sectionListE));
       setListOfSectionA(transformData(sectionListA));
-      setListOfSectionT(transformData(sectionListT));     
+      setListOfSectionT(transformData(sectionListT));
     }
     handleSelectChange(isEditValue?.dateOfServices, "dos");
   }, [isEditPage, isEditValue, reset, meatFormDisplay]);
@@ -1066,12 +1067,10 @@ const ManuallyAdd = ({
       setListOfSectionA(transformData(sectionListA));
       setListOfSectionT(transformData(sectionListT));
     }
-      form.setFieldsValue({
-        dos: [isDosSelected],
-      });
-
+    form.setFieldsValue({
+      dos: [isDosSelected],
+    });
   }, [isEditMeat, isEditMeatValue]);
-
 
   // useEffect(() => {
   //   if (isDosSelected) {
