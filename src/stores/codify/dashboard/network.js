@@ -45,7 +45,7 @@ export const autocomplete = async ({ code }) => {
   const options = {
     method: "GET",
   };
-  
+
   const data = await requestPortal(
     `management/autocomplete?q=${code}`,
     options
@@ -53,8 +53,7 @@ export const autocomplete = async ({ code }) => {
   return data;
 };
 
-
-export const indexes = async ({desc}) => {
+export const indexes = async ({ desc }) => {
   const options = {
     method: "GET",
   };
@@ -63,8 +62,7 @@ export const indexes = async ({desc}) => {
   return data;
 };
 
-
-export  const addCodes = async (obj)=> {
+export const addCodes = async (obj) => {
   const token = getStorage("token");
   const options = {
     method: "POST",
@@ -72,5 +70,4 @@ export  const addCodes = async (obj)=> {
   };
   const data = await requestPortal(`dbservice/disease/addicdcode`, options);
   return data;
-}
-
+};
