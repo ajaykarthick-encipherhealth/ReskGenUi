@@ -17,7 +17,7 @@ import { connect } from "react-redux";
 import { actions as supervisorAction } from "../../../../stores/supervisor/dashboard";
 import { dailyTaskData } from "../../../../stores/supervisor/dashboard/actions";
 
-const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData }) => {
+const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData, dailytask }) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
 
@@ -75,7 +75,12 @@ const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData }) => {
       return getAllDailyTask({ date: data?.dateString });
     });
   }, []);
+console.log(dailytask
 
+
+  ,"dailytasksdfcvgbhnj")
+  // console.log(dailytask.supervisor?.dashboard?.workFlow?.data?.response
+//dailytask.supervisor.dashboard.workFlow.response
   useEffect(() => {
     if (dailyStatusDatas && selectedDate) {
       getDays(selectedDate, dailyStatusDatas);
@@ -101,7 +106,7 @@ const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData }) => {
 
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
-      const matchingStatusData = statusData?.find((status) => {
+      const matchingStatusData = [statusData]?.find((status) => {
         return status?.data?.response?.date === dayInfo?.dateString;
       });
 
@@ -391,7 +396,10 @@ const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData }) => {
 
 const connector = connect(
   (state) => ({
-    dailyStatusDatas: state?.workFlow?.dailyTask,
+    // dailyStatusDatas: state?.workFlow?.dailyTask,
+    dailyStatusDatas: state.supervisor?.dashboard?.dailyTask,
+
+    dailytask:state,
     loader: state.admin?.workqueue?.patientsLoading,
   }),
   {

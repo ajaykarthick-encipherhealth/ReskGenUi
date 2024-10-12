@@ -10,12 +10,8 @@ import { Buttons } from "../../../reviewer/workingstatus";
 import accuracy from "../../../../images/dashboard/accuracy.png";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
-import {
-getAccuracyScoreNew,
-} from "../../../../store/actions/l2Action/DashboardAction";
-
 import spinSTYles from "../../../../styles/auth.module.css";
 import {
   chartBlockedDates,
@@ -67,8 +63,6 @@ const Accuracy = ({ accuracyDatas ,getAccuracyScore,getUserByIndividual,individu
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
   const [optionsUser, setOptionUser] = useState([]);
-
-  const dispatch = useDispatch();
 
   // const accuracyDatas = useSelector((state) => state?.l2Dashboard?.accuracy);
   // const individualDetails = useSelector(
