@@ -9,3 +9,10 @@ export const getAllocateUsers = createActionThunk(
   "ALLOCATE_USERS_in_L2",
   network.allocateUsers
 );
+
+export const getL2PatientList = createActionThunk(
+  "GET_L2_PATIENTS_LIST",
+  network.getL2PatientList
+);
+
+

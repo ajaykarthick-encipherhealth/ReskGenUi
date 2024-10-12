@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import TableStyle from "../../../../components/table/table.module.css";
 import { Select as AntSelect, Empty } from "antd";
-
-import axios from "../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../utility/enpoints";
 import AllocatedAdminList from "../../../../components/table/admin/allocatedAdminList/allocatedAdminList";
+import { connect } from "react-redux";
+import { actions as allActions } from "../../../../stores/tenantAdmin/patientAllocation";
 
-function L2AllocatedAdminList({ l2UserList }) {
+function L2AllocatedAdminList({ l2UserList, getL2PatientListData }) {
   const [detailsContent, setDetailsContent] = useState();
   const [isPatientList, setIsPatientList] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,8 +30,7 @@ function L2AllocatedAdminList({ l2UserList }) {
   };
 
   const getL2PatientList = async (value) => {
-    let resoureUrl = `dbservice/l2audit/patients?username=${value}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    const response = await getL2PatientListData({value:value});
     if (response.data) {
       let resultMap = [];
       let result = response?.data?.response;
@@ -60,8 +58,7 @@ function L2AllocatedAdminList({ l2UserList }) {
   };
 
   const getAllCheckList = async (value) => {
-    let resoureUrl = `dbservice/l2audit/patients?username=${value}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    const response = await getL2PatientListData({value:value});
     if (response.data) {
       let resultMap = [];
       let result = response?.data?.response;
@@ -123,5 +120,7 @@ function L2AllocatedAdminList({ l2UserList }) {
     </div>
   );
 }
-
-export default L2AllocatedAdminList;
+const connector=connect((state)=>({}),{
+  getL2PatientListData:allActions.getL2PatientList
+})
+export default connector(L2AllocatedAdminList);

@@ -38,6 +38,7 @@ import { reducer as allocatedReducer } from "./admin/patientAllocation";
 import { reducer as UsersReducer } from "./supervisor/users";
 import { reducer as AuditedReducer } from "./supervisor/auditedQueue";
 import { reducer as tenantUsersReducer } from "./tenantAdmin/users";
+import { reducer as tenantFileProcessing } from "./tenantAdmin/fileProcessing";
 import { reducer as tenantAminPatientsReducer } from "./tenantAdmin/patients";
 import { reducer as patientSyncReducer } from "./tenantAdmin/patientSync";
 import { reducer as tenantAdminTrackingReducer } from "./tenantAdmin/tracking";
@@ -118,6 +119,7 @@ const reducers = combineReducers({
     tracking: tenantAdminTrackingReducer,
     notification: tenantAminNotificationReducer,
     settings: tenantAminSettingsReducer,
+    fileProcessing: tenantFileProcessing,
   }),
   tenatOnBoarding: tenantOnBoarding,
 });
