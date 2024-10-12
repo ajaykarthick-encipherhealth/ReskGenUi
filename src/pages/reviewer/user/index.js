@@ -42,41 +42,41 @@ export default function Patient() {
     _filters["userName"].value = value;
     setFilters(_filters);
   };
+ // NO NEED IN THIS API AND PAGE
+  // useEffect(() => {
+  //   const uId = getStorage("userId");
+  //   getAllList(uId);
+  // }, []);
 
-  useEffect(() => {
-    const uId = getStorage("userId");
-    getAllList(uId);
-  }, []);
-
-  const getAllList = async (uId) => {
-    // logesh056
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid=" + uId
-    );
-    if (response?.data) {
-      const records = response?.data?.slice(firstIndex, lastIndex);
-      setPatinetList(records);
-      const userList = [
-        {
-          userId: "0001",
-          userName: "Ajith",
-          cost: "$ 4",
-        },
-        {
-          userId: "0002",
-          userName: "Priya",
-          cost: "$ 1",
-        },
-        {
-          userId: "0003",
-          userName: "Ranjith",
-          cost: "$ 1",
-        },
-      ];
-      setPatinetListAll(userList);
-      setIsLoading(false);
-    }
-  };
+  // const getAllList = async (uId) => {
+  //   // logesh056
+  //   const response = await axios.get(
+  //     ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid=" + uId
+  //   );
+  //   if (response?.data) {
+  //     const records = response?.data?.slice(firstIndex, lastIndex);
+  //     setPatinetList(records);
+  //     const userList = [
+  //       {
+  //         userId: "0001",
+  //         userName: "Ajith",
+  //         cost: "$ 4",
+  //       },
+  //       {
+  //         userId: "0002",
+  //         userName: "Priya",
+  //         cost: "$ 1",
+  //       },
+  //       {
+  //         userId: "0003",
+  //         userName: "Ranjith",
+  //         cost: "$ 1",
+  //       },
+  //     ];
+  //     setPatinetListAll(userList);
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <>
