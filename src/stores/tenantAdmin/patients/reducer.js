@@ -3,7 +3,9 @@ import { handleActions } from "redux-actions";
 import {
   getAllOrganizationAction,
   getAllPatientAction,
+  submitPatientId
 } from "./actions";
+
 
 const initialState = {
   loading: true,
@@ -47,6 +49,7 @@ const getReportLoading = (type) =>
 const adminPatientsReducer = combineReducers({
   allOrganization: createReducer(getAllOrganizationAction),
   allPatients: createReducer(getAllPatientAction),
+  submitPatientId: createReducer(submitPatientId),
   // loaders
   allOrganizationLoader: getReportLoading(getAllOrganizationAction),
   allPatientsLoading: getReportLoading(getAllPatientAction),

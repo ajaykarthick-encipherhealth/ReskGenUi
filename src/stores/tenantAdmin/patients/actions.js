@@ -10,3 +10,8 @@ export const getAllPatientAction = createActionThunk(
   "GET_ALL_PATIENT",
   network.getAllPatient
 );
+
+export const submitPatientId = createActionThunk(
+  "SUBMIT_PATIENT_ID",
+  network.submitPatientId
+);

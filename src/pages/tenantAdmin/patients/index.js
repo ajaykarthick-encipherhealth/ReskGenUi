@@ -25,6 +25,7 @@ import { connect } from "react-redux";
 import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
+import { getResponePopup } from "../../../utils/reusable";
 const bullets = [
   {
     color: "#34ace8",
@@ -58,6 +59,7 @@ const Patient = ({
   allPatientList,
   webSocketData,
   loading,
+  getPatientId,
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -172,9 +174,9 @@ const Patient = ({
       search,
       completedStartDate,
       completedEndDate,
-      selAllocatedTo||"",
-      selAllocatedBy||"",
-      selCreatedBy||"",
+      selAllocatedTo || "",
+      selAllocatedBy || "",
+      selCreatedBy || "",
       sort,
       (orgId = selectOrgList)
     );
@@ -205,7 +207,7 @@ const Patient = ({
       getAllOrganizationList();
     }
   }, []);
-console.log(selectOrgList,"selectOrgList")
+  console.log(selectOrgList, "selectOrgList");
   useEffect(() => {
     var orgListArray = [];
     organizationList?.response?.map((res) => {
@@ -336,7 +338,6 @@ console.log(selectOrgList,"selectOrgList")
     setValidated(true);
   };
 
-
   const handleSubmitPatientId = async (form) => {
     var orgId = selectOrgList;
     form.allocatedBy = localUserId;
@@ -344,10 +345,8 @@ console.log(selectOrgList,"selectOrgList")
     form.patientId = form.patientId.trim();
     try {
       setIsLoadingBtn(true);
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient`,
-        form
-      );
+      const response = await getPatientId({ obj: form });
+
       if (response?.data?.status == "SUCCESS") {
         getAllPatients(
           pageNo,
@@ -357,9 +356,9 @@ console.log(selectOrgList,"selectOrgList")
           search,
           completedStartDate,
           completedEndDate,
-          selAllocatedTo||"",
-          selAllocatedBy||"",
-          selCreatedBy||"",
+          selAllocatedTo || "",
+          selAllocatedBy || "",
+          selCreatedBy || "",
           sort,
           orgId
         );
@@ -370,6 +369,7 @@ console.log(selectOrgList,"selectOrgList")
           duration: 1,
         });
       } else {
+        getResponePopup(response);
         setIsLoadingBtn(false);
       }
     } catch (Err) {
@@ -516,9 +516,9 @@ console.log(selectOrgList,"selectOrgList")
         search,
         completedStartDate,
         completedEndDate,
-        selAllocatedTo||"",
-        selAllocatedBy||"",
-        selCreatedBy||"",
+        selAllocatedTo || "",
+        selAllocatedBy || "",
+        selCreatedBy || "",
         sort,
         orgId
       );
@@ -831,6 +831,7 @@ const enhancer = connect(
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     getAllPatients: tenantAdminAction.getAllPatientAction,
+    getPatientId: tenantAdminAction.submitPatientId,
   }
 );
 export default enhancer(Patient);
