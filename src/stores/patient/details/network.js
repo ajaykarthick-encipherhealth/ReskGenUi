@@ -541,6 +541,6 @@ export async function uploadLabFile({ data }) {
     method: "POST",
     body: data,
   };
-  const res = await requestPortalFiles(`aiservice/ai/upload/radiology`, options);
+  const res = await requestPortalFiles(`aiservice/ai/upload/lab`, options);
   return res;
 }
