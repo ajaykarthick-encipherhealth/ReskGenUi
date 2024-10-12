@@ -1,12 +1,7 @@
 
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { codifyAction } from "./actions";
-import {codesAction} from "./actions";
-import { riskadjustmentAction } from "./actions";
-import {searchesAction} from "./actions";
-import {autoCompleteAction} from "./actions";
-import {indexesAction} from "./actions";
+import {indexesAction,addCodesAction,autoCompleteAction,searchesAction,riskadjustmentAction,codesAction,codifyAction} from "./actions";
 import{codify} from './network'
 
 const initialState = {
@@ -56,7 +51,8 @@ const codifyReducer = combineReducers({
   searches:createReducer(searchesAction),
   autocomplete:createReducer(autoCompleteAction),
   indexes:createReducer(indexesAction),
-  codifyLoader:getCodifyLoading(codifyAction)
+  codifyLoader:getCodifyLoading(codifyAction),
+  addCodes:createReducer(addCodesAction),
   
 });
 

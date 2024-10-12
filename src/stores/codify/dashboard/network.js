@@ -1,5 +1,6 @@
 import { requestPortal } from "../../../utils/network";
 import { apirequestPortal } from "../../../utils/network";
+import { getStorage } from "../../../utils/storages";
 
 export const codify = async ({ diseases }) => {
   const options = {
@@ -35,7 +36,6 @@ export const searches = async () => {
   const options = {
     method: "GET",
   };
-
   const data = await requestPortal("dbservice/getRecentSearches", options);
   return data;
 };
@@ -44,7 +44,6 @@ export const autocomplete = async ({ code }) => {
   const options = {
     method: "GET",
   };
-  
   const data = await requestPortal(
     `management/autocomplete?q=${code}`,
     options
@@ -52,12 +51,21 @@ export const autocomplete = async ({ code }) => {
   return data;
 };
 
-
-export const indexes = async ({desc}) => {
+export const indexes = async ({ desc }) => {
   const options = {
     method: "GET",
   };
   const url = `q=${desc}`;
   const data = await requestPortal(`management/searchIndex?${url}`, options);
+  return data;
+};
+
+export const addCodes = async (obj) => {
+  const token = getStorage("token");
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`dbservice/disease/addicdcode`, options);
   return data;
 };
