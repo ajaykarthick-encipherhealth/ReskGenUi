@@ -34,7 +34,8 @@ export async function checkAllApi({
   filter = "",
   sort,
   size,
-  flagsList,
+  selectAllFlags,
+  selectAll,
 }) {
   const options = {
     method: "GET",
@@ -46,8 +47,9 @@ export async function checkAllApi({
       filter ? filter : ""
     }&searchstring=${search ? search : ""}&sortfield=${
       sort?.sortField ? sort?.sortField : ""
-    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&patientIds=${flagsList?flagsList:""}
-  `,
+    }&sortdirection=${
+      sort?.sortDir ? sort?.sortDir : ""
+    }&allPatientIds=${selectAll}&allFlags=${selectAllFlags}`,
     options
   );
   return data;

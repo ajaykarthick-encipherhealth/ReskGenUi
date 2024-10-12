@@ -445,7 +445,6 @@ const MachineAccuracy = ({ accuracyDetails, loading, getAccuracyScore }) => {
   // const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
   // const average = sum / numericalData?.length; // Calculate the average
   const average = 0;
-  console.log(accuracyDetails);
   return (
     <>
       <HeadTitle

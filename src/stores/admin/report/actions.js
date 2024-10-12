@@ -13,3 +13,7 @@ export const receivedReport = createActionThunk(
   "RECEIVED",
   network.receivedApi
 );
+export const adminCheckAllReport = createActionThunk(
+  "ADMIN_CHECK_ALL",
+  network.checkAllApi
+);

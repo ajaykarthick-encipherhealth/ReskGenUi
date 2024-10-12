@@ -3,7 +3,6 @@ import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector, connect } from "react-redux";
 import axios from "../../../utility/axiosConfig";
 import dayjs from "dayjs";
-import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";

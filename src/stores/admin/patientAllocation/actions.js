@@ -31,3 +31,12 @@ export const getAllocatedByList = createActionThunk(
   "FILTERS_LIST_ALLOCATED_BY",
   network.allocatedByFilters
 );
+
+export const getAllCheckedListForReviewer = createActionThunk(
+  "REVIEWER_CHECKED_LIST",
+  network.reviewerCheckedList
+);
+export const getAllCheckedListForSupervisor = createActionThunk(
+  "SUPERVISOR_CHECKED_LIST",
+  network.supervisorCheckedList
+);

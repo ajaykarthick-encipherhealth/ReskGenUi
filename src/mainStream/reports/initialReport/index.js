@@ -7,11 +7,7 @@ import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
 import declineIcon from "../../.../../../images/trackingImages/DeclineTrack.png";
 import reAuditIcon from "../../.../../../images/trackingImages/AuditPending.png";
-import auditHoldIcon from "../../.../../../images/trackingImages/AuditHoldTrack.png";
 import auditedIcon from "../../.../../../images/trackingImages/AuditedTrack.png";
-import reeAuditIcon from "../../.../../../images/trackingImages/reAuditTrack.png";
-import notAudited from "../../.../../../images/trackingImages/NotAuditedTrack.png";
-import auditDeclined from "../../.../../../images/trackingImages/AuditDeclined.png";
 import TableStyle from "../../../components/table/table.module.css";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 import { selectedRow } from "../../../store/actions/ReportActions";
@@ -28,10 +24,8 @@ import {
   auditstatusBodyTemplate,
   processstatusBodyTemplate,
 } from "../../components/chartUtils";
-import { getReportDetails } from "../../../store/actions/adminAction/ReportActions";
-import ENDPOINTS from "../../../utility/enpoints";
+import { actions as adminActions } from "../../../stores/admin/report";
 import { getStorage, setStorage } from "../../../utils/storages";
-import { renderSkeleton } from "../../../components/reuseableFunctions";
 
 const InitialCard = ({
   patientDetails,
@@ -51,98 +45,122 @@ const InitialCard = ({
   selectAllFlags,
   adminLoader,
   apiCall,
+  checkAllApi,
+  checkedLoader,
+  adminCheckedLoader,
+  getAdminChecKAll,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const handleHeaderCheckboxChange = async () => {
-    // console.log(selectAll);
-    setSelectAll(!selectAll);
+  const handleHeaderCheckboxChange = async (
+    activeTab,
+    selectAll,
+    setSelectAll
+  ) => {
+    const {
+      filter,
+      pagenum,
+      size,
+      startDate,
+      endDate,
+      search,
+      sort,
+      userName,
+      selectManager,
+      flagsList,
+      allPatientIds,
+    } = apiCall.admin;
+
     // const updatedRows = selectAll ? [] : reportListAll?.response?.data;
     // setSelectedRows(updatedRows);
-    if (activeTab === "Reviewer") {
-      setIsLoading(true);
-      const {
-        filter,
+    if (activeTab === "Reviewer" && selectAll) {
+      // setIsLoading(true);
+      // const {
+      //   filter,
+      //   pagenum,
+      //   size,
+      //   startDate,
+      //   endDate,
+      //   search,
+      //   sort,
+      //   flagsList,
+      //   allPatientIds,
+      // } = apiCall.admin;
+      // try {
+      const url = `dbservice/patient/coderreport?pageno=${pagenum}&size=${
+        size ? size : 7
+      }&startdate=${startDate}&enddate=${endDate}&status=${
+        filter ? filter : ""
+      }&searchstring=${search ? search : ""}&sortfield=${
+        sort?.sortField ? sort?.sortField : ""
+      }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&allPatientIds=${
+        selectAll ? false : true
+      }&allFlags=${selectAllFlags}`;
+      const res = await checkAllApi({
         pagenum,
-        size,
         startDate,
         endDate,
         search,
-        sort,
-        flagsList,
-        allPatientIds,
-      } = apiCall.admin;
-      try {
-        setIsLoading(true);
-        const url = `dbservice/patient/coderreport?pageno=${pagenum}&size=${
-          size ? size : 7
-        }&startdate=${startDate}&enddate=${endDate}&status=${
-          filter ? filter : ""
-        }&searchstring=${search ? search : ""}&sortfield=${
-          sort?.sortField ? sort?.sortField : ""
-        }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&allPatientIds=${
-          selectAll ? false : true
-        }&allFlags=${selectAllFlags}`;
-        const res = await fetch(
-          ENDPOINTS.apiEndoint + url,
-          // `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
-          {
-            headers: { Authorization: `Bearer ${await getStorage("token")}` },
-          }
-        ).then((res) => res.json());
-
-        const seletedAll = res?.response?.patientIds;
-        setSelectedRows(seletedAll ? seletedAll : []);
-        setIsLoading(false);
-      } catch (error) {}
-    }
-    if (activeTab === "Admin") {
-      setIsLoading(true);
-
-      const {
         filter,
-        pagenum,
-        size,
-        startDate,
-        endDate,
-        search,
         sort,
-        userName,
-        selectManager,
-        flagsList,
-        allPatientIds,
-      } = apiCall.admin;
-      try {
-        setIsLoading(true);
-        const orgId = getStorage("orgId");
-        const role = getStorage("role");
-        const searchValue = filter === "ALL" ? "" : filter;
-        const url = `dbservice/patient/adminreport?pageno=${0}&size=${
-          size ? size : 7
-        }&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${
-          sort?.sortField ? sort?.sortField : ""
-        }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&username=${
-          userName === "REVIEWER" ? selectManager : ""
-        }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${
-          role == "tenant_admin" ? "" : orgId
-        }&allPatientIds=${
-          selectAll ? false : true
-        }&allFlags=${selectAllFlags}`;
-        const res = await fetch(
-          ENDPOINTS.apiEndoint + url,
-          // `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
-          {
-            headers: { Authorization: `Bearer ${await getStorage("token")}` },
-          }
-        ).then((res) => res.json());
-
-        const seletedAll = res?.response?.patientIds;
-        setSelectedRows(seletedAll ? seletedAll : []);
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
+        size,
+        selectAllFlags,
+        selectAll,
+      });
+      if (res.status === "SUCCESS") {
+        console.log(res?.response?.patientIds);
+        setSelectAll(true);
+        setSelectedRows(res?.response?.patientIds);
       }
+      // } catch (error) {}
+    } else if (activeTab === "Admin" && selectAll) {
+      // setIsLoading(true);
+
+      // try {
+      // setIsLoading(true);
+      // const orgId = getStorage("orgId");
+      // const role = getStorage("role");
+      // const searchValue = filter === "ALL" ? "" : filter;
+      // const url = `dbservice/patient/adminreport?pageno=${0}&size=${
+      //   size ? size : 7
+      // }&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${
+      //   sort?.sortField ? sort?.sortField : ""
+      // }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&username=${
+      //   userName === "REVIEWER" ? selectManager : ""
+      // }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${
+      //   role == "tenant_admin" ? "" : orgId
+      // }&allPatientIds=${selectAll ? false : true}&allFlags=${selectAllFlags}`;
+
+      const searchValue = filter === "ALL" ? "" : filter;
+
+      const res = await getAdminChecKAll({
+        pagenum: 0,
+        startDate,
+        endDate,
+        search,
+        searchValue,
+        sort,
+        size,
+        selectAllFlags,
+        selectManager,
+        selectAll,
+        userName,
+      }); // fetch(
+      //   ENDPOINTS.apiEndoint + url,
+      //   // `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
+      //   {
+      //     headers: { Authorization: `Bearer ${await getStorage("token")}` },
+      //   }
+      // ).then((res) => res.json());
+
+      if (res.status === "SUCCESS") {
+        setSelectAll(true);
+        setSelectedRows(res?.response?.patientIds);
+      }
+      // setIsLoading(false);
+      // } catch (error) {
+      //  console.log(err)
+      // }
 
       // dispatch(
       //   getReportDetails({
@@ -150,6 +168,9 @@ const InitialCard = ({
       //     size: reportListAll?.response?.totalElements,
       //   })
       // );
+    } else {
+      setSelectAll(false);
+      setSelectedRows([]);
     }
   };
 
@@ -327,7 +348,6 @@ const InitialCard = ({
 
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
-    setSelectAll(reportListAll?.response?.totalElements == selectedRows.length);
   }, [selectedRows]);
 
   return (
@@ -347,44 +367,47 @@ const InitialCard = ({
               >
                 {/* {reportListAll?.response?.data?.length > 0 && (
                   <> */}
-                    <div className="col-xl-1 d-flex">
-                      <div>
-                        <input
-                          type="checkbox"
-                          onChange={handleHeaderCheckboxChange}
-                          className={
-                            styles.checkAlign +
-                            (selectAll ? " " + TableStyle.customChecked : "")
-                          }
-                          checked={
-                            selectAll &&
-                              selectedRows?.length>0
-                          }
-                        />
-                      </div>
-                      <span className={`pl-0 text-start ${styles.pName}`}>
-                        All
-                      </span>
-                    </div>
-                    <div className="col-xl-4 d-flex">
-                      <div>
-                        <input
-                          type="checkbox"
-                          onChange={handleHeaderCheckbox}
-                          className={
-                            styles.checkAlign +
-                            (selectAllFlags
-                              ? " " + TableStyle.customChecked
-                              : "")
-                          }
-                          checked={selectAllFlags}
-                        />
-                      </div>
-                      <span className={`pl-4 text-start ${styles.pName}`}>
-                        All Flags
-                      </span>
-                    </div>
-                  {/* </>
+                <div className="col-xl-1 d-flex">
+                  <div>
+                    <input
+                      type="checkbox"
+                      onChange={() => {
+                        setSelectAll((prevState) => {
+                          const updatedSelectAll = !prevState; // Toggle the state
+                          handleHeaderCheckboxChange(
+                            activeTab,
+                            updatedSelectAll,
+                            setSelectAll
+                          ); // Call the function with updated value
+                          return updatedSelectAll; // Return the new state
+                        });
+                      }}
+                      className={
+                        styles.checkAlign +
+                        (selectAll ? " " + TableStyle.customChecked : "")
+                      }
+                      checked={selectAll && selectedRows?.length > 0}
+                    />
+                  </div>
+                  <span className={`pl-0 text-start ${styles.pName}`}>All</span>
+                </div>
+                <div className="col-xl-4 d-flex">
+                  <div>
+                    <input
+                      type="checkbox"
+                      onChange={handleHeaderCheckbox}
+                      className={
+                        styles.checkAlign +
+                        (selectAllFlags ? " " + TableStyle.customChecked : "")
+                      }
+                      checked={selectAllFlags}
+                    />
+                  </div>
+                  <span className={`pl-4 text-start ${styles.pName}`}>
+                    All Flags
+                  </span>
+                </div>
+                {/* </>
                 // )} */}
               </div>
               <div className="row">
@@ -432,7 +455,11 @@ const InitialCard = ({
                               patientAllocatedProfileImage={
                                 item?.patientAllocatedProfileImage
                               }
-                              loading={isLoading}
+                              loading={
+                                activeTab === "Reviewer"
+                                  ? checkedLoader
+                                  : adminCheckedLoader
+                              }
                             />
                           ))}
                         </div>
@@ -534,9 +561,13 @@ const enhancer = connect(
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
     ReportPatientDetails: state?.reviewer?.report?.reviewer?.data,
     adminLoader: state?.admin?.report.adminLoader,
+    checkedLoader: state.reviewer?.report?.checkedLoader,
+    adminCheckedLoader: state.admin.report?.checkedLoader,
   }),
   {
     reviewerReport: reviewerAction.reviewerCheckAllReport,
+    checkAllApi: reviewerAction.reviewerCheckAllReport,
+    getAdminChecKAll: adminActions.adminCheckAllReport,
   }
 );
 export default enhancer(InitialCard);

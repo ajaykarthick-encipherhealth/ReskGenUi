@@ -8,6 +8,8 @@ import {
   getPatientAllocatedList,
   getAuditAssignedList,
   getAllocatedByList,
+  getAllCheckedListForReviewer,
+  getAllCheckedListForSupervisor,
 } from "./actions";
 
 const initialState = {
@@ -57,6 +59,10 @@ const allocatedReducer = combineReducers({
   patientAllocatedFilters: createReducer(getPatientAllocatedList),
   auditAssignedFilters: createReducer(getAuditAssignedList),
   allocatedByFilters: createReducer(getAllocatedByList),
+  allCheckBoxLoaderData:createReducer(getAllCheckedListForReviewer),
+  allCheckBoxLoader:getReportLoading(getAllCheckedListForReviewer),
+  allSupervisorCheckBoxLoaderData:createReducer(getAllCheckedListForSupervisor),
+  allSupervisorCheckBoxLoader:getReportLoading(getAllCheckedListForSupervisor),
 });
 
 export default allocatedReducer;
