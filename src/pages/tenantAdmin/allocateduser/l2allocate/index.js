@@ -3,10 +3,11 @@ import { Avatar, DatePicker, Modal, notification } from "antd";
 import { faXmark, faUser } from "@fortawesome/free-solid-svg-icons";
 import modalStyle from "./style.module.css";
 import { useEffect, useState } from "react";
-import axios from "../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../utility/enpoints";
 import { disablePastDate } from "../../../../components/headerFilters/functions";
 import moment from "moment";
+import { connect } from "react-redux";
+import { actions as allActions } from "../../../../stores/tenantAdmin/patientAllocation";
+import { getResponePopup } from "../../../../utils/reusable";
 
 const L2AllocateModal = ({
   open,
@@ -17,6 +18,8 @@ const L2AllocateModal = ({
   selectedChart,
   setSelectedChart,
   selectedUser,
+  getAllocateUsers,
+  getL2UsersList
 }) => {
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
@@ -39,33 +42,31 @@ const L2AllocateModal = ({
   };
 
   const setAllocate = async () => {
-    let resoureUrl = `dbservice/patient/admin/assignPatients/l2audit`;
-    const response = await axios.post(ENDPOINTS.apiEndoint + resoureUrl, {
-      userId: selectedUser?.userName,
-      dueDate: `${allocateDate + "T23:00:00.999Z"}`,
-      patientIds: selectedRowsId.map((item) => item.id),
+    const response = await getAllocateUsers({
+      data: {
+        userId: selectedUser?.userName,
+        dueDate: `${allocateDate + "T23:00:00.999Z"}`,
+        patientIds: selectedRowsId.map((item) => item.id),
+      },
     });
-    if (response) {
-      if (response?.data?.status == "SUCCESS") {
-        notification.success({
-          message: response?.data?.message,
-        });
-        setAllocateClicked(true);
-        setAllocateDate("");
-        setActiveCard("");
-        setActiveEmail("");
-        setSearch("");
-        setOpen(false);
-      }
+    if (response?.status == "SUCCESS") {
+      getResponePopup(response);
+      setAllocateClicked(true);
+      setAllocateDate("");
+      setActiveCard("");
+      setActiveEmail("");
+      setSearch("");
+      setOpen(false);
     }
   };
 
   const getAllCheckList = async () => {
     if (selectedUser) {
-      let resoureUrl = `dbservice/l2audit/statistics?username=${selectedUser?.userName}`;
-      const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-      if (response.data) {
-        let result = response?.data?.response;
+      const response = await getL2UsersList({
+        userName: selectedUser?.userName,
+      });
+      if (response?.status == "SUCCESS") {
+        let result = response?.response;
         setChart(result);
       }
     }
@@ -278,4 +279,8 @@ const L2AllocateModal = ({
   );
 };
 
-export default L2AllocateModal;
+const connector = connect((state) => ({ state }), {
+  getL2UsersList: allActions.getL2UsersList,
+  getAllocateUsers: allActions.getAllocateUsers,
+});
+export default connector(L2AllocateModal);

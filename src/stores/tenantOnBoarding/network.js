@@ -12,3 +12,16 @@ export async function getAllOnBoarding(obj) {
   return data;
 }
 
+export async function getAlltenantOnBoarding(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `securityservice/auth/organization/create`,
+    options
+  );
+  return data;
+}
+
+

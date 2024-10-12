@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { Stepper, Step } from "react-form-stepper";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import Form from "react-bootstrap/Form";
 import { notification, Result } from "antd";
 import ENDPOINTS from "../utility/enpoints";
 import axios from "../utility/axiosConfig";
 import LoginBack from "../images/logo/login-back.jpg";
 import Select from "react-select";
-export default function OnBoarding() {
+import {actions as allActions} from '../stores/tenantOnBoarding'
+
+
+const onBoarding = ({onBoardingOrganization}) => {
+
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -50,8 +54,7 @@ export default function OnBoarding() {
     });
   };
 
-  //org-creation
-  const dispatch = useDispatch();
+
 
   const orgHandleSubmit = (event) => {
     const form = event.currentTarget;
@@ -96,19 +99,15 @@ export default function OnBoarding() {
 
   const createOrganization = async (data) => {
     setIsLoading(true);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint + `securityservice/auth/organization/create`,
-      data
-    );
-    let result = response.data;
-    if (result.status === "SUCCESS") {
+    let result = onBoardingOrganization;
+    if (result?.status === "SUCCESS") {
       setSuccess(true);
       notification.success({
         message: result.message,
       });
     } else {
       notification.error({
-        message: result.message,
+        message: result?.message,
       });
     }
   };
@@ -411,3 +410,13 @@ export default function OnBoarding() {
     </div>
   );
 }
+
+const connector = connect(
+  (state) => ({
+    
+  }),
+  {
+    onBoardingOrganization : allActions.getAllOnBoarding
+  }
+);
+export default connector(onBoarding);
