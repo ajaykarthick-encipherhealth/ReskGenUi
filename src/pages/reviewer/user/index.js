@@ -42,7 +42,7 @@ export default function Patient() {
     _filters["userName"].value = value;
     setFilters(_filters);
   };
- // NO NEED IN THIS API AND PAGE
+  // NO NEED IN THIS API AND PAGE
   // useEffect(() => {
   //   const uId = getStorage("userId");
   //   getAllList(uId);

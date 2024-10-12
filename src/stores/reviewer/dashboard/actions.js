@@ -10,10 +10,7 @@ export const dailyTaskAction = createActionThunk(
   "DAILYTASK",
   network.dailyTask
 );
-export const accuracyAction = createActionThunk(
-  "ACCURACY",
-  network.accuracy
-);
+export const accuracyAction = createActionThunk("ACCURACY", network.accuracy);
 
 export const completedScoreAction = createActionThunk(
   "COMPLETED",
@@ -39,5 +36,4 @@ export const unReadCountPostAction = createActionThunk(
   network.unReadCountPost
 );
 export const dailyTaskData = createAction("GET_DAILY_TASK_DATA");
-
-export const reviewerFilterList = createAction("GET_FILTERED_LIST")
+export const reviewerFilterList = createAction("GET_FILTERED_LIST");
