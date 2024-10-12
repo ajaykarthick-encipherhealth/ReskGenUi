@@ -1,5 +1,6 @@
 import { requestPortal } from "../../../utils/network";
 import { apirequestPortal } from "../../../utils/network";
+import { getStorage } from "../../../utils/storages";
 
 export const codify = async ({ diseases }) => {
   const options = {
@@ -61,3 +62,15 @@ export const indexes = async ({desc}) => {
   const data = await requestPortal(`management/searchIndex?${url}`, options);
   return data;
 };
+
+
+export  const addCodes = async (obj)=> {
+  const token = getStorage("token");
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`dbservice/disease/addicdcode`, options);
+  return data;
+}
+

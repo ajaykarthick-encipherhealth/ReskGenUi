@@ -32,3 +32,8 @@ export const  indexesAction = createActionThunk(
   " AUTO COMPLETE ",
   network.indexes
 );
+
+export const  addCodesAction = createActionThunk(
+  "ADDCODESACTIONS",
+  network.addCodes
+);

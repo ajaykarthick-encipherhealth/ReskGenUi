@@ -1,39 +1,28 @@
-import React, { useState } from "react";
-import axios from "../../utility/axiosConfig";
-import ENDPOINTS from "../../utility/enpoints";
+import React, { useEffect, useState } from "react";
 import { getResponePopup } from "../../utils/reusable";
-import { getStorage } from "../../utils/storages";
+import { actions as dashbaordActions } from "../../stores/codify/dashboard";
+import { connect } from "react-redux";
 
-const AddCode = () => {
+const AddCode = ({ addCodesData }) => {
   const [first, setFirst] = useState("");
   const [sec, setSec] = useState("");
 
-  const setCode = async () => {
+  const setCodes = async () => {
     if (first && sec) {
-        const token = getStorage("token");
-        try {
-          const response = await axios.post(
-            `${ENDPOINTS?.apiEndoint}dbservice/disease/addicdcode`,
-            { diagnosisCode: first, description: sec },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          if (response?.data?.status == "SUCCESS") {
-            getResponePopup(response);
-            setFirst("");
-            setSec("");
-          }
-          return response.data;
-        } catch (err) {
-          console.log(err);
+      try {
+        const res = await addCodesData({
+          diagnosisCode: first,
+          description: sec,
+        });
+        if (res?.status !== "SUCCESS") {
+          getResponePopup(res);
         }
-    } else {
-        getResponePopup({data: {status: "FAILED", message: "Enter the values"}})
+      } catch (error) {
+        console.error(error, "error");
+      }
     }
   };
+
   return (
     <div className="d-flex align-item-center justify-content-center my-5">
       <div
@@ -65,7 +54,7 @@ const AddCode = () => {
               onChange={(e) => setSec(e.target.value)}
             />
           </div>
-          <button type="button" class="btn btn-primary" onClick={setCode}>
+          <button type="button" class="btn btn-primary" onClick={setCodes}>
             Submit
           </button>
         </form>
@@ -73,5 +62,7 @@ const AddCode = () => {
     </div>
   );
 };
-
-export default AddCode;
+const enhancer = connect((state) => ({}), {
+  addCodesData: dashbaordActions.addCodesAction,
+});
+export default enhancer(AddCode);
