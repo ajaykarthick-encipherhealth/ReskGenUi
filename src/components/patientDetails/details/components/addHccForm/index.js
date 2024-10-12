@@ -4,7 +4,6 @@ import { notification } from "antd";
 import { Select } from "antd";
 import { Button, Form, Input, Space, DatePicker, Switch } from "antd";
 import moment from "moment";
-import axios from "../../../../../utils/axiosConfig";
 import styles from "../../hcc/styles.module.css";
 import RegularButton from "../../../../../components/button";
 import visitStyles from "../../../../../styles/visitdata.module.css";

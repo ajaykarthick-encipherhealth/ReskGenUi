@@ -3,7 +3,6 @@ import { notification, Select } from "antd";
 import { connect, useSelector } from "react-redux";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import axios from "../../../../../utils/axiosConfig";
 import { validateYear } from "../../../../headerFilters/functions";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getResponePopup, validateFileName } from "../../../../../utils/reusable";

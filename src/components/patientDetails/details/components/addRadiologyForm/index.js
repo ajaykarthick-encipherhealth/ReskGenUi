@@ -3,7 +3,6 @@ import { notification } from "antd";
 import { useSelector } from "react-redux";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import axios from "../../../../../utils/axiosConfig";
 import { validateYear } from "../../../../headerFilters/functions";
 import { getStorage } from "../../../../../utils/storages";
 import { uploadRadiologyFile } from "../../../../../stores/patient/details/network";

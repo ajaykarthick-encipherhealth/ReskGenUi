@@ -10,7 +10,6 @@ import {
   submitMeatQuery,
   updateMeatQuery,
 } from "../../../../../services/PatientsListSevice";
-import axios from "../../../../../utils/axiosConfig";
 import styles from "../../hcc/styles.module.css";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import RegularButton from "../../../../../components/button";

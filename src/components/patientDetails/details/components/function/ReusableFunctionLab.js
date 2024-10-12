@@ -5,7 +5,6 @@ import moment from "moment";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
-import axios from "../../../../../utils/axiosConfig";
 import { getStorage } from "../../../../../utils/storages";
 import { movementApiCall } from "../../../../../stores/patient/details/network";
 import { getResponePopup } from "../../../../../utils/reusable";
