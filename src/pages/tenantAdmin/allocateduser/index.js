@@ -9,8 +9,6 @@ import { Paginator } from "primereact/paginator";
 import moment from "moment/moment";
 import { Tab, Nav } from "react-bootstrap";
 import Header from "../../../jsx/layouts/nav/Header";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
 import AllocatedAdminList from "../../../components/table/admin/allocatedAdminList/allocatedAdminList";
 import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
 import L2AllocateModal from "./l2allocate";

@@ -97,3 +97,22 @@ export async function uploadRadiologyFile({ data }) {
   const res = await requestPortalFiles(`aiservice/ai/upload/radiology`, options);
   return res;
 }
+
+export async function uploadLabFile({ data }) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+  const res = await requestPortalFiles(`aiservice/ai/upload/lab`, options);
+  return res;
+}
+export const getUsers = async ({ pageNo,pageSize }) => {
+  const uId=getStorage("userId")
+  const url = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
+  const options = {
+    method: "GET"
+  };
+
+  const res = await requestPortal(`${url}`, options);
+  return res;
+};

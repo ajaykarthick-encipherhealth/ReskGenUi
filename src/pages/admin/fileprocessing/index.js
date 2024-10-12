@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { connect, useSelector} from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { notification } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../jsx/layouts/nav/Header";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
 import FileProcessingTable from "../../../components/table/admin/FileProcessing/FileProcessing";
 import FileUploading from "./FileUploading";
 import Addpatients from "./Addpatiens";
 import { actions as adminActions } from "../../../stores/admin/workqueue";
 import { getStorage, setStorage } from "../../../utils/storages";
+import { getResponePopup } from "../../../utils/reusable";
 
-function Patient({ patientDetails, getPatients }) {
+function Patient({ patientDetails, getPatients, getUsersList,getUploadFile,getAddPatient,getUploadRadiologyFile}) {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
@@ -55,12 +54,12 @@ function Patient({ patientDetails, getPatients }) {
 
   const getAllList = async (uId, pageNo, pageSize) => {
     setTableLoading(true);
-    let resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
+    // let resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
+    const response = await getUsersList({ pageNo: pageNo, pageSize: pageSize });
+    if (response?.status === "SUCCESS") {
       let resultMap = [];
-      let result = response?.data?.response?.content;
-      setTotalElements(response?.data?.response?.totalElements);
+      let result = response?.response?.content;
+      setTotalElements(response?.response?.totalElements);
 
       result?.map((res) => {
         resultMap.push({
@@ -137,13 +136,14 @@ function Patient({ patientDetails, getPatients }) {
 
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient`,
-        inputValuePatientId
-      );
-      if (response?.status === 200) {
-        getPatients({data:{pageNo:0}});
-        if (response.data.message == "patient Already Present") {
+      const response = await getAddPatient({data:inputValuePatientId})
+      // axios.post(
+      //   ENDPOINTS.apiEndoint + `dbservice/patient`,
+      //   inputValuePatientId
+      // );
+      if (response?.status ==='SUCCESS') {
+        getPatients({ data: { pageNo: 0 } });
+        if (response.message == "patient Already Present") {
           setIsLoadingBtn(false);
           notification.warning({
             message: "Patient ID Already Present",
@@ -256,26 +256,24 @@ function Patient({ patientDetails, getPatients }) {
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
 
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload
-      `,
-      formData,
-      headers
-    );
-    if (response?.status == 202) {
+    const response = await getUploadFile({ data: formData });
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload
+    //   `,
+    //   formData,
+    //   headers
+    // );
+    if (response?.status == "SUCCESS") {
       getAllList(localUserId, pageNo, pageSize);
-
-      notification.success({
-        message: "Patient File Upload Successfully!",
-      });
+      getResponePopup(response);
       setAddPatient(false);
       setIsLoadingBtn(false);
     } else {
@@ -292,20 +290,21 @@ function Patient({ patientDetails, getPatients }) {
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/radiology
-    `,
-      formData,
-      headers
-    );
-    if (response?.status == 202) {
+    const response = await getUploadRadiologyFile({data:formData})
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload/radiology
+    // `,
+    //   formData,
+    //   headers
+    // );
+    if (response?.status == 'SUCCESS') {
       getAllList(localUserId, pageNo, pageSize);
       setAddPatient(false);
       setIsLoadingBtn(false);
@@ -369,11 +368,15 @@ function Patient({ patientDetails, getPatients }) {
 
 const enhancer = connect(
   (state) => ({
-   state
+    state,
   }),
   {
-    patientDetails: adminActions.getPatientDetails, 
+    patientDetails: adminActions.getPatientDetails,
     getPatients: adminActions.patientsAction,
+    getUsersList: adminActions.getUsersList,
+    getUploadFile:adminActions.getUploadFile,
+    getAddPatient:adminActions.getAddPatient,
+    getUploadRadiologyFile:adminActions.getUploadRadiologyFile
   }
 );
 export default enhancer(Patient);

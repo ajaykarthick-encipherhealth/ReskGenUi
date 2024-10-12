@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
@@ -25,6 +23,7 @@ import { connect } from "react-redux";
 import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
+import {actions as adminActions} from '../../../stores/admin/workqueue'
 const bullets = [
   {
     color: "#34ace8",
@@ -59,6 +58,9 @@ const Patient = ({
   allPatientList,
   webSocketData,
   loading,
+  getAddPatient,
+  getUploadFile,
+  getUploadRadiologyFile
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -88,7 +90,7 @@ const Patient = ({
     patientId: "",
     patientName: "",
   });
-  console.log(filteredList)
+
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -302,10 +304,11 @@ const Patient = ({
     form.patientId = form.patientId.trim()
     try {
       setIsLoadingBtn(true);
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient`,
-        form
-      );
+      const response = getAddPatient({data:form})
+      // await axios.post(
+      //   ENDPOINTS.apiEndoint + `dbservice/patient`,
+      //   form
+      // );
       if (response?.data?.status == "SUCCESS") {
         getAllPatients(
           pageNo,
@@ -445,20 +448,21 @@ const Patient = ({
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload
-      `,
-      formData,
-      headers
-    );
-    if (response?.status === 200) {
+    const response = await getUploadFile({data:formData})
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload
+    //   `,
+    //   formData,
+    //   headers
+    // );
+    if (response?.status === 'SUCCESS') {
       // getAllList(response);
 
       notification.success({
@@ -499,20 +503,21 @@ const Patient = ({
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/radiology
-    `,
-      formData,
-      headers
-    );
-    if (response?.status == 202) {
+    const response = await getUploadRadiologyFile({ data: formData });
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload/radiology
+    // `,
+    //   formData,
+    //   headers
+    // );
+    if (response?.status == 'SUCCESS') {
       // getAllList(localUserId, pageNo, pageSize);
       setAddPatient(false);
       setIsLoadingBtn(false);
@@ -751,6 +756,9 @@ const enhancer = connect(
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     getAllPatients: tenantAdminAction.getAllPatientAction,
+    getAddPatient:adminActions.getAddPatient,
+    getUploadFile:adminActions.getUploadFile,
+    getUploadRadiologyFile:adminActions.getUploadRadiologyFile
   }
 );
 export default enhancer(Patient);

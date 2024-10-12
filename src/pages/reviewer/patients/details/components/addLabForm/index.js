@@ -5,10 +5,11 @@ import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import axios from "../../../../../../utility/axiosConfig";
 import { validateYear } from "../../../../../../components/headerFilters/functions";
-import ENDPOINTS from "../../../../../../utility/enpoints";
+import { actions as allActions } from "../../../../../../stores/admin/workqueue";
 import { getStorage } from "../../../../../../utils/storages";
+import { connect } from "react-redux";
 
-const AddLabForm = ({ setOpen, open }) => {
+const AddLabForm = ({ setOpen, open, getUploadLabFile }) => {
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
   );
@@ -63,20 +64,21 @@ const AddLabForm = ({ setOpen, open }) => {
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
     formData.append("dos", inputValue.year);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/lab
-          `,
-      formData,
-      headers
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
+    const response = await getUploadLabFile({ data: formData });
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload/lab
+    //       `,
+    //   formData,
+    //   headers
+    // );
+    var result = response;
+    if (result?.status == "SUCCESS") {
       notification.success({
         message: result.message,
         placement: "top",
@@ -180,4 +182,7 @@ const AddLabForm = ({ setOpen, open }) => {
   );
 };
 
-export default AddLabForm;
+const connector = connect((state) => ({}), {
+  getUploadLabFile: allActions.getUploadLabFile,
+});
+export default connector(AddLabForm);

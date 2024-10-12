@@ -3,8 +3,6 @@ import { Avatar, DatePicker, Modal, notification } from "antd";
 import { faXmark, faUser } from "@fortawesome/free-solid-svg-icons";
 import modalStyle from "./style.module.css";
 import { useEffect, useState } from "react";
-import axios from "../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../utility/enpoints";
 import { disablePastDate } from "../../../../components/headerFilters/functions";
 import moment from "moment";
 import { actions as allActions } from "../../../../stores/tenantAdmin/patientAllocation";

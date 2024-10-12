@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { notification } from "antd";
-import ENDPOINTS from "../../../utility/enpoints";
-import axios from "../../../utility/axiosConfig";
 import PatientList from "./list";
 import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
