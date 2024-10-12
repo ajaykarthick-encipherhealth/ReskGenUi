@@ -80,7 +80,7 @@ export async function teamCheck({ totalElements, selectAllFlags, selectAll }) {
   const orgId = getStorage("orgId");
   const data = await requestPortal(
     `dbservice/patient/auditorreport?pageno=0&size=${totalElements}&orgid=${orgId}&allPatientIds=${
-      selectAll ? false : true
+      selectAll
     }&allFlags=${selectAllFlags}
   `,
     options

@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faFileExport } from "@fortawesome/free-solid-svg-icons";
 import { FilterMatchMode } from "primereact/api";
 import { Modal, DatePicker, Tooltip, Select,Input } from "antd";
-import { debounce } from "../../../src/pages/admin/reports/Export";
 import {
   disableFutureDate,
   resetPageNumber,
@@ -30,6 +29,7 @@ import Tab from "../components/tags";
 import MoreFilter from "../../resusablereport/reports/MoreFilter";
 import TeamReport from "./teamReport";
 import { getStorage, setStorage } from "../../utils/storages";
+import { debounce } from "../../components/input";
 
 const statusOptions = [
   { label: "Completed", value: "COMPLETED" },
@@ -175,6 +175,7 @@ const Reports = ({
     setSearchVal([]);
     setFlagPatientsList();
     setSelectAllFlags(false);
+    setSelectAll(false)
     if (name !== "Admin") {
       setSelectedData([]);
       setSelectAllCheckBoxes(false);

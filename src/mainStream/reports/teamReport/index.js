@@ -52,10 +52,10 @@ const TeamReport = ({
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+
   const handleHeaderCheckboxChange = async (
     activeTab,
-    updatedSelectAll,
+    selectAll,
     setSelectAll
   ) => {
     // setSelectAll(!selectAll);
@@ -64,7 +64,7 @@ const TeamReport = ({
     //   : reportListAll?.response?.response?.data;
     // setSelectedRows(updatedRows);
     // const orgId = getStorage("orgId");
-    if (activeTab === "Audit") {
+    if (activeTab === "Audit" && selectAll) {
       // auditReport({
       //   pagenum: 0,
       //   size: ReportPatientDetails?.response?.response?.totalElements,
@@ -96,11 +96,11 @@ const TeamReport = ({
         selectAll,
       });
       if (res.status === "SUCCESS") {
+        console.log(res);
         setSelectAll(true);
         setSelectedRows(res?.response?.patientIds);
       }
-    }
-    if (activeTab === "Team") {
+    } else if (activeTab === "Team" && selectAll) {
       // teamReport({
       //   pagenum: 0,
       //   size: ReportPatientDetails?.response?.response?.totalElements,
@@ -125,15 +125,19 @@ const TeamReport = ({
       //   setSelectedRows(seletedAll ? seletedAll : []);
       //   setIsLoading(false);
       // } catch (error) {}
+
       const res = await teamCHeckList({
         totalElements: ReportPatientDetails?.response?.response?.totalElements,
         selectAllFlags,
         selectAll,
       });
-      if (res.status === "SUCCESS") {
+      if (res?.status === "SUCCESS") {
         setSelectAll(true);
         setSelectedRows(res?.response?.patientIds);
       }
+    } else {
+      setSelectAll(false);
+      setSelectedRows([]);
     }
   };
 
