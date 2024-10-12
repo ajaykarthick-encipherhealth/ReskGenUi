@@ -72,7 +72,7 @@ const L2AllocateModal = ({
       const response = await getL2UsersList({
         userName: selectedUser?.userName,
       });
-      if (response.status == "SUCCESS") {
+      if (response?.status == "SUCCESS") {
         let result = response?.response;
         setChart(result);
       }
@@ -286,7 +286,7 @@ const L2AllocateModal = ({
   );
 };
 
-const connector = connect((state) => ({}), {
+const connector = connect((state) => ({state}), {
   getL2UsersList: allActions.getL2UsersList,
   getAllocateUsers: allActions.getAllocateUsers,
 });

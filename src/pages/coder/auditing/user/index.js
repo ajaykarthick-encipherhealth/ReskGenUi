@@ -28,8 +28,13 @@ import moment from "moment";
 import { Paginator } from "primereact/paginator";
 import { Calendar } from "primereact/calendar";
 import { getStorage, setStorage } from "../../../../utils/storages";
-import {actions as allActions } from '../../../../stores/admin/workqueue'
-function Patient({ getUsersList }) {
+import { actions as allActions } from "../../../../stores/admin/workqueue";
+function Patient({
+  getUsersList,
+  getAddPatient,
+  getUploadFile,
+  getUploadRadiologyFile,
+}) {
   const sideMenu = useSelector((state) => state.sideMenu);
   const patientStoreDetails = useSelector((state) => state);
   const controller = new AbortController();
@@ -242,7 +247,7 @@ function Patient({ getUsersList }) {
 
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
-      const response = await getAddPatient({data:inputValuePatientId})
+      const response = await getAddPatient({ data: inputValuePatientId });
       // axios.post(
       //   ENDPOINTS.apiEndoint + `dbservice/patient`,
       //   inputValuePatientId
@@ -534,7 +539,7 @@ function Patient({ getUsersList }) {
     //   },
     // };
     setSelectFile(formData);
-    const response = await getUploadFile({data:formData})
+    const response = await getUploadFile({ data: formData });
     // axios.post(
     //   ENDPOINTS.apiEndoint +
     //     `aiservice/ai/upload
@@ -542,7 +547,7 @@ function Patient({ getUsersList }) {
     //   formData,
     //   headers
     // );
-    if (response?.status == 'SUCCESS') {
+    if (response?.status == "SUCCESS") {
       getAllList(localUserId, pageNo, pageSize);
 
       notification.success({
@@ -574,7 +579,7 @@ function Patient({ getUsersList }) {
       },
     };
     setSelectFile(formData);
-    const response = await getUploadRadiologyFile({data:formData})
+    const response = await getUploadRadiologyFile({ data: formData });
     // axios.post(
     //   ENDPOINTS.apiEndoint +
     //     `aiservice/ai/upload/radiology
@@ -582,7 +587,7 @@ function Patient({ getUsersList }) {
     //   formData,
     //   headers
     // );
-    if (response?.status == 'SUCCESS') {
+    if (response?.status == "SUCCESS") {
       getAllList(localUserId, pageNo, pageSize);
       setAddPatient(false);
       setIsLoadingBtn(false);
@@ -1055,11 +1060,10 @@ function Patient({ getUsersList }) {
     </>
   );
 }
-const connector=connect((state)=>({}),{
-  getUsersList:allActions.getUsersList,
-  getAddPatient:allActions.getAddPatient,
-  getUploadFile:allActions.getUploadFile,
-  getUploadRadiologyFile:allActions.getUploadRadiologyFile
-
-})
+const connector = connect((state) => ({}), {
+  getUsersList: allActions.getUsersList,
+  getAddPatient: allActions.getAddPatient,
+  getUploadFile: allActions.getUploadFile,
+  getUploadRadiologyFile: allActions.getUploadRadiologyFile,
+});
 export default connector(Patient);
