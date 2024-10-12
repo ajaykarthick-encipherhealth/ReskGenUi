@@ -16,7 +16,7 @@ import { getFilteredList } from "../../../../store/actions/PatientsActions";
 import { actions as ReviewerAction } from "../../../../stores/reviewer/dashboard";
 import { dailyTaskData } from "../../../../stores/reviewer/dashboard/actions";
 
-const DailyTask = ({ getAllDailyTask, dailyStatusDatas }) => {
+const DailyTask = ({ getAllDailyTask, getFilteredList,dailyStatusDatas }) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
 
@@ -64,6 +64,7 @@ const DailyTask = ({ getAllDailyTask, dailyStatusDatas }) => {
         dateString: today?.toISOString(),
       });
     }
+    console.log(days,"days")
 
     setSelectedDate(days);
 
@@ -77,8 +78,6 @@ const DailyTask = ({ getAllDailyTask, dailyStatusDatas }) => {
       getDays(selectedDate, dailyStatusDatas);
     }
   }, [dailyStatusDatas, selectedDate]);
-  console.log(dailyStatusDatas,"dailyStatusDatas")
-
   const showPrevious = () => {
     const lastData = currentDays[0];
     const date = dayjs(lastData?.date).subtract(1, "date");
@@ -98,7 +97,7 @@ const DailyTask = ({ getAllDailyTask, dailyStatusDatas }) => {
 
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
-      const matchingStatusData = statusData?.find((status) => {
+      const matchingStatusData = [statusData]?.find((status) => {
         return status?.data?.response?.date === dayInfo?.dateString;
       });
       return {
@@ -225,6 +224,7 @@ const DailyTask = ({ getAllDailyTask, dailyStatusDatas }) => {
     );
     return index === firstIndex;
   });
+
   const renderCardSkeleton = () => (
     <Row
       gutter={[16, 16]}
@@ -269,6 +269,7 @@ const DailyTask = ({ getAllDailyTask, dailyStatusDatas }) => {
       ))}
     </Row>
   );
+
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -286,6 +287,7 @@ const DailyTask = ({ getAllDailyTask, dailyStatusDatas }) => {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   {uniqueData?.slice(0, 3)?.map((data, index) => (
+                    
                     <Col
                       key={index}
                       span={7}
@@ -302,7 +304,7 @@ const DailyTask = ({ getAllDailyTask, dailyStatusDatas }) => {
                             dueDateStart: data?.dateString,
                             dueDateEnd: data?.dateString,
                           };
-                          dispatch(getFilteredList(params));
+                          getFilteredList(params)
                           router?.push({
                             pathname: "/reviewer/patients",
                             query: params,
@@ -349,7 +351,7 @@ const DailyTask = ({ getAllDailyTask, dailyStatusDatas }) => {
                                           statusSelectedStatus: item?.name,
                                         })
                                       );
-                                      dispatch(getFilteredList(params));
+                                      getFilteredList(params)
                                       router?.push({
                                         pathname: "/reviewer/patients",
                                         search: `params=${params}`,
@@ -407,11 +409,12 @@ const DailyTask = ({ getAllDailyTask, dailyStatusDatas }) => {
 
 const connector = connect(
   (state) => ({
-    dailyStatusDatas: state?.workFlow?.dailyTask,
+    dailyStatusDatas: state?.reviewer?.dashboard?.dailyTask,
     loader: state.admin?.workqueue?.patientsLoading,
   }),
   {
     getAllDailyTask: ReviewerAction.dailyTaskAction,
+    getFilteredList:ReviewerAction.reviewerFilterList
   }
 );
 export default connector(DailyTask);

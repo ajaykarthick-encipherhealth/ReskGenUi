@@ -1,7 +1,7 @@
 
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { workFlowAction,dailyTaskData, dailyTaskAction, accuracyAction,completedScoreAction, holdStatusAction, notificationAction, tenentLogoAction } from "./actions";
+import { workFlowAction,dailyTaskData, dailyTaskAction, accuracyAction,completedScoreAction, holdStatusAction, notificationAction, tenentLogoAction,reviewerFilterList } from "./actions";
 
 const initialState = {
   loading: true,
@@ -59,6 +59,7 @@ const dashbaordReducer = combineReducers({
   notification:createReducer(notificationAction),
   tenentLogo:createReducer(tenentLogoAction),
   dailyTaskDatas: getDailyTaskDatas(dailyTaskData),
+  reviwerPatientFilterList:createReducer(reviewerFilterList),
 });
 
 export default dashbaordReducer;

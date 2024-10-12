@@ -39,3 +39,5 @@ export const unReadCountPostAction = createActionThunk(
   network.unReadCountPost
 );
 export const dailyTaskData = createAction("GET_DAILY_TASK_DATA");
+
+export const reviewerFilterList = createAction("GET_FILTERED_LIST")
