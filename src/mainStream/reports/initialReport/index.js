@@ -87,15 +87,15 @@ const InitialCard = ({
       //   allPatientIds,
       // } = apiCall.admin;
       // try {
-      const url = `dbservice/patient/coderreport?pageno=${pagenum}&size=${
-        size ? size : 7
-      }&startdate=${startDate}&enddate=${endDate}&status=${
-        filter ? filter : ""
-      }&searchstring=${search ? search : ""}&sortfield=${
-        sort?.sortField ? sort?.sortField : ""
-      }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&allPatientIds=${
-        selectAll ? false : true
-      }&allFlags=${selectAllFlags}`;
+      // const url = `dbservice/patient/coderreport?pageno=${pagenum}&size=${
+      //   size ? size : 7
+      // }&startdate=${startDate}&enddate=${endDate}&status=${
+      //   filter ? filter : ""
+      // }&searchstring=${search ? search : ""}&sortfield=${
+      //   sort?.sortField ? sort?.sortField : ""
+      // }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&allPatientIds=${
+      //   selectAll ? false : true
+      // }&allFlags=${selectAllFlags}`;
       const res = await checkAllApi({
         pagenum,
         startDate,
@@ -108,7 +108,6 @@ const InitialCard = ({
         selectAll,
       });
       if (res.status === "SUCCESS") {
-        console.log(res?.response?.patientIds);
         setSelectAll(true);
         setSelectedRows(res?.response?.patientIds);
       }
@@ -373,13 +372,13 @@ const InitialCard = ({
                       type="checkbox"
                       onChange={() => {
                         setSelectAll((prevState) => {
-                          const updatedSelectAll = !prevState; // Toggle the state
+                          const updatedSelectAll = !prevState; 
                           handleHeaderCheckboxChange(
                             activeTab,
                             updatedSelectAll,
                             setSelectAll
-                          ); // Call the function with updated value
-                          return updatedSelectAll; // Return the new state
+                          ); 
+                          return updatedSelectAll;
                         });
                       }}
                       className={

@@ -1,10 +1,7 @@
 import { createActionThunk } from "../../../utils/redux";
 import * as network from "./network";
 
-export const reviewerReport = createActionThunk(
-  "REVIEWER",
-  network.reviewerApi
-);
+
 export const sentReport = createActionThunk(
   "SENT",
   network.sentApi
@@ -18,6 +15,14 @@ export const auditReport = createActionThunk(
   network.auditApi
 );
 export const teamReport = createActionThunk(
-  "Audit",
+  "TEAM_REPORT",
   network.teamApi
+);
+export const auditCHeckList = createActionThunk(
+  "AUDIT_CHECKED_LIST",
+  network.auditCheck
+);
+export const teamCHeckList = createActionThunk(
+  "TEAM_CHECKED_LIST",
+  network.teamCheck
 );
