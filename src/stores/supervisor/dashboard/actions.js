@@ -41,4 +41,9 @@ export const completedChartAction = createActionThunk(
   network.CompletedStatus
 );
 
+export const getUserByIndividualAction = createActionThunk(
+  "INDIVIDUALUSER",
+  network.userByIndividual
+);
+
 export const dailyTaskData = createAction("GET_DAILY_TASK_DATA");

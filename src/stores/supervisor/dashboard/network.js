@@ -10,11 +10,11 @@ export async function supervisorWorkFlow({ startDate = "", endDate = "" }) {
   `,
     options
   );
-  console.log(startdataDate, "startDate");
   return data;
 }
 
 export const dailyTask = async ({ date }) => {
+  const userId = getStorage("userId");
   const options = {
     method: "GET",
   };
@@ -47,31 +47,19 @@ export const holdStatus = async () => {
   return data;
 };
 
-export const accuracy = async ({ btn, month, year, isAdmin = false }) => {
+export const accuracy = async ({ btn,month,year,user }) => {
   const role = getStorage("role");
-  const url = isAdmin
-    ? btn === "Daily"
-      ? `daily?month=${month}&year=${year}&role=${
-          role ? role.toUpperCase() : ""
-        }&isAdmin=${isAdmin}`
-      : btn === "Weekly"
-      ? `weekly?month=${month}&year=${year}&role=${
-          role ? role.toUpperCase() : ""
-        }&isAdmin=${isAdmin}`
-      : `monthyly?year=${year}&role=${
-          role ? role.toUpperCase() : ""
-        }&isAdmin=${isAdmin}`
-    : btn === "Daily"
-    ? `daily?month=${month}&year=${year}&role=${
+  const url =
+  btn === "DAILY"
+    ? `daily?month=${month}&role=${
         role ? role.toUpperCase() : ""
-      }&isAdmin=${isAdmin}`
-    : btn === "Weekly"
-    ? `weekly?month=${month}&year=${year}&role=${
+      }&year=${year}&userId=${user}`
+    : btn === "WEEKLY"
+    ? `weekly?month=${month}&role=${
         role ? role.toUpperCase() : ""
-      }&isAdmin=${isAdmin}`
-    : `monthyly?year=${year}&role=${
-        role ? role.toUpperCase() : ""
-      }&isAdmin=${isAdmin}`;
+      }&year=${year}&userId=${user}`
+    : `monthyly?role=${role ? role.toUpperCase() : ""}&year=${year}&userId=${user}`;
+
   const options = {
     method: "POST",
   };
@@ -101,6 +89,17 @@ export const CompletedStatus = async ({
     `dbservice/l2dashboard/productivity/status/${url}`,
     options
   );
-  console.log(data,"complete")
+  return data;
+};
+
+export const userByIndividual = async () => {
+  const orgId = getStorage("orgId");
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/user/getuserbymanagerid?orgid=${orgId}`,
+    options
+  );
   return data;
 };

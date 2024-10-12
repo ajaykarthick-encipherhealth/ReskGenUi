@@ -71,9 +71,8 @@ const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData }) => {
     }
 
     setSelectedDate(days);
-
     days?.map((data, index) => {
-      return dailyTaskData(data?.dateString, router);
+      return getAllDailyTask({ date: data?.dateString });
     });
   }, []);
 
@@ -96,7 +95,7 @@ const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData }) => {
     ];
     setSelectedDate((prev) => [...prev, ...datas]);
     datas?.map((data, index) => {
-      return getAllDailyTask(data?.dateString, router);
+      return getAllDailyTask({ date: data?.dateString });
     });
   };
 

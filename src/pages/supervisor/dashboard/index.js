@@ -35,7 +35,7 @@ const Index = ({ getAllWorkFlow }) => {
     : endOfToday.toISOString().split("T")[0] + "T23:59:59.999Z";
 
   useEffect(() => {
-    getAllWorkFlow(startDate, endDate, router);
+    getAllWorkFlow({ startDate, endDate });
   }, [startDate, endDate]);
 
   return (
@@ -46,7 +46,7 @@ const Index = ({ getAllWorkFlow }) => {
         <div className={styles.rowCOntainer}>
           <Row className={styles.RowCon} gutter={8}>
             <Col span={7} className={styles.column1}>
-              <WorkFlow getAllWorkFlow ={getAllWorkFlow}/>
+              <WorkFlow getAllWorkFlow={getAllWorkFlow} />
             </Col>
             <Col span={18} offset={1} className={styles.first_column}>
               <DailyTask />
@@ -74,8 +74,6 @@ const Index = ({ getAllWorkFlow }) => {
     </div>
   );
 };
-
-
 
 const connector = connect(() => ({}), {
   getAllWorkFlow: supervisorAction.supervisorWorkFlowAction,

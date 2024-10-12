@@ -9,7 +9,8 @@ import {
   getDailyTaskData,
   holdStatusAction,
   supervisorWorkFlowAction,
-  completedChartAction
+  completedChartAction,
+  getUserByIndividualAction
 } from "./actions";
 
 const initialState = {
@@ -71,6 +72,7 @@ const dashboardReducer = combineReducers({
   holdStatus: createReducer(holdStatusAction),
   // notification: createReducer(notificationAction),
   // tenentLogo: createReducer(tenentLogoAction),
+  individualUser: createReducer(getUserByIndividualAction),
 });
 
 export default dashboardReducer;

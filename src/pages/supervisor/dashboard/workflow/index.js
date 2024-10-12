@@ -33,7 +33,6 @@ const WorkFlow = ({ worlFlowData }) => {
   // const worlFlowData = useSelector((state) => state?.l2Dashboard?.data);
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const [openPicker, setOpenPicker] = useState(false);
-  console.log(worlFlowData, "worlFlowData");
   const last30thDate = currentDate?.subtract(31, "day");
   const lastDateWithTime = currentDate?.endOf("day");
 
@@ -211,13 +210,11 @@ const WorkFlow = ({ worlFlowData }) => {
   );
 };
 
-
 const connector = connect(
   (state) => ({
     worlFlowData: state?.supervisor?.dashboard?.workFlow,
     loader: state.admin?.workqueue?.patientsLoading,
   }),
-  {    
-  }
+  {}
 );
 export default connector(WorkFlow);

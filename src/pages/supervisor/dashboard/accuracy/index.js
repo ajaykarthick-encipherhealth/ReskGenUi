@@ -14,7 +14,6 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import {
 getAccuracyScoreNew,
-  getUserByIndividual,
 } from "../../../../store/actions/l2Action/DashboardAction";
 
 import spinSTYles from "../../../../styles/auth.module.css";
@@ -53,7 +52,7 @@ export const monthNames = [
   "DEC",
 ];
 
-const Accuracy = ({ accuracyDatass }) => {
+const Accuracy = ({ accuracyDatas ,getAccuracyScore,getUserByIndividual,individualDetails}) => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const [initialAccuracyData, setInitialAccuracyData] = useState(null);
@@ -70,11 +69,12 @@ const Accuracy = ({ accuracyDatass }) => {
   const [optionsUser, setOptionUser] = useState([]);
 
   const dispatch = useDispatch();
-  const accuracyDatas = useSelector((state) => state?.l2Dashboard?.accuracy);
-  const individualDetails = useSelector(
-    (state) => state?.l2Dashboard?.individualUser
-  );
-  console.log(accuracyDatass, "accuracyDatas");
+
+  // const accuracyDatas = useSelector((state) => state?.l2Dashboard?.accuracy);
+  // const individualDetails = useSelector(
+  //   (state) => state?.l2Dashboard?.individualUser
+  // );
+  // console.log(accuracyDatass, "accuracyDatas");
   const userOption = () => {
     const res = individualDetails?.data?.response.map((item) => {
       return {
@@ -113,7 +113,7 @@ const Accuracy = ({ accuracyDatass }) => {
   };
 
   useEffect(() => {
-    dispatch(getUserByIndividual());
+    getUserByIndividual();
   }, [selectMemberType]);
 
   useEffect(() => {
@@ -123,18 +123,14 @@ const Accuracy = ({ accuracyDatass }) => {
   }, [individualDetails]);
 
   useEffect(() => {
-    dispatch(
-      getAccuracyScoreNew(
-        currentBtn.toUpperCase(),
-        currentDate.getDate(),
-        selectedMonth,
-        selectedYear,
-        router,
-        selectMemberType,
-        selectUser
+      getAccuracyScore(
+       {btn: currentBtn.toUpperCase(),
+        date : currentDate.getDate(),
+        month: selectedMonth,
+        year: selectedYear,
+        user:selectUser}
       )
-    );
-    dispatch(getUserByIndividual());
+      getUserByIndividual();
   }, [currentBtn, selectedMonth, selectedYear, selectMemberType, selectUser]);
 
   const handleButtonClick = (index, btn) => {
@@ -494,11 +490,13 @@ const Accuracy = ({ accuracyDatass }) => {
 
 const enhancer = connect(
   (state) => ({
-    accuracyDatass: state?.reviewer?.dashboard?.accuracy,
-    accuracyLoading: state?.reviewer?.dashboard?.accuracyLoading,
+    accuracyDatas: state?.supervisor?.dashboard?.accuracy,
+    accuracyLoading: state?.supervisor?.dashboard?.accuracyLoading,
+    individualDetails: state?.supervisor?.dashboard?.individualUser,
   }),
   {
     getAccuracyScore: dashbaordActions.accuracyAction,
+    getUserByIndividual:dashbaordActions.getUserByIndividualAction,
   }
 );
 export default enhancer(Accuracy);
