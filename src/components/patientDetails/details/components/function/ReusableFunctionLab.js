@@ -7,6 +7,8 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
 import axios from "../../../../../utils/axiosConfig";
 import { getStorage } from "../../../../../utils/storages";
+import { movementApiCall } from "../../../../../stores/patient/details/network";
+import { getResponePopup } from "../../../../../utils/reusable";
 
 export const getEncounterDateBackground = ({
   value,
@@ -140,7 +142,7 @@ export const getCaptureSectionBackgroundFile = (
             diagnosisCode,
             setSearch,
             setFileModalHeader,
-            setIsModalOpenRadiology
+            setIsModalOpenRadiology,
           })
         }
         style={{ backgroundColor: backColor, color: textColor }}
@@ -291,7 +293,10 @@ export const handleSubmitValidNotes = async ({
     apiURL = "dbservice/update/move/deletedtovalid";
   }
 
-  if (isValidAction.name == "Move to NON HCC" && isValidAction.title == "DELETED") {
+  if (
+    isValidAction.name == "Move to NON HCC" &&
+    isValidAction.title == "DELETED"
+  ) {
     apiURL = "dbservice/update/move/deletedtoinvalid";
   }
 
@@ -327,26 +332,14 @@ export const handleSubmitValidNotes = async ({
       encounterDate: selectDisDetails.encounterDate,
       capturedSections: selectDisDetails.capturedSections,
     };
-    const response = await axios.put(
-      process.env.NEXT_PUBLIC_PORTAL_BASE_URL + apiURL,
-      dataFormatSuggested
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
+    const response = await movementApiCall(dataFormatSuggested, apiURL);
+    if (response.status == "SUCCESS") {
       setFileLoading(false);
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });  
-        getLabDetails(patientId);
+      getResponePopup(response);
+      getLabDetails(patientId);
     } else {
       setFileLoading(false);
-      notification.error({
-        message: result.response,
-        placement: "top",
-        duration: 1,
-      });
+      getResponePopup(response);
     }
   } catch (err) {
     setFileLoading(false);
@@ -364,11 +357,11 @@ export const findValueDocument = async ({
   diagnosisCode,
   setSearch,
   setFileModalHeader,
-  setIsModalOpenRadiology
+  setIsModalOpenRadiology,
 }) => {
-    if(setIsModalOpenRadiology){
-        setIsModalOpenRadiology(true)
-    }
+  if (setIsModalOpenRadiology) {
+    setIsModalOpenRadiology(true);
+  }
   var headerName = diagnosisCode + " - (" + headerNames + ")";
   setFileModalHeader(headerName);
   setSearch({

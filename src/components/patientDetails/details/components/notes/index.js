@@ -17,6 +17,7 @@ import { getStorage } from "../../../../../utils/storages";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { isDeleteNotes } from "../../../../../stores/patient/details/actions";
 import { getResponePopup } from "../../../../../utils/reusable";
+import { getNotesLists, getUserDetails } from "../../../../../stores/patient/details/network";
 
 const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes }) => {
   const [inputValue, setInputValue] = useState({
@@ -130,18 +131,8 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes 
 
   const getNotesList = async () => {
     const yearData = patientDetailsResult?.data?.response;
-
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_PORTAL_BASE_URL +
-        `dbservice/notes?patientId=${
-          patientDetailsResult?.data?.response?.patientId
-        }&processedYear=${
-          yearData?.processedYear ? yearData?.processedYear : ""
-        }&dateOfService=${
-          yearData?.dateOfService ? yearData?.dateOfService : ""
-        }`
-    );
-    setNotesList(response?.data?.response);
+    const response = await getNotesLists(patientDetailsResult?.data?.response?.patientId,yearData)
+    setNotesList(response?.response);
     setFilterDataLoading(false);
   };
 
@@ -166,11 +157,8 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes 
     );
 
     setTimeout(async () => {
-      const response = await axios.get(
-        process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `dbservice/user/get?userName=${userId}`
-      );
-
-      if (response.data) {
+      const response = await getUserDetails(userId);
+      if (response?.response) {
         result = response?.response;
         data = (
           <div className={visitStyles.userDetailsCard}>

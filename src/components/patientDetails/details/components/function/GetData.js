@@ -1,8 +1,3 @@
-import {
-  getLabFileDetails,
-  getRadiologyFileDetails,
-} from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
-import axios from "../../../../../utils/axiosConfig";
 import { getStorage } from "../../../../../utils/storages";
 import { sortFunction } from "./GetDataLab";
 import { stringToColour } from "./ReusableFunctions";

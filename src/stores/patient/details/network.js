@@ -207,10 +207,7 @@ export async function addNotes(obj) {
     method: "POST",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(
-    `dbservice/notes`,
-    options
-  );
+  const data = await requestPortal(`dbservice/notes`, options);
   return data;
 }
 
@@ -219,10 +216,7 @@ export async function addComments(obj) {
     method: "POST",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(
-    `dbservice/comment`,
-    options
-  );
+  const data = await requestPortal(`dbservice/comment`, options);
   return data;
 }
 
@@ -409,4 +403,126 @@ export async function getUserDetails(userId) {
     options
   );
   return res;
+}
+
+export async function addValidDisease(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/patient/compute/addvaliddisease`,
+    options
+  );
+  return data;
+}
+
+export async function findDiseaseByCode(value) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`,
+    options
+  );
+  return data;
+}
+export async function getProviderData(value) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `management/provider/getProviderData?npiNumber=${value}`,
+    options
+  );
+  return data;
+}
+
+export async function getCommentList(patientId, yearData) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/comment?patientId=${patientId}&processedYear=${
+      yearData?.processedYear || ""
+    }&dateOfService=${yearData?.dateOfService || ""}`,
+    options
+  );
+  return data;
+}
+
+export async function editDisease(obj) {
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`aiservice/disease/editdisease`, options);
+  return data;
+}
+
+export async function flagDetailsPost(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`dbservice/flagdetails`, options);
+  return data;
+}
+
+export async function movementApiCall(obj, apiUrl) {
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(apiUrl, options);
+  return data;
+}
+
+export async function getPageNumber(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`dbservice/pageNumber`, options);
+  return data;
+}
+
+export async function getPageNumberLatest(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`dbservice/pageNumber`, options);
+  return data;
+}
+
+export async function getNotesLists(patientId, yearData) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/notes?patientId=${patientId}&processedYear=${
+      yearData?.processedYear ? yearData?.processedYear : ""
+    }&dateOfService=${yearData?.dateOfService ? yearData?.dateOfService : ""}`,
+    options
+  );
+  return data;
+}
+
+export async function overallStatusUpdate(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`dbservice/patient/status/overallstatus`, options);
+  return data;
+}
+
+export async function overallYearStatus(obj,url) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(url, options);
+  return data;
 }

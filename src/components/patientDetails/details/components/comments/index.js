@@ -16,6 +16,7 @@ import { connect } from "react-redux";
 import { getStorage } from "../../../../../utils/storages";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
+import { getCommentList, getUserDetails } from "../../../../../stores/patient/details/network";
 
 const Comments = ({
   setOpen,
@@ -37,15 +38,8 @@ const Comments = ({
 
   const getCommentsList = async () => {
     const yearData = patientDetailsResult?.data?.response;
-
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_PORTAL_BASE_URL}dbservice/comment?patientId=${
-        patientDetailsResult?.data?.response?.patientId
-      }&processedYear=${yearData?.processedYear || ""}&dateOfService=${
-        yearData?.dateOfService || ""
-      }`
-    );
-    setCommentList(response?.data?.response);
+    const response = await getCommentList(patientDetailsResult?.data?.response?.patientId,yearData)
+    setCommentList(response?.response);
     setFilterDataLoading(false);
   };
 
@@ -155,12 +149,9 @@ const Comments = ({
     );
 
     setTimeout(async () => {
-      const response = await axios.get(
-        process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `dbservice/user/get?userName=${userId}`
-      );
-
-      if (response.data) {
-        result = response.data.response;
+      const response = await getUserDetails(userId);
+      if (response?.response) {
+        result = response?.response;
         data = (
           <div className={visitStyles.userDetailsCard}>
             <div className={visitStyles.avatarStyle}>

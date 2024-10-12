@@ -9,6 +9,7 @@ import RegularButton from "../../../../../components/button";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
+import { findDiseaseByCode } from "../../../../../stores/patient/details/network";
 const { TextArea } = Input;
 
 const { Option } = Select;
@@ -68,11 +69,8 @@ const EditHccForm = ({
         description: form.actualDescription,
       };
       try {
-        const response = await axios.put(
-          process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `aiservice/disease/editdisease`,
-          dataFormat
-        );
-        if (response?.data?.status == "SUCCESS") {
+        const response = await editDisease(dataFormat);
+        if (response?.status == "SUCCESS") {
           setProviderInfoSelectClose(true);
           setTimeout(() => {
             setIsEditHccForm(false);
@@ -103,11 +101,8 @@ const EditHccForm = ({
   const getFindValidDiagnosisCode = async (value) => {
     setAddValidCodeCheck(null);
     try {
-      const response = await axios.get(
-        process.env.NEXT_PUBLIC_PORTAL_BASE_URL +
-          `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
-      );
-      if (response.data) {
+      const response = await findDiseaseByCode(value);
+      if (response?.response) {
         if (response.data == "ICD disease not found") {
           setAddValidCodeCheck(false);
         } else {

@@ -17,6 +17,7 @@ import RegularButton from "../../../../../components/button";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { getStorage } from "../../../../../utils/storages";
+import { findDiseaseByCode } from "../../../../../stores/patient/details/network";
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -191,12 +192,9 @@ const AddMeatQuery = ({
 
   const getFindValidDiagnosisCode = async (value) => {
     try {
-      const response = await axios.get(
-        process.env.NEXT_PUBLIC_PORTAL_BASE_URL +
-          `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
-      );
-      if (response.data) {
-        if (response.data == "ICD disease not found") {
+      const response = await findDiseaseByCode(value);
+      if (response?.response) {
+        if (response.response == "ICD disease not found") {
           setAddValidCodeCheck(false);
         } else {
           setAddValidCodeCheck(true);

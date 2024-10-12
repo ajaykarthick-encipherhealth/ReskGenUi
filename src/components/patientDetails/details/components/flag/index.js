@@ -20,7 +20,7 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import { getStorage } from "../../../../../utils/storages";
 import { DeleteOutlined } from "@ant-design/icons";
 import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
-import { deleteflag } from "../../../../../stores/patient/details/network";
+import { deleteflag, flagDetailsPost, getUserDetails } from "../../../../../stores/patient/details/network";
 import SvgFlag from "../svg/svg";
 import { getResponePopup } from "../../../../../utils/reusable";
 
@@ -100,10 +100,7 @@ const Flag = ({
         flagId: inputValue.flagId,
       };
       try {
-        const response = await axios.post(
-          process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `dbservice/flagdetails`,
-          dataFormatSuggested
-        );
+        const response = await flagDetailsPost(dataFormatSuggested);
         getResponePopup(response);
         getFlagDetailsData(
           patientDetailsResult?.data?.response?.patientId,
@@ -146,12 +143,9 @@ const Flag = ({
     );
 
     setTimeout(async () => {
-      const response = await axios.get(
-        process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `dbservice/user/get?userName=${userId}`
-      );
-
-      if (response.data) {
-        result = response.data.response;
+      const response = await getUserDetails(userId);
+      if (response?.response) {
+        result = response?.response;
         data = (
           <div className={visitStyles.userDetailsCard}>
             <div className={visitStyles.avatarStyle}>

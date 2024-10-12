@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { DownOutlined } from "@ant-design/icons";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
+import { overallYearStatus } from "../../../../../stores/patient/details/network";
 const YearAndDosStatus = ({
   patientDetailsResult,
   patientIdDetailsData,
@@ -416,14 +417,10 @@ const YearAndDosStatus = ({
       apiURL = "dbservice/patient/status/audit";
     }
     try {
-      const response = await axios.post(
-        process.env.NEXT_PUBLIC_PORTAL_BASE_URL + apiURL,
-        postData
-      );
-      var result = response.data;
-      if (result.status == "SUCCESS") {
+      const response = await overallYearStatus(postData,apiURL)
+      if (response?.status == "SUCCESS") {
         notification.success({
-          message: result.message,
+          message: response?.message,
           placement: "top",
           duration: 1,
         });
