@@ -9,12 +9,14 @@ import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
 import { getDailyTaskDatas } from "../../../../store/actions/DashboardActions";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
+import { actions as ReviewerAction } from "../../../../stores/reviewer/dashboard";
+import { dailyTaskData } from "../../../../stores/reviewer/dashboard/actions";
 
-const DailyTask = () => {
+const DailyTask = ({ getAllDailyTask, dailyStatusDatas }) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
 
@@ -66,15 +68,16 @@ const DailyTask = () => {
     setSelectedDate(days);
 
     days?.map((data, index) => {
-      return dispatch(getDailyTaskDatas(data?.dateString, router));
+      return getAllDailyTask({ date: data?.dateString });
     });
   }, []);
 
   useEffect(() => {
-    if (dailyStatusData) {
-      getDays(selectedDate, dailyStatusData);
+    if (dailyStatusDatas && selectedDate) {
+      getDays(selectedDate, dailyStatusDatas);
     }
-  }, [dailyStatusData]);
+  }, [dailyStatusDatas, selectedDate]);
+  console.log(dailyStatusDatas,"dailyStatusDatas")
 
   const showPrevious = () => {
     const lastData = currentDays[0];
@@ -89,7 +92,7 @@ const DailyTask = () => {
     ];
     setSelectedDate((prev) => [...prev, ...datas]);
     datas?.map((data, index) => {
-      return dispatch(getDailyTaskDatas(data?.dateString, router));
+      return getAllDailyTask({ date: data?.dateString });
     });
   };
 
@@ -243,6 +246,25 @@ const DailyTask = () => {
             height: "260px",
           }}
         >
+          <Row>
+            <Col span={12}>
+              <div>
+                <Skeleton.Input
+                  style={{ width: "100%", height: "200px" }}
+                  active
+                />
+              </div>
+            </Col>
+            <Col span={12} className={styles.headerTitle}>
+              <div style={{ paddingLeft: "10px" }}>
+                {Array.from({ length: bullets.length }).map((_, i) => (
+                  <div className={styles.container} key={i}>
+                    <Skeleton.Input style={{ width: 30 }} active />
+                  </div>
+                ))}
+              </div>
+            </Col>
+          </Row>
         </Col>
       ))}
     </Row>
@@ -311,7 +333,7 @@ const DailyTask = () => {
                           </div>
                         </Col>
                         <Col span={12} className={styles.headerTitle}>
-                          <div>
+                          <div style={{ paddingLeft: "10px" }}>
                             {bullets?.map((item) => {
                               return (
                                 <div className={styles.container}>
@@ -383,4 +405,62 @@ const DailyTask = () => {
   );
 };
 
-export default DailyTask;
+const connector = connect(
+  (state) => ({
+    dailyStatusDatas: state?.workFlow?.dailyTask,
+    loader: state.admin?.workqueue?.patientsLoading,
+  }),
+  {
+    getAllDailyTask: ReviewerAction.dailyTaskAction,
+  }
+);
+export default connector(DailyTask);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
