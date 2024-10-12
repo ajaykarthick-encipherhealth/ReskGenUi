@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import { adminApi } from "./network";
+import { adminCheckAllReport } from "./actions";
 
 const initialState = {
   loading: true,
@@ -43,8 +44,9 @@ const createReducer = (actionType) =>
 
 const ReportReducer = combineReducers({
   admin: createReducer(adminApi),
-  adminLoader: getReportLoading(adminApi)
-
+  adminLoader: getReportLoading(adminApi),
+  checkedData:createReducer(adminCheckAllReport),
+  checkedLoader:getReportLoading(adminCheckAllReport),
 });
 
 export default ReportReducer;

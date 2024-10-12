@@ -7,11 +7,7 @@ import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
 import declineIcon from "../../.../../../images/trackingImages/DeclineTrack.png";
 import reAuditIcon from "../../.../../../images/trackingImages/AuditPending.png";
-import auditHoldIcon from "../../.../../../images/trackingImages/AuditHoldTrack.png";
 import auditedIcon from "../../.../../../images/trackingImages/AuditedTrack.png";
-import reeAuditIcon from "../../.../../../images/trackingImages/reAuditTrack.png";
-import notAudited from "../../.../../../images/trackingImages/NotAuditedTrack.png";
-import auditDeclined from "../../.../../../images/trackingImages/AuditDeclined.png";
 import { Paginator } from "primereact/paginator";
 import TableStyle from "../../../components/table/table.module.css";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
@@ -29,8 +25,6 @@ import {
 } from "../../components/chartUtils";
 import { actions as supervisorAction } from "../../../stores/supervisor/report";
 import { getStorage, setStorage } from "../../../utils/storages";
-import ENDPOINTS from "../../../utility/enpoints";
-
 const TeamReport = ({
   patientDetails,
   paginationFirst,
@@ -51,69 +45,99 @@ const TeamReport = ({
   handleHeaderCheckbox,
   selectAllFlags,
   userRole,
+  auditCheckedLoader,
+  teamCheckedLoader,
+  auditCHeckList,
+  teamCHeckList,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const handleHeaderCheckboxChange = async () => {
-    setSelectAll(!selectAll);
+
+  const handleHeaderCheckboxChange = async (
+    activeTab,
+    selectAll,
+    setSelectAll
+  ) => {
+    // setSelectAll(!selectAll);
     // const updatedRows = selectAll
     //   ? []
     //   : reportListAll?.response?.response?.data;
     // setSelectedRows(updatedRows);
-    const orgId = getStorage("orgId");
-    if (activeTab === "Audit") {
+    // const orgId = getStorage("orgId");
+    if (activeTab === "Audit" && selectAll) {
       // auditReport({
       //   pagenum: 0,
       //   size: ReportPatientDetails?.response?.response?.totalElements,
       // });
-      setIsLoading(true);
-      try {
-        setIsLoading(true);
-        const res = await fetch(
-          ENDPOINTS.apiEndoint +
-            `dbservice/patient/auditor/assinedreport?pageno=0&size=${
-              ReportPatientDetails?.response?.response?.totalElements
-            }&orgid=${orgId}&allPatientIds=${
-              selectAll ? false : true
-            }&allFlags=${selectAllFlags}`,
-          {
-            headers: { Authorization: `Bearer ${await getStorage("token")}` },
-          }
-        ).then((res) => res.json());
-        // const seletedAll =res?.response?.response?.data?.map(item=>item?.patientId);
-        const seletedAll = res?.response?.patientIds;
-        setSelectedRows(seletedAll ? seletedAll : []);
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
+      // setIsLoading(true);
+      // try {
+      //   setIsLoading(true);
+      //   const res = await fetch(
+      //     ENDPOINTS.apiEndoint +
+      //       `dbservice/patient/auditor/assinedreport?pageno=0&size=${
+      //         ReportPatientDetails?.response?.response?.totalElements
+      //       }&orgid=${orgId}&allPatientIds=${
+      //         selectAll ? false : true
+      //       }&allFlags=${selectAllFlags}`,
+      //     {
+      //       headers: { Authorization: `Bearer ${await getStorage("token")}` },
+      //     }
+      //   ).then((res) => res.json());
+      //   // const seletedAll =res?.response?.response?.data?.map(item=>item?.patientId);
+      //   const seletedAll = res?.response?.patientIds;
+      //   setSelectedRows(seletedAll ? seletedAll : []);
+      //   setIsLoading(false);
+      // } catch (error) {
+      //   setIsLoading(false);
+      // }
+      const res = await auditCHeckList({
+        totalElements: ReportPatientDetails?.response?.response?.totalElements,
+        selectAllFlags,
+        selectAll,
+      });
+      if (res.status === "SUCCESS") {
+        console.log(res);
+        setSelectAll(true);
+        setSelectedRows(res?.response?.patientIds);
       }
-    }
-    if (activeTab === "Team") {
+    } else if (activeTab === "Team" && selectAll) {
       // teamReport({
       //   pagenum: 0,
       //   size: ReportPatientDetails?.response?.response?.totalElements,
       // });
-      setIsLoading(true);
-      try {
-        const res = await fetch(
-          ENDPOINTS.apiEndoint +
-            `dbservice/patient/auditorreport?pageno=0&size=${
-              ReportPatientDetails?.response?.response?.totalElements
-            }&orgid=${orgId}&allPatientIds=${
-              selectAll ? false : true
-            }&allFlags=${selectAllFlags}`,
-          {
-            headers: { Authorization: `Bearer ${await getStorage("token")}` },
-          }
-        ).then((res) => res.json());
-        const seletedAll = res?.response?.patientIds
-        //  res?.response?.response?.data?.map(
-        //   (item) => item?.patientId
-        // );
-        setSelectedRows(seletedAll ? seletedAll : []);
-        setIsLoading(false);
-      } catch (error) {}
+      // setIsLoading(true);
+      // try {
+      //   const res = await fetch(
+      //     ENDPOINTS.apiEndoint +
+      //       `dbservice/patient/auditorreport?pageno=0&size=${
+      //         ReportPatientDetails?.response?.response?.totalElements
+      //       }&orgid=${orgId}&allPatientIds=${
+      //         selectAll ? false : true
+      //       }&allFlags=${selectAllFlags}`,
+      //     {
+      //       headers: { Authorization: `Bearer ${await getStorage("token")}` },
+      //     }
+      //   ).then((res) => res.json());
+      //   const seletedAll = res?.response?.patientIds;
+      //   //  res?.response?.response?.data?.map(
+      //   //   (item) => item?.patientId
+      //   // );
+      //   setSelectedRows(seletedAll ? seletedAll : []);
+      //   setIsLoading(false);
+      // } catch (error) {}
+
+      const res = await teamCHeckList({
+        totalElements: ReportPatientDetails?.response?.response?.totalElements,
+        selectAllFlags,
+        selectAll,
+      });
+      if (res?.status === "SUCCESS") {
+        setSelectAll(true);
+        setSelectedRows(res?.response?.patientIds);
+      }
+    } else {
+      setSelectAll(false);
+      setSelectedRows([]);
     }
   };
 
@@ -305,46 +329,52 @@ const TeamReport = ({
               >
                 {" "}
                 {/* { */}
-                  {/* reportListAll?.response?.response?.data?.length > 0 && (
+                {/* reportListAll?.response?.response?.data?.length > 0 && (
                     // (isLoading ? (
                     //   <Spin />
                     // ) : (
                     <> */}
-                      <div className="col-xl-1 d-flex">
-                        <div>
-                          <input
-                            type="checkbox"
-                            onChange={handleHeaderCheckboxChange}
-                            className={
-                              styles.checkAlign +
-                              (selectAll ? " " + TableStyle.customChecked : "")
-                            }
-                            checked={selectAll && selectedRows?.length > 0}
-                          />
-                        </div>
-                        <span className={`pl-0 text-start ${styles.pName}`}>
-                          All
-                        </span>
-                      </div>
-                      <div className="col-xl-2 d-flex pt-0">
-                        <div>
-                          <input
-                            type="checkbox"
-                            onChange={handleHeaderCheckbox}
-                            className={
-                              styles.checkAlign +
-                              (selectAllFlags
-                                ? " " + TableStyle.customChecked
-                                : "")
-                            }
-                            checked={selectAllFlags}
-                          />
-                        </div>
-                        <span className={`pl-4 text-start ${styles.pName}`}>
-                          All Flags
-                        </span>
-                      </div>
-                    {/* </>
+                <div className="col-xl-1 d-flex">
+                  <div>
+                    <input
+                      type="checkbox"
+                      onChange={() => {
+                        setSelectAll((prevState) => {
+                          const updatedSelectAll = !prevState;
+                          handleHeaderCheckboxChange(
+                            activeTab,
+                            updatedSelectAll,
+                            setSelectAll
+                          );
+                          return updatedSelectAll;
+                        });
+                      }}
+                      className={
+                        styles.checkAlign +
+                        (selectAll ? " " + TableStyle.customChecked : "")
+                      }
+                      checked={selectAll && selectedRows?.length > 0}
+                    />
+                  </div>
+                  <span className={`pl-0 text-start ${styles.pName}`}>All</span>
+                </div>
+                <div className="col-xl-2 d-flex pt-0">
+                  <div>
+                    <input
+                      type="checkbox"
+                      onChange={handleHeaderCheckbox}
+                      className={
+                        styles.checkAlign +
+                        (selectAllFlags ? " " + TableStyle.customChecked : "")
+                      }
+                      checked={selectAllFlags}
+                    />
+                  </div>
+                  <span className={`pl-4 text-start ${styles.pName}`}>
+                    All Flags
+                  </span>
+                </div>
+                {/* </>
                   )
                   // ))
                 } */}
@@ -399,7 +429,11 @@ const TeamReport = ({
                                 patientAllocatedProfileImage={
                                   item?.patientAllocatedProfileImage
                                 }
-                                loading={isLoading}
+                                loading={
+                                  activeTab === "Audit"
+                                    ? auditCheckedLoader
+                                    : teamCheckedLoader
+                                }
                               />
                             )
                           )}
@@ -491,10 +525,15 @@ const TeamReport = ({
 const enhancer = connect(
   (state) => ({
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+    auditCheckedLoader: state?.supervisor?.report?.checkedLoader,
+    teamCheckedLoader: state?.supervisor?.report?.teamCheckedLoader,
   }),
   {
     teamReport: supervisorAction.teamReport,
     auditReport: supervisorAction.auditReport,
+
+    auditCHeckList: supervisorAction.auditCHeckList,
+    teamCHeckList: supervisorAction.teamCHeckList,
   }
 );
 export default enhancer(TeamReport);

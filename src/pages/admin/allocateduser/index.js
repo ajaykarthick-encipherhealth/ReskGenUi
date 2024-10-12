@@ -9,8 +9,6 @@ import { Paginator } from "primereact/paginator";
 import moment from "moment/moment";
 import { Tab, Nav } from "react-bootstrap";
 import Header from "../../../jsx/layouts/nav/Header";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
 import AllocatedAdminList from "../../../components/table/admin/allocatedAdminList/allocatedAdminList";
 import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
 import L2AllocateModal from "./l2allocate";
@@ -31,6 +29,7 @@ import { useCallback } from "react";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
+import { getResponePopup } from "../../../utils/reusable";
 const { RangePicker } = DatePicker;
 const statusOption = [
   { value: "URGENT", label: "URGENT" },
@@ -51,6 +50,10 @@ const Patient = ({
   loader3,
   getFilters,
   filteredList,
+  getAllCheckedListForReviewer,
+  allCheckBoxLoader,
+  getAllCheckedListForSupervisor,
+  supervisorCheckBoxLoader,
 }) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -120,28 +123,39 @@ const Patient = ({
     allocatedGetList({ url: resoureUrl });
   };
   const getAllCheckList = async (sort) => {
-    setIsLoading(true);
-    const uId = getStorage("userId");
-    const orgId = getStorage("orgId");
-    let resoureUrl = `dbservice/patient/admin/computation/filter?&organizationId=${orgId}&
-    page=${0}&size=${
-      batchCount ? batchCount : reviewerResponse?.response?.totalElements
-    }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
-      sort?.sortDir
-    }&sortfield=${sort?.sortField}&priority=${
-      selectedOption ? selectedOption : ""
-    }&batchCount=${batchCount}`;
+    // setIsLoading(true);
+    // const uId = getStorage("userId");
+    // const orgId = getStorage("orgId");
+    // let resoureUrl = `dbservice/patient/admin/computation/filter?&organizationId=${orgId}&
+    // page=${0}&size=${
+    //   batchCount ? batchCount : reviewerResponse?.response?.totalElements
+    // }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
+    //   sort?.sortDir
+    // }&sortfield=${sort?.sortField}&priority=${
+    //   selectedOption ? selectedOption : ""
+    // }&batchCount=${batchCount}`;
 
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response?.data) {
-      let result = response?.data?.response?.content;
-      const data = result.map((item) => ({
-        id: item.patientId,
-        name: item.patientName,
-      }));
-      setSelectedRowsId(data);
-      setHeaderCheckValidation(data);
-      setIsLoading(false);
+    try {
+      const response = await getAllCheckedListForReviewer({
+        batchCount,
+        totalElements: batchCount
+          ? batchCount
+          : reviewerResponse?.response?.totalElements,
+        sort,
+        selectedOption,
+        searchString,
+      });
+      if (response?.status === "SUCCESS") {
+        let result = response?.response?.content;
+        const data = result.map((item) => ({
+          id: item.patientId,
+          name: item.patientName,
+        }));
+        setSelectedRowsId(data);
+        setHeaderCheckValidation(data);
+      }
+    } catch (err) {
+      getResponePopup(err);
     }
   };
 
@@ -413,28 +427,39 @@ const Patient = ({
 
   const getAllCheckListL2 = async (sort) => {
     setCheckedLoading(true);
-    let orgId = getStorage("orgId");
-    let resoureUrl = `dbservice/l2audit/patients?organizationId=${orgId}&username=${
-      l2selectUser?.userName
-    }&page=${pageNoL2Patient}&size=${15}&sortdirection=${
-      sort?.sortDir ? sort?.sortDir : "DESC"
-    }&sortfield=${
-      sort?.sortField ? sort?.sortField : "dueDate"
-    }&searchstring=${searchString}&processedStatus=${
-      selectedOptions ? selectedOptions : ""
-    }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
+    // let orgId = getStorage("orgId");
+    // let resoureUrl = `dbservice/l2audit/patients?organizationId=${orgId}&username=${
+    //   l2selectUser?.userName
+    // }&page=${pageNoL2Patient}&size=${15}&sortdirection=${
+    //   sort?.sortDir ? sort?.sortDir : "DESC"
+    // }&sortfield=${
+    //   sort?.sortField ? sort?.sortField : "dueDate"
+    // }&searchstring=${searchString}&processedStatus=${
+    //   selectedOptions ? selectedOptions : ""
+    // }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
     // let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=${pageNoL2Patient}&size=${15}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
-      let result = response?.data?.response;
-      const data = result?.content?.map((item) => ({
-        id: item.patientId,
-        name: item.patientName,
-      }));
-      setSelectedRowsId(data);
-      setHeaderCheckValidation(data);
+    try {
+      const response = await getAllCheckedListForSupervisor({
+        userName: l2selectUser?.userName,
+        pageNo: pageNoL2Patient,
+        sort,
+        selectedOption: selectedOptions,
+        allocatedOption: allocatedOption,
+        searchString: searchString,
+      });
+      if (response.status === "SUCCESS") {
+        let result = response?.response;
+        const data = result?.content?.map((item) => ({
+          id: item.patientId,
+          name: item.patientName,
+        }));
+        setSelectedRowsId(data);
+        setHeaderCheckValidation(data);
+      }
+      setCheckedLoading(false);
+    } catch (Err) {
+      getResponePopup(Err);
     }
-    setCheckedLoading(false);
   };
   useEffect(() => {
     getFilters({ field: "patientAllocated" });
@@ -449,6 +474,7 @@ const Patient = ({
       });
     }
   }, [selectedOptions, allocatedOption]);
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -786,7 +812,7 @@ const Patient = ({
                                         setSelectedRowsId={setSelectedRowsId}
                                         selectedChart={headerCheckValidation}
                                         setSort={setSort}
-                                        loading={isLoading}
+                                        loading={allCheckBoxLoader}
                                         sortCompleteOrder={sortCompleteOrder}
                                         setSortCompleteOrder={
                                           setSortCompleteOrder
@@ -933,7 +959,7 @@ const Patient = ({
                                               }
                                               setSort={setSort}
                                               sort={sort}
-                                              loading={checkedLoading}
+                                              loading={supervisorCheckBoxLoader}
                                               sortDueOrder={sortDueOrder}
                                               setSortDueOrder={setSortDueOrder}
                                               sortCompleteOrder={
@@ -1027,12 +1053,17 @@ const connector = connect(
     supervisorResponse: state.admin.patientAllocate?.l2AllocatedList?.data,
     selectedSupervisors: state.admin.patientAllocate?.selectedSupervisors?.data,
     filteredList: state.admin.patientAllocate?.filtersList,
+    allCheckBoxLoader: state.admin.patientAllocate.allCheckBoxLoader,
+    supervisorCheckBoxLoader:
+      state.admin.patientAllocate.allSupervisorCheckBoxLoader,
   }),
   {
     allocatedGetList: allActions.getAllList,
     getSupervisorsList: allActions.getSupervisorsList,
     getSelectedSupervisorList: allActions.getSelectedSupervisorList,
     getFilters: allActions.getFiltersList,
+    getAllCheckedListForReviewer: allActions.getAllCheckedListForReviewer,
+    getAllCheckedListForSupervisor: allActions.getAllCheckedListForSupervisor,
   }
 );
 export default connector(Patient);

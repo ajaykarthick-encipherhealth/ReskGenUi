@@ -24,13 +24,12 @@ import calender from "../../../../images/report/calender.svg";
 import send from "../../../../images/report/send.svg";
 import download from "../../../../images/report/download.svg";
 import Header from "../../../../jsx/layouts/nav/Header";
-import SpinnerDots from "../../../../components/spinner";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { useRouter } from "next/router";
-import { debounce } from "../../../admin/reports/Export";
 import { getReportActiveTab } from "../../../../store/actions/adminAction/ReportActions";
 import { getStorage } from "../../../../utils/storages";
+import { debounce } from "../../../../components/input";
 
 const IndividualReceiverReport = () => {
   const dispatch = useDispatch();

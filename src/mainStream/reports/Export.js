@@ -3,14 +3,12 @@ import React, { useEffect, useState } from "react";
 import styles from "./report.module.css";
 import {
   getExportDetails,
-  getUsersList,
   getUsersLists
 } from "../../store/actions/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
-import { debounce } from "../../pages/admin/reports/Export";
 import { updateSentReport } from "../../services/ReportService";
 import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
-import InputField from "../../components/input";
+import InputField, { debounce } from "../../components/input";
 import { SVGICON } from "../../jsx/constant/theme";
 import { getStorage } from "../../utils/storages";
 

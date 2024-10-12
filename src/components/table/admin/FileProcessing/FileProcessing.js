@@ -7,7 +7,6 @@ import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import { Empty, Progress, Skeleton, Steps, Tooltip } from "antd";
 import TableStyle from "../../table.module.css";
 import { getPatientsList } from "../../../../store/actions/adminAction/fileProcessingActions";
-import ENDPOINTS from "../../../../utility/enpoints";
 import SpinnerDots from "../../../spinner";
 import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin/tracking";
 

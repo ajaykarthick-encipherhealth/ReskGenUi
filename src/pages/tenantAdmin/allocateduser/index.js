@@ -34,6 +34,7 @@ import { actions as tenantAdminUsersAction } from "../../../stores/tenantAdmin/u
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
+import { getResponePopup } from "../../../utils/reusable";
 
 const { RangePicker } = DatePicker;
 const statusOption = [
@@ -58,6 +59,10 @@ const Patient = ({
   loader3,
   getFilters,
   filteredList,
+  getAllCheckedListForReviewer,
+  allCheckBoxLoader,
+  getAllCheckedListForSupervisor,
+  supervisorCheckBoxLoader,
 }) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -147,30 +152,53 @@ const Patient = ({
     // }
   };
   const getAllCheckList = async (sort) => {
-    setIsLoading(true);
-    const uId = getStorage("userId");
-    const orgId = getStorage("orgId");
-    let resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${
-      batchCount ? batchCount : reviewerResponse?.response?.totalElements
-    }&userId=${uId}&computationStart=${
-      startDate ? startDate : ""
-    }&computationEnd=${
-      endDate ? endDate : ""
-    }&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
-      sort?.sortDir
-    }&sortfield=${sort?.sortField}&priority=${
-      selectedOption ? selectedOption : ""
-    }&batchCount=${batchCount}&organizationId=${selectOrgList}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
-      let result = response?.data?.response?.content;
-      const data = result.map((item) => ({
-        id: item.patientId,
-        name: item.patientName,
-      }));
-      setSelectedRowsId(data);
-      setHeaderCheckValidation(data);
-      setIsLoading(false);
+    // setIsLoading(true);
+    // const uId = getStorage("userId");
+    // const orgId = getStorage("orgId");
+    // let resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${
+    //   batchCount ? batchCount : reviewerResponse?.response?.totalElements
+    // }&userId=${uId}&computationStart=${
+    //   startDate ? startDate : ""
+    // }&computationEnd=${
+    //   endDate ? endDate : ""
+    // }&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
+    //   sort?.sortDir
+    // }&sortfield=${sort?.sortField}&priority=${
+    //   selectedOption ? selectedOption : ""
+    // }&batchCount=${batchCount}&organizationId=${selectOrgList}`;
+    // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    // if (response.data) {
+    //   let result = response?.data?.response?.content;
+    //   const data = result.map((item) => ({
+    //     id: item.patientId,
+    //     name: item.patientName,
+    //   }));
+    //   setSelectedRowsId(data);
+    //   setHeaderCheckValidation(data);
+    //   setIsLoading(false);
+    // }
+    try {
+      const response = await getAllCheckedListForReviewer({
+        batchCount,
+        totalElements: batchCount
+          ? batchCount
+          : reviewerResponse?.response?.totalElements,
+        sort,
+        selectedOption,
+        searchString,
+        fromTenant:true
+      });
+      if (response?.status === "SUCCESS") {
+        let result = response?.response?.content;
+        const data = result.map((item) => ({
+          id: item.patientId,
+          name: item.patientName,
+        }));
+        setSelectedRowsId(data);
+        setHeaderCheckValidation(data);
+      }
+    } catch (err) {
+      getResponePopup(err);
     }
   };
 
@@ -472,30 +500,52 @@ const Patient = ({
   };
 
   const getAllCheckListL2 = async (sort) => {
-    console.log("hbhj");
-    setCheckedLoading(true);
+    // setCheckedLoading(true);
 
-    let resoureUrl = `dbservice/l2audit/patients?username=${
-      l2selectUser?.userName
-    }&page=${pageNoL2Patient}&size=${15}&sortdirection=${
-      sort?.sortDir ? sort?.sortDir : "DESC"
-    }&sortfield=${
-      sort?.sortField ? sort?.sortField : "dueDate"
-    }&searchstring=${searchString}&processedStatus=${
-      selectedOptions ? selectedOptions : ""
-    }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
-    // let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
-      let result = response?.data?.response;
-      const data = result?.content?.map((item) => ({
-        id: item.patientId,
-        name: item.patientName,
-      }));
-      setSelectedRowsId(data);
-      setHeaderCheckValidation(data);
+    // let resoureUrl = `dbservice/l2audit/patients?username=${
+    //   l2selectUser?.userName
+    // }&page=${pageNoL2Patient}&size=${15}&sortdirection=${
+    //   sort?.sortDir ? sort?.sortDir : "DESC"
+    // }&sortfield=${
+    //   sort?.sortField ? sort?.sortField : "dueDate"
+    // }&searchstring=${searchString}&processedStatus=${
+    //   selectedOptions ? selectedOptions : ""
+    // }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
+    // // let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
+    // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    // if (response.data) {
+    //   let result = response?.data?.response;
+    //   const data = result?.content?.map((item) => ({
+    //     id: item.patientId,
+    //     name: item.patientName,
+    //   }));
+    //   setSelectedRowsId(data);
+    //   setHeaderCheckValidation(data);
+    // }
+    // setCheckedLoading(false);
+    try {
+      const response = await getAllCheckedListForSupervisor({
+        userName: l2selectUser?.userName,
+        pageNo: pageNoL2Patient,
+        sort,
+        selectedOption: selectedOptions,
+        allocatedOption: allocatedOption,
+        searchString: searchString,
+        fromTenant:true
+      });
+      if (response.status === "SUCCESS") {
+        let result = response?.response;
+        const data = result?.content?.map((item) => ({
+          id: item.patientId,
+          name: item.patientName,
+        }));
+        setSelectedRowsId(data);
+        setHeaderCheckValidation(data);
+      }
+      setCheckedLoading(false);
+    } catch (Err) {
+      getResponePopup(Err);
     }
-    setCheckedLoading(false);
   };
 
   useEffect(() => {
@@ -909,7 +959,7 @@ const Patient = ({
                                         setSelectedRowsId={setSelectedRowsId}
                                         selectedChart={headerCheckValidation}
                                         setSort={setSort}
-                                        loading={isLoading}
+                                        loading={allCheckBoxLoader}
                                         sortCompleteOrder={sortCompleteOrder}
                                         setSortCompleteOrder={
                                           setSortCompleteOrder
@@ -1057,7 +1107,7 @@ const Patient = ({
                                               }
                                               setSort={setSort}
                                               sort={sort}
-                                              loading={checkedLoading}
+                                              loading={supervisorCheckBoxLoader}
                                               sortDueOrder={sortDueOrder}
                                               setSortDueOrder={setSortDueOrder}
                                               sortCompleteOrder={
@@ -1152,6 +1202,9 @@ const enhancer = connect(
     selectedSupervisors:
       state.admin?.patientAllocate?.selectedSupervisors?.data,
     filteredList: state.admin.patientAllocate?.filtersList,
+    allCheckBoxLoader: state.admin.patientAllocate.allCheckBoxLoader,
+    supervisorCheckBoxLoader:
+      state.admin.patientAllocate.allSupervisorCheckBoxLoader,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
@@ -1159,6 +1212,8 @@ const enhancer = connect(
     getSupervisorsList: allActions?.getSupervisorsList,
     getSelectedSupervisorList: allActions?.getSelectedSupervisorList,
     getFilters: allActions.getFiltersList,
+    getAllCheckedListForReviewer: allActions.getAllCheckedListForReviewer,
+    getAllCheckedListForSupervisor: allActions.getAllCheckedListForSupervisor,
   }
 );
 export default enhancer(Patient);

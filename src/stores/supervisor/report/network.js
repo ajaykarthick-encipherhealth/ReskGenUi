@@ -9,7 +9,7 @@ export async function auditApi({
   filter = "",
   sort,
   size,
-  flagsList
+  flagsList,
 }) {
   const options = {
     method: "GET",
@@ -19,7 +19,13 @@ export async function auditApi({
   const sortDirection = sort?.sortDir === "undefined" ? "" : sort?.sortDir;
   const orgId = getStorage("orgId");
   const data = await requestPortal(
-    `dbservice/patient/auditor/assinedreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&status=${searchValue?searchValue:""}&searchstring=${search?search:""}&orgid=${orgId}&sortfield=${sortField}&sortdirection=${sortDirection}&allFlags=${flagsList}
+    `dbservice/patient/auditor/assinedreport?pageno=${pagenum}&size=${
+      size ? size : 7
+    }&startdate=${startDate}&enddate=${endDate}&status=${
+      searchValue ? searchValue : ""
+    }&searchstring=${
+      search ? search : ""
+    }&orgid=${orgId}&sortfield=${sortField}&sortdirection=${sortDirection}&allFlags=${flagsList}
   `,
     options
   );
@@ -31,10 +37,10 @@ export async function teamApi({
   startDate = "",
   endDate = "",
   search,
-  filter="",
+  filter = "",
   sort,
   size,
-  flagsList
+  flagsList,
 }) {
   const options = {
     method: "GET",
@@ -42,10 +48,42 @@ export async function teamApi({
   const searchValue = filter === "ALL" ? "" : filter;
   const orgId = getStorage("orgId");
   const data = await requestPortal(
-    `dbservice/patient/auditorreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&status=${searchValue?searchValue:""}&searchstring=${search?search:""}&orgid=${orgId}&sortfield=${sort?.sortField?sort?.sortField:""}&sortdirection=${sort?.sortDir?sort?.sortDir:""}&allFlags=${flagsList}
+    `dbservice/patient/auditorreport?pageno=${pagenum}&size=${
+      size ? size : 7
+    }&startdate=${startDate}&enddate=${endDate}&status=${
+      searchValue ? searchValue : ""
+    }&searchstring=${search ? search : ""}&orgid=${orgId}&sortfield=${
+      sort?.sortField ? sort?.sortField : ""
+    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&allFlags=${flagsList}
   `,
     options
   );
   return data;
 }
 
+export async function auditCheck({ totalElements, selectAllFlags, selectAll }) {
+  const options = {
+    method: "GET",
+  };
+  const orgId = getStorage("orgId");
+  const data = await requestPortal(
+    `dbservice/patient/auditor/assinedreport?pageno=0&size=${totalElements}&orgid=${orgId}&allPatientIds=${selectAll}&allFlags=${selectAllFlags}
+  `,
+    options
+  );
+  return data;
+}
+export async function teamCheck({ totalElements, selectAllFlags, selectAll }) {
+  const options = {
+    method: "GET",
+  };
+  const orgId = getStorage("orgId");
+  const data = await requestPortal(
+    `dbservice/patient/auditorreport?pageno=0&size=${totalElements}&orgid=${orgId}&allPatientIds=${
+      selectAll
+    }&allFlags=${selectAllFlags}
+  `,
+    options
+  );
+  return data;
+}
