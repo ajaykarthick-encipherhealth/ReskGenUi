@@ -91,9 +91,11 @@ const AddLabForm = ({
     formData.append("emrtype", emrType);
    
     try {
-      let response = await uploadRadiologyFile({ data: formData });
+      let response = null;
       if(title == "LAB"){
         response = await uploadLabFile({ data: formData });
+      }else{
+        response = await uploadRadiologyFile({ data: formData })
       }
       console.log(response)
       if (response?.status == "SUCCESS") {
