@@ -84,7 +84,7 @@ export async function addPatient({ data }) {
 export async function uploadFile({ data }) {
   const options = {
     method: "POST",
-    body: JSON.stringify(data),
+    body: data
   };
   const res = await requestPortalFiles(`aiservice/ai/upload`, options);
   return res;
@@ -92,7 +92,7 @@ export async function uploadFile({ data }) {
 export async function uploadRadiologyFile({ data }) {
   const options = {
     method: "POST",
-    body: JSON.stringify(data),
+    body: data,
   };
   const res = await requestPortalFiles(`aiservice/ai/upload/radiology`, options);
   return res;
@@ -101,7 +101,7 @@ export async function uploadRadiologyFile({ data }) {
 export async function uploadLabFile({ data }) {
   const options = {
     method: "POST",
-    body: JSON.stringify(data),
+    body: data,
   };
   const res = await requestPortalFiles(`aiservice/ai/upload/lab`, options);
   return res;
