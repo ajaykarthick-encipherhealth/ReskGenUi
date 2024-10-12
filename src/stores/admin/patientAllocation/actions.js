@@ -31,7 +31,6 @@ export const getAllocatedByList = createActionThunk(
   "FILTERS_LIST_ALLOCATED_BY",
   network.allocatedByFilters
 );
-
 export const getAllCheckedListForReviewer = createActionThunk(
   "REVIEWER_CHECKED_LIST",
   network.reviewerCheckedList
@@ -39,4 +38,12 @@ export const getAllCheckedListForReviewer = createActionThunk(
 export const getAllCheckedListForSupervisor = createActionThunk(
   "SUPERVISOR_CHECKED_LIST",
   network.supervisorCheckedList
+);
+export const getL1UsersList = createActionThunk(
+  "GET_L1_USERS_LIST",
+  network.usersList
+);
+export const getAllocateUsers = createActionThunk(
+  "ALLOCATE_USERS",
+  network.allocateUsers
 );

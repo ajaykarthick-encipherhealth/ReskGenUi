@@ -1,16 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { Button } from "react-bootstrap";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
-import { Offcanvas } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
-import Select from "react-select";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
-import { ThemeContext } from "../../../context/ThemeContext";
 import { Avatar, Switch } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { AntDesignOutlined, UserOutlined } from '@ant-design/icons';
 
 
@@ -60,20 +51,19 @@ const UserList = () => {
   }, []);
 
   const getAllList = async () => {
-    const response = await axios.get(ENDPOINTS.apiEndoint + "/patient/getall");
-    console.log(response.data);
-    if (response.data) {
-      const records = response.data.slice(firstIndex, lastIndex);
-      setUserListAll(response.data);
-      setUserList(records);
-      setRecords(records);
-      const npage = Math.ceil(response.data.length / recordsPage);
-      const number = [...Array(npage + 1).keys()].slice(1);
-      setNPage(npage);
-      setNumber(number);
-      setIsDataLoading(false);
-      setIsLoading(false);
-    }
+    // const response = await axios.get(ENDPOINTS.apiEndoint + "/patient/getall");
+    // if (response.data) {
+    //   const records = response.data.slice(firstIndex, lastIndex);
+    //   setUserListAll(response.data);
+    //   setUserList(records);
+    //   setRecords(records);
+    //   const npage = Math.ceil(response.data.length / recordsPage);
+    //   const number = [...Array(npage + 1).keys()].slice(1);
+    //   setNPage(npage);
+    //   setNumber(number);
+    //   setIsDataLoading(false);
+    //   setIsLoading(false);
+    // }
   };
 
   const addUserForm = () => {
@@ -98,21 +88,21 @@ const UserList = () => {
   };
   const postPatient = async (data) => {
     setIsLoading(true);
-    const response = await axios.post(ENDPOINTS.apiEndoint + `patient`, data);
-    if (response?.status == 200) {
-      setAddUser(false);
-      getAllList();
-    } else {
-    }
+    // const response = await axios.post(ENDPOINTS.apiEndoint + `patient`, data);
+    // if (response?.status == 200) {
+    //   setAddUser(false);
+    //   getAllList();
+    // } else {
+    // }
   };
   const roleUpdate = async (data) => {
     setIsLoading(true);
-    const response = await axios.post(ENDPOINTS.apiEndoint + `patient`, data);
-    if (response?.status == 200) {
-      setAddUser(false);
-      getAllList();
-    } else {
-    }
+    // const response = await axios.post(ENDPOINTS.apiEndoint + `patient`, data);
+    // if (response?.status == 200) {
+    //   setAddUser(false);
+    //   getAllList();
+    // } else {
+    // }
   };
 
   const options3 = [

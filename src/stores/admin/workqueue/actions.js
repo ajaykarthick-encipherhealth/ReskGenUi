@@ -26,3 +26,11 @@ export const getUploadRadiologyFile= createActionThunk(
   "GET_UPLOAD_PATIENT_RADIOLOGY_FILE",
   network.uploadRadiologyFile
 );
+export const getUploadLabFile= createActionThunk(
+  "GET_UPLOAD_PATIENT_Lab_FILE",
+  network.uploadLabFile
+);
+export const getUsersList = createActionThunk(
+  "GET_BY_USERS",
+  network.getUsers
+);

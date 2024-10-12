@@ -6,8 +6,6 @@ import { notification } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../jsx/layouts/nav/Header";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
 import FileUploading from "./FileUploading";
 import Addpatients from "./Addpatiens";
 import { getPatients } from "../../../store/actions/adminAction/patientsActions";
@@ -17,8 +15,9 @@ import HeaderFilters from "../../../components/headerFilters";
 import { connect } from "react-redux";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
 import { getStorage, setStorage } from "../../../utils/storages";
+import {actions as adminActions} from '../../../stores/admin/workqueue'
 
-const Patient= ({ getAllOrganizationList, organizationList }) => {
+const Patient= ({ getAllOrganizationList, organizationList,getUsersList,getAddPatient,getUploadRadiologyFile }) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
@@ -64,8 +63,8 @@ const Patient= ({ getAllOrganizationList, organizationList }) => {
 
   const getAllList = async (uId, pageNo, pageSize) => {
     setTableLoading(true);
-    let resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    // let resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
+    const response = await getUsersList({ pageNo: pageNo, pageSize: pageSize });
     if (response.data) {
       let resultMap = [];
       let result = response?.data?.response?.content;
@@ -146,13 +145,14 @@ const Patient= ({ getAllOrganizationList, organizationList }) => {
 
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient`,
-        inputValuePatientId
-      );
-      if (response?.status === 200) {
+      const response = getAddPatient({data:inputValuePatientId})
+      // await axios.post(
+      //   ENDPOINTS.apiEndoint + `dbservice/patient`,
+      //   inputValuePatientId
+      // );
+      if (response?.status === 'SUCCESS') {
         dispatch(getPatients(0));
-        if (response.data.message == "patient Already Present") {
+        if (response.message == "patient Already Present") {
           setIsLoadingBtn(false);
           notification.warning({
             message: "Patient ID Already Present",
@@ -265,21 +265,22 @@ const Patient= ({ getAllOrganizationList, organizationList }) => {
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
 
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload
-      `,
-      formData,
-      headers
-    );
-    if (response?.status == 202) {
+    const response = await getUploadRadiologyFile({ data: formData });
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload
+    //   `,
+    //   formData,
+    //   headers
+    // );
+    if (response?.status == 'SUCCESS') {
       getAllList(localUserId, pageNo, pageSize);
 
       notification.success({
@@ -301,20 +302,21 @@ const Patient= ({ getAllOrganizationList, organizationList }) => {
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/radiology
-    `,
-      formData,
-      headers
-    );
-    if (response?.status == 202) {
+    const response = await getUploadRadiologyFile({ data: formData });
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload/radiology
+    // `,
+    //   formData,
+    //   headers
+    // );
+    if (response?.status == 'SUCCESS') {
       getAllList(localUserId, pageNo, pageSize);
       setAddPatient(false);
       setIsLoadingBtn(false);
@@ -420,6 +422,10 @@ const enhancer = connect(
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
+    getUsersList:adminActions.getUsersList,
+    getAddPatient:adminActions.getAddPatient,
+    getUploadRadiologyFile:adminActions.getUploadRadiologyFile,
+    getUploadRadiologyFile:adminActions.getUploadRadiologyFile
   }
 );
 export default enhancer(Patient);

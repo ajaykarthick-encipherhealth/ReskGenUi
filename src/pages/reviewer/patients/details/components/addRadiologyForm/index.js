@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { notification } from "antd";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import axios from "../../../../../../utility/axiosConfig";
 import { validateYear } from "../../../../../../components/headerFilters/functions";
-import ENDPOINTS from "../../../../../../utility/enpoints";
 import { getStorage } from "../../../../../../utils/storages";
-
-const AddRadiologyForm = ({ setOpen, open }) => {
+import {actions as allActions} from '../../../../../../stores/admin/workqueue'
+const AddRadiologyForm = ({ setOpen, open,getUploadRadiologyFile }) => {
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
   );
@@ -63,19 +61,20 @@ const AddRadiologyForm = ({ setOpen, open }) => {
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
     formData.append("dos", inputValue.year);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/radiology
-      `,
-      formData,
-      headers
-    );
-    var result = response.data;
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
+    const response = await getUploadRadiologyFile({data:formData})
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload/radiology
+    //   `,
+    //   formData,
+    //   headers
+    // );
+    var result = response;
     if (result.status == "SUCCESS") {
       notification.success({
         message: result.message,
@@ -180,4 +179,7 @@ const AddRadiologyForm = ({ setOpen, open }) => {
   );
 };
 
-export default AddRadiologyForm;
+const connector=connect((state)=>({}),{
+  getUploadRadiologyFile:allActions.getUploadRadiologyFile
+})
+export default connector(AddRadiologyForm);

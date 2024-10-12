@@ -4,8 +4,6 @@ import { Offcanvas } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Form, Input, Button, Select, Row, Col, notification } from "antd";
 import styles from "../../../styles/auth.module.css";
-import ENDPOINTS from "../../../utility/enpoints";
-import axios from "../../../utility/axiosConfig";
 import AdminList from "../../../components/table/admin/adminList/adminList";
 import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
@@ -17,6 +15,7 @@ import { actions as adminAction } from "../../../stores/admin/users";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
+import {actions as patientActions } from '../../../stores/admin/workqueue'
 
 const options3 = [
   { value: "true", label: "Enabled" },
@@ -44,7 +43,8 @@ const UserList = ({
   getAllUsersList,
   usersListData,
   loading,
-  AddUser
+  AddUser,
+  getAddPatient
 }) => {
   const sideMenu = useSelector((state) => state.sideMenu);
   const [localUserId, setLocalUserId] = useState("");
@@ -136,11 +136,12 @@ const UserList = ({
     inputValuePatientId.allocatedUserId = localUserId;
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient`,
-        inputValuePatientId
-      );
-      if (response?.status == 200) {
+      const response = await getAddPatient({data:inputValuePatientId})
+      //  axios.post(
+      //   ENDPOINTS.apiEndoint + `dbservice/patient`,
+      //   inputValuePatientId
+      // );
+      if (response?.status == "SUCCESS") {
         if (response.data.message == "patient Already Present") {
           setIsLoadingBtn(false);
           notification.warning({
@@ -714,7 +715,8 @@ const enhancer = connect(
   {
     getAllOrganizationList: adminAction.getAllOrganizationAction,
     getAllUsersList: adminAction.getAllUsersAction,
-    AddUser:adminAction.getAddUser
+    AddUser:adminAction.getAddUser,
+    getAddPatient:patientActions.getAddPatient
   }
 );
 export default enhancer(UserList);

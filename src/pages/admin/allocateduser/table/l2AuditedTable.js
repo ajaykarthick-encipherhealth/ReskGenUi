@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import TableStyle from "../../../../components/table/table.module.css";
 import { Select as AntSelect, Empty } from "antd";
-
-import axios from "../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../utility/enpoints";
 import AllocatedAdminList from "../../../../components/table/admin/allocatedAdminList/allocatedAdminList";
-
-function L2AllocatedAdminList({ l2UserList }) {
+import {actions as allActions} from '../../../../stores/admin/patientAllocation'
+import { connect } from "react-redux";
+function L2AllocatedAdminList({ l2UserList,getAllCheckedListForSupervisor }) {
   const [detailsContent, setDetailsContent] = useState();
   const [isPatientList, setIsPatientList] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,11 +29,11 @@ function L2AllocatedAdminList({ l2UserList }) {
   };
 
   const getL2PatientList = async (value) => {
-    let resoureUrl = `dbservice/l2audit/patients?username=${value}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
+    // let resoureUrl = `dbservice/l2audit/patients?username=${value}`;
+    const response = await getAllCheckedListForSupervisor({userName:value})
+    if (response?.status==='SUCCESS') {
       let resultMap = [];
-      let result = response?.data?.response;
+      let result = response?.response;
       result?.map((res) => {
         resultMap.push({
           ...res,
@@ -60,12 +58,13 @@ function L2AllocatedAdminList({ l2UserList }) {
   };
 
   const getAllCheckList = async (value) => {
-    let resoureUrl = `dbservice/l2audit/patients?username=${value}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
+    // let resoureUrl = `dbservice/l2audit/patients?username=${value}`;
+    const response = await getAllCheckedListForSupervisor({userName:value})
+    // axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    if (response?.status=="SUCCESS") {
       let resultMap = [];
-      let result = response?.data?.response;
-      const data = result.map((item) => ({
+      let result = response?.response;
+      const data = result?.map((item) => ({
         id: item.patientId,
         name: item.patientName,
       }));
@@ -124,4 +123,7 @@ function L2AllocatedAdminList({ l2UserList }) {
   );
 }
 
-export default L2AllocatedAdminList;
+const connector=connect((state)=>({}),{
+  getAllCheckedListForSupervisor:allActions.getAllCheckedListForSupervisor
+})
+export default connector(L2AllocatedAdminList);
