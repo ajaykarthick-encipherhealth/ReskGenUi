@@ -18,3 +18,11 @@ export const getAddPatient= createActionThunk(
   "GET_ADD_PATIENT",
   network.addPatient
 );
+export const getUploadFile= createActionThunk(
+  "GET_UPLOAD_PATIENT_FILE",
+  network.uploadFile
+);
+export const getUploadRadiologyFile= createActionThunk(
+  "GET_UPLOAD_PATIENT_RADIOLOGY_FILE",
+  network.uploadRadiologyFile
+);

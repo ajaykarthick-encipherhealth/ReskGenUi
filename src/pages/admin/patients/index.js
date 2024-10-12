@@ -59,6 +59,8 @@ const Patient = ({
   getFilters,
   filteredList,
   getAddPatient,
+  getUploadFile,
+  getUploadRadiologyFile,
 }) => {
   const navigate = useRouter();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -446,25 +448,26 @@ const Patient = ({
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+
+    // getUploadFile
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload
-      `,
-      formData,
-      headers
-    );
-    if (response?.status === 200) {
+    const response = await getUploadFile({ data: formData });
+    //  await axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload
+    //   `,
+    //   formData,
+    //   headers
+    // );
+    if (response?.status === "SUCCESS") {
       // getAllList(response);
 
-      notification.success({
-        message: "Patient File Upload Successfully!",
-      });
+      getResponePopup(response);
       const data = {
         pageNo,
         computedStartDate,
@@ -497,20 +500,21 @@ const Patient = ({
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/radiology
-    `,
-      formData,
-      headers
-    );
-    if (response?.status == 202) {
+    const response = await getUploadRadiologyFile({ data: formData });
+    // await axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload/radiology
+    // `,
+    //   formData,
+    //   headers
+    // );
+    if (response?.status == "SUCCESS") {
       // getAllList(localUserId, pageNo, pageSize);
       setAddPatient(false);
       setIsLoadingBtn(false);
@@ -705,6 +709,8 @@ const connector = connect(
     patientDetails: allActions.getPatientDetails,
     getFilters: allocationAction.getFiltersList,
     getAddPatient: allActions.getAddPatient,
+    getUploadFile: allActions.getUploadFile,
+    getUploadRadiologyFile: allActions.getUploadRadiologyFile,
   }
 );
 export default connector(Patient);
