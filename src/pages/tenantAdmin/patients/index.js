@@ -58,6 +58,7 @@ const Patient = ({
   allPatientList,
   webSocketData,
   loading,
+  getPatientId,
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -344,10 +345,7 @@ console.log(selectOrgList,"selectOrgList")
     form.patientId = form.patientId.trim();
     try {
       setIsLoadingBtn(true);
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient`,
-        form
-      );
+      const response = await getPatientId({obj:form})
       if (response?.data?.status == "SUCCESS") {
         getAllPatients(
           pageNo,
@@ -831,6 +829,7 @@ const enhancer = connect(
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     getAllPatients: tenantAdminAction.getAllPatientAction,
+    getPatientId:tenantAdminAction.submitPatientId,
   }
 );
 export default enhancer(Patient);
