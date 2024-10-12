@@ -28,7 +28,7 @@ import moment from "moment";
 import { Paginator } from "primereact/paginator";
 import { Calendar } from "primereact/calendar";
 import { getStorage, setStorage } from "../../../../utils/storages";
-import {actions as allActions } from '../../../stores/admin/workqueue'
+import {actions as allActions } from '../../../../stores/admin/workqueue'
 function Patient({ getUsersList }) {
   const sideMenu = useSelector((state) => state.sideMenu);
   const patientStoreDetails = useSelector((state) => state);
