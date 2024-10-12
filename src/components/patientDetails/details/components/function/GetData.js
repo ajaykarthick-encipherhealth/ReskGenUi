@@ -2,7 +2,7 @@ import {
   getLabFileDetails,
   getRadiologyFileDetails,
 } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
-import axios from "../../../../../utility/axiosConfig";
+import axios from "../../../../../utils/axiosConfig";
 import { portalUrl } from "../../../../../utils/config";
 import { getStorage } from "../../../../../utils/storages";
 import { sortFunction } from "./GetDataLab";

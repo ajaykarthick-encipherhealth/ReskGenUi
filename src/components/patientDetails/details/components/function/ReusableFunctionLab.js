@@ -5,7 +5,7 @@ import moment from "moment";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
-import axios from "../../../../../utility/axiosConfig";
+import axios from "../../../../../utils/axiosConfig";
 import { getStorage } from "../../../../../utils/storages";
 import { portalUrl } from "../../../../../utils/config";
 
