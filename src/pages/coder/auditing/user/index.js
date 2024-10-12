@@ -1,19 +1,13 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Button } from "react-bootstrap";
-import { Badge } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import Select from "react-select";
-import { SVGICON } from "../../../jsx/constant/theme";
-import LoadingSpinner from "../../../jsx/components/spinner/spinner";
-import NavBar from "../../../jsx/layouts/nav";
-import Header from "../../../jsx/layouts/nav/Header";
+import LoadingSpinner from "../../../../jsx/components/spinner/spinner";
+import Header from "../../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faAngleLeft,
-  faAngleRight,
   faClose,
   faUpload,
   faCheck,
@@ -22,43 +16,32 @@ import {
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { Space, Spin } from "antd";
-import { NativeEventSource, EventSourcePolyfill } from "event-source-polyfill";
 import { connect } from "react-redux";
 import { notification } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
 import { DataTable } from "primereact/datatable";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
-import { Tag } from "primereact/tag";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import moment from "moment";
 // import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Paginator } from "primereact/paginator";
 import { Calendar } from "primereact/calendar";
-import { getStorage, setStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../../utils/storages";
 import {actions as allActions } from '../../../stores/admin/workqueue'
 function Patient({ getUsersList }) {
   const sideMenu = useSelector((state) => state.sideMenu);
   const patientStoreDetails = useSelector((state) => state);
   const controller = new AbortController();
   const signal = controller.signal;
-
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
   const [dataValidationList, setDataValidationList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [addUser, setAddUser] = useState(false);
-
   const recordsPage = 10;
   const lastIndex = currentPage * recordsPage;
-  const firstIndex = lastIndex - recordsPage;
-
-  const [npage, setNPage] = useState("");
-  const [number, setNumber] = useState([]);
-  const [records, setRecords] = useState([]);
   const [addPatient, setAddPatient] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
   const [selectFile, setSelectFile] = useState(null);
