@@ -127,23 +127,25 @@ export const reviewerCheckedList = async ({
   sort,
   searchString,
   selectedOption,
-  fromTenant
+  fromTenant,
 }) => {
   const orgId = getStorage("orgId");
   const uId = getStorage("userId");
-  const url = fromTenant?`dbservice/patient/admin/computation/filter?page=${0}&size=${
-    batchCount ? batchCount : totalElements
-  }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
-    sort?.sortDir
-  }&sortfield=${sort?.sortField}&priority=${
-    selectedOption ? selectedOption : ""
-  }&batchCount=${batchCount}`:`dbservice/patient/admin/computation/filter?organizationId=${orgId}&page=${0}&size=${
-    batchCount ? batchCount : totalElements
-  }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
-    sort?.sortDir
-  }&sortfield=${sort?.sortField}&priority=${
-    selectedOption ? selectedOption : ""
-  }&batchCount=${batchCount}`;
+  const url = fromTenant
+    ? `dbservice/patient/admin/computation/filter?page=${0}&size=${
+        batchCount ? batchCount : totalElements
+      }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
+        sort?.sortDir
+      }&sortfield=${sort?.sortField}&priority=${
+        selectedOption ? selectedOption : ""
+      }&batchCount=${batchCount}`
+    : `dbservice/patient/admin/computation/filter?organizationId=${orgId}&page=${0}&size=${
+        batchCount ? batchCount : totalElements
+      }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
+        sort?.sortDir
+      }&sortfield=${sort?.sortField}&priority=${
+        selectedOption ? selectedOption : ""
+      }&batchCount=${batchCount}`;
 
   const options = {
     method: "GET",
@@ -181,6 +183,28 @@ export const supervisorCheckedList = async ({
 
   const options = {
     method: "GET",
+  };
+
+  const res = await requestPortal(`${url}`, options);
+  return res;
+};
+
+export const usersList = async ({ search }) => {
+  const orgId = getStorage("orgId");
+  const url = `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=${orgId}&searchString=${search}`;
+
+  const options = {
+    method: "GET",
+  };
+
+  const res = await requestPortal(`${url}`, options);
+  return res;
+};
+export const allocateUsers = async ({ data }) => {
+  const url = `dbservice/patient/admin/assignPatients`;
+  const options = {
+    method: "POST",
+    body:JSON.stringify(data)
   };
 
   const res = await requestPortal(`${url}`, options);
