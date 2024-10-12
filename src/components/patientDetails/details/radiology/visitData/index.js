@@ -4,8 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { notification } from "antd";
 import { Offcanvas } from "react-bootstrap";
-import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import Spinner from "../../../../../components/loadingSpinner";
 import styles from "../../hcc/styles.module.css";
@@ -25,6 +23,7 @@ import ManuallyAdd from "../../components/manuallyAdd";
 import LogoLoader from "../../../../logoLoader";
 import { getPatientRadiologyDetailsNew } from "../../components/function/GetDataRadiology";
 import { getStorage } from "../../../../../utils/storages";
+import { getValidHccDetailsApi } from "../../../../../stores/patient/details/network";
 
 const VisitData = ({
   setActiveTabHead,
@@ -165,17 +164,10 @@ const VisitData = ({
         <div className="bouncing-loader"></div>
       </div>
     );
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/hccdisease/icd10mappingForDisease?year=${
-          patientDetailsResult?.result?.response?.dos
-            ? patientDetailsResult?.result?.response?.dos
-            : year.value
-        }&diagnosisCode=${code}`
-    );
-    if (response.data) {
+    const response = await getValidHccDetailsApi(year.value,code)
+    if (response?.response) {
       var value = [];
-      result = response.data.response;
+      result = response?.response;
       for (var key in result) {
         if (
           key != "id" &&

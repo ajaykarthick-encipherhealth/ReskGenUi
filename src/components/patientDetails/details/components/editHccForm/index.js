@@ -4,13 +4,12 @@ import { notification } from "antd";
 import { Select, Modal } from "antd";
 import { Button, Form, Input, Space, DatePicker } from "antd";
 import moment from "moment";
-import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
 import RegularButton from "../../../../../components/button";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
+import { portalUrl } from "../../../../../utils/config";
 
 const { TextArea } = Input;
 
@@ -72,7 +71,7 @@ const EditHccForm = ({
       };
       try {
         const response = await axios.put(
-          ENDPOINTS.apiEndoint + `aiservice/disease/editdisease`,
+          portalUrl + `aiservice/disease/editdisease`,
           dataFormat
         );
         if (response?.data?.status == "SUCCESS") {
@@ -107,7 +106,7 @@ const EditHccForm = ({
     setAddValidCodeCheck(null);
     try {
       const response = await axios.get(
-        ENDPOINTS.apiEndoint +
+        portalUrl +
           `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
       );
       if (response.data) {

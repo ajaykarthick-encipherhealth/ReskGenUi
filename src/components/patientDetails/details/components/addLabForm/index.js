@@ -5,10 +5,10 @@ import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import axios from "../../../../../utility/axiosConfig";
 import { validateYear } from "../../../../headerFilters/functions";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getResponePopup, validateFileName } from "../../../../../utils/reusable";
 import { getStorage } from "../../../../../utils/storages";
+import { portalUrl } from "../../../../../utils/config";
 
 const AddLabForm = ({
   setOpen,
@@ -94,9 +94,9 @@ const AddLabForm = ({
         "Content-Type": "multipart/form-data",
       },
     };
-    var apiUrl = ENDPOINTS.apiEndoint +`aiservice/ai/upload/radiology`;
+    var apiUrl = portalUrl +`aiservice/ai/upload/radiology`;
     if(title == "LAB"){
-      apiUrl = ENDPOINTS.apiEndoint +`aiservice/ai/upload/lab`;
+      apiUrl = portalUrl +`aiservice/ai/upload/lab`;
     }
     try {
       const response = await axios.post(apiUrl,

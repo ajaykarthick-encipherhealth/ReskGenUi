@@ -5,7 +5,6 @@ import { Select } from "antd";
 import { Button, Form, Input, Space, DatePicker, Switch } from "antd";
 import moment from "moment";
 import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
 import RegularButton from "../../../../../components/button";
 import visitStyles from "../../../../../styles/visitdata.module.css";
@@ -13,6 +12,7 @@ import SelectButton from "../../../../../components/btnSelect";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import path from "path";
 import { getStorage } from "../../../../../utils/storages";
+import { portalUrl } from "../../../../../utils/config";
 
 const { TextArea } = Input;
 
@@ -176,7 +176,7 @@ const AddHccForm = ({
     // ) {
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient/compute/addvaliddisease`,
+        portalUrl + `dbservice/patient/compute/addvaliddisease`,
         dataFormat
       );
       if (response?.status == 200) {
@@ -208,7 +208,7 @@ const AddHccForm = ({
     setAddValidCodeCheck(null);
     try {
       const response = await axios.get(
-        ENDPOINTS.apiEndoint +
+        portalUrl +
           `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
       );
       if (response.data) {
@@ -232,7 +232,7 @@ const AddHccForm = ({
       });
       try {
         const response = await axios.get(
-          ENDPOINTS.apiEndoint +
+          portalUrl +
             `management/provider/getProviderData?npiNumber=${e.target.value}`
         );
         if (response.data) {

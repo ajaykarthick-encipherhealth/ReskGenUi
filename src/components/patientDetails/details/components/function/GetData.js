@@ -3,7 +3,7 @@ import {
   getRadiologyFileDetails,
 } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
+import { portalUrl } from "../../../../../utils/config";
 import { getStorage } from "../../../../../utils/storages";
 import { sortFunction } from "./GetDataLab";
 import { stringToColour } from "./ReusableFunctions";
@@ -74,7 +74,7 @@ const submitSectionColors = async (
 
   try {
     const response = await axios.post(
-      ENDPOINTS.apiEndoint + `dbservice/section/color/save`,
+      portalUrl + `dbservice/section/color/save`,
       postData
     );
     var result = response.data;
@@ -84,56 +84,6 @@ const submitSectionColors = async (
   } catch (e) {}
 };
 
-const getPatientDetailsRadiologyYear = async (orgId, dispatch) => {
-  var patientId = getStorage("patientId");
-  const response = await axios.get(
-    ENDPOINTS.apiEndoint +
-      `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
-  );
-  if (response.data) {
-    var result = response.data.response;
-
-    if (result.radiologyFileDetail != null) {
-      if (result.radiologyFileDetail.length != 0) {
-        var dosYearArrFile = [];
-        result.radiologyFileDetail.map((res, index) => {
-          for (var key in res.documentDos) {
-            dosYearArrFile.push({
-              value: key,
-              label: key + " - " + res.documentDos[key].testName,
-            });
-          }
-        });
-
-        dispatch(
-          getRadiologyFileDetails(result.radiologyFileDetail[0].azureBlobPath)
-        );
-      }
-    }
-  }
-};
-const getLabReportDetailsInititalLoad = async (orgId, dispatch) => {
-  var patientId = getStorage("patientId");
-
-  const response = await axios.get(
-    ENDPOINTS.apiEndoint +
-      `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
-  );
-
-  var resultTest = response.data.response;
-
-  var dosYearArrFile = [];
-  if (resultTest.labFileDetail != null) {
-    if (resultTest.labFileDetail.length != 0) {
-      for (var key in resultTest.labFileDetail[0].documentDos) {
-        dosYearArrFile.push({ value: key, label: key });
-      }
-
-      var fileDetails = resultTest.labFileDetail;
-      dispatch(getLabFileDetails(fileDetails[0].azureBlobPath));
-    }
-  }
-};
 function getUniqueListBy(arr, key) {
   return [...new Map(arr.map((item) => [item[key], item])).values()];
 }

@@ -365,6 +365,7 @@ export async function manuallyAddDosAndProvider(data) {
   );
   return res;
 }
+
 export async function manuallyAddDosAndProviderList(year) {
   const patientId = getStorage("patientId");
   const options = {
@@ -372,6 +373,39 @@ export async function manuallyAddDosAndProviderList(year) {
   };
   const res = await requestPortal(
     `management/dos-provider/get-dos-and-provider-information?patientId=${patientId}&processedYear=${year}`,
+    options
+  );
+  return res;
+}
+
+export async function getValidHccDetailsApi(year, code) {
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(
+    `dbservice/hccdisease/icd10mappingForDisease?year=${year}&diagnosisCode=${code}`,
+    options
+  );
+  return res;
+}
+
+export async function getTimelineList(patientId) {
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(
+    `dbservice/actioneventaudit?patientid=${patientId}&pageno=${0}&pagesize=${100}`,
+    options
+  );
+  return res;
+}
+
+export async function getUserDetails(userId) {
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(
+    `dbservice/user/get?userName=${userId}`,
     options
   );
   return res;

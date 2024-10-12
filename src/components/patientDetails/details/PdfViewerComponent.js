@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import ENDPOINTS from "../../../utility/enpoints";
 import { connect } from "react-redux";
 import Style from "./style.module.css";
 import { portalPdfUrl } from "../../../utils/config";

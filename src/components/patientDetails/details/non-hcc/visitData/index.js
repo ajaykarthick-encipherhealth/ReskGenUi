@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch,connect } from "react-redux";
-import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../../hcc/styles.module.css";
 import PdfViewer from "../../PdfViewerComponent";
@@ -131,13 +129,11 @@ const VisitData = ({
         <div className="bouncing-loader"></div>
       </div>
     );
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/hccdisease/icd10mappingForDisease?year=${patientDetailsResult?.result?.response?.dos}&diagnosisCode=${code}`
-    );
-    if (response.data) {
+    
+    const response = await getValidHccDetailsApi(year.value,code)
+    if (response?.response) {
       var value = [];
-      result = response.data.response;
+      result = response?.response;
       for (var key in result) {
         if (
           key != "id" &&

@@ -11,9 +11,9 @@ import {
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
 import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { getStorage } from "../../../../../utils/storages";
+import { portalUrl } from "../../../../../utils/config";
 
 export const getEncounterDateBackground = ({
   value,
@@ -1385,7 +1385,7 @@ export const handleSubmitValidNotes = async ({
         : "YEAR",
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndoint + apiURL,
+      portalUrl + apiURL,
       dataFormatSuggested
     );
     var result = response.data;
@@ -1436,7 +1436,7 @@ const findValueDocuments = async (
   };
   try {
     const response = await axios.post(
-      ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
+      portalUrl + `dbservice/pageNumber`,
       data
     );
     var result = response?.data?.response;
@@ -1543,7 +1543,7 @@ export const findValueDocument = async ({
         setIsModalOpenValidCodes(true);
       }
       const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
+        portalUrl + `dbservice/pageNumber/latest`,
         data
       );
       var result = response.data.response;

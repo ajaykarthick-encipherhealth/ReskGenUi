@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Modal, Tooltip, notification, Dropdown, Menu } from "antd";
 import { connect } from "react-redux";
@@ -13,6 +12,7 @@ import AllocateModal from "../../../../../pages/admin/allocateduser/allocate";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
 import { getResponePopup } from "../../../../../utils/reusable";
+import { portalUrl } from "../../../../../utils/config";
 
 const StatusAction = ({
   patientDetailsResult,
@@ -512,7 +512,7 @@ const StatusAction = ({
     var postData = { ...userData, ...resultData };
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient/status/complete`,
+        portalUrl + `dbservice/patient/status/complete`,
         postData
       );
       var result = response.data;
@@ -539,7 +539,7 @@ const StatusAction = ({
     var postData = { ...userData, ...resultData };
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient/status/audit`,
+        portalUrl + `dbservice/patient/status/audit`,
         postData
       );
       var result = response.data;
@@ -615,7 +615,7 @@ const StatusAction = ({
     // }
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient/status/overallstatus`,
+        portalUrl + `dbservice/patient/status/overallstatus`,
         postData
       );
       var result = response.data;

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch, connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
-import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Drawer, Popover, notification } from "antd";
 import { Button, Offcanvas } from "react-bootstrap";
@@ -18,6 +16,7 @@ import LogoLoader from "../../../../logoLoader";
 import { getPatientRadiologyDetailsNew } from "../../components/function/GetDataRadiology";
 import Select from "react-select";
 import { getStorage } from "../../../../../utils/storages";
+import { getValidHccDetailsApi } from "../../../../../stores/patient/details/network";
 
 const File = ({
   patientDetailsResult,
@@ -156,13 +155,10 @@ const File = ({
       </div>
     );
 
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/hccdisease/icd10mappingForDisease?year=${year.value}&diagnosisCode=${code}`
-    );
-    if (response.data) {
+    const response = await getValidHccDetailsApi(year.value,code)
+    if (response?.response) {
       var value = [];
-      result = response.data.response;
+      result = response?.response;
       for (var key in result) {
         if (
           key != "id" &&

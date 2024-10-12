@@ -5,8 +5,8 @@ import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import axios from "../../../../../utility/axiosConfig";
 import { validateYear } from "../../../../headerFilters/functions";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import { getStorage } from "../../../../../utils/storages";
+import { portalUrl } from "../../../../../utils/config";
 
 const AddRadiologyForm = ({ setOpen, open }) => {
   const patientDetailsResult = useSelector(
@@ -69,7 +69,7 @@ const AddRadiologyForm = ({ setOpen, open }) => {
       },
     };
     const response = await axios.post(
-      ENDPOINTS.apiEndoint +
+      portalUrl +
         `aiservice/ai/upload/radiology
       `,
       formData,

@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import NavBar from "../../../jsx/layouts/nav/Header";
 import { useSelector, useDispatch, connect } from "react-redux";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
 import visitStyles from "../../../styles/visitdata.module.css";
 import moment from "moment";
 import TableStyle from "../../../components/table/table.module.css";
@@ -57,6 +55,7 @@ import ManuallyAddProvider from "./manuallyAddProvider";
 import { getAge } from "../../../utils/reusable";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { truncateString } from "./components/function/ReusableFunctions";
+import { getTimelineList, getUserDetails } from "../../../stores/patient/details/network";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -71,15 +70,6 @@ export const navigetPageDetails = async (
   var orgId = getStorage("orgId");
   if (pageTitle == "HCC" && patientId) {
     setActiveTab(1);
-    // const response = await axios.get(
-    //   ENDPOINTS.apiEndoint +
-    //     `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
-    // );
-    // if (response.data) {
-    //   var result = response.data.response;
-    //   setPatientDocumentResult(result);
-    // }
-    // setActiveTab(1);
   }
   if (pageTitle == "NON HCC") {
     setActiveTab(2);
@@ -399,7 +389,6 @@ const Details = ({
           result.processedYear,
           result.dateOfService
         );
-        // getFlagListLastDetails(patientId, result.processedYear);
         setIsLoading(false);
         setPatientResultReload(true);
       } else {
@@ -437,11 +426,8 @@ const Details = ({
     }
     if (value == "Timeline") {
       setFlagContainerActiveTitle("Timeline");
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/actioneventaudit?patientid=${localPatientId}&pageno=${0}&pagesize=${100}`
-      );
-      var result = response.data.response.content;
+      const response = await getTimelineList(localPatientId)
+      var result = response?.response?.content;
       setTimeLineData(result);
       setFilterDataLoading(false);
     }
@@ -590,19 +576,6 @@ const Details = ({
     }
   };
 
-  const getFlagListLastDetails = async (patientId, year) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/flagdetails/get?patientId=${
-          patientId ? patientId : ""
-        }&processedYear=${year}`
-    );
-    if (response.data.response.length != 0) {
-      setFlagFirstData(response?.data?.response[0]);
-    }
-    // setFilterDataLoading(false);
-  };
-
   const renderUserDetails = async (userId) => {
     var result = "";
     var data = "";
@@ -618,12 +591,9 @@ const Details = ({
     );
 
     setTimeout(async () => {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint + `dbservice/user/get?userName=${userId}`
-      );
-
-      if (response.data) {
-        result = response.data.response;
+      const response = await getUserDetails(userId);
+      if (response?.response) {
+        result = response?.response;
         data = (
           <div className={visitStyles.userDetailsCard}>
             <div className={visitStyles.avatarStyle}>

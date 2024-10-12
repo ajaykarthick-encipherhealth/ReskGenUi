@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Popover, Avatar, Tooltip, notification } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,6 +23,7 @@ import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
 import { deleteflag } from "../../../../../stores/patient/details/network";
 import SvgFlag from "../svg/svg";
 import { getResponePopup } from "../../../../../utils/reusable";
+import { portalUrl } from "../../../../../utils/config";
 
 const Flag = ({
   setOpen,
@@ -102,7 +102,7 @@ const Flag = ({
       };
       try {
         const response = await axios.post(
-          ENDPOINTS.apiEndoint + `dbservice/flagdetails`,
+          portalUrl + `dbservice/flagdetails`,
           dataFormatSuggested
         );
         getResponePopup(response);
@@ -148,7 +148,7 @@ const Flag = ({
 
     setTimeout(async () => {
       const response = await axios.get(
-        ENDPOINTS.apiEndoint + `dbservice/user/get?userName=${userId}`
+        portalUrl + `dbservice/user/get?userName=${userId}`
       );
 
       if (response.data) {

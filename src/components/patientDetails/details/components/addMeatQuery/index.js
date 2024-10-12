@@ -11,13 +11,13 @@ import {
   updateMeatQuery,
 } from "../../../../../services/PatientsListSevice";
 import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import RegularButton from "../../../../../components/button";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { getStorage } from "../../../../../utils/storages";
+import { portalUrl } from "../../../../../utils/config";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -194,7 +194,7 @@ const AddMeatQuery = ({
   const getFindValidDiagnosisCode = async (value) => {
     try {
       const response = await axios.get(
-        ENDPOINTS.apiEndoint +
+        portalUrl +
           `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
       );
       if (response.data) {

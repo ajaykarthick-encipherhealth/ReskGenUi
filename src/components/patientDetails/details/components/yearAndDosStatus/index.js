@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Modal, Tooltip, notification, Dropdown, Menu } from "antd";
 import { connect } from "react-redux";
 import { DownOutlined } from "@ant-design/icons";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
+import { portalUrl } from "../../../../../utils/config";
 
 const YearAndDosStatus = ({
   patientDetailsResult,
@@ -419,7 +419,7 @@ const YearAndDosStatus = ({
     }
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndoint + apiURL,
+        portalUrl + apiURL,
         postData
       );
       var result = response.data;

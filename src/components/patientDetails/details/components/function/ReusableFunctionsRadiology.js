@@ -6,8 +6,8 @@ import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
 import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import { getStorage } from "../../../../../utils/storages";
+import { portalUrl } from "../../../../../utils/config";
 
 
 export const getEncounterDateBackground = ({
@@ -326,7 +326,7 @@ export const handleSubmitValidNotes = async ({
       capturedSections: selectDisDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndoint + apiURL,
+      portalUrl + apiURL,
       dataFormatSuggested
     );
     var result = response.data;
