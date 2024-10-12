@@ -9,17 +9,16 @@ import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
 import { getDailyTaskDatas } from "../../../../store/actions/DashboardActions";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
+import { actions as ReviewerAction } from "../../../../stores/reviewer/dashboard";
+import { dailyTaskData } from "../../../../stores/reviewer/dashboard/actions";
 
-const DailyTask = () => {
+const DailyTask = ({ getAllDailyTask, getFilteredList, dailyStatusDatas }) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
-
-  const dailyStatusData = useSelector((state) => state.workFlow.dailyTask);
-  const dispatch = useDispatch();
 
   const bullets = [
     {
@@ -62,20 +61,17 @@ const DailyTask = () => {
         dateString: today?.toISOString(),
       });
     }
-
     setSelectedDate(days);
-
     days?.map((data, index) => {
-      return dispatch(getDailyTaskDatas(data?.dateString, router));
+      return getAllDailyTask({ date: data?.dateString });
     });
   }, []);
 
   useEffect(() => {
-    if (dailyStatusData) {
-      getDays(selectedDate, dailyStatusData);
+    if (dailyStatusDatas && selectedDate) {
+      getDays(selectedDate, dailyStatusDatas);
     }
-  }, [dailyStatusData]);
-
+  }, [dailyStatusDatas, selectedDate]);
   const showPrevious = () => {
     const lastData = currentDays[0];
     const date = dayjs(lastData?.date).subtract(1, "date");
@@ -89,13 +85,13 @@ const DailyTask = () => {
     ];
     setSelectedDate((prev) => [...prev, ...datas]);
     datas?.map((data, index) => {
-      return dispatch(getDailyTaskDatas(data?.dateString, router));
+      return getAllDailyTask({ date: data?.dateString });
     });
   };
 
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
-      const matchingStatusData = statusData?.find((status) => {
+      const matchingStatusData = [statusData]?.find((status) => {
         return status?.data?.response?.date === dayInfo?.dateString;
       });
       return {
@@ -222,6 +218,7 @@ const DailyTask = () => {
     );
     return index === firstIndex;
   });
+
   const renderCardSkeleton = () => (
     <Row
       gutter={[16, 16]}
@@ -243,10 +240,30 @@ const DailyTask = () => {
             height: "260px",
           }}
         >
+          <Row>
+            <Col span={12}>
+              <div>
+                <Skeleton.Input
+                  style={{ width: "100%", height: "200px" }}
+                  active
+                />
+              </div>
+            </Col>
+            <Col span={12} className={styles.headerTitle}>
+              <div style={{ paddingLeft: "10px" }}>
+                {Array.from({ length: bullets.length }).map((_, i) => (
+                  <div className={styles.container} key={i}>
+                    <Skeleton.Input style={{ width: 30 }} active />
+                  </div>
+                ))}
+              </div>
+            </Col>
+          </Row>
         </Col>
       ))}
     </Row>
   );
+
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -280,7 +297,7 @@ const DailyTask = () => {
                             dueDateStart: data?.dateString,
                             dueDateEnd: data?.dateString,
                           };
-                          dispatch(getFilteredList(params));
+                          getFilteredList(params);
                           router?.push({
                             pathname: "/reviewer/patients",
                             query: params,
@@ -290,8 +307,7 @@ const DailyTask = () => {
                         <div className={styles.headerDisplay}>
                           <span> {data.day}</span>
                           <span className={styles.dateDisplay}>
-                            {" "}
-                            {`(${data.date})`}{" "}
+                            {`(${data.date})`}
                           </span>
                         </div>
                       </h4>
@@ -311,7 +327,7 @@ const DailyTask = () => {
                           </div>
                         </Col>
                         <Col span={12} className={styles.headerTitle}>
-                          <div>
+                          <div style={{ paddingLeft: "10px" }}>
                             {bullets?.map((item) => {
                               return (
                                 <div className={styles.container}>
@@ -327,7 +343,7 @@ const DailyTask = () => {
                                           statusSelectedStatus: item?.name,
                                         })
                                       );
-                                      dispatch(getFilteredList(params));
+                                      getFilteredList(params);
                                       router?.push({
                                         pathname: "/reviewer/patients",
                                         search: `params=${params}`,
@@ -360,19 +376,14 @@ const DailyTask = () => {
                   ))}
                 </Row>
               ) : (
-                // <div className={spinSTYles.spinStyle}>
-                //   <Spin loading={dailyStatusData?.loading} />
-                // </div>
                 renderCardSkeleton()
               )}
-
               <div className={styles.infoCards}>
                 <Legends bullets={bullets} />
               </div>
             </Col>
             <Col span={1}>
               <div onClick={showNext} className={styles.ImgDIv}>
-                {" "}
                 <Image src={right} />
               </div>
             </Col>
@@ -383,4 +394,14 @@ const DailyTask = () => {
   );
 };
 
-export default DailyTask;
+const connector = connect(
+  (state) => ({
+    dailyStatusDatas: state?.reviewer?.dashboard?.dailyTask,
+    loader: state.admin?.workqueue?.patientsLoading,
+  }),
+  {
+    getAllDailyTask: ReviewerAction.dailyTaskAction,
+    getFilteredList: ReviewerAction.reviewerFilterList,
+  }
+);
+export default connector(DailyTask);
