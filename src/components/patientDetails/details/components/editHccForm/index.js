@@ -9,8 +9,6 @@ import RegularButton from "../../../../../components/button";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
-import { portalUrl } from "../../../../../utils/config";
-
 const { TextArea } = Input;
 
 const { Option } = Select;
@@ -71,7 +69,7 @@ const EditHccForm = ({
       };
       try {
         const response = await axios.put(
-          portalUrl + `aiservice/disease/editdisease`,
+          process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `aiservice/disease/editdisease`,
           dataFormat
         );
         if (response?.data?.status == "SUCCESS") {
@@ -106,7 +104,7 @@ const EditHccForm = ({
     setAddValidCodeCheck(null);
     try {
       const response = await axios.get(
-        portalUrl +
+        process.env.NEXT_PUBLIC_PORTAL_BASE_URL +
           `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
       );
       if (response.data) {

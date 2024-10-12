@@ -8,8 +8,6 @@ import { connect } from "react-redux";
 import { DownOutlined } from "@ant-design/icons";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
-import { portalUrl } from "../../../../../utils/config";
-
 const YearAndDosStatus = ({
   patientDetailsResult,
   patientIdDetailsData,
@@ -419,7 +417,7 @@ const YearAndDosStatus = ({
     }
     try {
       const response = await axios.post(
-        portalUrl + apiURL,
+        process.env.NEXT_PUBLIC_PORTAL_BASE_URL + apiURL,
         postData
       );
       var result = response.data;

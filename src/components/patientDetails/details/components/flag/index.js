@@ -23,7 +23,6 @@ import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
 import { deleteflag } from "../../../../../stores/patient/details/network";
 import SvgFlag from "../svg/svg";
 import { getResponePopup } from "../../../../../utils/reusable";
-import { portalUrl } from "../../../../../utils/config";
 
 const Flag = ({
   setOpen,
@@ -102,7 +101,7 @@ const Flag = ({
       };
       try {
         const response = await axios.post(
-          portalUrl + `dbservice/flagdetails`,
+          process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `dbservice/flagdetails`,
           dataFormatSuggested
         );
         getResponePopup(response);
@@ -148,7 +147,7 @@ const Flag = ({
 
     setTimeout(async () => {
       const response = await axios.get(
-        portalUrl + `dbservice/user/get?userName=${userId}`
+        process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `dbservice/user/get?userName=${userId}`
       );
 
       if (response.data) {

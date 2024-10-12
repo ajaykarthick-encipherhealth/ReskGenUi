@@ -17,7 +17,6 @@ import { getStorage } from "../../../../../utils/storages";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { isDeleteNotes } from "../../../../../stores/patient/details/actions";
 import { getResponePopup } from "../../../../../utils/reusable";
-import { portalUrl } from "../../../../../utils/config";
 
 const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes }) => {
   const [inputValue, setInputValue] = useState({
@@ -133,7 +132,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes 
     const yearData = patientDetailsResult?.data?.response;
 
     const response = await axios.get(
-      portalUrl +
+      process.env.NEXT_PUBLIC_PORTAL_BASE_URL +
         `dbservice/notes?patientId=${
           patientDetailsResult?.data?.response?.patientId
         }&processedYear=${
@@ -168,7 +167,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes 
 
     setTimeout(async () => {
       const response = await axios.get(
-        portalUrl + `dbservice/user/get?userName=${userId}`
+        process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `dbservice/user/get?userName=${userId}`
       );
 
       if (response.data) {

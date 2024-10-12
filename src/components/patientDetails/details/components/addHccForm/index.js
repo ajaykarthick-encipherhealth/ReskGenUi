@@ -12,7 +12,6 @@ import SelectButton from "../../../../../components/btnSelect";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import path from "path";
 import { getStorage } from "../../../../../utils/storages";
-import { portalUrl } from "../../../../../utils/config";
 
 const { TextArea } = Input;
 
@@ -176,7 +175,7 @@ const AddHccForm = ({
     // ) {
     try {
       const response = await axios.post(
-        portalUrl + `dbservice/patient/compute/addvaliddisease`,
+        process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `dbservice/patient/compute/addvaliddisease`,
         dataFormat
       );
       if (response?.status == 200) {
@@ -208,7 +207,7 @@ const AddHccForm = ({
     setAddValidCodeCheck(null);
     try {
       const response = await axios.get(
-        portalUrl +
+        process.env.NEXT_PUBLIC_PORTAL_BASE_URL +
           `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
       );
       if (response.data) {
@@ -232,7 +231,7 @@ const AddHccForm = ({
       });
       try {
         const response = await axios.get(
-          portalUrl +
+          process.env.NEXT_PUBLIC_PORTAL_BASE_URL +
             `management/provider/getProviderData?npiNumber=${e.target.value}`
         );
         if (response.data) {

@@ -6,7 +6,6 @@ import Form from "react-bootstrap/Form";
 import axios from "../../../../../utils/axiosConfig";
 import { validateYear } from "../../../../headerFilters/functions";
 import { getStorage } from "../../../../../utils/storages";
-import { portalUrl } from "../../../../../utils/config";
 
 const AddRadiologyForm = ({ setOpen, open }) => {
   const patientDetailsResult = useSelector(
@@ -69,7 +68,7 @@ const AddRadiologyForm = ({ setOpen, open }) => {
       },
     };
     const response = await axios.post(
-      portalUrl +
+      process.env.NEXT_PUBLIC_PORTAL_BASE_URL +
         `aiservice/ai/upload/radiology
       `,
       formData,

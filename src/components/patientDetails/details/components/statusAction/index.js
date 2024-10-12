@@ -12,7 +12,6 @@ import AllocateModal from "../../../../../pages/admin/allocateduser/allocate";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
 import { getResponePopup } from "../../../../../utils/reusable";
-import { portalUrl } from "../../../../../utils/config";
 
 const StatusAction = ({
   patientDetailsResult,
@@ -512,7 +511,7 @@ const StatusAction = ({
     var postData = { ...userData, ...resultData };
     try {
       const response = await axios.post(
-        portalUrl + `dbservice/patient/status/complete`,
+        process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `dbservice/patient/status/complete`,
         postData
       );
       var result = response.data;
@@ -539,7 +538,7 @@ const StatusAction = ({
     var postData = { ...userData, ...resultData };
     try {
       const response = await axios.post(
-        portalUrl + `dbservice/patient/status/audit`,
+        process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `dbservice/patient/status/audit`,
         postData
       );
       var result = response.data;
@@ -615,7 +614,7 @@ const StatusAction = ({
     // }
     try {
       const response = await axios.post(
-        portalUrl + `dbservice/patient/status/overallstatus`,
+        process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `dbservice/patient/status/overallstatus`,
         postData
       );
       var result = response.data;

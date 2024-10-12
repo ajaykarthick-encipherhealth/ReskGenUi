@@ -8,7 +8,6 @@ import { validateYear } from "../../../../headerFilters/functions";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getResponePopup, validateFileName } from "../../../../../utils/reusable";
 import { getStorage } from "../../../../../utils/storages";
-import { portalUrl } from "../../../../../utils/config";
 
 const AddLabForm = ({
   setOpen,
@@ -94,9 +93,9 @@ const AddLabForm = ({
         "Content-Type": "multipart/form-data",
       },
     };
-    var apiUrl = portalUrl +`aiservice/ai/upload/radiology`;
+    var apiUrl = process.env.NEXT_PUBLIC_PORTAL_BASE_URL +`aiservice/ai/upload/radiology`;
     if(title == "LAB"){
-      apiUrl = portalUrl +`aiservice/ai/upload/lab`;
+      apiUrl = process.env.NEXT_PUBLIC_PORTAL_BASE_URL +`aiservice/ai/upload/lab`;
     }
     try {
       const response = await axios.post(apiUrl,

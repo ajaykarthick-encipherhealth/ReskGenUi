@@ -16,7 +16,6 @@ import { connect } from "react-redux";
 import { getStorage } from "../../../../../utils/storages";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
-import { portalUrl } from "../../../../../utils/config";
 
 const Comments = ({
   setOpen,
@@ -40,7 +39,7 @@ const Comments = ({
     const yearData = patientDetailsResult?.data?.response;
 
     const response = await axios.get(
-      `${portalUrl}dbservice/comment?patientId=${
+      `${process.env.NEXT_PUBLIC_PORTAL_BASE_URL}dbservice/comment?patientId=${
         patientDetailsResult?.data?.response?.patientId
       }&processedYear=${yearData?.processedYear || ""}&dateOfService=${
         yearData?.dateOfService || ""
@@ -157,7 +156,7 @@ const Comments = ({
 
     setTimeout(async () => {
       const response = await axios.get(
-        portalUrl + `dbservice/user/get?userName=${userId}`
+        process.env.NEXT_PUBLIC_PORTAL_BASE_URL + `dbservice/user/get?userName=${userId}`
       );
 
       if (response.data) {

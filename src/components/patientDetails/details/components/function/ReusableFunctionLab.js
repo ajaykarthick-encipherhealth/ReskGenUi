@@ -7,7 +7,6 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
 import axios from "../../../../../utils/axiosConfig";
 import { getStorage } from "../../../../../utils/storages";
-import { portalUrl } from "../../../../../utils/config";
 
 export const getEncounterDateBackground = ({
   value,
@@ -329,7 +328,7 @@ export const handleSubmitValidNotes = async ({
       capturedSections: selectDisDetails.capturedSections,
     };
     const response = await axios.put(
-      portalUrl + apiURL,
+      process.env.NEXT_PUBLIC_PORTAL_BASE_URL + apiURL,
       dataFormatSuggested
     );
     var result = response.data;

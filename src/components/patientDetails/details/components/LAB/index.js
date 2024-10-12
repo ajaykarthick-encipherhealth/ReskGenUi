@@ -29,6 +29,7 @@ import ModelIndex from "../model/Index";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import MovementAction from "../movementAction";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
+import { isLocalEdit } from "../../../../../utils/config";
 const LabCards = ({
   list,
   hccVersionDetails,

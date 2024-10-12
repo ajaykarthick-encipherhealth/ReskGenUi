@@ -3,7 +3,6 @@ import {
   getRadiologyFileDetails,
 } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import axios from "../../../../../utils/axiosConfig";
-import { portalUrl } from "../../../../../utils/config";
 import { getStorage } from "../../../../../utils/storages";
 import { sortFunction } from "./GetDataLab";
 import { stringToColour } from "./ReusableFunctions";
@@ -45,44 +44,6 @@ export const COLORS3 = [
   "encounterDateTag10",
 ];
 
-// const stringToColour = (str) => {
-//   let hash = 0;
-//   str?.split("").forEach((char) => {
-//     hash = char.charCodeAt(0) + ((hash << 5) - hash);
-//   });
-//   let colour = "#";
-//   for (let i = 0; i < 3; i++) {
-//     const value = (hash >> (i * 8)) & 0xff;
-//     colour += value.toString(16).padStart(2, "0");
-//   }
-//   if(str.toLocaleLowerCase() === "plan"){
-//      colour = "#536cdf"
-//   }
-//   return colour;
-// };
-
-const submitSectionColors = async (
-  sectionName,
-  sectionColor,
-  backgroundColor
-) => {
-  var postData = {
-    backgroundColor: backgroundColor,
-    sectionColor: sectionColor,
-    sectionName: sectionName,
-  };
-
-  try {
-    const response = await axios.post(
-      portalUrl + `dbservice/section/color/save`,
-      postData
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
-    } else {
-    }
-  } catch (e) {}
-};
 
 function getUniqueListBy(arr, key) {
   return [...new Map(arr.map((item) => [item[key], item])).values()];
