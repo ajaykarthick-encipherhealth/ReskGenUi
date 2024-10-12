@@ -29,6 +29,10 @@ import spinSTYles from "../../../../styles/auth.module.css";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import TC from "../../.../../../../images/dashboard/TC.png";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
+import Hold from "../../.../../../../images/trackingImages/HoldTrack.png";
+import HoldBg from "../../.../../../../images/dashboard/holdbg.png";
+import AuditedDecline from "../../.../../../../images/trackingImages/AuditDeclined.png";
+
 const WorkFlow = () => {
   const router = useRouter();
   const worlFlowData = useSelector(

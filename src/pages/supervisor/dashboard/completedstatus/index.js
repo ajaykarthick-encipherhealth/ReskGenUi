@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as echarts from "echarts";
 import ReactECharts from "echarts-for-react";
 import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import styles from "./styles.module.css";
 import { Empty, Skeleton, Spin } from "antd";
 import { Buttons } from "../../../reviewer/workingstatus";
@@ -14,10 +14,11 @@ import { monthNames, getDays } from "../accuracy";
 import YearPicker from "../../../../components/yearpicker";
 import { getCOmpletedScore } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
-const CompletedStatus = () => {
+import { actions as dashboardAction } from '../../../../stores/supervisor/dashboard'
+const CompletedStatus = ({completedDatas,getCOmpletedScore}) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const completedDatas = useSelector((state) => state?.workFlow?.completed);
+  // const completedDatas = useSelector((state) => state?.workFlow?.completed);
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -150,16 +151,14 @@ const CompletedStatus = () => {
   ];
 
   useEffect(() => {
-    dispatch(
-      getCOmpletedScore(
-        currentBtn.toUpperCase(),
-        currentDate.getDate(),
-        selectedMonth,
-        selectedYear,
-        router
-      )
-    );
+    getCOmpletedScore({
+      month: selectedMonth,
+      year: selectedYear,
+      btn: currentBtn,
+    });
   }, [currentBtn, selectedMonth, selectedYear]);
+
+  console.log(completedDatas?.loading,"load")
   return (
     <>
       <HeadTitle header="Productivity Status" />
@@ -220,4 +219,14 @@ const CompletedStatus = () => {
   );
 };
 
-export default CompletedStatus;
+const enhancer = connect(
+  (state) => ({
+    completedDatas: state.supervisor.dashboard.completedChart,
+    xdcfv:console.log(state,"state"),
+    completedChartLoading: state.supervisor.dashboard.completedChartLoading,
+  }),
+  {
+    getCOmpletedScore: dashboardAction.completedChartAction,
+  }
+);
+export default enhancer(CompletedStatus);

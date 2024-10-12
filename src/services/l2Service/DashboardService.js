@@ -3,22 +3,23 @@ import ENDPOINTS from "../../utility/enpoints";
 import { getStorage } from "../../utils/storages";
 
 // chnaged
-export async function workStatusApi(startDate, endDate, router) {
-  const token = getStorage("token");
-  try {
-    const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/audit/statistics/processed/range?startDate=${startDate}&endDate=${endDate}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (err) {
-    console.log(err)
-  }
-}
+// export async function workStatusApi(startDate, endDate, router) {
+//   const token = getStorage("token");
+//   try {
+//     const response = await axios.get(
+//       `${ENDPOINTS?.apiEndoint}dbservice/audit/statistics/processed/range?startDate=${startDate}&endDate=${endDate}`,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+//     return response.data;
+//   } catch (err) {
+//     console.log(err)
+//   }
+// }
+
 
 // chnaged
 export const DailyTaskApi = async (date, router) => {

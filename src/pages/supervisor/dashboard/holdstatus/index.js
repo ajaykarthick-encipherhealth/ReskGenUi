@@ -4,21 +4,20 @@ import styles from "./styles.module.css";
 import { Empty, Modal, Spin } from "antd";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { getPatientID } from "../../../../store/actions/PatientsActions";
-import { getHoldStatusData } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { renderSkeletonHold } from "../../../../components/reuseableFunctions";
+import { actions as dashbaordActions } from "../../../../stores/supervisor/dashboard";
 
-const HoldStatus = () => {
+const HoldStatus = ({ holdStatusData, getHoldStatusData }) => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
 
   useEffect(() => {
-    dispatch(getHoldStatusData(router));
+   getHoldStatusData(router);
   }, []);
-  const holdStatusData = useSelector((state) => state?.l2Dashboard?.holdStatus);
 
   const handleOpen = () => {
     setOpenHoldStatus(!openHoldStatus);
@@ -134,4 +133,12 @@ const HoldStatus = () => {
   );
 };
 
-export default HoldStatus;
+const enhancer = connect(
+  (state) => ({
+    holdStatusData: state?.supervisor?.dashboard?.holdStatus
+  }),
+  {
+    getHoldStatusData: dashbaordActions.holdStatusAction,
+  }
+);
+export default enhancer(HoldStatus);
