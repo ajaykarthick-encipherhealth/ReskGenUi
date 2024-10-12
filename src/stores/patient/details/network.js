@@ -1,4 +1,4 @@
-import { requestPortal } from "../../../utils/network";
+import { requestPortal, requestPortalFiles } from "../../../utils/network";
 import { getStorage, setStorage } from "../../../utils/storages";
 
 export async function patientDetails(
@@ -525,4 +525,22 @@ export async function overallYearStatus(obj,url) {
   };
   const data = await requestPortal(url, options);
   return data;
+}
+
+export async function uploadRadiologyFile({ data }) {
+  const options = {
+    method: "POST",
+    body: data,
+  };
+  const res = await requestPortalFiles(`aiservice/ai/upload/radiology`, options);
+  return res;
+}
+
+export async function uploadLabFile({ data }) {
+  const options = {
+    method: "POST",
+    body: data,
+  };
+  const res = await requestPortalFiles(`aiservice/ai/upload/radiology`, options);
+  return res;
 }

@@ -8,6 +8,7 @@ import { validateYear } from "../../../../headerFilters/functions";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getResponePopup, validateFileName } from "../../../../../utils/reusable";
 import { getStorage } from "../../../../../utils/storages";
+import { uploadLabFile, uploadRadiologyFile } from "../../../../../stores/patient/details/network";
 
 const AddLabForm = ({
   setOpen,
@@ -88,22 +89,14 @@ const AddLabForm = ({
     formData.append("patientid", inputValue.patientId);
     formData.append("dos", inputValue.year);
     formData.append("emrtype", emrType);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    var apiUrl = process.env.NEXT_PUBLIC_PORTAL_BASE_URL +`aiservice/ai/upload/radiology`;
-    if(title == "LAB"){
-      apiUrl = process.env.NEXT_PUBLIC_PORTAL_BASE_URL +`aiservice/ai/upload/lab`;
-    }
+   
     try {
-      const response = await axios.post(apiUrl,
-        formData,
-        headers
-      );
-      var res = response.data;
-      if (res?.status == "SUCCESS") {
+      let response = await uploadRadiologyFile({ data: formData });
+      if(title == "LAB"){
+        response = await uploadLabFile({ data: formData });
+      }
+      console.log(response)
+      if (response?.status == "SUCCESS") {
         getPatientLabDosList(
           patientDetailsResult?.data?.response?.patientId,
           processedYearResult?.data?.response[0]
