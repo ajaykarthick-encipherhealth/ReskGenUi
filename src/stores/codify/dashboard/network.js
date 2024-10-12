@@ -36,7 +36,6 @@ export const searches = async () => {
   const options = {
     method: "GET",
   };
-
   const data = await requestPortal("dbservice/getRecentSearches", options);
   return data;
 };
@@ -45,7 +44,6 @@ export const autocomplete = async ({ code }) => {
   const options = {
     method: "GET",
   };
-
   const data = await requestPortal(
     `management/autocomplete?q=${code}`,
     options
