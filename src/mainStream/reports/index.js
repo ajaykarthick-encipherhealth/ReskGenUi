@@ -4,10 +4,8 @@ import styles from "./report.module.css";
 import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faFileExport } from "@fortawesome/free-solid-svg-icons";
-import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
-import Select from "react-select";
-import { Modal, DatePicker, Tooltip } from "antd";
+import { Modal, DatePicker, Tooltip, Select,Input } from "antd";
 import { debounce } from "../../../src/pages/admin/reports/Export";
 import {
   disableFutureDate,
@@ -34,14 +32,12 @@ import TeamReport from "./teamReport";
 import { getStorage, setStorage } from "../../utils/storages";
 
 const statusOptions = [
-  { label: "All", value: "" },
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
 ];
 const options = [
-  { value: "", label: "All" },
   { value: "REVIEWER", label: "REVIEWER" },
   { value: "SUPERVISOR", label: "SUPERVISOR" },
 ];
@@ -188,11 +184,11 @@ const Reports = ({
   };
   const dosOnChange = (selectedOption, name) => {
     const nameString = name?.split(" ").join("");
-    if (selectedOption?.label === "All") {
+    if (name == "User Role" && !selectedOption) {
       setSelectedOptions((prevOptions) => ({
         ...prevOptions,
-        UserRole: "",
-        User: "",
+        UserRole: undefined,
+        User: undefined,
       }));
     } else {
       setSelectedOptions((prevOptions) => ({
@@ -240,7 +236,7 @@ const Reports = ({
   };
 
   const getTabsForRole = (role) => {
-    switch (role) {
+    switch (role?.toLowerCase()) {
       case "reviewer":
         return ["Reviewer", "Sent", "Received"];
       case "admin":
@@ -256,14 +252,13 @@ const Reports = ({
 
   const tabs = getTabsForRole(userRole);
 
-  const optionsUser =
-    selectUserList?.data?.response?.map((res) => ({
-      value: res.userName,
-      label: res.firstName + " " + res.lastName,
-    })) || [];
-  if (optionsUser.length > 0) {
-    optionsUser.unshift({ value: "", label: "All" });
-  }
+  const optionsUser = selectedOptions?.UserRole
+    ? selectUserList?.data?.response?.map((res) => ({
+        value: res.userName,
+        label: res.firstName + " " + res.lastName,
+      }))
+    : [];
+
   const checkedList = [
     {
       id: 1,
@@ -357,15 +352,12 @@ const Reports = ({
           startDate: selectedDateRanges?.Admin?.from,
           endDate: selectedDateRanges?.Admin?.to,
           search: coderSearchString ? coderSearchString : "",
-          filter: selectedOptions?.Status?.value,
-          userName: selectedOptions?.UserRole?.value
-            ? selectedOptions?.UserRole?.value
-            : "",
+          filter: selectedOptions?.Status,
+          userName: selectedOptions?.UserRole ? selectedOptions?.UserRole : "",
           sort: sort,
           selectManager:
-            selectedOptions?.User?.value &&
-            selectedOptions?.UserRole?.value !== "All"
-              ? selectedOptions?.User?.value
+            selectedOptions?.User && selectedOptions?.UserRole !== ""
+              ? selectedOptions?.User
               : "",
           flagsList: selectAllFlags,
           allPatientIds: false,
@@ -377,8 +369,8 @@ const Reports = ({
         startDate: selectedDateRanges?.Audit?.from,
         endDate: selectedDateRanges?.Audit?.to,
         search: coderSearchString ? coderSearchString : "",
-        filter: selectedOptions?.reviewerStatus?.value
-          ? selectedOptions?.reviewerStatus?.value
+        filter: selectedOptions?.reviewerStatus
+          ? selectedOptions?.reviewerStatus
           : "",
         sort: sort,
         flagsList: selectAllFlags,
@@ -389,8 +381,8 @@ const Reports = ({
         startDate: selectedDateRanges?.Team?.from,
         endDate: selectedDateRanges?.Team?.to,
         search: coderSearchString ? coderSearchString : "",
-        filter: selectedOptions?.reviewerStatus?.value
-          ? selectedOptions?.reviewerStatus?.value
+        filter: selectedOptions?.reviewerStatus
+          ? selectedOptions?.reviewerStatus
           : "",
         sort: sort,
         flagsList: selectAllFlags,
@@ -401,7 +393,7 @@ const Reports = ({
         startDate: selectedDateRanges?.Reviewer?.from,
         endDate: selectedDateRanges?.Reviewer?.to,
         search: coderSearchString ? coderSearchString : "",
-        filter: selectedOptions?.reviewerStatus?.value,
+        filter: selectedOptions?.reviewerStatus,
         sort: sort,
         flagsList: selectAllFlags,
       });
@@ -445,8 +437,8 @@ const Reports = ({
   }, [activeTab]);
 
   useEffect(() => {
-    if (selectedOptions?.UserRole?.value) {
-      dispatch(getSelectUserListReport(selectedOptions?.UserRole?.value));
+    if (selectedOptions?.UserRole) {
+      dispatch(getSelectUserListReport(selectedOptions?.UserRole || ""));
     }
   }, [selectedOptions?.UserRole]);
 
@@ -483,13 +475,9 @@ const Reports = ({
                                 {" "}
                                 Search
                               </label>
-                              <div className="form-group has-search2 w-100">
-                                <FontAwesomeIcon
-                                  className="fa fa-search form-control-feedback"
-                                  icon={faSearch}
-                                />
-
-                                <InputText
+                              <div style={{height:"43px"}}>
+                
+                                <Input
                                   name="initialSearch"
                                   type="text"
                                   onChange={(e) => {
@@ -497,7 +485,7 @@ const Reports = ({
                                     resetPageNumber(resetPageState);
                                   }}
                                   autoComplete="off"
-                                  className="form-control new-form-control new-item-control reportInput"
+                                  className={"w-100 new-search-control2 border-none "}
                                   placeholder="Search"
                                   maxLength={25}
                                   value={search ? search?.searchVal : ""}
@@ -507,6 +495,12 @@ const Reports = ({
                                       e.preventDefault();
                                     }
                                   }}
+                                  prefix={
+                                    (
+                                      <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
+                                    )
+                                  }
+                                  allowClear={true}
                                 />
 
                                 {/* )} */}
@@ -519,29 +513,32 @@ const Reports = ({
                           userRole == "supervisor" ? (
                             <div className="col-xl-2">
                               <div className="d-flex w-100">
-                                <label className="labelStyle d-flex m-auto  p-2">
-                                  {" "}
-                                  Status
-                                </label>
-                                <div className="form-group has-search w-100">
-                                  <Select
-                                    onChange={(selectedOption) => {
-                                      dosOnChange(
-                                        selectedOption,
-                                        "reviewer Status"
-                                      );
-                                      resetPageNumber(resetPageState);
-                                    }}
-                                    options={statusOptions}
-                                    className={`custom-react-report-select`}
-                                    isSearchable={false}
-                                  />
-                                </div>
+                              <label className="labelStyle d-flex m-auto  p-2">
+                                {" "}
+                                Status
+                              </label>
+                              <div className="form-group has-search w-100 custom-react-report-select">
+                                <Select
+                                  onChange={(selectedOption) => {
+                                    dosOnChange(
+                                      selectedOption,
+                                      "reviewer Status"
+                                    );
+                                    resetPageNumber(resetPageState);
+                                  }}
+                                  placeholder="Select Status"
+                                  options={statusOptions}
+                                  // className={`custom-react-report-select`}
+                                  isSearchable={false}
+                                  allowClear={true}
+                                />
                               </div>
+                              {/* </div> */}
+                            </div>
                             </div>
                           ) : null}
 
-                          <div className="col-xl-3 d-flex">
+                          <div className="col-xl-2 d-flex">
                             <div className="d-flex w-100">
                               <label className="labelStyle d-flex  p-2">
                                 {" "}
@@ -586,7 +583,7 @@ const Reports = ({
                                       {info.name}
                                     </label>
                                   )}
-                                  <div className="form-group has-search2 w-100">
+                                  <div className="form-group has-search2 w-100 custom-react-report-select">
                                     {info?.isSearch && (
                                       <FontAwesomeIcon
                                         className="fa fa-search form-control-feedback"
@@ -602,18 +599,16 @@ const Reports = ({
                                           );
                                           resetPageNumber(resetPageState);
                                         }}
+                                        placeholder={`Select ${info.name}`}
                                         options={
                                           info?.name === "User"
                                             ? optionsUser
                                             : info?.options
                                         }
-                                        className={`custom-react-report-select`}
+                                        // className={`custom-react-report-select`}
                                         isSearchable={false}
-                                        value={
-                                          selectedOptions[info?.name] == "All"
-                                            ? ""
-                                            : selectedOptions[info?.name]
-                                        }
+                                        value={selectedOptions[info?.name]}
+                                        allowClear={true}
                                       />
                                     )}
                                     {info?.isRangePikcer && (

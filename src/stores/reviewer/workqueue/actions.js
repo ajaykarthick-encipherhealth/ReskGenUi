@@ -1,3 +1,4 @@
+import { createAction } from "redux-actions";
 import { createActionThunk } from "../../../utils/redux";
 import * as network from "./network";
 
@@ -9,4 +10,8 @@ export const patientsAction = createActionThunk(
 export const flagsAction = createActionThunk(
   "FLAGS_LIST",
   network.flagsList
+);
+
+export const getPatientDetails = createAction(
+  "GET_ALL_REVIEWER_PATIENTS_FILES"
 );

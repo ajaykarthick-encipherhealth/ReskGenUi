@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { Button, DatePicker, Empty, Input, Select, Space, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
 import moment from "moment/moment";
 import { Tab, Nav } from "react-bootstrap";
@@ -14,10 +13,7 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import AllocatedAdminList from "../../../components/table/admin/allocatedAdminList/allocatedAdminList";
 import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
-import allocateStyle from "./allocate/style.module.css";
 import L2AllocateModal from "./l2allocate";
-import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/tracking";
-
 import styles from "../report/report.module.css";
 import reportStyles from "../../reviewer/report/report.module.css";
 import SpinnerDots from "../../../components/spinner";
@@ -28,9 +24,9 @@ import {
   disableFutureDate,
   renderUserPrfoile,
   resetPageNumber,
+  generateOptionsForNewStore,
 } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
-import { getFilters } from "../../../stores/authflow/actions";
 import AllocateModal from "./allocate";
 import { debounce } from "../../../components/input";
 import { useCallback } from "react";
@@ -60,6 +56,8 @@ const Patient = ({
   getSelectedSupervisorList,
   selectedSupervisors,
   loader3,
+  getFilters,
+  filteredList,
 }) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -93,15 +91,11 @@ const Patient = ({
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-  const filteredList = useSelector((state) => state.filters?.patientAllocated);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [searchStr, setSearchStr] = useState("");
   const [selectOrgList, setSelectedOrgList] = useState([]);
   const [orgAllList, setOrgAllList] = useState([]);
-  const [defaultOrgValue, setDefaultOrgValue] = useState(null);
-
-  const dispatch = useDispatch();
 
   const getAllList = async ({
     pageNo = 0,
@@ -284,13 +278,15 @@ const Patient = ({
   const getAuditL2List = async (pageNo, searchString) => {
     let orgId = getStorage("orgId");
     let tenantid = getStorage("tenantId");
-    let resoureUrl = `dbservice/l2audit?tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}&orgId=${selectOrgList}`;
+    let resoureUrl = `dbservice/l2audit?tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}&orgId=${
+      selectOrgList || ""
+    }`;
     getSupervisorsList({ url: resoureUrl });
   };
 
   useEffect(() => {
     if (selectAllChecked) {
-      if (isPatientList) {
+      if (isPatientList && activeTab == 2) {
         getAllCheckListL2(sort);
       } else {
         getAllCheckList(sort);
@@ -298,7 +294,7 @@ const Patient = ({
     } else {
       setSelectedRowsId([]);
     }
-  }, [selectAllChecked, sort, isPatientList, pageNoL2Patient]);
+  }, [selectAllChecked, sort, isPatientList, pageNoL2Patient, activeTab]);
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
@@ -318,7 +314,7 @@ const Patient = ({
     if (activeTab == 2 && !isPatientList) {
       getAuditL2List(pageNo, searchStr);
     }
-    dispatch(getFilters("patientAllocated"));
+    getFilters({ field: "patientAllocated" });
   }, [
     pageNo,
     pageSize,
@@ -342,7 +338,6 @@ const Patient = ({
     const orgListArray =
       organizationList?.response?.length > 0
         ? [
-            { label: "All", value: "All" },
             ...organizationList?.response?.map((res) => ({
               value: res.id,
               label: res.name,
@@ -369,6 +364,7 @@ const Patient = ({
               pageNoL2Patient: pageNoL2Patient,
               sort: sort,
             });
+            setIsPatientList(true);
           }}
         >
           <td
@@ -443,7 +439,6 @@ const Patient = ({
   const statusOptions = [
     { label: "Completed", value: "COMPLETED" },
     { label: "Declined", value: "DECLINED" },
-    { label: "All", value: "ALL" },
   ];
 
   const getL2PatientList = async ({
@@ -455,7 +450,7 @@ const Patient = ({
     allocatedOption,
   }) => {
     setTableLoading(true);
-    setIsLoading(true);
+    // setIsLoading(true);
     let dataMap = {
       firstName: data?.firstName,
       lastName: data?.lastName,
@@ -474,10 +469,10 @@ const Patient = ({
       allocatedOption ? (allocatedOption === "All" ? "" : allocatedOption) : ""
     }`;
     getSelectedSupervisorList({ url: resoureUrl });
-    setIsPatientList(true);
   };
 
   const getAllCheckListL2 = async (sort) => {
+    console.log("hbhj");
     setCheckedLoading(true);
 
     let resoureUrl = `dbservice/l2audit/patients?username=${
@@ -504,11 +499,11 @@ const Patient = ({
   };
 
   useEffect(() => {
-    dispatch(getFilters("patientAllocated"));
+    getFilters({ field: "patientAllocated" });
   }, []);
 
   useEffect(() => {
-    if (selectedOptions?.length > 0 || allocatedOption) {
+    if (activeTab == 1 && (!selectedOptions || !allocatedOption)) {
       getL2PatientList({
         data: l2selectUser,
         pageNoL2Patient: pageNoL2Patient,
@@ -534,7 +529,7 @@ const Patient = ({
                           <div
                             className={`${isPatientList && "d-flex"} col-xl-2`}
                           >
-                            {isPatientList && (
+                            {isPatientList && activeTab !== 1 && (
                               <div className={reportStyles.backDiv}>
                                 <button
                                   style={{ width: "40px", height: "40px" }}
@@ -542,6 +537,7 @@ const Patient = ({
                                   onClick={() => {
                                     setIsPatientList(false);
                                     setAllocatedOption("");
+                                    setSelectAllChecked(false);
                                   }}
                                 >
                                   <Image src={leftArrow} />
@@ -555,20 +551,17 @@ const Patient = ({
                                   ? "Search by Name"
                                   : "Search by Name or ID"}
                               </label>
-                              <div class="form-group has-search">
-                                <FontAwesomeIcon
-                                  className="fa fa-search form-control-feedback"
-                                  icon={faSearch}
-                                />
-                                <InputText
+                              <div style={{ height: "42px" }}>
+                                <Input
                                   type="text"
                                   onChange={(e) => {
                                     resetPageNumber(setPageNo);
-
                                     getNameSearch(e.target.value);
                                   }}
                                   value={searchString}
-                                  className="form-control new-form-control new-item-control"
+                                  className={
+                                    "w-100 new-search-control border-none"
+                                  }
                                   placeholder="Search"
                                   maxLength={25}
                                   onKeyDown={(e) => {
@@ -577,6 +570,13 @@ const Patient = ({
                                       e.preventDefault();
                                     }
                                   }}
+                                  prefix={
+                                    <FontAwesomeIcon
+                                      className="searchPrefix"
+                                      icon={faSearch}
+                                    />
+                                  }
+                                  allowClear={true}
                                 />
                               </div>
                             </div>
@@ -595,18 +595,20 @@ const Patient = ({
                                     setPageNo={setPageNo}
                                   /> */}
                                 <label>Select Organization</label>
-                                <Select
-                                  options={orgAllList}
-                                  style={{ width: "100%", height: "42px" }}
-                                  placeholder={"Select Organization"}
-                                  allowClear
-                                  onChange={(e) => {
-                                    setSelectedOrgList(e);
-                                    setSelectedRowsId([]);
-                                    setSelectAllChecked(false);
-                                  }}
-                                  value={selectOrgList}
-                                />
+                                <div class="form-group has-search custom-react-select">
+                                  <Select
+                                    options={orgAllList}
+                                    style={{ width: "100%", height: "42px" }}
+                                    placeholder={"Select Organization"}
+                                    allowClear
+                                    onChange={(e) => {
+                                      setSelectedOrgList(e);
+                                      setSelectedRowsId([]);
+                                      setSelectAllChecked(false);
+                                    }}
+                                    value={selectOrgList}
+                                  />
+                                </div>
                               </div>
                             </div>
                           )}
@@ -646,18 +648,20 @@ const Patient = ({
                                     selectDefaultValue={selectedOption}
                                   /> */}
                                   <label>Select Priority</label>
-                                  <Select
-                                    options={statusOption}
-                                    style={{ width: "100%", height: "42px" }}
-                                    placeholder={"Select Priority"}
-                                    allowClear
-                                    onChange={(e) => {
-                                      setSelectedOption(e);
-                                      setSelectedRowsId([]);
-                                      setSelectAllChecked(false);
-                                    }}
-                                    value={selectedOption}
-                                  />
+                                  <div class="form-group has-search custom-react-select">
+                                    <Select
+                                      options={statusOption}
+                                      style={{ width: "100%", height: "42px" }}
+                                      placeholder={"Select Priority"}
+                                      allowClear
+                                      onChange={(e) => {
+                                        setSelectedOption(e);
+                                        setSelectedRowsId([]);
+                                        setSelectAllChecked(false);
+                                      }}
+                                      value={selectedOption}
+                                    />
+                                  </div>
                                 </div>
                               </div>
 
@@ -758,8 +762,8 @@ const Patient = ({
                                   <Selector
                                     selectlabel={"Reviewer"}
                                     setSelectedOption={setAllocatedOption}
-                                    selectOptions={generateOptionsList(
-                                      filteredList
+                                    selectOptions={generateOptionsForNewStore(
+                                      filteredList?.data?.response
                                     )}
                                     defaultSelectValue1={""}
                                     // isClose={true}
@@ -889,7 +893,7 @@ const Patient = ({
                                   id="my-posts"
                                   eventKey="validDiseases"
                                 >
-                                  {loader ? (
+                                  {loader && activeTab == 1 ? (
                                     renderSkeleton()
                                   ) : (
                                     <>
@@ -938,7 +942,7 @@ const Patient = ({
                                 </Tab.Pane>
 
                                 <Tab.Pane id="my-posts" eventKey="team">
-                                  {loader2 ? (
+                                  {loader2 && activeTab == 2 ? (
                                     renderSkeleton()
                                   ) : (
                                     <>
@@ -1027,7 +1031,9 @@ const Patient = ({
                                               </div>
                                             </div>
                                           </>
-                                        ) : !loader2 && loader3 ? (
+                                        ) : !loader2 &&
+                                          loader3 &&
+                                          activeTab == 2 ? (
                                           <SpinnerDots />
                                         ) : (
                                           <>
@@ -1145,12 +1151,14 @@ const enhancer = connect(
     supervisorResponse: state.admin?.patientAllocate?.l2AllocatedList?.data,
     selectedSupervisors:
       state.admin?.patientAllocate?.selectedSupervisors?.data,
+    filteredList: state.admin.patientAllocate?.filtersList,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
     allocatedGetList: allActions?.getAllList,
     getSupervisorsList: allActions?.getSupervisorsList,
     getSelectedSupervisorList: allActions?.getSelectedSupervisorList,
+    getFilters: allActions.getFiltersList,
   }
 );
 export default enhancer(Patient);

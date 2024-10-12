@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { connect } from "react-redux";
 import { Radio, Select, notification } from "antd";
 import { Button, Spinner } from "react-bootstrap";
 import Header from "../../../jsx/layouts/nav/Header";
@@ -9,10 +9,9 @@ import {
   getNotificationList,
   postNotification,
 } from "../../../services/NotificationService";
-import { getUsers } from "../../../store/actions/adminAction/usersAction";
 import { SelectUserList } from "../../../services/adminServices/DashboardService";
 import { actions as tenantAdminActions } from "../../../stores/tenantAdmin/notification";
-
+import { actions as AdminAction } from "../../../stores/admin/users";
 const { Option } = Select;
 
 export const debounce = (func, delay) => {
@@ -24,8 +23,7 @@ export const debounce = (func, delay) => {
   };
 };
 
-const Notification = ({ getAllCustomUsers, allCustomUsers }) => {
-  const dispatch = useDispatch();
+const Notification = ({ getAllCustomUsers, allCustomUsers, getUsers }) => {
   const options = allCustomUsers?.data?.response?.map((data) => ({
     label: data?.firstName + " " + data?.lastName,
     value: data?.userName,
@@ -232,17 +230,15 @@ const Notification = ({ getAllCustomUsers, allCustomUsers }) => {
     getNotificationResult();
   }, []);
   useEffect(() => {
-    dispatch(
-      getUsers({
-        pageCount: 0,
-        search: searchUser,
-        startDate: "",
-        endDate: "",
-        status: "",
-        role: "",
-        sort: "",
-      })
-    );
+    getUsers({
+      pageCount: 0,
+      search: searchUser,
+      startDate: "",
+      endDate: "",
+      status: "",
+      role: "",
+      sort: "",
+    });
   }, [searchUser]);
 
   return (
@@ -285,6 +281,7 @@ const Notification = ({ getAllCustomUsers, allCustomUsers }) => {
                           }
                           maxTagCount={3}
                           style={{ height: "42px", width: "515px" }}
+                          allowClear={true}
                         >
                           {filteredOptions?.map((data) => (
                             <Option key={data?.value} value={data?.value}>
@@ -348,7 +345,7 @@ const Notification = ({ getAllCustomUsers, allCustomUsers }) => {
                       className={styles.btnLoading}
                     />
                   ) : null}
-                  Send 
+                  Send
                 </Button>
               </div>
             </div>
@@ -382,6 +379,7 @@ const enhancer = connect(
   }),
   {
     getAllCustomUsers: tenantAdminActions.getCustomUsersAction,
+    getUsers: AdminAction.getAllUsersAction,
   }
 );
 export default enhancer(Notification);

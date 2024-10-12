@@ -181,7 +181,7 @@ const WorkFlow = ({ worlFlowData }) => {
           <Row className={styles.carddiv}>
             {card1Data?.map((data) => (
               <Col
-                span={10}
+                span={9}
                 style={{
                   backgroundImage: `url(${data?.bg.src})`,
                   backgroundRepeat: "no-repeat",

@@ -21,4 +21,13 @@
   width: 100px;
   background-color: #E6EEFF;
 }
+@media screen and (max-width: 1280px) {
+  .pickerBox{
+    width: 87px;
+    margin-right:2px;
+  }
+  .monthSelect{
+    width:58px;
+  }
+ }
 

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import Select from "react-select";
 import { Button } from "react-bootstrap";
-import { DatePicker, Popover, Tooltip } from "antd";
+import { DatePicker, Popover, Select, Tooltip } from "antd";
 import Image from "next/image";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
@@ -12,13 +11,21 @@ import Legends from "../legends";
 import DateRangePicker from "../rangepicker";
 import Selector from "../selector";
 import Search from "../search";
-import { disableFutureDate, handleRnagePicker2, resetPageNumber } from "./functions";
+import {
+  disableFutureDate,
+  handleRnagePicker2,
+  resetPageNumber,
+} from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../stores/authflow/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import {PlusCircleFilled, InfoCircleFilled, FilterFilled} from "@ant-design/icons"
+import {
+  PlusCircleFilled,
+  InfoCircleFilled,
+  FilterFilled,
+} from "@ant-design/icons";
 const { RangePicker } = DatePicker;
 
 const HeaderFilters = ({
@@ -145,7 +152,7 @@ const HeaderFilters = ({
   selectorField,
   defaultShow = false,
   setSelect,
-  defaultSize = "col-xl-2",
+  defaultSize = "col-xl-2 col-md-3",
   adminReport,
   addBtn,
   atCorner,
@@ -166,7 +173,8 @@ const HeaderFilters = ({
   setMobileNumber,
   setPageNo,
   selectDefaultValue,
-  orgValue
+  orgValue,
+  fromTenantPatients
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -182,11 +190,8 @@ const HeaderFilters = ({
   }
   return (
     <>
-      <div style={{ height:"auto" }}>
-        <div
-          className="row filter-contain"
-          style={{ width:"100%" }}
-        >
+      <div style={{ height: "auto" }}>
+        <div className="row filter-contain" style={{ width: "100%" }}>
           {isSearch && (
             <div
               className={defaultSize}
@@ -238,19 +243,21 @@ const HeaderFilters = ({
               //   );
               // }}
             >
-              <label className={`${styles.label} responsiveLabel`}>{createdTolabel}</label>
-              <div class="form-group has-search">
+              <label className={`${styles.label} responsiveLabel`}>
+                {createdTolabel}
+              </label>
+              <div class="form-group has-search custom-react-select">
                 <Select
                   onChange={(selectedOption) => {
-                    setSelCreatedBy(selectedOption?.value);
-                    if(setPageNo){
-                      resetPageNumber(setPageNo)
+                    setSelCreatedBy(selectedOption ? selectedOption : "");
+                    if (setPageNo) {
+                      resetPageNumber(setPageNo);
                     }
                   }}
                   options={createdByOptoons}
-                  className="custom-react-select"
                   isSearchable={false}
                   placeholder={defaultCreatedBy}
+                  allowClear={true}
                 />
               </div>
             </div>
@@ -258,23 +265,26 @@ const HeaderFilters = ({
 
           {selectReportOptions && (
             <div className={defaultSize}>
-              <label className={`${styles.label} responsiveLabel`}>{selectlabel2}</label>
-              <div class="form-group has-search">
+              <label className={`${styles.label} responsiveLabel`}>
+                {selectlabel2}
+              </label>
+              <div class="form-group has-search custom-react-select">
                 <Select
                   value={defaultSelectValue2 ? defaultSelectValue2 : ""}
                   onChange={(selectedOption) => {
-                    if(setPageNo){
-                      resetPageNumber(setPageNo)
+                    if (setPageNo) {
+                      resetPageNumber(setPageNo);
                     }
-                    setSelectedOption2(selectedOption);
+                    setSelectedOption2(selectedOption ? selectedOption : "");
                     setSelectedManger("");
-                    if (selectedOption?.label === "All") {
+                    if (!selectedOption) {
                       setSelectedOption3(null);
                     }
                   }}
                   options={selectReportOptions}
-                  className="custom-react-select"
+                  placeholder={selectlabel2}
                   isSearchable={false}
+                  allowClear={true}
                 />
               </div>
             </div>
@@ -282,70 +292,74 @@ const HeaderFilters = ({
 
           {selectOptions2 && (
             <div className={defaultSize}>
-              <label className={`${styles.label} responsiveLabel`}>{selectlabel2}</label>
-              <div class="form-group has-search">
+              <label className={`${styles.label} responsiveLabel`}>
+                {selectlabel2}
+              </label>
+              <div class="form-group has-search custom-react-select ">
                 <Select
                   // value={defaultSelectValue2}
                   onChange={(selectedOption) => {
-                    if(setPageNo){
-                      resetPageNumber(setPageNo)
+                    if (setPageNo) {
+                      resetPageNumber(setPageNo);
                     }
-                    setSelectedOption2(selectedOption?.value);
+                    setSelectedOption2(selectedOption ? selectedOption : "");
                     if (setSelectedManger) setSelectedManger("");
                   }}
                   options={selectOptions2}
-                  // placeholder={defaultSelectValue2}
-                  className="custom-react-select"
+                  placeholder={selectlabel2}
                   isSearchable={false}
+                  allowClear={true}
                 />
               </div>
             </div>
           )}
           {isSelector3 && (
             <div className={defaultSize}>
-              <label className={`${styles.label} responsiveLabel`}>{selectlabel3}</label>
-              <div class="form-group has-search">
+              <label className={`${styles.label} responsiveLabel`}>
+                {selectlabel3}
+              </label>
+              <div class="form-group has-search custom-react-select">
                 <Select
                   showSearch
                   value={value ? value : ""}
                   onChange={(selectedOption) => {
-                    if(setPageNo){
-                      resetPageNumber(setPageNo)
+                    if (setPageNo) {
+                      resetPageNumber(setPageNo);
                     }
-                    if (selectedCoderOptReport?.value === "SUPERVISOR") {
-                      setSelectedOption3(selectedOption);
+                    if (selectedCoderOptReport === "SUPERVISOR") {
+                      setSelectedOption3(selectedOption ? selectedOption : "");
                       setSelect(null);
                     }
-                    if (selectedCoderOptReport?.value === "REVIEWER") {
-                      setSelect(selectedOption?.value);
+                    if (selectedCoderOptReport === "REVIEWER") {
+                      setSelect(selectedOption);
                       setSelectedOption3(selectedOption);
                     }
                   }}
-                  className="custom-react-select"
                   options={selectOptions3}
                   style={{ backgroundColor: "#F3F3FF", width: "20px" }}
+                  allowClear={true}
                 />
               </div>
             </div>
           )}
           {isSelectOrg && (
             <div className={defaultSize}>
-              <label className={`${styles.label} responsiveLabel`}>{selectlabelOrg}</label>
-              <div class="form-group has-search">
+              <label className={`${styles.label} responsiveLabel`}>
+                {selectlabelOrg}
+              </label>
+              <div class="form-group has-search custom-react-select">
                 <Select
-                value={orgValue&&orgValue}
+                  value={orgValue? orgValue:null}
                   onChange={(selectOrg) => {
-                    if(setPageNo){
-                      resetPageNumber(setPageNo)
+                    if (setPageNo) {
+                      resetPageNumber(setPageNo);
                     }
-                    setSelectedOptionOrg(selectOrg);
-                    if (selectOrg?.label === "All") {
-                      setSelectedOptionOrg(null);
-                    }
+                    setSelectedOptionOrg(selectOrg ? selectOrg : null);
                   }}
                   options={selectOptionsOrg}
-                  className="custom-react-select"
                   isSearchable={false}
+                  placeholder="Select Organization"
+                  allowClear={true}
                 />
               </div>
             </div>
@@ -374,7 +388,9 @@ const HeaderFilters = ({
           {isRangeTimePicker && (
             <>
               <div className={defaultSize} style={{ width: "20%" }}>
-                <label className={`${styles.label} responsiveLabel`}>{timePickerlabel}</label>
+                <label className={`${styles.label} responsiveLabel`}>
+                  {timePickerlabel}
+                </label>
                 <div>
                   <RangePicker
                     showTime={{ format: "HH:mm" }} // Specify the time format
@@ -432,14 +448,23 @@ const HeaderFilters = ({
               onClick={() => setShowFilters(!showFilters)}
             >
               <button className={`${styles.filterBtn} d-flex`}>
-                <FilterFilled  src={filter}  className={`${styles.iconStyleColor} py-1 px-1`}/> {showFilters ? "Hide" : "Filter"}
+                <FilterFilled
+                  src={filter}
+                  className={`${styles.iconStyleColor} py-1 px-1`}
+                />{" "}
+                {showFilters ? "Hide" : "Filter"}
               </button>
             </div>
           )}
           {bullets && (
             <div
-              className={`${(bullets&&addUser)?"col-xl-2":bullets ? "col-xl-1" : "col-xl-4"} d-flex justify-content-center align-items-center`}
-             
+              className={`${
+                bullets && addUser
+                  ? "col-xl-2"
+                  : bullets
+                  ? "col-xl-1"
+                  : "col-xl-4"
+              } d-flex justify-content-center align-items-center`}
             >
               <Popover
                 content={
@@ -469,7 +494,9 @@ const HeaderFilters = ({
                   style={{ cursor: "pointer" }}
                 /> */}
                 <Tooltip placement="top" title="View List of Status">
-                <InfoCircleFilled className={`${styles.iconStyleColor2} mt-4`} />
+                  <InfoCircleFilled
+                    className={`${styles.iconStyleColor2} mt-4`}
+                  />
                 </Tooltip>
               </Popover>
             </div>
@@ -477,12 +504,13 @@ const HeaderFilters = ({
           {addUser && (
             <div className={columnClass} style={{ marginTop: "29px" }}>
               <Button
-                onClick={()=>{
-                  if(form || setMobileNumber){
-                    form.resetFields()
-                    setMobileNumber("")
+                onClick={() => {
+                  if (form || setMobileNumber) {
+                    form.resetFields();
+                    setMobileNumber("");
                   }
-                  addUserForm()}}
+                  addUserForm();
+                }}
                 style={{ background: "#04306f" }}
                 className="btn btn-sm ms-2 flr width-max-content"
               >
@@ -540,10 +568,7 @@ const HeaderFilters = ({
       </div>
       {showFilters && (
         <div style={{ marginTop: "20px" }}>
-          <div
-            className="row filter-contain"
-            style={{ width: "100%" }}
-          >
+          <div className="row filter-contain" style={{ width: "100%" }}>
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
@@ -554,19 +579,21 @@ const HeaderFilters = ({
                 //   );
                 // }}
               >
-                <label className={`${styles.label} responsiveLabel`}>{allocatedBylabel}</label>
-                <div class="form-group has-search">
+                <label className={`${styles.label} responsiveLabel`}>
+                  {allocatedBylabel}
+                </label>
+                <div class="form-group has-search custom-react-select">
                   <Select
                     onChange={(selectedOption) => {
-                      setSelAllocatedBy(selectedOption?.value==="All"?"":selectedOption?.value);
-                      if(setPageNo){
-                        resetPageNumber(setPageNo)
+                      setSelAllocatedBy(selectedOption ? selectedOption : null);
+                      if (setPageNo) {
+                        resetPageNumber(setPageNo);
                       }
                     }}
                     options={allocatedByOptoons}
-                    className="custom-react-select"
                     isSearchable={false}
                     placeholder={defaultAllocatedBy}
+                    allowClear={true}
                   />
                 </div>
               </div>
@@ -574,7 +601,7 @@ const HeaderFilters = ({
             {isRangePicker && (
               <div
                 className={defaultSize}
-                style={{ position: "relative", right: "20px" }}
+                style={{ position: "relative", right:fromTenantPatients?"0px":"20px" }}
               >
                 <DateRangePicker
                   selectedDates={selectedDates}
@@ -602,19 +629,21 @@ const HeaderFilters = ({
                 //   dispatch(getFilters("patientAllocated"));
                 // }}
               >
-                <label className={`${styles.label} responsiveLabel`}>{allocatedTolabel}</label>
-                <div class="form-group has-search">
+                <label className={`${styles.label} responsiveLabel`}>
+                  {allocatedTolabel}
+                </label>
+                <div class="form-group has-search custom-react-select">
                   <Select
                     onChange={(selectedOption) => {
-                      setSelAllocatedTo(selectedOption?.value);
-                      if(setPageNo){
-                        resetPageNumber(setPageNo)
+                      setSelAllocatedTo(selectedOption ? selectedOption : "");
+                      if (setPageNo) {
+                        resetPageNumber(setPageNo);
                       }
                     }}
                     options={allocatedToOptoons}
-                    className="custom-react-select"
                     isSearchable={false}
                     placeholder={defaultAllocateTo}
+                    allowClear={true}
                   />
                 </div>
               </div>
@@ -632,19 +661,21 @@ const HeaderFilters = ({
                 //   );
                 // }}
               >
-                <label className={`${styles.label} responsiveLabel`}>{createdTolabel}</label>
-                <div class="form-group has-search">
+                <label className={`${styles.label} responsiveLabel`}>
+                  {createdTolabel}
+                </label>
+                <div class="form-group has-search custom-react-select">
                   <Select
                     onChange={(selectedOption) => {
-                      setSelCreatedBy(selectedOption?.value);
-                      if(setPageNo){
-                        resetPageNumber(setPageNo)
+                      setSelCreatedBy(selectedOption ? selectedOption : "");
+                      if (setPageNo) {
+                        resetPageNumber(setPageNo);
                       }
                     }}
                     options={createdByOptoons}
-                    className="custom-react-select"
                     isSearchable={false}
                     placeholder={defaultCreatedBy}
+                    allowClear={true}
                   />
                 </div>
               </div>
@@ -652,7 +683,9 @@ const HeaderFilters = ({
             {isAnotherPicker2 && (
               <>
                 <div className={defaultSize}>
-                  <label className={`${styles.label} responsiveLabel`}>{pickerlabe3}</label>
+                  <label className={`${styles.label} responsiveLabel`}>
+                    {pickerlabe3}
+                  </label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
@@ -663,8 +696,8 @@ const HeaderFilters = ({
                           setStartDate3,
                           setEndDate3,
                         });
-                        if(setPageNo){
-                          resetPageNumber(setPageNo)
+                        if (setPageNo) {
+                          resetPageNumber(setPageNo);
                         }
                       }}
                     />
@@ -675,19 +708,21 @@ const HeaderFilters = ({
             {isAnotherPicker3 && (
               <>
                 <div className={defaultSize}>
-                  <label className={`${styles.label} responsiveLabel`}>{pickerlabe4}</label>
+                  <label className={`${styles.label} responsiveLabel`}>
+                    {pickerlabe4}
+                  </label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
-                      onChange={(date, dateString) =>{
+                      onChange={(date, dateString) => {
                         handleRnagePicker2({
                           date,
                           dateString,
                           setStartDate4,
                           setEndDate4,
-                        })
-                        if(setPageNo){
-                          resetPageNumber(setPageNo)
+                        });
+                        if (setPageNo) {
+                          resetPageNumber(setPageNo);
                         }
                       }}
                       disabledDate={(current) => disableFutureDate(current)}
@@ -699,19 +734,21 @@ const HeaderFilters = ({
             {isAnotherPicker5 && (
               <>
                 <div className={defaultSize}>
-                  <label className={`${styles.label} responsiveLabel`}>{pickerlabe5}</label>
+                  <label className={`${styles.label} responsiveLabel`}>
+                    {pickerlabe5}
+                  </label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
-                      onChange={(date, dateString) =>{
+                      onChange={(date, dateString) => {
                         handleRnagePicker2({
                           date,
                           dateString,
                           setStartDate5,
                           setEndDate5,
-                        })
-                        if(setPageNo){
-                          resetPageNumber(setPageNo)
+                        });
+                        if (setPageNo) {
+                          resetPageNumber(setPageNo);
                         }
                       }}
                       disabledDate={(current) => disableFutureDate(current)}
@@ -723,19 +760,21 @@ const HeaderFilters = ({
             {isAnotherPicker6 && (
               <>
                 <div className={defaultSize}>
-                  <label className={`${styles.label} responsiveLabel`}>{pickerlabe6}</label>
-                  <div>
+                  <label className={`${styles.label} responsiveLabel`}>
+                    {pickerlabe6}
+                  </label>
+                  <div className="custom-react-select">
                     <Select
                       onChange={(selectedOption) => {
-                        setPriority(selectedOption?.value);
-                        if(setPageNo){
-                          resetPageNumber(setPageNo)
+                        setPriority(selectedOption ? selectedOption : "");
+                        if (setPageNo) {
+                          resetPageNumber(setPageNo);
                         }
                       }}
                       options={allocatedToOptoons}
-                      className="custom-react-select"
                       isSearchable={false}
                       placeholder={defaultPriority}
+                      allowClear={true}
                     />
                   </div>
                 </div>

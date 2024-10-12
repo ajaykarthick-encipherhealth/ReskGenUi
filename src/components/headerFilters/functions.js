@@ -28,7 +28,7 @@ export const searchFunction = (
 
 // for select
 export const handleSelector = (option, setSelectedOption) => {
-  setSelectedOption(option?.value);
+  setSelectedOption(option ? option : "");
 };
 
 export const processstatusBodyTemplate = (rowData) => {
@@ -192,7 +192,11 @@ export const handleRnagePicker2 = ({
 };
 
 export const dateFormate = (dayjs, date) => {
-  return date ? dayjs(date).format("MM-DD-YYYY hh:mm A") : <div className="w-100 text-center">---</div>;
+  return date ? (
+    dayjs(date).format("MM-DD-YYYY hh:mm A")
+  ) : (
+    <div className="w-100 text-center">---</div>
+  );
 };
 
 //sorting
@@ -296,8 +300,24 @@ export const priorityStatus = (value) => {
 export const generateOptionsList = (items) => {
   if (items?.data?.data?.response?.length > 0) {
     const options = [
-      { label: "All", value: "" },
       ...items?.data?.data?.response?.map((item) => ({
+        label: (
+          <span>
+            {item?.firstName}&nbsp;&nbsp;{item?.lastName}
+          </span>
+        ),
+        value: item?.userName,
+      })),
+    ].filter(Boolean);
+    return options;
+  } else {
+    return [];
+  }
+};
+export const generateOptionsForNewStore = (items) => {
+  if (items?.length > 0) {
+    const options = [
+      ...items?.map((item) => ({
         label: (
           <span>
             {item?.firstName}&nbsp;&nbsp;{item?.lastName}
@@ -316,7 +336,6 @@ export const generateOptionsLists = (items) => {
     return [{ label: "Loading...", value: "", isDisabled: true }];
   } else {
     const options = [
-      { label: "All", value: "" },
       ...items?.data?.data?.response?.map((item) => ({
         label: (
           <span>

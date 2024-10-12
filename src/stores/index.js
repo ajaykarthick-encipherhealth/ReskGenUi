@@ -22,7 +22,6 @@ import { PhysicianComparisonReducer } from "../store/reducers/physicianReducers/
 import { TanantAdminService } from "../store/reducers/tanantAdminReducers/fihrReducers";
 import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerReducers";
 import filterReducer, { AuthReducer } from "./authflow/reducers";
-import { reducer as UpdateDashboardReducer } from "./reviewer/dashboard";
 import { reducer as updatedPatientsReducer } from "./reviewer/workqueue";
 import { reducer as searchReducer } from "./search";
 import { reducer as physicianReducer } from "./physician/dashboard";
@@ -47,7 +46,9 @@ import { reducer as tenantAminSettingsReducer } from "./tenantAdmin/settings";
 import { reducer as tenantOnBoarding } from "./tenantOnBoarding";
 import { reducer as adminUsersReducer } from "./admin/users";
 import { reducer as supervisorDashboardReducer } from "./supervisor/dashboard";
+import { reducer as dashbaordReducer } from "./reviewer/dashboard";
 
+import {reducer as dashboardReducer} from './admin/dashboard'
 const reducers = combineReducers({
   // old reducers
   sideMenu: toggleMenu,
@@ -76,7 +77,7 @@ const reducers = combineReducers({
   ReviewerReducers: ReviewerReducers,
 
   reviewer: combineReducers({
-    dashboard: UpdateDashboardReducer,
+    dashboard: dashbaordReducer,
     workQueue: updatedPatientsReducer,
     report: reportReducer,
   }),
@@ -92,6 +93,7 @@ const reducers = combineReducers({
     workqueue: adminPatientsReducer,
     patientAllocate: allocatedReducer,
     users: adminUsersReducer,
+    dashboard:dashboardReducer
   }),
   codify: combineReducers({
     codify: codifyReducer,

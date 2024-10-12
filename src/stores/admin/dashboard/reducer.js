@@ -27,7 +27,7 @@
 
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { workFlowAction, dailyTaskAction, accuracyAction,completedScoreAction, holdStatusAction, notificationAction, tenentLogoAction } from "./actions";
+import { workFlowAction, dailyTaskAction, accuracyAction,completedScoreAction, holdStatusAction, notificationAction, tenentLogoAction,teamChartAction, getSelectUserList } from "./actions";
 
 const initialState = {
   loading: true,
@@ -70,13 +70,17 @@ const createReducer = (actionType) =>
 const dashbaordReducer = combineReducers({
   workFlow: createReducer(workFlowAction),
   dailyTask: createReducer(dailyTaskAction),
+  dailyTaskLoading:getUsersDetailsLoading(dailyTaskAction),
   accuracyLoading: getUsersDetailsLoading(accuracyAction),
   accuracy: createReducer(accuracyAction),
   completedScore:createReducer(completedScoreAction),
   completedScoreLoading: getUsersDetailsLoading(completedScoreAction),
   holdStatus:createReducer(holdStatusAction),
   notification:createReducer(notificationAction),
-  tenentLogo:createReducer(tenentLogoAction)
+  tenentLogo:createReducer(tenentLogoAction),
+  teamChartData:createReducer(teamChartAction),
+  teamChartLoader:getUsersDetailsLoading(teamChartAction),
+  managersList:createReducer(getSelectUserList)
 });
 
 export default dashbaordReducer;

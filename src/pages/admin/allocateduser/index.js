@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { DatePicker, Empty, Input, Space, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
 import moment from "moment/moment";
 import { Tab, Nav } from "react-bootstrap";
@@ -17,17 +16,15 @@ import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2Adm
 import L2AllocateModal from "./l2allocate";
 import styles from "../report/report.module.css";
 import reportStyles from "../../reviewer/report/report.module.css";
-import SpinnerDots from "../../../components/spinner";
 import TableStyle from "../../../components/table/table.module.css";
 import leftArrow from "../../../images/svg/leftArrow.svg";
 import {
-  generateOptionsList,
   disableFutureDate,
   renderUserPrfoile,
   resetPageNumber,
+  generateOptionsForNewStore,
 } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
-import { getFilters } from "../../../stores/authflow/actions";
 import AllocateModal from "./allocate";
 import { debounce } from "../../../components/input";
 import { useCallback } from "react";
@@ -36,7 +33,6 @@ import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
 const { RangePicker } = DatePicker;
 const statusOption = [
-  { value: "", label: "ALL" },
   { value: "URGENT", label: "URGENT" },
   { value: "HIGH", label: "HIGH" },
   { value: "NORMAL", label: "NORMAL" },
@@ -53,6 +49,8 @@ const Patient = ({
   getSelectedSupervisorList,
   selectedSupervisors,
   loader3,
+  getFilters,
+  filteredList,
 }) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -91,11 +89,9 @@ const Patient = ({
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-  const filteredList = useSelector((state) => state.filters?.patientAllocated);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [searchStr, setSearchStr] = useState("");
-  const dispatch = useDispatch();
 
   const getAllList = async ({
     pageNo = 0,
@@ -135,7 +131,7 @@ const Patient = ({
     }&sortfield=${sort?.sortField}&priority=${
       selectedOption ? selectedOption : ""
     }&batchCount=${batchCount}`;
-   
+
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response?.data) {
       let result = response?.data?.response?.content;
@@ -185,7 +181,12 @@ const Patient = ({
     setPaginationFirst(e.first);
     setPageNoL2Patient(e.page);
     setPageSize(e.rows);
-    getL2PatientList({data:l2selectUser, pageNoL2Patient:e.page, sort:sort, selectedOptions:selectedOptions});
+    getL2PatientList({
+      data: l2selectUser,
+      pageNoL2Patient: e.page,
+      sort: sort,
+      selectedOptions: selectedOptions,
+    });
     setTableLoading(true);
   };
   const selectTabClick = (number) => {
@@ -215,7 +216,12 @@ const Patient = ({
       if (!isPatientList) {
         getAuditL2List(pageNo, search);
       } else {
-        getL2PatientList({data:l2selectUser, pageNoL2Patient:pageNoL2Patient, sort:sort, searchString:search});
+        getL2PatientList({
+          data: l2selectUser,
+          pageNoL2Patient: pageNoL2Patient,
+          sort: sort,
+          searchString: search,
+        });
       }
     }
   };
@@ -243,12 +249,11 @@ const Patient = ({
     let tenantid = getStorage("tenantId");
     let resoureUrl = `dbservice/l2audit?organizationId=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
     getSupervisorsList({ url: resoureUrl });
-
   };
 
   useEffect(() => {
     if (selectAllChecked) {
-      if (isPatientList == true) {
+      if (isPatientList) {
         getAllCheckListL2(sort);
       } else {
         getAllCheckList(sort);
@@ -293,7 +298,12 @@ const Patient = ({
           style={{ height: "35px" }}
           key={index}
           onClick={() => {
-            getL2PatientList({data:data, pageNoL2Patient:pageNoL2Patient, sort:sort});
+            getL2PatientList({
+              data: data,
+              pageNoL2Patient: pageNoL2Patient,
+              sort: sort,
+            });
+            setIsPatientList(true);
           }}
         >
           <td
@@ -367,7 +377,6 @@ const Patient = ({
   };
 
   const statusOptions = [
-    { label: "ALL", value: "ALL" },
     { label: "COMPLETED", value: "COMPLETED" },
     { label: "DECLINED", value: "DECLINED" },
   ];
@@ -378,10 +387,10 @@ const Patient = ({
     sort,
     searchString,
     selectedOptions,
-    allocatedOption
+    allocatedOption,
   }) => {
     setTableLoading(true);
-    setIsLoading(true);
+    // setIsLoading(true);
     let dataMap = {
       firstName: data?.firstName,
       lastName: data?.lastName,
@@ -393,13 +402,13 @@ const Patient = ({
       data?.userName
     }&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${
       sort?.sortDir ? sort?.sortDir : "DESC"
-    }&sortfield=${
-      sort?.sortField ? sort?.sortField : "dueDate"
-    }&searchstring=${searchString?searchString:""}&processedStatus=${
-      selectedOptions ? selectedOptions==='ALL'?"":selectedOptions : ""
+    }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
+      searchString ? searchString : ""
+    }&processedStatus=${
+      selectedOptions ? selectedOptions : ""
     }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
     getSelectedSupervisorList({ url: resoureUrl });
-    setIsPatientList(true);
+    // setIsPatientList(true);
   };
 
   const getAllCheckListL2 = async (sort) => {
@@ -428,13 +437,18 @@ const Patient = ({
     setCheckedLoading(false);
   };
   useEffect(() => {
-    dispatch(getFilters("patientAllocated"));
+    getFilters({ field: "patientAllocated" });
   }, []);
   useEffect(() => {
-    if (selectedOptions?.length > 0) {
-      getL2PatientList({data:l2selectUser,pageNoL2Patient:pageNoL2Patient, selectedOptions: selectedOptions });
+    if (activeTab == 1 && (!selectedOptions || !allocatedOption)) {
+      getL2PatientList({
+        data: l2selectUser,
+        pageNoL2Patient: pageNoL2Patient,
+        selectedOptions: selectedOptions,
+        allocatedOption: allocatedOption,
+      });
     }
-  }, [selectedOptions]);
+  }, [selectedOptions, allocatedOption]);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -451,7 +465,7 @@ const Patient = ({
                           <div
                             className={`${isPatientList && "d-flex"} col-xl-2`}
                           >
-                            {isPatientList && (
+                            {isPatientList && activeTab != 1 && (
                               <div className={reportStyles.backDiv}>
                                 <button
                                   style={{ width: "40px", height: "40px" }}
@@ -459,6 +473,7 @@ const Patient = ({
                                   onClick={() => {
                                     setIsPatientList(false);
                                     setAllocatedOption("");
+                                    setSelectAllChecked(false);
                                   }}
                                 >
                                   <Image src={leftArrow} />
@@ -472,12 +487,8 @@ const Patient = ({
                                   ? "Search by Name"
                                   : "Search by Name or ID"}
                               </label>
-                              <div class="form-group has-search">
-                                <FontAwesomeIcon
-                                  className="fa fa-search form-control-feedback"
-                                  icon={faSearch}
-                                />
-                                <InputText
+                              <div style={{ height: "42px" }}>
+                                <Input
                                   type="text"
                                   onChange={(e) => {
                                     getNameSearch(e.target.value);
@@ -485,7 +496,9 @@ const Patient = ({
                                     resetPageNumber(setPageNo);
                                   }}
                                   value={searchString}
-                                  className="form-control new-form-control new-item-control"
+                                  className={
+                                    "w-100 new-search-control border-none"
+                                  }
                                   placeholder="Search"
                                   maxLength={25}
                                   onKeyDown={(e) => {
@@ -494,6 +507,13 @@ const Patient = ({
                                       e.preventDefault();
                                     }
                                   }}
+                                  prefix={
+                                    <FontAwesomeIcon
+                                      className="searchPrefix"
+                                      icon={faSearch}
+                                    />
+                                  }
+                                  allowClear={true}
                                 />
                               </div>
                             </div>
@@ -628,8 +648,8 @@ const Patient = ({
                                   <Selector
                                     selectlabel={"Reviewer"}
                                     setSelectedOption={setAllocatedOption}
-                                    selectOptions={generateOptionsList(
-                                      filteredList
+                                    selectOptions={generateOptionsForNewStore(
+                                      filteredList?.data?.response
                                     )}
                                     defaultSelectValue1={""}
                                     // isClose={true}
@@ -750,7 +770,7 @@ const Patient = ({
                                   id="my-posts"
                                   eventKey="validDiseases"
                                 >
-                                  {loader ? (
+                                  {loader && activeTab == 1 ? (
                                     renderSkeleton()
                                   ) : (
                                     <>
@@ -768,7 +788,9 @@ const Patient = ({
                                         setSort={setSort}
                                         loading={isLoading}
                                         sortCompleteOrder={sortCompleteOrder}
-                                        setSortCompleteOrder={setSortCompleteOrder}
+                                        setSortCompleteOrder={
+                                          setSortCompleteOrder
+                                        }
                                       />
                                       <div>
                                         <div className="pagination-container">
@@ -797,7 +819,7 @@ const Patient = ({
                                 </Tab.Pane>
 
                                 <Tab.Pane id="my-posts" eventKey="team">
-                                  {loader2 ? (
+                                  {loader2 && activeTab == 2 ? (
                                     renderSkeleton()
                                   ) : (
                                     <>
@@ -885,7 +907,9 @@ const Patient = ({
                                               </div>
                                             </div>
                                           </>
-                                        ) : !loader2 && loader3 ? (
+                                        ) : !loader2 &&
+                                          loader3 &&
+                                          activeTab == 2 ? (
                                           renderSkeleton()
                                         ) : (
                                           <>
@@ -1002,11 +1026,13 @@ const connector = connect(
     loader3: state.admin?.patientAllocate?.supervisorLoader,
     supervisorResponse: state.admin.patientAllocate?.l2AllocatedList?.data,
     selectedSupervisors: state.admin.patientAllocate?.selectedSupervisors?.data,
+    filteredList: state.admin.patientAllocate?.filtersList,
   }),
   {
     allocatedGetList: allActions.getAllList,
     getSupervisorsList: allActions.getSupervisorsList,
     getSelectedSupervisorList: allActions.getSelectedSupervisorList,
+    getFilters: allActions.getFiltersList,
   }
 );
 export default connector(Patient);

@@ -1,11 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Select from "react-select";
 import { useSelector, useDispatch, connect } from "react-redux";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { DatePicker, Popover, Skeleton, notification } from "antd";
+import {
+  DatePicker,
+  Input,
+  Popover,
+  Select,
+  Skeleton,
+  notification,
+} from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
@@ -40,11 +46,11 @@ import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { getStorage, setStorage } from "../../../utils/storages";
+import { actions as allActions } from '../../../stores/reviewer/workqueue'
 
 const { RangePicker } = DatePicker;
 
 const statusOptions = [
-  { label: "ALL", value: "ALL" },
   { label: "COMPLETED", value: "COMPLETED" },
   { label: "PENDING", value: "PENDING" },
   // { label: "COMPUTED", value: "COMPUTED" },
@@ -77,7 +83,7 @@ const bullets = [
   },
 ];
 
-const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
+const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientDetails, }) => {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
@@ -160,7 +166,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
 
   const [selectedDates, setSelectedDates] = useState([
     navigate?.query?.dueDateStart
-      ? dayjs(JSON.parse(navigate?.query?.dueDateStart))
+      ? dayjs(navigate?.query?.dueDateStart)
       : undefined,
     navigate?.query?.dueDateEnd
       ? dayjs(navigate?.query?.dueDateEnd)
@@ -227,7 +233,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     processedEnd,
     statusSelectedStatus,
     navigate.query,
-    searchVal,
   ]);
 
   // const getPatientRes = async (
@@ -323,6 +328,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const gotoPatientDetails = (data) => {
     // dispatch(patientDetails(data));
     getpatientsListFilter(data);
+    patientDetails(data);
     if (data.computing == 2) {
       const controller = new AbortController();
       controller.abort();
@@ -365,10 +371,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   };
 
   const onChangeStatus = (selectedOption) => {
-    let value = selectedOption.value;
-    if (value == "ALL") {
-      value = "";
-    }
+    let value = selectedOption;
     setStatusSelectedStatus(value);
     // getFilteApi(
     //   0,
@@ -381,10 +384,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
     // );
   };
   const onChangePriority = (selectedOption) => {
-    let value = selectedOption?.value;
-    if (value == "All") {
-      value = "";
-    }
+    let value = selectedOption;
     setSelectedPriority(value);
   };
 
@@ -424,7 +424,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Completed} style={{ height: "18%", width: "18%" }} />
+              <Image src={Completed} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -433,7 +433,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -448,7 +448,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
             }`}
           >
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Declined} style={{ height: "18%", width: "18%" }} />
+              <Image src={Declined} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -456,7 +456,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: NOT COMPUTED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -464,7 +464,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: COMPUTED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -472,7 +472,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: HOLD">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Hold} style={{ height: "18%", width: "18%" }} />
+              <Image src={Hold} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -480,7 +480,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="Status: ABORTED BY CRON">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Abort} style={{ height: "18%", width: "18%" }} />
+              <Image src={Abort} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -488,7 +488,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
         return (
           <Popover placement="bottom" title="">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
@@ -508,7 +508,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   //   </div>
   // );
 
-  const options = [{ label: "All", value: "" }, ...priorityOptions];
+  const options = [...priorityOptions];
   useEffect(() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -549,7 +549,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                             }}
                           >
                             <div className="col-xl-2">
-                              <label>Search by Name or ID</label>
+                              <label className="responsiveLabel">
+                                Search by Name or ID
+                              </label>
                               {/* <InputField
                                 inputValue={searchTextValue}
                                 setInputValue={setSearchTextValue}
@@ -559,17 +561,12 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                 placeholder="Search"
                                 isSearch={true}
                               /> */}
-                              <div className="form-group has-search">
-                                <FontAwesomeIcon
-                                  className="fa fa-search form-control-feedback"
-                                  icon={faSearch}
-                                />
-
-                                <InputText
+                              <div style={{ height: "45px" }}>
+                                <Input
                                   value={searchVal}
                                   onChange={(e) => getNameSearch(e)}
                                   className={
-                                    "form-control new-form-control new-item-control"
+                                    "w-100 new-search-control border-none"
                                   }
                                   placeholder={"Search"}
                                   maxLength={25}
@@ -578,12 +575,21 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                       e.preventDefault();
                                     }
                                   }}
+                                  prefix={
+                                    <FontAwesomeIcon
+                                      className="searchPrefix"
+                                      icon={faSearch}
+                                    />
+                                  }
+                                  allowClear={true}
                                 />
                               </div>
                             </div>
                             <div className="col-xl-2">
-                              <label>Select Status</label>
-                              <div class="form-group has-search">
+                              <label className="responsiveLabel">
+                                Select Status
+                              </label>
+                              <div class="form-group has-search custom-react-select">
                                 <Select
                                   onChange={(selectedOption) => {
                                     onChangeStatus(selectedOption);
@@ -591,51 +597,41 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                                   }}
                                   value={
                                     statusSelectedStatus
-                                      ? {
-                                          label: statusSelectedStatus,
-                                          value: statusSelectedStatus,
-                                        }
-                                      : {
-                                          label: "ALL",
-                                          value: "",
-                                        }
+                                      ? statusSelectedStatus
+                                      : null
                                   }
                                   options={statusOptions}
-                                  className="custom-react-select"
                                   isSearchable={false}
                                   placeholder={"Select Status"}
+                                  allowClear
                                 />
                               </div>
                             </div>
                             <div className="col-xl-2">
-                              <label>Select Priority</label>
-                              <div class="form-group has-search">
+                              <label className="responsiveLabel">
+                                Select Priority
+                              </label>
+                              <div class="form-group has-search custom-react-select">
                                 <Select
                                   onChange={(selectedOption) => {
                                     onChangePriority(selectedOption);
                                     resetPageNumber(setPageNo);
                                   }}
                                   value={
-                                    selectedPriority
-                                      ? {
-                                          label: selectedPriority,
-                                          value: selectedPriority,
-                                        }
-                                      : {
-                                          label: "ALL",
-                                          value: "",
-                                        }
+                                    selectedPriority ? selectedPriority : null
                                   }
                                   options={options}
-                                  className="custom-react-select"
                                   isSearchable={false}
                                   placeholder={"Select Priority"}
+                                  allowClear
                                 />
                               </div>
                             </div>
 
                             <div className="col-xl-2">
-                              <label>Due Date</label>
+                              <label className="responsiveLabel">
+                                Due Date
+                              </label>
                               <div>
                                 <RangePicker
                                   format="MM-DD-YYYY"
@@ -677,7 +673,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                             </div>
                             <HeaderFilters bullets={bullets} />
 
-                            <div className="col-xl-2">
+                            <div className="col-xl-2 mt-4 mb-1">
                               <DailyTask trackChart={trackChart} />
                             </div>
                           </div>
@@ -690,7 +686,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
                               }}
                             >
                               <div className="col-xl-2 ">
-                                <label>Completed Date</label>
+                                <label className="responsiveLabel">
+                                  Completed Date
+                                </label>
                                 <div>
                                   <RangePicker
                                     format="MM-DD-YYYY"
@@ -793,6 +791,7 @@ const enhancer = connect(
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,
+    patientDetails: allActions.getPatientDetails,
   }
 );
 export default enhancer(Patient);

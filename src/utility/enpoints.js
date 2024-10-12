@@ -1,7 +1,8 @@
-import { portalUrl } from "../utils/config";
+import { portalUrl ,portalUrl1} from "../utils/config";
 
 const ENDPOINTS = {
   apiEndoint: portalUrl,
+  apiEndoint1: portalUrl1,
   apiEndointFileUpload: "http://13.68.177.51:8082/ai/",
   apiEndointFileUploadHcc: portalUrl,
   apiLocal: "http://localhost:3003/",

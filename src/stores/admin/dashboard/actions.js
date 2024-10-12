@@ -33,3 +33,13 @@ export const tenentLogoAction = createActionThunk(
   "TENANT_LOGO",
   network.tenentLogo
 );
+
+export const teamChartAction = createActionThunk(
+  "TEAM_CHART",
+  network.getTeamChartData
+);
+
+export const getSelectUserList = createActionThunk(
+  "DASHBOARD_SELECTED_USERS_LIST",
+  network.usersList
+);

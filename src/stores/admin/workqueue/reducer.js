@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { patientsAction,getTrackingList } from "./actions";
+import { patientsAction,getTrackingList, getPatientDetails } from "./actions";
 
 const initialState = {
   loading: true,
@@ -37,11 +37,19 @@ const createReducer = (actionType) =>
     },
     false
   );
+  const getPatientDetailsState = (action) =>
+    handleActions(
+      {
+        [action.toString()]: (state, { payload }) => payload,
+      },
+      ""
+    );
 const adminPatientsReducer = combineReducers({
   patients: createReducer(patientsAction),
   patientsLoading:getReportLoading(patientsAction),
   trackingList:createReducer(getTrackingList),
   trackingLoader:getReportLoading(getTrackingList),
+  patientDetails:getPatientDetailsState(getPatientDetails),
 });
 
 export default adminPatientsReducer;

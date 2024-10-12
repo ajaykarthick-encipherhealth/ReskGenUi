@@ -16,9 +16,8 @@ const ConnectWebSocket = ({
     typeof window !== "undefined" ? getStorage("token") : null;
 
   const WS_URL =
-    `wss://${webSocketUrl}chatservice/chatservice/websocket?token=Bearer` +
-    token;
-
+  `wss://${webSocketUrl}chatservice/chatservice/websocket?token=Bearer` +
+  token;
   const { lastJsonMessage } = useWebSocket(WS_URL, {
     share: false,
     shouldReconnect: () => true,

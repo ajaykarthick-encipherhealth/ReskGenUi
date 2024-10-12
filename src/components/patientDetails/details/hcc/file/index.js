@@ -671,6 +671,7 @@ const File = ({
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
                               remove
+                              year={year}
                             />
                           </div>
                         </div>

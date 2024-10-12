@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import Select from "react-select";
-import { DatePicker, Popover, Tooltip } from "antd";
+import { DatePicker, Popover, Tooltip,Select } from "antd";
 import Image from "next/image";
 import styles from "../../../../pages/reviewer/report/report.module.css";
 import Tracking from "../../tracking/tracking.module.css";
 import { useDispatch } from "react-redux";
 import Legends from "../../../../components/legends";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPalette,faChartSimple } from "@fortawesome/free-solid-svg-icons";
+import { faPalette, faChartSimple } from "@fortawesome/free-solid-svg-icons";
 import {
   disableFutureDate,
   handleRnagePicker2,
@@ -169,13 +168,13 @@ const HeaderFilters = ({
     setSelectedDates3([]);
     setSelectedDates4([]);
     setSelectedDates5([]);
-    setSelAllocatedTo("");
-    setAuditSelAllocatedTo("");
-    setSelectedOption("");
-    setAuditSelectedOption("");
-    setSelAllocatedBy("");
-    setSelAuditAllocatedBy("");
-    setTrackInput("");
+    setSelAllocatedTo(null);
+    setAuditSelAllocatedTo(null);
+    setSelectedOption(null);
+    setAuditSelectedOption(null);
+    setSelAllocatedBy(null);
+    setSelAuditAllocatedBy(null);
+    setTrackInput(null);
     setPopoverVisible(false);
   };
   const renderFilter = (filter) => {
@@ -184,16 +183,17 @@ const HeaderFilters = ({
         return (
           <div className={defaultSize}>
             <label className={styles.label}>Processed Status</label>
-            <div className="form-group has-search">
+            <div class="form-group has-search custom-react-select">
               <Select
-                value={clear ? "" : selector4value}
+                value={clear ? null : selector4value}
                 onChange={(selectedOption) => {
                   setSelectedOption(selectedOption);
                   setClear(false);
                 }}
                 options={selectOptions}
-                className="custom-react-select"
+                placeholder={"Select Processed Status"}
                 isSearchable={false}
+                allowClear={true}
               />
             </div>
           </div>
@@ -202,16 +202,17 @@ const HeaderFilters = ({
         return (
           <div className={defaultSize}>
             <label className={styles.label}>Audit Status</label>
-            <div className="form-group has-search">
+            <div class="form-group has-search custom-react-select">
               <Select
-                value={clear ? "" : selector5value}
+                value={clear ? null : selector5value}
                 onChange={(selectedOption) => {
                   setAuditSelectedOption(selectedOption);
                   setClear(false);
                 }}
                 options={auditStatusOptions}
-                className="custom-react-select"
                 isSearchable={false}
+                allowClear={true}
+                placeholder={"Select Audit Status"}
               />
             </div>
           </div>
@@ -273,17 +274,17 @@ const HeaderFilters = ({
             // }}
           >
             <label className={styles.label}>Allocated By</label>
-            <div className="form-group has-search">
+            <div class="form-group has-search custom-react-select">
               <Select
-                value={clear ? "" : selector6value}
+                value={clear ? null : selector6value}
                 onChange={(selectedOption) => {
                   setSelAllocatedBy(selectedOption);
                   setClear(false);
                 }}
                 options={allocatedByOptoons}
-                className="custom-react-select"
                 isSearchable={false}
-                placeholder={defaultAllocatedBy}
+                placeholder={"Select Allocated By"}
+                allowClear={true}
               />
             </div>
           </div>
@@ -297,17 +298,17 @@ const HeaderFilters = ({
             // }}
           >
             <label className={styles.label}>Select Organization</label>
-            <div className="form-group has-search">
+            <div class="form-group has-search custom-react-select">
               <Select
-                value={clear ? "" : selectOrgList}
+                value={clear ? null : selectOrgList}
                 onChange={(selectedOption) => {
                   setSelectedOrgList(selectedOption);
                   setClear(false);
                 }}
                 options={orgAllList}
-                className="custom-react-select-tenant"
                 isSearchable={false}
-                placeholder={defaultAllocatedBy}
+                placeholder={"Select Organization"}
+                allowClear={true}
               />
             </div>
           </div>
@@ -373,17 +374,17 @@ const HeaderFilters = ({
             // }}
           >
             <label className={styles.label}>{"Audit Allocated By"}</label>
-            <div class="form-group has-search">
+            <div class="form-group has-search custom-react-select">
               <Select
-                value={clear ? "" : selector7value}
+                value={clear ? null : selector7value}
                 onChange={(selectedOption) => {
                   setSelAuditAllocatedBy(selectedOption);
                   setClear(false);
                 }}
                 options={auditAllocatedByOptoons}
-                className="custom-react-select"
                 isSearchable={false}
-                placeholder={defaultAllocatedBy}
+                placeholder={"Select Audit Allocated By"}
+                allowClear={true}
               />
             </div>
           </div>
@@ -426,16 +427,17 @@ const HeaderFilters = ({
             // }}
           >
             <label className={styles.label}>Reviewer</label>
-            <div className="form-group has-search">
+            <div class="form-group has-search custom-react-select">
               <Select
-                value={selectorValue ? selectorValue : ""}
+                value={selectorValue ? selectorValue : null}
                 onChange={(selectedOption) => {
                   setClear(false);
                   setSelAllocatedTo(selectedOption);
                 }}
                 options={allocatedToOptoons}
-                className="custom-react-select"
+                placeholder={"Select Reviewer"}
                 isSearchable={false}
+                allowClear={true}
               />
             </div>
           </div>
@@ -450,16 +452,17 @@ const HeaderFilters = ({
             // }}
           >
             <label className={styles.label}>Supervisor</label>
-            <div className="form-group has-search">
+            <div class="form-group has-search custom-react-select">
               <Select
-                value={auditSelAllocatedTo ? auditSelAllocatedTo : ""}
+                value={auditSelAllocatedTo ? auditSelAllocatedTo : null}
                 onChange={(selectedOption) => {
                   setClear(false);
                   setAuditSelAllocatedTo(selectedOption);
                 }}
                 options={auditallocatedToOptoons}
-                className="custom-react-select"
+                placeholder={"Select Supervisor"}
                 isSearchable={false}
+                allowClear={true}
               />
             </div>
           </div>

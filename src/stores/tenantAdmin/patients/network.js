@@ -46,3 +46,15 @@ export async function getAllPatient(
   );
   return data;
 }
+
+export async function submitPatientId({obj}) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/patient`,
+    options
+  );
+  return data;
+}

@@ -25,6 +25,7 @@ import AddMeatQuery from "../../components/addMeatQuery";
 import {
   getCaptureSectionBackgroundMeatNew,
   getEncounterDateBackground,
+  onDragEnd,
   // getProviderNameList,
 } from "../../components/function/ReusableFunctions";
 import { getPatientDetails } from "../../components/function/GetData";
@@ -35,6 +36,8 @@ import ManuallyAdd from "../../components/manuallyAdd";
 import { getDateOfServiceBackground } from "../../components/function/DateOfServices";
 import { getProviderNameTag } from "../../components/function/ProviderHyperlinks";
 import { getStorage } from "../../../../../utils/storages";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import LogoLoader from "../../../../logoLoader";
 const { Option } = Select;
 
 const Meat = ({
@@ -102,7 +105,9 @@ const Meat = ({
   const [formValues, setFormValues] = useState(false);
   const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
   const [isFileFormShow, setIsFileFormShow] = useState(false);
-  const [selectCardTitle, setSelectCardTitle] = useState('');
+  const [selectCardTitle, setSelectCardTitle] = useState("");
+  const [allDisList, setAllDisList] = useState([]);
+  const [allMeatList, setAllMeatList] = useState([]);
 
   const userId = getStorage("userId");
 
@@ -122,11 +127,13 @@ const Meat = ({
       patientDetailsResult,
       dispatch,
       sectionColorList,
+      setAllDisList,
       "",
       "",
       "",
+      setDeletedMeatList,
       "",
-      setDeletedMeatList
+      setAllMeatList
     );
   }, [patientDetailsResult]);
 
@@ -141,7 +148,7 @@ const Meat = ({
 
   const onchangeMeat = (code, data) => {
     console.log(code, data, "testingsss");
-    
+
     var title = data.diagnosisCode + " - " + data.diseaseName;
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
     data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
@@ -158,7 +165,7 @@ const Meat = ({
     setConfirmNotesModalValid(false);
     setIsAddButtonClicked(false);
     setIsMeatQueryModal(false);
-    setFileLoading(false);
+    // setFileLoading(false);
     setSuggestedMeatForm(false);
   };
 
@@ -347,95 +354,119 @@ const Meat = ({
 
   return (
     <div className={visitStyles?.meatContainer}>
-      {fileLoading ? (
-        <div className={styles.overlay_style}>
-          <div className={styles.overlay__inner_style}>
-            <div className={styles.overlay__content_style}>
-              <span className={styles.spinner_style}></span>
-            </div>
-          </div>
-        </div>
-      ) : null}
-      <div className={visitStyles.meatcontainer}>
-        <MeatCard
-          list={
-            userId == "reviewer@3gencogentai.onmicrosoft.com"
-              ? isBlockRxHcc
-              : meatCriteriaList
-          }
-          captureSectionMatching={captureSectionMatching}
-          encounterDateMatching={encounterDateMatching}
-          okText="OK"
-          cancelText="Cancel"
-          popConfirmTitle="Do you want to move to Delete?"
-          setSearch={setSearch}
-          setFileLoading={setFileLoading}
-          setFileModalHeader={setFileModalHeader}
-          onchangeMeat={onchangeMeat}
-          setIsModalOpen={setIsModalOpen}
-          isAddComboCode={false}
-          setConfirmNotesModalValid={setConfirmNotesModalValid}
-          setIsValidAction={setIsValidAction}
-          patientDocumentResult={patientDocumentResult}
-          setSelectMeatResult={setSelectMeatResult}
-          activeMeatTitle={activeMeatTitle}
-          setIsModalOpenLab={setIsModalOpenLab}
-          setIsModalOpenRadiology={setIsModalOpenRadiology}
-          setSelectHyperlink={setSelectHyperlink}
-          setEditData={setEditData}
-          setMeatEdit={setMeatEdit}
-          addMeatQuery={addMeatQuery}
-          getDisTitlePopover={getDisTitlePopover}
-          cardTitle="VALID_MEAT"
-          setLabData={setLabData}
-          labData={labData}
-          setSuggestedMeatForm={setSuggestedMeatForm}
-          setSelectCardTitle={setSelectCardTitle}
-        />
+      {fileLoading ? <LogoLoader /> : null}
+      <DragDropContext
+        onDragEnd={(result) =>
+          onDragEnd(
+            result,
+            allDisList,
+            setSelectDiseasesName,
+            setSelectDisDetails,
+            setConfirmNotesModalValid,
+            setIsValidAction,
+            patientDetailsResult
+          )
+        }
+      >
+        <div className={visitStyles.meatcontainer}>
+          <Droppable droppableId={"HCC"} key={"HCC"}>
+            {(provided) => {
+              return (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  <MeatCard
+                    list={
+                      userId == "reviewer@3gencogentai.onmicrosoft.com"
+                        ? isBlockRxHcc
+                        : meatCriteriaList
+                    }
+                    captureSectionMatching={captureSectionMatching}
+                    encounterDateMatching={encounterDateMatching}
+                    okText="OK"
+                    cancelText="Cancel"
+                    popConfirmTitle="Do you want to move to Delete?"
+                    setSearch={setSearch}
+                    setFileLoading={setFileLoading}
+                    setFileModalHeader={setFileModalHeader}
+                    onchangeMeat={onchangeMeat}
+                    setIsModalOpen={setIsModalOpen}
+                    isAddComboCode={false}
+                    setConfirmNotesModalValid={setConfirmNotesModalValid}
+                    setIsValidAction={setIsValidAction}
+                    patientDocumentResult={patientDocumentResult}
+                    setSelectMeatResult={setSelectMeatResult}
+                    activeMeatTitle={activeMeatTitle}
+                    setIsModalOpenLab={setIsModalOpenLab}
+                    setIsModalOpenRadiology={setIsModalOpenRadiology}
+                    setSelectHyperlink={setSelectHyperlink}
+                    setEditData={setEditData}
+                    setMeatEdit={setMeatEdit}
+                    addMeatQuery={addMeatQuery}
+                    getDisTitlePopover={getDisTitlePopover}
+                    cardTitle="VALID_MEAT"
+                    setLabData={setLabData}
+                    labData={labData}
+                    setSuggestedMeatForm={setSuggestedMeatForm}
+                    setSelectCardTitle={setSelectCardTitle}
+                    provided={provided}
+                  />
+                </div>
+              );
+            }}
+          </Droppable>
 
-        {deletedMeatList?.length != 0 && (
-          <>
-            <div className="invalid-combo">
-              <span>Deleted MeatCriteria</span>
-            </div>
-            <MeatCard
-              list={
-                userId == "reviewer@3gencogentai.onmicrosoft.com"
-                  ? isBlockRxHccDeleted
-                  : deletedMeatList
-              }
-              captureSectionMatching={captureSectionMatching}
-              encounterDateMatching={encounterDateMatching}
-              okText="OK"
-              cancelText="Cancel"
-              popConfirmTitle="You want move to valid?"
-              setSearch={setSearch}
-              setFileLoading={setFileLoading}
-              setFileModalHeader={setFileModalHeader}
-              onchangeMeat={onchangeMeat}
-              setIsModalOpen={setIsModalOpen}
-              isAddComboCode={false}
-              setConfirmNotesModalValid={setConfirmNotesModalValid}
-              setIsValidAction={setIsValidAction}
-              patientDocumentResult={patientDocumentResult}
-              setSelectMeatResult={setSelectMeatResult}
-              activeMeatTitle={activeMeatTitle}
-              setIsModalOpenLab={setIsModalOpenLab}
-              setIsModalOpenRadiology={setIsModalOpenRadiology}
-              setSelectHyperlink={setSelectHyperlink}
-              setEditData={setEditData}
-              setMeatEdit={setMeatEdit}
-              addMeatQuery={addMeatQuery}
-              getDisTitlePopover={getDisTitlePopover}
-              cardTitle="DELETED_MEAT"
-              setLabData={setLabData}
-              labData={labData}
-              setSuggestedMeatForm={setSuggestedMeatForm}
-              setSelectCardTitle={setSelectCardTitle}
-            />
-          </>
-        )}
-      </div>
+          <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
+            {(provided) => {
+              return (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {deletedMeatList?.length != 0 && (
+                    <>
+                      <div className="invalid-combo">
+                        <span>Deleted MeatCriteria</span>
+                      </div>
+                      <MeatCard
+                        list={
+                          userId == "reviewer@3gencogentai.onmicrosoft.com"
+                            ? isBlockRxHccDeleted
+                            : deletedMeatList
+                        }
+                        captureSectionMatching={captureSectionMatching}
+                        encounterDateMatching={encounterDateMatching}
+                        okText="OK"
+                        cancelText="Cancel"
+                        popConfirmTitle="You want move to valid?"
+                        setSearch={setSearch}
+                        setFileLoading={setFileLoading}
+                        setFileModalHeader={setFileModalHeader}
+                        onchangeMeat={onchangeMeat}
+                        setIsModalOpen={setIsModalOpen}
+                        isAddComboCode={false}
+                        setConfirmNotesModalValid={setConfirmNotesModalValid}
+                        setIsValidAction={setIsValidAction}
+                        patientDocumentResult={patientDocumentResult}
+                        setSelectMeatResult={setSelectMeatResult}
+                        activeMeatTitle={activeMeatTitle}
+                        setIsModalOpenLab={setIsModalOpenLab}
+                        setIsModalOpenRadiology={setIsModalOpenRadiology}
+                        setSelectHyperlink={setSelectHyperlink}
+                        setEditData={setEditData}
+                        setMeatEdit={setMeatEdit}
+                        addMeatQuery={addMeatQuery}
+                        getDisTitlePopover={getDisTitlePopover}
+                        cardTitle="DELETED_MEAT"
+                        setLabData={setLabData}
+                        labData={labData}
+                        setSuggestedMeatForm={setSuggestedMeatForm}
+                        setSelectCardTitle={setSelectCardTitle}
+                        provided={provided}
+                      />
+                    </>
+                  )}
+                </div>
+              );
+            }}
+          </Droppable>
+        </div>
+      </DragDropContext>
       {isModalOpen && (
         <Modal
           title={[
@@ -935,8 +966,12 @@ const Meat = ({
         setConfirmNotesModalValid={setConfirmNotesModalValid}
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
+        dragMovemntAction={true}
+        setSuggestedMeatForm={setSuggestedMeatForm}
+        meatCriteriaList={allMeatList}
+        setSelectCardTitle={setSelectCardTitle}
       />
-        <Modal
+      <Modal
         title="You want to move  valid? please add a MEAT condition."
         open={suggestedMeatForm}
         footer={false}

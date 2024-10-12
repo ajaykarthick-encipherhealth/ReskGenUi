@@ -9236,8 +9236,17 @@ tr>td{
 
 /* select style ? */
 
-.custom-react-select > div:nth-child(3) {
-  height: 2.813rem !important;
+.custom-react-select .ant-select {
+  width: 100%;
+}
+.custom-react-select .ant-select .ant-select-selector,
+.custom-react-select .ant-select .ant-select-selector:hover,
+.custom-react-select .ant-select .ant-select-selector:focus {
+  height: 2.7rem !important;
+  border: none !important;
+  width: 100% !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 10px;
 }
 
 .custom-react-select1 .ant-select {
@@ -9259,7 +9268,9 @@ tr>td{
   .ant-select-selector {
   border-color: red !important;
 }
-
+.ant-select .ant-select-arrow {
+  margin-top: 0px !important;
+}
 .ant-select-outlined {
   border: none !important;
 }
@@ -11813,20 +11824,22 @@ li.p-dropdown-item {
 }
 
 .has-search .new-form-control {
-  padding-left: 2.375rem;
+  /* padding-left: 2.375rem; */
   font-size: 14px;
 }
 .has-search .input-form-control {
-  padding-left: 2.375rem;
+  /* padding-left: 2.375rem; */
   font-size: 14px;
 }
 .has-search2 .new-form-control {
-  padding-left: 2.375rem;
+  width: 100%;
+  /* padding-left: 2.375rem; */
   font-size: 14px;
   border-top-right-radius: 5px !important;
   border-bottom-right-radius: 5px !important;
   border-bottom-left-radius: 0px !important;
   border-top-left-radius: 0px !important;
+  border: none !important;
 }
 .has-search .form-control-feedback {
   position: absolute;
@@ -12322,6 +12335,39 @@ tbody > tr {
   flex-shrink: 0;
   border: 1px solid #888 !important;
 }
+
+.new-search-control,
+.new-search--control:hover {
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  font-size: 15px;
+  /* border:1px solid red; */
+  border: none !important;
+}
+.new-search-control2{
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius:0px !important;
+  border-top-right-radius: 8px !important;
+  border-bottom-right-radius:8px !important;
+  background: #fff !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  font-size: 15px;
+  /* border:1px solid red; */
+  border: none !important;
+}
+.ant-input-affix-wrapper > input.ant-input {
+  margin-top: -3px;
+}
+.searchPrefix {
+  color: #d3d3d3;
+}
 .new-item-control {
   border-radius: 8px !important;
   background: #fff !important;
@@ -12425,7 +12471,7 @@ tbody > tr {
 }
 
 .form-control-feedback {
-  margin-left: 8px;
+  /* margin-left: 8px; */
   /* Adjust the margin as needed */
 }
 
@@ -12574,7 +12620,14 @@ tbody > tr {
 }
 
 /* report */
-.custom-react-report-select > div:nth-child(4) > div {
+.custom-react-report-select .ant-select .ant-select-selector {
+  height: 2.7rem !important;
+  border: none !important;
+  width: 100% !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 0px 10px 10px 0px !important ;
+}
+/* .custom-react-report-select > div:nth-child(4) > div {
   background-color: #fff;
 }
 
@@ -12618,7 +12671,7 @@ tbody > tr {
   background-color: #fff;
   border-radius: 0px 5px 5px 0px;
   border: none !important;
-}
+} */
 
 .p-datepicker.p-component.p-ripple-disabled.p-connected-overlay-enter-done {
   width: 440px !important;
@@ -13683,7 +13736,7 @@ tbody > tr {
 }
 
 .chatbox .msg_cotainer {
-  background: #CFE3FC;
+  background: #cfe3fc;
   /* margin-left: 0.625rem; */
   border-radius: 0 0.625rem 0.625rem 0.625rem;
   padding: 0.625rem 0.9375rem;
@@ -13712,7 +13765,7 @@ tbody > tr {
 }
 
 .chatbox .msg_cotainer_send {
-  background: #263E50;
+  background: #263e50;
   padding: 0.625rem 0.9375rem;
   border-radius: 0.375rem 0rem 0.375rem 0.375rem;
   margin-right: 0.625rem;
@@ -13735,7 +13788,7 @@ tbody > tr {
   content: "";
   position: absolute;
   right: -0.625rem;
-  border-left: 0.625rem solid  #263E50;
+  border-left: 0.625rem solid #263e50;
   border-bottom: 0.625rem solid transparent;
   border-top: 0rem solid;
   top: 0;
@@ -13795,7 +13848,9 @@ tbody > tr {
 }
 
 /*ant stepper  */
-.fileprocessingstepper .ant-steps.ant-steps-label-vertical .ant-steps-item-tail {
+.fileprocessingstepper
+  .ant-steps.ant-steps-label-vertical
+  .ant-steps-item-tail {
   background: #04306f !important;
 }
 
@@ -13807,7 +13862,8 @@ tbody > tr {
   padding: 0px !important;
   /* background: #04306f !important; */
 }
-.fileprocessingstepper .ant-steps
+.fileprocessingstepper
+  .ant-steps
   .ant-steps-item-finish
   > .ant-steps-item-container
   > .ant-steps-item-tail::after {
@@ -14746,6 +14802,7 @@ input::-webkit-inner-spin-button {
 /* border:1px solid gray !important */
 /* } */
 .ant-select-single {
+  width: 100%;
   font-size: 14px;
   /* height: 42px !important; */
   /* width: 100% !important; */
@@ -15041,15 +15098,15 @@ input::-webkit-inner-spin-button {
   }
 }
 @media only screen and (min-width: 600px) {
-  .tenantPie > div  {
-      height: 209px !important;
-      user-select: none;
-      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-      position: relative;
-      width: 100%;
-      margin-left: -10px;
-      margin-top: -20px !important;
-      width: 292px;
+  .tenantPie > div {
+    height: 209px !important;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    position: relative;
+    width: 100%;
+    margin-left: -10px;
+    margin-top: -20px !important;
+    width: 292px;
   }
 }
 .totalCodesPies > div > div > canvas {
@@ -15491,10 +15548,16 @@ input::-webkit-inner-spin-button {
   background-color: gray !important;
   border: 1px solid gray !important;
 }
-.fileprocessingstepper .ant-steps .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+.fileprocessingstepper
+  .ant-steps
+  .ant-steps-item-finish
+  .ant-steps-item-icon
+  > .ant-steps-icon {
   color: white !important;
 }
-.fileprocessingstepper .ant-steps.ant-steps-label-vertical .ant-steps-item-icon {
+.fileprocessingstepper
+  .ant-steps.ant-steps-label-vertical
+  .ant-steps-item-icon {
   background-color: gray !important;
 }
 .fileprocessingstepper .ant-steps .ant-steps-item-finish .ant-steps-item-icon {
@@ -15506,13 +15569,15 @@ input::-webkit-inner-spin-button {
   background-color: red !important;
   border: 1px solid red !important;
 }
-.fileprocessingstepper .ant-steps.ant-steps-with-progress
+.fileprocessingstepper
+  .ant-steps.ant-steps-with-progress
   .ant-steps-item-process
   .ant-steps-item-container
   .ant-steps-item-icon {
   background-color: #04306f !important;
 }
-.fileprocessingstepper .ant-steps.ant-steps-with-progress
+.fileprocessingstepper
+  .ant-steps.ant-steps-with-progress
   .ant-steps-item-process
   .ant-steps-item-container
   .ant-steps-item-icon
@@ -15520,7 +15585,11 @@ input::-webkit-inner-spin-button {
   color: white !important;
   font-weight: 500 !important;
 }
-.fileprocessingstepper .ant-steps .ant-steps-item-wait .ant-steps-item-icon .ant-steps-icon {
+.fileprocessingstepper
+  .ant-steps
+  .ant-steps-item-wait
+  .ant-steps-item-icon
+  .ant-steps-icon {
   color: white !important;
 }
 .providerAddPicker .ant-picker {
@@ -15570,8 +15639,8 @@ input::-webkit-inner-spin-button {
   height: 18px !important;
 }
 .calendar .ant-modal .ant-modal-content {
-  right:40% !important;
-  top:25px !important;
+  right: 40% !important;
+  top: 25px !important;
 }
 
 @media (max-width: 1344px) {
@@ -15607,13 +15676,13 @@ input::-webkit-inner-spin-button {
   }
 }
 .manuallyAddPicker .ant-picker,
-.manuallyAddPicker .ant-picker:hover{
-  border:1px solid #d9d9d9 !important;
-  box-shadow:none !important;
+.manuallyAddPicker .ant-picker:hover {
+  border: 1px solid #d9d9d9 !important;
+  box-shadow: none !important;
 }
 
-.manuallyAddPicker .ant-picker-dropdown .ant-picker-date-panel{
-  width:379px !important;
+.manuallyAddPicker .ant-picker-dropdown .ant-picker-date-panel {
+  width: 379px !important;
 }
 .customstepper
   .ant-steps
@@ -15682,16 +15751,15 @@ input::-webkit-inner-spin-button {
   width: 150px !important;
   font-size: 12px !important;
 }
-.customInput .ant-input{
+.customInput .ant-input {
   border-radius: none !important;
 }
-.customDrawer.ant-drawer .ant-drawer-body{
+.customDrawer.ant-drawer .ant-drawer-body {
   margin-left: 20px;
 }
-@media screen and (max-width:1500px){
-  .responsiveLabel{
-    font-size:12px !important;
+@media screen and (max-width: 1500px) {
+  .responsiveLabel {
+    font-size: 12px !important;
     font-weight: 400;
   }
-  
 }

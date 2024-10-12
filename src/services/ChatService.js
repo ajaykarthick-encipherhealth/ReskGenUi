@@ -20,11 +20,11 @@ export async function getChatHistory(userName) {
   }
 }
 
-export async function getUsers(userName) {
+export async function getUsers({searchString = ""}) {
   const token = getStorage("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}chatservice/api/users`,
+      `${ENDPOINTS?.apiEndoint}chatservice/api/users?searchString=${searchString}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -47,7 +47,7 @@ export async function getHandleChatHistory(
   const token = getStorage("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}chatservice/api/messages/private?sender=${getStorage('userId')}&receiver=${userName}&pageNo=${pageNumber}&pageSize=${pageSize}`,
+      `https://dev.hcc.encipherhealth.ai/chatservice/chatservice/api/messages/private?sender=${userName}&receiver=${secondaryUser}&pageNo=${pageNumber}&pageSize=${pageSize}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -117,4 +117,3 @@ export async function handleFilePost(data) {
       throw err;
     }
   }
-  

@@ -53,7 +53,7 @@
   align-items: center;
 }
 .insideTitle {
-  font-size: 40px;
+  font-size: 35px;
   color: #000000;
   font-weight: 700;
 }
@@ -82,8 +82,20 @@
   width: 98% !important;
   height: 280px !important;
 }
-.subTitle{
-  font-size:14px;
-  color:#808080;
-  margin-left:5px;
+.subTitle {
+  font-size: 14px;
+  color: #808080;
+  margin-left: 5px;
+}
+
+@media screen and (max-width: 1280px) {
+  .insideTitle {
+    font-size: 29px;
+  }
+  .custom_select_type {
+    width: 90px;
+  }
+  .custom_select_user {
+    width: 90px;
+  }
 }

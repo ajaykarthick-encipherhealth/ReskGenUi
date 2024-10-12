@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
+import { connect} from "react-redux";
 import { Offcanvas } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Form, Input, Button, Select, Row, Col, notification } from "antd";
@@ -9,25 +9,20 @@ import axios from "../../../utility/axiosConfig";
 import AdminList from "../../../components/table/admin/adminList/adminList";
 import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
-import { getUsers } from "../../../store/actions/adminAction/usersAction";
-import { AddUser } from "../../../services/adminServices/usersService";
 import { Paginator } from "primereact/paginator";
 import {
   encyptingPass,
-  getValidatePassword,
 } from "../../../components/headerFilters/functions";
-import SpinnerDots from "../../../components/spinner";
 import { actions as adminAction } from "../../../stores/admin/users";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
+import { getResponePopup } from "../../../utils/reusable";
 
 const options3 = [
-  { value: "ALL", label: "ALL" },
   { value: "true", label: "Enabled" },
   { value: "false", label: "Disabled" },
 ];
 const RoleList = [
-  { value: "", label: "ALL" },
   { value: "ADMIN", label: "ADMIN" },
   { value: "REVIEWER", label: "REVIEWER" },
   { value: "SUPERVISOR", label: "SUPERVISOR" },
@@ -49,9 +44,8 @@ const UserList = ({
   getAllUsersList,
   usersListData,
   loading,
+  AddUser
 }) => {
-  const dispatch = useDispatch();
-  const usersData = useSelector((state) => state.adminUsers.usersData);
   const sideMenu = useSelector((state) => state.sideMenu);
   const [localUserId, setLocalUserId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -76,8 +70,6 @@ const UserList = ({
   const [selectedDates, setSelectedDates] = useState();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [inputValuePatientId, setInputValuePatientId] = useState({
     patientId: "",
     patientName: "",
@@ -120,6 +112,7 @@ const UserList = ({
       setUseAdd(true);
       form.resetFields();
       setIsLoadingBtn(false);
+      getResponePopup(response)
     }
     setRoleValue([]);
     setValidated(true);
@@ -197,12 +190,13 @@ const UserList = ({
     setLocalUserId(uId);
     setLocalOrgId(orgId);
     setUseAdd(false);
+  
     getAllUsersList({
       pageCount,
       search,
       startDate,
       endDate,
-      status,
+      status:status||"",
       role,
       orgId: selectOrgList?.value,
       sort: sort,
@@ -720,6 +714,7 @@ const enhancer = connect(
   {
     getAllOrganizationList: adminAction.getAllOrganizationAction,
     getAllUsersList: adminAction.getAllUsersAction,
+    AddUser:adminAction.getAddUser
   }
 );
 export default enhancer(UserList);

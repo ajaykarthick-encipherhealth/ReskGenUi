@@ -2,20 +2,17 @@ import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import { connect, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import styles from "../../../pages/supervisor/dashboard/styles.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
 import { Popover, Tooltip, notification } from "antd";
 import { Paginator } from "primereact/paginator";
-import Footer from "../../../jsx/layouts/Footer";
-import visitStyles from "../../../styles/visitdata.module.css";
-import SpinnerDots from "../../../components/spinner";
-import { LoadingOutlined } from "@ant-design/icons";
 import HeaderFilters from "./headerFilters";
 import TrackingTable from "../../../components/table/admin/trackingList";
-import { generateOptionsList } from "../../../components/headerFilters/functions";
+import {
+  generateOptionsForNewStore,
+  generateOptionsList,
+} from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
 import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
@@ -28,12 +25,13 @@ import Completed from "../../../../src/images/trackingImages/CompletedTrack.png"
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 import Abort from "../../../../src/images/trackingImages/Abort.png";
-import { actions as allActions } from '../../../stores/admin/workqueue'
+import { actions as allActions } from "../../../stores/admin/workqueue";
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
-import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { setStorage } from "../../../utils/storages";
+import { actions as allocationActions } from "../../../stores/admin/patientAllocation";
+import { actions as workFlowActions } from "../../../stores/admin/workqueue";
 const bullets = [
   {
     title: "Processed Status",
@@ -88,7 +86,6 @@ const bullets = [
 ];
 
 const statusOptions = [
-  { label: "ALL", value: "" },
   { label: "COMPLETED", value: "COMPLETED", status: 2 },
   { label: "PENDING", value: "PENDING", status: 0 },
   { label: "DECLINED", value: "DECLINED", status: 0 },
@@ -97,7 +94,6 @@ const statusOptions = [
 ];
 
 const auditStatusOptions = [
-  { label: "ALL", value: "" },
   { label: "AUDITHOLD", value: "AUDITHOLD", status: 2 },
   { label: "REAUDIT", value: "REAUDIT", status: 0 },
   { label: "AUDIT_PENDING", value: "AUDIT_PENDING", status: 0 },
@@ -106,15 +102,20 @@ const auditStatusOptions = [
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED", status: 0 },
 ];
 
-const Patient = ({ getTrackingList, loader, response }) => {
+const Patient = ({
+  getTrackingList,
+  loader,
+  response,
+  filteredList,
+  getFilters,
+  patientDetails,
+}) => {
   const navigate = useRouter();
-  const dispatch = useDispatch();
-  const filteredList = useSelector((state) => state.filters.createdBy);
   const sideMenu = useSelector((state) => state.sideMenu);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
-  const [selectedOption, SetSelectedOption] = useState("");
+  const [selectedOption, SetSelectedOption] = useState(null);
   const [searchTextValue, setSearchTextValue] = useState("");
   const [dueDateStart, setDueDateStart] = useState("");
   const [dueDateEnd, setDueDateEnd] = useState("");
@@ -130,25 +131,17 @@ const Patient = ({ getTrackingList, loader, response }) => {
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-  const [parsedData, setParsedData] = useState([]);
   const [allocatedStartDate, setAllocatedStartDate] = useState("");
   const [allocatedEndDate, setAllocatedEndDate] = useState("");
   const [auditedStartDate, setAuditedStartDate] = useState("");
   const [auditedEndDate, setAuditedEnsDate] = useState("");
   const [auditedDueStartDate, setAuditedDueStartDate] = useState("");
   const [auditedDueEndDate, setAuditedDueEndDate] = useState("");
-  const [selAllocatedBy, setSelAllocatedBy] = useState("");
-  const [trackChart, setTrackChart] = useState({
-    COMPLETED: 0,
-    PENDING: 0,
-    DECLINED: 0,
-    HOLD: 0,
-  });
-  const [selAllocatedTo, setSelAllocatedTo] = useState("");
-  const [auditSelectedOption, setAuditSelectedOption] = useState("");
-  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
+  const [selAllocatedBy, setSelAllocatedBy] = useState(null);
+  const [selAllocatedTo, setSelAllocatedTo] = useState(null);
+  const [auditSelectedOption, setAuditSelectedOption] = useState(null);
+  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState(null);
   const [allocatedSortOrder, setAllocatedSortOrder] = useState("DESC");
   const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
@@ -163,19 +156,22 @@ const Patient = ({ getTrackingList, loader, response }) => {
 
   // new changes
 
-  const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
+  const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState(null);
 
   useEffect(() => {
-
     if (window !== "undefined") {
-      setIsLoading(true)
+      setIsLoading(true);
       if (navigate) {
-        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0)
-        setPaginationFirst(navigate?.query?.paginationFirst ? navigate?.query?.paginationFirst : 0)
+        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
+        setPaginationFirst(
+          navigate?.query?.paginationFirst
+            ? navigate?.query?.paginationFirst
+            : 0
+        );
       }
     }
-    setIsLoading(false)
-  }, [navigate])
+    setIsLoading(false);
+  }, [navigate]);
 
   useEffect(() => {
     const data = {
@@ -186,32 +182,32 @@ const Patient = ({ getTrackingList, loader, response }) => {
       selectedOption: clear ? "" : selectedOption ? selectedOption?.value : "",
       processedStart: clear ? "" : processedStart,
       processedEnd: clear ? "" : processedEnd,
-      selAllocatedTo: clear ? "" : selAllocatedTo ? selAllocatedTo?.value : "",
+      selAllocatedTo: clear ? "" : selAllocatedTo ? selAllocatedTo : "",
       auditedStartDate: clear ? "" : auditedStartDate,
       auditedEndDate: clear ? "" : auditedEndDate,
       allocatedStartDate: clear ? "" : allocatedStartDate,
       allocatedEndDate: clear ? "" : allocatedEndDate,
-      selAllocatedBy: clear ? "" : selAllocatedBy ? selAllocatedBy?.value : "",
+      selAllocatedBy: clear ? "" : selAllocatedBy ? selAllocatedBy : "",
       auditedDueStartDate: clear ? "" : auditedDueStartDate,
       auditedDueEndDate: clear ? "" : auditedDueEndDate,
       auditSelectedOption: clear
         ? ""
         : auditSelectedOption
-          ? auditSelectedOption?.value
-          : "",
+        ? auditSelectedOption
+        : "",
       selAuditAllocatedBy: clear
         ? ""
         : selAuditAllocatedBy
-          ? selAuditAllocatedBy?.value
-          : "",
+        ? selAuditAllocatedBy
+        : "",
       auditSelAllocatedTo: clear
         ? ""
         : auditSelAllocatedTo
-          ? auditSelAllocatedTo?.value
-          : "",
+        ? auditSelAllocatedTo
+        : "",
       sort,
     };
-    setIsLoading(true)
+    setIsLoading(true);
     getTrackingList({ data: data });
   }, [
     pageNo,
@@ -304,7 +300,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
   };
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails({ data: data });
     if (data.computing == 2) {
       const controller = new AbortController();
       const { signal } = controller;
@@ -520,9 +516,9 @@ const Patient = ({ getTrackingList, loader, response }) => {
     setTableLoading(true);
     // getAllList(response?.response);
   };
-  useEffect(()=>{
-    dispatch(getFilters("createdBy"));
-  },[])
+  useEffect(() => {
+    getFilters({ field: "createdBy" });
+  }, []);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -540,8 +536,8 @@ const Patient = ({ getTrackingList, loader, response }) => {
                             // audioAllocatedTo
                             isAuditAllocatedToSelector={true}
                             auditAllocatedTolabel="Audit Allocated to"
-                            auditallocatedToOptoons={generateOptionsList(
-                              filteredList
+                            auditallocatedToOptoons={generateOptionsForNewStore(
+                              filteredList?.data?.response
                             )}
                             setAuditSelAllocatedTo={setAuditSelAllocatedTo}
                             setSearch={setSearchTextValue}
@@ -635,7 +631,11 @@ const Patient = ({ getTrackingList, loader, response }) => {
                           />
                         </div>
                         <div className="col-xl-2">
-                          <DailyTask trackChart={response?.response?.patientDTOList?.content} />
+                          <DailyTask
+                            trackChart={
+                              response?.response?.patientDTOList?.content
+                            }
+                          />
                         </div>
                       </div>
 
@@ -648,7 +648,9 @@ const Patient = ({ getTrackingList, loader, response }) => {
                         ) : (
                           <>
                             <TrackingTable
-                              patinetListAll={response?.response?.patientDTOList?.content}
+                              patinetListAll={
+                                response?.response?.patientDTOList?.content
+                              }
                               actionBodyTemplate={actionBodyTemplate}
                               statusBodyTemplate={processstatusBodyTemplate}
                               auditBodyTemplate={auditstatusBodyTemplate}
@@ -662,7 +664,7 @@ const Patient = ({ getTrackingList, loader, response }) => {
                               setSortAuditOrder={setSortAuditOrder}
                               sortDueOrder={sortDueOrder}
                               setSortDueOrder={setSortDueOrder}
-                              sortAuditDueOrder={sortAuditDueOrder} 
+                              sortAuditDueOrder={sortAuditDueOrder}
                               setSortAuditDueOrder={setSortAuditDueOrder}
                             />
                             <div>
@@ -670,11 +672,18 @@ const Patient = ({ getTrackingList, loader, response }) => {
                                 <Paginator
                                   first={pageNo === 0 ? 0 : paginationFirst}
                                   rows={15}
-                                  totalRecords={response?.response?.patientDTOList?.totalElements}
+                                  totalRecords={
+                                    response?.response?.patientDTOList
+                                      ?.totalElements
+                                  }
                                   onPageChange={onPageChange}
                                 />
                                 <div className="total-pages">
-                                  Total count: {response?.response?.patientDTOList?.totalElements}
+                                  Total count:{" "}
+                                  {
+                                    response?.response?.patientDTOList
+                                      ?.totalElements
+                                  }
                                 </div>
                               </div>
                             </div>
@@ -691,15 +700,18 @@ const Patient = ({ getTrackingList, loader, response }) => {
       </div>
     </>
   );
-}
+};
 
 const connector = connect(
   (state) => ({
     response: state.admin.workqueue?.trackingList?.data,
     loader: state.admin?.workqueue?.trackingLoader,
+    filteredList: state.admin.patientAllocate?.filtersList,
   }),
   {
     getTrackingList: allActions.getTrackingList,
+    getFilters: allocationActions.getFiltersList,
+    patientDetails: workFlowActions.getPatientDetails,
   }
 );
-export default connector(Patient)
+export default connector(Patient);

@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
 import dayjs from "dayjs";
-import Image from "next/image";
-import completed from "../../../../images/trackingImages/CompletedTrack.png";
 import calender from "../../../../images/dashboard/calender.png";
 import Card from "../../../../components/card";
-import allocated from "../../../../images/dashboard/allocated.png";
-import pending from "../../../../images/trackingImages/PendingTrack.png";
-import hold from "../../../../images/dashboard/HoldTrack.png";
 import { Col, Empty, Row, Skeleton, Spin } from "antd";
 import HeadTitle from "../../../../components/headtitle";
-import holdbg from "../../.../../../../images/dashboard/holdbg.png";
 import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.png";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
@@ -18,13 +12,12 @@ import { useSelector, connect } from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 import declinedBg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
-import declineIcon from "../../.../../../../images/trackingImages/DeclineTrack.png";
 import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
  import { faCircleCheck ,faClockRotateLeft,faUsers} from "@fortawesome/free-solid-svg-icons";
 
-const WorkFlow = ({ worlFlowData }) => {
+const WorkFlow = ({ worlFlowData ,DateRanges}) => {
   const currentDate = dayjs();
-  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
+  // const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const [openPicker, setOpenPicker] = useState(false);
 
   const last30thDate = currentDate?.subtract(31, "day");
@@ -164,5 +157,6 @@ const WorkFlow = ({ worlFlowData }) => {
 };
 const enhancer = connect((state) => ({
   worlFlowData: state?.reviewer?.dashboard?.workFlow,
+  DateRanges:state?.workFlow?.dateRange
 }));
 export default enhancer(WorkFlow);
