@@ -28,6 +28,7 @@ const PdfDrawer = ({
   getAllBatches,
   selectedBatch,
   setSelectedBatch,
+  upoloadFiles
 }) => {
   const [form] = Form.useForm();
   const [selectedType, setSelectedType] = useState(null);
@@ -265,5 +266,6 @@ const PdfDrawer = ({
 const enhancer = connect((state) => ({}), {
   getCreateBatch: tenantActions.getCreateBatch,
   getAllBatches: tenantActions.getAllBatches,
+  upoloadFiles:tenantActions.upoloadFiles
 });
 export default enhancer(PdfDrawer);

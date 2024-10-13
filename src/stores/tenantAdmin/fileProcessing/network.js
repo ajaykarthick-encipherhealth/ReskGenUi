@@ -19,6 +19,14 @@ export async function uploadFile({ data }) {
   const res = await requestPortalFiles(`aiservice/ai/upload`, options);
   return res;
 }
+export async function uploadFilesRadiology({ data }) {
+  const options = {
+    method: "POST",
+    body: data
+  };
+  const res = await requestPortalFiles(`aiservice/ai/upload/radiology`, options);
+  return res;
+}
 
 export async function addPatient({ data }) {
   const options = {

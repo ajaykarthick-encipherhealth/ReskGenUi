@@ -1,4 +1,4 @@
-import { requestPortal } from "../../../utils/network";
+import { requestPortal, requestPortalFiles } from "../../../utils/network";
 
 export async function batchUploadCall({ obj }) {
   const options = {
@@ -56,6 +56,18 @@ export async function batchDetails({
   };
   const data = await requestPortal(
     `dbservice/batch/batchuploaddetails?batchId=${batchId}&page=${page}&size=15&searchString=${search}&fileStatus=${fileStatus?fileStatus:""}&startDate=${startDate?startDate:""}&endDate=${endDate?endDate:""}`,
+    options
+  );
+  return data;
+}
+
+export async function uploadFiles({obj}) {
+  const options = {
+    method: "POST",
+    body: obj
+  };
+  const data = await requestPortalFiles(
+    `management/batch/upload`,
     options
   );
   return data;

@@ -17,3 +17,7 @@ export const getBatchInfo=createActionThunk(
   'GET_BATCH_INFO',
   network.batchDetails
 )
+export const upoloadFiles=createActionThunk(
+  'UPOLOAD_FILES',
+  network.uploadFiles
+)

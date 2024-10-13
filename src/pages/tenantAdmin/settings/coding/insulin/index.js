@@ -105,13 +105,14 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
       },
     };
     setSelectFile(formData);
-    const res = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `management/tenantAdmin/codes/upload
-      `,
-      formData,
-      headers
-    );
+    const res = await uploadFiles({obj:formData})
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `management/tenantAdmin/codes/upload
+    //   `,
+    //   formData,
+    //   headers
+    // );
     if (res.status == "SUCCESS") {
       getResponePopup(res);
     } else if (res.status == "USER_DEFINED_ERROR") {

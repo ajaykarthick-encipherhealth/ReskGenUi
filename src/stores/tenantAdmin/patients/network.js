@@ -1,4 +1,4 @@
-import { requestPortal } from "../../../utils/network";
+import { requestPortal, requestPortalFiles } from "../../../utils/network";
 import { getStorage } from "../../../utils/storages";
 
 export async function getAllOrganization() {
@@ -54,6 +54,30 @@ export async function submitPatientId({obj}) {
   };
   const data = await requestPortal(
     `dbservice/patient`,
+    options
+  );
+  return data;
+}
+
+export async function uploadFiles({obj}) {
+  const options = {
+    method: "POST",
+    body: obj
+  };
+  const data = await requestPortalFiles(
+    `aiservice/ai/upload`,
+    options
+  );
+  return data;
+}
+
+export async function uploadFilesRadiology({obj}) {
+  const options = {
+    method: "POST",
+    body: obj
+  };
+  const data = await requestPortalFiles(
+    `aiservice/ai/upload/radiology`,
     options
   );
   return data;

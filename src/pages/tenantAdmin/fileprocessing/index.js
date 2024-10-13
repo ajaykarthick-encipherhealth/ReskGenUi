@@ -24,7 +24,9 @@ const Patient = ({
   patientDetails,
   getPatients,
   getUsersList,
-  addPatientFiles
+  addPatientFiles,
+  getUploadFile,
+  uploadFilesRadiology
 }) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -265,20 +267,22 @@ const Patient = ({
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
 
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload
-      `,
-      formData,
-      headers
-    );
+    const response = await getUploadFile({obj:formData})
+    
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload
+    //   `,
+    //   formData,
+    //   headers
+    // );
     if (response?.status == 202) {
       getAllList(localUserId, pageNo, pageSize);
 
@@ -301,19 +305,20 @@ const Patient = ({
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/radiology
-    `,
-      formData,
-      headers
-    );
+    const response = await uploadFilesRadiology({obj:formData})
+    //  axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload/radiology
+    // `,
+    //   formData,
+    //   headers
+    // );
     if (response?.status == 202) {
       getAllList(localUserId, pageNo, pageSize);
       setAddPatient(false);
@@ -416,6 +421,9 @@ const enhancer = connect(
     getPatients: adminActions.patientsAction,
     getUsersList:tenantAdminActionFile.getUsersList,
     addPatientFiles:tenantAdminActionFile.getAddPatient,
+    getUploadFile:tenantAdminActionFile.getUploadFile,
+    uploadFilesRadiology:tenantAdminActionFile.uploadFilesRadiology
+
   }
 );
 export default enhancer(Patient);

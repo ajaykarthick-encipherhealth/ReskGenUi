@@ -13,6 +13,12 @@ export const getAddUser = createActionThunk(
   "ADD_USER",
   network.AddUser
 );
+export const addPatient = createActionThunk(
+  "ADD_PATIENTS",
+  network.addPatient
+);
+
+
 export const getEnableUser = createActionThunk(
   "ENABLE_USER",
   network.enableUser

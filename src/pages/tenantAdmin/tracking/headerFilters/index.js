@@ -3,7 +3,6 @@ import { DatePicker, Popover, Tooltip,Select } from "antd";
 import Image from "next/image";
 import styles from "../../../../pages/reviewer/report/report.module.css";
 import Tracking from "../../tracking/tracking.module.css";
-import { useDispatch } from "react-redux";
 import Legends from "../../../../components/legends";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPalette, faChartSimple } from "@fortawesome/free-solid-svg-icons";
@@ -146,7 +145,6 @@ const HeaderFilters = ({
   orgAllList,
   setSelectedOrgList,
 }) => {
-  const dispatch = useDispatch();
   const [trackInput, setTrackInput] = useState("");
   const [activeFilters, setActiveFilters] = useState([]);
   const [selectAll, setSelectAll] = useState(false);

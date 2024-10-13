@@ -28,7 +28,7 @@ export const inputTypeOptions = [
   { label: "Manual", value: "MANUAL" },
   { label: "Group Id", value: "GROUP_ID" },
 ];
-const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch }) => {
+const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch, upoloadFiles }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [selectedType, setSelectedType] = useState(null);
@@ -303,5 +303,6 @@ const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch }) => {
 const enhancer = connect((state) => ({}), {
   getCreateBatch: tenantActions.getCreateBatch,
   getAllBatches: tenantActions.getAllBatches,
+  upoloadFiles:tenantActions.upoloadFiles
 });
 export default enhancer(FhirDrawer);

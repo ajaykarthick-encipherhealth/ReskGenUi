@@ -103,6 +103,15 @@ export const AddUser = async (data, setFormData) => {
   }
 };
 
+export async function addPatient({ data }) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+  const res = await requestPortal(`dbservice/patient`, options);
+  return res;
+}
+
 export const enableUser = async ({
   checked,
   user,
