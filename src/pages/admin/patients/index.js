@@ -471,7 +471,6 @@ const Patient = ({
     selCreatedBy,
     sort
   ) => {
-    // console.log("getCall", search);
     const data = {
       pageNo,
       computedStartDate,
@@ -485,24 +484,19 @@ const Patient = ({
       selCreatedBy,
       sort,
     };
-    const response = await getPatients({ data: data });
-    if (response.status == "SUCCESS") {
-      console.log(response?.response?.content, "response");
-    }
+    getPatients({ data: data });
   };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const query = navigate?.query;
       const encodedString = query?.params;
-      console.log(query)
       if (encodedString && typeof encodedString === "string") {
         try {
           setParamsFilter("check");
           const decodedParams = JSON.parse(
             atob(encodedString?.replace(/-/g, "+").replace(/_/g, "/"))
           );
-          console.log(decodedParams);
           setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
           setPaginationFirst(
             decodedParams?.paginationFirst ? decodedParams?.paginationFirst : 0
@@ -517,13 +511,13 @@ const Patient = ({
           setSelAllocatedBy(decodedParams?.selAllocatedBy || "");
           setSelAllocatedTo(decodedParams?.setSelAllocatedTo || "");
           setSelCreatedBy(decodedParams?.createdBy || "");
-          setSelectedDates(
+          setSelectedDate2s(
             decodedParams?.completedStartDate && [
               dayjs(decodedParams?.completedStartDate),
               dayjs(decodedParams?.completedEndDate),
             ]
           );
-          setSelectedDate2s(
+          setSelectedDates(
             (decodedParams?.computedStartDate && [
               dayjs(decodedParams?.computedStartDate),
               dayjs(decodedParams?.computedEndDate),
@@ -584,7 +578,6 @@ const Patient = ({
   useEffect(() => {
     getFilters({ field: "createdBy" });
   }, []);
-  // console.log("search", response?.response?.content);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -648,6 +641,7 @@ const Patient = ({
                             // defaultAllocatedBy={"All"}
                             defaultAllocatedBy={"Select CreatedBy"}
                             setSelCreatedBy={setSelCreatedBy}
+                            selAllocatedBy={selAllocatedBy}
                             addUser={true}
                             addUserForm={addPatientFormId}
                             bullets={bullets}

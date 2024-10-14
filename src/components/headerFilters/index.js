@@ -174,7 +174,8 @@ const HeaderFilters = ({
   setPageNo,
   selectDefaultValue,
   orgValue,
-  fromTenantPatients
+  fromTenantPatients,
+  selAllocatedBy
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -584,6 +585,7 @@ const HeaderFilters = ({
                 </label>
                 <div class="form-group has-search custom-react-select">
                   <Select
+                    value={selAllocatedBy? selAllocatedBy:null}
                     onChange={(selectedOption) => {
                       setSelAllocatedBy(selectedOption ? selectedOption : null);
                       if (setPageNo) {
@@ -634,6 +636,7 @@ const HeaderFilters = ({
                 </label>
                 <div class="form-group has-search custom-react-select">
                   <Select
+                  value={alloca? orgValue:null}
                     onChange={(selectedOption) => {
                       setSelAllocatedTo(selectedOption ? selectedOption : "");
                       if (setPageNo) {

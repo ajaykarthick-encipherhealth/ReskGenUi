@@ -63,7 +63,7 @@ function AddPatientListTable({
         navigate.push({
           pathname: "/admin/patients/details",
           query: {
-            encodedValue: encodedValue,
+            params: encodedValue,
           },
         });
       }
