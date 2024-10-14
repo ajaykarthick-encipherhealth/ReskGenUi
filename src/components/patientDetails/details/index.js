@@ -878,7 +878,6 @@ const Details = ({
                                                           key={flagIndex}
                                                           className="p-1"
                                                         >
-                                                          {/* Display the flag color and name */}
                                                           <SvgFlag
                                                             fillColor={
                                                               flag.flagDetails
