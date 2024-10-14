@@ -87,16 +87,16 @@ const EmrFhir = ({
     },
   ];
 
-  const handleConnection = async (emr) => {
-    try {
-      const res = await axios.get(
-        ENDPOINTS?.apiLocal + `emr/fhir/getAuthorization?emr=${emr}`
-      );
-      setEmrUrl(res.data.urlToRedirect);
-      setOpen(true);
-      // window.open(res.data.urlToRedirect, "_blank");
-    } catch (error) {}
-  };
+  // const handleConnection = async (emr) => {
+  //   try {
+  //     const res = await axios.get(
+  //       ENDPOINTS?.apiLocal + `emr/fhir/getAuthorization?emr=${emr}`
+  //     );
+  //     setEmrUrl(res.data.urlToRedirect);
+  //     setOpen(true);
+  //     // window.open(res.data.urlToRedirect, "_blank");
+  //   } catch (error) {}
+  // };
 
   const handleSubmit = async (values) => {
     if (isSelectEMR) {

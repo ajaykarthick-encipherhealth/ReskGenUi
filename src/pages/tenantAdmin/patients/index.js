@@ -60,6 +60,8 @@ const Patient = ({
   webSocketData,
   loading,
   getPatientId,
+  uploadFiles,
+  uploadFilesRadiology
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -488,19 +490,22 @@ const Patient = ({
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
     formData.append("emrtype", emrType);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload
-      `,
-      formData,
-      headers
-    );
+    const response = await uploadFiles({obj:formData})
+    
+    
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload
+    //   `,
+    //   formData,
+    //   headers
+    // );
     if (response?.status === 200) {
       // getAllList(response);
 
@@ -543,19 +548,21 @@ const Patient = ({
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
     formData.append("emrtype", emrType);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/radiology
-    `,
-      formData,
-      headers
-    );
+    const response = await uploadFilesRadiology({obj:formData})
+    
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload/radiology
+    // `,
+    //   formData,
+    //   headers
+    // );
     if (response?.status == 202) {
       // getAllList(localUserId, pageNo, pageSize);
       setAddPatient(false);
@@ -832,6 +839,8 @@ const enhancer = connect(
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     getAllPatients: tenantAdminAction.getAllPatientAction,
     getPatientId: tenantAdminAction.submitPatientId,
+    uploadFiles:tenantAdminAction.uploadFiles,
+    uploadFilesRadiology:tenantAdminAction.uploadFilesRadiology
   }
 );
 export default enhancer(Patient);

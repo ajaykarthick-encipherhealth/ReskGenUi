@@ -15,3 +15,12 @@ export const submitPatientId = createActionThunk(
   "SUBMIT_PATIENT_ID",
   network.submitPatientId
 );
+export const uploadFiles = createActionThunk(
+  "UPLOAD_FILES",
+  network.uploadFiles
+);
+
+export const uploadFilesRadiology = createActionThunk(
+  "UPLOAD_FILES_RADIOLOGY",
+  network.uploadFilesRadiology
+);

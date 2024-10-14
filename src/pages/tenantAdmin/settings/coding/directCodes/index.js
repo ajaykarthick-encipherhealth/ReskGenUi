@@ -13,7 +13,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import Search from "../../../../../components/table/tenantSettingsTable/search";
 import FilterButton from "../../../../../components/table/tenantSettingsTable/filterButton";
 import FileUpload from "../../../../../components/table/tenantSettingsTable/fileUpload";
-import { useSelector } from "react-redux";
+
 
 const DirectCodes = ({ updateSettings, getCodingDetails, list }) => {
   const [openModal, setOpenModal] = useState(false);
