@@ -48,11 +48,11 @@ const AllocateModal = ({
     return firstNameInitial?.toUpperCase() + secondNameInitial?.toUpperCase();
   };
 
-  const getUserList = async (search) => {
+  const getUserList = async (search = "") => {
     // const orgId = getStorage("orgId");
     // let resoureUrl = `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=${orgId}&searchString=${search}`;
     const response = await getL1UsersList({
-      searchString: search,
+      search: search  || "",
     });
     if (response.status == "SUCCESS") {
       let result = response?.response;
@@ -155,6 +155,7 @@ const AllocateModal = ({
             }
           }}
         />
+
       </div>
       <div className="overflow-auto" style={{ height: "640px" }}>
         {userDetails.length > 0 ? (
