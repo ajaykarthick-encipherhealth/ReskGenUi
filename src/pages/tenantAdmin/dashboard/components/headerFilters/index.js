@@ -117,7 +117,7 @@ const index = ({
           </div>
         </div>
         {isCustom && (
-          <div className="col-5 d-flex">
+          <div className="col-4 d-flex">
             <div
               className={`${styles.flterContainer}`}
               style={{ fontSize: "14px" }}
