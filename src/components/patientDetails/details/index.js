@@ -57,6 +57,7 @@ import ManuallyAddProvider from "./manuallyAddProvider";
 import { getAge } from "../../../utils/reusable";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { truncateString } from "./components/function/ReusableFunctions";
+import SvgFlag from "./components/svg/svg";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -717,9 +718,7 @@ const Details = ({
                   <div className="row">
                     {activeTab == "2" || activeTab == "1" ? (
                       <div className="d-flex">
-                        <div
-                          style={{ zIndex: "1" }}
-                        >
+                        <div style={{ zIndex: "1" }}>
                           <Button
                             onClick={backToPatientData}
                             className={`ms-2 ${visitStyles.backArrowBtn}`}
@@ -837,43 +836,57 @@ const Details = ({
                                     {patientIdDetailsData?.data?.response?.dob}
                                   </h6>
                                 </div>
+                                {console.log(
+                                  flagsDetailsResult,
+                                  "flagsDetailsResult"
+                                )}
                                 <div className="">
-                                  {flagsDetailsResult?.response[0] && (
-                                    <div className="mt-2">
-                                      <div
-                                        className="d-flex align-items-center justify-content-center cr-pointer"
-                                        onClick={() =>
-                                          setFlagContainerActive("Flag")
-                                        }
-                                      >
-                                        <Tooltip
-                                          placement="bottom"
-                                          title={flagsDetailsResult?.response[0]?.flagDetails?.flagName.replaceAll(
-                                            "_",
-                                            " "
-                                          )}
-                                        >
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="30"
-                                            height="30"
-                                            viewBox="0 0 800 800"
-                                            fill={
-                                              flagsDetailsResult?.response[0]
-                                                ?.flagDetails?.flagColour
+                                  {flagsDetailsResult?.response.length > 0 &&
+                                    // Sort the flags based on priority and get the first one
+                                    (() => {
+                                      const sortedFlags =
+                                        flagsDetailsResult.response.sort(
+                                          (a, b) =>
+                                            a.flagDetails.priority -
+                                            b.flagDetails.priority
+                                        );
+                                      const highestPriorityFlag =
+                                        sortedFlags[0];
+                                      return (
+                                        <div className="mt-2">
+                                          <div
+                                            className="d-flex align-items-center justify-content-center cr-pointer"
+                                            onClick={() =>
+                                              setFlagContainerActive("Flag")
                                             }
                                           >
-                                            <path
-                                              d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-                                              stroke="#000"
-                                              stroke-width="10"
-                                            />
-                                          </svg>
-                                        </Tooltip>
-                                      </div>
-                                    </div>
-                                  )}
+                                            {console.log(
+                                              highestPriorityFlag.flagDetails
+                                                .flagName,
+                                              "highestPriorityFlag.flagDetails.flagName"
+                                            )}
+                                            <Tooltip
+                                              placement="bottom"
+                                              title={highestPriorityFlag.flagDetails.flagName.replaceAll(
+                                                "_",
+                                                " "
+                                              )}
+                                            >
+                                              <span>
+                                                <SvgFlag
+                                                  fillColor={
+                                                    highestPriorityFlag
+                                                      .flagDetails.flagColour
+                                                  }
+                                                />
+                                              </span>
+                                            </Tooltip>
+                                          </div>
+                                        </div>
+                                      );
+                                    })()}
                                 </div>
+
                                 <div className="">
                                   <div
                                     className={`${visitStyles.priorityStatus} p-0`}
@@ -1307,7 +1320,6 @@ const Details = ({
                       </div>
                     </div>
                   </div>
-                 
 
                   {/* Modals */}
 
