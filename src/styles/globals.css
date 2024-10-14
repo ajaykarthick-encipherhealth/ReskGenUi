@@ -9271,6 +9271,12 @@ tr>td{
 .ant-select .ant-select-arrow {
   margin-top: 0px !important;
 }
+.dosSelect .ant-select-arrow {
+  margin-top: -5px !important;
+}
+.custom_select_type .ant-select-arrow {
+   margin-top: -5px !important;
+}
 .ant-select-outlined {
   border: none !important;
 }

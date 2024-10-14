@@ -133,6 +133,11 @@ function AddPatientListTable({
                         count={data.flagList.length}
                         offset={[5, 5]}
                         size="small"
+                        style={{
+                          right: "2px",
+                          marginTop: "2px",
+                          background: "#04306f",
+                        }}
                       >
                         <SvgFlag
                           fillColor={priorityFlag?.flagColour || "transparent"}

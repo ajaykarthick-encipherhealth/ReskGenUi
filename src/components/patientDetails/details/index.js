@@ -841,7 +841,7 @@ const Details = ({
                                   "flagsDetailsResult"
                                 )}
                                 <div className="">
-                                  {flagsDetailsResult?.response.length > 0 &&
+                                  {flagsDetailsResult?.response?.length > 0 &&
                                     (() => {
                                       const sortedFlags =
                                         flagsDetailsResult.response.sort(
@@ -860,62 +860,66 @@ const Details = ({
                                             onClick={() =>
                                               setFlagContainerActive("Flag")
                                             }
-                                          >                                   
-                                              <Popover
-                                                content={
-                                                  <div
-                                                    style={{
-                                                      height: "auto",
-                                                      overflowY: "scroll",
-                                                    }}
-                                                  >
-                                                    <strong>
-                                                      Flag details
-                                                    </strong>
-                                                    {sortedFlags?.map(
-                                                      (flag, flagIndex) => (
-                                                        <div
-                                                          key={flagIndex}
-                                                          className="p-1"
-                                                        >
-                                                          <SvgFlag
-                                                            fillColor={
-                                                              flag?.flagDetails
-                                                                .flagColour
-                                                            }
-                                                          />
-                                                          <span className="ml-2">
-                                                            {flag?.flagDetails?.flagName.replaceAll(
-                                                              "_",
-                                                              " "
-                                                            )}
-                                                          </span>
-                                                        </div>
-                                                      )
-                                                    )}
-                                                  </div>
-                                                }
-                                                placement="right"
-                                              >
-                                                <Badge
-                                                  count={
-                                                    flagsDetailsResult?.response
-                                                      .length
-                                                  }
-                                                  offset={[5, 5]}
-                                                  size="small"
+                                          >
+                                            <Popover
+                                              content={
+                                                <div
+                                                  style={{
+                                                    height: "auto",
+                                                    overflowY: "scroll",
+                                                  }}
                                                 >
-                                                  <span>
-                                                    <SvgFlag
-                                                      fillColor={
-                                                        highestPriorityFlag
-                                                          .flagDetails
-                                                          .flagColour
-                                                      }
-                                                    />
-                                                  </span>
-                                                </Badge>
-                                              </Popover>                                         
+                                                  <strong>Flag details</strong>
+                                                  {sortedFlags?.map(
+                                                    (flag, flagIndex) => (
+                                                      <div
+                                                        key={flagIndex}
+                                                        className="p-1"
+                                                      >
+                                                        <SvgFlag
+                                                          fillColor={
+                                                            flag?.flagDetails
+                                                              ?.flagColour
+                                                          }
+                                                        />
+                                                        <span className="ml-2">
+                                                          {flag?.flagDetails?.flagName.replaceAll(
+                                                            "_",
+                                                            " "
+                                                          )}
+                                                        </span>
+                                                      </div>
+                                                    )
+                                                  )}
+                                                </div>
+                                              }
+                                              placement="right"
+                                            >
+                                              <Badge
+                                                count={
+                                                  flagsDetailsResult?.response
+                                                    ?.length
+                                                }
+                                                offset={[5, 5]}
+                                                size="medium"
+                                                style={{
+                                                  right: "10px",
+                                                  background: "#04306f",
+                                                }}
+                                              >
+                                                <span>
+                                                  <SvgFlag
+                                                    fillColor={
+                                                      highestPriorityFlag
+                                                        ?.flagDetails
+                                                        ?.flagColour
+                                                    }
+                                                    height="35px"
+                                                    width="35px"
+                                                  />
+                                                </span>
+                                              </Badge>
+                                            </Popover>
                                           </div>
                                         </div>
                                       );
