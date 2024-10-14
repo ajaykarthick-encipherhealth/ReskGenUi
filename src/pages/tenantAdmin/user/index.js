@@ -107,13 +107,11 @@ const UserList = ({
     userFormData.password = encrptedData?.pass;
     userFormData.passwordIv = encrptedData.iv;
     const response = await AddUser(userFormData, setFormData);
-    if (response?.data?.status === "SUCCESS") {
       setAddUser(false);
       setUseAdd(true);
       form.resetFields();
       setIsLoadingBtn(false);
       getResponePopup(response);
-    }
     setRoleValue([]);
     setValidated(true);
   };
