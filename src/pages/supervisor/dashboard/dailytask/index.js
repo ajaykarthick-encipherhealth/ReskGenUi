@@ -104,7 +104,7 @@ const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData, dailyt
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
       const matchingStatusData = responseArray?.find((status) => {
-        return status?.date === dayInfo?.dateString;
+        return  status?.date === dayInfo?.dateString;
       });
 
       return {
