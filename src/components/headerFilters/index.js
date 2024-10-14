@@ -636,7 +636,6 @@ const HeaderFilters = ({
                 </label>
                 <div class="form-group has-search custom-react-select">
                   <Select
-                  value={alloca? orgValue:null}
                     onChange={(selectedOption) => {
                       setSelAllocatedTo(selectedOption ? selectedOption : "");
                       if (setPageNo) {
