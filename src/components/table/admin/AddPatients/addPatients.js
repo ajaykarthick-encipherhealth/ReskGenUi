@@ -107,7 +107,7 @@ function AddPatientListTable({
                     const sortedFlags = [...data.flagList].sort((a, b) => {
                       if (a.priority === null) return 1;
                       if (b.priority === null) return -1;
-                      return b.priority - a.priority;
+                      return a.priority - b.priority;
                     });
                     const priorityFlag = sortedFlags[0];
 

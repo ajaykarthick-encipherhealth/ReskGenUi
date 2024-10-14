@@ -26,7 +26,7 @@ import {
   faTimeline,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Avatar, Tooltip, Select, Badge, notification, Drawer } from "antd";
+import { Avatar, Tooltip, Select, Badge, notification, Drawer, Popover } from "antd";
 import { IMAGES, SVGICON } from "../../../jsx/constant/theme";
 import { Button, Offcanvas } from "react-bootstrap";
 import Image from "next/image";
@@ -842,16 +842,18 @@ const Details = ({
                                 )}
                                 <div className="">
                                   {flagsDetailsResult?.response.length > 0 &&
-                                    // Sort the flags based on priority and get the first one
                                     (() => {
+                                      // Sort the flags by priority in descending order (highest priority first)
                                       const sortedFlags =
                                         flagsDetailsResult.response.sort(
                                           (a, b) =>
-                                            a.flagDetails.priority -
-                                            b.flagDetails.priority
+                                            b.flagDetails.priority -
+                                            a.flagDetails.priority
                                         );
+
                                       const highestPriorityFlag =
                                         sortedFlags[0];
+
                                       return (
                                         <div className="mt-2">
                                           <div
@@ -859,28 +861,63 @@ const Details = ({
                                             onClick={() =>
                                               setFlagContainerActive("Flag")
                                             }
-                                          >
-                                            {console.log(
-                                              highestPriorityFlag.flagDetails
-                                                .flagName,
-                                              "highestPriorityFlag.flagDetails.flagName"
-                                            )}
-                                            <Tooltip
-                                              placement="bottom"
-                                              title={highestPriorityFlag.flagDetails.flagName.replaceAll(
-                                                "_",
-                                                " "
-                                              )}
-                                            >
-                                              <span>
-                                                <SvgFlag
-                                                  fillColor={
-                                                    highestPriorityFlag
-                                                      .flagDetails.flagColour
+                                          >                                   
+                                              <Popover
+                                                content={
+                                                  <div
+                                                    style={{
+                                                      height: "auto",
+                                                      overflowY: "scroll",
+                                                    }}
+                                                  >
+                                                    <strong>
+                                                      Flag details
+                                                    </strong>
+                                                    {sortedFlags?.map(
+                                                      (flag, flagIndex) => (
+                                                        <div
+                                                          key={flagIndex}
+                                                          className="p-1"
+                                                        >
+                                                          {/* Display the flag color and name */}
+                                                          <SvgFlag
+                                                            fillColor={
+                                                              flag.flagDetails
+                                                                .flagColour
+                                                            }
+                                                          />
+                                                          <span className="ml-2">
+                                                            {flag.flagDetails.flagName.replaceAll(
+                                                              "_",
+                                                              " "
+                                                            )}
+                                                          </span>
+                                                        </div>
+                                                      )
+                                                    )}
+                                                  </div>
+                                                }
+                                                placement="right"
+                                              >
+                                                <Badge
+                                                  count={
+                                                    flagsDetailsResult?.response
+                                                      .length
                                                   }
-                                                />
-                                              </span>
-                                            </Tooltip>
+                                                  offset={[5, 5]}
+                                                  size="small"
+                                                >
+                                                  <span>
+                                                    <SvgFlag
+                                                      fillColor={
+                                                        highestPriorityFlag
+                                                          .flagDetails
+                                                          .flagColour
+                                                      }
+                                                    />
+                                                  </span>
+                                                </Badge>
+                                              </Popover>                                         
                                           </div>
                                         </div>
                                       );
