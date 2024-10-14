@@ -58,11 +58,14 @@ const PdfDrawer = ({
           },
         };
 
-        return axios.post(
-          `${ENDPOINTS.apiEndoint}management/batch/upload`,
-          formData,
-          headers
-        );
+        return upoloadFiles({obj:formData})
+        
+        
+        // axios.post(
+        //   `${ENDPOINTS.apiEndoint}management/batch/upload`,
+        //   formData,
+        //   headers
+        // );
       });
 
       const responses = await Promise.all(uploadPromises);

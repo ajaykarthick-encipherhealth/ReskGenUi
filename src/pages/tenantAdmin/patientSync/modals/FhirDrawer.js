@@ -76,11 +76,15 @@ const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch, upoloadFi
       groupId: formVal?.groupId,
     };
     try {
-      const res = axios.post(
-        `${ENDPOINTS.apiEndoint}management/batch/upload`,
-        selectedType === "GROUP_ID" ? data : { ...data, file: fileList[0] },
-        selectedType !== "GROUP_ID" && headers
-      );
+      const res = await upoloadFiles( selectedType === "GROUP_ID" ? data : { ...data, file: fileList[0] },
+         selectedType !== "GROUP_ID")
+        
+      
+      // post(
+      //   `${ENDPOINTS.apiEndoint}management/batch/upload`,
+      //   selectedType === "GROUP_ID" ? data : { ...data, file: fileList[0] },
+      //   selectedType !== "GROUP_ID" && headers
+      // );
       console.log(res);
       form.resetFields();
     } catch (err) {
