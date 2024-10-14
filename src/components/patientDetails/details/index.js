@@ -846,8 +846,8 @@ const Details = ({
                                       const sortedFlags =
                                         flagsDetailsResult.response.sort(
                                           (a, b) =>
-                                            b.flagDetails.priority -
-                                            a.flagDetails.priority
+                                            b.flagDetails?.priority -
+                                            a.flagDetails?.priority
                                         );
 
                                       const highestPriorityFlag =
@@ -880,12 +880,12 @@ const Details = ({
                                                         >
                                                           <SvgFlag
                                                             fillColor={
-                                                              flag.flagDetails
+                                                              flag?.flagDetails
                                                                 .flagColour
                                                             }
                                                           />
                                                           <span className="ml-2">
-                                                            {flag.flagDetails.flagName.replaceAll(
+                                                            {flag?.flagDetails?.flagName.replaceAll(
                                                               "_",
                                                               " "
                                                             )}
@@ -1320,15 +1320,34 @@ const Details = ({
                         <div className={`${visitStyles.flag_container}`}>
                           <ul className="">
                             {flagList?.map((data) => {
+                              const isFlagDisabled =
+                                data.name === "Flag" && !isDosSelected;
+
                               return (
-                                <Tooltip title={data.name} placement="left">
+                                <Tooltip
+                                  title={data.name}
+                                  placement="left"
+                                  key={data.name}
+                                >
                                   <li
                                     className={
                                       flagContainerActive == data.name
                                         ? `${visitStyles.commentsTagActive}`
                                         : `${visitStyles.commentsTag}`
                                     }
-                                    onClick={() => addComments(data.name)}
+                                    onClick={() => {
+                                      if (!isFlagDisabled) {
+                                        addComments(data.name);
+                                      }
+                                    }}
+                                    style={
+                                      isFlagDisabled
+                                        ? {
+                                            cursor: "not-allowed",
+                                            opacity: 0.5,
+                                          }
+                                        : {}
+                                    }
                                   >
                                     {data.name === "Flag" ? (
                                       <Badge
