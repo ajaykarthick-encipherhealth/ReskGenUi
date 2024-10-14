@@ -106,6 +106,7 @@ const Patient = ({
   const [searchVal, setSearchVal] = useState("");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [errors, setErrors] = useState({ year: "" });
+  const [paramsFilter, setParamsFilter] = useState(null);
 
   // useEffect(() => {
   //   if (response?.response?.content?.length>0) {
@@ -457,7 +458,7 @@ const Patient = ({
     // getAllList(response?.response);
   };
 
-  const handleGetCall = async(
+  const handleGetCall = async (
     pageNo,
     computedStartDate,
     computedEndDate,
@@ -484,58 +485,24 @@ const Patient = ({
       selCreatedBy,
       sort,
     };
-    const response=await getPatients({ data: data });
-    if(response.status=="SUCCESS"){
-      console.log(response?.response?.content,"response")
+    const response = await getPatients({ data: data });
+    if (response.status == "SUCCESS") {
+      console.log(response?.response?.content, "response");
     }
   };
-
-
-  useEffect(() => {
-    var tenId = getStorage("tenantId");
-    var uId = getStorage("userId");
-    var orgId = getStorage("orgId");
-    setTenantId(tenId);
-    setLocalOrgId(orgId);
-    setLocalUserId(uId);
-    handleGetCall(
-      pageNo,
-      computedStartDate,
-      computedEndDate,
-      selectedOption,
-      searchVal,
-      completedStartDate,
-      completedEndDate,
-      selAllocatedTo,
-      selAllocatedBy,
-      selCreatedBy,
-      sort
-    );
-  }, [
-    pageNo,
-    computedStartDate,
-    computedEndDate,
-    selectedOption,
-    search,
-    completedStartDate,
-    completedEndDate,
-    selAllocatedTo,
-    selAllocatedBy,
-    selCreatedBy,
-    sort,
-    searchVal
-  ]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const query = navigate?.query;
-      const encodedString = query?.encodedValue;
+      const encodedString = query?.params;
+      console.log(query)
       if (encodedString && typeof encodedString === "string") {
         try {
+          setParamsFilter("check");
           const decodedParams = JSON.parse(
             atob(encodedString?.replace(/-/g, "+").replace(/_/g, "/"))
           );
-          // console.log(decodedParams);
+          console.log(decodedParams);
           setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
           setPaginationFirst(
             decodedParams?.paginationFirst ? decodedParams?.paginationFirst : 0
@@ -574,6 +541,46 @@ const Patient = ({
       }
     }
   }, []);
+
+  useEffect(() => {
+    setParamsFilter("check");
+    var tenId = getStorage("tenantId");
+    var uId = getStorage("userId");
+    var orgId = getStorage("orgId");
+    setTenantId(tenId);
+    setLocalOrgId(orgId);
+    setLocalUserId(uId);
+    if (paramsFilter) {
+      handleGetCall(
+        pageNo,
+        computedStartDate,
+        computedEndDate,
+        selectedOption,
+        searchVal,
+        completedStartDate,
+        completedEndDate,
+        selAllocatedTo,
+        selAllocatedBy,
+        selCreatedBy,
+        sort
+      );
+    }    
+  }, [
+    pageNo,
+    computedStartDate,
+    computedEndDate,
+    selectedOption,
+    search,
+    completedStartDate,
+    completedEndDate,
+    selAllocatedTo,
+    selAllocatedBy,
+    selCreatedBy,
+    sort,
+    searchVal,
+    paramsFilter
+  ]);
+
   useEffect(() => {
     getFilters({ field: "createdBy" });
   }, []);
