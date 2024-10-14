@@ -10,15 +10,13 @@ import {
   submitMeatQuery,
   updateMeatQuery,
 } from "../../../../../services/PatientsListSevice";
-import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import RegularButton from "../../../../../components/button";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { getStorage } from "../../../../../utils/storages";
-
+import { findDiseaseByCode } from "../../../../../stores/patient/details/network";
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -193,12 +191,9 @@ const AddMeatQuery = ({
 
   const getFindValidDiagnosisCode = async (value) => {
     try {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
-      );
-      if (response.data) {
-        if (response.data == "ICD disease not found") {
+      const response = await findDiseaseByCode(value);
+      if (response?.response) {
+        if (response.response == "ICD disease not found") {
           setAddValidCodeCheck(false);
         } else {
           setAddValidCodeCheck(true);

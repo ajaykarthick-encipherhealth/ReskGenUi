@@ -5,10 +5,8 @@ import moment from "moment";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
-import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import { getStorage } from "../../../../../utils/storages";
-
+import { getResponePopup } from "../../../../../utils/reusable";
 
 export const getEncounterDateBackground = ({
   value,
@@ -325,26 +323,14 @@ export const handleSubmitValidNotes = async ({
       encounterDate: selectDisDetails.encounterDate,
       capturedSections: selectDisDetails.capturedSections,
     };
-    const response = await axios.put(
-      ENDPOINTS.apiEndoint + apiURL,
-      dataFormatSuggested
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
+    const response = await movementApiCall(dataFormatSuggested, apiURL);
+    if (response.status == "SUCCESS") {
       setFileLoading(false);
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });    
+      getResponePopup(response);
       getRadiologyDetails(patientId);
     } else {
       setFileLoading(false);
-      notification.error({
-        message: result.response,
-        placement: "top",
-        duration: 1,
-      });
+      getResponePopup(response);
     }
   } catch (err) {
     setFileLoading(false);

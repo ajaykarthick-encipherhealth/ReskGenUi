@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Popover, Avatar, Tooltip, notification } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,7 +19,7 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import { getStorage } from "../../../../../utils/storages";
 import { DeleteOutlined } from "@ant-design/icons";
 import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
-import { deleteflag } from "../../../../../stores/patient/details/network";
+import { deleteflag, flagDetailsPost, getUserDetails } from "../../../../../stores/patient/details/network";
 import SvgFlag from "../svg/svg";
 import { getResponePopup } from "../../../../../utils/reusable";
 
@@ -101,10 +99,7 @@ const Flag = ({
         flagId: inputValue.flagId,
       };
       try {
-        const response = await axios.post(
-          ENDPOINTS.apiEndoint + `dbservice/flagdetails`,
-          dataFormatSuggested
-        );
+        const response = await flagDetailsPost(dataFormatSuggested);
         getResponePopup(response);
         getFlagDetailsData(
           patientDetailsResult?.data?.response?.patientId,
@@ -147,12 +142,9 @@ const Flag = ({
     );
 
     setTimeout(async () => {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint + `dbservice/user/get?userName=${userId}`
-      );
-
-      if (response.data) {
-        result = response.data.response;
+      const response = await getUserDetails(userId);
+      if (response?.response) {
+        result = response?.response;
         data = (
           <div className={visitStyles.userDetailsCard}>
             <div className={visitStyles.avatarStyle}>

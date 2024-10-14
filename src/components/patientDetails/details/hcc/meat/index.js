@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Badge, Offcanvas } from "react-bootstrap";
-import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { useSelector, useDispatch, connect } from "react-redux";
 import {
@@ -183,34 +181,6 @@ const Meat = ({
     notification.info({ message: "Tree Not Available", duration: 1 });
   };
 
-  const onFinishMeat = async (form) => {
-    const patientId = getStorage("patientId");
-    const data = {
-      ...form,
-      patientId: patientId,
-      year: year.value,
-      diagnosisCode: editData.diagnosisCode,
-    };
-
-    try {
-      const res = await axios.put(
-        ENDPOINTS.apiEndoint + "dbservice/patient/compute/editmeat",
-        data
-      );
-      if (res.data?.status) {
-        getResponePopup(res);
-        setEditData(null);
-        setMeatEdit(false);
-        getpatientDetailsData(
-          patientId,
-          patientDetailsResult?.data?.response?.processedYear,
-          patientDetailsResult?.data?.response?.dateOfService
-        );
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const getPdfEmptyFunction = () => {};
   const getLabPDF =
     labFile?.data?.response && labData == labFile?.data?.response?.fileId

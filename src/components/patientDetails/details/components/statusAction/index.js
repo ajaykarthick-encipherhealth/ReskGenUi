@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Modal, Tooltip, notification, Dropdown, Menu } from "antd";
 import { connect } from "react-redux";
@@ -13,6 +11,7 @@ import AllocateModal from "../../../../../pages/admin/allocateduser/allocate";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
 import { getResponePopup } from "../../../../../utils/reusable";
+import { overallStatusUpdate } from "../../../../../stores/patient/details/network";
 
 const StatusAction = ({
   patientDetailsResult,
@@ -504,58 +503,6 @@ const StatusAction = ({
     }
   };
 
-  const handleSubmitHccComplete = async () => {
-    var userData = {
-      userId: localUserId,
-    };
-    var resultData = patientDetailsResult?.data?.response;
-    var postData = { ...userData, ...resultData };
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient/status/complete`,
-        postData
-      );
-      var result = response.data;
-      if (result.status == "SUCCESS") {
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
-        setConfirmCompleteModal(false);
-        getPatientIdData(localPatientId);
-      } else {
-      }
-    } catch (e) {}
-  };
-
-  const updateAudit = async () => {
-    var userData = {
-      userId: localUserId,
-      orgId: patientDocumentResult.orgId,
-      tenantId: patientDocumentResult.tenantId,
-    };
-    var resultData = patientDetailsResult?.data?.response;
-    var postData = { ...userData, ...resultData };
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient/status/audit`,
-        postData
-      );
-      var result = response.data;
-      if (result.status == "SUCCESS") {
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
-        setConfirmCompleteModal(false);
-        getPatientIdData(localPatientId);
-      } else {
-      }
-    } catch (e) {}
-  };
-
   const statusCheck = (value) => {
     switch (value) {
       case "declineFunction":
@@ -614,14 +561,10 @@ const StatusAction = ({
     //   apiURL = "dbservice/patient/status/auditDecline";
     // }
     try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient/status/overallstatus`,
-        postData
-      );
-      var result = response.data;
-      if (result?.status == "SUCCESS") {
+      const response = await overallStatusUpdate(postData)
+      if (response?.status == "SUCCESS") {
         notification.success({
-          message: result.message,
+          message: response?.message,
           placement: "top",
           duration: 1,
         });

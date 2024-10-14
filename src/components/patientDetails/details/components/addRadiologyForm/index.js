@@ -3,10 +3,9 @@ import { notification } from "antd";
 import { useSelector } from "react-redux";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import axios from "../../../../../utility/axiosConfig";
 import { validateYear } from "../../../../headerFilters/functions";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import { getStorage } from "../../../../../utils/storages";
+import { uploadRadiologyFile } from "../../../../../stores/patient/details/network";
 
 const AddRadiologyForm = ({ setOpen, open }) => {
   const patientDetailsResult = useSelector(
@@ -63,22 +62,11 @@ const AddRadiologyForm = ({ setOpen, open }) => {
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
     formData.append("dos", inputValue.year);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/radiology
-      `,
-      formData,
-      headers
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
+
+    const response = uploadRadiologyFile(formData);
+    if (response.status == "SUCCESS") {
       notification.success({
-        message: result.message,
+        message: response.message,
         placement: "top",
         duration: 1,
       });
