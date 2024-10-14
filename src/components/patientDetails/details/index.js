@@ -836,10 +836,6 @@ const Details = ({
                                     {patientIdDetailsData?.data?.response?.dob}
                                   </h6>
                                 </div>
-                                {console.log(
-                                  flagsDetailsResult,
-                                  "flagsDetailsResult"
-                                )}
                                 <div className="">
                                   {flagsDetailsResult?.response?.length > 0 &&
                                     (() => {
