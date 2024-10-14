@@ -843,7 +843,6 @@ const Details = ({
                                 <div className="">
                                   {flagsDetailsResult?.response.length > 0 &&
                                     (() => {
-                                      // Sort the flags by priority in descending order (highest priority first)
                                       const sortedFlags =
                                         flagsDetailsResult.response.sort(
                                           (a, b) =>
