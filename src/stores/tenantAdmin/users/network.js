@@ -1,6 +1,7 @@
 import { notification } from "antd";
 import { requestPortal } from "../../../utils/network";
 import { getStorage } from "../../../utils/storages";
+import { getResponePopup } from "../../../utils/reusable";
 
 export async function getAllOrganization() {
   const options = {
@@ -49,58 +50,12 @@ export const AddUser = async (data, setFormData) => {
     method: "POST",
     body: JSON.stringify(data),
   };
-  try {
-    const response = await requestPortal(
-      `securityservice/admin/getusers/createuser`,
-      options
-    );
-    if (response) {
-      if (response?.data?.status === "SUCCESS") {
-        notification.success({
-          message: response?.data?.message,
-          duration: 1,
-        });
-        setFormData({
-          firstName: "",
-          lastName: "",
-          emailId: "",
-          password: "",
-          role: "",
-          userName: "",
-          mobileNumber: "",
-          confirmPassword: "",
-        });
-      } else {
-        notification.warning({
-          message: response?.data?.message,
-          duration: 1,
-        });
-        setFormData({
-          firstName: "",
-          lastName: "",
-          emailId: "",
-          password: "",
-          role: "",
-          userName: "",
-          mobileNumber: "",
-          confirmPassword: "",
-        });
-      }
-      return response;
-    }
-  } catch (err) {
-    setFormData({
-      firstName: "",
-      lastName: "",
-      emailId: "",
-      password: "",
-      role: "",
-      userName: "",
-      mobileNumber: "",
-      confirmPassword: "",
-    });
-    notification.error({ description: err?.response?.data?.message });
-  }
+
+  const response = await requestPortal(
+    `securityservice/admin/getusers/createuser`,
+    options
+  );
+  return response;
 };
 
 export async function addPatient({ data }) {
@@ -118,7 +73,7 @@ export const enableUser = async ({
   role,
   setPopoverVisible,
   selectedManager,
-  field
+  field,
 }) => {
   var tenId = getStorage("tenantId");
   var orgId = getStorage("orgId");
@@ -149,12 +104,12 @@ export const enableUser = async ({
         `management/admin/updateuser`,
         options
       );
-      if (response?.status==='SUCCESS') {
+      if (response?.status === "SUCCESS") {
         notification.success({
           description: `${response?.response?.message} `,
         });
       }
-      return response
+      return response;
     } catch (err) {
       console.log(err);
     }
