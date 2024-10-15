@@ -354,9 +354,7 @@ const Patient = ({
     form.patientId = form.patientId.trim();
     try {
       setIsLoadingBtn(true);
-      const response = await getPatientId({ obj: form });
-
-      if (response?.data?.status == "SUCCESS") {
+      const response = await getPatientId({ obj: form }); 
         getAllPatients(
           pageNo,
           computedStartDate,
@@ -371,23 +369,16 @@ const Patient = ({
           sort,
           orgId
         );
+
         setAddPatientId(false);
         setIsLoadingBtn(false);
-        notification.success({
-          message: "Patients added successfully.",
-          duration: 1,
-        });
-      } else {
         getResponePopup(response);
         setIsLoadingBtn(false);
-      }
-    } catch (Err) {
-      notification.error({
-        message: Err?.response?.data?.message,
-        duration: 1,
-      });
-    }
+        form.resetFields();
 
+    } catch (Err) {
+    getResponePopup(Err?.response);
+    }
     setValidated(true);
   };
 
@@ -513,12 +504,7 @@ const Patient = ({
     //   formData,
     //   headers
     // );
-    if (response?.status === 200) {
-      // getAllList(response);
 
-      notification.success({
-        message: "Patient File Upload Successfully!",
-      });
       var orgId = selectOrgList;
       getAllPatients(
         pageNo,
@@ -538,10 +524,11 @@ const Patient = ({
       setAddPatient(false);
       setAddPatient(false);
       setIsLoadingBtn(false);
+        getResponePopup(response);
       // dispatch(getMessagesList())
-    } else {
-      setIsLoadingBtn(false);
-    }
+    // } else {
+    //   setIsLoadingBtn(false);
+    // }
     setAddPatient(false);
     setIsLoadingBtn(false);
     // getAllList(localUserId);
