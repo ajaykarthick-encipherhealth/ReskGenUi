@@ -107,7 +107,6 @@ const UserList = ({
     userFormData.password = encrptedData?.pass;
     userFormData.passwordIv = encrptedData.iv;
     const response = await AddUser(userFormData, setFormData);
-    console.log(response, "response");
       setAddUser(false);
       setUseAdd(true);
       form.resetFields();
