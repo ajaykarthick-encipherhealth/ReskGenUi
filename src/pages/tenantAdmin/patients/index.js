@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import dayjs from "dayjs";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "../../../utility/axiosConfig";
@@ -102,7 +103,7 @@ const Patient = ({
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [parsedData, setParsedData] = useState([]);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("teasgf");
   const [selAllocatedTo, setSelAllocatedTo] = useState(null);
   const [selAllocatedBy, setSelAllocatedBy] = useState(null);
   const [selCreatedBy, setSelCreatedBy] = useState(null);
@@ -116,6 +117,7 @@ const Patient = ({
   const [selectOrgList, setSelectedOrgList] = useState(null);
   const [orgAllList, setOrgAllList] = useState([]);
   const [searchVal, setSearchVal] = useState("");
+  const [paramsFilter, setParamsFilter] = useState(null);
 
   useEffect(() => {
     if (window !== "undefined") {
@@ -125,6 +127,8 @@ const Patient = ({
           const urlParams = new URLSearchParams(queryString);
           const encodedParams = urlParams.get("params");
           const decodedParams = JSON.parse(atob(encodedParams));
+          console.log( decodedParams)
+          setParamsFilter("check")
           setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
           setPaginationFirst(
             decodedParams?.paginationFirst ? decodedParams?.paginationFirst : 0
@@ -161,6 +165,7 @@ const Patient = ({
   }, [navigate]);
 
   useEffect(() => {
+    setParamsFilter("check")
     var tenId = getStorage("tenantId");
     var uId = getStorage("userId");
     var orgId = getStorage("orgId");
@@ -168,20 +173,22 @@ const Patient = ({
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    getAllPatients(
-      pageNo,
-      computedStartDate,
-      computedEndDate,
-      selectedOption,
-      search,
-      completedStartDate,
-      completedEndDate,
-      selAllocatedTo || "",
-      selAllocatedBy || "",
-      selCreatedBy || "",
-      sort,
-      (orgId = selectOrgList)
-    );
+    if(paramsFilter){
+      getAllPatients(
+        pageNo,
+        computedStartDate,
+        computedEndDate,
+        selectedOption,
+        search,
+        completedStartDate,
+        completedEndDate,
+        selAllocatedTo || "",
+        selAllocatedBy || "",
+        selCreatedBy || "",
+        sort,
+        (orgId = selectOrgList)
+      );
+    }
     dispatch(getFilters("createdBy"));
   }, [
     pageNo,
@@ -668,6 +675,7 @@ const Patient = ({
                             search={search}
                             searchVal={searchVal}
                             setSearchVal={setSearchVal}
+                            activeTab={"pateints"}
                             // select status
                             selectlabel="Select Status"
                             isSelector={true}
@@ -717,6 +725,7 @@ const Patient = ({
                             isNextRow={true}
                             btnTitle="Add Patient"
                             atCorner={true}
+                            selAllocatedBy={selAllocatedBy}
                             // selectOrg
                             selectlabelOrg="Select Organization"
                             isSelectOrg={true}

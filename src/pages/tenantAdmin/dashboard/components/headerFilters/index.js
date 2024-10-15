@@ -83,7 +83,7 @@ const index = ({
   return (
     <div className={styles.container}>
       <div className="row" style={{ width: "80%" }}>
-        <div className="d-flex"  style={{ width: "30%" }}>
+        <div className="d-flex"  style={{ width: "25%" }}>
           <div className={styles.flterContainer}>Organization</div>
           <div className="tenantSelector" style={{ width: "100%" }}>
             <Select
@@ -117,7 +117,7 @@ const index = ({
           </div>
         </div>
         {isCustom && (
-          <div className="col-5 d-flex">
+          <div className="col-4 d-flex">
             <div
               className={`${styles.flterContainer}`}
               style={{ fontSize: "14px" }}

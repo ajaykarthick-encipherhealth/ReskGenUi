@@ -24,6 +24,7 @@ import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { actions as allocationAction } from "../../../stores/admin/patientAllocation";
 import { getResponePopup } from "../../../utils/reusable";
+import { enc } from "crypto-js/core";
 const bullets = [
   {
     color: "#34ace8",
@@ -105,84 +106,7 @@ const Patient = ({
   const [searchVal, setSearchVal] = useState("");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [errors, setErrors] = useState({ year: "" });
-
-  useEffect(() => {
-    if (window !== "undefined") {
-      if (window.location.search) {
-        try {
-          const queryString = window.location.search;
-          const urlParams = new URLSearchParams(queryString);
-          const encodedParams = urlParams.get("params");
-          const decodedParams = JSON.parse(atob(encodedParams));
-          setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
-          setPaginationFirst(
-            decodedParams?.paginationFirst ? decodedParams?.paginationFirst : 0
-          );
-          setCompletedStartDate(decodedParams?.completedStartDate || "");
-          setCompletedEndDate(decodedParams?.completedEndDate || "");
-          SetSelectedOption(decodedParams?.selectedOption || "");
-          setSearch(decodedParams?.search || "");
-          setSearchVal(decodedParams?.search || "");
-          setComputedStartDate(decodedParams?.computedStartDate || "");
-          setComputedEndDate(decodedParams?.computedEndDate || "");
-          setSelAllocatedBy(decodedParams?.selAllocatedBy || "");
-          setSelAllocatedTo(decodedParams?.setSelAllocatedTo || "");
-          setSelCreatedBy(decodedParams?.createdBy || "");
-          setSelectedDates(
-            decodedParams?.completedStartDate && [
-              dayjs(decodedParams?.completedStartDate),
-              dayjs(decodedParams?.completedEndDate),
-            ]
-          );
-          setSelectedDate2s(
-            (decodedParams?.computedStartDate && [
-              dayjs(decodedParams?.computedStartDate),
-              dayjs(decodedParams?.computedEndDate),
-            ]) ||
-              []
-          );
-        } catch (error) {
-          console.error("Error decoding Base64 string: ", error.message);
-        }
-      }
-    }
-  }, [navigate]);
-
-  useEffect(() => {
-    var tenId = getStorage("tenantId");
-    var uId = getStorage("userId");
-    var orgId = getStorage("orgId");
-    // var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
-    setTenantId(tenId);
-    setLocalOrgId(orgId);
-    setLocalUserId(uId);
-    const data = {
-      pageNo,
-      computedStartDate,
-      computedEndDate,
-      selectedOption,
-      search,
-      completedStartDate,
-      completedEndDate,
-      selAllocatedTo,
-      selAllocatedBy,
-      selCreatedBy,
-      sort,
-    };
-    getPatients({ data: data });
-  }, [
-    pageNo,
-    computedStartDate,
-    computedEndDate,
-    selectedOption,
-    search,
-    completedStartDate,
-    completedEndDate,
-    selAllocatedTo,
-    selAllocatedBy,
-    selCreatedBy,
-    sort,
-  ]);
+  const [paramsFilter, setParamsFilter] = useState(null);
 
   // useEffect(() => {
   //   if (response?.response?.content?.length>0) {
@@ -533,10 +457,127 @@ const Patient = ({
     setTableLoading(true);
     // getAllList(response?.response);
   };
+
+  const handleGetCall = async (
+    pageNo,
+    computedStartDate,
+    computedEndDate,
+    selectedOption,
+    searchVal,
+    completedStartDate,
+    completedEndDate,
+    selAllocatedTo,
+    selAllocatedBy,
+    selCreatedBy,
+    sort
+  ) => {
+    const data = {
+      pageNo,
+      computedStartDate,
+      computedEndDate,
+      selectedOption,
+      search: searchVal || "",
+      completedStartDate,
+      completedEndDate,
+      selAllocatedTo,
+      selAllocatedBy,
+      selCreatedBy,
+      sort,
+    };
+    getPatients({ data: data });
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const query = navigate?.query;
+      const encodedString = query?.params;
+      if (encodedString && typeof encodedString === "string") {
+        try {
+          setParamsFilter("check");
+          const decodedParams = JSON.parse(
+            atob(encodedString?.replace(/-/g, "+").replace(/_/g, "/"))
+          );
+          setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
+          setPaginationFirst(
+            decodedParams?.paginationFirst ? decodedParams?.paginationFirst : 0
+          );
+          setCompletedStartDate(decodedParams?.completedStartDate);
+          setCompletedEndDate(decodedParams?.completedEndDate || "");
+          SetSelectedOption(decodedParams?.selectedOption || "");
+          setSearch(decodedParams?.search || null);
+          setSearchVal(decodedParams?.search || null);
+          setComputedStartDate(decodedParams?.computedStartDate || "");
+          setComputedEndDate(decodedParams?.computedEndDate || "");
+          setSelAllocatedBy(decodedParams?.selAllocatedBy || "");
+          setSelAllocatedTo(decodedParams?.setSelAllocatedTo || "");
+          setSelCreatedBy(decodedParams?.createdBy || "");
+          setSelectedDate2s(
+            decodedParams?.completedStartDate && [
+              dayjs(decodedParams?.completedStartDate),
+              dayjs(decodedParams?.completedEndDate),
+            ]
+          );
+          setSelectedDates(
+            (decodedParams?.computedStartDate && [
+              dayjs(decodedParams?.computedStartDate),
+              dayjs(decodedParams?.computedEndDate),
+            ]) ||
+              []
+          );
+        } catch (error) {
+          console.error("Error decoding or parsing query:", error);
+        }
+      } else {
+        console.error(
+          "Encoded value not found or not a string:",
+          encodedString
+        );
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    setParamsFilter("check");
+    var tenId = getStorage("tenantId");
+    var uId = getStorage("userId");
+    var orgId = getStorage("orgId");
+    setTenantId(tenId);
+    setLocalOrgId(orgId);
+    setLocalUserId(uId);
+    if (paramsFilter) {
+      handleGetCall(
+        pageNo,
+        computedStartDate,
+        computedEndDate,
+        selectedOption,
+        searchVal,
+        completedStartDate,
+        completedEndDate,
+        selAllocatedTo,
+        selAllocatedBy,
+        selCreatedBy,
+        sort
+      );
+    }    
+  }, [
+    pageNo,
+    computedStartDate,
+    computedEndDate,
+    selectedOption,
+    search,
+    completedStartDate,
+    completedEndDate,
+    selAllocatedTo,
+    selAllocatedBy,
+    selCreatedBy,
+    sort,
+    searchVal,
+    paramsFilter
+  ]);
+
   useEffect(() => {
     getFilters({ field: "createdBy" });
   }, []);
-
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -600,6 +641,7 @@ const Patient = ({
                             // defaultAllocatedBy={"All"}
                             defaultAllocatedBy={"Select CreatedBy"}
                             setSelCreatedBy={setSelCreatedBy}
+                            selAllocatedBy={selAllocatedBy}
                             addUser={true}
                             addUserForm={addPatientFormId}
                             bullets={bullets}

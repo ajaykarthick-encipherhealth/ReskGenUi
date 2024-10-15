@@ -54,10 +54,17 @@ function AddPatientListTable({
           search: `params=${encodedValue}`,
         });
       } else {
-        const encodedValue = btoa(JSON.stringify(page));
+        const encodedValue = btoa(JSON.stringify(page))
+          .replace(/\+/g, "-")
+          .replace(/\//g, "_")
+          .replace(/=+$/, ""); // Remove padding '='
+
+        // const encodedValue = btoa(JSON.stringify(page));
         navigate.push({
           pathname: "/admin/patients/details",
-          search: `params=${encodedValue}`,
+          query: {
+            params: encodedValue,
+          },
         });
       }
       // setStorage('paginations', JSON.stringify(page))
