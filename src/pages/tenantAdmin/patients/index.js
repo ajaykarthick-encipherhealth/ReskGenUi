@@ -103,7 +103,7 @@ const Patient = ({
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [parsedData, setParsedData] = useState([]);
-  const [search, setSearch] = useState("teasgf");
+  const [search, setSearch] = useState("");
   const [selAllocatedTo, setSelAllocatedTo] = useState(null);
   const [selAllocatedBy, setSelAllocatedBy] = useState(null);
   const [selCreatedBy, setSelCreatedBy] = useState(null);
@@ -117,7 +117,7 @@ const Patient = ({
   const [selectOrgList, setSelectedOrgList] = useState(null);
   const [orgAllList, setOrgAllList] = useState([]);
   const [searchVal, setSearchVal] = useState("");
-  const [paramsFilter, setParamsFilter] = useState(null);
+  const [paramsFilter, setParamsFilter] = useState('check');
 
   useEffect(() => {
     if (window !== "undefined") {
@@ -127,7 +127,6 @@ const Patient = ({
           const urlParams = new URLSearchParams(queryString);
           const encodedParams = urlParams.get("params");
           const decodedParams = JSON.parse(atob(encodedParams));
-          console.log( decodedParams)
           setParamsFilter("check")
           setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
           setPaginationFirst(
@@ -216,7 +215,7 @@ const Patient = ({
       getAllOrganizationList();
     }
   }, []);
-  console.log(selectOrgList, "selectOrgList");
+
   useEffect(() => {
     var orgListArray = [];
     organizationList?.response?.map((res) => {
