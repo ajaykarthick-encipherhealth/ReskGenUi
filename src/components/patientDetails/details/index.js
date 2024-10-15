@@ -308,7 +308,6 @@ const Details = ({
   }, [patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath]);
 
   useEffect(() => {
-    console.log(storeFileDetails, "selectFileID");
     if (storeFileDetails) {
       if (storeFileDetails != preStoreFileDetails) {
         setStorage("fileId", storeFileDetails);
@@ -523,7 +522,6 @@ const Details = ({
     } else if (user && user.toLowerCase() === "supervisor") {
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(queryWithoutUser).toString();
-      //  console.log(navigate.query)
       if (navigate.query.isSupervisorAuited === "true") {
         // const url = queryString
         //   ? `/supervisor/auditing?${queryString}`

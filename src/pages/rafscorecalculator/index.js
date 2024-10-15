@@ -80,7 +80,6 @@ const RafScoreCalculator = () => {
             // initialValues={formInitialValues}
             onFinish={(form) => {
               handledSave(form);
-              console.log(form);
             }}
             onFinishFailed={() => {}}
           >

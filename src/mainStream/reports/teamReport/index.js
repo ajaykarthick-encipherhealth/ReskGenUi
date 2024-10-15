@@ -96,7 +96,6 @@ const TeamReport = ({
         selectAll,
       });
       if (res.status === "SUCCESS") {
-        console.log(res);
         setSelectAll(true);
         setSelectedRows(res?.response?.patientIds);
       }

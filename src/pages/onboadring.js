@@ -60,7 +60,6 @@ const onBoarding = ({onBoardingOrganization}) => {
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
-      console.log(formData);
       setGoSteps(1);
     }
     setValidatedOrg(true);
@@ -70,7 +69,6 @@ const onBoarding = ({onBoardingOrganization}) => {
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
-      console.log(formData);
       setGoSteps(2);
     }
     setValidatedProvider(true);
@@ -83,7 +81,6 @@ const onBoarding = ({onBoardingOrganization}) => {
       formData.providerlist = providerList;
       formData.userName = formData.userName;
       createOrganization(formData);
-      console.log(formData);
     }
     setValidatedAdmin(true);
   };
@@ -93,7 +90,6 @@ const onBoarding = ({onBoardingOrganization}) => {
     e.map((data) => {
       providerIdsMap.push(parseInt(data.value));
     });
-    console.log(providerIdsMap);
     setProviderList(providerIdsMap);
   };
 

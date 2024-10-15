@@ -96,7 +96,6 @@ const AddLabForm = ({
       }else{
         response = await uploadRadiologyFile({ data: formData })
       }
-      console.log(response)
       if (response?.status == "SUCCESS") {
         getPatientLabDosList(
           patientDetailsResult?.data?.response?.patientId,

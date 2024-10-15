@@ -34,7 +34,6 @@ const QualityScore = () => {
       chart.setFilter(filter);
     }
   };
-  console.log(currentDate);
 
   useEffect(() => {
     if (currentBtn === "Daily" || currentBtn === "Weekly") dayFilter();
@@ -52,7 +51,6 @@ const QualityScore = () => {
     if (chart) {
       chart.setFilter(filter);
     }
-    console.log("chartchart1", chart);
   };
 
   useEffect(() => {

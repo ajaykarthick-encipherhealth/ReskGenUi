@@ -9,7 +9,6 @@ import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 const Flag = ({ patienIdDetails, patientDetails, flagFirstData }) => {
 
   const underScoreRemove = (value) => {
-    console.log(value)
     if (value) {
       let str = value;
       let newStr = str.replace(/_/g, " ");

@@ -182,7 +182,6 @@ const CompletedStatus = ({
 
   const onChangeUser = (e) => {
     setSelectUser(e);
-    console.log(e);
   };
 
   useEffect(() => {

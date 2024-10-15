@@ -448,7 +448,7 @@ const AddHccForm = ({
     setFormInitialValues(initalForm);
     form.setFieldsValue(initalForm);
   }, [selectEncounterList, selectProviderNameList, hyperlinkListSelect,mhyperlinkListSelect,ehyperlinkListSelect,ahyperlinkListSelect,thyperlinkListSelect, form]);
-console.log(selectProviderNameList)
+
   return (
     <>
       <div className={styles.formTitleContaniner}>

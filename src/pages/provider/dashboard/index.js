@@ -38,7 +38,6 @@ const CompletedStatusChart = () => {
       chart.setFilter(filter);
     }
   };
-  console.log(currentDate);
 
   useEffect(() => {
     if (currentBtn === "Daily" || currentBtn === "Weekly") dayFilter();
@@ -56,7 +55,6 @@ const CompletedStatusChart = () => {
     if (chart) {
       chart.setFilter(filter);
     }
-    console.log("chartchart1", chart);
   };
 
   useEffect(() => {

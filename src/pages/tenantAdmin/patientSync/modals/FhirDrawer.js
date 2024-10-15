@@ -85,7 +85,6 @@ const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch, upoloadFi
       //   selectedType === "GROUP_ID" ? data : { ...data, file: fileList[0] },
       //   selectedType !== "GROUP_ID" && headers
       // );
-      console.log(res);
       form.resetFields();
     } catch (err) {
       form.resetFields();

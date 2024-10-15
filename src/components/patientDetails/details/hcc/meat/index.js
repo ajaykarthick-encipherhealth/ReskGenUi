@@ -145,8 +145,6 @@ const Meat = ({
   }, [selectHyperlink]);
 
   const onchangeMeat = (code, data) => {
-    console.log(code, data, "testingsss");
-
     var title = data.diagnosisCode + " - " + data.diseaseName;
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
     data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
