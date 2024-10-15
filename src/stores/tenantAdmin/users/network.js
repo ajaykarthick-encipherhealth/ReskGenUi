@@ -49,58 +49,12 @@ export const AddUser = async (data, setFormData) => {
     method: "POST",
     body: JSON.stringify(data),
   };
-  try {
+
     const response = await requestPortal(
       `securityservice/admin/getusers/createuser`,
       options
-    );
-    if (response) {
-      if (response?.data?.status === "SUCCESS") {
-        notification.success({
-          message: response?.data?.message,
-          duration: 1,
-        });
-        setFormData({
-          firstName: "",
-          lastName: "",
-          emailId: "",
-          password: "",
-          role: "",
-          userName: "",
-          mobileNumber: "",
-          confirmPassword: "",
-        });
-      } else {
-        notification.warning({
-          message: response?.data?.message,
-          duration: 1,
-        });
-        setFormData({
-          firstName: "",
-          lastName: "",
-          emailId: "",
-          password: "",
-          role: "",
-          userName: "",
-          mobileNumber: "",
-          confirmPassword: "",
-        });
-      }
+    );  
       return response;
-    }
-  } catch (err) {
-    setFormData({
-      firstName: "",
-      lastName: "",
-      emailId: "",
-      password: "",
-      role: "",
-      userName: "",
-      mobileNumber: "",
-      confirmPassword: "",
-    });
-    notification.error({ description: err?.response?.data?.message });
-  }
 };
 
 export async function addPatient({ data }) {

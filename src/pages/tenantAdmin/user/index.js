@@ -44,7 +44,7 @@ const UserList = ({
   usersListData,
   loading,
   AddUser,
-  addPatients
+  addPatients,
 }) => {
   const sideMenu = useSelector((state) => state.sideMenu);
   const [localUserId, setLocalUserId] = useState("");
@@ -97,26 +97,35 @@ const UserList = ({
   };
   const [clear, setClear] = useState(false);
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm();1
 
   const handleSubmit = async (userFormData) => {
-    const encrptedData = encyptingPass(userFormData?.password);
-    userFormData.tenantId = localTenantId;
-    userFormData.organizationId = userFormData.orgId;
-    userFormData.role = [userFormData?.role];
-    userFormData.password = encrptedData?.pass;
-    userFormData.passwordIv = encrptedData.iv;
-    const response = await AddUser(userFormData, setFormData);
-    if (response?.data?.status === "SUCCESS") {
-      setAddUser(false);
-      setUseAdd(true);
-      form.resetFields();
-      setIsLoadingBtn(false);
-      getResponePopup(response);
-    }
-    setRoleValue([]);
-    setValidated(true);
+      const encryptedData = encyptingPass(userFormData?.password);
+      userFormData.tenantId = localTenantId;
+      userFormData.organizationId = userFormData.orgId;
+      userFormData.role = [userFormData?.role];
+      userFormData.password = encryptedData?.pass;
+      userFormData.passwordIv = encryptedData.iv;
+      const response = await AddUser(userFormData, setFormData);
+        setFormData({
+          firstName: "",
+          lastName: "",
+          emailId: "",
+          password: "",
+          role: "",
+          userName: "",
+          mobileNumber: "",
+          confirmPassword: "",
+        });
+        setMobileNumber("");
+        form.resetFields();
+        setUseAdd(true);
+        setIsLoadingBtn(false);
+        getResponePopup(response); 
+        setRoleValue([]);
+        setValidated(true);
   };
+
 
   const switchHandler = (event, id) => {
     const isChecked = event;
@@ -136,8 +145,8 @@ const UserList = ({
     inputValuePatientId.allocatedUserId = localUserId;
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
-      const response = await addPatients({data:inputValuePatientId})
-      
+      const response = await addPatients({ data: inputValuePatientId });
+
       // axios.post(
       //   ENDPOINTS.apiEndoint + `dbservice/patient`,
       //   inputValuePatientId
@@ -733,7 +742,7 @@ const enhancer = connect(
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     getAllUsersList: tenantAdminAction.getAllUsersAction,
     AddUser: tenantAdminAction.getAddUser,
-    addPatients:tenantAdminAction.addPatient
+    addPatients: tenantAdminAction.addPatient,
   }
 );
 export default enhancer(UserList);
