@@ -28,7 +28,7 @@ const PdfDrawer = ({
   getAllBatches,
   selectedBatch,
   setSelectedBatch,
-  upoloadFiles
+  upoloadFiles,
 }) => {
   const [form] = Form.useForm();
   const [selectedType, setSelectedType] = useState(null);
@@ -58,9 +58,8 @@ const PdfDrawer = ({
           },
         };
 
-        return upoloadFiles({obj:formData})
-        
-        
+        return upoloadFiles({ obj: formData });
+
         // axios.post(
         //   `${ENDPOINTS.apiEndoint}management/batch/upload`,
         //   formData,
@@ -101,14 +100,14 @@ const PdfDrawer = ({
     <Drawer
       open={isDrawerOpen}
       onClose={() => handleClose(form)}
-      title={uploadType === "upload" ? "Upload New Batch" : "Create batch"}
+      title={uploadType === "upload" ? "Upload New Batch" : "Create New batch"}
     >
       <div className="container-fluid">
         <Form form={form} name="basic" layout="vertical" onFinish={onFinish}>
           {uploadType !== "upload" && (
             <Form.Item
               label={<label>Batch Name</label>}
-              name="name"
+              name="batchName"
               rules={[
                 {
                   required: true,
@@ -162,6 +161,25 @@ const PdfDrawer = ({
                 <Input placeholder="File Count" />
               </Form.Item>
               <Form.Item
+            label={<label>YearOf Service</label>}
+            name="yearOfService"
+            rules={[
+              {
+                required: true,
+                message: "Please Enter yearOfService ",
+              },
+            ]}
+          >
+            <Select
+              mode="tags"
+              name="yearOfService"
+              style={{ width: "100%" }}
+              options={getYears()}
+              size="large"
+              placeholder="year Of Service"
+            />
+          </Form.Item>
+              <Form.Item
                 label={<label>Source</label>}
                 name="source"
                 rules={[
@@ -184,7 +202,6 @@ const PdfDrawer = ({
                   allowClear={true}
                 />
               </Form.Item>
-
               {selectedType === "CogentUpload" ? (
                 <Form.Item
                   label={
@@ -208,7 +225,7 @@ const PdfDrawer = ({
                   />
                 </Form.Item>
               ) : (
-                selectedType && (
+                // selectedType && (
                   <Form.Item
                     label={<label>FilePath / FolderPath</label>}
                     name="FilePath"
@@ -221,8 +238,25 @@ const PdfDrawer = ({
                   >
                     <Input placeholder="FilePath / FolderPath" />
                   </Form.Item>
-                )
+                // )
               )}
+            
+
+              {/* <Form.Item
+                label={<label>File Path</label>}
+                name="filePath"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Enter File Path ",
+                  },
+                ]}
+              >
+                <Input placeholder="File Path" />
+              </Form.Item> */}
+
+              
+             
             </>
           )}
           {uploadType == "upload" && (
@@ -237,28 +271,12 @@ const PdfDrawer = ({
               <UploadFile filesList={fileList} setFilesList={setFileList} />
             </Form.Item>
           )}
-          <Form.Item
-            label={<label>YearOf Service</label>}
-            name="yearOfService"
-            rules={[
-              {
-                required: true,
-                message: "Please Enter yearOfService ",
-              },
-            ]}
-          >
-            <Select
-              mode="tags"
-              name="yearOfService"
-              style={{ width: "100%" }}
-              options={getYears()}
-              size="large"
-              placeholder="year Of Service"
-            />
-          </Form.Item>
+        
           <Form.Item>
             <div className="col-xl-12 mb-3 d-grid justify-content-center">
-              <Button type="submit">{uploadType === "upload" ? "Upload" : "Create" }</Button>
+              <Button type="submit">
+                {uploadType === "upload" ? "Upload" : "Submit"}
+              </Button>
             </div>
           </Form.Item>
         </Form>
@@ -269,6 +287,6 @@ const PdfDrawer = ({
 const enhancer = connect((state) => ({}), {
   getCreateBatch: tenantActions.getCreateBatch,
   getAllBatches: tenantActions.getAllBatches,
-  upoloadFiles:tenantActions.upoloadFiles
+  upoloadFiles: tenantActions.upoloadFiles,
 });
 export default enhancer(PdfDrawer);

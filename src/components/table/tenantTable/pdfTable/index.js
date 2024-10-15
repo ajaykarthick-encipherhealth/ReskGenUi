@@ -93,14 +93,17 @@ function PdfTable({
               <thead className={TableStyle.classTTotalhead}>
                 <tr>
                   <>
-                    <th>BATCH NAME</th>
-                    <th>PATIENT COUNT</th>
-                    <th className="text-center">STATUS </th>
+                    <th>BATCH DETAILS</th>
+                    <th>COUNT</th>
+                    {/* <th className="text-center">STATUS </th> */}
                     <th className="text-center">YEAR OF SERVICE</th>
+                    <th className="text-center">EMR </th>
+                    <th className="text-center">SOURCE </th>
                     <th className={`${TableStyle.rowAudited} text-center`}>
                       INITIATED BY{" "}
                     </th>
                     <th className="text-center">BATCH INITIATED DATE </th>
+                    <th className="text-center">STATUS </th>
                   </>
                 </tr>
               </thead>
@@ -126,36 +129,24 @@ function PdfTable({
                     >
                       <>
                         <td className={TableStyle.childBorder}>
-                          {row?.name ? row?.name : "---"}
+                          <div>{row?.name ? row?.name : "---"}</div>
+                          <div>{row?.batchId ? row?.batchId : "---"}</div>
                         </td>
-
                         <td className={TableStyle.childBorder}>
                           {row?.totalFileCount ? row?.totalFileCount : "---"}
                         </td>
 
                         <td className={TableStyle.childBorder}>
-                          <div className="text-center">
-                            <span
-                              className="text-capitalize mx-2"
-                              style={{
-                                color:
-                                  row.batchUploadStatus === "processing"
-                                    ? "#2D6187"
-                                    : row.batchUploadStatus === "completed"
-                                    ? "#008A0E"
-                                    : "black",
-                              }}
-                            >
-                              {row.batchUploadStatus
-                                ? row.batchUploadStatus
-                                : "---"}
-                            </span>
-                          </div>
-                        </td>
-                        <td className={TableStyle.childBorder}>
                           {row?.yearOfService
                             ? dateFormateAlign(row?.yearOfService)
                             : "000"}
+                        </td>
+
+                        <td className={`${TableStyle.childBorder} text-center`}>
+                          {row?.emr ? row?.emr : "---"}
+                        </td>
+                        <td className={`${TableStyle.childBorder} text-center`}>
+                          {row?.source ? row?.source : "---"}
                         </td>
                         <td
                           className={TableStyle.childBorder}
@@ -186,7 +177,13 @@ function PdfTable({
                             <div className="text-center">---</div>
                           )}
                         </td>
-                        <td className={TableStyle.childBorder}>
+                        <td
+                          className={`${TableStyle.childBorder} text-center`}
+                          // style={{ textAlign: "left", paddingLeft: "110px" }}
+                        >
+                          {row.initiatedDate?(dayjs(row?.initiatedDate).format("MM-DD-YYYY")):"---"}
+                        </td>
+                        {/* <td className={TableStyle.childBorder}>
                           <div className="d-flex justify-content-between">
                             {dateFormate(dayjs, row?.initialedDate)}
                             <div name="upload">
@@ -202,6 +199,25 @@ function PdfTable({
                                 />
                               </div>
                             </div>
+                          </div>
+                        </td> */}
+                        <td className={TableStyle.childBorder}>
+                          <div className="text-center">
+                            <span
+                              className="text-capitalize mx-2"
+                              style={{
+                                color:
+                                  row.batchUploadStatus === "processing"
+                                    ? "#2D6187"
+                                    : row.batchUploadStatus === "completed"
+                                    ? "#008A0E"
+                                    : "black",
+                              }}
+                            >
+                              {row.batchUploadStatus
+                                ? row.batchUploadStatus
+                                : "---"}
+                            </span>
                           </div>
                         </td>
                       </>
