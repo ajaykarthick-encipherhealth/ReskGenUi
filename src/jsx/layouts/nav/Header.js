@@ -44,9 +44,7 @@ import {
   getPatientID,
 } from "../../../store/actions/PatientsActions";
 import ChatCommunication from "../../../components/chatCommunication/index";
-import { renderUserPrfoile } from "../../../components/headerFilters/functions";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
-import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
 import {
@@ -62,9 +60,11 @@ import {
   logoutAllDevice,
 } from "../../../stores/authflow/actions";
 import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
+import { actions as userActions } from "../../../stores/supervisor/users";
 import Codify from "../../../pages/codify";
 import { actions as webSocketActions } from "../../../stores/websocket";
 import { getStorage, setStorage } from "../../../utils/storages";
+import Profile from "./profile";
 
 const Header = ({
   notificationResponse,
@@ -74,13 +74,15 @@ const Header = ({
   webSocketNotificationData,
   getNotificationData,
   postUnReadCount,
+  getCurrentUserInfo,
+  currentUserInfo,
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const menuItemsPerPage = 5;
   const msgReply = useSelector((state) => state?.workFlow?.chatReply);
   const accuracy = useSelector((state) => state?.auth?.accuracy);
-  const currentUserInfo = useSelector((state) => state?.auth?.userInfo);
+  // const currentUserInfo = useSelector((state) => state?.auth?.userInfo);
   const profileUploadedTime = useSelector((state) => state?.auth?.url);
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
@@ -306,8 +308,8 @@ const Header = ({
     }))
     .filter(
       (info) =>
-        info.key.toLowerCase() !== userRole.replace(/_/g," ")?.toLowerCase() &&
-        info.label.toLowerCase() !== userRole.replace(/_/g," ")?.toLowerCase()
+        info.key.toLowerCase() !== userRole.replace(/_/g, " ")?.toLowerCase() &&
+        info.label.toLowerCase() !== userRole.replace(/_/g, " ")?.toLowerCase()
     );
 
   const onClick = ({ key }) => {
@@ -452,7 +454,8 @@ const Header = ({
     const userId = getStorage("userId");
     const userRole = getStorage("role");
     const tenentId = getStorage("tenantId");
-    dispatch(getCurrentUser(userId, router));
+    // dispatch(getCurrentUser(userId, router));
+    getCurrentUserInfo({ userId });
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
     setTenentId(tenentId);
@@ -783,125 +786,18 @@ const Header = ({
                             </div>
                           </Badge>
                         </div>
-                        <div className="header-media d-flex">
-                          <Popover
-                            trigger="click"
-                            open={openContent}
-                            content={
-                              <div className={styles.popDIv}>
-                                <div className={styles.closeContainer2}>
-                                  <CloseCircleOutlined
-                                    onClick={() => setOpenContent(false)}
-                                    className={styles.close_icon}
-                                  />
-                                </div>
-                                <div
-                                  style={{
-                                    margin: "20px 0px 0 30px",
-                                    display: "flex",
-                                  }}
-                                >
-                                  <div
-                                    style={{ width: "80px", height: "80px" }}
-                                  >
-                                    {profileUploadedTime?.loading ? (
-                                      <Spin
-                                        indicator={
-                                          <LoadingOutlined
-                                            style={{ fontSize: 24 }}
-                                          />
-                                        }
-                                        loading={profileUploadedTime?.loading}
-                                        style={{ marginTop: "10px" }}
-                                      />
-                                    ) : (
-                                      renderUserPrfoile(
-                                        userName,
-                                        lastName,
-                                        profileImg,
-                                        "header",
-                                        "70px",
-                                        "70px"
-                                      )
-                                    )}
-                                    <div
-                                      onClick={() => {
-                                        setOpenContent(false);
-                                        setOpenUploader(!openUploader);
-                                      }}
-                                      className={styles.edit}
-                                    >
-                                      <span>
-                                        <Image src={editImg} alt="noimg" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <div style={{ margin: "10px 0 0 5px" }}>
-                                    <span
-                                      className="ms-2 header-name d-flex mr-3"
-                                      style={{
-                                        fontWeight: "700",
-                                        fontSize: "16px",
-                                      }}
-                                    >
-                                      {userName}
-                                    </span>
-                                    <span
-                                      className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3 "
-                                      style={{
-                                        fontWeight: "500",
-                                        fontSize: "6px",
-                                      }}
-                                    >
-                                       {currentRole?.charAt(0).toUpperCase() + currentRole?.slice(1)}
-                                    </span>
-                                  </div>
-                                </div>
-
-                                <Divider className={styles.divider} />
-                                <div
-                                  className={styles.footerDiv}
-                                  onClick={logoutFunction}
-                                >
-                                  {/* <Image src={logout} /> */}
-                                  <span className={styles.footerCont}>
-                                    {" "}
-                                    Log out
-                                  </span>
-                                </div>
-                              </div>
-                            }
-                          >
-                            <div>
-                              <div className="header-info2 d-flex align-items-center">
-                                <div
-                                  className="header-media"
-                                  style={{ marginTop: "-3px" }}
-                                  onClick={() => setOpenContent(true)}
-                                >
-                                  {profileUploadedTime?.loading ? (
-                                    <Spin
-                                      indicator={
-                                        <LoadingOutlined
-                                          style={{ fontSize: 20 }}
-                                        />
-                                      }
-                                      loading={profileUploadedTime?.loading}
-                                      style={{ marginTop: "10px" }}
-                                    />
-                                  ) : (
-                                    renderUserPrfoile(
-                                      userName,
-                                      lastName,
-                                      profileImg,
-                                      "header"
-                                    )
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </Popover>
-                        </div>
+                        <Profile
+                          openContent={openContent}
+                          setOpenContent={setOpenContent}
+                          setOpenUploader={setOpenUploader}
+                          openUploader={openUploader}
+                          profileUploadedTime={profileUploadedTime}
+                          currentRole={currentRole}
+                          currentUserInfo={currentUserInfo}
+                          logoutFunction={logoutFunction}
+                          profileImageUrl={profileImg}
+                          userName={userName}
+                        />
                         <div className="mx-15">
                           <div
                             className="text-dark-50 ms-2 header-name d-flex mr-3"
@@ -925,7 +821,9 @@ const Header = ({
                                 >
                                   {currentRole == "Record Analyst"
                                     ? "Analyst"
-                                    : userRole?.replace(/_/g, " ")?.toLowerCase()}
+                                    : userRole
+                                        ?.replace(/_/g, " ")
+                                        ?.toLowerCase()}
                                   <DownOutlined
                                     style={{ margin: "0 0 0 5px" }}
                                   />
@@ -993,6 +891,7 @@ const enhancer = connect(
   (state) => ({
     notificationResponse: state?.reviewer?.dashboard?.notification,
     tenent: state?.reviewer?.dashboard?.tenentLogo,
+    currentUserInfo: state?.loggedInUser.currentUser,
     webSocketNotificationData:
       state?.tenantAdmin?.webSocket?.webSocketNotificationDetails?.data,
   }),
@@ -1001,6 +900,7 @@ const enhancer = connect(
     getTenentLogo: dashbaordActions.tenentLogoAction,
     getNotificationData: webSocketActions.websocketNotificationAction,
     postUnReadCount: dashbaordActions.unReadCountPostAction,
+    getCurrentUserInfo: userActions.getCurrentUserInfo,
   }
 );
 export default enhancer(Header);

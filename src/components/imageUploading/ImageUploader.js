@@ -1,15 +1,25 @@
-import React, { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import React, { useRef, useState } from "react";
+import { connect } from "react-redux";
 import Image from "next/image";
 import styles from "./styles.module.css";
 import upload from "../../images/fihr/upload.png";
-import { getCurrentUser, getUrl, preSendURl, updateImage } from "../../stores/authflow/actions";
 import { getStorage } from "../../utils/storages";
+import { actions as uploadImagesAction } from "../../stores/authflow/imageUpload";
+import { actions as userAction } from "../../stores/supervisor/users";
+import { getResponePopup } from "../../utils/reusable";
+import { Spin } from "antd";
 
-const ImageUploader = ({ setOpenUploader, setOpenContent,height, isFolderUplaod }) => {
+const ImageUploader = ({
+  setOpenUploader,
+  height,
+  isFolderUplaod,
+  preSendURl,
+  getUrl,
+  updateImage,
+  getCurrentUser,
+}) => {
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
-  const dispatch = useDispatch();
-
   const handleChange = (event) => {
     const file = event.target.files[0];
     const type = file?.name?.split(".").pop();
@@ -32,10 +42,8 @@ const ImageUploader = ({ setOpenUploader, setOpenContent,height, isFolderUplaod 
               }
             );
             if (!isFolderUplaod) {
-              preSendCall(type,croppedFile)
-              
+              preSendCall(type, croppedFile);
             }
-            setOpenUploader(false);
           }, file.type);
         };
         img.src = e.target.result;
@@ -45,25 +53,36 @@ const ImageUploader = ({ setOpenUploader, setOpenContent,height, isFolderUplaod 
   };
   const preSendCall = async (type, croppedFile) => {
     try {
-      const res = await dispatch(preSendURl(type, croppedFile));
-      if (res?.data?.response) {
-        getBlobImageUrl(res?.data?.response, type, croppedFile)
+      setLoading(true);
+      const res = await preSendURl({ type, croppedFile });
+      if (res?.response) {
+        getBlobImageUrl(res?.response, type, croppedFile);
       }
     } catch (error) {
+      setOpenUploader(false);
+      setLoading(false);
       throw error;
     }
   };
   const getBlobImageUrl = async (data, type, file) => {
     const userId = getStorage("userId");
     try {
-      const res = await dispatch(getUrl(data,type,file));
+      const res = await getUrl({ url: data, urlType: type, file });
       if (res.status == 201) {
-        const user = await dispatch(updateImage(data));
-        if (user.data?.response) {
-          dispatch(getCurrentUser(userId));
+        const user = await updateImage({ url: data });
+        if (user?.response) {
+          setOpenUploader(false);
+          getResponePopup({
+            status: "SUCCESS",
+            message: "Profile Upload Successfully!",
+          });
+          getCurrentUser({ userId });
+          setLoading(false);
         }
       }
     } catch (error) {
+      setOpenUploader(false);
+      setLoading(false);
       throw error;
     }
   };
@@ -75,22 +94,33 @@ const ImageUploader = ({ setOpenUploader, setOpenContent,height, isFolderUplaod 
           type={"file"}
           onChange={handleChange}
           ref={fileInputRef}
-          name="file" 
+          name="file"
           multiple
-          accept={isFolderUplaod?".xl,.csv":".png,.jpg,.jpeg"}
+          accept={isFolderUplaod ? ".xl,.csv" : ".png,.jpg,.jpeg"}
         />
 
         <div className={styles.videoflex} style={{ height: height }}>
-          <div>
-            <div className="d-flex justify-content-center cursor-pointer">
-              <Image src={upload} alt="Image" />
+          {loading ? (
+            <Spin />
+          ) : (
+            <div>
+              <div className="d-flex justify-content-center cursor-pointer">
+                <Image src={upload} alt="Image" />
+              </div>
+              {isFolderUplaod ? "Upload a File" : "Upload Profile"}
             </div>
-            {isFolderUplaod?"Upload a File":"Upload Profile"}
-          </div>
+          )}
         </div>
       </label>
     </div>
   );
 };
 
-export default ImageUploader;
+const enhancer = connect((state) => ({}), {
+  preSendURl: uploadImagesAction.getuploadurl,
+  getUrl: uploadImagesAction.getURL,
+  updateImage: uploadImagesAction.updateImage,
+  getCurrentUser: userAction.getCurrentUserInfo,
+});
+
+export default enhancer(ImageUploader);
