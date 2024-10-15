@@ -107,7 +107,7 @@ const PdfDrawer = ({
           {uploadType !== "upload" && (
             <Form.Item
               label={<label>Batch Name</label>}
-              name="batchName"
+              name="name"
               rules={[
                 {
                   required: true,
