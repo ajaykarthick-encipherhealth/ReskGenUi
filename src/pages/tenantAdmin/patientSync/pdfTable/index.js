@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { DatePicker, Input, Select } from "antd";
+import { DatePicker, Input, Popover, Select } from "antd";
 import { useSelector, useDispatch, connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -20,6 +20,7 @@ import calender from "../../../../images/fihr/calender.svg";
 import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";
 import { debounce } from "../../../../components/input";
 import moment from "moment";
+import dayjs from "dayjs";
 import DetailedPdfTable from "../../../../components/table/tenantTable/pdfTable/detailPdfTable";
 
 export const statusOptions = [
@@ -160,39 +161,50 @@ const Index = ({
       id: 2,
       title: "Status",
       icon: statusIcon,
-      name: currentId?.batchUploadStatus ? currentId?.batchUploadStatus : "--",
+      name: currentId?.batchUploadStatus ? currentId?.batchUploadStatus : "---",
     },
     {
       id: 3,
       title: "Computed",
       icon: computed,
-      name: "--",
+      name: "---",
     },
     {
       id: 4,
-      title: "Uploaded By",
+      title: "Initiated By",
       icon: person,
-      name: "--",
+      name: currentId?.createdBy ? (
+        <Popover content={currentId?.createdBy}>
+          {currentId?.createdBy.slice(0, 20) + "..."}
+        </Popover>
+      ) : (
+        "---"
+      ),
     },
     {
       id: 5,
-      title: "Upload Date",
+      title: "Initiated Date",
       icon: calender,
-      name: "--",
+      name: currentId?.createdDate
+        ? dayjs(currentId?.createdDate).format("MM/DD/YYYY")
+        : "---",
     },
     {
       id: 6,
       title: "Year Of Service",
       icon: calender,
-      name:
-        currentId?.yearOfService?.length > 0
-          ? currentId?.yearOfService?.map(
-              (item, index) => `${item}${index / 2 === 0 ? "," : ""}`
-            )
-          : "--",
+      name: (
+        <div className="text-start">
+          {currentId?.yearOfService?.length > 0
+            ? currentId?.yearOfService?.map(
+                (item, index) => `${item}${(index + 1) / 2 === 0 ? "," : ""}`
+              )
+            : "---"}
+        </div>
+      ),
     },
   ];
-
+  console.log(currentId);
   return (
     <>
       <Header />
@@ -205,31 +217,25 @@ const Index = ({
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
                       <div
-                        className={styles.topHeader}
+                        className={`${styles.topHeader} mx-2`}
                         style={{ marginBottom: "40px" }}
                       >
                         <button
-                          className={`${styles.backButtonStyle}`}
+                          className={`${styles.backButtonStyle} mx-2`}
                           onClick={() => {
+                            router.push("/tenantAdmin/patientSync");
                             dispatch(getActiveTab("PDF"));
                             setSearch();
                             setSearchVal([]);
                             setSelectedDates(null);
                             setSelecteddateRanges([]);
-                            router.back();
                           }}
                         >
                           <Image src={leftArrow} />
                         </button>
-                        <div
-                          style={{
-                            width: "95%",
-                            display: "flex",
-                            margin: "auto",
-                          }}
-                        >
+                        <div className="w-100 d-flex justify-between">
                           {headerData?.map((item) => (
-                            <div className="col-xl-2" key={item?.id}>
+                            <div style={{ width: "20%" }} key={item?.id}>
                               <div style={{ display: "flex" }}>
                                 <Image src={item?.icon} alt="npimg" />
                                 <div className={styles.topTitle}>
@@ -240,7 +246,6 @@ const Index = ({
                             </div>
                           ))}
                         </div>
-                        <span></span>
                       </div>
                       <div className={styles.topHeader}>
                         <div className="col-lg-2 mx-2">

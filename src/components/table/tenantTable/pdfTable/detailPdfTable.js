@@ -21,7 +21,7 @@ export const getColors = (rowStatus) => {
 
   switch (status) {
     case "computed":
-    case "already_present":
+    case "already_present":case "completed":
       strokeColor = "rgba(11, 96, 176, 1)";
       progressTextClass = "fihrComputedProgressText";
       textColor = "rgba(11, 96, 176, 1)";
@@ -34,6 +34,7 @@ export const getColors = (rowStatus) => {
       imageSrc = failed;
       break;
     case "processing":
+      case "processed":
       strokeColor = "rgba(252, 103, 54, 1)";
       progressTextClass = "fihrProgressText";
       textColor = "rgba(252, 103, 54, 1)";
@@ -41,10 +42,10 @@ export const getColors = (rowStatus) => {
       break;
 
     default:
-      strokeColor = "rgba(252, 103, 54, 1)";
-      progressTextClass = "fihrProgressText";
-      textColor = "rgba(252, 103, 54, 1)";
-      imageSrc = completed;
+      strokeColor = "";
+      progressTextClass = "";
+      textColor = "";
+      imageSrc = "";
   }
 
   return { strokeColor, progressTextClass, textColor, imageSrc };
@@ -63,7 +64,7 @@ const DetailedPdfTable = ({
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (
-      renderSkeleton()
+        renderSkeleton()
       ) : (
         <>
           <table className={TableStyle.classTable}>
@@ -105,40 +106,41 @@ const DetailedPdfTable = ({
                         : "---"}
                     </td>
                     <td
-                      className={TableStyle.childBorder}
+                      className={`${TableStyle.childBorder}`}
                       style={{ textAlign: "center" }}
                     >
-                      <div>
-                        <div
-                          className="text-capitalize mx-2"
-                          style={{
-                            fontSize: "14px",
-                            display: "flex",
-                            margin: "auto",
-                            justifyContent: "start",
-                            color: getColors(row?.fileStatus)?.textColor,
-                          }}
-                        >
-                          <Image
-                            src={getColors(row?.fileStatus)?.imageSrc}
-                            style={{ paddingRight: "5px" }}
-                          />
-                          {row?.fileStatus}
-                          {row?.fileStatus === "FAILED" && (
-                            <div className={styles.refreshBtn}>
-                              <Image src={refresh} width={15} height={15} />
-                            </div>
-                          )}
-                        </div>
-                        <div className={styles.progressDIv}>
-                          <Progress
-                            percent={80}
-                            strokeColor={getColors(row?.fileStatus)?.strokeColor}
-                            className={`${styles.progreddBr} ${
-                              getColors(row?.fileStatus)?.progressTextClass
-                            }`}
-                          />
-                        </div>
+                      <div
+                        className="text-capitalize"
+                        style={{
+                          fontSize: "14px",
+                          display: "flex",
+                          margin: "auto",
+                          justifyContent: "start",
+                          color: getColors(row?.fileStatus)?.textColor,
+                        }}
+                      >
+                        <Image
+                          src={getColors(row?.fileStatus)?.imageSrc}
+                          style={{ paddingRight: "5px" }}
+                        />
+                        {row?.fileStatus?.slice(0, 1).toUpperCase() +
+                          row?.fileStatus.slice(1).toLowerCase()}
+                        {row?.fileStatus === "FAILED" && (
+                          <div className={styles.refreshBtn}>
+                            <Image src={refresh} width={15} height={15} />
+                          </div>
+                        )}
+                      </div>
+                      <div
+                        className={`${styles.progressDIv} d-flex justify-content-center`}
+                      >
+                        <Progress
+                          percent={row?.fileStatus === "PROCESSING" ? 70 : 100}
+                          strokeColor={getColors(row?.fileStatus)?.strokeColor}
+                          className={`${styles.progreddBr} ${
+                            getColors(row?.fileStatus)?.progressTextClass
+                          }`}
+                        />
                       </div>
                     </td>
                   </tr>
