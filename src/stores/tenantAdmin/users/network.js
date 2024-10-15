@@ -1,7 +1,6 @@
 import { notification } from "antd";
 import { requestPortal } from "../../../utils/network";
 import { getStorage } from "../../../utils/storages";
-import { getResponePopup } from "../../../utils/reusable";
 
 export async function getAllOrganization() {
   const options = {
@@ -51,11 +50,11 @@ export const AddUser = async (data, setFormData) => {
     body: JSON.stringify(data),
   };
 
-  const response = await requestPortal(
-    `securityservice/admin/getusers/createuser`,
-    options
-  );
-  return response;
+    const response = await requestPortal(
+      `securityservice/admin/getusers/createuser`,
+      options
+    );  
+      return response;
 };
 
 export async function addPatient({ data }) {
@@ -73,7 +72,7 @@ export const enableUser = async ({
   role,
   setPopoverVisible,
   selectedManager,
-  field,
+  field
 }) => {
   var tenId = getStorage("tenantId");
   var orgId = getStorage("orgId");
@@ -104,12 +103,12 @@ export const enableUser = async ({
         `management/admin/updateuser`,
         options
       );
-      if (response?.status === "SUCCESS") {
+      if (response?.status==='SUCCESS') {
         notification.success({
           description: `${response?.response?.message} `,
         });
       }
-      return response;
+      return response
     } catch (err) {
       console.log(err);
     }
