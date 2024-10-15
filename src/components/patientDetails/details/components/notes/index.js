@@ -16,9 +16,18 @@ import { getStorage } from "../../../../../utils/storages";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { isDeleteNotes } from "../../../../../stores/patient/details/actions";
 import { getResponePopup } from "../../../../../utils/reusable";
-import { getNotesLists, getUserDetails } from "../../../../../stores/patient/details/network";
+import {
+  getNotesLists,
+  getUserDetails,
+} from "../../../../../stores/patient/details/network";
 
-const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes }) => {
+const Notes = ({
+  setOpen,
+  open,
+  patientDetailsResult,
+  isDeleteNotes,
+  isAddNotes,
+}) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
     comments: "",
@@ -43,6 +52,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes 
       return;
     }
     const yearData = patientDetailsResult?.data?.response;
+
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
       const orgId = getStorage("orgId");
@@ -50,14 +60,11 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes 
       var dataFormatSuggested = {
         patientId: yearData?.patientId,
         note: inputValue.comments,
-        processedYear: yearData?.processedYear
-          ? yearData?.processedYear
-          : yearData?.dateOfService
-          ? yearData?.dateOfService
-          : "",
+        processedYear: yearData?.processedYear,
+        dateOfService: patientDetailsResult?.data?.response?.dateOfService,
       };
       try {
-        const response = await isAddNotes(dataFormatSuggested)
+        const response = await isAddNotes(dataFormatSuggested);
         getResponePopup(response);
         setInputValue({ ...inputValue, comments: "" });
         getNotesList();
@@ -109,15 +116,12 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes 
         var dataFormatSuggested = {
           patientId: yearData?.patientId,
           note: inputValue.comments,
-          processedYear: yearData?.processedYear
-            ? yearData?.processedYear
-            : yearData?.dateOfService
-            ? yearData?.dateOfService
-            : "",
+          processedYear: yearData?.processedYear,
+          dateOfService: yearData?.dateOfService,
         };
 
         try {
-          const response = await isAddNotes(dataFormatSuggested)
+          const response = await isAddNotes(dataFormatSuggested);
           getResponePopup(response);
           setInputValue({ ...inputValue, comments: "" });
           getNotesList();
@@ -130,7 +134,10 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes 
 
   const getNotesList = async () => {
     const yearData = patientDetailsResult?.data?.response;
-    const response = await getNotesLists(patientDetailsResult?.data?.response?.patientId,yearData)
+    const response = await getNotesLists(
+      patientDetailsResult?.data?.response?.patientId,
+      yearData
+    );
     setNotesList(response?.response);
     setFilterDataLoading(false);
   };
@@ -255,7 +262,7 @@ const Notes = ({ setOpen, open, patientDetailsResult, isDeleteNotes, isAddNotes 
               >
                 <FontAwesomeIcon
                   icon={faXmarkCircle}
-                  onClick={() => handleDelete(data.noteId)} 
+                  onClick={() => handleDelete(data.noteId)}
                   style={{ color: "#be3144" }}
                 />
               </div>
