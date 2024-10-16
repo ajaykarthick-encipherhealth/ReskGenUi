@@ -1,11 +1,11 @@
 
 import React from 'react';
 
-const SvgFlag = ({ fillColor }) => (
+const SvgFlag = ({ fillColor, width, height }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="23"
-    height="23"
+    width={width || "23"}
+    height={height || "23"}
     viewBox="0 0 800 800"
     fill={fillColor}
   >

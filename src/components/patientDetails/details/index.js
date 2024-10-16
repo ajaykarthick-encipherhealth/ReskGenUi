@@ -24,7 +24,7 @@ import {
   faTimeline,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Avatar, Tooltip, Select, Badge, notification, Drawer } from "antd";
+import { Avatar, Tooltip, Select, Badge, notification, Drawer, Popover } from "antd";
 import { IMAGES, SVGICON } from "../../../jsx/constant/theme";
 import { Button, Offcanvas } from "react-bootstrap";
 import Image from "next/image";
@@ -55,7 +55,9 @@ import ManuallyAddProvider from "./manuallyAddProvider";
 import { getAge } from "../../../utils/reusable";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { truncateString } from "./components/function/ReusableFunctions";
+import SvgFlag from "./components/svg/svg";
 import { getTimelineList, getUserDetails } from "../../../stores/patient/details/network";
+
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -685,9 +687,7 @@ const Details = ({
                   <div className="row">
                     {activeTab == "2" || activeTab == "1" ? (
                       <div className="d-flex">
-                        <div
-                          style={{ zIndex: "1" }}
-                        >
+                        <div style={{ zIndex: "1" }}>
                           <Button
                             onClick={backToPatientData}
                             className={`ms-2 ${visitStyles.backArrowBtn}`}
@@ -806,42 +806,91 @@ const Details = ({
                                   </h6>
                                 </div>
                                 <div className="">
-                                  {flagsDetailsResult?.response[0] && (
-                                    <div className="mt-2">
-                                      <div
-                                        className="d-flex align-items-center justify-content-center cr-pointer"
-                                        onClick={() =>
-                                          setFlagContainerActive("Flag")
-                                        }
-                                      >
-                                        <Tooltip
-                                          placement="bottom"
-                                          title={flagsDetailsResult?.response[0]?.flagDetails?.flagName.replaceAll(
-                                            "_",
-                                            " "
-                                          )}
-                                        >
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="30"
-                                            height="30"
-                                            viewBox="0 0 800 800"
-                                            fill={
-                                              flagsDetailsResult?.response[0]
-                                                ?.flagDetails?.flagColour
+                                  {flagsDetailsResult?.response?.length > 0 &&
+                                    (() => {
+                                      const sortedFlags =
+                                        flagsDetailsResult.response.sort(
+                                          (a, b) =>
+                                            b.flagDetails?.priority -
+                                            a.flagDetails?.priority
+                                        );
+
+                                      const highestPriorityFlag =
+                                        sortedFlags[0];
+
+                                      return (
+                                        <div className="mt-2">
+                                          <div
+                                            className="d-flex align-items-center justify-content-center cr-pointer"
+                                            onClick={() =>
+                                              setFlagContainerActive("Flag")
                                             }
                                           >
-                                            <path
-                                              d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-                                              stroke="#000"
-                                              stroke-width="10"
-                                            />
-                                          </svg>
-                                        </Tooltip>
-                                      </div>
-                                    </div>
-                                  )}
+                                            <Popover
+                                              content={
+                                                <div
+                                                  style={{
+                                                    height: "auto",
+                                                    overflowY: "scroll",
+                                                  }}
+                                                >
+                                                  <strong>Flag details</strong>
+                                                  {sortedFlags?.map(
+                                                    (flag, flagIndex) => (
+                                                      <div
+                                                        key={flagIndex}
+                                                        className="p-1"
+                                                      >
+                                                        <SvgFlag
+                                                          fillColor={
+                                                            flag?.flagDetails
+                                                              ?.flagColour
+                                                          }
+                                                        />
+                                                        <span className="ml-2">
+                                                          {flag?.flagDetails?.flagName.replaceAll(
+                                                            "_",
+                                                            " "
+                                                          )}
+                                                        </span>
+                                                      </div>
+                                                    )
+                                                  )}
+                                                </div>
+                                              }
+                                              placement="right"
+                                            >
+                                              <Badge
+                                                count={
+                                                  flagsDetailsResult?.response
+                                                    ?.length
+                                                }
+                                                offset={[5, 5]}
+                                                size="medium"
+                                                style={{
+                                                  right: "10px",
+                                                  background: "#04306f",
+                                                }}
+                                              >
+                                                <span>
+                                                  <SvgFlag
+                                                    fillColor={
+                                                      highestPriorityFlag
+                                                        ?.flagDetails
+                                                        ?.flagColour
+                                                    }
+                                                    height="35px"
+                                                    width="35px"
+                                                  />
+                                                </span>
+                                              </Badge>
+                                            </Popover>
+                                          </div>
+                                        </div>
+                                      );
+                                    })()}
                                 </div>
+
                                 <div className="">
                                   <div
                                     className={`${visitStyles.priorityStatus} p-0`}
@@ -1240,15 +1289,34 @@ const Details = ({
                         <div className={`${visitStyles.flag_container}`}>
                           <ul className="">
                             {flagList?.map((data) => {
+                              const isFlagDisabled =
+                                data.name === "Flag" && !isDosSelected;
+
                               return (
-                                <Tooltip title={data.name} placement="left">
+                                <Tooltip
+                                  title={data.name}
+                                  placement="left"
+                                  key={data.name}
+                                >
                                   <li
                                     className={
                                       flagContainerActive == data.name
                                         ? `${visitStyles.commentsTagActive}`
                                         : `${visitStyles.commentsTag}`
                                     }
-                                    onClick={() => addComments(data.name)}
+                                    onClick={() => {
+                                      if (!isFlagDisabled) {
+                                        addComments(data.name);
+                                      }
+                                    }}
+                                    style={
+                                      isFlagDisabled
+                                        ? {
+                                            cursor: "not-allowed",
+                                            opacity: 0.5,
+                                          }
+                                        : {}
+                                    }
                                   >
                                     {data.name === "Flag" ? (
                                       <Badge
@@ -1275,7 +1343,6 @@ const Details = ({
                       </div>
                     </div>
                   </div>
-                 
 
                   {/* Modals */}
 

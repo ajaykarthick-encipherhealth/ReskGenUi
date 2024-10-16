@@ -4,13 +4,14 @@ import { useRouter } from "next/router";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
-import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
+import { notification, Select as AntSelect, Empty, Tooltip, Popover, Badge } from "antd";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import {
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../headerFilters/functions";
 import { getStorage, setStorage } from "../../../../utils/storages";
+import SvgFlag from "../../../patientDetails/details/components/svg/svg";
 
 function AddPatientListTable({
   patinetListAll,
@@ -90,6 +91,62 @@ function AddPatientListTable({
           >
             <td
               className={TableStyle.firstTdBorder}
+              onClick={handleTableRowClick}
+            >
+              {data?.flagList && data.flagList.length > 0 ? (
+                (() => {
+                  const sortedFlags = [...data.flagList].sort((a, b) => {
+                    if (a.priority === null) return 1;
+                    if (b.priority === null) return -1;
+                    return a.priority - b.priority;
+                  });
+
+                  const priorityFlag = sortedFlags[0];
+
+                  return (
+                    <Popover
+                      content={
+                        <div style={{ height: "auto", overflow: "scroll" }}>
+                          <strong>Flag details</strong>
+                          {data.flagList.map((flag, flagIndex) => (
+                            <div key={flagIndex}>
+                              <span className="p-1">
+                                <SvgFlag fillColor={flag?.flagColour} />
+                              </span>
+                              {flag?.flagName.replaceAll("_", " ")}
+                            </div>
+                          ))}
+                        </div>
+                      }
+                      placement="right"
+                    >
+                      <Badge
+                        count={data.flagList.length}
+                        offset={[5, 5]}
+                        size="small"
+                        style={{
+                          right: "2px",
+                          marginTop: "2px",
+                          background: "#04306f",
+                        }}
+                      >
+                        <SvgFlag
+                          fillColor={priorityFlag?.flagColour || "transparent"}
+                        />
+                      </Badge>
+                    </Popover>
+                  );
+                })()
+              ) : (
+                <Tooltip title="No flag found">
+                  <span>
+                    <SvgFlag fillColor={"transparent"} />
+                  </span>
+                </Tooltip>
+              )}
+            </td>
+            <td
+              className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
               {data.patientId ? (
@@ -210,6 +267,7 @@ function AddPatientListTable({
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
+            <th>Flag </th>
             <th>PATIENT ID</th>
             <th className="text-truncate">FILE NAME</th>
             <th className="text-truncate">EMR TYPE</th>
