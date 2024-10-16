@@ -204,7 +204,7 @@ const Index = ({
       ),
     },
   ];
-  console.log(currentId);
+
   return (
     <>
       <Header />

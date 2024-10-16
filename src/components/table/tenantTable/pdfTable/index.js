@@ -30,6 +30,7 @@ function PdfTable({
   const dispatch = useDispatch();
   const router = useRouter();
   const [filelList, setFileList] = useState();
+  const [socketData, setSocketData] = useState([]);
   const [triggeredBatch, setTriggeredBatch] = useState({
     status: false,
     id: null,
@@ -96,7 +97,22 @@ function PdfTable({
     };
   };
 
-  console.log(webSocketData, "webSocketData");
+  useEffect(() => {
+    if (webSocketData && webSocketData?.webSocketType === "BATCH_STATUS") {
+      const patientData = tableData?.content;
+      var foundItem = patientData?.find(
+        (x) => x.id == webSocketData?.id
+      );
+      if (foundItem) {
+        foundItem.batchUploadStatus = webSocketData?.batchUploadStatus;
+        // if (webSocketData?.computedDate) {
+        //   foundItem.computedDate = webSocketData?.computedDate;
+        // }
+      }
+      setSocketData(patientData);
+    }
+  }, [webSocketData]);
+  console.log(webSocketData, "webSocketData", socketData);
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (
@@ -132,8 +148,8 @@ function PdfTable({
               </thead>
 
               <tbody className={TableStyle.bodytable}>
-                {tableData?.content?.length > 0 ? (
-                  tableData?.content?.map((row, index) => (
+                {socketData?.length > 0 ? (
+                  socketData?.map((row, index) => (
                     <tr
                       key={index}
                       onClick={(e) => {
@@ -207,7 +223,7 @@ function PdfTable({
                                       isBorder: true,
                                     }),
                                   }}
-                                  className="px-2 py-1 rounded-1 font-semibold d-flex justify-content-center align-items-center"
+                                  className="px-4 py-1 rounded-1 font-semibold d-flex justify-content-center align-items-center"
                                 >
                                   <FontAwesomeIcon
                                     className="mx-1"
@@ -245,7 +261,7 @@ function PdfTable({
                                   >
                                     {row?.source === "cogentUpload"
                                       ? "Upload"
-                                      : "Trigger"}
+                                      : (!row?.batchUploadStatus ? "Trigger":"")}
                                   </button>
                                 </div>
                               )}

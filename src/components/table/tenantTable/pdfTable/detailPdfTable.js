@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Empty, Progress } from "antd";
 import { Paginator } from "primereact/paginator";
 import dayjs from "dayjs";
@@ -11,6 +11,7 @@ import TableStyle from "../../table.module.css";
 import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
 import PropTypes from "prop-types";
 import { renderSkeleton } from "../../../reuseableFunctions";
+import { connect } from "react-redux";
 
 export const getColors = (rowStatus) => {
   let strokeColor;
@@ -55,12 +56,30 @@ const DetailedPdfTable = ({
   onPageChange,
   tableData,
   loader,
+  webSocketData
 }) => {
   DetailedPdfTable.propTypes = {
     paginationFirst: PropTypes.any.isRequired,
     onPageChange: PropTypes.func.isRequired,
     tableData: PropTypes.array.isRequired,
   };
+  const [socketData,setSocketData]=useState([])
+  useEffect(() => {
+    if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
+      const patientData = tableData?.content;
+      var foundItem = patientData?.find(
+        (x) => x.batchId == webSocketData?.patientId
+      );
+      if (foundItem) {
+        foundItem.computing = webSocketData?.computing;
+        if (webSocketData?.computedDate) {
+          foundItem.computedDate = webSocketData?.computedDate;
+        }
+      }
+      setSocketData(patientData);
+    }
+  }, [webSocketData]);
+  console.log(webSocketData, "webSocketData",socketData);
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (
@@ -170,5 +189,8 @@ const DetailedPdfTable = ({
     </div>
   );
 };
+const connector = connect((state) => ({
+  webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
+}));
 
-export default DetailedPdfTable;
+export default connector(DetailedPdfTable);
