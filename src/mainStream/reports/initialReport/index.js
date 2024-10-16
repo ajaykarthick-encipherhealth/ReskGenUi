@@ -372,12 +372,12 @@ const InitialCard = ({
                       type="checkbox"
                       onChange={() => {
                         setSelectAll((prevState) => {
-                          const updatedSelectAll = !prevState; 
+                          const updatedSelectAll = !prevState;
                           handleHeaderCheckboxChange(
                             activeTab,
                             updatedSelectAll,
                             setSelectAll
-                          ); 
+                          );
                           return updatedSelectAll;
                         });
                       }}
@@ -519,6 +519,7 @@ const InitialCard = ({
                             <Flags
                               reportListAll={reportListAll}
                               styles={styles}
+                              activeTab={activeTab}
                             />
                             {activeTab === "Reviewer"
                               ? ""

@@ -1,9 +1,13 @@
 import { Empty, Popover } from "antd";
 import React from "react";
 
-const Flags = ({ reportListAll, styles }) => {
+const Flags = ({ reportListAll, styles, activeTab }) => {
   return (
-    <div className={`col-xl-6 ${styles.flags}`}>
+    <div
+      className={`${activeTab === "Reviewer" ? "col-xl-6" : "col-xl-4"} ${
+        styles.flags
+      }`}
+    >
       <div className={styles.cardHead}>Flags</div>
       <div className={styles.contentOverFlow}>
         {reportListAll?.flagIdCountDTOs?.length > 0 ? (
@@ -43,10 +47,12 @@ const Flags = ({ reportListAll, styles }) => {
               </div>
               <Popover
                 content={() => (
-                  <div style={{
-                    maxHeight: "200px",
-                    overflow: "scroll"
-                  }}>
+                  <div
+                    style={{
+                      maxHeight: "200px",
+                      overflow: "scroll",
+                    }}
+                  >
                     {flagItem.patientIds.map((item) => (
                       <label className="d-block">{item}</label>
                     ))}
