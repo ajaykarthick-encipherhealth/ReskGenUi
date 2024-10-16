@@ -6,7 +6,7 @@ import FileUploader from "../../components/fileUploader";
 import ModalPop from "../../components/modal";
 import CommonModalContent from "../../components/commonModalContent";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import FileUpload from "../../../../../components/table/tenantSettingsTable/fileUpload";
 import { PlusOutlined } from "@ant-design/icons";
 import FilterButton from "../../../../../components/table/tenantSettingsTable/filterButton";
@@ -24,6 +24,7 @@ const HistoryCodes = ({
   list,
   editComoridConditions,
   deleteComoridConditions,
+  uploadFiles
 }) => {
   const [form] = Form.useForm();
   const [openModal, setOpenModal] = useState(false);
@@ -153,13 +154,15 @@ const HistoryCodes = ({
     };
     // setSelectFile(formData);
     try {
-      const res = await axios.post(
-        ENDPOINTS.apiEndoint +
-          `management/tenantAdmin/codes/upload
-      `,
-        formData,
-        headers
-      );
+      const res = await uploadFiles({obj:formData})
+      
+      // axios.post(
+      //   ENDPOINTS.apiEndoint +
+      //     `management/tenantAdmin/codes/upload
+      // `,
+      //   formData,
+      //   headers
+      // );
       setSelectFile("");
       if (res.data.status == "SUCCESS") {
         getResponePopup(res);
@@ -335,6 +338,7 @@ const enhancer = connect(
     editComoridConditions: settingActions.editComoridConditions,
     deleteComoridConditions: settingActions.deleteComoridConditions,
     getCodingDetails: settingActions.codingGuidelinesAction,
+    uploadFiles:settingActions.uploadFiles
   }
 );
 export default enhancer(HistoryCodes);

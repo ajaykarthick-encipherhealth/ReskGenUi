@@ -32,7 +32,6 @@ const AdminWorkList = ({
 }) => {
   const dispatch = useDispatch();
   const result = useSelector((state) => state.adminList.patients);
-  console.log(result);
   const [patientList, setPatientList] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);

@@ -38,6 +38,7 @@ import { reducer as allocatedReducer } from "./admin/patientAllocation";
 import { reducer as UsersReducer } from "./supervisor/users";
 import { reducer as AuditedReducer } from "./supervisor/auditedQueue";
 import { reducer as tenantUsersReducer } from "./tenantAdmin/users";
+import { reducer as tenantFileProcessing } from "./tenantAdmin/fileProcessing";
 import { reducer as tenantAminPatientsReducer } from "./tenantAdmin/patients";
 import { reducer as patientSyncReducer } from "./tenantAdmin/patientSync";
 import { reducer as tenantAdminTrackingReducer } from "./tenantAdmin/tracking";
@@ -48,14 +49,14 @@ import { reducer as adminUsersReducer } from "./admin/users";
 import { reducer as supervisorDashboardReducer } from "./supervisor/dashboard";
 import { reducer as dashbaordReducer } from "./reviewer/dashboard";
 
-import {reducer as dashboardReducer} from './admin/dashboard'
+import { reducer as dashboardReducer } from "./admin/dashboard";
+import { reducer as imageUploadReducer } from "./authflow/imageUpload";
 const reducers = combineReducers({
   // old reducers
   sideMenu: toggleMenu,
   posts: PostsReducer,
   auth: AuthReducer,
-  filters:filterReducer,
-  // patientDetails: PatientStore,
+  filters: filterReducer,
   workFlow: DashboardReducer,
   report: ReportReducer,
   AuditReport: AuditReportReducer,
@@ -81,19 +82,19 @@ const reducers = combineReducers({
     workQueue: updatedPatientsReducer,
     report: reportReducer,
   }),
-
+  loggedInUser: UsersReducer,
   supervisor: combineReducers({
     report: updatedReportReducer,
     users: UsersReducer,
     audited: AuditedReducer,
-    dashboard: supervisorDashboardReducer
+    dashboard: supervisorDashboardReducer,
   }),
   admin: combineReducers({
     report: updatedAdminReportReducer,
     workqueue: adminPatientsReducer,
     patientAllocate: allocatedReducer,
     users: adminUsersReducer,
-    dashboard:dashboardReducer
+    dashboard: dashboardReducer,
   }),
   codify: combineReducers({
     codify: codifyReducer,
@@ -118,8 +119,10 @@ const reducers = combineReducers({
     tracking: tenantAdminTrackingReducer,
     notification: tenantAminNotificationReducer,
     settings: tenantAminSettingsReducer,
+    fileProcessing: tenantFileProcessing,
   }),
   tenatOnBoarding: tenantOnBoarding,
+  imageUploadReducer: imageUploadReducer,
 });
 
 const middlewares = [thunkMiddleware, promiseMiddleware];

@@ -26,10 +26,10 @@ import {
 import { useSelector, connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import MovementAction from "../movementAction";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
+import { isLocalEdit } from "../../../../../utils/config";
 const LabCards = ({
   list,
   hccVersionDetails,
@@ -597,7 +597,7 @@ const LabCards = ({
         title={"Edit"}
         openState={openEdit}
         handleCloseModal={handleCloseModal}
-        isEdit={ENDPOINTS?.isLocalEdit}
+        isEdit={isLocalEdit}
         setOpenEdit={setOpenEdit}
         initialValues={initialValues}
         setInitialValues={setInitialValues}

@@ -14,8 +14,6 @@ import Tree from "./data.json";
 import Header from "../../../../../jsx/layouts/nav/Header";
 import { Card } from "react-bootstrap";
 // import visitStyles from "../../../styles/visitdata.module.css";
-import ENDPOINTS from "../../../../../utility/enpoints";
-import axios from "../../../../../utility/axiosConfig";
 import { CalendarOutlined } from "@ant-design/icons";
 import moment from "moment";
 import visitStyles from "../../../../../styles/visitdata.module.css";

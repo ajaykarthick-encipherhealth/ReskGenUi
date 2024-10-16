@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import dayjs from "dayjs";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "../../../utility/axiosConfig";
@@ -60,6 +61,8 @@ const Patient = ({
   webSocketData,
   loading,
   getPatientId,
+  uploadFiles,
+  uploadFilesRadiology
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -114,6 +117,7 @@ const Patient = ({
   const [selectOrgList, setSelectedOrgList] = useState(null);
   const [orgAllList, setOrgAllList] = useState([]);
   const [searchVal, setSearchVal] = useState("");
+  const [paramsFilter, setParamsFilter] = useState('check');
 
   useEffect(() => {
     if (window !== "undefined") {
@@ -123,6 +127,7 @@ const Patient = ({
           const urlParams = new URLSearchParams(queryString);
           const encodedParams = urlParams.get("params");
           const decodedParams = JSON.parse(atob(encodedParams));
+          setParamsFilter("check")
           setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
           setPaginationFirst(
             decodedParams?.paginationFirst ? decodedParams?.paginationFirst : 0
@@ -159,6 +164,7 @@ const Patient = ({
   }, [navigate]);
 
   useEffect(() => {
+    setParamsFilter("check")
     var tenId = getStorage("tenantId");
     var uId = getStorage("userId");
     var orgId = getStorage("orgId");
@@ -166,20 +172,22 @@ const Patient = ({
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    getAllPatients(
-      pageNo,
-      computedStartDate,
-      computedEndDate,
-      selectedOption,
-      search,
-      completedStartDate,
-      completedEndDate,
-      selAllocatedTo || "",
-      selAllocatedBy || "",
-      selCreatedBy || "",
-      sort,
-      (orgId = selectOrgList)
-    );
+    if(paramsFilter){
+      getAllPatients(
+        pageNo,
+        computedStartDate,
+        computedEndDate,
+        selectedOption,
+        search,
+        completedStartDate,
+        completedEndDate,
+        selAllocatedTo || "",
+        selAllocatedBy || "",
+        selCreatedBy || "",
+        sort,
+        (orgId = selectOrgList)
+      );
+    }
     dispatch(getFilters("createdBy"));
   }, [
     pageNo,
@@ -207,7 +215,7 @@ const Patient = ({
       getAllOrganizationList();
     }
   }, []);
-  console.log(selectOrgList, "selectOrgList");
+
   useEffect(() => {
     var orgListArray = [];
     organizationList?.response?.map((res) => {
@@ -345,9 +353,7 @@ const Patient = ({
     form.patientId = form.patientId.trim();
     try {
       setIsLoadingBtn(true);
-      const response = await getPatientId({ obj: form });
-
-      if (response?.data?.status == "SUCCESS") {
+      const response = await getPatientId({ obj: form }); 
         getAllPatients(
           pageNo,
           computedStartDate,
@@ -362,23 +368,16 @@ const Patient = ({
           sort,
           orgId
         );
+
         setAddPatientId(false);
         setIsLoadingBtn(false);
-        notification.success({
-          message: "Patients added successfully.",
-          duration: 1,
-        });
-      } else {
         getResponePopup(response);
         setIsLoadingBtn(false);
-      }
-    } catch (Err) {
-      notification.error({
-        message: Err?.response?.data?.message,
-        duration: 1,
-      });
-    }
+        form.resetFields();
 
+    } catch (Err) {
+    getResponePopup(Err?.response);
+    }
     setValidated(true);
   };
 
@@ -488,25 +487,23 @@ const Patient = ({
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
     formData.append("emrtype", emrType);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload
-      `,
-      formData,
-      headers
-    );
-    if (response?.status === 200) {
-      // getAllList(response);
+    const response = await uploadFiles({obj:formData})
+    
+    
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload
+    //   `,
+    //   formData,
+    //   headers
+    // );
 
-      notification.success({
-        message: "Patient File Upload Successfully!",
-      });
       var orgId = selectOrgList;
       getAllPatients(
         pageNo,
@@ -526,10 +523,11 @@ const Patient = ({
       setAddPatient(false);
       setAddPatient(false);
       setIsLoadingBtn(false);
+        getResponePopup(response);
       // dispatch(getMessagesList())
-    } else {
-      setIsLoadingBtn(false);
-    }
+    // } else {
+    //   setIsLoadingBtn(false);
+    // }
     setAddPatient(false);
     setIsLoadingBtn(false);
     // getAllList(localUserId);
@@ -543,19 +541,21 @@ const Patient = ({
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
     formData.append("emrtype", emrType);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
     setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/radiology
-    `,
-      formData,
-      headers
-    );
+    const response = await uploadFilesRadiology({obj:formData})
+    
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/upload/radiology
+    // `,
+    //   formData,
+    //   headers
+    // );
     if (response?.status == 202) {
       // getAllList(localUserId, pageNo, pageSize);
       setAddPatient(false);
@@ -661,6 +661,7 @@ const Patient = ({
                             search={search}
                             searchVal={searchVal}
                             setSearchVal={setSearchVal}
+                            activeTab={"pateints"}
                             // select status
                             selectlabel="Select Status"
                             isSelector={true}
@@ -710,6 +711,7 @@ const Patient = ({
                             isNextRow={true}
                             btnTitle="Add Patient"
                             atCorner={true}
+                            selAllocatedBy={selAllocatedBy}
                             // selectOrg
                             selectlabelOrg="Select Organization"
                             isSelectOrg={true}
@@ -832,6 +834,8 @@ const enhancer = connect(
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     getAllPatients: tenantAdminAction.getAllPatientAction,
     getPatientId: tenantAdminAction.submitPatientId,
+    uploadFiles:tenantAdminAction.uploadFiles,
+    uploadFilesRadiology:tenantAdminAction.uploadFilesRadiology
   }
 );
 export default enhancer(Patient);

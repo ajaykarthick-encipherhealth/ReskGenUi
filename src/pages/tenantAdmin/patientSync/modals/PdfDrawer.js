@@ -28,6 +28,7 @@ const PdfDrawer = ({
   getAllBatches,
   selectedBatch,
   setSelectedBatch,
+  upoloadFiles
 }) => {
   const [form] = Form.useForm();
   const [selectedType, setSelectedType] = useState(null);
@@ -57,11 +58,14 @@ const PdfDrawer = ({
           },
         };
 
-        return axios.post(
-          `${ENDPOINTS.apiEndoint}management/batch/upload`,
-          formData,
-          headers
-        );
+        return upoloadFiles({obj:formData})
+        
+        
+        // axios.post(
+        //   `${ENDPOINTS.apiEndoint}management/batch/upload`,
+        //   formData,
+        //   headers
+        // );
       });
 
       const responses = await Promise.all(uploadPromises);
@@ -265,5 +269,6 @@ const PdfDrawer = ({
 const enhancer = connect((state) => ({}), {
   getCreateBatch: tenantActions.getCreateBatch,
   getAllBatches: tenantActions.getAllBatches,
+  upoloadFiles:tenantActions.upoloadFiles
 });
 export default enhancer(PdfDrawer);

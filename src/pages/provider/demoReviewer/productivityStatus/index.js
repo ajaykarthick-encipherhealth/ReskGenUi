@@ -35,7 +35,6 @@ const ProductivityStatus = () => {
       chart.setFilter(filter);
     }
   };
-  console.log(currentDate);
 
   useEffect(() => {
     if (currentBtn === "Daily" || currentBtn === "Weekly") dayFilter();
@@ -53,7 +52,6 @@ const ProductivityStatus = () => {
     if (chart) {
       chart.setFilter(filter);
     }
-    console.log("chartchart1", chart);
   };
 
   useEffect(() => {

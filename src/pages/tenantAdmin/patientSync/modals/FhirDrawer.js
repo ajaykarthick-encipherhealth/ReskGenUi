@@ -28,7 +28,7 @@ export const inputTypeOptions = [
   { label: "Manual", value: "MANUAL" },
   { label: "Group Id", value: "GROUP_ID" },
 ];
-const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch }) => {
+const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch, upoloadFiles }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [selectedType, setSelectedType] = useState(null);
@@ -76,12 +76,15 @@ const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch }) => {
       groupId: formVal?.groupId,
     };
     try {
-      const res = axios.post(
-        `${ENDPOINTS.apiEndoint}management/batch/upload`,
-        selectedType === "GROUP_ID" ? data : { ...data, file: fileList[0] },
-        selectedType !== "GROUP_ID" && headers
-      );
-      console.log(res);
+      const res = await upoloadFiles( selectedType === "GROUP_ID" ? data : { ...data, file: fileList[0] },
+         selectedType !== "GROUP_ID")
+        
+      
+      // post(
+      //   `${ENDPOINTS.apiEndoint}management/batch/upload`,
+      //   selectedType === "GROUP_ID" ? data : { ...data, file: fileList[0] },
+      //   selectedType !== "GROUP_ID" && headers
+      // );
       form.resetFields();
     } catch (err) {
       form.resetFields();
@@ -303,5 +306,6 @@ const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch }) => {
 const enhancer = connect((state) => ({}), {
   getCreateBatch: tenantActions.getCreateBatch,
   getAllBatches: tenantActions.getAllBatches,
+  upoloadFiles:tenantActions.upoloadFiles
 });
 export default enhancer(FhirDrawer);

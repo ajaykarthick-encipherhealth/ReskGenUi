@@ -6,7 +6,7 @@ import FileUploader from "../../components/fileUploader";
 import ModalPop from "../../components/modal";
 import CommonModalContent from "../../components/commonModalContent";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import FileUpload from "../../../../../components/table/tenantSettingsTable/fileUpload";
 import { PlusOutlined } from "@ant-design/icons";
 import FilterButton from "../../../../../components/table/tenantSettingsTable/filterButton";
@@ -25,6 +25,7 @@ const DirectConfirmCodes = ({
   uploadfile,
   deleteComoridConditions,
   editComoridConditions,
+  uploadFiles
 }) => {
   const [form] = Form.useForm();
   const [openModal, setOpenModal] = useState(false);
@@ -93,18 +94,20 @@ const DirectConfirmCodes = ({
     formData.append("file", selectFile.originFileObj);
     formData.append("target", "DIRECT_CONFIRM_CODES");
     formData.append("isDefaultYear", isChecked);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    const res = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `management/tenantAdmin/codes/upload
-      `,
-      formData,
-      headers
-    );
+    // const headers = {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
+    const res = await uploadFiles({obj:formData})
+    
+    // axios.post(
+    //   ENDPOINTS.apiEndoint +
+    //     `management/tenantAdmin/codes/upload
+    //   `,
+    //   formData,
+    //   headers
+    // );
     setSelectFile("");
     if (res.status == "SUCCESS") {
       getResponePopup(res);
@@ -283,6 +286,7 @@ const enhancer = connect(
     editComoridConditions: settingActions.editComoridConditions,
     deleteComoridConditions: settingActions.deleteComoridConditions,
     getCodingDetails: settingActions.codingGuidelinesAction,
+    uploadFiles:settingActions.uploadFiles
   }
 );
 export default enhancer(DirectConfirmCodes);

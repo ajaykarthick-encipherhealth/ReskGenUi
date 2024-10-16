@@ -278,10 +278,10 @@ export async function updateRafConfig(obj) {
   );
   return data;
 }
-export async function uploadFile(obj) {
+export async function uploadFile({obj}) {
   const options = {
     method: "POST",
-    body: JSON.stringify(obj),
+    body: obj
   };
   const data = await requestPortalFiles(
     `management/tenantAdmin/codes/upload`,

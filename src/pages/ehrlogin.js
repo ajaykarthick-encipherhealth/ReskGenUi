@@ -66,7 +66,6 @@ export default function Login() {
       });
       setStorage("userRole", "ehr");
       let response = await submitLogin(enteredEmail, encyptingPass(password));
-      console.log(response);
       let result = response?.data?.response;
       if (response?.data?.status === "SUCCESS") {
         let emailSplit = enteredEmail?.split("@");

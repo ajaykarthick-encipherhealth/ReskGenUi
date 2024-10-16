@@ -450,10 +450,7 @@ function Patient({ getUsersList }) {
         );
     }
   };
-  const dateFormateChange = (rowData) => {
-    console.log(rowData);
-  };
-
+ 
   const processstatusBodyTemplate = (rowData) => {
     //   console.log(rowData.computing)
     //   return <span className={`badge badge-success`}>

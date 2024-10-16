@@ -4,8 +4,6 @@ import { notification } from "antd";
 import { Select } from "antd";
 import { Button, Form, Input, Space, DatePicker, Switch } from "antd";
 import moment from "moment";
-import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
 import RegularButton from "../../../../../components/button";
 import visitStyles from "../../../../../styles/visitdata.module.css";
@@ -13,6 +11,7 @@ import SelectButton from "../../../../../components/btnSelect";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import path from "path";
 import { getStorage } from "../../../../../utils/storages";
+import { addValidDisease, findDiseaseByCode, getProviderData } from "../../../../../stores/patient/details/network";
 
 const { TextArea } = Input;
 
@@ -175,10 +174,7 @@ const AddHccForm = ({
     //   (treatment && treatmentCapturedFromHeader)
     // ) {
     try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/patient/compute/addvaliddisease`,
-        dataFormat
-      );
+      const response = await addValidDisease(dataFormat);
       if (response?.status == 200) {
         handleCloseModal();
         notification.success({
@@ -207,12 +203,9 @@ const AddHccForm = ({
   const getFindValidDiagnosisCode = async (value) => {
     setAddValidCodeCheck(null);
     try {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
-      );
-      if (response.data) {
-        if (response.data == "ICD disease not found") {
+      const response = await findDiseaseByCode(value);
+      if (response?.response) {
+        if (response?.response== "ICD disease not found") {
           setAddValidCodeCheck(false);
         } else {
           setAddValidCodeCheck(true);
@@ -231,16 +224,13 @@ const AddHccForm = ({
         duration: 2,
       });
       try {
-        const response = await axios.get(
-          ENDPOINTS.apiEndoint +
-            `management/provider/getProviderData?npiNumber=${e.target.value}`
-        );
-        if (response.data) {
+        const response = await getProviderData(e.target.value);
+        if (response.response) {
           var initalForm = {
             providerName:
-              response?.data?.response?.userName +
+              response?.response?.userName +
               " " +
-              response?.data?.response?.credential,
+              response?.response?.credential,
             selectProviderInfo: ["Authorized Provider"],
           };
           setProviderDetails(initalForm);
@@ -458,7 +448,7 @@ const AddHccForm = ({
     setFormInitialValues(initalForm);
     form.setFieldsValue(initalForm);
   }, [selectEncounterList, selectProviderNameList, hyperlinkListSelect,mhyperlinkListSelect,ehyperlinkListSelect,ahyperlinkListSelect,thyperlinkListSelect, form]);
-console.log(selectProviderNameList)
+
   return (
     <>
       <div className={styles.formTitleContaniner}>

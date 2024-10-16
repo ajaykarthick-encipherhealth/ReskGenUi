@@ -10,10 +10,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
-import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { getStorage } from "../../../../../utils/storages";
+import { getPageNumber, getPageNumberLatest, movementApiCall } from "../../../../../stores/patient/details/network";
 
 export const getEncounterDateBackground = ({
   value,
@@ -1384,15 +1383,11 @@ export const handleSubmitValidNotes = async ({
         ? "DATE_OF_SERVICE"
         : "YEAR",
     };
-    const response = await axios.put(
-      ENDPOINTS.apiEndoint + apiURL,
-      dataFormatSuggested
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
+    const response = await movementApiCall(dataFormatSuggested,apiURL);
+    if (response?.status == "SUCCESS") {
       setFileLoading(false);
       notification.success({
-        message: result.response,
+        message: response?.response,
         placement: "top",
         duration: 1,
       });
@@ -1435,12 +1430,9 @@ const findValueDocuments = async (
     stringFileWord: splitPoint,
   };
   try {
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
-      data
-    );
-    var result = response?.data?.response;
-    if (response?.data?.status === "SUCCESS") {
+    const response = await getPageNumber(data);
+    var result = response?.response;
+    if (response?.status === "SUCCESS") {
       pageNumber = result?.second[0] ? result?.second[0] : null;
       if (!result?.first) {
         splitPoint = headerNames;
@@ -1542,12 +1534,9 @@ export const findValueDocument = async ({
       if (patientDocumentResult && setIsModalOpenValidCodes) {
         setIsModalOpenValidCodes(true);
       }
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
-        data
-      );
-      var result = response.data.response;
-      if (response?.data?.status == "SUCCESS") {
+      const response = await getPageNumberLatest(data);
+      var result = response?.response;
+      if (response?.status == "SUCCESS") {
         pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
         splitPoint = result?.searchString;
         if (result == null) {

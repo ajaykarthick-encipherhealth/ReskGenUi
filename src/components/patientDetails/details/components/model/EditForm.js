@@ -20,9 +20,8 @@ const EditForm = ({
       [field]: value,
     }));
   };
-  console.log(patientDetailsResult);
+  
   const handleForm = () => {
-    console.log(initialValues);
     setInitialValues({
       diagnosisCode: selectedData?.diagnosisCode,
       header: "",

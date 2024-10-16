@@ -14,8 +14,6 @@ import AddSection from "./AddSection";
 import MeatSection from "./MeatSection";
 import SelectButton from "../../../../btnSelect";
 import style from "../../../../../components/button/style.module.css";
-import ENDPOINTS from "../../../../../utility/enpoints";
-import axios from "../../../../../utility/axiosConfig";
 import { connect } from "react-redux";
 import { actions as patientDetailsAction } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";

@@ -28,6 +28,14 @@ export async function requestPortalFiles(url, options) {
   return fetch(actualUrl, actualOptions).then(checkStatus);
 }
 
+export async function requestPortalImgUpload(url, options) {
+  const actualUrl = `${url}`;
+  const actualOptions = {
+    ...options
+  };
+  return fetch(actualUrl, actualOptions).then((res) => res);
+}
+
 export async function requestAUthflow(url, options) {
   const actualUrl = `${portalUrl}${url}`;
   const actualOptions = {

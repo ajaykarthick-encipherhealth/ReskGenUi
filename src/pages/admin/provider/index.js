@@ -46,7 +46,6 @@ const UserList = () => {
   const [canMaxPage, setCanMaxPage] = useState(10);
 
   useEffect(() => {
-    console.log(sideMenu);
     getAllList();
   }, []);
 
@@ -81,7 +80,6 @@ const UserList = () => {
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
-      console.log(formData);
       // postPatient(formData);
     }
     setValidated(true);
@@ -165,10 +163,8 @@ const UserList = () => {
   }
 
   const roleChange = async (e) => {
-    console.log(e.value);
     var data = {};
     data.role = e.value;
-    console.log(data);
     // roleUpdate(data);
   };
 
@@ -180,8 +176,6 @@ const UserList = () => {
         [id]: isChecked,
       },
     }));
-
-    console.log(isStatus);
   };
   const cardsData = [
     { id: 1, title: "Provider 1", buttonLabel: 'Select Provider ', avatarSrc: 'avatar2.jpg'  },

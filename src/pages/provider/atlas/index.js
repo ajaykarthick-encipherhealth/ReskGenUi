@@ -170,7 +170,6 @@ const Atlas = () => {
         date: { $gte: startDate, $lte: endDate },
       };
     }
-    console.log("filter", filter);
     if (charts) {
       charts.setFilter(filter);
     }
@@ -197,7 +196,6 @@ const Atlas = () => {
         date: { $gte: startYearDate, $lte: endYearDate },
       };
     }
-console.log("filter month",filter);
     if (charts) {
       charts.setFilter(filter);
     }

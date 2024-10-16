@@ -17,7 +17,6 @@ import delIcon from "../../../../../images/svg/delIcon.svg";
 import edit from "../../../../../images/svg/editWithoutBg.svg";
 import { connect } from "react-redux";
 import ButtonStyles from "../../../../../components/button/style.module.css";
-import { useSelector } from "react-redux";
 import { getResponePopup, getYears } from "../../../../../utils/reusable";
 import FileUpload from "../../../../../components/table/tenantSettingsTable/fileUpload";
 import { PlusOutlined } from "@ant-design/icons";
@@ -50,6 +49,7 @@ const HealthMetricConfig = ({
   editHealthMetric,
   addHealthMetric,
   deleteComoridConditions,
+  uploadFiles
 }) => {
   const [form] = Form.useForm();
   const [openModal, setOpenModal] = useState(false);
@@ -373,13 +373,15 @@ const HealthMetricConfig = ({
     };
     // setSelectFile(formData);
     try {
-      const res = await axios.post(
-        ENDPOINTS.apiEndoint +
-          `management/tenantAdmin/codes/upload
-      `,
-        formData,
-        headers
-      );
+      const res = await uploadFiles({obj:formData})
+      
+      // axios.post(
+      //   ENDPOINTS.apiEndoint +
+      //     `management/tenantAdmin/codes/upload
+      // `,
+      //   formData,
+      //   headers
+      // );
       setSelectFile("");
       if (res.data.status == "SUCCESS") {
         getResponePopup(res);
@@ -594,6 +596,7 @@ const enhancer = connect(
     deleteComoridConditions: settingActions.deleteComoridConditions,
     addHealthMetric: settingActions.addHealthMetric,
     getCodingDetails: settingActions.codingGuidelinesAction,
+    uploadFiles:settingActions.uploadFiles
   }
 );
 export default enhancer(HealthMetricConfig);

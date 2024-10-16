@@ -1,4 +1,4 @@
-import { requestPortal } from "../../../utils/network";
+import { requestPortal, requestPortalFiles } from "../../../utils/network";
 import { getStorage, setStorage } from "../../../utils/storages";
 
 export async function patientDetails(
@@ -207,10 +207,7 @@ export async function addNotes(obj) {
     method: "POST",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(
-    `dbservice/notes`,
-    options
-  );
+  const data = await requestPortal(`dbservice/notes`, options);
   return data;
 }
 
@@ -219,10 +216,7 @@ export async function addComments(obj) {
     method: "POST",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(
-    `dbservice/comment`,
-    options
-  );
+  const data = await requestPortal(`dbservice/comment`, options);
   return data;
 }
 
@@ -365,6 +359,7 @@ export async function manuallyAddDosAndProvider(data) {
   );
   return res;
 }
+
 export async function manuallyAddDosAndProviderList(year) {
   const patientId = getStorage("patientId");
   const options = {
@@ -374,5 +369,178 @@ export async function manuallyAddDosAndProviderList(year) {
     `management/dos-provider/get-dos-and-provider-information?patientId=${patientId}&processedYear=${year}`,
     options
   );
+  return res;
+}
+
+export async function getValidHccDetailsApi(year, code) {
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(
+    `dbservice/hccdisease/icd10mappingForDisease?year=${year}&diagnosisCode=${code}`,
+    options
+  );
+  return res;
+}
+
+export async function getTimelineList(patientId) {
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(
+    `dbservice/actioneventaudit?patientid=${patientId}&pageno=${0}&pagesize=${100}`,
+    options
+  );
+  return res;
+}
+
+export async function getUserDetails(userId) {
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(
+    `dbservice/user/get?userName=${userId}`,
+    options
+  );
+  return res;
+}
+
+export async function addValidDisease(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/patient/compute/addvaliddisease`,
+    options
+  );
+  return data;
+}
+
+export async function findDiseaseByCode(value) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`,
+    options
+  );
+  return data;
+}
+export async function getProviderData(value) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `management/provider/getProviderData?npiNumber=${value}`,
+    options
+  );
+  return data;
+}
+
+export async function getCommentList(patientId, yearData) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/comment?patientId=${patientId}&processedYear=${
+      yearData?.processedYear || ""
+    }&dateOfService=${yearData?.dateOfService || ""}`,
+    options
+  );
+  return data;
+}
+
+export async function editDisease(obj) {
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`aiservice/disease/editdisease`, options);
+  return data;
+}
+
+export async function flagDetailsPost(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`dbservice/flagdetails`, options);
+  return data;
+}
+
+export async function movementApiCall(obj, apiUrl) {
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(apiUrl, options);
+  return data;
+}
+
+export async function getPageNumber(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`dbservice/pageNumber`, options);
+  return data;
+}
+
+export async function getPageNumberLatest(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`dbservice/pageNumber`, options);
+  return data;
+}
+
+export async function getNotesLists(patientId, yearData) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/notes?patientId=${patientId}&processedYear=${
+      yearData?.processedYear ? yearData?.processedYear : ""
+    }&dateOfService=${yearData?.dateOfService ? yearData?.dateOfService : ""}`,
+    options
+  );
+  return data;
+}
+
+export async function overallStatusUpdate(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`dbservice/patient/status/overallstatus`, options);
+  return data;
+}
+
+export async function overallYearStatus(obj,url) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(url, options);
+  return data;
+}
+
+export async function uploadRadiologyFile({ data }) {
+  const options = {
+    method: "POST",
+    body: data,
+  };
+  const res = await requestPortalFiles(`aiservice/ai/upload/radiology`, options);
+  return res;
+}
+
+export async function uploadLabFile({ data }) {
+  const options = {
+    method: "POST",
+    body: data,
+  };
+  const res = await requestPortalFiles(`aiservice/ai/upload/lab`, options);
   return res;
 }

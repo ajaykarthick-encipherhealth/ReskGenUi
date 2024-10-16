@@ -9268,9 +9268,9 @@ tr>td{
   .ant-select-selector {
   border-color: red !important;
 }
-.ant-select .ant-select-arrow {
+/* .ant-select .ant-select-arrow {
   margin-top: 0px !important;
-}
+
 .dosSelect .ant-select-arrow {
   margin-top: -5px !important;
 }
@@ -11830,7 +11830,7 @@ li.p-dropdown-item {
 }
 
 .has-search .new-form-control {
-  /* padding-left: 2.375rem; */
+  padding-left: 2.375rem !important;
   font-size: 14px;
 }
 .has-search .input-form-control {

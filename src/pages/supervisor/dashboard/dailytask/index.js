@@ -20,6 +20,7 @@ import { dailyTaskData } from "../../../../stores/supervisor/dashboard/actions";
 const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData, dailytask }) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
+  const [responseArray, setReponseArray] = useState([]);
 
   const dailyStatusData = useSelector((state) => state?.l2Dashboard?.dailyTask);
 
@@ -75,14 +76,10 @@ const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData, dailyt
       return getAllDailyTask({ date: data?.dateString });
     });
   }, []);
-console.log(dailytask
 
-
-  ,"dailytasksdfcvgbhnj")
-  // console.log(dailytask.supervisor?.dashboard?.workFlow?.data?.response
-//dailytask.supervisor.dashboard.workFlow.response
   useEffect(() => {
     if (dailyStatusDatas && selectedDate) {
+      responseArray.push(dailyStatusDatas?.data?.response)
       getDays(selectedDate, dailyStatusDatas);
     }
   }, [dailyStatusDatas, selectedDate]);
@@ -106,21 +103,21 @@ console.log(dailytask
 
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
-      const matchingStatusData = [statusData]?.find((status) => {
-        return status?.data?.response?.date === dayInfo?.dateString;
+      const matchingStatusData = responseArray?.find((status) => {
+        return  status?.date === dayInfo?.dateString;
       });
 
       return {
         id: index + 1,
         day: dayInfo?.day,
         date: dayInfo?.date,
-        dateString: matchingStatusData?.data?.response?.date,
-        pending: matchingStatusData?.data?.response?.auditPending || 0,
-        hold: matchingStatusData?.data?.response?.auditHold || 0,
-        audited: matchingStatusData?.data?.response?.audited || 0,
-        reAudited: matchingStatusData?.data?.response?.reAudited || 0,
-        allocated: matchingStatusData?.data?.response?.auditAllocated || 0,
-        declined: matchingStatusData?.data?.response?.auditDeclined || 0,
+        dateString: matchingStatusData?.date,
+        pending: matchingStatusData?.auditPending || 0,
+        hold: matchingStatusData?.auditHold || 0,
+        audited: matchingStatusData?.audited || 0,
+        reAudited: matchingStatusData?.reAudited || 0,
+        allocated: matchingStatusData?.auditAllocated || 0,
+        declined: matchingStatusData?.auditDeclined || 0,
       };
     });
     const sorted = processedDays?.sort((a, b) => {

@@ -47,7 +47,7 @@ const AllocateModal = ({
     // const orgId = getStorage("orgId");
     // let resoureUrl = `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=${orgId}&searchString=${search}`;
     const response = await getL1UsersList({
-      searchString: search,})
+      search: search || "",})
     // axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response?.status==='SUCCESS') {
       let result = response?.response;
