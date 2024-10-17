@@ -100,9 +100,7 @@ function PdfTable({
   useEffect(() => {
     if (webSocketData && webSocketData?.webSocketType === "BATCH_STATUS") {
       const patientData = tableData?.content;
-      var foundItem = patientData?.find(
-        (x) => x.id == webSocketData?.id
-      );
+      var foundItem = patientData?.find((x) => x.id == webSocketData?.id);
       if (foundItem) {
         foundItem.batchUploadStatus = webSocketData?.batchUploadStatus;
         // if (webSocketData?.computedDate) {
@@ -110,10 +108,10 @@ function PdfTable({
         // }
       }
       setSocketData(patientData);
-    }else{
+    } else {
       setSocketData(tableData?.content);
     }
-  }, [webSocketData,tableData]);
+  }, [webSocketData, tableData]);
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -263,7 +261,9 @@ function PdfTable({
                                   >
                                     {row?.source === "cogentUpload"
                                       ? "Upload"
-                                      : (!row?.batchUploadStatus ? "Trigger":"")}
+                                      : !row?.batchUploadStatus
+                                      ? "Trigger"
+                                      : ""}
                                   </button>
                                 </div>
                               )}

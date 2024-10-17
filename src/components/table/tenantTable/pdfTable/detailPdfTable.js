@@ -22,7 +22,8 @@ export const getColors = (rowStatus) => {
 
   switch (status) {
     case "computed":
-    case "already_present":case "completed":
+    case "already_present":
+    case "completed":
       strokeColor = "rgba(11, 96, 176, 1)";
       progressTextClass = "fihrComputedProgressText";
       textColor = "rgba(11, 96, 176, 1)";
@@ -35,7 +36,7 @@ export const getColors = (rowStatus) => {
       imageSrc = failed;
       break;
     case "processing":
-      case "processed":
+    case "processed":
       strokeColor = "rgba(252, 103, 54, 1)";
       progressTextClass = "fihrProgressText";
       textColor = "rgba(252, 103, 54, 1)";
@@ -56,31 +57,31 @@ const DetailedPdfTable = ({
   onPageChange,
   tableData,
   loader,
-  webSocketData
+  webSocketData,
 }) => {
   DetailedPdfTable.propTypes = {
     paginationFirst: PropTypes.any.isRequired,
     onPageChange: PropTypes.func.isRequired,
     tableData: PropTypes.array.isRequired,
   };
-  const [socketData,setSocketData]=useState([])
+  const [socketData, setSocketData] = useState([]);
   useEffect(() => {
     if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
       const patientData = tableData?.content;
       var foundItem = patientData?.find(
-        (x) => x.batchId == webSocketData?.patientId
+        (x) => x.fileId == webSocketData?.patientId
       );
       if (foundItem) {
-        foundItem.computing = webSocketData?.computing;
-        if (webSocketData?.computedDate) {
-          foundItem.computedDate = webSocketData?.computedDate;
-        }
+        foundItem.fileStatus = webSocketData?.fileStatus;
+        // if (webSocketData?.computedDate) {
+        //   foundItem.computedDate = webSocketData?.computedDate;
+        // }
       }
       setSocketData(patientData);
-    }else{
+    } else {
       setSocketData(tableData?.content);
     }
-  }, [webSocketData,tableData]);
+  }, [webSocketData, tableData]);
 
   return (
     <div className={TableStyle.classContaineer}>
