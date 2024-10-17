@@ -117,7 +117,7 @@ const Patient = ({
   const [selectOrgList, setSelectedOrgList] = useState(null);
   const [orgAllList, setOrgAllList] = useState([]);
   const [searchVal, setSearchVal] = useState("");
-  const [paramsFilter, setParamsFilter] = useState('check');
+  const [paramsFilter, setParamsFilter] = useState(null);
 
   useEffect(() => {
     if (window !== "undefined") {
@@ -202,6 +202,7 @@ const Patient = ({
     selCreatedBy,
     sort,
     selectOrgList,
+    paramsFilter
   ]);
 
   // useEffect(() => {
