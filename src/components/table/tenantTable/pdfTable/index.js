@@ -110,9 +110,11 @@ function PdfTable({
         // }
       }
       setSocketData(patientData);
+    }else{
+      setSocketData(tableData?.content);
     }
-  }, [webSocketData]);
-  console.log(webSocketData, "webSocketData", socketData);
+  }, [webSocketData,tableData]);
+
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (

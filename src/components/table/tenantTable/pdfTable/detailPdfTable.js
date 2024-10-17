@@ -77,9 +77,11 @@ const DetailedPdfTable = ({
         }
       }
       setSocketData(patientData);
+    }else{
+      setSocketData(tableData?.content);
     }
-  }, [webSocketData]);
-  console.log(webSocketData, "webSocketData",socketData);
+  }, [webSocketData,tableData]);
+
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (
@@ -99,8 +101,8 @@ const DetailedPdfTable = ({
             </thead>
 
             <tbody className={TableStyle.bodytable}>
-              {tableData?.content?.length > 0 ? (
-                tableData?.content?.map((row) => (
+              {socketData?.length > 0 ? (
+                socketData?.map((row) => (
                   <tr key={row?.patientId} style={{ height: "40px" }}>
                     <td className={TableStyle.childBorder}>
                       {row?.fileId ? row?.fileId : "---"}
