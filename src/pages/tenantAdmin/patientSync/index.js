@@ -531,7 +531,7 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                             </div>
                           ) : (
                             <>
-                              <div
+                              {/* <div
                                 className={styles.btnContainer}
                                 name="upload trigger"
                                 onClick={handleUploadButtonClick}
@@ -540,9 +540,9 @@ const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
                                   name={"Upload"}
                                   width={"150px"}
                                 />
-                              </div>
+                              </div> */}
                               <div
-                                className={styles.btnContainer}
+                                className={'w-100 d-flex justify-content-end align-items-end'}
                                 onClick={handleUploadButtonClick}
                                 name="upload"
                               >

@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Empty, Popover } from "antd";
+import { Empty, Popover, Progress } from "antd";
 import TableStyle from "../../table.module.css";
 import { Paginator } from "primereact/paginator";
 import { selectedRow } from "../../../../store/actions/ReportActions";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import dayjs from "dayjs";
-import {
-  dateFormate,
-  renderUserPrfoileAvatar,
-} from "../../../headerFilters/functions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
 import FhirDrawer from "../../../../pages/tenantAdmin/patientSync/modals/PdfDrawer";
 import { useRouter } from "next/router";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
-import SpinnerDots from "../../../spinner";
+import refreshIcon from "../../../../images/fihr/refresh.png";
 import { renderSkeleton } from "../../../reuseableFunctions";
+import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
+import { faRotateLeft } from "@fortawesome/free-solid-svg-icons";
+import { getColors } from "./detailPdfTable";
 
 function PdfTable({
   paginationFirst,
@@ -25,10 +25,16 @@ function PdfTable({
   setSelectedBatch,
   selectedBatch,
   loader,
+  webSocketData,
 }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const [filelList, setFileList] = useState();
+  const [socketData, setSocketData] = useState([]);
+  const [triggeredBatch, setTriggeredBatch] = useState({
+    status: false,
+    id: null,
+  });
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
@@ -60,8 +66,8 @@ function PdfTable({
               placement="bottom"
             >
               <span
-                style={{ fontSize: "10px" }}
-                className={`border border-success-subtle mx-1 p-1 rounded-circle font`}
+                style={{ width: "22px", height: "22px" }}
+                className={`border border-success-subtle rounded-circle text-center mx-1`}
               >
                 {dates.length - 1}+
               </span>
@@ -80,6 +86,35 @@ function PdfTable({
     setSelectedBatch(row);
     setFileList();
   };
+  const getStatusStyles = ({ status, isBorder }) => {
+    const isProcessing = status === "PROCESSING";
+    return {
+      background: isProcessing ? "#FFE0CB" : "#CFE5FC",
+      color: isProcessing ? "#FF7D2A" : "#1B67B3",
+      border: isBorder
+        ? `1px solid ${isProcessing ? "#FF7D2A" : "#1B67B3"}`
+        : "none",
+    };
+  };
+
+  useEffect(() => {
+    if (webSocketData && webSocketData?.webSocketType === "BATCH_STATUS") {
+      const patientData = tableData?.content;
+      var foundItem = patientData?.find(
+        (x) => x.id == webSocketData?.id
+      );
+      if (foundItem) {
+        foundItem.batchUploadStatus = webSocketData?.batchUploadStatus;
+        // if (webSocketData?.computedDate) {
+        //   foundItem.computedDate = webSocketData?.computedDate;
+        // }
+      }
+      setSocketData(patientData);
+    }else{
+      setSocketData(tableData?.content);
+    }
+  }, [webSocketData,tableData]);
+
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (
@@ -93,21 +128,30 @@ function PdfTable({
               <thead className={TableStyle.classTTotalhead}>
                 <tr>
                   <>
-                    <th>BATCH NAME</th>
-                    <th>PATIENT COUNT</th>
-                    <th className="text-center">STATUS </th>
-                    <th className="text-center">YEAR OF SERVICE</th>
-                    <th className={`${TableStyle.rowAudited} text-center`}>
+                    <th className="text-truncate">BATCH DETAILS</th>
+                    <th>COUNT</th>
+
+                    <th className="text-center text-truncate">
+                      YEAR OF SERVICE
+                    </th>
+                    <th className="text-center">EMR </th>
+                    <th className="text-center">SOURCE </th>
+                    <th
+                      className={`${TableStyle.rowAudited} text-center text-truncate`}
+                    >
                       INITIATED BY{" "}
                     </th>
-                    <th className="text-center">BATCH INITIATED DATE </th>
+                    <th className="text-center text-truncate">
+                      BATCH INITIATED DATE{" "}
+                    </th>
+                    <th style={{ paddingLeft: "60px" }}>STATUS </th>
                   </>
                 </tr>
               </thead>
 
               <tbody className={TableStyle.bodytable}>
-                {tableData?.content?.length > 0 ? (
-                  tableData?.content?.map((row, index) => (
+                {socketData?.length > 0 ? (
+                  socketData?.map((row, index) => (
                     <tr
                       key={index}
                       onClick={(e) => {
@@ -126,81 +170,124 @@ function PdfTable({
                     >
                       <>
                         <td className={TableStyle.childBorder}>
-                          {row?.name ? row?.name : "---"}
+                          <div className="font-bold">
+                            {row?.name ? row?.name : "---"}
+                          </div>
+                          <div>{row?.id ? row?.id : "---"}</div>
                         </td>
-
                         <td className={TableStyle.childBorder}>
                           {row?.totalFileCount ? row?.totalFileCount : "---"}
                         </td>
 
                         <td className={TableStyle.childBorder}>
-                          <div className="text-center">
-                            <span
-                              className="text-capitalize mx-2"
-                              style={{
-                                color:
-                                  row.batchUploadStatus === "processing"
-                                    ? "#2D6187"
-                                    : row.batchUploadStatus === "completed"
-                                    ? "#008A0E"
-                                    : "black",
-                              }}
-                            >
-                              {row.batchUploadStatus
-                                ? row.batchUploadStatus
-                                : "---"}
-                            </span>
-                          </div>
-                        </td>
-                        <td className={TableStyle.childBorder}>
                           {row?.yearOfService
                             ? dateFormateAlign(row?.yearOfService)
                             : "000"}
+                        </td>
+
+                        <td className={`${TableStyle.childBorder} text-center`}>
+                          {row?.emrType ? row?.emrType : "---"}
+                        </td>
+                        <td className={`${TableStyle.childBorder} text-center`}>
+                          {row?.source ? row?.source : "---"}
                         </td>
                         <td
                           className={TableStyle.childBorder}
                           // style={{ textAlign: "left", paddingLeft: "110px" }}
                         >
-                          {row.initiatedByFirstName ||
-                          row.initiatedByLastName ||
-                          row.auditedByProfileImage ? (
-                            <div
-                              style={{ display: "flex", alignItems: "center" }}
-                            >
-                              {" "}
-                              <span style={{ marginRight: "10px" }}>
-                                {" "}
-                                {renderUserPrfoileAvatar(
-                                  row.initiatedByFirstName,
-                                  row.initiatedByLastName,
-                                  row.auditedByProfileImage,
-                                  "header"
-                                )}
-                              </span>
-                              <span>
-                                {row.initiatedByFirstName}{" "}
-                                {row.initiatedByLastName}
-                              </span>
-                            </div>
+                          {row?.createdBy ? (
+                            <div className="text-center">{row?.createdBy}</div>
                           ) : (
                             <div className="text-center">---</div>
                           )}
                         </td>
-                        <td className={TableStyle.childBorder}>
-                          <div className="d-flex justify-content-between">
-                            {dateFormate(dayjs, row?.initialedDate)}
-                            <div name="upload">
-                              <div
-                                onClick={(e) => handleUploadButtonClick(e, row)}
-                                className="btn hegiht10  sharp me-1 action-btn"
-                                style={{ background: "#04306f" }}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faUpload}
-                                  fontSize={12}
-                                  style={{ color: "#ffff", paddingTop: "3px" }}
-                                />
-                              </div>
+                        <td
+                          className={`${TableStyle.childBorder} text-center`}
+                          // style={{ textAlign: "left", paddingLeft: "110px" }}
+                        >
+                          {row?.createdDate
+                            ? dayjs(row?.createdDate).format("MM-DD-YYYY")
+                            : "---"}
+                        </td>
+
+                        <td className={`${TableStyle.childBorder} text-center`}>
+                          <div className="w-100 text-center d-flex justify-content-center align-items-center">
+                            <div
+                              style={{ width: "50%" }}
+                              className="d-flex justify-content-center align-items-center"
+                            >
+                              {row?.batchUploadStatus ? (
+                                <div
+                                  style={{
+                                    width: "100%",
+                                    ...getStatusStyles({
+                                      status: row?.batchUploadStatus,
+                                      isBorder: true,
+                                    }),
+                                  }}
+                                  className="px-4 py-1 rounded-1 font-semibold d-flex justify-content-center align-items-center"
+                                >
+                                  <FontAwesomeIcon
+                                    className="mx-1"
+                                    icon={
+                                      row?.batchUploadStatus === "PROCESSING"
+                                        ? faRotateLeft
+                                        : faCircleCheck
+                                    }
+                                    style={getStatusStyles({
+                                      status: row?.batchUploadStatus,
+                                    })}
+                                  />
+                                  {row?.batchUploadStatus
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                    row?.batchUploadStatus
+                                      .slice(1)
+                                      .toLowerCase()}
+                                </div>
+                              ) : (
+                                <div className="w-100 d-flex justify-content-center align-items-center">
+                                  <button
+                                    className={`w-100 ${
+                                      row?.source === "cogentUpload"
+                                        ? styles.uploadButton
+                                        : styles.triggerButton
+                                    } d-flex justify-content-center align-items-center`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setTriggeredBatch({
+                                        status: true,
+                                        id: row?.batchID,
+                                      });
+                                    }}
+                                  >
+                                    {row?.source === "cogentUpload"
+                                      ? "Upload"
+                                      : (!row?.batchUploadStatus ? "Trigger":"")}
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                            <div
+                              style={{ width: "30%" }}
+                              className="d-flex justify-content-start align-items-center"
+                            >
+                              {["processing", "failed"].includes(
+                                row?.batchUploadStatus?.toLowerCase()
+                              ) && (
+                                <div className="d-flex mx-2">
+                                  <Popover content={"Files are failed"}>
+                                    <span className={styles.legendStyle}></span>
+                                  </Popover>
+                                  <Image
+                                    src={refreshIcon}
+                                    alt="noImage"
+                                    height={20}
+                                    width={20}
+                                    onClick={(e) => e.stopPropagation()}
+                                  />
+                                </div>
+                              )}
                             </div>
                           </div>
                         </td>
@@ -243,4 +330,7 @@ function PdfTable({
   );
 }
 
-export default PdfTable;
+const connector = connect((state) => ({
+  webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
+}));
+export default connector(PdfTable);

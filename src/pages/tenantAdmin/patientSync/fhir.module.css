@@ -323,21 +323,11 @@
   padding-left: 3px;
 }
 .progreddBr {
-  width: 60%;
+  width: 100%;
 
   /* margin: auto; */
 }
-.progressDIv {
-  position: relative;
-  left: -30px;
-}
 
-@media screen and (width>1500px) {
-  .progressDIv {
-    position: relative;
-    left: 10px;
-  }
-}
 .topTitle {
   font-size: 16px;
   font-weight: 600;
@@ -356,6 +346,15 @@
   border: 1px solid #4a249d;
   background-color: #e0d6f5;
   color: #4a249d;
+  border-radius: 3px;
+  height: 27px;
+}
+.uploadButton {
+  width: 30%;
+
+  border: 1px solid #0B3674;
+  background-color: #CEE1FC;
+  color: #0B3674;
   border-radius: 3px;
   height: 27px;
 }
