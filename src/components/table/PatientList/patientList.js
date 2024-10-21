@@ -31,18 +31,18 @@ function PatientTable({
   userId,
   params,
   gotoPatientDetails,
-  getPriorityChange,
+  supervisorActions,
 }) {
   const navigate = useRouter();
-  const handlePriorityChange = async (patientId, selectedValue) => {
-    // setSelectedPriority((prev) => ({
-    //   ...prev,
-    //   id: patientId,
-    //   value: selectedValue,
-    // }));
-    const res = await getPriorityChange({
-      patientId: data?.patientId,
-      year: dayjs(data?.lastModifiedDate)?.format("YYYY"),
+
+  const handlePriorityChange = async (
+    patientId,
+    selectedValue,
+    lastModifiedDate
+  ) => {
+    const res = await supervisorActions({
+      patientId: patientId,
+      year: dayjs(lastModifiedDate).format("YYYY"),
       priority: selectedValue,
     });
     if (res.status === "SUCCESS") {
@@ -136,9 +136,12 @@ function PatientTable({
               className={`custom-ant-select ${TableStyle.customAntSelect}`}
               showSearch={false}
               value={data?.priority ? data?.priority : "Set Priority"}
-              // disabled={!data?.priority ? true : false}
               onChange={(value) => {
-                handlePriorityChange(data?.patientId, value);
+                handlePriorityChange(
+                  data?.patientId,
+                  value,
+                  data?.lastModifiedDate
+                );
               }}
             />
           </td>
