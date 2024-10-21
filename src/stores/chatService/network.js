@@ -3,9 +3,9 @@ import { requestPortal } from "../../utils/network";
 export const ChatBot = async (msg) => {
   const options = {
     method: "POST",
-    body: {},
+    body: JSON.stringify({input:msg}),
   };
-  const data = await requestPortal(`aiservice/ai/chat?input=${msg}`, options);
+  const data = await requestPortal(`aiservice/ai/chat`, options);
   return data;
 };
 
