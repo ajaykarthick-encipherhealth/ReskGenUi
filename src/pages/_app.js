@@ -11,20 +11,36 @@ import { PrimeReactProvider } from "primereact/api";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import Footer from "../jsx/layouts/Footer";
 import AICHAT from "../components/aiChat";
-import { refreshToken } from "../stores/authflow/actions";
 import ConnectWebSocket from "../components/websocket";
 import { getStorage, setStorage } from "../utils/storages";
 import { serverControl } from "../utils/config";
-import { requestPortal } from "../utils/network";
+import { authRequestPortal, requestPortal } from "../utils/network";
 
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [showTerminal, setShowTerminal] = useState(false);
-  let loginCheck =
-    typeof window !== "undefined" ? getStorage("loginCheck") : null;
+  let loginCheck = typeof window !== "undefined" ? Boolean(getStorage("loginCheck")) : false;
 
+  const refreshToken = async () => {
+    const refreshToken = getStorage("refreshToken");
+    const options = {
+      method: "POST",
+      body: JSON.stringify({refreshToken: refreshToken }),
+    };
+      const response = await requestPortal(
+        `securityservice/token/refreshtoken`,
+        options
+      );
+      if (response?.status === "SUCCESS") { 
+        const newToken = response?.response;
+        setStorage("refreshTokenTime", Date.now());
+        setStorage("token", newToken);
+        setStorage("loginTime", Date.now());
+      }
+      return response;
+  };
   useEffect(() => {
     if (serverControl === "production") {
       const handleKeyDown = (event) => {
@@ -48,8 +64,6 @@ function MyApp({ Component, pageProps }) {
         ) {
           e.preventDefault();
           e.stopPropagation();
-
-          // Create an overlay element
           const overlay = document.createElement("div");
           overlay.style.position = "fixed";
           overlay.style.top = "0";
@@ -112,29 +126,7 @@ function MyApp({ Component, pageProps }) {
         console.error("Error fetching data:", error);
       });
   }, [router]);
-  const refreshToken = async () => {
-    const refreshToken = getStorage("refreshToken");
-    const options = {
-      method: "POST",
-      body: JSON.stringify({ refreshToken }),
-    };
-  
-    try {
-      const response = await requestPortal(`securityservice/token/refreshtoken`, options);
-      
-      if (response && response.data) {
-        const newToken = response.data.response;
-        setStorage("refreshTokenTime", Date.now());
-        setStorage("token", newToken);
-        setStorage("loginTime", Date.now());
-      }
-  
-      return response.data; 
-    } catch (error) {
-      console.error("Error refreshing token:", error);
-    }
-  };
-  
+
   useEffect(() => {
     let intervalId;
     let pauseTime = 0;
@@ -150,7 +142,6 @@ function MyApp({ Component, pageProps }) {
         }
       }
     };
-
     if (showTerminal) {
       checkLoginTime();
     }
@@ -159,14 +150,13 @@ function MyApp({ Component, pageProps }) {
       if (showTerminal && document.visibilityState === "visible") {
         checkLoginTime();
       } else {
-        clearInterval(intervalId); // Clear the interval when showTerminal is false or tab is hidden
-        pauseTime = Date.now(); // Store the timestamp when the timer was paused
+        clearInterval(intervalId);
+        pauseTime = Date.now(); 
       }
     }, 30 * 60 * 1000);
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
-        // If tab becomes visible, calculate remaining time and start the timer
         if (showTerminal) {
           const remainingTime = 30 * 60 * 1000 - (Date.now() - pauseTime);
           if (remainingTime > 0) {
@@ -180,7 +170,6 @@ function MyApp({ Component, pageProps }) {
           }
         }
       } else {
-        // If tab becomes hidden, pause the timer and store the pause time
         clearInterval(intervalId);
         pauseTime = Date.now();
       }
@@ -194,13 +183,6 @@ function MyApp({ Component, pageProps }) {
     };
   }, [showTerminal]);
 
-  useEffect(() => {
-    const currentPath = window.location.pathname;
-    const userRole = getStorage("userRole");
-    // if (userRole && !currentPath.includes(`/${userRole}/`) || "/search") {
-    //   router.replace("/_error");
-    // }
-  }, [showTerminal]);
   const hideFooterPaths = [
     "/admin/patients/details",
     "/reviewer/patients/details",
@@ -214,7 +196,7 @@ function MyApp({ Component, pageProps }) {
       <Provider store={store}>
         {showTerminal && <AICHAT openMsg={true} />}
         <Component {...pageProps} />
-        {loginCheck == "true" && <ConnectWebSocket />}
+        {loginCheck == true && <ConnectWebSocket />}
         {showFooter && showTerminal && <Footer />}
       </Provider>
     </PrimeReactProvider>
