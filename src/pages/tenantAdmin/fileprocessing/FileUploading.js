@@ -15,7 +15,8 @@ const FileUploading = ({
   errors,
   setEmrType,
   handleClose,
-  emrType
+  emrType,
+  isUpload,
 }) => {
   const validateFileName = (fileName) => {
     // Regular expression to detect double extensions
@@ -42,13 +43,9 @@ const FileUploading = ({
     >
       <div className="offcanvas-header">
         <h5 className="modal-title" id="#gridSystemModal">
-          Add Patient Details
+          {isUpload ? "Upload Patient Details" : "Add Patient Details"}
         </h5>
-        <button
-          type="button"
-          className="btn-close"
-          onClick={handleClose}
-        >
+        <button type="button" className="btn-close" onClick={handleClose}>
           <i className="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -109,6 +106,7 @@ const FileUploading = ({
                   required
                   type="number"
                   onChange={(e) => handleChange(e)}
+                  placeholder="Select Year"
                 />
               </div>
               {errors?.year && (
@@ -121,7 +119,7 @@ const FileUploading = ({
               </Form.Label>
               <Select
                 // mode="multiple"
-                showSearch
+                placeholder="Select EMR Type"
                 name="emrType"
                 maxTagCount="responsive"
                 className={`ant_select_form hcc_form mb-2`}
@@ -129,7 +127,7 @@ const FileUploading = ({
                   handleChange(selOption, "dos");
                   setEmrType(selOption);
                 }}
-                value={emrType}
+                value={emrType || null}
                 options={[
                   { label: "ADSC", value: "ADSC" },
                   { label: "Advanced MD", value: "Advanced MD" },

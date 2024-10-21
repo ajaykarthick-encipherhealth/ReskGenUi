@@ -457,7 +457,11 @@ const Patient = ({
     return (
       <div className="d-flex ">
         <button
-          onClick={() => addPatientFile(rowData)}
+          onClick={() => {
+            if (rowData?.processedStatus !== "PROCESSING") {
+              addPatientFile(rowData);
+            }
+          }}
           className="btn hegiht10  sharp me-1 action-btn"
           style={{ background: "#04306f" }}
         >
@@ -476,7 +480,7 @@ const Patient = ({
     // setAddPatient(false);
     const formData = new FormData();
     formData.append("file", selectFile);
-    formData.append("dos", inputValue.year);
+    formData.append("dos", inputValue?.dos);
     formData.append("orgid", localOrgId);
     formData.append("tenantid", tenantId);
     formData.append("userid", localUserId);
@@ -799,6 +803,7 @@ const Patient = ({
           setEmrType={setEmrType}
           emrType={emrType}
           handleClose={handleClose}
+          isUpload={true}
         />
         <Addpatients
           addPatientId={addPatientId}

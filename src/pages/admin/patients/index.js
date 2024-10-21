@@ -63,7 +63,7 @@ const Patient = ({
   getUploadRadiologyFile,
 }) => {
   const navigate = useRouter();
-  
+
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
@@ -342,7 +342,11 @@ const Patient = ({
     return (
       <div className="d-flex ">
         <button
-          onClick={() => addPatientFile(rowData)}
+          onClick={() => {
+            if (rowData?.processedStatus !== "PROCESSING") {
+              addPatientFile(rowData);
+            }
+          }}
           className="btn hegiht10 shadow  sharp me-1 action-btn"
           style={{ background: "#04306f" }}
         >
@@ -365,7 +369,7 @@ const Patient = ({
     // setAddPatient(false);
     const formData = new FormData();
     formData.append("file", selectFile);
-    formData.append("dos", inputValue.year);
+    formData.append("dos", inputValue.dos);
     formData.append("orgid", localOrgId);
     formData.append("tenantid", tenantId);
     formData.append("userid", localUserId);
@@ -558,7 +562,7 @@ const Patient = ({
         selCreatedBy,
         sort
       );
-    }    
+    }
   }, [
     pageNo,
     computedStartDate,
@@ -572,7 +576,7 @@ const Patient = ({
     selCreatedBy,
     sort,
     searchVal,
-    paramsFilter
+    paramsFilter,
   ]);
 
   useEffect(() => {
@@ -726,6 +730,7 @@ const Patient = ({
           isLoadingBtn={isLoadingBtn}
           onChangeFile={onChangeFile}
           errors={errors}
+          isUpload={true}
         />
         <Addpatients
           addPatientId={addPatientId}
