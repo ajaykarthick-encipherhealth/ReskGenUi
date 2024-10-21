@@ -9273,10 +9273,10 @@ tr>td{
 .custom-react-select1 .ant-select {
   width: 100% !important;
 }
-.custom-react-select .ant-select-arrow{
+.custom-react-select .ant-select-arrow {
   margin-top: 0%;
 }
-.custom-react-select-audit .ant-select-arrow{
+.custom-react-select-audit .ant-select-arrow {
   margin-top: 0%;
 }
 .custom-react-select1 .ant-select .ant-select-selector {
@@ -12381,11 +12381,11 @@ tbody > tr {
   /* border:1px solid red; */
   border: none !important;
 }
-.new-search-control2{
+.new-search-control2 {
   border-top-left-radius: 0px !important;
-  border-bottom-left-radius:0px !important;
+  border-bottom-left-radius: 0px !important;
   border-top-right-radius: 8px !important;
-  border-bottom-right-radius:8px !important;
+  border-bottom-right-radius: 8px !important;
   background: #fff !important;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
   width: 100%;
@@ -12635,7 +12635,7 @@ tbody > tr {
   border-radius: 0.5rem;
   border: none !important;
 }
-.custom-react-select .ant-select-clear{
+.custom-react-select .ant-select-clear {
   margin-top: 0%;
 }
 
@@ -12665,11 +12665,11 @@ tbody > tr {
 }
 
 .custom-react-report-select .ant-select-arrow {
- margin-top: 0% !important;
+  margin-top: 0% !important;
 }
 
 .custom-react-report-select .ant-select-clear {
- margin-top: 0% !important;
+  margin-top: 0% !important;
 }
 
 /* .custom-react-report-select > div:nth-child(4) > div {
@@ -15808,24 +15808,27 @@ input::-webkit-inner-spin-button {
     font-weight: 400;
   }
 }
-.batchProgressBar :where(.css-dev-only-do-not-override-3rel02).ant-progress .ant-progress-text{
-display: none;
+.batchProgressBar
+  :where(.css-dev-only-do-not-override-3rel02).ant-progress
+  .ant-progress-text {
+  display: none !important;
 }
-.individualReportSearch .ant-input-affix-wrapper >input.ant-input:focus,
-.individualReportSearch .ant-input-affix-wrapper >input.ant-input:active{
+.individualReportSearch .ant-input-affix-wrapper > input.ant-input:focus,
+.individualReportSearch .ant-input-affix-wrapper > input.ant-input:active {
   box-shadow: none !important;
   border: none !important;
 }
-.individualReportSearch .ant-input-affix-wrapper >input.ant-input{
-  height:30px !important;
+.individualReportSearch .ant-input-affix-wrapper > input.ant-input {
+  height: 30px !important;
 }
-.individualReportSearch .ant-input-outlined:focus, :where(.css-dev-only-do-not-override-3rel02).ant-input-outlined:focus-within{
+.individualReportSearch .ant-input-outlined:focus,
+:where(.css-dev-only-do-not-override-3rel02).ant-input-outlined:focus-within {
   /* box-shadow: none !important; */
   border: none !important;
 }
-.customizeInput .ant-select-single.ant-select-lg .ant-select-selector{
-  border:1px solid #b6b6b6!important;
+.customizeInput .ant-select-single.ant-select-lg .ant-select-selector {
+  border: 1px solid #b6b6b6 !important;
 }
-.searchStyle .ant-input-affix-wrapper{
+.searchStyle .ant-input-affix-wrapper {
   align-items: center;
 }

@@ -157,7 +157,7 @@ const DetailedPdfTable = ({
                         <div
                           className="text-capitalize"
                           style={{
-                            fontSize: "14px",
+                            fontSize: "12px",
                             display: "flex",
                             margin: "auto",
                             justifyContent: "start",
