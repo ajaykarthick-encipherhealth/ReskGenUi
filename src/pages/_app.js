@@ -4,7 +4,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import { wrapper, store } from "../stores/index";
-import { Provider, useDispatch } from "react-redux";
+import { Provider } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { PrimeReactProvider } from "primereact/api";
@@ -13,59 +13,63 @@ import Footer from "../jsx/layouts/Footer";
 import AICHAT from "../components/aiChat";
 import { refreshToken } from "../stores/authflow/actions";
 import ConnectWebSocket from "../components/websocket";
-import { getStorage } from "../utils/storages";
+import { getStorage, setStorage } from "../utils/storages";
 import { serverControl } from "../utils/config";
+import { requestPortal } from "../utils/network";
 
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
-  const dispatch = useDispatch();
   const [showTerminal, setShowTerminal] = useState(false);
   let loginCheck =
     typeof window !== "undefined" ? getStorage("loginCheck") : null;
 
   useEffect(() => {
     if (serverControl === "production") {
-    const handleKeyDown = (event) => {
-      if (
-        (event.ctrlKey || event.metaKey) &&
-        (event.key === "a" || event.key === "s")
-      ) {
-        event.preventDefault();
-      }
-    };
-    const handleContextmenu = (e) => {
-      e.preventDefault();
-    };
-    document.addEventListener("contextmenu", handleContextmenu);
-    window.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keydown", (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "Shift"||e.key==="p"||e.key==="Print") {
+      const handleKeyDown = (event) => {
+        if (
+          (event.ctrlKey || event.metaKey) &&
+          (event.key === "a" || event.key === "s")
+        ) {
+          event.preventDefault();
+        }
+      };
+      const handleContextmenu = (e) => {
         e.preventDefault();
-        e.stopPropagation();
+      };
+      document.addEventListener("contextmenu", handleContextmenu);
+      window.addEventListener("keydown", handleKeyDown);
+      document.addEventListener("keydown", (e) => {
+        if (
+          ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "Shift") ||
+          (e.key === "p" && e.ctrlKey) ||
+          (e.key === "Print" && e.ctrlKey)
+        ) {
+          e.preventDefault();
+          e.stopPropagation();
 
-        // Create an overlay element
-        const overlay = document.createElement("div");
-        overlay.style.position = "fixed";
-        overlay.style.top = "0";
-        overlay.style.left = "0";
-        overlay.style.width = "100%";
-        overlay.style.height = "100%";
-        overlay.style.backgroundColor = "rgba(255, 255, 255, 0.8)";
-        overlay.style.zIndex = "9999";
-        document.body.style.filter = "blur(10px)";
-        document.body.appendChild(overlay);
-        setTimeout(() => {
-          document.body.removeChild(overlay);
-          document.body.style.filter = "none";
-        }, 2000);
-      }
-    });
-    return () => {
-      document.removeEventListener("contextmenu", handleContextmenu);
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+          // Create an overlay element
+          const overlay = document.createElement("div");
+          overlay.style.position = "fixed";
+          overlay.style.top = "0";
+          overlay.style.left = "0";
+          overlay.style.width = "100%";
+          overlay.style.height = "100%";
+          overlay.style.backgroundColor = "rgba(255, 255, 255, 0.8)";
+          overlay.style.zIndex = "9999";
+          document.body.style.filter = "blur(10px)";
+          document.body.appendChild(overlay);
+          setTimeout(() => {
+            document.body.removeChild(overlay);
+            document.body.style.filter = "none";
+          }, 2000);
+        }
+      });
+      return () => {
+        document.removeEventListener("contextmenu", handleContextmenu);
+        window.removeEventListener("keydown", handleKeyDown);
+      };
     }
   }, []);
 
@@ -108,7 +112,29 @@ function MyApp({ Component, pageProps }) {
         console.error("Error fetching data:", error);
       });
   }, [router]);
-
+  const refreshToken = async () => {
+    const refreshToken = getStorage("refreshToken");
+    const options = {
+      method: "POST",
+      body: JSON.stringify({ refreshToken }),
+    };
+  
+    try {
+      const response = await requestPortal(`securityservice/token/refreshtoken`, options);
+      
+      if (response && response.data) {
+        const newToken = response.data.response;
+        setStorage("refreshTokenTime", Date.now());
+        setStorage("token", newToken);
+        setStorage("loginTime", Date.now());
+      }
+  
+      return response.data; 
+    } catch (error) {
+      console.error("Error refreshing token:", error);
+    }
+  };
+  
   useEffect(() => {
     let intervalId;
     let pauseTime = 0;
@@ -120,7 +146,7 @@ function MyApp({ Component, pageProps }) {
       if (!isNaN(loginTime)) {
         const timeElapsed = Date.now() - loginTime;
         if (timeElapsed > 30 * 60 * 1000) {
-          dispatch(refreshToken());
+          refreshToken();
         }
       }
     };
@@ -166,7 +192,7 @@ function MyApp({ Component, pageProps }) {
       clearInterval(intervalId);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [dispatch, showTerminal]);
+  }, [showTerminal]);
 
   useEffect(() => {
     const currentPath = window.location.pathname;

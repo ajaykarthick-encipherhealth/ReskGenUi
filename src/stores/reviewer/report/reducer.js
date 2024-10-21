@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { receivedReport, reviewerCheckAllReport, reviewerReport, sentReport } from "./actions";
+import { receivedReport, reviewerCheckAllReport, reviewerReport, sentReport ,getSelectedReportDetails} from "./actions";
 
 const initialState = {
   loading: true,
@@ -50,6 +50,7 @@ const ReportReducer = combineReducers({
   receivedLoader: getReportLoading(receivedReport),
   checkedData:createReducer(reviewerCheckAllReport),
   checkedLoader:getReportLoading(reviewerCheckAllReport),
+  uploadFile:createReducer(getSelectedReportDetails),
 
 });
 

@@ -2,7 +2,7 @@ import React from "react";
 import { Empty, Tree } from "antd";
 import { Spin } from "antd";
 import { useRef } from "react";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 
 const Codes = ({
   data,

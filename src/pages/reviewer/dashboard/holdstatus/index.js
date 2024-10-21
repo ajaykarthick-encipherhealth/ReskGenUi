@@ -34,6 +34,7 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData ,getPatientID}) => {
       testValue: item.noteText,
     };
   });
+
   const TableData = (
     <table className={styles.classTable}>
       <thead className={styles.tableHead}>

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, use } from "react";
 import { actions as dashbaordActions } from "../../stores/codify/dashboard";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { Button, Empty } from "antd";
 import { SearchOutlined, CaretDownOutlined } from "@ant-design/icons";
 import style from "./style.module.css";
@@ -45,9 +45,6 @@ const Codify = ({
   const [hideButton, setHideButton] = useState(false);
   const [indexData, setIndexData] = useState([]);
 
-  const { loading: indexesDataLoading } = useSelector(
-    (state) => state.codify.codify.indexes
-  );
   const getPanelValue = (searchText) =>
     !searchText ? [] : [mockVal(searchText)];
 
@@ -376,7 +373,7 @@ const Codify = ({
       <div className="row">
         {activeButton === "ICD-10" && (
           <div>
-            <div className="p-3 px-1 d-flex gap-3">
+            <div className="p-3 px-1 d-flex gap-3 customizeInput">
               <AutoComplete
                 style={{ width: "100%" }}
                 popupMatchSelectWidth={drawerWidth == "44%" ? 640 : ""}
@@ -490,10 +487,6 @@ const Codify = ({
             ) : (
               <div></div>
             )}
-            <div className="d-flex justify-content-center">
-              {indexesDataLoading && <Spin size="large" />}
-            </div>
-
             {currentButton === "Indexes" && indexData?.length ? (
               <div className=" mt-1 antdstyle">
                 {codifyDataLoading ? (

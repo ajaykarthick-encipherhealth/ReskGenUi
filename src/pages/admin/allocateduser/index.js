@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, connect } from "react-redux";
+import {  connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { DatePicker, Empty, Input, Space, Tooltip } from "antd";
@@ -75,7 +75,7 @@ const Patient = ({
   const [totalElements, setTotalElements] = useState(10);
   const [totalElementsPatient, setTotalElementsPatient] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-  const sideMenu = useSelector((state) => state.sideMenu);
+  
   const [activeTab, setActiveTab] = useState(1);
   const [l2UserListAll, setL2UserListAll] = useState([]);
   const [isPatientList, setIsPatientList] = useState(false);
@@ -477,7 +477,7 @@ const Patient = ({
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">

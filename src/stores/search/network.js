@@ -85,3 +85,15 @@ export async function updateSemantic({obj}) {
   );
   return data;
 }
+
+export const getCurrentUser = async ({ userId }) => {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/user/get?userName=${userId}
+  `,
+    options
+  );
+  return data;
+};

@@ -6,17 +6,17 @@ import dayjs from "dayjs";
 import EditButton from "../../../images/adminUsers/EditButton";
 import SpinnerDots from "../../spinner";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import Export from "../../../pages/admin/reports/Export";
 import TableStyle from "../table.module.css";
-import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
 import {
   dateFormate,
   getBackgroundColor,
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../headerFilters/functions";
+import { actions as allActions } from "../../../stores/admin/report";
 
 function SentReportTable({
   details,
@@ -31,8 +31,8 @@ function SentReportTable({
   receivedEndDate,
   isPhysician,
   isAdmin,
+  selectedReport,
 }) {
-  const dispatch = useDispatch();
   const router = useRouter();
   const [openEdit, setOpenEdit] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -112,7 +112,7 @@ function SentReportTable({
       receivedStartDate: receivedStartDate,
       receivedEndDate: receivedEndDate,
     };
-    dispatch(selectedReport(info));
+    selectedReport(info);
     isPhysician
       ? router?.push(
           `/reviewer/report/individualreport?reportId=${
@@ -259,7 +259,7 @@ function SentReportTable({
                         <div
                           onClick={() => {
                             setSelectedRows(row);
-                            dispatch(selectedReport(row))
+                            selectedReport(row);
                             setOpenEdit(true);
                           }}
                         >
@@ -305,5 +305,7 @@ function SentReportTable({
     </div>
   );
 }
-
-export default SentReportTable;
+const connector = connect((state) => ({ state }), {
+  selectedReport: allActions.selectedReport,
+});
+export default connector(SentReportTable);

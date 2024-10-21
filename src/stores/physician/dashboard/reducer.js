@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import {
-  getAllPhysician,
+  getAllPhysician,getPhysicianAction
 } from "./actions";
 
 const initialState = {
@@ -35,6 +35,7 @@ const createReducer = (actionType) =>
 
 const phyicianReducer = combineReducers({
   dashboard: createReducer(getAllPhysician),
+  getPhysician: createReducer(getPhysicianAction)
 });
 
 export default phyicianReducer;

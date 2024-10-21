@@ -3,7 +3,7 @@ import Style from "./../../style.module.css";
 import { Button, DatePicker, Form, Input, Select } from "antd";
 import { disablePastDate } from "../../../../../components/headerFilters/functions";
 import RegularButton from "../../../../../components/button";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 import { getYears } from "../../../../../utils/reusable";

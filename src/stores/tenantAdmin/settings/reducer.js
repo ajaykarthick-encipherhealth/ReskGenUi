@@ -12,6 +12,7 @@ import {
   getFlags,
   healthMetricAddAction,
   manualAddAction,
+  fhirServicesAction,
   updateSettingsAction, } from "./actions";
 
 const initialState = {
@@ -62,6 +63,7 @@ const tenantAminSettingsReducer = combineReducers({
   fhirInstructions: createReducer(fhirInstructionsAction),
   fhirConnectStatus: createReducer(fhirConnectAction),
   fhirList: createReducer(fhirListAction),
+  fhirServicesList: createReducer(fhirServicesAction),
   // manualAdd: createReducer(manualAddAction),
   // healthMetricAdd: createReducer(healthMetricAddAction),
 });

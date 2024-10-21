@@ -26,3 +26,18 @@ export const teamCHeckList = createActionThunk(
   "TEAM_CHECKED_LIST",
   network.teamCheck
 );
+
+export const getSentDetails = createActionThunk(
+  "SEND_REPORT_DETAILS",
+  network.sendReport
+);
+
+export const getReceivedDetails = createActionThunk(
+  "REC_REPORT_DETAILS",
+  network.receivedReport
+);
+
+export const getSelectedReportDetails = createActionThunk(
+  "SELECT_REPORT_DETAILS",
+  network.selectedReportDetails
+);

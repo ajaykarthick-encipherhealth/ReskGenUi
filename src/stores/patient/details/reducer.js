@@ -34,6 +34,7 @@ import {
   isDeleteFlag,
   storeFileIdAction,
   stroeFileIdPreAction,
+  getPatientID
 } from "./actions";
 
 const initialState = {
@@ -144,6 +145,7 @@ const patientDetailsReducer = combineReducers({
   getStoreFileIdDetails:getStoreFileIdDetails,
   getStoreFileIdDetailsPre:getStoreFileIdDetailsPre,
   fileLoading:getPatientsLoading(patientHccFileAction),
+  selectPatientId:createReducer(getPatientID)
 });
 
 export default patientDetailsReducer;

@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile } from "@fortawesome/free-solid-svg-icons";
 import { Progress, Tooltip } from "antd";
 import NavBar from "../../../jsx/layouts/nav";
-import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
@@ -13,7 +12,7 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 });
 
 const Screen = () => {
-  const sideMenu = useSelector((state) => state.sideMenu);
+  
   const navigate = useRouter();
 
   const gotoPatientDetails = (data) => {
@@ -130,7 +129,7 @@ const Screen = () => {
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <NavBar />
         <div class="content-body">
           <div className="container-fluid">

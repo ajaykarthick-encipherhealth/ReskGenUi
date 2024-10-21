@@ -9248,9 +9248,36 @@ tr>td{
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
   border-radius: 10px;
 }
+.custom-react-select-admin .ant-select {
+  width: 100%;
+}
+.custom-react-select-admin .ant-select .ant-select-selector,
+.custom-react-select-admin .ant-select .ant-select-selector:hover,
+.custom-react-select-admin .ant-select .ant-select-selector:focus {
+  height: 2.7rem !important;
+  border: none !important;
+  width: 100% !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 10px;
+}
+.custom-react-select-audit .ant-select .ant-select-selector,
+.custom-react-select-audit .ant-select .ant-select-selector:hover,
+.custom-react-select-audit .ant-select .ant-select-selector:focus {
+  height: 2.7rem !important;
+  border: none !important;
+  width: 100% !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 10px;
+}
 
 .custom-react-select1 .ant-select {
   width: 100% !important;
+}
+.custom-react-select .ant-select-arrow{
+  margin-top: 0%;
+}
+.custom-react-select-audit .ant-select-arrow{
+  margin-top: 0%;
 }
 .custom-react-select1 .ant-select .ant-select-selector {
   height: 2.7rem !important;
@@ -12608,6 +12635,9 @@ tbody > tr {
   border-radius: 0.5rem;
   border: none !important;
 }
+.custom-react-select .ant-select-clear{
+  margin-top: 0%;
+}
 
 .custom-react-select > div:nth-child(4) {
   border-radius: 10px;
@@ -12633,6 +12663,15 @@ tbody > tr {
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
   border-radius: 0px 10px 10px 0px !important ;
 }
+
+.custom-react-report-select .ant-select-arrow {
+ margin-top: 0% !important;
+}
+
+.custom-react-report-select .ant-select-clear {
+ margin-top: 0% !important;
+}
+
 /* .custom-react-report-select > div:nth-child(4) > div {
   background-color: #fff;
 }
@@ -13958,7 +13997,7 @@ overflow: scroll;
   border: none !important;
   box-shadow: none !important;
   width: 180px !important;
-  padding: 0px !important;
+  padding: 10px !important;
 }
 
 .auditBtnHcc button.ant-btn.ant-btn-compact-first-item {
@@ -13998,7 +14037,7 @@ overflow: scroll;
   border: none !important;
   box-shadow: none !important;
   width: 180px !important;
-  padding: 0px !important;
+  padding: 10px !important;
 }
 
 .declineBtnHcc button.ant-btn.ant-btn-compact-first-item {
@@ -14037,7 +14076,7 @@ overflow: scroll;
   border: none !important;
   box-shadow: none !important;
   width: 180px !important;
-  padding: 0px !important;
+  padding: 10px !important;
 }
 .reauditBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #964b00 !important;
@@ -14075,7 +14114,7 @@ overflow: scroll;
   border: none !important;
   box-shadow: none !important;
   width: 180px !important;
-  padding: 0px !important;
+  padding: 10px !important;
 }
 .auditHoldBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #ce9900 !important;
@@ -14113,7 +14152,7 @@ overflow: scroll;
   border: none !important;
   box-shadow: none !important;
   width: 180px !important;
-  padding: 0px !important;
+  padding: 10px !important;
 }
 
 .auditPendingBtnHcc button.ant-btn.ant-btn-compact-first-item {
@@ -15768,4 +15807,25 @@ input::-webkit-inner-spin-button {
     font-size: 12px !important;
     font-weight: 400;
   }
+}
+.batchProgressBar :where(.css-dev-only-do-not-override-3rel02).ant-progress .ant-progress-text{
+display: none;
+}
+.individualReportSearch .ant-input-affix-wrapper >input.ant-input:focus,
+.individualReportSearch .ant-input-affix-wrapper >input.ant-input:active{
+  box-shadow: none !important;
+  border: none !important;
+}
+.individualReportSearch .ant-input-affix-wrapper >input.ant-input{
+  height:30px !important;
+}
+.individualReportSearch .ant-input-outlined:focus, :where(.css-dev-only-do-not-override-3rel02).ant-input-outlined:focus-within{
+  /* box-shadow: none !important; */
+  border: none !important;
+}
+.customizeInput .ant-select-single.ant-select-lg .ant-select-selector{
+  border:1px solid #b6b6b6!important;
+}
+.searchStyle .ant-input-affix-wrapper{
+  align-items: center;
 }

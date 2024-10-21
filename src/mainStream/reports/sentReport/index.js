@@ -3,10 +3,9 @@ import styles from "../report.module.css";
 import { useRouter } from "next/router";
 import { Empty } from "antd";
 import ReactECharts from "echarts-for-react";
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
 import Export from "../Export";
-import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
 import CardComponent from "../../../mainStream/components/cards/miniGroupCard";
 import {
   AccessCountSection,
@@ -21,9 +20,8 @@ import {
   getChartUserOption,
   getChartAdminOption,
 } from "../../../mainStream/components/chartUtils";
-import TabSwitcher from "../../components/tabSwitch";
 import Pagination from "../../components/pagination";
-
+import { actions as allActions } from "../../../stores/admin/report";
 const SentReport = ({
   details,
   onSentPageChange,
@@ -32,9 +30,9 @@ const SentReport = ({
   receivedStartDate,
   receivedEndDate,
   loader,
-  userRole
+  userRole,
+  selectedReport,
 }) => {
-  const dispatch = useDispatch();
   const router = useRouter();
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
   const [openEdit, setOpenEdit] = useState(false);
@@ -110,7 +108,12 @@ const SentReport = ({
   const adminOptions = getChartAdminOption(details);
   const selectedChartOption =
     reportActiveTab === "Supervisor" ? userOptions : adminOptions;
-    const currentRole=userRole?.split("_").map((item,index)=>index===0?item:item.charAt(0).toUpperCase()+item?.slice(1)).join("")
+  const currentRole = userRole
+    ?.split("_")
+    .map((item, index) =>
+      index === 0 ? item : item.charAt(0).toUpperCase() + item?.slice(1)
+    )
+    .join("");
   const handleReceiverReport = (item) => {
     const info = {
       reportUser: item,
@@ -118,7 +121,7 @@ const SentReport = ({
       receivedStartDate: receivedStartDate,
       receivedEndDate: receivedEndDate,
     };
-    dispatch(selectedReport(info));
+    selectedReport(info);
     router?.push(
       `/${currentRole}/report/individualreport?reportId=${
         item?._id
@@ -148,7 +151,6 @@ const SentReport = ({
                                 selectedCardIndex={selectedCardIndex}
                                 handleReceiverReport={handleReceiverReport}
                                 setSelectedRows={setSelectedRows}
-                                dispatch={dispatch}
                                 selectedReport={selectedReport}
                                 setOpenEdit={setOpenEdit}
                                 styles={styles}
@@ -311,4 +313,7 @@ const SentReport = ({
   );
 };
 
-export default SentReport;
+const connectedSentReport = connect((state) => ({}), {
+  selectedReport: allActions.selectedReport,
+});
+export default connectedSentReport(SentReport);

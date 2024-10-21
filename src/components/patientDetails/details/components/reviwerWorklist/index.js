@@ -3,12 +3,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
-import { patientListFilter } from "../../../../../services/PatientsListSevice";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import LoadingSpinner from "../../../../../components/loadingSpinner";
 import MyWorkQueueFilter from "../MyWorkQueueFilter";
+import { actions as patientsActions } from "../../../../../stores/patient/details";
+import { connect } from "react-redux";
 
-const ReviwerWorkList = ({ localUserId, setWorkListPatientId,setIsModalComments }) => {
+const ReviwerWorkList = ({
+  localUserId,
+  setWorkListPatientId,
+  setIsModalComments,
+  patientListFilter,
+}) => {
   const [patientList, setPatientList] = useState([]);
   const [processedStatus, setProcessedStatus] = useState("ALL");
   const [searchtext, setSearchtext] = useState("");
@@ -46,12 +52,12 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId,setIsModalComments 
   const onPageChange = async (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
-    setFilterModalOpen(false)
+    setFilterModalOpen(false);
   };
   const getPatientListToDetails = (id) => {
     setWorkListPatientId(id);
-    setFilterModalOpen(false)
-    setIsModalComments(false)
+    setFilterModalOpen(false);
+    setIsModalComments(false);
   };
   const statuses = [
     { label: "ALL", value: "ALL" },
@@ -204,4 +210,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId,setIsModalComments 
   );
 };
 
-export default ReviwerWorkList;
+const connector = connect((state) => ({}), {
+  patientListFilter: patientsActions.getPatientListFilter,
+});
+export default connector(ReviwerWorkList);

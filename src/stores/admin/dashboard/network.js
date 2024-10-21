@@ -1,12 +1,25 @@
 import { requestPortal } from "../../../utils/network";
 import { getStorage } from "../../../utils/storages";
 
-export async function workFlow({ startDate, endDate }) {
+// export async function workFlow({ startDate, endDate }) {
+//   const options = {
+//     method: "GET",
+//   };
+//   const data = await requestPortal(
+//     `management/dashboard/tile/statistics?start=${startDate}&end=${endDate}
+//   `,
+//     options
+//   );
+//   return data;
+// }
+
+export async function workFlow({ startDate="", endDate=""}) {
+  const orgId = getStorage("orgId");
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `management/dashboard/tile/statistics?start=${startDate}&end=${endDate}
+    `dbservice/admindashboard/overallchart?allocatedOnStartDate=${startDate}&allocatedOnEndDate=${endDate}&organizationId=${orgId}
   `,
     options
   );
@@ -46,7 +59,6 @@ export const accuracy = async ({ btn, month, year, isAdmin = false }) => {
   );
   return data;
 };
-
 export const completedScore = async ({
   btn,
   month,
@@ -71,7 +83,6 @@ export const completedScore = async ({
   );
   return data;
 };
-
 export const holdStatus = async () => {
   const options = {
     method: "GET",
@@ -79,7 +90,6 @@ export const holdStatus = async () => {
   const data = await requestPortal(`dbservice/dashboard/hold/charts`, options);
   return data;
 };
-
 export const notification = async () => {
   const userId = getStorage("userId");
   const options = {
@@ -91,7 +101,6 @@ export const notification = async () => {
   );
   return data;
 };
-
 export const tenentLogo = async () => {
   const orgId = getStorage("orgId");
   const options = {
@@ -114,14 +123,29 @@ export const getTeamChartData = async () => {
   );
   return data;
 };
-
-export const usersList = async (role) => {
+export const usersList = async ({role}) => {
   const orgId = getStorage("orgId");
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
     `dbservice/user/getByRole?role=${role}&orgId=${orgId}`,
+    options
+  );
+  return data;
+};
+export const deliveryStatus = async ({month,year,btn}) => {
+  const url =
+  btn === "DAILY"
+    ? `daily?month=${month}&year=${year}`
+    : btn === "WEEKLY"
+    ? `weekly?month=${month}&year=${year}`
+    : `monthyly?year=${year}`;
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/admindashboard/chartdeliverystatus/${url}`,
     options
   );
   return data;

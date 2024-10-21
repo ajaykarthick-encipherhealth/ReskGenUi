@@ -146,3 +146,9 @@ export const fhirListAction = createActionThunk(
   "FHIR_LIST",
   network.fhirList
 );
+
+export const fhirServicesAction = createActionThunk(
+  "FHIR_LIST",
+  network.fhirServices
+
+);

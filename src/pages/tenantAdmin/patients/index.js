@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector, useDispatch } from "react-redux";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
@@ -15,18 +12,19 @@ import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
 import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
-import HeaderFilters from "../../../components/headerFilters";
 import {
-  generateOptionsList,
+  generateOptionsForNewStore,
   validateYear,
 } from "../../../components/headerFilters/functions";
-import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 import { connect } from "react-redux";
 import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
+import { actions as allocationAction } from "../../../stores/admin/patientAllocation";
+import { actions as allActions } from "../../../stores/admin/workqueue";
+import HeaderFilters from "./Filters";
 const bullets = [
   {
     color: "#34ace8",
@@ -62,13 +60,13 @@ const Patient = ({
   loading,
   getPatientId,
   uploadFiles,
-  uploadFilesRadiology
+  uploadFilesRadiology,
+  response,
+  patientDetails,
+  getFilters,
+  filteredList,
 }) => {
   const navigate = useRouter();
-  const dispatch = useDispatch();
-  const sideMenu = useSelector((state) => state.sideMenu);
-  const response = useSelector((state) => state.adminList.patients);
-  const filteredList = useSelector((state) => state.filters.createdBy);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
@@ -127,7 +125,7 @@ const Patient = ({
           const urlParams = new URLSearchParams(queryString);
           const encodedParams = urlParams.get("params");
           const decodedParams = JSON.parse(atob(encodedParams));
-          setParamsFilter("check")
+          setParamsFilter("check");
           setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
           setPaginationFirst(
             decodedParams?.paginationFirst ? decodedParams?.paginationFirst : 0
@@ -164,7 +162,7 @@ const Patient = ({
   }, [navigate]);
 
   useEffect(() => {
-    setParamsFilter("check")
+    setParamsFilter("check");
     var tenId = getStorage("tenantId");
     var uId = getStorage("userId");
     var orgId = getStorage("orgId");
@@ -172,29 +170,27 @@ const Patient = ({
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    if(paramsFilter){
-      getAllPatients(
-        pageNo,
-        computedStartDate,
-        computedEndDate,
-        selectedOption,
-        search,
-        completedStartDate,
-        completedEndDate,
-        selAllocatedTo || "",
-        selAllocatedBy || "",
-        selCreatedBy || "",
-        sort,
-        (orgId = selectOrgList)
-      );
-    }
-    dispatch(getFilters("createdBy"));
+    getAllPatients(
+      pageNo,
+      computedStartDate,
+      computedEndDate,
+      selectedOption,
+      searchVal,
+      completedStartDate,
+      completedEndDate,
+      selAllocatedTo || "",
+      selAllocatedBy || "",
+      selCreatedBy || "",
+      sort,
+      (orgId = selectOrgList)
+    );
+    getFilters({ field: "createdBy" });
   }, [
     pageNo,
     computedStartDate,
     computedEndDate,
     selectedOption,
-    search,
+    searchVal,
     completedStartDate,
     completedEndDate,
     selAllocatedTo,
@@ -202,7 +198,7 @@ const Patient = ({
     selCreatedBy,
     sort,
     selectOrgList,
-    paramsFilter
+    paramsFilter,
   ]);
 
   // useEffect(() => {
@@ -354,36 +350,35 @@ const Patient = ({
     form.patientId = form.patientId.trim();
     try {
       setIsLoadingBtn(true);
-      const response = await getPatientId({ obj: form }); 
-        getAllPatients(
-          pageNo,
-          computedStartDate,
-          computedEndDate,
-          selectedOption,
-          search,
-          completedStartDate,
-          completedEndDate,
-          selAllocatedTo || "",
-          selAllocatedBy || "",
-          selCreatedBy || "",
-          sort,
-          orgId
-        );
+      const response = await getPatientId({ obj: form });
+      getAllPatients(
+        pageNo,
+        computedStartDate,
+        computedEndDate,
+        selectedOption,
+        search,
+        completedStartDate,
+        completedEndDate,
+        selAllocatedTo || "",
+        selAllocatedBy || "",
+        selCreatedBy || "",
+        sort,
+        orgId
+      );
 
-        setAddPatientId(false);
-        setIsLoadingBtn(false);
-        getResponePopup(response);
-        setIsLoadingBtn(false);
-        form.resetFields();
-
+      setAddPatientId(false);
+      setIsLoadingBtn(false);
+      getResponePopup(response);
+      setIsLoadingBtn(false);
+      form.resetFields();
     } catch (Err) {
-    getResponePopup(Err?.response);
+      getResponePopup(Err?.response);
     }
     setValidated(true);
   };
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails(data);
     if (data.computing == 2) {
       const controller = new AbortController();
       const { signal } = controller;
@@ -494,9 +489,8 @@ const Patient = ({
     //   },
     // };
     setSelectFile(formData);
-    const response = await uploadFiles({obj:formData})
-    
-    
+    const response = await uploadFiles({ obj: formData });
+
     // axios.post(
     //   ENDPOINTS.apiEndoint +
     //     `aiservice/ai/upload
@@ -505,33 +499,29 @@ const Patient = ({
     //   headers
     // );
 
-      var orgId = selectOrgList;
-      getAllPatients(
-        pageNo,
-        computedStartDate,
-        computedEndDate,
-        selectedOption,
-        search,
-        completedStartDate,
-        completedEndDate,
-        selAllocatedTo || "",
-        selAllocatedBy || "",
-        selCreatedBy || "",
-        sort,
-        orgId
-      );
-      handleClose();
-      setAddPatient(false);
-      setAddPatient(false);
-      setIsLoadingBtn(false);
-        getResponePopup(response);
-      // dispatch(getMessagesList())
-    // } else {
-    //   setIsLoadingBtn(false);
-    // }
+    var orgId = selectOrgList;
+    getAllPatients(
+      pageNo,
+      computedStartDate,
+      computedEndDate,
+      selectedOption,
+      search,
+      completedStartDate,
+      completedEndDate,
+      selAllocatedTo || "",
+      selAllocatedBy || "",
+      selCreatedBy || "",
+      sort,
+      orgId
+    );
+    handleClose();
+    setAddPatient(false);
     setAddPatient(false);
     setIsLoadingBtn(false);
-    // getAllList(localUserId);
+    getResponePopup(response);
+
+    setAddPatient(false);
+    setIsLoadingBtn(false);
   };
   const submitRadiology = async () => {
     const formData = new FormData();
@@ -548,8 +538,8 @@ const Patient = ({
     //   },
     // };
     setSelectFile(formData);
-    const response = await uploadFilesRadiology({obj:formData})
-    
+    const response = await uploadFilesRadiology({ obj: formData });
+
     // axios.post(
     //   ENDPOINTS.apiEndoint +
     //     `aiservice/ai/upload/radiology
@@ -644,7 +634,7 @@ const Patient = ({
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">
@@ -697,8 +687,8 @@ const Patient = ({
                             // allocated by
                             isAllocatedBySelector={true}
                             allocatedBylabel="Created By"
-                            allocatedByOptoons={generateOptionsList(
-                              filteredList
+                            allocatedByOptoons={generateOptionsForNewStore(
+                              filteredList?.data?.response
                             )}
                             defaultAllocatedBy={"Select Created By"}
                             setSelAllocatedBy={setSelAllocatedBy}
@@ -826,17 +816,21 @@ const Patient = ({
 
 const enhancer = connect(
   (state) => ({
+    response: state.admin.workqueue?.patients?.data,
     organizationList: state?.tenantAdmin?.patients?.allOrganization?.data,
     allPatientList: state?.tenantAdmin?.patients?.allPatients,
     webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
     loading: state?.tenantAdmin?.patients?.allPatientsLoading,
+    filteredList: state.admin?.patientAllocate?.filtersList,
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     getAllPatients: tenantAdminAction.getAllPatientAction,
     getPatientId: tenantAdminAction.submitPatientId,
-    uploadFiles:tenantAdminAction.uploadFiles,
-    uploadFilesRadiology:tenantAdminAction.uploadFilesRadiology
+    uploadFiles: tenantAdminAction.uploadFiles,
+    getFilters: allocationAction.getFiltersList,
+    patientDetails: allActions.getPatientDetails,
+    uploadFilesRadiology: tenantAdminAction.uploadFilesRadiology,
   }
 );
 export default enhancer(Patient);

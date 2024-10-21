@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
 import { Avatar, Switch } from "antd";
 import { AntDesignOutlined, UserOutlined } from '@ant-design/icons';
 
@@ -8,7 +7,7 @@ import { AntDesignOutlined, UserOutlined } from '@ant-design/icons';
 const UserList = () => {
   // const { sidebariconHover} = useContext(ThemeContext);
 
-  const sideMenu = useSelector((state) => state.sideMenu);
+  
 
   const [validated, setValidated] = useState(false);
   const [userList, setUserList] = useState([]);
@@ -198,7 +197,7 @@ const UserList = () => {
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div className="content-body show menu-toggle no-sidebar">
           <div className="container-fluid">

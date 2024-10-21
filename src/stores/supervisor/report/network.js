@@ -87,3 +87,60 @@ export async function teamCheck({ totalElements, selectAllFlags, selectAll }) {
   );
   return data;
 }
+
+export async function sendReport(pagenum,
+  startDate = "",
+  endDate = "",
+  search,
+  sort) {
+  const options = {
+    method: "GET",
+  };
+  const url = `dbservice/reportdetails/sent?pageNo=${pagenum}&size=7&startdate=${
+    startDate ? startDate : ""
+  }&enddate=${endDate ? endDate : ""}&searchstring=${
+    search ? search : ""
+  }&sortfield=${sort?.sortField ? sort?.sortField : ""}&sortdirection=${
+    sort?.sortDir ? sort?.sortDir : ""
+  }`;
+  const data = await requestPortal(url,
+    options
+  );
+  return data;
+}
+
+export async function receivedReport(pagenum,
+  startDate = "",
+  endDate = "",
+  search,
+  sort) {
+  const options = {
+    method: "GET",
+  };
+  const url = `dbservice/reportdetails/received?pageNo=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
+  const data = await requestPortal(url,
+    options
+  );
+  return data;
+}
+
+export async function selectedReportDetails(reportId, reportInfo) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`dbservice/reportdetails/get?reportId=${reportId}`,
+    options
+  );
+  return data;
+}
+
+
+export async function getFileDetailsReport(pathname) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`management/patient/report/getfile?blobName=${pathname}`,
+    options
+  );
+  return data;
+}

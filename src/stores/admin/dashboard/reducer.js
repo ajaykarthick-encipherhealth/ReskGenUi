@@ -27,7 +27,7 @@
 
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { workFlowAction, dailyTaskAction, accuracyAction,completedScoreAction, holdStatusAction, notificationAction, tenentLogoAction,teamChartAction, getSelectUserList } from "./actions";
+import { workFlowAction, dailyTaskAction, accuracyAction,completedScoreAction, holdStatusAction, notificationAction, tenentLogoAction,teamChartAction, getSelectUserList,getDeliveryStatus, getDateRange } from "./actions";
 
 const initialState = {
   loading: true,
@@ -67,8 +67,17 @@ const createReducer = (actionType) =>
   },
   false
 );
+
+const getDateRangesData = (action) =>
+  handleActions(
+    {
+      [action.toString()]: (state, { payload }) => payload,
+    },
+    ""
+  );
 const dashbaordReducer = combineReducers({
   workFlow: createReducer(workFlowAction),
+  workFlowLoader: getUsersDetailsLoading(workFlowAction),
   dailyTask: createReducer(dailyTaskAction),
   dailyTaskLoading:getUsersDetailsLoading(dailyTaskAction),
   accuracyLoading: getUsersDetailsLoading(accuracyAction),
@@ -80,7 +89,10 @@ const dashbaordReducer = combineReducers({
   tenentLogo:createReducer(tenentLogoAction),
   teamChartData:createReducer(teamChartAction),
   teamChartLoader:getUsersDetailsLoading(teamChartAction),
-  managersList:createReducer(getSelectUserList)
+  managersList:createReducer(getSelectUserList),
+  deliveryStatus:createReducer(getDeliveryStatus),
+  deliveryStatusLoader:getUsersDetailsLoading(getDeliveryStatus),
+  dateRanges:getDateRangesData(getDateRange)
 });
 
 export default dashbaordReducer;

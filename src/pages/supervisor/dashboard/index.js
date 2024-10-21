@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import { Col, Row } from "antd";
@@ -13,13 +13,8 @@ import CompletedStatus from "./completedstatus";
 import HoldStatus from "./holdstatus";
 import { actions as supervisorAction } from "../../../stores/supervisor/dashboard";
 
-const Index = ({ getAllWorkFlow }) => {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
-
+const Index = ({ getAllWorkFlow, DateRanges }) => {
   const currentDate = new Date();
-
   const threeDaysAgo = new Date(currentDate);
   threeDaysAgo.setDate(currentDate.getDate() - 2);
 
@@ -75,7 +70,12 @@ const Index = ({ getAllWorkFlow }) => {
   );
 };
 
-const connector = connect(() => ({}), {
-  getAllWorkFlow: supervisorAction.supervisorWorkFlowAction,
-});
+const connector = connect(
+  (state) => ({
+    DateRanges: state?.admin?.dashboard?.dateRanges,
+  }),
+  {
+    getAllWorkFlow: supervisorAction.supervisorWorkFlowAction,
+  }
+);
 export default connector(Index);

@@ -22,22 +22,25 @@ import {
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { Tab, Nav } from "react-bootstrap";
 import moment from "moment";
+import { actions as allActions } from "../../stores/chatService";
+
 
 let stompClient = null;
 let pageSize = 10;
+import { portalUrl } from "../../utils/config";
+import { getStorage } from "../../utils/storages";
+import { connect } from "react-redux";
 
-import {
+const ChatCommunication = ({
+  openMsg,
+  offMsg,
   getChatHistory,
   getUsers,
   getHandleChatHistory,
   getHandleResetReadHistory,
   handleFilePost,
   addUser,
-} from "../../services/ChatService";
-import { portalUrl, portalUrl1 } from "../../utils/config";
-import { getStorage } from "../../utils/storages";
-
-const ChatCommunication = ({ openMsg, offMsg }) => {
+}) => {
   const messagesEndRef = useRef(null);
   const messagesTopRef = useRef(null);
   const messagesRef = useRef(null);
@@ -87,7 +90,11 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   };
 
   const fetchUsers = async () => {
-    let data = await getUsers({searchString:userData?.searchNewUserMessage?userData?.searchNewUserMessage:""});
+    let data = await getUsers({
+      searchString: userData?.searchNewUserMessage
+        ? userData?.searchNewUserMessage
+        : "",
+    });
     const temp = [];
     data?.forEach((item) => {
       temp.push(item);
@@ -97,9 +104,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   };
   const connect = () => {
     const token = getStorage("token");
-    let Sock = new SockJS(
-      `${portalUrl}chatservice/ws?token=${token}`
-    );
+    let Sock = new SockJS(`${portalUrl}chatservice/ws?token=${token}`);
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
   };
@@ -272,7 +277,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
           fileType: userData?.fileType,
           date: getCurrentTimestamp(),
           status: "MESSAGE",
-          token:getStorage("token")
+          token: getStorage("token"),
         };
       } else {
         chatMessage = {
@@ -283,10 +288,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
           id: uuidv4(),
           date: getCurrentTimestamp(),
           status: "MESSAGE",
-          token:getStorage("token")
+          token: getStorage("token"),
         };
       }
-      stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
+      stompClient?.send("/app/private-message", {}, JSON.stringify(chatMessage));
       messagesRef.current = [...message, chatMessage];
       setMessages([...message, chatMessage]);
       setFileModal(false);
@@ -418,8 +423,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
         messageIds: messageIds,
         messageStatus: "READ",
         primaryUser: userData?.username,
-        secondaryUser: sender?.secondaryUser || sender
-        ,
+        secondaryUser: sender?.secondaryUser || sender,
       };
       await getHandleResetReadHistory(dataBody);
     }
@@ -1624,4 +1628,12 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   );
 };
 
-export default ChatCommunication;
+const connector = connect((state) => ({}), {
+  getChatHistory: allActions.getChatHistory,
+  getUsers: allActions.getUsersList,
+  getHandleChatHistory: allActions.getHandleChatHistory,
+  getHandleResetReadHistory: allActions.getHandleResetReadHistory,
+  handleFilePost: allActions.getHandleFilePost,
+  addUser: allActions.getDddUser,
+});
+export default connector(ChatCommunication);

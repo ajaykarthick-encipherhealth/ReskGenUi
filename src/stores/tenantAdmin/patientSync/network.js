@@ -55,20 +55,30 @@ export async function batchDetails({
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/batch/batchuploaddetails?batchId=${batchId}&page=${page}&size=15&searchString=${search}&fileStatus=${fileStatus?fileStatus:""}&startDate=${startDate?startDate:""}&endDate=${endDate?endDate:""}`,
+    `dbservice/batch/batchuploaddetails?batchId=${batchId}&page=${page}&size=15&searchString=${search}&fileStatus=${
+      fileStatus ? fileStatus : ""
+    }&startDate=${startDate ? startDate : ""}&endDate=${
+      endDate ? endDate : ""
+    }`,
     options
   );
   return data;
 }
 
-export async function uploadFiles({obj}) {
+export async function uploadFiles({ obj }) {
   const options = {
     method: "POST",
-    body: obj
+    body: obj,
   };
-  const data = await requestPortalFiles(
-    `management/batch/upload`,
-    options
-  );
+  const data = await requestPortalFiles(`management/batch/upload`, options);
+  return data;
+}
+// triggerBatch
+export async function triggerBatch({ obj }) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(`management/ftp/trigger`, options);
   return data;
 }

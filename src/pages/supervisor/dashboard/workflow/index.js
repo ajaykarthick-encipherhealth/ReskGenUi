@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { Col, Empty, Row, Skeleton, Spin } from "antd";
 import styles from "./styles.module.css";
@@ -28,10 +26,8 @@ import {
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/supervisor/dashboard";
 
-const WorkFlow = ({ worlFlowData }) => {
+const WorkFlow = ({ worlFlowData, DateRanges }) => {
   const currentDate = dayjs();
-  // const worlFlowData = useSelector((state) => state?.l2Dashboard?.data);
-  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const [openPicker, setOpenPicker] = useState(false);
   const last30thDate = currentDate?.subtract(31, "day");
   const lastDateWithTime = currentDate?.endOf("day");
@@ -214,6 +210,7 @@ const connector = connect(
   (state) => ({
     worlFlowData: state?.supervisor?.dashboard?.workFlow,
     loader: state.admin?.workqueue?.patientsLoading,
+    DateRanges: state?.admin?.dashboard?.dateRanges,
   }),
   {}
 );

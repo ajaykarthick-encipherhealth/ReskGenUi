@@ -8,7 +8,6 @@ import {
   renderUserPrfoileAvatar,
 } from "../../../../components/headerFilters/functions";
 import { patientDetails } from "../../../../stores/authflow/actions";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { getMaskData } from "../../../../utils/reusable";
 import { handleCopyToClipboard } from "../../../../components/commonFunctions";
@@ -16,7 +15,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlag } from "@fortawesome/free-regular-svg-icons";
 import { getStorage, setStorage } from "../../../../utils/storages";
-// import {  } from "@fortawesome/free-solid-svg-icons";
+
 
 const ContentGroupCard = ({
   item,
@@ -39,37 +38,13 @@ const ContentGroupCard = ({
   content,
   page,
   loading,
+  patientDetails,
 }) => {
-  const dispatch = useDispatch();
   const navigate = useRouter();
   const [copied, setCopied] = useState(false);
-  // const gotoPatientDetails = (data) => {
-  //   if (!data) {
-  //     notification.warning({
-  //       message: "Data is undefined. Please wait.",
-  //     });
-  //     return;
-  //   }
 
-  //   dispatch(patientDetails(data));
-
-  //   if (data.processedStatus === "COMPLETED") {
-  //     const controller = new AbortController();
-  //     const currentRole = getStorage("userRole");
-  //     controller.abort();
-  //     setStorage("patientId", data.patientId);
-  //     navigate.push({
-  //       pathname: `/${currentRole}/patients/details`,
-  //       query: page,
-  //     });
-  //   } else {
-  //     notification.warning({
-  //       message: data.patientId + " file not processed. Please wait.",
-  //     });
-  //   }
-  // };
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails(data);
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();

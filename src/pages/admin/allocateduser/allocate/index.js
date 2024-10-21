@@ -54,7 +54,7 @@ const AllocateModal = ({
     const response = await getL1UsersList({
       search: search  || "",
     });
-    if (response.status == "SUCCESS") {
+    if (response?.status == "SUCCESS") {
       let result = response?.response;
 
       const user = result?.map((item) => {

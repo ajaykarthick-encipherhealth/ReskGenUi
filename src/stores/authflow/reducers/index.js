@@ -11,7 +11,7 @@ import {
   AUTHENTICATION,
   VERIFYMFA,
 } from "../actions";
-import { CHATBOT } from "../../../store/actions/DashboardActions";
+// import { CHATBOT } from "../../../store/actions/DashboardActions";
 export const PDF_URL = "PDF_URL";
 
 export const pdfUrl = (url) => {
@@ -78,12 +78,12 @@ export function AuthReducer(state = initialState, action) {
       userInfo: action.payload,
     };
   }
-  if (action.type === CHATBOT) {
-    return {
-      ...state,
-      chatReply: action.payload,
-    };
-  }
+  // if (action.type === CHATBOT) {
+  //   return {
+  //     ...state,
+  //     chatReply: action.payload,
+  //   };
+  // }
   if (action.type === CODER) {
     return {
       ...state,

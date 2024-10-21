@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
 import { Form, Switch } from "antd";
-import { connect, useSelector } from "react-redux";
+import { connect, } from "react-redux";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 import { getResponePopup } from "../../../../../utils/reusable";
 

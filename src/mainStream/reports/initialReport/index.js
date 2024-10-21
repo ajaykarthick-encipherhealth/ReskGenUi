@@ -10,8 +10,7 @@ import reAuditIcon from "../../.../../../images/trackingImages/AuditPending.png"
 import auditedIcon from "../../.../../../images/trackingImages/AuditedTrack.png";
 import TableStyle from "../../../components/table/table.module.css";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
-import { selectedRow } from "../../../store/actions/ReportActions";
-import { useDispatch, connect } from "react-redux";
+import {connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
 import ContentGroupCard from "../../../mainStream/components/cards/contentGroupCard";
 import AllocationCount from "../../../mainStream/components/allocationCount";
@@ -25,6 +24,7 @@ import {
   processstatusBodyTemplate,
 } from "../../components/chartUtils";
 import { actions as adminActions } from "../../../stores/admin/report";
+import { actions as patientsActions } from "../../../stores/admin/workqueue";
 import { getStorage, setStorage } from "../../../utils/storages";
 
 const InitialCard = ({
@@ -49,8 +49,8 @@ const InitialCard = ({
   checkedLoader,
   adminCheckedLoader,
   getAdminChecKAll,
+  getSelectedRow
 }) => {
-  const dispatch = useDispatch();
   const navigate = useRouter();
   const handleHeaderCheckboxChange = async (
     activeTab,
@@ -110,6 +110,7 @@ const InitialCard = ({
       if (res.status === "SUCCESS") {
         setSelectAll(true);
         setSelectedRows(res?.response?.patientIds);
+        getSelectedRow(res?.response?.patientIds)
       }
       // } catch (error) {}
     } else if (activeTab === "Admin" && selectAll) {
@@ -151,25 +152,15 @@ const InitialCard = ({
       //     headers: { Authorization: `Bearer ${await getStorage("token")}` },
       //   }
       // ).then((res) => res.json());
-
       if (res.status === "SUCCESS") {
         setSelectAll(true);
+        getSelectedRow(res?.response?.patientIds)
         setSelectedRows(res?.response?.patientIds);
       }
-      // setIsLoading(false);
-      // } catch (error) {
-      //  console.log(err)
-      // }
-
-      // dispatch(
-      //   getReportDetails({
-      //     pagenum: 0,
-      //     size: reportListAll?.response?.totalElements,
-      //   })
-      // );
     } else {
       setSelectAll(false);
       setSelectedRows([]);
+      getSelectedRow([])
     }
   };
 
@@ -187,6 +178,7 @@ const InitialCard = ({
     }
 
     setSelectedRows(updatedRows);
+    getSelectedRow(updatedRows)
   };
 
   const card1Data = [
@@ -295,7 +287,7 @@ const InitialCard = ({
     },
   ];
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails(data);
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
@@ -346,7 +338,7 @@ const InitialCard = ({
   ];
 
   useEffect(() => {
-    dispatch(selectedRow(selectedRows));
+    getSelectedRow(selectedRows);
   }, [selectedRows]);
 
   return (
@@ -459,6 +451,7 @@ const InitialCard = ({
                                   ? checkedLoader
                                   : adminCheckedLoader
                               }
+                              patientDetails={patientDetails}
                             />
                           ))}
                         </div>
@@ -568,6 +561,8 @@ const enhancer = connect(
     reviewerReport: reviewerAction.reviewerCheckAllReport,
     checkAllApi: reviewerAction.reviewerCheckAllReport,
     getAdminChecKAll: adminActions.adminCheckAllReport,
+    getSelectedRow: adminActions.selectedRow,
+    patientDetails: patientsActions.getPatientDetails,
   }
 );
 export default enhancer(InitialCard);

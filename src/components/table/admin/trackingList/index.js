@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import moment from "moment";
@@ -28,11 +27,11 @@ function TrackingTable({
   setSortAuditDueOrder,
 }) {
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
-  const dispatch = useDispatch();
+
   const navigate = useRouter();
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails(data);
     if (data.computing === 2) {
       const controller = new AbortController();
       const { signal } = controller;

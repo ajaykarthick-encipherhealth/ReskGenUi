@@ -21,3 +21,7 @@ export const upoloadFiles=createActionThunk(
   'UPOLOAD_FILES',
   network.uploadFiles
 )
+export const getTriggerBatch=createActionThunk(
+  'TRIGGER_BATCH',
+  network.triggerBatch
+)

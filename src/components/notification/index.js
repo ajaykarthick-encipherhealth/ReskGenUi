@@ -3,7 +3,6 @@ import Chat from "../chat/index";
 import { Tooltip } from "antd";
 import moment from "moment";
 import { connect } from "react-redux";
-import { getNotificationAlert } from "../../store/actions/NotificationAction";
 import { actions as webSocketActions } from "../../stores/websocket";
 import { actions as dashbaordActions } from "../../stores/reviewer/dashboard";
 import { getStorage } from "../../utils/storages";

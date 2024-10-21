@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import {
   ArrowUpOutlined,
   ArrowDownOutlined,
@@ -8,9 +8,9 @@ import {
 import moment from "moment";
 import TableStyle from "../../table.module.css";
 import { Select as AntSelect, Empty, Spin } from "antd";
-import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import { priorityStatus, sortFunction } from "../../../headerFilters/functions";
-
+import { actions as adminActions } from "../../../../stores/admin/users";
+import { actions as allActions } from "../../../../stores/admin/workqueue";
 function AllocatedAdminList({
   patinetListAll,
   selectAllChecked,
@@ -20,10 +20,10 @@ function AllocatedAdminList({
   selectedChart,
   setSort,
   loading,
-  sortCompleteOrder, 
-  setSortCompleteOrder
+  sortCompleteOrder,
+  setSortCompleteOrder,
+  selectedRoWDetails,
 }) {
-  const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows.some(
@@ -50,12 +50,10 @@ function AllocatedAdminList({
           style={{ height: "35px" }}
           key={index}
           onClick={() => {
-            dispatch(
-              selectedRoWDetails({
-                patientId: data?.patientId,
-                processStageId: data?.processStageId,
-              })
-            );
+            selectedRoWDetails({
+              patientId: data?.patientId,
+              processStageId: data?.processStageId,
+            });
           }}
         >
           <td className={TableStyle.firstTdBorder}>
@@ -200,5 +198,8 @@ function AllocatedAdminList({
     </div>
   );
 }
-
-export default AllocatedAdminList;
+const connector = connect((state) => ({}), {
+  selectedRoWDetails: adminActions.selectedRoWDetails,
+  patientDetails: allActions.getPatientDetails,
+});
+export default connector(AllocatedAdminList);

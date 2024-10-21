@@ -640,7 +640,6 @@ export const getCaptureSectionBackgroundFile = ({
   setIsModalOpenRadiology,
   setIsModalOpenValidCodes,
   setFileModalHeader,
-  fileId,
   patientDocumentResult,
   fileInitialPage,
   setFileInitialPage,

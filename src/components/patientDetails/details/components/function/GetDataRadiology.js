@@ -278,7 +278,6 @@ export const getPatientRadiologyDetailsNew = async (
   setCaptureSectionMatching,
   setMeatCriteriaList,
   patientDetailsResult,
-  dispatch,
   sectionColorList,
   setAllDisList,
   setComboDiseaseCodesList,

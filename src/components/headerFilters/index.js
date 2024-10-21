@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { DatePicker, Popover, Select, Tooltip } from "antd";
 import Image from "next/image";
-import dayjs from "dayjs";
-import { useDispatch } from "react-redux";
 import styles from "../../pages/reviewer/report/report.module.css";
 import allocateStyle from "../../pages/admin/allocateduser/allocate/style.module.css";
 import Export from "../../images/svg/Export";
@@ -17,10 +15,6 @@ import {
   resetPageNumber,
 } from "./functions";
 import filter from "../../images/svg/filter.svg";
-import warning from "../../images/svg/warning.svg";
-import { getFilters } from "../../stores/authflow/actions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import {
   PlusCircleFilled,
   InfoCircleFilled,
@@ -177,7 +171,6 @@ const HeaderFilters = ({
   fromTenantPatients,
   selAllocatedBy
 }) => {
-  const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
   let columnClass;
   if (addUser) {
@@ -218,32 +211,28 @@ const HeaderFilters = ({
           )}
           {isSelector && (
             <div className={defaultSize}>
-              {" "}
-              <Selector
-                selectlabel={selectlabel}
-                setSelectedOption={setSelectedOption}
-                selectOptions={selectOptions}
-                defaultSelectValue1={defaultSelectValue1}
-                selectDefaultValue={selectDefaultValue}
-                // selectedValue={selectedValue}
-                setPageNo={setPageNo}
-              />
+              <label className={`${styles.label} responsiveLabel`}>
+                {selectlabel}
+              </label>
+              <div class="form-group has-search custom-react-select">
+                <Select
+                  onChange={(selectOptions) => {
+                    setSelectedOption(selectOptions ? selectOptions : "");
+                    if (setPageNo) {
+                      resetPageNumber(setPageNo);
+                    }
+                  }}
+                  options={selectOptions}
+                  isSearchable={false}
+                  placeholder={"Select"}
+                  allowClear={true}
+                />
+              </div>
             </div>
           )}
 
           {isNextCreatedBySelector && (
-            <div
-              className={defaultSize}
-              // onClick={() => {
-              //   dispatch(
-              //     getFilters(
-              //       optionKey ? optionKey : "createdBy",
-              //       null,
-              //       "auditedqueue"
-              //     )
-              //   );
-              // }}
-            >
+            <div className={defaultSize}>
               <label className={`${styles.label} responsiveLabel`}>
                 {createdTolabel}
               </label>
@@ -350,7 +339,7 @@ const HeaderFilters = ({
               </label>
               <div class="form-group has-search custom-react-select">
                 <Select
-                  value={orgValue? orgValue:null}
+                  value={orgValue ? orgValue : null}
                   onChange={(selectOrg) => {
                     if (setPageNo) {
                       resetPageNumber(setPageNo);
@@ -571,21 +560,13 @@ const HeaderFilters = ({
         <div style={{ marginTop: "20px" }}>
           <div className="row filter-contain" style={{ width: "100%" }}>
             {isAllocatedBySelector && (
-              <div
-                className={defaultSize}
-                // style={{ position: "relative", left: atCorner && "-20px" }}
-                // onClick={() => {
-                //   dispatch(
-                //     getFilters(selectorField ? selectorField : "allocatedBy")
-                //   );
-                // }}
-              >
+              <div className={defaultSize}>
                 <label className={`${styles.label} responsiveLabel`}>
                   {allocatedBylabel}
                 </label>
                 <div class="form-group has-search custom-react-select">
                   <Select
-                    value={selAllocatedBy? selAllocatedBy:null}
+                    value={selAllocatedBy ? selAllocatedBy : null}
                     onChange={(selectedOption) => {
                       setSelAllocatedBy(selectedOption ? selectedOption : null);
                       if (setPageNo) {
@@ -603,7 +584,10 @@ const HeaderFilters = ({
             {isRangePicker && (
               <div
                 className={defaultSize}
-                style={{ position: "relative", right:fromTenantPatients?"0px":"20px" }}
+                style={{
+                  position: "relative",
+                  right: fromTenantPatients ? "0px" : "20px",
+                }}
               >
                 <DateRangePicker
                   selectedDates={selectedDates}
@@ -624,13 +608,7 @@ const HeaderFilters = ({
               </div>
             )}
             {isAllocatedToSelector && (
-              <div
-                className={defaultSize}
-                style={{ zIndex: tracking && "2" }}
-                // onClick={() => {
-                //   dispatch(getFilters("patientAllocated"));
-                // }}
-              >
+              <div className={defaultSize} style={{ zIndex: tracking && "2" }}>
                 <label className={`${styles.label} responsiveLabel`}>
                   {allocatedTolabel}
                 </label>
@@ -651,18 +629,7 @@ const HeaderFilters = ({
               </div>
             )}
             {isCreatedBySelector && (
-              <div
-                className={defaultSize}
-                // onClick={() => {
-                //   dispatch(
-                //     getFilters(
-                //       optionKey ? optionKey : "createdBy",
-                //       null,
-                //       "audited queue"
-                //     )
-                //   );
-                // }}
-              >
+              <div className={defaultSize}>
                 <label className={`${styles.label} responsiveLabel`}>
                   {createdTolabel}
                 </label>

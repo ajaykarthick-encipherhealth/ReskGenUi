@@ -4,13 +4,12 @@ import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
-import { selectedReport } from "../../../../store/actions/ReportActions";
+import { connect } from "react-redux";
 import { Empty } from "antd";
 import Footer from "../../../../jsx/layouts/Footer";
 import { dateFormate, sortFunction } from "../../../../components/headerFilters/functions";
 import SpinnerDots from "../../../../components/spinner";
-
+import {actions as allActions} from '../../../../stores/admin/report'
 function ReceivedReport({
   details,
   onPageChange,
@@ -22,11 +21,11 @@ function ReceivedReport({
   sortOrder,
   setSortOrder,
   setSort,
+  selectedReport
 }) {
 
   const [detailsContent, setDetailsContent] = useState(details?.content);
 
-  const dispatch = useDispatch();
   useEffect(() => {
     setDetailsContent(details?.content);
   }, [details]);
@@ -51,7 +50,7 @@ function ReceivedReport({
       receivedStartDate: receivedStartDate,
       receivedEndDate: receivedEndDate,
     };
-    dispatch(selectedReport(info));
+    selectedReport(info);
     router?.push(
       `/supervisor/report/individualreport?reportId=${info?.reportUser?.reportId}`
     );
@@ -194,5 +193,13 @@ function ReceivedReport({
     </div>
   );
 }
+const enhancer = connect(
+  (state) => ({
+   
+  }),
+  {
+    selectedReport:allActions.selectedReport
+  }
+);
 
-export default ReceivedReport;
+export default enhancer(ReceivedReport);

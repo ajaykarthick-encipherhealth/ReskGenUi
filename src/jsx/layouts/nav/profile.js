@@ -17,120 +17,129 @@ const Profile = ({
   currentUserInfo,
   logoutFunction,
   profileImageUrl,
-  userName
+  userName,
 }) => {
   return (
     <>
-    <div className="header-media d-flex">
-      <Popover
-        trigger="click"
-        open={openContent}
-        content={
-          <div className={styles.popDIv}>
-            <div className={styles.closeContainer2}>
-              <CloseCircleOutlined
-                onClick={() => setOpenContent(false)}
-                className={styles.close_icon}
-              />
+      <div className="header-media d-flex">
+        <Popover
+          trigger="click"
+          open={openContent}
+          content={
+            <div className={styles.popDIv}>
+              <div className={styles.closeContainer2}>
+                <CloseCircleOutlined
+                  onClick={() => setOpenContent(false)}
+                  className={styles.close_icon}
+                />
+              </div>
+              <div
+                style={{
+                  margin: "20px 0px 0 30px",
+                  display: "flex",
+                }}
+              >
+                <div style={{ width: "80px", height: "80px" }}>
+                  {profileUploadedTime?.loading ? (
+                    <Spin
+                      indicator={<LoadingOutlined style={{ fontSize: 24 }} />}
+                      loading={profileUploadedTime?.loading}
+                      style={{ marginTop: "10px" }}
+                    />
+                  ) : (
+                    renderUserPrfoile(
+                      currentUserInfo?.firstName,
+                      currentUserInfo?.lastName,
+                      profileImageUrl,
+                      "header",
+                      "70px",
+                      "70px"
+                    )
+                  )}
+                  <div
+                    onClick={() => {
+                      setOpenContent(false);
+                      setOpenUploader(!openUploader);
+                    }}
+                    className={styles.edit}
+                  >
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faPen}
+                        style={{ marginTop: "7px" }}
+                      />
+                    </span>
+                  </div>
+                </div>
+                <div style={{ margin: "10px 0 0 5px" }}>
+                  <span
+                    className="ms-2 header-name d-flex mr-3"
+                    style={{
+                      fontWeight: "700",
+                      fontSize: "16px",
+                    }}
+                  >
+                    {userName}
+                  </span>
+                  <span
+                    className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3 "
+                    style={{
+                      fontWeight: "500",
+                      fontSize: "6px",
+                    }}
+                  >
+                    {currentRole
+                      ?.replace(/_/g, " ")
+                      ?.split(" ")
+                      .map(
+                        (item) => item?.charAt(0).toUpperCase() + item?.slice(1)
+                      )
+                      .join(" ")}
+                  </span>
+                </div>
+              </div>
+
+              <Divider className={styles.divider} />
+              <div className={styles.footerDiv} onClick={logoutFunction}>
+                {/* <Image src={logout} /> */}
+                <span className={styles.footerCont}> Log out</span>
+              </div>
             </div>
-            <div
-              style={{
-                margin: "20px 0px 0 30px",
-                display: "flex",
-              }}
-            >
-              <div style={{ width: "80px", height: "80px" }}>
-                {profileUploadedTime?.loading ? (
+          }
+        >
+          <div>
+            <div className="header-info2 d-flex align-items-center">
+              <div
+                className="header-media"
+                style={{ marginTop: "-3px" }}
+                onClick={() => setOpenContent(true)}
+              >
+                {profileUploadedTime ? (
                   <Spin
-                    indicator={<LoadingOutlined style={{ fontSize: 24 }} />}
-                    loading={profileUploadedTime?.loading}
+                    indicator={<LoadingOutlined style={{ fontSize: 20 }} />}
+                    loading={profileUploadedTime}
                     style={{ marginTop: "10px" }}
                   />
                 ) : (
                   renderUserPrfoile(
-                    currentUserInfo?.userName,
+                    currentUserInfo?.firstName,
                     currentUserInfo?.lastName,
                     profileImageUrl,
-                    "header",
-                    "70px",
-                    "70px"
+                    "header"
                   )
                 )}
-                <div
-                  onClick={() => {
-                    setOpenContent(false);
-                    setOpenUploader(!openUploader);
-                  }}
-                  className={styles.edit}
-                >
-                  <span>
-                    <FontAwesomeIcon icon={faPen} style={{marginTop: '7px'}}/>
-                  </span>
-                </div>
-              </div>
-              <div style={{ margin: "10px 0 0 5px" }}>
-                <span
-                  className="ms-2 header-name d-flex mr-3"
-                  style={{
-                    fontWeight: "700",
-                    fontSize: "16px",
-                  }}
-                >
-                  {userName}
-                </span>
-                <span
-                  className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3 "
-                  style={{
-                    fontWeight: "500",
-                    fontSize: "6px",
-                  }}
-                >
-                  {currentRole?.charAt(0).toUpperCase() + currentRole?.slice(1)}
-                </span>
               </div>
             </div>
-
-            <Divider className={styles.divider} />
-            <div className={styles.footerDiv} onClick={logoutFunction}>
-              {/* <Image src={logout} /> */}
-              <span className={styles.footerCont}> Log out</span>
-            </div>
           </div>
-        }
-      >
-        <div>
-          <div className="header-info2 d-flex align-items-center">
-            <div
-              className="header-media"
-              style={{ marginTop: "-3px" }}
-              onClick={() => setOpenContent(true)}
-            >
-              {profileUploadedTime?.loading ? (
-                <Spin
-                  indicator={<LoadingOutlined style={{ fontSize: 20 }} />}
-                  loading={profileUploadedTime?.loading}
-                  style={{ marginTop: "10px" }}
-                />
-              ) : (
-                renderUserPrfoile(
-                  currentRole?.userName,
-                  currentRole?.lastName,
-                  profileImageUrl,
-                  "header"
-                )
-              )}
-            </div>
-          </div>
-        </div>
-      </Popover>
-    </div>
+        </Popover>
+      </div>
     </>
   );
 };
 
 const enhancer = connect(
   (state) => ({
-    currentUserInfo: state?.loggedInUser.currentUser?.data?.responce,
+    currentUserInfo: state?.loggedInUser.currentUser?.data?.response,
   }),
   {}
 );

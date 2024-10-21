@@ -9,17 +9,10 @@ export const getAllUsersAction = createActionThunk(
   "GET_ALL_USERS",
   network.getallUsers
 );
-export const getAddUser = createActionThunk(
-  "ADD_USER",
-  network.AddUser
-);
-export const addPatient = createActionThunk(
-  "ADD_PATIENTS",
-  network.addPatient
-);
-
+export const getAddUser = createActionThunk("ADD_USERS_LIST", network.AddUser);
+export const addPatient = createActionThunk("ADD_PATIENTS_IN_USER", network.addPatient);
 
 export const getEnableUser = createActionThunk(
-  "ENABLE_USER",
+  "ENABLE_USER_USERS_MODULE",
   network.enableUser
 );

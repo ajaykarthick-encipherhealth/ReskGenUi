@@ -4,9 +4,7 @@ import { useRouter } from "next/router";
 import ReactECharts from "echarts-for-react";
 import SpinnerDots from "../../../components/spinner";
 import { Empty } from "antd";
-import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
-import { useDispatch } from "react-redux";
-import TabSwitcher from "../../../mainStream/components/tabSwitch";
+import { connect } from "react-redux";
 import {
   AccessCountSection,
   OverallReportsSection,
@@ -14,7 +12,6 @@ import {
 } from "../../../mainStream/components/subMiniCard";
 import CustomTable from "../../../mainStream/components/customTable";
 import { color } from "highcharts";
-
 import {
   getChartOption,
   getChartUserOption,
@@ -23,6 +20,7 @@ import {
 import GroupCard from "../../../mainStream/components/cards/groupCard";
 import Pagination from "../../components/pagination";
 import { getStorage } from "../../../utils/storages";
+import { actions as allActions } from "../../../stores/admin/report";
 const ReceivedReport = ({
   details,
   onPageChange,
@@ -31,8 +29,8 @@ const ReceivedReport = ({
   receivedStartDate,
   receivedEndDate,
   loader,
+  selectedReport,
 }) => {
-  const dispatch = useDispatch();
   const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
 
   useEffect(() => {
@@ -52,9 +50,14 @@ const ReceivedReport = ({
       receivedStartDate: receivedStartDate,
       receivedEndDate: receivedEndDate,
     };
-    dispatch(selectedReport(info));
+    selectedReport(info);
     const userRole = getStorage("userRole");
-    const currentRole=userRole?.split("_").map((item,index)=>index===0?item:item.charAt(0).toUpperCase()+item?.slice(1)).join("")
+    const currentRole = userRole
+      ?.split("_")
+      .map((item, index) =>
+        index === 0 ? item : item.charAt(0).toUpperCase() + item?.slice(1)
+      )
+      .join("");
     router?.push(
       `/${currentRole}/report/individualreport?reportId=${
         item?.reportId
@@ -119,7 +122,6 @@ const ReceivedReport = ({
                                 key={item?.id}
                                 data={details?.reportStatusDTOList.content}
                                 handleReceiverReport={handleReceiverReport}
-                                dispatch={dispatch}
                                 selectedReport={selectedReport}
                                 styles={styles}
                                 item={item}
@@ -129,8 +131,8 @@ const ReceivedReport = ({
                           )
                         ) : (
                           <div className={styles.card}>
-                          <Empty />
-                        </div>
+                            <Empty />
+                          </div>
                         )}
                       </div>
                     </div>
@@ -254,7 +256,7 @@ const ReceivedReport = ({
       </div>
       {details?.reportStatusDTOList.content.length > 0 ? (
         <Pagination
-          first={receivedPageNo===0?0:paginationFirst}
+          first={receivedPageNo === 0 ? 0 : paginationFirst}
           totalRecords={details?.reportStatusDTOList?.totalElements}
           onPageChange={onPageChange}
           row={8}
@@ -264,4 +266,8 @@ const ReceivedReport = ({
   );
 };
 
-export default ReceivedReport;
+const connector = connect(
+  (state) => ({}),
+  { selectedReport: allActions.selectedReport }
+);
+export default connector(ReceivedReport);

@@ -2,25 +2,25 @@ import { createStore, applyMiddleware, combineReducers, compose } from "redux";
 import thunkMiddleware from "redux-thunk";
 import promiseMiddleware from "redux-promise";
 import { createWrapper } from "next-redux-wrapper";
-import { PostsReducer, toggleMenu } from "../store/reducers/PostsReducer";
-import { DashboardReducer } from "../store/reducers/DashboradReducer";
-import { PatientsReducer } from "../store/reducers/PatientsReducer";
-import { ReportReducer } from "../store/reducers/ReportReducer";
-import { NotificationReducer } from "../store/reducers/NotificationReducer";
-import { AdminPatientsReducer } from "../store/reducers/adminRecucers/fileProcessingReducer";
-import { AdminPatientsListReducer } from "../store/reducers/adminRecucers/patientsReducers";
-import { AdminUsersReducer } from "../store/reducers/adminRecucers/usewrsReducer";
-import { WorkReducers } from "../store/reducers/l2Reducers/AuditReducer";
-import { L2DashboardReducers } from "../store/reducers/l2Reducers/DashboardReducer";
-import { L2UserReducers } from "../store/reducers/l2Reducers/usersReducers";
-import { AuditReportReducer } from "../store/reducers/l2Reducers/AuditReportReducer";
-import { AdminDashboardReducer } from "../store/reducers/adminRecucers/dashboardReducer";
-import { AdminReportReducer } from "../store/reducers/adminRecucers/ReportReducer";
-import { PhyicianReducer } from "../store/reducers/physicianReducers/patientsReducers";
-import { PhysicianDashboardReducer } from "../store/reducers/physicianReducers/DashboardReducer";
-import { PhysicianComparisonReducer } from "../store/reducers/physicianReducers/ComparisionReducer";
-import { TanantAdminService } from "../store/reducers/tanantAdminReducers/fihrReducers";
-import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerReducers";
+// import { PostsReducer, toggleMenu } from "../store/reducers/PostsReducer";
+// import { DashboardReducer } from "../store/reducers/DashboradReducer";
+// import { PatientsReducer } from "../store/reducers/PatientsReducer";
+// import { ReportReducer } from "../store/reducers/ReportReducer";
+// import { NotificationReducer } from "../store/reducers/NotificationReducer";
+// import { AdminPatientsReducer } from "../store/reducers/adminRecucers/fileProcessingReducer";
+// import { AdminPatientsListReducer } from "../store/reducers/adminRecucers/patientsReducers";
+// import { AdminUsersReducer } from "../store/reducers/adminRecucers/usewrsReducer";
+// import { WorkReducers } from "../store/reducers/l2Reducers/AuditReducer";
+// import { L2DashboardReducers } from "../store/reducers/l2Reducers/DashboardReducer";
+// import { L2UserReducers } from "../store/reducers/l2Reducers/usersReducers";
+// import { AuditReportReducer } from "../store/reducers/l2Reducers/AuditReportReducer";
+// import { AdminDashboardReducer } from "../store/reducers/adminRecucers/dashboardReducer";
+// import { AdminReportReducer } from "../store/reducers/adminRecucers/ReportReducer";
+// import { PhyicianReducer } from "../store/reducers/physicianReducers/patientsReducers";
+// import { PhysicianDashboardReducer } from "../store/reducers/physicianReducers/DashboardReducer";
+// import { PhysicianComparisonReducer } from "../store/reducers/physicianReducers/ComparisionReducer";
+// import { TanantAdminService } from "../store/reducers/tanantAdminReducers/fihrReducers";
+// import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerReducers";
 import filterReducer, { AuthReducer } from "./authflow/reducers";
 import { reducer as updatedPatientsReducer } from "./reviewer/workqueue";
 import { reducer as searchReducer } from "./search";
@@ -28,6 +28,7 @@ import { reducer as physicianReducer } from "./physician/dashboard";
 import { reducer as reportReducer } from "./reviewer/report";
 import { reducer as updatedReportReducer } from "./supervisor/report";
 import { reducer as updatedAdminReportReducer } from "./admin/report";
+import { reducer as updatedTenantAdminReportReducer } from "./tenantAdmin/report";
 import { reducer as patientDeatilsReducer } from "./patient/details";
 import { reducer as tenantAdminDefault } from "../stores/tenantAdmin/dashboard/default";
 import { reducer as webSocketReducer } from "./websocket";
@@ -47,38 +48,44 @@ import { reducer as tenantAminSettingsReducer } from "./tenantAdmin/settings";
 import { reducer as tenantOnBoarding } from "./tenantOnBoarding";
 import { reducer as adminUsersReducer } from "./admin/users";
 import { reducer as supervisorDashboardReducer } from "./supervisor/dashboard";
-import { reducer as dashbaordReducer } from "./reviewer/dashboard";
-
-import { reducer as dashboardReducer } from "./admin/dashboard";
+import { reducer as reviewerDashboardReducer } from "./reviewer/dashboard";
+import {reducer as chartReducer} from './chatService'
+import {reducer as dashboardReducer} from './admin/dashboard'
+import {reducer as notificationReducer} from './admin/notifications'
+import {reducer as comparisonReducer} from './physician/comparison'
 import { reducer as imageUploadReducer } from "./authflow/imageUpload";
+import { reducer as authReducer } from "./authFlows";
+import { serverControl } from "../utils/config";
 const reducers = combineReducers({
   // old reducers
-  sideMenu: toggleMenu,
-  posts: PostsReducer,
+  // sideMenu: toggleMenu,
+  // posts: PostsReducer,
   auth: AuthReducer,
-  filters: filterReducer,
-  workFlow: DashboardReducer,
-  report: ReportReducer,
-  AuditReport: AuditReportReducer,
-  patients: PatientsReducer,
-  AuditWork: WorkReducers,
-  notificationDatas: NotificationReducer,
-  adminPatient: AdminPatientsReducer,
-  adminList: AdminPatientsListReducer,
-  adminUsers: AdminUsersReducer,
-  l2Dashboard: L2DashboardReducers,
-  AdminDashboardReducers: AdminDashboardReducer,
-  adminReport: AdminReportReducer,
-  l2User: L2UserReducers,
-  // physician
-  phyicianReducer: PhyicianReducer,
-  physicianDashbaord: PhysicianDashboardReducer,
-  physicianComparison: PhysicianComparisonReducer,
-  tanantAdmin: TanantAdminService,
-  ReviewerReducers: ReviewerReducers,
+  authReducer: authReducer,
+  filters:filterReducer,
+  // patientDetails: PatientStore,
+  // workFlow: DashboardReducer,
+  // report: ReportReducer,
+  // AuditReport: AuditReportReducer,
+  // patients: PatientsReducer,
+  // AuditWork: WorkReducers,
+  // notificationDatas: NotificationReducer,
+  // adminPatient: AdminPatientsReducer,
+  // adminList: AdminPatientsListReducer,
+  // adminUsers: AdminUsersReducer,
+  // l2Dashboard: L2DashboardReducers,
+  // AdminDashboardReducers: AdminDashboardReducer,
+  // adminReport: AdminReportReducer,
+  // l2User: L2UserReducers,
+  // // physician
+  // phyicianReducer: PhyicianReducer,
+  // physicianDashbaord: PhysicianDashboardReducer,
+  // physicianComparison: PhysicianComparisonReducer,
+  // tanantAdmin: TanantAdminService,
+  // ReviewerReducers: ReviewerReducers,
 
   reviewer: combineReducers({
-    dashboard: dashbaordReducer,
+    dashboard: reviewerDashboardReducer,
     workQueue: updatedPatientsReducer,
     report: reportReducer,
   }),
@@ -94,7 +101,8 @@ const reducers = combineReducers({
     workqueue: adminPatientsReducer,
     patientAllocate: allocatedReducer,
     users: adminUsersReducer,
-    dashboard: dashboardReducer,
+    dashboard:dashboardReducer,
+    notification:notificationReducer
   }),
   codify: combineReducers({
     codify: codifyReducer,
@@ -102,6 +110,7 @@ const reducers = combineReducers({
   search: searchReducer,
   physician: combineReducers({
     dashboard: physicianReducer,
+    comparison: comparisonReducer,
   }),
   patientDetails: combineReducers({
     details: patientDeatilsReducer,
@@ -120,15 +129,17 @@ const reducers = combineReducers({
     notification: tenantAminNotificationReducer,
     settings: tenantAminSettingsReducer,
     fileProcessing: tenantFileProcessing,
+    tenantAdmin:updatedTenantAdminReportReducer
   }),
   tenatOnBoarding: tenantOnBoarding,
+  chartService:chartReducer,
   imageUploadReducer: imageUploadReducer,
 });
 
 const middlewares = [thunkMiddleware, promiseMiddleware];
 
-// if (process.env.NODE_ENV !== "production") {
-if (false) {
+if (serverControl !== "production") {
+// if (false) {
   // need to remove for this if condition from production
   const { logger } = require("redux-logger");
   middlewares.push(logger);

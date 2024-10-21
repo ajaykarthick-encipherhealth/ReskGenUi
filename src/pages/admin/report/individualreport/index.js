@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import csvToJson from "csvtojson";
 import * as XLSX from "xlsx";
 import dayjs from "dayjs";
-import { Button } from "antd";
+import { Button, Empty } from "antd";
 import Image from "next/image";
 import { InputText } from "primereact/inputtext";
-import {
-  getReceivedDetails,
-  getSelectedReportDetails,
-  selectedReport,
-  getSentDetails,
-} from "../../../../store/actions/ReportActions";
 import ExcelDisplay from "../../../../components/table/receivedReport/ExcelDisplay";
 import CSVDisplay from "../../../../components/table/receivedReport/CSVDisplay";
 import styles from "../../../../components/table/receivedReport/receivedReport.module.css";
@@ -25,22 +18,22 @@ import send from "../../../../images/report/send.svg";
 import download from "../../../../images/report/download.svg";
 import Header from "../../../../jsx/layouts/nav/Header";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
-import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { useRouter } from "next/router";
-import { getReportActiveTab } from "../../../../store/actions/adminAction/ReportActions";
 import { getStorage } from "../../../../utils/storages";
 import { debounce } from "../../../../components/input";
+import { connect } from "react-redux";
+import { actions as allActions } from "../../../../stores/supervisor/report";
+import { getFileDetailsReport } from "../../../../stores/supervisor/report/network";
 
-const IndividualReceiverReport = () => {
-  const dispatch = useDispatch();
+const IndividualReceiverReport = ({
+  getReceivedDetails,
+  getSentDetails,
+  sentReportDatas,
+  reportDatas,
+  uploadFile,
+  getSelectedReportDetails,
+}) => {
   const router = useRouter();
-  const url = useSelector((state) => state?.AuditReport?.uploadFile);
-  const reportDatas = useSelector(
-    (state) => state?.AuditReport?.receivedDetails
-  );
-  const sentReportDatas = useSelector(
-    (state) => state?.adminReport?.sentDetails
-  );
   const [tableData, setTableData] = useState([]);
   const [csvTableData, setCSVTableData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -51,6 +44,7 @@ const IndividualReceiverReport = () => {
   const [loading, setLoading] = useState(false);
   const [isSentReport, setIsSentReport] = useState(false);
   const [isAdminPage, setIsAdminPage] = useState(false);
+  const [fileResult, setFileResult] = useState(null);
 
   const [detailsContent, setDetailsContent] = useState();
 
@@ -58,14 +52,13 @@ const IndividualReceiverReport = () => {
     setLoading(true);
     try {
       const response = await fetch(url?.path);
-      if (url?.extention === "csv") {
+      if (fileResult?.extention === "csv") {
         const text = await response.text();
         const jsonArray = await csvToJson().fromString(text);
-        if (jsonArray.length > 0) {
-          setCSVTableData(jsonArray);
-          setLoading(false);
-        }
-      } else if (url?.extention === "xlsx") {
+        setCSVTableData(jsonArray);
+        setLoading(false);
+      }
+      if (url?.extention === "xlsx") {
         const arrayBuffer = await response.arrayBuffer();
         const data = new Uint8Array(arrayBuffer);
         const workbook = XLSX.read(data, { type: "array" });
@@ -73,13 +66,12 @@ const IndividualReceiverReport = () => {
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        if (jsonData.length > 0) {
-          setTableData(jsonData);
-          setLoading(false);
-        }
+        setTableData(jsonData);
+        setLoading(false);
       }
     } catch (error) {
       setLoading(false);
+
       console.error("Error fetching CSV data:", error);
     }
   };
@@ -110,43 +102,59 @@ const IndividualReceiverReport = () => {
     setIsAdminPage(isAdminPage);
     if (reportConfirm) {
       setIsSentReport(true);
-      dispatch(getSentDetails(0, "", "", searchValue, sort));
-      dispatch(getSelectedReportDetails(id));
+      getSentDetails(0, "", "", searchValue, sort);
+      getSelectedReportDetails(id);
     } else {
-      dispatch(getReceivedDetails(0, "", "", searchValue, sort));
-      dispatch(getSelectedReportDetails(id));
+      getReceivedDetails(0, "", "", searchValue, sort);
+      getSelectedReportDetails(id);
     }
     setCurrentRole(getStorage("userRole"));
   }, [searchValue, sort, router]);
   useEffect(() => {
-    if (url) {
-      fetchData(url);
+    if (uploadFile) {
+      getFetchPathUrl(uploadFile);
     }
-  }, [url]);
+  }, [uploadFile]);
+
+  const getFetchPathUrl = async (url) => {
+    var result = await getFileDetailsReport(url?.reportPath);
+    var data = {
+      extention: "xlsx",
+      path: result?.response,
+    };
+    setFileResult(data);
+    fetchData(data);
+  };
 
   useEffect(() => {
-    if (reportDatas?.data) {
+    if (reportDatas?.data || (sentReportDatas?.data && isSentReport)) {
       setDetailsContent(
-        reportDatas?.data?.response?.reportStatusDTOList?.content
+        isSentReport
+          ? sentReportDatas?.data?.response?.receivedReportDTOList?.data
+          : reportDatas?.data?.response?.reportStatusDTOList?.content
       );
       const id = new URLSearchParams(window.location.search).get("reportId");
-      const reportData =
+      const reportdata =
         reportDatas?.data?.response?.reportStatusDTOList?.content?.filter(
           (item) => item?.reportId === id
         );
-      setReportInfo(reportData[0]);
-    } else if (sentReportDatas?.data && isSentReport) {
-      setDetailsContent(
-        sentReportDatas?.data?.response?.receivedReportDTOList?.data
-      );
-      const id = new URLSearchParams(window.location.search).get("reportId");
-      const sentData =
+      const sentdata =
         sentReportDatas?.data?.response?.receivedReportDTOList?.data?.filter(
           (item) => item?._id === id
         );
-      setReportInfo(sentData[0]);
+
+      // setReportInfo(!isSentReport ? reportdata[0] : sentdata[0]);
     }
   }, [reportDatas, sentReportDatas, isSentReport]);
+
+  useEffect(() => {
+    if (router?.query?.reportId) {
+      const filter = detailsContent?.find(
+        (item) => item?._id == router?.query?.reportId
+      );
+      setReportInfo(filter);
+    }
+  }, [detailsContent, router]);
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
@@ -164,8 +172,8 @@ const IndividualReceiverReport = () => {
                 style={{ cursor: "pointer", marginLeft: "10px" }}
               >
                 <button
-                  style={{ width: "40px", height: "30px" }}
-                  className={reportStyles.filterBtn}
+                  style={{ width: "40px", height: "30px"}}
+                  className={reportStyles.filterBtnArrow}
                   onClick={() => {
                     const page = new URLSearchParams(
                       window.location.search
@@ -173,11 +181,8 @@ const IndividualReceiverReport = () => {
                     const limit = new URLSearchParams(
                       window.location.search
                     ).get("limit");
-                    router?.push(`/admin/report?page=${page}&limit=${limit}`);
-
-                    dispatch(getActiveTab(isSentReport ? "Sent" : "Received"));
-                    dispatch(
-                      getReportActiveTab(isSentReport ? "Sent" : "Received")
+                    router?.push(
+                      `/supervisor/report?page=${page}&limit=${limit}`
                     );
                     setLoading(true);
                     setIsSentReport(false);
@@ -219,8 +224,6 @@ const IndividualReceiverReport = () => {
                     <div
                       key={id}
                       onClick={() => {
-                        dispatch(selectedReport({ reportUser: item }));
-                        dispatch(getSelectedReportDetails(id, item));
                         setReportInfo(item);
                       }}
                     >
@@ -301,7 +304,7 @@ const IndividualReceiverReport = () => {
               {reportInfo?.role === "DOWNLOAD" ? (
                 <Button
                   onClick={() => {
-                    window.open(url?.path);
+                    window.open(fileResult?.path);
                   }}
                   className={styles.download}
                   disabled={
@@ -328,10 +331,12 @@ const IndividualReceiverReport = () => {
             <div className={styles.innerFlex}>
               <div
                 className={
-                  url?.extention === "csv" ? styles.csvSTyle : styles.excelStyle
+                  fileResult?.extention === "csv"
+                    ? styles.csvSTyle
+                    : styles.excelStyle
                 }
               >
-                {url?.extention === "xlsx" ? "Excel" : "CSV"}
+                {fileResult?.extention === "xlsx" ? "Excel" : "CSV"}
               </div>
             </div>
             <div
@@ -340,19 +345,19 @@ const IndividualReceiverReport = () => {
                 overflowX: "scroll",
               }}
             >
-              {url?.extention === "csv" && (
+              {fileResult?.extention === "csv" && (
                 <CSVDisplay
                   tableData={csvTableData}
-                  fileUrl={url?.path}
-                  extention={url?.extention}
+                  fileUrl={fileResult?.path}
+                  extention={fileResult?.extention}
                   loading={loading}
                 />
               )}
-              {url?.extention === "xlsx" && (
+              {fileResult?.extention === "xlsx" && (
                 <ExcelDisplay
                   tableData={tableData}
-                  fileUrl={url?.path}
-                  extention={url?.extention}
+                  fileUrl={fileResult?.path}
+                  extention={fileResult?.extention}
                   loading={loading}
                 />
               )}
@@ -364,4 +369,16 @@ const IndividualReceiverReport = () => {
   );
 };
 
-export default IndividualReceiverReport;
+const connector = connect(
+  (state) => ({
+    sentReportDatas: state.supervisor?.report?.sentReportDatas,
+    reportDatas: state.supervisor?.report?.reportDatas,
+    uploadFile: state.supervisor?.report?.uploadFile?.data?.response,
+  }),
+  {
+    getReceivedDetails: allActions.getReceivedDetails,
+    getSentDetails: allActions.getSentDetails,
+    getSelectedReportDetails: allActions.getSelectedReportDetails,
+  }
+);
+export default connector(IndividualReceiverReport);

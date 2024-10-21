@@ -27,6 +27,14 @@ const DailyTask = ({ trackChart }) => {
     return {
       tooltip: {
         trigger: "item",
+        formatter: (param) => {
+          return `
+            <div style=display:flex;justify-content:center;align-items:center>
+              <span style=width:10px;height:10px;background-color:${param?.data?.itemStyle?.color};margin-right:5px;border-radius:50%;></span>
+              ${param?.data?.name}:${param?.data?.value}
+            </div>
+          `;
+        },
       },
       legend: {
         show: false,

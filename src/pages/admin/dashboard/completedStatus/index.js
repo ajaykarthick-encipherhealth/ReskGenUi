@@ -22,13 +22,6 @@ const CompletedStatus = ({
   getSelectUserList,
   managersList,
 }) => {
-  // const managersList = useSelector(
-  //   (state) => state?.AdminDashboardReducers?.selectedUsers
-  // );
-  // const completedDatas = useSelector(
-  //   (state) => state?.AdminDashboardReducers?.completedStatus
-  // );
-
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -38,7 +31,7 @@ const CompletedStatus = ({
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [selectUser, setSelectUser] = useState([]);
   const [isindividual, setIsindividual] = useState(false);
-  const [selectMemberType, setSelectMemberType] = useState(null);
+  const [selectMemberType, setSelectMemberType] = useState("");
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
 
@@ -185,7 +178,7 @@ const CompletedStatus = ({
   };
 
   useEffect(() => {
-    getSelectUserList(selectMemberType);
+    getSelectUserList({role:selectMemberType});
   }, [selectMemberType]);
 
   useEffect(() => {

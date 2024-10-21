@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { notification } from "antd";
@@ -8,16 +7,16 @@ import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../jsx/layouts/nav/Header";
 import FileUploading from "./FileUploading";
 import Addpatients from "./Addpatiens";
-import { getPatients } from "../../../store/actions/adminAction/patientsActions";
-import { patientDetails } from "../../../stores/authflow/actions";
 import FileProcessingTable from "../../../components/table/tenantTable/FileProcessing/FileProcessing";
 import HeaderFilters from "../../../components/headerFilters";
 import { connect } from "react-redux";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
 import { getStorage, setStorage } from "../../../utils/storages";
 import {actions as adminActions} from '../../../stores/admin/workqueue'
+import { actions as allActions } from '../../../stores/admin/workqueue'
 
-const Patient= ({ getAllOrganizationList, organizationList,getUsersList,getAddPatient,getUploadRadiologyFile }) => {
+
+const Patient= ({ getAllOrganizationList,patientDetails, organizationList,getUsersList,getAddPatient,getUploadRadiologyFile }) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
@@ -44,9 +43,7 @@ const Patient= ({ getAllOrganizationList, organizationList,getUsersList,getAddPa
 
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-
-  const dispatch = useDispatch();
-  const sideMenu = useSelector((state) => state.sideMenu);
+  
   const navigate = useRouter();
   const [selectOrgList, setSelectedOrgList] = useState("");
   const [orgAllList, setOrgAllList] = useState([]);
@@ -151,7 +148,7 @@ const Patient= ({ getAllOrganizationList, organizationList,getUsersList,getAddPa
       //   inputValuePatientId
       // );
       if (response?.status === 'SUCCESS') {
-        dispatch(getPatients(0));
+        getPatients(0);
         if (response.message == "patient Already Present") {
           setIsLoadingBtn(false);
           notification.warning({
@@ -177,7 +174,7 @@ const Patient= ({ getAllOrganizationList, organizationList,getUsersList,getAddPa
   };
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails(data);
     if (data.computing == 2) {
       const controller = new AbortController();
       const { signal } = controller;
@@ -348,7 +345,7 @@ const Patient= ({ getAllOrganizationList, organizationList,getUsersList,getAddPa
   
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">
@@ -425,7 +422,10 @@ const enhancer = connect(
     getUsersList:adminActions.getUsersList,
     getAddPatient:adminActions.getAddPatient,
     getUploadRadiologyFile:adminActions.getUploadRadiologyFile,
-    getUploadRadiologyFile:adminActions.getUploadRadiologyFile
+    getUploadRadiologyFile:adminActions.getUploadRadiologyFile,
+    getPatients:adminActions.patientsAction,
+    patientDetails: allActions.getPatientDetails,
+
   }
 );
 export default enhancer(Patient);

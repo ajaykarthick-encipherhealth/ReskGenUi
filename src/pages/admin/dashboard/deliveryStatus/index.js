@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import { Empty, Spin } from "antd";
 import * as echarts from "echarts";
@@ -12,14 +12,10 @@ import HeadTitle from "../../../../components/headtitle";
 import Legends from "../../../../components/legends";
 import { monthNames, getDays } from "../accuracy";
 import YearPicker from "../../../../components/yearpicker";
-import { getDeliveryStatus } from "../../../../store/actions/l2Action/DashboardAction";
+import { actions as allActions } from "../../../../stores/admin/dashboard";
 import spinSTYles from "../../../../styles/auth.module.css";
-const DeliveryStatus = () => {
-  const dispatch = useDispatch();
+const DeliveryStatus = ({ getDeliveryStatus, loader, completedDatas }) => {
   const router = useRouter();
-  const completedDatas = useSelector(
-    (state) => state?.l2Dashboard?.deliveryStatus
-  );
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -156,15 +152,12 @@ const DeliveryStatus = () => {
   ];
 
   useEffect(() => {
-    dispatch(
-      getDeliveryStatus(
-        currentBtn.toUpperCase(),
-        currentDate.getDate(),
-        selectedMonth,
-        selectedYear,
-        router
-      )
-    );
+    getDeliveryStatus({
+      btn: currentBtn.toUpperCase(),
+      date: currentDate.getDate(),
+      month: selectedMonth,
+      year: selectedYear,
+    });
   }, [currentBtn, selectedMonth, selectedYear]);
   return (
     <>
@@ -200,12 +193,11 @@ const DeliveryStatus = () => {
             </div>
           </div>
 
-          {completedDatas?.loading ? (
+          {loader ? (
             <div className={spinSTYles.spinStyle}>
               <Spin loading={completedDatas?.loading} />
             </div>
-          ) : completedDatas?.loading === false &&
-            completedDatas?.data?.response ? (
+          ) : completedDatas?.data?.response ? (
             <>
               <ReactECharts
                 option={option}
@@ -225,5 +217,13 @@ const DeliveryStatus = () => {
     </>
   );
 };
-
-export default DeliveryStatus;
+const connector = connect(
+  (state) => ({
+    completedDatas: state.admin?.dashboard?.deliveryStatus,
+    loader: state.admin?.dashboard?.deliveryStatusLoader,
+  }),
+  {
+    getDeliveryStatus: allActions.getDeliveryStatus,
+  }
+);
+export default connector(DeliveryStatus);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
@@ -84,8 +84,7 @@ const bullets = [
 ];
 
 const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientDetails, }) => {
-  const dispatch = useDispatch();
-  const sideMenu = useSelector((state) => state.sideMenu);
+
   const navigate = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const inputValue = {
@@ -93,10 +92,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
     name: "",
     patientId: "",
   };
-  // const filteratedDashboardData = useSelector(
-  //   (state) => state.patients.filteredList
-  // );
-
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [localUserId, setLocalUserId] = useState("");
   const [searchVal, setSearchVal] = useState(navigate.query.searchTextValue);
@@ -312,9 +307,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
     setIsLoading(true);
     setSearchVal(e.target.value);
     debounceText(e.target.value);
-    // const resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${val}`;
-    // dispatch(getpatientsListFilter(resoureUrl));
-    // getpatientsListFilter({ url: resoureUrl });
     resetPageNumber(setPageNo);
   };
 
@@ -326,7 +318,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
   };
 
   const gotoPatientDetails = (data) => {
-    // dispatch(patientDetails(data));
     getpatientsListFilter(data);
     patientDetails(data);
     if (data.computing == 2) {
@@ -526,10 +517,10 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
       setDueDateEnd(decodedParams?.dueDateEnd);
     }
   }, [navigate.query]);
-  console.log(patientsListFilter, "patientsListFilter");
+
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">
@@ -666,7 +657,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
                               }}
                               onClick={() => setShowFilters(!showFilters)}
                             >
-                              <button className={styles.filterBtn}>
+                              <button className={`d-flex ${styles.filterBtn}`} >
                                 <Image src={filter} />{" "}
                                 {showFilters ? "Hide" : "Filter"}
                               </button>

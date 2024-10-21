@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import {  connect } from "react-redux";
 import { useRouter } from "next/navigation";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { Paginator } from "primereact/paginator";
 import Header from "../../../jsx/layouts/nav/Header";
-import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
-import { getPatients } from "../../../store/actions/physicianAction/patientsActions";
 import PatientTable from "../table/PatientList/patientList";
 import { patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
+import {actions as comparisonActions} from '../../../stores/physician/comparison'
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -28,8 +27,6 @@ export function extractLatestData(notes) {
 
   return declinedData;
 }
-
-
 const statusOptions = [
   { label: "ALL", value: "" },
   { label: "AUDITED", value: "AUDITED" },
@@ -40,11 +37,9 @@ const statusOptions = [
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
 ];
 
-export default function Patients() {
+const Patients = ({ getPatients, response }) => {
   const navigate = useRouter();
-  const dispatch = useDispatch();
-  const sideMenu = useSelector((state) => state.sideMenu);
-  const response = useSelector((state) => state.phyicianReducer.patients);
+
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
@@ -81,7 +76,7 @@ export default function Patients() {
       selCreatedBy,
     };
 
-    dispatch(getPatients(datas));
+    getPatients(datas);
   }, [
     pageNo,
     computedStartDate,
@@ -107,7 +102,7 @@ export default function Patients() {
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">
@@ -142,7 +137,6 @@ export default function Patients() {
                             setEndDate={setComputedEndDate}
                             isRangePicker={true}
                             addUser={false}
-                            
                           />
                         </div>
                       </div>
@@ -151,9 +145,8 @@ export default function Patients() {
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                       
                         {response?.loading || !response ? (
-                         renderSkeleton()
+                          renderSkeleton()
                         ) : (
                           <>
                             <PatientTable
@@ -165,7 +158,7 @@ export default function Patients() {
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                  first={pageNo===0?0:paginationFirst}
+                                  first={pageNo === 0 ? 0 : paginationFirst}
                                   rows={15}
                                   totalRecords={totalElements}
                                   onPageChange={onPageChange}
@@ -188,4 +181,14 @@ export default function Patients() {
       </div>
     </>
   );
-}
+};
+
+const enhancer = connect(
+  (state) => ({
+    response: state.physician.comparison.getPatientList,
+  }),
+  {
+    getPatients: comparisonActions.getPatientAction,
+  }
+);
+export default enhancer(Patients);

@@ -4,15 +4,13 @@ import styles from "./styles.module.css";
 import { Empty, Modal, Spin } from "antd";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
-import { connect, useDispatch, useSelector } from "react-redux";
-import { getPatientID } from "../../../../store/actions/PatientsActions";
+import { connect} from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { renderSkeletonHold } from "../../../../components/reuseableFunctions";
 import { actions as dashbaordActions } from "../../../../stores/supervisor/dashboard";
 
 const HoldStatus = ({ holdStatusData, getHoldStatusData }) => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
-  const dispatch = useDispatch();
   const router = useRouter();
 
   useEffect(() => {
@@ -55,8 +53,7 @@ const HoldStatus = ({ holdStatusData, getHoldStatusData }) => {
             <tr
               key={index}
               className={styles.tabelCell}
-              onClick={() => {
-                dispatch(getPatientID({ patirntId: item.patientId }));
+              onClick={() => {                
                 router.push("/reviewer/patients/details");
               }}
             >

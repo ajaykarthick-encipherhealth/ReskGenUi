@@ -11,8 +11,7 @@ import auditedIcon from "../../.../../../images/trackingImages/AuditedTrack.png"
 import { Paginator } from "primereact/paginator";
 import TableStyle from "../../../components/table/table.module.css";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
-import { selectedRow } from "../../../store/actions/ReportActions";
-import { useDispatch, connect } from "react-redux";
+import { connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
 import ContentGroupCard from "../../../mainStream/components/cards/contentGroupCard";
 import SubCard from "../../../mainStream/components/cards/subcard";
@@ -25,6 +24,8 @@ import {
 } from "../../components/chartUtils";
 import { actions as supervisorAction } from "../../../stores/supervisor/report";
 import { getStorage, setStorage } from "../../../utils/storages";
+import { actions as allActions } from "../../../stores/admin/report";
+import { actions as patientsAction } from "../../../stores/admin/workqueue";
 const TeamReport = ({
   patientDetails,
   paginationFirst,
@@ -49,8 +50,8 @@ const TeamReport = ({
   teamCheckedLoader,
   auditCHeckList,
   teamCHeckList,
+  getSelectedRow,
 }) => {
-  const dispatch = useDispatch();
   const navigate = useRouter();
 
   const handleHeaderCheckboxChange = async (
@@ -98,6 +99,7 @@ const TeamReport = ({
       if (res.status === "SUCCESS") {
         setSelectAll(true);
         setSelectedRows(res?.response?.patientIds);
+        getSelectedRow(res?.response?.patientIds);
       }
     } else if (activeTab === "Team" && selectAll) {
       // teamReport({
@@ -133,10 +135,12 @@ const TeamReport = ({
       if (res?.status === "SUCCESS") {
         setSelectAll(true);
         setSelectedRows(res?.response?.patientIds);
+        getSelectedRow(res?.response?.patientIds);
       }
     } else {
       setSelectAll(false);
       setSelectedRows([]);
+      getSelectedRow([]);
     }
   };
 
@@ -275,7 +279,7 @@ const TeamReport = ({
     },
   ];
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails(data);
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
@@ -308,7 +312,7 @@ const TeamReport = ({
     },
   ];
   useEffect(() => {
-    dispatch(selectedRow(selectedRows));
+    getSelectedRow(selectedRows);
   }, [selectedRows]);
 
   return (
@@ -433,6 +437,7 @@ const TeamReport = ({
                                     ? auditCheckedLoader
                                     : teamCheckedLoader
                                 }
+                                patientDetails={patientDetails}
                               />
                             )
                           )}
@@ -530,9 +535,10 @@ const enhancer = connect(
   {
     teamReport: supervisorAction.teamReport,
     auditReport: supervisorAction.auditReport,
-
+    getSelectedRow: allActions.selectedRow,
     auditCHeckList: supervisorAction.auditCHeckList,
     teamCHeckList: supervisorAction.teamCHeckList,
+    patientDetails: patientsAction.getPatientDetails,
   }
 );
 export default enhancer(TeamReport);

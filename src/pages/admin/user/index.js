@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect} from "react-redux";
 import { Offcanvas } from "react-bootstrap";
-import { useSelector } from "react-redux";
 import { Form, Input, Button, Select, Row, Col, notification } from "antd";
 import styles from "../../../styles/auth.module.css";
 import AdminList from "../../../components/table/admin/adminList/adminList";
@@ -46,7 +45,7 @@ const UserList = ({
   AddUser,
   getAddPatient
 }) => {
-  const sideMenu = useSelector((state) => state.sideMenu);
+  
   const [localUserId, setLocalUserId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localTenantId, setLocalTenantId] = useState("");
@@ -241,7 +240,7 @@ const UserList = ({
   };
 
   return (
-    <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+    <div className={`show `}>
       <Header />
       <div class="content-body">
         <div className="container-fluid">

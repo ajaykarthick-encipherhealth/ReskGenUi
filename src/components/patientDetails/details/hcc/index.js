@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Tab, Nav } from "react-bootstrap";
-import { useDispatch, useSelector, connect } from "react-redux";
+import { connect } from "react-redux";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import VisitData from "./visitData";
 import Combo from "./combo";
@@ -47,7 +47,6 @@ const Hcc = ({
   getPatientHccFile,
   storeFileDetails
 }) => {
-  const dispatch = useDispatch();
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);

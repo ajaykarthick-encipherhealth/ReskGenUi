@@ -1,17 +1,12 @@
 import { Button, Checkbox, Form, Input, Modal, Radio, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import styles from "./report.module.css";
-import {
-  getExportDetails,
-  getUsersLists
-} from "../../store/actions/ReportActions";
-import { useDispatch, useSelector } from "react-redux";
-import { updateSentReport } from "../../services/ReportService";
-import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
+import { connect } from "react-redux";
 import InputField, { debounce } from "../../components/input";
 import { SVGICON } from "../../jsx/constant/theme";
 import { getStorage } from "../../utils/storages";
-
+import { actions as allActions } from "../../stores/admin/report";
+import { getResponePopup } from "../../utils/reusable";
 export const checkBoxData = [
   {
     id: 1,
@@ -179,11 +174,14 @@ const Export = ({
   setSelectAll,
   selectedRows,
   isSent,
+  getActiveTab,
+  updateSentReport,
+  selectedReportInfo,
+  usersList,
+  getUsersLists,
+  getExportDetails,
 }) => {
-  const usersList = useSelector((state) => state.report?.usersLists);
-  const selectedReportInfo = useSelector((state) => state.report?.reportInfo);
-  const list = useSelector((state) => state.report.row);
-  const [selectedUser, setSelectedUser] = useState();
+  const [selectedUser, setSelectedUser] = useState([]);
   const [search, setSearch] = useState("");
   const [display, setDisplay] = useState(false);
   const [userList, setUsersList] = useState([]);
@@ -193,7 +191,6 @@ const Export = ({
   const [removedUsers, setRemovedUsers] = useState([]);
   const [reportName, setReportName] = useState("");
   const [form] = Form.useForm();
-  const idList = list?.map((data) => data?.patientId);
   const [activeButton, setActiveButton] = useState("excel");
   const [activeBtn, setActiveBtn] = useState("read");
   const [checkall, setCheckAll] = useState(checkBoxData);
@@ -201,13 +198,10 @@ const Export = ({
 
   useEffect(() => {
     setCurrentUser(getStorage("userId"));
-    var orgId = getStorage("orgId");
-    dispatch(getUsersLists(orgId, search));
+    getUsersLists(search);
   }, [search]);
 
-  const dispatch = useDispatch();
-
-  const options = usersList?.response
+  const options = usersList?.data?.response
     ?.map(
       (data) =>
         data?.userName !== currentUser && {
@@ -222,13 +216,18 @@ const Export = ({
     .filter(Boolean);
 
   const handleSelectedOption = (value) => {
-    const filteredData = usersList?.response?.filter(
-      (data) => data?.userName === value[0]
+    const filteredData = usersList?.data?.response?.filter((data) =>
+      value.includes(data?.userName)
     );
-    setSelectedList(filteredData?.map((item) => item?.userName));
-    setSelectedUser((prevUsers) => [
-      { ...prevUsers, user: value[0], role: activeBtn.toUpperCase() },
-    ]);
+    setSelectedList(value);
+    setSelectedUser((prevUsers) => {
+      const updatedUsers = filteredData.map((item) => ({
+        user: item?.userName,
+        role: activeBtn?.toUpperCase(),
+      }));
+      return updatedUsers;
+    });
+
     setOpen(false);
   };
   const handleButtonClick = (buttonType) => {
@@ -254,23 +253,22 @@ const Export = ({
   const handleSearch = (e) => {
     debouncedSearch(e);
   };
-  
-  const onFinish = (values) => {
-    const patientIds = rowsLength
-    const editUserAndAccess = userList.reduce((result, { user, role }) => {
-      if (Array.isArray(user)) {
-        user.forEach((info) => {
-          result[info.userName] = role;
-        });
-      } else {
-        result[user] = role;
-      }
+
+  const onFinish = async (values) => {
+    const patientIds = rowsLength;
+    const editUserAndAccess = userList?.reduce((result, { user, role }) => {
+      // if (Array.isArray(user)) {
+      //   user.forEach((info) => {
+      //     result[info.userName] = role;
+      //   });
+      // } else {
+      result[user] = role;
+      // }
       return result;
     }, {});
-
-    const filteredId=checkall?.filter(item=>item?.checked)
+    const filteredId = checkall?.filter((item) => item?.checked);
     const data = {
-      reportFields: filteredId?.map(info=>info?.heading),
+      reportFields: filteredId?.map((info) => info?.heading),
       patientIds: patientIds,
       fileType: activeButton.toUpperCase(),
       reportName: values.ReportName,
@@ -284,23 +282,41 @@ const Export = ({
     };
 
     if (!isSent) {
-      dispatch(getExportDetails(data));
+      const res = await getExportDetails(data);
+      if (res) {
+        getResponePopup(res);
+        form.resetFields();
+        setSelectedUser([]);
+        setSelectedList([]);
+        setUsersList([]);
+        setCheckAll((prev) => {
+          return prev?.map((data) => {
+            return { ...data, checked: false };
+          });
+        });
+        setSelectedRows([]);
+        setSelectAll(false);
+        setIsModalVisible(false);
+      }
     } else {
-      dispatch(updateSentReport(updatedData));
-      dispatch(getActiveTab("Sent"));
+      const res = await updateSentReport(updatedData);
+      if (res) {
+        getResponePopup(res);
+        getActiveTab("Sent");
+        form.resetFields();
+        setSelectedUser([]);
+        setSelectedList([]);
+        setUsersList([]);
+        setCheckAll((prev) => {
+          return prev?.map((data) => {
+            return { ...data, checked: false };
+          });
+        });
+        setSelectedRows([]);
+        setSelectAll(false);
+        setIsModalVisible(false);
+      }
     }
-    form.resetFields();
-    setUsersList([]);
-    setCheckAll((prev) => {
-      return prev?.map((data) => {
-        return { ...data, checked: false };
-      });
-    });
-    setSelectedRows([]);
-    setSelectAll(false);
-    setTimeout(() => {
-      setIsModalVisible(false);
-    }, 500);
   };
 
   const deleteUser = (userInfo) => {
@@ -343,6 +359,7 @@ const Export = ({
   useEffect(() => {
     setInputStr("");
   }, [isModalVisible]);
+  const isAnyChecked = checkall?.some((item) => item?.checked);
 
   return (
     <Modal
@@ -458,7 +475,7 @@ const Export = ({
                       padding: "10px",
                       borderRadius: "10px",
                       height: "435px",
-                      overflowY: "scroll"
+                      overflowY: "scroll",
                     }}
                   >
                     <ul>
@@ -567,9 +584,9 @@ const Export = ({
                   <Button
                     onClick={() => {
                       setDisplay(true);
-                      setSelectedUser([]);
-                      setUsersList((prev) => [...prev, ...selectedUser]);
+                      // setSelectedUser([]);
                       setSelectedList([]);
+                      setUsersList((prev) => [...prev, ...selectedUser]);
                     }}
                     style={{
                       backgroundColor: "#04306f",
@@ -626,7 +643,9 @@ const Export = ({
             justifyContent: "center",
           }}
         >
-          <Form.Item>
+          <Form.Item
+            disabled={userList?.length > 0 && isAnyChecked ? false : true}
+          >
             <Button
               type="primary"
               htmlType="submit"
@@ -636,7 +655,7 @@ const Export = ({
                 width: "100px",
                 height: "40px",
               }}
-              disabled={userList?.length > 0 ? false : true}
+              disabled={userList?.length > 0 && isAnyChecked ? false : true}
             >
               Generate
             </Button>
@@ -646,5 +665,16 @@ const Export = ({
     </Modal>
   );
 };
-
-export default Export;
+const connector = connect(
+  (state) => ({
+    selectedReportInfo: state?.admin?.report.selectedReportInfo,
+    usersList: state?.admin?.report?.usersLists,
+  }),
+  {
+    getActiveTab: allActions.activeTab,
+    updateSentReport: allActions.updateSentReport,
+    getUsersLists: allActions.getUsersList,
+    getExportDetails: allActions.getExportDetails,
+  }
+);
+export default connector(Export);

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Badge, Offcanvas } from "react-bootstrap";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { connect } from "react-redux";
 import {
   Popconfirm,
   Popover,
@@ -44,10 +44,6 @@ const Meat = ({
   fileDosPageNumberList,
   radiologyFile
 }) => {
-  const dispatch = useDispatch();
-  const sectionColorList = useSelector(
-    (state) => state?.ReviewerReducers?.sectionColorList
-  );
   const [meatEdit, setMeatEdit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
@@ -96,8 +92,8 @@ const Meat = ({
       setCaptureSectionMatching,
       setMeatCriteriaList,
       patientDetailsResult,
-      dispatch,
-      sectionColorList,
+      "",
+      "",
       "",
       "",
       "",

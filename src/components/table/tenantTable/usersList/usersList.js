@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Empty, Popover, Select, Switch } from "antd";
 import dayjs from "dayjs";
 import TableStyle from "../../table.module.css";
@@ -15,9 +14,9 @@ import {
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
-import { getTenantAdminSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
 import { connect } from "react-redux";
 import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin/users";
+import { actions as adminAction } from "../../../../stores/admin/dashboard";
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
   { value: "REVIEWER", label: "Reviewer", role: "REVIEWER" },
@@ -25,7 +24,6 @@ const items = [
 ];
 
 const UserList = ({
-  userList,
   sortOrder,
   setSortOrder,
   setSort,
@@ -33,9 +31,10 @@ const UserList = ({
   getEnableUser,
   getAllUsersList,
   setPageCount,
+  getTenantAdminSelectUserList,
+  selectUserList
 }) => {
   const usersData = usersList;
-  const dispatch = useDispatch();
   const [rowData, setRowData] = useState();
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isMultiple, setIsMultiple] = useState(false);
@@ -45,11 +44,6 @@ const UserList = ({
   const [selectedManager, setSelectedManager] = useState();
   const [switchStates, setSwitchStates] = useState({});
   const [roleChangeLoader, setRoleChangeLoader] = useState(false);
-
-  const selectUserList = useSelector(
-    (state) => state?.AdminDashboardReducers?.selectedUsers
-  );
-
   const onChange = async (item, checked) => {
     setSwitchStates((prevState) => ({
       ...prevState,
@@ -151,7 +145,7 @@ const UserList = ({
   };
   useEffect(() => {
     // getEnableUser({ checked: "no", user: rowData });
-    dispatch(getTenantAdminSelectUserList("SUPERVISOR"));
+    getTenantAdminSelectUserList({role:"SUPERVISOR"});
   }, [rowData]);
   useEffect(() => {
     if (usersData?.data?.response?.content) {
@@ -454,10 +448,12 @@ const UserList = ({
 const enhancer = connect(
   (state) => ({
     usersList: state?.tenantAdmin?.users?.allUsers,
+    selectUserList:state?.admin.dashboard?.managersList
   }),
   {
     getAllUsersList: tenantAdminAction.getAllUsersAction,
     getEnableUser: tenantAdminAction.getEnableUser,
+    getTenantAdminSelectUserList:adminAction.getSelectUserList
   }
 );
 export default enhancer(UserList);

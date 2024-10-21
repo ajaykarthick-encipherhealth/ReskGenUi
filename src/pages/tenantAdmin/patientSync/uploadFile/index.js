@@ -4,8 +4,7 @@ import Image from "next/image";
 import { Progress } from "antd";
 import { getColors } from "../../../../components/table/tenantTable/pdfTable/detailPdfTable";
 import progressStyles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
-const UploadFile = ({ filesList, setFilesList, subText, uploaderImg }) => {
-  const [isLoading, setIsLoading] = useState(false);
+const UploadFile = ({ filesList, setFilesList, subText, uploaderImg,isLoading, setIsLoading }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const fileInputRef = useRef(null);

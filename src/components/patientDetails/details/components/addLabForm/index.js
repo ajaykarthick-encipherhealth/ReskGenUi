@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { notification, Select } from "antd";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { validateYear } from "../../../../headerFilters/functions";

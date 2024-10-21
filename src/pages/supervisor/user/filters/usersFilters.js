@@ -203,14 +203,9 @@ const UserFilters = ({
             </div>
           )}
           {isAuditAllocatedBy && (
-            <div
-              className="col-xl-2 col-md-4"
-              // onClick={() => {
-              //   dispatch(getFilters("auditAllocatedBy", username));
-              // }}
-            >
+            <div className="col-xl-2 col-md-4">
               <label className={styles.label}>{audiallocatedBylabel}</label>
-              <div class="form-group has-search custom-react-select">
+              <div class="form-group has-search custom-react-select-audit">
                 <Select
                   onChange={(selectedOption) => {
                     audisetSelAllocatedBy(
@@ -223,7 +218,7 @@ const UserFilters = ({
                   }}
                   options={auditallocatedByOptions}
                   value={selAuditAllocatedByVal ? selAuditAllocatedBy : null}
-                  className="custom-react-select"
+                  className="custom-react-select-audit"
                   isSearchable={false}
                   placeholder={audidefaultAllocatedBy}
                   allowClear={true}
@@ -409,13 +404,7 @@ const UserFilters = ({
               </>
             )}
             {isAllocatedBySelector && (
-              <div
-                className="col-xl-2 col-md-3"
-                // onClick={() => {
-                //   dispatch(getFilters("allocatedBy", username));
-                // }}
-                style={{ zIndex: "2" }}
-              >
+              <div className="col-xl-2 col-md-3" style={{ zIndex: "2" }}>
                 <label className={styles.label}>{allocatedBylabel}</label>
                 <div class="form-group has-search">
                   <Select

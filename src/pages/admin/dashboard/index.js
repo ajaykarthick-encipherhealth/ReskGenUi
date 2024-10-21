@@ -1,25 +1,18 @@
 import React, { useEffect } from "react";
 import { Col, Row } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import Header from "../../../jsx/layouts/nav/Header";
 import styles from "./styles.module.css";
 import CompletedStatus from "./completedStatus";
-import { getWorkFlow } from "../../../store/actions/adminAction/DashboardAction";
 import WorkFlow from "./workflow";
 import DailyTask from "./dailytask";
-// import Accuracy from "./accuracy";
 import BarChart from "./teamChart/Index";
 import Notifications from "./notifications";
 import MachineAccuracy from "./machineAccuracy";
+import { actions as allActions } from "../../../stores/admin/dashboard";
 
-const Index = () => {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const DateRanges = useSelector(
-    (state) => state?.AdminDashboardReducers?.dateRange
-  );
-
+const Index = ({ workFlowData, DateRanges }) => {
   const startDate = DateRanges?.startDate
     ? new Date(DateRanges?.startDate)?.toISOString()
     : "";
@@ -28,7 +21,7 @@ const Index = () => {
     : "";
 
   useEffect(() => {
-    dispatch(getWorkFlow(startDate, endDate, router));
+    workFlowData({ startDate, endDate });
   }, [startDate, endDate]);
 
   return (
@@ -47,7 +40,7 @@ const Index = () => {
                 </Col>
               </Row>
 
-              <Row >
+              <Row>
                 <Col span={23}>
                   <MachineAccuracy />
                 </Col>
@@ -72,4 +65,14 @@ const Index = () => {
   );
 };
 
-export default Index;
+const connector = connect(
+  (state) => ({
+    completedDatas: state.admin?.dashboard?.workFlow,
+    loader: state.admin?.dashboard?.workFlowLoader,
+    DateRanges:state?.admin?.dashboard?.dateRanges
+  }),
+  {
+    workFlowData: allActions.workFlowAction,
+  }
+);
+export default connector(Index);

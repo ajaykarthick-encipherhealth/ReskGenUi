@@ -12,6 +12,12 @@ import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
 import PropTypes from "prop-types";
 import { renderSkeleton } from "../../../reuseableFunctions";
 import { connect } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleCheck,
+  faCircleXmark,
+} from "@fortawesome/free-regular-svg-icons";
+import { faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
 
 export const getColors = (rowStatus) => {
   let strokeColor;
@@ -59,29 +65,47 @@ const DetailedPdfTable = ({
   loader,
   webSocketData,
 }) => {
-  DetailedPdfTable.propTypes = {
-    paginationFirst: PropTypes.any.isRequired,
-    onPageChange: PropTypes.func.isRequired,
-    tableData: PropTypes.array.isRequired,
-  };
-  const [socketData, setSocketData] = useState([]);
+  const [progressMap, setProgressMap] = useState(5);
+  const [socketData, setSocketData] = useState(tableData);
+  // DetailedPdfTable.propTypes = {
+  //   paginationFirst: PropTypes.any.isRequired,
+  //   onPageChange: PropTypes.func.isRequired,
+  //   tableData: PropTypes.array.isRequired,
+  // };
+
   useEffect(() => {
-    if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
-      const patientData = tableData?.content;
-      var foundItem = patientData?.find(
-        (x) => x.fileId == webSocketData?.patientId
-      );
-      if (foundItem) {
-        foundItem.fileStatus = webSocketData?.fileStatus;
-        // if (webSocketData?.computedDate) {
-        //   foundItem.computedDate = webSocketData?.computedDate;
-        // }
-      }
-      setSocketData(patientData);
-    } else {
-      setSocketData(tableData?.content);
+    if (socketData) {
+      const interval = setInterval(() => {
+        setProgressMap((prevCount) => (prevCount + 5) % 100);
+      }, 500);
+
+      return () => clearInterval(interval);
     }
-  }, [webSocketData, tableData]);
+  }, [socketData]);
+
+  useEffect(() => {
+    if (
+      webSocketData &&
+      webSocketData?.webSocketType === "PROCESS_STAGE" &&
+      tableData?.content
+    ) {
+      const updatedTableData = socketData?.content?.map((item) => {
+        if (item.patientId === webSocketData?.patientId) {
+          return {
+            ...item,
+            processStage: webSocketData?.processStageChart||'PROCESSING' ,
+          };
+        }
+        return item;
+      });
+      setSocketData((prevState) => ({
+        ...prevState,
+        content: updatedTableData,
+      }));
+    } else {
+      setSocketData(tableData);
+    }
+  }, [webSocketData, socketData?.content, tableData]);
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -94,79 +118,121 @@ const DetailedPdfTable = ({
               <tr>
                 <th>FILE ID</th>
                 <th>FILE NAME</th>
-                <th>PATIENT ID</th>
-                <th>PATIENT NAME</th>
-                <th style={{ textAlign: "center" }}> COMPUTED DATE TIME</th>
-                <th style={{ textAlign: "center" }}>STATUS </th>
+                <th className="text-center">PATIENT ID</th>
+                <th className="text-center">PATIENT NAME</th>
+                <th className="text-center"> COMPUTED DATE TIME</th>
+                <th className="text-center">STATUS </th>
               </tr>
             </thead>
 
             <tbody className={TableStyle.bodytable}>
-              {socketData?.length > 0 ? (
-                socketData?.map((row) => (
-                  <tr key={row?.patientId} style={{ height: "40px" }}>
-                    <td className={TableStyle.childBorder}>
-                      {row?.fileId ? row?.fileId : "---"}
-                    </td>
-                    <td className={TableStyle.childBorder}>
-                      {row?.fileName ? row?.fileName : "---"}
-                    </td>
-                    <td className={TableStyle.childBorder}>
-                      {row?.patientId ? row?.patientId : "---"}
-                    </td>
-                    <td className={TableStyle.childBorder}>
-                      {row?.patientName ? row?.patientName : "---"}
-                    </td>
-                    <td
-                      className={TableStyle.childBorder}
-                      style={{ textAlign: "center" }}
-                    >
-                      {row?.computedDateTime
-                        ? dayjs(row?.computedDateTime).format(
-                            "MM/DD/YYYY hh:mm A"
-                          )
-                        : "---"}
-                    </td>
-                    <td
-                      className={`${TableStyle.childBorder}`}
-                      style={{ textAlign: "center" }}
-                    >
-                      <div
-                        className="text-capitalize"
-                        style={{
-                          fontSize: "14px",
-                          display: "flex",
-                          margin: "auto",
-                          justifyContent: "start",
-                          color: getColors(row?.fileStatus)?.textColor,
-                        }}
+              {socketData?.content?.length > 0 ? (
+                socketData?.content?.map((row) => {
+                  const errStatus = row?.processStage?.split("_");
+                  return (
+                    <tr key={row?.patientId} style={{ height: "40px" }}>
+                      <td className={TableStyle.childBorder}>
+                        {row?.fileId ? row?.fileId : "---"}
+                      </td>
+                      <td className={TableStyle.childBorder}>
+                        {row?.fileName ? row?.fileName : "---"}
+                      </td>
+                      <td className={`${TableStyle.childBorder} text-center`}>
+                        {row?.patientId ? row?.patientId : "---"}
+                      </td>
+                      <td className={`${TableStyle.childBorder} text-center`}>
+                        {row?.patientName ? row?.patientName : "---"}
+                      </td>
+                      <td
+                        className={TableStyle.childBorder}
+                        style={{ textAlign: "center" }}
                       >
-                        <Image
-                          src={getColors(row?.fileStatus)?.imageSrc}
+                        {row?.computedDateTime
+                          ? dayjs(row?.computedDateTime).format(
+                              "MM/DD/YYYY hh:mm A"
+                            )
+                          : "---"}
+                      </td>
+                      <td className={`${TableStyle.childBorder} text-center`}>
+                        <div
+                          className="text-capitalize"
+                          style={{
+                            fontSize: "14px",
+                            display: "flex",
+                            margin: "auto",
+                            justifyContent: "start",
+                            color:
+                              row?.processStage === "FINISHED" ||
+                              row?.processStage === "PROCESSED"
+                                ? "green"
+                                : errStatus?.includes("FAILED")
+                                ? "red"
+                                : "rgba(11, 96, 176, 1)",
+                          }}
+                        >
+                          {/* <Image
+                          src={getColors(row?.processStage)?.imageSrc}
                           style={{ paddingRight: "5px" }}
-                        />
-                        {row?.fileStatus?.slice(0, 1).toUpperCase() +
-                          row?.fileStatus.slice(1).toLowerCase()}
-                        {row?.fileStatus === "FAILED" && (
+                        /> */}
+                          {row?.processStage === "FINISHED" ||
+                          row?.processStage === "PROCESSED" ? (
+                            <FontAwesomeIcon
+                              icon={faCircleCheck}
+                              className="p-1"
+                              style={{ color: "green" }}
+                            />
+                          ) : errStatus?.includes("FAILED") ? (
+                            <FontAwesomeIcon
+                              icon={faCircleXmark}
+                              className="p-1"
+                              style={{ color: "red" }}
+                            />
+                          ) : (
+                            ""
+                          )}
+                          {row?.processStage
+                            .replace(/_/g, " ")
+                            ?.slice(0, 1)
+                            .toUpperCase() +
+                            row?.processStage
+                              .replace(/_/g, " ")
+                              .slice(1)
+                              .toLowerCase()||""}
+                          {/* {errStatus?.includes("FAILED")&& (
                           <div className={styles.refreshBtn}>
                             <Image src={refresh} width={15} height={15} />
                           </div>
-                        )}
-                      </div>
-                      <div
-                        className={`${styles.progressDIv} d-flex justify-content-center`}
-                      >
-                        <Progress
-                          percent={row?.fileStatus === "PROCESSING" ? 70 : 100}
-                          strokeColor={getColors(row?.fileStatus)?.strokeColor}
-                          className={`${styles.progreddBr} ${
-                            getColors(row?.fileStatus)?.progressTextClass
-                          }`}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                        )} */}
+                        </div>
+                        <div
+                          className={`d-flex justify-content-center batchProgressBar`}
+                        >
+                          <Progress
+                            percent={
+                              errStatus?.includes("FAILED")
+                                ? 5
+                                : row?.processStage === "FINISHED" ||
+                                  row?.processStage === "PROCESSED"
+                                ? 100
+                                : progressMap
+                            }
+                            strokeColor={
+                              row?.processStage === "FINISHED" ||
+                              row?.processStage === "PROCESSED"
+                                ? "green"
+                                : errStatus?.includes("FAILED")
+                                ? "red"
+                                : "rgba(11, 96, 176, 1)"
+                            }
+                            className={`${styles.progreddBr} ${
+                              getColors(row?.processStage)?.progressTextClass
+                            }`}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
                   <td colSpan={11}>

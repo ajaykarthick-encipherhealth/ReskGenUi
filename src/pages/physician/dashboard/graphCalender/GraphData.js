@@ -2,23 +2,20 @@ import React, { useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import { Empty, Spin } from "antd";
 import styles from "./styles.module.css";
-import spinSTYles from '../../../../styles/auth.module.css'
+import spinSTYles from "../../../../styles/auth.module.css";
 import Card from "../../../../components/card";
 import Buttonscroller from "../../../../components/buttonSroller";
 import HeadTitle from "../../../../components/headtitle";
 import Legends from "../../../../components/legends";
 import buttonStyle from "../../../admin/dashboard/completedStatus/styles.module.css";
 import { Buttons } from "../../../reviewer/workingstatus";
-import { useDispatch, useSelector } from "react-redux";
-import { GraphContent } from "../../../../services/physicianService/DashbaordServices";
 import YearPicker from "../../../../components/yearpicker";
 import { getDays, monthNames } from "../../../reviewer/dashboard/accuracy";
+import { actions as comparisonActions } from "../../../../stores/physician/comparison";
+import { connect } from "react-redux";
 
-const GraphData = () => {
-  const dispatch = useDispatch();
-  const graphInfo = useSelector(
-    (state) => state?.physicianDashbaord?.graphData
-  );
+const GraphData = ({ GraphContent,graphInfo }) => {
+
   const ClientRafScore = graphInfo?.data?.response?.clientRafScore?.sort(
     (a, b) => a._id.month - b._id.month
   );
@@ -142,8 +139,14 @@ const GraphData = () => {
       .padStart(2, "0");
     setSelectedMonth(monthNumber);
   };
+
   useEffect(() => {
-    dispatch(GraphContent("ID-001", currentBtn.toUpperCase(), selectedMonth, selectedYear));
+    GraphContent({
+      physicianId: "ID-001",
+      currentBtn: currentBtn.toUpperCase(),
+      selectedMonth,
+      selectedYear,
+    });
   }, [currentBtn, selectedMonth, selectedYear]);
 
   return (
@@ -178,8 +181,7 @@ const GraphData = () => {
             />
           </div>
         </div>
-        {graphInfo?.loading &&
-        (
+        {graphInfo?.loading && (
           <div className={spinSTYles.spinStyle}>
             <Spin loading={graphInfo?.loading} />
           </div>
@@ -204,4 +206,12 @@ const GraphData = () => {
   );
 };
 
-export default GraphData;
+const enhancer = connect(
+  (state) => ({
+    graphInfo: state.physician.comparison.getGraphData,
+  }),
+  {
+    GraphContent: comparisonActions.graphContentAction,
+  }
+);
+export default enhancer(GraphData);

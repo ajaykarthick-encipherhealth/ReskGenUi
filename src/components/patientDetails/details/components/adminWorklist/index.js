@@ -3,12 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
-import { useSelector, useDispatch } from "react-redux";
-import { getPatients } from "../../../../../store/actions/adminAction/patientsActions";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import LoadingSpinner from "../../../../../components/loadingSpinner";
 import Legends from "../../../../../components/legends";
 import MyWorkQueueFilter from "../MyWorkQueueFilter";
+import { actions as allActions } from "../../../../../stores/admin/workqueue";
+import { connect } from "react-redux";
+import { Input } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -29,9 +31,9 @@ const AdminWorkList = ({
   localUserId,
   setWorkListPatientId,
   setIsModalComments,
+  getPatients,
+  result,
 }) => {
-  const dispatch = useDispatch();
-  const result = useSelector((state) => state.adminList.patients);
   const [patientList, setPatientList] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -65,13 +67,13 @@ const AdminWorkList = ({
   const onPageChange = async (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
-    setFilterModalOpen(false)
+    setFilterModalOpen(false);
   };
 
   const getPatientListToDetails = (id) => {
     setWorkListPatientId(id);
     setIsModalComments(false);
-    setFilterModalOpen(false)
+    setFilterModalOpen(false);
   };
 
   const statusOptions = [
@@ -146,21 +148,20 @@ const AdminWorkList = ({
 
   useEffect(() => {
     setFilterDataLoading(true);
-    dispatch(
-      getPatients(
-        pageNo,
-        computedStartDate,
-        computedEndDate,
-        selectedOption,
-        search,
-        completedStartDate,
-        completedEndDate,
-        selAllocatedTo,
-        selAllocatedBy,
-        selCreatedBy,
-        sort
-      )
-    );
+    const data = {
+      pageNo,
+      computedStartDate,
+      computedEndDate,
+      selectedOption,
+      search,
+      completedStartDate,
+      completedEndDate,
+      selAllocatedTo,
+      selAllocatedBy,
+      selCreatedBy,
+      sort,
+    };
+    getPatients({ data: data });
   }, [
     pageNo,
     computedStartDate,
@@ -186,24 +187,23 @@ const AdminWorkList = ({
           <Legends bullets={bullets} display="ruby" padding="0 0px 10px 0" />
         </div>
         <div className="col-xl-9">
-          <div class="form-group has-search">
-            <FontAwesomeIcon
-              className="fa fa-search form-control-feedback"
-              icon={faSearch}
-            />
-            <InputText
-              type="text"
-              onChange={(e) => filterChangePatientId(e)}
-              className="form-control input-form-control"
-              placeholder="Search"
-              maxLength={25}
-              onKeyDown={(e) => {
-                // Prevent input of backslash ("\")
-                if (e.key === "\\") {
-                  e.preventDefault();
-                }
-              }}
-            />
+          <div class="form-group has-search searchStyle">
+            <div>
+              <Input
+               
+                type="text"
+                onChange={(e) => filterChangePatientId(e)}
+                className={`input-form-control align-items-center`}
+                placeholder="Search"
+                maxLength={25}
+                onKeyDown={(e) => {
+                  if (e.key === "\\") {
+                    e.preventDefault();
+                  }
+                }}
+                prefix={<SearchOutlined className="text-muted" />}
+              />
+            </div>
           </div>
         </div>
 
@@ -274,4 +274,12 @@ const AdminWorkList = ({
   );
 };
 
-export default AdminWorkList;
+const connector = connect(
+  (state) => ({
+    result: state.admin.workqueue?.patients,
+  }),
+  {
+    getPatients: allActions.patientsAction,
+  }
+);
+export default connector(AdminWorkList);

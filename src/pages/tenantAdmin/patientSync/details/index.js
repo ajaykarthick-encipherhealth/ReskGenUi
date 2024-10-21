@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DatePicker, Input } from "antd";
-import { useSelector, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import styles from "../fhir.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
-import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
+// import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../../components/headerFilters/functions";
 import Selector from "../../../../components/selector";
 import idCard from "../../../../images/fihr/idCard.svg";
@@ -19,7 +19,8 @@ import person from "../../../../images/fihr/person.svg";
 import statusIcon from "../../../../images/fihr/status.svg";
 import calender from "../../../../images/fihr/calender.svg";
 import DetailedFhirTable from "../../../../components/table/tenantTable/fhirPatient/DetailedFhirTable";
-
+import { actions as activeTab } from "../../../../stores/admin/report";
+import { statusOptions3 } from "../pdfTable";
 const statusOptions = [
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
@@ -119,11 +120,8 @@ const FIHRData = {
   ],
 };
 
-const Index = () => {
+const Index = ({ getActiveTab, reportActiveTab }) => {
   const router = useRouter();
-  const dispatch = useDispatch();
-
-  const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [status, setStatus] = useState("");
   const [dateRange, setDateRange] = useState();
   const [search, setSearch] = useState();
@@ -191,7 +189,7 @@ const Index = () => {
   ];
   useEffect(() => {
     if (reportActiveTab) {
-      dispatch(getActiveTab(reportActiveTab));
+      getActiveTab(reportActiveTab);
     }
   }, [reportActiveTab, status, search, pageNo, dateRange]);
 
@@ -287,7 +285,7 @@ const Index = () => {
                             <Selector
                               selectlabel={"Select Status"}
                               setSelectedOption={setStatus}
-                              selectOptions={statusOptions}
+                              selectOptions={statusOptions3}
                               defaultSelectValue1={""}
                             />
                           </div>
@@ -339,4 +337,14 @@ const Index = () => {
   );
 };
 
-export default Index;
+const enhancer = connect(
+  (state) => ({
+    organizationList: state?.tenantAdmin?.users?.allOrganization?.data,
+    reportActiveTab: state?.admin?.report?.activeTab,
+  }),
+  {
+    getActiveTab: activeTab.activeTab,
+  }
+);
+
+export default enhancer(Index);

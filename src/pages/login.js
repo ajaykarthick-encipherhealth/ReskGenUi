@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "../styles/auth.module.css";
@@ -9,17 +9,12 @@ import LoginBack from "../images/logo/login-back.jpg";
 import { IMAGES } from "../jsx/constant/theme";
 import {
   encyptingPass,
-  getValidatePassword,
-  handleTogglePasswordVisibility,
 } from "../components/headerFilters/functions";
 import RegularButton from "../components/button";
-import { getMFAValidation } from "../stores/authflow/actions";
-import { useSelector } from "react-redux";
+import {actions as allActions} from '../stores/authFlows'
 
-export default function Login() {
+const Login =({getMFAValidation, loginResponse}) =>{
   const router = useRouter();
-  const dispatch = useDispatch();
-  const loginResponse = useSelector((state) => state.auth.mfa);
   const [enteredEmail, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   let errorsObj = { email: "", password: "" };
@@ -56,7 +51,7 @@ export default function Login() {
         email: "",
         password: "",
       });
-      dispatch(getMFAValidation(enteredEmail, router, encyptingPass(password)));
+      getMFAValidation({username:enteredEmail, route:router, password:encyptingPass(password)});
     } else {
       return;
     }
@@ -149,7 +144,7 @@ export default function Login() {
                     type="submit"
                     name="LOGIN"
                     width="100%"
-                    loading={loginResponse?.loading}
+                    loading={loginResponse}
                   />
                 </div>
               </form>
@@ -160,3 +155,13 @@ export default function Login() {
     </div>
   );
 }
+
+const connector = connect(
+  (state) => ({
+    loginResponse:state?.authReducer?.mfaLoader
+  }),
+  {
+    getMFAValidation: allActions.getMFAValidation,
+  }
+);
+export default connector(Login);

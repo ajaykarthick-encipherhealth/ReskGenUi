@@ -73,3 +73,14 @@ export async function requestAUthflow(url, options) {
     }
   });
 }
+
+export async function authRequestPortal(url, options) {
+    const actualUrl = `${portalUrl}${url}`;
+  const actualOptions = {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  return fetch(actualUrl, actualOptions).then(checkStatus);
+}

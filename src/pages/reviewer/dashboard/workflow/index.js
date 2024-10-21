@@ -8,7 +8,7 @@ import HeadTitle from "../../../../components/headtitle";
 import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.png";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
-import { useSelector, connect } from "react-redux";
+import { connect } from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 import declinedBg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
@@ -17,7 +17,6 @@ import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const WorkFlow = ({ worlFlowData ,DateRanges}) => {
   const currentDate = dayjs();
-  // const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const [openPicker, setOpenPicker] = useState(false);
 
   const last30thDate = currentDate?.subtract(31, "day");
@@ -157,6 +156,6 @@ const WorkFlow = ({ worlFlowData ,DateRanges}) => {
 };
 const enhancer = connect((state) => ({
   worlFlowData: state?.reviewer?.dashboard?.workFlow,
-  DateRanges:state?.workFlow?.dateRange
+  DateRanges:state?.admin?.dashboard?.dateRanges,
 }));
-export default enhancer(WorkFlow);
+ export default enhancer(WorkFlow);

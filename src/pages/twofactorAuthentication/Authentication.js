@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import Image from "next/image";
 import { notification } from "antd";
 import styles from "../../styles/auth.module.css";
@@ -8,16 +8,15 @@ import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
 import { encyptingPass } from "../../components/headerFilters/functions";
 import RegularButton from "../../components/button";
 import { getValidateCode, loginAction } from "../../stores/authflow/actions";
-import { useSelector } from "react-redux";
+import { actions as AllActions } from '../../stores/authFlows'
+
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
   Array.from({ length: codeLength + 1 }, (_, index) => index + 1);
 
-const Index = () => {
+const Index = ({getValidateCode,getLogin,loginLoader}) => {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const loginResponse = useSelector((state) => state.auth.authInfo);
   const [seconds, setSeconds] = useState(30);
   const [enableMFA, setEnableMFA] = useState(false);
   const [username, setUsername] = useState();
@@ -100,16 +99,13 @@ const Index = () => {
     }
     if (e.code == "Enter" && code.length >= 6) {
       const codeString = code?.join("");
-      dispatch(
-        getValidateCode(
-          username,
-          encyptingPass(codeString),
-          router,
-          "validate",
-          password,
-          enableMFA
-        )
-      );
+      getValidateCode({
+        username: username,
+        code: encryptedCode,
+        route: router,
+        validate: "validate",
+        userpassword: encryptedPassword,
+      });
     }
   };
 
@@ -152,15 +148,6 @@ const Index = () => {
         ) : (
           <div className={styles.contentDiv}>
             <div style={{ width: "60%" }}>
-              {/* The purpose of Multi-Factor Authentication (MFA) is to enhance the
-              security of digital accounts, systems, and sensitive information
-              by adding an extra layer of verification beyond just a password.
-              Traditional password-based authentication systems have
-              vulnerabilities, and MFA addresses some of these weaknesses by
-              requiring users to provide multiple forms of identification. The
-              goal is to create a more robust and resilient authentication
-              process that significantly enhances the security posture of
-              digital systems and accounts. */}
               Enhance your security measures by activating the newest
               Multi-Factor Authentication (MFA) feature. This provides an
               additional level of protection against unauthorized access and
@@ -180,16 +167,13 @@ const Index = () => {
                   type="submit"
                   onClick={() => {
                     const codeString = code?.join("");
-                    dispatch(
-                      getValidateCode(
-                        username,
-                        encyptingPass(codeString),
-                        router,
-                        "validate",
-                        password,
-                        enableMFA
-                      )
-                    );
+                    getValidateCode({
+                      username: username,
+                      code: encryptedCode,
+                      route: router,
+                      validate: "validate",
+                      userpassword: encryptedPassword,
+                    });
                   }}
                   name="SUBMIT"
                    width="100%"
@@ -231,20 +215,18 @@ const Index = () => {
                 <RegularButton
                   type="submit"
                   onClick={() => {
-                    dispatch(
-                      loginAction(
-                        username,
-                        router,
-                        code?.join(""),
-                        password,
-                        enableMFA,
-                        skip
-                      )
-                    );
+                    getLogin({
+                      email: username,
+                      router: router,
+                      code: code.length > 0 ? encryptingPass(code) : "",
+                      password: password,
+                      mfa: enableMFA,
+                      skip: skip,
+                    });
                   }}
                   name="SETUP LATER"
                   width="100%"
-                  loading={loginResponse?.loading}
+                  loading={loginLoader}
                 />
               )}
             </>
@@ -255,4 +237,15 @@ const Index = () => {
   );
 };
 
-export default Index;
+
+const connector = connect(
+  (state) => ({
+    loginLoader: state.authReducer.loginLoader,
+  }),
+  {
+    getLogin: AllActions.getLogin,
+    getValidateCode: AllActions.getValidateCode,
+  }
+);
+
+export default connector(Index);

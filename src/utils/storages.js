@@ -1,7 +1,7 @@
 import CryptoJS from "crypto-js";
-import { serverControl } from "../utils/config";
+import { salt, serverControl } from "../utils/config";
 
-const secretKey = "B27AA05B9A2490D1AE59B33B45CFD4B0";
+const secretKey = salt;
 const hashKey = (key) => {
   return CryptoJS.SHA256(key).toString();
 };

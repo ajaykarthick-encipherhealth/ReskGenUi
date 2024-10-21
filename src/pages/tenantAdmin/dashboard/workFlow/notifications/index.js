@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import moment from "moment";
 import Image from "next/image";
 import { Modal, Spin } from "antd";

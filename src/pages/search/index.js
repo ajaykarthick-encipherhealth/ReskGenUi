@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "../../utility/axiosConfig";
 import { Modal, Select } from "antd";
 import AppTable from "../../components/tables";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { actions as searchActions } from "../../stores/search";
 import { getResponePopup } from "../../utils/reusable";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { getCurrentUser } from "../../stores/authflow/actions";
 import { getStorage } from "../../utils/storages";
@@ -26,7 +24,7 @@ const Searches = ({
   getUpdateSemanticStatus,
   getSuggestedCodes,
 }) => {
-  const dispatch = useDispatch();
+
   const router = useRouter();
   const size = 15;
   const [search, serSearch] = useState("");
@@ -257,7 +255,7 @@ const Searches = ({
     const userId = getStorage("userId");
     setSearchType(e.target.name);
     serSearch("");
-    dispatch(getCurrentUser(userId, router));
+    getCurrentUser(userId, router)
   };
   return (
     <>
@@ -688,6 +686,7 @@ const enhancer = connect(
     getSemanticSearch: searchActions.getSemanticSearch,
     updateSemantic: searchActions.updateSemantic,
     getSuggestedCodes: searchActions.getSuggestedCodes,
+    getCurrentUser:searchActions.currentUserAction
   }
 );
 export default enhancer(Searches);

@@ -4,7 +4,7 @@ import RegularButton from "../../../../../components/button";
 import { Button, Input, Switch } from "antd";
 import { useState } from "react";
 import Tags from "../../components/tags";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { PlusOutlined } from "@ant-design/icons";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";

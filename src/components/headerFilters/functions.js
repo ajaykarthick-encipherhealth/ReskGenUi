@@ -5,6 +5,7 @@ import CryptoJS from "crypto-js";
 import TableStyle from "../table/table.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { salt } from "../../utils/config";
 
 // for search
 export const searchFunction = (
@@ -715,7 +716,7 @@ function generateRandomString(count = 16) {
 
 export const encyptingPass = (password) => {
   const plaintextData = password;
-  const encryptionKey = "B27AA05B9A2490D1AE59B33B45CFD4B0"; // Should be 16, 24, or 32 bytes
+  const encryptionKey = salt; // Should be 16, 24, or 32 bytes
   const initializationVector = generateRandomString(); // Should be 16 bytes
   const encryptedData = encryptData(
     plaintextData,
@@ -738,7 +739,7 @@ export const pdfEncrypt = (value) => {
     now.getUTCSeconds(),
     now.getUTCMilliseconds()
   );
-  const encryptionKey = "B27AA05B9A2490D1AE59B33B45CFD4B0"; // Should be 16, 24, or 32 bytes
+  const encryptionKey = salt; // Should be 16, 24, or 32 bytes
   const initializationVector = date + ":" + "vg"; // Should be 16 bytes
   const encryptedData = encryptData(
     plaintextData,
@@ -755,4 +756,22 @@ export const getDateAndTime = (date) => {
 
 export const resetPageNumber = (setPageNo) => {
   setPageNo(0);
+};
+
+export const generateOptionsListSupervisor = (items) => {
+  if (items?.data?.response?.length > 0) {
+    const options = [
+      ...items?.data?.response?.map((item) => ({
+        label: (
+          <span>
+            {item?.firstName}&nbsp;&nbsp;{item?.lastName}
+          </span>
+        ),
+        value: item?.userName,
+      })),
+    ].filter(Boolean);
+    return options;
+  } else {
+    return [];
+  }
 };

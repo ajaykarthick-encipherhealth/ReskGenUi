@@ -264,13 +264,7 @@ const HeaderFilters = ({
       case "Allocated By":
         return (
           <div
-            className={defaultSize}
-            // onClick={() => {
-            //   dispatch(
-            //     getFilters(selectorField ? selectorField : "allocatedBy")
-            //   );
-            // }}
-          >
+            className={defaultSize}>
             <label className={styles.label}>Allocated By</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -290,11 +284,7 @@ const HeaderFilters = ({
       case "Select Organization":
         return (
           <div
-            className={defaultSize}
-            // onClick={() => {
-            //   dispatch(getFilters("organization"));
-            // }}
-          >
+            className={defaultSize}>
             <label className={styles.label}>Select Organization</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -367,9 +357,6 @@ const HeaderFilters = ({
         return (
           <div
             className={defaultSize}
-            // onClick={() => {
-            //   dispatch(getFilters("auditAllocatedBy"));
-            // }}
           >
             <label className={styles.label}>{"Audit Allocated By"}</label>
             <div class="form-group has-search custom-react-select">
@@ -420,9 +407,6 @@ const HeaderFilters = ({
           <div
             className={defaultSize}
             style={{ zIndex: tracking && "2" }}
-            // onClick={() => {
-            //   dispatch(getFilters("patientAllocated"));
-            // }}
           >
             <label className={styles.label}>Reviewer</label>
             <div class="form-group has-search custom-react-select">
@@ -445,9 +429,6 @@ const HeaderFilters = ({
           <div
             className={defaultSize}
             style={{ zIndex: tracking && "2" }}
-            // onClick={() => {
-            //   dispatch(getFilters("auditedAssigned"));
-            // }}
           >
             <label className={styles.label}>Supervisor</label>
             <div class="form-group has-search custom-react-select">

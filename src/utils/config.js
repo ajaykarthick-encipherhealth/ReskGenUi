@@ -4,4 +4,5 @@ export const portalPdfUrl = process.env.NEXT_PUBLIC_PDF_PORTAL_BASE_URL;
 export const webSocketUrl = process.env.NEXT_PUBLIC_WEB_SOCKET_URL;
 export const tokenKey = "token";
 export const serverControl = process.env.NEXT_PUBLIC_NODE_ENV;
+export const salt = process.env.NEXT_PUBLIC_SALT;
 export const isLocalEdit = true;

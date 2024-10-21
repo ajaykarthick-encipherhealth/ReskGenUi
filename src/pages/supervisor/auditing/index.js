@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Paginator } from "primereact/paginator";
@@ -10,7 +10,7 @@ import Header from "../../../jsx/layouts/nav/Header";
 import PatientTable from "../table/PatientList/patientList";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
-import { generateOptionsList } from "../../../components/headerFilters/functions";
+import {generateOptionsListSupervisor } from "../../../components/headerFilters/functions";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
 import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
 import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
@@ -37,7 +37,7 @@ export function extractLatestData(notes) {
   return declinedData;
 }
 import Image from "next/image";
-import { getFilters, patientDetails } from "../../../stores/authflow/actions";
+import { patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
 const bullets = [
@@ -72,12 +72,8 @@ const statusOptions = [
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
 ];
 
-const Patient = ({ getWorkListFilter, response, loader }) => {
-  const navigate = useRouter();
-  const dispatch = useDispatch();
-  const sideMenu = useSelector((state) => state.sideMenu);
-  // const response = useSelector((state) => state.AuditWork.workListFilter);
-  const filteredList = useSelector((state) => state.filters?.patientAllocated);
+const Patient = ({ getWorkListFilter, response, loader ,filteredList,getFilters}) => {
+  const navigate = useRouter();  
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
@@ -143,7 +139,7 @@ const Patient = ({ getWorkListFilter, response, loader }) => {
     };
 
     getWorkListFilter({ data: data });
-    dispatch(getFilters("patientAllocated"));
+    getFilters({field:"patientAllocated"});
   }, [
     pageNo,
     computedStartDate,
@@ -233,7 +229,6 @@ const Patient = ({ getWorkListFilter, response, loader }) => {
   };
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
     if (data.computing == 2) {
       const controller = new AbortController();
       const { signal } = controller;
@@ -357,7 +352,7 @@ const Patient = ({ getWorkListFilter, response, loader }) => {
   };
 
   return (
-    <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+    <div className={`show `}>
       <Header />
       <div class="content-body">
         <div className="container-fluid">
@@ -402,7 +397,7 @@ const Patient = ({ getWorkListFilter, response, loader }) => {
                           isNextCreatedBySelector={true}
                           createdTolabel="Reviewer"
                           optionKey="patientAllocated"
-                          createdByOptoons={generateOptionsList(filteredList)}
+                          createdByOptoons={generateOptionsListSupervisor(filteredList)}
                           setSelCreatedBy={setSelCreatedBy}
                           addUser={false}
                           addUserForm={addPatientFormId}
@@ -468,10 +463,12 @@ const Patient = ({ getWorkListFilter, response, loader }) => {
 const connector = connect(
   (state) => ({
     response: state.supervisor?.audited?.filteredList,
+    filteredList:state.supervisor?.audited?.filterUsers,
     loader: state.supervisor?.audited?.loading,
   }),
   {
     getWorkListFilter: allActions.getWorkListFilter,
+    getFilters: allActions.getFilterUsers,
   }
 );
 export default connector(Patient);

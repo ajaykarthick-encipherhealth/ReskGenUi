@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { connect } from "react-redux";
 import { Modal } from "antd";
-import { Button } from "react-bootstrap";
 import { Offcanvas } from "react-bootstrap";
 import { Input, notification, Form, Space } from "antd";
 import { Select } from "antd";
 import moment from "moment";
-import {
-  submitMeatQuery,
-  updateMeatQuery,
-} from "../../../../../services/PatientsListSevice";
 import styles from "../../hcc/styles.module.css";
-import visitStyles from "../../../../../styles/visitdata.module.css";
 import RegularButton from "../../../../../components/button";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getResponePopup } from "../../../../../utils/reusable";
@@ -30,10 +24,11 @@ const AddMeatQuery = ({
   getMeatQueryList,
   year,
   isDosSelected = "",
-  getpatientDetailsData
+  getpatientDetailsData,
+  submitMeatQuery,
+  updateMeatQuery,
 }) => {
   const [form] = Form.useForm();
-  const dispatch = useDispatch();
   const [meatQueryResult, setMeatQueryResult] = useState([]);
   const [meatQueryUpdate, setMeatQueryUpdate] = useState(false);
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
@@ -505,6 +500,8 @@ const enhancer = connect(
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
     getMeatQueryList: detailsActions.meatQueryAction,
+    submitMeatQuery:detailsActions.getSubmitMeatQuery,
+    updateMeatQuery:detailsActions.getUpdateMeatQuery,
   }
 );
 export default enhancer(AddMeatQuery);

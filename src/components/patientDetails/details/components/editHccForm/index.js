@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch,connect } from "react-redux";
+import { connect } from "react-redux";
 import { notification } from "antd";
 import { Select, Modal } from "antd";
 import { Button, Form, Input, Space, DatePicker } from "antd";
@@ -23,7 +23,6 @@ const EditHccForm = ({
   getpatientDetailsData
 }) => {
   const [form] = Form.useForm();
-  const dispatch = useDispatch();
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(true);
   const [providerNameList, setProviderNameList] = useState([]);
   const [selectProviderNameList, setSelectProviderNameList] = useState([]);

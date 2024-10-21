@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
-import { useSelector, useDispatch, connect } from "react-redux";
+import {  connect } from "react-redux";
 import Image from "next/image";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import LoadingSpinner from "../../../../../components/loadingSpinner";
@@ -40,8 +40,6 @@ const SupervisorWorkList = ({
   getWorkListFilter,
   setIsModalComments,
 }) => {
-  const dispatch = useDispatch();
-  // const result = useSelector((state) => state.AuditWork.workListFilter);
   const [patientList, setPatientList] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);

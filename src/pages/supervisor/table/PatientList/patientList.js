@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import moment from "moment";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
 import TableStyle from "../../../../components/table/table.module.css";
 import { SVGICON } from "../../../../jsx/constant/theme";
-import { getPriorityChange } from "../../../../store/actions/PatientsActions";
+// import { getPriorityChange } from "../../../../store/actions/PatientsActions";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import {
   renderUserPrfoileAvatar,
@@ -28,9 +27,7 @@ function PatientTable({
   sortAuditOrder,
   setSortAuditOrder,
 }) {
-  const dispatch = useDispatch();
   const navigate = useRouter();
-
   const priorityOptions = [
     {
       value: "URGENT",
@@ -81,7 +78,6 @@ function PatientTable({
   };
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
     if (data.computing === 2) {
       const controller = new AbortController();
       const { signal } = controller;
@@ -232,13 +228,6 @@ function PatientTable({
               disabled={!data?.priority ? true : false}
               onChange={(value) => {
                 handlePriorityChange(data?.patientId, value);
-                dispatch(
-                  getPriorityChange(
-                    data?.patientId,
-                    dayjs(data?.lastModifiedDate)?.format("YYYY"),
-                    value
-                  )
-                );
               }}
               style={{ width: "80%" }}
             />

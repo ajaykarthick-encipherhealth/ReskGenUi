@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import { Stepper, Step } from "react-form-stepper";
 import { useRouter } from "next/router";
-import { connect, useDispatch } from "react-redux";
 import Form from "react-bootstrap/Form";
 import { notification, Result } from "antd";
-import ENDPOINTS from "../utility/enpoints";
-import axios from "../utility/axiosConfig";
 import LoginBack from "../images/logo/login-back.jpg";
 import Select from "react-select";
 import {actions as allActions} from '../stores/tenantOnBoarding'
-
+import { connect } from "react-redux";
 
 const onBoarding = ({onBoardingOrganization}) => {
 

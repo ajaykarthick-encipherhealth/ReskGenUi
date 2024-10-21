@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch, connect } from "react-redux";
+import {  connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
@@ -34,16 +34,6 @@ const File = ({
   search,
   setSearch,
 }) => {
-  const dispatch = useDispatch();
-  const sectionColorList = useSelector(
-    (state) => state?.ReviewerReducers?.sectionColorList
-  );
-  const radiologyFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyFileDetails
-  );
-  const labFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.labFileDetails
-  );
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
@@ -94,8 +84,8 @@ const File = ({
       setCaptureSectionMatching,
       setMeatCriteriaList,
       patientDetailsResult,
-      dispatch,
-      sectionColorList,
+      "",
+      "",
       setAllDisList,
       "",
       "",

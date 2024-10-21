@@ -17,3 +17,7 @@ export const receivedReport = createActionThunk(
   "RECEIVED",
   network.receivedApi
 );
+export const getSelectedReportDetails = createActionThunk(
+  "SELECT_REPORT_DETAILS",
+  network.selectedReportDetails
+);

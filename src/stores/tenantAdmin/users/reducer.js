@@ -41,7 +41,7 @@ const getReportLoading = (type) =>
     false
   );
 
-const tenantAminPatientsReducer = combineReducers({
+const tenantAminUsersReducer = combineReducers({
   allOrganization: createReducer(getAllOrganizationAction),
   allUsers: createReducer(getAllUsersAction),
 
@@ -50,4 +50,4 @@ const tenantAminPatientsReducer = combineReducers({
   allUsersLoading: getReportLoading(getAllUsersAction),
 });
 
-export default tenantAminPatientsReducer;
+export default tenantAminUsersReducer;

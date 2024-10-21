@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../../../../resusablereport/reports/report.module.css";
+import styles from "../../../../mainStream/components/moreFilters/report.module.css";
 import { Divider, Popover, Tooltip } from "antd";
 import Tracking from "../tracking.module.css";
 
@@ -37,16 +37,16 @@ const MoreFilter = ({
 
   const PopContent = (
     <>
-    <div className="d-flex my-2">
-    <input
-        type="checkbox"
-        onChange={handleHeaderCheckboxChange}
-        className={`${styles.customChecked}`}
-        checked={selectAll}
-      />{" "}
-      <span style={{ margin: "0 5px" }}>Select All</span>
-    </div>
-      <Divider className="m-0 p-0"/>
+      <div className="d-flex my-2">
+        <input
+          type="checkbox"
+          onChange={handleHeaderCheckboxChange}
+          className={`${styles.customChecked}`}
+          checked={selectAll}
+        />{" "}
+        <span style={{ margin: "0 5px" }}>Select All</span>
+      </div>
+      <Divider className="m-0 p-0" />
       {allFilters?.map((filter, index) => (
         <div key={filter} style={{ margin: "10px 0px" }}>
           <input
@@ -77,9 +77,7 @@ const MoreFilter = ({
         onVisibleChange={setPopoverVisible}
       >
         <Tooltip title={"More Filters"}>
-          <div
-            className={Tracking.iconBorder}
-          >
+          <div className={Tracking.iconBorder}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="#03316f"
@@ -98,7 +96,6 @@ const MoreFilter = ({
           </div>
         </Tooltip>
       </Popover>
-      <span></span>
     </div>
   );
 };

@@ -1,18 +1,14 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { Empty, Tooltip } from "antd";
 import { CircularProgressbar } from "react-circular-progressbar";
 import TableStyle from "../../../../components/table/table.module.css";
-import { storeUserValues } from "../../../../store/actions/l2Action/userActions";
 import { renderUserPrfoile } from "../../../../components/headerFilters/functions";
 
 const AdminList = ({ userList }) => {
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const gotoUserQueue = (item) => {
-    dispatch(storeUserValues(item)),
       router.push(`/supervisor/user/userQueue?userId=${item?.userName}`);
   };
   return (

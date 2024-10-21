@@ -3,8 +3,6 @@ import { Badge, Empty, Popover, Tooltip } from "antd";
 import TableStyle from "../table.module.css";
 import { SVGICON } from "../../../jsx/constant/theme";
 import { Paginator } from "primereact/paginator";
-import { selectedRow } from "../../../store/actions/ReportActions";
-import { useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import {
   dateFormate,
@@ -19,7 +17,6 @@ import Completed from "../../../../src/images/trackingImages/CompletedTrack.png"
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import Abort from "../../../../src/images/trackingImages/Abort.png";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
-
 import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
 import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
 import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
@@ -27,6 +24,8 @@ import AuditPending from "../../../../src/images/trackingImages/AuditPending.png
 import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 import { extractLatestData } from "../../../pages/supervisor/auditing";
 import Image from "next/image";
+import { connect } from "react-redux";
+import { actions as allActions} from '../../../stores/admin/report'
 
 function CoderReport({
   setModal,
@@ -43,8 +42,8 @@ function CoderReport({
   sortOrder,
   setSortOrder,
   setSort,
+  selectedRow
 }) {
-  const dispatch = useDispatch();
 
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
@@ -365,7 +364,7 @@ function CoderReport({
   };
 
   useEffect(() => {
-    dispatch(selectedRow(selectedRows));
+    selectedRow(selectedRows);
   }, [selectedRows]);
 
   return (
@@ -590,5 +589,7 @@ function CoderReport({
     </div>
   );
 }
-
-export default CoderReport;
+const connector=connect((state)=>({state}),{
+  selectedRow:allActions.selectedRow
+})
+export default connector(CoderReport);

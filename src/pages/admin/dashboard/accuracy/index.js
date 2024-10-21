@@ -1,29 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Buttonscroller from "../../../../components/buttonSroller";
 import { Buttons } from "../../../reviewer/workingstatus";
-import ReactECharts from "echarts-for-react";
-import accuracy from "../../../../images/dashboard/accuracy.png";
-import Image from "next/image";
 import Card from "../../../../components/card/index";
 import styles from "./styles.module.css";
 import HeadTitle from "../../../../components/headtitle";
-import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 import { Empty, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
-import {
-  getAccuracyDaily,
-  getAccuracyMOnthly,
-  getAccuracyWeekly,
-} from "../../../../services/adminServices/DashboardService";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
-import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
-import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
- import { faCheckDouble} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import { renderCardSkeleton } from "../../../reviewer/dashboard/accuracy";
-
+import { actions as adminActions } from "../../../../stores/admin/dashboard";
+import { connect } from "react-redux";
 export const TabButtons = [
   {
     id: 1,
@@ -111,7 +102,7 @@ export function getHighlightedIndex(
 }
 
 export const getGraphData = (
-  param = [], 
+  param = {},
   text,
   month,
   year,
@@ -122,15 +113,16 @@ export const getGraphData = (
     currentBtn === "Monthly" &&
     parseInt(year) <= parseInt(currentDate.getFullYear())
   ) {
-    return param?.map((item) => item?.[text] ?? 0); 
-  } 
-  else if (currentBtn !== "Monthly") {
+    return Object.values(param).map((value) => value ?? 0);
+  } else if (currentBtn !== "Monthly") {
     if (parseInt(month) <= parseInt(currentDate.getMonth() + 1)) {
-      return param?.map((item) => item?.[text] ?? 0);
+      return Object.values(param).map((value) => value ?? 0);
     }
   }
+
   return [];
 };
+
 export const chartBlockedDates = (
   year,
   month,
@@ -139,50 +131,53 @@ export const chartBlockedDates = (
   currentBtn,
   currentDate
 ) => {
-  year = Number(year);
-  month = Number(month);
-  if (year < currentDate.getFullYear()) {
-    return param?.map((item) => item[val]);
-  } else if (
-    year == currentDate.getFullYear() &&
-    month < currentDate.getMonth() + 1 &&
-    currentBtn !== "Monthly"
-  ) {
-    return param?.map((item) => item[val]);
-  } else if (
-    year == currentDate.getFullYear() &&
-    month == currentDate.getMonth() + 1 &&
-    currentBtn !== "Monthly"
-  ) {
-    if (currentBtn == "Daily") {
-      return param?.map(
-        (item, index) => index < new Date().getDate() && item[val]
-      );
-    } else if (currentBtn == "Weekly") {
-      return param?.map(
-        (item, index) => index < getDateWeek(currentDate) && item[val]
-      );
-    }
-    // else if (currentBtn == "Monthly") {
-    //   return param?.data?.response.map(
-    //     (item, index) => index < new Date().getMonth() + 1 && item[val]
-    //   );
-    // }
-  } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
-    if (parseInt(year) > parseInt(currentDate.getFullYear())) {
-      return false;
+  if (param) {
+    year = Number(year);
+    month = Number(month);
+    if (year < currentDate.getFullYear()) {
+      return Object.values(param)?.map((item) => item[val]) ?? 0;
+    } else if (
+      year == currentDate.getFullYear() &&
+      month < currentDate.getMonth() + 1 &&
+      currentBtn !== "Monthly"
+    ) {
+      return Object.values(param)?.map((item) => item[val]) ?? 0;
+    } else if (
+      year == currentDate.getFullYear() &&
+      month == currentDate.getMonth() + 1 &&
+      currentBtn !== "Monthly"
+    ) {
+      if (currentBtn == "Daily") {
+        return Object.values(param)?.map(
+          (item, index) => (index < new Date().getDate() && item?.[val]) ?? 0
+        );
+      } else if (currentBtn == "Weekly") {
+        return Object.values(param)?.map(
+          (item, index) =>
+            (index < getDateWeek(currentDate) && item?.[val]) ?? 0
+        );
+      }
+
+      // else if (currentBtn == "Monthly") {
+      //   return param?.data?.response.map(
+      //     (item, index) => index < new Date().getMonth() + 1 && item[val]
+      //   );
+      // }
+    } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
+      if (parseInt(year) > parseInt(currentDate.getFullYear())) {
+        return false;
+      } else {
+        return Object.values(param)?.map(
+          (item, index) => (index < new Date().getMonth() + 1 && item[val]) ?? 0
+        );
+      }
     } else {
-      return param?.map(
-        (item, index) => index < new Date().getMonth() + 1 && item[val]
-      );
+      return false;
     }
-  } else {
-    return false;
   }
 };
-const Accuracy = () => {
+const Accuracy = ({ getAccuracyScore, loading, QualityAccuracyDatas }) => {
   const [activeButton, setActiveButton] = useState(0);
-  const [initialAccuracyData, setInitialAccuracyData] = useState(null);
   const [initialQualityData, setInitialQualityData] = useState(null);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const [activeTabButton, setActiveTabButton] = useState(0);
@@ -194,14 +189,6 @@ const Accuracy = () => {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
-
-  const dispatch = useDispatch();
-  const accuracyDatas = useSelector(
-    (state) => state?.AdminDashboardReducers?.accuracy
-  );
-  const QualityAccuracyDatas = useSelector(
-    (state) => state?.workFlow?.accuracy
-  );
 
   const numberOfWeeks =
     QualityAccuracyDatas?.data?.response &&
@@ -269,10 +256,10 @@ const Accuracy = () => {
     }
   }
 
-  let data = [];
-  if (currentBtn && accuracyDatas?.data?.response) {
-    data = Object.values(accuracyDatas?.data?.response);
-  }
+  // let data = [];
+  // if (currentBtn && accuracyDatas?.data?.response) {
+  //   data = Object.values(accuracyDatas?.data?.response);
+  // }
 
   const chartBlocked = (year, month, param) => {
     year = Number(year);
@@ -325,62 +312,62 @@ const Accuracy = () => {
     }
   };
 
-  const option = {
-    xAxis: {
-      type: "category",
-      data: xAxisData,
-    },
-    yAxis: {
-      type: "value",
-      axisLabel: {
-        formatter: "{value}%",
-      },
-    },
-    tooltip: {
-      show: true,
+  // const option = {
+  //   xAxis: {
+  //     type: "category",
+  //     data: xAxisData,
+  //   },
+  //   yAxis: {
+  //     type: "value",
+  //     axisLabel: {
+  //       formatter: "{value}%",
+  //     },
+  //   },
+  //   tooltip: {
+  //     show: true,
 
-      formatter: function (params) {
-        let tooltipContent = "";
+  //     formatter: function (params) {
+  //       let tooltipContent = "";
 
-        if (Array.isArray(params)) {
-          params.forEach((item) => {
-            const allocatedValue = Number(item.data).toFixed(2);
-            tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-          });
-        } else if (params.data) {
-          const allocatedValue = Number(params.data).toFixed(2);
-          tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-        }
+  //       if (Array.isArray(params)) {
+  //         params.forEach((item) => {
+  //           const allocatedValue = Number(item.data).toFixed(2);
+  //           tooltipContent += `accuracy: ${allocatedValue}%<br>`;
+  //         });
+  //       } else if (params.data) {
+  //         const allocatedValue = Number(params.data).toFixed(2);
+  //         tooltipContent += `accuracy: ${allocatedValue}%<br>`;
+  //       }
 
-        return tooltipContent;
-      },
-    },
-    series: [
-      {
-        data: chartBlocked(selectedYear, selectedMonth, data),
-        type: "bar",
-        itemStyle: {
-          barBorderRadius: [10, 10, 0, 0],
-          color: function (params) {
-            return params.dataIndex === highlightIndex ? "#3479FE" : "#C2D5FF";
-          },
-        },
-        lineStyle: {
-          color: "#BD83B8",
-        },
-        showSymbol: false,
-        label: {
-          show: true,
-          position: "top",
-          formatter: function (params) {
-            return params?.data && currentBtn !== "Daily"
-              ? `${Math.round(params?.data)}%`
-              : "";
-          },
-        },
-      },
-    ],
-  };
+  //       return tooltipContent;
+  //     },
+  //   },
+  //   series: [
+  //     {
+  //       data: chartBlocked(selectedYear, selectedMonth, data),
+  //       type: "bar",
+  //       itemStyle: {
+  //         barBorderRadius: [10, 10, 0, 0],
+  //         color: function (params) {
+  //           return params.dataIndex === highlightIndex ? "#3479FE" : "#C2D5FF";
+  //         },
+  //       },
+  //       lineStyle: {
+  //         color: "#BD83B8",
+  //       },
+  //       showSymbol: false,
+  //       label: {
+  //         show: true,
+  //         position: "top",
+  //         formatter: function (params) {
+  //           return params && currentBtn !== "Daily"
+  //             ? `${Math.round(params)}%`
+  //             : "";
+  //         },
+  //       },
+  //     },
+  //   ],
+  // };
 
   const config = {
     chart: {
@@ -458,7 +445,7 @@ const Accuracy = () => {
         ) {
           const weekIndex = parseInt(this.point.category.substring(4));
 
-          finalData = QualityAccuracyDatas?.data?.response?.find(
+          finalData = Object.keys(QualityAccuracyDatas?.data?.response).find(
             (item) => item?.weekOfMonth === weekIndex
           );
         } else if (
@@ -469,11 +456,11 @@ const Accuracy = () => {
             (month) => month === this.point.category
           );
 
-          finalData = QualityAccuracyDatas?.data?.response?.find(
+          finalData = Object.keys(QualityAccuracyDatas?.data?.response)?.find(
             (item) => item?.monthOfYear === hoveredMonthIndex + 1
           );
         } else {
-          finalData = QualityAccuracyDatas?.data?.response?.find(
+          finalData = Object.keys(QualityAccuracyDatas?.data?.response)?.find(
             (item) => item?.dayOfMonth === this.x
           );
         }
@@ -555,31 +542,22 @@ const Accuracy = () => {
   };
 
   useEffect(() => {
-    // if (currentTabBtn === "CogentAI Accuracy") {
-    //   if (currentBtn === "Daily") {
-    //     dispatch(getAccuracyDaily(selectedYear, selectedMonth));
-    //   }
-    //   if (currentBtn === "Weekly") {
-    //     dispatch(getAccuracyWeekly(selectedYear, selectedMonth));
-    //   }
-    //   if (currentBtn === "Monthly") {
-    //     dispatch(getAccuracyMOnthly(selectedYear));
-    //   }
-    // } else {
     const isAdmin = true;
-    dispatch(
-      getAccuracyScore(currentBtn, selectedMonth, selectedYear, router, isAdmin)
-    );
+
+    getAccuracyScore({
+      btn: currentBtn,
+      month: selectedMonth,
+      year: selectedYear,
+      isAdmin: isAdmin,
+    });
+
     // }
   }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
   useEffect(() => {
-    if (accuracyDatas?.data?.response) {
-      setInitialAccuracyData(accuracyDatas?.data?.response);
-    }
     if (QualityAccuracyDatas?.data?.response) {
       setInitialQualityData(QualityAccuracyDatas?.data?.response);
     }
-  }, [accuracyDatas, QualityAccuracyDatas]);
+  }, [QualityAccuracyDatas]);
 
   const allAverageScore = chartBlockedDates(
     selectedYear,
@@ -647,10 +625,8 @@ const Accuracy = () => {
           </div>
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
-              {accuracyDatas?.loading || QualityAccuracyDatas?.loading ? (
-                <div>
-                  {renderCardSkeleton()}
-                </div>
+              {loading ? (
+                <div>{renderCardSkeleton()}</div>
               ) : QualityAccuracyDatas?.loading === false &&
                 QualityAccuracyDatas?.data?.response ? (
                 currentTabBtn === "CogentAI Accuracy" ? (
@@ -699,8 +675,11 @@ const Accuracy = () => {
             </div>
             <div className={styles.accuracy}>
               <div className={styles.header}>
-                 <div className="mt-1"> <FontAwesomeIcon icon={faCheckDouble} /></div>
-              
+                <div className="mt-1">
+                  {" "}
+                  <FontAwesomeIcon icon={faCheckDouble} />
+                </div>
+
                 {/* <Image src={accuracy} className={styles.Img} /> */}
                 <div className={styles.heading}>
                   {currentTabBtn === "CogentAI Accuracy"
@@ -763,4 +742,13 @@ const Accuracy = () => {
   );
 };
 
-export default Accuracy;
+const connector = connect(
+  (state) => ({
+    loading: state.admin.dashboard.accuracyLoading,
+    QualityAccuracyDatas: state?.admin.dashboard?.accuracy,
+  }),
+  {
+    getAccuracyScore: adminActions.accuracyAction,
+  }
+);
+export default connector(Accuracy);

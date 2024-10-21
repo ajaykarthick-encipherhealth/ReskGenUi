@@ -1,74 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
-import { over } from "stompjs";
-import SockJS from "sockjs-client";
+import { connect } from "react-redux";
 import dayjs from "dayjs";
-import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import { Empty, Progress, Skeleton, Steps, Tooltip } from "antd";
 import TableStyle from "../../table.module.css";
-import { getPatientsList } from "../../../../store/actions/adminAction/fileProcessingActions";
-import SpinnerDots from "../../../spinner";
 import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin/tracking";
+import { actions as allActions } from "../../../../stores/admin/users";
 
-// export const eventStreming = (
-//   ENDPOINTS,
-//   setParsedData,
-//   pageNo,
-//   getPatients,
-//   dispatch,
-//   computedStartDate,
-//   computedEndDate,
-//   selectedOption,
-//   search,
-//   completedStartDate,
-//   completedEndDate,
-//   selAllocatedTo,
-//   selAllocatedBy,
-//   selCreatedBy
-// ) => {
-//   const id = getStorage("userId");
-//   const token = getStorage("token");
-//   const orgId = getStorage("orgId");
-//   const sse = new EventSource(
-//     `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=`
-//   );
-
-//   const fileStatusEventListener = (event) => {
-//     const data = JSON.parse(event.data);
-//     if (data?.length != 0) {
-//       const item = data[0];
-//       if (item?.processStageChart === "FINISHED") {
-//         setParsedData(data);
-//         dispatch(
-//           getPatients(
-//             pageNo,
-//             computedStartDate,
-//             computedEndDate,
-//             selectedOption,
-//             search,
-//             completedStartDate,
-//             completedEndDate,
-//             selAllocatedTo,
-//             selAllocatedBy,
-//             selCreatedBy
-//           )
-//         );
-//         sse.close();
-//       }
-//     }
-//   };
-
-//   sse.addEventListener("file-status-event", fileStatusEventListener);
-
-//   sse.onerror = () => {
-//     sse.close();
-//   };
-
-//   return () => {
-//     sse.removeEventListener("file-status-event", fileStatusEventListener);
-//     sse.close();
-//   };
-// };
 export const fileProcessingSkeleton = () => {
   return (
     <div>
@@ -209,9 +146,9 @@ const FileProcessingTable = ({
   getAllProcessingData,
   fileProcessingData,
   webSocketData,
+  getPatientsList,
 }) => {
-  let stompClient = null;
-  const dispatch = useDispatch();
+
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
   );
@@ -222,10 +159,7 @@ const FileProcessingTable = ({
   const [toggle, setToggle] = useState(patinetListAll);
   const [failedList, setFiledList] = useState();
   const [finished, setIsFInished] = useState(false);
-  const[stepperStyle,setStepperStyle]=useState("flex")
-  const selectedRowTime = useSelector(
-    (state) => state?.adminPatient?.patientsList
-  );
+  const [stepperStyle, setStepperStyle] = useState("flex")
 
   const handleToggleStepper = (index, data) => {
     setIsFInished(true);
@@ -283,7 +217,7 @@ const FileProcessingTable = ({
           info?.patientId === activeId &&
           info?.processStageId !== "FINISHED"
         ) {
-          dispatch(getPatientsList(info?.patientId, info?.processStageId));
+          getPatientsList(info?.patientId, info?.processStageId);
         }
       });
     }
@@ -594,61 +528,58 @@ const FileProcessingTable = ({
             </Tooltip>
           </div>
 
-            <div
-              className={TableStyle.fileprocessing}
-              style={{ height: "30px" }}
-            >
-              {mappedSteps?.map((step, index) => {
-                const findData =
-                  data?.processStageEventDTOs &&
-                  data?.processStageEventDTOs?.find(
-                    (item) => item?.processStageChart === step?.info
-                  );
-
-                return (
-                  <div key={index} className={TableStyle.innerProcessingDiv}>
-                    {finished
-                      ? "Loading..."
-                      : data?.processStageEventDTOs?.length > 0 &&
-                        (findData ? (
-                          <span>
-                            {findData?.createdDate &&
-                              dayjs(findData?.createdDate).format("hh:mm:ss A")}
-                          </span>
-                        ) : (
-                          "---"
-                        ))}
-                  </div>
+          <div className={TableStyle.fileprocessing} style={{ height: "30px" }}>
+            {mappedSteps?.map((step, index) => {
+              const findData =
+                data?.processStageEventDTOs &&
+                data?.processStageEventDTOs?.find(
+                  (item) => item?.processStageChart === step?.info
                 );
-              })}
-            </div>
 
-            <div
-              style={{
-                position: "relative",
-                marginTop: stepperVisible ? "10px" : "0",
-                marginLeft: "-40px",
-              }}
-              className={errStages[data?.processStageChart] ? "errStages" : ""}
-            >
-              <div className="fileprocessingstepper">
-                <Steps
-                  current={
-                    currentIndex
-                      ? currentIndex + 1
-                      : stageChartMap[findPreviousStep(data?.processStageChart)]
-                  }
-                  labelPlacement="vertical"
-                  items={mappedSteps}
-                  percent={
-                    failedList || errStages[data?.processStageChart] ? 0 : count
-                  }
-                  finishIconBorderColor="#000"
-                  style={{display:stepperStyle}}
-                />
-              </div>
+              return (
+                <div key={index} className={TableStyle.innerProcessingDiv}>
+                  {finished
+                    ? "Loading..."
+                    : data?.processStageEventDTOs?.length > 0 &&
+                      (findData ? (
+                        <span>
+                          {findData?.createdDate &&
+                            dayjs(findData?.createdDate).format("hh:mm:ss A")}
+                        </span>
+                      ) : (
+                        "---"
+                      ))}
+                </div>
+              );
+            })}
+          </div>
+
+          <div
+            style={{
+              position: "relative",
+              marginTop: stepperVisible ? "10px" : "0",
+              marginLeft: "-40px",
+            }}
+            className={errStages[data?.processStageChart] ? "errStages" : ""}
+          >
+            <div className="fileprocessingstepper">
+              <Steps
+                current={
+                  currentIndex
+                    ? currentIndex + 1
+                    : stageChartMap[findPreviousStep(data?.processStageChart)]
+                }
+                labelPlacement="vertical"
+                items={mappedSteps}
+                percent={
+                  failedList || errStages[data?.processStageChart] ? 0 : count
+                }
+                finishIconBorderColor="#000"
+                style={{ display: stepperStyle }}
+              />
             </div>
-         
+          </div>
+
           <div
             style={{
               display: "flex",
@@ -682,18 +613,18 @@ const FileProcessingTable = ({
     ));
   };
 
-  useEffect(()=>{
-  const handlereSize=()=>{
-    if(window.innerWidth<=1229){
-      setStepperStyle("block")
-    }else{
-      setStepperStyle("flex")
-    }
-  }
-  handlereSize()
-  window.addEventListener("resize",handlereSize);
-  return ()=>window.removeEventListener("resize",handlereSize)
-  },[])
+  useEffect(() => {
+    const handlereSize = () => {
+      if (window.innerWidth <= 1229) {
+        setStepperStyle("block");
+      } else {
+        setStepperStyle("flex");
+      }
+    };
+    handlereSize();
+    window.addEventListener("resize", handlereSize);
+    return () => window.removeEventListener("resize", handlereSize);
+  }, []);
   return (
     <div className={TableStyle.classContaineer}>
       {fileProcessingData?.loading ? (
@@ -732,6 +663,7 @@ const enhancer = connect(
   }),
   {
     getAllProcessingData: tenantAdminAction.getAllFileProcessAction,
+    getPatientsList: allActions.getPatientsList,
   }
 );
 export default enhancer(FileProcessingTable);

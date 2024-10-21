@@ -27,5 +27,9 @@ export const getFilteredList = createAction(
 );
 export const getPatientID = createAction(
   "PATIENT_ID",
+);
 
+export const getFilterUsers = createActionThunk(
+  "FILTER_USER",
+  network.filterUsers
 );

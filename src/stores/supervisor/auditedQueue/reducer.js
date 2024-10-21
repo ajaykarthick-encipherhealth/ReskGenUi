@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { getpatientsList, getFilteredList, getPatientID,getSearchPatients,getPriorityChange,getWorkListFilter } from "./actions";
+import { getpatientsList, getFilteredList, getPatientID,getSearchPatients,getPriorityChange,getWorkListFilter, getFilterUsers } from "./actions";
 
 const initialState = {
   loading: true,
@@ -58,6 +58,7 @@ const AuditedReducer = combineReducers({
   // reducers
   selectedFilteredList: getSelectedDetails(getFilteredList),
   selectedPatientID: getSelectedDetails(getPatientID),
+  filterUsers: createReducer(getFilterUsers),
 });
 
 export default AuditedReducer;

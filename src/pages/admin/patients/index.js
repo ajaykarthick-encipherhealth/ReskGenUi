@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector, connect } from "react-redux";
+import { connect } from "react-redux";
 import axios from "../../../utility/axiosConfig";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
@@ -63,7 +63,7 @@ const Patient = ({
   getUploadRadiologyFile,
 }) => {
   const navigate = useRouter();
-  const sideMenu = useSelector((state) => state.sideMenu);
+  
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
@@ -580,7 +580,7 @@ const Patient = ({
   }, []);
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">

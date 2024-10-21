@@ -6,14 +6,11 @@ import { IMAGES } from "../../jsx/constant/theme";
 import LoginBack from "../../images/logo/login-back.jpg";
 import styles from "../../styles/auth.module.css";
 import RegularButton from "../../components/button";
-import {
-  checkDeviceLogin,
-  logoutAllDevice,
-} from "../../stores/authflow/actions";
 import { getStorage, setStorage } from "../../utils/storages";
+import { connect } from "react-redux";
 
 
-const SelectRole = () => {
+const SelectRole = ({loginData}) => {
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
@@ -22,15 +19,11 @@ const SelectRole = () => {
   const [confirmModal, setConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const rolesList = role?.slice().reverse();
-  const items = [
-    // { value: "physician", label: "PHYSICIAN" },
-    ...(rolesList?.length > 0
-      ? rolesList?.map((info) => ({
-          value: info,
-          label: info?.split("_").join(" "),
-        }))
-      : []),
-  ];
+  const optionsList = loginData?.roles?.map((info) => ({
+    value: info,
+    label: info?.split("_").join(" "),
+  }));
+  const items = [...(loginData?.roles?.length > 0 ? optionsList : [])];
 
   const onSubmitRole = async (e) => {
     e.preventDefault();
@@ -42,8 +35,6 @@ const SelectRole = () => {
   };
 
   const handleLogout = () => {
-    logoutAllDevice();
-    checkDeviceLogin();
     setConfirmModal(false);
     loginSuccessCallBack();
   };
@@ -191,4 +182,8 @@ const SelectRole = () => {
   );
 };
 
-export default SelectRole;
+const connector = connect((state) => ({
+  loginData: state.authReducer?.loginData?.data?.response,
+}));
+export default connector(SelectRole);
+

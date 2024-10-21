@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { actions as tenantActions } from "../../../../stores/tenantAdmin/patientSync";
+import { actions as tenantActionsActive } from "../../../../stores/tenantAdmin/report";
+
 import { connect } from "react-redux";
 import { Drawer, Form, Input, Select } from "antd";
 import style from "../fhir.module.css";
@@ -8,9 +10,7 @@ import downloadImg from "../../../../images/fihr/download.png";
 import uploaderImg from "../../../../images/fihr/uploaderImg.png";
 import { getYears } from "../../../../utils/reusable";
 import UploadFile from "../uploadFile";
-import { useSelector } from "react-redux";
-import ENDPOINTS from "../../../../utility/enpoints";
-import axios from "../../../../utility/axiosConfig";
+
 const inputTypeOptions = [
   { label: "FireZilla", value: "FireZilla" },
   { label: "GoogleDrive", value: "GoogleDrive" },
@@ -29,6 +29,8 @@ const PdfDrawer = ({
   selectedBatch,
   setSelectedBatch,
   upoloadFiles,
+  reportActiveTab,
+  pageNo,
 }) => {
   const [form] = Form.useForm();
   const [selectedType, setSelectedType] = useState(null);
@@ -42,7 +44,6 @@ const PdfDrawer = ({
       setSelectedBatch();
     }
   };
-  const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
 
   const handleFileUpload = async () => {
     try {
@@ -51,13 +52,6 @@ const PdfDrawer = ({
         formData.append("file", item);
         formData.append("batchId", selectedBatch?.id);
         formData.append("yearOfServices", selectedBatch?.yearOfService);
-
-        const headers = {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        };
-
         return upoloadFiles({ obj: formData });
 
         // axios.post(
@@ -84,7 +78,7 @@ const PdfDrawer = ({
       if (uploadType !== "upload") {
         const res = await getCreateBatch({ info: formVal });
         if (res.status === "SUCCESS") {
-          await getAllBatches({ page: 0 });
+          await getAllBatches({ page: pageNo });
           form.resetFields();
           setFileList([]);
           setSelectedType(null);
@@ -125,7 +119,7 @@ const PdfDrawer = ({
                 name="emrType"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "Please Enter EMR Type",
                   },
                 ]}
@@ -134,7 +128,7 @@ const PdfDrawer = ({
               </Form.Item>
               <Form.Item
                 label={<label> File Count</label>}
-                name="fileCount"
+                name="totalFileCount"
                 rules={[
                   {
                     validator: (_, value) => {
@@ -161,24 +155,24 @@ const PdfDrawer = ({
                 <Input placeholder="File Count" />
               </Form.Item>
               <Form.Item
-            label={<label>YearOf Service</label>}
-            name="yearOfService"
-            rules={[
-              {
-                required: true,
-                message: "Please Enter yearOfService ",
-              },
-            ]}
-          >
-            <Select
-              mode="tags"
-              name="yearOfService"
-              style={{ width: "100%" }}
-              options={getYears()}
-              size="large"
-              placeholder="year Of Service"
-            />
-          </Form.Item>
+                label={<label>YearOf Service</label>}
+                name="yearOfService"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Enter yearOfService ",
+                  },
+                ]}
+              >
+                <Select
+                  mode="tags"
+                  name="yearOfService"
+                  style={{ width: "100%" }}
+                  options={getYears()}
+                  size="large"
+                  placeholder="year Of Service"
+                />
+              </Form.Item>
               <Form.Item
                 label={<label>Source</label>}
                 name="source"
@@ -202,7 +196,7 @@ const PdfDrawer = ({
                   allowClear={true}
                 />
               </Form.Item>
-              {selectedType === "CogentUpload" ? (
+              {/* {selectedType === "CogentUpload" ? (
                 <Form.Item
                   label={
                     <label>
@@ -224,23 +218,24 @@ const PdfDrawer = ({
                     subText={"Upload Excel, CSV, Json files"}
                   />
                 </Form.Item>
-              ) : (
-                // selectedType && (
-                  <Form.Item
-                    label={<label>FilePath / FolderPath</label>}
-                    name="FilePath"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter FilePath / FolderPath",
-                      },
-                    ]}
-                  >
-                    <Input placeholder="FilePath / FolderPath" />
-                  </Form.Item>
-                // )
+              ) : ( */}
+              {/* // selectedType && ( */}
+              {selectedType !== "CogentUpload" && (
+                <Form.Item
+                  label={<label>FilePath / FolderPath</label>}
+                  name="sourceFolderPath"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter FilePath / FolderPath",
+                    },
+                  ]}
+                >
+                  <Input placeholder="FilePath / FolderPath" />
+                </Form.Item>
               )}
-            
+              {/* // ) */}
+              {/* )} */}
 
               {/* <Form.Item
                 label={<label>File Path</label>}
@@ -254,24 +249,9 @@ const PdfDrawer = ({
               >
                 <Input placeholder="File Path" />
               </Form.Item> */}
-
-              
-             
             </>
           )}
-          {uploadType == "upload" && (
-            <Form.Item
-              label={
-                <label>
-                  Upload File <span className="text-danger">*</span>
-                </label>
-              }
-              name="upload"
-            >
-              <UploadFile filesList={fileList} setFilesList={setFileList} />
-            </Form.Item>
-          )}
-        
+
           <Form.Item>
             <div className="col-xl-12 mb-3 d-grid justify-content-center">
               <Button type="submit">
@@ -284,9 +264,14 @@ const PdfDrawer = ({
     </Drawer>
   );
 };
-const enhancer = connect((state) => ({}), {
-  getCreateBatch: tenantActions.getCreateBatch,
-  getAllBatches: tenantActions.getAllBatches,
-  upoloadFiles: tenantActions.upoloadFiles,
-});
+const enhancer = connect(
+  (state) => ({
+    reportActiveTab: state.admin.report?.activeTab,
+  }),
+  {
+    getCreateBatch: tenantActions.getCreateBatch,
+    getAllBatches: tenantActions.getAllBatches,
+    upoloadFiles: tenantActions.upoloadFiles,
+  }
+);
 export default enhancer(PdfDrawer);

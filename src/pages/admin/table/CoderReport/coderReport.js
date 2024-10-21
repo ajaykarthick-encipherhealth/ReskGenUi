@@ -3,8 +3,6 @@ import { Badge, Empty, Tooltip } from "antd";
 import TableStyle from "../../../../components/table/table.module.css";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import { Paginator } from "primereact/paginator";
-import { selectedRow } from "../../../../store/actions/ReportActions";
-import { useDispatch } from "react-redux";
 import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
 import {
@@ -13,6 +11,8 @@ import {
 } from "../../../../components/headerFilters/functions";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import {actions as allActions} from '../../../../stores/admin/report'
+import { connect } from "react-redux";
 
 function CoderReport({
   setModal,
@@ -30,8 +30,8 @@ function CoderReport({
   sortOrder,
   setSortOrder,
   setSort,
+  selectedRow
 }) {
-  const dispatch = useDispatch();
 
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
@@ -213,7 +213,7 @@ function CoderReport({
   };
 
   useEffect(() => {
-    dispatch(selectedRow(selectedRows));
+    selectedRow(selectedRows);
   }, [selectedRows]);
 
   return (
@@ -479,5 +479,16 @@ function CoderReport({
     </div>
   );
 }
+const enhancer = connect(
+  (state) => ({
+   
+  }),
+  {
+   
+    selectedRow:allActions.selectedRow
+    
+    
+  }
+);
 
-export default CoderReport;
+export default enhancer(CoderReport);

@@ -5,21 +5,12 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { SVGICON } from "../../constant/theme";
-
 import { MenuList, PhysicanMenuList, L2AuditMenuList } from "./Menu";
-import { useDispatch, useSelector } from "react-redux";
-import { navtoggle } from "../../../stores/authflow/actions";
 
 export default function SideBar() {
   const router = useRouter();
   const [stateActive, setStateActive] = useState(router.pathname);
   const [userRole, setUserRole] = useState("");
-
-  const dispatch = useDispatch();
-  const sideMenu = useSelector((state) => state.sideMenu);
-  const handleToogle = () => {
-    dispatch(navtoggle());
-  };
 
   useEffect(() => {
     const item = getStorage("userRole");
@@ -35,7 +26,7 @@ export default function SideBar() {
             handleToogle();
           }}
         >
-          <div className={`hamburger ${sideMenu ? "is-active" : ""}`}>
+          <div className={`hamburger `}>
             <span className="line">{SVGICON.NavHeaderIcon}</span>
           </div>
         </div>
@@ -50,9 +41,7 @@ export default function SideBar() {
                   <Link href={data.to}>
                     <div className="menu-icon">{data.iconStyle}</div>{" "}
                     <span
-                      className={`nav-text text-white ${
-                        sideMenu ? "d-none" : ""
-                      }`}
+                      className={`nav-text text-white`}
                     >
                       {data.title}
                     </span>
@@ -72,9 +61,7 @@ export default function SideBar() {
                   <Link href={data.to}>
                     <div className="menu-icon">{data.iconStyle}</div>{" "}
                     <span
-                      className={`nav-text text-white ${
-                        sideMenu ? "d-none" : ""
-                      }`}
+                      className={`nav-text text-white `}
                     >
                       {data.title}
                     </span>
@@ -94,9 +81,7 @@ export default function SideBar() {
                   <Link href={data.to}>
                     <div className="menu-icon">{data.iconStyle}</div>{" "}
                     <span
-                      className={`nav-text text-white ${
-                        sideMenu ? "d-none" : ""
-                      }`}
+                      className={`nav-text text-white`}
                     >
                       {data.title}
                     </span>

@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { useSelector, useDispatch, connect } from "react-redux";
-import Link from "next/link";
+import React, { useState, useEffect, useRef } from "react";
+import { connect } from "react-redux";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
@@ -39,10 +38,6 @@ import {
   Analyst,
 } from "./Menu";
 import Notification from "../../../components/notification/index";
-import {
-  getFilteredList,
-  getPatientID,
-} from "../../../store/actions/PatientsActions";
 import ChatCommunication from "../../../components/chatCommunication/index";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -63,7 +58,11 @@ import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard"
 import { actions as userActions } from "../../../stores/supervisor/users";
 import Codify from "../../../pages/codify";
 import { actions as webSocketActions } from "../../../stores/websocket";
-import { getStorage, setStorage } from "../../../utils/storages";
+import { getStorage, removeStorage, setStorage } from "../../../utils/storages";
+import { actions as allActions } from "../../../stores/supervisor/auditedQueue";
+import { actions as detailsActions } from "../../../stores/patient/details";
+import { actions as authActions } from "../../../stores/authFlows";
+import {actions as reportActions} from '../../../stores/admin/report'
 import Profile from "./profile";
 
 const Header = ({
@@ -74,16 +73,19 @@ const Header = ({
   webSocketNotificationData,
   getNotificationData,
   postUnReadCount,
+  getFilteredList,
+  getPatientID,
   getCurrentUserInfo,
   currentUserInfo,
+  getCoderDetails,
+  getAccuracy,
+  profileUploadedTime,
+  accuracy,
+  getActiveTab,
+  getReportActiveTab,
 }) => {
-  const dispatch = useDispatch();
   const router = useRouter();
   const menuItemsPerPage = 5;
-  const msgReply = useSelector((state) => state?.workFlow?.chatReply);
-  const accuracy = useSelector((state) => state?.auth?.accuracy);
-  // const currentUserInfo = useSelector((state) => state?.auth?.userInfo);
-  const profileUploadedTime = useSelector((state) => state?.auth?.url);
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");
@@ -113,7 +115,6 @@ const Header = ({
     height: null,
   });
   const [animate, setAnimate] = useState(false);
-
   const showDrawer = () => {
     setOpened(true);
     setPopoverVisible(false);
@@ -176,118 +177,7 @@ const Header = ({
     let userId = currentUserInfo?.data?.response?.id;
 
     getNotificationList(userId);
-    // const sse = new EventSource(
-    //   `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userName}?token=${token}`
-    // );
-    // sse.addEventListener("user-list-event", (event) => {
-    //   const data = JSON.parse(event.data);
-    //   if (data.length != 0) {
-    //     dispatch(getNotificationAlert(data));
-    //     getNotificationList(userId);
-    //   }
-    // });
-    // sse.onerror = () => {
-    //   sse.close();
-    // };
-    // return () => {
-    //   sse.close();
-    // };
   };
-
-  // const PopContent = (
-  //   <div className={styles.innerPop}>
-  //     <div className={styles.codesContainer}>
-  //       <div
-  //         style={{
-  //           width: "90%",
-  //           display: "flex",
-  //           justifyContent: "space-between",
-  //         }}
-  //       >
-  //         <div>
-  //           {btnItems?.map((data) => (
-  //             <button
-  //               key={data?.id}
-  //               onClick={() => {
-  //                 setSelectedBtn(data?.name);
-  //                 setSearchVal("");
-  //                 setSearch("");
-  //               }}
-  //               className={
-  //                 selectedbtn === data?.name
-  //                   ? styles.activeBtn
-  //                   : styles.inactiveBtn
-  //               }
-  //             >
-  //               {data?.name}
-  //             </button>
-  //           ))}
-  //         </div>
-  //         <div style={{ width: "30%", margin: "-25px 30px 0 0" }}>
-  //           {selectedbtn === "HCC" && (
-  //             <Selector
-  //               selectlabel={""}
-  //               setSelectedOption={setSelectedOption}
-  //               selectOptions={Options}
-  //               defaultSelectValue1={Options[0]}
-  //             />
-  //           )}
-  //         </div>
-  //         <div className={styles.closeContainer}>
-  //           <CloseCircleOutlined
-  //             onClick={() => setPopoverVisible(false)}
-  //             className={styles.close_icon}
-  //           />
-  //         </div>
-  //       </div>
-  //     </div>
-  //     <div className={styles.codesContainer}>
-  //       <div className={styles.codesContainer2}>
-  //         <Search
-  //           searchlabel={""}
-  //           setSearch={setSearch}
-  //           searchVal={searchVal}
-  //           setSearchVal={setSearchVal}
-  //           activeTab={"codes"}
-  //         />
-  //       </div>
-  //     </div>
-  //     <div className={styles.displayDiv}>
-  //       {codDetails?.response
-  //         ? codDetails?.response?.map((data) => (
-  //             <div className={styles.hoverDiv} key={data?.id}>
-  //               {data?.diagnosisCode} &nbsp;
-  //               {data?.description}&nbsp;
-  //               {selectedbtn === "HCC" && (
-  //                 <>
-  //                   {getStatus(data) === "CMS" && (
-  //                     <span className={styles.cmsStatus}>
-  //                       {getStatus(data)}
-  //                     </span>
-  //                   )}
-  //                   {getStatus(data) === "RX" && (
-  //                     <span className={styles.rxStatus}>{getStatus(data)}</span>
-  //                   )}
-  //                   {getStatus(data) === "CMS RX" && (
-  //                     <>
-  //                       <span
-  //                         className={styles.cmsStatus}
-  //                         style={{ marginRight: "5px" }}
-  //                       >
-  //                         CMS
-  //                       </span>
-  //                       <span className={styles.rxStatus}>RX</span>
-  //                     </>
-  //                   )}
-  //                 </>
-  //               )}
-  //             </div>
-  //           ))
-  //         : null}
-  //     </div>
-  //   </div>
-  // );
-
   const notificationDrawer = async () => {
     setOpen(true);
     setNotificationCount(0);
@@ -354,19 +244,16 @@ const Header = ({
   };
   useEffect(() => {
     if (selectedbtn) {
-      dispatch(
-        getCoderDetails({
-          name: selectedbtn?.toLowerCase(),
-          search: search?.toUpperCase(),
-          selectedOption: selectedOption.toLowerCase(),
-          router,
-        })
-      );
+      getCoderDetails({
+        name: selectedbtn?.toLowerCase(),
+        search: search?.toUpperCase(),
+        selectedOption: selectedOption.toLowerCase(),
+      });
     }
     if (currentUserInfo) {
       getUserIdDetails(currentUserInfo);
     }
-  }, [msgReply, selectedbtn, search, selectedOption, currentUserInfo]);
+  }, [ selectedbtn, search, selectedOption, currentUserInfo]);
 
   useEffect(() => {
     getTenentLogo();
@@ -454,7 +341,6 @@ const Header = ({
     const userId = getStorage("userId");
     const userRole = getStorage("role");
     const tenentId = getStorage("tenantId");
-    // dispatch(getCurrentUser(userId, router));
     getCurrentUserInfo({ userId });
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
@@ -476,6 +362,7 @@ const Header = ({
           } else {
             window.location = "/ehrlogin";
           }
+          removeStorage()
         }
       });
     }
@@ -484,7 +371,7 @@ const Header = ({
       setheaderFix(window.scrollY > 50);
     });
 
-    dispatch(getAccuracy());
+    getAccuracy();
   }, []);
 
   const renderMenuItems = (condition) => {
@@ -513,8 +400,10 @@ const Header = ({
           } ${styles.transformed}`}
           key={index}
           onClick={() => {
-            dispatch(getFilteredList(null));
-            dispatch(getPatientID(null));
+            getFilteredList(null);
+            getPatientID(null);
+            getActiveTab(null);
+            getReportActiveTab(null)
             router.push(
               {
                 pathname: `${data?.to}`,
@@ -708,22 +597,20 @@ const Header = ({
                         {userRole === "Reviewer" && (
                           <Tooltip
                             title={` Quality : ${
-                              accuracy?.data?.response
-                                ? Math.round(accuracy?.data?.response)
-                                : 100
+                              accuracy ? Math.round(accuracy) : 100
                             }%`}
                           >
                             <div className="header-progress">
                               <div style={{ width: 40, height: 40 }}>
                                 <CircularProgressbar
                                   value={
-                                    accuracy?.data?.response
-                                      ? Math.round(accuracy?.data?.response)
+                                    accuracy
+                                      ? Math.round(accuracy)
                                       : Math.round(100)
                                   }
                                   text={`${
-                                    accuracy?.data?.response
-                                      ? Math.round(accuracy?.data?.response)
+                                    accuracy
+                                      ? Math.round(accuracy)
                                       : Math.round(100)
                                   }%`}
                                 />
@@ -731,7 +618,7 @@ const Header = ({
                             </div>
                           </Tooltip>
                         )}
-                        {userRole === "Tenant Admin" && (
+                        {userRole === "tenant_admin" && (
                           <div
                             className="chatheaderIcon"
                             onClick={() => router.push("/tenantAdmin/settings")}
@@ -835,7 +722,7 @@ const Header = ({
                               className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3"
                               style={{ fontWeight: "500", fontSize: "6px" }}
                             >
-                              {currentRole}
+                              {currentRole?.replace(/_/g, " ")}
                             </span>
                           )}
                         </div>
@@ -894,13 +781,21 @@ const enhancer = connect(
     currentUserInfo: state?.loggedInUser.currentUser,
     webSocketNotificationData:
       state?.tenantAdmin?.webSocket?.webSocketNotificationDetails?.data,
+    accuracy: state?.authReducer?.getAccuracy?.getAccuracy?.data?.response,
+    profileUploadedTime: state?.authReducer?.getUpdateImageLoading,
   }),
   {
     getNotificationList: dashbaordActions.notificationAction,
     getTenentLogo: dashbaordActions.tenentLogoAction,
     getNotificationData: webSocketActions.websocketNotificationAction,
     postUnReadCount: dashbaordActions.unReadCountPostAction,
+    getFilteredList: allActions.getFilteredList,
+    getPatientID: detailsActions.getPatientID,
     getCurrentUserInfo: userActions.getCurrentUserInfo,
+    getCoderDetails: authActions.getCoderDetails,
+    getAccuracy: authActions.getAccuracy,
+    getActiveTab:reportActions.activeTab,
+    getReportActiveTab:reportActions.activeTab,
   }
 );
 export default enhancer(Header);

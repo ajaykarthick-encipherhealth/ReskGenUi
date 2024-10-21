@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Empty, Popover, Select, Switch } from "antd";
 import dayjs from "dayjs";
 import TableStyle from "../../table.module.css";
@@ -18,9 +17,9 @@ import {
   CloseCircleOutlined,
 } from "@ant-design/icons";
 import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
-import { getSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
 import { connect } from "react-redux";
 import { actions as adminAction } from "../../../../stores/admin/users";
+import { actions as allActions } from "../../../../stores/admin/dashboard";
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
   { value: "REVIEWER", label: "Reviewer", role: "REVIEWER" },
@@ -36,10 +35,10 @@ const AdminList = ({
   getEnableUser,
   getAllUsersList,
   setPageCount,
+  getSelectUserList,
+  selectUserList,
 }) => {
   const usersData = usersList;
-  const dispatch = useDispatch();
-  const [checked, setChecked] = useState(false);
   const [rowData, setRowData] = useState();
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isMultiple, setIsMultiple] = useState(false);
@@ -49,10 +48,6 @@ const AdminList = ({
   const [selectedManager, setSelectedManager] = useState();
   const [switchStates, setSwitchStates] = useState({});
   const [roleChangeLoader, setRoleChangeLoader] = useState(false);
-
-  const selectUserList = useSelector(
-    (state) => state?.AdminDashboardReducers?.selectedUsers
-  );
 
   const onChange = async (item, checked) => {
     setSwitchStates((prevState) => ({
@@ -99,7 +94,7 @@ const AdminList = ({
             // open={open}
             onDropdownVisibleChange={(visible) => setOpen(visible)}
           />
-          {selectedRoles?.length ==1 && selectedRoles[0] === "REVIEWER" && (
+          {selectedRoles?.length == 1 && selectedRoles[0] === "REVIEWER" && (
             <>
               <div className="mt-4 my-2">Change Manager</div>
               <Select
@@ -160,7 +155,7 @@ const AdminList = ({
   };
   useEffect(() => {
     // getEnableUser({ checked: "no", user: rowData });
-    dispatch(getSelectUserList("SUPERVISOR"));
+    getSelectUserList({role:"SUPERVISOR"});
   }, [rowData]);
   useEffect(() => {
     if (usersData?.data?.response?.content) {
@@ -463,10 +458,12 @@ const AdminList = ({
 const enhancer = connect(
   (state) => ({
     usersList: state?.admin?.users?.allUsers,
+    selectUserList: state.admin.dashboard?.managersList,
   }),
   {
     getAllUsersList: adminAction.getAllUsersAction,
     getEnableUser: adminAction.getEnableUser,
+    getSelectUserList: allActions.getSelectUserList,
   }
 );
 export default enhancer(AdminList);

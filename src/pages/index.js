@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { getStorage } from "../utils/storages";
+
 
 export default class Index extends Component {
   componentDidMount = () => {
@@ -17,3 +18,5 @@ export default class Index extends Component {
     return <div />;
   }
 }
+
+

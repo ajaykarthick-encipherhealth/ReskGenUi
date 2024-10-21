@@ -1,6 +1,6 @@
 import { Button, Col, Form, Input, Row } from "antd";
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+
 
 const EditForm = ({
   setOpenEdit,
@@ -10,9 +10,7 @@ const EditForm = ({
   selectedData,
 }) => {
   const [form] = Form.useForm();
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
+ 
 
   const handleChange = (field, value) => {
     setInitialValues((prevValues) => ({

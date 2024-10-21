@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { Empty, Select, Badge, Popover, Tooltip } from "antd";
@@ -20,7 +19,6 @@ import {
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../../components/headerFilters/functions";
-import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAction";
 import { extractLatestData } from "../../auditing";
 import { setStorage } from "../../../../utils/storages";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
@@ -40,9 +38,7 @@ const UserQueueTable = ({
   setAuditDateSort,
   params,
 }) => {
-  const dispatch = useDispatch();
   const router = useRouter();
-
   const auditstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes
@@ -326,13 +322,6 @@ const UserQueueTable = ({
               defaultValue={data?.priority ? data.priority : "Set Priority"}
               disabled={!data?.priority ? true : false}
               onChange={(value) => {
-                dispatch(
-                  getPriorityChange(
-                    data?.patientId,
-                    dayjs(data?.lastModifiedDate)?.format("YYYY"),
-                    value
-                  )
-                );
               }}
             />
           </td>

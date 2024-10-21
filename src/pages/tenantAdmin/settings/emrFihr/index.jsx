@@ -6,12 +6,9 @@ import Cerner from "../../../../images/svg/settingsIcons/icons/cerner.png";
 import EClinical from "../../../../images/svg/settingsIcons/icons/eclinicalworks.png";
 import Image from "next/image";
 import { notification, Tag } from "antd";
-import { getFihrList } from "../../../../store/actions/tanantAdminAction/FihrActions";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import { getDateAndTime } from "../../../../components/headerFilters/functions";
-import axios from "axios";
-import ENDPOINTS from "../../../../utility/enpoints";
 import { Modal, Form, Select, Button } from "antd";
 import Notes from "./notes";
 import RegularButton from "../../../../components/button";
@@ -29,7 +26,6 @@ const EmrFhir = ({
   getFhirList,
 }) => {
   const [form] = Form.useForm();
-  const dispatch = useDispatch();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [emrUrl, setEmrUrl] = useState("");
@@ -38,9 +34,7 @@ const EmrFhir = ({
   const [inputValues, setInputValues] = useState(null);
   const [connectBtn, setConnectBtn] = useState("NEXT");
 
-  // const FihrList = useSelector(
-  //   (state) => state?.tanantAdmin?.fihr_list?.fihr_list
-  // );
+
 
   const FihrList = [
     {
@@ -138,7 +132,6 @@ const EmrFhir = ({
   useEffect(() => {
     getFhirList();
     getFhirInstructionDetails();
-    dispatch(getFihrList(router));
   }, []);
 
   useEffect(() => {

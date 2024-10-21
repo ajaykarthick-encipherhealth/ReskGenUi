@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { Empty, Popover, Select, Switch, Modal } from "antd";
 import dayjs from "dayjs";
 import TableStyle from "../../../../components/table/table.module.css";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import SpinnerDots from "../../../../components/spinner";
-import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
 import {
@@ -20,13 +17,16 @@ const items = [
   { value: "SUPERVISOR", label: "Supervisor", role: "SUPERVISOR" },
 ];
 
-const PatientList = ({ userList, sortOrder, setSortOrder, setSort }) => {
+const PatientList = ({
+  userList,
+  sortOrder,
+  setSortOrder,
+  setSort,
+  usersData,
+}) => {
   const router = useRouter();
-  const usersData = useSelector((state) => state.adminUsers.usersData);
+
   const [open, setOpen] = useState(false);
-
-  const dispatch = useDispatch();
-
   const handleTableRowClick = () => {
     setOpen(true);
   };
@@ -34,11 +34,6 @@ const PatientList = ({ userList, sortOrder, setSortOrder, setSort }) => {
     setOpen(true);
     router.push("patients/details");
   };
-
-  const selectUserList = useSelector(
-    (state) => state?.AdminDashboardReducers?.selectedUsers
-  );
-
   const patientList = [
     {
       id: "EH-1234",
@@ -73,7 +68,7 @@ const PatientList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   return (
     <div>
       {!usersData || usersData?.loading ? (
-       renderSkeleton()
+        renderSkeleton()
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classThead}>
@@ -206,4 +201,8 @@ const PatientList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   );
 };
 
-export default PatientList;
+const enhancer = connect((state) => ({
+  organizationList: state?.tenantAdmin?.users?.allOrganization?.data,
+  usersData: state.admin?.users?.allUsers,
+}));
+export default enhancer(PatientList);

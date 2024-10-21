@@ -514,11 +514,14 @@ export async function overallStatusUpdate(obj) {
     method: "POST",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(`dbservice/patient/status/overallstatus`, options);
+  const data = await requestPortal(
+    `dbservice/patient/status/overallstatus`,
+    options
+  );
   return data;
 }
 
-export async function overallYearStatus(obj,url) {
+export async function overallYearStatus(obj, url) {
   const options = {
     method: "POST",
     body: JSON.stringify(obj),
@@ -532,7 +535,10 @@ export async function uploadRadiologyFile({ data }) {
     method: "POST",
     body: data,
   };
-  const res = await requestPortalFiles(`aiservice/ai/upload/radiology`, options);
+  const res = await requestPortalFiles(
+    `aiservice/ai/upload/radiology`,
+    options
+  );
   return res;
 }
 
@@ -544,3 +550,59 @@ export async function uploadLabFile({ data }) {
   const res = await requestPortalFiles(`aiservice/ai/upload/lab`, options);
   return res;
 }
+
+export const submitMeatQuery = async (data) => {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+  const response = await requestPortal(
+    `dbservice/meatquery/storequery`,
+    options
+  );
+  return response;
+};
+
+export const updateMeatQuery = async (data) => {
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(data),
+  };
+  const response = await requestPortal(
+    `dbservice/meatquery/updateQueryComment`,
+    options
+  );
+  return response;
+};
+
+export const patientListFilter = async (
+  userId,
+  status,
+  searchText,
+  startDate,
+  endDate,
+  processedStart,
+  processedEnd,
+  pageNo
+) => {
+  const options = {
+    method: "GET",
+  };
+  const response = await requestPortal(
+    `dbservice/patient/filter?patientAllocated=${userId}&page=${pageNo}&size=${15}&processedStatus=${status}&dueDateStart=${startDate}&dueDateEnd=${endDate}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchText}`,
+    options
+  );
+  return response;
+};
+export const manuallyAddComboCode = async (data) => {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+  const response = await requestPortal(
+    `dbservice/patient/compute/combo/manuallyAdded`,
+    options
+  );
+
+  return response;
+};

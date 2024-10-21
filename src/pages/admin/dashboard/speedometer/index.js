@@ -1,26 +1,16 @@
 import React, { useEffect, useState } from "react";
 import * as echarts from "echarts";
 import ReactECharts from "echarts-for-react";
-import { useSelector,useDispatch } from "react-redux";
 import styles from "./style.module.css";
 import HeadTitle from "../../../../components/headtitle";
-import Card from "../../../../components/card";
-import {
-  getManagers,
-  getSppedoMeterDatas,
-} from "../../../../services/adminServices/DashboardService";
+import Card from "../../../../components/card";;
 import { Select, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
 import completStyle from "../completedStatus/styles.module.css";
 
 const SpeedoMeter = () => {
-  const dispatch = useDispatch();
-  const managerOptions = useSelector(
-    (state) => state.AdminDashboardReducers.managers
-  );
-  const meterDatas = useSelector(
-    (state) => state.AdminDashboardReducers.speedometer
-  );
+  const managerOptions = []
+  const meterDatas = []
   const [selectOption, setSelectedOption] = useState();
   const selectorOptions = managerOptions?.data?.response
     ? [
@@ -129,12 +119,6 @@ const SpeedoMeter = () => {
       },
     ],
   };
-  useEffect(() => {
-    dispatch(getManagers());
-    if (selectOption) {
-      dispatch(getSppedoMeterDatas(selectOption));
-    }
-  }, [selectOption]);
 
   return (
     <>

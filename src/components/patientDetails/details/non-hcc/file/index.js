@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { useSelector, useDispatch,connect } from "react-redux";
+import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClose,
@@ -32,19 +32,9 @@ const File = ({
   patientDetailsResult,
   hccFileDetails
 }) => {
-  const dispatch = useDispatch();
-  const sectionColorList = useSelector(
-    (state) => state?.ReviewerReducers?.sectionColorList
-  );
-  const radiologyFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyFileDetails
-  );
-  const labFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.labFileDetails
-  );
-  const fileDosPageNumberList = useSelector(
-    (state) => state?.ReviewerReducers.dosPageNumberList
-  );
+ 
+ 
+ 
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
@@ -92,8 +82,8 @@ const File = ({
       setCaptureSectionMatching,
       "",
       patientDetailsResult,
-      dispatch,
-      sectionColorList,
+      "",
+      "",
       "",
       "",
       "",
@@ -105,17 +95,11 @@ const File = ({
     if (hccFileDetails?.data?.response && patientDetailsResult?.data?.response?.fileDetailDTO) {
       setSelectFileURL(hccFileDetails?.data?.response);
     }
-    if (radiologyFileDetails?.result?.response) {
-      setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
-    }
-    if (labFileDetails?.result?.response) {
-      setLabReportFile(labFileDetails?.result?.response);
-    }
-  }, [hccFileDetails, radiologyFileDetails, labFileDetails]);
+  
+   
+  }, [hccFileDetails, ]);
 
-  useEffect(() => {
-    getFileDosPageNumber();
-  }, [fileDosPageNumberList]);
+ 
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
     data.dos = patientDetailsResult?.result?.response?.dos;
@@ -166,33 +150,7 @@ const File = ({
     }
   };
 
-  const getFileDosPageNumber = async () => {
-    var result = fileDosPageNumberList?.result;
-    var groupPageNumber = [];
-    var groupEncounterDate = [];
-    for (var key in result?.response) {
-      var optionArray = [];
-      var optionPage = [];
-      var pageNumbervalue = result.response[key];
-      for (var key2 in pageNumbervalue) {
-        var startPage = key2 == "first" ? pageNumbervalue[key2] : null;
-        var keyValue = key2 == "first" ? "Start - " : "End - ";
-        optionArray.push({
-          label: keyValue + " " + pageNumbervalue[key2],
-          value: pageNumbervalue[key2] + "," + moment(key).format("MM/DD"),
-        });
-        if (startPage) {
-          optionPage.push({
-            pageNumber: startPage,
-          });
-        }
-      }
-      groupPageNumber.push({
-        label: moment(key).format("MM-DD-YYYY"),
-        options: optionArray,
-      });
-    }
-  };
+  
 
 
   return (

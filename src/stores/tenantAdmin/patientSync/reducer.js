@@ -4,6 +4,7 @@ import {
   batchUpload,
   getAllBatches,
   getBatchInfo,
+  activeTab
   
 } from "./actions";
 
@@ -50,6 +51,7 @@ const patientSyncReducer = combineReducers({
   allBatches: createReducer(getAllBatches),
   getBatch:createReducer(getBatchInfo),
   batchUpload: createReducer(batchUpload),
+ 
 
   // loaders
   getBatchLoader:getReportLoading(getBatchInfo),

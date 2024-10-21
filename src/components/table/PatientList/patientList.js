@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import moment from "moment";
 import TableStyle from "../table.module.css";
 import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { getPriorityChange } from "../../../store/actions/PatientsActions";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import {
@@ -13,7 +11,8 @@ import {
   renderUserPrfoileAvatar,
 } from "../../headerFilters/functions";
 import { truncateString } from "../../patientDetails/details/components/function/ReusableFunctions";
-import { setStorage } from "../../../utils/storages";
+import { actions as supervisorActions } from "../../../stores/supervisor/auditedQueue";
+import { connect } from "react-redux";
 
 function PatientTable({
   patinetListAll,
@@ -32,15 +31,23 @@ function PatientTable({
   userId,
   params,
   gotoPatientDetails,
+  getPriorityChange,
 }) {
-  const dispatch = useDispatch();
   const navigate = useRouter();
-  const handlePriorityChange = (patientId, selectedValue) => {
+  const handlePriorityChange = async (patientId, selectedValue) => {
     // setSelectedPriority((prev) => ({
     //   ...prev,
     //   id: patientId,
     //   value: selectedValue,
     // }));
+    const res = await getPriorityChange({
+      patientId: data?.patientId,
+      year: dayjs(data?.lastModifiedDate)?.format("YYYY"),
+      priority: selectedValue,
+    });
+    if (res.status === "SUCCESS") {
+      getFilteApi();
+    }
   };
 
   const handleTableRowClick = (e) => {
@@ -48,7 +55,7 @@ function PatientTable({
     if (targetTd) {
       const dataIndex = targetTd.parentElement.rowIndex - 1;
       const clickedData = patinetListAll[dataIndex];
-      gotoPatientDetails(clickedData);     
+      gotoPatientDetails(clickedData);
     }
   };
   const renderRows = () => {
@@ -61,10 +68,16 @@ function PatientTable({
             className={TableStyle.firstTdBorder}
             onClick={handleTableRowClick}
           >
-             <Tooltip title={data?.patientId}> {truncateString(data?.patientId, 20)}</Tooltip>
+            <Tooltip title={data?.patientId}>
+              {" "}
+              {truncateString(data?.patientId, 20)}
+            </Tooltip>
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-             <Tooltip title={data?.fileName}> {truncateString(data?.fileName, 20)}</Tooltip>
+            <Tooltip title={data?.fileName}>
+              {" "}
+              {truncateString(data?.fileName, 20)}
+            </Tooltip>
           </td>
           {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
             <td
@@ -126,16 +139,7 @@ function PatientTable({
               // disabled={!data?.priority ? true : false}
               onChange={(value) => {
                 handlePriorityChange(data?.patientId, value);
-                dispatch(
-                  getPriorityChange(
-                    data?.patientId,
-                    dayjs(data?.lastModifiedDate)?.format("YYYY"),
-                    value,
-                    getFilteApi
-                  )
-                );
               }}
-           
             />
           </td>
 
@@ -215,7 +219,7 @@ function PatientTable({
 
             <th className={TableStyle.rowStyle}> ALLOCATED BY</th>
             <th style={{ paddingLeft: "35px" }}>PRIORITY</th>
-            <th >STATUS</th>
+            <th>STATUS</th>
           </tr>
         </thead>
 
@@ -236,4 +240,7 @@ function PatientTable({
   );
 }
 
-export default PatientTable;
+const connector = connect((state) => ({}), {
+  supervisorActions: supervisorActions.getPriorityChange,
+});
+export default connector(PatientTable);

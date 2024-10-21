@@ -11,7 +11,6 @@ const CardComponent = ({
   selectedCardIndex,
   handleReceiverReport,
   setSelectedRows,
-  dispatch,
   selectedReport,
   setOpenEdit,
   styles,
@@ -21,7 +20,7 @@ const CardComponent = ({
   const handleDateFormat = (date) => {
     return dayjs(date).format("MM-DD-YYYY");
   };
-
+console.log(selectedReport,"selectedReport")
   return (
     <div>
       {data?.length > 0 ? (
@@ -127,7 +126,7 @@ const CardComponent = ({
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedRows(item);
-                      dispatch(selectedReport(item));
+                      selectedReport(item);
                       setOpenEdit(true);
                     }}
                   >

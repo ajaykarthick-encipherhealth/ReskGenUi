@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus ,faAngleDown,faAngleRight} from "@fortawesome/free-solid-svg-icons";
 import { Drawer, Modal, notification } from "antd";
@@ -41,16 +41,6 @@ const VisitData = ({
   currentDiseaseType,
   isDosSelected,
 }) => {
-  const dispatch = useDispatch();
-  const sectionColorList = useSelector(
-    (state) => state?.ReviewerReducers?.sectionColorList
-  );
-  const radiologyFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyFileDetails
-  );
-  const labFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.labFileDetails
-  );
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
   const [isModalOpenValidCodes, setIsModalOpenValidCodes] = useState(false);
@@ -107,8 +97,7 @@ const VisitData = ({
       setCaptureSectionMatching,
       setMeatCriteriaList,
       patientDetailsResult,
-      dispatch,
-      sectionColorList,
+      "",
       setAllDisList,
       "",
       "",

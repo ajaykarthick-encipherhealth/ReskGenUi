@@ -106,10 +106,13 @@
 @media screen and (max-width: 1404px) {
   .customModalPosition {
     top: 115px;
-    left: 50px; 
+    left: 50px;
     position: absolute;
     margin: 0;
   }
 }
-
-
+.customModal {
+  position: relative;
+  top: 15%;
+  right: 20%;
+}

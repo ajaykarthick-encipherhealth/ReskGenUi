@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Badge, Button } from "react-bootstrap";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import {
   faCircleUser,
   faUserCircle,
@@ -19,18 +19,13 @@ import styles from "./styles.module.css";
 import visitStyles from "../../../styles/visitdata.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
 import { SVGICON } from "../../../jsx/constant/theme";
-import {
-  getColors,
-  getComparisionData,
-} from "../../../services/physicianService/comparisionService";
 import SpinnerDots from "../../../components/spinner/index";
 import ClientResult from "./ClientResult";
 import CogentAIResult from "./CogentAIResult";
 import RafSummary from "./RafSummary";
 import ModalContent from "./ModalContent";
-import { getPatients } from "../../../store/actions/physicianAction/patientsActions";
 import { COLORS3 } from "../../../components/patientDetails/details/components/function/GetData";
-
+import { actions as comparisonActions } from "../../../stores/physician/comparison";
 
 export function removeDuplicates(array) {
   let output = [];
@@ -42,7 +37,11 @@ export function removeDuplicates(array) {
   return output;
 }
 
-export const getCaptureSectionBackground = (value, diagnosisCode,colorsData) => {
+export const getCaptureSectionBackground = (
+  value,
+  diagnosisCode,
+  colorsData
+) => {
   let dublicateCaptureDelete = removeDuplicates(value);
 
   return dublicateCaptureDelete.map((res) => {
@@ -118,10 +117,13 @@ export const getEncounterDateBackgroundHcc = (value, code) => {
     return sectionMapArr;
   });
 };
-const Hcc = () => {
-  const dispatch = useDispatch();
+const Hcc = ({
+  getPatients,
+  getComparisionData,
+  getColors,
+  comparisonData,
+}) => {
   const router = useRouter();
-  const comparisonData = useSelector((state) => state.physicianComparison.data);
   const [validHccList, setvalidHccList] = useState([]);
   const [validClienHccList, setvalidClienHccList] = useState([]);
   const [clientSuggestedHccList, setClientSuggestedHccList] = useState([]);
@@ -129,7 +131,6 @@ const Hcc = () => {
   const [fileUploadModal, setFileUploadModal] = useState(false);
   const [validated, setValidated] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState();
-
 
   const closeModal = () => {
     setFileUploadModal(false);
@@ -141,26 +142,21 @@ const Hcc = () => {
     setValidated(true);
   };
   const backToPatientData = () => {
-    dispatch(getPatients(null));
+    getPatients(null);
     router.back();
   };
   useEffect(() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const encodedParams = urlParams.get("id");
-   if(encodedParams){
-
-     setSelectedPatient(JSON.parse(atob(encodedParams))?.id);
-   }
-    if (selectedPatient) {
-      dispatch(
-        getComparisionData(
-          "ID-001",
-          selectedPatient
-        )
-      );
+    if (encodedParams) {
+      setSelectedPatient(JSON.parse(atob(encodedParams))?.id);
     }
-    dispatch(getColors());
+    if (selectedPatient) {
+      getComparisionData({ physicianId: "ID-001", patientId: selectedPatient });
+    }
+    getColors();
+    getPatients()
   }, [selectedPatient]);
 
   const clientYear = comparisonData?.data
@@ -302,7 +298,7 @@ const Hcc = () => {
                         <div className="col-xl-2 col-sm-12">
                           <FontAwesomeIcon icon={faVenusMars} />
                           <label>Gender</label>
-                          <h6 className="ageDtails" >
+                          <h6 className="ageDtails">
                             {comparisonData?.data?.clientResult?.gender}
                           </h6>
                         </div>
@@ -320,7 +316,7 @@ const Hcc = () => {
                         <button
                           onClick={() => {
                             setFileUploadModal(true);
-                            dispatch(getPatients());
+                            getPatients();
                           }}
                           className={`${styles.addFileBtn}`}
                         >
@@ -339,12 +335,15 @@ const Hcc = () => {
                 </div>
                 <div className="col-xl-6">
                   <div className="row">
-                    {comparisonData?.loading || !comparisonData? (
+                    {comparisonData?.loading || !comparisonData ? (
                       <SpinnerDots />
                     ) : (
                       <>
                         {" "}
-                        <div className="col-xl-6" style={{overflow:"hidden"}}>
+                        <div
+                          className="col-xl-6"
+                          style={{ overflow: "hidden" }}
+                        >
                           <div className={styles.headerTitle}>
                             <div className="d-flex">
                               <h6 className={styles.headerName2}>
@@ -393,7 +392,7 @@ const Hcc = () => {
                           </div>
                         </div>
                       </>
-                    )}
+                   )} 
                   </div>
                 </div>
                 <div className="col-xl-6">
@@ -417,4 +416,15 @@ const Hcc = () => {
   );
 };
 
-export default Hcc;
+const enhancer = connect(
+  (state) => ({
+    comparisonData: state.physician.comparison.patientList,
+  }),
+  {
+    getPatients: comparisonActions.getPatientAction,
+    getComparisionData: comparisonActions.getAllPatientListAction,
+    getColors: comparisonActions.getColorAction,
+  
+  }
+);
+export default enhancer(Hcc);

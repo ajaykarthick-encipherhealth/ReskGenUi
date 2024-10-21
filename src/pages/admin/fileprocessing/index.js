@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect, useSelector } from "react-redux";
+import { connect} from "react-redux";
 import { useRouter } from "next/navigation";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { notification } from "antd";
@@ -40,7 +40,7 @@ function Patient({ patientDetails, getPatients, getUsersList,getUploadFile,getAd
 
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-  const sideMenu = useSelector((state) => state.sideMenu);
+  
   const navigate = useRouter();
   useEffect(() => {
     let tenId = getStorage("tenantId");
@@ -317,7 +317,7 @@ function Patient({ patientDetails, getPatients, getUsersList,getUploadFile,getAd
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">

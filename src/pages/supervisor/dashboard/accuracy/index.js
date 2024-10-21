@@ -48,7 +48,7 @@ export const monthNames = [
   "DEC",
 ];
 
-const Accuracy = ({ accuracyDatas ,getAccuracyScore,getUserByIndividual,individualDetails}) => {
+const Accuracy = ({ accuracyDatas ,getAccuracyScore,getUserByIndividual,individualDetails,accuracyLoading}) => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const [initialAccuracyData, setInitialAccuracyData] = useState(null);
@@ -63,12 +63,6 @@ const Accuracy = ({ accuracyDatas ,getAccuracyScore,getUserByIndividual,individu
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
   const [optionsUser, setOptionUser] = useState([]);
-
-  // const accuracyDatas = useSelector((state) => state?.l2Dashboard?.accuracy);
-  // const individualDetails = useSelector(
-  //   (state) => state?.l2Dashboard?.individualUser
-  // );
-  // console.log(accuracyDatass, "accuracyDatas");
   const userOption = () => {
     const res = individualDetails?.data?.response.map((item) => {
       return {
@@ -405,7 +399,7 @@ const Accuracy = ({ accuracyDatas ,getAccuracyScore,getUserByIndividual,individu
           </div>
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
-              {accuracyDatas?.loading ? (
+              {accuracyLoading ? (
                 <Skeleton
                   active
                   paragraph={{ rows: 4 }}
@@ -428,7 +422,7 @@ const Accuracy = ({ accuracyDatas ,getAccuracyScore,getUserByIndividual,individu
                 </div>
               )}
             </div>
-            {accuracyDatas?.loading ? (
+            {accuracyLoading? (
               <div className={styles.accuracy}>
                 {renderCardSkeleton(130, 250)}
               </div>

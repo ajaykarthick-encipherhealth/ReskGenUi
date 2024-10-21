@@ -395,3 +395,13 @@ export async function fhirList() {
   const data = await requestPortal(`controlzen/fhir/v1/getconnectiondetails`, options);
   return data;
 }
+
+
+export async function fhirServices() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`emr/fhir/emr`, options);
+  return data;
+}
+

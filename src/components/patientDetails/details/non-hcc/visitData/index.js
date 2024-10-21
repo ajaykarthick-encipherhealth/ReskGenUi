@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch,connect } from "react-redux";
+import { connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../../hcc/styles.module.css";
 import PdfViewer from "../../PdfViewerComponent";
@@ -15,17 +15,7 @@ const VisitData = ({
   patientDetailsResult,
   hccFileDetails
 }) => {
-  const dispatch = useDispatch();
-  const sectionColorList = useSelector(
-    (state) => state?.ReviewerReducers?.sectionColorList
-  );
-  const radiologyFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyFileDetails
-  );
-  const labFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.labFileDetails
-  );
-  const [isFileFormShow, setIsFileFormShow] = useState(false);
+   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
   const [isModalOpenValidCodes, setIsModalOpenValidCodes] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
@@ -77,8 +67,8 @@ const VisitData = ({
       setCaptureSectionMatching,
       "",
       patientDetailsResult,
-      dispatch,
-      sectionColorList,
+      "",
+      "",
       "",
       "",
       "",
@@ -90,13 +80,8 @@ const VisitData = ({
     if (hccFileDetails?.data?.response) {
       setSelectFileURL(hccFileDetails?.data?.response);
     }
-    if (radiologyFileDetails?.result?.response) {
-      setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
-    }
-    if (labFileDetails?.result?.response) {
-      setLabReportFile(labFileDetails?.result?.response);
-    }
-  }, [hccFileDetails, radiologyFileDetails, labFileDetails]);
+   
+  }, [hccFileDetails,]);
 
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;

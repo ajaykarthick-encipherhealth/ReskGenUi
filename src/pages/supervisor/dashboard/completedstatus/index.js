@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as echarts from "echarts";
 import ReactECharts from "echarts-for-react";
 import { useRouter } from "next/router";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import styles from "./styles.module.css";
 import { Empty, Skeleton, Spin } from "antd";
 import { Buttons } from "../../../reviewer/workingstatus";
@@ -12,13 +12,10 @@ import HeadTitle from "../../../../components/headtitle";
 import Legends from "../../../../components/legends";
 import { monthNames, getDays } from "../accuracy";
 import YearPicker from "../../../../components/yearpicker";
-import { getCOmpletedScore } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { actions as dashboardAction } from '../../../../stores/supervisor/dashboard'
-const CompletedStatus = ({completedDatas,getCOmpletedScore}) => {
-  const dispatch = useDispatch();
+const CompletedStatus = ({completedDatas,getCOmpletedScore,completedChartLoading}) => {
   const router = useRouter();
-  // const completedDatas = useSelector((state) => state?.workFlow?.completed);
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -189,7 +186,7 @@ const CompletedStatus = ({completedDatas,getCOmpletedScore}) => {
             </div>
           </div>
 
-          {completedDatas?.loading ? (
+          {completedChartLoading ? (
             <div className={spinSTYles.spinStyle}>
                 <Skeleton
                 active
@@ -222,7 +219,6 @@ const CompletedStatus = ({completedDatas,getCOmpletedScore}) => {
 const enhancer = connect(
   (state) => ({
     completedDatas: state.supervisor.dashboard.completedChart,
-    xdcfv:console.log(state,"state"),
     completedChartLoading: state.supervisor.dashboard.completedChartLoading,
   }),
   {

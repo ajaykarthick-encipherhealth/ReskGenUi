@@ -8,10 +8,8 @@ import { Col, Row, Skeleton, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
-import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
-import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { connect } from "react-redux";
 import { actions as supervisorAction } from "../../../../stores/supervisor/dashboard";
@@ -21,10 +19,6 @@ const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData, dailyt
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
   const [responseArray, setReponseArray] = useState([]);
-
-  const dailyStatusData = useSelector((state) => state?.l2Dashboard?.dailyTask);
-
-  console.log(dailyStatusDatas, "dailyStatusData");
   const bullets = [
     {
       color: "#64B4BE",

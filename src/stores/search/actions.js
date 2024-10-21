@@ -35,3 +35,8 @@ export const getSuggestedCodes = createActionThunk(
   "GET_SUGGESTED_CODES",
   network.getSuggested
 );
+
+export const currentUserAction = createActionThunk(
+  "GET_CURRENT_USER",
+  network.getCurrentUser
+);

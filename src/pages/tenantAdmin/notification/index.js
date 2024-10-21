@@ -5,13 +5,10 @@ import { Button, Spinner } from "react-bootstrap";
 import Header from "../../../jsx/layouts/nav/Header";
 import styles from "./style.module.css";
 import SendList from "./sendList/index";
-import {
-  getNotificationList,
-  postNotification,
-} from "../../../services/NotificationService";
-import { SelectUserList } from "../../../services/adminServices/DashboardService";
 import { actions as tenantAdminActions } from "../../../stores/tenantAdmin/notification";
-import { actions as adminActions } from "../../../stores/admin/users";
+import { actions as AdminAction } from "../../../stores/admin/users";
+import { actions as notificationAction } from "../../../stores/admin/notifications";
+import { actions as allActions } from "../../../stores/admin/dashboard";
 const { Option } = Select;
 
 export const debounce = (func, delay) => {
@@ -23,7 +20,14 @@ export const debounce = (func, delay) => {
   };
 };
 
-const Notification = ({ getAllCustomUsers, allCustomUsers, getUsers }) => {
+const Notification = ({
+  getAllCustomUsers,
+  allCustomUsers,
+  getUsers,
+  getNotificationList,
+  postNotification,
+  SelectUserList,
+}) => {
   const options = allCustomUsers?.data?.response?.map((data) => ({
     label: data?.firstName + " " + data?.lastName,
     value: data?.userName,
@@ -210,7 +214,7 @@ const Notification = ({ getAllCustomUsers, allCustomUsers, getUsers }) => {
   };
 
   const getTeamUser = async () => {
-    let result = await SelectUserList("SUPERVISOR");
+    let result = await SelectUserList({role:"SUPERVISOR"});
     const options = result?.response?.map((data) => ({
       label: data?.firstName + "" + data?.lastName,
       value: data?.userName,
@@ -379,7 +383,10 @@ const enhancer = connect(
   }),
   {
     getAllCustomUsers: tenantAdminActions.getCustomUsersAction,
-    getUsers: adminActions.getAllUsersAction,
+    getUsers: AdminAction.getAllUsersAction,
+    getNotificationList: notificationAction.getNotificationList,
+    postNotification: notificationAction.getPostNotificationList,
+    SelectUserList: allActions.getSelectUserList,
   }
 );
 export default enhancer(Notification);

@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { useSelector, useDispatch, connect } from "react-redux";
+import {connect } from "react-redux";
 import { notification, Tag, Modal } from "antd";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import styles from "../styles.module.css";
-import { manuallyAddComboCode } from "../../../../../services/PatientsListSevice";
 import CamboTree from "../org";
 import PdfViewer from "../../PdfViewerComponent";
 import { getPatientDetails } from "../../components/function/GetData";
@@ -27,11 +25,9 @@ const Combo = ({
   setActiveTabHead,
   setActiveMeatTitle,
   year,
+  manuallyAddComboCode
 }) => {
-  const dispatch = useDispatch();
-  const sectionColorList = useSelector(
-    (state) => state?.ReviewerReducers?.sectionColorList
-  );
+
   const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] =
     useState(false);
   const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
@@ -121,8 +117,7 @@ const Combo = ({
       setCaptureSectionMatching,
       setMeatCriteriaList,
       patientDetailsResult,
-      dispatch,
-      sectionColorList,
+      null,
       setAllDisList,
       setComboDiseaseCodesList,
       "",
@@ -673,6 +668,7 @@ const enhancer = connect(
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
+    manuallyAddComboCode:detailsActions.getManuallyAddComboCode
   }
 );
 export default enhancer(Combo);

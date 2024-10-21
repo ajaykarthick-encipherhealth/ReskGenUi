@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { notification } from "antd";
 import PatientList from "./list";
 import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
-import { getUsers } from "../../../store/actions/adminAction/usersAction";
-import { Paginator } from "primereact/paginator";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputText } from "primereact/inputtext";
+import {actions as allActions} from '../../../stores/admin/users'
 
 const options3 = [
   { value: "ALL", label: "ALL" },
@@ -33,10 +31,9 @@ const intialValues = {
   mobileNumber: "",
   confirmPassword: "",
 };
-const UserList = () => {
-  const dispatch = useDispatch();
-  const usersData = useSelector((state) => state.adminUsers.usersData);
-  const sideMenu = useSelector((state) => state.sideMenu);
+const UserList = ({getUsers,usersData}) => {
+
+  
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
   const [totalElements, setTotalElements] = useState(10);
@@ -65,7 +62,7 @@ const UserList = () => {
   }, [usersData]);
 
   useEffect(() => {
-    dispatch(
+    
       getUsers({
         pageCount: clear ? "" : pageCount,
         search: clear ? "" : search,
@@ -75,11 +72,11 @@ const UserList = () => {
         role: clear ? "" : role?.value,
         sort: clear ? "" : sort,
       })
-    );
+  
   }, [pageCount, search, startDate, endDate, status, role, sort, useAdd]);
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">
@@ -246,4 +243,14 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+
+const enhancer = connect(
+  (state) => ({
+    organizationList: state?.tenantAdmin?.users?.allOrganization?.data,
+     usersData: state.admin?.users?.allUsers,
+  }),
+  {
+    getUsers:allActions.getAllUsersAction
+  }
+);
+export default enhancer(UserList);

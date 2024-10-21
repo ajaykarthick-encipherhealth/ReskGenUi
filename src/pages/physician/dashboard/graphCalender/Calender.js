@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useSelector, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import styles from "./styles.module.css";
-import { CalenderData } from "../../../../services/physicianService/DashbaordServices";
 import Card from "../../../../components/card";
 import calenderIcon from "../../../../images/physician/calender.svg";
+import { actions as comparisonActions } from "../../../../stores/physician/comparison";
 
 const daysInaWeek = ["S", "M", "T", "W", "T", "F", "S"];
-const Calender = () => {
-  const dispatch = useDispatch();
+const Calender = ({ CalenderData,calInfo }) => {
   const dateFormat = "MMM YYYY";
   const initialSelectedDate = dayjs().format(dateFormat);
-  const calInfo = useSelector(
-    (state) => state?.physicianDashbaord?.calenderData
-  );
   const [selectedDate, setSelectedDate] = useState(initialSelectedDate);
   const [days, setDays] = useState();
   const [hoveredIndex, setHoveredIndex] = useState();
@@ -72,13 +68,11 @@ const Calender = () => {
     const dateObj = new Date(selectedDate);
     const monthName = dateObj.toLocaleString("en-US", { month: "long" });
 
-    dispatch(
-      CalenderData(
-        "ID-001",
-        monthName?.toUpperCase(),
-        dayjs(selectedDate).format("YYYY")
-      )
-    );
+    CalenderData({
+      physicianId: "ID-001",
+      month: monthName?.toUpperCase(),
+      year: dayjs(selectedDate).format("YYYY"),
+    });
   }, [selectedDate]);
 
   return (
@@ -201,4 +195,12 @@ const Calender = () => {
   );
 };
 
-export default Calender;
+const enhancer = connect(
+  (state) => ({
+    calInfo: state.physician.comparison.getCalendarData,
+  }),
+  {
+    CalenderData: comparisonActions.calendarAction,
+  }
+);
+export default enhancer(Calender);

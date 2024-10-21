@@ -285,7 +285,7 @@ export const ProviderMenuList = [
     iconStyle: <FileTextOutlined />,
     activeIcon: <FileTextFilled />,
     to: "/tenantAdmin/report",
-    childRoute: "/tenantAdmin/report",
+    childRoute: "/tenantAdmin/report/individualreport",
   },
   {
     title: "Tracking",

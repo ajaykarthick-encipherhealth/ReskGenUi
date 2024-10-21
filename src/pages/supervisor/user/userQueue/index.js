@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { Paginator } from "primereact/paginator";
@@ -11,15 +11,16 @@ import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png"
 import { extractLatestData } from "../../auditing";
 import {
   generateOptionsList,
+  generateOptionsListSupervisor,
   renderUserPrfoile,
   renderUserPrfoileAvatar,
 } from "../../../../components/headerFilters/functions";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import dayjs from "dayjs";
 import userStyles from "./styles.module.css";
-import { getFilters } from "../../../../stores/authflow/actions";
 import UserQueueTable from "../../table/userqueue";
 import { actions as allActions } from "../../../../stores/supervisor/users";
+import { actions as allActions2 } from "../../../../stores/supervisor/auditedQueue";
 import { renderSkeleton } from "../../../../components/reuseableFunctions";
 import UserFilters from "../filters/usersFilters";
 
@@ -78,10 +79,10 @@ const Index = ({
   currentUser,
   usersData,
   loader,
+  filteredList,
+  getFilters
 }) => {
   const router = useRouter();
-  const sideMenu = useSelector((state) => state?.sideMenu);
-  const filteredList = useSelector((state) => state?.filters?.auditAllocatedBy);
   const [processSort, setProcessSort] = useState(
     router.query?.processSort ? router.query?.processSort : "DESC"
   );
@@ -186,7 +187,6 @@ const Index = ({
       : "",
   ]);
 
-  const dispatch = useDispatch();
   const [sort, setSort] = useState({
     sortDir: router?.query?.sortDirection
       ? router?.query?.sortDirection
@@ -359,11 +359,11 @@ const Index = ({
   };
 
   useEffect(() => {
-    dispatch(getFilters("auditAllocatedBy", userName));
+    getFilters({field:"auditAllocatedBy",userName:userName});
   }, [userName]);
 
   return (
-    <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+    <div className={`show `}>
       <Header />
 
       <div class="content-body">
@@ -393,7 +393,7 @@ const Index = ({
                   currentUser?.data?.response?.profileImageUrl,
                   "header"
                 )}
-                <span>
+                <span className="mt-1">
                   {currentUser?.data?.response?.firstName}{" "}
                   {currentUser?.data?.response?.lastName}
                 </span>
@@ -438,7 +438,7 @@ const Index = ({
                       // allocated by
                       isAuditAllocatedBy={true}
                       audiallocatedBylabel="Audit AllocatedBy"
-                      auditallocatedByOptions={generateOptionsList(
+                      auditallocatedByOptions={generateOptionsListSupervisor(
                         filteredList
                       )}
                       audisetSelAllocatedBy={setSelAuditAllocatedBy}
@@ -584,10 +584,13 @@ const connector = connect(
     currentUser: state.supervisor.users?.currentUser,
     usersData: state.supervisor.users?.getIndividualUsersList,
     loader: state.supervisor.users?.individualUserLoading,
+    filteredList:state.supervisor?.audited?.filterUsers,
   }),
   {
     getIndividualUser: allActions.getIndividualUsers,
     getCurrentUserDetails: allActions.getCurrentUserInfo,
+    getFilters: allActions2.getFilterUsers,
+
   }
 );
 export default connector(Index);

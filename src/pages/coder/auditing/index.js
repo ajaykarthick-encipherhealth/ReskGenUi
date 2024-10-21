@@ -7,7 +7,6 @@ import { SVGICON } from "../../../jsx/constant/theme";
 import LoadingSpinner from "../../../jsx/components/spinner/spinner";
 import NavBar from "../../../jsx/layouts/nav";
 import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -39,8 +38,7 @@ import { Calendar } from "primereact/calendar";
 import { getStorage, setStorage } from "../../../utils/storages";
 import {actions as allActions } from '../../../stores/admin/workqueue'
 function Patient({ getUsersList }) {
-  const sideMenu = useSelector((state) => state.sideMenu);
-  const patientStoreDetails = useSelector((state) => state);
+  
   const controller = new AbortController();
   const signal = controller.signal;
 
@@ -617,11 +615,7 @@ function Patient({ getUsersList }) {
   };
 
   const gotoPatientDetails = (data) => {
-    // dispatch(patientDetails(data));
-    // if (data.computing == 2) {
-    //   const controller = new AbortController()
-    //   const { signal } = controller
-    //   controller.abort()
+  
     setStorage("patientId", data.patientId);
     navigate.push("/coder/auditing/user");
     // } else {
@@ -647,7 +641,7 @@ function Patient({ getUsersList }) {
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           {isLoading ? (

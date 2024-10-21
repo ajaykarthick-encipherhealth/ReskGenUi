@@ -6,3 +6,7 @@ const index = () => {
 
 export default index;
 
+export const getActiveTab = (val) => ({
+  type: ACTIVETAB,
+  payload: val,
+});

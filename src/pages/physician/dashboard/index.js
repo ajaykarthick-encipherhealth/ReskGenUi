@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import styles from "./styles.module.css";
-import { DashbaoudContent } from "../../../services/physicianService/DashbaordServices";
 import patients from "../../../images/physician/patients.svg";
 import completed from "../../../images/physician/completed.svg";
 import upcoming from "../../../images/physician/upcoming.svg";
@@ -17,6 +16,7 @@ import cont6 from "../../../images/physician/cont6.svg";
 import GraphCalender from "./graphCalender/Index";
 import TopCards from "./topcards/Index";
 import DataCards from "./dataCards/DataCards";
+import { actions as physicianActions } from "../../../stores/physician/dashboard";
 
 export function formatCount(count) {
   if (count >= 1000) {
@@ -26,11 +26,9 @@ export function formatCount(count) {
 
   return count;
 }
-const Index = () => {
-  const dispatch = useDispatch();
-  const cardInfo = useSelector((state) => state?.physicianDashbaord?.data);
+const Index = ({ DashbaoudContent, cardInfo }) => {
   useEffect(() => {
-    dispatch(DashbaoudContent());
+    DashbaoudContent({physicianId:"ID-001"});
   }, []);
   const CardData = [
     {
@@ -139,4 +137,14 @@ const Index = () => {
   );
 };
 
-export default Index;
+const enhancer = connect(
+  (state) => ({
+    cardInfo: state.physician.dashboard.getPhysician,
+  
+  }),
+  {
+    DashbaoudContent: physicianActions.getPhysicianAction,
+  }
+);
+
+export default enhancer(Index);

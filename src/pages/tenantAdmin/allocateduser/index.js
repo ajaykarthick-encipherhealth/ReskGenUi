@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, connect } from "react-redux";
+import {  connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { Button, DatePicker, Empty, Input, Select, Space, Tooltip } from "antd";
@@ -36,7 +36,6 @@ import { getResponePopup } from "../../../utils/reusable";
 
 const { RangePicker } = DatePicker;
 const statusOption = [
-  { value: "", label: "All" },
   { value: "URGENT", label: "Urgent" },
   { value: "HIGH", label: "High" },
   { value: "NORMAL", label: "Normal" },
@@ -80,7 +79,7 @@ const Patient = ({
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [tableLoading, setTableLoading] = useState(true);
-  const sideMenu = useSelector((state) => state.sideMenu);
+  
   const [activeTab, setActiveTab] = useState(1);
   const [isPatientList, setIsPatientList] = useState(false);
   const [l2selectUser, setL2selectUser] = useState(null);
@@ -563,7 +562,7 @@ const Patient = ({
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">
@@ -643,7 +642,7 @@ const Patient = ({
                                     setPageNo={setPageNo}
                                   /> */}
                                 <label>Select Organization</label>
-                                <div class="form-group has-search custom-react-select">
+                                <div class="form-group has-search custom-react-select-admin">
                                   <Select
                                     options={orgAllList}
                                     style={{ width: "100%", height: "42px" }}
@@ -696,7 +695,7 @@ const Patient = ({
                                     selectDefaultValue={selectedOption}
                                   /> */}
                                   <label>Select Priority</label>
-                                  <div class="form-group has-search custom-react-select">
+                                  <div class="form-group has-search custom-react-select-admin">
                                     <Select
                                       options={statusOption}
                                       style={{ width: "100%", height: "42px" }}

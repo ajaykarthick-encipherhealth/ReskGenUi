@@ -3,7 +3,6 @@ import axios from "axios";
 import axiosConfig from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { getResponePopup } from "../../../utils/reusable";
-import exp from "constants";
 import { getStorage, setStorage } from "../../../utils/storages";
 
 export const ENABLEMFA = "ENABLEMFA";
@@ -445,16 +444,6 @@ export const updateImage = (url) => async (dispatch) => {
           },
         }
       );
-
-      // if (response?.data) {
-      //   dispatch(getCurrentUser(userId));
-      //   dispatch({
-      //     type: PROFILE_URL,
-      //     payload: {
-      //       loading: false,
-      //     },
-      //   });
-      // }
       return response;
     } catch (error) {
       console.log("error", error);

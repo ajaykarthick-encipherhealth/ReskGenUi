@@ -149,3 +149,14 @@ export const enableUser = async ({
     }
   }
 };
+
+export const patientDetails = async (patientId, chartId) => {
+  const options = {
+    method: "GET",
+  };
+  const response = await requestPortal(
+    `dbservice/file-process/finished/stage?patientId=${patientId}&processStageIdChart=${chartId}`,
+    options
+  );
+  return response;
+};

@@ -14,7 +14,6 @@ import { useRouter } from "next/router";
 import refreshIcon from "../../../../images/fihr/refresh.png";
 
 function FIHRPatinetTable({
-  reportListAll,
   paginationFirst,
   onPageChange,
   tableData,
@@ -63,7 +62,7 @@ function FIHRPatinetTable({
 
   return (
     <div className={TableStyle.classContaineer}>
-      {reportListAll?.data?.length === 0 ? (
+      {tableData?.length === 0 ? (
         <Empty />
       ) : (
         <table className={TableStyle.classTable}>

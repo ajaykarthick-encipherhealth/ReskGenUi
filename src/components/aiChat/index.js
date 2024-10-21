@@ -1,21 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import Image from "next/image";
 import Form from "react-bootstrap/Form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
-import { getChatReply } from "../../store/actions/DashboardActions";
-import { renderUserPrfoile } from "../headerFilters/functions";
 import styles from "./styles.module.css";
 import { IMAGES } from "../../jsx/constant/theme";
 import { faComments, faCopy } from "@fortawesome/free-regular-svg-icons"; // Import the desired icon
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"; // Import the close icon if needed
 import chatAssistant from "../../images/chat/chatAssistant.svg";
 import { handleCopyToClipboard } from "../commonFunctions";
-const AICHAT = ({ openMsg, offMsg }) => {
-  const dispatch = useDispatch();
-  const msgReply = useSelector((state) => state?.auth?.chatReply);
-  const currentUserInfo = useSelector((state) => state?.auth?.userInfo);
+import {actions as allActions} from '../../stores/chatService'
+import { connect } from "react-redux";
+const AICHAT = ({ openMsg, getChatReply,msgReply }) => {
   const [activeChat, setActiveChat] = useState(false);
   const [inputValue, setInputValue] = useState({
     question: "",
@@ -35,7 +31,7 @@ const AICHAT = ({ openMsg, offMsg }) => {
     event.preventDefault();
 
     if (form.checkValidity() === true) {
-      dispatch(getChatReply(inputValue.question));
+      getChatReply(inputValue.question);
       inputValue.question = "";
       setValidated(false);
     } else {
@@ -229,5 +225,10 @@ const AICHAT = ({ openMsg, offMsg }) => {
     </>
   );
 };
+const connector=connect((state)=>({
+  msgReply:state.chartService?.chatReply
+}),{
+  getChatReply:allActions.getChatReply
+})
 
-export default AICHAT;
+export default connector(AICHAT);

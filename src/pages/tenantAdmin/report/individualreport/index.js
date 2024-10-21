@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import csvToJson from "csvtojson";
 import * as XLSX from "xlsx";
 import dayjs from "dayjs";
-import { Button } from "antd";
+import { Button, Empty, Input } from "antd";
 import Image from "next/image";
-import { InputText } from "primereact/inputtext";
-import {
-  getReceivedDetails,
-  getSelectedReportDetails,
-  selectedReport,
-  getSentDetails,
-} from "../../../../store/actions/ReportActions";
 import ExcelDisplay from "../../../../components/table/receivedReport/ExcelDisplay";
 import CSVDisplay from "../../../../components/table/receivedReport/CSVDisplay";
 import styles from "../../../../components/table/receivedReport/receivedReport.module.css";
-import reportStyles from "../../../reviewer/report/report.module.css";
-import search from "../../../../images/report/search.svg";
 import sortImg from "../../../../images/report/sort.svg";
 import id from "../../../../images/report/id.svg";
 import file from "../../../../images/report/file.svg";
@@ -25,40 +15,44 @@ import send from "../../../../images/report/send.svg";
 import download from "../../../../images/report/download.svg";
 import Header from "../../../../jsx/layouts/nav/Header";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
-import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { useRouter } from "next/router";
-import { getReportActiveTab } from "../../../../store/actions/adminAction/ReportActions";
 import { getStorage } from "../../../../utils/storages";
 import { debounce } from "../../../../components/input";
+import { connect } from "react-redux";
+import { actions as allActions } from "../../../../stores/supervisor/report";
+import { getFileDetailsReport } from "../../../../stores/supervisor/report/network";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { actions as allReportActions } from "../../../.././stores/admin/report";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const IndividualReceiverReport = () => {
-  const dispatch = useDispatch();
+const IndividualReceiverReport = ({
+  getReceivedDetails,
+  getSentDetails,
+  sentReportDatas,
+  reportDatas,
+  uploadFile,
+  getSelectedReportDetails,
+  getActiveTab,
+}) => {
   const router = useRouter();
-  const url = useSelector((state) => state?.AuditReport?.uploadFile);
-  const reportDatas = useSelector(
-    (state) => state?.AuditReport?.receivedDetails
-  );
-  const sentReportDatas = useSelector(
-    (state) => state?.adminReport?.sentDetails
-  );
   const [tableData, setTableData] = useState([]);
   const [csvTableData, setCSVTableData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [reportInfo, setReportInfo] = useState();
+  const [reportInfo, setReportInfo] = useState(null);
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [receivedSort, setReceivedSort] = useState("DESC");
   const [currentRole, setCurrentRole] = useState();
   const [loading, setLoading] = useState(false);
   const [isSentReport, setIsSentReport] = useState(false);
   const [isAdminPage, setIsAdminPage] = useState(false);
-
+  const [fileResult, setFileResult] = useState(null);
   const [detailsContent, setDetailsContent] = useState();
 
   const fetchData = async (url) => {
     setLoading(true);
     try {
       const response = await fetch(url?.path);
-      if (url?.extention === "csv") {
+      if (fileResult?.extention === "csv") {
         const text = await response.text();
         const jsonArray = await csvToJson().fromString(text);
         setCSVTableData(jsonArray);
@@ -97,30 +91,17 @@ const IndividualReceiverReport = () => {
   const filterChange = (e) => {
     debouncedSearch(e.target.value);
   };
-  useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get("reportId");
-    const reportConfirm = new URLSearchParams(window.location.search).get(
-      "sentreport"
-    );
-    const isAdminPage = new URLSearchParams(window.location.search).get(
-      "isAdminPage"
-    );
-    setIsAdminPage(isAdminPage);
-    if (reportConfirm) {
-      setIsSentReport(true);
-      dispatch(getSentDetails(0, "", "", searchValue, sort));
-      dispatch(getSelectedReportDetails(id));
-    } else {
-      dispatch(getReceivedDetails(0, "", "", searchValue, sort));
-      dispatch(getSelectedReportDetails(id));
-    }
-    setCurrentRole(getStorage("userRole"));
-  }, [searchValue, sort, router]);
-  useEffect(() => {
-    if (url) {
-      fetchData(url);
-    }
-  }, [url]);
+
+  const getFetchPathUrl = async (url) => {
+    const fileId = url?.reportPath ? url?.reportPath : url;
+    var result = await getFileDetailsReport(fileId || "");
+    var data = {
+      extention: "xlsx",
+      path: result?.response,
+    };
+    setFileResult(data);
+    fetchData(data);
+  };
 
   useEffect(() => {
     if (reportDatas?.data || (sentReportDatas?.data && isSentReport)) {
@@ -143,6 +124,39 @@ const IndividualReceiverReport = () => {
     }
   }, [reportDatas, sentReportDatas, isSentReport]);
 
+  useEffect(() => {
+    if (router?.query?.reportId) {
+      const filter = detailsContent?.find(
+        (item) => item?._id == router?.query?.reportId
+      );
+      setReportInfo(filter);
+    }
+  }, [detailsContent, router]);
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("reportId");
+    const reportConfirm = new URLSearchParams(window.location.search).get(
+      "sentreport"
+    );
+    const isAdminPage = new URLSearchParams(window.location.search).get(
+      "isAdminPage"
+    );
+    setIsAdminPage(isAdminPage);
+    if (reportConfirm) {
+      setIsSentReport(true);
+      getSentDetails(0, "", "", searchValue, sort);
+      getSelectedReportDetails(id);
+    } else {
+      getReceivedDetails(0, "", "", searchValue, sort);
+      getSelectedReportDetails(id);
+    }
+    setCurrentRole(getStorage("userRole"));
+  }, [searchValue, sort, router]);
+  useEffect(() => {
+    if (reportInfo) {
+      getFetchPathUrl(reportInfo?._id);
+    }
+  }, [reportInfo]);
+
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
@@ -152,130 +166,117 @@ const IndividualReceiverReport = () => {
         style={{ margin: "30px 0px 50px 0px", height: "auto" }}
       >
         <div className={styles.cont1}>
-          <div>
-            <div className={styles.container}>
-              <div
-                className={"col-xl-1 d-flex"}
-                style={{ cursor: "pointer", marginLeft: "10px" }}
+          <div className={styles.container}>
+            <div className={`${styles.divContainer} individualReportSearch`}>
+              <button
+                // style={{ width: "40px", height: "30px" }}
+                // className={reportStyles.filterBtnArrow}
+                className="border-0 bg-white text-white"
+                onClick={() => {
+                  const page = new URLSearchParams(window.location.search).get(
+                    "page"
+                  );
+                  const limit = new URLSearchParams(window.location.search).get(
+                    "limit"
+                  );
+                  router?.push(
+                    `/supervisor/report?page=${page}&limit=${limit}`
+                  );
+                  setLoading(true);
+                  setIsSentReport(false);
+                  getActiveTab(isSentReport ? "Sent" : "Received");
+                }}
+                allowClear
               >
-                <button
-                  style={{ width: "40px", height: "30px" }}
-                  className={reportStyles.filterBtn}
-                  onClick={() => {
-                    const page = new URLSearchParams(
-                      window.location.search
-                    ).get("page");
-                    const limit = new URLSearchParams(
-                      window.location.search
-                    ).get("limit");
-                    router?.push(
-                      `/tenantAdmin/report?page=${page}&limit=${limit}`
-                    );
-
-                    dispatch(getActiveTab(isSentReport ? "Sent" : "Received"));
-                    dispatch(
-                      getReportActiveTab(isSentReport ? "Sent" : "Received")
-                    );
-                    setLoading(true);
-                    setIsSentReport(false);
-                  }}
-                >
-                  <Image src={leftArrow} />
-                </button>
-              </div>
-              <div className={styles.divContainer}>
-                <InputText
-                  type="text"
-                  onChange={(e) => filterChange(e)}
-                  placeholder="Search"
-                  className={styles.search}
-                  maxLength={25}
-                  onKeyDown={(e) => {
-                    // Prevent input of backslash ("\")
-                    if (e.key === "\\") {
-                      e.preventDefault();
-                    }
-                  }}
-                />
-                <Image src={search} alt="noimg" style={{ marginTop: "5px" }} />
-              </div>
-              <div className={styles.sort} onClick={sortTableByDate}>
-                <Image src={sortImg} alt="noimg" style={{ marginTop: "5px" }} />
-              </div>
+                <Image src={leftArrow} />
+              </button>
+              <Input
+                type="text"
+                onChange={(e) => filterChange(e)}
+                placeholder="Search"
+                className={`${styles.search}`}
+                maxLength={25}
+                onKeyDown={(e) => {
+                  // Prevent input of backslash ("\")
+                  if (e.key === "\\") {
+                    e.preventDefault();
+                  }
+                }}
+                style={{ height: "100%" }}
+                suffix={
+                  <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
+                }
+                allowClear={true}
+              />
+              {/* <Image src={search} alt="noimg" style={{ marginTop: "5px" }} /> */}
             </div>
 
-            {/* users */}
-            <div className={styles.list}>
-              {detailsContent?.length > 0 ? (
-                detailsContent?.map((item) => {
-                  const id=item?._id?item?._id:item?.reportId
-                  const reportId=reportInfo?._id? reportInfo?._id :reportInfo?.reportId
-                  return(
-                    <div
-                      key={id}
-                      onClick={() => {
-                        dispatch(selectedReport({ reportUser: item }));
-                        dispatch(
-                          getSelectedReportDetails(
-                           id,
-                            item
-                          )
-                        );
-                        setReportInfo(item);
-                      }}
-                    >
-                      <div className="d-flex cursor-pointer mb-2">
-                        <div className={styles.user}>
-                          <div
-                            style={{
-                              color:
-                              reportId===id
-                                  ? "#04306f"
-                                  : "black",
-                              fontWeight:
-                              reportId===id
-                                  ? "bold"
-                                  : "normal",
-                            }}
-                          >
-                            {item?.reportName}
-                          </div>
-  
-                          {item?.type && (
-                            <div
-                              style={{ margin: "5px 0 0 5px" }}
-                              className={
-                                item.type === "EXCEL"
-                                  ? styles.excelStyle
-                                  : styles.csvSTyle
-                              }
-                            >
-                              {item?.type}
-                            </div>
-                          )}
-                          {item?.role && (
-                            <div
-                              className={
-                                item.role.toLowerCase() === "download"
-                                  ? styles.download1
-                                  : styles.read
-                              }
-                            >
-                              {item?.role.toLowerCase()}
-                            </div>
-                          )}
+            <div className={styles.sort} onClick={sortTableByDate}>
+              <Image src={sortImg} alt="noimg" style={{ marginTop: "5px" }} />
+            </div>
+          </div>
+
+          {/* users */}
+          <div className={styles.list}>
+            {detailsContent?.length > 0 ? (
+              detailsContent?.map((item) => {
+                const id = item?._id ? item?._id : item?.reportId;
+                const reportId = reportInfo?._id
+                  ? reportInfo?._id
+                  : reportInfo?.reportId;
+                return (
+                  <div
+                    key={id}
+                    onClick={() => {
+                      setReportInfo(item);
+                    }}
+                  >
+                    <div className="d-flex mb-2" style={{ cursor: "pointer" }}>
+                      <div className={styles.user}>
+                        <div
+                          style={{
+                            color: reportId === id ? "#04306f" : "black",
+                            fontWeight: reportId === id ? "bold" : "normal",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {item?.reportName}
                         </div>
-                      </div>
-                      <div className={styles.date}>
-                        {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
+
+                        {item?.type && (
+                          <div
+                            style={{ margin: "5px 0 0 5px" }}
+                            className={
+                              item.type === "EXCEL"
+                                ? styles.excelStyle
+                                : styles.csvSTyle
+                            }
+                          >
+                            {item?.type}
+                          </div>
+                        )}
+                        {item?.role && (
+                          <div
+                            className={
+                              item.role.toLowerCase() === "download"
+                                ? styles.download1
+                                : styles.read
+                            }
+                          >
+                            {item?.role.toLowerCase()}
+                          </div>
+                        )}
                       </div>
                     </div>
-                  )
-                })
-              ) : (
-                <div>No data</div>
-              )}
-            </div>
+                    <div className={styles.date}>
+                      {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div>No data</div>
+            )}
           </div>
         </div>
         <div className={styles.tablediv}>
@@ -307,7 +308,7 @@ const IndividualReceiverReport = () => {
               {reportInfo?.role === "DOWNLOAD" ? (
                 <Button
                   onClick={() => {
-                    window.open(url?.path);
+                    window.open(fileResult?.path);
                   }}
                   className={styles.download}
                   disabled={
@@ -334,10 +335,12 @@ const IndividualReceiverReport = () => {
             <div className={styles.innerFlex}>
               <div
                 className={
-                  url?.extention === "csv" ? styles.csvSTyle : styles.excelStyle
+                  fileResult?.extention === "csv"
+                    ? styles.csvSTyle
+                    : styles.excelStyle
                 }
               >
-                {url?.extention === "xlsx" ? "Excel" : "CSV"}
+                {fileResult?.extention === "xlsx" ? "Excel" : "CSV"}
               </div>
             </div>
             <div
@@ -346,19 +349,19 @@ const IndividualReceiverReport = () => {
                 overflowX: "scroll",
               }}
             >
-              {url?.extention === "csv" && (
+              {fileResult?.extention === "csv" && (
                 <CSVDisplay
                   tableData={csvTableData}
-                  fileUrl={url?.path}
-                  extention={url?.extention}
+                  fileUrl={fileResult?.path}
+                  extention={fileResult?.extention}
                   loading={loading}
                 />
               )}
-              {url?.extention === "xlsx" && (
+              {fileResult?.extention === "xlsx" && (
                 <ExcelDisplay
                   tableData={tableData}
-                  fileUrl={url?.path}
-                  extention={url?.extention}
+                  fileUrl={fileResult?.path}
+                  extention={fileResult?.extention}
                   loading={loading}
                 />
               )}
@@ -370,4 +373,17 @@ const IndividualReceiverReport = () => {
   );
 };
 
-export default IndividualReceiverReport;
+const connector = connect(
+  (state) => ({
+    sentReportDatas: state.supervisor?.report?.sentReportDatas,
+    reportDatas: state.supervisor?.report?.reportDatas,
+    uploadFile: state.supervisor?.report?.uploadFile?.data?.response,
+  }),
+  {
+    getReceivedDetails: allActions.getReceivedDetails,
+    getSentDetails: allActions.getSentDetails,
+    getSelectedReportDetails: allActions.getSelectedReportDetails,
+    getActiveTab: allReportActions.activeTab,
+  }
+);
+export default connector(IndividualReceiverReport);

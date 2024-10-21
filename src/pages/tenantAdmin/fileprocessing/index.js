@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { notification } from "antd";
@@ -52,7 +51,7 @@ const Patient = ({
   const [pageSize, setPageSize] = useState(15);
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-  const sideMenu = useSelector((state) => state.sideMenu);
+  
   const navigate = useRouter();
   const [selectOrgList, setSelectedOrgList] = useState(null);
   const [orgAllList, setOrgAllList] = useState([]);
@@ -64,13 +63,13 @@ const Patient = ({
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    getAllList(uId, pageNo, pageSize);
-  }, []);
+    getAllList(uId, pageNo, pageSize,selectOrgList);
+  }, [selectOrgList]);
 
-  const getAllList = async (uId, pageNo, pageSize) => {
+  const getAllList = async (uId, pageNo, pageSize,selectOrgList) => {
     setTableLoading(true);
     // let resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
-    const response = await getUsersList({pageNo:pageNo, pageSize:pageSize});
+    const response = await getUsersList({pageNo:pageNo, pageSize:pageSize,selectOrgList:selectOrgList||""});
     if (response.data) {
       let resultMap = [];
       let result = response?.data?.response?.content;
@@ -172,7 +171,7 @@ const Patient = ({
       } else {
         setIsLoadingBtn(false);
       }
-      getAllList(localUserId, pageNo, pageSize);
+      getAllList(localUserId, pageNo, pageSize,selectOrgList);
     }
 
     setValidated(true);
@@ -284,7 +283,7 @@ const Patient = ({
     //   headers
     // );
     if (response?.status == 202) {
-      getAllList(localUserId, pageNo, pageSize);
+      getAllList(localUserId, pageNo, pageSize,selectOrgList);
 
       notification.success({
         message: "Patient File Upload Successfully!",
@@ -320,7 +319,7 @@ const Patient = ({
     //   headers
     // );
     if (response?.status == 202) {
-      getAllList(localUserId, pageNo, pageSize);
+      getAllList(localUserId, pageNo, pageSize,selectOrgList);
       setAddPatient(false);
       setIsLoadingBtn(false);
     } else {
@@ -349,7 +348,7 @@ const Patient = ({
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">

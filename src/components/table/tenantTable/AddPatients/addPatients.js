@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
 import { notification, Select as AntSelect, Empty, Tooltip, Popover, Badge } from "antd";
-import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import {
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../headerFilters/functions";
 import { getStorage, setStorage } from "../../../../utils/storages";
 import SvgFlag from "../../../patientDetails/details/components/svg/svg";
-
+import { actions as adminActions } from "../../../../stores/admin/users";
+import { actions as allActions } from "../../../../stores/admin/workqueue";
+import { connect } from "react-redux";
 function AddPatientListTable({
   patinetListAll,
   actionBodyTemplate,
@@ -24,14 +24,13 @@ function AddPatientListTable({
   page,
   sortCompleteOrder,
   setSortCompleteOrder,
+  selectedRoWDetails,
 }) {
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
-
-  const dispatch = useDispatch();
   const navigate = useRouter();
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails(data);
     if (data.computing === 2) {
       const controller = new AbortController();
       const { signal } = controller;
@@ -81,12 +80,10 @@ function AddPatientListTable({
           <tr
             key={index}
             onClick={() => {
-              dispatch(
-                selectedRoWDetails({
-                  patientId: data?.patientId,
-                  processStageId: data?.processStageId,
-                })
-              );
+              selectedRoWDetails({
+                patientId: data?.patientId,
+                processStageId: data?.processStageId,
+              });
             }}
           >
             <td
@@ -344,5 +341,8 @@ function AddPatientListTable({
     </div>
   );
 }
-
-export default AddPatientListTable;
+const connector = connect((state) => ({}), {
+  selectedRoWDetails: adminActions.selectedRoWDetails,
+  patientDetails: allActions.getPatientDetails,
+});
+export default connector(AddPatientListTable);

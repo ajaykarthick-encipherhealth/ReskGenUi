@@ -4,8 +4,7 @@ import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
-import { selectedReport } from "../../../store/actions/ReportActions";
+import { connect } from "react-redux";
 import SpinnerDots from "../../spinner";
 import { Empty } from "antd";
 import {
@@ -13,7 +12,7 @@ import {
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../headerFilters/functions";
-
+import {actions as allActions} from '../../../stores/admin/report'
 function ReceivedReport({
   details,
   onPageChange,
@@ -25,10 +24,10 @@ function ReceivedReport({
   setSortOrder,
   setSort,
   isPhysician,
+  selectedReport
 }) {
   const [detailsContent, setDetailsContent] = useState(details?.content);
 
-  const dispatch = useDispatch();
   useEffect(() => {
     setDetailsContent(details?.content);
   }, [details]);
@@ -41,7 +40,7 @@ function ReceivedReport({
       receivedStartDate: receivedStartDate,
       receivedEndDate: receivedEndDate,
     };
-    dispatch(selectedReport(info));
+    selectedReport(info);
     if (isPhysician) {
       router?.push(
         `/reviewer/report/individualreport?reportId=${info?.reportUser?.reportId}&page=${receivedPageNo}&limit=${paginationFirst}`
@@ -197,5 +196,7 @@ function ReceivedReport({
     </div>
   );
 }
-
-export default ReceivedReport;
+const connector=connect((state)=>({state}),{
+  selectedReport:allActions.selectedReport
+})
+export default connector(ReceivedReport);

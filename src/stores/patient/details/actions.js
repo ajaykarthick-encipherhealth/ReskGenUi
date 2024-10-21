@@ -164,5 +164,21 @@ export const getAddProviderAndDOSList = createActionThunk(
   network.manuallyAddDosAndProviderList
 );
 export const storeFileIdAction = createAction("STORE_FILE_ID");
-
+export const getPatientID = createAction("PATIENT_ID");
 export const stroeFileIdPreAction = createAction("STORE_FILE_ID_PRE");
+export const getSubmitMeatQuery = createActionThunk(
+  "SUBMIT_MEAT_QUERY",
+  network.submitMeatQuery
+);
+export const getUpdateMeatQuery = createActionThunk(
+  "UPDATE_MEAT_QUERY",
+  network.updateMeatQuery
+);
+export const getPatientListFilter = createActionThunk(
+  "PATIENT_LIST_FILTER",
+  network.patientListFilter
+);
+export const getManuallyAddComboCode = createActionThunk(
+  "MANUALLY_ADD_COMBO_CODE",
+  network.manuallyAddComboCode
+);

@@ -6,11 +6,11 @@ import {
   getEncounterDateBackgroundHcc,
   getCaptureSectionBackground,
 } from "../index";
-import { useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { reusableElipses } from "./ValidHcc";
 
 const SuggestedCode = ({ content, ProviderName }) => {
-  const colorsData = useSelector((state) => state.physicianComparison.colors);
+
   return (
     <>
       <ul className="timeline">
@@ -102,4 +102,10 @@ const SuggestedCode = ({ content, ProviderName }) => {
   );
 };
 
-export default SuggestedCode;
+const enhancer = connect(
+  (state) => ({
+    colorsData: state.physician.comparison.getAllColor,
+  }),
+  {}
+);
+export default enhancer(SuggestedCode);

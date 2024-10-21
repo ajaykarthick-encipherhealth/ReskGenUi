@@ -3,7 +3,6 @@ import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import LoadingSpinner from "../../../../jsx/components/spinner/spinner";
 import Header from "../../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,7 +23,6 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import moment from "moment";
-// import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Paginator } from "primereact/paginator";
 import { Calendar } from "primereact/calendar";
 import { getStorage, setStorage } from "../../../../utils/storages";
@@ -35,8 +33,8 @@ function Patient({
   getUploadFile,
   getUploadRadiologyFile,
 }) {
-  const sideMenu = useSelector((state) => state.sideMenu);
-  const patientStoreDetails = useSelector((state) => state);
+  
+
   const controller = new AbortController();
   const signal = controller.signal;
   const navigate = useRouter();
@@ -608,7 +606,6 @@ function Patient({
   };
 
   const gotoPatientDetails = (data) => {
-    // dispatch(patientDetails(data));
     // if (data.computing == 2) {
     //   const controller = new AbortController()
     //   const { signal } = controller
@@ -638,7 +635,7 @@ function Patient({
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           {isLoading ? (

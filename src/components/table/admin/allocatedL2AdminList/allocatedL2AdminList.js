@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import Image from "next/image";
 import {
   LoadingOutlined,
@@ -9,7 +9,6 @@ import {
 import moment from "moment";
 import TableStyle from "../../table.module.css";
 import { Select as AntSelect, Empty, Spin, Popover } from "antd";
-import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
 import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
@@ -20,7 +19,8 @@ import {
   renderUserPrfoileAvatar,
 } from "../../../headerFilters/functions";
 import { extractLatestData } from "../../../../pages/supervisor/auditing";
-
+import { actions as adminActions } from "../../../../stores/admin/users";
+import { actions as allActions } from "../../../../stores/admin/workqueue";
 function AllocatedL2AdminList({
   patinetListAll,
   selectAllChecked,
@@ -35,8 +35,8 @@ function AllocatedL2AdminList({
   sortDueOrder,
   setSortCompleteOrder,
   sortCompleteOrder,
+  selectedRoWDetails,
 }) {
-  const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
 
   const handleRowCheckboxChange = (row) => {
@@ -143,12 +143,10 @@ function AllocatedL2AdminList({
         style={{ height: "35px" }}
         key={index}
         onClick={() => {
-          dispatch(
-            selectedRoWDetails({
-              patientId: data?.patientId,
-              processStageId: data?.processStageId,
-            })
-          );
+          selectedRoWDetails({
+            patientId: data?.patientId,
+            processStageId: data?.processStageId,
+          });
         }}
       >
         <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
@@ -226,113 +224,117 @@ function AllocatedL2AdminList({
 
   return (
     // <div className={TableStyle.classContaineer}>
-      <table className={TableStyle.classTable}>
-        <thead className={TableStyle.classThead}>
-          <tr>
-            <th>PATIENT ID</th>
-            <th>PATIENT NAME</th>
-            <th style={{ paddingLeft: "60px" }}>REVIEWER</th>
-            <th
-              style={{ paddingLeft: "20px" }}
-              onClick={() => {
-                sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
-                // setSortCompleteOrder("DESC");
-              }}
-            >
-              DUE DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortDueOrder === "ASC" ? (
-                  <ArrowUpOutlined />
-                ) : (
-                  <ArrowDownOutlined />
-                )}
-              </span>
-            </th>
-
-            <th
-              onClick={() => {
-                sortFunction(
-                  sortCompleteOrder,
-                  setSortCompleteOrder,
-                  setSort,
-                  "processedDate"
-                );
-                // setSortDueOrder("DESC");
-              }}
-            >
-              COMPLETED DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortCompleteOrder === "ASC" ? (
-                  <ArrowUpOutlined />
-                ) : (
-                  <ArrowDownOutlined />
-                )}
-              </span>
-            </th>
-
-            <th style={{ textAlign: "center" }}>STATUS</th>
-            {/* <th>Upload</th> */}
-            <th>
-              {patinetListAll && patinetListAll.length > 0 && (
-                <div
-                  style={{
-                    width: "40px",
-                    display: "flex",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  {loading ? (
-                    <Spin
-                      indicator={<LoadingOutlined />}
-                      style={{
-                        fontSize: 18,
-                        color: "#ffff",
-                        marginTop: "-15px",
-                      }}
-                    />
-                  ) : (
-                    <input
-                      type="checkbox"
-                      onClick={() => setSelectAllChecked(!selectAllChecked)}
-                      style={{
-                        width: "20px",
-                        height: "20px",
-                        flexhrink: "0",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                      }}
-                      checked={
-                        selectAllChecked &&
-                        selectedRowsId.length == selectedChart.length
-                      }
-                      className={
-                        selectAllChecked &&
-                        selectedRowsId.length == selectedChart.length
-                          ? TableStyle.customChecked2
-                          : ""
-                      }
-                    />
-                  )}
-                </div>
+    <table className={TableStyle.classTable}>
+      <thead className={TableStyle.classThead}>
+        <tr>
+          <th>PATIENT ID</th>
+          <th>PATIENT NAME</th>
+          <th style={{ paddingLeft: "60px" }}>REVIEWER</th>
+          <th
+            style={{ paddingLeft: "20px" }}
+            onClick={() => {
+              sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
+              // setSortCompleteOrder("DESC");
+            }}
+          >
+            DUE DATE
+            <span style={{ padding: "10px", cursor: "pointer" }}>
+              {sortDueOrder === "ASC" ? (
+                <ArrowUpOutlined />
+              ) : (
+                <ArrowDownOutlined />
               )}
-            </th>
-          </tr>
-        </thead>
+            </span>
+          </th>
 
-        <tbody>
-          {patinetListAll?.length <= 0 ? (
-            <tr>
-              <td colSpan="9">
-                <Empty />
-              </td>
-            </tr>
-          ) : (
-            renderRows()
-          )}
-        </tbody>
-      </table>
+          <th
+            onClick={() => {
+              sortFunction(
+                sortCompleteOrder,
+                setSortCompleteOrder,
+                setSort,
+                "processedDate"
+              );
+              // setSortDueOrder("DESC");
+            }}
+          >
+            COMPLETED DATE
+            <span style={{ padding: "10px", cursor: "pointer" }}>
+              {sortCompleteOrder === "ASC" ? (
+                <ArrowUpOutlined />
+              ) : (
+                <ArrowDownOutlined />
+              )}
+            </span>
+          </th>
+
+          <th style={{ textAlign: "center" }}>STATUS</th>
+          {/* <th>Upload</th> */}
+          <th>
+            {patinetListAll && patinetListAll.length > 0 && (
+              <div
+                style={{
+                  width: "40px",
+                  display: "flex",
+                  justifyContent: "space-around",
+                }}
+              >
+                {loading ? (
+                  <Spin
+                    indicator={<LoadingOutlined />}
+                    style={{
+                      fontSize: 18,
+                      color: "#ffff",
+                      marginTop: "-15px",
+                    }}
+                  />
+                ) : (
+                  <input
+                    type="checkbox"
+                    onClick={() => setSelectAllChecked(!selectAllChecked)}
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      flexhrink: "0",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                    }}
+                    checked={
+                      selectAllChecked &&
+                      selectedRowsId.length == selectedChart.length
+                    }
+                    className={
+                      selectAllChecked &&
+                      selectedRowsId.length == selectedChart.length
+                        ? TableStyle.customChecked2
+                        : ""
+                    }
+                  />
+                )}
+              </div>
+            )}
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {patinetListAll?.length <= 0 ? (
+          <tr>
+            <td colSpan="9">
+              <Empty />
+            </td>
+          </tr>
+        ) : (
+          renderRows()
+        )}
+      </tbody>
+    </table>
     // </div>
   );
 }
 
-export default AllocatedL2AdminList;
+const connector = connect((state) => ({}), {
+  selectedRoWDetails: adminActions.selectedRoWDetails,
+  patientDetails: allActions.getPatientDetails,
+});
+export default connector(AllocatedL2AdminList);

@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Header from "../../jsx/layouts/nav/Header";
 import styles from "./report.module.css";
-import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faFileExport } from "@fortawesome/free-solid-svg-icons";
 import { FilterMatchMode } from "primereact/api";
-import { Modal, DatePicker, Tooltip, Select,Input } from "antd";
+import { Modal, DatePicker, Tooltip, Select, Input } from "antd";
 import {
   disableFutureDate,
   resetPageNumber,
 } from "../../components/headerFilters/functions";
 import { patientDetails } from "../../stores/authflow/actions";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import InitialCard from "../../mainStream/reports/initialReport";
 import SentReport from "../../mainStream/reports/sentReport";
 import ReceivedReport from "../../mainStream/reports/receivedReport";
@@ -20,17 +19,14 @@ import { actions as workflowActions } from "../../stores/reviewer/workqueue";
 import { actions as reviewerAction } from "../../stores/reviewer/report";
 import { actions as supervisorAction } from "../../stores/supervisor/report";
 import moment from "moment";
-import {
-  selectedReport,
-  getReportDetails,
-  getSelectUserListReport,
-} from "../../store/actions/adminAction/ReportActions";
 import Tab from "../components/tags";
-import MoreFilter from "../../resusablereport/reports/MoreFilter";
+import MoreFilter from "../components/moreFilters/MoreFilter";
 import TeamReport from "./teamReport";
 import { getStorage, setStorage } from "../../utils/storages";
 import { debounce } from "../../components/input";
-
+import { actions as allActions } from "../../stores/admin/report";
+import { actions as adminActions } from "../../stores/admin/dashboard";
+import {actions as allPatientActions} from '../../stores/admin/workqueue'
 const statusOptions = [
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
@@ -58,21 +54,19 @@ const Reports = ({
   teamReport,
   auditeReportLoading,
   AdminReportDetails,
+  selectedReport,
+  activeTabName,
   tab,
+  AdminReportLoader,
+  selectUserList,
+  selectedRow,
+  ExportResponse,
+  getReportDetails,
+  getActiveTab,
+  teamReportLoading
 }) => {
-  const dispatch = useDispatch();
-  const ExportResponse = useSelector((state) => state.report?.exportRes);
-  const rowsLength = useSelector((state) => state?.report?.row);
-  const activeTabName = useSelector((state) => state.AuditReport?.activetab);
+  const rowsLength = selectedRow;
   const activeTab = activeTabName ? activeTabName : tab;
-
-  const AdminReportPatientDetails = useSelector(
-    (state) => state.report?.details
-  );
-
-  const selectUserList = useSelector(
-    (state) => state?.adminReport?.selectedUsers
-  );
   const [userRole, setUserRole] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
@@ -170,12 +164,12 @@ const Reports = ({
   const handleTabs = (name) => {
     setSelectedDates(null);
     setSelecteddateRanges([]);
-    dispatch(getActiveTab(name));
+    getActiveTab(name);
     setSearch();
     setSearchVal([]);
     setFlagPatientsList();
     setSelectAllFlags(false);
-    setSelectAll(false)
+    setSelectAll(false);
     if (name !== "Admin") {
       setSelectedData([]);
       setSelectAllCheckBoxes(false);
@@ -309,7 +303,7 @@ const Reports = ({
   };
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails(data);
     if (data.computing == 2) {
       const controller = new AbortController();
       const { signal } = controller;
@@ -347,23 +341,21 @@ const Reports = ({
         sort: sort,
       });
     } else if (activeTab === "Admin") {
-      dispatch(
-        getReportDetails({
-          pagenum: pageNo,
-          startDate: selectedDateRanges?.Admin?.from,
-          endDate: selectedDateRanges?.Admin?.to,
-          search: coderSearchString ? coderSearchString : "",
-          filter: selectedOptions?.Status,
-          userName: selectedOptions?.UserRole ? selectedOptions?.UserRole : "",
-          sort: sort,
-          selectManager:
-            selectedOptions?.User && selectedOptions?.UserRole !== ""
-              ? selectedOptions?.User
-              : "",
-          flagsList: selectAllFlags,
-          allPatientIds: false,
-        })
-      );
+      getReportDetails({
+        pagenum: pageNo,
+        startDate: selectedDateRanges?.Admin?.from,
+        endDate: selectedDateRanges?.Admin?.to,
+        search: coderSearchString ? coderSearchString : "",
+        filter: selectedOptions?.Status,
+        userName: selectedOptions?.UserRole ? selectedOptions?.UserRole : "",
+        sort: sort,
+        selectManager:
+          selectedOptions?.User && selectedOptions?.UserRole !== ""
+            ? selectedOptions?.User
+            : "",
+        flagsList: selectAllFlags,
+        allPatientIds: false,
+      });
     } else if (activeTab === "Audit") {
       auditReport({
         pagenum: teamPageNo,
@@ -421,8 +413,8 @@ const Reports = ({
   }, [ReportPatientDetails]);
 
   useEffect(() => {
-    setFilteredCoder(AdminReportPatientDetails?.data?.response);
-  }, [AdminReportPatientDetails]);
+    setFilteredCoder(AdminReportDetails?.data?.response);
+  }, [AdminReportDetails]);
 
   useEffect(() => {
     const page = new URLSearchParams(window.location.search).get("page");
@@ -439,7 +431,7 @@ const Reports = ({
 
   useEffect(() => {
     if (selectedOptions?.UserRole) {
-      dispatch(getSelectUserListReport(selectedOptions?.UserRole || ""));
+     getSelectUserListReport({role:selectedOptions?.UserRole || ""});
     }
   }, [selectedOptions?.UserRole]);
 
@@ -476,8 +468,7 @@ const Reports = ({
                                 {" "}
                                 Search
                               </label>
-                              <div style={{height:"43px"}}>
-                
+                              <div style={{ height: "43px" }}>
                                 <Input
                                   name="initialSearch"
                                   type="text"
@@ -486,7 +477,9 @@ const Reports = ({
                                     resetPageNumber(resetPageState);
                                   }}
                                   autoComplete="off"
-                                  className={"w-100 new-search-control2 border-none "}
+                                  className={
+                                    "w-100 new-search-control2 border-none "
+                                  }
                                   placeholder="Search"
                                   maxLength={25}
                                   value={search ? search?.searchVal : ""}
@@ -497,9 +490,10 @@ const Reports = ({
                                     }
                                   }}
                                   prefix={
-                                    (
-                                      <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
-                                    )
+                                    <FontAwesomeIcon
+                                      className="searchPrefix"
+                                      icon={faSearch}
+                                    />
                                   }
                                   allowClear={true}
                                 />
@@ -514,28 +508,28 @@ const Reports = ({
                           userRole == "supervisor" ? (
                             <div className="col-xl-2">
                               <div className="d-flex w-100">
-                              <label className="labelStyle d-flex m-auto  p-2">
-                                {" "}
-                                Status
-                              </label>
-                              <div className="form-group has-search w-100 custom-react-report-select">
-                                <Select
-                                  onChange={(selectedOption) => {
-                                    dosOnChange(
-                                      selectedOption,
-                                      "reviewer Status"
-                                    );
-                                    resetPageNumber(resetPageState);
-                                  }}
-                                  placeholder="Select Status"
-                                  options={statusOptions}
-                                  // className={`custom-react-report-select`}
-                                  isSearchable={false}
-                                  allowClear={true}
-                                />
+                                <label className="labelStyle d-flex m-auto  p-2">
+                                  {" "}
+                                  Status
+                                </label>
+                                <div className="form-group has-search w-100 custom-react-report-select">
+                                  <Select
+                                    onChange={(selectedOption) => {
+                                      dosOnChange(
+                                        selectedOption,
+                                        "reviewer Status"
+                                      );
+                                      resetPageNumber(resetPageState);
+                                    }}
+                                    placeholder="Select Status"
+                                    options={statusOptions}
+                                    // className={`custom-react-report-select`}
+                                    isSearchable={false}
+                                    allowClear={true}
+                                  />
+                                </div>
+                                {/* </div> */}
                               </div>
-                              {/* </div> */}
-                            </div>
                             </div>
                           ) : null}
 
@@ -706,7 +700,7 @@ const Reports = ({
                             <button
                               onClick={() => {
                                 setIsModalVisible(true);
-                                dispatch(selectedReport(null));
+                                selectedReport(null);
                               }}
                               className={`${
                                 rowsLength?.length > 0 ||
@@ -782,7 +776,7 @@ const Reports = ({
                         setSort={setSort}
                         gotoPatientDetails={gotoPatientDetails}
                         page={{ pageNo, paginationFirst }}
-                        loader={AdminReportPatientDetails?.loading}
+                        loader={AdminReportLoader}
                         activeTab={activeTab}
                         handleHeaderCheckbox={handleHeaderCheckboxChange}
                         selectAllFlags={selectAllFlags}
@@ -849,7 +843,7 @@ const Reports = ({
                       setSort={setSort}
                       gotoPatientDetails={gotoPatientDetails}
                       page={{ teamPageNo, paginationTeamFirst }}
-                      loader={auditeReportLoading}
+                      loader={activeTab === "Team"?teamReportLoading:auditeReportLoading}
                       activeTab={activeTab}
                       handleHeaderCheckbox={handleHeaderCheckboxChange}
                       selectAllFlags={selectAllFlags}
@@ -969,6 +963,13 @@ const enhancer = connect(
     auditeReportLoading: state?.supervisor?.report?.auditeReportLoading,
     TeamReportDetails: state?.supervisor?.report?.teamReport,
     AdminReportDetails: state?.admin?.report?.admin,
+    AdminReportLoader: state?.admin?.report?.adminLoader,
+    activeTabName: state.admin.report?.activeTab,
+    selectUserList: state?.admin?.dashboard?.managersList,
+    selectedRow: state?.admin?.report?.selectedRow,
+    ExportResponse: state?.admin?.report?.exportData,
+    teamReportLoading:state?.supervisor?.report?.teamReportLoading,
+    
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -977,6 +978,12 @@ const enhancer = connect(
     receivedReport: reviewerAction.receivedReport,
     teamReport: supervisorAction.teamReport,
     auditReport: supervisorAction.auditReport,
+    selectedReport: allActions.selectedReport,
+    getReportDetails: allActions.adminReport,
+    getSelectUserListReport: adminActions.getSelectUserList,
+    patientDetails:allPatientActions.getPatientDetails,
+    getActiveTab:allActions.activeTab,
+    getExportDetails:allActions.getExportDetails
   }
 );
 export default enhancer(Reports);

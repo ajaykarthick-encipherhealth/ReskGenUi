@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
@@ -10,20 +9,20 @@ import { Paginator } from "primereact/paginator";
 import visitStyles from "../../../styles/visitdata.module.css";
 import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
-import SpinnerDots from "../../../components/spinner";
+import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { LoadingOutlined } from "@ant-design/icons";
 import HeaderFilters from "../../../components/headerFilters";
 import {
   generateOptionsList,
   validateYear,
 } from "../../../components/headerFilters/functions";
-import { getFilters, patientDetails } from "../../../stores/authflow/actions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 import { connect } from "react-redux";
 import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
 import {actions as adminActions} from '../../../stores/admin/workqueue'
+import {actions as patientActions} from '../../../stores/patient/details'
 const bullets = [
   {
     color: "#34ace8",
@@ -60,13 +59,12 @@ const Patient = ({
   loading,
   getAddPatient,
   getUploadFile,
-  getUploadRadiologyFile
+  getUploadRadiologyFile,
+  getFilters,
+  patientDetails
 }) => {
-  const navigate = useRouter();
-  const dispatch = useDispatch();
-  const sideMenu = useSelector((state) => state.sideMenu);
-  const response = useSelector((state) => state.adminList.patients);
-  const filteredList = useSelector((state) => state.filters.createdBy);
+  const navigate = useRouter();  
+  const filteredList = []
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
@@ -150,7 +148,7 @@ const Patient = ({
       sort,
       (orgId = selectOrgList?.value)
     );
-    dispatch(getFilters("createdBy"));
+    getFilters({field:"createdBy"});
   }, [
     pageNo,
     computedStartDate,
@@ -344,7 +342,7 @@ const Patient = ({
   };
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
+    patientDetails(data);
     if (data.computing == 2) {
       const controller = new AbortController();
       const { signal } = controller;
@@ -487,7 +485,6 @@ const Patient = ({
       setAddPatient(false);
       setAddPatient(false);
       setIsLoadingBtn(false);
-      // dispatch(getMessagesList())
     } else {
       setIsLoadingBtn(false);
     }
@@ -598,7 +595,7 @@ const Patient = ({
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">
@@ -758,7 +755,9 @@ const enhancer = connect(
     getAllPatients: tenantAdminAction.getAllPatientAction,
     getAddPatient:adminActions.getAddPatient,
     getUploadFile:adminActions.getUploadFile,
-    getUploadRadiologyFile:adminActions.getUploadRadiologyFile
+    getUploadRadiologyFile:adminActions.getUploadRadiologyFile,
+     getFilters:allActions.getFiltersList,
+  patientDetails:patientActions.patientDetailsAction
   }
 );
 export default enhancer(Patient);

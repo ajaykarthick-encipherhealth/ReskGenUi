@@ -7,7 +7,7 @@ import {
   getEncounterDateBackgroundHcc,
   getProviderNameList,
 } from "../index";
-import { useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { getMeatFound } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 
 export const reusableElipses = (str, count) => {
@@ -18,7 +18,6 @@ export const reusableElipses = (str, count) => {
   }
 };
 const ValidHcc = ({ content, meatCriteriaList, ProviderName }) => {
-  const colorsData = useSelector((state) => state.physicianComparison.colors);
   return (
     <ul className="timeline">
       <div
@@ -131,4 +130,10 @@ const ValidHcc = ({ content, meatCriteriaList, ProviderName }) => {
   );
 };
 
-export default ValidHcc;
+const enhancer = connect(
+  (state) => ({
+    colorsData: state.physician.comparison.getAllColor,
+  }),
+  {}
+);
+export default enhancer(ValidHcc);

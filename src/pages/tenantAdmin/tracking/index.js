@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
@@ -119,9 +119,6 @@ const Patient = ({
   getAllocatedByList
 }) => {
   const navigate = useRouter();
-  // const filteredList = useSelector((state) => state.auth.filterList);
-  const sideMenu = useSelector((state) => state.sideMenu);
-  // const response = useSelector((state) => state.adminList.tracking);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
@@ -573,7 +570,7 @@ const Patient = ({
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">

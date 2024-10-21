@@ -20,7 +20,7 @@ import {
   getProviderNameList,
   moveToAnotherAction,
 } from "../function/ReusableFunctions";
-import { useSelector, connect } from "react-redux";
+import {  connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
@@ -64,12 +64,8 @@ const NonHccCards = ({
   storeFileDetails,
   patientDetailsResult
 }) => {
-  const fileId = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
-  // const fileDosPageNumberList = useSelector(
-  //   (state) => state?.ReviewerReducers.dosPageNumberList
-  // );
+ 
+
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [openContent, setOpenContent] = useState(null);
@@ -221,7 +217,7 @@ const NonHccCards = ({
                       setIsModalOpenRadiology: setIsModalOpenRadiology,
                       setIsModalOpenValidCodes: setIsModalOpenValidCodes,
                       setFileModalHeader: setFileModalHeader,
-                      fileId: fileId,
+                     
                       patientDocumentResult: patientDocumentResult,
                       fileInitialPage: fileInitialPage,
                       setFileInitialPage: setFileInitialPage,

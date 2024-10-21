@@ -1,3 +1,4 @@
+import { createAction } from "redux-actions";
 import { createActionThunk } from "../../../utils/redux";
 import * as network from "./network";
 
@@ -9,10 +10,7 @@ export const dailyTaskAction = createActionThunk(
   "DAILY_TASK",
   network.dailyTask
 );
-export const accuracyAction = createActionThunk(
-  "ACCURACY",
-  network.accuracy
-);
+export const accuracyAction = createActionThunk("ACCURACY", network.accuracy);
 
 export const completedScoreAction = createActionThunk(
   "COMPLETED",
@@ -43,3 +41,8 @@ export const getSelectUserList = createActionThunk(
   "DASHBOARD_SELECTED_USERS_LIST",
   network.usersList
 );
+export const getDeliveryStatus = createActionThunk(
+  "DASHBOARD_DELIVERY_STATUS",
+  network.deliveryStatus
+);
+export const getDateRange = createAction("DATE_RANGE");

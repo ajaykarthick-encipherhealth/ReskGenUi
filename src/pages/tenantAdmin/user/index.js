@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
-import { useSelector } from "react-redux";
 import { Form, Input, Button, Select, Row, Col, notification } from "antd";
 import styles from "../../../styles/auth.module.css";
-import ENDPOINTS from "../../../utility/enpoints";
-import axios from "../../../utility/axiosConfig";
 import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
 import { Paginator } from "primereact/paginator";
@@ -43,10 +40,10 @@ const UserList = ({
   getAllUsersList,
   usersListData,
   loading,
-  AddUser,
+  getAddUser,
   addPatients,
 }) => {
-  const sideMenu = useSelector((state) => state.sideMenu);
+  
   const [localUserId, setLocalUserId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localTenantId, setLocalTenantId] = useState("");
@@ -106,7 +103,7 @@ const UserList = ({
       userFormData.role = [userFormData?.role];
       userFormData.password = encryptedData?.pass;
       userFormData.passwordIv = encryptedData.iv;
-      const response = await AddUser(userFormData, setFormData);
+      const response = await getAddUser(userFormData, setFormData);
         setFormData({
           firstName: "",
           lastName: "",
@@ -247,11 +244,12 @@ const UserList = ({
 
   const onFinish = (values) => {
     handleSubmit(values);
+    setAddUser(false)
   };
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">
@@ -266,20 +264,20 @@ const UserList = ({
                         searchlabel="Search By Username"
                         search={search}
                         // select status
-                        selectlabel="Select Status"
+                        selectlabel="Status"
                         isSelector={true}
                         setSelectedOption={setSelectedStatus}
                         selectOptions={options3}
                         defaultSelectValue1={""}
                         selectedValue={status}
                         //  selecte Role
-                        selectlabel2="Select Role"
+                        selectlabel2="Role"
                         selectOptions2={RoleList}
                         defaultSelectValue2={""}
                         setSelectedOption2={setRole}
                         selectedValue2={role}
                         // selectOrg
-                        selectlabelOrg="Select Organization"
+                        selectlabelOrg="Organization"
                         isSelectOrg={true}
                         setSelectedOptionOrg={setSelectedOrgList}
                         selectOptionsOrg={orgAllList}
@@ -741,7 +739,7 @@ const enhancer = connect(
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     getAllUsersList: tenantAdminAction.getAllUsersAction,
-    AddUser: tenantAdminAction.getAddUser,
+    getAddUser: tenantAdminAction.getAddUser,
     addPatients: tenantAdminAction.addPatient,
   }
 );

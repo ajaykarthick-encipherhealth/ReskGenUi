@@ -1,6 +1,10 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { getAllOrganizationAction, getAllUsersAction } from "./actions";
+import {
+  getAllOrganizationAction,
+  getAllUsersAction,
+  selectedRoWDetails,
+} from "./actions";
 
 const initialState = {
   loading: true,
@@ -41,6 +45,13 @@ const getReportLoading = (type) =>
     false
   );
 
+const getSelectedRoWDetails = (action) =>
+  handleActions(
+    {
+      [action.toString()]: (state, { payload }) => payload,
+    },
+    ""
+  );
 const adminUsersReducer = combineReducers({
   allOrganization: createReducer(getAllOrganizationAction),
   allUsers: createReducer(getAllUsersAction),
@@ -48,6 +59,7 @@ const adminUsersReducer = combineReducers({
   // loaders
   allOrganizationLoader: getReportLoading(getAllOrganizationAction),
   allUsersLoading: getReportLoading(getAllUsersAction),
+  selectedRoWDetails: getSelectedRoWDetails(selectedRoWDetails),
 });
 
 export default adminUsersReducer;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Form, Offcanvas } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { connect } from "react-redux";
 import dayjs from "dayjs";
 import styles from "./styles.module.css";
 import { priorityStatus } from "../table/PatientList/patientList";
@@ -13,10 +13,12 @@ const ModalContent = ({
   validated,
   setFileUploadModal,
   setSelectedPatient,
-  selectedPatient
+  selectedPatient,
+  patientsList,
 }) => {
-  const patientsList = useSelector((state) => state.phyicianReducer.patients);
-  const FilteredList=patientsList?.data?.response?.filter(item=>(item?.id !== selectedPatient))
+  const FilteredList = patientsList?.data?.response?.filter(
+    (item) => item?.id !== selectedPatient
+  );
   return (
     <Offcanvas
       show={fileUploadModal}
@@ -45,9 +47,13 @@ const ModalContent = ({
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <div className="row">
               {FilteredList?.map((info) => (
-                <div className={styles.patientListContainer} onClick={()=>{
-                  setSelectedPatient(info?.id)
-                  setFileUploadModal(false)}}>
+                <div
+                  className={styles.patientListContainer}
+                  onClick={() => {
+                    setSelectedPatient(info?.id);
+                    setFileUploadModal(false);
+                  }}
+                >
                   <div style={{ marginBottom: "10px" }}>
                     {info.patientName || info?.profilePictureUrl ? (
                       <div className={styles.patientsDisply}>
@@ -60,14 +66,19 @@ const ModalContent = ({
                         </span>
                         <div>
                           <span>{info?.patientName}</span>
-                          <div className={styles.subTitle}> {info?.mrnNumber}</div>
+                          <div className={styles.subTitle}>
+                            {" "}
+                            {info?.mrnNumber}
+                          </div>
                         </div>
                       </div>
                     ) : (
                       <span>---</span>
                     )}
                   </div>
-                  <div style={{ marginTop: "10px" }}>{dayjs(info?.date).format("dddd hh:mm")}</div>
+                  <div style={{ marginTop: "10px" }}>
+                    {dayjs(info?.date).format("dddd hh:mm")}
+                  </div>
                   <div style={{ marginTop: "10px" }}>
                     {priorityStatus(info?.priority, true)}
                   </div>
@@ -93,4 +104,10 @@ const ModalContent = ({
   );
 };
 
-export default ModalContent;
+const enhancer = connect(
+  (state) => ({
+    patientsList: state.physician.comparison.patientList,
+  }),
+  {}
+);
+export default enhancer(ModalContent);

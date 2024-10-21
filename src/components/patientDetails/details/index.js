@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import NavBar from "../../../jsx/layouts/nav/Header";
-import { useSelector, useDispatch, connect } from "react-redux";
 import visitStyles from "../../../styles/visitdata.module.css";
-import moment from "moment";
 import TableStyle from "../../../components/table/table.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FilterOutlined } from "@ant-design/icons";
@@ -33,16 +31,12 @@ import Hcc from "./hcc/index";
 import NonHcc from "./non-hcc/index";
 import Radiology from "./radiology/index";
 import Lab from "./lab/index";
-import SpinnerDots from "../../../components/spinner";
-import { getPatientID } from "../../../store/actions/PatientsActions";
 import Timeline from "./timline";
 import ReviwerWorkList from "./components/reviwerWorklist";
 import SupervisorWorkList from "./components/supervisorWorklist";
 import AdminWorkList from "./components/adminWorklist";
-import { getAllSectionColor } from "../../../store/actions/ReviewerAction/PatientDetailsAction";
 import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 import { actions as detailsActions } from "../../../stores/patient/details";
-import styles from "../details/hcc/styles.module.css";
 import Comments from "./components/comments";
 import Notes from "./components/notes";
 import Flag from "./components/flag";
@@ -56,8 +50,12 @@ import { getAge } from "../../../utils/reusable";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { truncateString } from "./components/function/ReusableFunctions";
 import SvgFlag from "./components/svg/svg";
-import { getTimelineList, getUserDetails } from "../../../stores/patient/details/network";
+import {
+  getTimelineList,
+  getUserDetails,
+} from "../../../stores/patient/details/network";
 
+import { connect } from "react-redux";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -112,7 +110,7 @@ const Details = ({
   radiologyDetailsResult,
   labDetailsResult,
   getCurrentDiseaseType,
-  getCurrentProcessYearAction,
+  // getCurrentProcessYearAction,
   activeLabels,
   isDosSelected,
   isActives,
@@ -121,10 +119,10 @@ const Details = ({
   preStoreFileDetails,
   storePrePatientFileId,
   storeCurrentFile,
+  getPatientID,
+  selectPatientId,
 }) => {
   const navigate = useRouter();
-  const dispatch = useDispatch();
-  const sideMenu = useSelector((state) => state.sideMenu);
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [dosYear, setDosYear] = useState("");
@@ -152,7 +150,6 @@ const Details = ({
   const [flagFirstData, setFlagFirstData] = useState([]);
   const [filterDataLoading, setFilterDataLoading] = useState(true);
   const [patientResultReload, setPatientResultReload] = useState(false);
-  const selectPatientId = useSelector((state) => state.patients?.patiendId);
   const [userRole, setUserRole] = useState("");
   const [hccValidCount, setHccValidCount] = useState(0);
   const [hccCounts, setHccCounts] = useState({ isCmsHcc: 0, isRxHcc: 0 });
@@ -220,7 +217,7 @@ const Details = ({
       //   setIsSpinnerLoading
       // );
       getPatientRadiologyDosList(
-        selectPatientId ? selectPatientId?.patirntId : patientId,
+        selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0]?.value
       );
     }
@@ -232,7 +229,7 @@ const Details = ({
       //   setIsSpinnerLoading
       // );
       getPatientLabDosList(
-        selectPatientId ? selectPatientId?.patirntId : patientId,
+        selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0]?.value
       );
     }
@@ -263,19 +260,19 @@ const Details = ({
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
     setLocalUserId(uId);
-    setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
+    setLocalPatientId(selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId);
     getPatientDetails(
-      selectPatientId ? selectPatientId?.patirntId : patientId,
+      selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
       patientDetailsResult?.data?.response
     );
   }, [patientDetailsResult?.data?.response]);
 
   useEffect(() => {
     const patientId = getStorage("patientId");
-    setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
+    setLocalPatientId(selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId);
     if (activeTab == 3 || activeTab == 4) {
       getPatientDetails(
-        selectPatientId ? selectPatientId?.patirntId : patientId,
+        selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
         activeTab == 3
           ? radiologyDetailsResult?.data?.response
           : labDetailsResult?.data?.response
@@ -321,7 +318,6 @@ const Details = ({
 
   const getAllProcessYearSelect = async (result) => {
     const patientId = getStorage("patientId");
-
     var dosYearArr = result?.data?.response?.map((res) => {
       return { value: res, label: res };
     });
@@ -332,27 +328,26 @@ const Details = ({
     if (result?.data?.response?.length > 0) {
       if (activeTab == 1) {
         getpatientDetailsData(
-          selectPatientId ? selectPatientId?.patirntId : patientId,
+          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
           dosYearArr[0]?.value,
           null,
           setIsSpinnerLoading,
           userRole
         );
         getPatientIdData(
-          selectPatientId ? selectPatientId?.patirntId : patientId
+          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
         );
         getPatientDosList(
-          selectPatientId ? selectPatientId?.patirntId : patientId,
+          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
           dosYearArr[0]?.value
         );
         getDosPageNumber(
-          selectPatientId ? selectPatientId?.patirntId : patientId,
+          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
           dosYearArr[0]?.value
         );
       }
     }
   };
-
   const getPatientDetails = async (patientId, fileResponse) => {
     setHccValidCount(0);
     if (fileResponse) {
@@ -427,7 +422,7 @@ const Details = ({
     }
     if (value == "Timeline") {
       setFlagContainerActiveTitle("Timeline");
-      const response = await getTimelineList(localPatientId)
+      const response = await getTimelineList(localPatientId);
       var result = response?.response?.content;
       setTimeLineData(result);
       setFilterDataLoading(false);
@@ -486,7 +481,7 @@ const Details = ({
   };
 
   const backToPatientData = () => {
-    dispatch(getPatientID(null));
+    getPatientID(null);
     // setSelectDosValue("");
     getSelectedDos("");
     getCurrentDiseaseType(true);
@@ -668,10 +663,7 @@ const Details = ({
 
   return (
     <>
-      <div
-        className={`show ${sideMenu ? "menu-toggle" : ""}`}
-        style={{ height: "100vh", background: "#fff" }}
-      >
+      <div className={`show `} style={{ height: "100vh", background: "#fff" }}>
         <NavBar />
         <div className={visitStyles.headerFixed} style={{ height: "100%" }}>
           {isSpinnerLoading ? (
@@ -811,8 +803,8 @@ const Details = ({
                                       const sortedFlags =
                                         flagsDetailsResult.response.sort(
                                           (a, b) =>
-                                            b.flagDetails?.priority -
-                                            a.flagDetails?.priority
+                                          a.flagDetails?.priority -
+                                           b.flagDetails?.priority
                                         );
 
                                       const highestPriorityFlag =
@@ -1452,6 +1444,7 @@ const enhancer = connect(
     storeFileDetails: state.patientDetails?.details?.getStoreFileIdDetails,
     preStoreFileDetails:
       state.patientDetails?.details?.getStoreFileIdDetailsPre,
+    selectPatientId: state.patientDetails?.details?.selectPatientId,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -1474,9 +1467,10 @@ const enhancer = connect(
     getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
     activeLabels: detailsActions.activeLabels,
     getSelectedDos: detailsActions.getSelectedDos,
-    getCurrentProcessYearAction: detailsActions.getCurrentProcessYearAction,
+    // getCurrentProcessYearAction: detailsActions.getCurrentProcessYearAction,
     storePrePatientFileId: detailsActions.stroeFileIdPreAction,
     storeCurrentFile: detailsActions.storeFileIdAction,
+    getPatientID: detailsActions.getPatientID,
   }
 );
 export default enhancer(Details);

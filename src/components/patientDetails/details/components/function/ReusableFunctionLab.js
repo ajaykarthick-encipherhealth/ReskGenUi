@@ -255,7 +255,6 @@ export const handleSubmitValidNotes = async ({
   getPatientDetailsReload,
   isValidAction,
   selectDisDetails,
-  dispatch,
   getLabDetails,
 }) => {
   setFileLoading(true);

@@ -53,3 +53,25 @@ export async function GetWorkListFilters({ data }) {
   );
   return res;
 }
+
+export async function filterUsers({field, username, pageQueue}) {
+  console.log(username)
+  const options = {
+    method: "GET",
+  };
+  const role = getStorage("userRole");
+  const userRole = role?.toUpperCase();
+  const customPage =
+    field === "patientAllocated" && role === "supervisor"
+      ? "auditedqueue"
+      : pageQueue;
+  const url = username
+    ? `dbservice/patient/filter/field/list?username=${username}&field=${field}&role=${userRole}`
+    : `dbservice/patient/filter/field/list?field=${field}&role=${userRole}&page=${
+        customPage ? customPage : 0
+      }`;      
+  const data = await requestPortal(url,
+    options
+  );
+  return data;
+}

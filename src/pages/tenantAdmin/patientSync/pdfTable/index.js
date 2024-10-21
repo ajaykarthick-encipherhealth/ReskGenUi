@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { DatePicker, Input, Popover, Select } from "antd";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { InputText } from "primereact/inputtext";
+import { faCircleInfo, faSearch } from "@fortawesome/free-solid-svg-icons";
 import "react-circular-progressbar/dist/styles.css";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import styles from "../fhir.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
-import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../../components/headerFilters/functions";
 import computed from "../../../../images/fihr/computed.svg";
 import profile from "../../../../images/fihr/profile.svg";
@@ -22,27 +20,36 @@ import { debounce } from "../../../../components/input";
 import moment from "moment";
 import dayjs from "dayjs";
 import DetailedPdfTable from "../../../../components/table/tenantTable/pdfTable/detailPdfTable";
-
+import { actions as allReportActions } from "../../../../stores/admin/report";
 export const statusOptions = [
-  { label: "Completed", value: "COMPLETED" },
-  { label: "Pending", value: "PENDING" },
-  { label: "Declined", value: "DECLINED" },
-  { label: "Hold", value: "HOLD" },
+  { label: "Computed", value: "COMPUTED" },
+  { label: "Processing", value: "PROCESSING" },
+  { label: "Failed", value: "FAILED" },
 ];
-
+export const statusOptions2 = [
+  { label: "Processed", value: "PROCESSED" },
+  { label: "Processing", value: "PROCESSING" },
+  { label: "Failed", value: "FAILED" },
+];
+export const statusOptions3 = [
+  { label: "Processing", value: "PROCESSING" },
+  { label: "Failed", value: "FAILED" },
+];
 const { RangePicker } = DatePicker;
 
-const Index = ({
+const DetailedViewPdfTable = ({
   getBatchInfo,
   getBatch,
   loader,
   getAllBatches,
   pdfTabledata,
+  getActiveTab,
+  reportActiveTab,
+  params,
+  setViewDetailedBatch,
 }) => {
   const router = useRouter();
-  const dispatch = useDispatch();
 
-  const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [searchVal, setSearchVal] = useState([]);
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -51,6 +58,7 @@ const Index = ({
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [currentId, setCurrentId] = useState({});
+  const [batchPageNo, setBatchPageNo] = useState(0);
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -113,34 +121,34 @@ const Index = ({
     }));
   };
   useEffect(() => {
-    getAllBatches({ page: 0 });
-  }, []);
+    getAllBatches({ page: batchPageNo });
+  }, [batchPageNo]);
   useEffect(() => {
     if (reportActiveTab) {
-      dispatch(getActiveTab(reportActiveTab));
+      getActiveTab(reportActiveTab);
     }
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const encodedParams = urlParams.get("params");
-    const decodedParams = JSON.parse(atob(encodedParams));
-    if (pdfTabledata) {
-      const filterData = pdfTabledata?.content?.filter(
-        (item) => item?.id === decodedParams?.batchId
-      );
-      setCurrentId(...filterData);
-    }
-    const coderSearchString = searchVal.find(
-      (item) => item.field === "initialSearch"
-    )?.search;
+    if (params) {
+      const decodedParams = params;
+      setBatchPageNo(decodedParams?.pageNo);
+      if (pdfTabledata) {
+        const filterData = pdfTabledata?.content?.filter(
+          (item) => item?.id === decodedParams?.batchId
+        );
+        setCurrentId(...filterData);
+      }
+      const coderSearchString = searchVal.find(
+        (item) => item.field === "initialSearch"
+      )?.search;
 
-    getBatchInfo({
-      batchId: decodedParams?.batchId,
-      page: pageNo,
-      search: coderSearchString ? coderSearchString : "",
-      startDate: selectedDateRanges?.batch?.from,
-      endDate: selectedDateRanges?.batch?.to,
-      fileStatus: selectedOptions?.batch,
-    });
+      getBatchInfo({
+        batchId: decodedParams?.batchId,
+        page: pageNo,
+        search: coderSearchString ? coderSearchString : "",
+        startDate: selectedDateRanges?.batch?.from,
+        endDate: selectedDateRanges?.batch?.to,
+        fileStatus: selectedOptions?.batch,
+      });
+    }
   }, [
     reportActiveTab,
     pdfTabledata,
@@ -148,26 +156,88 @@ const Index = ({
     selectedDateRanges,
     searchVal,
     selectedOptions,
+    params,
   ]);
 
   const headerData = [
     {
       id: 1,
-      title: "Batch Name",
+      title: "Batch Details",
       icon: profile,
-      name: currentId?.name ? currentId?.name : "--",
+      name: (
+        <>
+          {currentId?.name ? currentId?.name : "--"}
+          {/* <br />
+          <Popover content={currentId?.id} placement="top">
+            {currentId?.id ? currentId?.id.slice(0, 8) + ".." : "--"}
+          </Popover> */}
+        </>
+      ),
     },
     {
       id: 2,
-      title: "Status",
+      title: "Count",
       icon: statusIcon,
-      name: currentId?.batchUploadStatus ? currentId?.batchUploadStatus : "---",
+      name: (
+        <>
+          {currentId?.totalFileCount > 0 ? (
+            <Popover
+              content={
+                <>
+                  Computed:{currentId?.totalSuccessCount}
+                  <br />
+                  Failed:{currentId?.totalFailedCount}
+                  <br />
+                  Processing:
+                  {currentId?.totalFileCount -
+                    (currentId?.totalSuccessCount +
+                      currentId?.totalFailedCount)}
+                </>
+              }
+            >
+              {currentId?.totalFileCount}
+
+              <FontAwesomeIcon
+                icon={faCircleInfo}
+                style={{ color: "#04306f" }}
+                placement="rightBottom"
+                className="mx-1"
+              />
+            </Popover>
+          ) : (
+            currentId?.totalFileCount
+          )}
+        </>
+      ),
     },
     {
       id: 3,
-      title: "Computed",
+      title: "Year Of Services",
+      icon: calender,
+      name: (
+        <div className="text-start">
+          {currentId?.yearOfService?.length > 0
+            ? currentId?.yearOfService?.map(
+                (item, index) =>
+                  `${item}${
+                    index < currentId.yearOfService.length - 1 ? "," : ""
+                  } `
+              )
+            : "---"}
+        </div>
+      ),
+    },
+    {
+      id: 3,
+      title: "EMR",
       icon: computed,
-      name: "---",
+      name: currentId?.emrType ? currentId?.emrType : "---",
+    },
+    {
+      id: 3,
+      title: "Source",
+      icon: computed,
+      name: currentId?.source ? currentId?.source : "---",
     },
     {
       id: 4,
@@ -175,7 +245,7 @@ const Index = ({
       icon: person,
       name: currentId?.createdBy ? (
         <Popover content={currentId?.createdBy}>
-          {currentId?.createdBy.slice(0, 20) + "..."}
+          {currentId?.createdBy.slice(0, 15) + "..."}
         </Popover>
       ) : (
         "---"
@@ -183,7 +253,7 @@ const Index = ({
     },
     {
       id: 5,
-      title: "Initiated Date",
+      title: "Batch Initiated",
       icon: calender,
       name: currentId?.createdDate
         ? dayjs(currentId?.createdDate).format("MM/DD/YYYY")
@@ -191,17 +261,9 @@ const Index = ({
     },
     {
       id: 6,
-      title: "Year Of Service",
+      title: "Status",
       icon: calender,
-      name: (
-        <div className="text-start">
-          {currentId?.yearOfService?.length > 0
-            ? currentId?.yearOfService?.map(
-                (item, index) => `${item}${(index + 1) / 2 === 0 ? "," : ""}`
-              )
-            : "---"}
-        </div>
-      ),
+      name: currentId?.batchUploadStatus ? currentId?.batchUploadStatus : "---",
     },
   ];
 
@@ -223,12 +285,13 @@ const Index = ({
                         <button
                           className={`${styles.backButtonStyle} mx-2`}
                           onClick={() => {
-                            router.push("/tenantAdmin/patientSync");
-                            dispatch(getActiveTab("PDF"));
+                            // router.push("/tenantAdmin/patientSync");
+                            getActiveTab("PDF");
                             setSearch();
                             setSearchVal([]);
                             setSelectedDates(null);
                             setSelecteddateRanges([]);
+                            setViewDetailedBatch({ status: false, data: null });
                           }}
                         >
                           <Image src={leftArrow} />
@@ -237,12 +300,12 @@ const Index = ({
                           {headerData?.map((item) => (
                             <div style={{ width: "20%" }} key={item?.id}>
                               <div style={{ display: "flex" }}>
-                                <Image src={item?.icon} alt="npimg" />
+                                {/* <Image src={item?.icon} alt="npimg" /> */}
                                 <div className={styles.topTitle}>
                                   {item?.title}
                                 </div>
                               </div>
-                              <div>{item?.name}</div>
+                              <div className="px-2">{item?.name}</div>
                             </div>
                           ))}
                         </div>
@@ -299,7 +362,7 @@ const Index = ({
                           <div className={`custom-react-select1`}>
                             <Select
                               placeholder={"Select Status"}
-                              options={statusOptions}
+                              options={statusOptions3}
                               onChange={(selectedOption) => {
                                 dosOnChange(selectedOption, "batch");
                               }}
@@ -338,13 +401,15 @@ const Index = ({
 
 const connector = connect(
   (state) => ({
-    getBatch: state?.tenantAdmin?.patientSync?.getBatch?.data?.response,
+    getBatch: state.tenantAdmin?.patientSync?.getBatch?.data?.response,
     loader: state?.tenantAdmin?.patientSync?.getBatchLoader,
     pdfTabledata: state.tenantAdmin?.patientSync?.allBatches?.data?.response,
+    reportActiveTab: state.admin?.report?.activeTab,
   }),
   {
     getBatchInfo: allActions.getBatchInfo,
     getAllBatches: allActions.getAllBatches,
+    getActiveTab: allReportActions.activeTab,
   }
 );
-export default connector(Index);
+export default connector(DetailedViewPdfTable);

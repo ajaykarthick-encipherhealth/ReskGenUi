@@ -240,7 +240,6 @@ export const getPatientLabDetailsNew = async (
   setCaptureSectionMatching,
   setMeatCriteriaList,
   patientDetailsResult,
-  dispatch,
   sectionColorList,
   setAllDisList,
   setComboDiseaseCodesList,

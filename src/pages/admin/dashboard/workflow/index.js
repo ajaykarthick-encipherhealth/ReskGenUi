@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faClockRotateLeft  } from "@fortawesome/free-regular-svg-icons";
 import {
   faCircleCheck,
   faClockRotateLeft,
@@ -13,7 +12,7 @@ import {
   faUsers,
   faFile,
 } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { Col, Empty, Row, Skeleton, Spin } from "antd";
 import { useRouter } from "next/router";
 import calender from "../../../../images/dashboard/calender.png";
@@ -29,16 +28,9 @@ import spinSTYles from "../../../../styles/auth.module.css";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import TC from "../../.../../../../images/dashboard/TC.png";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
-import Hold from "../../.../../../../images/trackingImages/HoldTrack.png";
-import HoldBg from "../../.../../../../images/dashboard/holdbg.png";
-import AuditedDecline from "../../.../../../../images/trackingImages/AuditDeclined.png";
+import {actions as allActions} from '../../../../stores/admin/dashboard'
 
-const WorkFlow = () => {
-  const router = useRouter();
-  const worlFlowData = useSelector(
-    (state) => state?.AdminDashboardReducers?.data
-  );
-  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
+const WorkFlow = ({worlFlowData ,DateRanges}) => {
   const [dateRange, setDateRange] = useState({
     processedStatus: {
       PENDING: 0,
@@ -261,10 +253,6 @@ const WorkFlow = () => {
       ))}
     </Row>
   );
-  // useEffect(() => {
-  //   getWorkFlow();
-  // }, [startDate, endDate, router]);
-
   return (
     <div className={styles.card1} style={{ height: "75%" }}>
       <HeadTitle
@@ -362,4 +350,11 @@ const WorkFlow = () => {
   );
 };
 
-export default WorkFlow;
+const enhancer = connect((state) => ({
+  worlFlowData: state?.admin?.dashboard?.workFlow,
+  DateRanges:state?.admin?.dashboard?.dateRanges
+}),
+{
+  getWorkFlow: allActions.workFlowAction,
+});
+ export default enhancer(WorkFlow);

@@ -97,3 +97,13 @@ export async function receivedApi({
   );
   return data;
 }
+
+export async function selectedReportDetails(reportId, reportInfo) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`dbservice/reportdetails/get?reportId=${reportId}`,
+    options
+  );
+  return data;
+}

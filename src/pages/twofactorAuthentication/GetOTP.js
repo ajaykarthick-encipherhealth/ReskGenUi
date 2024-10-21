@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import styles from "../../styles/auth.module.css";
 import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
@@ -10,13 +10,11 @@ import settings from "../../images/svg/settings.svg";
 import { codeLength, generateCodeArray } from "./Authentication";
 import { encyptingPass } from "../../components/headerFilters/functions";
 import RegularButton from "../../components/button";
-import { getQrCode, getValidateCode } from "../../stores/authflow/actions";
+import {actions as allActions} from '../../stores/authFlows'
 
-const GetOTP = () => {
-  const dispatch = useDispatch();
+const GetOTP = ({getQrCode, getValidateCode, url, codeValidateLoader}) => {
+
   const router = useRouter();
-  const url = useSelector((state) => state.auth.qrcode);
-  const loginResponse = useSelector((state) => state.auth.verifyMfa);
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
@@ -31,7 +29,7 @@ const GetOTP = () => {
       const decodedParams = JSON.parse(atob(encodedParams));
       setUsername(decodedParams?.username);
       setPassword(decodedParams?.password);
-      dispatch(getQrCode(decodedParams?.username, router));
+    getQrCode({username:decodedParams?.username});
     }
   }, []);
 
@@ -141,19 +139,19 @@ const GetOTP = () => {
               type="submit"
               name="VALIDATE"
               width="280px"
-              loading={loginResponse?.loading}
+              loading={codeValidateLoader}
               onClick={() => {
                 const codeString = code?.join("");
                 if (codeString?.length > 0) {
-                  dispatch(
-                    getValidateCode(
-                      username,
-                      encyptingPass(codeString),
-                      router,
-                      "",
-                      password
+                
+                    getValidateCode({
+                      username:username,
+                      code:encyptingPass(codeString),
+                      route:router,
+                      validate:"",
+                      userpassword:password}
                     )
-                  );
+                  ;
                 }
               }}
             />
@@ -164,4 +162,16 @@ const GetOTP = () => {
   );
 };
 
-export default GetOTP;
+const connector = connect(
+  (state) => ({
+    url:state?.authReducer?.qrImage,
+    codeValidateLoader:state.authReducer.codeValidateLoader,
+
+  }),
+  {
+    getQrCode: allActions.getQrCode,
+    getValidateCode:allActions.getValidateCode
+  }
+);
+
+export default connector(GetOTP);

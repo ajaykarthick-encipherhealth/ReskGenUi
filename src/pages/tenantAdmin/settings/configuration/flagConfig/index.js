@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Style from "./../../style.module.css";
 import RegularButton from "../../../../../components/button";
 import { ColorPicker, Form, Popconfirm } from "antd";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";

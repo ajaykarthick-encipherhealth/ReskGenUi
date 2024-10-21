@@ -54,7 +54,6 @@ export const getPatientDetails = async (
   setCaptureSectionMatching,
   setMeatCriteriaList,
   patientDetailsResult,
-  dispatch,
   sectionColorList,
   setAllDisList,
   setComboDiseaseCodesList,
@@ -945,18 +944,6 @@ export const getPatientDetails = async (
         setAllDisList([...hccDisArray, ...deleteHccList, ...suggestListAll,...potentialListAll]);
       setAllMeatList && setAllMeatList([...meatListArr, ...deletedmeatListArr]);
       setPotentialList && setPotentialList(potentialListAll)
-
-      // if (result.suggestRadiology != null) {
-      //   if (result.suggestRadiology.length != 0) {
-      //     getPatientDetailsRadiologyYear(orgId, dispatch);
-      //   }
-      // }
-
-      // if (result.suggestLab != null) {
-      //   if (result.suggestLab.length != 0) {
-      //     getLabReportDetailsInititalLoad(orgId, dispatch);
-      //   }
-      // }
     }
   }
 };

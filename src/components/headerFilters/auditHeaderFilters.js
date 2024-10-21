@@ -11,8 +11,6 @@ import Search from "../search";
 import { disableFutureDate, handleRnagePicker2, resetPageNumber } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
-import { useDispatch } from "react-redux";
-import { getFilters } from "../../stores/authflow/actions";
 
 const { RangePicker } = DatePicker;
 const AuditHeaderFilters = ({
@@ -111,7 +109,6 @@ const AuditHeaderFilters = ({
   bulletsTitle,
   badgesTitle
 }) => {
-  const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
   return (
     <>
@@ -176,9 +173,7 @@ const AuditHeaderFilters = ({
           {isAuditAllocatedBy && (
             <div
               className="col-xl-2"
-              // onClick={() => {
-              //   dispatch(getFilters("auditAllocatedBy", username));
-              // }}
+             
             >
               <label className={styles.label}>{audiallocatedBylabel}</label>
               <div class="form-group has-search">
@@ -345,9 +340,7 @@ const AuditHeaderFilters = ({
             {isAllocatedBySelector && (
               <div
                 className="col-xl-2"
-                // onClick={() => {
-                //   dispatch(getFilters("allocatedBy", username));
-                // }}
+             
                 style={{ zIndex: "2" }}
               >
                 <label className={styles.label}>{allocatedBylabel}</label>

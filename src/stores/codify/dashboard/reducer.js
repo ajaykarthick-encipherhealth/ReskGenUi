@@ -51,6 +51,7 @@ const codifyReducer = combineReducers({
   searches:createReducer(searchesAction),
   autocomplete:createReducer(autoCompleteAction),
   indexes:createReducer(indexesAction),
+  indexesLoading:getCodifyLoading(indexesAction),
   codifyLoader:getCodifyLoading(codifyAction),
   addCodes:createReducer(addCodesAction),
   

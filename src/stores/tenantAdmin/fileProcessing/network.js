@@ -37,9 +37,9 @@ export async function addPatient({ data }) {
   return res;
 }
 
-export const getUsers = async ({ pageNo,pageSize }) => {
+export const getUsers = async ({ pageNo,pageSize,selectOrgList="" }) => {
   const uId=getStorage("userId")
-  const url = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
+  const url = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}&orgId=${selectOrgList}`;
   const options = {
     method: "GET"
   };

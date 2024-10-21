@@ -8,14 +8,10 @@ import { Col, Row, Skeleton, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
-import { getDailyTaskDatas } from "../../../../store/actions/DashboardActions";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect, } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
-import { getFilteredList } from "../../../../store/actions/PatientsActions";
 import { actions as ReviewerAction } from "../../../../stores/reviewer/dashboard";
-import { dailyTaskData } from "../../../../stores/reviewer/dashboard/actions";
-
 const DailyTask = ({ getAllDailyTask, getFilteredList, dailyStatusDatas }) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
@@ -341,8 +337,12 @@ const DailyTask = ({ getAllDailyTask, getFilteredList, dailyStatusDatas }) => {
                                         JSON.stringify({
                                           // processedStart: data?.dateString,
                                           // processedEnd: data?.dateString,
-                                          dueDateStart: data?.dateString,
-                                          dueDateEnd: data?.dateString,
+                                          dueDateStart: dayjs(data?.dateString)
+                                            .startOf("day")
+                                            .toISOString(),
+                                          dueDateEnd: dayjs(data?.dateString)
+                                            .endOf("day")
+                                            .toISOString(),
                                           statusSelectedStatus: item?.name,
                                         })
                                       );
@@ -352,7 +352,7 @@ const DailyTask = ({ getAllDailyTask, getFilteredList, dailyStatusDatas }) => {
                                         search: `params=${params}`,
                                       });
                                     }}
-                                  >
+                                  >                                 
                                     <div
                                       className={styles.bgColor}
                                       style={{

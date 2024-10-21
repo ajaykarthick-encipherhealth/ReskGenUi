@@ -1,28 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { DataTable } from "primereact/datatable";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from "../../../jsx/components/spinner/spinner";
 import NavBar from "../../../jsx/layouts/nav";
 import AdminList from "../../../components/table/admin/adminList/adminList";
-import axios from "../../../utility/axiosConfig";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FilterMatchMode } from "primereact/api";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
-import { getStorage } from "../../../utils/storages";
 
 export default function Patient() {
-  const sideMenu = useSelector((state) => state.sideMenu);
   const [isLoading, setIsLoading] = useState(true);
-
-  const recordsPage = 10;
-  const lastIndex = 1 * recordsPage;
-  const firstIndex = lastIndex - recordsPage;
-
-  const [patinetList, setPatinetList] = useState([]);
   const [patinetListAll, setPatinetListAll] = useState([]);
-
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     userId: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -79,7 +68,7 @@ export default function Patient() {
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <NavBar />
         <div class="content-body">
           {isLoading ? (

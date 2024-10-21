@@ -7,7 +7,7 @@ import {
   getMeatAnyOneFindCheck,
   handleSubmitValidNotes,
 } from "../function/ReusableFunctions";
-import { useDispatch, connect } from "react-redux";
+import {  connect } from "react-redux";
 import EditForm from "./EditForm";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { suggestedMeatCheck } from "../../../../../stores/patient/details/network";
@@ -48,7 +48,6 @@ const ModelIndex = ({
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
-  const dispatch = useDispatch();
   const onConfirmValidMove = async (openState) => {
     handleCloseModal();
     const customValidAction =

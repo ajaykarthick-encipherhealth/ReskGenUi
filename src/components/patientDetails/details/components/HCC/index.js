@@ -22,7 +22,7 @@ import {
   getSuspectTypes,
   moveToAnotherAction,
 } from "../function/ReusableFunctions";
-import { useSelector, connect } from "react-redux";
+import { connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
@@ -82,9 +82,6 @@ const HccCards = ({
   storeFileDetails,
   year
 }) => {
-  const fileId = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [openContent, setOpenContent] = useState(null);
@@ -674,7 +671,7 @@ const HccCards = ({
                                       setIsModalOpenValidCodes:
                                         setIsModalOpenValidCodes,
                                       setFileModalHeader: setFileModalHeader,
-                                      fileId: fileId,
+                                
                                       patientDocumentResult:
                                         patientDocumentResult,
                                       fileInitialPage: fileInitialPage,
@@ -878,7 +875,7 @@ const HccCards = ({
                                     setIsModalOpenValidCodes:
                                       setIsModalOpenValidCodes,
                                     setFileModalHeader: setFileModalHeader,
-                                    fileId: fileId,
+                                 
                                     patientDocumentResult:
                                       patientDocumentResult,
                                     fileInitialPage: fileInitialPage,

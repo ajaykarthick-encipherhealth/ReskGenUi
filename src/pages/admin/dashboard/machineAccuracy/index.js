@@ -189,10 +189,6 @@ const MachineAccuracy = ({ accuracyDetails, loading, getAccuracyScore }) => {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
-  // const accuracyDatas = useSelector(
-  //   (state) => state?.AdminDashboardReducers?.accuracy
-  // );
-
   const numberOfWeeks =
     accuracyDetails?.data?.response &&
     Object.keys(accuracyDetails?.data?.response)?.length;

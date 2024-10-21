@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { Paginator } from "primereact/paginator";
 import AdminList from "../table/adminList/adminList";
 import Header from "../../../jsx/layouts/nav/Header";
@@ -8,7 +8,7 @@ import SpinnerDots from "../../../components/spinner";
 import {actions as allActions} from '../../../stores/supervisor/users'
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 const UserList = ({getUsers,loader,usersData}) => {
-  const sideMenu = useSelector((state) => state.sideMenu);
+  
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
   const [totalElements, setTotalElements] = useState(15);
@@ -33,7 +33,7 @@ const UserList = ({getUsers,loader,usersData}) => {
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show `}>
         <Header />
         <div class="content-body">
           <div className="container-fluid">

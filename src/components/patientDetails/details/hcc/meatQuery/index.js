@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, connect } from "react-redux";
+import { connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import moment, { months } from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
