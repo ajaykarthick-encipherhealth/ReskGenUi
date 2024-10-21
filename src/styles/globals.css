@@ -15808,11 +15808,6 @@ input::-webkit-inner-spin-button {
     font-weight: 400;
   }
 }
-.batchProgressBar
-  :where(.css-dev-only-do-not-override-3rel02).ant-progress
-  .ant-progress-text {
-  display: none !important;
-}
 .individualReportSearch .ant-input-affix-wrapper > input.ant-input:focus,
 .individualReportSearch .ant-input-affix-wrapper > input.ant-input:active {
   box-shadow: none !important;

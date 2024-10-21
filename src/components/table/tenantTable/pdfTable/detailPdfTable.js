@@ -225,6 +225,7 @@ const DetailedPdfTable = ({
                             className={`${styles.progreddBr} ${
                               getColors(row?.processStage)?.progressTextClass
                             }`}
+                            showInfo={false}
                           />
                         </div>
                       </td>
