@@ -2,23 +2,28 @@ import React, { useRef, useState } from "react";
 import styles from "../../../../components/imageUploading/styles.module.css";
 import Image from "next/image";
 import { Progress } from "antd";
-import { getColors } from "../../../../components/table/tenantTable/pdfTable/detailPdfTable";
 import progressStyles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
-const UploadFile = ({ filesList, setFilesList, subText, uploaderImg,isLoading, setIsLoading }) => {
+const UploadFile = ({
+  filesList,
+  setFilesList,
+  subText,
+  uploaderImg,
+  isLoading,
+  setIsLoading,
+  uploadFolder,
+}) => {
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const fileInputRef = useRef(null);
   const fileHandleChange = (e) => {
     if (e.target.files) {
       const files = e.target.files;
-
+      const fileArray = Array.from(files);
       const validFiles = [];
-      const maxSize = 40 * 1024 * 1024;
-      for (let i = 0; i < files?.length; i++) {
-        if (files[i].size < maxSize) {
-          validFiles?.push(files[i]);
-        }
-      }
+      fileArray.forEach((file) => {
+        validFiles.push(file);
+      });
+
       if (validFiles?.length > 0) {
         uploadFiles(validFiles);
         setFilesList(validFiles);
@@ -57,14 +62,24 @@ const UploadFile = ({ filesList, setFilesList, subText, uploaderImg,isLoading, s
   return (
     <div className={`${styles.cover} `}>
       <label className="cr-pointer">
-        <input
+        {/* <input
           className="input"
           name="file"
           type="file"
-          multiple
+          // multiple
           onChange={fileHandleChange}
           ref={fileInputRef}
           accept=".pdf"
+          webkitdirectory
+          mozdirectory
+        /> */}
+        <input
+          className="input"
+          type="file"
+          webkitdirectory={uploadFolder ? "true" : "false"}
+          directory=""
+          ref={fileInputRef}
+          onChange={fileHandleChange}
         />
         <div
           className={styles.videoflex}
@@ -78,7 +93,7 @@ const UploadFile = ({ filesList, setFilesList, subText, uploaderImg,isLoading, s
               <div className={styles.subText}>{subText}</div>
             </div>
           ) : (
-            "Upload"
+            "Upload A Folder"
           )}
         </div>
       </label>

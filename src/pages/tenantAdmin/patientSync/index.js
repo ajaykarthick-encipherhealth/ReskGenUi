@@ -428,24 +428,27 @@ const Index = ({
   }, [reportActiveTab, pageNo, selectedDateRanges, searchVal, selectedOptions]);
 
   const handleUpload = async () => {
-    const uploadPromises = fileList?.map((item) => {
-      const formData = new FormData();
-      formData.append("file", item);
-      formData.append("batchId", openUpload?.data?.id);
-      formData.append("yearOfServices", openUpload?.data?.yearOfService[0]);
-      return uploadFiles({ obj: formData });
-    });
-    const responses = await Promise.all(uploadPromises);
-    const lastData=responses[responses?.length-1]
+    if (fileList && fileList?.length > 0) {
+      const uploadPromises = fileList?.map((item) => {
+        const formData = new FormData();
+        formData.append("file", item);
+        formData.append("batchId", openUpload?.data?.id);
+        formData.append("yearOfServices", openUpload?.data?.yearOfService[0]);
+        return uploadFiles({ obj: formData });
+      });
+      const responses = await Promise.all(uploadPromises);
+      const lastData = responses[responses?.length - 1];
 
-    if (lastData?.status === "SUCCESS") {
-      getResponePopup(lastData);
-      setOpenUpload({ status: false, data: null });
-      getAllBatches({ page: pageNo });
-      form.resetFields();
-      setFileList([]);
+      if (lastData?.status === "SUCCESS") {
+        getResponePopup(lastData);
+        setOpenUpload({ status: false, data: null });
+        getAllBatches({ page: pageNo });
+        form.resetFields();
+        setFileList([]);
+      }
     }
   };
+
   return (
     <>
       <Header />
@@ -712,7 +715,7 @@ const Index = ({
           <Form.Item
             label={
               <label>
-                Upload File <span className="text-danger">*</span>
+                Upload Folder <span className="text-danger">*</span>
               </label>
             }
             name="upload"
@@ -722,13 +725,14 @@ const Index = ({
               setFilesList={setFileList}
               setIsLoading={setFileLoading}
               isLoading={fileLoading}
+              uploadFolder={true}
             />
           </Form.Item>
           <Form.Item
             disabled={fileList?.length > 0 && !fileLoading ? false : true}
           >
             <div className="col-xl-12 mb-3 d-grid justify-content-center">
-              <Button type="submit">Upload</Button>
+              <Button type="submit">Submit</Button>
             </div>
           </Form.Item>
         </Form>

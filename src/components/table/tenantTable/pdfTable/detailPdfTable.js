@@ -153,7 +153,7 @@ const DetailedPdfTable = ({
                             )
                           : "---"}
                       </td>
-                      <td className={`${TableStyle.childBorder} text-center`}>
+                      <td className={`${TableStyle.childBorder} text-center`} style={{width:"200px"}}>
                         <div
                           className="text-capitalize"
                           style={{
@@ -190,12 +190,10 @@ const DetailedPdfTable = ({
                           ) : (
                             ""
                           )}
-                          {row?.processStage
-                            .replace(/_/g, " ")
+                          {row?.processStage?.replace(/_/g, " ")
                             ?.slice(0, 1)
                             .toUpperCase() +
-                            row?.processStage
-                              .replace(/_/g, " ")
+                            row?.processStage?.replace(/_/g, " ")
                               .slice(1)
                               .toLowerCase()||""}
                           {/* {errStatus?.includes("FAILED")&& (
