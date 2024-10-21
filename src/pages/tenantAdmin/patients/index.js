@@ -304,7 +304,8 @@ const Patient = ({
         setErrors({ ...errors, year: "" });
         setInputValue({ ...inputValue, [key]: value });
       } else {
-        console.log(validateYearField);
+        setInputValue({ ...inputValue, year: '' });
+        setErrors({ ...errors, year: "Please enter a valid year" });
       }
     } else if (name == "dos") {
       if (value) {
@@ -327,7 +328,7 @@ const Patient = ({
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
-    if (form.checkValidity() === true && emrType) {
+    if (form.checkValidity() === true && emrType && inputValue.year) {
       setIsLoadingBtn(true);
       event.preventDefault();
       event.stopPropagation();
@@ -342,7 +343,6 @@ const Patient = ({
     }
     setValidated(true);
   };
-
   const handleSubmitPatientId = async (form) => {
     var orgId = selectOrgList;
     form.allocatedBy = localUserId;
@@ -480,7 +480,7 @@ const Patient = ({
     // setAddPatient(false);
     const formData = new FormData();
     formData.append("file", selectFile);
-    formData.append("dos", inputValue?.dos);
+    formData.append("dos", inputValue?.year);
     formData.append("orgid", localOrgId);
     formData.append("tenantid", tenantId);
     formData.append("userid", localUserId);

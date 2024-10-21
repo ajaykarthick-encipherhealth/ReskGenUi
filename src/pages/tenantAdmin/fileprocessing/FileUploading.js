@@ -127,6 +127,7 @@ const FileUploading = ({
                   handleChange(selOption, "dos");
                   setEmrType(selOption);
                 }}
+                showSearch
                 value={emrType || null}
                 options={[
                   { label: "ADSC", value: "ADSC" },
