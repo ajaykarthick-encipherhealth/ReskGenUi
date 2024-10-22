@@ -503,7 +503,7 @@ const Index = ({
                                 />
                               </div>
                             </div>
-                            <div className="col-xl-6 mx-2">
+                            <div className="col-xl-5 mx-2">
                               <label>Date</label>
                               <div class="form-group has-search">
                                 <RangePicker

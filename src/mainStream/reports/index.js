@@ -63,7 +63,8 @@ const Reports = ({
   ExportResponse,
   getReportDetails,
   getActiveTab,
-  teamReportLoading
+  teamReportLoading,
+  getSelectUserListReport
 }) => {
   const rowsLength = selectedRow;
   const activeTab = activeTabName ? activeTabName : tab;
