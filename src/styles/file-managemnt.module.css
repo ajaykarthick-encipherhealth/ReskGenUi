@@ -385,6 +385,7 @@
   width: 22px;
   height: 22px;
   margin: 5px 0 0px 0;
+  cursor: pointer;
 }
 .close_icon {
   width: 18px;
@@ -399,7 +400,8 @@
   margin-right: 7px;
   margin-top: 10px;
   margin-bottom: 10px;
-  color:#04306f
+  color:#04306f;
+  cursor: pointer;
 }
 .lapicon{
   font-size:23px ;

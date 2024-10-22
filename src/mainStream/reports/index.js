@@ -533,7 +533,7 @@ const Reports = ({
                             </div>
                           ) : null}
 
-                          <div className="col-xl-2 d-flex">
+                          <div className="col-xl-3 d-flex">
                             <div className="d-flex w-100">
                               <label className="labelStyle d-flex  p-2">
                                 {" "}

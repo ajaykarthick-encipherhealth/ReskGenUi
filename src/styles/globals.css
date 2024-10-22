@@ -15821,9 +15821,6 @@ input::-webkit-inner-spin-button {
   /* box-shadow: none !important; */
   border: none !important;
 }
-.customizeInput .ant-select-single.ant-select-lg .ant-select-selector {
-  border: 1px solid #b6b6b6 !important;
-}
 .searchStyle .ant-input-affix-wrapper {
   align-items: center;
 }
