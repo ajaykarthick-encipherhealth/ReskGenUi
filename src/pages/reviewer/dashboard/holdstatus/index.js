@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
 import { renderSkeletonHold } from "../../../../components/reuseableFunctions";
-import { actions as allActions } from '../../../../stores/patient/details'
+import { setStorage } from "../../../../utils/storages";
 
 const HoldStatus = ({ getHoldStatusData, holdStatusData ,getPatientID}) => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
@@ -51,7 +51,7 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData ,getPatientID}) => {
               key={item?.id}
               className={styles.tabelCell}  
               onClick={() => {
-              getPatientID({ patientId: item.patientId })
+                setStorage("patientId", item?.patientId);
                 router.push("/reviewer/patients/details");
               }}
             >
@@ -136,7 +136,6 @@ const enhancer = connect(
   }),
   {
     getHoldStatusData: dashbaordActions.holdStatusAction,
-    getPatientID: allActions.getPatientID
   }
 );
 export default enhancer(HoldStatus);
