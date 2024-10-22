@@ -1,6 +1,7 @@
 import { notification } from "antd";
 import { authRequestPortal, requestPortal } from "../../utils/network";
 import { getStorage, setStorage } from "../../utils/storages";
+import { getResponePopup } from "../../utils/reusable";
 
 export async function mfaValidation({ username, password, route }) {
   const params = {
@@ -19,7 +20,8 @@ export async function mfaValidation({ username, password, route }) {
   );
   const skip = data?.response?.skipEntryAvailable;
   const mfa = data?.response?.mfaIsEnabled;
-  if (data) {
+
+  if (data?.response) {
     const encodedParams = btoa(
       JSON.stringify({
         mfa: mfa,
@@ -32,6 +34,8 @@ export async function mfaValidation({ username, password, route }) {
       pathname: `/twofactorAuthentication/Authentication`,
       search: `params=${encodedParams}`,
     });
+  } else {
+    getResponePopup(data);
   }
 }
 
@@ -300,13 +304,12 @@ export async function updateImage(url) {
   return data;
 }
 
-
 export async function refreshToken() {
   const refreshToken = getStorage("refreshToken");
   const token = getStorage("token");
   const options = {
     method: "POST",
-    body:JSON.stringify({refreshToken: refreshToken})
+    body: JSON.stringify({ refreshToken: refreshToken }),
   };
   const data = await requestPortal(
     `securityservice/token/refreshtoken`,
