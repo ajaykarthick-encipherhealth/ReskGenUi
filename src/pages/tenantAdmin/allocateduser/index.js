@@ -550,7 +550,7 @@ const Patient = ({
   }, []);
 
   useEffect(() => {
-    if (activeTab == 1 && (!selectedOptions || !allocatedOption)) {
+    if (activeTab == 2 ) {
       getL2PatientList({
         data: l2selectUser,
         pageNoL2Patient: pageNoL2Patient,
@@ -812,6 +812,7 @@ const Patient = ({
                                     selectOptions={generateOptionsForNewStore(
                                       filteredList?.data?.response
                                     )}
+                                    selectDefaultValue={allocatedOption}
                                     defaultSelectValue1={""}
                                     // isClose={true}
                                     setPageNo={setPageNo}
@@ -828,6 +829,7 @@ const Patient = ({
                                     setSelectedOption={setSelectedOptions}
                                     selectOptions={statusOptions}
                                     defaultSelectValue1={""}
+                                    selectDefaultValue={selectedOptions}
                                     setPageNo={setPageNo}
                                     // isClose={true}
                                     onChanges={() => {
