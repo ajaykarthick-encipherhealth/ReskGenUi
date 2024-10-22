@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Empty, Popover, Progress } from "antd";
+import { Empty, Popover, Progress, Spin } from "antd";
 import TableStyle from "../../table.module.css";
 import { Paginator } from "primereact/paginator";
 import { connect } from "react-redux";
@@ -7,12 +7,16 @@ import dayjs from "dayjs";
 import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
 import FhirDrawer from "../../../../pages/tenantAdmin/patientSync/modals/PdfDrawer";
 import { useRouter } from "next/router";
-import refreshIcon from "../../../../images/fihr/refresh.png";
 import { renderSkeleton } from "../../../reuseableFunctions";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LoadingOutlined } from "@ant-design/icons";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
-import { faCircleInfo, faRotateLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleInfo,
+  faCircleXmark,
+  faRotateLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import { actions as allActions } from "../../../../stores/admin/report";
 import { actions as patientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
 import { getResponePopup } from "../../../../utils/reusable";
@@ -34,6 +38,7 @@ function PdfTable({
   getAllBatches,
   pageNo,
   setViewDetailedBatch,
+  viewDetailedBatch,
 }) {
   const router = useRouter();
   const [filelList, setFileList] = useState();
@@ -84,19 +89,35 @@ function PdfTable({
     </div>
   );
 
-  const handleUploadButtonClick = (e, row) => {
-    e.stopPropagation();
-    setIsDrawerOpen(!isDrawerOpen);
-    setSelectedBatch(row);
-    setFileList();
-  };
+  // const handleUploadButtonClick = (e, row) => {
+  //   e.stopPropagation();
+  //   setIsDrawerOpen(!isDrawerOpen);
+  //   setSelectedBatch(row);
+  //   setFileList();
+  // };
   const getStatusStyles = ({ status, isBorder }) => {
     // const isProcessing = status === "PROCESSING";
     return {
-      background: status === "PROCESSING" ? "#FFE0CB" : "#CFE5FC",
-      color: status === "PROCESSING" ? "#FF7D2A" : "#1B67B3",
+      background:
+        status === "PROCESSING"
+          ? "#FFE0CB"
+          : status === "FAILED"
+          ? "red"
+          : "#CFE5FC",
+      color:
+        status === "PROCESSING"
+          ? "#FF7D2A"
+          : status === "FAILED"
+          ? "red"
+          : "#1B67B3",
       border: isBorder
-        ? `1px solid ${status === "PROCESSING" ? "#FF7D2A" : "#1B67B3"}`
+        ? `1px solid ${
+            status === "PROCESSING"
+              ? "#FF7D2A"
+              : status === "FAILED"
+              ? "red"
+              : "#1B67B3"
+          }`
         : "none",
     };
   };
@@ -143,7 +164,6 @@ function PdfTable({
               <tr>
                 <th className="text-truncate">BATCH DETAILS</th>
                 <th>COUNT</th>
-
                 <th className="text-center text-truncate">YEAR OF SERVICE</th>
                 <th className="text-center">EMR </th>
                 <th className="text-center">SOURCE </th>
@@ -152,43 +172,40 @@ function PdfTable({
                 >
                   INITIATED BY{" "}
                 </th>
-                <th className="text-center text-truncate">
-                  BATCH INITIATED DATE{" "}
-                </th>
-                <th style={{ paddingLeft: "70px" }}>STATUS </th>
+                <th className="text-center text-truncate">INITIATED DATE </th>
+                <th className="text-center">STATUS </th>
               </tr>
             </thead>
             <tbody className={TableStyle.bodytable}>
               {socketData?.content?.length > 0 ? (
-                socketData?.content?.map((row, index) => (
-                  <tr
-                    key={index}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      const encodedParams = btoa(
-                        JSON.stringify({
-                          batchId: row?.id,
-                          pageNo: pageNo,
-                        })
-                      );
-                      getActiveTab("PDF");
-
-                      row?.batchUploadStatus &&
-                        setViewDetailedBatch({ status: true, data: row });
-                      // router?.push({
-                      //   pathname: `/tenantAdmin/patientSync/pdfTable`,
-                      //   search: `params=${encodedParams}`,
-                      // });
-                    }}
-                  >
-                    <td className={TableStyle.childBorder}>
-                      <div className="font-bold">
-                        {row?.name ? row?.name : "---"}
-                      </div>
-                      <div>{row?.id ? row?.id : "---"}</div>
-                    </td>
-                    <td className={TableStyle.childBorder}>
-                      {row?.totalFileCount ? (
+                socketData?.content?.map((row, index) => {
+                  const processingCount =
+                    row?.totalFileCount > 0
+                      ? row?.totalFileCount -
+                        (row?.totalSuccessCount + row?.totalFailedCount)
+                      : 0;
+                  return (
+                    <tr
+                      key={index}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        getActiveTab("PDF");
+                        row?.batchUploadStatus &&
+                          setViewDetailedBatch({ status: true, data: row });
+                        // router?.push({
+                        //   pathname: `/tenantAdmin/patientSync/pdfTable`,
+                        //   search: `params=${encodedParams}`,
+                        // });
+                      }}
+                    >
+                      <td className={TableStyle.childBorder}>
+                        <div className="font-bold">
+                          {row?.name ? row?.name : "---"}
+                        </div>
+                        <div>{row?.id ? row?.id : "---"}</div>
+                      </td>
+                      <td className={TableStyle.childBorder}>
+                        {/* {row?.totalFileCount > 0 ? ( */}
                         <div className="d-flex">
                           <div style={{ width: "25px" }}>
                             {row?.totalFileCount}{" "}
@@ -196,132 +213,169 @@ function PdfTable({
                           <Popover
                             content={
                               <>
-                                Computed:{row?.totalSuccessCount}
+                                Computed:
+                                {row?.totalFileCount > 0
+                                  ? row?.totalSuccessCount
+                                  : 0}
                                 <br />
-                                Failed:{row?.totalFailedCount}
+                                Failed:
+                                {row?.totalFileCount > 0
+                                  ? row?.totalFailedCount
+                                  : 0}
                                 <br />
                                 Processing:
-                                {row?.totalFileCount -
-                                  (row?.totalSuccessCount +
-                                    row?.totalFailedCount)}
+                                {processingCount}
                               </>
                             }
                           >
                             <FontAwesomeIcon
                               icon={faCircleInfo}
-                              style={{ color: "#04306f" }}
+                              style={{
+                                color:
+                                  processingCount > 0
+                                    ? "#FF7D2A"
+                                    : row?.totalFailedCount > 0
+                                    ? "red"
+                                    : "#04306f",
+                              }}
                               className="mx-1 d-flex justify-content-center align-items-center pt-1"
                               placement="rightBottom"
                             />
                           </Popover>{" "}
                         </div>
-                      ) : (
-                        "---"
-                      )}
-                    </td>
+                        {/* ) : (
+                          0
+                        )} */}
+                      </td>
 
-                    <td className={TableStyle.childBorder}>
-                      {row?.yearOfService
-                        ? dateFormateAlign(row?.yearOfService)
-                        : "000"}
-                    </td>
+                      <td className={TableStyle.childBorder}>
+                        {row?.yearOfService
+                          ? dateFormateAlign(row?.yearOfService)
+                          : "000"}
+                      </td>
 
-                    <td className={`${TableStyle.childBorder} text-center`}>
-                      {row?.emrType ? row?.emrType : "---"}
-                    </td>
-                    <td className={`${TableStyle.childBorder} text-center`}>
-                      {row?.source ? row?.source : "---"}
-                    </td>
-                    <td
-                      className={TableStyle.childBorder}
-                      // style={{ textAlign: "left", paddingLeft: "110px" }}
-                    >
-                      {row?.createdBy ? (
-                        <div className="text-center">{row?.createdBy}</div>
-                      ) : (
-                        <div className="text-center">---</div>
-                      )}
-                    </td>
-                    <td
-                      className={`${TableStyle.childBorder} text-center`}
-                      // style={{ textAlign: "left", paddingLeft: "110px" }}
-                    >
-                      {row?.createdDate
-                        ? dayjs(row?.createdDate).format("MM-DD-YYYY")
-                        : "---"}
-                    </td>
+                      <td className={`${TableStyle.childBorder} text-center`}>
+                        {row?.emrType ? row?.emrType : "---"}
+                      </td>
+                      <td
+                        className={`${TableStyle.childBorder} text-center px-2`}
+                      >
+                        {row?.source ? row?.source : "---"}
+                      </td>
+                      <td
+                        className={TableStyle.childBorder}
+                        // style={{ textAlign: "left", paddingLeft: "110px" }}
+                      >
+                        {row?.createdBy ? (
+                          <div className="text-center">{row?.createdBy}</div>
+                        ) : (
+                          <div className="text-center">---</div>
+                        )}
+                      </td>
+                      <td
+                        className={`${TableStyle.childBorder} text-center`}
+                        // style={{ textAlign: "left", paddingLeft: "110px" }}
+                      >
+                        {row?.createdDate
+                          ? dayjs(row?.createdDate).format("MM-DD-YYYY:hh:mm A")
+                          : "---"}
+                      </td>
 
-                    <td className={`${TableStyle.childBorder} text-center`}>
-                      <div className="w-100 text-center d-flex justify-content-center align-items-center">
-                        <div
-                          style={{ width: "50%" }}
-                          className="d-flex justify-content-center align-items-center"
-                        >
-                          {row?.batchUploadStatus ? (
-                            <div
-                              style={{
-                                width: "100%",
-                                ...getStatusStyles({
-                                  status: row?.batchUploadStatus,
-                                  isBorder: true,
-                                }),
-                              }}
-                              className="px-4 py-1 rounded-1 font-semibold d-flex justify-content-center align-items-center"
-                            >
-                              <FontAwesomeIcon
-                                className="mx-1"
-                                icon={
-                                  row?.batchUploadStatus === "PROCESSING"
-                                    ? faRotateLeft
-                                    : faCircleCheck
-                                }
-                                style={getStatusStyles({
-                                  status: row?.batchUploadStatus,
-                                })}
-                              />
-
-                              {row?.batchUploadStatus.charAt(0).toUpperCase() +
-                                row?.batchUploadStatus.slice(1).toLowerCase()}
-                            </div>
-                          ) : (
-                            <div className="w-100 d-flex justify-content-center align-items-center">
-                              <button
-                                className={`w-100 ${
-                                  row?.source === "CogentUpload"
-                                    ? styles.uploadButton
-                                    : styles.triggerButton
-                                } d-flex justify-content-center align-items-center`}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-
-                                  setTriggeredBatch({
-                                    status: true,
-                                    id: row?.batchID,
-                                  });
-                                  if (row?.source === "CogentUpload") {
-                                    setOpenUpload({
-                                      status: !openUpload?.status,
-                                      data: row,
-                                    });
-                                  }
-                                  if (
-                                    row?.batchUploadStatus == null &&
-                                    row?.source !== "CogentUpload"
-                                  ) {
-                                    handleBatchTrigger(row);
-                                  }
+                      <td className={`${TableStyle.childBorder} text-center`}>
+                        <div className="w-100 text-center d-flex justify-content-center align-items-center">
+                          <div
+                            style={{ width: "65%" }}
+                            className="d-flex justify-content-center align-items-center"
+                          >
+                            {row?.batchUploadStatus ? (
+                              <div
+                                style={{
+                                  width: "100%",
+                                  ...getStatusStyles({
+                                    status: row?.batchUploadStatus,
+                                    isBorder: true,
+                                  }),
                                 }}
+                                className="px-4 py-1 rounded-1 font-semibold d-flex justify-content-center align-items-center"
                               >
-                                {row?.source === "CogentUpload"
-                                  ? "Upload"
-                                  : !row?.batchUploadStatus
-                                  ? "Trigger"
-                                  : ""}
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                        <div
+                                {row?.batchUploadStatus === "PROCESSING" ? (
+                                  <Spin
+                                    indicator={
+                                      <LoadingOutlined
+                                        style={{
+                                          fontSize: 14,
+                                        }}
+                                        spin
+                                      />
+                                    }
+                                    className="mx-2"
+                                    style={{
+                                      color: "#FF7D2A",
+                                      
+                                    }}
+                                  />
+                                ) : row?.batchUploadStatus === "FAILED" ? (
+                                  <FontAwesomeIcon
+                                    className="mx-1"
+                                    icon={faCircleXmark}
+                                    style={getStatusStyles({
+                                      status: row?.batchUploadStatus,
+                                    })}
+                                  />
+                                ) : (
+                                  <FontAwesomeIcon
+                                    className="mx-1"
+                                    icon={faCircleCheck}
+                                    style={getStatusStyles({
+                                      status: row?.batchUploadStatus,
+                                    })}
+                                  />
+                                )}
+
+                                {row?.batchUploadStatus
+                                  .charAt(0)
+                                  .toUpperCase() +
+                                  row?.batchUploadStatus.slice(1).toLowerCase()}
+                              </div>
+                            ) : (
+                              <div className="w-100 d-flex justify-content-center align-items-center">
+                                <button
+                                  className={`w-100 ${
+                                    row?.source === "CogentUpload"
+                                      ? styles.uploadButton
+                                      : styles.triggerButton
+                                  } d-flex justify-content-center align-items-center`}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+
+                                    setTriggeredBatch({
+                                      status: true,
+                                      id: row?.batchID,
+                                    });
+                                    if (row?.source === "CogentUpload") {
+                                      setOpenUpload({
+                                        status: !openUpload?.status,
+                                        data: row,
+                                      });
+                                    }
+                                    if (
+                                      row?.batchUploadStatus == null &&
+                                      row?.source !== "CogentUpload"
+                                    ) {
+                                      handleBatchTrigger(row);
+                                    }
+                                  }}
+                                >
+                                  {row?.source === "CogentUpload"
+                                    ? "Upload"
+                                    : !row?.batchUploadStatus
+                                    ? "Trigger"
+                                    : ""}
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                          {/* <div
                           style={{ width: "30%" }}
                           className="d-flex justify-content-start align-items-center"
                         >
@@ -341,11 +395,12 @@ function PdfTable({
                               />
                             </div>
                           )}
+                        </div> */}
                         </div>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
                   <td colSpan={11}>

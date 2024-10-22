@@ -2,6 +2,7 @@ import { message, Select } from "antd";
 import React from "react";
 import { Offcanvas, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import { emrTypeOptions } from "../../../utils/reusable";
 
 const FileUploading = ({
   addPatient,
@@ -129,39 +130,7 @@ const FileUploading = ({
                 }}
                 showSearch
                 value={emrType || null}
-                options={[
-                  { label: "ADSC", value: "ADSC" },
-                  { label: "Advanced MD", value: "Advanced MD" },
-                  { label: "Amazing Charts", value: "Amazing Charts" },
-                  { label: "Aprima", value: "Aprima" },
-                  { label: "Athena", value: "Athena" },
-                  { label: "Allegiance MD", value: "Allegiance MD" },
-                  { label: "Bizmatics", value: "Bizmatics" },
-                  { label: "Cronos", value: "Cronos" },
-                  { label: "DR RIAZ U HAQUE MD", value: "DR RIAZ U HAQUE MD" },
-                  { label: "Eclinicalworks", value: "Eclinicalworks" },
-                  { label: "EMD", value: "EMD" },
-                  { label: "EpicCare", value: "EpicCare" },
-                  { label: "Glenwood Systems", value: "Glenwood Systems" },
-                  { label: "Happy MD", value: "Happy MD" },
-                  { label: "Insync", value: "Insync" },
-                  { label: "IPatientCare", value: "IPatientCare" },
-                  { label: "NextGen", value: "NextGen" },
-                  { label: "PointClickCare", value: "PointClickCare" },
-                  { label: "Paper", value: "Paper" },
-                  { label: "Power to Practice", value: "Power to Practice" },
-                  { label: "Practice Fusion", value: "Practice Fusion" },
-                  { label: "Prognosis", value: "Prognosis" },
-                  { label: "Tebra", value: "Tebra" },
-                  { label: "Term SVR", value: "Term SVR" },
-                  {
-                    label: "Aprima Facility Portal",
-                    value: "Aprima Facility Portal",
-                  },
-                  { label: "Micro MD", value: "Micro MD" },
-                  { label: "IMS", value: "IMS" },
-                  { label: "Other", value: "-" },
-                ]}
+                options={emrTypeOptions}
                 required
               />
               {errors?.emr && (

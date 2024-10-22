@@ -307,6 +307,7 @@ const Index = ({
   getActiveTab,
   reportActiveTab,
   uploadFiles,
+  uploadFilesLoader,
 }) => {
   const [filteredCOder, setFilteredCoder] = useState(null);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -666,6 +667,7 @@ const Index = ({
                                       setViewDetailedBatch={
                                         setViewDetailedBatch
                                       }
+                                      viewDetailedBatch={viewDetailedBatch}
                                     />
                                   </Tab.Pane>
                                 </Tab.Content>
@@ -732,7 +734,9 @@ const Index = ({
             disabled={fileList?.length > 0 && !fileLoading ? false : true}
           >
             <div className="col-xl-12 mb-3 d-grid justify-content-center">
-              <Button type="submit">Submit</Button>
+              <Button type="submit">
+                {uploadFilesLoader ? "Loading..." : "Submit"}
+              </Button>
             </div>
           </Form.Item>
         </Form>
@@ -745,6 +749,7 @@ const connector = connect(
     pdfTableData: state.tenantAdmin?.patientSync?.allBatches?.data?.response,
     pdfLoader: state.tenantAdmin?.patientSync?.batchLoader,
     reportActiveTab: state.admin?.report?.activeTab,
+    uploadFilesLoader: state?.tenantAdmin?.patientSync?.uploadFilesLoader,
   }),
   {
     getAllBatches: allActions.getAllBatches,

@@ -306,7 +306,7 @@
 }
 .topHeader {
   display: flex;
-  width: 97%;
+  width: 100%;
   margin: auto;
   margin-top: 20px;
 }

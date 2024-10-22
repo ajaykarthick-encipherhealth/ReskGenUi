@@ -47,9 +47,8 @@ const DetailedViewPdfTable = ({
   reportActiveTab,
   params,
   setViewDetailedBatch,
+  webSocketData,
 }) => {
-  const router = useRouter();
-
   const [searchVal, setSearchVal] = useState([]);
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -59,6 +58,7 @@ const DetailedViewPdfTable = ({
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [currentId, setCurrentId] = useState({});
   const [batchPageNo, setBatchPageNo] = useState(0);
+  const [socketData, setSocketData] = useState(pdfTabledata);
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -124,6 +124,30 @@ const DetailedViewPdfTable = ({
     getAllBatches({ page: batchPageNo });
   }, [batchPageNo]);
   useEffect(() => {
+    if (
+      webSocketData &&
+      webSocketData?.webSocketType === "BATCH_STATUS" &&
+      pdfTabledata?.content
+    ) {
+      const updatedTableData = socketData?.content?.map((item) => {
+        if (item.patientId === webSocketData?.patientId) {
+          return {
+            ...item,
+            batchUploadStatus: webSocketData?.batchUploadStatus || "PROCESSING",
+          };
+        }
+        return item;
+      });
+      setSocketData((prevState) => ({
+        ...prevState,
+        content: updatedTableData,
+      }));
+    } else {
+      setSocketData(pdfTabledata);
+    }
+  }, [webSocketData, socketData?.content, pdfTabledata?.content]);
+
+  useEffect(() => {
     if (reportActiveTab) {
       getActiveTab(reportActiveTab);
     }
@@ -131,7 +155,7 @@ const DetailedViewPdfTable = ({
       const decodedParams = params;
       setBatchPageNo(decodedParams?.pageNo);
       if (pdfTabledata) {
-        const filterData = pdfTabledata?.content?.filter(
+        const filterData = socketData?.content?.filter(
           (item) => item?.id === decodedParams?.batchId
         );
         setCurrentId(...filterData);
@@ -158,7 +182,6 @@ const DetailedViewPdfTable = ({
     selectedOptions,
     params,
   ]);
-
   const headerData = [
     {
       id: 1,
@@ -180,18 +203,26 @@ const DetailedViewPdfTable = ({
       icon: statusIcon,
       name: (
         <>
-          {currentId?.totalFileCount > 0 ? (
+          {
             <Popover
               content={
                 <>
-                  Computed:{currentId?.totalSuccessCount}
+                  Computed:
+                  {currentId?.totalFileCount > 0
+                    ? currentId?.totalSuccessCount
+                    : 0}
                   <br />
-                  Failed:{currentId?.totalFailedCount}
+                  Failed:
+                  {currentId?.totalFileCount > 0
+                    ? currentId?.totalFailedCount
+                    : 0}
                   <br />
                   Processing:
-                  {currentId?.totalFileCount -
-                    (currentId?.totalSuccessCount +
-                      currentId?.totalFailedCount)}
+                  {currentId?.totalFileCount > 0
+                    ? currentId?.totalFileCount -
+                      (currentId?.totalSuccessCount +
+                        currentId?.totalFailedCount)
+                    : 0}
                 </>
               }
             >
@@ -201,12 +232,10 @@ const DetailedViewPdfTable = ({
                 icon={faCircleInfo}
                 style={{ color: "#04306f" }}
                 placement="rightBottom"
-                className="mx-1"
+                className="mx-1 cursor-pointer"
               />
             </Popover>
-          ) : (
-            currentId?.totalFileCount
-          )}
+          }
         </>
       ),
     },
@@ -405,6 +434,7 @@ const connector = connect(
     loader: state?.tenantAdmin?.patientSync?.getBatchLoader,
     pdfTabledata: state.tenantAdmin?.patientSync?.allBatches?.data?.response,
     reportActiveTab: state.admin?.report?.activeTab,
+    webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
   }),
   {
     getBatchInfo: allActions.getBatchInfo,

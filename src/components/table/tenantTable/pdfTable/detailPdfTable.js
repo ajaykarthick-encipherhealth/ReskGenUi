@@ -2,14 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Empty, Progress } from "antd";
 import { Paginator } from "primereact/paginator";
 import dayjs from "dayjs";
-import Image from "next/image";
 import processing from "../../../../images/fihr/processing.svg";
 import completed from "../.././../../images/fihr/completed.svg";
-import refresh from "../.././../../images/fihr/detailedFhirRefresh.svg";
 import failed from "../.././../../images/fihr/failed.svg";
 import TableStyle from "../../table.module.css";
 import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
-import PropTypes from "prop-types";
 import { renderSkeleton } from "../../../reuseableFunctions";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,7 +14,6 @@ import {
   faCircleCheck,
   faCircleXmark,
 } from "@fortawesome/free-regular-svg-icons";
-import { faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
 
 export const getColors = (rowStatus) => {
   let strokeColor;
@@ -74,14 +70,14 @@ const DetailedPdfTable = ({
   // };
 
   useEffect(() => {
-    if (socketData) {
+    if (tableData?.content) {
       const interval = setInterval(() => {
         setProgressMap((prevCount) => (prevCount + 5) % 100);
       }, 500);
 
       return () => clearInterval(interval);
     }
-  }, [socketData]);
+  }, [tableData?.content]);
 
   useEffect(() => {
     if (
@@ -93,7 +89,7 @@ const DetailedPdfTable = ({
         if (item.patientId === webSocketData?.patientId) {
           return {
             ...item,
-            processStage: webSocketData?.processStageChart||'PROCESSING' ,
+            processStage: webSocketData?.processStageChart || "PROCESSING",
           };
         }
         return item;
@@ -105,7 +101,7 @@ const DetailedPdfTable = ({
     } else {
       setSocketData(tableData);
     }
-  }, [webSocketData, socketData?.content, tableData]);
+  }, [webSocketData, socketData?.content, tableData?.content]);
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -117,7 +113,7 @@ const DetailedPdfTable = ({
             <thead className={TableStyle.classTTotalhead}>
               <tr>
                 <th>FILE ID</th>
-                <th>FILE NAME</th>
+                <th className="text-start">FILE NAME</th>
                 <th className="text-center">PATIENT ID</th>
                 <th className="text-center">PATIENT NAME</th>
                 <th className="text-center"> COMPUTED DATE TIME</th>
@@ -131,13 +127,15 @@ const DetailedPdfTable = ({
                   const errStatus = row?.processStage?.split("_");
                   return (
                     <tr key={row?.patientId} style={{ height: "40px" }}>
-                      <td className={TableStyle.childBorder}>
+                      <td className={`${TableStyle.childBorder} px-1`}>
                         {row?.fileId ? row?.fileId : "---"}
                       </td>
-                      <td className={TableStyle.childBorder}>
+                      <td className="px-0">
                         {row?.fileName ? row?.fileName : "---"}
                       </td>
-                      <td className={`${TableStyle.childBorder} text-center`}>
+                      <td
+                        className={`${TableStyle.childBorder} text-center px-2`}
+                      >
                         {row?.patientId ? row?.patientId : "---"}
                       </td>
                       <td className={`${TableStyle.childBorder} text-center`}>
@@ -147,20 +145,17 @@ const DetailedPdfTable = ({
                         className={TableStyle.childBorder}
                         style={{ textAlign: "center" }}
                       >
-                        {row?.computedDateTime
-                          ? dayjs(row?.computedDateTime).format(
-                              "MM/DD/YYYY hh:mm A"
-                            )
+                        {row?.createdDate
+                          ? dayjs(row?.createdDate).format("MM/DD/YYYY hh:mm A")
                           : "---"}
                       </td>
-                      <td className={`${TableStyle.childBorder} text-center`} style={{width:"200px"}}>
+                      <td
+                        className={`${TableStyle.childBorder} text-center px-2`}
+                        style={{ width: "200px" }}
+                      >
                         <div
-                          className="text-capitalize"
+                          className="d-flex text-capitalize pt-2 m-auto justify-content-start"
                           style={{
-                            fontSize: "12px",
-                            display: "flex",
-                            margin: "auto",
-                            justifyContent: "start",
                             color:
                               row?.processStage === "FINISHED" ||
                               row?.processStage === "PROCESSED"
@@ -190,12 +185,14 @@ const DetailedPdfTable = ({
                           ) : (
                             ""
                           )}
-                          {row?.processStage?.replace(/_/g, " ")
+                          {row?.processStage
+                            ?.replace(/_/g, " ")
                             ?.slice(0, 1)
                             .toUpperCase() +
-                            row?.processStage?.replace(/_/g, " ")
+                            row?.processStage
+                              ?.replace(/_/g, " ")
                               .slice(1)
-                              .toLowerCase()||""}
+                              .toLowerCase() || ""}
                           {/* {errStatus?.includes("FAILED")&& (
                           <div className={styles.refreshBtn}>
                             <Image src={refresh} width={15} height={15} />
@@ -224,7 +221,7 @@ const DetailedPdfTable = ({
                             }
                             className={`${styles.progreddBr} ${
                               getColors(row?.processStage)?.progressTextClass
-                            }`}
+                            } pb-2`}
                             showInfo={false}
                           />
                         </div>

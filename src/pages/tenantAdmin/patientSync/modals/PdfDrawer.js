@@ -8,7 +8,7 @@ import { Drawer, Form, Input, Select } from "antd";
 import style from "../fhir.module.css";
 import downloadImg from "../../../../images/fihr/download.png";
 import uploaderImg from "../../../../images/fihr/uploaderImg.png";
-import { getYears } from "../../../../utils/reusable";
+import { emrTypeOptions, getYears } from "../../../../utils/reusable";
 import UploadFile from "../uploadFile";
 
 const inputTypeOptions = [
@@ -100,7 +100,11 @@ const PdfDrawer = ({
         <Form form={form} name="basic" layout="vertical" onFinish={onFinish}>
           {uploadType !== "upload" && (
             <Form.Item
-              label={<label>Batch Name</label>}
+              label={
+                <label>
+                  Batch Name <span className="text-danger">*</span>
+                </label>
+              }
               name="name"
               rules={[
                 {
@@ -115,19 +119,87 @@ const PdfDrawer = ({
           {uploadType !== "upload" && (
             <>
               <Form.Item
-                label={<label>EMR Type</label>}
+                label={
+                  <label>
+                    Source <span className="text-danger">*</span>
+                  </label>
+                }
+                name="source"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Enter source",
+                  },
+                ]}
+              >
+                <Select
+                  name="source"
+                  style={{ width: "100%" }}
+                  options={inputTypeOptions}
+                  size="large"
+                  onChange={(value) => {
+                    setSelectedType(value);
+                    setFileList([]);
+                  }}
+                  placeholder="Source"
+                  allowClear={true}
+                />
+              </Form.Item>
+              {selectedType !== "CogentUpload" && (
+                <Form.Item
+                  label={
+                    <label>
+                      FilePath / FolderPath{" "}
+                      <span className="text-danger">*</span>
+                    </label>
+                  }
+                  name="sourceFolderPath"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter FilePath / FolderPath",
+                    },
+                  ]}
+                >
+                  <Input placeholder="FilePath / FolderPath" />
+                </Form.Item>
+              )}
+              <Form.Item
+                label={
+                  <label>
+                    EMR Type <span className="text-danger">*</span>
+                  </label>
+                }
                 name="emrType"
                 rules={[
                   {
-                    required: false,
+                    required: true,
                     message: "Please Enter EMR Type",
                   },
                 ]}
               >
-                <Input placeholder="EMR Type" />
+                {/* <Input placeholder="EMR Type" /> */}
+                <Select
+                  showSearch
+                  name="emrType"
+                  style={{ width: "100%" }}
+                  options={emrTypeOptions}
+                  size="large"
+                  // onChange={(value) => {
+                  //   setSelectedType(value);
+                  //   setFileList([]);
+                  // }}
+                  placeholder="EMR Type"
+                  allowClear={true}
+                />
               </Form.Item>
               <Form.Item
-                label={<label> File Count</label>}
+                label={
+                  <label>
+                    {" "}
+                    File Count <span className="text-danger">*</span>
+                  </label>
+                }
                 name="totalFileCount"
                 rules={[
                   {
@@ -155,7 +227,11 @@ const PdfDrawer = ({
                 <Input placeholder="File Count" />
               </Form.Item>
               <Form.Item
-                label={<label>YearOf Service</label>}
+                label={
+                  <label>
+                    Year Of Service <span className="text-danger">*</span>
+                  </label>
+                }
                 name="yearOfService"
                 rules={[
                   {
@@ -168,34 +244,12 @@ const PdfDrawer = ({
                   mode="tags"
                   name="yearOfService"
                   style={{ width: "100%" }}
-                  options={getYears()}
+                  options={getYears().sort((a, b) => b.value - a.value)}
                   size="large"
                   placeholder="year Of Service"
                 />
               </Form.Item>
-              <Form.Item
-                label={<label>Source</label>}
-                name="source"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Enter source",
-                  },
-                ]}
-              >
-                <Select
-                  name="source"
-                  style={{ width: "100%" }}
-                  options={inputTypeOptions}
-                  size="large"
-                  onChange={(value) => {
-                    setSelectedType(value);
-                    setFileList([]);
-                  }}
-                  placeholder="Source"
-                  allowClear={true}
-                />
-              </Form.Item>
+
               {/* {selectedType === "CogentUpload" ? (
                 <Form.Item
                   label={
@@ -220,20 +274,7 @@ const PdfDrawer = ({
                 </Form.Item>
               ) : ( */}
               {/* // selectedType && ( */}
-              {selectedType !== "CogentUpload" && (
-                <Form.Item
-                  label={<label>FilePath / FolderPath</label>}
-                  name="sourceFolderPath"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter FilePath / FolderPath",
-                    },
-                  ]}
-                >
-                  <Input placeholder="FilePath / FolderPath" />
-                </Form.Item>
-              )}
+
               {/* // ) */}
               {/* )} */}
 
