@@ -67,7 +67,6 @@ const File = ({
   const [allDisList, setAllDisList] = useState([]);
   const [nonHccDiseasesList, setNonHccDiseasesList] = useState([]);
 
-
   useEffect(() => {
     var orgId = getStorage("orgId");
     var tenId = getStorage("tenantId");
@@ -82,7 +81,6 @@ const File = ({
       setCaptureSectionMatching,
       "",
       patientDetailsResult,
-      "",
       "",
       "",
       "",

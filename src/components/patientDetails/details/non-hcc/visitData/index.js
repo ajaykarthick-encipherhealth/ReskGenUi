@@ -71,7 +71,6 @@ const VisitData = ({
       "",
       "",
       "",
-      "",
       setNonHccDiseasesList
     );
   }, [patientDetailsResult]);

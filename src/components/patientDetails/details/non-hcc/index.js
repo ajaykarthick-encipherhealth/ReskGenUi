@@ -26,7 +26,6 @@ const NonHcc = ({
   // const [selectDosValue, setSelectDosValue] = useState("");
   const [dosSummariesList, setDosSummariesList] = useState([]);
   const selectTab = async (number) => {};
-
   const handleOptions = (value) => {
     setIsLoading(true);
     setSelectDosValue(value);

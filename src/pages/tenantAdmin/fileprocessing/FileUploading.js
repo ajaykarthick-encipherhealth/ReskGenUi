@@ -2,7 +2,7 @@ import { message, Select } from "antd";
 import React from "react";
 import { Offcanvas, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { emrTypeOptions } from "../../../utils/reusable";
+import { emrTypeOptions, getYears } from "../../../utils/reusable";
 
 const FileUploading = ({
   addPatient,
@@ -102,12 +102,18 @@ const FileUploading = ({
                 <Form.Label>
                   Year of Service <span className="text-danger">*</span>{" "}
                 </Form.Label>
-                <Form.Control
-                  name="year"
-                  required
-                  type="number"
-                  onChange={(e) => handleChange(e)}
+                <Select
                   placeholder="Select Year"
+                  name="year"
+                  maxTagCount="responsive"
+                  className={`ant_select_form hcc_form mb-2`}
+                  onChange={(selOption, val) => {
+                    handleChange(selOption, "year");
+                  }}
+                  showSearch
+                  value={inputValue?.year || null}
+                  options={getYears()}
+                  required
                 />
               </div>
               {errors?.year && (

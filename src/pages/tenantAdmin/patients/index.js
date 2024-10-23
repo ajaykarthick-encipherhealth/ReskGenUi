@@ -296,16 +296,16 @@ const Patient = ({
   };
 
   const handleChange = async (e, name) => {
-    const key = name == "dos" ? "dos" : e.target.name;
-    const value = name == "dos" ? e : e.target.value;
-    if (e?.target?.name === "year") {
-      const validateYearField = validateYear(e.target.value, setErrors);
+    const key = name == "dos" ? "dos" : name == "year" ? "year" : e.target.name;
+    const value = name == "dos" || name == "year" ? e : e.target.value;
+    if (name === "year") {
+      const validateYearField = validateYear(e, setErrors);
       if (validateYearField) {
         setErrors({ ...errors, year: "" });
         setInputValue({ ...inputValue, [key]: value });
       } else {
-        setInputValue({ ...inputValue, year: '' });
-        setErrors({ ...errors, year: "Please enter a valid year" });
+        setInputValue({ ...inputValue, year: "" });
+        setErrors({ ...errors, year: "Please select year" });
       }
     } else if (name == "dos") {
       if (value) {
@@ -338,11 +338,16 @@ const Patient = ({
       if (selectFileRadiology != null) {
         submitRadiology();
       }
-    } else if (!emrType) {
-      setErrors({ ...errors, emr: "Please Select EMR Type" });
+    }
+    if (!emrType) {
+      setErrors((prev) => ({ ...prev, emr: "Please select EMR type" }));
+    }
+    if (!inputValue.year) {
+      setErrors((prev) => ({ ...prev, year: "Please select year" }));
     }
     setValidated(true);
   };
+
   const handleSubmitPatientId = async (form) => {
     var orgId = selectOrgList;
     form.allocatedBy = localUserId;
@@ -567,6 +572,13 @@ const Patient = ({
     setAddPatient(false);
     setErrors({ year: "", emr: "" });
     setEmrType("");
+    setInputValue({
+      year: "",
+      name: "",
+      patientId: "",
+      processStageId: "",
+      patientId: "",
+    });
   };
 
   const onPageChange = (e) => {

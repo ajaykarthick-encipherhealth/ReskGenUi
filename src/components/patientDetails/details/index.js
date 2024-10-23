@@ -22,7 +22,15 @@ import {
   faTimeline,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Avatar, Tooltip, Select, Badge, notification, Drawer, Popover } from "antd";
+import {
+  Avatar,
+  Tooltip,
+  Select,
+  Badge,
+  notification,
+  Drawer,
+  Popover,
+} from "antd";
 import { IMAGES, SVGICON } from "../../../jsx/constant/theme";
 import { Button, Offcanvas } from "react-bootstrap";
 import Image from "next/image";
@@ -260,7 +268,9 @@ const Details = ({
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
     setLocalUserId(uId);
-    setLocalPatientId(selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId);
+    setLocalPatientId(
+      selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
+    );
     getPatientDetails(
       selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
       patientDetailsResult?.data?.response
@@ -269,7 +279,9 @@ const Details = ({
 
   useEffect(() => {
     const patientId = getStorage("patientId");
-    setLocalPatientId(selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId);
+    setLocalPatientId(
+      selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
+    );
     if (activeTab == 3 || activeTab == 4) {
       getPatientDetails(
         selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
@@ -803,8 +815,8 @@ const Details = ({
                                       const sortedFlags =
                                         flagsDetailsResult.response.sort(
                                           (a, b) =>
-                                          a.flagDetails?.priority -
-                                           b.flagDetails?.priority
+                                            a.flagDetails?.priority -
+                                            b.flagDetails?.priority
                                         );
 
                                       const highestPriorityFlag =
@@ -882,12 +894,12 @@ const Details = ({
                                       );
                                     })()}
                                 </div>
-
                                 <div className="">
                                   <div
                                     className={`${visitStyles.priorityStatus} p-0`}
                                   >
-                                    {patienIdDetails?.priority == "URGENT" ? (
+                                    {patientIdDetailsData?.data?.response
+                                      ?.priority == "URGENT" ? (
                                       <div
                                         className={
                                           visitStyles.priorityStatusIcon
@@ -904,7 +916,8 @@ const Details = ({
                                           Urgent
                                         </span>
                                       </div>
-                                    ) : patienIdDetails?.priority == "HIGH" ? (
+                                    ) : patientIdDetailsData?.data?.response
+                                        ?.priority == "HIGH" ? (
                                       <div
                                         className={
                                           visitStyles.priorityStatusIcon
@@ -923,8 +936,8 @@ const Details = ({
                                           High
                                         </span>
                                       </div>
-                                    ) : patienIdDetails?.priority ==
-                                      "NORMAL" ? (
+                                    ) : patientIdDetailsData?.data?.response
+                                        ?.priority == "NORMAL" ? (
                                       <div
                                         className={
                                           visitStyles.priorityStatusIcon
@@ -1071,7 +1084,9 @@ const Details = ({
                         <div className="col-xl-11">
                           <FileDetails
                             title={activeTab == 3 ? "Radiology" : "LAB"}
-                            patienIdDetails={patienIdDetails}
+                            patienIdDetails={
+                              patientIdDetailsData?.data?.response
+                            }
                             patientDetails={patientDetails}
                             fileResult={patientDocumentResult}
                             hccCounts={hccCounts}
