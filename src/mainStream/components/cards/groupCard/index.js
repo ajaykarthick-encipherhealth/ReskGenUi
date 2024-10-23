@@ -22,7 +22,7 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
   };
 
   return (
-    <div>
+    <div className="cursor-pointer">
       {data?.length > 0 ? (
         <div
           style={{ marginBottom: "0px" }}

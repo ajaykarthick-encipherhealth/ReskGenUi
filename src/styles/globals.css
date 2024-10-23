@@ -15813,14 +15813,21 @@ input::-webkit-inner-spin-button {
   box-shadow: none !important;
   border: none !important;
 }
-.individualReportSearch .ant-input-affix-wrapper > input.ant-input {
+.individualReportSearch .ant-input-affix-wrapper > input.ant-input,
+&:focus,
+&:active {
   height: 30px !important;
+  box-shadow: none !important;
 }
 .individualReportSearch .ant-input-outlined:focus,
 :where(.css-dev-only-do-not-override-3rel02).ant-input-outlined:focus-within {
-  /* box-shadow: none !important; */
+  box-shadow: none !important;
   border: none !important;
 }
 .searchStyle .ant-input-affix-wrapper {
   align-items: center;
+}
+.custom-spreadsheet .Spreadsheet__cell {
+  height: auto; /* Adjust the value as needed */
+  line-height: 0px; /* Make the text vertically centered */
 }

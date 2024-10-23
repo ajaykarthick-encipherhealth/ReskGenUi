@@ -42,7 +42,7 @@ const ExcelDisplay = ({ tableData, loading, extention }) => {
           Loading....
         </div>
       ) : Array.isArray(data) && data?.length > 0 ? (
-        <Spreadsheet data={data} onChange={setData} />
+        <Spreadsheet data={data} onChange={setData} className="custom-spreadsheet"/>
       ) : (
         <div className="d-flex align-items-center justify-content-center">
           <Empty />

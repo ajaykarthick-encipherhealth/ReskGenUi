@@ -2,14 +2,11 @@ import React, { useEffect, useState } from "react";
 import csvToJson from "csvtojson";
 import * as XLSX from "xlsx";
 import dayjs from "dayjs";
-import { Button, Empty } from "antd";
+import { Button, Empty, Input } from "antd";
 import Image from "next/image";
-import { InputText } from "primereact/inputtext";
 import ExcelDisplay from "../../../../components/table/receivedReport/ExcelDisplay";
 import CSVDisplay from "../../../../components/table/receivedReport/CSVDisplay";
 import styles from "../../../../components/table/receivedReport/receivedReport.module.css";
-import reportStyles from "../../../reviewer/report/report.module.css";
-import search from "../../../../images/report/search.svg";
 import sortImg from "../../../../images/report/sort.svg";
 import id from "../../../../images/report/id.svg";
 import file from "../../../../images/report/file.svg";
@@ -24,6 +21,9 @@ import { debounce } from "../../../../components/input";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/supervisor/report";
 import { getFileDetailsReport } from "../../../../stores/supervisor/report/network";
+import { actions as allReportActions } from "../../../.././stores/admin/report";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const IndividualReceiverReport = ({
   getReceivedDetails,
@@ -32,12 +32,13 @@ const IndividualReceiverReport = ({
   reportDatas,
   uploadFile,
   getSelectedReportDetails,
+  getActiveTab,
 }) => {
   const router = useRouter();
   const [tableData, setTableData] = useState([]);
   const [csvTableData, setCSVTableData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [reportInfo, setReportInfo] = useState();
+  const [reportInfo, setReportInfo] = useState({ data: null, id: null });
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [receivedSort, setReceivedSort] = useState("DESC");
   const [currentRole, setCurrentRole] = useState();
@@ -45,8 +46,9 @@ const IndividualReceiverReport = ({
   const [isSentReport, setIsSentReport] = useState(false);
   const [isAdminPage, setIsAdminPage] = useState(false);
   const [fileResult, setFileResult] = useState(null);
-
+  const [reportPath, setReportPath] = useState(null);
   const [detailsContent, setDetailsContent] = useState();
+  const [loadingList, setLoadingList] = useState(true);
 
   const fetchData = async (url) => {
     setLoading(true);
@@ -91,33 +93,8 @@ const IndividualReceiverReport = ({
   const filterChange = (e) => {
     debouncedSearch(e.target.value);
   };
-  useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get("reportId");
-    const reportConfirm = new URLSearchParams(window.location.search).get(
-      "sentreport"
-    );
-    const isAdminPage = new URLSearchParams(window.location.search).get(
-      "isAdminPage"
-    );
-    setIsAdminPage(isAdminPage);
-    if (reportConfirm) {
-      setIsSentReport(true);
-      getSentDetails(0, "", "", searchValue, sort);
-      getSelectedReportDetails(id);
-    } else {
-      getReceivedDetails(0, "", "", searchValue, sort);
-      getSelectedReportDetails(id);
-    }
-    setCurrentRole(getStorage("userRole"));
-  }, [searchValue, sort, router]);
-  useEffect(() => {
-    if (uploadFile) {
-      getFetchPathUrl(uploadFile);
-    }
-  }, [uploadFile]);
-
   const getFetchPathUrl = async (url) => {
-    var result = await getFileDetailsReport(url?.reportPath);
+    var result = await getFileDetailsReport(url);
     var data = {
       extention: "xlsx",
       path: result?.response,
@@ -125,7 +102,26 @@ const IndividualReceiverReport = ({
     setFileResult(data);
     fetchData(data);
   };
-
+  const callGetFileApi = async ({ reportConfirm, searchValue, id }) => {
+    setLoadingList(true);
+    if (reportConfirm) {
+      setIsSentReport(true);
+      getSentDetails(0, "", "", searchValue, sort);
+      const res = await getSelectedReportDetails(id);
+      if (res?.status === "SUCCESS") {
+        setReportPath(res?.response);
+        setLoadingList(false);
+      }
+    } else {
+      getReceivedDetails(0, "", "", searchValue || "", sort);
+      const res = await getSelectedReportDetails(id);
+      if (res?.status === "SUCCESS") {
+        setReportPath(res?.response);
+        setLoadingList(false);
+      }
+    }
+    setCurrentRole(getStorage("userRole"));
+  };
   useEffect(() => {
     if (reportDatas?.data || (sentReportDatas?.data && isSentReport)) {
       setDetailsContent(
@@ -133,112 +129,145 @@ const IndividualReceiverReport = ({
           ? sentReportDatas?.data?.response?.receivedReportDTOList?.data
           : reportDatas?.data?.response?.reportStatusDTOList?.content
       );
-      const id = new URLSearchParams(window.location.search).get("reportId");
-      const reportdata =
-        reportDatas?.data?.response?.reportStatusDTOList?.content?.filter(
-          (item) => item?.reportId === id
+      if (window.location.search && !reportInfo?.id) {
+        const id = new URLSearchParams(window.location.search).get("reportId");
+        const reportConfirm = new URLSearchParams(window.location.search).get(
+          "sentreport"
         );
-      const sentdata =
-        sentReportDatas?.data?.response?.receivedReportDTOList?.data?.filter(
-          (item) => item?._id === id
-        );
-
-      // setReportInfo(!isSentReport ? reportdata[0] : sentdata[0]);
+        if (id) {
+          const reportDataId =
+            reportDatas?.data?.response?.reportStatusDTOList?.content?.find(
+              (item) => item?.reportId == id
+            )?.reportId;
+          const sentDataId =
+            sentReportDatas?.data?.response?.receivedReportDTOList?.data?.find(
+              (item) => item?._id == id
+            )?._id;
+          const reportData =
+            reportDatas?.data?.response?.reportStatusDTOList?.content?.find(
+              (item) => item?.reportId == id
+            );
+          const sentData =
+            sentReportDatas?.data?.response?.receivedReportDTOList?.data?.find(
+              (item) => item?._id == id
+            );
+          setReportInfo({
+            data: reportConfirm ? sentData : reportData,
+            id: reportConfirm ? sentDataId : reportDataId,
+          });
+        }
+      }
     }
   }, [reportDatas, sentReportDatas, isSentReport]);
 
   useEffect(() => {
-    if (router?.query?.reportId) {
-      const filter = detailsContent?.find(
-        (item) => item?._id == router?.query?.reportId
+    if (window.location.search) {
+      setLoadingList(true);
+      const id = new URLSearchParams(window.location.search).get("reportId");
+      const reportConfirm = new URLSearchParams(window.location.search).get(
+        "sentreport"
       );
-      setReportInfo(filter);
+      setIsSentReport(reportConfirm);
+      const isAdminPage = new URLSearchParams(window.location.search).get(
+        "isAdminPage"
+      );
+      setIsAdminPage(isAdminPage);
+      callGetFileApi({
+        reportConfirm: reportConfirm,
+        searchValue: searchValue,
+        id: id,
+      });
     }
-  }, [detailsContent, router]);
+  }, [searchValue, sort]);
+
+  useEffect(() => {
+    if (reportPath) {
+      getFetchPathUrl(reportPath?.reportPath);
+    }
+  }, [reportPath]);
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
-
       <div
-        className={styles.container}
+        className={`${styles.container}`}
         style={{ margin: "30px 0px 50px 0px", height: "auto" }}
       >
-        <div className={styles.cont1}>
-          <div>
-            <div className={styles.container}>
-              <div
-                className={"col-xl-1 d-flex"}
-                style={{ cursor: "pointer", marginLeft: "10px" }}
+        <div className={`${styles.cont1} text-truncate`}>
+          <div className={styles.sideContainer}>
+            <div className={`${styles.divContainer} individualReportSearch`}>
+              <button
+                className="border-0 bg-white text-white"
+                onClick={() => {
+                  router.push(`/supervisor/report`);
+                  setLoading(true);
+                  setIsSentReport(false);
+                  getActiveTab(isSentReport ? "Sent" : "Received");
+                  setReportInfo({ data: null, id: null });
+                }}
+                allowClear
               >
-                <button
-                  style={{ width: "40px", height: "30px" }}
-                  className={reportStyles.filterBtn}
-                  onClick={() => {
-                    const page = new URLSearchParams(
-                      window.location.search
-                    ).get("page");
-                    const limit = new URLSearchParams(
-                      window.location.search
-                    ).get("limit");
-                    router?.push(
-                      `/supervisor/report?page=${page}&limit=${limit}`
-                    );
-
-                    setLoading(true);
-                    setIsSentReport(false);
-                  }}
-                >
-                  <Image src={leftArrow} />
-                </button>
-              </div>
-              <div className={styles.divContainer}>
-                <InputText
-                  type="text"
-                  onChange={(e) => filterChange(e)}
-                  placeholder="Search"
-                  className={styles.search}
-                  maxLength={25}
-                  onKeyDown={(e) => {
-                    // Prevent input of backslash ("\")
-                    if (e.key === "\\") {
-                      e.preventDefault();
-                    }
-                  }}
-                />
-                <Image src={search} alt="noimg" style={{ marginTop: "5px" }} />
-              </div>
-              <div className={styles.sort} onClick={sortTableByDate}>
-                <Image src={sortImg} alt="noimg" style={{ marginTop: "5px" }} />
-              </div>
+                <Image src={leftArrow} />
+              </button>
+              <Input
+                type="text"
+                onChange={(e) => filterChange(e)}
+                placeholder="Search"
+                className={`${styles.search}`}
+                maxLength={25}
+                onKeyDown={(e) => {
+                  // Prevent input of backslash ("\")
+                  if (e.key === "\\") {
+                    e.preventDefault();
+                  }
+                }}
+                style={{ height: "100%" }}
+                suffix={
+                  <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
+                }
+                allowClear={true}
+              />
+              {/* <Image src={search} alt="noimg" style={{ marginTop: "5px" }} /> */}
             </div>
 
-            {/* users */}
-            <div className={styles.list}>
-              {detailsContent?.length > 0 ? (
-                detailsContent?.map((item) => {
-                  const id = item?._id ? item?._id : item?.reportId;
-                  const reportId = reportInfo?._id
-                    ? reportInfo?._id
-                    : reportInfo?.reportId;
-                  return (
-                    <div
-                      key={id}
-                      onClick={() => {
-                        setReportInfo(item);
-                      }}
-                    >
-                      <div className="d-flex cursor-pointer mb-2">
-                        <div className={styles.user}>
-                          <div
-                            style={{
-                              color: reportId === id ? "#04306f" : "black",
-                              fontWeight: reportId === id ? "bold" : "normal",
-                            }}
-                          >
-                            {item?.reportName}
-                          </div>
+            <div className={styles.sort} onClick={sortTableByDate}>
+              <Image src={sortImg} alt="noimg" style={{ marginTop: "5px" }} />
+            </div>
+          </div>
+          {/* users */}
+          <div className={styles.list}>
+            {loadingList ? (
+              <div className={styles.sideContainer}>Loading...</div>
+            ) : detailsContent?.length > 0 ? (
+              detailsContent?.map((item) => {
+                const id = item?._id ? item?._id : item?.reportId;
 
+                return (
+                  <div
+                    key={id}
+                    onClick={() => {
+                      setReportInfo({ data: item, id: id });
+                      callGetFileApi({
+                        reportConfirm: isSentReport,
+                        id: id,
+                      });
+                    }}
+                  >
+                    <div className="d-flex mb-2" style={{ cursor: "pointer" }}>
+                      <div className={`${styles.user}`}>
+                        <div
+                          className="text-truncate"
+                          style={{
+                            color: reportInfo?.id == id ? "#04306f" : "black",
+                            fontWeight:
+                              reportInfo?.id == id ? "bold" : "normal",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {item?.reportName}
+                        </div>
+
+                        <div>
                           {item?.type && (
                             <div
                               style={{ margin: "5px 0 0 5px" }}
@@ -264,16 +293,16 @@ const IndividualReceiverReport = ({
                           )}
                         </div>
                       </div>
-                      <div className={styles.date}>
-                        {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
-                      </div>
                     </div>
-                  );
-                })
-              ) : (
-                <div>No data</div>
-              )}
-            </div>
+                    <div className={styles.date}>
+                      {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className={styles.sideContainer}>No data</div>
+            )}
           </div>
         </div>
         <div className={styles.tablediv}>
@@ -282,27 +311,27 @@ const IndividualReceiverReport = ({
               {" "}
               <Image src={id} alt="noimg" />
               &nbsp; Id: &nbsp;
-              {reportInfo?.reportId ? reportInfo?.reportId : reportInfo?._id}
+              {reportInfo?.id || "---"}
             </div>
             <div>
               {" "}
               <Image src={file} alt="noimg" /> &nbsp;Name:&nbsp;
-              {reportInfo?.reportName}
+              {reportInfo?.data?.reportName}
             </div>
             <div>
               {" "}
               <Image src={send} alt="noimg" />
               &nbsp;{isSentReport ? "Reciever" : "Sender"}:&nbsp;
-              {reportInfo?.sender}
+              {reportInfo?.data?.sender}
             </div>
             <div>
               {" "}
               <Image src={calender} alt="noimg" />
               &nbsp; Date:&nbsp;
-              {dayjs(reportInfo?.receiveDate).format("DD/MM/YYYY")}
+              {dayjs(reportInfo?.data?.receiveDate).format("DD/MM/YYYY")}
             </div>
             <div>
-              {reportInfo?.role === "DOWNLOAD" ? (
+              {reportInfo?.data?.role === "DOWNLOAD" ? (
                 <Button
                   onClick={() => {
                     window.open(fileResult?.path);
@@ -322,7 +351,7 @@ const IndividualReceiverReport = ({
                   Download
                 </Button>
               ) : (
-                reportInfo?.role === "read" && (
+                reportInfo?.data?.role === "read" && (
                   <Button className={styles.readOption}>Read</Button>
                 )
               )}
@@ -380,6 +409,7 @@ const connector = connect(
     getReceivedDetails: allActions.getReceivedDetails,
     getSentDetails: allActions.getSentDetails,
     getSelectedReportDetails: allActions.getSelectedReportDetails,
+    getActiveTab: allReportActions.activeTab,
   }
 );
 export default connector(IndividualReceiverReport);

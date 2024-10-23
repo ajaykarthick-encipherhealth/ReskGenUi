@@ -38,7 +38,7 @@ const IndividualReceiverReport = ({
   const [tableData, setTableData] = useState([]);
   const [csvTableData, setCSVTableData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [reportInfo, setReportInfo] = useState(null);
+  const [reportInfo, setReportInfo] = useState({ data: null, id: null });
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [receivedSort, setReceivedSort] = useState("DESC");
   const [currentRole, setCurrentRole] = useState();
@@ -47,6 +47,8 @@ const IndividualReceiverReport = ({
   const [isAdminPage, setIsAdminPage] = useState(false);
   const [fileResult, setFileResult] = useState(null);
   const [detailsContent, setDetailsContent] = useState();
+  const [reportPath, setReportPath] = useState(null);
+  const [loadingList, setLoadingList] = useState(true);
 
   const fetchData = async (url) => {
     setLoading(true);
@@ -62,7 +64,6 @@ const IndividualReceiverReport = ({
         const arrayBuffer = await response.arrayBuffer();
         const data = new Uint8Array(arrayBuffer);
         const workbook = XLSX.read(data, { type: "array" });
-
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
@@ -91,16 +92,37 @@ const IndividualReceiverReport = ({
   const filterChange = (e) => {
     debouncedSearch(e.target.value);
   };
-
   const getFetchPathUrl = async (url) => {
-    const fileId = url?.reportPath ? url?.reportPath : url;
-    var result = await getFileDetailsReport(fileId || "");
-    var data = {
-      extention: "xlsx",
-      path: result?.response,
-    };
-    setFileResult(data);
-    fetchData(data);
+    var result = await getFileDetailsReport(url);
+    if (result?.status === "SUCCESS") {
+      var data = {
+        extention: "xlsx",
+        path: result?.response,
+      };
+      setFileResult(data);
+      fetchData(data);
+    }
+  };
+
+  const callGetFileApi = async ({ reportConfirm, searchValue, id }) => {
+    setLoadingList(true);
+    if (reportConfirm) {
+      setIsSentReport(true);
+      getSentDetails(0, "", "", searchValue, sort);
+      const res = await getSelectedReportDetails(id);
+      if (res?.status === "SUCCESS") {
+        setReportPath(res?.response);
+        setLoadingList(false);
+      }
+    } else {
+      getReceivedDetails(0, "", "", searchValue || "", sort);
+      const res = await getSelectedReportDetails(id);
+      if (res?.status === "SUCCESS") {
+        setReportPath(res?.response);
+        setLoadingList(false);
+      }
+    }
+    setCurrentRole(getStorage("userRole"));
   };
 
   useEffect(() => {
@@ -110,81 +132,77 @@ const IndividualReceiverReport = ({
           ? sentReportDatas?.data?.response?.receivedReportDTOList?.data
           : reportDatas?.data?.response?.reportStatusDTOList?.content
       );
-      const id = new URLSearchParams(window.location.search).get("reportId");
-      const reportdata =
-        reportDatas?.data?.response?.reportStatusDTOList?.content?.filter(
-          (item) => item?.reportId === id
+      if (window.location.search && !reportInfo?.id) {
+        const id = new URLSearchParams(window.location.search).get("reportId");
+        const reportConfirm = new URLSearchParams(window.location.search).get(
+          "sentreport"
         );
-      const sentdata =
-        sentReportDatas?.data?.response?.receivedReportDTOList?.data?.filter(
-          (item) => item?._id === id
-        );
-
-      setReportInfo(!isSentReport ? reportdata[0] : sentdata[0]);
+        if (id) {
+          const reportDataId =
+            reportDatas?.data?.response?.reportStatusDTOList?.content?.find(
+              (item) => item?.reportId == id
+            )?.reportId;
+          const sentDataId =
+            sentReportDatas?.data?.response?.receivedReportDTOList?.data?.find(
+              (item) => item?._id == id
+            )?._id;
+          const reportData =
+            reportDatas?.data?.response?.reportStatusDTOList?.content?.find(
+              (item) => item?.reportId == id
+            );
+          const sentData =
+            sentReportDatas?.data?.response?.receivedReportDTOList?.data?.find(
+              (item) => item?._id == id
+            );
+          setReportInfo({
+            data: reportConfirm ? sentData : reportData,
+            id: reportConfirm ? sentDataId : reportDataId,
+          });
+        }
+      }
     }
   }, [reportDatas, sentReportDatas, isSentReport]);
-
   useEffect(() => {
-    if (router?.query?.reportId) {
-      const filter = detailsContent?.find(
-        (item) => item?._id == router?.query?.reportId
+    if (window.location.search) {
+      setLoadingList(true);
+      const id = new URLSearchParams(window.location.search).get("reportId");
+      const reportConfirm = new URLSearchParams(window.location.search).get(
+        "sentreport"
       );
-      setReportInfo(filter);
+      setIsSentReport(reportConfirm);
+      const isAdminPage = new URLSearchParams(window.location.search).get(
+        "isAdminPage"
+      );
+      setIsAdminPage(isAdminPage);
+      callGetFileApi({
+        reportConfirm: reportConfirm,
+        searchValue: searchValue,
+        id: id,
+      });
     }
-  }, [detailsContent, router]);
+  }, [searchValue, sort]);
   useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get("reportId");
-    const reportConfirm = new URLSearchParams(window.location.search).get(
-      "sentreport"
-    );
-    const isAdminPage = new URLSearchParams(window.location.search).get(
-      "isAdminPage"
-    );
-    setIsAdminPage(isAdminPage);
-    if (reportConfirm) {
-      setIsSentReport(true);
-      getSentDetails(0, "", "", searchValue, sort);
-      getSelectedReportDetails(id);
-    } else {
-      getReceivedDetails(0, "", "", searchValue, sort);
-      getSelectedReportDetails(id);
+    if (reportPath) {
+      getFetchPathUrl(reportPath?.reportPath);
     }
-    setCurrentRole(getStorage("userRole"));
-  }, [searchValue, sort, router]);
-  useEffect(() => {
-    if (reportInfo) {
-      getFetchPathUrl(reportInfo?._id);
-    }
-  }, [reportInfo]);
-
+  }, [reportPath]);
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
-
       <div
-        className={styles.container}
+        className={`${styles.container}`}
         style={{ margin: "30px 0px 50px 0px", height: "auto" }}
       >
-        <div className={styles.cont1}>
-          <div className={styles.container}>
+        <div className={`${styles.cont1} text-truncate`}>
+          <div className={styles.sideContainer}>
             <div className={`${styles.divContainer} individualReportSearch`}>
               <button
-                // style={{ width: "40px", height: "30px" }}
-                // className={reportStyles.filterBtnArrow}
                 className="border-0 bg-white text-white"
                 onClick={() => {
-                  const page = new URLSearchParams(window.location.search).get(
-                    "page"
-                  );
-                  const limit = new URLSearchParams(window.location.search).get(
-                    "limit"
-                  );
-                  router?.push(
-                    `/supervisor/report?page=${page}&limit=${limit}`
-                  );
-                  setLoading(true);
+                  router.push(`/tenantAdmin/report`);
                   setIsSentReport(false);
                   getActiveTab(isSentReport ? "Sent" : "Received");
+                  setReportInfo({ data: null, id: null });
                 }}
                 allowClear
               >
@@ -215,57 +233,63 @@ const IndividualReceiverReport = ({
               <Image src={sortImg} alt="noimg" style={{ marginTop: "5px" }} />
             </div>
           </div>
-
           {/* users */}
           <div className={styles.list}>
-            {detailsContent?.length > 0 ? (
+            {loadingList ? (
+              <div className={styles.sideContainer}>Loading...</div>
+            ) : detailsContent?.length > 0 ? (
               detailsContent?.map((item) => {
                 const id = item?._id ? item?._id : item?.reportId;
-                const reportId = reportInfo?._id
-                  ? reportInfo?._id
-                  : reportInfo?.reportId;
                 return (
                   <div
                     key={id}
                     onClick={() => {
-                      setReportInfo(item);
+                      setReportInfo({ data: item, id: id });
+                      callGetFileApi({
+                        reportConfirm: isSentReport,
+                        id: id,
+                      });
                     }}
                   >
                     <div className="d-flex mb-2" style={{ cursor: "pointer" }}>
-                      <div className={styles.user}>
+                      <div className={`${styles.user}`}>
                         <div
+                          className="text-truncate"
                           style={{
-                            color: reportId === id ? "#04306f" : "black",
-                            fontWeight: reportId === id ? "bold" : "normal",
+                            color: reportInfo?.id == id ? "#04306f" : "black",
+                            fontWeight:
+                              reportInfo?.id == id ? "bold" : "normal",
                             cursor: "pointer",
                           }}
                         >
                           {item?.reportName}
                         </div>
 
-                        {item?.type && (
-                          <div
-                            style={{ margin: "5px 0 0 5px" }}
-                            className={
-                              item.type === "EXCEL"
-                                ? styles.excelStyle
-                                : styles.csvSTyle
-                            }
-                          >
-                            {item?.type}
-                          </div>
-                        )}
-                        {item?.role && (
-                          <div
-                            className={
-                              item.role.toLowerCase() === "download"
-                                ? styles.download1
-                                : styles.read
-                            }
-                          >
-                            {item?.role.toLowerCase()}
-                          </div>
-                        )}
+                        <div>
+                          {item?.type && (
+                            <div
+                              style={{ margin: "5px 0 0 5px" }}
+                              className={
+                                item.type === "EXCEL"
+                                  ? styles.excelStyle
+                                  : styles.csvSTyle
+                              }
+                            >
+                              {item?.type}
+                            </div>
+                          )}
+                          {item?.role && (
+                            <div
+                              className={
+                                item.role.toLowerCase() === "download"
+                                  ? styles.download1
+                                  : styles.read
+                              }
+                            >
+                              {item?.role.toLowerCase()}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <div className={styles.date}>
@@ -275,7 +299,7 @@ const IndividualReceiverReport = ({
                 );
               })
             ) : (
-              <div>No data</div>
+              <div className={styles.sideContainer}>No data</div>
             )}
           </div>
         </div>
@@ -285,27 +309,27 @@ const IndividualReceiverReport = ({
               {" "}
               <Image src={id} alt="noimg" />
               &nbsp; Id: &nbsp;
-              {reportInfo?.reportId ? reportInfo?.reportId : reportInfo?._id}
+              {reportInfo?.id || "---"}
             </div>
             <div>
               {" "}
               <Image src={file} alt="noimg" /> &nbsp;Name:&nbsp;
-              {reportInfo?.reportName}
+              {reportInfo?.data?.reportName}
             </div>
             <div>
               {" "}
               <Image src={send} alt="noimg" />
               &nbsp;{isSentReport ? "Reciever" : "Sender"}:&nbsp;
-              {reportInfo?.sender}
+              {reportInfo?.data?.sender}
             </div>
             <div>
               {" "}
               <Image src={calender} alt="noimg" />
               &nbsp; Date:&nbsp;
-              {dayjs(reportInfo?.receiveDate).format("DD/MM/YYYY")}
+              {dayjs(reportInfo?.data?.receiveDate).format("DD/MM/YYYY")}
             </div>
             <div>
-              {reportInfo?.role === "DOWNLOAD" ? (
+              {reportInfo?.data?.role === "DOWNLOAD" ? (
                 <Button
                   onClick={() => {
                     window.open(fileResult?.path);
@@ -325,7 +349,7 @@ const IndividualReceiverReport = ({
                   Download
                 </Button>
               ) : (
-                reportInfo?.role === "read" && (
+                reportInfo?.data?.role === "read" && (
                   <Button className={styles.readOption}>Read</Button>
                 )
               )}

@@ -52,7 +52,7 @@ const CustomTable = ({ data, styles, head2, head1, color }) => {
               </td>
             </tr>
           ) : (
-            data.map((item, index) => (
+            data?.map((item, index) => (
               <tr className="borderless" key={index}>
                 <td
                   style={{
