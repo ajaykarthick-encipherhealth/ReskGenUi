@@ -9,9 +9,9 @@ import { faComments, faCopy } from "@fortawesome/free-regular-svg-icons"; // Imp
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"; // Import the close icon if needed
 import chatAssistant from "../../images/chat/chatAssistant.svg";
 import { handleCopyToClipboard } from "../commonFunctions";
-import {actions as allActions} from '../../stores/chatService'
+import { actions as allActions } from "../../stores/chatService";
 import { connect } from "react-redux";
-const AICHAT = ({ openMsg, getChatReply,msgReply }) => {
+const AICHAT = ({ openMsg, getChatReply }) => {
   const [activeChat, setActiveChat] = useState(false);
   const [inputValue, setInputValue] = useState({
     question: "",
@@ -19,35 +19,35 @@ const AICHAT = ({ openMsg, getChatReply,msgReply }) => {
   const [validated, setValidated] = useState(false);
   const [startChart, setStartChat] = useState(false);
   let messagesEndRef = useRef(null);
+  const [chatResponse, setChatResponse] = useState([]);
 
-  const handleChange = async (e) => {
+  const handleChange = (e) => {
     const key = e.target.name;
     const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
+    setInputValue({ question: value });
   };
 
-  const handleNewUserMessage = (event) => {
+  const handleNewUserMessage = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
-
     if (form.checkValidity() === true) {
-      getChatReply(inputValue.question);
-      inputValue.question = "";
-      setValidated(false);
+      const res = await getChatReply(inputValue?.question);
+      if (res.status === "SUCCESS") {
+        setChatResponse((prev) => [
+          ...prev,
+          {
+            question: inputValue.question,
+            details: res?.response[0],
+          },
+        ]);
+        setInputValue({ question: "" });
+        setStartChat(true);
+        setValidated(false);
+      }
     } else {
       setValidated(true);
     }
   };
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "end",
-    });
-    inputValue.question = "";
-    setValidated(false);
-  }, [msgReply?.data?.length]);
-
   return (
     <>
       <button
@@ -111,13 +111,12 @@ const AICHAT = ({ openMsg, getChatReply,msgReply }) => {
                         {/* <span className="msg_time">8:40 AM, Today</span> */}
                       </div>
                     </div>
-                    {msgReply?.data?.map((data) => (
+                    {chatResponse?.map((data) => (
                       <>
                         <div name="test1" className="element">
                           <div className="d-flex justify-content-end mb-1">
                             <div className="msg_cotainer_send">
                               {data?.question}
-                              {/* <span className="msg_time_send">8:55 AM, Today</span> */}
                             </div>
                           </div>
                           <div
@@ -225,10 +224,13 @@ const AICHAT = ({ openMsg, getChatReply,msgReply }) => {
     </>
   );
 };
-const connector=connect((state)=>({
-  msgReply:state.chartService?.chatReply
-}),{
-  getChatReply:allActions.getChatReply
-})
+const connector = connect(
+  (state) => ({
+    msgReply: state.chartService?.chatReply,
+  }),
+  {
+    getChatReply: allActions.getChatReply,
+  }
+);
 
 export default connector(AICHAT);
