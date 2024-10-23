@@ -6,25 +6,26 @@ const Selector = ({
   selectlabel,
   setSelectedOption,
   selectOptions,
-  isClose = false,
   selectDefaultValue,
   setDefaultValue,
   setPageNo,
   onChanges,
-  defaultSelectValue1
-  
+  defaultSelectValue1,
 }) => {
+  const labelId = `select-label-${selectlabel}`;
   return (
     <div>
-      <label style={{ marginLeft: "10px" }} className="responsiveLabel">
+      <label
+        id={labelId}
+        style={{ marginLeft: "10px" }}
+        className="responsiveLabel"
+      >
         {selectlabel}
       </label>
       <div class="form-group has-search custom-react-select">
         <Select
-          // className="custom-react-select"
           options={selectOptions}
-          // isSearchable={false}
-          // isClearable={isClose}
+          aria-labelledby={labelId}
           placeholder={selectlabel || defaultSelectValue1}
           onChange={(value) => {
             handleSelector(value, setSelectedOption);
@@ -34,8 +35,7 @@ const Selector = ({
             }
             onChanges && onChanges();
           }}
-          // value={selectDefaultValue ?selectDefaultValue: null}
-          value={selectDefaultValue? selectDefaultValue : null}
+          value={selectDefaultValue ? selectDefaultValue : null}
           allowClear={true}
         />
       </div>

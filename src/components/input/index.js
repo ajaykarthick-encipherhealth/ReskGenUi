@@ -115,6 +115,7 @@ const InputField = ({
           )
         }
         allowClear={true}
+        data-testid="searchPrefix"
       />
     </div>
   );

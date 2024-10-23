@@ -21,8 +21,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "test/home/index.test.jsx", "test/home/snapshot.jsx", "src/pages/home/index.jsx"  ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+   "jsx": "react"
 }
