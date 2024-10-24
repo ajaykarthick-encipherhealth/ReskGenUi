@@ -17,13 +17,13 @@ export const searchFunction = (
   activeTab
 ) => {
   if (activeTab === "SentReport") {
-    setSentSearch(e.target.value);
+    setSentSearch(searchValue);
   } else if (activeTab === "ReceivedReport") {
-    setReceivedSearch(e.target.value);
+    setReceivedSearch(searchValue);
   } else if (activeTab === "CoderReport") {
-    setCoderSearch(e.target.value);
+    setCoderSearch(searchValue);
   } else {
-    setSearch(e.target.value);
+    setSearch(searchValue);
   }
 };
 
@@ -36,21 +36,21 @@ export const processstatusBodyTemplate = (rowData) => {
   switch (rowData.processedStatus) {
     case "COMPLETED":
       return (
-        <div className="patient-status">
+        <div className="patient-status" data-testid="status-span">
           <span className={`badge processed-text`}>Completed</span>
         </div>
       );
 
     case "PENDING":
       return (
-        <div className="patient-status">
+        <div className="patient-status" data-testid="status-span">
           <span className={`badge processing-text`}>Pending</span>
         </div>
       );
 
     case "DECLINED":
       return (
-        <div className="patient-status">
+        <div className="patient-status" data-testid="status-span">
           <span className={`badge failed-text`} style={{ color: "red" }}>
             Declined
           </span>
@@ -59,26 +59,26 @@ export const processstatusBodyTemplate = (rowData) => {
 
     case "NOTCOMPUTED":
       return (
-        <div className="patient-status">
+        <div className="patient-status" data-testid="status-span">
           <span className={`badge processing-text`}>Not Computed</span>
         </div>
       );
 
     case "COMPUTED":
       return (
-        <div className="patient-status">
+        <div className="patient-status" data-testid="status-span">
           <span className={`badge processing-text`}>Computed</span>
         </div>
       );
     case "HOLD":
       return (
-        <div className="patient-status">
+        <div className="patient-status" data-testid="status-span">
           <span className={`badge hold-text`}>Hold</span>
         </div>
       );
     case null:
       return (
-        <div className="patient-status">
+        <div className="patient-status" data-testid="status-span">
           <span className={`badge processing-text`}></span>
         </div>
       );
@@ -259,39 +259,39 @@ export const priorityStatus = (value) => {
   switch (value) {
     case "URGENT":
       return (
-        <>
+        <div data-testid="status-span">
           <i>
             <FontAwesomeIcon icon={faTriangleExclamation} />
           </i>{" "}
-          <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
-        </>
+          <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>
+        </div>
       );
     case "HIGH":
       return (
-        <>
+        <div data-testid="status-span">
           <i className={TableStyle.highFlag}>
             <FontAwesomeIcon icon={faTriangleExclamation} />
           </i>
           <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
-        </>
+        </div>
       );
     case "NORMAL":
       return (
-        <>
+        <div data-testid="status-span">
           <i className={TableStyle.normalFlag}>
             <FontAwesomeIcon icon={faTriangleExclamation} />
           </i>
-          <span style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>{" "}
-        </>
+          <span style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>
+        </div>
       );
     case "LOW":
       return (
-        <>
+        <div data-testid="status-span">
           <i className={TableStyle.lowFlag}>
             <FontAwesomeIcon icon={faTriangleExclamation} />
-          </i>{" "}
-          <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
-        </>
+          </i>
+          <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>
+        </div>
       );
     default:
       break;
