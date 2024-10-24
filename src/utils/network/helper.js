@@ -1,7 +1,7 @@
 import CryptoJS from "crypto-js";
 import { salt } from "../config";
 import Swal from "sweetalert2";
-import {removeStorage, setStorage } from "../storages";
+import { removeStorage, setStorage } from "../storages";
 const defaultHeaders = {
   "Content-Type": "application/json",
 };
@@ -53,16 +53,29 @@ function decryptData(encryptedData, key, iv) {
 }
 
 export async function checkStatus(response) {
+  setStorage("loginCheck", false);
   if (response?.status === 401) {
-    setStorage("loginCheck", false);
-  } else {
+    Swal.fire({
+      title: "",
+      text: "Your session has timed out. Please log in again.",
+      icon: "warning",
+      confirmButtonText: "Logout",
+      confirmButtonColor: "#DD6B55",
+      closeOnConfirm: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location = "/login";
+      }
+      removeStorage()
+    });} 
+  else {
     const data = await response.text();
     try {
       err = false;
       const res = decryptData(data, salt, "Or-F1IjTa]1LiOt30en36,Py6z5Hz^Z=");
       return JSON.parse(res);
     } catch (error) {
-     console.error(err)
+      console.error(err);
     }
   }
 }
