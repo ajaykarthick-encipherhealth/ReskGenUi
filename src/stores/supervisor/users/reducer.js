@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { getUsers,getIndividualUsers,getCurrentUserInfo} from "./actions";
+import { getUsers,getIndividualUsers,getCurrentUserInfo,getCurrentUserAction} from "./actions";
 
 const initialState = {
   loading: true,
@@ -47,6 +47,7 @@ const UsersReducer = combineReducers({
   getIndividualUsersList: createReducer(getIndividualUsers),
   individualUserLoading: getReportLoading(getIndividualUsers),
   currentUser: createReducer(getCurrentUserInfo),
+  user: createReducer(getCurrentUserAction),
 });
 
 export default UsersReducer;

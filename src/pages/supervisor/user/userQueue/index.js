@@ -581,14 +581,14 @@ const Index = ({
 };
 const connector = connect(
   (state) => ({
-    currentUser: state.supervisor.users?.currentUser,
+    currentUser: state.supervisor.users?.user,
     usersData: state.supervisor.users?.getIndividualUsersList,
     loader: state.supervisor.users?.individualUserLoading,
     filteredList:state.supervisor?.audited?.filterUsers,
   }),
   {
     getIndividualUser: allActions.getIndividualUsers,
-    getCurrentUserDetails: allActions.getCurrentUserInfo,
+    getCurrentUserDetails: allActions.getCurrentUserAction,
     getFilters: allActions2.getFilterUsers,
 
   }

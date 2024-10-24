@@ -13,3 +13,7 @@ export const getCurrentUserInfo = createActionThunk(
   "CURRENT_USER",
   network.CurrentUserInfo
 );
+export const getCurrentUserAction = createActionThunk(
+  "GET_CURRENT_USER",
+  network.CurrentUserInfo
+);
