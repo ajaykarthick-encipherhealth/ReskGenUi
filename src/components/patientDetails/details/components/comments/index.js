@@ -61,7 +61,7 @@ const Comments = ({
 
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
-        comment: inputValue.comments,
+        userComment: inputValue.comments,
         processedYear: patientDetailsResult?.data?.response?.processedYear,
         dateOfService: patientDetailsResult?.data?.response?.dateOfService,
       };
@@ -94,7 +94,7 @@ const Comments = ({
       }
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
-        comment: inputValue.comments,
+        userComment: inputValue.comments,
         processedYear: patientDetailsResult?.data?.response?.processedYear,
         dateOfService: patientDetailsResult?.data?.response?.dateOfService,
       };
@@ -262,7 +262,7 @@ const Comments = ({
                 className={`${visitStyles.commentNameHead}`}
                 style={{ paddingTop: "20px" }}
               >
-                <span className={visitStyles.commentsName}>{data.comment}</span>
+                <span className={visitStyles.commentsName}>{data.userComment}</span>
                 <Tooltip placement="bottom" title={data.commentCreatedBy}>
                   <Popover
                     placement="bottom"
