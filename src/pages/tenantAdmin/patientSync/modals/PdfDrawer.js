@@ -31,6 +31,7 @@ const PdfDrawer = ({
   upoloadFiles,
   reportActiveTab,
   pageNo,
+  loader
 }) => {
   const [form] = Form.useForm();
   const [selectedType, setSelectedType] = useState(null);
@@ -167,13 +168,13 @@ const PdfDrawer = ({
               <Form.Item
                 label={
                   <label>
-                    EMR Type <span className="text-danger">*</span>
+                    EMR Type
                   </label>
                 }
                 name="emrType"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "Please Enter EMR Type",
                   },
                 ]}
@@ -296,7 +297,7 @@ const PdfDrawer = ({
           <Form.Item>
             <div className="col-xl-12 mb-3 d-grid justify-content-center">
               <Button type="submit">
-                {uploadType === "upload" ? "Upload" : "Submit"}
+                {uploadType === "upload" ? "Upload" : loader?"Loading...":"Submit"}
               </Button>
             </div>
           </Form.Item>
@@ -308,6 +309,7 @@ const PdfDrawer = ({
 const enhancer = connect(
   (state) => ({
     reportActiveTab: state.admin.report?.activeTab,
+    loader:state.tenantAdmin?.patientSync?.createBatchLoader
   }),
   {
     getCreateBatch: tenantActions.getCreateBatch,

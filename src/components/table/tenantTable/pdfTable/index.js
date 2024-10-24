@@ -214,12 +214,12 @@ function PdfTable({
                             content={
                               <>
                                 Computed:
-                                {row?.totalFileCount > 0
+                                {row?.totalSuccessCount > 0
                                   ? row?.totalSuccessCount
                                   : 0}
                                 <br />
                                 Failed:
-                                {row?.totalFileCount > 0
+                                {row?.totalFailedCount > 0
                                   ? row?.totalFailedCount
                                   : 0}
                                 <br />
@@ -340,7 +340,7 @@ function PdfTable({
                             ) : (
                               <div className="w-100 d-flex justify-content-center align-items-center">
                                 <button
-                                  className={`w-100 ${
+                                  className={`w-100 px-4 py-1  ${
                                     row?.source === "CogentUpload"
                                       ? styles.uploadButton
                                       : styles.triggerButton
