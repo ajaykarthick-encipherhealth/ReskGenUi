@@ -1,5 +1,5 @@
 import CryptoJS from "crypto-js";
-import { salt } from "../config";
+import { salt, serverControl } from "../config";
 import Swal from "sweetalert2";
 import { removeStorage, setStorage } from "../storages";
 const defaultHeaders = {
@@ -66,16 +66,32 @@ export async function checkStatus(response) {
       if (result.isConfirmed) {
         window.location = "/login";
       }
-      removeStorage()
-    });} 
-  else {
-    const data = await response.text();
-    try {
-      err = false;
-      const res = decryptData(data, salt, "Or-F1IjTa]1LiOt30en36,Py6z5Hz^Z=");
-      return JSON.parse(res);
-    } catch (error) {
-      console.error(err);
+      removeStorage();
+    });
+  } else {
+    if (serverControl == "production") {
+      const data = await response.text();
+      try {
+        err = false;
+        const res = decryptData(data, salt, "Or-F1IjTa]1LiOt30en36,Py6z5Hz^Z=");
+        return JSON.parse(res);
+      } catch (error) {
+        console.error(err);
+      }
+    } else {
+      const data = await response.json();
+      if (data.logout) {
+        await removeStorage(tokenKey);
+        window.open("/", "_self");
+        return;
+      }
+      if (response.status !== 200) {
+        const error = {
+          ...data,
+        };
+        throw error;
+      }
+      return data;
     }
   }
 }
