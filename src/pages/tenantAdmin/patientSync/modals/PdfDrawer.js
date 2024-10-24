@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { actions as tenantActions } from "../../../../stores/tenantAdmin/patientSync";
-import { actions as tenantActionsActive } from "../../../../stores/tenantAdmin/report";
-
 import { connect } from "react-redux";
 import { Drawer, Form, Input, Select } from "antd";
-import style from "../fhir.module.css";
-import downloadImg from "../../../../images/fihr/download.png";
-import uploaderImg from "../../../../images/fihr/uploaderImg.png";
 import { emrTypeOptions, getYears } from "../../../../utils/reusable";
-import UploadFile from "../uploadFile";
 
 const inputTypeOptions = [
-  { label: "FireZilla", value: "FireZilla" },
+  { label: "FileZilla", value: "FileZilla" },
   { label: "GoogleDrive", value: "GoogleDrive" },
   { label: "DropBox", value: "DropBox" },
   { label: "CogentUpload", value: "CogentUpload" },
