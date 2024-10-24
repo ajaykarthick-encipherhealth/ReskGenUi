@@ -753,7 +753,8 @@ const Header = ({
           setOpenUploader(false);
           setOpenContent(false);
         }}
-        closable={false}
+        closable={true}
+        footer={null}
         onCancel={() => {
           setOpenContent(false);
           setOpenUploader(false);
