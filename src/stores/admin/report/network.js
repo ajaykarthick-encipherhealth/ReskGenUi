@@ -24,7 +24,7 @@ export async function adminApi({
       userName === "REVIEWER" ? selectManager : ""
     }&managerid=${
       userName === "SUPERVISOR" ? selectManager : ""
-    }&orgid=${orgId}&patientIds=${flagsList ? flagsList : ""}
+    }&orgid=${orgId}&allFlags=${flagsList ? flagsList : ""}
   `,
     options
   );

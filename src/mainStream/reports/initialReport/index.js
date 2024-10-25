@@ -10,7 +10,7 @@ import reAuditIcon from "../../.../../../images/trackingImages/AuditPending.png"
 import auditedIcon from "../../.../../../images/trackingImages/AuditedTrack.png";
 import TableStyle from "../../../components/table/table.module.css";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
-import {connect } from "react-redux";
+import { connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
 import ContentGroupCard from "../../../mainStream/components/cards/contentGroupCard";
 import AllocationCount from "../../../mainStream/components/allocationCount";
@@ -49,7 +49,7 @@ const InitialCard = ({
   checkedLoader,
   adminCheckedLoader,
   getAdminChecKAll,
-  getSelectedRow
+  getSelectedRow,
 }) => {
   const navigate = useRouter();
   const handleHeaderCheckboxChange = async (
@@ -110,7 +110,7 @@ const InitialCard = ({
       if (res.status === "SUCCESS") {
         setSelectAll(true);
         setSelectedRows(res?.response?.patientIds);
-        getSelectedRow(res?.response?.patientIds)
+        getSelectedRow(res?.response?.patientIds);
       }
       // } catch (error) {}
     } else if (activeTab === "Admin" && selectAll) {
@@ -154,13 +154,13 @@ const InitialCard = ({
       // ).then((res) => res.json());
       if (res.status === "SUCCESS") {
         setSelectAll(true);
-        getSelectedRow(res?.response?.patientIds)
+        getSelectedRow(res?.response?.patientIds);
         setSelectedRows(res?.response?.patientIds);
       }
     } else {
       setSelectAll(false);
       setSelectedRows([]);
-      getSelectedRow([])
+      getSelectedRow([]);
     }
   };
 
@@ -178,7 +178,7 @@ const InitialCard = ({
     }
 
     setSelectedRows(updatedRows);
-    getSelectedRow(updatedRows)
+    getSelectedRow(updatedRows);
   };
 
   const card1Data = [
@@ -345,62 +345,62 @@ const InitialCard = ({
     <>
       <div>
         <div className="content-body">
-          {loader ? (
-            <SpinnerDots />
-          ) : (
-            <div className={`container-fluid py-4 px-2`}>
-              <div
-                style={{
-                  display: "flex",
-                  marginLeft: "10px",
-                  paddingBottom: "10px",
-                }}
-              >
-                {/* {reportListAll?.response?.data?.length > 0 && (
+          <div className={`container-fluid py-4 px-2`}>
+            <div
+              style={{
+                display: "flex",
+                marginLeft: "10px",
+                paddingBottom: "10px",
+              }}
+            >
+              {/* {reportListAll?.response?.data?.length > 0 && (
                   <> */}
-                <div className="col-xl-1 d-flex">
-                  <div>
-                    <input
-                      type="checkbox"
-                      onChange={() => {
-                        setSelectAll((prevState) => {
-                          const updatedSelectAll = !prevState;
-                          handleHeaderCheckboxChange(
-                            activeTab,
-                            updatedSelectAll,
-                            setSelectAll
-                          );
-                          return updatedSelectAll;
-                        });
-                      }}
-                      className={
-                        styles.checkAlign +
-                        (selectAll ? " " + TableStyle.customChecked : "")
-                      }
-                      checked={selectAll && selectedRows?.length > 0}
-                    />
-                  </div>
-                  <span className={`pl-0 text-start ${styles.pName}`}>All</span>
+              <div className="col-xl-1 d-flex">
+                <div>
+                  <input
+                    type="checkbox"
+                    onChange={() => {
+                      setSelectAll((prevState) => {
+                        const updatedSelectAll = !prevState;
+                        handleHeaderCheckboxChange(
+                          activeTab,
+                          updatedSelectAll,
+                          setSelectAll
+                        );
+                        return updatedSelectAll;
+                      });
+                    }}
+                    className={
+                      styles.checkAlign +
+                      (selectAll ? " " + TableStyle.customChecked : "")
+                    }
+                    checked={selectAll && selectedRows?.length > 0}
+                  />
                 </div>
-                <div className="col-xl-4 d-flex">
-                  <div>
-                    <input
-                      type="checkbox"
-                      onChange={handleHeaderCheckbox}
-                      className={
-                        styles.checkAlign +
-                        (selectAllFlags ? " " + TableStyle.customChecked : "")
-                      }
-                      checked={selectAllFlags}
-                    />
-                  </div>
-                  <span className={`pl-4 text-start ${styles.pName}`}>
-                    All Flags
-                  </span>
-                </div>
-                {/* </>
-                // )} */}
+                <span className={`pl-0 text-start ${styles.pName}`}>All</span>
               </div>
+              <div className="col-xl-4 d-flex">
+                <div>
+                  <input
+                    type="checkbox"
+                    onChange={handleHeaderCheckbox}
+                    className={
+                      styles.checkAlign +
+                      (selectAllFlags ? " " + TableStyle.customChecked : "")
+                    }
+                    checked={selectAllFlags}
+                  />
+                </div>
+                <span className={`pl-4 text-start ${styles.pName}`}>
+                  All Flags
+                </span>
+              </div>
+              {/* </>
+                // )} */}
+            </div>
+            {loader ? (
+              <SpinnerDots />
+            ) : (
               <div className="row">
                 <div>
                   <div className=" col-xl-12 d-flex">
@@ -534,8 +534,8 @@ const InitialCard = ({
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
       {reportListAll?.response?.data?.length > 0 ? (
