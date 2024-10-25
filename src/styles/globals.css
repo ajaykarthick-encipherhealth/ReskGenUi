@@ -15671,10 +15671,13 @@ input::-webkit-inner-spin-button {
   width: 18px !important;
   height: 18px !important;
 }
-.header-menu li span {
-  font-size: 14px !important;
+
+@media (max-width: 1344px) {
+  .header-menu li span {
+    font-size: 11px !important;
   font-size: 700 !important;
-  margin-top: 3px;
+  margin-top: 5px !important;
+  }
 }
 .hospitalIcon {
   font-size: 13px !important;
