@@ -80,15 +80,15 @@ const ComboCard = ({
         <div ref={provided?.innerRef} {...provided?.droppableProps}>
           <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
             <div className={visitStyles.combo_head_card}>
-              <div className="row">
-                <div className="col-xl-3">
-                  <label htmlFor="combo">Combo Codes</label>
+              <div className="row p-1">
+                <div className="col-xl-3 d-flex align-items-center justify-content-center text-truncate">
+                  <label  htmlFor="combo">Combo Codes</label>
                 </div>
-                <div className="col-xl-3">
+                <div className="col-xl-2 d-flex align-items-center justify-content-center text-truncate">
                   <label htmlFor="additional">Addons</label>
                 </div>
-                <div className="col-xl-5">
-                  <label htmlFor="description">Description</label>
+                <div className="col-xl-5 d-flex align-items-center justify-content-center text-truncate">
+                  <label  htmlFor="description">Description</label>
                 </div>
                 <div className="col-xl-1">
                   {/* {isAddComboCode && (

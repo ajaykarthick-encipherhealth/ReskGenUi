@@ -281,14 +281,14 @@ const RafScore = ({ patientDetailsResult }) => {
                       <div className="row">
                         <div className="col-xl-4">HCC</div>
                         <div className="col-xl-2">RAF</div>
-                        <div className="col-xl-4">Monthly Premium</div>
+                        <div className="col-xl-4  d-flex align-items-center justify-content-center text-truncate">Monthly Premium</div>
                         <div
                           className="col-xl-1 rounded d-flex align-items-center justify-content-center"
                           style={{ background: "#ffffff", color: "#8262ce" }}
                         >
                           <span
                             className="d-flex align-items-center justify-content-center"
-                            style={{ marginLeft: "-5px" }}
+                            // style={{ marginLeft: "-5px" }}
                           >
                             V24
                           </span>
@@ -315,7 +315,7 @@ const RafScore = ({ patientDetailsResult }) => {
                                 <div>{item.v24_raf ? item.v24_raf : ""}</div>
                               </div>
 
-                              <div className="col-xl-4  text-center">
+                              <div className="col-xl-4 d-flex align-items-center justify-content-center  text-center">
                                 <div>
                                   {item.v24_monthly_premium
                                     ? "$" + item.v24_monthly_premium
@@ -363,14 +363,14 @@ const RafScore = ({ patientDetailsResult }) => {
                       <div className="row">
                         <div className="col-xl-4">HCC</div>
                         <div className="col-xl-2">RAF</div>
-                        <div className="col-xl-4">Monthly Premium</div>
+                        <div className="col-xl-4 d-flex align-items-center justify-content-center  text-truncate">Monthly Premium</div>
                         <div
                           className="col-xl-1 rounded d-flex align-items-center justify-content-center"
                           style={{ background: "#ffffff", color: "#e47e7e" }}
                         >
                           <span
                             className="d-flex align-items-center justify-content-center"
-                            style={{ marginLeft: "-5px" }}
+                            // style={{ marginLeft: "-5px" }}
                           >
                             V28
                           </span>
@@ -396,7 +396,7 @@ const RafScore = ({ patientDetailsResult }) => {
                                 <div>{item.v28_raf ? item.v28_raf : ""}</div>
                               </div>
 
-                              <div className="col-xl-4  text-center">
+                              <div className="col-xl-4 d-flex align-items-center justify-content-center   text-center">
                                 <div>
                                   {item.v28_monthly_premium
                                     ? "$" + item.v28_monthly_premium
