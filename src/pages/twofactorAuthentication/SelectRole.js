@@ -8,9 +8,10 @@ import styles from "../../styles/auth.module.css";
 import RegularButton from "../../components/button";
 import { getStorage, setStorage } from "../../utils/storages";
 import { connect } from "react-redux";
+import {actions as allActions} from '../../stores/authFlows'
 
 
-const SelectRole = ({loginData}) => {
+const SelectRole = ({loginData,getLogin}) => {
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
@@ -75,6 +76,7 @@ const SelectRole = ({loginData}) => {
     const decodedParams = JSON.parse(atob(encodedParams));
     const { mfa, username, password } = decodedParams;
     const skipParam = decodedParams?.skipEntry;
+    const code=decodedParams?.code
     const encodeParams = btoa(
       JSON.stringify({
         mfa: mfa,
@@ -91,8 +93,17 @@ const SelectRole = ({loginData}) => {
       rolesArray = ["TENANT ADMIN"];
     }
     setRole(rolesArray);
+    getLogin({
+      email: username,
+      router: router,
+      code: code,
+      password: password,
+      mfa: decodedParams?.mfa,
+      skip: skipParam,
+    });
   }, []);
 
+console.log(loginData,"loginData")
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -184,6 +195,8 @@ const SelectRole = ({loginData}) => {
 
 const connector = connect((state) => ({
   loginData: state.authReducer?.loginData?.data?.response,
-}));
+}),{
+  getLogin:allActions.getLogin
+});
 export default connector(SelectRole);
 

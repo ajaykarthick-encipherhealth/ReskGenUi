@@ -72,6 +72,7 @@ export async function login({ email, router, code, password, mfa, skip }) {
         skipEntry: skip,
         username: email,
         password: password,
+        code: code,
       })
     );
     if (data?.status === "SUCCESS") {
