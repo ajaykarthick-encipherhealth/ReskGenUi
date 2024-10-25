@@ -24,7 +24,8 @@ import { getStorage, setStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
 import { actions as allocationAction } from "../../../stores/admin/patientAllocation";
 import { actions as allActions } from "../../../stores/admin/workqueue";
-import HeaderFilters from "./Filters";
+import HeaderFilters from "./headerFilters";
+
 const bullets = [
   {
     color: "#34ace8",
@@ -116,6 +117,9 @@ const Patient = ({
   const [orgAllList, setOrgAllList] = useState([]);
   const [searchVal, setSearchVal] = useState("");
   const [paramsFilter, setParamsFilter] = useState(null);
+  const [clear, setClear] = useState(false);
+    const [selectAll, setSelectAll] = useState(false);
+      const [activeFilters, setActiveFilters] = useState([]);
 
   useEffect(() => {
     if (window !== "undefined") {
@@ -154,6 +158,7 @@ const Patient = ({
               []
           );
           setSelectedOrgList(decodedParams?.selectOrgList || "");
+          setActiveFilters(decodedParams?.activeFilters || []);
         } catch (error) {
           console.error("Error decoding Base64 string: ", error.message);
         }
@@ -176,8 +181,8 @@ const Patient = ({
       computedEndDate,
       selectedOption,
       searchVal,
-      completedStartDate,
-      completedEndDate,
+      completedStartDate || "",
+      completedEndDate || "",
       selAllocatedTo || "",
       selAllocatedBy || "",
       selCreatedBy || "",
@@ -362,8 +367,8 @@ const Patient = ({
         computedEndDate,
         selectedOption,
         search,
-        completedStartDate,
-        completedEndDate,
+        completedStartDate || "",
+        completedEndDate || "",
         selAllocatedTo || "",
         selAllocatedBy || "",
         selCreatedBy || "",
@@ -515,8 +520,8 @@ const Patient = ({
       computedEndDate,
       selectedOption,
       search,
-      completedStartDate,
-      completedEndDate,
+      completedStartDate || "",
+      completedEndDate || "",
       selAllocatedTo || "",
       selAllocatedBy || "",
       selCreatedBy || "",
@@ -664,7 +669,7 @@ const Patient = ({
                           <HeaderFilters
                             setSearch={setSearch}
                             isSearch={true}
-                            searchlabel="Search By Patient ID / Name"
+                            searchlabel=" Patient ID / Name"
                             search={search}
                             searchVal={searchVal}
                             setSearchVal={setSearchVal}
@@ -728,6 +733,12 @@ const Patient = ({
                             selectedValueOrg={selectOrgList}
                             setPageNo={setPageNo}
                             orgValue={selectOrgList}
+                            setClear={setClear}
+                            clear={clear}
+                            selectAll={selectAll}
+                            setSelectAll={setSelectAll}
+                            activeFilters={activeFilters}
+                            setActiveFilters={setActiveFilters}
                           />
                         </div>
                       </div>
@@ -764,6 +775,7 @@ const Patient = ({
                                 selAllocatedBy,
                                 selCreatedBy,
                                 selectOrgList,
+                                activeFilters,
                               }}
                               sortCompleteOrder={sortCompleteOrder}
                               setSortCompleteOrder={setSortCompleteOrder}

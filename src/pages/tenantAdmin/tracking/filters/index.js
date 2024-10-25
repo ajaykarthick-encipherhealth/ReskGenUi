@@ -77,7 +77,7 @@ const MoreFilter = ({
         onVisibleChange={setPopoverVisible}
       >
         <Tooltip title={"More Filters"}>
-          <div className={Tracking.iconBorder}>
+          <div className={Tracking.iconBorderFlex}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="#03316f"

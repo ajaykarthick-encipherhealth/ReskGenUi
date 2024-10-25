@@ -4,7 +4,6 @@ import { Offcanvas } from "react-bootstrap";
 import { Form, Input, Button, Select, Row, Col, notification } from "antd";
 import styles from "../../../styles/auth.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
-import HeaderFilters from "../../../components/headerFilters";
 import { Paginator } from "primereact/paginator";
 import { encyptingPass } from "../../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
@@ -12,6 +11,7 @@ import UsersList from "../../../components/table/tenantTable/usersList/usersList
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
+import HeaderFilters from "./headerFilters";
 
 const options3 = [
   { value: "true", label: "Enabled" },
@@ -72,6 +72,7 @@ const UserList = ({
     patientName: "",
   });
   const [selectOrgList, setSelectedOrgList] = useState(null);
+    const [roleList, setSelectedRoleLsit] = useState(null);
   const [orgAllList, setOrgAllList] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
 
@@ -276,6 +277,7 @@ const UserList = ({
                         defaultSelectValue2={""}
                         setSelectedOption2={setRole}
                         selectedValue2={role}
+                        
                         // selectOrg
                         selectlabelOrg="Organization"
                         isSelectOrg={true}

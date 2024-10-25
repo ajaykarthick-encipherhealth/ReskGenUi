@@ -404,10 +404,7 @@ const HeaderFilters = ({
     <div style={{ display: "flex" }}>
       <div className="row filter-contain" style={{ width: "95%" }}>
         {isAllocatedToSelector && (
-          <div
-            className={defaultSize}
-            style={{ zIndex: tracking && "2" }}
-          >
+          <div className={defaultSize} style={{ zIndex: tracking && "2" }}>
             <label className={styles.label}>Reviewer</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -426,10 +423,7 @@ const HeaderFilters = ({
         )}
 
         {isAuditAllocatedToSelector && (
-          <div
-            className={defaultSize}
-            style={{ zIndex: tracking && "2" }}
-          >
+          <div className={defaultSize} style={{ zIndex: tracking && "2" }}>
             <label className={styles.label}>Supervisor</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -453,8 +447,8 @@ const HeaderFilters = ({
       </div>
 
       <div
-        className={Tracking}
-        style={{ width: "5%", display: "flex", justifyContent: "end" }}
+        className={`d-flex justify-content-end ${{ Tracking }}`}
+        style={{ width: "5%" }}
       >
         <div>
           <MoreFilter

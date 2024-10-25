@@ -598,7 +598,7 @@ const Patient = ({
                           <HeaderFilters
                             setSearch={setSearch}
                             isSearch={true}
-                            searchlabel="Search By Patient ID / Name"
+                            searchlabel="Patient ID / Name"
                             search={search}
                             searchVal={searchVal}
                             setSearchVal={setSearchVal}
