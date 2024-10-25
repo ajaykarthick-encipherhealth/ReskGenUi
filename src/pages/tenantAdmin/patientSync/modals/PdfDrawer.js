@@ -3,7 +3,15 @@ import { Button } from "react-bootstrap";
 import { actions as tenantActions } from "../../../../stores/tenantAdmin/patientSync";
 import { connect } from "react-redux";
 import { Drawer, Form, Input, Select } from "antd";
-import { emrTypeOptions, getYears } from "../../../../utils/reusable";
+import { emrTypeOptions } from "../../../../utils/reusable";
+
+const getYears = () => {
+  const currentYear = new Date().getFullYear();
+  return Array.from({ length: 50 }, (_, i) => ({
+    label: `${currentYear - i}`,
+    value: `${currentYear - i}`,
+  }));
+};
 
 const inputTypeOptions = [
   { label: "FileZilla", value: "FileZilla" },
@@ -25,10 +33,11 @@ const PdfDrawer = ({
   upoloadFiles,
   reportActiveTab,
   pageNo,
-  loader
+  loader,
 }) => {
   const [form] = Form.useForm();
   const [selectedType, setSelectedType] = useState(null);
+  const [options, setOptions] = useState(getYears());
 
   const handleClose = (form) => {
     setIsDrawerOpen(false);
@@ -84,7 +93,15 @@ const PdfDrawer = ({
       }
     }
   };
-
+  const handleSearch = (inputValue) => {
+    const isValidYear = /^\d{4}$/.test(inputValue);
+    if (isValidYear && !options.some((option) => option.value === inputValue)) {
+      setOptions((prevOptions) => [
+        { label: inputValue, value: inputValue },
+        ...prevOptions,
+      ]);
+    }
+  };
   return (
     <Drawer
       open={isDrawerOpen}
@@ -160,11 +177,7 @@ const PdfDrawer = ({
                 </Form.Item>
               )}
               <Form.Item
-                label={
-                  <label>
-                    EMR Type
-                  </label>
-                }
+                label={<label>EMR Type</label>}
                 name="emrType"
                 rules={[
                   {
@@ -239,9 +252,10 @@ const PdfDrawer = ({
                   mode="tags"
                   name="yearOfService"
                   style={{ width: "100%" }}
-                  options={getYears().sort((a, b) => b.value - a.value)}
+                  options={options}
                   size="large"
                   placeholder="year Of Service"
+                  onSearch={handleSearch}
                 />
               </Form.Item>
 
@@ -291,7 +305,11 @@ const PdfDrawer = ({
           <Form.Item>
             <div className="col-xl-12 mb-3 d-grid justify-content-center">
               <Button type="submit">
-                {uploadType === "upload" ? "Upload" : loader?"Loading...":"Submit"}
+                {uploadType === "upload"
+                  ? "Upload"
+                  : loader
+                  ? "Loading..."
+                  : "Submit"}
               </Button>
             </div>
           </Form.Item>
@@ -303,7 +321,7 @@ const PdfDrawer = ({
 const enhancer = connect(
   (state) => ({
     reportActiveTab: state.admin.report?.activeTab,
-    loader:state.tenantAdmin?.patientSync?.createBatchLoader
+    loader: state.tenantAdmin?.patientSync?.createBatchLoader,
   }),
   {
     getCreateBatch: tenantActions.getCreateBatch,
