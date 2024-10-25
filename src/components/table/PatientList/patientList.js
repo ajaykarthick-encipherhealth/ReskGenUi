@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import TableStyle from "../table.module.css";
-import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
+import { Select as AntSelect, Empty, Tooltip } from "antd";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
@@ -32,9 +32,9 @@ function PatientTable({
   params,
   gotoPatientDetails,
   supervisorActions,
+  activeFilters
 }) {
-  const navigate = useRouter();
-
+  const router = useRouter();
   const handlePriorityChange = async (
     patientId,
     selectedValue,
@@ -46,18 +46,27 @@ function PatientTable({
       priority: selectedValue,
     });
     if (res.status === "SUCCESS") {
-      getFilteApi();
+      getFilteApi({pageNo:page.pageNo});
     }
   };
 
   const handleTableRowClick = (e) => {
+    // /reviewer/patients/details
     const targetTd = e.target.closest("td");
     if (targetTd) {
+      router?.push(
+        {
+          pathname: "/reviewer/patients/details",
+          query: { ...params, filter:activeFilters },
+        },
+        "/reviewer/patients/details"
+      );
       const dataIndex = targetTd.parentElement.rowIndex - 1;
       const clickedData = patinetListAll[dataIndex];
       gotoPatientDetails(clickedData);
     }
   };
+  console.log(router,"router")
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
       <Empty />

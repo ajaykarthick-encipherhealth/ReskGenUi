@@ -377,7 +377,7 @@ const HeaderFilters = ({
       case "Search By Patient Name / ID":
         return (
           <div className={defaultSize} onClick={() => setClear(false)}>
-            <label style={{ marginLeft: "8px" }}> Patient Name / ID</label>
+            <label style={{ marginLeft: "8px" , color:"black"}}> Patient Name / ID</label>
             <div class="form-group has-search">
               <InputField
                 isSearch={true}

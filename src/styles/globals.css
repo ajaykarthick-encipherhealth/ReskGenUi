@@ -9248,6 +9248,15 @@ tr>td{
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
   border-radius: 10px;
 }
+.custom-react-selects .ant-select .ant-select-selector,
+.custom-react-selects .ant-select .ant-select-selector:hover,
+.custom-react-selects .ant-select .ant-select-selector:focus {
+  height: 49px !important;
+  border: none !important;
+  width: 100% !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 10px;
+}
 .custom-react-select-admin .ant-select {
   width: 100%;
 }
@@ -9294,6 +9303,9 @@ tr>td{
   ):not(.ant-pagination-size-changer)
   .ant-select-selector {
   border-color: red !important;
+}
+.custom-react-selects .ant-select .ant-select-arrow {
+  top:25px !important
 }
 /* .ant-select .ant-select-arrow {
   margin-top: 0px !important;
@@ -15833,6 +15845,10 @@ input::-webkit-inner-spin-button {
 .custom-spreadsheet .Spreadsheet__cell {
   height: auto; /* Adjust the value as needed */
   line-height: 0px; /* Make the text vertically centered */
+}
+
+.dateRangesHeight .ant-picker{
+  height: 48px !important;
 }
 .new-search,
 .new-search:hover {

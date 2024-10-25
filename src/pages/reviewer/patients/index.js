@@ -6,10 +6,7 @@ import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import {
   DatePicker,
-  Input,
   Popover,
-  Select,
-  Skeleton,
   notification,
 } from "antd";
 import moment from "moment";
@@ -17,7 +14,6 @@ import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
 import Header from "../../../jsx/layouts/nav/Header";
 import PatientTable from "../../../components/table/PatientList/patientList";
-import LoadingSpinner from "../../../components/spinner";
 import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
@@ -46,7 +42,8 @@ import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { getStorage, setStorage } from "../../../utils/storages";
-import { actions as allActions } from '../../../stores/reviewer/workqueue'
+import { actions as allActions } from "../../../stores/reviewer/workqueue";
+import HeaderFiltersPatients from "./headerFilters";
 
 const { RangePicker } = DatePicker;
 
@@ -83,8 +80,12 @@ const bullets = [
   },
 ];
 
-const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientDetails, }) => {
-
+const Patient = ({
+  patientsListFilter,
+  getpatientsListFilter,
+  loading,
+  patientDetails,
+}) => {
   const navigate = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const inputValue = {
@@ -99,13 +100,19 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
+  const [clear, setClear] = useState(false);
+  const [activeFilters, setActiveFilters] = useState([navigate?.query?.filter||[]]);
   const [trackChart, setTrackChart] = useState({
     COMPLETED: 0,
     PENDING: 0,
     DECLINED: 0,
     HOLD: 0,
   });
-  const [selectedPriority, setSelectedPriority] = useState();
+  const [selectedPriority, setSelectedPriority] = useState(
+    navigate.query?.selectedPriority
+      ? navigate.query?.selectedPriority
+      : null
+  );
   const [showFilters, setShowFilters] = useState(
     navigate?.query ? true : false
   );
@@ -125,8 +132,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
   const [processedEnd, setProcessedEnd] = useState("");
   const [statusSelectedStatus, setStatusSelectedStatus] = useState(
     navigate.query?.statusSelectedStatus
-      ? navigate.query?.statusSelectedStatus?.toUpperCase()
-      : ""
+      ? navigate.query?.statusSelectedStatus
+      : null
   );
   const [searchTextValue, setSearchTextValue] = useState(
     navigate.query?.searchTextValue
@@ -183,7 +190,14 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
       dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z"
     );
   }, [dayDateFormated]);
-
+  useEffect(() =>{
+    if (navigate.query?.filter?.length) {
+      const array = activeFilters?.[0].split(',');
+      setActiveFilters(array)
+  } else {
+      console.error('activeFilters is not a string:', activeFilters);
+  }
+  },[navigate.query])
   useEffect(() => {
     if (window !== "undefined") {
       if (navigate.query) {
@@ -194,9 +208,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
             ? navigate?.query?.paginationFirst
             : 0
         );
-        // setSearchVal(navigate.query?.searchTextValue);
-        // setSelectedPriorityValue(navigate.query?.selectedPriority);
-        // setStatusSelectedStatus(navigate.query?.statusSelectedValue);
+
       }
     }
   }, [navigate]);
@@ -206,16 +218,16 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
     setLocalUserId(uId);
     if (window !== "undefined") {
       getFilteApi(
-        pageNo,
+        {pageNo,
         pageSize,
-        statusSelectedStatus,
-        dueDateStart,
-        dueDateEnd,
-        processedStart,
-        processedEnd,
+        statusValue:clear ? "" : statusSelectedStatus,
+        dStart:clear ? "" : dueDateStart,
+        dEnd:clear ? "" : dueDateEnd,
+        pStart:clear ? "" : processedStart,
+        pEnd:clear ? "" : processedEnd,
         sort,
-        selectedPriority,
-        searchTextValue
+        selectedPriority:clear ? "" : selectedPriority,
+        searchTextValue:clear ? "" : searchTextValue}
       );
     }
   }, [
@@ -228,52 +240,20 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
     processedEnd,
     statusSelectedStatus,
     navigate.query,
+    clear
   ]);
 
-  // const getPatientRes = async (
-  //   pageNo,
-  //   pageSize,
-  //   statusSelectedStatus,
-  //   dueDateStart,
-  //   dueDateEnd,
-  //   processedStart,
-  //   processedEnd,
-  //   sort,
-  //   selectedPriority,
-  //   searchTextValue
-  // ) => {
-  //   try {
-  //     const res = await getFilteApi(
-  //       pageNo,
-  //       pageSize,
-  //       statusSelectedStatus,
-  //       dueDateStart,
-  //       dueDateEnd,
-  //       processedStart,
-  //       processedEnd,
-  //       sort,
-  //       selectedPriority,
-  //       searchTextValue
-  //     );
-  //     if (res.status == "SUCCESS") {
-  //       setTotalElements(res.response?.patientDTOList?.totalElements);
-  //       setTrackChart(res?.response?.processStatusCount);
-  //       setPatinetListAll(res?.response?.patientDTOList?.content);
-  //     }
-  //   } catch (error) {}
-  // };
-
   const getFilteApi = async (
-    pageNo,
-    pageSize,
-    statusValue,
-    dStart,
-    dEnd,
-    pStart,
-    pEnd,
-    sort,
-    selectedPriority,
-    searchTextValue
+ {   pageNo,
+  pageSize,
+  statusValue,
+  dStart,
+  dEnd,
+  pStart,
+  pEnd,
+  sort,
+  selectedPriority,
+  searchTextValue}
   ) => {
     const uId = getStorage("userId");
     const resoureUrl = `patientAllocated=${uId}&page=${
@@ -350,29 +330,11 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageSize(e.rows);
-    // getFilteApi(
-    //   e.page,
-    //   15,
-    //   statusSelectedValue,
-    //   dueDateStart,
-    //   dueDateEnd,
-    //   processedStart,
-    //   processedEnd
-    // );
   };
 
   const onChangeStatus = (selectedOption) => {
     let value = selectedOption;
     setStatusSelectedStatus(value);
-    // getFilteApi(
-    //   0,
-    //   pageSize,
-    //   value,
-    //   dueDateStart,
-    //   dueDateEnd,
-    //   processedStart,
-    //   processedEnd
-    // );
   };
   const onChangePriority = (selectedOption) => {
     let value = selectedOption;
@@ -414,7 +376,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
       case "COMPLETED":
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status text-center" >
               <Image src={Completed} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
@@ -423,7 +385,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
       case "PENDING":
         return (
           <Popover placement="bottom" title="Status: PENDING">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status text-center">
               <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
@@ -438,7 +400,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
               declinedDataFromDeclined ? declinedDataFromDeclined : "---"
             }`}
           >
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status text-center" >
               <Image src={Declined} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
@@ -446,7 +408,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
       case "NOTCOMPUTED":
         return (
           <Popover placement="bottom" title="Status: NOT COMPUTED">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status text-center" >
               <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
@@ -454,7 +416,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
       case "COMPUTED":
         return (
           <Popover placement="bottom" title="Status: COMPUTED">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status text-center" >
               <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
@@ -462,7 +424,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
       case "HOLD":
         return (
           <Popover placement="bottom" title="Status: HOLD">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status text-center" >
               <Image src={Hold} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
@@ -470,7 +432,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
       case "ABORTED_BY_CRON":
         return (
           <Popover placement="bottom" title="Status: ABORTED BY CRON">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status text-center">
               <Image src={Abort} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
@@ -478,26 +440,14 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
       case null:
         return (
           <Popover placement="bottom" title="">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status text-center" >
               <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
     }
   };
-  // const renderSkeleton = () => (
-  //   <div className="skeleton-table">
-  //     <div className="skeleton-header">
-  //       <Skeleton.Input style={{ width: 2000 }} active />
-  //     </div>
-
-  //     {Array.from({ length: 6 }).map((_, index) => (
-  //       <div key={index} className="skeleton-row">
-  //         <Skeleton.Input style={{ width: 2000 }} active />
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
+ 
 
   const options = [...priorityOptions];
   useEffect(() => {
@@ -517,7 +467,6 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
       setDueDateEnd(decodedParams?.dueDateEnd);
     }
   }, [navigate.query]);
-
   return (
     <>
       <div className={`show `}>
@@ -529,180 +478,62 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
                 <div className="">
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
-                      <div className="tbl-caption  align-items-center">
-                        <div className="row filter-contain">
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                              flexDirection: "row",
+                      <div className="row">
+                        <div className="col-10">
+                          <HeaderFiltersPatients
+                          activeFilters={activeFilters}
+                          setActiveFilters={setActiveFilters}
+                            isAllocatedToSelector={true}
+                            value={searchVal}
+                            onChange={(e) => getNameSearch(e)}
+                            orgAllList={statusOptions}
+                            onChangeStatus={(selectedOption) => {
+                              onChangeStatus(selectedOption);
+                              resetPageNumber(setPageNo);
+                              setClear(false);
                             }}
-                          >
-                            <div className="col-xl-2">
-                              <label className="responsiveLabel">
-                                Search by Name or ID
-                              </label>
-                              {/* <InputField
-                                inputValue={searchTextValue}
-                                setInputValue={setSearchTextValue}
-                                delay={1000}
-                                type="text"
-                                onChange={getNameSearch}
-                                placeholder="Search"
-                                isSearch={true}
-                              /> */}
-                              <div style={{ height: "45px" }}>
-                                <Input
-                                  value={searchVal}
-                                  onChange={(e) => getNameSearch(e)}
-                                  className={
-                                    "w-100 new-search-control border-none"
-                                  }
-                                  placeholder={"Search"}
-                                  maxLength={25}
-                                  onKeyDown={(e) => {
-                                    if (disallowedCharacters.includes(e.key)) {
-                                      e.preventDefault();
-                                    }
-                                  }}
-                                  prefix={
-                                    <FontAwesomeIcon
-                                      className="searchPrefix"
-                                      icon={faSearch}
-                                    />
-                                  }
-                                  allowClear={true}
-                                />
-                              </div>
+                            statusSelectedStatus={statusSelectedStatus}
+                            statusSelectedStatus1={selectedPriority}
+                            onChangeStatus1={(selectedOption) => {
+                              onChangePriority(selectedOption);
+                              resetPageNumber(setPageNo);
+                              setClear(false);
+                            }}
+                            orgAllList1={options}
+                            selectedDates={selectedDates}
+                            setSelectedDates={setSelectedDates}
+                            onchangeRangePicker={(dates, dateStrings) => {
+                              handleDatePickerChange(dateStrings);
+                              resetPageNumber(setPageNo);
+                              setClear(false);
+                            }}
+                            selectedDates2={selectedDates2}
+                            setSelectedDates2={setSelectedDates2}
+                            onchangeRangePicker2={(dates, dateStrings) => {
+                              handleDatePickerChangeProcesseDate(dateStrings);
+                              resetPageNumber(setPageNo);
+                              setClear(false);
+                            }}
+                            setClear={setClear}
+                            clear={clear}
+                          />
+                        </div>
+                        <div className="col-2">
+                          <div className="row">
+                            <div className="col-2">
+                              {" "}
+                             <div style={{marginTop:"62px"}}>
+                             <HeaderFilters bullets={bullets} />
+                             </div>
                             </div>
-                            <div className="col-xl-2">
-                              <label className="responsiveLabel">
-                                Select Status
-                              </label>
-                              <div class="form-group has-search custom-react-select">
-                                <Select
-                                  onChange={(selectedOption) => {
-                                    onChangeStatus(selectedOption);
-                                    resetPageNumber(setPageNo);
-                                  }}
-                                  value={
-                                    statusSelectedStatus
-                                      ? statusSelectedStatus
-                                      : null
-                                  }
-                                  options={statusOptions}
-                                  isSearchable={false}
-                                  placeholder={"Select Status"}
-                                  allowClear
-                                />
-                              </div>
-                            </div>
-                            <div className="col-xl-2">
-                              <label className="responsiveLabel">
-                                Select Priority
-                              </label>
-                              <div class="form-group has-search custom-react-select">
-                                <Select
-                                  onChange={(selectedOption) => {
-                                    onChangePriority(selectedOption);
-                                    resetPageNumber(setPageNo);
-                                  }}
-                                  value={
-                                    selectedPriority ? selectedPriority : null
-                                  }
-                                  options={options}
-                                  isSearchable={false}
-                                  placeholder={"Select Priority"}
-                                  allowClear
-                                />
-                              </div>
-                            </div>
-
-                            <div className="col-xl-2">
-                              <label className="responsiveLabel">
-                                Due Date
-                              </label>
-                              <div>
-                                <RangePicker
-                                  format="MM-DD-YYYY"
-                                  onChange={(dates, dateStrings) => {
-                                    handleDatePickerChange(dateStrings);
-                                    resetPageNumber(setPageNo);
-                                  }}
-                                  value={selectedDates}
-                                  onCalendarChange={(val) =>
-                                    setSelectedDates(val)
-                                  }
-                                  // defaultValue={
-                                  //   navigate?.query
-                                  //     ? [
-                                  //         dayjs(defaultStartDate, "MM-DD-YYYY"),
-                                  //         dayjs(defaultEndDate, "MM-DD-YYYY"),
-                                  //       ]
-                                  //     : []
-                                  // }
-                                  disabledDate={(current) =>
-                                    disableFutureDates(current)
-                                  }
-                                />
-                              </div>
-                            </div>
-                            <div
-                              className={"col-xl-1"}
-                              style={{
-                                margin: "30px 0 0 10px",
-                                cursor: "pointer",
-                                width: "100px",
-                              }}
-                              onClick={() => setShowFilters(!showFilters)}
-                            >
-                              <button className={`d-flex ${styles.filterBtn}`} >
-                                <Image src={filter} />{" "}
-                                {showFilters ? "Hide" : "Filter"}
-                              </button>
-                            </div>
-                            <HeaderFilters bullets={bullets} />
-
-                            <div className="col-xl-2 mt-4 mb-1">
+                            <div className="col-10 mt-1 mb-1">
+                              {" "}
                               <DailyTask trackChart={trackChart} />
                             </div>
                           </div>
-                          {showFilters && (
-                            <div
-                              style={{
-                                display: "flex",
-                                marginTop: "-30px",
-                                flexDirection: "row",
-                              }}
-                            >
-                              <div className="col-xl-2 ">
-                                <label className="responsiveLabel">
-                                  Completed Date
-                                </label>
-                                <div>
-                                  <RangePicker
-                                    format="MM-DD-YYYY"
-                                    value={selectedDates2}
-                                    onCalendarChange={(val) =>
-                                      setSelectedDates2(val)
-                                    }
-                                    onChange={(dates, dateStrings) => {
-                                      handleDatePickerChangeProcesseDate(
-                                        dateStrings
-                                      );
-                                      resetPageNumber(setPageNo);
-                                    }}
-                                    disabledDate={(current) =>
-                                      disableFutureDate(current)
-                                    }
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          )}
                         </div>
                       </div>
+
 
                       <div
                         id="task-tbl_wrapper"
@@ -713,6 +544,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter, loading,  patientD
                         ) : (
                           <>
                             <PatientTable
+                             activeFilters={activeFilters}
+                             setActiveFilters={setActiveFilters}
                               patinetListAll={patinetListAll}
                               actionBodyTemplate={actionBodyTemplate}
                               statusBodyTemplate={processstatusBodyTemplate}

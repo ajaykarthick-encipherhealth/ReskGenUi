@@ -560,9 +560,10 @@ const Details = ({
       }
     } else if (user && user.toLowerCase() === "reviewer") {
       const { user: _, ...queryWithoutUser } = navigate.query;
-      const queryString = new URLSearchParams(queryWithoutUser).toString();
+      const queryString = new URLSearchParams(navigate.query).toString();
       if (navigate.query && queryString) {
         // const url = queryString ? `/reviewer/patients` : "/reviewer/patients";
+    
         navigate.push(
           {
             pathname: "/reviewer/patients",
@@ -570,7 +571,9 @@ const Details = ({
           },
           "/reviewer/patients"
         );
-      } else {
+      } 
+      
+      else {
         navigate.back();
       }
     } else {
