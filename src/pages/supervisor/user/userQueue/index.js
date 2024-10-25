@@ -23,6 +23,7 @@ import { actions as allActions } from "../../../../stores/supervisor/users";
 import { actions as allActions2 } from "../../../../stores/supervisor/auditedQueue";
 import { renderSkeleton } from "../../../../components/reuseableFunctions";
 import UserFilters from "../filters/usersFilters";
+import HeaderFilters from "../filters/headerFilters";
 
 const bullets = [
   {
@@ -195,7 +196,8 @@ const Index = ({
       ? router?.query?.sortField
       : "auditDueDate",
   });
-
+  const [clear, setClear] = useState(false);
+  const [activeFilters, setActiveFilters] = useState([router?.query?.filters|| []]);
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -231,20 +233,20 @@ const Index = ({
         search: searchTextValue,
         selectedOption,
         selAllocatedBy,
-        dueStartDate,
-        dueEndDate,
-        completedStartDate,
-        completedEndDate,
+        dueStartDate:clear ?"":dueStartDate,
+        dueEndDate:clear?"":dueEndDate,
+        completedStartDate:clear?"":completedStartDate,
+        completedEndDate:clear?"":completedEndDate,
         auditedStartDate,
         auditedEndDate,
         allocatedStartDate,
         allocatedEndDate,
         selectedAuditOption,
         selAuditAllocatedBy,
-        aduitCompletedStartDate,
-        aduitCompletedEndDate,
-        aduitDueStartDate,
-        aduitDueEndDate,
+        aduitCompletedStartDate:clear?"":aduitCompletedStartDate,
+        aduitCompletedEndDate:clear?"":aduitCompletedEndDate,
+        aduitDueStartDate:clear ?"":aduitDueStartDate,
+        aduitDueEndDate:clear ?"":aduitDueEndDate,
         sort,
       };
       getIndividualUser({ data: data });
@@ -270,7 +272,18 @@ const Index = ({
     aduitDueStartDate,
     aduitDueEndDate,
     sort,
+    
   ]);
+
+  useEffect(() =>{
+    if (router.query?.filters?.length) {
+      const array = activeFilters?.[0].split(',');
+      setActiveFilters(array)
+  } else {
+      console.error('activeFilters is not a string:', activeFilters);
+  }
+  },[router.query])
+ 
   const auditstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes
@@ -373,7 +386,7 @@ const Index = ({
               className={"col-xl-12 d-flex"}
               style={{
                 position: "relative",
-                left: "40px",
+                // left: "40px",
                 bottom: "10px",
                 cursor: "pointer",
               }}
@@ -403,107 +416,110 @@ const Index = ({
               <div className="card-body p-0">
                 <div className="table-responsive active-projects task-table">
                   <div className="tbl-caption  align-items-center">
-                    <UserFilters
-                      setSearchTextValue={setSearchTextValue}
-                      searchlabel="Search By Patient ID / Name"
-                      searchVal={search}
-                      setSearchVal={setSearch}
-                      // auditedStatus
-                      selectlabel2="Audit Status"
-                      setSelectedOption2={setSelectedAuditOption}
-                      selectOptions2={AuditOptions}
-                      selectDefaultValue={
-                        selectedAuditOption
-                          ? selectedAuditOption
-                          : "Select Status"
-                      }
-                      //audit due date
-                      audipickerlabel1="Audit Due Date"
-                      audidefaultStartDate={""}
-                      audidefaultEndDate={""}
-                      audisetStartDate={setAduitDueStartDate}
-                      audisetEndDate={setAduitDueEndDate}
-                      isAduitDueDate={true}
-                      setSelectedDates={setSelectedDates}
-                      selectedDates={selectedDates}
-                      // audited completed date
-                      audipickerlabe2="Audit Completed Date"
-                      audidefaultStartDate2={""}
-                      audidefaultEndDate2={""}
-                      audisetStartDate2={setAduitCompletedStartDate}
-                      audisetEndDate2={setAduitCompletedEndDate}
-                      isAuditCompleteDate={true}
-                      setSelectedDates2={setSelectedDates2}
-                      selectedDates2={selectedDates2}
-                      // allocated by
-                      isAuditAllocatedBy={true}
-                      audiallocatedBylabel="Audit AllocatedBy"
-                      auditallocatedByOptions={generateOptionsListSupervisor(
-                        filteredList
-                      )}
-                      audisetSelAllocatedBy={setSelAuditAllocatedBy}
-                      selAuditAllocatedBy={selAuditAllocatedBy}
-                      audidefaultAllocatedBy="Select Audit AllocatedBy"
-                      // select status
-                      selectlabel="Reviewed Status"
-                      isSelector={true}
-                      setSelectedOption={setSelectedOption}
-                      selectOptions={statusOptions}
-                      defaultSelectValue1={"Select Status"}
-                      selectedOption={selectedOption}
-                      
+                   <HeaderFilters
+                    setSearchTextValue={setSearchTextValue}
+                    searchlabel="Search By Patient ID / Name"
+                    searchVal={search}
+                    setSearchVal={setSearch}
+                    // auditedStatus
+                    selectlabel2="Audit Status"
+                    setSelectedOption2={setSelectedAuditOption}
+                    selectOptions2={AuditOptions}
+                    selectDefaultValue={
+                      selectedAuditOption
+                        ? selectedAuditOption
+                        : "Select Status"
+                    }
+                    //audit due date
+                    audipickerlabel1="Audit Due Date"
+                    audidefaultStartDate={""}
+                    audidefaultEndDate={""}
+                    audisetStartDate={setAduitDueStartDate}
+                    audisetEndDate={setAduitDueEndDate}
+                    // isAduitDueDate={true}
+                    setSelectedDates={setSelectedDates}
+                    selectedDates={selectedDates}
+                    // audited completed date
+                    audipickerlabe2="Audit Completed Date"
+                    audidefaultStartDate2={""}
+                    audidefaultEndDate2={""}
+                    audisetStartDate2={setAduitCompletedStartDate}
+                    audisetEndDate2={setAduitCompletedEndDate}
+                    // isAuditCompleteDate={true}
+                    setSelectedDates2={setSelectedDates2}
+                    selectedDates2={selectedDates2}
+                    // allocated by
+                    // isAuditAllocatedBy={true}
+                    audiallocatedBylabel="Audit AllocatedBy"
+                    auditallocatedByOptions={generateOptionsListSupervisor(
+                      filteredList
+                    )}
+                    audisetSelAllocatedBy={setSelAuditAllocatedBy}
+                    selAuditAllocatedBy={selAuditAllocatedBy}
+                    audidefaultAllocatedBy="Select Audit AllocatedBy"
+                    // select status
+                    selectlabel="Reviewed Status"
+                    // isSelector={true}
+                    setSelectedOption={setSelectedOption}
+                    selectOptions={statusOptions}
+                    defaultSelectValue1={"Select Status"}
+                    selectedOption={selectedOption}
+                    
 
-                      // due date
-                      pickerlabel="Due Date"
-                      defaultStartDate={""}
-                      defaultEndDate={""}
-                      setStartDate={setDueStartDate}
-                      setEndDate={setDueEndDate}
-                      isRangePicker={true}
-                      selectedDueDates={selectedDates3}
-                      setSelectedDueDates={setSelectedDates3}
-                      // completed date
-                      pickerlabe2="Completed Date"
-                      defaultStartDate2={""}
-                      defaultEndDate2={""}
-                      setStartDate2={setCompletedStartDate}
-                      setEndDate2={setCompletedEndDate}
-                      isAnotherPicker={true}
-                      selectedDates4={selectedDates4}
-                      setSelectedDates4={setSelectedDates4}
-                      // defaultAllocateTo={""}
-                      // allocated by
-                      // isAllocatedBySelector={true}
-                      // allocatedBylabel=" AllocatedBy"
-                      // allocatedByOptoons={generateOptionsList(filteredList)}
-                      // setSelAllocatedBy={setSelAllocatedBy}
-                      // defaultAllocatedBy={"All"}
-                      // allocated date
-                      // pickerlabe3="Allocated Date"
-                      // defaultStartDate3={""}
-                      // defaultEndDate3={""}
-                      // setStartDate3={setAllocatedStartDate}
-                      // setEndDate3={setAllocatedEndDate}
-                      // isAllocatedDate={true}
-                      // Auditeddate
-                      pickerlabe4="Audited Date"
-                      defaultStartDate4={""}
-                      defaultEndDate4={""}
-                      setStartDate4={setAuditedStartDate}
-                      setEndDate4={setAuditedEnsDate}
-                      isAnotherPicker3={true}
-                      addUser={false}
-                      bullets={bullets}
-                      isNextRow={true}
-                      badges={badges}
-                      getFilters={getFilters}
-                      username={userName}
-                      setPageNo={setPageNo}
-                      bulletsTitle="Reviewed Status"
-                      badgesTitle="Audited Status"
-                      selAuditAllocatedByVal={selAuditAllocatedByVal}
-                      setSelAuditAllocatedByVal={setSelAuditAllocatedByVal}
-                    />
+                    // due date
+                    pickerlabel="Due Date"
+                    defaultStartDate={""}
+                    defaultEndDate={""}
+                    setStartDate={setDueStartDate}
+                    setEndDate={setDueEndDate}
+                    // isRangePicker={true}
+                    selectedDueDates={selectedDates3}
+                    setSelectedDueDates={setSelectedDates3}
+                    // completed date
+                    pickerlabe2="Completed Date"
+                    defaultStartDate2={""}
+                    defaultEndDate2={""}
+                    setStartDate2={setCompletedStartDate}
+                    setEndDate2={setCompletedEndDate}
+                    // isAnotherPicker={true}
+                    selectedDates4={selectedDates4}
+                    setSelectedDates4={setSelectedDates4}
+                    defaultAllocateTo={""}
+                    // allocated by
+                    // isAllocatedBySelector={true}
+                    allocatedBylabel=" AllocatedBy"
+                    allocatedByOptoons={generateOptionsList(filteredList)}
+                    setSelAllocatedBy={setSelAllocatedBy}
+                    defaultAllocatedBy={"All"}
+                    // allocated date
+                    pickerlabe3="Allocated Date"
+                    defaultStartDate3={""}
+                    defaultEndDate3={""}
+                    setStartDate3={setAllocatedStartDate}
+                    setEndDate3={setAllocatedEndDate}
+                    // isAllocatedDate={true}
+                    // Auditeddate
+                    pickerlabe4="Audited Date"
+                    defaultStartDate4={""}
+                    defaultEndDate4={""}
+                    setStartDate4={setAuditedStartDate}
+                    setEndDate4={setAuditedEnsDate}
+                    isAnotherPicker3={true}
+                    addUser={false}
+                    bullets={bullets}
+                    isNextRow={true}
+                    badges={badges}
+                    getFilters={getFilters}
+                    username={userName}
+                    setPageNo={setPageNo}
+                    bulletsTitle="Reviewed Status"
+                    badgesTitle="Audited Status"
+                    selAuditAllocatedByVal={selAuditAllocatedByVal}
+                    setSelAuditAllocatedByVal={setSelAuditAllocatedByVal}
+                    clear={clear}
+                    activeFilters={activeFilters}
+                    setActiveFilters={setActiveFilters}
+                    setClear={setClear}/>
                   </div>
                   <div
                     id="task-tbl_wrapper"
@@ -526,6 +542,8 @@ const Index = ({
                         setAuditAllocatedSort={setAuditAllocatedSort}
                         audirDateSort={audirDateSort}
                         setAuditDateSort={setAuditDateSort}
+                        activeFilters={activeFilters}
+                        setActiveFilters={setActiveFilters}
                         params={{
                           pageNo,
                           searchTextValue,

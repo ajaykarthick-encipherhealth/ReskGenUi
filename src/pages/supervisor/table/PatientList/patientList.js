@@ -100,6 +100,14 @@ function PatientTable({
       const dataIndex = targetTd.parentElement.rowIndex - 1;
       const clickedData = patinetListAll[dataIndex];
       gotoPatientDetails(clickedData);
+      // router?.push(`/supervisor/user/details?page=${page}`);
+      router?.push(
+        {
+          pathname: "/supervisor/auditing",
+          query: { ...params, isSupervisorUser: true},
+        },
+        "/supervisor/auditing"
+      );
     }
   };
 

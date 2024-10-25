@@ -17,7 +17,9 @@
   margin-top: 25px;
   border-radius: 8px;
 }
-
+.label {
+  margin-left: 8px;
+}
 .export:hover {
   text-decoration: none !important;
 }
@@ -223,4 +225,15 @@
   margin-top: 10px;
   cursor: pointer;
   color: #04306f;
+}
+.containerStyle{
+  flex-direction: row;
+  width:100%
+}
+.mainDiv{
+  width:90%;
+  flex-wrap: wrap;
+}
+.subDiv{
+  width: 10%;
 }

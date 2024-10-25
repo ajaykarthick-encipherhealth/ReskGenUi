@@ -530,7 +530,7 @@ const Details = ({
       }
     } else if (user && user.toLowerCase() === "supervisor") {
       const { user: _, ...queryWithoutUser } = navigate.query;
-      const queryString = new URLSearchParams(queryWithoutUser).toString();
+      const queryString = new URLSearchParams(navigate.query).toString();
       if (navigate.query.isSupervisorAuited === "true") {
         // const url = queryString
         //   ? `/supervisor/auditing?${queryString}`
@@ -551,8 +551,10 @@ const Details = ({
             pathname: `/supervisor/user/userQueue`,
             query: queryString ? queryString : "",
           },
+         
           `/supervisor/user/userQueue?userId=${queryWithoutUser?.userName}`
         );
+        
       } else {
         navigate.back();
       }
@@ -576,7 +578,6 @@ const Details = ({
     }
     setSelectDosValue("");
   };
-
   const splitUserName = (name) => {
     if (name) {
       return name[0];

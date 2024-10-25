@@ -40,6 +40,7 @@ import Image from "next/image";
 import { patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
+import Filters from "./filters";
 const bullets = [
   {
     color: "#377880",
@@ -113,6 +114,7 @@ const Patient = ({ getWorkListFilter, response, loader ,filteredList,getFilters}
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
+  const [clear, setClear] = useState(false);
   useEffect(() => {
     let tenId = getStorage("tenantId");
     let uId = getStorage("userId");
@@ -128,14 +130,14 @@ const Patient = ({ getWorkListFilter, response, loader ,filteredList,getFilters}
       pageNo,
       computedStartDate,
       computedEndDate,
-      selectedOption,
+      selectedOption:clear?"":selectedOption,
       search,
-      completedStartDate,
-      completedEndDate,
+      completedStartDate:clear?"":completedStartDate,
+      completedEndDate:clear?"":completedEndDate,
       patientSortOrder,
       selAllocatedBy,
       sort,
-      selCreatedBy,
+      selCreatedBy:clear?"":selCreatedBy,
     };
 
     getWorkListFilter({ data: data });
@@ -363,49 +365,52 @@ const Patient = ({ getWorkListFilter, response, loader ,filteredList,getFilters}
                   <div className="table-responsive active-projects task-table">
                     <div className="tbl-caption  align-items-center">
                       <div className="tbl-caption  align-items-center">
-                        <HeaderFilters
-                          setSearch={setSearch}
-                          isSearch={true}
-                          searchlabel="Search By Patient ID / Name"
-                          search={search}
-                          // select status
-                          selectlabel="Select Audited Status"
-                          isSelector={true}
-                          setSelectedOption={SetSelectedOption}
-                          selectOptions={statusOptions}
-                          defaultSelectValue1={"Select Status"}
-                          // computation date
-                          pickerlabel="Audit Due Date"
-                          defaultStartDate={""}
-                          defaultEndDate={""}
-                          setStartDate={setComputedStartDate}
-                          setEndDate={setComputedEndDate}
-                          isRangePicker={true}
-                          selectedDates={selectedDates}
-                          setSelectedDates={setSelectedDates}
-                          // completed date
-                          pickerlabe2="Audited Date"
-                          defaultStartDate2={""}
-                          defaultEndDate2={""}
-                          setStartDate2={setCompletedStartDate}
-                          setEndDate2={setCompletedEndDate}
-                          isAnotherPicker={true}
-                          defaultAllocateTo={"All"}
-                          selectedDates2={selecteddates2}
-                          setSelectedDates2={setSelectedDate2s}
-                          // created by
-                          isNextCreatedBySelector={true}
-                          createdTolabel="Reviewer"
-                          optionKey="patientAllocated"
-                          createdByOptoons={generateOptionsListSupervisor(filteredList)}
-                          setSelCreatedBy={setSelCreatedBy}
-                          addUser={false}
-                          addUserForm={addPatientFormId}
-                          bullets={bullets}
-                          setPageNo={setPageNo}
-                          defaultCreatedBy={"Select Reviewer"}
-                          // isNextRow={true}
-                        />
+                        <Filters
+                         setSearch={setSearch}
+                         selectedOption={selectedOption}
+                         // isSearch={true}
+                         searchlabel="Search By Patient ID / Name"
+                         search={search}
+                         // select status
+                         selectlabel="Select Audited Status"
+                         // isSelector={true}
+                         setSelectedOption={SetSelectedOption}
+                         selectOptions={statusOptions}
+                         defaultSelectValue1={"Select Status"}
+                         // computation date
+                         pickerlabel="Audit Due Date"
+                         defaultStartDate={""}
+                         defaultEndDate={""}
+                         setStartDate={setComputedStartDate}
+                         setEndDate={setComputedEndDate}
+                         isRangePicker={true}
+                         selectedDates={selectedDates}
+                         setSelectedDates={setSelectedDates}
+                         // completed date
+                         pickerlabe2="Audited Date"
+                         defaultStartDate2={""}
+                         defaultEndDate2={""}
+                         setStartDate2={setCompletedStartDate}
+                         setEndDate2={setCompletedEndDate}
+                         // isAnotherPicker={true}
+                         defaultAllocateTo={"All"}
+                         selectedDates2={selecteddates2}
+                         setSelectedDates2={setSelectedDate2s}
+                         // created by
+                         isNextCreatedBySelector={true}
+                         createdTolabel="Reviewer"
+                         optionKey="patientAllocated"
+                         createdByOptoons={generateOptionsListSupervisor(filteredList)}
+                         setSelCreatedBy={setSelCreatedBy}
+                         selCreatedBy={selCreatedBy}
+                         addUser={false}
+                         addUserForm={addPatientFormId}
+                         bullets={bullets}
+                         setPageNo={setPageNo}
+                         defaultCreatedBy={"Select Reviewer"}
+                         // isNextRow={true}
+                         clear={clear}
+                         setClear={setClear}/>
                       </div>
                     </div>
 

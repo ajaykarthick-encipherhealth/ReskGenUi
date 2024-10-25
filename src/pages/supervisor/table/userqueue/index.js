@@ -20,7 +20,7 @@ import {
   sortFunction,
 } from "../../../../components/headerFilters/functions";
 import { extractLatestData } from "../../auditing";
-import { setStorage } from "../../../../utils/storages";
+import {  setStorage } from "../../../../utils/storages";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 
 const UserQueueTable = ({
@@ -37,6 +37,8 @@ const UserQueueTable = ({
   audirDateSort,
   setAuditDateSort,
   params,
+  setActiveFilters,
+  activeFilters
 }) => {
   const router = useRouter();
   const auditstatusBodyTemplate = (rowData) => {
@@ -142,7 +144,7 @@ const UserQueueTable = ({
       router?.push(
         {
           pathname: "/supervisor/user/details",
-          query: { ...params, isSupervisorUser: true },
+          query: { ...params, isSupervisorUser: true,filters: activeFilters},
         },
         "/supervisor/user/details"
       );

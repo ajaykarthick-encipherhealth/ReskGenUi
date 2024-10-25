@@ -53,7 +53,7 @@ const MoreFilter = ({
             type="checkbox"
             onChange={() => handleRowCheckboxChange(filter)}
             className={`${styles.customChecked}`}
-            checked={activeFilters.includes(filter)}
+            checked={activeFilters?.includes(filter)}
           />{" "}
           <span style={{ margin: "0 5px" }}>{filter}</span>
         </div>
