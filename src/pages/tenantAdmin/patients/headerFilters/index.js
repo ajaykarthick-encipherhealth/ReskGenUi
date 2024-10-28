@@ -309,7 +309,7 @@ const HeaderFilters = ({
           </div>
         )}
 
-        {activeFilters.map((filter) => (
+        {activeFilters?.map((filter) => (
           <React.Fragment key={filter}>{renderFilter(filter)}</React.Fragment>
         ))}
       </div>
