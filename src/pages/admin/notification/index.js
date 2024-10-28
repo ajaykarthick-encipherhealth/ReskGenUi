@@ -264,7 +264,7 @@ const Notification = ({ getAllCustomUsers, allCustomUsers, getUsers,getNotificat
                 <div>
                   {selectCheckBox == "CUSTOM" ? (
                     <>
-                      <div className="d-flex" style={{ width: "600px" }}>
+                     <div className="d-flex gap-2" style={{ width: "500px" }}>
                         <Select
                           className={`ant_select_form ${styles.ant_select_form}`}
                           mode="multiple"
