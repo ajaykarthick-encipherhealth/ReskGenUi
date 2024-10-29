@@ -43,6 +43,7 @@ const Index = ({
   orgLoader,
   getTop10DiseasesData,
   getAccuracyScore,
+  getAllLabAndRadiologyChart
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
   const [selectedValue, setSelectedValue] = useState(null);
@@ -214,6 +215,11 @@ const Index = ({
       selectedOrganization
     );
     getAccuracyScore(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
+    getAllLabAndRadiologyChart(
       dateRange.startDate,
       dateRange.endDate,
       selectedOrganization
@@ -470,6 +476,7 @@ const enhancer = connect(
       dashboardWorkflowActions?.organizationStatusAction,
     getTop10DiseasesData: defaultActions.top10Diseases,
     getAccuracyScore: dashboardWorkflowActions.getAccuracyWorkflow,
+    getAllLabAndRadiologyChart:defaultActions.getAllLabAndRadiologyChart
   }
 );
 export default enhancer(Index);

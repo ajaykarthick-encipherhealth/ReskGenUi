@@ -28,21 +28,24 @@ const CodesGraph = ({
   selectedValue,
   className,
   customDate,
+  getAllLabAndRadiologyChart,
+  isLabValues
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
+  const radiologyCountValues =   getAllLabAndRadiologyChart?.radiologyCountMap;
+  const labCountValues =   getAllLabAndRadiologyChart?.getAllLabAndRadiologyChart?.labCountMap;
   const dates =
     selectedValue === "custom"
       ? customDate
       : selectedValue === "last_1_week"
       ? getLast7Days()
       : getLast30Days();
-
   const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
-
+  const resultArrayRadiology = formatValues(radiologyCountValues, dates);
+  const resultArrayLab = formatValues(labCountValues, dates);
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap;
   const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
-
   const graphOptions = {
     xAxis: {
       type: "category",
@@ -68,7 +71,6 @@ const CodesGraph = ({
         },
       },
     },
-
     series: [
       {
         name: isCargaps
@@ -82,7 +84,11 @@ const CodesGraph = ({
           ? resultArrayHCC
           : isCargaps
           ? resultArrayCaregaps
-          : [2,2,1],
+          :isTwoWaves
+          ?resultArrayRadiology
+          :isLabValues
+          ?resultArrayLab
+          :[] ,
         type: "line",
         lineStyle: { color: borderColor },
         smooth: true,
@@ -101,14 +107,14 @@ const CodesGraph = ({
       },
       {
         name: "Lab",
-        data: isTwoWaves && [1,2,1,1,2],
-        type: "line",
+        data: resultArrayLab,
         lineStyle: { color: borderColor2 },
         smooth: true,
         showSymbol: false,
       },
     ],
   };
+
   return (
     <div className={`${className}`}>
       <ReactECharts option={options ? options : graphOptions} />
@@ -124,6 +130,8 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
+      getAllLabAndRadiologyChart:state?.tenantAdmin?.dashboard?.default?.
+      getAllLabAndRadiologyChart?.data?.response
   }),
   {
     getAllHccCodesData: HccCodes,

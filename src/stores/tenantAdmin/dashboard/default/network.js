@@ -27,6 +27,33 @@ export async function getAllHccCodes(startDate, endDate, organizationId) {
   );
   return data;
 }
+//lab and radiology
+export async function getAllLabAndRadiologyCount({startDate, endDate, organizationId}) {
+  const options = {
+    method: "GET",
+  };
+
+  const data = await requestPortal(
+    `dbservice/tenantadmin/dashboard/diagnosticdata/statistics?startDate=${startDate}&endDate=${endDate}&organizationId=${
+      organizationId ? organizationId : ""
+    }`,
+    options
+  );
+  return data;
+}
+export async function getAllLabAndRadiologyChart(startDate, endDate, organizationId) {
+  const options = {
+    method: "GET",
+  };
+
+  const data = await requestPortal(
+    `dbservice/tenantadmin/dashboard/diagnosticdata/statistics/chart?startDate=${startDate}&endDate=${endDate}&organizationId=${
+      organizationId ? organizationId : ""
+    }`,
+    options
+  );
+  return data;
+}
 
 //rafScore
 export async function getAllRafScore(startDate, endDate, organizationId) {

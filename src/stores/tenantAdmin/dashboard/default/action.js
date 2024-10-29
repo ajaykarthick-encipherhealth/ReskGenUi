@@ -5,6 +5,15 @@ export const HccCodes = createActionThunk(
   "GET_ALL_HCC_CODES",
   network.getAllHccCodes
 );
+export const  getAllLabAndRadiologyCount= createActionThunk(
+  "GET_ALL_COUNT",
+  network.getAllLabAndRadiologyCount
+);
+export const  getAllLabAndRadiologyChart= createActionThunk(
+  "GET_ALL_LAB_CHART",
+  network.getAllLabAndRadiologyChart
+);
+
 export const getAllRafScore = createActionThunk(
   "GET_ALL_RAF_COUNTS_SCORE",
   network.getAllRafScore

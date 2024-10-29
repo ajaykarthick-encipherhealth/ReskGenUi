@@ -11,6 +11,8 @@ import {
   rafScore,
   RafCounts,
   accuracyScore,
+  getAllLabAndRadiologyCount,
+  getAllLabAndRadiologyChart
 } from "./action";
 
 const initialState = {
@@ -54,6 +56,8 @@ const getReportLoading = (type) =>
 
 const tenantAdminDefault = combineReducers({
   allHccCodes: createReducer(HccCodes),
+  getAllLabAndRadiologyCount: createReducer(getAllLabAndRadiologyCount),
+  getAllLabAndRadiologyChart: createReducer(getAllLabAndRadiologyChart),
   allRafCounts: createReducer(RafCounts),
   allFilesCounts: createReducer(FilesCount),
   allComputingStatus: createReducer(ComputingStatus),
@@ -63,18 +67,16 @@ const tenantAdminDefault = combineReducers({
   accuracyScores: createReducer(accuracyScore),
   allComputingTileStatus: createReducer(computingTileStatus),
   allRafScore: createReducer(rafScore),
-  totalCountsLoader:getReportLoading(FilesCount),
-  rafScoreLoader:getReportLoading(rafScore),
-  totalCodesLoader:getReportLoading(HccCodes),
-  totalCodesLoader:getReportLoading(ComputingStatus),
-  computingTileStatusLoader:getReportLoading(computingTileStatus),
-  computingStatusLoader:getReportLoading(ComputingStatus),
-  topTenDiseasesLoader:getReportLoading(top10Diseases),
-  topTenOigCodes:getReportLoading(topOigCodes),
-  rafScorechartLoader:getReportLoading(getAllRafScore),
-  revenueChartLoader:getReportLoading(RafCounts),
-  
-
+  totalCountsLoader: getReportLoading(FilesCount),
+  rafScoreLoader: getReportLoading(rafScore),
+  totalCodesLoader: getReportLoading(HccCodes),
+  totalCodesLoader: getReportLoading(ComputingStatus),
+  computingTileStatusLoader: getReportLoading(computingTileStatus),
+  computingStatusLoader: getReportLoading(ComputingStatus),
+  topTenDiseasesLoader: getReportLoading(top10Diseases),
+  topTenOigCodes: getReportLoading(topOigCodes),
+  rafScorechartLoader: getReportLoading(getAllRafScore),
+  revenueChartLoader: getReportLoading(RafCounts),
 });
 
 export default tenantAdminDefault;
