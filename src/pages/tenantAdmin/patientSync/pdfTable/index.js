@@ -35,7 +35,6 @@ export const statusOptions3 = [
   { label: "Processing", value: "PROCESSING" },
   { label: "Failed", value: "FAILED" },
 ];
-const { RangePicker } = DatePicker;
 
 const DetailedViewPdfTable = ({
   getBatchInfo,
@@ -48,12 +47,10 @@ const DetailedViewPdfTable = ({
   params,
   setViewDetailedBatch,
   webSocketData,
+  viewDetailedBatch,
 }) => {
   const [searchVal, setSearchVal] = useState([]);
-  const [selectedDates, setSelectedDates] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([]);
   const [search, setSearch] = useState();
-  const [selectedDateRanges, setSelecteddateRanges] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [currentId, setCurrentId] = useState({});
@@ -93,33 +90,22 @@ const DetailedViewPdfTable = ({
     debouncedSearch(value, setSearchVal, field);
   };
 
-  const handleRangePicker = (date, dateString, tabName) => {
-    const formattedDates = dateString?.map((date, index) => {
-      const formattedDate =
-        index === 1
-          ? date &&
-            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-          : date &&
-            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
-      return formattedDate;
-    });
-    setSelectedDates((prevOptions) => ({
-      ...prevOptions,
-      [tabName]: date,
-    }));
-    setSelecteddateRanges((prevOptions) => ({
-      ...prevOptions,
-      [tabName]: { from: formattedDates[0], to: formattedDates[1] },
-    }));
-  };
-
-  const dosOnChange = (selectedOption, name) => {
-    const nameString = name?.split(" ").join("");
-    setSelectedOptions((prevOptions) => ({
-      ...prevOptions,
-      [nameString]: selectedOption,
-    }));
-  };
+  useEffect(() => {
+    if (window !== "undefined") {
+      if (window.location.search) {
+        try {
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const encodedParams = urlParams.get("params");
+          const decodedParams = JSON.parse(atob(encodedParams));
+          setSearchVal(decodedParams?.searchVal);
+          setPageNo(decodedParams?.pageNo);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+  }, []);
   useEffect(() => {
     getAllBatches({ page: batchPageNo });
   }, [batchPageNo]);
@@ -168,20 +154,9 @@ const DetailedViewPdfTable = ({
         batchId: decodedParams?.batchId,
         page: pageNo,
         search: coderSearchString ? coderSearchString : "",
-        startDate: selectedDateRanges?.batch?.from,
-        endDate: selectedDateRanges?.batch?.to,
-        fileStatus: selectedOptions?.batch,
       });
     }
-  }, [
-    reportActiveTab,
-    pdfTabledata,
-    pageNo,
-    selectedDateRanges,
-    searchVal,
-    selectedOptions,
-    params,
-  ]);
+  }, [reportActiveTab, pdfTabledata, pageNo, searchVal, params]);
   const headerData = [
     {
       id: 1,
@@ -295,7 +270,6 @@ const DetailedViewPdfTable = ({
       name: currentId?.batchUploadStatus ? currentId?.batchUploadStatus : "---",
     },
   ];
-
   return (
     <>
       <Header />
@@ -318,8 +292,6 @@ const DetailedViewPdfTable = ({
                             getActiveTab("PDF");
                             setSearch();
                             setSearchVal([]);
-                            setSelectedDates(null);
-                            setSelecteddateRanges([]);
                             setViewDetailedBatch({ status: false, data: null });
                           }}
                         >
@@ -367,38 +339,6 @@ const DetailedViewPdfTable = ({
                             />
                           </div>
                         </div>
-                        <div className="col-xl-2 mx-2">
-                          <label htmlFor="date">Date</label>
-                          <div>
-                            <RangePicker
-                              value={
-                                selectedDates
-                                  ? selectedDates[reportActiveTab]
-                                  : undefined
-                              }
-                              format="MM-DD-YYYY"
-                              onChange={(dates, dateStrings) => {
-                                handleRangePicker(dates, dateStrings, "batch");
-                              }}
-                              disabledDate={(current) =>
-                                disableFutureDate(current)
-                              }
-                            />
-                          </div>
-                        </div>
-                        <div className="col-xl-2 mx-2">
-                          <label>Status</label>
-                          <div className={`custom-react-select1`}>
-                            <Select
-                              placeholder={"Select Status"}
-                              options={statusOptions3}
-                              onChange={(selectedOption) => {
-                                dosOnChange(selectedOption, "batch");
-                              }}
-                              allowClear
-                            />
-                          </div>
-                        </div>
                       </div>
                       <div
                         id="task-tbl_wrapper"
@@ -413,6 +353,11 @@ const DetailedViewPdfTable = ({
                             onPageChange={onPageChange}
                             tableData={getBatch}
                             loader={loader}
+                            params={{
+                              searchVal: searchVal,
+                              pageNo: pageNo,
+                              viewDetailedBatch: viewDetailedBatch,
+                            }}
                           />
                         </div>
                       </div>

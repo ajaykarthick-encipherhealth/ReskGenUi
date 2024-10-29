@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Empty, Progress } from "antd";
+import { Empty, notification, Progress } from "antd";
 import { Paginator } from "primereact/paginator";
 import dayjs from "dayjs";
 import processing from "../../../../images/fihr/processing.svg";
@@ -14,6 +14,8 @@ import {
   faCircleCheck,
   faCircleXmark,
 } from "@fortawesome/free-regular-svg-icons";
+import { useRouter } from "next/router";
+import { setStorage } from "../../../../utils/storages";
 
 export const getColors = (rowStatus) => {
   let strokeColor;
@@ -60,7 +62,9 @@ const DetailedPdfTable = ({
   tableData,
   loader,
   webSocketData,
+  params,
 }) => {
+  const navigate = useRouter();
   const [progressMap, setProgressMap] = useState(5);
   const [socketData, setSocketData] = useState(tableData);
   // DetailedPdfTable.propTypes = {
@@ -68,6 +72,20 @@ const DetailedPdfTable = ({
   //   onPageChange: PropTypes.func.isRequired,
   //   tableData: PropTypes.array.isRequired,
   // };
+  const gotoPatientDetails = (row) => {
+    if (row?.processStage === "FINISHED") {
+      setStorage("patientId", row?.patientId);
+      const encodedValue = btoa(JSON.stringify(params));
+      navigate.push({
+        pathname: "/tenantAdmin/patientSync/batchFilesView",
+        search: `params=${encodedValue}&fromPatientSync=true`,
+      });
+    } else {
+      notification.warning({
+        message: row?.patientId + " file not processed. Please wait.",
+      });
+    }
+  };
 
   useEffect(() => {
     if (tableData?.content) {
@@ -126,7 +144,11 @@ const DetailedPdfTable = ({
                 socketData?.content?.map((row) => {
                   const errStatus = row?.processStage?.split("_");
                   return (
-                    <tr key={row?.patientId} style={{ height: "40px" }}>
+                    <tr
+                      key={row?.patientId}
+                      style={{ height: "40px" }}
+                      onClick={() => gotoPatientDetails(row)}
+                    >
                       <td className={`${TableStyle.childBorder} px-1`}>
                         {row?.fileId ? row?.fileId : "---"}
                       </td>

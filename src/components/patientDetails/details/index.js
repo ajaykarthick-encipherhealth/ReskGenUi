@@ -62,7 +62,7 @@ import {
   getTimelineList,
   getUserDetails,
 } from "../../../stores/patient/details/network";
-
+import { actions as allReportActions } from "../../../stores/admin/report";
 import { connect } from "react-redux";
 
 export const navigetPageDetails = async (
@@ -129,6 +129,7 @@ const Details = ({
   storeCurrentFile,
   getPatientID,
   selectPatientId,
+  getActiveTab,
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -516,7 +517,13 @@ const Details = ({
       if (user && user.toLowerCase() === "tenant_admin") {
         const { user: _, ...queryWithoutUser } = navigate.query;
         const queryString = new URLSearchParams(queryWithoutUser).toString();
-        if (navigate.query.isTenantAdminTracking) {
+        if (navigate.query.fromPatientSync === "true") {
+          const url = queryString
+            ? `/tenantAdmin/patientSync?${queryString}`
+            : "/tenantAdmin/patientSync";
+          navigate.push(url);
+          getActiveTab("PDF");
+        } else if (navigate.query.isTenantAdminTracking) {
           const url = queryString
             ? `/tenantAdmin/tracking?${queryString}`
             : "/tenantAdmin/tracking";
@@ -551,10 +558,9 @@ const Details = ({
             pathname: `/supervisor/user/userQueue`,
             query: queryString ? queryString : "",
           },
-         
+
           `/supervisor/user/userQueue?userId=${queryWithoutUser?.userName}`
         );
-        
       } else {
         navigate.back();
       }
@@ -563,7 +569,7 @@ const Details = ({
       const queryString = new URLSearchParams(navigate.query).toString();
       if (navigate.query && queryString) {
         // const url = queryString ? `/reviewer/patients` : "/reviewer/patients";
-    
+
         navigate.push(
           {
             pathname: "/reviewer/patients",
@@ -571,9 +577,7 @@ const Details = ({
           },
           "/reviewer/patients"
         );
-      } 
-      
-      else {
+      } else {
         navigate.back();
       }
     } else {
@@ -1490,6 +1494,7 @@ const enhancer = connect(
     storePrePatientFileId: detailsActions.stroeFileIdPreAction,
     storeCurrentFile: detailsActions.storeFileIdAction,
     getPatientID: detailsActions.getPatientID,
+    getActiveTab: allReportActions.activeTab,
   }
 );
 export default enhancer(Details);

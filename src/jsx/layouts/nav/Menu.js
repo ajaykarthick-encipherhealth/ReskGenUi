@@ -267,6 +267,7 @@ export const ProviderMenuList = [
     to: "/tenantAdmin/patientSync",
     // childRoute: "/fhirTable/details",
     childRoute: "/tenantAdmin/patientSync/pdfTable",
+    childRoute2: "/tenantAdmin/patientSync/batchFilesView",
   },
   {
     title: "File Processing",

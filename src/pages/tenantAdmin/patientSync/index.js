@@ -406,6 +406,21 @@ const Index = ({
     }));
   };
   useEffect(() => {
+    if (window !== "undefined") {
+      if (window.location.search) {
+        try {
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const encodedParams = urlParams.get("params");
+          const decodedParams = JSON.parse(atob(encodedParams));
+          setViewDetailedBatch(decodedParams?.viewDetailedBatch);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+  }, []);
+  useEffect(() => {
     setFilteredCoder(null);
   }, []);
 
@@ -434,7 +449,7 @@ const Index = ({
         const formData = new FormData();
         formData.append("file", item);
         formData.append("batchId", openUpload?.data?.id);
-        formData.append("yearOfServices", openUpload?.data?.yearOfService[0]);
+        formData.append("yearOfServices", openUpload?.data?.yearOfService);
         return uploadFiles({ obj: formData });
       });
       const responses = await Promise.all(uploadPromises);
@@ -460,6 +475,7 @@ const Index = ({
             pageNo: pageNo,
           }}
           setViewDetailedBatch={setViewDetailedBatch}
+          viewDetailedBatch={viewDetailedBatch}
         />
       ) : (
         <div className={styles.maincontainer}>

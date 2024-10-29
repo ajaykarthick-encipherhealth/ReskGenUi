@@ -27,7 +27,7 @@ export async function allBatches({
       search ? search : ""
     }&batchUploadStatus=${
       batchUploadStatus ? batchUploadStatus : ""
-    }&startDate=${startDate ? startDate : ""}&endDate=${
+    }&createdDateStart=${startDate ? startDate : ""}&createdDateEnd=${
       endDate ? endDate : ""
     }`,
     options
@@ -54,12 +54,14 @@ export async function batchDetails({
   const options = {
     method: "GET",
   };
+  // url for removed filters in view batchFiles
+  // fileStatus=${
+  //   fileStatus ? fileStatus : ""
+  // }&startDate=${startDate ? startDate : ""}&endDate=${
+  //   endDate ? endDate : ""
+  // }
   const data = await requestPortal(
-    `dbservice/batch/batchuploaddetails?batchId=${batchId}&page=${page}&size=15&searchString=${search}&fileStatus=${
-      fileStatus ? fileStatus : ""
-    }&startDate=${startDate ? startDate : ""}&endDate=${
-      endDate ? endDate : ""
-    }`,
+    `dbservice/batch/batchuploaddetails?batchId=${batchId}&page=${page}&size=15&searchString=${search}`,
     options
   );
   return data;
