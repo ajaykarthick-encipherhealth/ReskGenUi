@@ -403,38 +403,8 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                   <Image src={accuracy} className={styles.Img} />
                   <div className={styles.heading}>Average Quality</div>
                 </div>
-
-                {/* <div className={styles.month}>
-                {currentBtn === "Daily" && `Day ${currentDate.getDate()}`}
-                {currentBtn === "Monthly" &&
-                  `Month ${monthNames[currentDate.getMonth()]}`}
-                {currentBtn === "Weekly" && `Week ${getDateWeek(currentDate)}`}
-                {currentBtn !== "Monthly" && (
-                  <span className={styles.subTitle}>(Current Month)</span>
-                )}
-              </div> */}
-
                 <div className={styles.percentage}>
                   <span className={styles.insideTitle}>
-                    {/* {initialAccuracyData
-                    ? currentBtn === "Monthly"
-                      ? `${
-                          initialAccuracyData[currentDate?.getMonth()]
-                            ?.averageScore
-                        }%`
-                      : currentBtn === "Daily"
-                      ? `${
-                          initialAccuracyData[currentDate?.getDate() - 1]
-                            ?.averageScore
-                            ? initialAccuracyData[currentDate?.getDate() - 1]
-                                ?.averageScore
-                            : 0
-                        }%`
-                      : `${
-                          initialAccuracyData[getDateWeek(currentDate) - 1]
-                            ?.averageScore
-                        }%`
-                    : "0%"} */}
                     {average ? `${average?.toFixed(2)}%` : "0%"}
                   </span>
                 </div>
