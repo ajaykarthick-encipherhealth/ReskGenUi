@@ -62,7 +62,7 @@ import { getStorage, removeStorage, setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/supervisor/auditedQueue";
 import { actions as detailsActions } from "../../../stores/patient/details";
 import { actions as authActions } from "../../../stores/authFlows";
-import {actions as reportActions} from '../../../stores/admin/report'
+import { actions as reportActions } from "../../../stores/admin/report";
 import Profile from "./profile";
 
 const Header = ({
@@ -253,7 +253,7 @@ const Header = ({
     if (currentUserInfo) {
       getUserIdDetails(currentUserInfo);
     }
-  }, [ selectedbtn, search, selectedOption, currentUserInfo]);
+  }, [selectedbtn, search, selectedOption, currentUserInfo]);
 
   useEffect(() => {
     getTenentLogo();
@@ -362,7 +362,7 @@ const Header = ({
           } else {
             window.location = "/ehrlogin";
           }
-          removeStorage()
+          removeStorage();
         }
       });
     }
@@ -403,7 +403,7 @@ const Header = ({
             getFilteredList(null);
             getPatientID(null);
             getActiveTab(null);
-            getReportActiveTab(null)
+            getReportActiveTab(null);
             router.push(
               {
                 pathname: `${data?.to}`,
@@ -749,6 +749,7 @@ const Header = ({
       <Modal
         title="Upload Profile Image"
         open={openUploader}
+        maskClosable={false}
         onOk={() => {
           setOpenUploader(false);
           setOpenContent(false);
@@ -795,8 +796,8 @@ const enhancer = connect(
     getCurrentUserInfo: userActions.getCurrentUserInfo,
     getCoderDetails: authActions.getCoderDetails,
     getAccuracy: authActions.getAccuracy,
-    getActiveTab:reportActions.activeTab,
-    getReportActiveTab:reportActions.activeTab,
+    getActiveTab: reportActions.activeTab,
+    getReportActiveTab: reportActions.activeTab,
   }
 );
 export default enhancer(Header);
