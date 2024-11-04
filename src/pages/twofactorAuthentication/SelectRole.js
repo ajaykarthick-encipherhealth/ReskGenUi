@@ -103,7 +103,6 @@ const SelectRole = ({loginData,getLogin}) => {
     });
   }, []);
 
-console.log(loginData,"loginData")
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -175,6 +174,7 @@ console.log(loginData,"loginData")
                     name="NEXT"
                     width="240px"
                     loading={loading}
+                    disabled={loading}
                   />
                 </div>
               </form>

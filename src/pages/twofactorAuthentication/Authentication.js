@@ -5,17 +5,14 @@ import Image from "next/image";
 import { notification } from "antd";
 import styles from "../../styles/auth.module.css";
 import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
-import { encyptingPass } from "../../components/headerFilters/functions";
 import RegularButton from "../../components/button";
-import { getValidateCode, loginAction } from "../../stores/authflow/actions";
-import { actions as AllActions } from '../../stores/authFlows'
-
+import { actions as AllActions } from "../../stores/authFlows";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
   Array.from({ length: codeLength + 1 }, (_, index) => index + 1);
 
-const Index = ({getValidateCode,getLogin,loginLoader}) => {
+const Index = ({ getValidateCode, getLogin, loginLoader }) => {
   const router = useRouter();
   const [seconds, setSeconds] = useState(30);
   const [enableMFA, setEnableMFA] = useState(false);
@@ -176,7 +173,7 @@ const Index = ({getValidateCode,getLogin,loginLoader}) => {
                     });
                   }}
                   name="SUBMIT"
-                   width="100%"
+                  width="100%"
                 />
               </div>
               <RegularButton
@@ -186,7 +183,7 @@ const Index = ({getValidateCode,getLogin,loginLoader}) => {
                 onClick={() => {
                   router.push("/login");
                 }}
-                 width="100%"
+                width="100%"
               />
             </>
           ) : (
@@ -227,6 +224,7 @@ const Index = ({getValidateCode,getLogin,loginLoader}) => {
                   name="SETUP LATER"
                   width="100%"
                   loading={loginLoader}
+                  disabled={loginLoader}
                 />
               )}
             </>
@@ -236,7 +234,6 @@ const Index = ({getValidateCode,getLogin,loginLoader}) => {
     </div>
   );
 };
-
 
 const connector = connect(
   (state) => ({

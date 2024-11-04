@@ -140,6 +140,7 @@ const GetOTP = ({getQrCode, getValidateCode, url, codeValidateLoader}) => {
               name="VALIDATE"
               width="280px"
               loading={codeValidateLoader}
+              disabled={codeValidateLoader}
               onClick={() => {
                 const codeString = code?.join("");
                 if (codeString?.length > 0) {
