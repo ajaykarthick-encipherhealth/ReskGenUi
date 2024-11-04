@@ -419,28 +419,29 @@ const MachineAccuracy = ({ accuracyDetails, loading, getAccuracyScore }) => {
 
     // }
   }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
-  // useEffect(() => {
-  //   if (accuracyDatas?.data?.response) {
-  //     setInitialAccuracyData(accuracyDatas?.data?.response);
-  //   }
-  //   if (accuracyDetails?.data?.response) {
-  //     setInitialQualityData(Object.values(accuracyDetails?.data?.response));
-  //   }
-  // }, [accuracyDatas, accuracyDetails]);
+  useEffect(() => {
+    if (accuracyDetails?.data?.response) {
+      setInitialQualityData(Object.values(accuracyDetails?.data?.response));
+    }
+  }, [accuracyDetails]);
 
-  // const allAverageScore = chartBlockedDates(
-  //   selectedYear,
-  //   selectedMonth,
-  //   accuracyDetails?.data?.response,
-  //   "averageScore",
-  //   currentBtn,
-  //   currentDate
-  // );
-  // console.log(allAverageScore);
-  // const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
-  // const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
-  // const average = sum / numericalData?.length; // Calculate the average
-  const average = 0;
+  const allAverageScore = chartBlockedDates(
+    selectedYear,
+    selectedMonth,
+    accuracyDetails?.data?.response,
+    "averageScore",
+    currentBtn,
+    currentDate
+  );
+  const numericalData =
+    allAverageScore?.length > 0
+      ? allAverageScore?.filter((value) => value)?.flat()
+      : [];
+  const sum =
+    numericalData?.length > 0
+      ? numericalData?.reduce((acc, value) => acc + value, 0)
+      : 0;
+  const average = sum > 0 ? sum / numericalData?.length : 0;
   return (
     <>
       <HeadTitle
