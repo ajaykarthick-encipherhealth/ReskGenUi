@@ -58,11 +58,19 @@ const MoreFilter = ({
           <span style={{ margin: "0 5px" }}>{filter}</span>
         </div>
       ))}
-      <div
-        style={{ marginTop: "10px", cursor: "pointer", color: "blue" }}
-        onClick={handleClearAllFilters}
-      >
-        Clear Filters
+      <div className="d-flex justify-content-between">
+        <div
+          style={{ marginTop: "10px", cursor: "pointer", color: "blue" }}
+          onClick={handleClearAllFilters}
+        >
+          Clear Filters 
+        </div>
+        <div
+          style={{ marginTop: "10px", cursor: "pointer", color: "blue" }}
+          onClick={handleClearFilters}
+        >
+          Reset
+        </div>
       </div>
     </>
   );
