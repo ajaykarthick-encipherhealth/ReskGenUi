@@ -16,6 +16,7 @@ import { debounce, disallowedCharacters } from "../../../../components/input";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
+import { InfoCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../../tenantAdmin/tracking/filters";
 
 const { RangePicker } = DatePicker;
@@ -129,7 +130,7 @@ const HeaderFilters = ({
   setClear,
   clear,
   activeFilters,
-  setActiveFilters
+  setActiveFilters,
 }) => {
   const router = useRouter();
   // const [activeFilters, setActiveFilters] = useState([]);
@@ -288,79 +289,84 @@ const HeaderFilters = ({
   };
 
   return (
-    <>
-      <div className={`d-flex gap-2 ${styles.containerStyle}`}>
-        <div className={`d-flex justify-content-start gap-3 ${styles.mainDiv}`}>
-          <div className="col-xl-2 col-md-4">
-            <label className={styles.label}>{searchlabel}</label>
-            <Input
-              value={searchVal}
-              onChange={(e) => getNameSearch(e)}
-              className={"w-100 new-search border-none"}
-              placeholder={"Search"}
-              maxLength={25}
-              onKeyDown={(e) => {
-                if (disallowedCharacters.includes(e.key)) {
-                  e.preventDefault();
-                }
-              }}
-              prefix={
-                <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
+    <div className="d-flex">
+           <div className={`row filter-contain ${styles.mainDiv}`}>
+        <div className="col-xl-2 col-md-4">
+          <label style={{ marginLeft: "8px" }} className="responsiveLabel">
+            {searchlabel}
+          </label>
+          <Input
+            value={searchVal}
+            onChange={(e) => getNameSearch(e)}
+            className={"w-100 new-search border-none"}
+            placeholder={"Search"}
+            maxLength={25}
+            onKeyDown={(e) => {
+              if (disallowedCharacters.includes(e.key)) {
+                e.preventDefault();
               }
-              allowClear={true}
-            />
-          </div>
-
-          {activeFilters?.map((filter) => (
-            <React.Fragment key={filter}>{renderFilter(filter)}</React.Fragment>
-          ))}
-        </div>
-
-        <div
-          className={`d-flex align-items-center justify-content-center gap-3 ${styles.subDiv}`}
-        >
-          <MoreFilter
-            selectAll={selectAll}
-            setSelectAll={setSelectAll}
-            allFilters={allFilters}
-            setClear={setClear}
-            setActiveFilters={setActiveFilters}
-            handleClearAllFilters={handleClearAllFilters}
-            activeFilters={activeFilters}
-          />
-          <Popover
-            content={
-              <>
-                {bulletsTitle && (
-                  <label className={styles.label} style={{ fontWeight: "700" }}>
-                    {bulletsTitle}
-                  </label>
-                )}
-                <Legends
-                  bullets={bullets}
-                  display="block"
-                  padding="0 0px 10px 0"
-                />
-                {badgesTitle && (
-                  <label className={styles.label} style={{ fontWeight: "700" }}>
-                    {badgesTitle}
-                  </label>
-                )}
-                <Legends
-                  bullets={badges}
-                  display="block"
-                  padding="0 0px 10px 0"
-                />
-              </>
+            }}
+            prefix={
+              <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
             }
-            trigger={["click"]}
-            placement="bottom"
-          >
-            <Image src={warning} />
-          </Popover>
+            allowClear={true}
+          />
         </div>
+
+        {activeFilters?.map((filter) => (
+          <React.Fragment key={filter}>{renderFilter(filter)}</React.Fragment>
+        ))}
       </div>
-    </>
+      <div
+        className={`d-flex justify-content-end  align-items-center `}
+        style={{ width: "10%" ,flexDirection: "column" }}
+      >
+        <MoreFilter
+          selectAll={selectAll}
+          setSelectAll={setSelectAll}
+          allFilters={allFilters}
+          setClear={setClear}
+          setActiveFilters={setActiveFilters}
+          handleClearAllFilters={handleClearAllFilters}
+          activeFilters={activeFilters}
+        />
+        <Popover
+          content={
+            <>
+              {bulletsTitle && (
+                <label className={styles.label} style={{ fontWeight: "700" }}>
+                  {bulletsTitle}
+                </label>
+              )}
+              <Legends
+                bullets={bullets}
+                display="block"
+                padding="0 0px 10px 0"
+              />
+              {badgesTitle && (
+                <label className={styles.label} style={{ fontWeight: "700" }}>
+                  {badgesTitle}
+                </label>
+              )}
+              <Legends
+                bullets={badges}
+                display="block"
+                padding="0 0px 10px 0"
+              />
+            </>
+          }
+          trigger={["click"]}
+          placement="bottom"
+        >
+         
+        </Popover>
+        <div className=" cursor-pointer">
+        <div className={styles.iconBorder}>
+                    <InfoCircleFilled />
+                  </div>
+          </div>
+      </div>
+    </div>
   );
 };
 

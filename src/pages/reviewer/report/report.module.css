@@ -227,13 +227,25 @@
   color: #04306f;
 }
 .containerStyle{
-  flex-direction: row;
-  width:100%
+  width:95%;
 }
 .mainDiv{
-  width:90%;
-  flex-wrap: wrap;
+  width:95%;
+height: 150px;
 }
 .subDiv{
   width: 10%;
+}
+
+.iconBorder{
+  color :#04306f;
+  display: inline-block;
+  border-radius: 50%;
+  width: 100%;
+  font-size: 20px;
+  width:40px;
+  height:40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
