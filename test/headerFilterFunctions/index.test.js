@@ -1,7 +1,7 @@
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import dayjs from "dayjs";
-import { Select, DatePicker } from "antd";
+import { DatePicker } from "antd";
 import { handleRnagePicker } from "../../src/components/headerFilters/functions";
 import { generateOptionsForNewStore } from "../../src/components/headerFilters/functions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
