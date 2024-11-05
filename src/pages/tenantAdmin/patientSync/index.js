@@ -744,6 +744,7 @@ const Index = ({
               setIsLoading={setFileLoading}
               isLoading={fileLoading}
               uploadFolder={true}
+              openUpload={openUpload}
             />
           </Form.Item>
           <Form.Item

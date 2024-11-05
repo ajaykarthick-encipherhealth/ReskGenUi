@@ -3,6 +3,7 @@ import styles from "../../../../components/imageUploading/styles.module.css";
 import Image from "next/image";
 import { Progress } from "antd";
 import progressStyles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
+import { useEffect } from "react";
 const UploadFile = ({
   filesList,
   setFilesList,
@@ -11,6 +12,7 @@ const UploadFile = ({
   isLoading,
   setIsLoading,
   uploadFolder,
+  openUpload,
 }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -58,7 +60,13 @@ const UploadFile = ({
         return { strokeColor: "#000", progressTextClass: "default-text" };
     }
   };
-
+  useEffect(() => {
+    if (openUpload?.status) {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  }, [openUpload]);
   return (
     <div className={`${styles.cover} `}>
       <label className="cr-pointer">
@@ -74,6 +82,7 @@ const UploadFile = ({
           mozdirectory
         /> */}
         <input
+          key={openUpload?.status ? "open" : "closed"}
           className="input"
           type="file"
           webkitdirectory={uploadFolder ? "true" : "false"}
@@ -97,6 +106,7 @@ const UploadFile = ({
           )}
         </div>
       </label>
+
       {filesList?.length > 0 && (
         <>
           {filesList?.map((item, index) => (

@@ -87,15 +87,15 @@ const DetailedPdfTable = ({
     }
   };
 
-  useEffect(() => {
-    if (tableData?.content) {
-      const interval = setInterval(() => {
-        setProgressMap((prevCount) => (prevCount + 5) % 100);
-      }, 500);
+  // useEffect(() => {
+  //   if (tableData?.content) {
+  //     const interval = setInterval(() => {
+  //       setProgressMap((prevCount) => (prevCount + 5) % 100);
+  //     }, 500);
 
-      return () => clearInterval(interval);
-    }
-  }, [tableData?.content]);
+  //     return () => clearInterval(interval);
+  //   }
+  // }, [tableData?.content]);
 
   useEffect(() => {
     if (
@@ -226,12 +226,13 @@ const DetailedPdfTable = ({
                         >
                           <Progress
                             percent={
-                              errStatus?.includes("FAILED")
-                                ? 5
-                                : row?.processStage === "FINISHED" ||
-                                  row?.processStage === "PROCESSED"
-                                ? 100
-                                : progressMap
+                              // errStatus?.includes("FAILED")
+                              //   ? 5
+                              //   : row?.processStage === "FINISHED" ||
+                              //     row?.processStage === "PROCESSED"
+                              //   ? 100
+                              //   : progressMap
+                              row?.percentage
                             }
                             strokeColor={
                               row?.processStage === "FINISHED" ||
@@ -244,7 +245,7 @@ const DetailedPdfTable = ({
                             className={`${styles.progreddBr} ${
                               getColors(row?.processStage)?.progressTextClass
                             } pb-2`}
-                            showInfo={false}
+                            showInfo={true}
                           />
                         </div>
                       </td>
