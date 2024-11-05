@@ -678,8 +678,13 @@
 }
 
 .combo_details_card span {
-  font-size: 13px;
+  font-size: 12px;
 }
+@media screen  and (max-width:1344px){
+  .combo_details_card {
+   font-size: 11px;
+  }
+ }
 
 .combo_add_btn {
   border-radius: 4px;

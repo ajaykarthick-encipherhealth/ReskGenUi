@@ -462,10 +462,10 @@ const Reports = ({
                   <div className="tbl-caption  align-items-center">
                     <div className={`row filter-contain mt-4 mb-0 d-flex`}>
                       <div className="col-xl-10 d-flex">
-                        <div className={`w-100 row mb-0 d-flex`}>
+                        <div className={`w-100 row mb-0 d-flex gap-4`}>
                           <div className="col-xl-2">
                             <div className="d-flex w-100">
-                              <label className="labelStyle d-flex m-auto p-2">
+                              <label className="labelStyle d-flex m-auto p-3">
                                 {" "}
                                 Search
                               </label>

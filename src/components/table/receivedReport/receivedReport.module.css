@@ -45,6 +45,7 @@ tbody.csvBody tr:nth-child(odd) td {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  gap:10px;
 }
 .container {
   width: 100%;
@@ -91,7 +92,7 @@ tbody.csvBody tr:nth-child(odd) td {
   background-color: #fff;
 }
 .sort {
-  width: 10%;
+  width: 13%;
   border-radius: 8px;
   box-shadow: 0 0px 6px 0 rgba(0, 0, 0, 0.2);
   cursor: pointer;

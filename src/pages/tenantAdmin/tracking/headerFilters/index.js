@@ -329,7 +329,7 @@ const HeaderFilters = ({
       case "Audit Allocated Date":
         return (
           <div className={defaultSize}>
-            <label className={styles.label}>Audit Allocated Date</label>
+            <label >Audit Allocated Date</label>
             <div className="dateRangeSize">
               <RangePicker
                 value={clear ? "" : selectedDates}

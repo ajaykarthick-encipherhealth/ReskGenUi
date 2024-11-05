@@ -365,7 +365,7 @@ const Combo = ({
                       className="timeline"
                       {...provided.droppableProps}
                       ref={provided.innerRef}
-                      style={{ marginTop: "10px" }}
+                      // style={{ marginTop: "10px" }
                     >
                       <div className={`${visitStyles.comboTitle}`}>
                         <span>DELETED COMBO CODES </span>

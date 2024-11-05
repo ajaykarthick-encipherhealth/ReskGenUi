@@ -94,7 +94,7 @@ const DailyTask = ({ trackChart }) => {
                 fontSize: 12,
               },
               b: {
-                fontSize: 18,
+                fontSize: 14,
               },
             },
           },

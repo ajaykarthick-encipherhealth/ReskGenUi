@@ -230,7 +230,7 @@ const IndividualReceiverReport = ({
             </div>
 
             <div className={styles.sort} onClick={sortTableByDate}>
-              <Image src={sortImg} alt="noimg" style={{ marginTop: "5px" }} />
+              <Image src={sortImg} alt="noimg" style={{ marginTop: "5px",marginLeft:"8px" }} />
             </div>
           </div>
           {/* users */}
@@ -311,21 +311,21 @@ const IndividualReceiverReport = ({
               &nbsp; Id: &nbsp;
               {reportInfo?.id || "---"}
             </div>
-            <div>
+            <div className="d-flex  gap-1">
               {" "}
               <Image src={file} alt="noimg" /> &nbsp;Name:&nbsp;
               {reportInfo?.data?.reportName}
             </div>
-            <div>
+            <div className="d-flex gap-1">
               {" "}
               <Image src={send} alt="noimg" />
               &nbsp;{isSentReport ? "Reciever" : "Sender"}:&nbsp;
               {reportInfo?.data?.sender}
             </div>
-            <div>
+            <div className="d-flex gap-1">
               {" "}
               <Image src={calender} alt="noimg" />
-              &nbsp; Date:&nbsp;
+           Date:
               {dayjs(reportInfo?.data?.receiveDate).format("DD/MM/YYYY")}
             </div>
             <div>

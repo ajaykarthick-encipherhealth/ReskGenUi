@@ -80,8 +80,8 @@ const ComboCard = ({
         <div ref={provided?.innerRef} {...provided?.droppableProps}>
           <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
             <div className={visitStyles.combo_head_card}>
-              <div className="row p-1">
-                <div className="col-xl-3 d-flex align-items-center justify-content-center text-truncate">
+              <div className="row p-0">
+                <div className="col-xl-4 d-flex align-items-center justify-content-center text-truncate">
                   <label  htmlFor="combo">Combo Codes</label>
                 </div>
                 <div className="col-xl-2 d-flex align-items-center justify-content-center text-truncate">
