@@ -214,20 +214,21 @@ const HeaderFilters = ({
             </div>
           </div>
         );
+    
       case "Created By":
         return (
           <div className={defaultSize}>
-            <label className={styles.label}>Allocated By</label>
+            <label className={styles.label}>Created By</label>
             <div class="form-group has-search custom-react-select">
               <Select
-                value={clear ? null : selector6value}
+                value={clear ? null : selAllocatedBy}
                 onChange={(selectedOption) => {
                   setSelAllocatedBy(selectedOption);
                   setClear(false);
                 }}
                 options={allocatedByOptoons}
                 isSearchable={false}
-                placeholder={"Select Allocated By"}
+                placeholder={"Select Created By"}
                 allowClear={true}
               />
             </div>
