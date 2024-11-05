@@ -491,7 +491,7 @@ const Details = ({
     } else {
       setIsSideNavShow(true);
     }
-  };
+  }
 
   const backToPatientData = () => {
     getPatientID(null);
@@ -539,28 +539,23 @@ const Details = ({
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(navigate.query).toString();
       if (navigate.query.isSupervisorAuited === "true") {
-        // const url = queryString
-        //   ? `/supervisor/auditing?${queryString}`
-        //   : "/supervisor/auditing";
         navigate.push(
           {
-            pathname: `/supervisor/auditing?userId=${queryWithoutUser?.userName}`,
+            pathname: `/supervisor/auditing`,
             query: queryString ? queryString : "",
           },
-          `/supervisor/auditing?userId=${queryWithoutUser?.userName}`
+          `/supervisor/auditing`
         );
-      } else if (navigate.query.isSupervisorUser === "true") {
-        // const url = queryString
-        //   ? `/supervisor/user/userQueue?${queryString}`
-        //   : "/supervisor/user/userQueue";
+      } 
+      else if (navigate.query.isSupervisorUser === "true") {
         navigate.push(
           {
             pathname: `/supervisor/user/userQueue`,
             query: queryString ? queryString : "",
           },
-
           `/supervisor/user/userQueue?userId=${queryWithoutUser?.userName}`
         );
+        
       } else {
         navigate.back();
       }
@@ -569,7 +564,6 @@ const Details = ({
       const queryString = new URLSearchParams(navigate.query).toString();
       if (navigate.query && queryString) {
         // const url = queryString ? `/reviewer/patients` : "/reviewer/patients";
-
         navigate.push(
           {
             pathname: "/reviewer/patients",

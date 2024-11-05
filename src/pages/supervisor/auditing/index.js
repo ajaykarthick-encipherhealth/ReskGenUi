@@ -10,7 +10,7 @@ import Header from "../../../jsx/layouts/nav/Header";
 import PatientTable from "../table/PatientList/patientList";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
-import {generateOptionsListSupervisor } from "../../../components/headerFilters/functions";
+import { generateOptionsListSupervisor } from "../../../components/headerFilters/functions";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
 import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
 import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
@@ -73,22 +73,33 @@ const statusOptions = [
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
 ];
 
-const Patient = ({ getWorkListFilter, response, loader ,filteredList,getFilters}) => {
-  const navigate = useRouter();  
+const Patient = ({
+  getWorkListFilter,
+  response,
+  loader,
+  filteredList,
+  getFilters,
+}) => {
+  const navigate = useRouter();
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
-  const [completedStartDate, setCompletedStartDate] = useState("");
+  const [completedStartDate, setCompletedStartDate] = useState(
+    navigate?.query?.completedStartDate
+      ? navigate?.query?.completedStartDate
+      : ""
+  );
   const [completedEndDate, setCompletedEndDate] = useState("");
   const [computedStartDate, setComputedStartDate] = useState("");
   const [computedEndDate, setComputedEndDate] = useState("");
-  const [selectedOption, SetSelectedOption] = useState("");
+  const [selectedOption, SetSelectedOption] = useState(
+    navigate?.query?.selectedOption ? navigate?.query?.selectedOption : ""
+  );
   const [patientSortOrder, setPatientSortOrder] = useState("ASC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [selecteddates2, setSelectedDate2s] = useState([]);
-
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -97,7 +108,6 @@ const Patient = ({ getWorkListFilter, response, loader ,filteredList,getFilters}
     patientId: "",
   });
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
-
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -108,40 +118,49 @@ const Patient = ({ getWorkListFilter, response, loader ,filteredList,getFilters}
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [parsedData, setParsedData] = useState([]);
-  const [search, setSearch] = useState("");
-  const [selCreatedBy, setSelCreatedBy] = useState("");
+  const [search, setSearch] = useState(
+    navigate?.query?.search ? navigate?.query?.search : ""
+  );
+  const [selCreatedBy, setSelCreatedBy] = useState(
+    navigate?.query?.selCreatedBy ? navigate?.query?.selCreatedBy : ""
+  );
   const [selectedDates, setSelectedDates] = useState([]);
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
   const [clear, setClear] = useState(false);
+  const [activeFilters, setActiveFilters] = useState([
+    navigate?.query?.filters || [],
+  ]);
   useEffect(() => {
     let tenId = getStorage("tenantId");
-    let uId = getStorage("userId");
+    // let uId = getStorage("userId");
     let orgId = getStorage("orgId");
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    
+
     // const newSortDir = prevSortDir === "ASC" ? "DESC" : "ASC";
     // setSort({ sortDir: newSortDir, sortField: field });
-
+    const searchParams = new URLSearchParams(window.location.search);
+    const uId = searchParams.get("userId")
+      ? searchParams.get("userId")
+      : navigate.query;
     const data = {
       pageNo,
       computedStartDate,
       computedEndDate,
-      selectedOption:clear?"":selectedOption,
-      search,
-      completedStartDate:clear?"":completedStartDate,
-      completedEndDate:clear?"":completedEndDate,
+      selectedOption: clear ? "" : selectedOption,
+      search :clear ? "" : search,
+      completedStartDate: clear ? "" : completedStartDate,
+      completedEndDate: clear ? "" : completedEndDate,
       patientSortOrder,
       selAllocatedBy,
       sort,
-      selCreatedBy:clear?"":selCreatedBy,
+      selCreatedBy: clear ? "" : selCreatedBy,
     };
-
     getWorkListFilter({ data: data });
-    getFilters({field:"patientAllocated"});
+    getFilters({ field: "patientAllocated" });
   }, [
     pageNo,
     computedStartDate,
@@ -162,10 +181,10 @@ const Patient = ({ getWorkListFilter, response, loader ,filteredList,getFilters}
         setIsLoading(true);
         setPageNo(navigate?.query?.pageNo);
         setPaginationFirst(navigate?.query?.paginationFirst);
+        setSearch(navigate?.query?.search)
       }
     }
   }, [navigate]);
-
   useEffect(() => {
     if (response?.data?.response?.content) {
       getAllList();
@@ -243,16 +262,21 @@ const Patient = ({ getWorkListFilter, response, loader ,filteredList,getFilters}
       });
     }
   };
+  useEffect(() => {
+    if (navigate.query?.filters?.length) {
+      const array = activeFilters?.[0]?.split(",");
+      setActiveFilters(array);
+    } else {
+      console.error("activeFilters is not a string:", activeFilters);
+    }
+  }, [navigate.query]);
 
   const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes
     );
-
     const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
-
     const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-
     switch (rowData.auditedStatus) {
       case "AUDIT_PENDING":
         return (
@@ -366,51 +390,56 @@ const Patient = ({ getWorkListFilter, response, loader ,filteredList,getFilters}
                     <div className="tbl-caption  align-items-center">
                       <div className="tbl-caption  align-items-center">
                         <Filters
-                         setSearch={setSearch}
-                         selectedOption={selectedOption}
-                         // isSearch={true}
-                         searchlabel="Search By Patient ID / Name"
-                         search={search}
-                         // select status
-                         selectlabel="Select Audited Status"
-                         // isSelector={true}
-                         setSelectedOption={SetSelectedOption}
-                         selectOptions={statusOptions}
-                         defaultSelectValue1={"Select Status"}
-                         // computation date
-                         pickerlabel="Audit Due Date"
-                         defaultStartDate={""}
-                         defaultEndDate={""}
-                         setStartDate={setComputedStartDate}
-                         setEndDate={setComputedEndDate}
-                         isRangePicker={true}
-                         selectedDates={selectedDates}
-                         setSelectedDates={setSelectedDates}
-                         // completed date
-                         pickerlabe2="Audited Date"
-                         defaultStartDate2={""}
-                         defaultEndDate2={""}
-                         setStartDate2={setCompletedStartDate}
-                         setEndDate2={setCompletedEndDate}
-                         // isAnotherPicker={true}
-                         defaultAllocateTo={"All"}
-                         selectedDates2={selecteddates2}
-                         setSelectedDates2={setSelectedDate2s}
-                         // created by
-                         isNextCreatedBySelector={true}
-                         createdTolabel="Reviewer"
-                         optionKey="patientAllocated"
-                         createdByOptoons={generateOptionsListSupervisor(filteredList)}
-                         setSelCreatedBy={setSelCreatedBy}
-                         selCreatedBy={selCreatedBy}
-                         addUser={false}
-                         addUserForm={addPatientFormId}
-                         bullets={bullets}
-                         setPageNo={setPageNo}
-                         defaultCreatedBy={"Select Reviewer"}
-                         // isNextRow={true}
-                         clear={clear}
-                         setClear={setClear}/>
+                          setSearch={setSearch}
+                          selectedOption={selectedOption}
+                          // isSearch={true}
+                          searchlabel="Search By Patient ID / Name"
+                          search={search}
+                          // select status
+                          selectlabel="Select Audited Status"
+                          // isSelector={true}
+                          setSelectedOption={SetSelectedOption}
+                          selectOptions={statusOptions}
+                          defaultSelectValue1={"Select Status"}
+                          // computation date
+                          pickerlabel="Audit Due Date"
+                          defaultStartDate={""}
+                          defaultEndDate={""}
+                          setStartDate={setComputedStartDate}
+                          setEndDate={setComputedEndDate}
+                          isRangePicker={true}
+                          selectedDates={selectedDates}
+                          setSelectedDates={setSelectedDates}
+                          // completed date
+                          pickerlabe2="Audited Date"
+                          defaultStartDate2={""}
+                          defaultEndDate2={""}
+                          setStartDate2={setCompletedStartDate}
+                          setEndDate2={setCompletedEndDate}
+                          // isAnotherPicker={true}
+                          defaultAllocateTo={"All"}
+                          selectedDates2={selecteddates2}
+                          setSelectedDates2={setSelectedDate2s}
+                          // created by
+                          isNextCreatedBySelector={true}
+                          createdTolabel="Reviewer"
+                          optionKey="patientAllocated"
+                          createdByOptoons={generateOptionsListSupervisor(
+                            filteredList
+                          )}
+                          setSelCreatedBy={setSelCreatedBy}
+                          selCreatedBy={selCreatedBy}
+                          addUser={false}
+                          addUserForm={addPatientFormId}
+                          bullets={bullets}
+                          setPageNo={setPageNo}
+                          defaultCreatedBy={"Select Reviewer"}
+                          // isNextRow={true}
+                          clear={clear}
+                          activeFilters={activeFilters}
+                          setActiveFilters={setActiveFilters}
+                          setClear={setClear}
+                        />
                       </div>
                     </div>
 
@@ -418,8 +447,8 @@ const Patient = ({ getWorkListFilter, response, loader ,filteredList,getFilters}
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      {loader  ? (
-                       renderSkeleton()
+                      {loader ? (
+                        renderSkeleton()
                       ) : (
                         <>
                           <PatientTable
@@ -437,6 +466,21 @@ const Patient = ({ getWorkListFilter, response, loader ,filteredList,getFilters}
                             setSortCompleteOrder={setSortCompleteOrder}
                             sortAuditOrder={sortAuditOrder}
                             setSortAuditOrder={setSortAuditOrder}
+                            setActiveFilters={setActiveFilters}
+                            activeFilters={activeFilters}
+                            params={{
+                              pageNo,
+                              computedStartDate,
+                              computedEndDate,
+                              selectedOption,
+                              search,
+                              completedStartDate,
+                              completedEndDate,
+                              patientSortOrder,
+                              selAllocatedBy,
+                              sort,
+                              selCreatedBy,
+                            }}
                           />
                           <div>
                             <div className="pagination-container">
@@ -468,7 +512,7 @@ const Patient = ({ getWorkListFilter, response, loader ,filteredList,getFilters}
 const connector = connect(
   (state) => ({
     response: state.supervisor?.audited?.filteredList,
-    filteredList:state.supervisor?.audited?.filterUsers,
+    filteredList: state.supervisor?.audited?.filterUsers,
     loader: state.supervisor?.audited?.loading,
   }),
   {

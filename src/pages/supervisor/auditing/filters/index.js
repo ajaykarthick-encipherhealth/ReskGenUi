@@ -164,8 +164,8 @@ const Filters = ({
   clear,
   selCreatedBy,
   setClear,
+  activeFilters,setActiveFilters
 }) => {
-  const [activeFilters, setActiveFilters] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
 

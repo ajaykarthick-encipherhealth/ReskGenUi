@@ -14,7 +14,8 @@ import {
 import { setStorage } from "../../../../utils/storages";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 
-function PatientTable({
+function 
+PatientTable({
   patinetListAll,
   statusBodyTemplate,
   patientDetails,
@@ -26,6 +27,10 @@ function PatientTable({
   setSortCompleteOrder,
   sortAuditOrder,
   setSortAuditOrder,
+  params,
+  activeFilters,
+  setActiveFilters,
+
 }) {
   const navigate = useRouter();
   const priorityOptions = [
@@ -85,7 +90,7 @@ function PatientTable({
       setStorage("patientId", data.patientId);
       navigate.push({
         pathname: "/supervisor/patients/details",
-        query: { ...page, isSupervisorAuited: true },
+        query: { ...params, isSupervisorAuited: true ,filters: activeFilters},
       },"/supervisor/patients/details");
     } else {
       notification.warning({
@@ -93,7 +98,8 @@ function PatientTable({
       });
     }
   };
-
+  console.log(navigate,"navigatetable")
+ 
   const handleTableRowClick = (e) => {
     const targetTd = e.target.closest("td");
     if (targetTd) {
@@ -101,13 +107,6 @@ function PatientTable({
       const clickedData = patinetListAll[dataIndex];
       gotoPatientDetails(clickedData);
       // router?.push(`/supervisor/user/details?page=${page}`);
-      router?.push(
-        {
-          pathname: "/supervisor/auditing",
-          query: { ...params, isSupervisorUser: true},
-        },
-        "/supervisor/auditing"
-      );
     }
   };
 
