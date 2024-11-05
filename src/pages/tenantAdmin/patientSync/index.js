@@ -315,7 +315,7 @@ const Index = ({
   const [uploadType, setUploadType] = useState("");
   const [pageNo, setPageNo] = useState(0);
   const [selectedBatch, setSelectedBatch] = useState();
-  const [searchVal, setSearchVal] = useState([]);
+  const [searchVal, setSearchVal] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [search, setSearch] = useState();
@@ -347,25 +347,26 @@ const Index = ({
   const handleTabs = (name) => {
     getActiveTab(name);
     setSearch();
-    setSearchVal([]);
+    setSearchVal(null);
     setSelectedDates(null);
     setSelecteddateRanges([]);
   };
   const debouncedSearch = useCallback(
     debounce((text, setSearchVal, field) => {
-      setSearchVal((prev) => {
-        const existingIndex = prev.findIndex((item) => item.field === field);
-        if (existingIndex !== -1) {
-          return prev.map((item, index) => {
-            if (index === existingIndex) {
-              return { ...item, search: text };
-            }
-            return item;
-          });
-        } else {
-          return [...prev, { search: text, field: field }];
-        }
-      });
+      setSearchVal(text)
+      // setSearchVal((prev) => {
+      //   const existingIndex = prev.findIndex((item) => item.field === field);
+      //   if (existingIndex !== -1) {
+      //     return prev.map((item, index) => {
+      //       if (index === existingIndex) {
+      //         return { ...item, search: text };
+      //       }
+      //       return item;
+      //     });
+      //   } else {
+      //     return [...prev, { search: text, field: field }];
+      //   }
+      // });
     }, 1000),
     []
   );
@@ -374,7 +375,7 @@ const Index = ({
     const field = event.target.name;
     setSearch({
       name: event.target.name,
-      searchval: value,
+      searchVal: value,
     });
     debouncedSearch(value, setSearchVal, field);
   };
@@ -425,17 +426,13 @@ const Index = ({
   }, []);
 
   useEffect(() => {
-    const coderSearchString = searchVal.find(
-      (item) => item.field === "initialSearch"
-    )?.search;
-
     if (reportActiveTab) {
       getActiveTab(reportActiveTab);
     }
     if (reportActiveTab === "PDF") {
       getAllBatches({
         page: pageNo,
-        search: coderSearchString ? coderSearchString : "",
+        search: searchVal|| "",
         startDate: selectedDateRanges?.PDF?.from,
         endDate: selectedDateRanges?.PDF?.to,
         batchUploadStatus: selectedOptions?.PDF,
@@ -464,7 +461,6 @@ const Index = ({
       }
     }
   };
-
   return (
     <>
       <Header />
@@ -498,7 +494,7 @@ const Index = ({
                                   type="text"
                                   name="initialSearch"
                                   onChange={(e) => getNameSearch(e)}
-                                  value={search ? search?.searchVal : ""}
+                                  value={search?.searchVal || ""}
                                   className={
                                     "w-100 new-search-control border-none"
                                   }
@@ -517,6 +513,7 @@ const Index = ({
                                     />
                                   }
                                   allowClear={true}
+                                  autoComplete="off"
                                 />
                               </div>
                             </div>

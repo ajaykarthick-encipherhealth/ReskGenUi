@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, use } from "react";
 import { DatePicker, Input, Popover, Select } from "antd";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -49,7 +49,8 @@ const DetailedViewPdfTable = ({
   webSocketData,
   viewDetailedBatch,
 }) => {
-  const [searchVal, setSearchVal] = useState([]);
+  const router=useRouter()
+  const [searchVal, setSearchVal] = useState(null);
   const [search, setSearch] = useState();
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -64,19 +65,20 @@ const DetailedViewPdfTable = ({
 
   const debouncedSearch = useCallback(
     debounce((text, setSearchVal, field) => {
-      setSearchVal((prev) => {
-        const existingIndex = prev.findIndex((item) => item.field === field);
-        if (existingIndex !== -1) {
-          return prev.map((item, index) => {
-            if (index === existingIndex) {
-              return { ...item, search: text };
-            }
-            return item;
-          });
-        } else {
-          return [...prev, { search: text, field: field }];
-        }
-      });
+      setSearchVal(text);
+      // setSearchVal((prev) => {
+      //   const existingIndex = prev.findIndex((item) => item.field === field);
+      //   if (existingIndex !== -1) {
+      //     return prev.map((item, index) => {
+      //       if (index === existingIndex) {
+      //         return { ...item, search: text };
+      //       }
+      //       return item;
+      //     });
+      //   } else {
+      //     return [...prev, { search: text, field: field }];
+      //   }
+      // });
     }, 1000),
     []
   );
@@ -85,7 +87,7 @@ const DetailedViewPdfTable = ({
     const field = event.target.name;
     setSearch({
       name: event.target.name,
-      searchval: value,
+      searchVal: value,
     });
     debouncedSearch(value, setSearchVal, field);
   };
@@ -99,6 +101,10 @@ const DetailedViewPdfTable = ({
           const encodedParams = urlParams.get("params");
           const decodedParams = JSON.parse(atob(encodedParams));
           setSearchVal(decodedParams?.searchVal);
+          setSearch({
+            searchVal: decodedParams?.searchVal,
+            name: "initialSearch",
+          });
           setPageNo(decodedParams?.pageNo);
         } catch (error) {
           console.log(error);
@@ -141,19 +147,19 @@ const DetailedViewPdfTable = ({
       const decodedParams = params;
       setBatchPageNo(decodedParams?.pageNo);
       if (pdfTabledata) {
-        const filterData = socketData?.content?.filter(
-          (item) => item?.id === decodedParams?.batchId
-        );
+        const filterData =
+          socketData?.content?.length > 0
+            ? socketData?.content?.filter(
+                (item) => item?.id === decodedParams?.batchId
+              )
+            : [];
         setCurrentId(...filterData);
       }
-      const coderSearchString = searchVal.find(
-        (item) => item.field === "initialSearch"
-      )?.search;
 
       getBatchInfo({
         batchId: decodedParams?.batchId,
         page: pageNo,
-        search: coderSearchString ? coderSearchString : "",
+        search: searchVal || "",
       });
     }
   }, [reportActiveTab, pdfTabledata, pageNo, searchVal, params]);
@@ -270,6 +276,7 @@ const DetailedViewPdfTable = ({
       name: currentId?.batchUploadStatus ? currentId?.batchUploadStatus : "---",
     },
   ];
+
   return (
     <>
       <Header />
@@ -288,10 +295,10 @@ const DetailedViewPdfTable = ({
                         <button
                           className={`${styles.backButtonStyle} mx-2`}
                           onClick={() => {
-                            // router.push("/tenantAdmin/patientSync");
                             getActiveTab("PDF");
+                            router.push("/tenantAdmin/patientSync");
                             setSearch();
-                            setSearchVal([]);
+                            setSearchVal(null);
                             setViewDetailedBatch({ status: false, data: null });
                           }}
                         >
@@ -319,7 +326,7 @@ const DetailedViewPdfTable = ({
                               type="text"
                               name="initialSearch"
                               onChange={(e) => getNameSearch(e)}
-                              value={search ? search?.searchVal : ""}
+                              value={search?.searchVal || ""}
                               className={"w-100 new-search-control border-none"}
                               placeholder="Search"
                               maxLength={25}
@@ -336,6 +343,7 @@ const DetailedViewPdfTable = ({
                                 />
                               }
                               allowClear={true}
+                              autoComplete="off"
                             />
                           </div>
                         </div>

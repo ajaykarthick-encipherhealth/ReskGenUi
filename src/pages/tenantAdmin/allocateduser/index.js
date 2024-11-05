@@ -322,7 +322,7 @@ const Patient = ({
     } else {
       setSelectedRowsId([]);
     }
-  }, [selectAllChecked, sort, isPatientList, pageNoL2Patient, activeTab]);
+  }, [selectAllChecked, sort, isPatientList, pageNoL2Patient, activeTab,selectedOptions]);
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
