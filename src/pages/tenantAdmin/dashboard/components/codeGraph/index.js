@@ -33,7 +33,7 @@ const CodesGraph = ({
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
   const radiologyCountValues =   getAllLabAndRadiologyChart?.radiologyCountMap;
-  const labCountValues =   getAllLabAndRadiologyChart?.getAllLabAndRadiologyChart?.labCountMap;
+  const labCountValues =   getAllLabAndRadiologyChart?.labCountMap;
   const dates =
     selectedValue === "custom"
       ? customDate
@@ -74,7 +74,7 @@ const CodesGraph = ({
     series: [
       {
         name: isCargaps
-          ? "Care Gap Codes"
+          ? "Car Gap Codes"
           : isHcc
           ? "HCC Codes"
           : isRevenue
@@ -86,8 +86,6 @@ const CodesGraph = ({
           ? resultArrayCaregaps
           :isTwoWaves
           ?resultArrayRadiology
-          :isLabValues
-          ?resultArrayLab
           :[] ,
         type: "line",
         lineStyle: { color: borderColor },

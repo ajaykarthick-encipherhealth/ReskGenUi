@@ -15,13 +15,13 @@ const index = ({
     {
       id: 1,
       title: "Radiology",
-      count: labAndRadiologyCount?.response?.labCount,
+      count: labAndRadiologyCount?.response?.radiologyCount,
       color: "#F8D3E9",
     },
     {
       id: 2,
       title: "lab",
-      count: labAndRadiologyCount?.response?.radiologyCount,
+      count: labAndRadiologyCount?.response?.labCount,
       color: "#D0E0FB",
     },
   ];
