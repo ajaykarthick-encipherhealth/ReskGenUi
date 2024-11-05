@@ -20,6 +20,7 @@ import { getFilters } from "../../../../stores/authflow/actions";
 // import MoreFilter from "../filters";
 import { InfoCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../../tenantAdmin/tracking/filters";
+import HeaderFilters from "../../../../components/headerFilters";
 
 const { RangePicker } = DatePicker;
 
@@ -48,12 +49,9 @@ const HeaderFiltersPatients = ({
   selectedDates,
   setSelectedDates,
 
-
-
   // allocatedBY
 
   setSelAllocatedBy,
-
 
   // allocatedTo
   isAllocatedToSelector,
@@ -78,7 +76,6 @@ const HeaderFiltersPatients = ({
   setSelectedDates3,
   setSelectedDates4,
   setSelectedDates5,
-
 }) => {
   const [trackInput, setTrackInput] = useState("");
 
@@ -90,7 +87,6 @@ const HeaderFiltersPatients = ({
     setSelectedDates([]);
     setSelectedDates2([]);
 
-  
     // setStartDate([]);
     // setEndDate([]);
     // setStartDate4([]);
@@ -119,10 +115,12 @@ const HeaderFiltersPatients = ({
       case "Due Date":
         return (
           <div className={defaultSize}>
-            <label className={styles.label} style={{marginTop:"40px"}}>Due Date</label>
+            <label className={styles.label} style={{ marginTop: "40px" }}>
+              Due Date
+            </label>
             <div className="dateRangeSize dateRangesHeight">
               <RangePicker
-               value={clear ? ["", ""] : selectedDates}
+                value={clear ? ["", ""] : selectedDates}
                 format="MM-DD-YYYY"
                 onChange={onchangeRangePicker}
                 onCalendarChange={(val) => setSelectedDates(val)}
@@ -132,28 +130,32 @@ const HeaderFiltersPatients = ({
           </div>
         );
 
-        case "Completed Date":
-          return (
-            <div className={defaultSize}>
-              <label className={styles.label} style={{marginTop:"40px"}}>Completed Date</label>
-              <div className="dateRangeSize dateRangesHeight">
+      case "Completed Date":
+        return (
+          <div className={defaultSize}>
+            <label className={styles.label} style={{ marginTop: "40px" }}>
+              Completed Date
+            </label>
+            <div className="dateRangeSize dateRangesHeight">
               <RangePicker
-               value={clear ? ["", ""] : selectedDates2}
+                value={clear ? ["", ""] : selectedDates2}
                 format="MM-DD-YYYY"
                 onChange={onchangeRangePicker2}
                 onCalendarChange={(val) => setSelectedDates2(val)}
                 disabledDate={(current) => disableFutureDate(current)}
               />
-              </div>
             </div>
-          );
+          </div>
+        );
       case "Select Priority":
         return (
           <div className={defaultSize}>
-            <label className={styles.label} style={{marginTop:"40px"}}>Select Priority</label>
+            <label className={styles.label} style={{ marginTop: "40px" }}>
+              Select Priority
+            </label>
             <div class="form-group has-search custom-react-selects">
               <Select
-                value={clear ? null: statusSelectedStatus1 }
+                value={clear ? null : statusSelectedStatus1}
                 onChange={onChangeStatus1}
                 options={orgAllList1}
                 isSearchable={false}
@@ -166,10 +168,12 @@ const HeaderFiltersPatients = ({
       case "Select Status":
         return (
           <div className={defaultSize}>
-            <label className={styles.label} style={{marginTop:"40px"}}>Select Status</label>
+            <label className={styles.label} style={{ marginTop: "40px" }}>
+              Select Status
+            </label>
             <div class="form-group has-search custom-react-selects">
               <Select
-                value={clear ?  "": statusSelectedStatus}
+                value={clear ? "" : statusSelectedStatus}
                 onChange={onChangeStatus}
                 options={orgAllList}
                 isSearchable={false}
@@ -180,23 +184,45 @@ const HeaderFiltersPatients = ({
           </div>
         );
 
-  
-
-
-
-
-
       default:
         return null;
     }
   };
+
+  const bulletsIcon = [
+    {
+      title: "Processed Status",
+      option: [
+        {
+          color: "#5da9e4",
+          name: "Pending",
+        },
+        {
+          color: "red",
+          name: "Declined",
+        },
+        {
+          color: "#3a9b94",
+          name: "Completed",
+        },
+        { color: "#AD94FA", name: "Hold" },
+        // {
+        //   color: "#3B3486",
+        //   name: "ABORTED BY CRON",
+        // },
+      ],
+    },
+  ];
 
   return (
     <div style={{ display: "flex" }}>
       <div className="row filter-contain" style={{ width: "95%" }}>
         {isAllocatedToSelector && (
           <div className={defaultSize} onClick={() => setClear(false)}>
-            <label style={{ marginLeft: "8px", marginTop:"40px" }}> Patient Name / ID</label>
+            <label style={{ marginLeft: "8px", marginTop: "40px" }}>
+              {" "}
+              Patient Name / ID
+            </label>
             <div class="form-group has-search">
               <Input
                 value={value}
@@ -227,7 +253,7 @@ const HeaderFiltersPatients = ({
         // className={Tracking}
         style={{ width: "5%", display: "flex", justifyContent: "end" }}
       >
-        <div style={{marginTop:"49px"}}>
+        <div style={{ marginTop: "30px" }}>
           <MoreFilter
             clear={clear}
             activeFilters={activeFilters}
@@ -267,6 +293,10 @@ const HeaderFiltersPatients = ({
               </Popover>
             </div>
           )}
+          <div style={{ marginLeft: "12px" }}>
+            {" "}
+            <HeaderFilters bullets={bulletsIcon} />
+          </div>
         </div>
       </div>
     </div>

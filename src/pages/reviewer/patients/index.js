@@ -520,13 +520,13 @@ const Patient = ({
                         </div>
                         <div className="col-2">
                           <div className="row">
-                            <div className="col-2">
+                            {/* <div className="col-2">
                               {" "}
                              <div style={{marginTop:"62px"}}>
                              <HeaderFilters bullets={bullets} />
                              </div>
-                            </div>
-                            <div className="col-10 mt-1 mb-1">
+                            </div> */}
+                            <div className=" mt-1 mb-1">
                               {" "}
                               <DailyTask trackChart={trackChart} />
                             </div>
