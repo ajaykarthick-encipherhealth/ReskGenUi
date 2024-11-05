@@ -90,7 +90,7 @@ export async function labDetails(
   }
 }
 
-export async function labPDFData({ fileId }) {
+export async function labPDFData({fileId}) {
   const options = {
     method: "GET",
   };
@@ -102,7 +102,6 @@ export async function labPDFData({ fileId }) {
 }
 
 export async function patientHccFile(fileId) {
-  const tenId = getStorage("tenantId");
   const options = {
     method: "GET",
   };

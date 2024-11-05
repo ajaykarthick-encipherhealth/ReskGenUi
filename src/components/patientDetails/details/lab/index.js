@@ -64,7 +64,7 @@ const Lab = ({
   }
 
   const handleOptions = (value) => {
-    var selectData = patientDosResult?.data?.response.filter(
+    var selectData = patientDosResult?.data?.response.find(
       (i) => i.dateOfService === value
     );
     setIsLoading(true);
@@ -77,9 +77,9 @@ const Lab = ({
         selectedYearValue,
         moment(value).format("YYYY-MM-DD"),
         "",
-        selectData[0]?.testName
+        selectData?.testName
       );
-      getLabFileDetails(selectData[0]?.fileDetailDTO?.azureBlobPath);
+      getLabFileDetails(selectData?.fileId);
     } else {
       setSelectDosValue(dosSummariesList[0]?.value);
       getLabDetails(
@@ -109,7 +109,7 @@ const Lab = ({
   useEffect(() => {
     if (patientDosResult?.data?.response) {
       getLabFileDetails(
-        patientDosResult?.data?.response[0]?.fileDetailDTO?.azureBlobPath
+        patientDosResult?.data?.response[0]?.fileId||""
       );
       setIsLoading(true);
     }
@@ -313,6 +313,7 @@ const Lab = ({
                           className="dosSelect"
                           value={selectedYearValue}
                           style={{ marginRight: "10px" }}
+                          allowClear
                         >
                           {dosYear?.map((data) => (
                             <Option key={data?.value} value={data?.value}>
