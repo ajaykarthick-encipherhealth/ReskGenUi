@@ -15,7 +15,8 @@ const AddForm = ({
   getAddProviderAndDOS,
   dosYear,
   getAddProviderAndDOSList,
-  dosDeatilsAction
+  dosDeatilsAction,
+  selectedDosValue,
 }) => {
   const validateThreeDigitNumber = (_, value) => {
     if (!value || /^\d{1,3}$/.test(value)) {
@@ -49,9 +50,17 @@ const AddForm = ({
     if (res.status == "SUCCESS") {
       getResponePopup(res);
       getAddProviderAndDOSList(dosYear?.length > 0 ? dosYear[0]?.value : "");
-      dosDeatilsAction(patientId,dosYear?.length > 0 ? dosYear[0]?.value : "")
+      dosDeatilsAction(patientId, dosYear?.length > 0 ? dosYear[0]?.value : "");
       form.resetFields();
     }
+  };
+  const customDisableDate = (current) => {
+    const selectedYear = parseInt(selectedDosValue, 10);
+
+    if (dayjs(current).year() === selectedYear) {
+      return false; 
+    }
+    return true;
   };
 
   return (
@@ -166,12 +175,11 @@ const AddForm = ({
               },
             ]}
             className="manuallyAddPicker"
-           
           >
             <DatePicker
-              disabledDate={(current) => disableFutureDate(current)}
+              disabledDate={customDisableDate}
               getPopupContainer={(triggerNode) => triggerNode.parentNode}
-              disabled={providersList?.dateOfService?true:false}
+              disabled={providersList?.dateOfService ? true : false}
             />
           </Form.Item>
           <Form.Item
@@ -183,9 +191,11 @@ const AddForm = ({
                 message: "Please Enter DOS Substring",
               },
             ]}
-            
           >
-            <Input placeholder="DOS Substring" disabled={providersList?.dosSubstring?true:false}/>
+            <Input
+              placeholder="DOS Substring"
+              disabled={providersList?.dosSubstring ? true : false}
+            />
           </Form.Item>
           <Form.Item
             label={
@@ -196,9 +206,12 @@ const AddForm = ({
               { required: true, message: "Please enter DOS Start Page Number" },
               { validator: validateThreeDigitNumber },
             ]}
-
           >
-            <Input maxLength={3} placeholder="DOS Start Page Number"  disabled={providersList?.dosStartPageNumber?true:false}/>
+            <Input
+              maxLength={3}
+              placeholder="DOS Start Page Number"
+              disabled={providersList?.dosStartPageNumber ? true : false}
+            />
           </Form.Item>
           <Form.Item
             label={
@@ -209,9 +222,12 @@ const AddForm = ({
               { required: true, message: "Please enter DOS End Page Number" },
               { validator: validateThreeDigitNumber },
             ]}
-           
           >
-            <Input maxLength={3} placeholder="DOS End Page Number"  disabled={providersList?.dosEndPageNumber?true:false}/>
+            <Input
+              maxLength={3}
+              placeholder="DOS End Page Number"
+              disabled={providersList?.dosEndPageNumber ? true : false}
+            />
           </Form.Item>
           {/* provider */}
           <Form.Item

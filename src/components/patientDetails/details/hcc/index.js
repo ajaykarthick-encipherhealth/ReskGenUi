@@ -45,7 +45,9 @@ const Hcc = ({
   setSelectDosValue,
   getLabPDFFile,
   getPatientHccFile,
-  storeFileDetails
+  storeFileDetails,
+  selectedDosValue
+
 }) => {
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);

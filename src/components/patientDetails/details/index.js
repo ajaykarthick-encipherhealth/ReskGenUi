@@ -1257,7 +1257,6 @@ const Details = ({
                           </div>
                         </div>
                       </div>
-
                       <div
                         className={`${visitStyles.secondContainer}`}
                         style={{ height: "100%" }}
@@ -1419,6 +1418,7 @@ const Details = ({
                       <ManuallyAddProvider
                         selectDosValue={selectDosValue}
                         dosYear={dosYear}
+                        selectedDosValue={selectedDosValue}
                       />
                     ) : null}
                   </Drawer>

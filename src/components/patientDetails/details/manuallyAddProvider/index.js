@@ -25,6 +25,7 @@ const ManuallyAddProvider = ({
   dosYear,
   getAddProviderAndDOSList,
   dosAndProvidersList,
+  selectedDosValue,
 }) => {
   const [form] = Form.useForm();
   const [selectFileURL, setSelectFileURL] = useState([]);
@@ -32,15 +33,15 @@ const ManuallyAddProvider = ({
   const handleEdit = (e, data) => {
     e.stopPropagation();
     form.setFieldsValue({
-      dos:data?.dateOfService?dayjs(data?.dateOfService):null,
-      dosSubstring: data?.dosSubstring||"",
+      dos: data?.dateOfService ? dayjs(data?.dateOfService) : null,
+      dosSubstring: data?.dosSubstring || "",
       dosStartPageNumber: data?.dosStartPageNumber || "",
       dosEndPageNumber: data?.dosEndPageNumber || "",
       providerName: data?.providerName || "",
       providerPageNumber: data?.hyperlinks[0]?.pageNumber || "",
       providerCredentials: data?.providerCredentials || "",
       providerReference: data?.hyperlinks[0]?.substring || "",
-      isProviderSigned: !data?.noCredential?true:false || false,
+      isProviderSigned: !data?.noCredential ? true : false || false,
       fileType: data?.fileType || "",
     });
     setProvidersList(data);
@@ -72,6 +73,7 @@ const ManuallyAddProvider = ({
           selectDosValue={selectDosValue}
           providersList={providersList}
           dosYear={dosYear}
+          selectedDosValue={selectedDosValue}
         />
       </div>
       <div style={{ width: "20%" }}>
