@@ -34,7 +34,7 @@ const Details = ({ fileResult }) => {
                 cursor: "pointer",
               }}
             >
-              {getMastData(fileResult?.patientId)}
+              {fileResult?.patientId?getMastData(fileResult?.patientId):"--"}
             </h6>
           </div>
           <div className="col-xl-5">
@@ -42,7 +42,7 @@ const Details = ({ fileResult }) => {
 
             <label>Patient Name</label>
             <h6 className="ageDtails" style={{ paddingLeft: "20px" }}>
-              {getMastData(fileResult?.patientId)}
+              {fileResult?.patientId?getMastData(fileResult?.patientId):"--"}
             </h6>
           </div>
           <div className="col-xl-3">
@@ -65,7 +65,7 @@ const Details = ({ fileResult }) => {
                 cursor: "pointer",
               }}
             >
-              {fileResult?.fileDetailDTO?.fileName}
+              {fileResult?.fileDetailDTO?.fileName||"--"}
             </h6>
           </div>
           <div className="col-xl-5">
@@ -73,14 +73,14 @@ const Details = ({ fileResult }) => {
 
             <label>Date Of Birth</label>
             <h6 className="ageDtails" style={{ paddingLeft: "20px" }}>
-              {fileResult?.dob}
+              {fileResult?.dob||"--"}
             </h6>
           </div>
           <div className="col-xl-3">
             <FontAwesomeIcon icon={faVenusMars} style={{ color: "#241571" }} />
             <label>Gender</label>
             <h6 className="ageDtails" style={{ paddingLeft: "20px" }}>
-              {fileResult?.gender}
+              {fileResult?.gender||"--"}
             </h6>
           </div>
         </div>

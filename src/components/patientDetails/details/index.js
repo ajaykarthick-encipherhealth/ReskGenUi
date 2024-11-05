@@ -729,9 +729,9 @@ const Details = ({
                                       cursor: "pointer",
                                     }}
                                   >
-                                    {getMastData(
+                                    {patientDocumentResult.patientId?getMastData(
                                       patientDocumentResult.patientId
-                                    )}
+                                    ):"--"}
                                   </h6>
                                 </div>
                                 <div className="">
@@ -740,10 +740,11 @@ const Details = ({
                                   <label>Patient Name</label>
 
                                   <h6 className="ageDtails">
-                                    {getMastData(
+                                    {patientIdDetailsData?.data?.response
+                                        ?.patientName?getMastData(
                                       patientIdDetailsData?.data?.response
                                         ?.patientName
-                                    )}
+                                    ):<div className="px-4">--</div>}
                                   </h6>
                                 </div>
                                 <div className="">
@@ -760,7 +761,8 @@ const Details = ({
                                         })
                                       }
                                     >
-                                      <Tooltip
+                                      {patientDocumentResult?.fileDetailDTO
+                                            ?.fileName?<Tooltip
                                         title={
                                           patientDocumentResult?.fileDetailDTO
                                             ?.fileName
@@ -771,7 +773,7 @@ const Details = ({
                                             ?.fileName,
                                           7
                                         )}
-                                      </Tooltip>
+                                      </Tooltip>:<div className="px-4">--</div>}
                                     </h6>
                                   </div>
                                 </div>
@@ -782,9 +784,9 @@ const Details = ({
                                     className="ageDtails"
                                     style={{ paddingLeft: "20px" }}
                                   >
-                                    {getAge(
+                                    { patientIdDetailsData?.data?.response?.dob?getAge(
                                       patientIdDetailsData?.data?.response?.dob
-                                    )}
+                                    ):"--"}
                                   </h6>
                                 </div>
                                 <div className="">
@@ -797,7 +799,7 @@ const Details = ({
                                     >
                                       {
                                         patientIdDetailsData?.data?.response
-                                          ?.gender
+                                          ?.gender||"--"
                                       }
                                     </h6>
                                   </div>
@@ -808,7 +810,7 @@ const Details = ({
                                   </i>
                                   <label>DOB</label>
                                   <h6 className="ageDtails">
-                                    {patientIdDetailsData?.data?.response?.dob}
+                                    {patientIdDetailsData?.data?.response?.dob||<div className="px-4">--</div>}
                                   </h6>
                                 </div>
                                 <div className="">
@@ -990,7 +992,7 @@ const Details = ({
                                       <label>CMS</label>
 
                                       <h6 className="ageDtails">
-                                        {hccCounts.isCmsHcc}
+                                        {hccCounts.isCmsHcc||0}
                                       </h6>
                                     </div>
                                     {localUserId !=
@@ -1002,7 +1004,7 @@ const Details = ({
                                           <label>RX</label>
 
                                           <h6 className="ageDtails">
-                                            {hccCounts.isRxHcc}
+                                            {hccCounts.isRxHcc||0}
                                           </h6>
                                         </div>
                                         <div
@@ -1011,7 +1013,7 @@ const Details = ({
                                           <label>TOTAL</label>
 
                                           <h6 className="ageDtails">
-                                            {hccValidCount}
+                                            {hccValidCount||0}
                                           </h6>
                                         </div>
                                       </>
