@@ -63,3 +63,8 @@ export const getRefreshToken=createActionThunk(
   network.refreshToken
 )
 
+export const deleteProfileImg=createActionThunk(
+  "DELETE_PROFILE_IMAGE",
+  network.deleteImage
+)
+

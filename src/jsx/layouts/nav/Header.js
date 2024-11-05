@@ -15,6 +15,7 @@ import {
   Modal,
   Divider,
   Spin,
+  Button,
 } from "antd";
 import {
   LoadingOutlined,
@@ -83,6 +84,8 @@ const Header = ({
   accuracy,
   getActiveTab,
   getReportActiveTab,
+  deleteProfile,
+  deleteImage,
 }) => {
   const router = useRouter();
   const menuItemsPerPage = 5;
@@ -109,7 +112,8 @@ const Header = ({
   const [drawerWidth, setDrawerWidth] = useState(700);
   const [notificationCount, setNotificationCount] = useState(0);
   const notificationSoundRef = useRef(null);
-  const [nextMenuList, setNextMenuList] = useState(false);
+  const [nextMenuList, setNextMenuList] = useState(false)
+  const [user,setUser]=useState(null)
   const [screenSize, setScreenSize] = useState({
     width: 0,
     height: null,
@@ -346,6 +350,7 @@ const Header = ({
     setCurrentRole(userRole);
     setTenentId(tenentId);
     setMenuList(getMenuListByRole(userRoleLocal));
+    setUser(userId)
 
     if (!loginCheck) {
       Swal.fire({
@@ -460,6 +465,12 @@ const Header = ({
       };
     }
   }, [router, menuList]);
+
+  useEffect(()=>{
+    if(deleteImage?.status === 'SUCCESS'){
+      getCurrentUserInfo( {userId:user})
+    }  
+  },[deleteImage])
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -755,7 +766,14 @@ const Header = ({
           setOpenContent(false);
         }}
         closable={true}
-        footer={null}
+        footer={profileImg ? [
+          <div className="customDelete">
+          <Button onClick={()=>{deleteProfile()
+            setOpenUploader(false);
+          }}>
+            Delete
+          </Button></div>
+        ]:[]}
         onCancel={() => {
           setOpenContent(false);
           setOpenUploader(false);
@@ -785,6 +803,7 @@ const enhancer = connect(
       state?.tenantAdmin?.webSocket?.webSocketNotificationDetails?.data,
     accuracy: state?.authReducer?.getAccuracy?.getAccuracy?.data?.response,
     profileUploadedTime: state?.authReducer?.getUpdateImageLoading,
+    deleteImage:state?.authReducer?.deleteProfileImg?.data
   }),
   {
     getNotificationList: dashbaordActions.notificationAction,
@@ -798,6 +817,7 @@ const enhancer = connect(
     getAccuracy: authActions.getAccuracy,
     getActiveTab: reportActions.activeTab,
     getReportActiveTab: reportActions.activeTab,
+    deleteProfile:authActions.deleteProfileImg
   }
 );
 export default enhancer(Header);

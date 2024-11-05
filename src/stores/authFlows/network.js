@@ -305,6 +305,14 @@ export async function updateImage(url) {
   return data;
 }
 
+export async function deleteImage(url) {
+  const options = {
+    method: "DELETE",
+  };
+  const data = await requestPortal(`dbservice/user/profileimage`, options);
+  return data;
+}
+
 export async function refreshToken() {
   const refreshToken = getStorage("refreshToken");
   const token = getStorage("token");

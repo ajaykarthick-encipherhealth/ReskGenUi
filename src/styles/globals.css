@@ -15861,3 +15861,7 @@ input::-webkit-inner-spin-button {
   height: 42px !important;
   border: none !important;
 }
+.customDelete .ant-btn-default {
+color:red !important;
+border-color: red !important;
+}
