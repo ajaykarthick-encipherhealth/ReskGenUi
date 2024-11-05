@@ -148,7 +148,7 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
               Enhance your security measures by activating the newest
               Multi-Factor Authentication (MFA) feature. This provides an
               additional level of protection against unauthorized access and
-              potential security risks. Want to learn more about MFA? Click here
+              potential security risks. Want to learn more about MFA? Click ENABLE MFA
               to enable it. If you require additional time to prepare, you can
               choose to skip this step, though adopting MFA will be compulsory
               in the future.
