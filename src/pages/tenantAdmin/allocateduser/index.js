@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  connect } from "react-redux";
+import { connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { Button, DatePicker, Empty, Input, Select, Space, Tooltip } from "antd";
@@ -79,7 +79,7 @@ const Patient = ({
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [tableLoading, setTableLoading] = useState(true);
-  
+
   const [activeTab, setActiveTab] = useState(1);
   const [isPatientList, setIsPatientList] = useState(false);
   const [l2selectUser, setL2selectUser] = useState(null);
@@ -183,9 +183,11 @@ const Patient = ({
         sort,
         selectedOption,
         searchString,
-        fromTenant:true
+        fromTenant: true,
       });
       if (response?.status === "SUCCESS") {
+        setIsLoading(false);
+        setCheckedLoading(false)
         let result = response?.response?.content;
         const data = result.map((item) => ({
           id: item.patientId,
@@ -269,10 +271,10 @@ const Patient = ({
     if (activeTab === 1) {
       setSearchStr(search);
     } else {
-      if (!isPatientList) {
+      if (!isPatientList && activeTab == 2) {  
         getAuditL2List(pageNo, search);
       } else {
-        getL2PatientList({
+         getL2PatientList({
           data: l2selectUser,
           pageNoL2Patient: pageNoL2Patient,
           sort: sort,
@@ -281,6 +283,7 @@ const Patient = ({
       }
     }
   };
+  
   const debounceFunc = useCallback(
     debounce((text, activeTab) => searchFunction(text, activeTab), 900),
     []
@@ -528,7 +531,7 @@ const Patient = ({
         selectedOption: selectedOptions,
         allocatedOption: allocatedOption,
         searchString: searchString,
-        fromTenant:true
+        fromTenant: true,
       });
       if (response.status === "SUCCESS") {
         let result = response?.response;
@@ -550,7 +553,7 @@ const Patient = ({
   }, []);
 
   useEffect(() => {
-    if (activeTab == 2 ) {
+    if (activeTab == 2) {
       getL2PatientList({
         data: l2selectUser,
         pageNoL2Patient: pageNoL2Patient,
