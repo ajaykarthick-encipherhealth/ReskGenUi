@@ -66,6 +66,7 @@ import { actions as allReportActions } from "../../../stores/admin/report";
 import { connect } from "react-redux";
 import HeaderComponent from "./components/headerComponent";
 
+
 export const navigetPageDetails = async (
   pageTitle,
   setSideNavLabelActiveKey,
@@ -500,8 +501,10 @@ const Details = ({
     getSelectedDos("");
     getCurrentDiseaseType(true);
     const user = getStorage("userRole");
-    const isAdminTracking = getStorage("isAdminTracking");
-    const isTenantAdminTracking = getStorage("isTenantAdminTracking");
+    const isAdminTracking=getStorage("isAdminTracking")
+    const isTenantAdminTracking=getStorage("isTenantAdminTracking")
+    const isSupervisorUserDetails=getStorage("isSupervisorUserDetails")
+    const isSupervisorAuited = getStorage("isSupervisorAuited")
     if (user && user.toLowerCase() === "admin") {
       if (isAdminTracking) {
         const url = "/admin/tracking";
@@ -532,10 +535,11 @@ const Details = ({
           navigate.push(url);
         }
       }
-    } else if (user && user.toLowerCase() === "supervisor") {
+    } 
+    else if (user && user.toLowerCase() === "supervisor") {
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(navigate.query).toString();
-      if (navigate.query.isSupervisorAuited === "true") {
+      if ( isSupervisorAuited ) {
         navigate.push(
           {
             pathname: `/supervisor/auditing`,
@@ -543,13 +547,14 @@ const Details = ({
           },
           `/supervisor/auditing`
         );
-      } else if (navigate.query.isSupervisorUser === "true") {
+      } 
+      else if (isSupervisorUserDetails) {
         navigate.push(
           {
             pathname: `/supervisor/user/userQueue`,
             query: queryString ? queryString : "",
           },
-          `/supervisor/user/userQueue?userId=${queryWithoutUser?.userName}`
+          `/supervisor/user/userQueue`
         );
       } else {
         navigate.back();

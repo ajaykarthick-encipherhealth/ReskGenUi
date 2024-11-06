@@ -154,8 +154,6 @@ const CompletedStatus = ({completedDatas,getCOmpletedScore,completedChartLoading
       btn: currentBtn,
     });
   }, [currentBtn, selectedMonth, selectedYear]);
-
-  console.log(completedDatas?.loading,"load")
   return (
     <>
       <HeadTitle header="Productivity Status" />

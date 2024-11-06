@@ -88,6 +88,7 @@ PatientTable({
       const { signal } = controller;
       controller.abort();
       setStorage("patientId", data.patientId);
+      setStorage("isSupervisorAuited", true);
       navigate.push({
         pathname: "/supervisor/patients/details",
         query: { ...params, isSupervisorAuited: true ,filters: activeFilters},
@@ -98,8 +99,6 @@ PatientTable({
       });
     }
   };
-  console.log(navigate,"navigatetable")
- 
   const handleTableRowClick = (e) => {
     const targetTd = e.target.closest("td");
     if (targetTd) {

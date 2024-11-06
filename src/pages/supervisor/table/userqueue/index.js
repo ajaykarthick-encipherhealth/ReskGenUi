@@ -140,11 +140,11 @@ const UserQueueTable = ({
     const targetTd = e.target.closest("td");
     if (targetTd) {
       setStorage("patientId", id);
-      // router?.push(`/supervisor/user/details?page=${page}`);
+      setStorage("isSupervisorUserDetails", true);
       router?.push(
         {
           pathname: "/supervisor/user/details",
-          query: { ...params, isSupervisorUser: true,filters: activeFilters},
+          query: { ...params, isSupervisorUserDetails: true,filters: activeFilters},
         },
         "/supervisor/user/details"
       );
