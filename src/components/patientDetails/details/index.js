@@ -499,21 +499,14 @@ const Details = ({
     getSelectedDos("");
     getCurrentDiseaseType(true);
     const user = getStorage("userRole");
-    const isAdminTracking=getStorage("isAdminTracking")
-      const isTenantAdminTracking=getStorage("isTenantAdminTracking")
+    const isAdminTracking = getStorage("isAdminTracking");
+    const isTenantAdminTracking = getStorage("isTenantAdminTracking");
     if (user && user.toLowerCase() === "admin") {
-      const { user: _, ...queryWithoutUser } = navigate.query;
-      const queryString = new URLSearchParams(queryWithoutUser).toString();
-
       if (isAdminTracking) {
-        const url = queryString
-          ? `/admin/tracking?${queryString}`
-          : "/admin/tracking";
+        const url = "/admin/tracking";
         navigate.push(url);
       } else {
-        const url = queryString
-          ? `/admin/patients?${queryString}`
-          : "/admin/patients";
+        const url = "/admin/patients";
         navigate.push(url);
       }
     } else if (user && user.toLowerCase() === "tenant_admin") {
