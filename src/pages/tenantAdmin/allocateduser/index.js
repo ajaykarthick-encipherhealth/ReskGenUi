@@ -85,6 +85,7 @@ const Patient = ({
   const [l2selectUser, setL2selectUser] = useState(null);
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [searchString, setSearchString] = useState("");
+  const [selectedSupervisorSearch, setSelectedSupervisorSearch] = useState("");
   const [checkedLoading, setCheckedLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState("");
@@ -125,55 +126,8 @@ const Patient = ({
       batchCount ? batchCount : ""
     }&organizationId=${selectOrgList}`;
     allocatedGetList({ url: resoureUrl });
-    // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    // if (response?.data) {
-    //   let resultMap = [];
-    //   let result = response?.data?.response?.content;
-    //   setTotalElements(response?.data?.response?.totalElements);
-    //   result?.map((res) => {
-    //     resultMap.push({
-    //       ...res,
-    //       patientId: res.patientId,
-    //       patientName: res.patientName,
-    //       computedDate: res.computedDate,
-    //     });
-    //   });
-    //   if (result?.length > 0) {
-    //     setPatinetListAll(result);
-    //     setIsLoading(false);
-    //   } else {
-    //     setPatinetListAll([]);
-    //   }
-
-    //   setTableLoading(false);
-    // }
   };
   const getAllCheckList = async (sort) => {
-    // setIsLoading(true);
-    // const uId = getStorage("userId");
-    // const orgId = getStorage("orgId");
-    // let resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${
-    //   batchCount ? batchCount : reviewerResponse?.response?.totalElements
-    // }&userId=${uId}&computationStart=${
-    //   startDate ? startDate : ""
-    // }&computationEnd=${
-    //   endDate ? endDate : ""
-    // }&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
-    //   sort?.sortDir
-    // }&sortfield=${sort?.sortField}&priority=${
-    //   selectedOption ? selectedOption : ""
-    // }&batchCount=${batchCount}&organizationId=${selectOrgList}`;
-    // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    // if (response.data) {
-    //   let result = response?.data?.response?.content;
-    //   const data = result.map((item) => ({
-    //     id: item.patientId,
-    //     name: item.patientName,
-    //   }));
-    //   setSelectedRowsId(data);
-    //   setHeaderCheckValidation(data);
-    //   setIsLoading(false);
-    // }
     try {
       const response = await getAllCheckedListForReviewer({
         batchCount,
@@ -248,6 +202,7 @@ const Patient = ({
 
   const selectTabClick = (number) => {
     setSearchString("");
+    setSelectedSupervisorSearch("");
     setPaginationFirst(0);
     setIsLoading(false);
     setActiveTab(number);
@@ -267,14 +222,14 @@ const Patient = ({
       // getAllList(0, pageSize, "", "", true, 2, "", sort);
     }
   };
-  const searchFunction = (search, activeTab) => {
-    if (activeTab === 1) {
+  const searchFunction = (search, activeTab, isPatientList, l2selectUser) => {
+    if (activeTab == 1) {
       setSearchStr(search);
     } else {
-      if (!isPatientList && activeTab == 2) {  
+      if (!isPatientList && activeTab == 2) {
         getAuditL2List(pageNo, search);
       } else {
-         getL2PatientList({
+        getL2PatientList({
           data: l2selectUser,
           pageNoL2Patient: pageNoL2Patient,
           sort: sort,
@@ -283,14 +238,23 @@ const Patient = ({
       }
     }
   };
-  
   const debounceFunc = useCallback(
-    debounce((text, activeTab) => searchFunction(text, activeTab), 900),
+    debounce(
+      (text, activeTab, isPatientList, l2selectUser) =>
+        searchFunction(text, activeTab, isPatientList, l2selectUser),
+      900
+    ),
     []
   );
-  const getNameSearch = (search) => {
-    setSearchString(search);
-    debounceFunc(search, activeTab);
+  const getNameSearch = (search, activeTab, isPatientList, l2selectUser) => {
+    if (activeTab == 2 && isPatientList) {
+      setSelectedSupervisorSearch(search);
+      // setSearchString("");
+    } else {
+      setSelectedSupervisorSearch("");
+      setSearchString(search);
+    }
+    debounceFunc(search, activeTab, isPatientList, l2selectUser);
   };
 
   const handleOpneModal = () => {
@@ -325,7 +289,7 @@ const Patient = ({
   }, [selectAllChecked, sort, isPatientList, pageNoL2Patient, activeTab,selectedOptions]);
 
   useEffect(() => {
-    if (typeof pageNo == "number" && activeTab === 1) {
+    if (typeof pageNo == "number" && activeTab == 1 && !isPatientList) {
       getAllList({
         pageNo: pageNo,
         pageSize: pageSize,
@@ -340,7 +304,7 @@ const Patient = ({
       });
     }
     if (activeTab == 2 && !isPatientList) {
-      getAuditL2List(pageNo, searchStr);
+      getAuditL2List(pageNo, searchStr || searchString);
     }
     getFilters({ field: "patientAllocated" });
   }, [
@@ -393,6 +357,8 @@ const Patient = ({
               sort: sort,
             });
             setIsPatientList(true);
+            setL2selectUser(data);
+            setSelectedSupervisorSearch("")
           }}
         >
           <td
@@ -500,29 +466,6 @@ const Patient = ({
   };
 
   const getAllCheckListL2 = async (sort) => {
-    // setCheckedLoading(true);
-
-    // let resoureUrl = `dbservice/l2audit/patients?username=${
-    //   l2selectUser?.userName
-    // }&page=${pageNoL2Patient}&size=${15}&sortdirection=${
-    //   sort?.sortDir ? sort?.sortDir : "DESC"
-    // }&sortfield=${
-    //   sort?.sortField ? sort?.sortField : "dueDate"
-    // }&searchstring=${searchString}&processedStatus=${
-    //   selectedOptions ? selectedOptions : ""
-    // }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
-    // // let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
-    // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    // if (response.data) {
-    //   let result = response?.data?.response;
-    //   const data = result?.content?.map((item) => ({
-    //     id: item.patientId,
-    //     name: item.patientName,
-    //   }));
-    //   setSelectedRowsId(data);
-    //   setHeaderCheckValidation(data);
-    // }
-    // setCheckedLoading(false);
     try {
       const response = await getAllCheckedListForSupervisor({
         userName: l2selectUser?.userName,
@@ -553,7 +496,7 @@ const Patient = ({
   }, []);
 
   useEffect(() => {
-    if (activeTab == 2) {
+    if (activeTab == 2 && isPatientList) {
       getL2PatientList({
         data: l2selectUser,
         pageNoL2Patient: pageNoL2Patient,
@@ -561,7 +504,7 @@ const Patient = ({
         allocatedOption: allocatedOption,
       });
     }
-  }, [selectedOptions, allocatedOption]);
+  }, [selectedOptions, allocatedOption,isPatientList]);
 
   return (
     <>
@@ -606,9 +549,13 @@ const Patient = ({
                                   type="text"
                                   onChange={(e) => {
                                     resetPageNumber(setPageNo);
-                                    getNameSearch(e.target.value);
+                                    getNameSearch(e.target.value, activeTab, isPatientList, l2selectUser);
                                   }}
-                                  value={searchString}
+                                  value={
+                                    activeTab == 2 && isPatientList
+                                      ? selectedSupervisorSearch
+                                      : searchString
+                                  }
                                   className={
                                     "w-100 new-search-control border-none"
                                   }
@@ -907,6 +854,8 @@ const Patient = ({
                                     selectTabClick(1);
                                     setActiveTab(1);
                                     setSelectedOrgList([]);
+                                    setSearchString("")
+                                    setSearchStr("");
                                   }}
                                 >
                                   <Nav.Link
@@ -926,6 +875,8 @@ const Patient = ({
                                     selectTabClick(2);
                                     setActiveTab(2);
                                     setSelectedOrgList([]);
+                                    setSearchString("")
+                                    setSearchStr("");
                                   }}
                                 >
                                   <Nav.Link

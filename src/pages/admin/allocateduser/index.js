@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  connect } from "react-redux";
+import { connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { DatePicker, Empty, Input, Space, Tooltip } from "antd";
@@ -37,7 +37,10 @@ const statusOption = [
   { value: "NORMAL", label: "NORMAL" },
   { value: "LOW", label: "LOW" },
 ];
-
+const statusOptions = [
+  { label: "COMPLETED", value: "COMPLETED" },
+  { label: "DECLINED", value: "DECLINED" },
+];
 const Patient = ({
   allocatedGetList,
   reviewerResponse,
@@ -75,7 +78,6 @@ const Patient = ({
   const [totalElements, setTotalElements] = useState(10);
   const [totalElementsPatient, setTotalElementsPatient] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-  
   const [activeTab, setActiveTab] = useState(1);
   const [l2UserListAll, setL2UserListAll] = useState([]);
   const [isPatientList, setIsPatientList] = useState(false);
@@ -84,6 +86,7 @@ const Patient = ({
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [totalElementsUser, setTotalElementsUser] = useState(0);
   const [searchString, setSearchString] = useState("");
+  const [selectedSupervisorSearch, setSelectedSupervisorSearch] = useState("");
   const [checkedLoading, setCheckedLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [selectedOptions, setSelectedOptions] = useState("");
@@ -123,18 +126,6 @@ const Patient = ({
     allocatedGetList({ url: resoureUrl });
   };
   const getAllCheckList = async (sort) => {
-    // setIsLoading(true);
-    // const uId = getStorage("userId");
-    // const orgId = getStorage("orgId");
-    // let resoureUrl = `dbservice/patient/admin/computation/filter?&organizationId=${orgId}&
-    // page=${0}&size=${
-    //   batchCount ? batchCount : reviewerResponse?.response?.totalElements
-    // }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
-    //   sort?.sortDir
-    // }&sortfield=${sort?.sortField}&priority=${
-    //   selectedOption ? selectedOption : ""
-    // }&batchCount=${batchCount}`;
-
     try {
       const response = await getAllCheckedListForReviewer({
         batchCount,
@@ -205,6 +196,7 @@ const Patient = ({
   };
   const selectTabClick = (number) => {
     setSearchString("");
+    setSelectedSupervisorSearch("");
     setPaginationFirst(0);
     setIsLoading(false);
     setActiveTab(number);
@@ -223,11 +215,11 @@ const Patient = ({
       // getAllList(0, pageSize, "", "", true, 2, "", sort);
     }
   };
-  const searchFunction = (search, activeTab) => {
-    if (activeTab === 1) {
+  const searchFunction = (search, activeTab, isPatientList, l2selectUser) => {
+    if (activeTab == 1) {
       setSearchStr(search);
     } else {
-      if (!isPatientList) {
+      if (!isPatientList && activeTab == 2) {
         getAuditL2List(pageNo, search);
       } else {
         getL2PatientList({
@@ -240,12 +232,22 @@ const Patient = ({
     }
   };
   const debounceFunc = useCallback(
-    debounce((text, activeTab) => searchFunction(text, activeTab), 900),
+    debounce(
+      (text, activeTab, isPatientList, l2selectUser) =>
+        searchFunction(text, activeTab, isPatientList, l2selectUser),
+      900
+    ),
     []
   );
-  const getNameSearch = (search) => {
-    setSearchString(search);
-    debounceFunc(search, activeTab);
+  const getNameSearch = (search, activeTab, isPatientList, l2selectUser) => {
+    if (activeTab == 2 && isPatientList) {
+      setSelectedSupervisorSearch(search);
+      // setSearchString("");
+    } else {
+      setSelectedSupervisorSearch("");
+      setSearchString(search);
+    }
+    debounceFunc(search, activeTab, isPatientList, l2selectUser);
   };
 
   const handleOpneModal = () => {
@@ -265,46 +267,6 @@ const Patient = ({
     getSupervisorsList({ url: resoureUrl });
   };
 
-  useEffect(() => {
-    if (selectAllChecked) {
-      if (isPatientList) {
-        getAllCheckListL2(sort);
-      } else {
-        getAllCheckList(sort);
-      }
-    } else {
-      setSelectedRowsId([]);
-    }
-  }, [selectAllChecked, sort, isPatientList]);
-
-  useEffect(() => {
-    if (typeof pageNo == "number" && activeTab === 1) {
-      getAllList({
-        pageNo: pageNo,
-        pageSize: pageSize,
-        startDate: startDate,
-        endDate: endDate,
-        allocate: true,
-        status: 2,
-        search: searchStr,
-        sort: sort,
-        selectedOption: selectedOption,
-      });
-    }
-    if (activeTab == 2 && !isPatientList) {
-      getAuditL2List(pageNo, searchStr);
-    }
-  }, [
-    pageNo,
-    pageSize,
-    sort,
-    activeTab,
-    startDate,
-    endDate,
-    searchStr,
-    selectedOption,
-  ]);
-
   const renderRows = () => {
     return supervisorResponse?.response?.content?.length > 0 ? (
       supervisorResponse?.response?.content?.map((data, index) => (
@@ -317,7 +279,9 @@ const Patient = ({
               pageNoL2Patient: pageNoL2Patient,
               sort: sort,
             });
+            setL2selectUser(data);
             setIsPatientList(true);
+            setSelectedSupervisorSearch("")
           }}
         >
           <td
@@ -390,11 +354,6 @@ const Patient = ({
     );
   };
 
-  const statusOptions = [
-    { label: "COMPLETED", value: "COMPLETED" },
-    { label: "DECLINED", value: "DECLINED" },
-  ];
-
   const getL2PatientList = async ({
     data,
     pageNoL2Patient,
@@ -427,17 +386,6 @@ const Patient = ({
 
   const getAllCheckListL2 = async (sort) => {
     setCheckedLoading(true);
-    // let orgId = getStorage("orgId");
-    // let resoureUrl = `dbservice/l2audit/patients?organizationId=${orgId}&username=${
-    //   l2selectUser?.userName
-    // }&page=${pageNoL2Patient}&size=${15}&sortdirection=${
-    //   sort?.sortDir ? sort?.sortDir : "DESC"
-    // }&sortfield=${
-    //   sort?.sortField ? sort?.sortField : "dueDate"
-    // }&searchstring=${searchString}&processedStatus=${
-    //   selectedOptions ? selectedOptions : ""
-    // }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
-    // let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=${pageNoL2Patient}&size=${15}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     try {
       const response = await getAllCheckedListForSupervisor({
         userName: l2selectUser?.userName,
@@ -465,7 +413,7 @@ const Patient = ({
     getFilters({ field: "patientAllocated" });
   }, []);
   useEffect(() => {
-    if (activeTab == 2) {
+    if (activeTab == 2 && isPatientList) {
       getL2PatientList({
         data: l2selectUser,
         pageNoL2Patient: pageNoL2Patient,
@@ -473,7 +421,47 @@ const Patient = ({
         allocatedOption: allocatedOption,
       });
     }
-  }, [selectedOptions, allocatedOption]);
+  }, [selectedOptions, allocatedOption, isPatientList]);
+  useEffect(() => {
+    if (selectAllChecked) {
+      if (isPatientList) {
+        getAllCheckListL2(sort);
+      } else {
+        getAllCheckList(sort);
+      }
+    } else {
+      setSelectedRowsId([]);
+    }
+  }, [selectAllChecked, sort, isPatientList]);
+
+  useEffect(() => {
+    if (typeof pageNo == "number" && activeTab === 1 && !isPatientList) {
+      getAllList({
+        pageNo: pageNo,
+        pageSize: pageSize,
+        startDate: startDate,
+        endDate: endDate,
+        allocate: true,
+        status: 2,
+        search: searchStr,
+        sort: sort,
+        selectedOption: selectedOption,
+      });
+    }
+    if (activeTab == 2 && !isPatientList) {
+      getAuditL2List(pageNo, searchStr || searchString);
+    }
+  }, [
+    pageNo,
+    pageSize,
+    sort,
+    activeTab,
+    startDate,
+    endDate,
+    searchStr,
+    selectedOption,
+    isPatientList,
+  ]);
 
   return (
     <>
@@ -500,6 +488,7 @@ const Patient = ({
                                     setIsPatientList(false);
                                     setAllocatedOption("");
                                     setSelectAllChecked(false);
+                                    setSelectedSupervisorSearch("");
                                   }}
                                 >
                                   <Image src={leftArrow} />
@@ -517,11 +506,19 @@ const Patient = ({
                                 <Input
                                   type="text"
                                   onChange={(e) => {
-                                    getNameSearch(e.target.value);
-
+                                    getNameSearch(
+                                      e.target.value,
+                                      activeTab,
+                                      isPatientList,
+                                      l2selectUser
+                                    );
                                     resetPageNumber(setPageNo);
                                   }}
-                                  value={searchString}
+                                  value={
+                                    activeTab == 2 && isPatientList
+                                      ? selectedSupervisorSearch
+                                      : searchString
+                                  }
                                   className={
                                     "w-100 new-search-control border-none"
                                   }
@@ -761,6 +758,8 @@ const Patient = ({
                                     selectTabClick(1);
                                     setActiveTab(1);
                                     setPaginationFirst("0");
+                                    setSearchString("")
+                                    setSearchStr("");
                                   }}
                                 >
                                   <Nav.Link
@@ -779,6 +778,8 @@ const Patient = ({
                                     setSortDueOrder("DESC");
                                     selectTabClick(2);
                                     setActiveTab(2);
+                                    setSearchString("")
+                                    setSearchStr("");
                                   }}
                                 >
                                   <Nav.Link
