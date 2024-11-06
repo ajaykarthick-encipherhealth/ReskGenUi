@@ -29,7 +29,7 @@ import { extractLatestData } from "../../supervisor/auditing";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/tracking";
 import { actions as tenantUserAdminAction } from "../../../stores/tenantAdmin/users";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
-import { setStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { actions as workFlowActions } from "../../../stores/admin/workqueue";
 const bullets = [
@@ -168,19 +168,26 @@ const Patient = ({
   const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
 
   useEffect(() => {
-    if (window !== "undefined") {
-      setIsLoading(true);
-      if (navigate) {
-        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
-        setPaginationFirst(
-          navigate?.query?.paginationFirst
-            ? navigate?.query?.paginationFirst
-            : 0
-        );
-      }
-    }
-    setIsLoading(false);
-  }, [navigate]);
+    // if (window !== "undefined") {
+    //   setIsLoading(true);
+    //   if (navigate) {
+    //     setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
+    //     setPaginationFirst(
+    //       navigate?.query?.paginationFirst
+    //         ? navigate?.query?.paginationFirst
+    //         : 0
+    //     );
+    //   }
+    // }
+    // setIsLoading(false);
+        const encodedVal = JSON.parse(getStorage("TeantAdminTrackingEncodedValue"));
+        setIsLoading(true);
+        if (encodedVal) {
+          setPageNo(encodedVal?.pageNo || 0);
+          setPaginationFirst(encodedVal?.paginationFirst || 0);
+          setIsLoading(false);
+        }
+  }, []);
   getAllOrganizationList,
     organizationList,
     useEffect(() => {

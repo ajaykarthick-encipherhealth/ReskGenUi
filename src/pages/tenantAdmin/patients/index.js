@@ -121,36 +121,35 @@ const Patient = ({
     const [selectAll, setSelectAll] = useState(false);
       const [activeFilters, setActiveFilters] = useState([]);
 
-  useEffect(() => {
-    if (window !== "undefined") {
-      if (window.location.search) {
+    useEffect(() => {
+      const encodedString = getStorage("TenantAdminPatientsEncodedValue");
+      if (encodedString && typeof encodedString === "string") {
         try {
-          const queryString = window.location.search;
-          const urlParams = new URLSearchParams(queryString);
-          const encodedParams = urlParams.get("params");
-          const decodedParams = JSON.parse(atob(encodedParams));
           setParamsFilter("check");
+          const decodedParams = JSON.parse(
+            atob(encodedString?.replace(/-/g, "+").replace(/_/g, "/"))
+          );
           setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
           setPaginationFirst(
             decodedParams?.paginationFirst ? decodedParams?.paginationFirst : 0
           );
-          setCompletedStartDate(decodedParams?.completedStartDate || "");
+          setCompletedStartDate(decodedParams?.completedStartDate);
           setCompletedEndDate(decodedParams?.completedEndDate || "");
           SetSelectedOption(decodedParams?.selectedOption || "");
-          setSearch(decodedParams?.search || "");
-          setSearchVal(decodedParams?.search || "");
+          setSearch(decodedParams?.search || null);
+          setSearchVal(decodedParams?.search || null);
           setComputedStartDate(decodedParams?.computedStartDate || "");
           setComputedEndDate(decodedParams?.computedEndDate || "");
           setSelAllocatedBy(decodedParams?.selAllocatedBy || "");
           setSelAllocatedTo(decodedParams?.setSelAllocatedTo || "");
           setSelCreatedBy(decodedParams?.createdBy || "");
-          setSelectedDates(
+          setSelectedDate2s(
             decodedParams?.completedStartDate && [
               dayjs(decodedParams?.completedStartDate),
               dayjs(decodedParams?.completedEndDate),
             ]
           );
-          setSelectedDate2s(
+          setSelectedDates(
             (decodedParams?.computedStartDate && [
               dayjs(decodedParams?.computedStartDate),
               dayjs(decodedParams?.computedEndDate),
@@ -160,11 +159,16 @@ const Patient = ({
           setSelectedOrgList(decodedParams?.selectOrgList || "");
           setActiveFilters(decodedParams?.activeFilters || []);
         } catch (error) {
-          console.error("Error decoding Base64 string: ", error.message);
+          console.error("Error decoding or parsing query:", error);
         }
+      } else {
+        console.error(
+          "Encoded value not found or not a string:",
+          encodedString
+        );
       }
-    }
-  }, [navigate]);
+      // }
+    }, []);
 
   useEffect(() => {
     setParamsFilter("check");
@@ -206,11 +210,6 @@ const Patient = ({
     paramsFilter,
   ]);
 
-  // useEffect(() => {
-  //   if (allPatientList?.data?.response) {
-  //     getAllList(allPatientList?.data?.response);
-  //   }
-  // }, [parsedData, allPatientList, pageNo, pageSize]);
 
   useEffect(() => {
     if (!organizationList?.response) {
@@ -228,58 +227,6 @@ const Patient = ({
     });
     setOrgAllList(orgListArray);
   }, [organizationList]);
-
-  // const getAllList = (info) => {
-  //   if (info) {
-  //     var resultMap = [];
-  //     var result = info?.content;
-  //     setTotalElements(info?.totalElements);
-  //     result?.map((res) => {
-  //       resultMap?.push({
-  //         ...res,
-  //         patientId: res.patientId,
-  //         patientAllocated: res.patientAllocated,
-  //         computing: res.computing,
-  //         processStageChart: res.processStageChart,
-  //         processStageRadiology: res.processStageRadiology,
-  //         processStageLab: res.processStageLab,
-  //         processStageId: res.processStageId,
-  //         processStageIdRadiology: res.processStageIdRadiology,
-  //         processStageIdLab: res.processStageIdLab,
-  //         allocatedUserId: res.allocatedUserId,
-  //         allocatedOn: res.allocatedOn,
-  //         allocatedBy: res.allocatedBy,
-  //         patientName: res.patientName,
-  //         dueDate: res.dueDate,
-  //         processedStatus: res.processedStatus,
-  //         auditedStatus: res.auditedStatus,
-  //         auditedBy: res.auditedBy,
-  //         auditedDate: res.auditedDate,
-  //         priority: res.priority,
-  //         computedDate: res.computedDate,
-  //         lastModifiedDate: res.lastModifiedDate,
-  //         createdDate: res.createdDate,
-  //         createdBy: res.createdBy,
-  //         allocatedByFirstName: res.allocatedByFirstName,
-  //         allocatedByLastName: res.allocatedByLastName,
-  //         allocatedByProfileImage: res.allocatedByProfileImage,
-  //         createdByFirstName: res.createdByFirstName,
-  //         createdByLastName: res.createdByLastName,
-  //         createdByProfileImage: res.createdByProfileImage,
-  //         totalPages: res.totalPages,
-  //       });
-  //     });
-  //     var newArray = [];
-  //     newArray = [...patinetListAll, ...resultMap];
-  //     setPatinetListAll(resultMap);
-
-  //     setIsLoading(false);
-  //     setTableLoading(false);
-  //     //     setTimeout(() => {
-  //     //     subscribe(resultMap);
-  //     // }, 3000);
-  //   }
-  // };
 
   const addPatientFormId = () => {
     setValidated(false);
