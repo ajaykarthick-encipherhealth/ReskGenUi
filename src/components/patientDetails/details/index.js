@@ -66,7 +66,6 @@ import { actions as allReportActions } from "../../../stores/admin/report";
 import { connect } from "react-redux";
 import HeaderComponent from "./components/headerComponent";
 
-
 export const navigetPageDetails = async (
   pageTitle,
   setSideNavLabelActiveKey,
@@ -501,45 +500,32 @@ const Details = ({
     getSelectedDos("");
     getCurrentDiseaseType(true);
     const user = getStorage("userRole");
-    const isAdminTracking=getStorage("isAdminTracking")
-    const isTenantAdminTracking=getStorage("isTenantAdminTracking")
-    const isSupervisorUserDetails=getStorage("isSupervisorUserDetails")
-    const isSupervisorAuited = getStorage("isSupervisorAuited")
+    const isAdminTracking = getStorage("isAdminTracking");
+    const isTenantAdminTracking = getStorage("isTenantAdminTracking");
+    const isSupervisorUserDetails = getStorage("isSupervisorUserDetails");
+    const isSupervisorAuited = getStorage("isSupervisorAuited");
     if (user && user.toLowerCase() === "admin") {
       if (isAdminTracking) {
-        const url = "/admin/tracking";
-        navigate.push(url);
+        navigate.push("/admin/tracking");
       } else {
-        const url = "/admin/patients";
-        navigate.push(url);
+        navigate.push("/admin/patients");
       }
     } else if (user && user.toLowerCase() === "tenant_admin") {
       if (user && user.toLowerCase() === "tenant_admin") {
-        const { user: _, ...queryWithoutUser } = navigate.query;
-        const queryString = new URLSearchParams(queryWithoutUser).toString();
-        if (navigate.query.fromPatientSync === "true") {
-          const url = queryString
-            ? `/tenantAdmin/patientSync?${queryString}`
-            : "/tenantAdmin/patientSync";
-          navigate.push(url);
+        const fromPatientSync = getStorage("fromPatientSync");
+        if (fromPatientSync === "true") {
+          navigate.push("/tenantAdmin/patientSync");
           getActiveTab("PDF");
         } else if (isTenantAdminTracking) {
-          const url = queryString
-            ? `/tenantAdmin/tracking?${queryString}`
-            : "/tenantAdmin/tracking";
-          navigate.push(url);
+          navigate.push("/tenantAdmin/tracking");
         } else {
-          const url = queryString
-            ? `/tenantAdmin/patients?${queryString}`
-            : "/tenantAdmin/patients";
-          navigate.push(url);
+          navigate.push("/tenantAdmin/patients");
         }
       }
-    } 
-    else if (user && user.toLowerCase() === "supervisor") {
+    } else if (user && user.toLowerCase() === "supervisor") {
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(navigate.query).toString();
-      if ( isSupervisorAuited ) {
+      if (isSupervisorAuited) {
         navigate.push(
           {
             pathname: `/supervisor/auditing`,
@@ -547,8 +533,7 @@ const Details = ({
           },
           `/supervisor/auditing`
         );
-      } 
-      else if (isSupervisorUserDetails) {
+      } else if (isSupervisorUserDetails) {
         navigate.push(
           {
             pathname: `/supervisor/user/userQueue`,
@@ -560,23 +545,7 @@ const Details = ({
         navigate.back();
       }
     } else if (user && user.toLowerCase() === "reviewer") {
-      const { user: _, ...queryWithoutUser } = navigate.query;
-      const queryString = new URLSearchParams(navigate.query).toString();
-      if (navigate.query && queryString) {
-        // const url = queryString ? `/reviewer/patients` : "/reviewer/patients";
-    
-        navigate.push(
-          {
-            pathname: "/reviewer/patients",
-            query: queryString ? queryString : "",
-          },
-          "/reviewer/patients"
-        );
-      } 
-      
-      else {
-        navigate.back();
-      }
+      navigate.push("/reviewer/patients");
     } else {
       navigate.back();
     }

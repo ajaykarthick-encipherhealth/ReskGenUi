@@ -21,6 +21,7 @@ import FhirDrawer from "./modals/FhirDrawer";
 import UploadFile from "./uploadFile";
 import { connect } from "react-redux";
 import { getResponePopup } from "../../../utils/reusable";
+import { getStorage } from "../../../utils/storages";
 
 const { RangePicker } = DatePicker;
 
@@ -353,7 +354,7 @@ const Index = ({
   };
   const debouncedSearch = useCallback(
     debounce((text, setSearchVal, field) => {
-      setSearchVal(text)
+      setSearchVal(text);
       // setSearchVal((prev) => {
       //   const existingIndex = prev.findIndex((item) => item.field === field);
       //   if (existingIndex !== -1) {
@@ -407,17 +408,13 @@ const Index = ({
     }));
   };
   useEffect(() => {
-    if (window !== "undefined") {
-      if (window.location.search) {
-        try {
-          const queryString = window.location.search;
-          const urlParams = new URLSearchParams(queryString);
-          const encodedParams = urlParams.get("params");
-          const decodedParams = JSON.parse(atob(encodedParams));
-          setViewDetailedBatch(decodedParams?.viewDetailedBatch);
-        } catch (error) {
-          console.log(error);
-        }
+    const encodedParams = JSON.parse(getStorage("patientSyncEncodedValue"));
+    if (encodedParams) {
+      try {
+        const decodedParams = JSON.parse(atob(encodedParams));
+        setViewDetailedBatch(decodedParams?.viewDetailedBatch);
+      } catch (error) {
+        console.log(error);
       }
     }
   }, []);
@@ -432,7 +429,7 @@ const Index = ({
     if (reportActiveTab === "PDF") {
       getAllBatches({
         page: pageNo,
-        search: searchVal|| "",
+        search: searchVal || "",
         startDate: selectedDateRanges?.PDF?.from,
         endDate: selectedDateRanges?.PDF?.to,
         batchUploadStatus: selectedOptions?.PDF,

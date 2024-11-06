@@ -76,9 +76,10 @@ const DetailedPdfTable = ({
     if (row?.processStage === "FINISHED") {
       setStorage("patientId", row?.patientId);
       const encodedValue = btoa(JSON.stringify(params));
+      setStorage("patientSyncEncodedValue", JSON.stringify(encodedValue));
+      setStorage("fromPatientSync", true);
       navigate.push({
-        pathname: "/tenantAdmin/patientSync/batchFilesView",
-        search: `params=${encodedValue}&fromPatientSync=true`,
+        pathname: "/tenantAdmin/patientSync/batchFilesView"
       });
     } else {
       notification.warning({

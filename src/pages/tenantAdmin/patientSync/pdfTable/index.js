@@ -21,6 +21,7 @@ import moment from "moment";
 import dayjs from "dayjs";
 import DetailedPdfTable from "../../../../components/table/tenantTable/pdfTable/detailPdfTable";
 import { actions as allReportActions } from "../../../../stores/admin/report";
+import { getStorage, removeStorage } from "../../../../utils/storages";
 export const statusOptions = [
   { label: "Computed", value: "COMPUTED" },
   { label: "Processing", value: "PROCESSING" },
@@ -49,7 +50,7 @@ const DetailedViewPdfTable = ({
   webSocketData,
   viewDetailedBatch,
 }) => {
-  const router=useRouter()
+  const router = useRouter();
   const [searchVal, setSearchVal] = useState(null);
   const [search, setSearch] = useState();
   const [pageNo, setPageNo] = useState(0);
@@ -57,7 +58,7 @@ const DetailedViewPdfTable = ({
   const [currentId, setCurrentId] = useState({});
   const [batchPageNo, setBatchPageNo] = useState(0);
   const [socketData, setSocketData] = useState(pdfTabledata);
-
+  const [batchId, setBatchId] = useState(null);
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -93,22 +94,18 @@ const DetailedViewPdfTable = ({
   };
 
   useEffect(() => {
-    if (window !== "undefined") {
-      if (window.location.search) {
-        try {
-          const queryString = window.location.search;
-          const urlParams = new URLSearchParams(queryString);
-          const encodedParams = urlParams.get("params");
-          const decodedParams = JSON.parse(atob(encodedParams));
-          setSearchVal(decodedParams?.searchVal);
-          setSearch({
-            searchVal: decodedParams?.searchVal,
-            name: "initialSearch",
-          });
-          setPageNo(decodedParams?.pageNo);
-        } catch (error) {
-          console.log(error);
-        }
+    const encodedParams = JSON.parse(getStorage("patientSyncEncodedValue"));
+    if (encodedParams) {
+      try {
+        const decodedParams = JSON.parse(atob(encodedParams));
+        setSearchVal(decodedParams?.searchVal);
+        setSearch({
+          searchVal: decodedParams?.searchVal,
+          name: "initialSearch",
+        });
+        setPageNo(decodedParams?.pageNo);
+      } catch (error) {
+        console.log(error);
       }
     }
   }, []);
@@ -145,6 +142,7 @@ const DetailedViewPdfTable = ({
     }
     if (params) {
       const decodedParams = params;
+      setBatchId(decodedParams?.batchId);
       setBatchPageNo(decodedParams?.pageNo);
       if (pdfTabledata) {
         const filterData =
@@ -155,14 +153,17 @@ const DetailedViewPdfTable = ({
             : [];
         setCurrentId(...filterData);
       }
-
-      getBatchInfo({
-        batchId: decodedParams?.batchId,
-        page: pageNo,
-        search: searchVal || "",
-      });
     }
-  }, [reportActiveTab, pdfTabledata, pageNo, searchVal, params]);
+  }, [reportActiveTab, pdfTabledata, params]);
+  useEffect(() => {
+    if(batchId){
+    getBatchInfo({
+      batchId: batchId,
+      page: pageNo,
+      search: searchVal || "",
+    });
+  }
+  }, [batchId, pageNo, searchVal]);
   const headerData = [
     {
       id: 1,
@@ -296,6 +297,7 @@ const DetailedViewPdfTable = ({
                           className={`${styles.backButtonStyle} mx-2`}
                           onClick={() => {
                             getActiveTab("PDF");
+                            removeStorage("patientSyncEncodedValue");
                             router.push("/tenantAdmin/patientSync");
                             setSearch();
                             setSearchVal(null);
