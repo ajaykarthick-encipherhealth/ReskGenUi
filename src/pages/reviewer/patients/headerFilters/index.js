@@ -177,7 +177,7 @@ const HeaderFiltersPatients = ({
             </label>
             <div class="form-group has-search custom-react-selects">
               <Select
-                value={clear ? "" : statusSelectedStatus}
+                value={clear ? null : statusSelectedStatus}
                 onChange={onChangeStatus}
                 options={orgAllList}
                 isSearchable={false}

@@ -28,20 +28,21 @@ const Details = ({ fileResult, fromHcc }) => {
         <div className="row" style={{ lineHeight: "0" }}>
           <div className="col-xl-4">
             <FontAwesomeIcon icon={faIdCardClip} style={{ color: "#241571" }} />
-            <label className="px-2" style={{fontWeight:600}}>Patient ID</label>
-            <h6
-              className="ageDtails"
-              style={{
-                paddingLeft: "25px",
-                cursor: "pointer",
-              }
-              {fileResult?.patientId?getMastData(fileResult?.patientId):"--"}
+            <label className="px-2" style={{ fontWeight: 600 }}>
+              Patient ID
+            </label>
+            <h6 className="px-4 cursor-pointer">
+              {fileResult?.patientId
+                ? getMastData(fileResult?.patientId)
+                : "--"}
             </h6>
           </div>
           <div className="col-xl-5">
             <FontAwesomeIcon icon={faUserCircle} style={{ color: "#241571" }} />
 
-            <label className="px-2" style={{fontWeight:600}}>Patient Name</label>
+            <label className="px-2" style={{ fontWeight: 600 }}>
+              Patient Name
+            </label>
             <h6 className="px-4">
               {fileResult?.patientName
                 ? getMastData(fileResult?.patientName)
@@ -53,12 +54,16 @@ const Details = ({ fileResult, fromHcc }) => {
               icon={faCalendarAlt}
               style={{ color: "#241571" }}
             />
-            <label className="px-2" style={{fontWeight:600}}>Age</label>
+            <label className="px-2" style={{ fontWeight: 600 }}>
+              Age
+            </label>
             <h6 className="px-4">{fileResult?.age || "--"}</h6>
           </div>
           <div className="col-xl-4">
             <FontAwesomeIcon icon={faFile} style={{ color: "#241571" }} />
-            <label className="px-2" style={{fontWeight:600}}>File Name</label>
+            <label className="px-2" style={{ fontWeight: 600 }}>
+              File Name
+            </label>
             <h6
               className="px-3"
               style={{
@@ -77,7 +82,9 @@ const Details = ({ fileResult, fromHcc }) => {
           </div>
           <div className="col-xl-5">
             <i className={styles.dob_icon}>{SVGICON.DatebirthIcon}</i>
-            <label className="px-2" style={{fontWeight:600}}>Date Of Birth</label>
+            <label className="px-2" style={{ fontWeight: 600 }}>
+              Date Of Birth
+            </label>
             <h6 className="px-4">
               {dayjs(fileResult?.dateOfBirth).format("MM-DD-YYYY") ||
                 "MM-DD-YYYY"}
@@ -85,7 +92,12 @@ const Details = ({ fileResult, fromHcc }) => {
           </div>
           <div className="col-xl-3">
             <FontAwesomeIcon icon={faVenusMars} style={{ color: "#241571" }} />
-            <label className="px-2 font-weight-bold" style={{fontWeight:600}}>Gender</label>
+            <label
+              className="px-2 font-weight-bold"
+              style={{ fontWeight: 600 }}
+            >
+              Gender
+            </label>
             <h6 className="px-4">{fileResult?.gender || "--"}</h6>
           </div>
         </div>

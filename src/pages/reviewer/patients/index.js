@@ -4,11 +4,7 @@ import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import {
-  DatePicker,
-  Popover,
-  notification,
-} from "antd";
+import { DatePicker, Popover, notification } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
@@ -95,139 +91,80 @@ const Patient = ({
   };
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [localUserId, setLocalUserId] = useState("");
-  const [searchVal, setSearchVal] = useState(navigate.query.searchTextValue);
+  const [searchVal, setSearchVal] = useState("");
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
   const [clear, setClear] = useState(false);
-  const [activeFilters, setActiveFilters] = useState([navigate?.query?.filter||[]]);
+  const [activeFilters, setActiveFilters] = useState([]);
   const [trackChart, setTrackChart] = useState({
     COMPLETED: 0,
     PENDING: 0,
     DECLINED: 0,
     HOLD: 0,
   });
-  const [selectedPriority, setSelectedPriority] = useState(
-    navigate.query?.selectedPriority
-      ? navigate.query?.selectedPriority
-      : null
-  );
-  const [showFilters, setShowFilters] = useState(
-    navigate?.query ? true : false
-  );
-  const dueStartDate = navigate?.query?.dueDateStart
-    ? moment(navigate?.query?.dueDateStart)?.format("YYYY-MM-DD") +
-      "T00:00:00.000Z"
-    : "";
+  const [selectedPriority, setSelectedPriority] = useState(null);
+  const dueStartDate = "";
+  // query?.dueDateStart
+  //   ? moment(query?.dueDateStart)?.format("YYYY-MM-DD") +
+  //     "T00:00:00.000Z"
+  //   : "";
+  const dueEndDate = "";
+  // query?.dueDateStart
+  //   ? moment(query?.dueDateStart)?.format("YYYY-MM-DD") +
+  //     "T23:59:59.000Z"
+  //   : "";
+  const [dueDateStart, setDueDateStart] = useState(null);
+  const [dueDateEnd, setDueDateEnd] = useState(null);
+  const [processedStart, setProcessedStart] = useState(null);
+  const [processedEnd, setProcessedEnd] = useState(null);
+  const [statusSelectedStatus, setStatusSelectedStatus] = useState(null);
+  const [searchTextValue, setSearchTextValue] = useState("");
 
-  const dueEndDate = navigate?.query?.dueDateStart
-    ? moment(navigate?.query?.dueDateStart)?.format("YYYY-MM-DD") +
-      "T23:59:59.000Z"
-    : "";
-  const [dueDateStart, setDueDateStart] = useState(dueStartDate);
-  const [dueDateEnd, setDueDateEnd] = useState(dueEndDate);
-  const [processedStart, setProcessedStart] = useState("");
-  const [processedEnd, setProcessedEnd] = useState("");
-  const [statusSelectedStatus, setStatusSelectedStatus] = useState(
-    navigate.query?.statusSelectedStatus
-      ? navigate.query?.statusSelectedStatus
-      : null
-  );
-  const [searchTextValue, setSearchTextValue] = useState(
-    navigate.query?.searchTextValue
-  );
-
-  const dayDateFormated = navigate?.query?.dueDateStart
-    ? dayjs(navigate?.query?.dueDateStart).format("MM-DD-YYYY")
-    : dayjs(navigate?.query?.dueDateStart).format("MM-DD-YYYY");
-  const [defaultStartDate, setDefaultStartDate] = useState(
-    dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
-  );
-  const [defaultEndDate, setDefaultEndDate] = useState(
-    dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z"
-  );
+  // const dayDateFormated = "";
+  // // query?.dueDateStart
+  // //   ? dayjs(query?.dueDateStart).format("MM-DD-YYYY")
+  // //   : dayjs(query?.dueDateStart).format("MM-DD-YYYY");
+  // const [defaultStartDate, setDefaultStartDate] = useState(
+  //   dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
+  // );
+  // const [defaultEndDate, setDefaultEndDate] = useState(
+  //   dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z"
+  // );
   const [sort, setSort] = useState({
-    sortDir: navigate?.query?.sortDir ? navigate?.query?.sortDir : "",
-    sortField: navigate?.query?.sortField ? navigate?.query?.sortField : "",
+    sortDir: "",
+    sortField: "",
   });
-  const [sortDueOrder, setSortDueOrder] = useState(
-    navigate?.query?.sortDueOrder ? navigate?.query?.sortDueOrder : "DESC"
-  );
-  const [sortCompleteOrder, setSortCompleteOrder] = useState(
-    navigate?.query?.sortCompleteOrder
-      ? navigate?.query?.sortCompleteOrder
-      : "DESC"
-  );
-  const [sortAllocateOrder, setSortAllocateOrder] = useState(
-    navigate?.query?.sortAllocateOrder
-      ? navigate?.query?.sortAllocateOrder
-      : "DESC"
-  );
-
-  const [selectedDates, setSelectedDates] = useState([
-    navigate?.query?.dueDateStart
-      ? dayjs(navigate?.query?.dueDateStart)
-      : undefined,
-    navigate?.query?.dueDateEnd
-      ? dayjs(navigate?.query?.dueDateEnd)
-      : undefined,
-  ]);
-  const [selectedDates2, setSelectedDates2] = useState([
-    navigate?.query?.processedStart
-      ? dayjs(navigate?.query?.processedStart)
-      : undefined,
-    navigate?.query?.processedEnd
-      ? dayjs(navigate?.query?.processedEnd)
-      : undefined,
-  ]);
-  useEffect(() => {
-    setDefaultStartDate(
-      dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
-    );
-    setDefaultEndDate(
-      dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z"
-    );
-  }, [dayDateFormated]);
-  useEffect(() =>{
-    if (navigate.query?.filter?.length) {
-      const array = activeFilters?.[0].split(',');
-      setActiveFilters(array)
-  } else {
-      console.error('activeFilters is not a string:', activeFilters);
-  }
-  },[navigate.query])
-  useEffect(() => {
-    if (window !== "undefined") {
-      if (navigate.query) {
-        setIsLoading(true);
-        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
-        setPaginationFirst(
-          navigate?.query?.paginationFirst
-            ? navigate?.query?.paginationFirst
-            : 0
-        );
-
-      }
-    }
-  }, [navigate]);
-
+  const [sortDueOrder, setSortDueOrder] = useState("DESC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
+  const [sortAllocateOrder, setSortAllocateOrder] = useState("DESC");
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [selectedDates2, setSelectedDates2] = useState([]);
+  // useEffect(() => {
+  //   setDefaultStartDate(
+  //     dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
+  //   );
+  //   setDefaultEndDate(
+  //     dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z"
+  //   );
+  // }, [dayDateFormated]);
   useEffect(() => {
     const uId = sessionStorage.getItem("userId");
     setLocalUserId(uId);
     if (window !== "undefined") {
-      getFilteApi(
-        {pageNo,
+      getFilteApi({
+        pageNo,
         pageSize,
-        statusValue:clear ? "" : statusSelectedStatus,
-        dStart:clear ? "" : dueDateStart,
-        dEnd:clear ? "" : dueDateEnd,
-        pStart:clear ? "" : processedStart,
-        pEnd:clear ? "" : processedEnd,
+        statusValue: clear ? "" : statusSelectedStatus,
+        dStart: clear ? "" : dueDateStart,
+        dEnd: clear ? "" : dueDateEnd,
+        pStart: clear ? "" : processedStart,
+        pEnd: clear ? "" : processedEnd,
         sort,
-        selectedPriority:clear ? "" : selectedPriority,
-        searchTextValue:clear ? "" : searchTextValue}
-      );
+        selectedPriority: clear ? "" : selectedPriority,
+        searchTextValue: clear ? "" : searchTextValue,
+      });
     }
   }, [
     pageNo,
@@ -239,21 +176,21 @@ const Patient = ({
     processedEnd,
     statusSelectedStatus,
     navigate.query,
-    clear
+    clear,
   ]);
 
-  const getFilteApi = async (
- {   pageNo,
-  pageSize,
-  statusValue,
-  dStart,
-  dEnd,
-  pStart,
-  pEnd,
-  sort,
-  selectedPriority,
-  searchTextValue}
-  ) => {
+  const getFilteApi = async ({
+    pageNo,
+    pageSize,
+    statusValue,
+    dStart,
+    dEnd,
+    pStart,
+    pEnd,
+    sort,
+    selectedPriority,
+    searchTextValue,
+  }) => {
     const uId = getStorage("userId");
     const resoureUrl = `patientAllocated=${uId}&page=${
       pageNo ? pageNo : 0
@@ -340,12 +277,13 @@ const Patient = ({
     setSelectedPriority(value);
   };
 
-  const handleDatePickerChange = (dateString) => {
+  const handleDatePickerChange = (dates, dateString) => {
+    setSelectedDates(dates);
     if (dateString[0] != "") {
       let convertStartDate =
         moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
       let convertEndDate =
-        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
+        moment(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
       setDueDateStart(convertStartDate);
       setDueDateEnd(convertEndDate);
     } else {
@@ -354,7 +292,8 @@ const Patient = ({
     }
   };
 
-  const handleDatePickerChangeProcesseDate = (dateString) => {
+  const handleDatePickerChangeProcesseDate = (dates, dateString) => {
+    setSelectedDates2(dates);
     if (dateString[0] !== "") {
       let convertStartDate =
         moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
@@ -375,7 +314,7 @@ const Patient = ({
       case "COMPLETED":
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
-            <div className="patient-status text-center" >
+            <div className="patient-status text-center">
               <Image src={Completed} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
@@ -399,7 +338,7 @@ const Patient = ({
               declinedDataFromDeclined ? declinedDataFromDeclined : "---"
             }`}
           >
-            <div className="patient-status text-center" >
+            <div className="patient-status text-center">
               <Image src={Declined} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
@@ -407,7 +346,7 @@ const Patient = ({
       case "NOTCOMPUTED":
         return (
           <Popover placement="bottom" title="Status: NOT COMPUTED">
-            <div className="patient-status text-center" >
+            <div className="patient-status text-center">
               <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
@@ -415,7 +354,7 @@ const Patient = ({
       case "COMPUTED":
         return (
           <Popover placement="bottom" title="Status: COMPUTED">
-            <div className="patient-status text-center" >
+            <div className="patient-status text-center">
               <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
@@ -423,7 +362,7 @@ const Patient = ({
       case "HOLD":
         return (
           <Popover placement="bottom" title="Status: HOLD">
-            <div className="patient-status text-center" >
+            <div className="patient-status text-center">
               <Image src={Hold} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
@@ -439,163 +378,203 @@ const Patient = ({
       case null:
         return (
           <Popover placement="bottom" title="">
-            <div className="patient-status text-center" >
+            <div className="patient-status text-center">
               <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Popover>
         );
     }
   };
- 
 
   const options = [...priorityOptions];
   useEffect(() => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const encodedParams = urlParams.get("params");
-    if (encodedParams) {
-      const decodedParams = JSON.parse(atob(encodedParams));
+    const decodedParams = JSON.parse(getStorage("reviewerEncodedValue"));
+    const sessionActiveFilters = JSON.parse(getStorage("reviewerFilter"));
+    if (decodedParams) {
       setStatusSelectedStatus(
         decodedParams?.statusSelectedStatus?.toUpperCase()
       );
       setSelectedDates([
-        dayjs(decodedParams?.dueDateStart),
-        dayjs(decodedParams?.dueDateEnd),
+        decodedParams?.dueDateStart ? dayjs(decodedParams?.dueDateStart) : null,
+        decodedParams?.dueDateEnd ? dayjs(decodedParams?.dueDateEnd) : null,
       ]);
-      setDueDateStart(decodedParams?.dueDateStart);
-      setDueDateEnd(decodedParams?.dueDateEnd);
+      setSelectedDates2([
+        decodedParams?.processedStart
+          ? dayjs(decodedParams?.processedStart)
+          : null,
+        decodedParams?.processedEnd ? dayjs(decodedParams?.processedEnd) : null,
+      ]);
+      setSearchTextValue(decodedParams?.searchTextValue);
+      setSelectedPriority(decodedParams?.selectedPriority);
+      setPageNo(decodedParams?.pageNo || 0);
+      setPaginationFirst(decodedParams?.paginationFirst || 0);
+      setDueDateStart(
+        decodedParams?.dueDateStart
+          ? moment(decodedParams?.dueDateStart)?.format("YYYY-MM-DD") +
+              "T00:00:00.000Z"
+          : null
+      );
+      setDueDateEnd(
+        decodedParams?.dueDateEnd
+          ? moment(decodedParams?.dueDateEnd)?.format("YYYY-MM-DD") +
+              "T23:59:59.000Z"
+          : null
+      );
+      setProcessedStart(
+        decodedParams?.processedStart
+          ? moment(decodedParams?.processedStart)?.format("YYYY-MM-DD") +
+              "T00:00:00.000Z"
+          : null
+      );
+      setProcessedEnd(
+        decodedParams?.processedEnd
+          ? moment(decodedParams?.processedEnd)?.format("YYYY-MM-DD") +
+              "T23:59:59.000Z"
+          : null
+      );
+      setStatusSelectedStatus(
+        decodedParams?.statusSelectedStatus?.toUpperCase()
+      );
+      setSort(decodedParams?.sort);
+      setSortDueOrder(decodedParams?.sortDueOrder);
+      setSortCompleteOrder(decodedParams?.sortCompleteOrder);
+      setSortAllocateOrder(decodedParams?.sortAllocateOrder);
     }
-  }, [navigate.query]);
+    if (sessionActiveFilters) {
+      setActiveFilters(sessionActiveFilters);
+    }
+  }, []);
+
   return (
-    <>
-      <div className={`show `}>
-        <Header />
-        <div class="content-body">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-xl-12">
-                <div className="">
-                  <div className="card-body p-0">
-                    <div className="table-responsive active-projects task-table">
-                      <div className="row">
-                        <div className="col-10">
-                          <HeaderFiltersPatients
+    <div className={`show `}>
+      <Header />
+      <div class="content-body">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-xl-12">
+              <div className="">
+                <div className="card-body p-0">
+                  <div className="table-responsive active-projects task-table">
+                    <div className="row">
+                      <div className="col-10">
+                        <HeaderFiltersPatients
                           activeFilters={activeFilters}
                           setActiveFilters={setActiveFilters}
-                            isAllocatedToSelector={true}
-                            value={searchVal}
-                            onChange={(e) => getNameSearch(e)}
-                            orgAllList={statusOptions}
-                            onChangeStatus={(selectedOption) => {
-                              onChangeStatus(selectedOption);
-                              resetPageNumber(setPageNo);
-                              setClear(false);
-                            }}
-                            statusSelectedStatus={statusSelectedStatus}
-                            statusSelectedStatus1={selectedPriority}
-                            onChangeStatus1={(selectedOption) => {
-                              onChangePriority(selectedOption);
-                              resetPageNumber(setPageNo);
-                              setClear(false);
-                            }}
-                            orgAllList1={options}
-                            selectedDates={selectedDates}
-                            setSelectedDates={setSelectedDates}
-                            onchangeRangePicker={(dates, dateStrings) => {
-                              handleDatePickerChange(dateStrings);
-                              resetPageNumber(setPageNo);
-                              setClear(false);
-                            }}
-                            selectedDates2={selectedDates2}
-                            setSelectedDates2={setSelectedDates2}
-                            onchangeRangePicker2={(dates, dateStrings) => {
-                              handleDatePickerChangeProcesseDate(dateStrings);
-                              resetPageNumber(setPageNo);
-                              setClear(false);
-                            }}
-                            setClear={setClear}
-                            clear={clear}
-                          />
-                        </div>
-                        <div className="col-2">
-                          <div className="row">
-                            {/* <div className="col-2">
+                          isAllocatedToSelector={true}
+                          value={searchVal}
+                          onChange={(e) => getNameSearch(e)}
+                          orgAllList={statusOptions}
+                          onChangeStatus={(selectedOption) => {
+                            onChangeStatus(selectedOption);
+                            resetPageNumber(setPageNo);
+                            setClear(false);
+                          }}
+                          statusSelectedStatus={statusSelectedStatus}
+                          statusSelectedStatus1={selectedPriority}
+                          onChangeStatus1={(selectedOption) => {
+                            onChangePriority(selectedOption);
+                            resetPageNumber(setPageNo);
+                            setClear(false);
+                          }}
+                          orgAllList1={options}
+                          selectedDates={selectedDates}
+                          setSelectedDates={setSelectedDates}
+                          onchangeRangePicker={(dates, dateStrings) => {
+                            handleDatePickerChange(dates, dateStrings);
+                            resetPageNumber(setPageNo);
+                            setClear(false);
+                          }}
+                          selectedDates2={selectedDates2}
+                          setSelectedDates2={setSelectedDates2}
+                          onchangeRangePicker2={(dates, dateStrings) => {
+                            handleDatePickerChangeProcesseDate(
+                              dates,
+                              dateStrings
+                            );
+                            resetPageNumber(setPageNo);
+                            setClear(false);
+                          }}
+                          setClear={setClear}
+                          clear={clear}
+                        />
+                      </div>
+                      <div className="col-2">
+                        <div className="row">
+                          {/* <div className="col-2">
                               {" "}
                              <div style={{marginTop:"62px"}}>
                              <HeaderFilters bullets={bullets} />
                              </div>
                             </div> */}
-                            <div className=" mt-1 mb-1">
-                              {" "}
-                              <DailyTask trackChart={trackChart} />
-                            </div>
+                          <div className=" mt-1 mb-1">
+                            {" "}
+                            <DailyTask trackChart={trackChart} />
                           </div>
                         </div>
                       </div>
+                    </div>
 
-
-                      <div
-                        id="task-tbl_wrapper"
-                        className="dataTables_wrapper no-footer"
-                      >
-                        {loading ? (
-                          renderSkeleton()
-                        ) : (
-                          <>
-                            <PatientTable
-                             activeFilters={activeFilters}
-                             setActiveFilters={setActiveFilters}
-                              patinetListAll={patinetListAll}
-                              actionBodyTemplate={actionBodyTemplate}
-                              statusBodyTemplate={processstatusBodyTemplate}
-                              gotoPatientDetails={gotoPatientDetails}
-                              patientDetails={patientDetails}
-                              setSelectedPriority={setSelectedPriority}
-                              sort={sort}
-                              setSort={setSort}
-                              getFilteApi={getFilteApi}
-                              page={{ pageNo, paginationFirst }}
-                              sortDueOrder={sortDueOrder}
-                              setSortDueOrder={setSortDueOrder}
-                              sortCompleteOrder={sortCompleteOrder}
-                              setSortCompleteOrder={setSortCompleteOrder}
-                              sortAllocateOrder={sortAllocateOrder}
-                              setSortAllocateOrder={setSortAllocateOrder}
-                              userId={localUserId}
-                              params={{
-                                statusSelectedStatus,
-                                dueDateStart,
-                                dueDateEnd,
-                                processedStart,
-                                processedEnd,
-                                sort,
-                                selectedPriority,
-                                searchTextValue,
-                                pageNo,
-                                paginationFirst,
-                                sortDueOrder,
-                                sortCompleteOrder,
-                                sortAllocateOrder,
-                                sortDir: sort?.sortDir,
-                                sortField: sort?.sortField,
-                              }}
-                            />
-                            <div>
-                              <div className="pagination-container">
-                                <Paginator
-                                  first={pageNo === 0 ? 0 : paginationFirst}
-                                  rows={15}
-                                  totalRecords={totalElements}
-                                  onPageChange={onPageChange}
-                                />
-                                <div className="total-pages">
-                                  Total count: {totalElements}
-                                </div>
+                    <div
+                      id="task-tbl_wrapper"
+                      className="dataTables_wrapper no-footer"
+                    >
+                      {loading ? (
+                        renderSkeleton()
+                      ) : (
+                        <>
+                          <PatientTable
+                            activeFilters={activeFilters}
+                            setActiveFilters={setActiveFilters}
+                            patinetListAll={patinetListAll}
+                            actionBodyTemplate={actionBodyTemplate}
+                            statusBodyTemplate={processstatusBodyTemplate}
+                            gotoPatientDetails={gotoPatientDetails}
+                            patientDetails={patientDetails}
+                            setSelectedPriority={setSelectedPriority}
+                            sort={sort}
+                            setSort={setSort}
+                            getFilteApi={getFilteApi}
+                            page={{ pageNo, paginationFirst }}
+                            sortDueOrder={sortDueOrder}
+                            setSortDueOrder={setSortDueOrder}
+                            sortCompleteOrder={sortCompleteOrder}
+                            setSortCompleteOrder={setSortCompleteOrder}
+                            sortAllocateOrder={sortAllocateOrder}
+                            setSortAllocateOrder={setSortAllocateOrder}
+                            userId={localUserId}
+                            params={{
+                              statusSelectedStatus,
+                              dueDateStart,
+                              dueDateEnd,
+                              processedStart,
+                              processedEnd,
+                              sort,
+                              selectedPriority,
+                              searchTextValue,
+                              pageNo,
+                              paginationFirst,
+                              sortDueOrder,
+                              sortCompleteOrder,
+                              sortAllocateOrder,
+                              sortDir: sort?.sortDir,
+                              sortField: sort?.sortField,
+                            }}
+                          />
+                          <div>
+                            <div className="pagination-container">
+                              <Paginator
+                                first={pageNo === 0 ? 0 : paginationFirst}
+                                rows={15}
+                                totalRecords={totalElements}
+                                onPageChange={onPageChange}
+                              />
+                              <div className="total-pages">
+                                Total count: {totalElements}
                               </div>
                             </div>
-                          </>
-                        )}
-                      </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -604,7 +583,7 @@ const Patient = ({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 const enhancer = connect(

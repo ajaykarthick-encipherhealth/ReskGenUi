@@ -13,6 +13,7 @@ import {
 import { truncateString } from "../../patientDetails/details/components/function/ReusableFunctions";
 import { actions as supervisorActions } from "../../../stores/supervisor/auditedQueue";
 import { connect } from "react-redux";
+import { setStorage } from "../../../utils/storages";
 
 function PatientTable({
   patinetListAll,
@@ -32,7 +33,7 @@ function PatientTable({
   params,
   gotoPatientDetails,
   supervisorActions,
-  activeFilters
+  activeFilters,
 }) {
   const router = useRouter();
   const handlePriorityChange = async (
@@ -46,7 +47,7 @@ function PatientTable({
       priority: selectedValue,
     });
     if (res.status === "SUCCESS") {
-      getFilteApi({pageNo:page.pageNo});
+      getFilteApi({ pageNo: page.pageNo });
     }
   };
 
@@ -54,19 +55,17 @@ function PatientTable({
     // /reviewer/patients/details
     const targetTd = e.target.closest("td");
     if (targetTd) {
+      setStorage("reviewerFilter", JSON.stringify(activeFilters));
+      setStorage("reviewerEncodedValue", JSON.stringify(params));
       router?.push(
-        {
-          pathname: "/reviewer/patients/details",
-          query: { ...params, filter:activeFilters },
-        },
         "/reviewer/patients/details"
+        // query: { ...params, filter:activeFilters },
       );
       const dataIndex = targetTd.parentElement.rowIndex - 1;
       const clickedData = patinetListAll[dataIndex];
       gotoPatientDetails(clickedData);
     }
   };
-  console.log(router,"router")
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
       <Empty />
