@@ -47,9 +47,9 @@ function AddPatientListTable({
       var role = getStorage("role");
       if (role == "tenant_admin") {
         const encodedValue = btoa(JSON.stringify(page));
+        setStorage("TenantAdminPatientsEncodedValue",encodedValue)
         navigate.push({
-          pathname: "/tenantAdmin/patients/details",
-          search: `params=${encodedValue}`,
+          pathname: "/tenantAdmin/patients/details"
         });
       } else {
         const encodedValue = btoa(JSON.stringify(page))
@@ -58,11 +58,12 @@ function AddPatientListTable({
           .replace(/=+$/, ""); // Remove padding '='
 
         // const encodedValue = btoa(JSON.stringify(page));
+        setStorage("AdminPatientsEncodedValue",encodedValue)
         navigate.push({
-          pathname: "/admin/patients/details",
-          query: {
-            params: encodedValue,
-          },
+          pathname: "/admin/patients/details"
+          // query: {
+          //   params: encodedValue,
+          // },
         });
       }
       // setStorage('paginations', JSON.stringify(page))

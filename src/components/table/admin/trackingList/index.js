@@ -39,14 +39,18 @@ function TrackingTable({
       setStorage("patientId", data?.patientId);
       var role = getStorage("role");
       if (role == "tenant_admin") {
+        setStorage("isTenantAdminTracking", true);
+        setStorage("tenantAdminTrackingEncodedValue", JSON.stringify(page));
         navigate.push({
           pathname: "/tenantAdmin/patients/details",
-          query: { ...page, isTenantAdminTracking: true },
+          // query: { ...page, isTenantAdminTracking: true },
         });
       } else {
+        setStorage("isAdminTracking", true);
+        setStorage("adminTrackingEncodedValue", JSON.stringify(page));
         navigate.push({
           pathname: "/admin/patients/details",
-          query: { ...page, isAdminTracking: true },
+          // query: { ...page, isAdminTracking: true },
         });
       }
     } else {

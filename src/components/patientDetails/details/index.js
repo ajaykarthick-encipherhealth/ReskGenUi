@@ -491,7 +491,7 @@ const Details = ({
     } else {
       setIsSideNavShow(true);
     }
-  }
+  };
 
   const backToPatientData = () => {
     getPatientID(null);
@@ -499,10 +499,13 @@ const Details = ({
     getSelectedDos("");
     getCurrentDiseaseType(true);
     const user = getStorage("userRole");
+    const isAdminTracking=getStorage("isAdminTracking")
+      const isTenantAdminTracking=getStorage("isTenantAdminTracking")
     if (user && user.toLowerCase() === "admin") {
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(queryWithoutUser).toString();
-      if (navigate.query.isAdminTracking) {
+
+      if (isAdminTracking) {
         const url = queryString
           ? `/admin/tracking?${queryString}`
           : "/admin/tracking";
@@ -523,7 +526,7 @@ const Details = ({
             : "/tenantAdmin/patientSync";
           navigate.push(url);
           getActiveTab("PDF");
-        } else if (navigate.query.isTenantAdminTracking) {
+        } else if (isTenantAdminTracking) {
           const url = queryString
             ? `/tenantAdmin/tracking?${queryString}`
             : "/tenantAdmin/tracking";
@@ -546,8 +549,7 @@ const Details = ({
           },
           `/supervisor/auditing`
         );
-      } 
-      else if (navigate.query.isSupervisorUser === "true") {
+      } else if (navigate.query.isSupervisorUser === "true") {
         navigate.push(
           {
             pathname: `/supervisor/user/userQueue`,
@@ -555,7 +557,6 @@ const Details = ({
           },
           `/supervisor/user/userQueue?userId=${queryWithoutUser?.userName}`
         );
-        
       } else {
         navigate.back();
       }
@@ -729,9 +730,11 @@ const Details = ({
                                       cursor: "pointer",
                                     }}
                                   >
-                                    {patientDocumentResult.patientId?getMastData(
-                                      patientDocumentResult.patientId
-                                    ):"--"}
+                                    {patientDocumentResult.patientId
+                                      ? getMastData(
+                                          patientDocumentResult.patientId
+                                        )
+                                      : "--"}
                                   </h6>
                                 </div>
                                 <div className="">
@@ -741,10 +744,14 @@ const Details = ({
 
                                   <h6 className="ageDtails">
                                     {patientIdDetailsData?.data?.response
-                                        ?.patientName?getMastData(
-                                      patientIdDetailsData?.data?.response
-                                        ?.patientName
-                                    ):<div className="px-4">--</div>}
+                                      ?.patientName ? (
+                                      getMastData(
+                                        patientIdDetailsData?.data?.response
+                                          ?.patientName
+                                      )
+                                    ) : (
+                                      <div className="px-4">--</div>
+                                    )}
                                   </h6>
                                 </div>
                                 <div className="">
@@ -762,18 +769,22 @@ const Details = ({
                                       }
                                     >
                                       {patientDocumentResult?.fileDetailDTO
-                                            ?.fileName?<Tooltip
-                                        title={
-                                          patientDocumentResult?.fileDetailDTO
-                                            ?.fileName
-                                        }
-                                      >
-                                        {truncateString(
-                                          patientDocumentResult?.fileDetailDTO
-                                            ?.fileName,
-                                          7
-                                        )}
-                                      </Tooltip>:<div className="px-4">--</div>}
+                                        ?.fileName ? (
+                                        <Tooltip
+                                          title={
+                                            patientDocumentResult?.fileDetailDTO
+                                              ?.fileName
+                                          }
+                                        >
+                                          {truncateString(
+                                            patientDocumentResult?.fileDetailDTO
+                                              ?.fileName,
+                                            7
+                                          )}
+                                        </Tooltip>
+                                      ) : (
+                                        <div className="px-4">--</div>
+                                      )}
                                     </h6>
                                   </div>
                                 </div>
@@ -784,9 +795,12 @@ const Details = ({
                                     className="ageDtails"
                                     style={{ paddingLeft: "20px" }}
                                   >
-                                    { patientIdDetailsData?.data?.response?.dob?getAge(
-                                      patientIdDetailsData?.data?.response?.dob
-                                    ):"--"}
+                                    {patientIdDetailsData?.data?.response?.dob
+                                      ? getAge(
+                                          patientIdDetailsData?.data?.response
+                                            ?.dob
+                                        )
+                                      : "--"}
                                   </h6>
                                 </div>
                                 <div className="">
@@ -797,10 +811,8 @@ const Details = ({
                                       className="ageDtails"
                                       style={{ paddingLeft: "25px" }}
                                     >
-                                      {
-                                        patientIdDetailsData?.data?.response
-                                          ?.gender||"--"
-                                      }
+                                      {patientIdDetailsData?.data?.response
+                                        ?.gender || "--"}
                                     </h6>
                                   </div>
                                 </div>
@@ -810,7 +822,8 @@ const Details = ({
                                   </i>
                                   <label>DOB</label>
                                   <h6 className="ageDtails">
-                                    {patientIdDetailsData?.data?.response?.dob||<div className="px-4">--</div>}
+                                    {patientIdDetailsData?.data?.response
+                                      ?.dob || <div className="px-4">--</div>}
                                   </h6>
                                 </div>
                                 <div className="">
@@ -992,7 +1005,7 @@ const Details = ({
                                       <label>CMS</label>
 
                                       <h6 className="ageDtails">
-                                        {hccCounts.isCmsHcc||0}
+                                        {hccCounts.isCmsHcc || 0}
                                       </h6>
                                     </div>
                                     {localUserId !=
@@ -1004,7 +1017,7 @@ const Details = ({
                                           <label>RX</label>
 
                                           <h6 className="ageDtails">
-                                            {hccCounts.isRxHcc||0}
+                                            {hccCounts.isRxHcc || 0}
                                           </h6>
                                         </div>
                                         <div
@@ -1013,7 +1026,7 @@ const Details = ({
                                           <label>TOTAL</label>
 
                                           <h6 className="ageDtails">
-                                            {hccValidCount||0}
+                                            {hccValidCount || 0}
                                           </h6>
                                         </div>
                                       </>

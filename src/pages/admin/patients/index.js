@@ -14,7 +14,6 @@ import AddPatientListTable from "../../../components/table/admin/AddPatients/add
 import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
 import { LoadingOutlined } from "@ant-design/icons";
-import HeaderFilters from "../../../components/headerFilters";
 import {
   generateOptionsForNewStore,
   validateYear,
@@ -25,6 +24,7 @@ import { getStorage, setStorage } from "../../../utils/storages";
 import { actions as allocationAction } from "../../../stores/admin/patientAllocation";
 import { getResponePopup } from "../../../utils/reusable";
 import { enc } from "crypto-js/core";
+import HeaderFilters from "./filters";
 const bullets = [
   {
     color: "#34ace8",
@@ -492,52 +492,47 @@ const Patient = ({
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const query = navigate?.query;
-      const encodedString = query?.params;
-      if (encodedString && typeof encodedString === "string") {
-        try {
-          setParamsFilter("check");
-          const decodedParams = JSON.parse(
-            atob(encodedString?.replace(/-/g, "+").replace(/_/g, "/"))
-          );
-          setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
-          setPaginationFirst(
-            decodedParams?.paginationFirst ? decodedParams?.paginationFirst : 0
-          );
-          setCompletedStartDate(decodedParams?.completedStartDate);
-          setCompletedEndDate(decodedParams?.completedEndDate || "");
-          SetSelectedOption(decodedParams?.selectedOption || "");
-          setSearch(decodedParams?.search || null);
-          setSearchVal(decodedParams?.search || null);
-          setComputedStartDate(decodedParams?.computedStartDate || "");
-          setComputedEndDate(decodedParams?.computedEndDate || "");
-          setSelAllocatedBy(decodedParams?.selAllocatedBy || "");
-          setSelAllocatedTo(decodedParams?.setSelAllocatedTo || "");
-          setSelCreatedBy(decodedParams?.createdBy || "");
-          setSelectedDate2s(
-            decodedParams?.completedStartDate && [
-              dayjs(decodedParams?.completedStartDate),
-              dayjs(decodedParams?.completedEndDate),
-            ]
-          );
-          setSelectedDates(
-            (decodedParams?.computedStartDate && [
-              dayjs(decodedParams?.computedStartDate),
-              dayjs(decodedParams?.computedEndDate),
-            ]) ||
-              []
-          );
-        } catch (error) {
-          console.error("Error decoding or parsing query:", error);
-        }
-      } else {
-        console.error(
-          "Encoded value not found or not a string:",
-          encodedString
+    const encodedString = getStorage("AdminPatientsEncodedValue");
+    if (encodedString && typeof encodedString === "string") {
+      try {
+        setParamsFilter("check");
+        const decodedParams = JSON.parse(
+          atob(encodedString?.replace(/-/g, "+").replace(/_/g, "/"))
         );
+        setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
+        setPaginationFirst(
+          decodedParams?.paginationFirst ? decodedParams?.paginationFirst : 0
+        );
+        setCompletedStartDate(decodedParams?.completedStartDate);
+        setCompletedEndDate(decodedParams?.completedEndDate || "");
+        SetSelectedOption(decodedParams?.selectedOption || "");
+        setSearch(decodedParams?.search || null);
+        setSearchVal(decodedParams?.search || null);
+        setComputedStartDate(decodedParams?.computedStartDate || "");
+        setComputedEndDate(decodedParams?.computedEndDate || "");
+        setSelAllocatedBy(decodedParams?.selAllocatedBy || "");
+        setSelAllocatedTo(decodedParams?.setSelAllocatedTo || "");
+        setSelCreatedBy(decodedParams?.createdBy || "");
+        setSelectedDate2s(
+          decodedParams?.completedStartDate && [
+            dayjs(decodedParams?.completedStartDate),
+            dayjs(decodedParams?.completedEndDate),
+          ]
+        );
+        setSelectedDates(
+          (decodedParams?.computedStartDate && [
+            dayjs(decodedParams?.computedStartDate),
+            dayjs(decodedParams?.computedEndDate),
+          ]) ||
+            []
+        );
+      } catch (error) {
+        console.error("Error decoding or parsing query:", error);
       }
+    } else {
+      console.error("Encoded value not found or not a string:", encodedString);
     }
+    // }
   }, []);
 
   useEffect(() => {
@@ -558,7 +553,7 @@ const Patient = ({
         completedStartDate,
         completedEndDate,
         selAllocatedTo,
-        selAllocatedBy,
+        selAllocatedBy||"",
         selCreatedBy,
         sort
       );
@@ -582,6 +577,7 @@ const Patient = ({
   useEffect(() => {
     getFilters({ field: "createdBy" });
   }, []);
+
   return (
     <>
       <div className={`show `}>
@@ -614,6 +610,7 @@ const Patient = ({
                                 (item) => item?.value === selectedOption
                               )?.label
                             }
+                            selectedOption={selectedOption}
                             // computation date
                             pickerlabel="Computed Date"
                             defaultStartDate={""}

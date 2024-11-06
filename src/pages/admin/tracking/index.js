@@ -29,7 +29,7 @@ import { actions as allActions } from "../../../stores/admin/workqueue";
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
-import { setStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 import { actions as allocationActions } from "../../../stores/admin/patientAllocation";
 import { actions as workFlowActions } from "../../../stores/admin/workqueue";
 const bullets = [
@@ -111,7 +111,7 @@ const Patient = ({
   patientDetails,
 }) => {
   const navigate = useRouter();
-  
+
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
@@ -153,25 +153,30 @@ const Patient = ({
   const [selectedDates3, setSelectedDates3] = useState();
   const [selectedDates4, setSelectedDates4] = useState();
   const [selectedDates5, setSelectedDates5] = useState();
-
   // new changes
-
   const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState(null);
 
   useEffect(() => {
-    if (window !== "undefined") {
-      setIsLoading(true);
-      if (navigate) {
-        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
-        setPaginationFirst(
-          navigate?.query?.paginationFirst
-            ? navigate?.query?.paginationFirst
-            : 0
-        );
-      }
+    // if (window !== "undefined") {
+    //   setIsLoading(true);
+    //   if (navigate) {
+    // setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
+    // setPaginationFirst(
+    //   navigate?.query?.paginationFirst
+    //     ? navigate?.query?.paginationFirst
+    //     : 0
+    // );
+    //   }
+    // }
+    // setIsLoading(false);
+    const encodedVal = JSON.parse(getStorage("adminTrackingEncodedValue"));
+    setIsLoading(true);
+    if (encodedVal) {
+      setPageNo(encodedVal?.pageNo || 0);
+      setPaginationFirst(encodedVal?.paginationFirst || 0);
+      setIsLoading(false);
     }
-    setIsLoading(false);
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
     const data = {
@@ -179,7 +184,7 @@ const Patient = ({
       dueDateStart: clear ? "" : dueDateStart,
       dueDateEnd: clear ? "" : dueDateEnd,
       searchTextValue: clear ? "" : searchTextValue,
-      selectedOption: clear ? "" : selectedOption ? selectedOption?.value : "",
+      selectedOption: clear ? "" : selectedOption ? selectedOption : "",
       processedStart: clear ? "" : processedStart,
       processedEnd: clear ? "" : processedEnd,
       selAllocatedTo: clear ? "" : selAllocatedTo ? selAllocatedTo : "",

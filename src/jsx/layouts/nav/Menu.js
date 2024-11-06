@@ -122,7 +122,7 @@ export const AdminMenuList = [
     iconStyle: <EnvironmentOutlined />,
     activeIcon: <EnvironmentFilled />,
     to: "/admin/tracking",
-    childRoute3: "/admin/patients/details",
+    childRoute: "/admin/patients/details",
   },
   {
     title: "Report",
