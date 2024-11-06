@@ -64,6 +64,7 @@ import {
 } from "../../../stores/patient/details/network";
 import { actions as allReportActions } from "../../../stores/admin/report";
 import { connect } from "react-redux";
+import HeaderComponent from "./components/headerComponent";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -684,10 +685,13 @@ const Details = ({
             ) : ( */}
               <div className={`${visitStyles.container_fluid_patient}`}>
                 <div className="row patient-file-container">
-                  <div className="row">
+                  <div className="row p-0">
                     {activeTab == "2" || activeTab == "1" ? (
                       <div className="d-flex">
-                        <div style={{ zIndex: "1" }}>
+                        <div
+                          className="col-xl-1 col-sm-2"
+                          style={{ zIndex: "1", marginTop: "20px" }}
+                        >
                           <Button
                             onClick={backToPatientData}
                             className={`ms-2 ${visitStyles.backArrowBtn}`}
@@ -700,7 +704,38 @@ const Details = ({
                             />
                           </Button>
                         </div>
-                        <div className="w-100">
+                        <div className="col-xl-11">
+                          <HeaderComponent
+                            patienIdDetails={
+                              patientIdDetailsData?.data?.response
+                            }
+                            patientDetails={patientDetails}
+                            fileResult={patientDocumentResult}
+                            hccCounts={hccCounts}
+                            hccValidCount={hccValidCount}
+                            flagsDetailsResult={flagsDetailsResult}
+                            dosOnChange={dosOnChange}
+                            setSelectDosValue={setSelectDosValue}
+                            getSelectedDos={getSelectedDos}
+                            dosYearDefalutSelect={dosYearDefalutSelect}
+                            isLoadingDos={isLoadingDos}
+                            dosYear={dosYear}
+                          />
+                        </div>
+                        {/* <div style={{ zIndex: "1" }}>
+                          <Button
+                            onClick={backToPatientData}
+                            className={`ms-2 ${visitStyles.backArrowBtn}`}
+                          >
+                            <FontAwesomeIcon
+                              icon={faArrowLeft}
+                              style={{
+                                color: "rgb(38 50 107)",
+                              }}
+                            />
+                          </Button>
+                        </div> */}
+                        {/* <div className="w-100">
                           <div
                             className={`${visitStyles.patient_info_details}`}
                           >
@@ -1071,7 +1106,8 @@ const Details = ({
                               </div>
                             </div>
                           </div>
-                        </div>
+                          
+                        </div> */}
                       </div>
                     ) : (
                       <>

@@ -13178,7 +13178,7 @@ tbody > tr {
   border: none !important;
   box-shadow: none !important;
   border-radius: 10px;
-  width: 140px !important;
+  width: 100% !important;
 }
 
 .completedBtnHcc
@@ -13229,7 +13229,7 @@ tbody > tr {
   border: none !important;
   box-shadow: none !important;
   border-radius: 10px;
-  width: 140px !important;
+  width: 100% !important;
 }
 
 .declinedBtnHcc
@@ -13255,7 +13255,7 @@ tbody > tr {
   border: none !important;
   box-shadow: none !important;
   border-radius: 10px;
-  width: 140px !important;
+  width: 100% !important;
 }
 
 .holdBtnHcc
@@ -14008,7 +14008,7 @@ overflow: scroll;
   background: #d4eaed !important;
   border: none !important;
   box-shadow: none !important;
-  width: 180px !important;
+  width: 100% !important;
   padding: 10px !important;
 }
 
@@ -14017,7 +14017,7 @@ overflow: scroll;
   background: #d4eaed !important;
   border: none !important;
   box-shadow: none !important;
-  width: 140px !important;
+  width: 100% !important;
 }
 
 .auditBtnHcc
@@ -14048,7 +14048,7 @@ overflow: scroll;
   background: #ffdede !important;
   border: none !important;
   box-shadow: none !important;
-  width: 180px !important;
+  width: 100% !important;
   padding: 10px !important;
 }
 
@@ -14057,7 +14057,7 @@ overflow: scroll;
   background: #ffdede !important;
   border: none !important;
   box-shadow: none !important;
-  width: 140px !important;
+  width: 100% !important;
 }
 
 .declineBtnHcc
@@ -14087,7 +14087,7 @@ overflow: scroll;
   background: #ffd1a3 !important;
   border: none !important;
   box-shadow: none !important;
-  width: 180px !important;
+  width: 100% !important;
   padding: 10px !important;
 }
 .reauditBtnHcc button.ant-btn.ant-btn-compact-first-item {
@@ -14095,7 +14095,7 @@ overflow: scroll;
   background: #ffd1a3 !important;
   border: none !important;
   box-shadow: none !important;
-  width: 140px !important;
+  width: 100% !important;
 }
 
 .reauditBtnHcc
@@ -14125,7 +14125,7 @@ overflow: scroll;
   background: #ffebad !important;
   border: none !important;
   box-shadow: none !important;
-  width: 180px !important;
+  width: 100% !important;
   padding: 10px !important;
 }
 .auditHoldBtnHcc button.ant-btn.ant-btn-compact-first-item {
@@ -14133,7 +14133,7 @@ overflow: scroll;
   background: #ffebad !important;
   border: none !important;
   box-shadow: none !important;
-  width: 140px !important;
+  width: 100% !important;
 }
 
 .auditHoldBtnHcc
@@ -14163,7 +14163,7 @@ overflow: scroll;
   background: #fbe7d0 !important;
   border: none !important;
   box-shadow: none !important;
-  width: 180px !important;
+  width: 100% !important;
   padding: 10px !important;
 }
 
@@ -14172,7 +14172,7 @@ overflow: scroll;
   background: #fbe7d0 !important;
   border: none !important;
   box-shadow: none !important;
-  width: 140px !important;
+  width: 100% !important;
 }
 
 .auditPendingBtnHcc

@@ -52,7 +52,8 @@
 }
 
 .rafscoreheader {
-  padding-top: 15px;
+  /* padding-top: 15px; */
+  /* margin-right: 20px; */
 }
 
 .rafscoreheader label {
@@ -258,8 +259,9 @@
 }
 
 .actionbtnContainer {
+  width:100%;
   /* position: relative; */
-  right: 70px;
+  /* right: 70px; */
   /* padding-top: 1.25rem; */
 }
 
@@ -1726,7 +1728,7 @@
   border-radius: 6px !important;
   border: none !important;
   box-shadow: none !important;
-  width: 170px !important;
+  width: 100% !important;
   padding: 10px;
   /* height: 35px !important; */
 }
@@ -2178,9 +2180,9 @@
 .custom_select_type {
   border: none !important;
   border-radius: 12px;
-  width: 100px !important;
+  width: 100% !important;
   height: 45px;
-  margin-right: 10px;
+  /* margin-right: 10px; */
   background: #f3f3ff !important;
   /* position: relative; */
   /* right: 70px; */
