@@ -21,18 +21,13 @@ export async function mfaValidation({ username, password, route }) {
   const skip = data?.response?.skipEntryAvailable;
   const mfa = data?.response?.mfaIsEnabled;
 
-  if (data?.response) {
-    const encodedParams = btoa(
-      JSON.stringify({
-        mfa: mfa,
-        skipEntry: skip,
-        username: username,
-        password: password,
-      })
-    );
+  if (data?.response) {;
+    setStorage("username", username);
+    setStorage("password", JSON.stringify(password));
+    setStorage("skipEntry", skip);
+    setStorage("mfa", mfa);
     route?.push({
-      pathname: `/twofactorAuthentication/Authentication`,
-      search: `params=${encodedParams}`,
+      pathname: `/twofactorAuthentication/Authentication`
     });
   } else {
     getResponePopup(data);
@@ -64,17 +59,7 @@ export async function login({ email, router, code, password, mfa, skip }) {
 
   try {
     const data = await authRequestPortal(`securityservice/auth/login`, options);
-
     let emailSplit = email.split("@");
-    const encodedParams = btoa(
-      JSON.stringify({
-        mfa: mfa,
-        skipEntry: skip,
-        username: email,
-        password: password,
-        code: code,
-      })
-    );
     if (data?.status === "SUCCESS") {
       setStorage("token", data?.response?.access_token);
       setStorage("userId", data?.response?.userEmail);
@@ -84,10 +69,13 @@ export async function login({ email, router, code, password, mfa, skip }) {
       setStorage("roles", JSON.stringify(data?.response?.roles));
       setStorage("refreshToken", data?.response?.refresh_token);
       setStorage("userName", emailSplit[0]);
-
+      setStorage("username", email);
+      setStorage("password", JSON.stringify(password));
+      setStorage("skipEntry", skip);
+      setStorage("mfa", mfa);
+      setStorage("refreshTokenTime", Date.now());
       router?.push({
-        pathname: `/twofactorAuthentication/SelectRole`,
-        search: `params=${encodedParams}`,
+        pathname: `/twofactorAuthentication/SelectRole`
       });
       setStorage("loginTime", Date.now());
     }
@@ -122,7 +110,7 @@ export async function validateCode({
     }),
   };
   try {
-    const data = await requestPortal(
+    const data = await authRequestPortal(
       `securityservice/auth/verify/mfa`,
       options
     );
@@ -160,7 +148,7 @@ export async function qrCodeFunc({ username }) {
     method: "POST",
   };
   try {
-    const data = await requestPortal(
+    const data = await authRequestPortal(
       `securityservice/auth/enablemfa?userName=${username}`,
       options
     );

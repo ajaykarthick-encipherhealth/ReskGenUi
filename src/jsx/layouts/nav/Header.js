@@ -151,7 +151,8 @@ const Header = ({
       if (result.isConfirmed) {
         const userRole = getStorage("role");
         await logoutAllDevice();
-        localStorage.clear();
+        sessionStorage.clear();
+        removeStorage();
         if (userRole != "ehr") {
           window.location = "/login";
         } else {

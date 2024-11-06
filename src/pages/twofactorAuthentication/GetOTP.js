@@ -10,28 +10,16 @@ import settings from "../../images/svg/settings.svg";
 import { codeLength, generateCodeArray } from "./Authentication";
 import { encyptingPass } from "../../components/headerFilters/functions";
 import RegularButton from "../../components/button";
-import {actions as allActions} from '../../stores/authFlows'
+import { actions as allActions } from "../../stores/authFlows";
+import { getStorage, removeStorage } from "../../utils/storages";
+import { get } from "http";
 
-const GetOTP = ({getQrCode, getValidateCode, url, codeValidateLoader}) => {
-
+const GetOTP = ({ getQrCode, getValidateCode, url, codeValidateLoader }) => {
   const router = useRouter();
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [code, setCode] = useState([]);
-
-  useEffect(() => {
-    inputRefs[1]?.current?.focus();
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const encodedParams = urlParams.get("params");
-    if (encodedParams) {
-      const decodedParams = JSON.parse(atob(encodedParams));
-      setUsername(decodedParams?.username);
-      setPassword(decodedParams?.password);
-    getQrCode({username:decodedParams?.username});
-    }
-  }, []);
 
   const handleInput = (index, e) => {
     const value = e.target.value;
@@ -61,6 +49,13 @@ const GetOTP = ({getQrCode, getValidateCode, url, codeValidateLoader}) => {
     }
   };
 
+  useEffect(() => {
+    inputRefs[1]?.current?.focus();
+    setUsername(getStorage("username"));
+    setPassword(getStorage("password"));
+    getQrCode({ username: getStorage("username") });
+    removeStorage("password");
+  }, []);
   return (
     <div className={styles.contentMainDIv}>
       <div className={styles.mfaMainDiv}>
@@ -109,7 +104,14 @@ const GetOTP = ({getQrCode, getValidateCode, url, codeValidateLoader}) => {
           </div>
         </div>
         <div className={styles.qrDIv}>
-          {url && <Image src={url} alt="noimg" width={300} height={300} />}
+          {url?.data?.secretImageUri && (
+            <Image
+              src={url?.data?.secretImageUri}
+              alt="noimg"
+              width={300}
+              height={300}
+            />
+          )}
         </div>
       </div>
       <div className={styles.verifyDiv}>
@@ -144,15 +146,13 @@ const GetOTP = ({getQrCode, getValidateCode, url, codeValidateLoader}) => {
               onClick={() => {
                 const codeString = code?.join("");
                 if (codeString?.length > 0) {
-                
-                    getValidateCode({
-                      username:username,
-                      code:encyptingPass(codeString),
-                      route:router,
-                      validate:"",
-                      userpassword:password}
-                    )
-                  ;
+                  getValidateCode({
+                    username: username,
+                    code: encyptingPass(codeString),
+                    route: router,
+                    validate: "",
+                    userpassword: password,
+                  });
                 }
               }}
             />
@@ -165,13 +165,12 @@ const GetOTP = ({getQrCode, getValidateCode, url, codeValidateLoader}) => {
 
 const connector = connect(
   (state) => ({
-    url:state?.authReducer?.qrImage,
-    codeValidateLoader:state.authReducer.codeValidateLoader,
-
+    url: state?.authReducer?.qrImage,
+    codeValidateLoader: state.authReducer.codeValidateLoader,
   }),
   {
     getQrCode: allActions.getQrCode,
-    getValidateCode:allActions.getValidateCode
+    getValidateCode: allActions.getValidateCode,
   }
 );
 

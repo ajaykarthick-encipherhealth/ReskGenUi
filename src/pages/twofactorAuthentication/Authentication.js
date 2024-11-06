@@ -7,6 +7,7 @@ import styles from "../../styles/auth.module.css";
 import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
 import RegularButton from "../../components/button";
 import { actions as AllActions } from "../../stores/authFlows";
+import { getStorage, removeStorage } from "../../utils/storages";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
@@ -22,52 +23,6 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
   const [password, setPassword] = useState();
 
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
-
-  useEffect(() => {
-    inputRefs[1]?.current?.focus();
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const encodedParams = urlParams.get("params");
-    const decodedParams = JSON.parse(atob(encodedParams));
-    setEnableMFA(decodedParams?.mfa);
-    setUsername(decodedParams?.username);
-    setPassword(decodedParams?.password);
-    const skipParam = decodedParams?.skipEntry;
-    setSkip(skipParam);
-  }, []);
-
-  useEffect(() => {
-    if (seconds === 0) {
-      setCode([]);
-      inputRefs[1].current?.focus();
-      if (enableMFA) {
-        notification.warning({
-          description: "Oops! your time is expired",
-          duration: 10,
-          onClose: () => {
-            setSeconds(30);
-          },
-        });
-      }
-    }
-  }, [seconds]);
-
-  useEffect(() => {
-    if (seconds > 0) {
-      const intervalId = setInterval(() => {
-        setSeconds((prevSeconds) => {
-          if (prevSeconds === 0) {
-            clearInterval(intervalId);
-          }
-          return Math.max(0, prevSeconds - 1);
-        });
-      }, 1000);
-      return () => {
-        clearInterval(intervalId);
-      };
-    }
-  }, [seconds]);
-
   const handleInput = (index, e) => {
     const value = e.target.value;
     if (!isNaN(value) && value.length === 1) {
@@ -105,6 +60,51 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
       });
     }
   };
+
+  useEffect(() => {
+    inputRefs[1]?.current?.focus();
+    const mfa=JSON.parse(getStorage("mfa"))
+    const username=getStorage("username")
+    const password=getStorage("password")
+    const skipParam =JSON.parse(getStorage("skipEntry"));
+    setEnableMFA(mfa);
+    setUsername(username);
+    setPassword(JSON.parse(password));
+    setSkip(skipParam);
+    removeStorage("password")
+  }, []);
+
+  useEffect(() => {
+    if (seconds === 0) {
+      setCode([]);
+      inputRefs[1].current?.focus();
+      if (enableMFA) {
+        notification.warning({
+          description: "Oops! your time is expired",
+          duration: 10,
+          onClose: () => {
+            setSeconds(30);
+          },
+        });
+      }
+    }
+  }, [seconds]);
+
+  useEffect(() => {
+    if (seconds > 0) {
+      const intervalId = setInterval(() => {
+        setSeconds((prevSeconds) => {
+          if (prevSeconds === 0) {
+            clearInterval(intervalId);
+          }
+          return Math.max(0, prevSeconds - 1);
+        });
+      }, 1000);
+      return () => {
+        clearInterval(intervalId);
+      };
+    }
+  }, [seconds]);
 
   return (
     <div className={styles.maindiv}>
@@ -148,10 +148,10 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
               Enhance your security measures by activating the newest
               Multi-Factor Authentication (MFA) feature. This provides an
               additional level of protection against unauthorized access and
-              potential security risks. Want to learn more about MFA? Click ENABLE MFA
-              to enable it. If you require additional time to prepare, you can
-              choose to skip this step, though adopting MFA will be compulsory
-              in the future.
+              potential security risks. Want to learn more about MFA? Click
+              ENABLE MFA to enable it. If you require additional time to
+              prepare, you can choose to skip this step, though adopting MFA
+              will be compulsory in the future.
             </div>
           </div>
         )}
@@ -200,8 +200,7 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
                     );
 
                     router?.push({
-                      pathname: `/twofactorAuthentication/GetOTP`,
-                      search: `params=${encodedParams}`,
+                      pathname: `/twofactorAuthentication/GetOTP`
                     });
                   }}
                   name="ENABLE MFA"

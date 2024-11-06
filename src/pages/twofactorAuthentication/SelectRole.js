@@ -6,12 +6,11 @@ import { IMAGES } from "../../jsx/constant/theme";
 import LoginBack from "../../images/logo/login-back.jpg";
 import styles from "../../styles/auth.module.css";
 import RegularButton from "../../components/button";
-import { getStorage, setStorage } from "../../utils/storages";
+import { getStorage, removeStorage, setStorage } from "../../utils/storages";
 import { connect } from "react-redux";
-import {actions as allActions} from '../../stores/authFlows'
+import { actions as allActions } from "../../stores/authFlows";
 
-
-const SelectRole = ({loginData,getLogin}) => {
+const SelectRole = ({ loginData, getLogin }) => {
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
@@ -19,6 +18,7 @@ const SelectRole = ({loginData,getLogin}) => {
   const [decodedParams, setDecodedParams] = useState();
   const [confirmModal, setConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState("");
   const rolesList = role?.slice().reverse();
   const optionsList = loginData?.roles?.map((info) => ({
     value: info,
@@ -56,10 +56,13 @@ const SelectRole = ({loginData,getLogin}) => {
         route: "/tenantAdmin/dashboard",
       },
       physician: { userRole: "physician", route: "/physicians/dashboard" },
-      record_analyst: { userRole: "record_analyst", route: "/analyst/patients" },
+      record_analyst: {
+        userRole: "record_analyst",
+        route: "/analyst/patients",
+      },
       // physician: { userRole: "physician", route: "/physician/dashboard" },
     };
-    
+
     const selectedRoleInfo = rolesMapping[selectedRole];
     if (selectedRoleInfo && !roleError) {
       setStorage("userRole", selectedRoleInfo?.userRole);
@@ -70,37 +73,39 @@ const SelectRole = ({loginData,getLogin}) => {
   };
 
   useEffect(() => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const encodedParams = urlParams.get("params");
-    const decodedParams = JSON.parse(atob(encodedParams));
-    const { mfa, username, password } = decodedParams;
-    const skipParam = decodedParams?.skipEntry;
-    const code=decodedParams?.code
-    const encodeParams = btoa(
-      JSON.stringify({
-        mfa: mfa,
-        skipEntry: skipParam,
-        username: username,
-        password: password,
-      })
-    );
-    setDecodedParams(encodeParams);
+    const mfa = JSON.parse(getStorage("mfa"));
+    const skipEntry = JSON.parse(getStorage("skipEntry"));
+    const username = getStorage("username");
+    const sessionPassword = JSON.parse(getStorage("password"));
+    const code = getStorage("code");
+    setPassword(sessionPassword);
+    removeStorage("password");
+    if (password) {
+      const encodeParams = btoa(
+        JSON.stringify({
+          mfa: mfa,
+          skipEntry: skipEntry,
+          username: username,
+          password: password,
+        })
+      );
+      setDecodedParams(encodeParams);
 
-    let rolesArray = JSON.parse(getStorage("roles"));
-    let getUserId = getStorage("userId");
-    if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
-      rolesArray = ["TENANT ADMIN"];
+      let rolesArray = JSON.parse(getStorage("roles"));
+      let getUserId = getStorage("userId");
+      if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
+        rolesArray = ["TENANT ADMIN"];
+      }
+      setRole(rolesArray);
+      getLogin({
+        email: username,
+        router: router,
+        code: code,
+        password: password,
+        mfa: mfa,
+        skip: skipEntry,
+      });
     }
-    setRole(rolesArray);
-    getLogin({
-      email: username,
-      router: router,
-      code: code,
-      password: password,
-      mfa: decodedParams?.mfa,
-      skip: skipParam,
-    });
   }, []);
 
   return (
@@ -115,9 +120,7 @@ const SelectRole = ({loginData,getLogin}) => {
               <div className="login-content">
                 <p className="sub-title"></p>
                 <Image className="login-logo" src={IMAGES.loginPageLogo1} />
-                <div className="company-name">
-                Encipher Health Inc.
-                </div>
+                <div className="company-name">Encipher Health Inc.</div>
               </div>
             </div>
           </div>
@@ -193,10 +196,12 @@ const SelectRole = ({loginData,getLogin}) => {
   );
 };
 
-const connector = connect((state) => ({
-  loginData: state.authReducer?.loginData?.data?.response,
-}),{
-  getLogin:allActions.getLogin
-});
+const connector = connect(
+  (state) => ({
+    loginData: state.authReducer?.loginData?.data?.response,
+  }),
+  {
+    getLogin: allActions.getLogin,
+  }
+);
 export default connector(SelectRole);
-
