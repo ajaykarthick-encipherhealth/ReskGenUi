@@ -24,6 +24,7 @@ import { actions as allActions2 } from "../../../../stores/supervisor/auditedQue
 import { renderSkeleton } from "../../../../components/reuseableFunctions";
 import UserFilters from "../filters/usersFilters";
 import HeaderFilters from "../filters/headerFilters";
+import { getStorage } from "../../../../utils/storages";
 
 const bullets = [
   {
@@ -224,7 +225,7 @@ const Index = ({
     const searchParams = new URLSearchParams(window.location.search);
     const uId = searchParams.get("userId")
       ? searchParams.get("userId")
-      : router.query.userName;
+      : getStorage("user");
     setUserName(uId);
     if (uId) {
       const data = {

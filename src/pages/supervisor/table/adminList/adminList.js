@@ -4,12 +4,14 @@ import { Empty, Tooltip } from "antd";
 import { CircularProgressbar } from "react-circular-progressbar";
 import TableStyle from "../../../../components/table/table.module.css";
 import { renderUserPrfoile } from "../../../../components/headerFilters/functions";
+import { setStorage } from "../../../../utils/storages";
 
 const AdminList = ({ userList }) => {
   const router = useRouter();
 
   const gotoUserQueue = (item) => {
-      router.push(`/supervisor/user/userQueue?userId=${item?.userName}`);
+    setStorage("user",item?.userName)
+      router.push(`/supervisor/user/userQueue`);
   };
   return (
     <div className={TableStyle.classContaineer}>
