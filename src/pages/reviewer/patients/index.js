@@ -116,7 +116,6 @@ const Patient = ({
   const [showFilters, setShowFilters] = useState(
     navigate?.query ? true : false
   );
-
   const dueStartDate = navigate?.query?.dueDateStart
     ? moment(navigate?.query?.dueDateStart)?.format("YYYY-MM-DD") +
       "T00:00:00.000Z"

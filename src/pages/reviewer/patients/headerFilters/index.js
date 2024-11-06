@@ -21,7 +21,6 @@ import { getFilters } from "../../../../stores/authflow/actions";
 import { InfoCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../../tenantAdmin/tracking/filters";
 import HeaderFilters from "../../../../components/headerFilters";
-
 const { RangePicker } = DatePicker;
 
 const allFilters = [
@@ -49,9 +48,12 @@ const HeaderFiltersPatients = ({
   selectedDates,
   setSelectedDates,
 
+
+
   // allocatedBY
 
   setSelAllocatedBy,
+
 
   // allocatedTo
   isAllocatedToSelector,
@@ -76,6 +78,7 @@ const HeaderFiltersPatients = ({
   setSelectedDates3,
   setSelectedDates4,
   setSelectedDates5,
+
 }) => {
   const [trackInput, setTrackInput] = useState("");
 
@@ -87,6 +90,7 @@ const HeaderFiltersPatients = ({
     setSelectedDates([]);
     setSelectedDates2([]);
 
+  
     // setStartDate([]);
     // setEndDate([]);
     // setStartDate4([]);

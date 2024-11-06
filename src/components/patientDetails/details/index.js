@@ -559,6 +559,7 @@ const Details = ({
       const queryString = new URLSearchParams(navigate.query).toString();
       if (navigate.query && queryString) {
         // const url = queryString ? `/reviewer/patients` : "/reviewer/patients";
+    
         navigate.push(
           {
             pathname: "/reviewer/patients",
@@ -566,7 +567,9 @@ const Details = ({
           },
           "/reviewer/patients"
         );
-      } else {
+      } 
+      
+      else {
         navigate.back();
       }
     } else {
