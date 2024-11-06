@@ -86,8 +86,7 @@ const Filters = ({
             <div class="form-group has-search custom-react-select">
               <Select
                 onChange={(selectOptions) => {
-                  setSelectedOption(selectOptions ? selectOptions : null);
-
+                  setSelectedOption(selectOptions ? selectOptions : "");
                   if (setPageNo) {
                     resetPageNumber(setPageNo);
                   }
@@ -97,7 +96,7 @@ const Filters = ({
                 isSearchable={false}
                 placeholder="Select"
                 allowClear={true}
-                value={selectedOption ? selectedOption : null}
+                value={selectedOption ? selectedOption :null}
               />
             </div>
           </div>
@@ -127,7 +126,7 @@ const Filters = ({
             <div class="form-group has-search custom-react-select">
               <Select
                 onChange={(selectedOption) => {
-                  setSelCreatedBy(selectedOption ? selectedOption : null);
+                  setSelCreatedBy(selectedOption ? selectedOption : "");
                   setClear(false);
                   if (setPageNo) {
                     resetPageNumber(setPageNo);

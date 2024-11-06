@@ -203,7 +203,7 @@ const HeaderFilters = ({
             <div class="form-group has-search custom-react-select-audit">
               <Select
                 onChange={(selectedOption) => {
-                  audisetSelAllocatedBy(selectedOption ? selectedOption : null);
+                  audisetSelAllocatedBy(selectedOption ? selectedOption : "");
                   setSelAuditAllocatedByVal(selectedOption?.label);
                   if (setPageNo) {
                     resetPageNumber(setPageNo);

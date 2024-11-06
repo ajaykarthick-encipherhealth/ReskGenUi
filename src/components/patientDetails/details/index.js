@@ -523,23 +523,13 @@ const Details = ({
         }
       }
     } else if (user && user.toLowerCase() === "supervisor") {
-      const { user: _, ...queryWithoutUser } = navigate.query;
-      const queryString = new URLSearchParams(navigate.query).toString();
       if (isSupervisorAuited) {
         navigate.push(
-          {
-            pathname: `/supervisor/auditing`,
-            query: queryString ? queryString : "",
-          },
-          `/supervisor/auditing`
+         "/supervisor/auditing"
         );
-      } else if (isSupervisorUserDetails) {
-        navigate.push(
-          {
-            pathname: `/supervisor/user/userQueue`,
-            query: queryString ? queryString : "",
-          },
-          `/supervisor/user/userQueue`
+      } 
+      else if (isSupervisorUserDetails) {
+        navigate.push("/supervisor/user/userQueue"
         );
       } else {
         navigate.back();
