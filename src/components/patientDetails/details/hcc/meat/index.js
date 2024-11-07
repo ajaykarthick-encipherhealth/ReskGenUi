@@ -124,8 +124,8 @@ const Meat = ({
       setAllDisList,
       "",
       "",
-      "",
       setDeletedMeatList,
+      "",
       "",
       setAllMeatList
     );
