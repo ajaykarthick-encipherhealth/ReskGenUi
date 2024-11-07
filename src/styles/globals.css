@@ -8733,11 +8733,11 @@ button:focus {
 
 .login-account .account-info-area .login-content {
   text-align: center;
-  padding: 120px 10px;
+  /* padding: 120px 10px; */
   z-index: 9;
   position: relative;
   max-width: 100%;
-  margin-left: 126px;
+  /* margin-left: 126px; */
 }
 
 .login-account .account-info-area .login-content .logo {
@@ -8871,7 +8871,7 @@ button:focus {
 
 @media only screen and (max-width: 87.5rem) {
   .login-account .login-form {
-    padding: 0 15px;
+    padding: 0 35px;
   }
 }
 
@@ -8889,6 +8889,7 @@ button:focus {
 .login-account .login-form .login-head .title {
   font-size: 36px;
   font-weight: 600;
+  padding: 10px ;
 }
 
 @media only screen and (max-width: 1024px) {
