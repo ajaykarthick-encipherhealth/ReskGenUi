@@ -10,11 +10,13 @@ import {
   faAngleDoubleRight,
   faAngleDoubleLeft,
   faFile,
+  setCopied,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "./styles.module.css";
 import { SVGICON } from "../../../../../jsx/constant/theme";
-import { Tooltip } from "antd";
+import { notification, Tooltip } from "antd";
 import { truncateString } from "../function/ReusableFunctions";
+import { handleCopyToClipboard } from "../../../../commonFunctions";
 const Details = ({ fileResult, fromHcc }) => {
   const getMastData = (value) => {
     if (value) {
@@ -31,7 +33,15 @@ const Details = ({ fileResult, fromHcc }) => {
             <label className="px-2" style={{ fontWeight: 600 }}>
               Patient ID
             </label>
-            <h6 className="px-4 cursor-pointer">
+            <h6
+              className="px-4 cursor-pointer"
+              onClick={() =>
+                handleCopyToClipboard({
+                  text: fileResult?.patientId,
+                  setCopied: setCopied,
+                })
+              }
+            >
               {fileResult?.patientId
                 ? getMastData(fileResult?.patientId)
                 : "--"}
@@ -70,6 +80,12 @@ const Details = ({ fileResult, fromHcc }) => {
                 // paddingLeft: "25px",
                 cursor: "pointer",
               }}
+              onClick={() =>
+                handleCopyToClipboard({
+                  text: fileResult?.fileDetailDTO?.fileName,
+                  setCopied: setCopied,
+                })
+              }
             >
               {fileResult?.fileDetailDTO?.fileName ? (
                 <Tooltip title={fileResult?.fileDetailDTO?.fileName}>

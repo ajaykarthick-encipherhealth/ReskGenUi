@@ -524,13 +524,9 @@ const Details = ({
       }
     } else if (user && user.toLowerCase() === "supervisor") {
       if (isSupervisorAuited) {
-        navigate.push(
-         "/supervisor/auditing"
-        );
-      } 
-      else if (isSupervisorUserDetails) {
-        navigate.push("/supervisor/user/userQueue"
-        );
+        navigate.push("/supervisor/auditing");
+      } else if (isSupervisorUserDetails) {
+        navigate.push("/supervisor/user/userQueue");
       } else {
         navigate.back();
       }
@@ -687,6 +683,7 @@ const Details = ({
                             dosYearDefalutSelect={dosYearDefalutSelect}
                             isLoadingDos={isLoadingDos}
                             dosYear={dosYear}
+                            setCopied={setCopied}
                           />
                         </div>
                         {/* <div style={{ zIndex: "1" }}>

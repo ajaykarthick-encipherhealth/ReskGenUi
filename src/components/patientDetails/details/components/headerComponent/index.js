@@ -20,11 +20,12 @@ const HeaderComponent = ({
   dosYearDefalutSelect,
   isLoadingDos,
   dosYear,
+  setCopied,
 }) => {
   return (
     <div className={`row ${styles.HccContainer}`}>
       <div className="col-xl-5" style={{ padding: "0px" }}>
-        <Details fileResult={fileResult} fromHcc={true} />
+        <Details fileResult={fileResult} fromHcc={true} setCopied = {setCopied}/>
       </div>
       <div className="col-xl-3" style={{ padding: "0px" }}>
         <Flag
