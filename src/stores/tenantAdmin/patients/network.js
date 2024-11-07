@@ -33,7 +33,7 @@ export async function getAllPatient(
   const filteredStatus = status === undefined ? "" : status;
   const selectOrgId = orgId === "ALL" || orgId == undefined ? "" : orgId;
   const data = await requestPortal(
-    `dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&organizationId=${selectOrgId || ""}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus || ""}&searchString=${search}&createdStartDate=${createdStartDate || ""}&createdEndDate=${createdEndDate || ""}&patientCreatedBy=${
+    `dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&organizationId=${selectOrgId || ""}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus || ""}&searchString=${search || ""}&createdStartDate=${createdStartDate || ""}&createdEndDate=${createdEndDate || ""}&patientCreatedBy=${
       selAllocatedBy === "All" ? "" : selAllocatedBy
     }&patientAllocatedTo=${
       selAllocatedTo === "All" ? "" : selAllocatedTo
