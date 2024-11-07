@@ -427,6 +427,7 @@ const UserList = ({
                     onChange={(checked) => {
                       onChange(item, checked);
                       setPopoverVisible(true);
+                      setPageCount(0)
                     }}
                   />
                 </td>
