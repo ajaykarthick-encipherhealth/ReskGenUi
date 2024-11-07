@@ -88,82 +88,38 @@ const Index = ({
   const [processSort, setProcessSort] = useState("DESC");
   const [auditAllocatedSort, setAuditAllocatedSort] = useState("DESC");
   const [audirDateSort, setAuditDateSort] = useState("DESC");
-  const [auditDueSort, setAuditDueSort] = useState(
-    router.query?.auditDueSort ? router.query?.auditDueSort : "DESC"
-  );
+  const [auditDueSort, setAuditDueSort] = useState("DESC");
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(
-    router?.query?.selectedOption ? router?.query?.selectedOption : null
-  );
-  const [completedStartDate, setCompletedStartDate] = useState(
-    router?.query?.completedStartDate ? router?.query?.completedStartDate : ""
-  );
-  const [completedEndDate, setCompletedEndDate] = useState(
-    router?.query?.completedEndDate ? router?.query?.completedEndDate : ""
-  );
-  const [dueStartDate, setDueStartDate] = useState(
-    router?.query?.dueStartDate ? router?.query?.dueStartDate : ""
-  );
-  const [dueEndDate, setDueEndDate] = useState(
-    router?.query?.dueEndDate ? router?.query?.dueEndDate : ""
-  );
-  const [allocatedStartDate, setAllocatedStartDate] = useState(
-    router?.query?.allocatedStartDate ? router?.query?.allocatedStartDate : ""
-  );
-  const [allocatedEndDate, setAllocatedEndDate] = useState(
-    router?.query?.allocatedEndDate ? router?.query?.allocatedEndDate : ""
-  );
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [completedStartDate, setCompletedStartDate] = useState("");
+  const [completedEndDate, setCompletedEndDate] = useState("");
+  const [dueStartDate, setDueStartDate] = useState("");
+  const [dueEndDate, setDueEndDate] = useState("");
+  const [allocatedStartDate, setAllocatedStartDate] = useState("");
+  const [allocatedEndDate, setAllocatedEndDate] = useState("");
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
-  const [auditedStartDate, setAuditedStartDate] = useState(
-    router?.query?.auditedStartDate ? router?.query?.auditedStartDate : ""
-  );
-  const [auditedEndDate, setAuditedEnsDate] = useState(
-    router?.query?.auditedEndDate ? router?.query?.auditedEndDate : ""
-  );
+  const [auditedStartDate, setAuditedStartDate] = useState("");
+  const [auditedEndDate, setAuditedEnsDate] = useState("");
   const [totalElements, setTotalElements] = useState(10);
   const [search, setSearch] = useState("");
-  const [searchTextValue, setSearchTextValue] = useState(
-    router?.query?.searchTextValue ? router?.query?.searchTextValue : ""
-  );
+  const [searchTextValue, setSearchTextValue] = useState("");
   const [userName, setUserName] = useState();
-  const [selectedAuditOption, setSelectedAuditOption] = useState(
-    router?.query?.selectedAuditOption ? router?.query?.selectedAuditOption : ""
-  );
-  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState(
-    router?.query?.selAuditAllocatedBy ? router?.query?.selAuditAllocatedBy : ""
-  );
-  const [selAuditAllocatedByVal, setSelAuditAllocatedByVal] = useState(
-    router?.query?.selAuditAllocatedBy ? router?.query?.selAuditAllocatedBy : ""
-  );
-  const [aduitCompletedStartDate, setAduitCompletedStartDate] = useState(
-    router?.query?.aduitCompletedStartDate
-      ? router?.query?.aduitCompletedStartDate
-      : ""
-  );
-  const [aduitCompletedEndDate, setAduitCompletedEndDate] = useState(
-    router?.query?.aduitCompletedEndDate
-      ? router?.query?.aduitCompletedEndDate
-      : ""
-  );
-  const [aduitDueStartDate, setAduitDueStartDate] = useState(
-    router?.query?.aduitDueStartDate ? router?.query?.aduitDueStartDate : ""
-  );
-  const [aduitDueEndDate, setAduitDueEndDate] = useState(
-    router?.query?.aduitDueEndDate ? router?.query?.aduitDueEndDate : ""
-  );
+  const [selectedAuditOption, setSelectedAuditOption] = useState("");
+  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
+  const [selAuditAllocatedByVal, setSelAuditAllocatedByVal] = useState("");
+  const [aduitCompletedStartDate, setAduitCompletedStartDate] = useState("");
+  const [aduitCompletedEndDate, setAduitCompletedEndDate] = useState("");
+  const [aduitDueStartDate, setAduitDueStartDate] = useState("");
+  const [aduitDueEndDate, setAduitDueEndDate] = useState("");
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedDates2, setSelectedDates2] = useState([]);
   const [selectedDates3, setSelectedDates3] = useState([]);
   const [selectedDates4, setSelectedDates4] = useState([]);
   const [sort, setSort] = useState({
-    sortDir: router?.query?.sortDirection
-      ? router?.query?.sortDirection
-      : "DESC",
-    sortField: router?.query?.sortField
-      ? router?.query?.sortField
-      : "auditDueDate",
+    sortDir:"DESC",
+    sortField:"auditDueDate",
   });
   const [clear, setClear] = useState(false);
   const [activeFilters, setActiveFilters] = useState([
@@ -180,19 +136,8 @@ const Index = ({
       setTotalElements(usersData?.data?.response?.totalElements);
     }
   }, [usersData]);
-  // useEffect(() => {
-  //   if (window !== "undefined") {
-  //     if (router.query) {
-  //       setPageNo(router?.query?.pageNo ? router?.query?.pageNo : 0);
-  //       setPaginationFirst(
-  //         router?.query?.paginationFirst ? router?.query?.paginationFirst : 0
-  //       );
-  //     }
-  //   }
-  // }, [router]);
 
   useEffect(() => {
-    // const searchParams = new URLSearchParams(window.location.search);
     const uId = getStorage("user");
     setUserName(uId);
     if (uId) {
@@ -241,17 +186,7 @@ const Index = ({
     aduitDueStartDate,
     aduitDueEndDate,
     sort,
-  ]);
-
-  // useEffect(() => {
-  //   if (router.query?.filters?.length) {
-  //     const array = activeFilters?.[0].split(",");
-  //     setActiveFilters(array);
-  //   } else {
-  //     console.error("activeFilters is not a string:", activeFilters);
-  //   }
-  // }, [router.query]);
-
+  ])
   const auditstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes
@@ -375,17 +310,17 @@ const Index = ({
           : null,
       ]);
       setSearch(decodedParams?.search);
-      setPageNo(decodedParams?.pageNo)
-      setPaginationFirst(decodedParams?.paginationFirst)
+      setPageNo(decodedParams?.pageNo);
+      setPaginationFirst(decodedParams?.paginationFirst);
+      setSelectedOption(decodedParams?.selectedOption)
     }
     if (sessionActiveFilters) {
       setActiveFilters(sessionActiveFilters);
     }
-  });
+  }, []);
   return (
     <div className={`show `}>
       <Header />
-
       <div class="content-body">
         <div className="container-fluid">
           <div className="row">
