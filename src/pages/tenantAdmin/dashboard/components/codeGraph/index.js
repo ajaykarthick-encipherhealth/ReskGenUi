@@ -18,20 +18,14 @@ const CodesGraph = ({
   borderColor,
   gradientColor1,
   gradientColor2,
-  isTwoWaves,
   borderColor2,
   isCargaps,
   isHcc,
-  isRadio,
-  isRevenue,
-  getAllHccCodes,
   selectedValue,
   className,
   customDate,
   getAllLabAndRadiologyChart,
-  isLabValues
 }) => {
-  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
   const radiologyCountValues =   getAllLabAndRadiologyChart?.radiologyCountMap;
   const labCountValues =   getAllLabAndRadiologyChart?.labCountMap;
   const dates =
@@ -40,12 +34,11 @@ const CodesGraph = ({
       : selectedValue === "last_1_week"
       ? getLast7Days()
       : getLast30Days();
-  const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
+
   const resultArrayRadiology = formatValues(radiologyCountValues, dates);
   const resultArrayLab = formatValues(labCountValues, dates);
-  const suggestedHccDiseaseCountMap =
-    getAllHccCodes?.suggestedHccDiseaseCountMap;
-  const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
+
+
   const graphOptions = {
     xAxis: {
       type: "category",
@@ -73,20 +66,8 @@ const CodesGraph = ({
     },
     series: [
       {
-        name: isCargaps
-          ? "Car Gap Codes"
-          : isHcc
-          ? "HCC Codes"
-          : isRevenue
-          ? "Revenue"
-          : isTwoWaves && "Radiology",
-        data: isHcc
-          ? resultArrayHCC
-          : isCargaps
-          ? resultArrayCaregaps
-          :isTwoWaves
-          ?resultArrayRadiology
-          :[] ,
+        name: "Lab",
+        data: resultArrayLab ,
         type: "line",
         lineStyle: { color: borderColor },
         smooth: true,
@@ -104,14 +85,28 @@ const CodesGraph = ({
           },
       },
       {
-        name: "Lab",
-        data: resultArrayLab,
+        name: "Radiology",
+        data: resultArrayRadiology ,
+        type: "line",
         lineStyle: { color: borderColor2 },
         smooth: true,
         showSymbol: false,
+        itemStyle: {
+          color: borderColor
+        },
+        areaStyle: gradientColor1 &&
+          gradientColor2 && {
+            opacity: 0.5,
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: gradientColor1 },
+              { offset: 1, color: gradientColor2 },
+            ]),
+          },
       },
     ],
   };
+
+
 
   return (
     <div className={`${className}`}>
@@ -129,7 +124,7 @@ const enhancer = connect(
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
       getAllLabAndRadiologyChart:state?.tenantAdmin?.dashboard?.default?.
-      getAllLabAndRadiologyChart?.data?.response
+      getAllLabAndRadiologyChart?.data?.response,
   }),
   {
     getAllHccCodesData: HccCodes,
