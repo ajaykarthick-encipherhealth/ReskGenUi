@@ -56,6 +56,15 @@ const GetOTP = ({ getQrCode, getValidateCode, url, codeValidateLoader }) => {
     getQrCode({ username: getStorage("username") });
     removeStorage("password");
   }, []);
+  useEffect(() => {
+    router.beforePopState(({ url }) => {
+      router.push('/login');
+      return false;
+    });
+    return () => {
+      router.beforePopState(() => true);
+    };
+  }, [router]);
   return (
     <div className={styles.contentMainDIv}>
       <div className={styles.mfaMainDiv}>

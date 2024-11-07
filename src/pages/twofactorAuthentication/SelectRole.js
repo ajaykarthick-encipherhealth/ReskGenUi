@@ -19,12 +19,12 @@ const SelectRole = ({ loginData, getLogin }) => {
   const [confirmModal, setConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
-  const rolesList = role?.slice().reverse();
-  const optionsList = loginData?.roles?.map((info) => ({
+  const rolesList = JSON.parse(getStorage("roles"));
+  const optionsList = rolesList?.map((info) => ({
     value: info,
     label: info?.split("_").join(" "),
   }));
-  const items = [...(loginData?.roles?.length > 0 ? optionsList : [])];
+  const items = [...(rolesList?.length > 0 ? optionsList : [])];
 
   const onSubmitRole = async (e) => {
     e.preventDefault();
@@ -108,6 +108,15 @@ const SelectRole = ({ loginData, getLogin }) => {
     }
   }, []);
 
+  useEffect(() => {
+    router.beforePopState(({ url }) => {
+      router.push("/login");
+      return false;
+    });
+    return () => {
+      router.beforePopState(() => true);
+    };
+  }, [router]);
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -163,10 +172,7 @@ const SelectRole = ({ loginData, getLogin }) => {
                     onClick={() => {
                       setSelectedRole(null);
                       setRoleError(false);
-                      router?.push({
-                        pathname: `/twofactorAuthentication/Authentication`,
-                        search: `params=${decodedParams}`,
-                      });
+                      router?.push(`/login`);
                     }}
                     type="outline"
                     name="BACK"

@@ -105,7 +105,15 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
       };
     }
   }, [seconds]);
-
+  useEffect(() => {
+    router.beforePopState(({ url }) => {
+      router.push('/login');
+      return false;
+    });
+    return () => {
+      router.beforePopState(() => true);
+    };
+  }, [router]);
   return (
     <div className={styles.maindiv}>
       <section className={styles.innerdiv}>
