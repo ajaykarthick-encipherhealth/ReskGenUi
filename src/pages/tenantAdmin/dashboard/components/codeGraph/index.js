@@ -18,27 +18,35 @@ const CodesGraph = ({
   borderColor,
   gradientColor1,
   gradientColor2,
+  isTwoWaves,
   borderColor2,
   isCargaps,
   isHcc,
+  isRadio,
+  isRevenue,
+  getAllHccCodes,
   selectedValue,
   className,
   customDate,
   getAllLabAndRadiologyChart,
+  isLabValues
 }) => {
+  const dates =
+  selectedValue === "custom"
+    ? customDate
+    : selectedValue === "last_1_week"
+    ? getLast7Days()
+    : getLast30Days();
+  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
   const radiologyCountValues =   getAllLabAndRadiologyChart?.radiologyCountMap;
   const labCountValues =   getAllLabAndRadiologyChart?.labCountMap;
-  const dates =
-    selectedValue === "custom"
-      ? customDate
-      : selectedValue === "last_1_week"
-      ? getLast7Days()
-      : getLast30Days();
-
+  const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
   const resultArrayRadiology = formatValues(radiologyCountValues, dates);
   const resultArrayLab = formatValues(labCountValues, dates);
-
-
+  const suggestedHccDiseaseCountMap =
+    getAllHccCodes?.suggestedHccDiseaseCountMap;
+  const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
+  
   const graphOptions = {
     xAxis: {
       type: "category",
@@ -66,8 +74,20 @@ const CodesGraph = ({
     },
     series: [
       {
-        name: "Lab",
-        data: resultArrayLab ,
+        name: isCargaps
+          ? "Car Gap Codes"
+          : isHcc
+          ? "HCC Codes"
+          : isRevenue
+          ? "Revenue"
+          : "Radiology",
+        data: isHcc
+          ? resultArrayHCC
+          : isCargaps
+          ? resultArrayCaregaps
+          :isTwoWaves
+          ?resultArrayRadiology
+          :[] ,
         type: "line",
         lineStyle: { color: borderColor },
         smooth: true,
@@ -85,14 +105,14 @@ const CodesGraph = ({
           },
       },
       {
-        name: "Radiology",
-        data: resultArrayRadiology ,
+        name: isLabValues?"Lab":"",
+        data:isLabValues? resultArrayLab:"",
         type: "line",
         lineStyle: { color: borderColor2 },
         smooth: true,
         showSymbol: false,
         itemStyle: {
-          color: borderColor
+          color: borderColor,
         },
         areaStyle: gradientColor1 &&
           gradientColor2 && {
@@ -105,8 +125,6 @@ const CodesGraph = ({
       },
     ],
   };
-
-
 
   return (
     <div className={`${className}`}>
