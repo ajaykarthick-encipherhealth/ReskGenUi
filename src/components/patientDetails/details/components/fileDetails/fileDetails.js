@@ -102,7 +102,7 @@ const Details = ({ fileResult, fromHcc }) => {
               Date Of Birth
             </label>
             <h6 className="px-4">
-              {dayjs(fileResult?.dob).format("MM-DD-YYYY") || "MM-DD-YYYY"}
+            {fileResult?.dob ? dayjs(fileResult.dob).format("MM-DD-YYYY") : "---"}
             </h6>
           </div>
           <div className="col-xl-3">
