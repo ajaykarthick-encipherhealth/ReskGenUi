@@ -55,7 +55,6 @@ export async function GetWorkListFilters({ data }) {
 }
 
 export async function filterUsers({field, username, pageQueue}) {
-  console.log(username)
   const options = {
     method: "GET",
   };

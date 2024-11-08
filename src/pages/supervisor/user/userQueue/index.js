@@ -275,7 +275,7 @@ const Index = ({
   };
 
   useEffect(() => {
-    getFilters({ field: "auditAllocatedBy", userName: userName });
+    getFilters({ field: "auditAllocatedBy", username: userName });
   }, [userName]);
   useEffect(() => {
     const decodedParams = JSON.parse(getStorage("supervisorUserEncodedValue"));
