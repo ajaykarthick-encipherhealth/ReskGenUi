@@ -440,6 +440,7 @@ const Patient = ({
       setStatusSelectedStatus(
         decodedParams?.statusSelectedStatus?.toUpperCase()
       );
+      setSearchVal(decodedParams?.searchTextValue?decodedParams?.searchTextValue:"")
       setSort(decodedParams?.sort);
       setSortDueOrder(decodedParams?.sortDueOrder);
       setSortCompleteOrder(decodedParams?.sortCompleteOrder);
