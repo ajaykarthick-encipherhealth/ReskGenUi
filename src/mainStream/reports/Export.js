@@ -195,25 +195,7 @@ const Export = ({
   const [activeBtn, setActiveBtn] = useState("read");
   const [checkall, setCheckAll] = useState(checkBoxData);
   const [inputStr, setInputStr] = useState("");
-
-  useEffect(() => {
-    setCurrentUser(getStorage("userId"));
-    getUsersLists(search);
-  }, [search]);
-
-  const options = usersList?.data?.response
-    ?.map(
-      (data) =>
-        data?.userName !== currentUser && {
-          label: (
-            <span>
-              {data?.firstName}&nbsp;&nbsp;{data?.lastName}
-            </span>
-          ),
-          value: data?.userName,
-        }
-    )
-    .filter(Boolean);
+  const [filteredOptions, setFilteredOptions] = useState([]);
 
   const handleSelectedOption = (value) => {
     const filteredData = usersList?.data?.response?.filter((data) =>
@@ -334,9 +316,9 @@ const Export = ({
     }
   };
 
-  const filteredOptions = options?.filter((option) => {
-    return !userList?.some((data) => option?.value === data?.user);
-  });
+  // const filteredOptions = options?.filter((option) => {
+  //   return !userList?.some((data) => option?.value === data?.user);
+  // });
   useEffect(() => {
     setSelectedList([]);
     if (selectedRows?.receivedUsers?.length > 0) {
@@ -356,9 +338,36 @@ const Export = ({
   });
   const isAllChecked = checkall?.every((item) => item.checked);
 
+  const getOptionsList = async () => {
+    const res = await getUsersLists();
+    if (res) {
+      const options = res?.response
+        ?.map(
+          (data) =>
+            data?.userName !== currentUser && {
+              label: (
+                <span>
+                  {data?.firstName}&nbsp;&nbsp;{data?.lastName}
+                </span>
+              ),
+              value: data?.userName,
+              searchString:
+                `${data?.firstName} ${data?.lastName}`.toLowerCase(),
+            }
+        )
+        .filter(Boolean);
+      setFilteredOptions(options);
+    }
+  };
   useEffect(() => {
     setInputStr("");
   }, [isModalVisible]);
+
+  useEffect(() => {
+    setCurrentUser(getStorage("userId"));
+    // getUsersLists();
+    getOptionsList();
+  }, []);
   const isAnyChecked = checkall?.some((item) => item?.checked);
 
   return (
@@ -536,6 +545,12 @@ const Export = ({
                         open={open}
                         onDropdownVisibleChange={(visible) => setOpen(visible)}
                         options={filteredOptions}
+                        filterOption={(input, option) =>
+                          option?.label?.props?.children
+                            ?.join("")
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
                       />
                       {/* {filteredOptions?.map((data) => (
                     <Option key={data?.value} value={data?.value}>
@@ -673,7 +688,7 @@ const connector = connect(
   {
     getActiveTab: allActions.activeTab,
     updateSentReport: allActions.updateSentReport,
-    getUsersLists: allActions.getUsersList,
+    getUsersLists: allActions.getUsersLists,
     getExportDetails: allActions.getExportDetails,
   }
 );
