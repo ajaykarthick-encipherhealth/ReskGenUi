@@ -8,16 +8,22 @@ import { Col, Row, Skeleton, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
-import { connect, } from "react-redux";
+import { connect } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { actions as ReviewerAction } from "../../../../stores/reviewer/dashboard";
+import { setStorage } from "../../../../utils/storages";
 const DailyTask = ({ getAllDailyTask, getFilteredList, dailyStatusDatas }) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
   const [responseArray, setReponseArray] = useState([]);
 
-
+  const activeFilters = [
+    "Select Status",
+    "Select Priority",
+    "Due Date",
+    "Completed Date",
+  ];
   const bullets = [
     {
       color: "#B4EFBA",
@@ -67,7 +73,7 @@ const DailyTask = ({ getAllDailyTask, getFilteredList, dailyStatusDatas }) => {
 
   useEffect(() => {
     if (dailyStatusDatas && selectedDate) {
-      responseArray.push(dailyStatusDatas?.data?.response)
+      responseArray.push(dailyStatusDatas?.data?.response);
       getDays(selectedDate, dailyStatusDatas);
     }
   }, [dailyStatusDatas, selectedDate]);
@@ -290,16 +296,17 @@ const DailyTask = ({ getAllDailyTask, getFilteredList, dailyStatusDatas }) => {
                         className={styles.headerTitle}
                         style={{ fontSize: "16px" }}
                         onClick={() => {
+                          setStorage("filter", JSON.stringify(activeFilters));
                           const params = {
                             // processedStart: data?.dateString,
                             // processedEnd: data?.dateString,
-                            dueDateStart: data?.dateString,
-                            dueDateEnd: data?.dateString,
+                            dueDateStart: data?.dateString? data?.dateString:"",
+                            dueDateEnd: data?.dateString?data?.dateString:"",
                           };
-                          getFilteredList(params);
+                          setStorage("reviewerDate",JSON.stringify(params))
                           router?.push({
                             pathname: "/reviewer/patients",
-                            query: params,
+                            // query: params,
                           });
                         }}
                       >
@@ -333,26 +340,25 @@ const DailyTask = ({ getAllDailyTask, getFilteredList, dailyStatusDatas }) => {
                                   <div
                                     style={{ display: "flex" }}
                                     onClick={() => {
-                                      const params = btoa(
-                                        JSON.stringify({
+                                      const params ={
                                           // processedStart: data?.dateString,
                                           // processedEnd: data?.dateString,
-                                          dueDateStart: dayjs(data?.dateString)
-                                            .startOf("day")
-                                            .toISOString(),
-                                          dueDateEnd: dayjs(data?.dateString)
-                                            .endOf("day")
-                                            .toISOString(),
-                                          statusSelectedStatus: item?.name,
-                                        })
+                                          dueDateStart: data?.dateString?data?.dateString:"",
+                                          dueDateEnd: data?.dateString? data?.dateString:'',
+                                          statusSelectedStatus: item?.name?item?.name:"",
+                                        }
+                                      
+                                      setStorage(
+                                        "filter",
+                                        JSON.stringify(activeFilters)
                                       );
-                                      getFilteredList(params);
+                                      setStorage("reviewerDueDate",JSON.stringify(params))
                                       router?.push({
                                         pathname: "/reviewer/patients",
-                                        search: `params=${params}`,
+                                        // search: `params=${params}`,
                                       });
                                     }}
-                                  >                                 
+                                  >
                                     <div
                                       className={styles.bgColor}
                                       style={{
@@ -408,4 +414,3 @@ const connector = connect(
   }
 );
 export default connector(DailyTask);
-

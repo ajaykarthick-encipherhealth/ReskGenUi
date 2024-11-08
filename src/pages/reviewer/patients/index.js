@@ -37,7 +37,7 @@ import { patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
-import { getStorage, setStorage } from "../../../utils/storages";
+import { getStorage, removeStorage, setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import HeaderFiltersPatients from "./headerFilters";
 
@@ -172,6 +172,7 @@ const Patient = ({
     selectedPriority,
     searchTextValue,
     dueDateStart,
+    dueDateEnd,
     processedStart,
     processedEnd,
     statusSelectedStatus,
@@ -271,6 +272,8 @@ const Patient = ({
   const onChangeStatus = (selectedOption) => {
     let value = selectedOption;
     setStatusSelectedStatus(value);
+    removeStorage("reviewerDueDate")
+    removeStorage("reviewerDate");
   };
   const onChangePriority = (selectedOption) => {
     let value = selectedOption;
@@ -289,6 +292,8 @@ const Patient = ({
     } else {
       setDueDateStart("");
       setDueDateEnd("");
+      removeStorage("reviewerDueDate")
+      removeStorage("reviewerDate");
     }
   };
 
@@ -444,7 +449,22 @@ const Patient = ({
       setActiveFilters(sessionActiveFilters);
     }
   }, []);
-
+  useEffect(() => {
+    const reviewerFilters = JSON.parse(getStorage("filter"));
+    const decodedParams = JSON.parse(getStorage("reviewerDate"));
+    const params=JSON.parse(getStorage("reviewerDueDate"));
+    if (reviewerFilters) {
+      setActiveFilters(reviewerFilters);
+    }
+    if(decodedParams){
+      
+      setSelectedDates([
+        decodedParams?.dueDateStart ? dayjs(decodedParams?.dueDateStart) : null,
+        decodedParams?.dueDateEnd ? dayjs(decodedParams?.dueDateEnd) : null,
+      ]);
+    }
+    setStatusSelectedStatus(params?.statusSelectedStatus?params?.statusSelectedStatus:"")
+  }, []);
   return (
     <div className={`show `}>
       <Header />

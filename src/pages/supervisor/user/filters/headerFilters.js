@@ -139,7 +139,7 @@ const HeaderFilters = ({
   const debounceText = useCallback(
     debounce((val) => {
       return setSearchTextValue(val);
-    }, 700),
+    }, 900),
     []
   );
   const getNameSearch = async (e) => {

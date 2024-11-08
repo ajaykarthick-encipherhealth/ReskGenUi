@@ -91,13 +91,13 @@ const Radiology = ({
   };
 
   useEffect(() => {
-    if (patientDosResult?.data?.response) {
+    if (patientDosResult?.data?.response?.length>0) {
       getRadiologyFileDetails(
-        patientDosResult?.data?.response[0]?.fileDetailDTO?.azureBlobPath
+        radiologyDetailsResult?.data?.response[0]?.fileId||""
       );
       setIsLoading(true);
     }
-  }, [patientDosResult?.data?.response]);
+  }, []);
 
   const getAllProcessYearSelect = async (result) => {
     var dosYearArr = [];
@@ -115,13 +115,13 @@ const Radiology = ({
   }, [processedYearResult]);
 
   useEffect(() => {
-    if (radiologyDetailsResult?.data?.response) {
+    if (patientDosResult?.data?.response?.length>0) {
       getRadiologyFileDetails(
         radiologyDetailsResult?.data?.response[0]?.fileId || ""
       );
       setIsLoading(true);
     }
-  }, [radiologyDetailsResult?.data?.response]);
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -130,7 +130,7 @@ const Radiology = ({
   }, [activeMeatTitle]);
 
   useEffect(() => {
-    if (patientDosResult?.data?.response) {
+    if (patientDosResult?.data?.response?.length>0) {
       setSelectDosValue();
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
@@ -163,7 +163,7 @@ const Radiology = ({
         );
       }
     }
-  }, [patientDosResult?.data?.response]);
+  }, []);
 
   const handleChangePageNumber = async (value) => {
     setPopoverVisible(false);
