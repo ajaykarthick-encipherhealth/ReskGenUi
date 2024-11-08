@@ -50,7 +50,6 @@ const File = ({
   isDosSelected,
   labFileLoad,
   fileLoadingStatus,
-  actions
 }) => {
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
@@ -112,10 +111,9 @@ const File = ({
       "",
       setAllMeatList,
       "",
-      setPotentialList,
-      actions?.showDisease
+      setPotentialList
     );
-  }, [patientDetailsResult,actions?.showDisease]);
+  }, [patientDetailsResult]);
 
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
@@ -312,7 +310,6 @@ const File = ({
                             cardTitle="HCC"
                             provided={provided}
                             year={year}
-                            actions={actions}
                           />
                         </div>
                       </div>
@@ -481,7 +478,6 @@ const File = ({
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
                               year={year}
-                              actions={actions}
                             />
                           </div>
                         </div>
@@ -571,7 +567,6 @@ const File = ({
                               setSelectCardTitle={setSelectCardTitle}
                               remove
                               year={year}
-                              actions={actions}
                             />
                           </div>
                         </div>
@@ -662,7 +657,6 @@ const File = ({
                               setSelectCardTitle={setSelectCardTitle}
                               remove
                               year={year}
-                              actions={actions}
                             />
                           </div>
                         </div>

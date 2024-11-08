@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Tab, Nav } from "react-bootstrap";
 import { connect } from "react-redux";
 import visitStyles from "../../../../styles/visitdata.module.css";
-import TableStyle from "../../../table/table.module.css";
 import VisitData from "./visitData";
 import Combo from "./combo";
 import Meat from "./meat";
@@ -18,17 +17,9 @@ import {
   Tooltip,
   Badge,
   Tag,
-  Divider,
-  Modal,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAngleDown,
-  faAngleRight,
-  faCircleXmark,
-  faClose,
-  faLeftRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
 import styles from "../hcc/styles.module.css";
 import moment from "moment";
 import { actions as detailsActions } from "../../../../stores/patient/details";
@@ -38,7 +29,6 @@ import YearAndDosStatus from "../components/yearAndDosStatus";
 import { getStatusIcon, selectTab } from "../../../reuseableFunctions";
 import { getStorage } from "../../../../utils/storages";
 import { SwapOutlined } from "@ant-design/icons";
-import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 const { Option } = Select;
 
 const Hcc = ({
@@ -56,7 +46,8 @@ const Hcc = ({
   getLabPDFFile,
   getPatientHccFile,
   storeFileDetails,
-  selectedDosValue,
+  selectedDosValue
+
 }) => {
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
@@ -68,12 +59,6 @@ const Hcc = ({
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [dosSummariesList, setDosSummariesList] = useState([]);
   const [selectedFile, setSelectedFile] = useState("");
-  const [actions, setActions] = useState({
-    showDisease: false,
-    reEvaluate: false,
-    showActionsPop: false,
-  });
-  const [selectedReEvaluateItems, setSelectedReEvaluateItems] = useState([]);
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
@@ -172,7 +157,7 @@ const Hcc = ({
     const filteredDos1 = dosSummariesList?.find(
       (data) => data?.value === value
     );
-    storeFileDetails(filteredDos1?.details?.fileId || null);
+    storeFileDetails(filteredDos1?.details?.fileId || null)
     setSelectedFile(filteredDos1?.details?.fileId || "");
     if (filteredDos1?.details?.stateIndicators?.includes("LAB")) {
       // getLabPDFFile({ fileId: filteredDos1.details?.fileId });
@@ -321,69 +306,9 @@ const Hcc = ({
       </div>
     </div>
   );
-
-  const hideDiseasePopContent = (
-    <>
-      <div className="row">
-        <div className="col-xl-6 my-2">Re-Evaluate</div>
-        <div
-          className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer"
-          onClick={() =>
-            setActions({
-              showDisease: actions?.showDisease,
-              reEvaluate: true,
-              showActionsPop: false,
-            })
-          }
-        >
-          <FontAwesomeIcon icon={faAngleRight} style={{ color: "#04306f" }} />
-        </div>
-        <Divider className="p-0 m-0" />
-        <div className="col-xl-6 my-2">Disease</div>
-        <div
-          className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer"
-          onClick={() =>
-            setActions({
-              showDisease: !actions?.showDisease,
-              reEvaluate: actions?.reEvaluate,
-              showActionsPop: actions?.showActionsPop,
-            })
-          }
-        >
-          <span
-            className="px-2"
-            style={{
-              width: "50px",
-              color: actions?.showDisease ? "#04306f" : "#d9d9d9",
-            }}
-          >
-            {actions?.showDisease ? "Hide" : "Show"}
-          </span>
-          <div style={{width:"15px"}}><FontAwesomeIcon
-            icon={actions?.showDisease ? faEye : faEyeSlash}
-            style={{ color: actions?.showDisease ? "#04306f" : "#d9d9d9" }}
-          /></div>
-        </div>
-      </div>
-
-      <div className="d-flex justify-content-end align-items-center cursor-pointer">
-        {" "}
-        <button
-          className={`${visitStyles.actionBtn} px-2 py-1 rounded-md mt-4`}
-          onClick={() => {
-            setActions({
-              showActionsPop: false,
-              showDisease: actions?.showDisease,
-              reEvaluate: false,
-            });
-          }}
-        >
-          Cancel
-        </button>
-      </div>
-    </>
-  );
-
+  // useEffect(() => {
+  //   getSelectedDos("");
+  // }, []);
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
@@ -392,229 +317,222 @@ const Hcc = ({
             <div className="row">
               <div className="col-xl-12">
                 <Nav as="ul" className="nav nav-tabs">
-                  <div className="w-100 d-flex justify-content-between">
-                    <div className="d-flex" style={{ width: "95%" }}>
-                      {" "}
-                      <Nav.Item as="li" className="nav-item">
-                        <Nav.Link
-                          to="#my-posts"
-                          eventKey={1}
-                          className={visitStyles.navColor}
-                          onClick={() => {
-                            selectTab(
-                              1,
-                              setFlagTagActive,
-                              setActiveTabHead,
-                              setActiveComboTree,
-                              setPopoverVisible
-                            );
-                            getCurrentDiseaseType(true);
-                          }}
-                        >
-                          File
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <Nav.Link
-                          to="#my-posts"
-                          eventKey={2}
-                          className={visitStyles.navColor}
-                          activeClassName={visitStyles.activeLink}
-                          onClick={() =>
-                            selectTab(
-                              2,
-                              setFlagTagActive,
-                              setActiveTabHead,
-                              setActiveComboTree,
-                              setPopoverVisible
-                            )
-                          }
-                        >
-                          Visit Data
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <Nav.Link
-                          to="#my-posts"
-                          eventKey={3}
-                          className={visitStyles.navColor}
-                          onClick={() =>
-                            selectTab(
-                              3,
-                              setFlagTagActive,
-                              setActiveTabHead,
-                              setActiveComboTree,
-                              setPopoverVisible
-                            )
-                          }
-                        >
-                          Combination Codes
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <Nav.Link
-                          to="#my-posts"
-                          eventKey={4}
-                          className={visitStyles.navColor}
-                          onClick={() =>
-                            selectTab(
-                              4,
-                              setFlagTagActive,
-                              setActiveTabHead,
-                              setActiveComboTree,
-                              setPopoverVisible
-                            )
-                          }
-                        >
-                          MEAT Criteria
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <Nav.Link
-                          to="#my-posts"
-                          eventKey={5}
-                          className={visitStyles.navColor}
-                          onClick={() =>
-                            selectTab(
-                              5,
-                              setFlagTagActive,
-                              setActiveTabHead,
-                              setActiveComboTree,
-                              setPopoverVisible,
-                              setActiveMeatTitle
-                            )
-                          }
-                        >
-                          RAF Score
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <Nav.Link
-                          to="#my-posts"
-                          eventKey={6}
-                          className={visitStyles.navColor}
-                          onClick={() =>
-                            selectTab(
-                              6,
-                              setFlagTagActive,
-                              setActiveTabHead,
-                              setActiveComboTree,
-                              setPopoverVisible
-                            )
-                          }
-                        >
-                          Query
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <Select
-                          placeholder="Select DOS"
-                          onChange={handleOptions}
-                          className="dosSelect"
-                          allowClear
-                          value={selectDosValue ? selectDosValue : null}
-                        >
-                          {dosSummariesList?.map((data) => (
-                            <Option key={data?.value} value={data?.value}>
-                              {data.label}
-                            </Option>
-                          ))}
-                        </Select>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item mx-2">
-                        {getStorage("role") != "admin" && selectDosValue && (
-                          <YearAndDosStatus setIsLoading={setIsLoading} />
-                        )}
-                      </Nav.Item>
-                      {activeTabHead == 1 && (
-                        <Popover
-                          open={popoverVisible}
-                          content={PopContent}
-                          placement="bottom"
-                          trigger={"click"}
-                          overlayStyle={{ zIndex: 1000 }}
-                          onOpenChange={() => setPopoverVisible(false)}
-                        >
-                          <div
-                            className={styles.dosContainer}
-                            onClick={() => {
-                              setPopoverVisible(true);
-                            }}
-                          >
-                            <span className={styles.dosPageNumber}>
-                              Select Dos Page Number
-                            </span>
-                            <FontAwesomeIcon
-                              icon={faAngleDown}
-                              style={{
-                                size: 10,
-                                color: "#e6e6e6",
-                                marginLeft: "5px",
-                              }}
-                            />
-                          </div>
-                        </Popover>
+                  <Nav.Item as="li" className="nav-item">
+                    <Nav.Link
+                      to="#my-posts"
+                      eventKey={1}
+                      className={visitStyles.navColor}
+                      onClick={() => {
+                        selectTab(
+                          1,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible
+                        );
+                        getCurrentDiseaseType(true);
+                      }}
+                    >
+                      File
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item as="li" className="nav-item">
+                    <Nav.Link
+                      to="#my-posts"
+                      eventKey={2}
+                      className={visitStyles.navColor}
+                      activeClassName={visitStyles.activeLink}
+                      onClick={() =>
+                        selectTab(
+                          2,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible
+                        )
+                      }
+                    >
+                      Visit Data
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item as="li" className="nav-item">
+                    <Nav.Link
+                      to="#my-posts"
+                      eventKey={3}
+                      className={visitStyles.navColor}
+                      onClick={() =>
+                        selectTab(
+                          3,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible
+                        )
+                      }
+                    >
+                      Combination Codes
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item as="li" className="nav-item">
+                    <Nav.Link
+                      to="#my-posts"
+                      eventKey={4}
+                      className={visitStyles.navColor}
+                      onClick={() =>
+                        selectTab(
+                          4,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible
+                        )
+                      }
+                    >
+                      MEAT Criteria
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item as="li" className="nav-item">
+                    <Nav.Link
+                      to="#my-posts"
+                      eventKey={5}
+                      className={visitStyles.navColor}
+                      onClick={() =>
+                        selectTab(
+                          5,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible,
+                          setActiveMeatTitle
+                        )
+                      }
+                    >
+                      RAF Score
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item as="li" className="nav-item">
+                    <Nav.Link
+                      to="#my-posts"
+                      eventKey={6}
+                      className={visitStyles.navColor}
+                      onClick={() =>
+                        selectTab(
+                          6,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible
+                        )
+                      }
+                    >
+                      Query
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item as="li" className="nav-item">
+                    <Select
+                      placeholder="Select DOS"
+                      onChange={handleOptions}
+                      className="dosSelect"
+                      allowClear
+                      value={selectDosValue ? selectDosValue : null}
+                    >
+                      {dosSummariesList?.map((data) => (
+                        <Option key={data?.value} value={data?.value}>
+                          {data.label}
+                        </Option>
+                      ))}
+                    </Select>
+                  </Nav.Item>
+                  <Nav.Item as="li" className="nav-item mx-2">
+                    {getStorage("role") != "admin" &&
+                      selectDosValue && (
+                        <YearAndDosStatus setIsLoading={setIsLoading} />
                       )}
-                      {flagTagActive ? (
-                        <div>
-                          <div>
-                            <Popover
-                              content={
-                                <>
-                                  <div className={visitStyles.flags}>
-                                    <div className={visitStyles.flags}>
-                                      <span
-                                        className={visitStyles.hccFlag}
-                                      ></span>
-                                      <span className={visitStyles.flagCodes}>
-                                        HCC
-                                      </span>
-                                    </div>
-                                    <div className={visitStyles.flags}>
-                                      <span
-                                        className={visitStyles.suggestedFlag}
-                                      ></span>
-                                      <span className={visitStyles.flagCodes}>
-                                        SUGGESTED
-                                      </span>
-                                    </div>
-                                    <div className={visitStyles.flags}>
-                                      <span
-                                        className={visitStyles.deleteFlag}
-                                      ></span>
-                                      <span className={visitStyles.flagCodes}>
-                                        DELETED
-                                      </span>
-                                    </div>
-                                    <div className={visitStyles.flags}>
-                                      <span
-                                        className={visitStyles.nonhccFlag}
-                                      ></span>
-                                      <span className={visitStyles.flagCodes}>
-                                        NON HCC
-                                      </span>
-                                    </div>
-                                    <div className={visitStyles.flags}>
-                                      <span
-                                        className={visitStyles.potentialFlag}
-                                      ></span>
-                                      <span className={visitStyles.flagCodes}>
-                                        POTENTIAL DIAGNOSIS
-                                      </span>
-                                    </div>
-                                  </div>
-                                </>
-                              }
-                              trigger={["click"]}
-                              placement="bottom"
-                            >
-                              <Image
-                                src={warning}
-                                style={{ cursor: "pointer" }}
-                              />
-                            </Popover>
-                          </div>
-                          {/* <div className={visitStyles.flags}>
+                  </Nav.Item>
+                  {activeTabHead == 1 && (
+                    <Popover
+                      open={popoverVisible}
+                      content={PopContent}
+                      placement="bottom"
+                      trigger={"click"}
+                      overlayStyle={{ zIndex: 1000 }}
+                      onOpenChange={() => setPopoverVisible(false)}
+                    >
+                      <div
+                        className={styles.dosContainer}
+                        onClick={() => {
+                          setPopoverVisible(true);
+                        }}
+                      >
+                        <span className={styles.dosPageNumber}>
+                          Select Dos Page Number
+                        </span>
+                        <FontAwesomeIcon
+                          icon={faAngleDown}
+                          style={{
+                            size: 10,
+                            color: "#e6e6e6",
+                            marginLeft: "5px",
+                          }}
+                        />
+                      </div>
+                    </Popover>
+                  )}
+                  {flagTagActive ? (
+                    <div>
+                      <div>
+                        <Popover
+                          content={
+                            <>
+                              <div className={visitStyles.flags}>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.hccFlag}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    HCC
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.suggestedFlag}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    SUGGESTED
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.deleteFlag}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    DELETED
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.nonhccFlag}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    NON HCC
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.potentialFlag}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                  POTENTIAL DIAGNOSIS
+                                  </span>
+                                </div>
+                              </div>
+                            </>
+                          }
+                          trigger={["click"]}
+                          placement="bottom"
+                        >
+                          <Image src={warning} style={{ cursor: "pointer" }} />
+                        </Popover>
+                      </div>
+                      {/* <div className={visitStyles.flags}>
                         <div className={visitStyles.flags}>
                           <span className={visitStyles.hccFlag}></span>
                           <span className={visitStyles.flagCodes}>HCC</span>
@@ -634,34 +552,8 @@ const Hcc = ({
                           <span className={visitStyles.flagCodes}>NON HCC</span>
                         </div>
                       </div> */}
-                        </div>
-                      ) : null}
                     </div>
-                    <div
-                      style={{ width: "5%" }}
-                      className="d-flex justify-content-end align-items-center"
-                    >
-                      <Popover
-                        open={actions.showActionsPop}
-                        trigger={["click"]}
-                        placement="bottom"
-                        content={hideDiseasePopContent}
-                      >
-                        <button
-                          className={`${visitStyles.actionBtn} px-4 py-1 rounded-md`}
-                          onClick={() =>
-                            setActions({
-                              showActionsPop: !actions.showActionsPop,
-                              showDisease: actions?.showDisease,
-                              reEvaluate: actions?.reEvaluate,
-                            })
-                          }
-                        >
-                          Action
-                        </button>
-                      </Popover>
-                    </div>
-                  </div>
+                  ) : null}
                 </Nav>
               </div>
             </div>
@@ -679,8 +571,6 @@ const Hcc = ({
                   setPageNumberOptions={setPageNumberOptions}
                   search={search}
                   setSearch={setSearch}
-                  actions={actions}
-                  selectDosValue={selectDosValue}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={2}>
@@ -689,7 +579,6 @@ const Hcc = ({
                   setActiveMeatTitle={setActiveMeatTitle}
                   setActiveComboTree={setActiveComboTree}
                   year={year}
-                  actions={actions}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={3}>
@@ -698,98 +587,21 @@ const Hcc = ({
                   setActiveMeatTitle={setActiveMeatTitle}
                   activeComboTree={activeComboTree}
                   year={year}
-                  actions={actions}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={4}>
-                <Meat activeMeatTitle={activeMeatTitle} year={year} actions={actions}/>
+                <Meat activeMeatTitle={activeMeatTitle} year={year} />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={5}>
                 <RafScore />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={6}>
-                <MeatQuery year={year} actions={actions} />
+                <MeatQuery year={year} />
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>
         </div>
       </div>
-      <Modal
-        open={actions?.reEvaluate}
-        footer={false}
-        onCancel={() => {
-          setActions({
-            showActionsPop: actions?.showActionsPop,
-            showDisease: actions?.showDisease,
-            reEvaluate: false,
-          });
-          setSelectedReEvaluateItems([]);
-        }}
-        width={300}
-      >
-        <div className="font-bold">Re-Evaluate</div>
-        <Divider className="p-0 my-2" />
-        <div className="row">
-          <div className="col-xl-10">Combination</div>
-          <div className="col-xl-2 p-0 d-flex">
-            <input
-              type="checkbox"
-              onChange={(val) => {
-                val?.target.checked
-                  ? setSelectedReEvaluateItems((prev) => [
-                      ...prev,
-                      "Combination",
-                    ])
-                  : setSelectedReEvaluateItems((prev) =>
-                      prev.filter((item) => item !== "Combination")
-                    );
-              }}
-              style={{
-                width: "20px",
-                height: "20px",
-                flexhrink: "0",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-              checked={selectedReEvaluateItems.includes("Combination")}
-              className={
-                selectedReEvaluateItems.includes("Combination")
-                  ? TableStyle.customChecked2
-                  : ""
-              }
-            />
-          </div>
-          <div className="col-xl-10 mt-4">Lab & Radiology</div>
-          <div className="col-xl-2 p-0 d-flex mt-4">
-            <input
-              type="checkbox"
-              onChange={(val) => {
-                val?.target.checked
-                  ? setSelectedReEvaluateItems((prev) => [
-                      ...prev,
-                      "Lab & Radiology",
-                    ])
-                  : setSelectedReEvaluateItems((prev) =>
-                      prev.filter((item) => item !== "Lab & Radiology")
-                    );
-              }}
-              style={{
-                width: "20px",
-                height: "20px",
-                flexhrink: "0",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-              checked={selectedReEvaluateItems.includes("Lab & Radiology")}
-              className={
-                selectedReEvaluateItems.includes("Lab & Radiology")
-                  ? TableStyle.customChecked2
-                  : ""
-              }
-            />
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 };

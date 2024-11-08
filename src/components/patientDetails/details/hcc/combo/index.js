@@ -25,8 +25,7 @@ const Combo = ({
   setActiveTabHead,
   setActiveMeatTitle,
   year,
-  manuallyAddComboCode,
-  actions
+  manuallyAddComboCode
 }) => {
 
   const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] =
@@ -305,7 +304,6 @@ const Combo = ({
                         meatCriteriaList={allMeatList}
                         cardTitle="HCC"
                         provided={provided}
-                        actions={actions}
                       />
                     </div>
                   );
@@ -352,7 +350,6 @@ const Combo = ({
                         setSuggestedMeatForm={setSuggestedMeatForm}
                         setSelectCardTitle={setSelectCardTitle}
                         provided={provided}
-                        actions={actions}
                       />
                     </div>
                   );
@@ -404,7 +401,6 @@ const Combo = ({
                         setSuggestedMeatForm={setSuggestedMeatForm}
                         setSelectCardTitle={setSelectCardTitle}
                         provided={provided}
-                        actions={actions}
                       />
                     </div>
                   );
@@ -480,7 +476,6 @@ const Combo = ({
                           popup={zIndex}
                           cardTitle="VALID_COMBO"
                           provided={provided}
-                          actions={actions}
                         />
                       </div>
                     );

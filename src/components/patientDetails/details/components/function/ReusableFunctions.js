@@ -32,7 +32,6 @@ export const getEncounterDateBackground = ({
   setSelectedDos,
   setLabData,
   storeFileDetails,
-  isShow
 }) => {
   return value?.map((res, index) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -73,7 +72,7 @@ export const getEncounterDateBackground = ({
             // } else {
             //   getCurrentDiseaseType && getCurrentDiseaseType(true);
             // }
-            isShow && getEncounterDetails({
+            getEncounterDetails({
               date: res,
               fileDosPageNumberList: fileDosPageNumberList,
               setIsModalOpenValidCodes: setIsModalOpenValidCodes,
@@ -109,7 +108,7 @@ export const getEncounterDateBackground = ({
       return sectionMapArr;
     } else if (value.length - 1 == index) {
       var sectionMapArr = (
-        isShow? <Popover
+        <Popover
           trigger={["hover"]}
           placement="bottom"
           overlayStyle={{ zIndex: 1000 }}
@@ -197,15 +196,7 @@ export const getEncounterDateBackground = ({
           >
             {value.length - 2}+
           </span>
-        </Popover>:<span
-            style={{
-              background: "#a0b1a0",
-              color: "#fff",
-            }}
-            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-          >
-            {value.length - 2}+
-          </span>
+        </Popover>
       );
 
       return sectionMapArr;
@@ -666,7 +657,6 @@ export const getCaptureSectionBackgroundFile = ({
   getCurrentDiseaseType,
   setLabData,
   storeFileDetails,
-  isShow
 }) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res, index) => {
@@ -711,7 +701,7 @@ export const getCaptureSectionBackgroundFile = ({
               // } else {
               //   getCurrentDiseaseType && getCurrentDiseaseType(true);
               // }
-              isShow && newFindValueDocument(
+              newFindValueDocument(
                 headerResult[0],
                 documentPlace,
                 setSearch,
@@ -743,7 +733,7 @@ export const getCaptureSectionBackgroundFile = ({
         }
       } else {
         var sectionMapArr = (
-          isShow?<Popover
+          <Popover
             overlayStyle={{ zIndex: !popup && 1000 }}
             placement="bottom"
             content={
@@ -782,12 +772,7 @@ export const getCaptureSectionBackgroundFile = ({
             >
               {truncateString(res, 30)}
             </span>
-          </Popover>:<span
-              style={{ backgroundColor: backColor, color: textColor }}
-              className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
-            >
-              {truncateString(res, 30)}
-            </span>
+          </Popover>
         );
         if (res != "") {
           return sectionMapArr;
@@ -830,7 +815,7 @@ export const getCaptureSectionBackgroundFile = ({
                           //   getCurrentDiseaseType &&
                           //     getCurrentDiseaseType(true);
                           // }
-                          isShow && newFindValueDocument(
+                          newFindValueDocument(
                             findSectionHyperlink(hyperlinks, item)[0],
                             documentPlace,
                             setSearch,
@@ -900,7 +885,7 @@ export const getCaptureSectionBackgroundFile = ({
               );
               return i > 1 ? (
                 duplicateHeaders?.length > 1 ? (
-                  isShow ?<Popover
+                  <Popover
                     overlayStyle={{ zIndex: 9999 }}
                     placement="bottom"
                     content={getHeaderHyperlink(
@@ -940,18 +925,7 @@ export const getCaptureSectionBackgroundFile = ({
                           {item}
                         </span>
                       )}
-                  </Popover>:isMulitpleHeader &&
-                      diagnosisCode == isMulitpleHeaderCode && (
-                        <span
-                          style={{
-                            background: stringToColour(item) + 33,
-                            color: stringToColour(item),
-                          }}
-                          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-                        >
-                          {item}
-                        </span>
-                      )
+                  </Popover>
                 ) : (
                   <>
                     {isMulitpleHeader &&
@@ -985,7 +959,7 @@ export const getCaptureSectionBackgroundFile = ({
                             //   getCurrentDiseaseType &&
                             //     getCurrentDiseaseType(true);
                             // }
-                            isShow && newFindValueDocument(
+                            newFindValueDocument(
                               findSectionHyperlink(hyperlinks, item)[0],
                               documentPlace,
                               setSearch,
@@ -1867,9 +1841,8 @@ export function removeDuplicatesArray(arr) {
   }
 }
 
-export const getSuspectTypes = (title, value,isShow) => {
+export const getSuspectTypes = (title, value) => {
   var popOver = (
-    isShow?
     <Popover
       overlayStyle={{ zIndex: 999 }}
       className="suspectContainer"
@@ -1901,9 +1874,7 @@ export const getSuspectTypes = (title, value,isShow) => {
       <div>
         <FontAwesomeIcon icon={faCircle} className={styles.suspectCircle} />
       </div>
-    </Popover>:<div>
-        <FontAwesomeIcon icon={faCircle} className={styles.suspectCircle} />
-      </div>
+    </Popover>
   );
 
   return popOver;
