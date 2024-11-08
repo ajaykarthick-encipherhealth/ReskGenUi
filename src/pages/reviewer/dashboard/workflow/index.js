@@ -116,41 +116,44 @@ const WorkFlow = ({ worlFlowData ,DateRanges}) => {
         handleOpen={handleOpen}
         openPicker={openPicker}
         setOpenPicker={setOpenPicker}
+        defaultDateRange={DateRanges}
       />
-   <Card borderRadius="28px">
-      {worlFlowData?.loading ? (
-        renderCardSkeleton()
-      ) : worlFlowData?.data?.response ? (
-        <Row className={styles.carddiv}>
-          {card1Data?.map((data) => (
-            <Col
-              key={data?.id}
-              span={10}
-              style={{
-                backgroundImage: `url(${data?.bg.src})`,
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: 'cover',
-              }}
-              className={styles.colData}
-            >
-              <div className={styles.header}>
-                <div className="mt-1">{data?.icon}</div>
-                {/* <Image src={data?.icon} className={styles.Img} /> */}
-                <div className={styles.heading}>{data.title}</div>
-              </div>
-              <div className={styles.charts}>{`${data?.charts ? data?.charts : '0'} Charts`}</div>
-              <div className={styles.days}>{data.days}</div>
-            </Col>
-          ))}
-        </Row>
-      ) : (
-        !worlFlowData?.loading && (
-          <div className={spinSTYles.spinStyle}>
-            <Empty />
-          </div>
-        )
-      )}
-    </Card>
+      <Card borderRadius="28px">
+        {worlFlowData?.loading ? (
+          renderCardSkeleton()
+        ) : worlFlowData?.data?.response ? (
+          <Row className={styles.carddiv}>
+            {card1Data?.map((data) => (
+              <Col
+                key={data?.id}
+                span={10}
+                style={{
+                  backgroundImage: `url(${data?.bg.src})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "cover",
+                }}
+                className={styles.colData}
+              >
+                <div className={styles.header}>
+                  <div className="mt-1">{data?.icon}</div>
+                  {/* <Image src={data?.icon} className={styles.Img} /> */}
+                  <div className={styles.heading}>{data.title}</div>
+                </div>
+                <div className={styles.charts}>{`${
+                  data?.charts ? data?.charts : "0"
+                } Charts`}</div>
+                <div className={styles.days}>{data.days}</div>
+              </Col>
+            ))}
+          </Row>
+        ) : (
+          !worlFlowData?.loading && (
+            <div className={spinSTYles.spinStyle}>
+              <Empty />
+            </div>
+          )
+        )}
+      </Card>
     </div>
   );
 };

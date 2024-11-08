@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import styles from "./styles.module.css";
 import { Button, DatePicker, Modal } from "antd";
 import dayjs from "dayjs";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/admin/dashboard";
-import moment from "moment";
 import { disableFutureDate } from "../headerFilters/functions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
+import styles from "./styles.module.css";
 
 const { RangePicker } = DatePicker;
 
@@ -22,28 +20,44 @@ const HeadTitle = ({
   isAdmin = false,
   margin,
   fontSize,
-  getDateRange
+  getDateRange,
+  defaultDateRange,
 }) => {
- 
-  const [selectedDates, setSelectedDates] = useState([]);
+  const [selectedDates, setSelectedDates] = useState(
+    defaultDateRange
+      ? [dayjs(defaultDateRange.startDate), dayjs(defaultDateRange.endDate)]
+      : []
+  );
   const [dateValues, setDates] = useState();
-  const currentDate = dayjs();
-  const startOfMonth = currentDate.startOf("month");
+
+  useEffect(() => {
+    // Log defaultDateRange and selectedDates for debugging
+    console.log("defaultDateRange:", defaultDateRange);
+    console.log("selectedDates before setting:", selectedDates);
+
+    if (defaultDateRange?.startDate && defaultDateRange?.endDate) {
+      setSelectedDates([
+        dayjs(defaultDateRange.startDate),
+        dayjs(defaultDateRange.endDate),
+      ]);
+    }
+  }, [defaultDateRange]);
 
   const handleDatePickerChange = (date) => {
     if (date) {
       const dates = {
-        startDate:
-          moment(date[0], "MM-DD-YYYY").format("YYYY-MM-DD") + "T00:00:00.000Z",
-        endDate:
-          moment(date[1], "MM-DD-YYYY").format("YYYY-MM-DD") + "T23:59:59.000Z",
+        startDate: dayjs(date[0]).format("YYYY-MM-DD") + "T00:00:00.000Z",
+        endDate: dayjs(date[1]).format("YYYY-MM-DD") + "T23:59:59.000Z",
       };
       setDates(dates);
     }
   };
 
-  const last3thDate = currentDate.subtract(2, "day");
-  const lastDateWithTime = currentDate.endOf("day").toISOString();
+  const handleRefresh = () => {
+    setSelectedDates([]);
+    setDates(null);
+    getDateRange(null);
+  };
 
   return (
     <div
@@ -53,8 +67,7 @@ const HeadTitle = ({
       <div
         style={{
           display: "flex",
-          with: "100%",
-          height: "100%",
+          width: "100%",
           justifyContent: "space-between",
         }}
       >
@@ -63,17 +76,10 @@ const HeadTitle = ({
         </div>
         {icon && (
           <div className={styles.imgContainer}>
-            <div className="cursor-pointer">
-              <FontAwesomeIcon
-                onClick={() => {
-                  setOpenPicker(!openPicker);
-                  if (!openPicker) {
-                    setSelectedDates([]);
-                  }
-                }}
-                icon={faCalendar}
-              />
-            </div>
+            <FontAwesomeIcon
+              onClick={() => setOpenPicker(!openPicker)}
+              icon={faCalendar}
+            />
           </div>
         )}
       </div>
@@ -84,7 +90,6 @@ const HeadTitle = ({
       )}
       <Modal
         open={openPicker}
-        mask={true}
         width={640}
         closable={false}
         onOk={() => {
@@ -95,6 +100,7 @@ const HeadTitle = ({
           setOpenPicker(false);
           setSelectedDates([]);
         }}
+        footer={null}
         className={styles.customModal}
       >
         <div
@@ -102,30 +108,60 @@ const HeadTitle = ({
         >
           <RangePicker
             getPopupContainer={() => document.getElementById("date-popup")}
-            placeholder={[
-              dayjs(currentDate).format("MM-DD-YYYY"),
-              dayjs(startOfMonth).format("MM-DD-YYYY"),
-            ]}
-            open={openPicker}
-            value={selectedDates?.length > 0 ? selectedDates : ""}
+            value={selectedDates?.length ? selectedDates : null} // Set selected dates if available
             onChange={(dates, dateStrings) => {
               setSelectedDates(dates);
               handleDatePickerChange(dateStrings);
             }}
             format="MM-DD-YYYY"
-            suffixIcon={false}
             disabledDate={(current) => disableFutureDate(current)}
             inputReadOnly={true}
+            open={openPicker}
           />
         </div>
+        <div
+          className="modal-footer"
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginTop: "20px",
+          }}
+        >
+          <Button
+            onClick={handleRefresh}
+            type="default"
+            style={{ marginRight: "10px" }}
+          >
+            Refresh
+          </Button>
+
+          <Button
+            onClick={() => setOpenPicker(false)}
+            style={{ marginLeft: "10px", marginRight:"20px" }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              getDateRange(dateValues);
+              setOpenPicker(false);
+            }}
+            type="primary"
+          >
+            OK
+          </Button>
+        </div>
         <div id="date-popup" style={{ position: "relative" }} />
+        <div
+          className="modal-footer"
+          style={{ textAlign: "right", marginTop: "20px" }}
+        ></div>
       </Modal>
     </div>
   );
 };
 
-const connector = connect((state) => ({
-}), {
+const connector = connect(null, {
   getDateRange: allActions.getDateRange,
 });
 export default connector(HeadTitle);
