@@ -136,7 +136,6 @@ const Index = ({
       setTotalElements(usersData?.data?.response?.totalElements);
     }
   }, [usersData]);
-
   useEffect(() => {
     const uId = getStorage("user");
     setUserName(uId);
@@ -144,7 +143,7 @@ const Index = ({
       const data = {
         uId,
         pageNo,
-        search: searchTextValue,
+        search: search,
         selectedOption,
         selAllocatedBy,
         dueStartDate: clear ? "" : dueStartDate,
@@ -173,6 +172,7 @@ const Index = ({
     selAllocatedBy,
     dueStartDate,
     dueEndDate,
+    search,
     completedStartDate,
     completedEndDate,
     auditedStartDate,
@@ -309,7 +309,7 @@ const Index = ({
           ? dayjs(decodedParams?.aduitDueEndDate)
           : null,
       ]);
-      setSearch(decodedParams?.search);
+      setSearch(decodedParams?.searchTextValue?decodedParams?.searchTextValue:"");
       setPageNo(decodedParams?.pageNo);
       setPaginationFirst(decodedParams?.paginationFirst);
       setSelectedOption(decodedParams?.selectedOption)

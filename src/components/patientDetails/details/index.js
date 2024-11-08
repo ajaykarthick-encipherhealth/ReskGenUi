@@ -523,9 +523,10 @@ const Details = ({
         }
       }
     } else if (user && user.toLowerCase() === "supervisor") {
-      if (isSupervisorAuited) {
+        if( JSON.parse(getStorage("isSupervisorAuited")))
+        {
         navigate.push("/supervisor/auditing");
-      } else if (isSupervisorUserDetails) {
+      } else if (JSON.parse(getStorage("isSupervisorUserDetails"))) {
         navigate.push("/supervisor/user/userQueue");
       } else {
         navigate.back();
@@ -542,7 +543,6 @@ const Details = ({
       return name[0];
     }
   };
-
   const renderUserDetails = async (userId) => {
     var result = "";
     var data = "";

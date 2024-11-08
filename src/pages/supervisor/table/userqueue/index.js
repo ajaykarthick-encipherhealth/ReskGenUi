@@ -141,13 +141,12 @@ const UserQueueTable = ({
     if (targetTd) {
       setStorage("patientId", id);
       setStorage("isSupervisorUserDetails", true);
+      setStorage("isSupervisorAuited",false)
       setStorage("supervisorUserFilter", JSON.stringify(activeFilters));
       setStorage("supervisorUserEncodedValue", JSON.stringify(params));
-      
       router?.push(
         {
           pathname: "/supervisor/user/details",
-          // query: { ...params, isSupervisorUserDetails: true,filters: activeFilters},
         },
         "/supervisor/user/details"
       );

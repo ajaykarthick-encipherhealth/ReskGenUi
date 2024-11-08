@@ -7,6 +7,7 @@ import { Popover, notification } from "antd";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../jsx/layouts/nav/Header";
+import dayjs from "dayjs";
 import PatientTable from "../table/PatientList/patientList";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
@@ -133,10 +134,6 @@ const Patient = ({
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    // const searchParams = new URLSearchParams(window.location.search);
-    // const uId = searchParams.get("userId")
-    //   ? searchParams.get("userId")
-    //   : navigate.query;
     const uId = getStorage("user")
     const data = {
       pageNo,
@@ -144,8 +141,8 @@ const Patient = ({
       computedEndDate,
       selectedOption: clear ? "" : selectedOption,
       search :clear ? "" : search,
-      completedStartDate: clear ? "" : completedStartDate,
-      completedEndDate: clear ? "" : completedEndDate,
+      completedStartDate: clear ? "" : selecteddates2?.[0]?selecteddates2?.[0]:"",
+      completedEndDate: clear ? "" : selecteddates2?.[1]?selecteddates2?.[1]:"",
       patientSortOrder,
       selAllocatedBy,
       sort,
@@ -161,22 +158,13 @@ const Patient = ({
     selAllocatedBy,
     search,
     completedStartDate,
+    selecteddates2,
     completedEndDate,
     patientSortOrder,
     sort,
     selCreatedBy,
   ]);
 
-  // useEffect(() => {
-  //   if (window !== "undefined") {
-  //     if (navigate.query.pageNo) {
-  //       setIsLoading(true);
-  //       setPageNo(navigate?.query?.pageNo);
-  //       setPaginationFirst(navigate?.query?.paginationFirst);
-  //       setSearch(navigate?.query?.search)
-  //     }
-  //   }
-  // }, [navigate]);
   useEffect(() => {
     if (response?.data?.response?.content) {
       getAllList();
@@ -254,35 +242,34 @@ const Patient = ({
       });
     }
   };
-  // useEffect(() => {
-  //   if (navigate.query?.filters?.length) {
-  //     const array = activeFilters?.[0]?.split(",");
-  //     setActiveFilters(array);
-  //   } else {
-  //     console.error("activeFilters is not a string:", activeFilters);
-  //   }
-  // }, [navigate.query]);
+
  useEffect(()=>{
   const decodedParams = JSON.parse(getStorage("supervisorEncodedValue"));
   const sessionActiveFilters = JSON.parse(getStorage("supervisorFilters"));
   if (decodedParams) {
-    setCompletedStartDate(
+    setSelectedDate2s([
       decodedParams?.completedStartDate
-    );
+        ? dayjs(decodedParams?.completedStartDate)
+        : null,
+      decodedParams?.completedEndDate ? dayjs(decodedParams?.completedEndDate) : null,
+    ]);
     SetSelectedOption(
       decodedParams?.selectedOption? decodedParams?.selectedOption:""
     );
     setSearch(
-      decodedParams?.search
+      decodedParams?.search? decodedParams?.search:""
     );
     setSelCreatedBy(
-      decodedParams?.selCreatedBy
+      decodedParams?.selCreatedBy? decodedParams?.selCreatedBy:""
     );
+    setPageNo(decodedParams?.pageNo);
+    setPaginationFirst(decodedParams?.paginationFirst);
   }
   if (sessionActiveFilters) {
     setActiveFilters(sessionActiveFilters);
   }
  },[])
+
   const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes

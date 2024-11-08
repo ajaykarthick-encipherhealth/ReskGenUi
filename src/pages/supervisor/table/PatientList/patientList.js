@@ -89,11 +89,11 @@ PatientTable({
       controller.abort();
       setStorage("patientId", data.patientId);
       setStorage("isSupervisorAuited", true);
+      setStorage("isSupervisorUserDetails",false)
       setStorage("supervisorFilters", JSON.stringify(activeFilters));
       setStorage("supervisorEncodedValue", JSON.stringify(params));
       navigate.push({
         pathname: "/supervisor/patients/details",
-        // query: { ...params, isSupervisorAuited: true ,filters: activeFilters},
       },"/supervisor/patients/details");
     } else {
       notification.warning({
