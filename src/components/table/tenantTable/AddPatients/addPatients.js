@@ -345,7 +345,7 @@ function AddPatientListTable({
           )}
         </tbody>
       </table>
-      <div></div>
+     
     </div>
   );
 }

@@ -27,6 +27,7 @@ export const getProviderNameTag = ({
   getCurrentDiseaseType,
   setLabData,
   storeFileDetails,
+  isShow
 }) => {
   return providerNames?.map((res, index) => {
     const normalizedRes = res?.toLowerCase().trim();
@@ -62,7 +63,7 @@ export const getProviderNameTag = ({
               //   getCurrentDiseaseType && getCurrentDiseaseType(true);
               // }
               // storeFileDetails(headerResult[0]?.fileId)
-              findProviderNameDocument({
+              isShow && findProviderNameDocument({
                 data: headerResult[0],
                 diagnosisCode: diagnosisCode,
                 diseaseName: diseaseName,
@@ -101,7 +102,7 @@ export const getProviderNameTag = ({
         }
       } else {
         const sectionMapArr = (
-          <Popover
+         isShow? <Popover
             placement="bottom"
             overlayStyle={{ zIndex: 1000 }}
             content={
@@ -146,7 +147,25 @@ export const getProviderNameTag = ({
               </i>
               {truncateString(res, 20)}
             </span>
-          </Popover>
+          </Popover>:<span
+              className={`mt-2 text-start ${visitStyles.provider_name}`}
+              style={{
+                backgroundColor: stringToColour(res) + 33,
+                color: stringToColour(res),
+              }}
+            >
+              <i>
+                {" "}
+                <FontAwesomeIcon
+                  icon={faCircleUser}
+                  style={{
+                    size: 10,
+                    color: stringToColour(res),
+                  }}
+                />
+              </i>
+              {truncateString(res, 20)}
+            </span>
         );
         if (res !== "") {
           return sectionMapArr;
