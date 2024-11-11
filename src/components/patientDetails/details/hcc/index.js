@@ -56,7 +56,6 @@ const Hcc = ({
   getLabPDFFile,
   getPatientHccFile,
   storeFileDetails,
-  selectedDosValue,
 }) => {
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
@@ -164,62 +163,72 @@ const Hcc = ({
   }, [activeMeatTitle]);
 
   const handleOptions = (value) => {
-    setIsLoading(true);
-    setSelectDosValue(value);
-    const filteredDos = pageNumberOptions?.filter(
-      (data) => data?.dos === value
-    );
-    const filteredDos1 = dosSummariesList?.find(
-      (data) => data?.value === value
-    );
-    storeFileDetails(filteredDos1?.details?.fileId || null);
-    setSelectedFile(filteredDos1?.details?.fileId || "");
-    if (filteredDos1?.details?.stateIndicators?.includes("LAB")) {
-      // getLabPDFFile({ fileId: filteredDos1.details?.fileId });
-    } else if (filteredDos1?.details?.stateIndicators?.includes("RADIOLOGY")) {
-      // getLabPDFFile({ fileId: filteredDos1.details?.fileId });
-    } else {
-      // if (!filteredDos1?.details?.fileId) {
-      //   getLabPDFFile({
-      //     fileId:
-      //       patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath,
-      //   });
-      //   getPatientHccFile(
-      //     patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
-      //   );
-      // } else {
-      //   getLabPDFFile({ fileId: filteredDos1?.details?.fileId });
-      // }
-
-      getSelectedDosPageNumber(
-        filteredDos?.length > 0 ? filteredDos[0]?.startPageNumber : null
-      );
-    }
-
     if (value) {
-      getSelectedDos(value);
-    } else {
-      getSelectedDos("");
-    }
-    const patientId = getStorage("patientId");
-    const role = getStorage("role");
+      setIsLoading(true);
+      setSelectDosValue(value);
+      const filteredDos = pageNumberOptions?.filter(
+        (data) => data?.dos === value
+      );
+      const filteredDos1 = dosSummariesList?.find(
+        (data) => data?.value === value
+      );
+      storeFileDetails(filteredDos1?.details?.fileId || null);
+      setSelectedFile(filteredDos1?.details?.fileId || "");
+      if (filteredDos1?.details?.stateIndicators?.includes("LAB")) {
+        // getLabPDFFile({ fileId: filteredDos1.details?.fileId });
+      } else if (
+        filteredDos1?.details?.stateIndicators?.includes("RADIOLOGY")
+      ) {
+        // getLabPDFFile({ fileId: filteredDos1.details?.fileId });
+      } else {
+        // if (!filteredDos1?.details?.fileId) {
+        //   getLabPDFFile({
+        //     fileId:
+        //       patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath,
+        //   });
+        //   getPatientHccFile(
+        //     patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
+        //   );
+        // } else {
+        //   getLabPDFFile({ fileId: filteredDos1?.details?.fileId });
+        // }
 
-    if (value) {
-      getpatientDetailsData(
-        patientId,
-        null,
-        moment(value).format("YYYY-MM-DD"),
-        "",
-        role
-      );
+        getSelectedDosPageNumber(
+          filteredDos?.length > 0 ? filteredDos[0]?.startPageNumber : null
+        );
+      }
+
+      if (value) {
+        getSelectedDos(value);
+      } else {
+        getSelectedDos("");
+      }
+      const patientId = getStorage("patientId");
+      const role = getStorage("role");
+
+      if (value) {
+        getpatientDetailsData(
+          patientId,
+          null,
+          moment(value).format("YYYY-MM-DD"),
+          "",
+          role
+        );
+      } else {
+        getpatientDetailsData(
+          patientId,
+          patientDetailsResult?.data?.response?.processedYear,
+          null,
+          "",
+          role
+        );
+      }
     } else {
-      getpatientDetailsData(
-        patientId,
-        patientDetailsResult?.data?.response?.processedYear,
-        null,
-        "",
-        role
-      );
+      setActions({
+        showDisease: false,
+        reEvaluate: false,
+        showActionsPop: false,
+      });
     }
   };
   const handleChangePageNumber = async (value) => {
@@ -342,13 +351,14 @@ const Hcc = ({
         <div className="col-xl-6 my-2">Disease</div>
         <div
           className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer"
-          onClick={() =>
-            setActions({
-              showDisease: !actions?.showDisease,
-              reEvaluate: actions?.reEvaluate,
-              showActionsPop: actions?.showActionsPop,
-            })
-          }
+          onClick={() => {
+            selectDosValue &&
+              setActions({
+                showDisease: !actions?.showDisease,
+                reEvaluate: actions?.reEvaluate,
+                showActionsPop: actions?.showActionsPop,
+              });
+          }}
         >
           <span
             className="px-2"
@@ -359,10 +369,12 @@ const Hcc = ({
           >
             {actions?.showDisease ? "Hide" : "Show"}
           </span>
-          <div style={{width:"15px"}}><FontAwesomeIcon
-            icon={actions?.showDisease ? faEye : faEyeSlash}
-            style={{ color: actions?.showDisease ? "#04306f" : "#d9d9d9" }}
-          /></div>
+          <div style={{ width: "15px" }}>
+            <FontAwesomeIcon
+              icon={actions?.showDisease ? faEye : faEyeSlash}
+              style={{ color: actions?.showDisease ? "#04306f" : "#d9d9d9" }}
+            />
+          </div>
         </div>
       </div>
 
@@ -690,6 +702,7 @@ const Hcc = ({
                   setActiveComboTree={setActiveComboTree}
                   year={year}
                   actions={actions}
+                  selectDosValue={selectDosValue}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={3}>
@@ -702,7 +715,11 @@ const Hcc = ({
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={4}>
-                <Meat activeMeatTitle={activeMeatTitle} year={year} actions={actions}/>
+                <Meat
+                  activeMeatTitle={activeMeatTitle}
+                  year={year}
+                  actions={actions}
+                />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={5}>
                 <RafScore />

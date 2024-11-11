@@ -50,7 +50,8 @@ const File = ({
   isDosSelected,
   labFileLoad,
   fileLoadingStatus,
-  actions
+  actions,
+  selectDosValue
 }) => {
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
@@ -225,6 +226,7 @@ const File = ({
   }, [patientDetailsResult]);
 
   const handleShowList = (value) => {
+    console.log("show",value)
     if (showList.includes(value)) {
       setShowList((prev) => {
         return prev.filter((item) => item != value);
@@ -313,6 +315,7 @@ const File = ({
                             provided={provided}
                             year={year}
                             actions={actions}
+                            selectDosValue={selectDosValue}
                           />
                         </div>
                       </div>
@@ -482,6 +485,7 @@ const File = ({
                               setSelectCardTitle={setSelectCardTitle}
                               year={year}
                               actions={actions}
+                              selectDosValue={selectDosValue}
                             />
                           </div>
                         </div>
@@ -572,6 +576,7 @@ const File = ({
                               remove
                               year={year}
                               actions={actions}
+                              selectDosValue={selectDosValue}
                             />
                           </div>
                         </div>
@@ -663,6 +668,7 @@ const File = ({
                               remove
                               year={year}
                               actions={actions}
+                              selectDosValue={selectDosValue}
                             />
                           </div>
                         </div>

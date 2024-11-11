@@ -84,6 +84,7 @@ const HccCards = ({
   year,
   getPatientDetailsData,
   diseaseEdit,
+  selectDosValue
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -191,8 +192,8 @@ const HccCards = ({
       newDiagnosisCode: data?.diagnosisCode,
       oldDiagnosisCode: data?.diagnosisCode,
     });
-    if (res) {
-      getPatientDetailsData(patientId, year?.value, null, "", role);
+    if (res?.status==='SUCCESS') {
+      getPatientDetailsData(patientId, null, selectDosValue, "", role);
       setOpenContent(false);
     }
   };

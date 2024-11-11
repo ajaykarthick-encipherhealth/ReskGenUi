@@ -40,7 +40,8 @@ const VisitData = ({
   getLabFileDetails,
   currentDiseaseType,
   isDosSelected,
-  actions
+  actions,
+  selectDosValue
 }) => {
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
@@ -725,6 +726,7 @@ const VisitData = ({
                               provided={provided}
                               isVisitData={true}
                               actions={actions}
+                              selectDosValue={selectDosValue}
                             />
                           </div>
                         </div>
@@ -799,6 +801,7 @@ const VisitData = ({
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
                               actions={actions}
+                              selectDosValue={selectDosValue}
                             />
                           </div>
                         </div>
@@ -872,6 +875,7 @@ const VisitData = ({
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
                               actions={actions}
+                              selectDosValue={selectDosValue}
                             />
                           </div>
                         </div>
@@ -943,6 +947,7 @@ const VisitData = ({
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
                               actions={actions}
+                              selectDosValue={selectDosValue}
                             />
                           </div>
                         </div>
