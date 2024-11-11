@@ -40,6 +40,7 @@ const VisitData = ({
   getLabFileDetails,
   currentDiseaseType,
   isDosSelected,
+  actions
 }) => {
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
@@ -276,6 +277,7 @@ const VisitData = ({
                             isVisitData={true}
                             provided={provided}
                             popup={zIndex}
+                            actions={actions}
                           />
                         </div>
                       </div>
@@ -393,6 +395,7 @@ const VisitData = ({
                               popup={zIndex}
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
+                              actions={actions}
                             />
                           </div>
                         </div>
@@ -483,6 +486,7 @@ const VisitData = ({
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
                               remove
+                              actions={actions}
                             />
                           </div>
                         </div>
@@ -576,6 +580,7 @@ const VisitData = ({
                               popup={zIndex}
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
+                              actions={actions}
                             />
                           </div>
                         </div>
@@ -719,6 +724,7 @@ const VisitData = ({
                               cardTitle="HCC"
                               provided={provided}
                               isVisitData={true}
+                              actions={actions}
                             />
                           </div>
                         </div>
@@ -792,6 +798,7 @@ const VisitData = ({
                               isVisitData={true}
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
+                              actions={actions}
                             />
                           </div>
                         </div>
@@ -864,6 +871,7 @@ const VisitData = ({
                               isVisitData={true}
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
+                              actions={actions}
                             />
                           </div>
                         </div>
@@ -934,6 +942,7 @@ const VisitData = ({
                               isVisitData={true}
                               setSuggestedMeatForm={setSuggestedMeatForm}
                               setSelectCardTitle={setSelectCardTitle}
+                              actions={actions}
                             />
                           </div>
                         </div>

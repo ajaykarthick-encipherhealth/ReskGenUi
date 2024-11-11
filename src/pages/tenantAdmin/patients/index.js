@@ -184,7 +184,7 @@ const Patient = ({
       computedStartDate,
       computedEndDate,
       selectedOption,
-      searchVal,
+      searchVal||"",
       completedStartDate || "",
       completedEndDate || "",
       selAllocatedTo || "",
