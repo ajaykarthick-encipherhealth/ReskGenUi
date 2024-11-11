@@ -490,6 +490,9 @@ const Reports = ({
                                       e.preventDefault();
                                     }
                                   }}
+                                  onPaste={(e) => {
+                                    filterChangePatientId(e);
+                                  }}
                                   prefix={
                                     <FontAwesomeIcon
                                       className="searchPrefix"
@@ -844,7 +847,11 @@ const Reports = ({
                       setSort={setSort}
                       gotoPatientDetails={gotoPatientDetails}
                       page={{ teamPageNo, paginationTeamFirst }}
-                      loader={activeTab === "Team"?teamReportLoading:auditeReportLoading}
+                      loader={
+                        activeTab === "Team"
+                          ? teamReportLoading
+                          : auditeReportLoading
+                      }
                       activeTab={activeTab}
                       handleHeaderCheckbox={handleHeaderCheckboxChange}
                       selectAllFlags={selectAllFlags}
