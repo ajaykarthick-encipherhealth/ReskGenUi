@@ -270,6 +270,24 @@ const Patient = ({
   }
  },[])
 
+
+ useEffect(() => {
+  const reviewerFilters = JSON.parse(getStorage("SuperVisorfilter"));
+  const decodedParams = JSON.parse(getStorage("supervisorStatus"));
+  const params = JSON.parse(getStorage("supervisorDate"));
+  if (reviewerFilters) {
+    setActiveFilters(reviewerFilters);
+  }
+  if(params){
+    setSelectedDate2s([
+      params?.auditedDateStart
+        ? dayjs(decodedParams?.auditedDateStart)
+        : null,
+        params?.auditedDateEnd ? dayjs(params?.auditedDateEnd) : null,
+    ]);
+  }
+  SetSelectedOption(decodedParams?.statusSelectedStatus?decodedParams?.statusSelectedStatus:"")
+}, []);
   const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes

@@ -6,6 +6,7 @@ import TableStyle from "../table/table.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { salt } from "../../utils/config";
+import { removeStorage } from "../../utils/storages";
 
 // for search
 export const searchFunction = (
@@ -174,6 +175,7 @@ export const handleRnagePicker2 = ({
     setStartDate2(formattedDates[0]);
     setEndDate2(formattedDates[1]);
   }
+  removeStorage("supervisorDate")
   if (setStartDate3 && setEndDate3) {
     setStartDate3(formattedDates[0]);
     setEndDate3(formattedDates[1]);

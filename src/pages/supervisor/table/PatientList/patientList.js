@@ -11,7 +11,7 @@ import {
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../../components/headerFilters/functions";
-import { setStorage } from "../../../../utils/storages";
+import { removeStorage, setStorage } from "../../../../utils/storages";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 
 function 
@@ -92,6 +92,7 @@ PatientTable({
       setStorage("isSupervisorUserDetails",false)
       setStorage("supervisorFilters", JSON.stringify(activeFilters));
       setStorage("supervisorEncodedValue", JSON.stringify(params));
+      removeStorage("SuperVisorfilter") 
       navigate.push({
         pathname: "/supervisor/patients/details",
       },"/supervisor/patients/details");

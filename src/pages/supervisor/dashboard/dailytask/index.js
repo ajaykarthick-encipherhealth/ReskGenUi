@@ -14,11 +14,22 @@ import spinSTYles from "../../../../styles/auth.module.css";
 import { connect } from "react-redux";
 import { actions as supervisorAction } from "../../../../stores/supervisor/dashboard";
 import { dailyTaskData } from "../../../../stores/supervisor/dashboard/actions";
+import { setStorage } from "../../../../utils/storages";
 
-const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData, dailytask }) => {
+const DailyTask = ({
+  dailyStatusDatas,
+  getAllDailyTask,
+  getDailyTaskData,
+  dailytask,
+}) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
   const [responseArray, setReponseArray] = useState([]);
+  const allFilters = [
+    "Reviewer Status",
+    "Select Audited Status",
+    "Audited Date",
+  ];
   const bullets = [
     {
       color: "#64B4BE",
@@ -73,7 +84,7 @@ const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData, dailyt
 
   useEffect(() => {
     if (dailyStatusDatas && selectedDate) {
-      responseArray.push(dailyStatusDatas?.data?.response)
+      responseArray.push(dailyStatusDatas?.data?.response);
       getDays(selectedDate, dailyStatusDatas);
     }
   }, [dailyStatusDatas, selectedDate]);
@@ -98,7 +109,7 @@ const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData, dailyt
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
       const matchingStatusData = responseArray?.find((status) => {
-        return  status?.date === dayInfo?.dateString;
+        return status?.date === dayInfo?.dateString;
       });
 
       return {
@@ -304,6 +315,24 @@ const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData, dailyt
                       <h4
                         className={styles.headerTitle}
                         style={{ fontSize: "16px" }}
+                        onClick={() => {
+                          setStorage(
+                            "SuperVisorfilter",
+                            JSON.stringify(allFilters)
+                          );
+                          const params = {
+                            auditedDateStart: data?.dateString
+                              ? data?.dateString
+                              : "",
+                            auditedDateEnd: data?.dateString
+                              ? data?.dateString
+                              : "",
+                          };
+                          setStorage("supervisorDate", JSON.stringify(params));
+                          router?.push({
+                            pathname: "/supervisor/auditing",
+                          });
+                        }}
                       >
                         <div className={styles.headerDisplay}>
                           <span> {data.day}</span>
@@ -334,7 +363,30 @@ const DailyTask = ({ dailyStatusDatas, getAllDailyTask, getDailyTaskData, dailyt
                             {bullets?.map((item) => {
                               return (
                                 <div className={styles.container}>
-                                  <div style={{ display: "flex" }}>
+                                  <div
+                                    style={{ display: "flex" }}
+                                    onClick={() => {
+                                      const params = {
+                                        statusSelectedStatus: item?.name
+                                          ? (item?.name === 'AuditPending' || item?.name === 'AuditDeclined'
+                                            ? item?.name.replace(/([a-z])([A-Z])/g, "$1_$2").toUpperCase()
+                                            : item?.name
+                                                .toUpperCase())
+                                          : "",
+                                      };
+                                      setStorage(
+                                        "SuperVisorfilter",
+                                        JSON.stringify(allFilters)
+                                      );
+                                      setStorage(
+                                        "supervisorStatus",
+                                        JSON.stringify(params)
+                                      );
+                                      router?.push({
+                                        pathname: "/supervisor/auditing",
+                                      });
+                                    }}
+                                  >
                                     <div
                                       className={styles.bgColor}
                                       style={{
@@ -390,7 +442,7 @@ const connector = connect(
     // dailyStatusDatas: state?.workFlow?.dailyTask,
     dailyStatusDatas: state.supervisor?.dashboard?.dailyTask,
 
-    dailytask:state,
+    dailytask: state,
     loader: state.admin?.workqueue?.patientsLoading,
   }),
   {

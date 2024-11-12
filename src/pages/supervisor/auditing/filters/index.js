@@ -8,6 +8,7 @@ import Search from "../../../../components/search";
 import { resetPageNumber } from "../../../../components/headerFilters/functions";
 import { InfoCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../../tenantAdmin/tracking/filters";
+import { removeStorage } from '../../../../utils/storages'
 const allFilters = ["Reviewer Status", "Select Audited Status", "Audited Date"];
 
 const Filters = ({
@@ -91,6 +92,7 @@ const Filters = ({
                     resetPageNumber(setPageNo);
                   }
                   setClear(false);
+                  removeStorage("supervisorStatus")
                 }}
                 options={selectOptions}
                 isSearchable={false}
