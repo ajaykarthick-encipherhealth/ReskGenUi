@@ -7,7 +7,7 @@ import styles from "../../styles/auth.module.css";
 import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
 import RegularButton from "../../components/button";
 import { actions as AllActions } from "../../stores/authFlows";
-import { getStorage, removeStorage } from "../../utils/storages";
+import { getStorage, removeStorage, setStorage } from "../../utils/storages";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
@@ -72,6 +72,9 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
     setPassword(JSON.parse(password));
     setSkip(skipParam);
     removeStorage("password")
+    if(!username){
+      router.push("/login")
+    }
   }, []);
 
   useEffect(() => {
@@ -106,14 +109,21 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
     }
   }, [seconds]);
   useEffect(() => {
+    const isPageRefresh = JSON.parse(getStorage('isPageRefresh'));if (isPageRefresh) {
+      router.push('/login');
+    } else {
+      setStorage('isPageRefresh', true);
+    }
     router.beforePopState(({ url }) => {
       router.push('/login');
       return false;
     });
     return () => {
       router.beforePopState(() => true);
+      removeStorage('isPageRefresh');
     };
   }, [router]);
+
   return (
     <div className={styles.maindiv}>
       <section className={styles.innerdiv}>

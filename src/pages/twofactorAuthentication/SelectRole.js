@@ -106,6 +106,9 @@ const SelectRole = ({ loginData, getLogin }) => {
         skip: skipEntry,
       });
     }
+    if(!username){
+      router.push("/login")
+    }
   }, []);
 
   useEffect(() => {

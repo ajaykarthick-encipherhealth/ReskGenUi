@@ -55,6 +55,9 @@ const GetOTP = ({ getQrCode, getValidateCode, url, codeValidateLoader }) => {
     setPassword(getStorage("password"));
     getQrCode({ username: getStorage("username") });
     removeStorage("password");
+    if(!getStorage("username")){
+      router.push("/login")
+    }
   }, []);
   useEffect(() => {
     router.beforePopState(({ url }) => {
@@ -64,6 +67,7 @@ const GetOTP = ({ getQrCode, getValidateCode, url, codeValidateLoader }) => {
     return () => {
       router.beforePopState(() => true);
     };
+
   }, [router]);
   return (
     <div className={styles.contentMainDIv}>
