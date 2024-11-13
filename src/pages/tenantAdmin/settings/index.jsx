@@ -22,18 +22,19 @@ import DownCodes from "./coding/downCodes";
 import DirectConfirmCodes from "./coding/directConfirmCodes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHospital } from "@fortawesome/free-solid-svg-icons";
+import QueryTemplateConfig from "./configuration/queryTemplateCofig";
 const { Sider } = Layout;
 
 const menuList = [
   {
     key: `Configuration`,
-    icon: <span className=""><ConfigIcon /></span>,
+    icon: (
+      <span className="">
+        <ConfigIcon />
+      </span>
+    ),
     label: `Configuration`,
     children: [
-      {
-        key: "File_Processing_Config",
-        label: "File Processing Config",
-      },
       {
         key: "Chat_Audit_Config",
         label: "Chart Audit Config",
@@ -42,13 +43,26 @@ const menuList = [
         key: "Flag_Config",
         label: "Flag Config",
       },
+      {
+        key: "File_Processing_Config",
+        label: "File Processing Config",
+      },
+      {
+        key: "Query_Template_Config",
+        label: "Query Template Config",
+      },
     ],
   },
   {
     key: `Coding_Guidelines`,
-    icon: <FontAwesomeIcon icon={faHospital} style={{
-      color:"#04306f"
-    }} />,
+    icon: (
+      <FontAwesomeIcon
+        icon={faHospital}
+        style={{
+          color: "#04306f",
+        }}
+      />
+    ),
     label: `Coding Guidelines`,
     children: [
       {
@@ -66,6 +80,26 @@ const menuList = [
       {
         key: "Health_Metric_Config",
         label: "Health Metric Config",
+      },
+      {
+        key: "Diagnostic_Report_Config",
+        label: "Diagnostic Report Config",
+      },
+      {
+        key: "Meat_Config",
+        label: "Meat Config",
+      },
+      {
+        key: "OldMi_Config",
+        label: "OldMi Config",
+      },
+      {
+        key: "Combo_Config",
+        label: "Combo Config",
+      },
+      {
+        key: "Conflict_Config",
+        label: "Conflict Config",
       },
       {
         key: "Comorbid_Conditions",
@@ -91,8 +125,21 @@ const menuList = [
   },
   {
     key: `EMR-FHIR`,
-    icon: <span className=""><Fire /></span>,
+    icon: (
+      <span className="">
+        <Fire />
+      </span>
+    ),
     label: `EMR-FHIR`,
+  },
+  {
+    key: `FTP-SFTP`,
+    icon: (
+      <span className="">
+        <Fire />
+      </span>
+    ),
+    label: `FTP-SFTP`,
   },
 ];
 
@@ -106,47 +153,52 @@ const Settings = () => {
       <HeaderFile />
       <div className={Style.headerContainer}>
         <div className={`${Style.title} mb-2`}>Settings</div>
-        <div style={{minHeight: "78vh"}}>
-        <Card>
-          <div className="d-flex py-4">
-            <div>
-              <Layout>
-                <Sider width={250} >
-                  <div className={Style.menuLists} style={{width: "100%"}}>
-                  <Menu
-                    mode="inline"
-                    defaultSelectedKeys={["File_Processing_Config"]}
-                    defaultOpenKeys={["Configuration"]}
-                    items={menuList}
-                    onClick={handleMenuClick}
-                  /></div>
-                </Sider>
-              </Layout>
-            </div>
-            <div
-              className="border rounded-3 mx-4 border-bottom-2"
-              style={{minHeight: "74vh", width: "100%" }}
-            >
-              {activePage == "Chat_Audit_Config" && <ChatAuditConfig />}
-              {activePage == "Flag_Config" && <FlagConfig />}
-              {activePage == "File_Processing_Config" && (
-                <FileProcessingConfig />
-              )}
+        <div style={{ minHeight: "78vh" }}>
+          <Card>
+            <div className="d-flex py-4">
+              <div>
+                <Layout>
+                  <Sider width={250}>
+                    <div className={Style.menuLists} style={{ width: "100%" }}>
+                      <Menu
+                        mode="inline"
+                        defaultSelectedKeys={["File_Processing_Config"]}
+                        defaultOpenKeys={["Configuration"]}
+                        items={menuList}
+                        onClick={handleMenuClick}
+                      />
+                    </div>
+                  </Sider>
+                </Layout>
+              </div>
+              <div
+                className="border rounded-3 mx-4 border-bottom-2"
+                style={{ minHeight: "74vh", width: "100%" }}
+              >
+                {activePage == "Chat_Audit_Config" && <ChatAuditConfig />}
+                {activePage == "Flag_Config" && <FlagConfig />}
+                {activePage == "File_Processing_Config" && (
+                  <FileProcessingConfig />
+                )}
+                {activePage == "Query_Template_Config" && (
+                  <QueryTemplateConfig />
+                )}
 
-              {activePage == "Medical_Coding" && <MedicalCoding />}
-              {activePage == "Insulin_Medications" && <Insulin />}
-              {activePage == "Direct_Codes" && <DirectCodes />}
-              {activePage == "Health_Metric_Config" && <HealthMetricConfig />}
-              {activePage == "Comorbid_Conditions" && <ComorbidConditions />}
-              {activePage == "Critical_Conditions" && <CriticalConditions />}
-              {activePage == "RAF_CONFIG" && <RafConfig />}
-              {activePage == "History_Codes" && <HistoryCodes />}
-              {activePage == "Down_Codes" && <DownCodes />}
-              {activePage == "Direct_Confirm_Codes" && <DirectConfirmCodes />}
-              {activePage == "EMR-FHIR" && <EmrFhir />}
+                {activePage == "Medical_Coding" && <MedicalCoding />}
+                {activePage == "Insulin_Medications" && <Insulin />}
+                {activePage == "Direct_Codes" && <DirectCodes />}
+                {activePage == "Health_Metric_Config" && <HealthMetricConfig />}
+                {activePage == "Comorbid_Conditions" && <ComorbidConditions />}
+                {activePage == "Critical_Conditions" && <CriticalConditions />}
+                {activePage == "RAF_CONFIG" && <RafConfig />}
+                {activePage == "History_Codes" && <HistoryCodes />}
+                {activePage == "Down_Codes" && <DownCodes />}
+                {activePage == "Direct_Confirm_Codes" && <DirectConfirmCodes />}
+                {activePage == "EMR-FHIR" && <EmrFhir />}
+              </div>
             </div>
-          </div>
-        </Card></div>
+          </Card>
+        </div>
       </div>
     </div>
   );

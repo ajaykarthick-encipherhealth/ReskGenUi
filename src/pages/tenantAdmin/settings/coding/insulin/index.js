@@ -123,60 +123,60 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
     <>
       <div className="p-3" style={{ height: "65vh" }}>
         <div>
-          <div className={Style.title}>Insulin Medications</div>
           <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <div className="d-flex justify-content-between my-4">
-                <div className="me-3">
-                  Do you need an Capture Insulin Medication as ICD Codes
-                </div>
-                <div className="d-flex justify-content-between">
-                  <Switch
-                    checked={
-                      isCaptureInsulin?.captureInsulinMedicationAsIcdCodes
-                    }
-                    // className="directCodeSwitch"
-                    onChange={(e) =>
-                      onChange(e, "captureInsulinMedicationAsIcdCodes")
-                    }
-                  />
-                  <div className={`mx-2`}>
-                    {isCaptureInsulin?.captureInsulinMedicationAsIcdCodes
-                      ? "Yes"
-                      : "No"}
-                  </div>
-                </div>
-              </div>
-              <div className="d-flex justify-content-between my-4">
-                <div>Do you need to include general insulin medications</div>
-                <div className="d-flex justify-content-between">
-                  <Switch
-                    checked={isCaptureInsulin?.includeGeneralInsulinMedications}
-                    // className="directCodeSwitch"
-                    onChange={(e) =>
-                      onChange(e, "includeGeneralInsulinMedications")
-                    }
-                  />
-                  <div className={`mx-2`}>
-                    {isCaptureInsulin?.includeGeneralInsulinMedications
-                      ? "Yes"
-                      : "No"}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div className={Style.title}>Insulin Medications</div>
             <div className="d-flex">
               <FileUpload
                 allowedFormat={"File must be in xlsx or CSV"}
                 onChange={(e) => setSelectFile(e.file)}
                 value={selectFile}
               />
-              <RegularButton
-                name="Upload"
-                type={selectFile}
-                disabled={!selectFile}
-                onClick={submitPatientFile}
-              />
+              <div>
+                <RegularButton
+                  name="Upload"
+                  type={selectFile}
+                  disabled={!selectFile}
+                  onClick={submitPatientFile}
+                />
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="d-flex justify-content-between my-4">
+              <div className="me-3">
+                Do you need an Capture Insulin Medication as ICD Codes
+              </div>
+              <div className="d-flex justify-content-between">
+                <Switch
+                  checked={isCaptureInsulin?.captureInsulinMedicationAsIcdCodes}
+                  // className="directCodeSwitch"
+                  onChange={(e) =>
+                    onChange(e, "captureInsulinMedicationAsIcdCodes")
+                  }
+                />
+                <div className={`mx-2`}>
+                  {isCaptureInsulin?.captureInsulinMedicationAsIcdCodes
+                    ? "Yes"
+                    : "No"}
+                </div>
+              </div>
+            </div>
+            <div className="d-flex justify-content-between my-4">
+              <div>Do you need to include general insulin medications</div>
+              <div className="d-flex justify-content-between">
+                <Switch
+                  checked={isCaptureInsulin?.includeGeneralInsulinMedications}
+                  // className="directCodeSwitch"
+                  onChange={(e) =>
+                    onChange(e, "includeGeneralInsulinMedications")
+                  }
+                />
+                <div className={`mx-2`}>
+                  {isCaptureInsulin?.includeGeneralInsulinMedications
+                    ? "Yes"
+                    : "No"}
+                </div>
+              </div>
             </div>
           </div>
         </div>

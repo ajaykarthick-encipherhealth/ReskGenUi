@@ -15866,3 +15866,9 @@ input::-webkit-inner-spin-button {
 color:red !important;
 border-color: red !important;
 }
+
+.custom-card .card {
+    box-shadow: 0 6px 6px 0 #523f690d !important;
+    background-color: #F9FAFC;
+
+}

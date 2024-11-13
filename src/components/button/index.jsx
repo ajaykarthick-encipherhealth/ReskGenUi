@@ -18,7 +18,7 @@ const RegularButton = ({
       }`}
       name={name?.toLowerCase()}
       onClick={!htmlType && onClick}
-      style={{ width: width }}
+      style={{ width: width}}
       type={
         method == "reset" ? "reset" : method == "button" ? "button" : "submit"
       }

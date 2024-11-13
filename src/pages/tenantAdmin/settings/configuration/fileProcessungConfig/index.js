@@ -69,11 +69,7 @@ const FileProcessingConfig = ({
 
   return (
     <>
-      <Form
-        id={"chart-audit"}
-        onFinish={handleSubmit}
-        form={form}
-      >
+      <Form id={"chart-audit"} onFinish={handleSubmit} form={form}>
         <div className="p-3" style={{ width: "40%" }}>
           <div className={Style.title}>File Processing Configuration</div>
           <div className="d-flex justify-content-between mt-4">
@@ -137,21 +133,29 @@ const FileProcessingConfig = ({
             </div>
           </div>
         </div>
-        <div className="d-flex justify-content-end p-3" style={{width: "40%"}}>
-          <RegularButton
-            type={"outline"}
-            name={"Restore Changes"}
-            onClick={() => console.log("Restore Changes")}
-          />
+        <div
+          className="d-flex justify-content-end align-items-center"
+          style={{
+            width: "95%",
+            marginTop: "300px",
+          }}
+        >
+          <Form.Item>
+            <RegularButton
+              type={"outline"}
+              name={"Restore"}
+              onClick={() => console.log("Restore Changes")}
+            />
+          </Form.Item>
+
           <Form.Item>
             <Button
               htmlType="submit"
               type="primary"
               className={ButtonStyles?.btnColor}
               style={{ height: "45px" }}
-              onClick={handleSubmit}
             >
-              Save Changes
+              Save
             </Button>
           </Form.Item>
         </div>
