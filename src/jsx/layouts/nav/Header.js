@@ -64,7 +64,11 @@ import { actions as allActions } from "../../../stores/supervisor/auditedQueue";
 import { actions as detailsActions } from "../../../stores/patient/details";
 import { actions as authActions } from "../../../stores/authFlows";
 import { actions as reportActions } from "../../../stores/admin/report";
+import { actions as uploadImagesAction } from "../../../stores/authflow/imageUpload";
+import { actions as userAction } from "../../../stores/supervisor/users";
+
 import Profile from "./profile";
+import { getResponePopup } from "../../../utils/reusable";
 
 const Header = ({
   notificationResponse,
@@ -86,6 +90,10 @@ const Header = ({
   getReportActiveTab,
   deleteProfile,
   deleteImage,
+  isFolderUplaod,
+  preSendURl,
+  getUrl,
+  updateImage,
 }) => {
   const router = useRouter();
   const menuItemsPerPage = 5;
@@ -112,12 +120,14 @@ const Header = ({
   const [drawerWidth, setDrawerWidth] = useState(700);
   const [notificationCount, setNotificationCount] = useState(0);
   const notificationSoundRef = useRef(null);
-  const [nextMenuList, setNextMenuList] = useState(false)
-  const [user,setUser]=useState(null)
+  const [nextMenuList, setNextMenuList] = useState(false);
+  const [user, setUser] = useState(null);
   const [screenSize, setScreenSize] = useState({
     width: 0,
     height: null,
   });
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [animate, setAnimate] = useState(false);
   const showDrawer = () => {
     setOpened(true);
@@ -203,7 +213,8 @@ const Header = ({
     }))
     .filter(
       (info) =>
-        info.key.toLowerCase() !== userRole?.replace(/_/g, " ")?.toLowerCase() &&
+        info.key.toLowerCase() !==
+          userRole?.replace(/_/g, " ")?.toLowerCase() &&
         info.label.toLowerCase() !== userRole?.replace(/_/g, " ")?.toLowerCase()
     );
 
@@ -351,7 +362,7 @@ const Header = ({
     setCurrentRole(userRole);
     setTenentId(tenentId);
     setMenuList(getMenuListByRole(userRoleLocal));
-    setUser(userId)
+    setUser(userId);
 
     if (!loginCheck) {
       Swal.fire({
@@ -466,12 +477,88 @@ const Header = ({
       };
     }
   }, [router, menuList]);
+  const handleChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
 
-  useEffect(()=>{
-    if(deleteImage?.status === 'SUCCESS'){
-      getCurrentUserInfo( {userId:user})
-    }  
-  },[deleteImage])
+  const handleSubmit = async () => {
+    if (selectedFile) {
+      const type = selectedFile.name.split(".").pop();
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const img = document.createElement("img");
+        img.onload = async () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          canvas.width = 600;
+          canvas.height = 600;
+          ctx.drawImage(img, 0, 0, 600, 600);
+          canvas.toBlob(async (blob) => {
+            const croppedFile = new File([blob], `cropped.${type}`, {
+              type: selectedFile.type,
+            });
+            await preSendCall(type, croppedFile);
+          }, selectedFile.type);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+  const preSendCall = async (type, croppedFile) => {
+    try {
+      setLoading(true);
+      const res = await preSendURl({ type, croppedFile });
+      if (res?.response) {
+        getBlobImageUrl(res?.response, type, croppedFile);
+      }
+    } catch (error) {
+      setOpenUploader(false);
+      setLoading(false);
+      throw error;
+    }
+  };
+
+  const getBlobImageUrl = async (data, type, file) => {
+    const userId = getStorage("userId");
+    try {
+      const res = await getUrl({ url: data, urlType: type, file });
+      if (res.status === 201) {
+        const userUpdateResponse = await updateImage({ url: data });
+        if (userUpdateResponse?.response) {
+          setUser((prevUser) => ({
+            ...prevUser,
+            profileImageUrl: data,
+          }));
+
+          setOpenUploader(false);
+          setLoading(false);
+          getResponePopup({
+            status: "SUCCESS",
+            message: "Profile Upload Successfully!",
+          });
+         await getCurrentUserInfo({ userId });
+          setOpenContent(false);
+        }
+      }
+    } catch (error) {
+      setOpenUploader(false);
+      setLoading(false);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+  const userId = getStorage("userId");
+    if (deleteImage?.status === "SUCCESS") {
+      getCurrentUserInfo({ userId });
+    }
+  }, [deleteImage]);
+
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -767,14 +854,49 @@ const Header = ({
           setOpenContent(false);
         }}
         closable={true}
-        footer={profileImg ? [
-          <div className="customDelete">
-          <Button onClick={()=>{deleteProfile()
-            setOpenUploader(false);
-          }}>
-            Delete
-          </Button></div>
-        ]:[]}
+        // footer={
+        //   profileImg
+        //     ? [
+        //         <div className="customDelete">
+        //           <Button
+        //             onClick={() => {
+        //               deleteProfile();
+        //               setOpenUploader(false);
+        //             }}
+        //           >
+        //             Delete
+        //           </Button>
+        //         </div>,
+        //       ]
+        //     : []
+        // }
+        footer={[
+          <Button key="ok" type="primary" onClick={handleSubmit}>
+            Ok
+          </Button>,
+          profileImg && (
+            <span className="customDelete p-2">
+              <Button
+                key="delete"
+                onClick={() => {
+                  deleteProfile();
+                  setOpenUploader(false);
+                }}
+              >
+                Delete
+              </Button>
+            </span>
+          ),
+          <Button
+            key="cancel"
+            onClick={() => {
+              setOpenContent(false);
+              setOpenUploader(false);
+            }}
+          >
+            Cancel
+          </Button>,
+        ]}
         onCancel={() => {
           setOpenContent(false);
           setOpenUploader(false);
@@ -784,6 +906,9 @@ const Header = ({
           <ImageUploader
             setOpenUploader={setOpenUploader}
             setOpenContent={setOpenContent}
+            handleChange={handleChange}
+            setLoading={setLoading}
+            loading={loading}
           />
         </div>
       </Modal>
@@ -804,7 +929,7 @@ const enhancer = connect(
       state?.tenantAdmin?.webSocket?.webSocketNotificationDetails?.data,
     accuracy: state?.authReducer?.getAccuracy?.getAccuracy?.data?.response,
     profileUploadedTime: state?.authReducer?.getUpdateImageLoading,
-    deleteImage:state?.authReducer?.deleteProfileImg?.data
+    deleteImage: state?.authReducer?.deleteProfileImg?.data,
   }),
   {
     getNotificationList: dashbaordActions.notificationAction,
@@ -818,7 +943,11 @@ const enhancer = connect(
     getAccuracy: authActions.getAccuracy,
     getActiveTab: reportActions.activeTab,
     getReportActiveTab: reportActions.activeTab,
-    deleteProfile:authActions.deleteProfileImg
+    deleteProfile: authActions.deleteProfileImg,
+    preSendURl: uploadImagesAction.getuploadurl,
+    getUrl: uploadImagesAction.getURL,
+    updateImage: uploadImagesAction.updateImage,
+    getCurrentUser: userAction.getCurrentUserInfo,
   }
 );
 export default enhancer(Header);

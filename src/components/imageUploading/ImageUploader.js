@@ -17,75 +17,11 @@ const ImageUploader = ({
   getUrl,
   updateImage,
   getCurrentUser,
+  handleChange,
+  loading,
 }) => {
-  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
-  const handleChange = (event) => {
-    const file = event.target.files[0];
-    const type = file?.name?.split(".").pop();
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = document.createElement("img");
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
-          canvas.width = 600;
-          canvas.height = 600;
-          ctx.drawImage(img, 0, 0, 600, 600);
-          canvas.toBlob((blob) => {
-            const croppedFile = new File(
-              [blob],
-              `cropped.${file.type.split("/")[1]}`,
-              {
-                type: file.type,
-              }
-            );
-            if (!isFolderUplaod) {
-              preSendCall(type, croppedFile);
-            }
-          }, file.type);
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  const preSendCall = async (type, croppedFile) => {
-    try {
-      setLoading(true);
-      const res = await preSendURl({ type, croppedFile });
-      if (res?.response) {
-        getBlobImageUrl(res?.response, type, croppedFile);
-      }
-    } catch (error) {
-      setOpenUploader(false);
-      setLoading(false);
-      throw error;
-    }
-  };
-  const getBlobImageUrl = async (data, type, file) => {
-    const userId = getStorage("userId");
-    try {
-      const res = await getUrl({ url: data, urlType: type, file });
-      if (res.status == 201) {
-        const user = await updateImage({ url: data });
-        if (user?.response) {
-          setOpenUploader(false);
-          getResponePopup({
-            status: "SUCCESS",
-            message: "Profile Upload Successfully!",
-          });
-          getCurrentUser({ userId });
-          setLoading(false);
-        }
-      }
-    } catch (error) {
-      setOpenUploader(false);
-      setLoading(false);
-      throw error;
-    }
-  };
+
   return (
     <div className={styles.cover}>
       <label style={{ height: height }}>
