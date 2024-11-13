@@ -23,6 +23,8 @@ import DirectConfirmCodes from "./coding/directConfirmCodes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHospital } from "@fortawesome/free-solid-svg-icons";
 import QueryTemplateConfig from "./configuration/queryTemplateCofig";
+import ComboConfig from "./coding/comboConfig";
+import ConflictConfig from "./coding/conflictConfig";
 const { Sider } = Layout;
 
 const menuList = [
@@ -188,6 +190,8 @@ const Settings = () => {
                 {activePage == "Insulin_Medications" && <Insulin />}
                 {activePage == "Direct_Codes" && <DirectCodes />}
                 {activePage == "Health_Metric_Config" && <HealthMetricConfig />}
+                {activePage == "Combo_Config" && <ComboConfig />}
+                {activePage == "Conflict_Config" && <ConflictConfig />}
                 {activePage == "Comorbid_Conditions" && <ComorbidConditions />}
                 {activePage == "Critical_Conditions" && <CriticalConditions />}
                 {activePage == "RAF_CONFIG" && <RafConfig />}
