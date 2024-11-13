@@ -23,6 +23,8 @@ import DirectConfirmCodes from "./coding/directConfirmCodes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHospital } from "@fortawesome/free-solid-svg-icons";
 import QueryTemplateConfig from "./configuration/queryTemplateCofig";
+import DiagnosticReportConfig from "./coding/diagnosticReportConfig";
+import MeatConfig from "./coding/meatCofig";
 import ComboConfig from "./coding/comboConfig";
 import ConflictConfig from "./coding/conflictConfig";
 const { Sider } = Layout;
@@ -185,7 +187,10 @@ const Settings = () => {
                 {activePage == "Query_Template_Config" && (
                   <QueryTemplateConfig />
                 )}
-
+                {activePage == "Diagnostic_Report_Config" && (
+                  <DiagnosticReportConfig />
+                )}
+                {activePage == "Meat_Config" && <MeatConfig />}
                 {activePage == "Medical_Coding" && <MedicalCoding />}
                 {activePage == "Insulin_Medications" && <Insulin />}
                 {activePage == "Direct_Codes" && <DirectCodes />}
