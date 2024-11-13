@@ -222,9 +222,8 @@ function PdfTable({
                                 {row?.totalFailedCount > 0
                                   ? row?.totalFailedCount
                                   : 0}
-                                <br />
-                                Processing:
-                                {processingCount}
+                                
+                               
                               </>
                             }
                           >

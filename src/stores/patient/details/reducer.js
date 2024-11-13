@@ -34,7 +34,7 @@ import {
   isDeleteFlag,
   storeFileIdAction,
   stroeFileIdPreAction,
-  getPatientID
+  getPatientID,
 } from "./actions";
 
 const initialState = {

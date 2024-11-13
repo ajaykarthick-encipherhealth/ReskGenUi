@@ -199,12 +199,12 @@ const DetailedViewPdfTable = ({
                     ? currentId?.totalFailedCount
                     : 0}
                   <br />
-                  Processing:
+                  {/* Processing:
                   {currentId?.totalFileCount > 0
                     ? currentId?.totalFileCount -
                       (currentId?.totalSuccessCount +
                         currentId?.totalFailedCount)
-                    : 0}
+                    : 0} */}
                 </>
               }
             >

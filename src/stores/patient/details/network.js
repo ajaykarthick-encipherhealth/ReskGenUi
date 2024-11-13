@@ -1,6 +1,18 @@
 import { requestPortal, requestPortalFiles } from "../../../utils/network";
 import { getStorage, setStorage } from "../../../utils/storages";
 
+export async function patientDetailsBasedOnACtionType() {
+  const patientId = getStorage("patientId");
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/patient/compute/process-scope?patientId=${patientId}`,
+    options
+  );
+  console.log(data,"dosVal")
+  return data;
+}
 export async function patientDetails(
   patientId,
   processedYear,

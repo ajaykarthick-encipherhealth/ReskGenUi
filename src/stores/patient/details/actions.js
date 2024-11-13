@@ -2,6 +2,10 @@ import { createAction } from "redux-actions";
 import { createActionThunk } from "../../../utils/redux";
 import * as network from "./network";
 
+export const patientDetailsActionCall = createActionThunk(
+  "PATIENT_DETAILS_call",
+  network.patientDetailsBasedOnACtionType
+);
 export const patientDetailsAction = createActionThunk(
   "PATIENT_DETAILS",
   network.patientDetails

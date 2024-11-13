@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { DatePicker, Form, Input, Modal, Select } from "antd";
+import { DatePicker, Form, Input, Modal, Select, Button } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Tab, Nav, Button } from "react-bootstrap";
+import { Tab, Nav } from "react-bootstrap";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import "react-circular-progressbar/dist/styles.css";
 import styles from "./fhir.module.css";
@@ -436,9 +436,14 @@ const Index = ({
       });
     }
   }, [reportActiveTab, pageNo, selectedDateRanges, searchVal, selectedOptions]);
-
+  const [uploadStatus, SetUploadStatus] = useState(false);
   const handleUpload = async () => {
+    console.log(
+      fileList.slice(0, openUpload?.data?.totalFileCount),
+      "openUpload"
+    );
     if (fileList && fileList?.length > 0) {
+      setFileLoading(true);
       const uploadPromises = fileList?.map((item) => {
         const formData = new FormData();
         formData.append("file", item);
@@ -455,6 +460,7 @@ const Index = ({
         getAllBatches({ page: pageNo });
         form.resetFields();
         setFileList([]);
+        setFileLoading(false)
       }
     }
   };
@@ -741,13 +747,20 @@ const Index = ({
               openUpload={openUpload}
             />
           </Form.Item>
-          <Form.Item
-            disabled={fileList?.length > 0 && !fileLoading ? false : true}
-          >
+          <Form.Item>
             <div className="col-xl-12 mb-3 d-grid justify-content-center">
-              <Button type="submit">
+              <button
+                type="submit"
+                style={{ backgroundColor: "#04306f" }}
+                className="border-0 px-4 py-2 text-white rounded-1"
+                disabled={
+                  fileList?.length > 0 && !fileLoading && !uploadFilesLoader
+                    ? false
+                    : true
+                }
+              >
                 {uploadFilesLoader ? "Loading..." : "Submit"}
-              </Button>
+              </button>
             </div>
           </Form.Item>
         </Form>
