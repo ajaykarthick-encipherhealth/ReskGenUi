@@ -35,6 +35,7 @@ const MovementAction = ({
   meatCriteriaList,
   setSelectCardTitle,
   isShow,
+  fromMeat
 }) => {
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const onChangeValues = (data) => {
@@ -89,7 +90,7 @@ const MovementAction = ({
       <div className={styles.container}>
         {validAction && (
           <Tooltip title="Move to valid" placement="bottom">
-            {isShow ? (
+            {isShow ||fromMeat? (
               <Popconfirm
                 onConfirm={() => {
                   onConfirmValidMove();
@@ -119,7 +120,7 @@ const MovementAction = ({
         )}
         {suggestedAction && (
           <Tooltip title="Move to suggested" placement="bottom">
-            {isShow ? (
+            {isShow||fromMeat ? (
               <Popconfirm
                 onConfirm={() => {
                   handleSubmitValidNotes({
@@ -158,7 +159,7 @@ const MovementAction = ({
         )}
         {potentialAction && !isComboCode && (
           <Tooltip title="Move to potential" placement="bottom">
-            {isShow ? (
+            {isShow||fromMeat ? (
               <Popconfirm
                 onConfirm={() => {
                   onConfirmValidMove();
@@ -200,7 +201,7 @@ const MovementAction = ({
         )}
         {deleteAction && !isComboCode ? (
           <Tooltip title="Move to delete" placement="bottom">
-            {isShow ? (
+            {isShow ||fromMeat? (
               <Popconfirm
                 onConfirm={() => {
                   handleSubmitValidNotes({

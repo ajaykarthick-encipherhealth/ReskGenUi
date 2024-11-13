@@ -27,7 +27,6 @@ import { connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
-import MovementAction from "../movementAction";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
 import { isLocalEdit } from "../../../../../utils/config";
 const LabCards = ({

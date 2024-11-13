@@ -258,6 +258,7 @@ const ComboCard = ({
                                           setSelectCardTitle={
                                             setSelectCardTitle
                                           }
+                                          fromMeat={true}
                                         />
                                       ) : null}
                                     </div>

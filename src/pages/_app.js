@@ -99,11 +99,11 @@ function MyApp({ Component, pageProps }) {
         document.removeEventListener("keydown", handleKeydown);
       };
     }
-    const username=getStorage("username")
-    const password=getStorage("password")
-    if(!username ||!password){
-      router.push("/login")
-    }
+    // const username=getStorage("username")
+    // const password=getStorage("password")
+    // if(!username ||!password){
+    //   router.push("/login")
+    // }
   }, []);
 
   useEffect(() => {

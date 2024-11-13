@@ -531,6 +531,7 @@ const MeatCard = ({
                                           setSuggestedMeatForm
                                         }
                                         setSelectCardTitle={setSelectCardTitle}
+                                        fromMeat={true}
                                       />
                                     </div>
 
