@@ -100,6 +100,7 @@ const Flag = ({
       };
       try {
         const response = await flagDetailsPost(dataFormatSuggested);
+        
         getResponePopup(response);
         getFlagDetailsData(
           patientDetailsResult?.data?.response?.patientId,
@@ -114,7 +115,7 @@ const Flag = ({
         setCommentsTrigger(false);
         setIsModalComments(false);
       } catch (error) {
-        getResponePopup(error.response);
+        getResponePopup(error);
         setCommentsTrigger(false);
       }
     }
