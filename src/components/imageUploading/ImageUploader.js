@@ -19,9 +19,9 @@ const ImageUploader = ({
   getCurrentUser,
   handleChange,
   loading,
+  selectedFile,
+  fileInputRef
 }) => {
-  const fileInputRef = useRef(null);
-
   return (
     <div className={styles.cover}>
       <label style={{ height: height }}>
@@ -43,7 +43,7 @@ const ImageUploader = ({
               <div className="d-flex justify-content-center cursor-pointer">
                 <Image src={upload} alt="Image" />
               </div>
-              {isFolderUplaod ? "Upload a File" : "Upload Profile"}
+              {isFolderUplaod ? "Upload a File" : selectedFile?.name || "Upload Profile"}
             </div>
           )}
         </div>

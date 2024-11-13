@@ -96,6 +96,7 @@ const Header = ({
   updateImage,
 }) => {
   const router = useRouter();
+  const fileInputRef = useRef(null);
   const menuItemsPerPage = 5;
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
@@ -477,7 +478,7 @@ const Header = ({
       };
     }
   }, [router, menuList]);
-  const handleChange = (event) => {
+  const handleChange = async(event) => {
     const file = event.target.files[0];
     if (file) {
       setSelectedFile(file);
@@ -486,9 +487,8 @@ const Header = ({
 
   const handleSubmit = async () => {
     if (selectedFile) {
-      const type = selectedFile.name.split(".").pop();
+      const type = selectedFile?.name?.split(".").pop();
       const reader = new FileReader();
-
       reader.onload = (e) => {
         const img = document.createElement("img");
         img.onload = async () => {
@@ -515,10 +515,12 @@ const Header = ({
       const res = await preSendURl({ type, croppedFile });
       if (res?.response) {
         getBlobImageUrl(res?.response, type, croppedFile);
+        setSelectedFile(null);
       }
     } catch (error) {
       setOpenUploader(false);
       setLoading(false);
+      setSelectedFile(null);
       throw error;
     }
   };
@@ -558,7 +560,6 @@ const Header = ({
       getCurrentUserInfo({ userId });
     }
   }, [deleteImage]);
-
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -871,7 +872,8 @@ const Header = ({
         //     : []
         // }
         footer={[
-          <Button key="ok" type="primary" onClick={handleSubmit}>
+          <Button key="ok" type="primary" onClick={handleSubmit}
+          disabled={loading}>
             Ok
           </Button>,
           profileImg && (
@@ -881,7 +883,9 @@ const Header = ({
                 onClick={() => {
                   deleteProfile();
                   setOpenUploader(false);
+                  setSelectedFile(null);
                 }}
+                disabled={loading}
               >
                 Delete
               </Button>
@@ -892,7 +896,12 @@ const Header = ({
             onClick={() => {
               setOpenContent(false);
               setOpenUploader(false);
+              setSelectedFile(null);
+              if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+              }
             }}
+            
           >
             Cancel
           </Button>,
@@ -900,6 +909,10 @@ const Header = ({
         onCancel={() => {
           setOpenContent(false);
           setOpenUploader(false);
+          setSelectedFile(null);
+          if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+          }
         }}
       >
         <div>
@@ -909,6 +922,8 @@ const Header = ({
             handleChange={handleChange}
             setLoading={setLoading}
             loading={loading}
+            selectedFile={selectedFile}
+            fileInputRef={fileInputRef}
           />
         </div>
       </Modal>
