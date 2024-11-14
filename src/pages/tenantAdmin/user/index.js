@@ -43,7 +43,6 @@ const UserList = ({
   getAddUser,
   addPatients,
 }) => {
-  
   const [localUserId, setLocalUserId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localTenantId, setLocalTenantId] = useState("");
@@ -72,7 +71,7 @@ const UserList = ({
     patientName: "",
   });
   const [selectOrgList, setSelectedOrgList] = useState(null);
-    const [roleList, setSelectedRoleLsit] = useState(null);
+  const [roleList, setSelectedRoleLsit] = useState(null);
   const [orgAllList, setOrgAllList] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
 
@@ -95,35 +94,46 @@ const UserList = ({
   };
   const [clear, setClear] = useState(false);
 
-  const [form] = Form.useForm();1
+  const [form] = Form.useForm();
 
   const handleSubmit = async (userFormData) => {
-      const encryptedData = encyptingPass(userFormData?.password);
-      userFormData.tenantId = localTenantId;
-      userFormData.organizationId = userFormData.orgId;
-      userFormData.role = [userFormData?.role];
-      userFormData.password = encryptedData?.pass;
-      userFormData.passwordIv = encryptedData.iv;
-      const response = await getAddUser(userFormData, setFormData);
-        setFormData({
-          firstName: "",
-          lastName: "",
-          emailId: "",
-          password: "",
-          role: "",
-          userName: "",
-          mobileNumber: "",
-          confirmPassword: "",
-        });
-        setMobileNumber("");
-        form.resetFields();
-        setUseAdd(true);
-        setIsLoadingBtn(false);
-        getResponePopup(response); 
-        setRoleValue([]);
-        setValidated(true);
-  };
+    const encryptedData = encyptingPass(userFormData?.password);
+    userFormData.tenantId = localTenantId;
+    userFormData.organizationId = userFormData.orgId;
+    userFormData.role = [userFormData?.role];
+    userFormData.password = encryptedData?.pass;
+    userFormData.passwordIv = encryptedData.iv;
+    const response = await getAddUser(userFormData, setFormData);
+    if(response?.status == 'SUCCESS'){
+      setFormData({
+        firstName: "",
+        lastName: "",
+        emailId: "",
+        password: "",
+        role: "",
+        userName: "",
+        mobileNumber: "",
+        confirmPassword: "",
+      });
+      setMobileNumber("");
+      form.resetFields();
+      setUseAdd(true);
+      setIsLoadingBtn(false);
+      getResponePopup(response);
+      setRoleValue([]);
+      setValidated(true);
 
+    }
+   else  if(response?.status == 'FAILED'){
+      setAddUser(true);
+      notification.warning({
+        message: response.message,
+        duration: 2,
+      });
+    }
+    else 
+    setAddUser(false);
+  };
 
   const switchHandler = (event, id) => {
     const isChecked = event;
@@ -144,7 +154,6 @@ const UserList = ({
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
       const response = await addPatients({ data: inputValuePatientId });
-
       // axios.post(
       //   ENDPOINTS.apiEndoint + `dbservice/patient`,
       //   inputValuePatientId
@@ -245,7 +254,7 @@ const UserList = ({
 
   const onFinish = (values) => {
     handleSubmit(values);
-    setAddUser(false)
+    setAddUser(false);
   };
 
   return (
@@ -277,7 +286,6 @@ const UserList = ({
                         defaultSelectValue2={""}
                         setSelectedOption2={setRole}
                         selectedValue2={role}
-                        
                         // selectOrg
                         selectlabelOrg="Organization"
                         isSelectOrg={true}
@@ -500,9 +508,10 @@ const UserList = ({
                       rules={[
                         { required: true, message: "Please enter your email!" },
                         {
-                          type: "email",
-                          message: "Please enter a valid email!",
-                        },
+                          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$",
+                          required: true,
+                          message: 'Enter the Valid Email ',
+                      },
                       ]}
                     >
                       <div>
@@ -599,25 +608,23 @@ const UserList = ({
                           message: "Please enter your password!",
                         },
                         {
-                          validator: (_, value) => {
-                            if (
-                              value?.length === 0 ||
-                              !/[a-z]/.test(value) ||
-                              !/[A-Z]/.test(value)
-                            ) {
-                              return Promise.reject(
-                                "Keep it strong! Your password must be case sensitive"
-                              );
-                            }
-                            return Promise.resolve();
-                          },
+                          validator: (_, value) =>
+                            value &&
+                            value.length >= 8 &&
+                            /[a-z]/.test(value) &&
+                            /[A-Z]/.test(value) &&
+                            /\d/.test(value) &&
+                            /[!@#$%^&*(),.?":{}|<>]/.test(value)
+                              ? Promise.resolve()
+                              : Promise.reject(
+                                  "Password must be at least 8 characters, with at least one lowercase, one uppercase, one number, and one special character!"
+                                ),
                         },
                       ]}
                     >
                       <div className="confirmPass">
                         <input type="password" style={{ display: "none" }} />
                         <Input.Password
-                          // style={{ height: "42px" }}
                           placeholder="Enter password"
                           autoComplete="new-password"
                         />
@@ -665,14 +672,15 @@ const UserList = ({
                       rules={[
                         {
                           required: true,
+                          max: 10,
                           message: "Please enter your mobile number!",
                         },
                         {
-                          len: 10,
-                          message:
-                            "Please enter a valid 10-digit mobile number!",
+                          pattern: /^[0-9]{10}$/,
+                          message: "Please enter a valid 10-digit mobile number!",
                         },
                       ]}
+                      
                     >
                       <div>
                         <Input
