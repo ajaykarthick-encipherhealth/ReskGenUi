@@ -69,6 +69,7 @@ const GetOTP = ({ getQrCode, getValidateCode, url, codeValidateLoader }) => {
     };
 
   }, [router]);
+  
   return (
     <div className={styles.contentMainDIv}>
       <div className={styles.mfaMainDiv}>
@@ -164,7 +165,7 @@ const GetOTP = ({ getQrCode, getValidateCode, url, codeValidateLoader }) => {
                     code: encyptingPass(codeString),
                     route: router,
                     validate: "",
-                    userpassword: password,
+                    userpassword: router.query,
                   });
                 }
               }}

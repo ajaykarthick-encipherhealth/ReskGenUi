@@ -8,6 +8,7 @@ import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
 import RegularButton from "../../components/button";
 import { actions as AllActions } from "../../stores/authFlows";
 import { getStorage, removeStorage, setStorage } from "../../utils/storages";
+import { encyptingPass } from "../../components/headerFilters/functions";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
@@ -53,10 +54,10 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
       const codeString = code?.join("");
       getValidateCode({
         username: username,
-        code: encryptedCode,
+        code: encyptingPass(codeString),
         route: router,
         validate: "validate",
-        userpassword: encryptedPassword,
+        userpassword: password,
       });
     }
   };
@@ -184,10 +185,10 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
                     const codeString = code?.join("");
                     getValidateCode({
                       username: username,
-                      code: encryptedCode,
+                      code: encyptingPass(codeString),
                       route: router,
                       validate: "validate",
-                      userpassword: encryptedPassword,
+                      userpassword: password,
                     });
                   }}
                   name="SUBMIT"
@@ -218,8 +219,12 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
                     );
 
                     router?.push({
-                      pathname: `/twofactorAuthentication/GetOTP`
-                    });
+                      pathname: `/twofactorAuthentication/GetOTP`,
+                      query: password
+                    },
+                    '/twofactorAuthentication/GetOTP',
+                    { shallow: true }
+                    );
                   }}
                   name="ENABLE MFA"
                   width="100%"

@@ -115,19 +115,20 @@ export async function validateCode({
       options
     );
     if (data?.status === "SUCCESS") {
-      if (validate && userpassword) {
+      if (userpassword) {
         login({
           email: username,
           router: route,
           code: code,
           password: userpassword,
+          mfa: true,
+          skip: false
         });
       } else {
         notification.success({
           message: "Code verified successfully",
           duration: 1,
         });
-        route?.push(`/technical/dashboard`);
       }
     } else {
       if (!data?.response) {
