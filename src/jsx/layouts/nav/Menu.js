@@ -299,7 +299,7 @@ export const ProviderMenuList = [
     title: "Notification",
     iconStyle: <BellOutlined />,
     activeIcon: <BellFilled />,
-    to: "/admin/notification",
+    to: "/tenantAdmin/notification",
   },
 ];
 export const EHRMenuList = [

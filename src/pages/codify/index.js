@@ -390,6 +390,7 @@ const Codify = ({
                   value={searchInput}
                   onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
+                  maxLength={100}
                 />
               </AutoComplete>
               <div className="antdbutton">

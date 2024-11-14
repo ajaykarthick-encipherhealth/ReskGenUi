@@ -127,6 +127,7 @@ const RiskAdjustment = ({
               value={code}
               onChange={handleCode}
               onKeyDown={handleKeyDown}
+              maxLength={10}
             />
           </div>
           {codeErrorMessage && (

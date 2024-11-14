@@ -15835,11 +15835,11 @@ input::-webkit-inner-spin-button {
   height: 30px !important;
   box-shadow: none !important;
 }
-.individualReportSearch .ant-input-outlined:focus,
+/* .individualReportSearch .ant-input-outlined:focus,
 :where(.css-dev-only-do-not-override-3rel02).ant-input-outlined:focus-within {
   box-shadow: none !important;
   border: none !important;
-}
+} */
 .searchStyle .ant-input-affix-wrapper {
   align-items: center;
 }

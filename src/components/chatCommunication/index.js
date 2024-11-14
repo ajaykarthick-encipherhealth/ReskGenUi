@@ -671,6 +671,7 @@ const ChatCommunication = ({
                                 placeholder="Search members"
                                 type="search"
                                 onChange={handleSearchMembers}
+                                maxLength={20}
                               />
                             </div>
                           </div>
@@ -1189,6 +1190,7 @@ const ChatCommunication = ({
                             type="search"
                             value={userData.searchNewUserMessage}
                             onChange={handleSearchUser}
+                            maxLength={20}
                           />
                         </div>
                       </div>

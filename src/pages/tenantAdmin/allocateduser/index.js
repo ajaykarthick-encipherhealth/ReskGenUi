@@ -141,7 +141,7 @@ const Patient = ({
       });
       if (response?.status === "SUCCESS") {
         setIsLoading(false);
-        setCheckedLoading(false)
+        setCheckedLoading(false);
         let result = response?.response?.content;
         const data = result.map((item) => ({
           id: item.patientId,
@@ -286,7 +286,14 @@ const Patient = ({
     } else {
       setSelectedRowsId([]);
     }
-  }, [selectAllChecked, sort, isPatientList, pageNoL2Patient, activeTab,selectedOptions]);
+  }, [
+    selectAllChecked,
+    sort,
+    isPatientList,
+    pageNoL2Patient,
+    activeTab,
+    selectedOptions,
+  ]);
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab == 1 && !isPatientList) {
@@ -358,7 +365,7 @@ const Patient = ({
             });
             setIsPatientList(true);
             setL2selectUser(data);
-            setSelectedSupervisorSearch("")
+            setSelectedSupervisorSearch("");
           }}
         >
           <td
@@ -504,7 +511,7 @@ const Patient = ({
         allocatedOption: allocatedOption,
       });
     }
-  }, [selectedOptions, allocatedOption,isPatientList]);
+  }, [selectedOptions, allocatedOption, isPatientList]);
 
   return (
     <>
@@ -549,7 +556,12 @@ const Patient = ({
                                   type="text"
                                   onChange={(e) => {
                                     resetPageNumber(setPageNo);
-                                    getNameSearch(e.target.value, activeTab, isPatientList, l2selectUser);
+                                    getNameSearch(
+                                      e.target.value,
+                                      activeTab,
+                                      isPatientList,
+                                      l2selectUser
+                                    );
                                   }}
                                   value={
                                     activeTab == 2 && isPatientList
@@ -703,33 +715,33 @@ const Patient = ({
                                     <Input
                                       type="number"
                                       onChange={(e) => {
-                                        // setBatchCount(e.target.value);
-                                        if (e.target.value.length <= 0) {
+                                        let inputValue = e.target.value.replace(
+                                          /[^\d]/g,
+                                          ""
+                                        );
+                                        if (inputValue.length > 3) {
+                                          inputValue = inputValue.slice(0, 3);
+                                        }
+                                        setBatchCount(inputValue);
+                                        if (inputValue.length <= 0) {
                                           setFilterBatchCount(true);
                                           getAllList({
                                             batchCount: "",
                                             selectOrgList: selectOrgList,
                                           });
                                           setBatchCount("");
-                                        }
-                                        const inputValue =
-                                          e.target.value.replace(/[^\d]/g, "");
-
-                                        setBatchCount(inputValue);
-                                        if (inputValue?.length >= 0) {
+                                        } else if (inputValue.length > 0) {
                                           setFilterBatchCount(true);
                                         }
                                       }}
                                       value={batchCount}
-                                      className="batch-form-control"
                                       placeholder="Batch Count"
-                                      maxLength={3}
                                       onKeyDown={(e) => {
-                                        // Prevent input of backslash ("\")
                                         if (e.key === "\\") {
                                           e.preventDefault();
                                         }
                                       }}
+                                      className="batch-form-control"
                                     />
                                     <button
                                       onClick={() => {
@@ -854,7 +866,7 @@ const Patient = ({
                                     selectTabClick(1);
                                     setActiveTab(1);
                                     setSelectedOrgList([]);
-                                    setSearchString("")
+                                    setSearchString("");
                                     setSearchStr("");
                                   }}
                                 >
@@ -875,7 +887,7 @@ const Patient = ({
                                     selectTabClick(2);
                                     setActiveTab(2);
                                     setSelectedOrgList([]);
-                                    setSearchString("")
+                                    setSearchString("");
                                     setSearchStr("");
                                   }}
                                 >

@@ -7,13 +7,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "../styles/auth.module.css";
 import LoginBack from "../images/logo/login-back.jpg";
 import { IMAGES } from "../jsx/constant/theme";
-import {
-  encyptingPass,
-} from "../components/headerFilters/functions";
+import { encyptingPass } from "../components/headerFilters/functions";
 import RegularButton from "../components/button";
-import {actions as allActions} from '../stores/authFlows'
+import { actions as allActions } from "../stores/authFlows";
+import { getResponePopup } from "../utils/reusable";
 
-const Login =({getMFAValidation, loginResponse}) =>{
+const Login = ({ getMFAValidation, loginResponse }) => {
   const router = useRouter();
   const [enteredEmail, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -51,7 +50,14 @@ const Login =({getMFAValidation, loginResponse}) =>{
         email: "",
         password: "",
       });
-      getMFAValidation({username:enteredEmail, route:router, password:encyptingPass(password)});
+      const res = await getMFAValidation({
+        username: enteredEmail,
+        route: router,
+        password: encyptingPass(password),
+      });
+      if (res?.status !== "SUCCESS") {
+        getResponePopup(res);
+      }
     } else {
       return;
     }
@@ -76,9 +82,7 @@ const Login =({getMFAValidation, loginResponse}) =>{
                   src={IMAGES.loginPageLogo1}
                   style={{ display: "block", margin: "0 auto" }}
                 />
-                <div className="company-name">
-                Encipher Health Inc.
-                </div>
+                <div className="company-name">Encipher Health Inc.</div>
               </div>
             </div>
           </div>
@@ -154,11 +158,11 @@ const Login =({getMFAValidation, loginResponse}) =>{
       </div>
     </div>
   );
-}
+};
 
 const connector = connect(
   (state) => ({
-    loginResponse:state?.authReducer?.mfaLoader
+    loginResponse: state?.authReducer?.mfaLoader,
   }),
   {
     getMFAValidation: allActions.getMFAValidation,

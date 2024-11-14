@@ -32,8 +32,8 @@ const HeadTitle = ({
 
   useEffect(() => {
     // Log defaultDateRange and selectedDates for debugging
-    console.log("defaultDateRange:", defaultDateRange);
-    console.log("selectedDates before setting:", selectedDates);
+    // console.log("defaultDateRange:", defaultDateRange);
+    // console.log("selectedDates before setting:", selectedDates);
 
     if (defaultDateRange?.startDate && defaultDateRange?.endDate) {
       setSelectedDates([
@@ -67,7 +67,7 @@ const HeadTitle = ({
       <div
         style={{
           display: "flex",
-          width: "100%",
+          // width: "100%",
           justifyContent: "space-between",
         }}
       >
@@ -137,7 +137,7 @@ const HeadTitle = ({
 
           <Button
             onClick={() => setOpenPicker(false)}
-            style={{ marginLeft: "10px", marginRight:"20px" }}
+            style={{ marginLeft: "10px", marginRight: "20px" }}
           >
             Cancel
           </Button>

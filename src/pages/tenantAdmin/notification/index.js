@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { Radio, Select, notification } from "antd";
+import { Radio, Select, Input, notification } from "antd";
 import { Button, Spinner } from "react-bootstrap";
 import Header from "../../../jsx/layouts/nav/Header";
 import styles from "./style.module.css";
@@ -10,7 +10,7 @@ import { actions as AdminAction } from "../../../stores/admin/users";
 import { actions as notificationAction } from "../../../stores/admin/notifications";
 import { actions as allActions } from "../../../stores/admin/dashboard";
 const { Option } = Select;
-
+const { TextArea } = Input;
 export const debounce = (func, delay) => {
   let timer;
   return function (...args) {
@@ -214,7 +214,7 @@ const Notification = ({
   };
 
   const getTeamUser = async () => {
-    let result = await SelectUserList({role:"SUPERVISOR"});
+    let result = await SelectUserList({ role: "SUPERVISOR" });
     const options = result?.response?.map((data) => ({
       label: data?.firstName + "" + data?.lastName,
       value: data?.userName,
@@ -355,16 +355,16 @@ const Notification = ({
             </div>
 
             <div className={styles.textareaContainer}>
-              <textarea
+              <TextArea
+                showCount
                 className={styles.commentsFormControl}
                 value={inputValue?.content}
-                rows="5"
-                required
-                id="content"
+                maxLength={250}
                 name="content"
-                placeholder="Message"
                 onChange={handleChange}
-              ></textarea>
+                placeholder="Message"
+                style={{ height: 120, resize: "none" }}
+              />
               <p className={styles.errorMessage}>{errMessage?.msg}</p>
             </div>
             <div className={styles.sendListContainer}>
