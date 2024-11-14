@@ -356,6 +356,8 @@ const YearAndDosStatus = ({
   const handleCloseModal = () => {
     setConfirmCompleteModal(false);
     setConfirmNotesModal(false);
+    setInputValue({ notes: "" });
+    setValidated(false);
   };
 
   const handleSubmitValidNotes = async (event) => {
@@ -364,8 +366,10 @@ const YearAndDosStatus = ({
     if (form.checkValidity() === true) {
       setConfirmNotesModal(false);
       updateStatus(isValidAction);
+      setInputValue({ notes: "" });
+      setValidated(true);
     }
-    setValidated(true);
+   
   };
 
   const handleSubmitHccComplete = async () => {
@@ -423,6 +427,7 @@ const YearAndDosStatus = ({
           placement: "top",
           duration: 1,
         });
+        setInputValue({ notes: "" });
         getpatientDetailsData(
           localPatientId,
           patientDetailsResult?.data?.response?.processedYear,
@@ -633,6 +638,7 @@ const YearAndDosStatus = ({
                     name="notes"
                     onChange={handleChange}
                     rows="5"
+                    value={inputValue.notes}
                   ></textarea>
                 </div>
               </div>
