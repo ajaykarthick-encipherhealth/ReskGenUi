@@ -187,12 +187,15 @@ const ComorbidConditions = ({
                   accept={".xlsx, .csv"}
                 />
                 <div>
-                  <RegularButton
+                  <div>
+                      <RegularButton
                     name="Upload"
                     type={selectFile}
                     disabled={!selectFile}
                     onClick={submitPatientFile}
                   />
+                  </div>
+                
                 </div>
               </div>
               <div>

@@ -191,12 +191,14 @@ const CriticalConditions = ({
                 fileList={[]}
                 accept={".xlsx, .csv"}
               />
-              <RegularButton
-                name="Upload"
-                type={selectFile}
-                disabled={!selectFile}
-                onClick={submitPatientFile}
-              />
+              <div>
+                <RegularButton
+                  name="Upload"
+                  type={selectFile}
+                  disabled={!selectFile}
+                  onClick={submitPatientFile}
+                />
+              </div>
             </div>
             <div>
               <Button

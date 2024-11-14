@@ -8,17 +8,23 @@ import {
   Select,
   Switch,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Style from "./../../style.module.css";
 import RegularButton from "../../../../../components/button";
 import ButtonStyles from "../../../../../components/button/style.module.css";
-import Tags from "../../components/tags";
-import { handleEditInputChange, handleEditTag, handleRemoveTag, handleSaveEdit } from "../insulin";
-import { connect } from "react-redux";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 
-const MeatConfig = ({ getCodingDetails, updateSettings, list }) => {
-      const [form] = Form.useForm();
+import Tags from "../../components/tags";
+import {
+  handleEditInputChange,
+  handleEditTag,
+  handleRemoveTag,
+  handleSaveEdit,
+} from "../insulin";
+import { connect } from "react-redux";
+
+const OldMiConfig = ({ getCodingDetails, updateSettings, list }) => {
+    const [form] = Form.useForm();
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [editIndex, setEditIndex] = useState(null);
@@ -31,15 +37,6 @@ const MeatConfig = ({ getCodingDetails, updateSettings, list }) => {
     addOnDirectComboCodes: false,
     calculateComboIncludingPastMedicalHistory: false,
   });
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-  const handleAddTag = () => {
-    if (inputValue) {
-      setTags([...tags, inputValue]);
-      setInputValue("");
-    }
-  };
 
   useEffect(() => {
     getCodingDetails({ type: "CODING" });
@@ -80,10 +77,20 @@ const MeatConfig = ({ getCodingDetails, updateSettings, list }) => {
       console.log(error);
     }
   };
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+  const handleAddTag = () => {
+    if (inputValue) {
+      setTags([...tags, inputValue]);
+      setInputValue("");
+    }
+  };
   return (
     <div className="p-3">
       <div>
-        <div className={Style.title}>Meat Configuration</div>
+        <div className={Style.title}>OldMi Configuration</div>
       </div>
       <div>
         <div>
@@ -99,30 +106,15 @@ const MeatConfig = ({ getCodingDetails, updateSettings, list }) => {
                   <div className="d-flex justify-content-between mt-1">
                     <div>
                       <div className={Style.heading}>
-                        Consider Assessment Header as MEAT
+                        Capture OldMi Conditions
                       </div>
                     </div>
                     <div className="d-flex justify-content-between">
-                      <Form.Item name="findComboFromPMH">
+                      <Form.Item name="addOnDirectComboCodes">
                         <Switch />
                       </Form.Item>
                       <div className={`m-2`}>
-                        {medical?.findComboFromPMH ? "Enable" : "Disable"}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="d-flex justify-content-between mt-1">
-                    <div>
-                      <div className={Style.heading}>
-                        Suggest Assessment Header MEAT
-                      </div>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <Form.Item name="considerESRDAsHcc">
-                        <Switch />
-                      </Form.Item>
-                      <div className={`m-2`}>
-                        {medical?.considerESRDAsHcc ? "Enable" : "Disable"}
+                        {medical?.addOnDirectComboCodes ? "Enable" : "Disable"}
                       </div>
                     </div>
                   </div>
@@ -245,4 +237,4 @@ const enhancer = connect(
     updateSettings: settingActions.updateMedical,
   }
 );
-export default enhancer(MeatConfig);
+export default enhancer(OldMiConfig);

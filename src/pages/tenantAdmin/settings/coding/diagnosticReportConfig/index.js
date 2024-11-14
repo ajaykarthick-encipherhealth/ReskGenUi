@@ -8,12 +8,61 @@ import {
   Select,
   Switch,
 } from "antd";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Style from "./../../style.module.css";
 import RegularButton from "../../../../../components/button";
 import ButtonStyles from "../../../../../components/button/style.module.css";
+import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
+import { connect } from "react-redux";
 
-const DiagnosticReportConfig = () => {
+const DiagnosticReportConfig = ({ getCodingDetails, updateSettings, list }) => {
+  const [form] = Form.useForm();
+  const [medical, setMedical] = useState({
+    findComboFromPMH: false,
+    considerESRDAsHcc: false,
+    indirectComboCodes: false,
+    addOnDirectComboCodes: false,
+    calculateComboIncludingPastMedicalHistory: false,
+  });
+ useEffect(() => {
+   getCodingDetails({ type: "CODING" });
+ }, []);
+
+ useEffect(() => {
+   if (list?.response) {
+     form.setFieldsValue({
+       findComboFromPMH: list?.response?.findComboFromPMH,
+       considerESRDAsHcc: list?.response?.considerESRDAsHcc,
+       indirectComboCodes: list?.response?.indirectComboCodes,
+       addOnDirectComboCodes: list?.response?.addOnDirectComboCodes,
+       calculateComboIncludingPastMedicalHistory:
+         list.response?.calculateComboIncludingPastMedicalHistory,
+     });
+     setMedical({
+       findComboFromPMH: list?.response?.findComboFromPMH,
+       considerESRDAsHcc: list?.response?.considerESRDAsHcc,
+       indirectComboCodes: list?.response?.indirectComboCodes,
+       addOnDirectComboCodes: list?.response?.addOnDirectComboCodes,
+       calculateComboIncludingPastMedicalHistory:
+         list.response?.calculateComboIncludingPastMedicalHistory,
+     });
+   }
+ }, [list]);
+
+ const onChange = (value, values) => {
+   console.log(values);
+   setMedical(values);
+ };
+ const handleSubmit = async (values) => {
+   try {
+     const res = await updateSettings(values);
+     if (res?.status == "SUCCESS") {
+       getResponePopup(res);
+     }
+   } catch (error) {
+     console.log(error);
+   }
+ };
   return (
     <div className="p-3">
       <div>
@@ -21,7 +70,12 @@ const DiagnosticReportConfig = () => {
       </div>
       <div>
         <div>
-          <Form id={"chart-audit"}>
+          <Form
+            id={"chart-audit"}
+            onFinish={handleSubmit}
+            form={form}
+            onValuesChange={onChange}
+          >
             <div className="d-flex ">
               <div className=" p-3" style={{ width: "35%" }}>
                 <h4>Radiology</h4>
@@ -54,10 +108,13 @@ const DiagnosticReportConfig = () => {
                         Consider as Valid Radiology
                       </div>
                     </div>
-                    <div>
-                      <Form.Item name="test">
+                    <div className="d-flex justify-content-between">
+                      <Form.Item name="indirectComboCodes">
                         <Switch />
                       </Form.Item>
+                      <div className={`m-1`}>
+                        {medical?.indirectComboCodes ? "Enable" : "Disable"}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -100,20 +157,26 @@ const DiagnosticReportConfig = () => {
                     <div>
                       <div className={Style.heading}>Consider as Valid Lab</div>
                     </div>
-                    <div>
-                      <Form.Item name="test3">
+                    <div className="d-flex justify-content-between">
+                      <Form.Item name="findComboFromPMH">
                         <Switch />
                       </Form.Item>
+                      <div className={`m-1`}>
+                        {medical?.findComboFromPMH ? "Enable" : "Disable"}
+                      </div>
                     </div>
                   </div>
                   <div className="d-flex justify-content-between mt-4">
                     <div>
                       <div className={Style.heading}>Future DOS </div>
                     </div>
-                    <div>
-                      <Form.Item name="test2">
+                    <div className="d-flex justify-content-between">
+                      <Form.Item name="considerESRDAsHcc">
                         <Switch />
                       </Form.Item>
+                      <div className={`m-1`}>
+                        {medical?.considerESRDAsHcc ? "Enable" : "Disable"}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -128,4 +191,13 @@ const DiagnosticReportConfig = () => {
   );
 };
 
-export default DiagnosticReportConfig;
+const enhancer = connect(
+  (state) => ({
+    list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
+  }),
+  {
+    getCodingDetails: settingActions.codingGuidelinesAction,
+    updateSettings: settingActions.updateMedical,
+  }
+);
+export default enhancer(DiagnosticReportConfig);

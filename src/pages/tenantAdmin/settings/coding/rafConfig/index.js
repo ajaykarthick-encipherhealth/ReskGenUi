@@ -165,7 +165,7 @@ const RAFConfig = ({
                   onChange={(e) => onChange(e, "isRafCalculationEnabled")}
                 />
                 <div className={`mx-2`}>
-                  {isChecked?.isRafCalculationEnabled ? "Yes" : "No"}
+                  {isChecked?.isRafCalculationEnabled ? "Enable" : "Disable"}
                 </div>
               </div>
             </div>
@@ -179,7 +179,7 @@ const RAFConfig = ({
                   onChange={(e) => onChange(e, "rafScoreMedicAid")}
                 />
                 <div className={`mx-2`}>
-                  {isChecked?.rafScoreMedicAid ? "Yes" : "No"}
+                  {isChecked?.rafScoreMedicAid ? "Enable" : "Disable"}
                 </div>
               </div>
             </div>

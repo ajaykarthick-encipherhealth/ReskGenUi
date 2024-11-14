@@ -27,6 +27,7 @@ import DiagnosticReportConfig from "./coding/diagnosticReportConfig";
 import MeatConfig from "./coding/meatCofig";
 import ComboConfig from "./coding/comboConfig";
 import ConflictConfig from "./coding/conflictConfig";
+import OldMiConfig from "./coding/oldMiConfig";
 const { Sider } = Layout;
 
 const menuList = [
@@ -191,6 +192,7 @@ const Settings = () => {
                   <DiagnosticReportConfig />
                 )}
                 {activePage == "Meat_Config" && <MeatConfig />}
+                {activePage == "OldMi_Config" && <OldMiConfig />}
                 {activePage == "Medical_Coding" && <MedicalCoding />}
                 {activePage == "Insulin_Medications" && <Insulin />}
                 {activePage == "Direct_Codes" && <DirectCodes />}

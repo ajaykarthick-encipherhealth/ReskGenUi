@@ -29,7 +29,7 @@ const Tags = ({
       ) : (
         <div className="d-flex">
           <Tag
-            className="flex justify-center p-2 py-1 fs-5"
+            className="d-flex align-items-center p-2 py-1 fs-5"
             style={{
               background: "#BAE0FC",
               padding: "10px",
@@ -43,11 +43,9 @@ const Tags = ({
               size="small"
               type="link"
               onClick={() => handleEditTag(index)}
-              style={{padding:"0px"}}
-              
+              style={{ padding: "0px" }}
             >
-            
-              <Image src={edit} alt="noimg"/>  
+              <Image src={edit} alt="noimg" />
             </Button>
             <Popconfirm
               title="Are you sure you want to delete this tag?"
@@ -55,12 +53,8 @@ const Tags = ({
               okText="Yes"
               cancelText="No"
             >
-              <Button
-                size="small"
-                type="link"
-                style={{padding:"0px"}}
-              >
-               <Image src={delIcon} alt="noimg"/>  
+              <Button size="small" type="link" style={{ padding: "0px" }}>
+                <Image src={delIcon} alt="noimg" />
               </Button>
             </Popconfirm>
           </Tag>
