@@ -368,6 +368,7 @@ const DetailedViewPdfTable = ({
                               pageNo: pageNo,
                               viewDetailedBatch: viewDetailedBatch,
                             }}
+                            currentId={currentId}
                           />
                         </div>
                       </div>

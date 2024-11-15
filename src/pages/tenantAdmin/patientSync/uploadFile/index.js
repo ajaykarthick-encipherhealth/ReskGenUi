@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Progress } from "antd";
 import progressStyles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
 import { useEffect } from "react";
+
 const UploadFile = ({
   filesList,
   setFilesList,
@@ -13,14 +14,29 @@ const UploadFile = ({
   setIsLoading,
   uploadFolder,
   openUpload,
+  setUploadAction,
+  uploadAction,
+  singleUpload,
 }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
-
   const fileInputRef = useRef(null);
   const fileHandleChange = (e) => {
     if (e.target.files) {
       const files = e.target.files;
       const fileArray = Array.from(files);
+      if (singleUpload && fileArray.length > 1) {
+        alert("Only one file can be uploaded at a time.");
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        return;
+      }
+      const maxFilesAllowed =
+        openUpload?.data?.totalFileCount -
+          openUpload?.data?.totalSuccessCount || Infinity;
+      if (fileArray?.length > maxFilesAllowed) {
+        alert(`This batch can allow only ${maxFilesAllowed} files.`);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        return;
+      }
       const validFiles = [];
       fileArray.forEach((file) => {
         validFiles.push(file);
@@ -67,26 +83,17 @@ const UploadFile = ({
       }
     }
   }, [openUpload]);
-  return (
+console.log(isLoading,"isLoading")
+  return uploadAction || singleUpload ? (
     <div className={`${styles.cover} `}>
       <label className="cr-pointer">
-        {/* <input
-          className="input"
-          name="file"
-          type="file"
-          // multiple
-          onChange={fileHandleChange}
-          ref={fileInputRef}
-          accept=".pdf"
-          webkitdirectory
-          mozdirectory
-        /> */}
         <input
           key={openUpload?.status ? "open" : "closed"}
           className="input"
           type="file"
-          webkitdirectory={uploadFolder ? "true" : "false"}
+          webkitdirectory={uploadAction === "uploadFolder" ? "true" : undefined}
           directory=""
+          multiple={uploadAction === "uploadMultipleFiles" ? true : false}
           ref={fileInputRef}
           onChange={fileHandleChange}
         />
@@ -101,8 +108,12 @@ const UploadFile = ({
               </div>
               <div className={styles.subText}>{subText}</div>
             </div>
+          ) : singleUpload ? (
+            "Upload File"
+          ) : uploadAction === "uploadFolder" ? (
+            "Upload Folder"
           ) : (
-            "Upload A Folder"
+            "Upload Multiple Files"
           )}
         </div>
       </label>
@@ -120,17 +131,37 @@ const UploadFile = ({
                       ? getColors("PENDING")?.strokeColor
                       : getColors("COMPLETED")?.strokeColor
                   }
-                  className={`w-100 ${progressStyles.progreddBr} ${
-                    isLoading
-                      ? getColors("PENDING")?.progressTextClass
-                      : getColors("COMPLETED")?.progressTextClass
-                  }`}
+                  className={`w-100 ${progressStyles.progreddBr}`}
                 />
               </div>
             </>
           ))}
         </>
       )}
+    </div>
+  ) : (
+    <div className="col-xl-12 mb-3 d-flex justify-content-center ">
+      <button
+        type="submit"
+        style={{ backgroundColor: "#04306f" }}
+        className="border-0 px-4 py-2 text-white rounded-1"
+        onClick={() => {
+          !singleUpload &&
+          setUploadAction("uploadFolder");
+        }}
+      >
+        Upload Folder
+      </button>
+      <button
+        type="submit"
+        style={{ backgroundColor: "#04306f" }}
+        className="border-0 px-4 py-2 text-white rounded-1 mx-2"
+        onClick={() => {
+          !singleUpload &&setUploadAction("uploadMultipleFiles");
+        }}
+      >
+        Upload Multiple Files
+      </button>
     </div>
   );
 };

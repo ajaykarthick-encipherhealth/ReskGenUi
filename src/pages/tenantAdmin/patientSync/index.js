@@ -22,6 +22,7 @@ import UploadFile from "./uploadFile";
 import { connect } from "react-redux";
 import { getResponePopup } from "../../../utils/reusable";
 import { getStorage } from "../../../utils/storages";
+import UploadModal from "./uploadFile/uploadModal";
 
 const { RangePicker } = DatePicker;
 
@@ -326,6 +327,7 @@ const Index = ({
   const [openUpload, setOpenUpload] = useState({ status: false, data: null });
   const [form] = Form.useForm();
   const [fileLoading, setFileLoading] = useState(false);
+  const [uploadAction, setUploadAction] = useState(null);
   const [viewDetailedBatch, setViewDetailedBatch] = useState({
     status: false,
     data: null,
@@ -436,34 +438,7 @@ const Index = ({
       });
     }
   }, [reportActiveTab, pageNo, selectedDateRanges, searchVal, selectedOptions]);
-  const [uploadStatus, SetUploadStatus] = useState(false);
-  const handleUpload = async () => {
-    console.log(
-      fileList.slice(0, openUpload?.data?.totalFileCount),
-      "openUpload"
-    );
-    if (fileList && fileList?.length > 0) {
-      setFileLoading(true);
-      const uploadPromises = fileList?.map((item) => {
-        const formData = new FormData();
-        formData.append("file", item);
-        formData.append("batchId", openUpload?.data?.id);
-        formData.append("yearOfServices", openUpload?.data?.yearOfService);
-        return uploadFiles({ obj: formData });
-      });
-      const responses = await Promise.all(uploadPromises);
-      const lastData = responses[responses?.length - 1];
 
-      if (lastData?.status === "SUCCESS") {
-        getResponePopup(lastData);
-        setOpenUpload({ status: false, data: null });
-        getAllBatches({ page: pageNo });
-        form.resetFields();
-        setFileList([]);
-        setFileLoading(false)
-      }
-    }
-  };
   return (
     <>
       <Header />
@@ -721,50 +696,18 @@ const Index = ({
           </div>
         </div>
       )}
-      <Modal
-        open={openUpload?.status}
-        onCancel={() => {
-          setOpenUpload({ status: false, data: null });
-          setFileList([]);
-        }}
-        footer={false}
-      >
-        <Form form={form} onFinish={handleUpload} layout="vertical">
-          <Form.Item
-            label={
-              <label>
-                Upload Folder <span className="text-danger">*</span>
-              </label>
-            }
-            name="upload"
-          >
-            <UploadFile
-              filesList={fileList}
-              setFilesList={setFileList}
-              setIsLoading={setFileLoading}
-              isLoading={fileLoading}
-              uploadFolder={true}
-              openUpload={openUpload}
-            />
-          </Form.Item>
-          <Form.Item>
-            <div className="col-xl-12 mb-3 d-grid justify-content-center">
-              <button
-                type="submit"
-                style={{ backgroundColor: "#04306f" }}
-                className="border-0 px-4 py-2 text-white rounded-1"
-                disabled={
-                  fileList?.length > 0 && !fileLoading && !uploadFilesLoader
-                    ? false
-                    : true
-                }
-              >
-                {uploadFilesLoader ? "Loading..." : "Submit"}
-              </button>
-            </div>
-          </Form.Item>
-        </Form>
-      </Modal>
+      <UploadModal
+        openUpload={openUpload}
+        setOpenUpload={setOpenUpload}
+        setUploadAction={setUploadAction}
+        setFileLoading={setFileLoading}
+        fileList={fileList}
+        setFileList={setFileList}
+        fileLoading={fileLoading}
+        uploadAction={uploadAction}
+        pageNo={pageNo}
+        singleUpload={false}
+      />
     </>
   );
 };

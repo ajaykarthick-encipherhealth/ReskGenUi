@@ -16,6 +16,8 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import { useRouter } from "next/router";
 import { setStorage } from "../../../../utils/storages";
+import { faRotate } from "@fortawesome/free-solid-svg-icons";
+import UploadModal from "../../../../pages/tenantAdmin/patientSync/uploadFile/uploadModal";
 
 export const getColors = (rowStatus) => {
   let strokeColor;
@@ -63,10 +65,14 @@ const DetailedPdfTable = ({
   loader,
   webSocketData,
   params,
+  currentId
 }) => {
   const navigate = useRouter();
-  const [progressMap, setProgressMap] = useState(5);
   const [socketData, setSocketData] = useState(tableData);
+  const [fileList, setFileList] = useState([]);
+  const [openUpload, setOpenUpload] = useState({ status: false, data: null });
+  const [fileLoading, setFileLoading] = useState(false);
+  const [uploadAction, setUploadAction] = useState(null);
   // DetailedPdfTable.propTypes = {
   //   paginationFirst: PropTypes.any.isRequired,
   //   onPageChange: PropTypes.func.isRequired,
@@ -79,7 +85,7 @@ const DetailedPdfTable = ({
       setStorage("patientSyncEncodedValue", JSON.stringify(encodedValue));
       setStorage("fromPatientSync", true);
       navigate.push({
-        pathname: "/tenantAdmin/patientSync/batchFilesView"
+        pathname: "/tenantAdmin/patientSync/batchFilesView",
       });
     } else {
       notification.warning({
@@ -148,7 +154,10 @@ const DetailedPdfTable = ({
                     <tr
                       key={row?.patientId}
                       style={{ height: "40px" }}
-                      onClick={() => gotoPatientDetails(row)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        gotoPatientDetails(row);
+                      }}
                     >
                       <td className={`${TableStyle.childBorder} px-1`}>
                         {row?.fileId ? row?.fileId : "---"}
@@ -216,11 +225,24 @@ const DetailedPdfTable = ({
                               ?.replace(/_/g, " ")
                               .slice(1)
                               .toLowerCase() || ""}
-                          {/* {errStatus?.includes("FAILED")&& (
-                          <div className={styles.refreshBtn}>
-                            <Image src={refresh} width={15} height={15} />
-                          </div>
-                        )} */}
+                          {row?.fileStatus === "FAILED" && (
+                            <div
+                              className={`${styles.refreshBtn} mx-2`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setOpenUpload({
+                                  status: !openUpload?.status,
+                                  data: row,
+                                });
+                                setUploadAction("uploadFile");
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faRotate}
+                                className="text-red px-2"
+                              />
+                            </div>
+                          )}
                         </div>
                         <div
                           className={`d-flex justify-content-center batchProgressBar`}
@@ -275,6 +297,19 @@ const DetailedPdfTable = ({
           </div>
         </>
       )}
+      <UploadModal
+        openUpload={openUpload}
+        setOpenUpload={setOpenUpload}
+        setUploadAction={setUploadAction}
+        setFileLoading={setFileLoading}
+        fileList={fileList}
+        setFileList={setFileList}
+        fileLoading={fileLoading}
+        uploadAction={uploadAction}
+        pageNo={params?.pageNo}
+        singleUpload={true}
+        currentId={currentId}
+      />
     </div>
   );
 };
