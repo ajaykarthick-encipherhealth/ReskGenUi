@@ -163,7 +163,7 @@ const Hcc = ({
   }, [activeMeatTitle]);
 
   const handleOptions = (value) => {
-    if (value) {
+    // if (value) {
       setIsLoading(true);
       setSelectDosValue(value);
       const filteredDos = pageNumberOptions?.filter(
@@ -223,13 +223,14 @@ const Hcc = ({
           role
         );
       }
-    } else {
+    // } else {
       setActions({
-        showDisease: false,
-        reEvaluate: false,
-        showActionsPop: false,
+        showDisease: !value && false,
+        reEvaluate: !value && false,
+        showActionsPop: !value &&false,
       });
-    }
+      // setSelectDosValue(null)
+    // }
   };
   const handleChangePageNumber = async (value) => {
     // setPopoverVisible(false);
@@ -378,7 +379,7 @@ const Hcc = ({
         </div>
       </div>
 
-      <div className="d-flex justify-content-end align-items-center cursor-pointer">
+      {/* <div className="d-flex justify-content-end align-items-center cursor-pointer">
         {" "}
         <button
           className={`${visitStyles.actionBtn} px-2 py-1 rounded-md mt-4`}
@@ -392,7 +393,7 @@ const Hcc = ({
         >
           Cancel
         </button>
-      </div>
+      </div> */}
     </>
   );
 
@@ -523,7 +524,7 @@ const Hcc = ({
                           placeholder="Select DOS"
                           onChange={handleOptions}
                           className="dosSelect"
-                          allowClear
+                          allowClear={true}
                           value={selectDosValue ? selectDosValue : null}
                         >
                           {dosSummariesList?.map((data) => (

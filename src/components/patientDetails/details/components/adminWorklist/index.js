@@ -55,16 +55,19 @@ const AdminWorkList = ({
   const [selectComputedPicker, setSelectComputedPicker] = useState("");
   const [filterModalOpen, setFilterModalOpen] = useState(false);
 
-  const getWorkList = async () => {
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
-    setFilterDataLoading(false);
+  const getWorkList = async (data) => {
+    const info = await getPatients({ data: data });
+    if (info) {
+      setPatientList(info?.response?.content);
+      setTotalElements(info?.response?.totalElements);
+      setFilterDataLoading(false);
+    }
   };
 
   const filterChangePatientId = async (e) => {
     setSearch(e.target.value);
   };
-  const onPageChange = async (e) => {
+  const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setFilterModalOpen(false);
@@ -141,10 +144,10 @@ const AdminWorkList = ({
     );
   };
 
-  useEffect(() => {
-    setFilterDataLoading(true);
-    getWorkList();
-  }, [result, pageNo]);
+  // useEffect(() => {
+  //   setFilterDataLoading(true);
+  //   getWorkList(result);
+  // }, [result, pageNo]);
 
   useEffect(() => {
     setFilterDataLoading(true);
@@ -161,7 +164,8 @@ const AdminWorkList = ({
       selCreatedBy,
       sort,
     };
-    getPatients({ data: data });
+    getWorkList(data);
+    // getPatients({ data: data });
   }, [
     pageNo,
     computedStartDate,
@@ -190,7 +194,6 @@ const AdminWorkList = ({
           <div class="form-group has-search searchStyle">
             <div>
               <Input
-               
                 type="text"
                 onChange={(e) => filterChangePatientId(e)}
                 className={`input-form-control align-items-center`}
@@ -232,7 +235,7 @@ const AdminWorkList = ({
             />
           </div>
         </div>
-        {result?.response?.content && !filterDataLoading ? (
+        {!filterDataLoading ? (
           <>
             <div className={visitStyles.patientListHead}>
               <ul className={`${visitStyles.patientDetailsHead}`}>
