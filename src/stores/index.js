@@ -138,12 +138,12 @@ const reducers = combineReducers({
 
 const middlewares = [thunkMiddleware, promiseMiddleware];
 
-if (serverControl !== "production") {
-// if (false) {
-  // need to remove for this if condition from production
-  const { logger } = require("redux-logger");
-  middlewares.push(logger);
-}
+// if (serverControl !== "production") {
+// // if (false) {
+//   // need to remove for this if condition from production
+//   const { logger } = require("redux-logger");
+//   middlewares.push(logger);
+// }
 
 export const store = createStore(
   reducers,
