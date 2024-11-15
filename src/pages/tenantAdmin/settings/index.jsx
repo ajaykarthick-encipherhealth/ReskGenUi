@@ -28,6 +28,8 @@ import MeatConfig from "./coding/meatCofig";
 import ComboConfig from "./coding/comboConfig";
 import ConflictConfig from "./coding/conflictConfig";
 import OldMiConfig from "./coding/oldMiConfig";
+import PmhConditionConfig from "./coding/pmhConditionConfig";
+import FTPSETPIntegration from "./coding/ftpSetpIntegration";
 const { Sider } = Layout;
 
 const menuList = [
@@ -123,6 +125,10 @@ const menuList = [
         label: "Down Codes",
       },
       {
+        key: "PMH_Config",
+        label: "PMH Condition Config",
+      },
+      {
         key: "RAF_CONFIG",
         label: "RAF Config",
       },
@@ -196,6 +202,8 @@ const Settings = () => {
                 {activePage == "Medical_Coding" && <MedicalCoding />}
                 {activePage == "Insulin_Medications" && <Insulin />}
                 {activePage == "Direct_Codes" && <DirectCodes />}
+                {activePage == "PMH_Config" && <PmhConditionConfig />}
+                {activePage == "FTP-SFTP" && <FTPSETPIntegration />}
                 {activePage == "Health_Metric_Config" && <HealthMetricConfig />}
                 {activePage == "Combo_Config" && <ComboConfig />}
                 {activePage == "Conflict_Config" && <ConflictConfig />}

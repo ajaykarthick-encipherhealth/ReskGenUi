@@ -171,10 +171,21 @@
   padding: 5px;
   height: 35px;
 }
-.borderStyleConnect{
-  border: 1px solid #06439D;
+.borderStyleConnect {
+  border: 1px solid #06439d;
 }
-.borderStyleDisConnect{
+.borderStyleDisConnect {
   border: 1px solid #8C9097;
 }
-
+.connectBtn {
+  margin-top: "8px";
+  border-color: "#289A00";
+  background-color: "#D9FFCC";
+  color: "#289A00";
+}
+.disConnectBtn {
+  background-color: #8c9097 !important;
+  color: #fff !important;
+  border: 1px solid #8c9097 !important;
+  border-radius: 5px !important;
+}
