@@ -1,5 +1,5 @@
 import CryptoJS from "crypto-js";
-import { salt, serverControl } from "../config";
+import { isEncrypted, salt } from "../config";
 import Swal from "sweetalert2";
 import { removeStorage, setStorage } from "../storages";
 const defaultHeaders = {
@@ -69,7 +69,7 @@ export async function checkStatus(response) {
       removeStorage();
     });
   } else {
-    if (serverControl == "production") {
+    if (isEncrypted == "true") {
       const data = await response.text();
       try {
         err = false;
