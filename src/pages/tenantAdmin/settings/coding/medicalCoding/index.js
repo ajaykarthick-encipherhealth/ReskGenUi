@@ -13,7 +13,7 @@ const MedicalCoding = ({ getCodingDetails, updateSettings, list }) => {
     considerESRDAsHcc: false,
     activeHeadersEnabled: false,
     isSlashConditionsNeedToCapture: false,
-    calculateComboIncludingPastMedicalHistory: false,
+    considerESRDAsHcc: false,
   });
 
   useEffect(() => {
@@ -28,8 +28,8 @@ const MedicalCoding = ({ getCodingDetails, updateSettings, list }) => {
         activeHeadersEnabled: list?.response?.activeHeadersEnabled,
         isSlashConditionsNeedToCapture:
           list?.response?.isSlashConditionsNeedToCapture,
-        calculateComboIncludingPastMedicalHistory:
-          list.response?.calculateComboIncludingPastMedicalHistory,
+        considerESRDAsHcc:
+          list.response?.considerESRDAsHcc,
       });
       setMedical({
         isOIGCodeNeeded: list?.response?.isOIGCodeNeeded,
@@ -37,8 +37,8 @@ const MedicalCoding = ({ getCodingDetails, updateSettings, list }) => {
         activeHeadersEnabled: list?.response?.activeHeadersEnabled,
         isSlashConditionsNeedToCapture:
           list?.response?.isSlashConditionsNeedToCapture,
-        calculateComboIncludingPastMedicalHistory:
-          list.response?.calculateComboIncludingPastMedicalHistory,
+        considerESRDAsHcc:
+          list.response?.considerESRDAsHcc,
       });
     }
   }, [list]);
@@ -102,21 +102,21 @@ const MedicalCoding = ({ getCodingDetails, updateSettings, list }) => {
                       <Switch />
                     </Form.Item>
                     <div className={`m-2`}>
-                      {medical?.isSlashConditionsNeedToCapture ? "Enable" : "Disable"}
+                      {medical?.isSlashConditionsNeedToCapture
+                        ? "Enable"
+                        : "Disable"}
                     </div>
                   </div>
                 </div>
 
                 <div className="d-flex justify-content-between mt-1">
-                  <div>{" Capture Insulin Medication as ICD Codes"}</div>
+                  <div>{" Consider ESRD as HCC"}</div>
                   <div className="d-flex justify-content-between">
-                    <Form.Item name="calculateComboIncludingPastMedicalHistory">
+                    <Form.Item name="considerESRDAsHcc">
                       <Switch />
                     </Form.Item>
                     <div className={`m-2`}>
-                      {medical?.calculateComboIncludingPastMedicalHistory
-                        ? "Enable"
-                        : "Disable"}
+                      {medical?.considerESRDAsHcc ? "Enable" : "Disable"}
                     </div>
                   </div>
                 </div>

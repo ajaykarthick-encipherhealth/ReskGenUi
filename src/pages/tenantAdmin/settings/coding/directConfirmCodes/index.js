@@ -71,7 +71,9 @@ const DirectConfirmCodes = ({
         page: page,
       });
       if (res?.status == "SUCCESS") {
-        setIsGuidelines(res?.response?.includeGeneralGuidelineCodes);
+        setIsGuidelines(
+          res?.response?.directConfirmConfigResponse?.includeGeneralGuidelineCodes
+        );
       }
     } catch (error) {}
   };
@@ -228,7 +230,10 @@ const DirectConfirmCodes = ({
           <div>
             <TenantSettingsTable
               columns={columns}
-              data={list?.response?.directConfirmCodesPage?.content}
+              data={
+                list?.response?.directConfirmConfigResponse
+                  ?.directConfirmCodesPage?.content
+              }
               handleEdit={(e) => {
                 setEditRowValue(e);
                 setIsEdit(e);
@@ -238,7 +243,9 @@ const DirectConfirmCodes = ({
               handleDelete={handleDeleteRow}
               paginationFirst={paginationFirst}
               totalElements={
-                list?.response?.directConfirmCodesPage?.totalElements
+                list?.response
+                  ?.directConfirmConfigResponse?.directConfirmCodesPage
+                  ?.totalElements
               }
               onPageChange={onPageChange}
             />

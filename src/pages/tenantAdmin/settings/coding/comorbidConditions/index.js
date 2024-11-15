@@ -72,7 +72,10 @@ const ComorbidConditions = ({
         search: search,
       });
       if (res?.status == "SUCCESS") {
-        setIsGuidelines(res?.response?.includeGeneralGuidelineCodes);
+        setIsGuidelines(
+          res?.response?.comorbidConditionsConfigResponse
+            ?.includeGeneralGuidelineCodes
+        );
       }
     } catch (error) {}
   };
@@ -188,14 +191,13 @@ const ComorbidConditions = ({
                 />
                 <div>
                   <div>
-                      <RegularButton
-                    name="Upload"
-                    type={selectFile}
-                    disabled={!selectFile}
-                    onClick={submitPatientFile}
-                  />
+                    <RegularButton
+                      name="Upload"
+                      type={selectFile}
+                      disabled={!selectFile}
+                      onClick={submitPatientFile}
+                    />
                   </div>
-                
                 </div>
               </div>
               <div>
@@ -234,7 +236,10 @@ const ComorbidConditions = ({
           <div>
             <TenantSettingsTable
               columns={columns}
-              data={list?.response?.comorbidConditionsPage?.content}
+              data={
+                list?.response?.comorbidConditionsConfigResponse
+                  ?.comorbidConditionsPage?.content
+              }
               handleEdit={(e) => {
                 setEditRowValue(e);
                 setIsEdit(e);
@@ -243,7 +248,9 @@ const ComorbidConditions = ({
               handleDelete={handleDeleteRow}
               paginationFirst={paginationFirst}
               totalElements={
-                list?.response?.comorbidConditionsPage?.totalElements
+                list?.response
+                  ?.comorbidConditionsConfigResponse?.comorbidConditionsPage
+                  ?.totalElements
               }
               onPageChange={onPageChange}
             />

@@ -84,9 +84,11 @@ const CriticalConditions = ({
       if (res?.status == "SUCCESS") {
         setIsChecked({
           includeGeneralGuidelineCodes:
-            res?.response?.includeGeneralGuidelineCodes,
+            res?.response?.criticalConditionResponse
+              ?.includeGeneralGuidelineCodes,
           captureCriticalConditionsForOutpatient:
-            res?.response?.captureCriticalConditionsForOutpatient,
+            res?.response
+              ?.criticalConditionResponse?.captureCriticalConditionsForOutpatient,
         });
       }
     } catch (error) {}
@@ -258,7 +260,10 @@ const CriticalConditions = ({
         <div>
           <TenantSettingsTable
             columns={columns}
-            data={list?.response?.criticalConditionsPage?.content}
+            data={
+              list?.response?.criticalConditionResponse?.criticalConditionsPage
+                ?.content
+            }
             handleEdit={(e) => {
               setEditRowValue(e);
               setIsEdit(e);
@@ -267,7 +272,8 @@ const CriticalConditions = ({
             handleDelete={handleDeleteRow}
             paginationFirst={paginationFirst}
             totalElements={
-              list?.response?.criticalConditionsPage?.totalElements
+              list?.response?.criticalConditionResponse?.criticalConditionsPage
+                ?.totalElements
             }
             onPageChange={onPageChange}
           />

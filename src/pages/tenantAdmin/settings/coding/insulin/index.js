@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
-import { Button, Input, Switch } from "antd";
+import { Button, Input, Spin, Switch } from "antd";
 import { useState } from "react";
 import Tags from "../../components/tags";
 import { connect } from "react-redux";
@@ -47,6 +47,7 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
   const [editIndex, setEditIndex] = useState(null);
   const [editValue, setEditValue] = useState("");
   const [selectFile, setSelectFile] = useState("");
+  const [loading, setLoading] = useState(true);
   const [isCaptureInsulin, setIsCaptureInsulin] = useState({
     captureInsulinMedicationAsIcdCodes: false,
     includeGeneralInsulinMedications: false,
@@ -57,16 +58,24 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
   }, []);
 
   useEffect(() => {
-    if (list?.response?.insulinMedications) {
+     setLoading(true);
+    if (list?.response) {
+     
       setIsCaptureInsulin({
         captureInsulinMedicationAsIcdCodes:
-          list?.response?.captureInsulinMedicationAsIcdCodes,
+          list?.response?.insulinConfigResponse
+            ?.captureInsulinMedicationAsIcdCodes,
         includeGeneralInsulinMedications:
-          list?.response?.includeGeneralInsulinMedications,
+          list?.response?.insulinConfigResponse?.includeGeneralInsulinMedications,
       });
-      setTags(list?.response?.insulinMedications);
+      setTags(
+        list?.response?.insulinConfigResponse?.insulinMedicationsPage?.content
+      );
+      setLoading(false);
     }
+  
   }, [list]);
+
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -148,16 +157,14 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
               </div>
               <div className="d-flex justify-content-between">
                 <Switch
-                  checked={isCaptureInsulin?.captureInsulinMedicationAsIcdCodes}
+                  checked={isCaptureInsulin}
                   // className="directCodeSwitch"
                   onChange={(e) =>
                     onChange(e, "captureInsulinMedicationAsIcdCodes")
                   }
                 />
                 <div className={`mx-2`}>
-                  {isCaptureInsulin?.captureInsulinMedicationAsIcdCodes
-                    ? "Yes"
-                    : "No"}
+                  {isCaptureInsulin ? "Enable" : "Disable"}
                 </div>
               </div>
             </div>
@@ -165,16 +172,14 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
               <div>Do you need to include general insulin medications</div>
               <div className="d-flex justify-content-between">
                 <Switch
-                  checked={isCaptureInsulin?.includeGeneralInsulinMedications}
+                  checked={isCaptureInsulin}
                   // className="directCodeSwitch"
                   onChange={(e) =>
                     onChange(e, "includeGeneralInsulinMedications")
                   }
                 />
                 <div className={`mx-2`}>
-                  {isCaptureInsulin?.includeGeneralInsulinMedications
-                    ? "Yes"
-                    : "No"}
+                  {isCaptureInsulin ? "Enable" : "Disable"}
                 </div>
               </div>
             </div>
@@ -199,7 +204,6 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
                 <RegularButton name={"Add"} onClick={handleAddTag} />
               </div>
             </div>
-
             <div className="mt-2 max-h-[60vh] overflow-y-auto">
               {tags?.length > 0 ? (
                 tags?.map((tag, index) => (
@@ -237,37 +241,43 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
                         }
                         className="mr-2 w-auto p-2.5"
                       />
+                    ) : loading ? (
+                      <div>
+                        <Spin size="small" />
+                      </div>
                     ) : (
-                      <Tags
-                        tag={tag}
-                        index={index}
-                        handleRemoveTag={() =>
-                          handleRemoveTag({ index, setTags, tags })
-                        }
-                        handleEditTag={() =>
-                          handleEditTag({
-                            index,
-                            setEditIndex,
-                            setEditValue,
-                            tags,
-                          })
-                        }
-                        editIndex={editIndex}
-                        editValue={editValue}
-                        handleEditInputChange={(e) =>
-                          handleEditInputChange({ e, setEditValue })
-                        }
-                        handleSaveEdit={() =>
-                          handleSaveEdit({
-                            index,
-                            setTags,
-                            setEditIndex,
-                            setEditValue,
-                            editValue,
-                            tags,
-                          })
-                        }
-                      />
+                      <div>
+                        <Tags
+                          tag={tag?.medication || "test"}
+                          index={index}
+                          handleRemoveTag={() =>
+                            handleRemoveTag({ index, setTags, tags })
+                          }
+                          handleEditTag={() =>
+                            handleEditTag({
+                              index,
+                              setEditIndex,
+                              setEditValue,
+                              tags,
+                            })
+                          }
+                          editIndex={editIndex}
+                          editValue={editValue}
+                          handleEditInputChange={(e) =>
+                            handleEditInputChange({ e, setEditValue })
+                          }
+                          handleSaveEdit={() =>
+                            handleSaveEdit({
+                              index,
+                              setTags,
+                              setEditIndex,
+                              setEditValue,
+                              editValue,
+                              tags,
+                            })
+                          }
+                        />
+                      </div>
                     )}
                   </div>
                 ))

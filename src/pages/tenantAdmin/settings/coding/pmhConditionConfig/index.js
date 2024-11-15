@@ -1,38 +1,48 @@
 import React, { useEffect, useState } from "react";
-import { Switch } from "antd";
-import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
-import { connect } from "react-redux";
-import { getResponePopup } from "../../../../../utils/reusable";
 import Style from "../../style.module.css";
+import RegularButton from "../../../../../components/button";
+import { Form, Switch } from "antd";
+import { connect } from "react-redux";
+import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
+import { getResponePopup } from "../../../../../utils/reusable";
 
-const PMHConditionConfig = ({
-  updateDirectCode,
-  getCodingDetails,
-}) => {
-  const [isGuidelines, setIsGuidelines] = useState(false);
-
-//   useEffect(() => {
-//     getDirectConfirmDetails();
-//   }, [paginationFirst]);
-
-  const getDirectConfirmDetails = async () => {
-    try {
-      const res = await getCodingDetails({
-        type: "DIRECT_CONFIRM_CODES",
-        page: page,
+const PMHConfig = ({ getCodingDetails, updateSettings, list }) => {
+  const [form] = Form.useForm();
+  const [medical, setMedical] = useState({
+    enablePmhConditionSegregation: false,
+  });
+  useEffect(() => {
+    getCodingDetails({ type: "PMH_CONDITIONS" });
+  }, []);
+  useEffect(() => {
+    if (list?.response) {
+      form.setFieldsValue({
+        enablePmhConditionSegregation:
+          list.response?.pmhConditionConfig?.enablePmhConditionSegregation,
       });
-      if (res?.status == "SUCCESS") {
-        setIsGuidelines(res?.response?.includeGeneralGuidelineCodes);
-      }
-    } catch (error) {}
+      setMedical({
+        enablePmhConditionSegregation:
+          list.response?.pmhConditionConfig?.enablePmhConditionSegregation,
+      });
+    }
+  }, [list]);
+
+  const onChange = (changedValues, allValues) => {
+    setMedical(allValues);
   };
 
-  const handleGuidelines = async (value) => {
+  const handleSubmit = async () => {
+    const values = form.getFieldsValue();
+    const payload = {
+      type: "PMH_CONDITIONS",
+      pmhConditionConfig: {
+        enablePmhConditionSegregation: values.enablePmhConditionSegregation || false,
+      },
+    };
+
     try {
-      const res = await updateDirectCode({
-        includeGeneralGuidelineCodes: value,
-      });
-      if (res.status == "SUCCESS") {
+      const res = await updateSettings(payload);
+      if (res?.status == "SUCCESS") {
         getResponePopup(res);
       }
     } catch (error) {
@@ -42,41 +52,58 @@ const PMHConditionConfig = ({
 
   return (
     <>
-      <div className="p-3">
-        <div className="d-flex justify-content-between">
-          <div className={Style.title}>PMH Condition Config</div>
-        </div>
-        <div>
-          <div className="d-flex justify-content-start  gap-4 mt-4">
-            <div className="mx-3">{"Do you need general guidelines codes"}</div>
-            <div className="d-flex justify-content-between">
-              <Switch
-                checked={isGuidelines}
-                onChange={(e) => {
-                  setIsGuidelines(e);
-                  handleGuidelines(e);
-                }}
-              />
-              <div className={`mx-2`}>{isGuidelines ? "Yes" : "No"}</div>
+      <Form
+        id="chart-audit"
+        onFinish={handleSubmit}
+        form={form}
+        onValuesChange={onChange}
+      >
+        <div className="d-flex flex-column" style={{ height: "100%" }}>
+          <div style={{ width: "50%" }}>
+            <div className="p-3">
+              <div className="d-flex justify-content-between">
+                <div className={Style.title}>PMH Condition Config</div>
+              </div>
+              <div className="mt-4">
+                <div className="d-flex justify-content-between mt-1">
+                  <div>PMH Condition Segregation</div>
+                  <div className="d-flex justify-content-between">
+                    <Form.Item
+                      name="enablePmhConditionSegregation"
+                      valuePropName="checked"
+                    >
+                      <Switch />
+                    </Form.Item>
+                    <div className={`m-2`}>
+                      {medical.enablePmhConditionSegregation ? "Enable" : "Disable"}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+
+          <div
+            className="d-flex justify-content-end p-2"
+            style={{ marginTop: "25pc" }}
+          >
+            <RegularButton type="outline" name="Restore" />
+            <RegularButton name="Save" />
+          </div>
         </div>
-      </div>
+      </Form>
     </>
   );
 };
+
 const enhancer = connect(
   (state) => ({
     list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
   }),
   {
-    updateSettings: settingActions.updateSettingsAction,
-    updateDirectCode: settingActions.updateDirectCode,
-    uploadfile: settingActions.uploadFiles,
-    editComoridConditions: settingActions.editComoridConditions,
-    deleteComoridConditions: settingActions.deleteComoridConditions,
     getCodingDetails: settingActions.codingGuidelinesAction,
-    uploadFiles: settingActions.uploadFiles,
+    updateSettings: settingActions.updateMedical,
   }
 );
-export default enhancer(PMHConditionConfig);
+
+export default enhancer(PMHConfig);

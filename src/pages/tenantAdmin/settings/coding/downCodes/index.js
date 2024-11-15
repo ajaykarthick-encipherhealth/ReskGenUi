@@ -89,9 +89,9 @@ const DownCodes = ({
       if (res?.status == "SUCCESS") {
         setIsChecked({
           isDownCodeConversionEnabled:
-            res?.response?.isDownCodeConversionEnabled,
+            res?.response?.downCodesConfigResponse?.isDownCodeConversionEnabled,
           includeGeneralGuidelineCodes:
-            res?.response?.includeGeneralGuidelineCodes,
+            res?.response?.downCodesConfigResponse?.includeGeneralGuidelineCodes,
         });
       }
     } catch (error) {
@@ -262,7 +262,9 @@ const DownCodes = ({
           <div>
             <TenantSettingsTable
               columns={columns}
-              data={list?.response?.downCodesPage?.content}
+              data={
+                list?.response?.downCodesConfigResponse?.downCodesPage?.content
+              }
               handleEdit={(e) => {
                 setEditRowValue(e);
                 setIsEdit(e);
@@ -270,7 +272,10 @@ const DownCodes = ({
               }}
               handleDelete={handleDeleteRow}
               paginationFirst={paginationFirst}
-              totalElements={list?.response?.downCodesPage?.totalElements}
+              totalElements={
+                list?.response?.downCodesConfigResponse?.downCodesPage
+                  ?.totalElements
+              }
               onPageChange={onPageChange}
             />
           </div>
