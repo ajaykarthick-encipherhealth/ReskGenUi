@@ -9,47 +9,51 @@ import { getResponePopup } from "../../../../../utils/reusable";
 const ComboConfig = ({ getCodingDetails, updateSettings, list }) => {
   const [form] = Form.useForm();
   const [medical, setMedical] = useState({
-    findComboFromPMH: false,
-    considerESRDAsHcc: false,
-    indirectComboCodes: false,
-    addOnDirectComboCodes: false,
     calculateComboIncludingPastMedicalHistory: false,
+    enableIndirectCode: false,
+    directCombinationAddonRegex: false
   });
 
   useEffect(() => {
-    getCodingDetails({ type: "CODING" });
+    getCodingDetails({ type: "COMBO" });
   }, []);
 
   useEffect(() => {
     if (list?.response) {
       form.setFieldsValue({
-        findComboFromPMH: list?.response?.findComboFromPMH,
-        considerESRDAsHcc: list?.response?.considerESRDAsHcc,
-        indirectComboCodes: list?.response?.indirectComboCodes,
-        addOnDirectComboCodes:
-          list?.response?.addOnDirectComboCodes,
         calculateComboIncludingPastMedicalHistory:
-          list.response?.calculateComboIncludingPastMedicalHistory,
+          list.response.calculateComboIncludingPastMedicalHistory,
+        enableIndirectCode: list.response.enableIndirectCode,
+        directCombinationAddonRegex: list.response.directCombinationAddonRegex,
       });
       setMedical({
-        findComboFromPMH: list?.response?.findComboFromPMH,
-        considerESRDAsHcc: list?.response?.considerESRDAsHcc,
-        indirectComboCodes: list?.response?.indirectComboCodes,
-        addOnDirectComboCodes:
-          list?.response?.addOnDirectComboCodes,
         calculateComboIncludingPastMedicalHistory:
-          list.response?.calculateComboIncludingPastMedicalHistory,
+          list.response.calculateComboIncludingPastMedicalHistory,
+        enableIndirectCode: list.response.enableIndirectCode,
+        directCombinationAddonRegex: list.response.directCombinationAddonRegex
       });
     }
   }, [list]);
 
-  const onChange = (value, values) => {
-    console.log(values);
-    setMedical(values);
+  const onChange = (changedValues, allValues) => {
+    setMedical(allValues);
   };
-  const handleSubmit = async (values) => {
+
+  const handleSubmit = async () => {
+    const values = form.getFieldsValue();
+    const payload = {
+      type: "COMBO",
+      comboConfig: {
+        calculateComboIncludingPastMedicalHistory:
+          values.calculateComboIncludingPastMedicalHistory || false,
+        enableIndirectCode: values.enableIndirectCode || false,
+        directCombinationAddonRegex:
+          values.directCombinationAddonRegex || false,
+      },
+    };
+
     try {
-      const res = await updateSettings(values);
+      const res = await updateSettings(payload);
       if (res?.status == "SUCCESS") {
         getResponePopup(res);
       }
@@ -57,10 +61,11 @@ const ComboConfig = ({ getCodingDetails, updateSettings, list }) => {
       console.log(error);
     }
   };
+
   return (
     <>
       <Form
-        id={"chart-audit"}
+        id="chart-audit"
         onFinish={handleSubmit}
         form={form}
         onValuesChange={onChange}
@@ -69,40 +74,52 @@ const ComboConfig = ({ getCodingDetails, updateSettings, list }) => {
           <div style={{ width: "50%" }}>
             <div className="p-3">
               <div className="d-flex justify-content-between">
-                <div className={Style.title}>Combo Configuration</div>
+                <div className={Style.title}>Meat Configuration</div>
               </div>
               <div className="mt-4">
                 <div className="d-flex justify-content-between mt-1">
-                  <div>Find Combo From PMH</div>
+                  <div>Find Combo from PMH</div>
                   <div className="d-flex justify-content-between">
-                    <Form.Item name="findComboFromPMH">
+                    <Form.Item
+                      name="calculateComboIncludingPastMedicalHistory"
+                      valuePropName="checked"
+                    >
                       <Switch />
                     </Form.Item>
                     <div className={`m-2`}>
-                      {medical?.findComboFromPMH ? "Enable" : "Disable"}
+                      {medical.calculateComboIncludingPastMedicalHistory
+                        ? "Enable"
+                        : "Disable"}
                     </div>
                   </div>
                 </div>
                 <div className="d-flex justify-content-between mt-1">
-                  <div>Indirect Combo Codes</div>
+                  <div> Find Indirect Combo Codes</div>
                   <div className="d-flex justify-content-between">
-                    <Form.Item name="indirectComboCodes">
+                    <Form.Item
+                      name="enableIndirectCode"
+                      valuePropName="checked"
+                    >
                       <Switch />
                     </Form.Item>
                     <div className={`m-2`}>
-                      {medical?.indirectComboCodes ? "Enable" : "Disable"}
+                      {medical.enableIndirectCode ? "Enable" : "Disable"}
                     </div>
                   </div>
                 </div>
-
                 <div className="d-flex justify-content-between mt-1">
-                  <div>Add on Direct Combo Codes</div>
+                  <div> Add on Direct Combo Codes</div>
                   <div className="d-flex justify-content-between">
-                    <Form.Item name="addOnDirectComboCodes">
+                    <Form.Item
+                      name="directCombinationAddonRegex"
+                      valuePropName="checked"
+                    >
                       <Switch />
                     </Form.Item>
                     <div className={`m-2`}>
-                      {medical?.addOnDirectComboCodes ? "Enable" : "Disable"}
+                      {medical.directCombinationAddonRegex
+                        ? "Enable"
+                        : "Disable"}
                     </div>
                   </div>
                 </div>
@@ -110,22 +127,19 @@ const ComboConfig = ({ getCodingDetails, updateSettings, list }) => {
             </div>
           </div>
 
-          {/* <div
+          <div
             className="d-flex justify-content-end p-2"
             style={{ marginTop: "25pc" }}
           >
-            <RegularButton
-              type={"outline"}
-              name={"Restore"}
-              onClick={() => console.log("Restore")}
-            />
-            <RegularButton name={"Save"} onClick={handleSubmit} />
-          </div> */}
+            <RegularButton type="outline" name="Restore" />
+            <RegularButton name="Save" />
+          </div>
         </div>
       </Form>
     </>
   );
 };
+
 const enhancer = connect(
   (state) => ({
     list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
@@ -135,4 +149,5 @@ const enhancer = connect(
     updateSettings: settingActions.updateMedical,
   }
 );
+
 export default enhancer(ComboConfig);

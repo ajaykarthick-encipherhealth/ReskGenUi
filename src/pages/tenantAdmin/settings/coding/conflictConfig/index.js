@@ -9,31 +9,42 @@ import { getResponePopup } from "../../../../../utils/reusable";
 const ConflictConfig = ({ getCodingDetails, updateSettings, list }) => {
   const [form] = Form.useForm();
   const [medical, setMedical] = useState({
-    conflictProxy: false
+    conflictConditionDontHide: false,
   });
 
   useEffect(() => {
-    getCodingDetails({ type: "CODING" });
+    getCodingDetails({ type: "CONFLICT" });
   }, []);
 
   useEffect(() => {
     if (list?.response) {
       form.setFieldsValue({
-        conflictProxy: list?.response?.conflictProxy,
+        conflictConditionDontHide:
+          list.response?.conflictConfig?.conflictConditionDontHide,
       });
       setMedical({
-        conflictProxy: list?.response?.conflictProxy
+        conflictConditionDontHide:
+          list.response?.conflictConfig?.conflictConditionDontHide,
       });
     }
   }, [list]);
 
-  const onChange = (value, values) => {
-    setMedical(values);
-    handleSubmit(values)
+  const onChange = (changedValues, allValues) => {
+    setMedical(allValues);
   };
-  const handleSubmit = async (values) => {
+
+  const handleSubmit = async () => {
+    const values = form.getFieldsValue();
+    const payload = {
+      type: "CONFLICT",
+      conflictConfig: {
+        conflictConditionDontHide:
+          values.conflictConditionDontHide || false,
+      },
+    };
+
     try {
-      const res = await updateSettings(values);
+      const res = await updateSettings(payload);
       if (res?.status == "SUCCESS") {
         getResponePopup(res);
       }
@@ -41,10 +52,11 @@ const ConflictConfig = ({ getCodingDetails, updateSettings, list }) => {
       console.log(error);
     }
   };
+
   return (
     <>
       <Form
-        id={"chart-audit"}
+        id="chart-audit"
         onFinish={handleSubmit}
         form={form}
         onValuesChange={onChange}
@@ -53,40 +65,43 @@ const ConflictConfig = ({ getCodingDetails, updateSettings, list }) => {
           <div style={{ width: "50%" }}>
             <div className="p-3">
               <div className="d-flex justify-content-between">
-                <div className={Style.title}>Combo Configuration</div>
+                <div className={Style.title}>Conflict Configuration</div>
               </div>
               <div className="mt-4">
                 <div className="d-flex justify-content-between mt-1">
                   <div>Conflict Proxy</div>
                   <div className="d-flex justify-content-between">
-                    <Form.Item name="conflictProxy">
+                    <Form.Item
+                      name="conflictConditionDontHide"
+                      valuePropName="checked"
+                    >
                       <Switch />
                     </Form.Item>
                     <div className={`m-2`}>
-                      {medical?.conflictProxy ? "Enable" : "Disable"}
+                      {medical.conflictConditionDontHide
+                        ? "Enable"
+                        : "Disable"}
                     </div>
                   </div>
                 </div>
+          
               </div>
             </div>
           </div>
 
-          {/* <div
+          <div
             className="d-flex justify-content-end p-2"
             style={{ marginTop: "25pc" }}
           >
-            <RegularButton
-              type={"outline"}
-              name={"Restore"}
-              onClick={() => console.log("Restore")}
-            />
-            <RegularButton name={"Save"} onClick={handleSubmit} />
-          </div> */}
+            <RegularButton type="outline" name="Restore" />
+            <RegularButton name="Save" />
+          </div>
         </div>
       </Form>
     </>
   );
 };
+
 const enhancer = connect(
   (state) => ({
     list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
@@ -96,4 +111,5 @@ const enhancer = connect(
     updateSettings: settingActions.updateMedical,
   }
 );
+
 export default enhancer(ConflictConfig);

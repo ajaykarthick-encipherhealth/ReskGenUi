@@ -128,7 +128,7 @@ export async function updateChatAuditConf(obj) {
 }
 export async function updateMedicalCoding(obj) {
   const options = {
-    method: "POST",
+    method: "PUT",
     body: JSON.stringify(obj),
   };
   const data = await requestPortal(
@@ -172,7 +172,7 @@ export async function updateSettings(obj) {
 
 export async function updateInsulinConfigs(obj) {
   const options = {
-    method: "POST",
+    method: "PUT",
     body: JSON.stringify(obj),
   };
   const data = await requestPortal(

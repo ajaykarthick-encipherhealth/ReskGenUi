@@ -53,7 +53,7 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
   });
 
   useEffect(() => {
-    getCodingDetails({ type: "INSULIN_MEDICATIONS" });
+    getCodingDetails({ type: "INSULIN" });
   }, []);
 
   useEffect(() => {
@@ -97,7 +97,7 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
   const submitPatientFile = async () => {
     const formData = new FormData();
     formData.append("file", selectFile.originFileObj);
-    formData.append("target", "INSULIN_MEDICATIONS");
+    formData.append("target", "INSULIN");
     formData.append("isDefaultYear", false);
     const headers = {
       headers: {
