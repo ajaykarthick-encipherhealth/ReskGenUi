@@ -111,6 +111,26 @@ const CriticalConditions = ({
       console.log(error);
     }
   };
+    const handleSubmit = async () => {
+      const values = form.getFieldsValue();
+      const payload = {
+        type: "CRITICAL_CONDITIONS",
+        criticalConditionsConfig: {
+          captureCriticalConditionsForOutpatient:
+            values.captureCriticalConditionsForOutpatient || false,
+          includeGeneralGuidelineCodes: values.includeGeneralGuidelineCodes || false,
+        },
+      };
+
+      try {
+        const res = await updateSettings(payload);
+        if (res?.status == "SUCCESS") {
+          getResponePopup(res);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
   const handleEditRow = async (value) => {
     try {
       const res = await editComoridConditions({
@@ -228,11 +248,10 @@ const CriticalConditions = ({
                   ...prev,
                   includeGeneralGuidelineCodes: e,
                 }));
-                handleGuidelines(e, "includeGeneralGuidelineCodes");
               }}
             />
             <div className={`mx-2`}>
-              {isChecked.includeGeneralGuidelineCodes ? "Yes" : "No"}
+              {isChecked.includeGeneralGuidelineCodes ? "Enable" : "Disable"}
             </div>
           </div>
           <div className="">
@@ -250,7 +269,7 @@ const CriticalConditions = ({
               }}
             />
             <div className={`mx-2`}>
-              {isChecked.captureCriticalConditionsForOutpatient ? "Yes" : "No"}
+              {isChecked.captureCriticalConditionsForOutpatient ? "Enable" : "Disable"}
             </div>
           </div>
           <div className="ms-auto mx-4">
@@ -279,17 +298,13 @@ const CriticalConditions = ({
           />
         </div>
       </div>
-      {/* <div className="text-end p-3">
+      <div className="text-end p-3">
         <RegularButton
           type={"outline"}
-          name={"Restore Changes"}
-          onClick={() => console.log("Restore Changes")}
+          name={"Restore"}
         />
-        <RegularButton
-          name={"Save Changes"}
-          onClick={() => handleSettingsUpdate()}
-        />
-      </div> */}
+        <RegularButton name={"Save"} onClick={() => handleSubmit()} />
+      </div>
       <ModalPop
         openModal={openModal}
         content={
@@ -319,12 +334,12 @@ const enhancer = connect(
     list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
   }),
   {
-    updateSettings: settingActions.updateSettingsAction,
+    updateSettings: settingActions.updateMedical,
     updateCriticalCondition: settingActions.updateCriticalCondition,
     editComoridConditions: settingActions.editComoridConditions,
     deleteComoridConditions: settingActions.deleteComoridConditions,
     getCodingDetails: settingActions.codingGuidelinesAction,
-    uploadFiles:settingActions.uploadFiles
+    uploadFiles: settingActions.uploadFiles,
   }
 );
 

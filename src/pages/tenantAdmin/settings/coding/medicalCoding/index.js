@@ -130,9 +130,7 @@ const MedicalCoding = ({ getCodingDetails, updateSettings, list }) => {
           >
             <RegularButton
               type={"outline"}
-              name={"Restore"}
-              onClick={() => console.log("Restore")}
-            />
+              name={"Restore"}            />
             <RegularButton name={"Save"} onClick={handleSubmit} />
           </div>
         </div>

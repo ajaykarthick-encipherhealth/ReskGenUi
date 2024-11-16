@@ -36,7 +36,8 @@ const PMHConfig = ({ getCodingDetails, updateSettings, list }) => {
     const payload = {
       type: "PMH_CONDITIONS",
       pmhConditionConfig: {
-        enablePmhConditionSegregation: values.enablePmhConditionSegregation || false,
+        enablePmhConditionSegregation:
+          values.enablePmhConditionSegregation || false,
       },
     };
 

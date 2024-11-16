@@ -128,6 +128,25 @@ const ComorbidConditions = ({
     }
   };
 
+      const handleSubmit = async () => {
+        const values = form.getFieldsValue();
+        const payload = {
+          type: "COMORBID_CONDITIONS",
+          comorbidConditionsConfig: {
+            includeGeneralGuidelineCodes:
+              values.includeGeneralGuidelineCodes || false,
+          },
+        };
+
+        try {
+          const res = await updateSettings(payload);
+          if (res?.status == "SUCCESS") {
+            getResponePopup(res);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
   const handleDeleteRow = async (value) => {
     try {
       const res = await deleteComoridConditions({
@@ -222,11 +241,10 @@ const ComorbidConditions = ({
               <Switch
                 checked={isGuidelines}
                 onChange={(e) => {
-                  setIsGuidelines(e);
-                  handleGuidelines(e);
+                  setIsGuidelines(e);           
                 }}
               />
-              <div className={`mx-2`}>{isGuidelines ? "Yes" : "No"}</div>
+              <div className={`mx-2`}>{isGuidelines ? "Enable" : "Disable"}</div>
             </div>
 
             <div className="ms-auto mx-4">
@@ -257,17 +275,13 @@ const ComorbidConditions = ({
           </div>
         </div>
       </div>
-      {/* <div className="text-end p-3">
+      <div className="text-end p-3">
         <RegularButton
           type={"outline"}
-          name={"Restore Changes"}
-          onClick={() => console.log("Restore Changes")}
+          name={"Restore"}
         />
-        <RegularButton
-          name={"Save Changes"}
-          onClick={() => console.log("Save Changes")}
-        />
-      </div> */}
+        <RegularButton name={"Save"} onClick={() => handleSubmit()} />
+      </div> 
       <ModalPop
         openModal={openModal}
         content={
@@ -301,13 +315,12 @@ const enhancer = connect(
     list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
   }),
   {
-    updateSettings: settingActions.updateSettingsAction,
+    updateSettings: settingActions.updateMedical,
     updateComorbidCondition: settingActions.updateComorbidCondition,
     editComoridConditions: settingActions.editComoridConditions,
     deleteComoridConditions: settingActions.deleteComoridConditions,
     getCodingDetails: settingActions.codingGuidelinesAction,
-    uploadFiles:settingActions.uploadFiles
-
+    uploadFiles: settingActions.uploadFiles,
   }
 );
 export default enhancer(ComorbidConditions);

@@ -61,6 +61,10 @@ const HealthMetricConfig = ({
   const [selectFile, setSelectFile] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [editRowValue, setEditRowValue] = useState(null);
+  const [isGuidelines, setIsGuidelines] = useState({
+    isHeightWeightNeededForBMI: false,
+    shouldMoveToSuggested: false,
+  });
   const [select, setSelect] = useState({
     healthMetricType: "",
     gender: "",
@@ -107,27 +111,27 @@ const HealthMetricConfig = ({
     },
   ];
 
-  const handleSubmit = async (values) => {
-    try {
-      const res = await addHealthMetric({ ...values });
-      if (res.status == "SUCCESS") {
-        getResponePopup(res);
-        setOpenModal(false);
-        form.resetFields();
-        getCodingDetails({
-          type: "HEALTH_METRICS",
-          page: page,
-          healthMetricType: select.healthMetricType,
-          gender: select.gender,
-          year: select.year,
-        });
-      } else if (res.status == "USER_DEFINED_ERROR") {
-        getResponePopup(res);
+
+    const handleSubmit = async () => {
+      const values = form.getFieldsValue();
+      const payload = {
+        type: "HEALTH_METRICS",
+        healthMetricConfig: {
+          isHeightWeightNeededForBMI:
+            values.isHeightWeightNeededForBMI || false,
+        },
+        shouldMoveToSuggested: values.shouldMoveToSuggested || false,
+      };
+
+      try {
+        const res = await updateSettings(payload);
+        if (res?.status == "SUCCESS") {
+          getResponePopup(res);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    };
 
   const content = (
     <>
@@ -462,11 +466,36 @@ const HealthMetricConfig = ({
         </div>
         <div className="d-flex justify-content-between align-items-center">
           <div className="d-flex justify-content-start gap-2 mt-4">
-            <div>Year</div>
-            <div>
-              <Switch checked={isChecked} onChange={(e) => setIsChecked(e)} />
+            <div className="mx-3">{"Height Weight"}</div>
+            <div className="d-flex">
+              <Switch
+                checked={isGuidelines.isHeightWeightNeededForBMI}
+                onChange={(e) => {
+                  setIsGuidelines((prev) => ({
+                    ...prev,
+                    isHeightWeightNeededForBMI: e,
+                  }));
+                }}
+              />
+              <div className={`mx-2`}>
+                {isGuidelines.isHeightWeightNeededForBMI ? "Enable" : "Disable"}
+              </div>
             </div>
-            <div>Can We calculate for all Processing Year</div>
+            <div className="mx-3">{"Move to suggested"}</div>
+            <div className="d-flex">
+              <Switch
+                checked={isGuidelines.shouldMoveToSuggested}
+                onChange={(e) => {
+                  setIsGuidelines((prev) => ({
+                    ...prev,
+                    shouldMoveToSuggested: e,
+                  }));
+                }}
+              />
+              <div className={`mx-2`}>
+                {isGuidelines.shouldMoveToSuggested ? "Enable" : "Disable"}
+              </div>
+            </div>
           </div>
 
           <div className="d-flex justify-content-start gap-2 mt-4">
@@ -560,10 +589,9 @@ const HealthMetricConfig = ({
       <div className="text-end p-3">
         <RegularButton
           type={"outline"}
-          name={"Restore Changes"}
-          onClick={() => handleSettingsUpdate()}
+          name={"Restore"}
         />
-        <RegularButton name={"Save Changes"} onClick={() => handleSubmit()} />
+        <RegularButton name={"Save"} onClick={() => handleSubmit()} />
       </div>
       <ModalPop
         openModal={openModal}
@@ -593,12 +621,12 @@ const enhancer = connect(
   }),
   {
     healthMetricAdd: settingActions.healthMetricAddAction,
-    updateSettings: settingActions.updateSettingsAction,
+    updateSettings: settingActions.updateMedical,
     editHealthMetric: settingActions.editHealthMetric,
     deleteComoridConditions: settingActions.deleteComoridConditions,
     addHealthMetric: settingActions.addHealthMetric,
     getCodingDetails: settingActions.codingGuidelinesAction,
-    uploadFiles:settingActions.uploadFiles
+    uploadFiles: settingActions.uploadFiles,
   }
 );
 export default enhancer(HealthMetricConfig);
