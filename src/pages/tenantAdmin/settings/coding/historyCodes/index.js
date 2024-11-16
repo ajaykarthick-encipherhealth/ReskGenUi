@@ -185,17 +185,7 @@ const HistoryCodes = ({
         <div>
           <div className="d-flex justify-content-between mb-4">
             <div className="">
-              <div className={Style.title}>History Codes</div>
-              <div className="d-flex justify-content-start gap-2 mt-4">
-                <div>Year</div>
-                <div>
-                  <Switch
-                    checked={isCheckeds}
-                    onChange={(e) => setIsCheckeds(e)}
-                  />
-                </div>
-                <div>Can We calculate for all Processing Year</div>
-              </div>
+              <div className={Style.title}>History Codes</div>            
             </div>
             <div className="d-flex justify-content-start gap-2">
               <div className="d-flex">

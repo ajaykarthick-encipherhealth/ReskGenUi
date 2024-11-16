@@ -195,32 +195,20 @@ const CriticalConditions = ({
       <div className="p-3">
         <div className="d-flex justify-content-between">
           <div className={Style.title}>Critical Conditions</div>
-        </div>
-        <div className="d-flex justify-content-between">
-          <div className="d-flex justify-content-start gap-2 mt-4">
-            <div>Year</div>
+          <div className="d-flex">
+            <FileUpload
+              allowedFormat={"File must be in xlsx or CSV"}
+              onChange={(e) => setSelectFile(e.file)}
+              fileList={[]}
+              accept={".xlsx, .csv"}
+            />
             <div>
-              <Switch checked={isCheckeds} onChange={(e) => setIsCheckeds(e)} />
-            </div>
-            <div>Can We calculate for all Processing Year</div>
-          </div>
-
-          <div className="d-flex justify-content-start gap-2">
-            <div className="d-flex">
-              <FileUpload
-                allowedFormat={"File must be in xlsx or CSV"}
-                onChange={(e) => setSelectFile(e.file)}
-                fileList={[]}
-                accept={".xlsx, .csv"}
+              <RegularButton
+                name="Upload"
+                type={selectFile}
+                disabled={!selectFile}
+                onClick={submitPatientFile}
               />
-              <div>
-                <RegularButton
-                  name="Upload"
-                  type={selectFile}
-                  disabled={!selectFile}
-                  onClick={submitPatientFile}
-                />
-              </div>
             </div>
             <div>
               <Button
@@ -237,8 +225,8 @@ const CriticalConditions = ({
             </div>
           </div>
         </div>
-        <Divider />
-        <div className="d-flex justify-content-start  gap-4 mt-4">
+  
+        <div className="d-flex justify-content-start  align-items-center gap-4 mt-4">
           <div className="mx-3">{"Do you need general guidelines codes"}</div>
           <div className="d-flex">
             <Switch
@@ -269,7 +257,9 @@ const CriticalConditions = ({
               }}
             />
             <div className={`mx-2`}>
-              {isChecked.captureCriticalConditionsForOutpatient ? "Enable" : "Disable"}
+              {isChecked.captureCriticalConditionsForOutpatient
+                ? "Enable"
+                : "Disable"}
             </div>
           </div>
           <div className="ms-auto mx-4">
@@ -299,10 +289,7 @@ const CriticalConditions = ({
         </div>
       </div>
       <div className="text-end p-3">
-        <RegularButton
-          type={"outline"}
-          name={"Restore"}
-        />
+        <RegularButton type={"outline"} name={"Restore"} />
         <RegularButton name={"Save"} onClick={() => handleSubmit()} />
       </div>
       <ModalPop
@@ -319,7 +306,7 @@ const CriticalConditions = ({
         setOpenModal={() => setOpenModal(false)}
       />
       <Modal
-        title="Edit Critical Conditions"
+        title="Edit "
         onCancel={() => setIsEdit(false)}
         footer={false}
         open={isEdit}

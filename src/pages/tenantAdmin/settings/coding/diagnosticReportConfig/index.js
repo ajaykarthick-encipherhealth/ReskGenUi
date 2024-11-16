@@ -177,7 +177,10 @@ const DiagnosticReportConfig = ({ getCodingDetails, updateSettings, list }) => {
           </div>
         </div>
 
-        <div className="d-flex justify-content-end mt-4">
+        <div
+          className="d-flex justify-content-end"
+          style={{ marginTop: "350px" }}
+        >
           <RegularButton
             type="outline"
             name="Restore"

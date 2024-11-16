@@ -120,19 +120,23 @@ const FlagConfig = ({ getFlagConfigDetails, flagSave, deleteFlag }) => {
                 onChange={(e) => setFlag(e.target.value)}
               />
             </div>
-            <RegularButton
-              name={isEdit ? "Update" : "Save"}
-              onClick={handleSubmit}
-            />
-            <RegularButton
-              name={"Cancel"}
-              type={"outline"}
-              onClick={() => {
-                setColor("#1677ff");
-                setFlag("");
-                setIsEdit(null);
-              }}
-            />
+            <div>
+              <RegularButton
+                name={isEdit ? "Update" : "Save"}
+                onClick={handleSubmit}
+              />
+            </div>
+            <div>
+              <RegularButton
+                name={"Cancel"}
+                type={"outline"}
+                onClick={() => {
+                  setColor("#1677ff");
+                  setFlag("");
+                  setIsEdit(null);
+                }}
+              />
+            </div>
           </div>
         </div>
         {/* <div>

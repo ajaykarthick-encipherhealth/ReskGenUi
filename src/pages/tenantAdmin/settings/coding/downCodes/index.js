@@ -176,17 +176,7 @@ const DownCodes = ({
         <div>
           <div className="d-flex justify-content-between">
             <div>
-              <div className={Style.title}>Down Codes</div>
-              <div className="d-flex justify-content-start gap-2 mt-4">
-                <div>Year</div>
-                <div>
-                  <Switch
-                    checked={isCheckeds}
-                    onChange={(e) => setIsCheckeds(e)}
-                  />
-                </div>
-                <div>Can We calculate for all Processing Year</div>
-              </div>
+              <div className={Style.title}>Down Codes</div>          
             </div>
 
             <div className="d-flex justify-content-start gap-2">

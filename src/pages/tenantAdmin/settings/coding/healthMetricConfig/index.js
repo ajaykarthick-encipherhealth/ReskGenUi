@@ -586,7 +586,7 @@ const HealthMetricConfig = ({
           />
         </div>
       </div>
-      <div className="text-end p-3">
+      <div className="text-end p-3 " style={{marginTop:"200px"}}>
         <RegularButton
           type={"outline"}
           name={"Restore"}

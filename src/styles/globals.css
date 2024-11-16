@@ -15872,3 +15872,7 @@ border-color: red !important;
     background-color: #F9FAFC;
 
 }
+.custom-menu ul {
+height: 190px !important;
+overflow: scroll;
+}

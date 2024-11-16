@@ -192,14 +192,18 @@ const ComorbidConditions = ({
         </div>
         <div>
           <div className="d-flex justify-content-between">
-            <div className="d-flex justify-content-start gap-2 mt-4">
-              <div>Year</div>
-              <div>
-                <Switch checked={isChecked} onChange={(e) => setIsChecked(e)} />
+            <div className="pt-3">{"Do you need general guidelines codes"}</div>
+            <div className=" pt-3 d-flex">
+              <Switch
+                checked={isGuidelines}
+                onChange={(e) => {
+                  setIsGuidelines(e);
+                }}
+              />
+              <div className={`mx-2`}>
+                {isGuidelines ? "Enable" : "Disable"}
               </div>
-              <div>Can We calculate for all Processing Year</div>
             </div>
-
             <div className="d-flex justify-content-start gap-2">
               <div className="d-flex">
                 <FileUpload
@@ -234,19 +238,8 @@ const ComorbidConditions = ({
               </div>
             </div>
           </div>
-          <Divider />
-          <div className="d-flex justify-content-start  gap-4 mt-4">
-            <div className="mx-3">{"Do you need general guidelines codes"}</div>
-            <div className="d-flex">
-              <Switch
-                checked={isGuidelines}
-                onChange={(e) => {
-                  setIsGuidelines(e);           
-                }}
-              />
-              <div className={`mx-2`}>{isGuidelines ? "Enable" : "Disable"}</div>
-            </div>
 
+          <div className="d-flex justify-content-start  gap-4 mt-4">
             <div className="ms-auto mx-4">
               <Search setSearch={setSearch} value={search} />
             </div>
@@ -266,9 +259,8 @@ const ComorbidConditions = ({
               handleDelete={handleDeleteRow}
               paginationFirst={paginationFirst}
               totalElements={
-                list?.response
-                  ?.comorbidConditionsConfigResponse?.comorbidConditionsPage
-                  ?.totalElements
+                list?.response?.comorbidConditionsConfigResponse
+                  ?.comorbidConditionsPage?.totalElements
               }
               onPageChange={onPageChange}
             />
@@ -276,12 +268,9 @@ const ComorbidConditions = ({
         </div>
       </div>
       <div className="text-end p-3">
-        <RegularButton
-          type={"outline"}
-          name={"Restore"}
-        />
+        <RegularButton type={"outline"} name={"Restore"} />
         <RegularButton name={"Save"} onClick={() => handleSubmit()} />
-      </div> 
+      </div>
       <ModalPop
         openModal={openModal}
         content={

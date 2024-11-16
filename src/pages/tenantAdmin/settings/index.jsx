@@ -155,7 +155,7 @@ const menuList = [
 ];
 
 const Settings = () => {
-  const [activePage, setActivePage] = useState("File_Processing_Config");
+  const [activePage, setActivePage] = useState("Chat_Audit_Config");
   const handleMenuClick = (e) => {
     setActivePage(e.key);
   };
@@ -173,10 +173,11 @@ const Settings = () => {
                     <div className={Style.menuLists} style={{ width: "100%" }}>
                       <Menu
                         mode="inline"
-                        defaultSelectedKeys={["File_Processing_Config"]}
+                        defaultSelectedKeys={["Chat_Audit_Config"]}
                         defaultOpenKeys={["Configuration"]}
                         items={menuList}
                         onClick={handleMenuClick}
+                        className="custom-menu"
                       />
                     </div>
                   </Sider>

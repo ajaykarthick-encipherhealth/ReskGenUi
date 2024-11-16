@@ -91,7 +91,7 @@ const ConflictConfig = ({ getCodingDetails, updateSettings, list }) => {
 
           <div
             className="d-flex justify-content-end p-2"
-            style={{ marginTop: "25pc" }}
+            style={{ marginTop: "35pc" }}
           >
             <RegularButton type="outline" name="Restore" />
             <RegularButton name="Save" />
