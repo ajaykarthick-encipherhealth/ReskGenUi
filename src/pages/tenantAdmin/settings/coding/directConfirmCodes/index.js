@@ -31,7 +31,7 @@ const DirectConfirmCodes = ({
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
   const [isGuidelines, setIsGuidelines] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(false); 
   const [selectFile, setSelectFile] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -72,7 +72,8 @@ const DirectConfirmCodes = ({
       });
       if (res?.status == "SUCCESS") {
         setIsGuidelines(
-          res?.response?.directConfirmConfigResponse?.includeGeneralGuidelineCodes
+          res?.response?.directConfirmConfigResponse
+            ?.includeGeneralGuidelineCodes
         );
       }
     } catch (error) {}
@@ -90,6 +91,22 @@ const DirectConfirmCodes = ({
       console.log(error);
     }
   };
+const handleSubmit = async () => {
+  const payload = {
+    type: "DIRECT_CONFIRM_CODES",
+    directConfirmCodesConfig: {
+      includeGeneralGuidelineCodes: isChecked, 
+    },
+  };
+  try {
+    const res = await updateSettings(payload);
+    if (res?.status === "SUCCESS") {
+      getResponePopup(res);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const submitPatientFile = async () => {
     const formData = new FormData();
@@ -101,8 +118,8 @@ const DirectConfirmCodes = ({
     //     "Content-Type": "multipart/form-data",
     //   },
     // };
-    const res = await uploadFiles({obj:formData})
-    
+    const res = await uploadFiles({ obj: formData });
+
     // axios.post(
     //   ENDPOINTS.apiEndoint +
     //     `management/tenantAdmin/codes/upload
@@ -166,16 +183,6 @@ const DirectConfirmCodes = ({
           <div className="d-flex justify-content-between my-4">
             <div>
               <div className={Style.title}>Direct Confirm Codes</div>
-              <div className="d-flex justify-content-start gap-2 mt-4">
-                <div>Year</div>
-                <div>
-                  <Switch
-                    checked={isChecked}
-                    onChange={(e) => setIsChecked(e)}
-                  />
-                </div>
-                <div>Can We calculate for all Processing Year</div>
-              </div>
             </div>
 
             <div className="d-flex justify-content-start">
@@ -214,14 +221,8 @@ const DirectConfirmCodes = ({
           <div className="d-flex justify-content-start  gap-4 mt-4">
             <div className="mx-3">{"Do you need general guidelines codes"}</div>
             <div className="d-flex justify-content-between">
-              <Switch
-                checked={isGuidelines}
-                onChange={(e) => {
-                  setIsGuidelines(e);
-                  handleGuidelines(e);
-                }}
-              />
-              <div className={`mx-2`}>{isGuidelines ? "Yes" : "No"}</div>
+              <Switch checked={isChecked} onChange={(e) => setIsChecked(e)} />
+              <div className={`mx-2`}>{isChecked ? "Yes" : "No"}</div>
             </div>
             <div className="ms-auto mx-4">
               <Search setSearch={setSearch} value={search} />
@@ -243,9 +244,8 @@ const DirectConfirmCodes = ({
               handleDelete={handleDeleteRow}
               paginationFirst={paginationFirst}
               totalElements={
-                list?.response
-                  ?.directConfirmConfigResponse?.directConfirmCodesPage
-                  ?.totalElements
+                list?.response?.directConfirmConfigResponse
+                  ?.directConfirmCodesPage?.totalElements
               }
               onPageChange={onPageChange}
             />
@@ -255,10 +255,9 @@ const DirectConfirmCodes = ({
       <div className="text-end p-3">
         <RegularButton
           type={"outline"}
-          name={"Restore Changes"}
-          onClick={() => console.log("Restore Changes")}
+          name={"Restore"}
         />
-        {/* <RegularButton name={"Save Changes"} onClick={submitPatientFile} /> */}
+        <RegularButton name={"Save"} onClick={() => handleSubmit()} />
       </div>
       <ModalPop
         openModal={openModal}
@@ -289,13 +288,13 @@ const enhancer = connect(
     list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
   }),
   {
-    updateSettings: settingActions.updateSettingsAction,
+    updateSettings: settingActions.updateMedical,
     updateDirectCode: settingActions.updateDirectCode,
     uploadfile: settingActions.uploadFiles,
     editComoridConditions: settingActions.editComoridConditions,
     deleteComoridConditions: settingActions.deleteComoridConditions,
     getCodingDetails: settingActions.codingGuidelinesAction,
-    uploadFiles:settingActions.uploadFiles
+    uploadFiles: settingActions.uploadFiles,
   }
 );
 export default enhancer(DirectConfirmCodes);

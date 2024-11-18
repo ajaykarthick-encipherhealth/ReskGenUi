@@ -165,6 +165,25 @@ const DownCodes = ({
       }
     }
   };
+    const handleSubmit = async () => {
+      const payload = {
+        type: "DOWN_CODES",
+        downCodesConfig: {
+          isDownCodeConversionEnabled: isChecked.isDownCodeConversionEnabled,
+          includeGeneralGuidelineCodes: isChecked.includeGeneralGuidelineCodes,
+        },
+        // insulinMedications: tags,
+      };
+
+      try {
+        const res = await updateSettings(payload);
+        if (res?.status === "SUCCESS") {
+          getResponePopup(res);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPage(e.page);
@@ -176,7 +195,7 @@ const DownCodes = ({
         <div>
           <div className="d-flex justify-content-between">
             <div>
-              <div className={Style.title}>Down Codes</div>          
+              <div className={Style.title}>Down Codes</div>
             </div>
 
             <div className="d-flex justify-content-start gap-2">
@@ -270,6 +289,13 @@ const DownCodes = ({
             />
           </div>
         </div>
+        <div
+          className="d-flex justify-content-end p-2"
+          style={{ marginTop: "25pc" }}
+        >
+          <RegularButton type={"outline"} name={"Restore"} />
+          <RegularButton name={"Save"}  onClick={handleSubmit}/>
+        </div>
       </div>
       <ModalPop
         openModal={openModal}
@@ -301,11 +327,11 @@ const enhancer = connect(
     list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
   }),
   {
-    updateSettings: settingActions.updateDownCodes,
+    updateSettings: settingActions.updateMedical,
     editComoridConditions: settingActions.editComoridConditions,
     deleteComoridConditions: settingActions.deleteComoridConditions,
     getCodingDetails: settingActions.codingGuidelinesAction,
-    uploadFiles:settingActions.uploadFiles
+    uploadFiles: settingActions.uploadFiles,
   }
 );
 export default enhancer(DownCodes);
