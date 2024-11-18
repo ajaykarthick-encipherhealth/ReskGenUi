@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
-import { Button, Input, Spin, Switch } from "antd";
+import { Button, Form, Input, Spin, Switch } from "antd";
 import { useState } from "react";
 import Tags from "../../components/tags";
 import { connect } from "react-redux";
@@ -41,7 +41,14 @@ export const handleEditTag = ({ index, setEditIndex, setEditValue, tags }) => {
   setEditValue(tags[index]);
 };
 
-const Insulin = ({ getCodingDetails, updateSettings, list }) => {
+const Insulin = ({
+  getCodingDetails,
+  updateSettings,
+  list,
+  setAddManually,
+}) => {
+    const [form] = Form.useForm();
+
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [editIndex, setEditIndex] = useState(null);
@@ -58,51 +65,112 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
   }, []);
 
   useEffect(() => {
-     setLoading(true);
+    setLoading(true);
     if (list?.response) {
-     
       setIsCaptureInsulin({
         captureInsulinMedicationAsIcdCodes:
           list?.response?.insulinConfigResponse
             ?.captureInsulinMedicationAsIcdCodes,
         includeGeneralInsulinMedications:
-          list?.response?.insulinConfigResponse?.includeGeneralInsulinMedications,
+          list?.response?.insulinConfigResponse
+            ?.includeGeneralInsulinMedications,
       });
       setTags(
         list?.response?.insulinConfigResponse?.insulinMedicationsPage?.content
       );
       setLoading(false);
     }
-  
   }, [list]);
-
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
-  const handleAddTag = () => {
+const handleAddTag = async () => {
+  try {
     if (inputValue) {
-      setTags([...tags, inputValue]);
-      setInputValue("");
+      const payload = {
+        type: "INSULIN",
+        medication: inputValue, 
+        requestSource: "TENANT_CODES",
+      };
+
+      const res = await setAddManually(payload); 
+      if (res?.status === "SUCCESS") {
+        getResponePopup(res); 
+        setTags((prevTags) => [...prevTags, inputValue]); 
+        setInputValue(""); 
+        getCodingDetails({ type: "INSULIN" }); 
+      } else if (res?.status === "USER_DEFINED_ERROR") {
+        getResponePopup(res);
+      }
     }
-  };
+  } catch (error) {
+    console.error("Error adding tag:", error);
+  }
+};
+
   const onChange = (checked, type) => {
     setIsCaptureInsulin((prev) => ({ ...prev, [type]: checked }));
-    handleSubmit()
+
   };
+  // const handleSubmit = async () => {
+  //   try {
+  //     const res = await updateSettings({
+  //       ...isCaptureInsulin,
+  //       insulinMedications: tags,
+  //     });
+  //     if (res?.status == "SUCCESS") {
+  //       getResponePopup(res);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  //  const handleSubmit = async () => {
+  //   const values = form.getFieldsValue();
+
+  //    const payload = {
+  //      type: "INSULIN",
+  //      insulinConfig: {
+  //        captureInsulinMedicationAsIcdCodes:
+  //          values.captureInsulinMedicationAsIcdCodes || false,
+  //      },
+  //      includeGeneralInsulinMedications:
+  //        values.includeGeneralInsulinMedications || false,
+  //    };
+
+  //    try {
+  //      const res = await updateSettings(payload);
+  //      if (res?.status == "SUCCESS") {
+  //        getResponePopup(res);
+  //      }
+  //    } catch (error) {
+  //      console.log(error);
+  //    }
+  //  };
   const handleSubmit = async () => {
+    const payload = {
+      type: "INSULIN",
+      insulinConfig: {
+        captureInsulinMedicationAsIcdCodes:
+          isCaptureInsulin.captureInsulinMedicationAsIcdCodes,
+        includeGeneralInsulinMedications:
+          isCaptureInsulin.includeGeneralInsulinMedications,
+      },
+      // insulinMedications: tags,
+    };
+
     try {
-      const res = await updateSettings({
-        ...isCaptureInsulin,
-        insulinMedications: tags,
-      });
-      if (res?.status == "SUCCESS") {
+      const res = await updateSettings(payload);
+      if (res?.status === "SUCCESS") {
         getResponePopup(res);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+
   const submitPatientFile = async () => {
     const formData = new FormData();
     formData.append("file", selectFile.originFileObj);
@@ -114,7 +182,7 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
       },
     };
     setSelectFile(formData);
-    const res = await uploadFiles({obj:formData})
+    const res = await uploadFiles({ obj: formData });
     // axios.post(
     //   ENDPOINTS.apiEndoint +
     //     `management/tenantAdmin/codes/upload
@@ -128,6 +196,10 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
       getResponePopup(res);
     }
   };
+  useEffect(() => {
+    form.setFieldsValue(isCaptureInsulin);
+  }, [isCaptureInsulin]);
+
   return (
     <>
       <div className="p-3" style={{ height: "65vh" }}>
@@ -153,18 +225,19 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
           <div>
             <div className="d-flex justify-content-between my-4">
               <div className="me-3">
-                Do you need an Capture Insulin Medication as ICD Codes
+                Do you need to capture Insulin Medication as ICD Codes
               </div>
               <div className="d-flex justify-content-between">
                 <Switch
-                  checked={isCaptureInsulin}
-                  // className="directCodeSwitch"
-                  onChange={(e) =>
-                    onChange(e, "captureInsulinMedicationAsIcdCodes")
+                  checked={isCaptureInsulin.captureInsulinMedicationAsIcdCodes} // Bind to the specific key
+                  onChange={(checked) =>
+                    onChange(checked, "captureInsulinMedicationAsIcdCodes")
                   }
                 />
                 <div className={`mx-2`}>
-                  {isCaptureInsulin ? "Enable" : "Disable"}
+                  {isCaptureInsulin.captureInsulinMedicationAsIcdCodes
+                    ? "Enable"
+                    : "Disable"}
                 </div>
               </div>
             </div>
@@ -172,14 +245,15 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
               <div>Do you need to include general insulin medications</div>
               <div className="d-flex justify-content-between">
                 <Switch
-                  checked={isCaptureInsulin}
-                  // className="directCodeSwitch"
-                  onChange={(e) =>
-                    onChange(e, "includeGeneralInsulinMedications")
+                  checked={isCaptureInsulin.includeGeneralInsulinMedications} // Bind to the specific key
+                  onChange={(checked) =>
+                    onChange(checked, "includeGeneralInsulinMedications")
                   }
                 />
                 <div className={`mx-2`}>
-                  {isCaptureInsulin ? "Enable" : "Disable"}
+                  {isCaptureInsulin.includeGeneralInsulinMedications
+                    ? "Enable"
+                    : "Disable"}
                 </div>
               </div>
             </div>
@@ -248,7 +322,7 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
                     ) : (
                       <div>
                         <Tags
-                          tag={tag?.medication || "test"}
+                          tag={tag?.medication}
                           index={index}
                           handleRemoveTag={() =>
                             handleRemoveTag({ index, setTags, tags })
@@ -306,7 +380,8 @@ const enhancer = connect(
   }),
   {
     getCodingDetails: settingActions.codingGuidelinesAction,
-    updateSettings: settingActions.updateInsulinConfig,
+    updateSettings: settingActions.updateMedical,
+    setAddManually: settingActions.addManually,
   }
 );
 export default enhancer(Insulin);

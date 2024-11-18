@@ -1,5 +1,5 @@
 import { Button, Form, Input, Popconfirm, Select, Switch } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Style from "../style.module.css";
 import RegularButton from "../../../../components/button";
 import {
@@ -14,6 +14,7 @@ import { getResponePopup, getYears } from "../../../../utils/reusable";
 import ButtonStyles from "../../../../components/button/style.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { actions as settingActions } from "../../../../stores/tenantAdmin/settings";
 
 const CommonModalContent = ({
   tags,
@@ -23,6 +24,7 @@ const CommonModalContent = ({
   setOpenModal,
   setAddManually,
   isResult,
+  getCodingDetails,
 }) => {
   const [form] = Form.useForm();
   const [selectedOption, setSelectedOption] = useState("Default");
@@ -47,13 +49,15 @@ const CommonModalContent = ({
     try {
       const res = await setAddManually({
         ...e,
-        target: target,
+        type: target,
         isDefaultYear: isChecked,
         defaults: [],
+        requestSource: "TENANT_CODES",
       });
       if (res.status == "SUCCESS") {
         getResponePopup(res);
         setOpenModal(false);
+        getCodingDetails({ type: target });
       } else if (res.status == "USER_DEFINED_ERROR") {
         getResponePopup(res);
       }
@@ -67,9 +71,10 @@ const CommonModalContent = ({
       const res = await setAddManually({
         years: year,
         [selectedOption.toLowerCase() + "s"]: tags,
-        target: target,
-        isDefaultYear: isChecked,
+        type: target,
+        // isDefaultYear: isChecked,
         // defaults: [],
+        requestSource: "TENANT_CODES",
       });
 
       if (res.status == "SUCCESS") {
@@ -93,6 +98,9 @@ const CommonModalContent = ({
     setIsEdit("");
     setTags(update);
   };
+  useEffect(() => {
+    getCodingDetails({ type: target });
+  }, []);
 
   return (
     <>
@@ -343,5 +351,6 @@ const CommonModalContent = ({
 const enhancer = connect((state) => ({}), {
   createDirectCodes: manualAddActions.manualAddAction,
   setAddManually: manualAddActions.addManually,
+  getCodingDetails: settingActions.codingGuidelinesAction,
 });
 export default enhancer(CommonModalContent);

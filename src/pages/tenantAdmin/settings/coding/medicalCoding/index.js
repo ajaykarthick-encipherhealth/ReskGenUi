@@ -44,19 +44,25 @@ const MedicalCoding = ({ getCodingDetails, updateSettings, list }) => {
   }, [list]);
 
   const onChange = (value, values) => {
-    console.log(values);
     setMedical(values);
   };
+
   const handleSubmit = async (values) => {
+    const payload = {
+      ...values,
+      type: "CODING",
+    };
+
     try {
-      const res = await updateSettings(values);
-      if (res?.status == "SUCCESS") {
+      const res = await updateSettings(payload); 
+      if (res?.status === "SUCCESS") {
         getResponePopup(res);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <>
       <Form

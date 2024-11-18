@@ -22,18 +22,22 @@ const ComboConfig = ({ getCodingDetails, updateSettings, list }) => {
     if (list?.response) {
       form.setFieldsValue({
         calculateComboIncludingPastMedicalHistory:
-          list.response.calculateComboIncludingPastMedicalHistory,
-        enableIndirectCode: list.response.enableIndirectCode,
-        directCombinationAddonRegex: list.response.directCombinationAddonRegex,
+          list.response.comboConfig?.calculateComboIncludingPastMedicalHistory,
+        enableIndirectCode: list.response?.comboConfig?.enableIndirectCode,
+        directCombinationAddonRegex:
+          list.response?.comboConfig?.directCombinationAddonRegex,
+
       });
       setMedical({
         calculateComboIncludingPastMedicalHistory:
-          list.response.calculateComboIncludingPastMedicalHistory,
-        enableIndirectCode: list.response.enableIndirectCode,
-        directCombinationAddonRegex: list.response.directCombinationAddonRegex
+          list.response?.comboConfig?.calculateComboIncludingPastMedicalHistory,
+        enableIndirectCode: list.response?.comboConfigenableIndirectCode,
+        directCombinationAddonRegex:
+          list.response?.comboConfig?.directCombinationAddonRegex,
       });
     }
   }, [list]);
+
 
   const onChange = (changedValues, allValues) => {
     setMedical(allValues);
