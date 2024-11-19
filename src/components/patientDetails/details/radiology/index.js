@@ -224,7 +224,7 @@ const Radiology = ({
                       margin: "0",
                     }}
                   >
-                    <div className="col-xl-6 ">
+                    <div className="col-6 ">
                       <span className={styles.selectHead}>
                         {moment(data.dos).format("MM-DD-YYYY")}
                       </span>
@@ -232,7 +232,7 @@ const Radiology = ({
 
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <div
-                        className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
+                        className={`col-4 p-2 cr-pointer ${styles.hoverPageNum}`}
                         style={{
                           textAlign: "center",
                           margin: "10px",
@@ -244,14 +244,14 @@ const Radiology = ({
                         <span>{data?.startPageNumber}</span>
                       </div>
                       <div
-                        className="col-xl-1 text-center"
+                        className="col-1 text-center"
                         style={{ padding: "10px" }}
                       >
                         <SwapOutlined />
                       </div>
 
                       <div
-                        className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
+                        className={`col-4 p-2 cr-pointer ${styles.hoverPageNum}`}
                         style={{
                           textAlign: "center",
                           margin: "10px",
@@ -279,7 +279,7 @@ const Radiology = ({
           <div className="custom-tab-1">
             <Tab.Container activeKey={activeTabHead}>
               <div className="row">
-                <div className="col-xl-12">
+                <div className="col-12">
                   <Nav
                     as="ul"
                     className={`nav nav-tabs ${styles.tabsContainer}`}

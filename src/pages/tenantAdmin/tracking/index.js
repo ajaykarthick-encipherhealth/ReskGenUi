@@ -582,7 +582,7 @@ const Patient = ({
         <div class="content-body">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-xl-12">
+              <div className="col-12">
                 <div className="">
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
@@ -658,7 +658,7 @@ const Patient = ({
                             bullets={bullets}
                             isNextRow={true}
                             defaultShow={true}
-                            defaultSize={"col-xl-2"}
+                            defaultSize={"col-2"}
                             auditStatusOptions={auditStatusOptions}
                             setAuditSelectedOption={setAuditSelectedOption}
                             setStartDate6={setAuditedDueStartDate}
@@ -692,7 +692,7 @@ const Patient = ({
                             setPageNo={setPageNo}
                           />
                         </div>
-                        <div className="col-xl-2">
+                        <div className="col-2">
                           <DailyTask
                             trackChart={trackingList?.processStatusCount}
                           />

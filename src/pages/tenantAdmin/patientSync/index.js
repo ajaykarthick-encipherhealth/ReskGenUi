@@ -456,7 +456,7 @@ const Index = ({
           <div class="content-body">
             <div className="container-fluid">
               <div className="row">
-                <div className="col-xl-12">
+                <div className="col-12">
                   <div className="">
                     <div className="card-body p-0">
                       <div className="table-responsive active-projects task-table">
@@ -465,7 +465,7 @@ const Index = ({
                           style={{ width: "100%", margin: "auto" }}
                         >
                           <div className="d-flex">
-                            <div className="col-lg-4 mx-2">
+                            <div className="col-4 mx-2">
                               <label>Search by Name or ID</label>
                               <div style={{ height: "45px" }}>
                                 <Input
@@ -495,7 +495,7 @@ const Index = ({
                                 />
                               </div>
                             </div>
-                            <div className="col-xl-5 mx-2">
+                            <div className="col-5 mx-2">
                               <label>Date</label>
                               <div class="form-group has-search">
                                 <RangePicker
@@ -519,7 +519,7 @@ const Index = ({
                                 />
                               </div>
                             </div>
-                            <div className="col-xl-4 mx-2">
+                            <div className="col-4 mx-2">
                               <label>Status</label>
                               <div className={`custom-react-select1`}>
                                 <Select
@@ -541,7 +541,7 @@ const Index = ({
                             </div>
                             {!reportActiveTab ||
                               (reportActiveTab === "FHIR" && (
-                                <div className="col-xl-4 mx-2">
+                                <div className="col-4 mx-2">
                                   <label>Initiated By</label>
                                   <div className={`custom-react-select1`}>
                                     <Select

@@ -91,10 +91,10 @@ const RadiologyCards = ({
               hccVersionDetails?.map((data) => (
                 <div className={styles.hoverDiv} key={data?.id}>
                   <div className={`row ${styles.selectDetailsContainer}`}>
-                    <div className="col-xl-3">
+                    <div className="col-3">
                       <span className={styles.selectHead}>{data.name}</span>
                     </div>
-                    <div className="col-xl-3">
+                    <div className="col-3">
                       <span className={styles.selectHead}>{data.value}</span>
                     </div>
                   </div>
@@ -103,7 +103,7 @@ const RadiologyCards = ({
             ) : (
               <div className={styles.hoverDiv}>
                 <div className={`row ${styles.selectDetailsContainerNoData}`}>
-                  <div className="col-xl-3 text-center">
+                  <div className="col-3 text-center">
                     <span className={styles.selectHead}>NO DATA</span>
                   </div>
                 </div>

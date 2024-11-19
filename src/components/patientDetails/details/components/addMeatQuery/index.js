@@ -416,7 +416,7 @@ const AddMeatQuery = ({
         <div className="offcanvas-body">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-xl-6">
+              <div className="col-6">
                 <div className={styles.publishedByDetails}>
                   <span className={styles.meatQueried_head}>
                     {meatQueryResult.diagnosisCode}
@@ -426,7 +426,7 @@ const AddMeatQuery = ({
                   </p>
                 </div>
               </div>
-              <div className="col-xl-6">
+              <div className="col-6">
                 <div className={styles.publishedByDetails}>
                   <span className={styles.meatQueried_head}>
                     Published By :

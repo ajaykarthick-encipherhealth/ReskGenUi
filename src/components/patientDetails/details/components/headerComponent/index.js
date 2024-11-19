@@ -24,24 +24,24 @@ const HeaderComponent = ({
 }) => {
   return (
     <div className={`row ${styles.HccContainer}`}>
-      <div className="col-xl-5" style={{ padding: "0px" }}>
+      <div className="col-5" style={{ padding: "0px" }}>
         <Details fileResult={fileResult} fromHcc={true} setCopied = {setCopied}/>
       </div>
-      <div className="col-xl-3" style={{ padding: "0px" }}>
+      <div className="col-3" style={{ padding: "0px" }}>
         <Flag
           patienIdDetails={patienIdDetails}
           patientDetails={patientDetails}
           flagsDetailsResult={flagsDetailsResult}
         />
       </div>
-      <div className="col-xl-3" style={{ padding: "0px" }}>
+      <div className="col-3" style={{ padding: "0px" }}>
         <Codes
           hccCounts={hccCounts}
           hccValidCount={hccValidCount}
           fromHcc={true}
         />
       </div>
-      <div className="col-xl-1 d-grid " style={{ padding: "0px" }}>
+      <div className="col-1 d-grid " style={{ padding: "0px" }}>
         <div>
           <StatusAction />
         </div>

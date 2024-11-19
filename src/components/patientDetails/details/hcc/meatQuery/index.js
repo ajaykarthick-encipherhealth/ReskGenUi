@@ -61,25 +61,25 @@ const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year }) => {
       <div className="my-post-content pt-3">
         <div className={visitStyles.meat_head_card}>
           <div className="row">
-            <div className="col-xl-1">
+            <div className="col-1">
               <label>Codes</label>
             </div>
-            <div className="col-xl-2">
+            <div className="col-2">
               <label>Description</label>
             </div>
-            <div className="col-xl-2">
+            <div className="col-2">
               <label>Published By</label>
             </div>
-            <div className="col-xl-2">
+            <div className="col-2">
               <label>Date & Time</label>
             </div>
-            <div className="col-xl-2">
+            <div className="col-2">
               <label>Message</label>
             </div>
-            <div className="col-xl-2">
+            <div className="col-2">
               <label>Reason</label>
             </div>
-            <div className="col-xl-1">
+            <div className="col-1">
               <label></label>
             </div>
           </div>
@@ -116,17 +116,17 @@ const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year }) => {
                         )}
                       </>
                       <div className="row">
-                        <div className="col-xl-1 d-grid">
+                        <div className="col-1 d-grid">
                           <span className="meat-name-details font-bold">
                             {item.diagnosisCode}
                           </span>
                         </div>
-                        <div className="col-xl-2">
+                        <div className="col-2">
                           <span className="meat-name-details">
                             {item.description}
                           </span>
                         </div>
-                        <div className="col-xl-2 d-grid">
+                        <div className="col-2 d-grid">
                           <span className="meat-name-details">
                             {item.createdBy}
                           </span>
@@ -134,14 +134,14 @@ const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year }) => {
                                         L1 Auditor
                                       </span> */}
                         </div>
-                        <div className="col-xl-2 d-grid">
+                        <div className="col-2 d-grid">
                           <span className="meat-name-details">
                             {moment(item.createdAt).format(
                               "MM-DD-YYYY & HH:mm"
                             )}
                           </span>
                         </div>
-                        <div className="col-xl-2 d-grid">
+                        <div className="col-2 d-grid">
                           <span
                             onClick={() => meatQueriedComments(item)}
                             className="cr-pointer meat-name-details"
@@ -149,12 +149,12 @@ const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year }) => {
                             {SVGICON.comment}
                           </span>
                         </div>
-                        <div className="col-xl-2 d-grid">
+                        <div className="col-2 d-grid">
                           <span className="meat-name-details">
                             {item.queryReason}
                           </span>
                         </div>
-                        <div className="col-xl-1">
+                        <div className="col-1">
                           <div className="d-flex">
                             <div
                               onClick={() => addMeatQuery(item, "Update")}
@@ -191,29 +191,29 @@ const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year }) => {
                           {meatQueryListPrevious?.map((item) => (
                             <div>
                               <div className="row">
-                                <div className="col-xl-1 d-grid">
+                                <div className="col-1 d-grid">
                                   <span className="meat-name-details font-bold">
                                     {item.diagnosisCode}
                                   </span>
                                 </div>
-                                <div className="col-xl-2">
+                                <div className="col-2">
                                   <span className="meat-name-details">
                                     {item.description}
                                   </span>
                                 </div>
-                                <div className="col-xl-2 d-grid">
+                                <div className="col-2 d-grid">
                                   <span className="meat-name-details">
                                     {item.createdBy}
                                   </span>
                                 </div>
-                                <div className="col-xl-2 d-grid">
+                                <div className="col-2 d-grid">
                                   <span className="meat-name-details">
                                     {moment(item.createdAt).format(
                                       "MM-DD-YYYY & HH:MM:SS"
                                     )}
                                   </span>
                                 </div>
-                                <div className="col-xl-2 d-grid">
+                                <div className="col-2 d-grid">
                                   <span
                                     onClick={() => meatQueriedComments(item)}
                                     className="cr-pointer meat-name-details"
@@ -221,7 +221,7 @@ const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year }) => {
                                     {SVGICON.comment}
                                   </span>
                                 </div>
-                                <div className="col-xl-2 d-grid">
+                                <div className="col-2 d-grid">
                                   <span className="meat-name-details">
                                     {item.queryReason}
                                   </span>

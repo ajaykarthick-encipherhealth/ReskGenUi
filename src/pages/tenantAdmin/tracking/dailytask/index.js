@@ -147,7 +147,7 @@ const DailyTask = ({ trackChart }) => {
                       {bullets?.map((item) => {
                         return (
                           <div className={styles.container}>
-                            <div style={{ display: "flex", fontSize: "12px" }}>
+                            <div className={styles.fontSize} style={{ display: "flex", fontSize: "12px" }}>
                               <div
                                 className={styles.bgColor}
                                 style={{

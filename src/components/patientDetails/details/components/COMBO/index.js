@@ -81,16 +81,16 @@ const ComboCard = ({
           <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
             <div className={visitStyles.combo_head_card}>
               <div className="row p-0">
-                <div className="col-xl-4 d-flex align-items-center justify-content-center text-truncate">
+                <div className="col-4 d-flex align-items-center justify-content-center text-truncate">
                   <label  htmlFor="combo">Combo Codes</label>
                 </div>
-                <div className="col-xl-2 d-flex align-items-center justify-content-center text-truncate">
+                <div className="col-2 d-flex align-items-center justify-content-center text-truncate">
                   <label htmlFor="additional">Addons</label>
                 </div>
-                <div className="col-xl-5 d-flex align-items-center justify-content-center text-truncate">
+                <div className="col-5 d-flex align-items-center justify-content-center text-truncate">
                   <label  htmlFor="description">Description</label>
                 </div>
-                <div className="col-xl-1">
+                <div className="col-1">
                   {/* {isAddComboCode && (
                 <div className="d-flex justify-content-center">
                   <button
@@ -140,12 +140,12 @@ const ComboCard = ({
                                 key={item?.id}
                               >
                                 <div className="row">
-                                  <div className="col-xl-3 d-grid">
+                                  <div className="col-3 d-grid">
                                     <span className="font-bold ms-3">
                                       {item.diagnosisCode}
                                     </span>
                                   </div>
-                                  <div className="col-xl-3">
+                                  <div className="col-3">
                                     {item.addOnCodes?.map(
                                       (addCombo, index) =>
                                         addCombo && (
@@ -163,11 +163,11 @@ const ComboCard = ({
                                         )
                                     )}
                                   </div>
-                                  <div className="col-xl-5">
+                                  <div className="col-5">
                                     <span>{item.actualDescription}</span>
                                   </div>
                                   <div
-                                    className="col-xl-1"
+                                    className="col-1"
                                     style={{
                                       position: "relative",
                                       right: "18px",

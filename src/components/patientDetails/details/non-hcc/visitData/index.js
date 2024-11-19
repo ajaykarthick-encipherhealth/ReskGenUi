@@ -138,8 +138,8 @@ const VisitData = ({
 
   const modalOpenValidContent = (
     <div className="section-container">
-      <div className="my-post-content row pt-3">
-        <div className="col-xl-3">
+      <div className="my-post-content row pt-3 px-2">
+        <div className="col-3">
           <div className="timeline">
             <div
               className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
@@ -188,7 +188,7 @@ const VisitData = ({
             </div>
           </div>
         </div>
-        <div className={isFileFormShow ? "col-xl-8" : "col-xl-6"}>
+        <div className={isFileFormShow ? "col-8" : "col-6"}>
           <div className="card-body p-0">
             {selectFileURL && (
               <PdfViewer
@@ -201,7 +201,7 @@ const VisitData = ({
             )}
           </div>
         </div>
-        <div className="col-xl-3">
+        <div className="col-3">
           <div className="">
             <div className="timeline">
               <div
@@ -268,10 +268,10 @@ const VisitData = ({
           </div>
         </div>
       ) : null}
-      <div className="my-post-content pt-3">
+      <div className="my-post-content pt-3 px-2">
         <div className="widget-media   ps--active-y">
           <div className="row">
-            <div className="col-xl-4">
+            <div className="col-4">
               <div className="timeline">
                 <div
                   className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
@@ -322,7 +322,7 @@ const VisitData = ({
                 </div>
               </div>
             </div>
-            <div className="col-xl-4">
+            <div className="col-4">
               <div className="timeline">
                 <div
                   className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
@@ -373,7 +373,7 @@ const VisitData = ({
                 </div>
               </div>
             </div>
-            <div className="col-xl-4"></div>
+            <div className="col-4"></div>
           </div>
         </div>
       </div>

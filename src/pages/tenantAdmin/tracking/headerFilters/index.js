@@ -114,7 +114,7 @@ const HeaderFilters = ({
   tracking,
   selectorField,
   defaultShow = false,
-  defaultSize = "col-xl-2",
+  defaultSize = "col-2",
   setAuditSelAllocatedTo,
   isAuditAllocatedToSelector,
   auditAllocatedToOptoons,
@@ -285,7 +285,7 @@ const HeaderFilters = ({
         return (
           <div
             className={defaultSize}>
-            <label className={styles.label}>Select Organization</label>
+            <label className={ ` text-truncate ${styles.label}`}>Select Organization</label>
             <div class="form-group has-search custom-react-select">
               <Select
                 value={clear ? null : selectOrgList}
@@ -329,7 +329,7 @@ const HeaderFilters = ({
       case "Audit Allocated Date":
         return (
           <div className={defaultSize}>
-            <label >Audit Allocated Date</label>
+            <label className="text-truncate" >Audit Allocated Date</label>
             <div className="dateRangeSize">
               <RangePicker
                 value={clear ? "" : selectedDates}
@@ -358,7 +358,7 @@ const HeaderFilters = ({
           <div
             className={defaultSize}
           >
-            <label className={styles.label}>{"Audit Allocated By"}</label>
+            <label className={`text-truncate ${styles.label}`}>{"Audit Allocated By"}</label>
             <div class="form-group has-search custom-react-select">
               <Select
                 value={clear ? null : selector7value}

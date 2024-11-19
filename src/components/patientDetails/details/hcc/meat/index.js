@@ -819,7 +819,7 @@ const Meat = ({
                   </div>
                 </div>
               </div>
-              <div className="col-xl-8">
+              <div className="col-8">
                 <>
                   {selectFileURL && (
                     <PdfViewer

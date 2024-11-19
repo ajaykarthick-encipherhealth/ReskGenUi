@@ -207,9 +207,9 @@ const VisitData = ({
           )
         }
       >
-        <div className="my-post-content row pt-3">
+        <div className="my-post-content row pt-3 px-2">
           {!isFileFormShow ? (
-            <div className="col-xl-3">
+            <div className="col-3">
               <Droppable droppableId={"HCC"} key={"HCC"}>
                 {(provided) => {
                   return (
@@ -278,7 +278,7 @@ const VisitData = ({
               </Droppable>
             </div>
           ) : null}
-          <div className={isFileFormShow ? "col-xl-8" : "col-xl-6"}>
+          <div className={isFileFormShow ? "col-8" : "col-6"}>
             <div className="card-body p-0">
               {selectFileURL && (
                 <PdfViewer
@@ -292,7 +292,7 @@ const VisitData = ({
             </div>
           </div>
           {isFileFormShow ? (
-            <div className={`col-xl-4 ${styles.hccFormContainer}`}>
+            <div className={`col-4 ${styles.hccFormContainer}`}>
               {/* <ManuallyAdd handleCloseModal={handleCloseModal} setIsFileFormShow={setIsFileFormShow} year={year}/> */}
               {/* <AddHccForm
                 handleCloseModal={handleCloseModal}
@@ -301,7 +301,7 @@ const VisitData = ({
             </div>
           ) : null}
           {!isFileFormShow ? (
-            <div className="col-xl-3">
+            <div className="col-3">
               {/* <div className="">
                 <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                   {(provided) => {
@@ -473,7 +473,7 @@ const VisitData = ({
         <div className="my-post-content pt-3">
           <div className="widget-media   ps--active-y">
             <div className="row">
-              <div className="col-xl-4">
+              <div className="col-4">
                 <Droppable droppableId={"HCC"} key={"HCC"}>
                   {(provided) => {
                     return (
@@ -542,7 +542,7 @@ const VisitData = ({
                   }}
                 </Droppable>
               </div>
-              {/* <div className="col-xl-4">
+              {/* <div className="col-4">
                 <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                   {(provided) => {
                     return (
@@ -614,7 +614,7 @@ const VisitData = ({
                   }}
                 </Droppable>
               </div> */}
-              <div className="col-xl-4">
+              <div className="col-4">
                 <Droppable droppableId={"DELETED"} key={"DELETED"}>
                   {(provided) => {
                     return (
@@ -762,7 +762,7 @@ const VisitData = ({
         </div>
         <div className="offcanvas-body">
           <div className="container-fluid">
-            <div className={`className="col-xl-12`}>
+            <div className={`className="col-12`}>
               <AddHccForm
                 handleCloseModal={handleCloseModal}
                 isMeatNew={true}

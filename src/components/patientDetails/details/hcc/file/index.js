@@ -252,9 +252,9 @@ const File = ({
           )
         }
       >
-        <div className="my-post-content row pt-3" style={{ height: "100%" }}>
+        <div className="my-post-content row pt-3 px-2" style={{ height: "100%" }}>
           {!isFileFormShow ? (
-            <div className="col-xl-3">
+            <div className="col-3">
               <Droppable droppableId={"HCC"} key={"HCC"}>
                 {(provided) => {
                   return (
@@ -326,7 +326,7 @@ const File = ({
             </div>
           ) : null}
           {isFileFormShow && (
-            <div className={"col-xl-1"}>
+            <div className={"col-1"}>
               <Button
                 onClick={() => handleCloseModal()}
                 className={`ms-2 ${visitStyles.backArrowBtn}`}
@@ -340,7 +340,7 @@ const File = ({
               </Button>
             </div>
           )}
-          <div className={"col-xl-6"}>
+          <div className={"col-6"}>
             {/* <Popover
               open={popoverVisible}
               content={PopContent}
@@ -386,7 +386,7 @@ const File = ({
           </div>
           {isFileFormShow ? (
             <div
-              className="col-xl-5"
+              className="col-5"
               style={{ height: "74.5vh", overflowY: "scroll" }}
             >
               {/* <AddHccForm
@@ -404,7 +404,7 @@ const File = ({
             </div>
           ) : null}
           {!isFileFormShow ? (
-            <div className="col-xl-3" style={{ height: "74vh" }}>
+            <div className="col-3" style={{ height: "74vh" }}>
               <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                 {(provided) => {
                   return (

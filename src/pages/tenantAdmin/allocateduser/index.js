@@ -546,7 +546,7 @@ const Patient = ({
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
                           <div
-                            className={`${isPatientList && "d-flex"} col-xl-2`}
+                            className={`${isPatientList && "d-flex"} col-2`}
                           >
                             {isPatientList && activeTab !== 1 && (
                               <div className={reportStyles.backDiv}>
@@ -612,7 +612,7 @@ const Patient = ({
                           </div>
                           {(activeTab == 1 ||
                             (!isPatientList && activeTab == 2)) && (
-                            <div className="col-xl-2">
+                            <div className="col-2">
                               <div>
                                 {/* <Selector
                                     selectlabel={"Select Organization"}
@@ -644,7 +644,7 @@ const Patient = ({
 
                           {!isPatientList && activeTab == 1 ? (
                             <>
-                              <div className="col-xl-2">
+                              <div className="col-2">
                                 <label>Computed Date</label>
                                 <div>
                                   <RangePicker
@@ -665,7 +665,7 @@ const Patient = ({
                                   />
                                 </div>
                               </div>
-                              <div className="col-xl-2">
+                              <div className="col-2">
                                 <div>
                                   {/* <Selector
                                     selectlabel={"Select Priority"}
@@ -694,7 +694,7 @@ const Patient = ({
                                 </div>
                               </div>
 
-                              <div className="col-xl-2">
+                              <div className="col-2">
                                 <label>Batch Count</label>
                                 <div class="form-group d-flex">
                                   {/* <InputText
@@ -783,10 +783,10 @@ const Patient = ({
                               </div>
                             </>
                           ) : !isPatientList && activeTab == 2 ? (
-                            <div className="col-xl-6"></div>
+                            <div className="col-6"></div>
                           ) : (
                             <>
-                              <div className="col-xl-2">
+                              <div className="col-2">
                                 <div>
                                   <Selector
                                     selectlabel={"Reviewer"}
@@ -806,8 +806,8 @@ const Patient = ({
                                   />
                                 </div>
                               </div>
-                              <div className="col-xl-6">
-                                <div className="col-xl-4">
+                              <div className="col-6">
+                                <div className="col-4">
                                   <Selector
                                     selectlabel={"Status"}
                                     setSelectedOption={setSelectedOptions}

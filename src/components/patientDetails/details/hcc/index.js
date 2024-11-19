@@ -403,11 +403,10 @@ const Hcc = ({
         <div className="custom-tab-1 ">
           <Tab.Container activeKey={activeTabHead}>
             <div className="row">
-              <div className="col-xl-12">
+              <div className="col-12">
                 <Nav as="ul" className="nav nav-tabs">
                   <div className="w-100 d-flex justify-content-between">
                     <div className="d-flex">
-                      {" "}
                       <Nav.Item as="li" className="nav-item ">
                         <Nav.Link
                           to="#my-posts"
@@ -431,7 +430,7 @@ const Hcc = ({
                         <Nav.Link
                           to="#my-posts"
                           eventKey={2}
-                          className={visitStyles.navColor}
+                          className={` text-truncate ${visitStyles.navColor}`}
                           activeClassName={visitStyles.activeLink}
                           onClick={() =>
                             selectTab(
@@ -450,7 +449,7 @@ const Hcc = ({
                         <Nav.Link
                           to="#my-posts"
                           eventKey={3}
-                          className={visitStyles.navColor}
+                          className={` text-truncate ${visitStyles.navColor}`}
                           onClick={() =>
                             selectTab(
                               3,
@@ -468,7 +467,7 @@ const Hcc = ({
                         <Nav.Link
                           to="#my-posts"
                           eventKey={4}
-                          className={visitStyles.navColor}
+                          className={` text-truncate ${visitStyles.navColor}`}
                           onClick={() =>
                             selectTab(
                               4,
@@ -486,7 +485,7 @@ const Hcc = ({
                         <Nav.Link
                           to="#my-posts"
                           eventKey={5}
-                          className={visitStyles.navColor}
+                          className={` text-truncate ${visitStyles.navColor}`}
                           onClick={() =>
                             selectTab(
                               5,
@@ -505,7 +504,7 @@ const Hcc = ({
                         <Nav.Link
                           to="#my-posts"
                           eventKey={6}
-                          className={visitStyles.navColor}
+                          className={` text-truncate ${visitStyles.navColor}`}
                           onClick={() =>
                             selectTab(
                               6,
@@ -539,6 +538,7 @@ const Hcc = ({
                           <YearAndDosStatus setIsLoading={setIsLoading} />
                         )}
                       </Nav.Item>
+                      <Nav.Item as="li" className="nav-item ">
                       {activeTabHead == 1 && (
                         <Popover
                           open={popoverVisible}
@@ -549,26 +549,29 @@ const Hcc = ({
                           onOpenChange={() => setPopoverVisible(false)}
                         >
                           <div
-                            className={styles.dosContainer}
+                            className={` d-flex align-items-center justify-content-center ${styles.dosContainer}`}
                             onClick={() => {
                               setPopoverVisible(true);
                             }}
                           >
-                            <span className={styles.dosPageNumber}>
+                            <span className={`text-truncate  ${styles.dosPageNumber}`}>
                               Select Dos Page Number
                             </span>
                             <FontAwesomeIcon
+                            className="mt-1"
                               icon={faAngleDown}
                               style={{
                                 size: 10,
                                 color: "#e6e6e6",
-                                marginLeft: "5px",
+                                // marginLeft: "5px",
                               }}
                             />
                           </div>
                         </Popover>
                       )}
-                      {flagTagActive ? (
+                      </Nav.Item>
+                      <Nav.Item as="li" className="nav-item">
+                         {flagTagActive ? (
                         <div>
                           <div>
                             <Popover
@@ -649,6 +652,8 @@ const Hcc = ({
                       </div> */}
                         </div>
                       ) : null}
+                      </Nav.Item>
+                    
                     </div>
                     <div
                       className="d-flex justify-content-end align-items-center"

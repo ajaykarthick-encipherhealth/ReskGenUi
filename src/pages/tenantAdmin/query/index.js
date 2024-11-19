@@ -72,7 +72,7 @@ const Query = () => {
           >
             <div className={styles.mainContainer}>
               <div className="row">
-                <div className="col-xl-3">
+                <div className="col-3">
                   <label>Search by Name or ID</label>
                   <div class="form-group has-search">
                     <FontAwesomeIcon
@@ -86,7 +86,7 @@ const Query = () => {
                     />
                   </div>
                 </div>
-                <div className="col-xl-3">
+                <div className="col-3">
                   <label>Date</label>
                   <div class="form-group has-search">
                     <FontAwesomeIcon
@@ -103,25 +103,25 @@ const Query = () => {
                 <div className="my-post-content pt-3">
                   <div className={visitStyles.meat_head_card}>
                     <div className="row">
-                      <div className="col-xl-1">
+                      <div className="col-1">
                         <label>Codes</label>
                       </div>
-                      <div className="col-xl-2">
+                      <div className="col-2">
                         <label>Description</label>
                       </div>
-                      <div className="col-xl-2">
+                      <div className="col-2">
                         <label>Published By</label>
                       </div>
-                      <div className="col-xl-2">
+                      <div className="col-2">
                         <label>Date & Time</label>
                       </div>
-                      <div className="col-xl-2">
+                      <div className="col-2">
                         <label>Message</label>
                       </div>
-                      <div className="col-xl-2">
+                      <div className="col-2">
                         <label>Reason</label>
                       </div>
-                      <div className="col-xl-1">
+                      <div className="col-1">
                         <label></label>
                       </div>
                     </div>
@@ -162,29 +162,29 @@ const Query = () => {
                                   </div>
                                 )}
                                 <div className="row">
-                                  <div className="col-xl-1 d-grid">
+                                  <div className="col-1 d-grid">
                                     <span className="font-bold meat-name-details">
                                       {item.diagnosisCode}
                                     </span>
                                   </div>
-                                  <div className="col-xl-2">
+                                  <div className="col-2">
                                     <span className="meat-name-details">
                                       {item.description}
                                     </span>
                                   </div>
-                                  <div className="col-xl-2 d-grid">
+                                  <div className="col-2 d-grid">
                                     <span className="meat-name-details">
                                       {item.createdBy}
                                     </span>
                                   </div>
-                                  <div className="col-xl-2 d-grid">
+                                  <div className="col-2 d-grid">
                                     <span className="meat-name-details">
                                       {moment(item.createdAt)?.format(
                                         "MM-DD-YYYY & HH:MM:SS"
                                       )}
                                     </span>
                                   </div>
-                                  <div className="col-xl-2 d-grid">
+                                  <div className="col-2 d-grid">
                                     <span
                                       onClick={() => meatQueriedComments(item)}
                                       className="cr-pointer meat-name-details"
@@ -193,12 +193,12 @@ const Query = () => {
                                       <FontAwesomeIcon className="mx-4" style={{fontSize:"20px"}} icon={faMessage} />
                                     </span>
                                   </div>
-                                  <div className="col-xl-2 d-grid">
+                                  <div className="col-2 d-grid">
                                     <span className="meat-name-details">
                                       {item.reason}
                                     </span>
                                   </div>
-                                  <div className="col-xl-1">
+                                  <div className="col-1">
                                     <div
                                       onClick={() =>
                                         addMeatQuery(item, "Update")
@@ -218,29 +218,29 @@ const Query = () => {
                                     {meatQueryListPrevious?.map((item) => (
                                       <div>
                                         <div className="row">
-                                          <div className="col-xl-1 d-grid">
+                                          <div className="col-1 d-grid">
                                             <span className="font-bold meat-name-details">
                                               {item.diagnosisCode}
                                             </span>
                                           </div>
-                                          <div className="col-xl-2">
+                                          <div className="col-2">
                                             <span className="meat-name-details">
                                               {item.description}
                                             </span>
                                           </div>
-                                          <div className="col-xl-2 d-grid">
+                                          <div className="col-2 d-grid">
                                             <span className="meat-name-details">
                                               {item.createdBy}
                                             </span>
                                           </div>
-                                          <div className="col-xl-2 d-grid">
+                                          <div className="col-2 d-grid">
                                             <span className="meat-name-details">
                                               {moment(item.createdAt).format(
                                                 "MM-DD-YYYY & HH:MM:SS"
                                               )}
                                             </span>
                                           </div>
-                                          <div className="col-xl-2 d-grid">
+                                          <div className="col-2 d-grid">
                                             <span
                                               onClick={() =>
                                                 meatQueriedComments(item)
@@ -250,7 +250,7 @@ const Query = () => {
                                               {SVGICON.comment}
                                             </span>
                                           </div>
-                                          <div className="col-xl-2 d-grid">
+                                          <div className="col-2 d-grid">
                                             <span className="meat-name-details">
                                               {item.reason}
                                             </span>

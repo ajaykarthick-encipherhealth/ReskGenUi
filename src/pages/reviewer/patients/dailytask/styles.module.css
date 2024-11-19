@@ -96,9 +96,14 @@
     justify-content: center;
     align-items: center;
     font-weight: 500;
-    font-size: 11px;
+    font-size: 8px;
     color: #000000;
     padding-top: 10px;
+    padding-left:16px;
+  }
+  .bgColor{
+    width:5px;
+    height:5px;
   }
  }
 

@@ -70,7 +70,7 @@
 }
 
 .classContaineer {
-  /* overflow: scroll; */
+  overflow: scroll;
   padding: 10px;
 }
 .firstTdBorder {

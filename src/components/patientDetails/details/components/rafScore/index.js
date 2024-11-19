@@ -38,7 +38,7 @@ const RafScore = ({ rafScoreList }) => {
   return (
     <>
       <div className={style.rafScoreMainContainer}>
-        <div className="col-xl-12">
+        <div className="col-12">
           <div className="table-responsive active-projects task-table">
             <div className="tbl-caption  align-items-center">
               <div className="d-flex">
@@ -46,8 +46,8 @@ const RafScore = ({ rafScoreList }) => {
                   <div className={style.rafCard1}>
                     <div className={style.titleHead}>
                       <div className="row">
-                        <div className="col-xl-3">DX Code</div>
-                        <div className="col-xl-9">DX Description</div>
+                        <div className="col-3">DX Code</div>
+                        <div className="col-9">DX Description</div>
                       </div>
                     </div>
                     {rafScoreData?.map((item, i) => (
@@ -59,8 +59,8 @@ const RafScore = ({ rafScoreList }) => {
                               : `row`
                           }
                         >
-                          <div className="col-xl-3"> {item.dx_name}</div>
-                          <div className={`col-xl-9 ${style.rafDescription}`}>
+                          <div className="col-3"> {item.dx_name}</div>
+                          <div className={`col-9 ${style.rafDescription}`}>
                             <Popover title={item.dx_desc}>
                               {item.dx_desc}{" "}
                             </Popover>
@@ -74,9 +74,9 @@ const RafScore = ({ rafScoreList }) => {
                   <div className={style.rafCard2}>
                     <div className={style.titleHead}>
                       <div className="row">
-                        <div className="col-xl-3">HCC(V24)</div>
-                        <div className="col-xl-3">RAF(V24)</div>
-                        <div className="col-xl-6">Monthly Premium(V24)</div>
+                        <div className="col-3">HCC(V24)</div>
+                        <div className="col-3">RAF(V24)</div>
+                        <div className="col-6">Monthly Premium(V24)</div>
                       </div>
                     </div>
                     {rafScoreData?.map((item, i) => (
@@ -88,21 +88,21 @@ const RafScore = ({ rafScoreList }) => {
                               : `row`
                           }
                         >
-                          <div className="col-xl-3">
+                          <div className="col-3">
                             {getRafDetails(item.dx_name, "v24_2022")?.map(
                               (item) => (
                                 <div>{item.hcc_name}</div>
                               )
                             )}
                           </div>
-                          <div className="col-xl-3">
+                          <div className="col-3">
                             {getRafDetails(item.dx_name, "v24_2022")?.map(
                               (item) => (
                                 <div>{item.hcc_raf}</div>
                               )
                             )}
                           </div>
-                          <div className="col-xl-6  text-center">
+                          <div className="col-6  text-center">
                             {getRafDetails(item.dx_name, "v24_2022")?.map(
                               (item) => (
                                 <div>${item.premium}</div>
@@ -118,9 +118,9 @@ const RafScore = ({ rafScoreList }) => {
                   <div className={style.rafCard2}>
                     <div className={style.titleHead}>
                       <div className="row">
-                        <div className="col-xl-3">HCC(V28)</div>
-                        <div className="col-xl-3">RAF(V28)</div>
-                        <div className="col-xl-6">Monthly Premium(V28)</div>
+                        <div className="col-3">HCC(V28)</div>
+                        <div className="col-3">RAF(V28)</div>
+                        <div className="col-6">Monthly Premium(V28)</div>
                       </div>
                     </div>
                     {rafScoreData?.map((item, i) => (
@@ -132,21 +132,21 @@ const RafScore = ({ rafScoreList }) => {
                               : `row`
                           }
                         >
-                          <div className="col-xl-3">
+                          <div className="col-3">
                             {getRafDetails(item.dx_name, "v28_2023")?.map(
                               (item) => (
                                 <div>{item.hcc_name}</div>
                               )
                             )}
                           </div>
-                          <div className="col-xl-3">
+                          <div className="col-3">
                             {getRafDetails(item.dx_name, "v28_2023")?.map(
                               (item) => (
                                 <div>{item.hcc_raf}</div>
                               )
                             )}
                           </div>
-                          <div className="col-xl-6 text-center">
+                          <div className="col-6 text-center">
                             {getRafDetails(item.dx_name, "v28_2023")?.map(
                               (item) => (
                                 <div>${item.premium}</div>
@@ -168,14 +168,14 @@ const RafScore = ({ rafScoreList }) => {
                 <div className={style.rafScoreCard1}>
                   <div className={style.titleHead}>
                     <div className="row">
-                      <div className="col-xl-6">V24 score</div>
-                      <div className="col-xl-6">V24Score(67%)</div>
+                      <div className="col-6">V24 score</div>
+                      <div className="col-6">V24Score(67%)</div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>
                     <div className="row">
-                      <div className="col-xl-6">{rafScoreList?.v24Score}</div>
-                      <div className="col-xl-6">
+                      <div className="col-6">{rafScoreList?.v24Score}</div>
+                      <div className="col-6">
                         {" "}
                         {rafScoreList?.v24Score70Percent?.toFixed(3)}
                       </div>
@@ -185,14 +185,14 @@ const RafScore = ({ rafScoreList }) => {
                 <div className={style.rafScoreCard1}>
                   <div className={style.titleHead}>
                     <div className="row">
-                      <div className="col-xl-6">V28 score</div>
-                      <div className="col-xl-6">V28Score(33%)</div>
+                      <div className="col-6">V28 score</div>
+                      <div className="col-6">V28Score(33%)</div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>
                     <div className="row">
-                      <div className="col-xl-6">{rafScoreList?.v28Score}</div>
-                      <div className="col-xl-6">
+                      <div className="col-6">{rafScoreList?.v28Score}</div>
+                      <div className="col-6">
                         {rafScoreList?.v28Score30Percent?.toFixed(3)}
                       </div>
                     </div>
@@ -201,12 +201,12 @@ const RafScore = ({ rafScoreList }) => {
                 <div className={style.rafScoreCard2}>
                   <div className={style.titleHead}>
                     <div className="row">
-                      <div className="col-xl-12 text-center">Overall score</div>
+                      <div className="col-12 text-center">Overall score</div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>
                     <div className="row">
-                      <div className="col-xl-12 text-center">
+                      <div className="col-12 text-center">
                         {" "}
                         {rafScoreList?.score?.toFixed(3)}
                       </div>
@@ -308,7 +308,7 @@ const RafScore = ({ rafScoreList }) => {
                     <div className={`row ${visitStyles.rafContainer2}`}>
                       {rafScoreList != null ? (
                         <>
-                          <div className="col-xl-12">
+                          <div className="col-12">
                             <label
                               className={`${visitStyles.labelStyle} ${visitStyles.raflableheadOverall}`}
                             >

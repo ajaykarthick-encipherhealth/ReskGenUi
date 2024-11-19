@@ -163,8 +163,8 @@ const File = ({
         </div>
       ) : null}
 
-      <div className="my-post-content row pt-3">
-        <div className="col-xl-3">
+      <div className="my-post-content row pt-3 px-2">
+        <div className="col-3">
           <div className="timeline" style={{height:"74vh"}}>
             <div
               className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
@@ -210,7 +210,7 @@ const File = ({
             </div>
           </div>
         </div>
-        <div className={"col-xl-6"}>
+        <div className={"col-6"}>
           <div className="card-body p-0">
             {hccFileDetails?.loading != true ? (
               <>
@@ -229,7 +229,7 @@ const File = ({
             ) : null}
           </div>
         </div>
-        <div className="col-xl-3">
+        <div className="col-3">
           <div className="timeline" style={{height:"74vh"}}>
             <div
               className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}

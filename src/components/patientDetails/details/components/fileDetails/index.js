@@ -16,20 +16,20 @@ const FileDetails = ({
   return (
     <>
       <div className={`row ${styles.container}`}>
-        <div className="col-xl-1">
+        <div className="col-1">
           <Title title={title} />
         </div>
-        <div className="col-xl-4">
+        <div className="col-4">
           <Details fileResult={fileResult} />
         </div>
-        <div className="col-xl-4">
+        <div className="col-4">
           <Flag
             patienIdDetails={patienIdDetails}
             patientDetails={patientDetails}
             flagFirstData={flagFirstData}
           />
         </div>
-        <div className="col-xl-3">
+        <div className="col-3">
           <Codes hccCounts={hccCounts} hccValidCount={hccValidCount} />
         </div>
       </div>

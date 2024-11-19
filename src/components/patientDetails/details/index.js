@@ -652,7 +652,7 @@ const Details = ({
                     {activeTab == "2" || activeTab == "1" ? (
                       <div className="d-flex">
                         <div
-                          className="col-xl-1 col-sm-2"
+                          className="col-1"
                           style={{ zIndex: "1", marginTop: "20px" }}
                         >
                           <Button
@@ -667,7 +667,7 @@ const Details = ({
                             />
                           </Button>
                         </div>
-                        <div className="col-xl-11">
+                        <div className="col-11">
                           <HeaderComponent
                             patienIdDetails={
                               patientIdDetailsData?.data?.response
@@ -1076,7 +1076,7 @@ const Details = ({
                     ) : (
                       <>
                         <div
-                          className="col-xl-1 col-sm-12"
+                          className="col-1"
                           style={{ zIndex: "1", marginTop: "20px" }}
                         >
                           <Button
@@ -1091,7 +1091,7 @@ const Details = ({
                             />
                           </Button>
                         </div>
-                        <div className="col-xl-11">
+                        <div className="col-11">
                           <FileDetails
                             title={activeTab == 3 ? "Radiology" : "LAB"}
                             patienIdDetails={

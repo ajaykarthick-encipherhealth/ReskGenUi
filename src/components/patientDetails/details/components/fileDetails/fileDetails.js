@@ -28,7 +28,7 @@ const Details = ({ fileResult, fromHcc }) => {
     <>
       <div className={fromHcc ? styles.detailsCardHcc : styles.detailsCard}>
         <div className="row" style={{ lineHeight: "0" }}>
-          <div className="col-xl-4">
+          <div className="col-4">
             <FontAwesomeIcon icon={faIdCardClip} style={{ color: "#241571" }} />
             <label className="px-2" style={{ fontWeight: 600 }}>
               Patient ID
@@ -47,7 +47,7 @@ const Details = ({ fileResult, fromHcc }) => {
                 : "--"}
             </h6>
           </div>
-          <div className="col-xl-5">
+          <div className="col-5">
             <FontAwesomeIcon icon={faUserCircle} style={{ color: "#241571" }} />
 
             <label className="px-2" style={{ fontWeight: 600 }}>
@@ -59,7 +59,7 @@ const Details = ({ fileResult, fromHcc }) => {
                 : "--"}
             </h6>
           </div>
-          <div className="col-xl-3">
+          <div className="col-3">
             <FontAwesomeIcon
               icon={faCalendarAlt}
               style={{ color: "#241571" }}
@@ -69,13 +69,13 @@ const Details = ({ fileResult, fromHcc }) => {
             </label>
             <h6 className="px-4">{fileResult?.age || "--"}</h6>
           </div>
-          <div className="col-xl-4">
+          <div className="col-4 ">
             <FontAwesomeIcon icon={faFile} style={{ color: "#241571" }} />
             <label className="px-2" style={{ fontWeight: 600 }}>
               File Name
             </label>
             <h6
-              className="px-3"
+              className="px-2"
               style={{
                 // paddingLeft: "25px",
                 cursor: "pointer",
@@ -89,14 +89,14 @@ const Details = ({ fileResult, fromHcc }) => {
             >
               {fileResult?.fileDetailDTO?.fileName ? (
                 <Tooltip title={fileResult?.fileDetailDTO?.fileName}>
-                  {truncateString(fileResult?.fileDetailDTO?.fileName, 17)}
+                  {truncateString(fileResult?.fileDetailDTO?.fileName, 12)}
                 </Tooltip>
               ) : (
                 "--"
               )}
             </h6>
           </div>
-          <div className="col-xl-5">
+          <div className="col-5">
             <i className={styles.dob_icon}>{SVGICON.DatebirthIcon}</i>
             <label className="px-2" style={{ fontWeight: 600 }}>
               Date Of Birth
@@ -105,7 +105,7 @@ const Details = ({ fileResult, fromHcc }) => {
             {fileResult?.dob ? dayjs(fileResult.dob).format("MM-DD-YYYY") : "---"}
             </h6>
           </div>
-          <div className="col-xl-3">
+          <div className="col-3">
             <FontAwesomeIcon icon={faVenusMars} style={{ color: "#241571" }} />
             <label
               className="px-2 font-weight-bold"

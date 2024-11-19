@@ -232,7 +232,7 @@ const RafScore = ({ patientDetailsResult }) => {
   return (
     <>
       <div className={style.rafScoreMainContainer}>
-        <div className="col-xl-12">
+        <div className="col-12">
           <div className="table-responsive active-projects task-table">
             <div className="tbl-caption  align-items-center">
               <div className="d-flex">
@@ -243,8 +243,8 @@ const RafScore = ({ patientDetailsResult }) => {
                       style={{ background: "#73b2f2", color: "#ffffff" }}
                     >
                       <div className="row">
-                        <div className="col-xl-4">DX Code</div>
-                        <div className="col-xl-7">DX Description</div>
+                        <div className="col-4">DX Code</div>
+                        <div className="col-7">DX Description</div>
                       </div>
                     </div>
                     <div className={style.stickyHeader}>
@@ -257,8 +257,8 @@ const RafScore = ({ patientDetailsResult }) => {
                                 : `row`
                             }
                           >
-                            <div className="col-xl-4"> {item.dx_code}</div>
-                            <div className={`col-xl-7 ${style.rafDescription}`}>
+                            <div className="col-4"> {item.dx_code}</div>
+                            <div className={`col-7 ${style.rafDescription}`}>
                               <Popover title={item.dx_desc}>
                                 {item.dx_desc}{" "}
                               </Popover>
@@ -279,11 +279,11 @@ const RafScore = ({ patientDetailsResult }) => {
                       style={{ background: "#8262ce", color: "#ffffff" }}
                     >
                       <div className="row">
-                        <div className="col-xl-3">HCC</div>
-                        <div className="col-xl-2">RAF</div>
-                        <div className="col-xl-5  d-flex align-items-center justify-content-center text-truncate">Monthly Premium</div>
+                        <div className="col-3">HCC</div>
+                        <div className="col-2">RAF</div>
+                        <div className="col-5  d-flex align-items-center justify-content-center ">Monthly Premium</div>
                         <div
-                          className="col-xl-2 rounded d-flex align-items-center justify-content-center "
+                          className="col-2 rounded d-flex align-items-center justify-content-center "
                           style={{ background: "#ffffff", color: "#8262ce",marginLeft:"-5px" }}
                         >
                           <span
@@ -307,15 +307,15 @@ const RafScore = ({ patientDetailsResult }) => {
                           >
                             {/* {rafScoreDetails.map((item) => ( */}
                             <>
-                              <div className="col-xl-3">
+                              <div className="col-3">
                                 <div>{item.v24_hcc ? item.v24_hcc : ""}</div>
                               </div>
 
-                              <div className="col-xl-2">
+                              <div className="col-2">
                                 <div>{item.v24_raf ? item.v24_raf : ""}</div>
                               </div>
 
-                              <div className="col-xl-5 d-flex align-items-center justify-content-center  text-center">
+                              <div className="col-5 d-flex align-items-center justify-content-center  text-center">
                                 <div>
                                   {item.v24_monthly_premium
                                     ? "$" + item.v24_monthly_premium
@@ -324,21 +324,21 @@ const RafScore = ({ patientDetailsResult }) => {
                               </div>
                             </>
                             {/* ))} */}
-                            {/* <div className="col-xl-3">
+                            {/* <div className="col-3">
                               {getRafDetails(item.dx_name, "V24")?.map(
                                 (item) => (
                                   <div>{item.hcc_name}</div>
                                 )
                               )}
                             </div>
-                            <div className="col-xl-3">
+                            <div className="col-3">
                               {getRafDetails(item.dx_name, "V24")?.map(
                                 (item) => (
                                   <div>{item.hcc_raf}</div>
                                 )
                               )}
                             </div>
-                            <div className="col-xl-4  text-center">
+                            <div className="col-4  text-center">
                               {getRafDetails(item.dx_name, "V24")?.map(
                                 (item) => (
                                   <div>${item.premium}</div>
@@ -361,11 +361,11 @@ const RafScore = ({ patientDetailsResult }) => {
                       style={{ background: "#e47e7e", color: "#ffffff" }}
                     >
                       <div className="row">
-                        <div className="col-xl-3">HCC</div>
-                        <div className="col-xl-2">RAF</div>
-                        <div className="col-xl-5 d-flex align-items-center justify-content-center text-truncate">Monthly Premium</div>
+                        <div className="col-3">HCC</div>
+                        <div className="col-2">RAF</div>
+                        <div className="col-5 d-flex align-items-center justify-content-center ">Monthly Premium</div>
                         <div
-                          className="col-xl-2 rounded d-flex align-items-center justify-content-center"
+                          className="col-2 rounded d-flex align-items-center justify-content-center"
                           style={{ background: "#ffffff", color: "#e47e7e",marginLeft:"-5px"  }}
                         >
                           <span
@@ -388,15 +388,15 @@ const RafScore = ({ patientDetailsResult }) => {
                             }
                           >
                             <>
-                              <div className="col-xl-3">
+                              <div className="col-3">
                                 <div>{item.v28_hcc ? item.v28_hcc : ""}</div>
                               </div>
 
-                              <div className="col-xl-2">
+                              <div className="col-2">
                                 <div>{item.v28_raf ? item.v28_raf : ""}</div>
                               </div>
 
-                              <div className="col-xl-5 d-flex align-items-center justify-content-center   text-center">
+                              <div className="col-5 d-flex align-items-center justify-content-center   text-center">
                                 <div>
                                   {item.v28_monthly_premium
                                     ? "$" + item.v28_monthly_premium
@@ -404,7 +404,7 @@ const RafScore = ({ patientDetailsResult }) => {
                                 </div>
                               </div>
                             </>
-                            {/* <div className="col-xl-3">
+                            {/* <div className="col-3">
                               {getRafDetails(item.dx_name, "V28")?.length >
                               0 ? (
                                 getRafDetails(item.dx_name, "V28")?.map(
@@ -414,7 +414,7 @@ const RafScore = ({ patientDetailsResult }) => {
                                 <div>&nbsp;</div>
                               )}
                             </div>
-                            <div className="col-xl-3">
+                            <div className="col-3">
                               {getRafDetails(item.dx_name, "V28")?.length >
                               0 ? (
                                 getRafDetails(item.dx_name, "V28")?.map(
@@ -424,7 +424,7 @@ const RafScore = ({ patientDetailsResult }) => {
                                 <div>&nbsp;</div>
                               )}
                             </div>
-                            <div className="col-xl-4  text-center">
+                            <div className="col-4  text-center">
                               {getRafDetails(item.dx_name, "V28")?.length >
                               0 ? (
                                 getRafDetails(item.dx_name, "V28")?.map(
@@ -453,19 +453,19 @@ const RafScore = ({ patientDetailsResult }) => {
                     style={{ background: "#73b2f2", color: "#ffffff" }}
                   >
                     <div className="row">
-                      <div className="col-xl-6 text-center">Overall score</div>
-                      <div className="col-xl-6 text-center">
+                      <div className="col-6 text-center">Overall score</div>
+                      <div className="col-6 text-center">
                         Overall premium
                       </div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>
                     <div className="row">
-                      <div className="col-xl-6 text-center">
+                      <div className="col-6 text-center">
                         {" "}
                         {rafScoreList?.rafVersionDTO?.overAllScore}
                       </div>
-                      <div className="col-xl-6 text-center">
+                      <div className="col-6 text-center">
                         {" "}
                         {rafScoreList?.rafVersionDTO?.overAllPremium
                           ? "$" + rafScoreList?.rafVersionDTO?.overAllPremium
@@ -483,18 +483,18 @@ const RafScore = ({ patientDetailsResult }) => {
                     style={{ background: "#8262ce", color: "#ffffff" }}
                   >
                     <div className="row">
-                      <div className="col-xl-6">V24 score</div>
-                      <div className="col-xl-6">
+                      <div className="col-6">V24 score</div>
+                      <div className="col-6">
                         V24Score({rafScoreList?.rafVersionDTO?.v24Percentage}%)
                       </div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>
                     <div className="row">
-                      <div className="col-xl-6">
+                      <div className="col-6">
                         {rafScoreList?.rafVersionDTO?.v24Score}
                       </div>
-                      <div className="col-xl-6">
+                      <div className="col-6">
                         {" "}
                         {rafScoreList?.rafVersionDTO?.v24PercentageScore}
                       </div>
@@ -510,18 +510,18 @@ const RafScore = ({ patientDetailsResult }) => {
                     style={{ background: "#e47e7e", color: "#ffffff" }}
                   >
                     <div className="row">
-                      <div className="col-xl-6">V28 score</div>
-                      <div className="col-xl-6">
+                      <div className="col-6">V28 score</div>
+                      <div className="col-6">
                         V28Score({rafScoreList?.rafVersionDTO?.v28Percentage}%)
                       </div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>
                     <div className="row">
-                      <div className="col-xl-6">
+                      <div className="col-6">
                         {rafScoreList?.rafVersionDTO?.v28Score}
                       </div>
-                      <div className="col-xl-6">
+                      <div className="col-6">
                         {rafScoreList?.rafVersionDTO?.v28PercentageScore}
                       </div>
                     </div>

@@ -81,12 +81,12 @@ const UserList = ({getUsers,usersData}) => {
         <div class="content-body">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-xl-12">
+              <div className="col-12">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
                     <div className="tbl-caption  align-items-center">
                       <div className="row">
-                        <div className="col-xl-2">
+                        <div className="col-2">
                           <label style={{ marginLeft: "8px" }}>
                             Search By Name/MRN
                           </label>
@@ -109,7 +109,7 @@ const UserList = ({getUsers,usersData}) => {
                             />
                           </div>
                         </div>
-                        <div className="col-xl-2">
+                        <div className="col-2">
                           <label style={{ marginLeft: "8px" }}>SSN</label>
                           <div class="form-group has-search">
                             <FontAwesomeIcon
@@ -130,7 +130,7 @@ const UserList = ({getUsers,usersData}) => {
                             />
                           </div>
                         </div>
-                        <div className="col-xl-2">
+                        <div className="col-2">
                           <label style={{ marginLeft: "8px" }}>Sex</label>
                           <div class="form-group has-search">
                             <FontAwesomeIcon
@@ -151,7 +151,7 @@ const UserList = ({getUsers,usersData}) => {
                             />
                           </div>
                         </div>
-                        <div className="col-xl-2">
+                        <div className="col-2">
                           <label style={{ marginLeft: "8px" }}>
                             Date Of Birth
                           </label>
@@ -168,7 +168,7 @@ const UserList = ({getUsers,usersData}) => {
                           </div>
                         </div>
 
-                        <div className="col-xl-2">
+                        <div className="col-2">
                           <label style={{ marginLeft: "8px" }}>Zip Code</label>
                           <div class="form-group has-search">
                             <FontAwesomeIcon
@@ -189,7 +189,7 @@ const UserList = ({getUsers,usersData}) => {
                             />
                           </div>
                         </div>
-                        <div className="col-xl-2">
+                        <div className="col-2">
                           <label style={{ marginLeft: "8px" }}>Phone</label>
                           <div class="form-group has-search">
                             <FontAwesomeIcon

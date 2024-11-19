@@ -267,7 +267,7 @@ const Combo = ({
       >
         <div className={`${visitStyles.comboContainer}`}>
           <div className={`row ${visitStyles.comboContainer2}`}>
-            <div className="col-xl-4">
+            <div className="col-4">
               <Droppable droppableId={"HCC"} key={"HCC"}>
                 {(provided) => {
                   return (
@@ -313,7 +313,7 @@ const Combo = ({
               </Droppable>
             </div>
 
-            <div className="col-xl-4">
+            <div className="col-4">
               <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                 {(provided) => {
                   return (
@@ -360,7 +360,7 @@ const Combo = ({
               </Droppable>
             </div>
 
-            <div className="col-xl-4">
+            <div className="col-4">
               <Droppable droppableId={"DELETED"} key={"DELETED"}>
                 {(provided) => {
                   return (
@@ -445,7 +445,7 @@ const Combo = ({
                   {(provided) => {
                     return (
                       <div
-                        className="col-xl-5"
+                        className="col-5"
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                       >
@@ -487,7 +487,7 @@ const Combo = ({
                   }}
                 </Droppable>
               </DragDropContext>
-              <div className="col-xl-7">
+              <div className="col-7">
                 {selectFileURL && (
                   <PdfViewer
                     src={selectFileURL}
@@ -565,7 +565,7 @@ const Combo = ({
               onSubmit={handleSubmitComboCode}
             >
               <div className="row">
-                <div className="col-xl-12 mb-3">
+                <div className="col-12 mb-3">
                   <Form.Label>
                     Combo Code <span className="text-danger">*</span>{" "}
                   </Form.Label>
@@ -577,7 +577,7 @@ const Combo = ({
                     onChange={handleChange}
                   />
                 </div>
-                <div className="col-xl-12 mb-3">
+                <div className="col-12 mb-3">
                   <Form.Label>Additional Code</Form.Label>
                   <Form.Control
                     type="text"
@@ -586,7 +586,7 @@ const Combo = ({
                     onChange={handleChange}
                   />
                 </div>
-                <div className="col-xl-12 mb-3">
+                <div className="col-12 mb-3">
                   <Form.Label>
                     Description <span className="text-danger">*</span>{" "}
                   </Form.Label>

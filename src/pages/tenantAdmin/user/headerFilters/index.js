@@ -39,7 +39,7 @@ const HeaderFilters = ({
   setEndDate,
   bullets,
   badges,
-  defaultSize = "col-xl-2",
+  defaultSize = "col-2",
   clear,
   setClear,
   selector4value,
@@ -98,7 +98,7 @@ const HeaderFilters = ({
 
       case "Created date Range":
         return (
-          <div className= "col-xl-3">
+          <div className= "col-3">
             <label className={styles.label}>Created date Range</label>
             <div className="dateRangeSize">
               <RangePicker
@@ -123,7 +123,7 @@ const HeaderFilters = ({
       case "Organization":
         return (
           <div className={defaultSize}>
-            <label className={styles.label}>Select Organization</label>
+            <label className={` text-truncate ${styles.label}`}>Select Organization</label>
             <div class="form-group has-search custom-react-select">
               <Select
                 value={orgValue ? orgValue : null}
@@ -151,7 +151,7 @@ const HeaderFilters = ({
       <div className="row filter-contain" style={{ width: "95%" }}>
         {isSearch && (
           <div className={defaultSize} onClick={() => setClear(false)}>
-            <label style={{ marginLeft: "8px" }}>Search By Username</label>
+            <label className="text-truncate" style={{ marginLeft: "8px" }}>Search By Username</label>
             <div class="form-group has-search">
               <InputField
                 isSearch={true}

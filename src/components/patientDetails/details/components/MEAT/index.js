@@ -81,22 +81,22 @@ const MeatCard = ({
           <div className={`my-post-content pt-3 `}>
             <div className={visitStyles.meat_head_card}>
               <div className="row">
-                <div className="col-xl-3 text-center text-uppercase">
+                <div className="col-3 text-center text-uppercase">
                   <label>Codes & Description</label>
                 </div>
-                <div className="col-xl-2 text-center text-uppercase">
+                <div className="col-2 text-center text-uppercase">
                   <label>Monitor</label>
                 </div>
-                <div className="col-xl-2 text-center text-uppercase">
+                <div className="col-2 text-center text-uppercase">
                   <label>Evaluation</label>
                 </div>
-                <div className="col-xl-2 text-center text-uppercase">
+                <div className="col-2 text-center text-uppercase">
                   <label>Assessment</label>
                 </div>
-                <div className="col-xl-2 text-center text-uppercase">
+                <div className="col-2 text-center text-uppercase">
                   <label>Treatment</label>
                 </div>
-                <div className="col-xl-1">
+                <div className="col-1">
                   <label></label>
                 </div>
               </div>
@@ -130,7 +130,7 @@ const MeatCard = ({
                           }
                         >
                           <div className="row">
-                            <div className="col-xl-3 pe-0">
+                            <div className="col-3 pe-0">
                               <div
                                 className="rounded-start-2"
                                 style={{ padding: "10px" }}
@@ -156,7 +156,7 @@ const MeatCard = ({
                               </Badge>
                             )}
                           </div> */}
-                                  <div className="col-xl-12  d-grid">
+                                  <div className="col-12  d-grid">
                                     <Popover
                                       placement="topLeft"
                                       title="Description"
@@ -268,8 +268,8 @@ const MeatCard = ({
                                   ".",
                                   ""
                                 ) == item?.diagnosisCode?.replace(".", "")
-                                  ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
-                                  : `col-xl-2 d-grid`
+                                  ? `col-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                                  : `col-2 d-grid`
                               }
                               style={{
                                 // background: "#eff5ff",
@@ -320,8 +320,8 @@ const MeatCard = ({
                                   ".",
                                   ""
                                 ) == item?.diagnosisCode?.replace(".", "")
-                                  ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
-                                  : `col-xl-2 d-grid`
+                                  ? `col-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                                  : `col-2 d-grid`
                               }
                               style={{
                                 // background: "#f4f8ff",
@@ -370,8 +370,8 @@ const MeatCard = ({
                                   ".",
                                   ""
                                 ) == item?.diagnosisCode?.replace(".", "")
-                                  ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
-                                  : `col-xl-2 d-grid`
+                                  ? `col-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                                  : `col-2 d-grid`
                               }
                               style={{
                                 // background: "#edf5ff",
@@ -421,8 +421,8 @@ const MeatCard = ({
                                   ".",
                                   ""
                                 ) == item?.diagnosisCode?.replace(".", "")
-                                  ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
-                                  : `col-xl-2 d-grid`
+                                  ? `col-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                                  : `col-2 d-grid`
                               }
                               style={{
                                 // background: "#fdfdff",
@@ -466,7 +466,7 @@ const MeatCard = ({
                               </div>
                             </div>
                             {isDosSelected && (
-                              <div className="col-xl-1 meatclose">
+                              <div className="col-1 meatclose">
                                 <div
                                   className="d-flex align-items-center justify-content-center"
                                   style={{
@@ -605,7 +605,7 @@ const MeatCard = ({
 
             {list.length == 0 ? (
               <div className="card combo-card">
-                <div className="col-xl-12">
+                <div className="col-12">
                   <div>
                     <span className="no-patient-data">NO DATA</span>
                   </div>
