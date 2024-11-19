@@ -3,7 +3,7 @@ import PdfViewer from "../PdfViewerComponent";
 import { connect } from "react-redux";
 import style from "./styles.module.css";
 import { EditOutlined, DeleteOutlined, CloseOutlined } from "@ant-design/icons";
-import { Button, Form, Popover } from "antd";
+import { Button, Empty, Form, Popover } from "antd";
 import { stringToColour } from "../components/function/ReusableFunctions";
 import AddForm from "./AddForm";
 import { actions as allActions } from "../../../../stores/patient/details";
@@ -92,7 +92,7 @@ const ManuallyAddProvider = ({
           </div>
         )}
         <div className="w-100 h-100 overflow-scroll">
-          {dosAndProvidersList?.map((item) => (
+          {dosAndProvidersList?.length>0 ? dosAndProvidersList?.map((item) => (
             <button className={`${style.providerButton} my-2`}>
               <span className={style.dateField}>{item?.dateOfService}</span>
               <span className={style.providerText}>Provider</span>
@@ -107,7 +107,7 @@ const ManuallyAddProvider = ({
                 <EditOutlined style={{ color: "#06439D", fontSize: "16px" }} />
               </span>
             </button>
-          ))}
+          )):<Empty/>}
         </div>
       </div>
     </div>

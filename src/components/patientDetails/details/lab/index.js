@@ -74,18 +74,20 @@ const Lab = ({
     if (value) {
       getLabDetails(
         patientId,
-        selectedYearValue,
+        selectedYearValue||"",
         moment(value).format("YYYY-MM-DD"),
         "",
         selectData?.testName
       );
       getLabFileDetails(selectData?.fileId);
     } else {
-      setSelectDosValue(dosSummariesList[0]?.value);
+      setSelectDosValue(null)
+      // setSelectDosValue(dosSummariesList[0]?.value);
       getLabDetails(
         patientId,
-        selectedYearValue,
-        moment(dosSummariesList[0]?.value).format("YYYY-MM-DD"),
+        selectedYearValue||"",
+        "",
+        // moment(dosSummariesList[0]?.value).format("YYYY-MM-DD"),
         ""
       );
     }
@@ -313,7 +315,7 @@ const Lab = ({
                           className="dosSelect"
                           value={selectedYearValue}
                           style={{ marginRight: "10px" }}
-                          allowClear
+                          allowClear={false}
                         >
                           {dosYear?.map((data) => (
                             <Option key={data?.value} value={data?.value}>
@@ -329,6 +331,7 @@ const Lab = ({
                           // allowClear
                           style={{ width: "220px" }}
                           value={selectDosValue}
+                          allowClear={true}
                         >
                           {dosSummariesList?.map((data) => (
                             <Option key={data?.value} value={data?.value}>

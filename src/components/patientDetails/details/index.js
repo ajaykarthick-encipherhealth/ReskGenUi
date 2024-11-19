@@ -240,7 +240,7 @@ const Details = ({
       // );
       getPatientLabDosList(
         selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0]?.value
+        dosYearArr[0]?.value||""
       );
     }
   }, [activeTab]);
@@ -1291,8 +1291,8 @@ const Details = ({
                           ) : (
                             <Lab
                               year={
-                                dosYearDefalutSelect.value
-                                  ? dosYearDefalutSelect.value
+                                dosYearDefalutSelect?.value
+                                  ? dosYearDefalutSelect?.value
                                   : dosYearDefalutSelect
                               }
                               setDosYearDefalutSelect={setDosYearDefalutSelect}

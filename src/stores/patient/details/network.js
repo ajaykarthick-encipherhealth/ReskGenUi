@@ -89,7 +89,7 @@ export async function labDetails(
   const options = {
     method: "GET",
   };
-  var url = `patientId=${patientId}&processedYear=${processedYear}&dateOfService=${dos}&stateIndicator=LAB`;
+  var url = `patientId=${patientId}&processedYear=${processedYear||""}&dateOfService=${dos}&stateIndicator=LAB`;
   try {
     const data = await requestPortal(
       `dbservice/patient/compute/get/diagnostic/data?${url}
@@ -313,7 +313,7 @@ export async function labdosWiseList(patientId, year) {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/patient/compute/get/alldos/stateindicator?patientId=${patientId}&processedYear=${year}&stateIndicator=LAB`,
+    `dbservice/patient/compute/get/alldos/stateindicator?patientId=${patientId}&processedYear=${year||""}&stateIndicator=LAB`,
     options
   );
   return data;
