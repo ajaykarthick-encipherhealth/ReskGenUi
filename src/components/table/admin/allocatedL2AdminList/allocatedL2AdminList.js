@@ -36,9 +36,11 @@ function AllocatedL2AdminList({
   setSortCompleteOrder,
   sortCompleteOrder,
   selectedRoWDetails,
+  setSupervisorPageSize,
+  totalElements,
+  setBatchCount
 }) {
   const [selectedRows, setSelectedRows] = useState([]);
-
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows.some(
       (selectedRow) => selectedRow.patientId === row.patientId
@@ -200,14 +202,14 @@ function AllocatedL2AdminList({
               onChange={() => {
                 handleRowCheckboxChange(data);
                 setSelectedRowsId((prev) => {
-                  const currentIds = prev.map((item) => item.id);
-                  if (!currentIds.includes(data.patientId)) {
+                  const currentIds = prev?.map((item) => item.id);
+                  if (!currentIds.includes(data?.patientId)) {
                     return [
                       ...prev,
-                      { id: data.patientId, name: data.patientName },
+                      { id: data?.patientId, name: data?.patientName },
                     ];
                   } else {
-                    return prev.filter((item) => item.id !== data.patientId);
+                    return prev.filter((item) => item?.id !== data?.patientId);
                   }
                 });
               }}
@@ -291,7 +293,11 @@ function AllocatedL2AdminList({
                 ) : (
                   <input
                     type="checkbox"
-                    onClick={() => setSelectAllChecked(!selectAllChecked)}
+                    onClick={() => {
+                      setSupervisorPageSize(totalElements);
+                      // setBatchCount(totalElements)
+                      setSelectAllChecked(!selectAllChecked);
+                    }}
                     style={{
                       width: "20px",
                       height: "20px",
@@ -301,11 +307,13 @@ function AllocatedL2AdminList({
                     }}
                     checked={
                       selectAllChecked &&
-                      selectedRowsId.length == selectedChart.length
+                      selectedRowsId.length == selectedChart.length &&
+                      patinetListAll?.length === selectedRowsId.length
                     }
                     className={
                       selectAllChecked &&
-                      selectedRowsId.length == selectedChart.length
+                      selectedRowsId.length == selectedChart.length &&
+                      patinetListAll?.length === selectedRowsId.length || totalElements ===selectedRowsId.length
                         ? TableStyle.customChecked2
                         : ""
                     }

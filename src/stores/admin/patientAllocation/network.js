@@ -164,17 +164,18 @@ export const supervisorCheckedList = async ({
   selectedOption,
   allocatedOption,
   fromTenant,
+  pageSize,
 }) => {
   const orgId = getStorage("orgId");
   const url = fromTenant
-    ? `dbservice/l2audit/patients?username=${userName}&page=${pageNo}&size=${15}&sortdirection=${
+    ? `dbservice/l2audit/patients?username=${userName}&page=${pageNo}&size=${pageSize}&sortdirection=${
         sort?.sortDir ? sort?.sortDir : "DESC"
       }&sortfield=${
         sort?.sortField ? sort?.sortField : "dueDate"
       }&searchstring=${searchString}&processedStatus=${
         selectedOption ? selectedOption : ""
       }&patientAllocated=${allocatedOption ? allocatedOption : ""}`
-    : `dbservice/l2audit/patients?organizationId=${orgId}&username=${userName}&page=${pageNo}&size=${15}&sortdirection=${
+    : `dbservice/l2audit/patients?organizationId=${orgId}&username=${userName}&page=${pageNo}&size=${pageSize}&sortdirection=${
         sort?.sortDir ? sort?.sortDir : "DESC"
       }&sortfield=${
         sort?.sortField ? sort?.sortField : "dueDate"

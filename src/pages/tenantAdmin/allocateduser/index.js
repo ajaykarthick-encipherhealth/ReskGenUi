@@ -77,6 +77,8 @@ const Patient = ({
   const [pageNoL2Patient, setPageNoL2Patient] = useState(0);
   const [pageNoL2User, setPageNoL2User] = useState(0);
   const [pageSize, setPageSize] = useState(15);
+  const [supervisorPageSize, setSupervisorPageSize] = useState(15);
+
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [tableLoading, setTableLoading] = useState(true);
 
@@ -88,7 +90,7 @@ const Patient = ({
   const [selectedSupervisorSearch, setSelectedSupervisorSearch] = useState("");
   const [checkedLoading, setCheckedLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState("");
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const [allocatedOption, setAllocatedOption] = useState(null);
   const [batchCount, setBatchCount] = useState("");
   const [filterBatchCount, setFilterBatchCount] = useState(false);
@@ -99,7 +101,6 @@ const Patient = ({
   const [searchStr, setSearchStr] = useState("");
   const [selectOrgList, setSelectedOrgList] = useState([]);
   const [orgAllList, setOrgAllList] = useState([]);
-
   const getAllList = async ({
     pageNo = 0,
     pageSize = 15,
@@ -185,17 +186,28 @@ const Patient = ({
     setStartDate(formattedDates[0]);
     setEndDate(formattedDates[1]);
   };
-
   const onPageChangePatient = (e) => {
-    setIsLoading(true);
+    setIsLoading(false);
     setPaginationFirst(e.first);
     setPageNoL2Patient(e.page);
     setPageSize(e.rows);
+    setSupervisorPageSize(e.rows);
+    // getL2PatientList({
+    //   data: l2selectUser,
+    //   pageNoL2Patient: e.page,
+    //   sort: sort,
+    //   searchString:selectedSupervisorSearch,
+    //   selectedOptions: selectedOptions,
+    //   allocatedOption: allocatedOption,
+    // });
     getL2PatientList({
       data: l2selectUser,
       pageNoL2Patient: e.page,
-      sort: sort,
-      selectedOptions: selectedOptions,
+      // sort: sort,
+      pageSize: e.rows,
+      // searchString: selectedSupervisorSearch,
+      // selectedOptions: selectedOptions,
+      // allocatedOption: allocatedOption,
     });
     setTableLoading(true);
   };
@@ -212,8 +224,9 @@ const Patient = ({
     setSelectAllChecked(false);
     setSelectAllCheckedL2(false);
     setSelectedOption([]);
-    setSelectedOptions("");
+    setSelectedOptions([]);
     setPageNo(0);
+    setPageNoL2Patient(0);
     if (number == 2) {
       getAuditL2List(pageNoL2User, "");
     } else {
@@ -234,6 +247,8 @@ const Patient = ({
           pageNoL2Patient: pageNoL2Patient,
           sort: sort,
           searchString: search,
+          selectedOptions: selectedOptions,
+          allocatedOption: allocatedOption,
         });
       }
     }
@@ -260,7 +275,8 @@ const Patient = ({
   const handleOpneModal = () => {
     setValidated(false);
     setAddPatientId(false);
-    if (activeTab == 2) {
+    if (        batchCount,
+      activeTab == 2) {
       setAllocateModalL2(true);
     } else {
       setAllocateModal(true);
@@ -286,14 +302,7 @@ const Patient = ({
     } else {
       setSelectedRowsId([]);
     }
-  }, [
-    selectAllChecked,
-    sort,
-    isPatientList,
-    pageNoL2Patient,
-    activeTab,
-    selectedOptions,
-  ]);
+  }, [selectAllChecked, sort, isPatientList,  activeTab]);
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab == 1 && !isPatientList) {
@@ -325,6 +334,7 @@ const Patient = ({
     selectedOption,
     selectOrgList,
     isPatientList,
+    selectedSupervisorSearch
   ]);
 
   useEffect(() => {
@@ -362,6 +372,8 @@ const Patient = ({
               data,
               pageNoL2Patient: pageNoL2Patient,
               sort: sort,
+              selectedOptions: selectedOptions,
+              allocatedOption: allocatedOption,
             });
             setIsPatientList(true);
             setL2selectUser(data);
@@ -460,7 +472,7 @@ const Patient = ({
     setL2selectUser(dataMap);
     let resoureUrl = `dbservice/l2audit/patients?username=${
       data?.userName
-    }&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${
+    }&page=${pageNoL2Patient}&size=${supervisorPageSize}&sortdirection=${
       sort?.sortDir ? sort?.sortDir : "DESC"
     }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
       searchString ? searchString : ""
@@ -480,8 +492,12 @@ const Patient = ({
         sort,
         selectedOption: selectedOptions,
         allocatedOption: allocatedOption,
-        searchString: searchString,
+        searchString: selectedSupervisorSearch,
         fromTenant: true,
+        pageSize:
+          selectedSupervisors?.response?.totalElements < supervisorPageSize
+            ? selectedSupervisors?.response?.totalElements
+            : supervisorPageSize,
       });
       if (response.status === "SUCCESS") {
         let result = response?.response;
@@ -506,13 +522,16 @@ const Patient = ({
     if (activeTab == 2 && isPatientList) {
       getL2PatientList({
         data: l2selectUser,
+        sort: sort,
+        pageSize: supervisorPageSize,
         pageNoL2Patient: pageNoL2Patient,
         selectedOptions: selectedOptions,
         allocatedOption: allocatedOption,
+       
       });
     }
-  }, [selectedOptions, allocatedOption, isPatientList]);
-
+   
+  }, [selectedOptions, allocatedOption, isPatientList, supervisorPageSize]);
   return (
     <>
       <div className={`show `}>
@@ -562,6 +581,7 @@ const Patient = ({
                                       isPatientList,
                                       l2selectUser
                                     );
+                                    setPageNoL2Patient(0);
                                   }}
                                   value={
                                     activeTab == 2 && isPatientList
@@ -780,6 +800,8 @@ const Patient = ({
                                     setPageNo={setPageNo}
                                     onChanges={() => {
                                       setPageNoL2Patient(0);
+                                      setSupervisorPageSize(15)
+
                                     }}
                                   />
                                 </div>
@@ -796,6 +818,7 @@ const Patient = ({
                                     // isClose={true}
                                     onChanges={() => {
                                       setPageNoL2Patient(0);
+                                      setSupervisorPageSize(15)
                                     }}
                                   />
                                 </div>
@@ -1053,6 +1076,7 @@ const Patient = ({
                                         ) : (
                                           <>
                                             <AllocatedL2AdminList
+                                            setBatchCount={setBatchCount}
                                               patinetListAll={
                                                 selectedSupervisors?.response
                                                   ?.content
@@ -1067,9 +1091,12 @@ const Patient = ({
                                               setSelectedRowsId={
                                                 setSelectedRowsId
                                               }
+                                              totalElements={selectedSupervisors?.response
+                                                ?.totalElements}
                                               selectedChart={
                                                 headerCheckValidation
                                               }
+                                              setSupervisorPageSize={setSupervisorPageSize}
                                               setSort={setSort}
                                               sort={sort}
                                               loading={supervisorCheckBoxLoader}
