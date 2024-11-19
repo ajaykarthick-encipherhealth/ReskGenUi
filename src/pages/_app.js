@@ -193,6 +193,7 @@ function MyApp({ Component, pageProps }) {
     "/reviewer/patients/details",
     "/supervisor/patients/details",
     "/tenantAdmin/patients/details",
+    "/supervisor/user/details", 
   ];
   const showFooter = !hideFooterPaths.includes(router.pathname);
 
