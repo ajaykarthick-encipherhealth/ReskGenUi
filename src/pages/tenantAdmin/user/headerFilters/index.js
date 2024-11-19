@@ -98,7 +98,7 @@ const HeaderFilters = ({
 
       case "Created date Range":
         return (
-          <div className={defaultSize}>
+          <div className= "col-xl-3">
             <label className={styles.label}>Created date Range</label>
             <div className="dateRangeSize">
               <RangePicker

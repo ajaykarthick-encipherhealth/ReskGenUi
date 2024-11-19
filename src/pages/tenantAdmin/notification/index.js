@@ -258,7 +258,7 @@ const Notification = ({
                 justifyContent: "space-between",
               }}
             >
-              <div style={{ paddingTop: "8px" }}>
+              <div style={{ paddingTop: "8px",width:"600px" }}>
                 <Radio.Group
                   options={radioOptions}
                   onChange={onChange}
@@ -267,7 +267,7 @@ const Notification = ({
                 <p className={styles.errorMessage}>{errMessageRadio}</p>
               </div>
 
-              <div>
+              <div className="d-flex gap-4">
                 <div>
                   {selectCheckBox == "CUSTOM" ? (
                     <>
@@ -332,25 +332,25 @@ const Notification = ({
                     </div>
                   ) : null}
                 </div>
-              </div>
 
-              <div>
-                <Button
-                  className={styles.notificationSentBtn}
-                  onClick={() => handleSubmit()}
-                >
-                  {isBtnLoading ? (
-                    <Spinner
-                      as="span"
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                      className={styles.btnLoading}
-                    />
-                  ) : null}
-                  Send
-                </Button>
+                <div>
+                  <Button
+                    className={styles.notificationSentBtn}
+                    onClick={() => handleSubmit()}
+                  >
+                    {isBtnLoading ? (
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        className={styles.btnLoading}
+                      />
+                    ) : null}
+                    Send
+                  </Button>
+                </div>
               </div>
             </div>
 

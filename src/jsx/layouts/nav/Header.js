@@ -439,7 +439,7 @@ const Header = ({
             >
               {stateActive === data.to ? data.activeIcon : data.iconStyle}
             </div>
-            <span className={`nav-text header-nav-text`}>{data.title}</span>
+            <span className={`nav-text header-nav-text text-truncate`}>{data.title}</span>
             <span></span>
           </div>
         </li>
@@ -644,7 +644,7 @@ const Header = ({
             ) : null}
             <div className="header-right d-flex align-items-center">
               <ul className="navbar-nav ">
-                <li className="nav-item ps-3">
+                <li className="nav-item">
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
@@ -819,7 +819,7 @@ const Header = ({
                             </span>
                           ) : (
                             <span
-                              className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3"
+                              className="text-[#4F4F4F] ms-2 text-truncate subHeader-name d-flex mr-3"
                               style={{ fontWeight: "500", fontSize: "6px" }}
                             >
                               {currentRole?.replace(/_/g, " ")}

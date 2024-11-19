@@ -355,7 +355,7 @@ const InitialCard = ({
             >
               {/* {reportListAll?.response?.data?.length > 0 && (
                   <> */}
-              <div className="col-xl-1 d-flex">
+              <div className="col-1 d-flex">
                 <div>
                   <input
                     type="checkbox"
@@ -379,7 +379,7 @@ const InitialCard = ({
                 </div>
                 <span className={`pl-0 text-start ${styles.pName}`}>All</span>
               </div>
-              <div className="col-xl-4 d-flex">
+              <div className="col-4 d-flex">
                 <div>
                   <input
                     type="checkbox"
@@ -403,8 +403,8 @@ const InitialCard = ({
             ) : (
               <div className="row">
                 <div>
-                  <div className=" col-xl-12 d-flex">
-                    <div className={`col-xl-6 ${styles.cardDiv}`}>
+                  <div className=" col-12 d-flex">
+                    <div className={`col-6 ${styles.cardDiv}`}>
                       {reportListAll?.response?.data?.length > 0 ? (
                         <div className={styles.cardContainer}>
                           {reportListAll?.response?.data?.map((item, id) => (
@@ -462,7 +462,7 @@ const InitialCard = ({
                       )}
                     </div>
 
-                    <div className={`col-xl-6 ${styles.cardSeperation}`}>
+                    <div className={`col-6 ${styles.cardSeperation}`}>
                       <div className={styles.cardContainer}>
                         <div className={styles.card1}>
                           <div className={styles.summaryText}>Summary</div>

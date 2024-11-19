@@ -64,14 +64,14 @@ const index = ({
           }}
         >
           <div
-            style={{ width: "90%", height: "100%", margin: "10px 0 0 10px" }}
+            style={{ width: "90%", height: "100%", margin: "10px 0 0 4px" }}
           >
             {totalCountsLoader ? (
               <Skeleton.Input active size="small" className="mt-2" />
             ) : (
               <div>
                 <div
-                  className="d-flex justify-content-start align-items-start gap-1"
+                  className="d-flex justify-content-start align-items-center gap-1"
                   style={{ height: "50px" }}
                 >
                   <div
@@ -80,7 +80,6 @@ const index = ({
                       height: "40px",
                       backgroundColor: item?.iconBg,
                       borderRadius: "10px",
-                      margin: "0 5px 0 0",
                       display: "flex",
                       justifyContent: "center",
                       textAlign: "center",

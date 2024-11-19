@@ -78,7 +78,7 @@ export const getProviderNameTag = ({
                 storeFileDetails: storeFileDetails,
               });
             }}
-            className={`mt-2 text-start ${visitStyles.provider_name} truncate-text`}
+            className={`mt-2 text-start ${visitStyles.provider_name} text-truncate`}
             style={{
               backgroundColor: stringToColour(res) + 33,
               color: stringToColour(res),

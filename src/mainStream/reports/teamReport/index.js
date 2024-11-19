@@ -334,7 +334,7 @@ const TeamReport = ({
                     //   <Spin />
                     // ) : (
                     <> */}
-              <div className="col-xl-1 d-flex">
+              <div className="col-1 d-flex">
                 <div>
                   <input
                     type="checkbox"
@@ -358,7 +358,7 @@ const TeamReport = ({
                 </div>
                 <span className={`pl-0 text-start ${styles.pName}`}>All</span>
               </div>
-              <div className="col-xl-2 d-flex pt-0">
+              <div className="col-2 d-flex pt-0">
                 <div>
                   <input
                     type="checkbox"
@@ -384,7 +384,7 @@ const TeamReport = ({
             ) : (
               <div className="row">
                 <div>
-                  <div className=" col-xl-12 d-flex" style={{ height: "100%" }}>
+                  <div className=" col-12 d-flex" style={{ height: "100%" }}>
                     {reportListAll?.response?.response?.data?.length === 0 ? (
                       <div className={`col-xl-6 ${styles.card1}`}>
                         <div className={` ${styles.emptyCard}`}>
@@ -392,7 +392,7 @@ const TeamReport = ({
                         </div>
                       </div>
                     ) : (
-                      <div className={`col-xl-6 ${styles.cardDiv}`}>
+                      <div className={`col-6 ${styles.cardDiv}`}>
                         <div className={styles.cardContainer}>
                           {reportListAll?.response?.response?.data?.map(
                             (item, id) => (
@@ -445,11 +445,11 @@ const TeamReport = ({
                       </div>
                     )}
 
-                    <div className={`col-xl-6 ${styles.cardSeperation}`}>
+                    <div className={`col-6 ${styles.cardSeperation}`}>
                       <div className={styles.cardContainer}>
                         <div className={styles.card1}>
                           <div className={styles.summaryText}>Summary</div>
-                          <div className="col-xl-12 d-flex mt-4">
+                          <div className="col-12 d-flex mt-4">
                             {subCardData.map((card, index) => (
                               <SubCard
                                 key={index}
@@ -461,7 +461,7 @@ const TeamReport = ({
                           <div className={` pt-2 ${styles.summaryText}`}>
                             Overall Status
                           </div>
-                          <div className="col-xl-12 d-flex mt-2">
+                          <div className="col-12 d-flex mt-2">
                             <div className="row g-2" style={{ width: "100%" }}>
                               {card1Data?.map((data) => (
                                 <MiniCards
@@ -475,7 +475,7 @@ const TeamReport = ({
                               ))}
                             </div>
                           </div>
-                          <div className="col-xl-12  d-flex mt-4">
+                          <div className="col-12  d-flex mt-4">
                             <Flags
                               reportListAll={reportListAll?.response}
                               styles={styles}

@@ -307,27 +307,27 @@ const IndividualReceiverReport = ({
         </div>
         <div className={styles.tablediv}>
           <div className={styles.container1}>
-            <div className={styles.header}>
+            <div className={`${styles.header}`}>
               {" "}
               <Image src={id} alt="noimg" />
-              &nbsp; Id: &nbsp;
+              Id: 
               {reportInfo?.id || "---"}
             </div>
-            <div>
+            <div className="d-flex">
               {" "}
-              <Image src={file} alt="noimg" /> &nbsp;Name:&nbsp;
+              <Image src={file} alt="noimg" /> Name:
               {reportInfo?.data?.reportName}
             </div>
-            <div>
+            <div className="d-flex">
               {" "}
               <Image src={send} alt="noimg" />
-              &nbsp;{isSentReport ? "Reciever" : "Sender"}:&nbsp;
+            {isSentReport ? "Reciever" : "Sender"}:
               {reportInfo?.data?.sender}
             </div>
-            <div>
+            <div className="d-flex">
               {" "}
               <Image src={calender} alt="noimg" />
-              &nbsp; Date:&nbsp;
+               Date:
               {dayjs(reportInfo?.data?.receiveDate).format("DD/MM/YYYY")}
             </div>
             <div>

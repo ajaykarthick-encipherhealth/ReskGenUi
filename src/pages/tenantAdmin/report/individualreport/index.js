@@ -311,18 +311,18 @@ const IndividualReceiverReport = ({
               &nbsp; Id: &nbsp;
               {reportInfo?.id || "---"}
             </div>
-            <div className="d-flex  gap-1">
+            <div className="d-flex align-items-center gap-1">
               {" "}
               <Image src={file} alt="noimg" /> &nbsp;Name:&nbsp;
               {reportInfo?.data?.reportName}
             </div>
-            <div className="d-flex gap-1">
+            <div className="d-flex align-items-center gap-1">
               {" "}
               <Image src={send} alt="noimg" />
               &nbsp;{isSentReport ? "Reciever" : "Sender"}:&nbsp;
               {reportInfo?.data?.sender}
             </div>
-            <div className="d-flex gap-1">
+            <div className="d-flex align-items-center gap-1">
               {" "}
               <Image src={calender} alt="noimg" />
            Date:

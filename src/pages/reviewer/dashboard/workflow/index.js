@@ -126,7 +126,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges}) => {
             {card1Data?.map((data) => (
               <Col
                 key={data?.id}
-                span={10}
+                span={9}
                 style={{
                   backgroundImage: `url(${data?.bg.src})`,
                   backgroundRepeat: "no-repeat",

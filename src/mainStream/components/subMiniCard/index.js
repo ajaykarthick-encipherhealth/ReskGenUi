@@ -4,7 +4,7 @@ const OverallReportsSection = ({ totalReports, styles,isSent }) => {
   return (
     <div className={`col-xl-3 ${styles.sentSubCard}`}>
       <div>
-        <div className="reusableLabel">{isSent?'Overall Sent Reports':'Overall Received Reports'}</div>
+        <div className="reusableLabel mt-2">{isSent?'Overall Sent Reports':'Overall Received Reports'}</div>
         <h4>{totalReports}</h4>
       </div>
     </div>

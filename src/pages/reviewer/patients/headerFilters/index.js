@@ -63,7 +63,7 @@ const HeaderFiltersPatients = ({
   bullets,
   badges,
 
-  defaultSize = "col-xl-2",
+  defaultSize = "col-2",
   setAuditSelAllocatedTo,
 
   setAuditSelectedOption,
@@ -118,7 +118,7 @@ const HeaderFiltersPatients = ({
     switch (filter) {
       case "Due Date":
         return (
-          <div className={defaultSize}>
+          <div className="col-3">
             <label className={styles.label} style={{ marginTop: "40px" }}>
               Due Date
             </label>
@@ -136,7 +136,7 @@ const HeaderFiltersPatients = ({
 
       case "Completed Date":
         return (
-          <div className={defaultSize}>
+          <div className="col-3">
             <label className={styles.label} style={{ marginTop: "40px" }}>
               Completed Date
             </label>
@@ -223,7 +223,7 @@ const HeaderFiltersPatients = ({
       <div className="row filter-contain" style={{ width: "95%" }}>
         {isAllocatedToSelector && (
           <div className={defaultSize} onClick={() => setClear(false)}>
-            <label style={{ marginLeft: "8px", marginTop: "40px" }}>
+            <label className="text-truncate" style={{ marginLeft: "8px", marginTop: "35px" }}>
               {" "}
               Patient Name / ID
             </label>

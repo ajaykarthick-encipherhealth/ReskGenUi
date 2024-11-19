@@ -163,7 +163,7 @@ const UserList = ({
         <thead className={TableStyle.classThead}>
           <tr>
             <th className={TableStyle.rowEmailStyle}>NAME</th>
-            <th style={{ paddingLeft: "120px" }}>EMAIL</th>
+            <th style={{ paddingLeft: "50px" }}>EMAIL</th>
             <th
               style={{
                 textAlign: "center",

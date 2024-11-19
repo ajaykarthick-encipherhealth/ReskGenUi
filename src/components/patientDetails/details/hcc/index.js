@@ -406,9 +406,9 @@ const Hcc = ({
               <div className="col-xl-12">
                 <Nav as="ul" className="nav nav-tabs">
                   <div className="w-100 d-flex justify-content-between">
-                    <div className="d-flex" style={{ width: "95%" }}>
+                    <div className="d-flex">
                       {" "}
-                      <Nav.Item as="li" className="nav-item">
+                      <Nav.Item as="li" className="nav-item ">
                         <Nav.Link
                           to="#my-posts"
                           eventKey={1}
@@ -651,7 +651,6 @@ const Hcc = ({
                       ) : null}
                     </div>
                     <div
-                      style={{ width: "5%" }}
                       className="d-flex justify-content-end align-items-center"
                     >
                       <Popover

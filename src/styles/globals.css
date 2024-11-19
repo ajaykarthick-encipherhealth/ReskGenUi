@@ -12740,7 +12740,7 @@ tbody > tr {
 }
 
 .notificationIcon {
-  margin-right: 20px;
+  margin-right: 5px;
 }
 
 .ant-ribbon-wrapper {
@@ -14396,7 +14396,7 @@ overflow: scroll;
 }
 
 .chatheaderIcon {
-  margin-right: 3px;
+  margin-right: 0px;
 }
 
 .chat-tab .nav-item .nav-link {
@@ -14682,7 +14682,7 @@ input::-webkit-inner-spin-button {
   /* Adjust padding as needed */
   color: #04306f;
   margin-bottom: 0;
-  width: 30% !important;
+  width: 35% !important;
   height: 42px;
   display: flex;
   justify-content: center;
@@ -15309,7 +15309,7 @@ input::-webkit-inner-spin-button {
 
 .revenueDollar > div > div > canvas {
   position: absolute;
-  left: -46px !important;
+  left: 2px !important;
   top: -45px !important;
   width: 100% !important;
   height: 300px !important;

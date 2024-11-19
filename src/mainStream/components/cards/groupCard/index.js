@@ -30,7 +30,7 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
           onClick={() => handleReceiverReport(item)}
         >
           <div className={styles.contentGroup}>
-            <div className="col-xl-12">
+            <div className="col-12">
               <div
                 style={{
                   display: "flex",
