@@ -79,10 +79,10 @@ const Login = ({ getMFAValidation, loginResponse }) => {
                 <p className="sub-title"></p>
                 <Image
                   className="login-logo"
-                  src={IMAGES.loginPageLogo1}
+                  src={IMAGES.loginPageLogo4}
                   style={{ display: "block", margin: "0 auto" }}
                 />
-                <div className="company-name">Encipher Health Inc.</div>
+                {/* <div className="company-name">Encipher Health Inc.</div> */}
               </div>
             </div>
           </div>

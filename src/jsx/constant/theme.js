@@ -13,6 +13,7 @@ export const IMAGES = {
   visitDataLabreport: require("../../images/visitdata/labreport.png"),
   loginPageLogo: require("../../images/logo/CogentAI logo.png"),
   loginPageLogo1: require("../../images/logo/CogentAIlogo22.png"),
+  loginPageLogo4: require("../../images/logo/cogentAI-logo-loginpage.png"),
   loginPageLogo2: require("../../images/logo/new_logo_2.png"),
   chatIcons: require("../../images/chat/chatIcon.png"),
   headerLogo: require("../../images/logo/header_logo.png"),

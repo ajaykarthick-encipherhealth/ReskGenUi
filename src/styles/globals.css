@@ -300,6 +300,12 @@ body {
   height: 42px !important;
   border-radius: 8px !important;
 }
+@media screen and (min-width: 1080px) and (max-width: 1100px) {
+  .form-control {
+    height: 30px !important;
+  }
+}
+
 
 .form-control[type="file"] {
   overflow: hidden;
@@ -8635,8 +8641,8 @@ button:focus {
   padding: 40px;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   /* background: linear-gradient(90deg, hsla(180, 33%, 88%, 1) 0%, hsla(310, 76%, 82%, 1) 50%, hsla(256, 83%, 72%, 1) 100%); */
-  display: flex;
-  justify-content: center;
+  /* display: flex; */
+  /* justify-content: center; */
   background-image: url("../images/login/back_1.webp");
   background-repeat: no-repeat;
   background-size: cover;
@@ -8652,6 +8658,7 @@ button:focus {
   border-radius: 2.5rem;
   display: flex;
   align-items: center;
+  justify-content: center;
   position: relative;
   z-index: 1;
   overflow: hidden;
@@ -8660,6 +8667,28 @@ button:focus {
   background-repeat: no-repeat;
   background-size: cover;
   background-blend-mode: luminosity;
+  margin-left: 0px;
+}
+@media  screen and (min-width: 1915px) and (max-width:1980px) {
+  .login-account .account-info-area {
+    margin-left: 271px;
+}}
+@media  screen and (min-width: 1740px) and (max-width:1800px) {
+  .login-account .account-info-area {
+    margin-left: 271px;
+}}
+@media  screen and (min-width: 1530px) and (max-width:1600px) {
+  .login-account .account-info-area {
+    margin-left: 271px;
+}}
+@media  screen and (min-width: 1080px) and (max-width:1100px) {
+  .login-account .account-info-area {
+    min-height: 340px;
+}}
+@media  screen and (min-width: 1250px) and (max-width:1300px) {
+  .login-account .account-info-area {
+    min-height: 340px;
+  }
 }
 
 .login-account .account-info-area:after {
@@ -8872,19 +8901,71 @@ button:focus {
 @media only screen and (max-width: 87.5rem) {
   .login-account .login-form {
     padding: 0 35px;
+    /* max-width: 300px; */
   }
 }
+
 
 @media only screen and (max-width: 1024px) {
   .login-account .login-form {
     padding: 0;
   }
 }
+@media  screen and (max-width:600px )  {
+  .login-account .login-form {
+    max-width: 1000px !important;
+  }
+}
+@media  screen and (min-width: 400px) and (max-width:1000px) {
+  .login-account .login-form {
+    padding: 0 35px;
+    max-width: 300px;
+    /* background-color: #0000ff; */
+  }
+  
+}
+@media  screen and (min-width: 1700px) and (max-width:1800px) {
+  .login-account .login-form {
+    padding:30px 40px;
+    max-width: 443px;  
+  }}
+@media  screen and (min-width: 1500px) and (max-width:1699px) {
+    .login-account .login-form {
+      max-width: 388px;
+    }}
+@media  screen and (min-width: 1230px) and (max-width:1300px) {
+      .login-account .login-form {
+        max-width: 340px;
+        min-height: 335px;
+}}
+@media  screen and (min-width: 1080px) and (max-width:1100px) {
+  .login-account .login-form {
+    max-width: 307px;
+    min-height: 336px;
+}}
+
 
 .login-account .login-form .login-head {
   text-align: center;
   margin-bottom: 2rem;
 }
+@media  screen and (min-width: 1500px) and (max-width:1699px) {
+  .login-account .login-form .login-head {
+    margin-bottom: 0px;
+  }
+}
+@media  screen and (min-width: 1250px) and (max-width:1300px) {
+  .login-account .login-form .login-head {
+    margin-bottom: 0px;
+  }
+}
+@media  screen and (min-width: 1080px) and (max-width:1100px) {
+  .login-account .login-form .login-head {
+    margin-bottom: 0px;
+  }
+}
+
+
 
 .login-account .login-form .login-head .title {
   font-size: 36px;
@@ -8903,15 +8984,54 @@ button:focus {
     font-size: 20px;
   }
 }
+@media  screen and (min-width: 1700px) and (max-width:1800px){
+  .login-account .login-form .login-head .title {
+    font-size: 34px;
+    padding: 0px;
+  }
+}
+@media  screen and (min-width: 1500px) and (max-width:1699px){
+  .login-account .login-form .login-head .title {
+    font-size: 21px;
+  }
+}
+@media  screen and (min-width: 1250px) and (max-width:1300px){
+  .login-account .login-form .login-head .title {
+    font-size: 23px;
+  }
+}
+@media  screen and (min-width: 1080px) and (max-width:1100px){
+  .login-account .login-form .login-head .title {
+    font-size: 20px;
+    margin-bottom: 0px;
+  }
+}
 
 .login-account .login-form .login-title {
   text-align: center;
   position: relative;
-  margin-bottom: 48px;
+  margin-bottom: 31px;
   z-index: 1;
   display: flex;
   align-items: center;
 }
+@media  screen and (min-width: 1250px) and (max-width:1300px){
+  .login-account .login-form .login-title{
+    margin-bottom: 10px;
+  }
+}
+@media  screen and (min-width: 1500px) and (max-width:1699px){
+  .login-account .login-form .login-title{
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (min-width: 1700px) and (max-width:1800px) {
+  .login-account .login-form .login-title{
+    margin-bottom: 10px;
+  }
+}
+
 
 .login-account .login-form .login-title:before,
 .login-account .login-form .login-title:after {
@@ -8932,7 +9052,7 @@ button:focus {
 
 @media only screen and (max-width: 1200px) {
   .login-account .login-form .login-title {
-    margin-bottom: 25px;
+    margin-bottom: 10px;
   }
   .profile-tab .nav-item .nav-link {
     font-size: 12px !important;
@@ -14965,6 +15085,12 @@ input::-webkit-inner-spin-button {
   font-weight: 500;
   font-family: "Arial", sans-serif;
   white-space: nowrap;
+}
+
+@media screen and (min-width: 1700px) and (max-width:1800px) {
+  .company-name {
+    font-size: 12px;
+  }
 }
 /* :where(.css-dev-only-do-not-override-1b0bdye).ant-picker-dropdown
   .ant-picker-header {
