@@ -472,7 +472,7 @@ const Patient = ({
     setL2selectUser(dataMap);
     let resoureUrl = `dbservice/l2audit/patients?username=${
       data?.userName
-    }&page=${pageNoL2Patient}&size=${supervisorPageSize}&sortdirection=${
+    }&page=${pageNoL2Patient}&size=${15}&sortdirection=${
       sort?.sortDir ? sort?.sortDir : "DESC"
     }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
       searchString ? searchString : ""
