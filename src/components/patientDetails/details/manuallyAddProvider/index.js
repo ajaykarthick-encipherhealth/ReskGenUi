@@ -48,7 +48,7 @@ const ManuallyAddProvider = ({
   };
 
   useEffect(() => {
-    if (hccFileDetails?.data?.response) {
+    if (hccFileDetails?.data?.response?.length>0) {
       setSelectFileURL(hccFileDetails?.data?.response);
     }
     if (dosYear) {
@@ -92,7 +92,7 @@ const ManuallyAddProvider = ({
           </div>
         )}
         <div className="w-100 h-100 overflow-scroll">
-          {dosAndProvidersList?.length>0 ? dosAndProvidersList?.map((item) => (
+          {Array.isArray(dosAndProvidersList) ? dosAndProvidersList?.map((item) => (
             <button className={`${style.providerButton} my-2`}>
               <span className={style.dateField}>{item?.dateOfService}</span>
               <span className={style.providerText}>Provider</span>
