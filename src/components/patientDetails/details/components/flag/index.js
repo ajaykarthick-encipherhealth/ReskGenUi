@@ -221,7 +221,7 @@ const Flag = ({
                 <Select
                   options={flagPostList}
                   className="customize-react-select"
-                  isSearchable={false}
+                  isSearchable={true}
                   id="flag"
                   name="flag"
                   value={
@@ -230,6 +230,7 @@ const Flag = ({
                     ) || null
                   } 
                   onChange={handleChangeFlag}
+                 
                 />
               </div>
             </div>

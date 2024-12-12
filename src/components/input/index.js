@@ -101,7 +101,7 @@ const InputField = ({
             : inputStr
         }
         onChange={handleChange}
-        className={"w-100 new-search-control border-none"}
+        className={`w-100 ${isReport ? "new-search-control1" : 'new-search-control'} border-none`}
         placeholder={placeholder}
         maxLength={25}
         disabled={isDisabled ? true : false}

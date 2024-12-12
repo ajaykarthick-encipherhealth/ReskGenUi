@@ -28,7 +28,7 @@ const Flag = ({ patienIdDetails, patientDetails, flagsDetailsResult }) => {
                   <div className="mt-3">
                     <div
                       className="d-flex align-items-center justify-content-center cr-pointer"
-                      onClick={() => setFlagContainerActive("Flag")}
+                      // onClick={() => setFlagContainerActive("Flag")}
                     >
                       <Popover
                         content={

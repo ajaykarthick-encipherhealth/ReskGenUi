@@ -381,7 +381,7 @@ const Export = ({
       <Form form={form} onFinish={onFinish}>
         <div className="container-fluid">
           {/* <label className={styles.text}>Report Name</label> */}
-          <div className={`p-2 ${styles.reportLabel}`}>
+          <div className={`py-2 ${styles.reportLabel}`}>
             Give a proper & suitable name for Report
           </div>
 
@@ -408,7 +408,7 @@ const Export = ({
                       setInputValue={setReportName}
                       delay={1000}
                       type="text"
-                      placeholder=""
+                      placeholder="Please enter the report name"
                       isSearch={false}
                       isDisabled={selectedReportInfo?.reportName ? true : false}
                       isInputFiled={true}
@@ -449,7 +449,7 @@ const Export = ({
             </div>
           </div>
           <div className="col-md-12" style={{ marginTop: "10px" }}>
-            <div className="d-flex p-2">
+            <div className="d-flex ">
               {!selectedReportInfo && (
                 <div>
                   <div className="d-flex p-2">
@@ -657,6 +657,7 @@ const Export = ({
             alignItems: "center",
             justifyContent: "center",
           }}
+          className="mt-2"
         >
           <Form.Item
             disabled={userList?.length > 0 && isAnyChecked ? false : true}

@@ -1428,8 +1428,9 @@ export const handleSubmitValidNotes = async ({
       getResponePopup(result);
     }
   } catch (err) {
+    
     setFileLoading(false);
-    getResponePopup(err?.response);
+    getResponePopup(err);
   }
 };
 

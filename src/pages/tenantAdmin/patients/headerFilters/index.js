@@ -158,7 +158,7 @@ const HeaderFilters = ({
       case "Select Status":
         return (
           <div className={defaultSize}>
-            <label className={styles.label}>Status</label>
+            <label className={styles.label}>Select Status</label>
             <div class="form-group has-search custom-react-select">
               <Select
                 value={selectDefaultValue}

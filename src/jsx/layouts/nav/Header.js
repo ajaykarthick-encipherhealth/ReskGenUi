@@ -761,7 +761,7 @@ const Header = ({
                           </div>
                         )}
                         <div
-                          className="notificationIcon"
+                          className={`notificationIcon ${notificationCount < 9 ? 'me-3' : "me-4"}`}
                           onClick={() => notificationDrawer()}
                         >
                           <Badge count={notificationCount} color="#04306F">
