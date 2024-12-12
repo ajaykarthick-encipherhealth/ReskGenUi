@@ -28,9 +28,9 @@ import spinSTYles from "../../../../styles/auth.module.css";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import TC from "../../.../../../../images/dashboard/TC.png";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
-import {actions as allActions} from '../../../../stores/admin/dashboard'
+import { actions as allActions } from "../../../../stores/admin/dashboard";
 
-const WorkFlow = ({worlFlowData ,DateRanges}) => {
+const WorkFlow = ({ worlFlowData, DateRanges, workFlowLoader }) => {
   const [dateRange, setDateRange] = useState({
     processedStatus: {
       PENDING: 0,
@@ -270,91 +270,101 @@ const WorkFlow = ({worlFlowData ,DateRanges}) => {
         isAdmin={true}
       />
       <Card borderRadius="28px" height="200px" style={{ width: "100%" }}>
-        {worlFlowData?.loading ? (
+        {workFlowLoader ? (
           renderCardSkeleton()
-        ) : worlFlowData?.data?.response ? (
+        ) : (
           <Row
             className={styles.carddiv}
             style={{ width: "100%", height: "100%" }}
           >
-            <Col span={4}>
-              <Row style={{ width: "100%", height: "100%" }}>
-                {card2Data?.map((data) => (
-                  <>
-                    <Col
-                      span={22}
-                      style={{
-                        backgroundImage: `url(${data?.bg.src})`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundSize: "cover",
-                        height: "90%",
-                        width: "100%",
-                      }}
-                      className={styles.colData}
-                    >
-                      <div className={styles.totalChartDiv}>
-                        <div className={styles.header}>
-                          <div className="mt-1">{data?.icon}</div>
-                          {/* <Image src={data?.icon} className={styles.Img} /> */}
-                          <div className={styles.heading}>{data.title}</div>
-                        </div>
-                        <div
-                          className={styles.charts}
-                          style={{ marginTop: "30px" }}
-                        >{`${data?.charts ? data?.charts : "0"} Charts`}</div>
-                      </div>
+            {worlFlowData?.data?.response? (
+              <>
+                {" "}
+                <Col span={4}>
+                  <Row style={{ width: "100%", height: "100%" }}>
+                    {card2Data?.map((data) => (
+                      <>
+                        <Col
+                          span={22}
+                          style={{
+                            backgroundImage: `url(${data?.bg.src})`,
+                            backgroundRepeat: "no-repeat",
+                            backgroundSize: "cover",
+                            height: "90%",
+                            width: "100%",
+                          }}
+                          className={styles.colData}
+                        >
+                          <div className={styles.totalChartDiv}>
+                            <div className={styles.header}>
+                              <div className="mt-1">{data?.icon}</div>
+                              {/* <Image src={data?.icon} className={styles.Img} /> */}
+                              <div className={styles.heading}>{data.title}</div>
+                            </div>
+                            <div
+                              className={styles.charts}
+                              style={{ marginTop: "30px" }}
+                            >{`${
+                              data?.charts ? data?.charts : "0"
+                            } Charts`}</div>
+                          </div>
 
-                      {/* <div className={styles.days}>{data.days}</div> */}
-                    </Col>
-                  </>
-                ))}
-              </Row>
-            </Col>
-            <Col span={20} style={{ height: "100%" }}>
-              <Row className={styles.rowDiv}>
-                {card1Data?.map((data) => (
-                  <>
-                    <Col
-                      span={5}
-                      style={{
-                        backgroundImage: `url(${data?.bg.src})`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundSize: "cover",
-                      }}
-                      className={styles.colData}
-                    >
-                      <div className={styles.subCardDiv}>
-                        <div className={styles.header}>
-                          <div className="mt-1">{data?.icon}</div>
-                          {/* <Image src={data?.icon} className={styles.Img} />  */}
-                          <div className={styles.heading}>{data.title}</div>
-                        </div>
-                        <div className={styles.charts}>{`${
-                          data?.charts ? data?.charts : "0"
-                        }  Charts`}</div>
-                      </div>
-                      {/* <div className={styles.days}>{data.days}</div> */}
-                    </Col>
-                  </>
-                ))}
-              </Row>
-            </Col>
+                          {/* <div className={styles.days}>{data.days}</div> */}
+                        </Col>
+                      </>
+                    ))}
+                  </Row>
+                </Col>
+                <Col span={20} style={{ height: "100%" }}>
+                  <Row className={styles.rowDiv}>
+                    {card1Data?.map((data) => (
+                      <>
+                        <Col
+                          span={5}
+                          style={{
+                            backgroundImage: `url(${data?.bg.src})`,
+                            backgroundRepeat: "no-repeat",
+                            backgroundSize: "cover",
+                          }}
+                          className={styles.colData}
+                        >
+                          <div className={styles.subCardDiv}>
+                            <div className={styles.header}>
+                              <div className="mt-1">{data?.icon}</div>
+                              {/* <Image src={data?.icon} className={styles.Img} />  */}
+                              <div className={styles.heading}>{data.title}</div>
+                            </div>
+                            <div className={styles.charts}>{`${
+                              data?.charts ? data?.charts : "0"
+                            }  Charts`}</div>
+                          </div>
+                          {/* <div className={styles.days}>{data.days}</div> */}
+                        </Col>
+                      </>
+                    ))}
+                  </Row>
+                </Col>
+              </>
+            ) : (
+              <div>
+                <Empty />
+              </div>
+            )}
           </Row>
-        ) : (
-          <div className={spinSTYles.spinStyle}>
-            <Empty />
-          </div>
         )}
       </Card>
     </div>
   );
 };
 
-const enhancer = connect((state) => ({
-  worlFlowData: state?.admin?.dashboard?.workFlow,
-  DateRanges:state?.admin?.dashboard?.dateRanges
-}),
-{
-  getWorkFlow: allActions.workFlowAction,
-});
- export default enhancer(WorkFlow);
+const enhancer = connect(
+  (state) => ({
+    worlFlowData: state?.admin?.dashboard?.workFlow,
+    DateRanges: state?.admin?.dashboard?.dateRanges,
+    workFlowLoader: state?.admin?.dashboard?.workFlowLoader,
+  }),
+  {
+    getWorkFlow: allActions.workFlowAction,
+  }
+);
+export default enhancer(WorkFlow);

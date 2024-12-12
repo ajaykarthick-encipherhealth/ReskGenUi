@@ -11,7 +11,7 @@ import { encyptingPass } from "../components/headerFilters/functions";
 import RegularButton from "../components/button";
 import { actions as allActions } from "../stores/authFlows";
 import { getResponePopup } from "../utils/reusable";
-
+import newLoginLogo from '../images/logo/newLoginLogo.png';
 const Login = ({ getMFAValidation, loginResponse }) => {
   const router = useRouter();
   const [enteredEmail, setEmail] = useState("");
@@ -79,8 +79,8 @@ const Login = ({ getMFAValidation, loginResponse }) => {
                 <p className="sub-title"></p>
                 <Image
                   className="login-logo"
-                  src={IMAGES.loginPageLogo4}
-                  style={{ display: "block", margin: "0 auto" }}
+                  src={newLoginLogo}
+                  style={{ display: "block", margin: "0 auto",width:"350px",height:"280px" }}
                 />
                 {/* <div className="company-name">Encipher Health Inc.</div> */}
               </div>

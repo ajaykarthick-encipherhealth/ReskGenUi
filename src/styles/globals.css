@@ -6278,7 +6278,7 @@ textarea.form-control {
 }
 
 body > * {
-  scrollbar-width: thin;
+  scrollbar-width: 1px !important;
   scrollbar-color: rgba(111, 133, 147, 0.1) #fff0;
 }
 
@@ -9150,6 +9150,10 @@ button:focus {
   /* margin-left: 20px !important; */
   padding-left: 0 !important;
   z-index: 999 !important;
+  background-color: #edf5fd !important;
+}
+.body{
+  scrollbar-width: 0px !important;
 }
 
 .nav-header {
@@ -9190,7 +9194,9 @@ button:focus {
 .header-logo {
   padding-left: 30px;
   text-align: center;
-  width: 170px;
+  /* width:80px; */
+  width: 110px;
+  height:55px;
 }
 
 .header-logo img {
@@ -9458,6 +9464,10 @@ tr>td{
 }
 
 /* fontcolor */
+
+.cr-pointer {
+  cursor: pointer !important;
+}
 
 form#step-form-horizontal .form-group .text-label {
   text-align: left;

@@ -66,7 +66,8 @@ import { actions as authActions } from "../../../stores/authFlows";
 import { actions as reportActions } from "../../../stores/admin/report";
 import { actions as uploadImagesAction } from "../../../stores/authflow/imageUpload";
 import { actions as userAction } from "../../../stores/supervisor/users";
-
+import newHeaderLogo from '../../../images/logo/newChatImage.png';
+import newLoginLogo from '../../../images/logo/newLoginLogo.png';
 import Profile from "./profile";
 import { getResponePopup } from "../../../utils/reusable";
 
@@ -567,8 +568,8 @@ const Header = ({
         <nav className="navbar navbar-expand">
           <div className="collapse navbar-collapse justify-content-between">
             <div className="d-flex">
-              <div className="header-logo ">
-                <Image src={IMAGES.headerLogo} />
+              <div className="header-logo" >
+                <Image src={newLoginLogo} alt="noImg"/>
               </div>
               {tenent?.data?.response?.companyLogoLink && (
                 <div className="d-flex justify-content-center align-items-center">

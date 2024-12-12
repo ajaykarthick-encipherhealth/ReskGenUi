@@ -250,7 +250,7 @@ const BarChart = ({ TeamChart, teamChartData, loading }) => {
                 className={styles.chartContainer}
               >
                 {loading ? (
-                  renderCardSkeleton(365, 650, 30)
+                  renderCardSkeleton(365, 580, 30)
                 ) : teamChartData?.data?.response?.length > 0 ? (
                   option && (
                     <ReactApexChart

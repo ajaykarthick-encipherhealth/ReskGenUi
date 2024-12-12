@@ -40,7 +40,7 @@ const Footer = () => {
                 padding: "5px",
               }}
             >
-              &copy; {currentYear} Encipher Health Inc.
+              &copy; {currentYear} Powered by Encipher Health Inc.
             </p>
             &nbsp; &nbsp;
           </div>

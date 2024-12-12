@@ -1056,6 +1056,7 @@ const HccCards = ({
                                         getSelectedDosPageNumber,
                                       setLabData: setLabData,
                                       storeFileDetails: storeFileDetails,
+                                      isShow: data?.isShow,
                                     })}
                                   </div>
 

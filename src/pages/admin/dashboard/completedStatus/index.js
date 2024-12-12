@@ -204,7 +204,7 @@ const CompletedStatus = ({
       <HeadTitle
         header="Productivity Status"
         height="20px"
-        margin="-40px 0px 20px 0"
+        margin="-40px 0px 5px 0"
         fontSize="18px"
       />
       <div className={styles.card5}>

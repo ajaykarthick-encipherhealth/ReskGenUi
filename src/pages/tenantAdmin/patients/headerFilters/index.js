@@ -149,6 +149,8 @@ const HeaderFilters = ({
                 placeholder={"Select Processed Status"}
                 isSearchable={false}
                 allowClear={true}
+                id="processed-status"
+                name="processed-status"
               />
             </div>
           </div>
@@ -170,6 +172,8 @@ const HeaderFilters = ({
                 isSearchable={false}
                 placeholder={"Select"}
                 allowClear={true}
+                id="status"
+                name="status"
               />
             </div>
           </div>
@@ -210,11 +214,13 @@ const HeaderFilters = ({
                   setClear(false);
                 }}
                 disabledDate={(current) => disableFutureDate(current)}
+                id="create-date"
+                name="create-date"
               />
             </div>
           </div>
         );
-    
+
       case "Created By":
         return (
           <div className={defaultSize}>
@@ -230,6 +236,8 @@ const HeaderFilters = ({
                 isSearchable={false}
                 placeholder={"Select Created By"}
                 allowClear={true}
+                id="created-by"
+                name="created-by"
               />
             </div>
           </div>
@@ -252,6 +260,8 @@ const HeaderFilters = ({
                 isSearchable={false}
                 placeholder="Select Organization"
                 allowClear={true}
+                id="select-organization"
+                name="select-organization"
               />
             </div>
           </div>
@@ -276,6 +286,8 @@ const HeaderFilters = ({
                 setCoderEndDate={setCoderEndDate}
                 disabled={disable != "Yes" ? true : false}
                 setPageNo={setPageNo}
+                id="select-date-range"
+                name="select-date-range"
               />
             </div>
           </div>
@@ -305,6 +317,8 @@ const HeaderFilters = ({
                 searchVal={searchVal}
                 setSearchVal={setSearchVal}
                 setPageNo={setPageNo}
+                id="search"
+                name="search"
               />
             </div>
           </div>

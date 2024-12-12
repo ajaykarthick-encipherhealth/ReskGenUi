@@ -50,6 +50,8 @@ const InputField = ({
   searchVal,
   isReport,
   setPageNo,
+  id,
+  name
 }) => {
   const [inputStr, setInputStr] = useState("");
 
@@ -116,6 +118,8 @@ const InputField = ({
         }
         allowClear={true}
         data-testid="searchPrefix"
+        id={id}
+        name={name}
       />
     </div>
   );

@@ -3,6 +3,11 @@ const nextConfig = {
   reactStrictMode: false,
   // useFileSystemPublicRoutes:true,
   poweredByHeader: false,
+  experimental: {
+    images: {
+      useSharp: true,
+    },
+  },
   async headers() {
     return [
       {

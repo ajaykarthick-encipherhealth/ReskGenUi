@@ -11,6 +11,7 @@ import chatAssistant from "../../images/chat/chatAssistant.svg";
 import { handleCopyToClipboard } from "../commonFunctions";
 import { actions as allActions } from "../../stores/chatService";
 import { connect } from "react-redux";
+import neChatImage from '../../images/logo/newChatImage.png'
 const AICHAT = ({ openMsg, getChatReply }) => {
   const [activeChat, setActiveChat] = useState(false);
   const [inputValue, setInputValue] = useState({
@@ -79,9 +80,9 @@ const AICHAT = ({ openMsg, getChatReply }) => {
                     <div className="text-white">Hello user</div>
                     <div className={`${styles.chatHead} mt-4`}>
                       <Image
-                        src={IMAGES.loginPageLogo3}
-                        width={50}
-                        height={50}
+                        src={neChatImage}
+                        width={30}
+                        height={40}
                       />
                       <h4 className={`${styles.chatTitle} text-white`}>
                         Chat with CogentAI

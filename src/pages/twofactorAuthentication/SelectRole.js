@@ -9,7 +9,7 @@ import RegularButton from "../../components/button";
 import { getStorage, removeStorage, setStorage } from "../../utils/storages";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/authFlows";
-
+import newLoginLogo from '../../images/logo/newLoginLogo.png';
 const SelectRole = ({ loginData, getLogin }) => {
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState(null);
@@ -131,8 +131,12 @@ const SelectRole = ({ loginData, getLogin }) => {
             >
               <div className="login-content">
                 <p className="sub-title"></p>
-                <Image className="login-logo" src={IMAGES.loginPageLogo1} />
-                <div className="company-name">Encipher Health Inc.</div>
+                <Image
+                  className="login-logo"
+                  src={newLoginLogo}
+                  style={{ display: "block", margin: "0 auto",width:"350px",height:"280px" }}
+                />
+                {/* <div className="company-name">Encipher Health Inc.</div> */}
               </div>
             </div>
           </div>

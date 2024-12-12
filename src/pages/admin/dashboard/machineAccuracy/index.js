@@ -447,7 +447,7 @@ const MachineAccuracy = ({ accuracyDetails, loading, getAccuracyScore }) => {
       <HeadTitle
         header="Accuracy and Quality Insights"
         height="20px"
-        margin="15px 0px"
+        margin="10px 0px 5px 0"
         fontSize="18px"
       />
       <div className={styles.card3}>

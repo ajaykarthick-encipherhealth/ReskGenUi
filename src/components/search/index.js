@@ -8,13 +8,17 @@ const Search = ({
   setReceivedSearch,
   setCoderSearch,
   activeTab,
-  searchVal, 
+  searchVal,
   setSearchVal,
-  setPageNo
+  setPageNo,
+  id = "search",
+  name = "search",
 }) => {
   return (
     <div>
-      <label style={{ marginLeft: "8px" }} className="responsiveLabel">{searchlabel}</label>
+      <label style={{ marginLeft: "8px" }} className="responsiveLabel">
+        {searchlabel}
+      </label>
       <InputField
         delay={1000}
         type="text"
@@ -28,6 +32,8 @@ const Search = ({
         setSearchVal={setSearchVal}
         setInputValue={setSearch}
         setPageNo={setPageNo}
+        id={id}
+        name={name}
       />
     </div>
   );

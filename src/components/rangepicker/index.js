@@ -23,11 +23,15 @@ const DateRangePicker = ({
   setCoderStartDate,
   setCoderEndDate,
   disabled,
-  setPageNo
+  setPageNo,
+  id = "select-date-range",
+  name = "select-date-range",
 }) => {
   return (
     <>
-      <label style={{ marginLeft: "8px" }} className="responsiveLabel">{pickerlabel}</label>
+      <label style={{ marginLeft: "8px" }} className="responsiveLabel">
+        {pickerlabel}
+      </label>
       <div>
         {/* <RangePicker
           value={selectedDates ? selectedDates : ""}
@@ -70,8 +74,8 @@ const DateRangePicker = ({
               setStartDate,
               setEndDate,
             });
-            if(setPageNo){
-              resetPageNumber(setPageNo)
+            if (setPageNo) {
+              resetPageNumber(setPageNo);
             }
             // setClear(false);
           }}
@@ -79,6 +83,8 @@ const DateRangePicker = ({
             let customDate = moment().format("MM-DD-YYYY");
             return current && current > moment(customDate, "MM-DD-YYYY");
           }}
+          id={id}
+          name={name}
         />
       </div>
     </>
