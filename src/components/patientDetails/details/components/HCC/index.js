@@ -223,7 +223,7 @@ const HccCards = ({
                       index={i}
                       draggableData={data.list}
                       isDragDisabled={
-                        isDosSelected || data?.isShow ? false : true
+                        isDosSelected && data?.isShow ? false : true
                       }
                     >
                       {(provided, snapshot) => {
@@ -242,13 +242,13 @@ const HccCards = ({
                             className={`hccActiveCard ${visitStyles.hcc_card} ${
                               snapshot?.isDragging &&
                               visitStyles.drag_and_drop_movement_bg
+                            } ${
+                              !data?.isShow &&
+                              visitStyles.isSHowHccBlurHcc
                             }`}
                             ref={provided.innerRef}
                             {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={{
-                              filter: !data?.isShow && "blur(1px)",
-                            }}
+                            {...provided.dragHandleProps}                           
                             onMouseOver={() =>
                               !data?.isShow &&
                               setHoveredIem(data?.diagnosisCode)

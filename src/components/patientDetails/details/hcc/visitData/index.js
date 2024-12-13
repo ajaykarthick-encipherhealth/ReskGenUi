@@ -108,7 +108,8 @@ const VisitData = ({
       "",
       setAllMeatList,
       "",
-      setPotentialList
+      setPotentialList,
+      actions?.showDisease
     );
 
     var dotLoading = (
@@ -117,7 +118,7 @@ const VisitData = ({
       </div>
     );
     setUserDetails(dotLoading);
-  }, [patientDetailsResult]);
+  }, [patientDetailsResult,actions?.showDisease]);
 
   // useEffect(() => {
   //   if (hccFileDetails?.data?.response) {
