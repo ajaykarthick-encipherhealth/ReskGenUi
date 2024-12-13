@@ -28,13 +28,7 @@ const HeadTitle = ({
       ? [dayjs(defaultDateRange.startDate), dayjs(defaultDateRange.endDate)]
       : []
   );
-  const [dateValues, setDates] = useState();
-
   useEffect(() => {
-    // Log defaultDateRange and selectedDates for debugging
-    // console.log("defaultDateRange:", defaultDateRange);
-    // console.log("selectedDates before setting:", selectedDates);
-
     if (defaultDateRange?.startDate && defaultDateRange?.endDate) {
       setSelectedDates([
         dayjs(defaultDateRange.startDate),
@@ -43,20 +37,20 @@ const HeadTitle = ({
     }
   }, [defaultDateRange]);
 
-  const handleDatePickerChange = (date) => {
+  const handleDatePickerChange = (date, dateStrings) => {
     if (date) {
       const dates = {
         startDate: dayjs(date[0]).format("YYYY-MM-DD") + "T00:00:00.000Z",
         endDate: dayjs(date[1]).format("YYYY-MM-DD") + "T23:59:59.000Z",
       };
-      setDates(dates);
+      setSelectedDates(date);
+      getDateRange(dates);
+      setOpenPicker(false);
+    } else {
+      setSelectedDates([]);
+      getDateRange(null);
+      setOpenPicker(false);
     }
-  };
-
-  const handleRefresh = () => {
-    setSelectedDates([]);
-    setDates(null);
-    getDateRange(null);
   };
 
   return (
@@ -67,7 +61,6 @@ const HeadTitle = ({
       <div
         style={{
           display: "flex",
-          // width: "100%",
           justifyContent: "space-between",
         }}
       >
@@ -90,12 +83,8 @@ const HeadTitle = ({
       )}
       <Modal
         open={openPicker}
-        width={640}
+        width={650}
         closable={false}
-        onOk={() => {
-          getDateRange(dateValues);
-          setOpenPicker(false);
-        }}
         onCancel={() => {
           setOpenPicker(false);
           setSelectedDates([]);
@@ -108,18 +97,15 @@ const HeadTitle = ({
         >
           <RangePicker
             getPopupContainer={() => document.getElementById("date-popup")}
-            value={selectedDates?.length ? selectedDates : null} // Set selected dates if available
-            onChange={(dates, dateStrings) => {
-              setSelectedDates(dates);
-              handleDatePickerChange(dateStrings);
-            }}
+            value={selectedDates?.length ? selectedDates : null}
+            onChange={handleDatePickerChange}
             format="MM-DD-YYYY"
             disabledDate={(current) => disableFutureDate(current)}
             inputReadOnly={true}
             open={openPicker}
           />
         </div>
-        <div
+        {/* <div
           className="modal-footer"
           style={{
             display: "flex",
@@ -134,28 +120,14 @@ const HeadTitle = ({
           >
             Refresh
           </Button>
-
           <Button
             onClick={() => setOpenPicker(false)}
             style={{ marginLeft: "10px", marginRight: "20px" }}
           >
             Cancel
           </Button>
-          <Button
-            onClick={() => {
-              getDateRange(dateValues);
-              setOpenPicker(false);
-            }}
-            type="primary"
-          >
-            OK
-          </Button>
-        </div>
+        </div> */}
         <div id="date-popup" style={{ position: "relative" }} />
-        <div
-          className="modal-footer"
-          style={{ textAlign: "right", marginTop: "20px" }}
-        ></div>
       </Modal>
     </div>
   );

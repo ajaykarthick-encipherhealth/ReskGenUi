@@ -655,7 +655,7 @@ const Hcc = ({
                       </Nav.Item>
                     
                     </div>
-                    <div
+                    {/* <div
                       className="d-flex justify-content-end align-items-center"
                     >
                       <Popover
@@ -677,7 +677,7 @@ const Hcc = ({
                           Action
                         </button>
                       </Popover>
-                    </div>
+                    </div> */}
                   </div>
                 </Nav>
               </div>

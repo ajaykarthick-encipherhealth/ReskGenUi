@@ -20,7 +20,7 @@ const CardComponent = ({
   const handleDateFormat = (date) => {
     return dayjs(date).format("MM-DD-YYYY");
   };
-console.log(selectedReport,"selectedReport")
+
   return (
     <div>
       {data?.length > 0 ? (
