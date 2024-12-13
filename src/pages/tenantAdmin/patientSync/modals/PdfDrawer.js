@@ -80,7 +80,9 @@ const PdfDrawer = ({
   const onFinish = async (formVal) => {
     if (reportActiveTab === "PDF") {
       if (uploadType !== "upload") {
-        const res = await getCreateBatch({ info: formVal });
+        const res = await getCreateBatch({
+          info: { ...formVal, fileExtension: "pdf" },
+        });
         if (res.status === "SUCCESS") {
           await getAllBatches({ page: pageNo });
           form.resetFields();
@@ -254,8 +256,34 @@ const PdfDrawer = ({
                   style={{ width: "100%" }}
                   options={options}
                   size="large"
-                  placeholder="year Of Service"
+                  placeholder="Year Of Service"
                   onSearch={handleSearch}
+                />
+              </Form.Item>
+              <Form.Item
+                label={
+                  <label>
+                    File Extension <span className="text-danger">*</span>
+                  </label>
+                }
+                name="fileExtension"
+                rules={[
+                  {
+                    required: false,
+                    message: "Please Enter fileExtension ",
+                  },
+                ]}
+              >
+                <Select
+                  // mode="tags"
+                  name="fileExtension"
+                  style={{ width: "100%" }}
+                  value={"pdf"}
+                  defaultValue={[{ label: "PDF", value: "pdf" }]}
+                  options={[{ label: "pdf", value: "pdf" }]}
+                  size="large"
+                  placeholder="File Extension"
+                  disabled
                 />
               </Form.Item>
 

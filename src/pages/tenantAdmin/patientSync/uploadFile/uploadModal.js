@@ -29,11 +29,13 @@ const uploadModal = ({
         formData.append("file", item);
         formData.append("batchId", openUpload?.data?.id);
         formData.append("yearOfServices", openUpload?.data?.yearOfService);
+        formData.append("batchProcessFor", "COGENT_AI")
         // for single upload
         const formData2 = new FormData();
         formData2.append("file", item);
         formData2.append("batchId", currentId?.id);
         formData2.append("batchUploadDetailsId", openUpload?.data?.id);
+        formData2.append("batchProcessFor", "COGENT_AI")
         return uploadFiles({ obj: singleUpload ? formData2 : formData });
       });
       const responses = await Promise.all(uploadPromises);

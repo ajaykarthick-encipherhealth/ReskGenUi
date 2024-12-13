@@ -83,7 +83,7 @@ const UploadFile = ({
       }
     }
   }, [openUpload]);
-console.log(isLoading,"isLoading")
+  
   return uploadAction || singleUpload ? (
     <div className={`${styles.cover} `}>
       <label className="cr-pointer">
