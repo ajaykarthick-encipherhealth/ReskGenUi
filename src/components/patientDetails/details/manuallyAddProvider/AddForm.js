@@ -1,4 +1,13 @@
-import { Button, DatePicker, Form, Input, Radio, Select, Switch } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  notification,
+  Radio,
+  Select,
+  Switch,
+} from "antd";
 import React from "react";
 import style from "./styles.module.css";
 import { getStorage } from "../../../../utils/storages";
@@ -17,6 +26,7 @@ const AddForm = ({
   getAddProviderAndDOSList,
   dosDeatilsAction,
   selectedDosValue,
+  dosAndProvidersList,
 }) => {
   const validateThreeDigitNumber = (_, value) => {
     if (!value || /^\d{1,3}$/.test(value)) {
@@ -46,19 +56,36 @@ const AddForm = ({
       fileId: providersList ? providersList?.fileId : customFileId || "",
     };
 
-    const res = await getAddProviderAndDOS(data);
-    if (res.status == "SUCCESS") {
-      getResponePopup(res);
-      getAddProviderAndDOSList(dosYear?.length > 0 ? dosYear[0]?.value : "");
-      dosDeatilsAction(patientId, dosYear?.length > 0 ? dosYear[0]?.value : "");
-      form.resetFields();
+    if (data?.dos) {
+      const result = dosAndProvidersList?.some(
+        (item) => item?.dateOfService === data?.dos
+      );
+      if (!result) {
+        const res = await getAddProviderAndDOS(data);
+        if (res.status == "SUCCESS") {
+          getResponePopup(res);
+          getAddProviderAndDOSList(
+            dosYear?.length > 0 ? dosYear[0]?.value : ""
+          );
+          dosDeatilsAction(
+            patientId,
+            dosYear?.length > 0 ? dosYear[0]?.value : ""
+          );
+          form.resetFields();
+        }
+      } else {
+        return notification.warning({
+          description: "DOS already exists",
+          duration: 2,
+        });
+      }
     }
   };
   const customDisableDate = (current) => {
     const selectedYear = parseInt(selectedDosValue, 10);
 
     if (dayjs(current).year() === selectedYear) {
-      return false; 
+      return false;
     }
     return true;
   };
@@ -328,6 +355,8 @@ const connector = connect(
   (state) => ({
     patientDetailsResult:
       state?.patientDetails?.details?.patientResult?.data?.response,
+    dosAndProvidersList:
+      state.patientDetails?.details?.dosAndProvidersList?.data?.response,
   }),
   {
     getAddProviderAndDOS: allActions.getAddProviderAndDOS,
