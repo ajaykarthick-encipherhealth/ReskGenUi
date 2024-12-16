@@ -235,7 +235,7 @@ const Patient = ({
   };
 
   const gotoPatientDetails = (data) => {
-    getpatientsListFilter(data);
+    // getpatientsListFilter(data);
     patientDetails(data);
     if (data.computing == 2) {
       const controller = new AbortController();
