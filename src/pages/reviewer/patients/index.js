@@ -39,7 +39,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { getStorage, removeStorage, setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
-import HeaderFiltersPatients from "./headerFilters";
+import HeaderFiltersPatients, { allFilters } from "./headerFilters";
 
 const { RangePicker } = DatePicker;
 
@@ -81,6 +81,7 @@ const Patient = ({
   getpatientsListFilter,
   loading,
   patientDetails,
+  filtersData
 }) => {
   const navigate = useRouter();
   const [isLoading, setIsLoading] = useState(true);
@@ -97,7 +98,7 @@ const Patient = ({
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
   const [clear, setClear] = useState(false);
-  const [activeFilters, setActiveFilters] = useState([]);
+  const [activeFilters, setActiveFilters] = useState(allFilters);
   const [trackChart, setTrackChart] = useState({
     COMPLETED: 0,
     PENDING: 0,
@@ -141,6 +142,7 @@ const Patient = ({
   const [sortAllocateOrder, setSortAllocateOrder] = useState("DESC");
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedDates2, setSelectedDates2] = useState([]);
+  const [paramsFilter, setParamsFilter] = useState(null);
   // useEffect(() => {
   //   setDefaultStartDate(
   //     dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
@@ -149,36 +151,6 @@ const Patient = ({
   //     dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z"
   //   );
   // }, [dayDateFormated]);
-  useEffect(() => {
-    const uId = sessionStorage.getItem("userId");
-    setLocalUserId(uId);
-    if (window !== "undefined") {
-      getFilteApi({
-        pageNo,
-        pageSize,
-        statusValue: clear ? "" : statusSelectedStatus,
-        dStart: clear ? "" : dueDateStart,
-        dEnd: clear ? "" : dueDateEnd,
-        pStart: clear ? "" : processedStart,
-        pEnd: clear ? "" : processedEnd,
-        sort,
-        selectedPriority: clear ? "" : selectedPriority,
-        searchTextValue: clear ? "" : searchTextValue,
-      });
-    }
-  }, [
-    pageNo,
-    sort,
-    selectedPriority,
-    searchTextValue,
-    dueDateStart,
-    dueDateEnd,
-    processedStart,
-    processedEnd,
-    statusSelectedStatus,
-    navigate.query,
-    clear,
-  ]);
 
   const getFilteApi = async ({
     pageNo,
@@ -207,7 +179,7 @@ const Patient = ({
       selectedPriority ? selectedPriority : ""
     }`;
     const res = await getpatientsListFilter({ url: resoureUrl });
-    if (res.status == "SUCCESS") {
+    if (res?.status == "SUCCESS") {
       setTotalElements(res.response?.patientDTOList?.totalElements);
       setTrackChart(res?.response?.processStatusCount);
       setPatinetListAll(res?.response?.patientDTOList?.content);
@@ -393,9 +365,11 @@ const Patient = ({
 
   const options = [...priorityOptions];
   useEffect(() => {
-    const decodedParams = JSON.parse(getStorage("reviewerEncodedValue"));
+    // const decodedParams = JSON.parse(getStorage("reviewerEncodedValue"));
+    const decodedParams=navigate.query
     const sessionActiveFilters = JSON.parse(getStorage("reviewerFilter"));
     if (decodedParams) {
+      setParamsFilter("check");
       setStatusSelectedStatus(
         decodedParams?.statusSelectedStatus?.toUpperCase()
       );
@@ -446,26 +420,58 @@ const Patient = ({
       setSortCompleteOrder(decodedParams?.sortCompleteOrder);
       setSortAllocateOrder(decodedParams?.sortAllocateOrder);
     }
-    if (sessionActiveFilters) {
-      setActiveFilters(sessionActiveFilters);
-    }
+    // if (allFilters) {
+    //   setActiveFilters(sessionActiveFilters);
+    // }
   }, []);
   useEffect(() => {
-    const reviewerFilters = JSON.parse(getStorage("filter"));
-    const decodedParams = JSON.parse(getStorage("reviewerDate"));
-    const params=JSON.parse(getStorage("reviewerDueDate"));
-    if (reviewerFilters) {
-      setActiveFilters(reviewerFilters);
+    // const reviewerFilters = JSON.parse(getStorage("filter"));
+    // const decodedParams = JSON.parse(getStorage("reviewerDate"));
+    // const params=JSON.parse(getStorage("reviewerDueDate"));
+    if (filtersData) {
+      setActiveFilters(filtersData);
     }
-    if(decodedParams){
+    // if(decodedParams){
       
-      setSelectedDates([
-        decodedParams?.dueDateStart ? dayjs(decodedParams?.dueDateStart) : null,
-        decodedParams?.dueDateEnd ? dayjs(decodedParams?.dueDateEnd) : null,
-      ]);
-    }
-    setStatusSelectedStatus(params?.statusSelectedStatus?params?.statusSelectedStatus:"")
+    //   setSelectedDates([
+    //     decodedParams?.dueDateStart ? dayjs(decodedParams?.dueDateStart) : null,
+    //     decodedParams?.dueDateEnd ? dayjs(decodedParams?.dueDateEnd) : null,
+    //   ]);
+    // }
+    // setStatusSelectedStatus(params?.statusSelectedStatus?params?.statusSelectedStatus:"")
   }, []);
+
+  useEffect(() => {
+    const uId = sessionStorage.getItem("userId");
+    setLocalUserId(uId);
+    setParamsFilter("check");
+    if (window !== "undefined" && paramsFilter) {
+      getFilteApi({
+        pageNo,
+        pageSize,
+        statusValue: clear ? "" : statusSelectedStatus,
+        dStart: clear ? "" : dueDateStart,
+        dEnd: clear ? "" : dueDateEnd,
+        pStart: clear ? "" : processedStart,
+        pEnd: clear ? "" : processedEnd,
+        sort,
+        selectedPriority: clear ? "" : selectedPriority,
+        searchTextValue: clear ? "" : searchTextValue,
+      });
+    }
+  }, [
+    pageNo,
+    sort,
+    selectedPriority,
+    searchTextValue,
+    dueDateStart,
+    dueDateEnd,
+    processedStart,
+    processedEnd,
+    statusSelectedStatus,
+    navigate.query,
+    clear,
+  ]);
   return (
     <div className={`show `}>
       <Header />
@@ -611,6 +617,7 @@ const enhancer = connect(
   (state) => ({
     patientsListFilter: state?.reviewer?.workQueue?.patients,
     loading: state?.reviewer?.workQueue?.patientsLoading,
+    filtersData:state.reviewer?.workQueue?.reviewerPatientFilterList
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,

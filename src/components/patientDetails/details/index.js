@@ -65,7 +65,8 @@ import {
 import { actions as allReportActions } from "../../../stores/admin/report";
 import { connect } from "react-redux";
 import HeaderComponent from "./components/headerComponent";
-
+import {actions as reviewerWorkQueueAction} from '../../../stores/reviewer/workqueue'
+import { allFilters } from "../../../pages/reviewer/patients/headerFilters";
 export const navigetPageDetails = async (
   pageTitle,
   setSideNavLabelActiveKey,
@@ -131,6 +132,7 @@ const Details = ({
   getPatientID,
   selectPatientId,
   getActiveTab,
+  getFilteredList
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -532,7 +534,8 @@ const Details = ({
         navigate.back();
       }
     } else if (user && user.toLowerCase() === "reviewer") {
-      navigate.push("/reviewer/patients");
+      getFilteredList(allFilters)
+      navigate.push({pathname:"/reviewer/patients",query:navigate.query},"/reviewer/patients");
     } else {
       navigate.back();
     }
@@ -1497,6 +1500,7 @@ const enhancer = connect(
     storeCurrentFile: detailsActions.storeFileIdAction,
     getPatientID: detailsActions.getPatientID,
     getActiveTab: allReportActions.activeTab,
+    getFilteredList: reviewerWorkQueueAction.reviewerFilterList,
   }
 );
 export default enhancer(Details);

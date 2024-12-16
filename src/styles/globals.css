@@ -16020,6 +16020,11 @@ border-color: red !important;
 height: 190px !important;
 overflow: scroll;
 }
+
+.reviewerFilterSelect .ant-select-single{
+  width:100%;
+}
+
 .custom-spreadsheet .Spreadsheet__cell {
   min-width: 40px; 
   height: auto;

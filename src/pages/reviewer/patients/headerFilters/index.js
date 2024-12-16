@@ -23,7 +23,7 @@ import MoreFilter from "../../../tenantAdmin/tracking/filters";
 import HeaderFilters from "../../../../components/headerFilters";
 const { RangePicker } = DatePicker;
 
-const allFilters = [
+export const allFilters = [
   "Select Status",
   "Select Priority",
   "Due Date",
@@ -78,6 +78,7 @@ const HeaderFiltersPatients = ({
   setSelectedDates3,
   setSelectedDates4,
   setSelectedDates5,
+  filtersData
 
 }) => {
   const [trackInput, setTrackInput] = useState("");
@@ -157,9 +158,9 @@ const HeaderFiltersPatients = ({
             <label className={styles.label} style={{ marginTop: "40px" }}>
               Select Priority
             </label>
-            <div class="form-group has-search custom-react-selects">
+            <div class="form-group has-search custom-react-selects reviewerFilterSelect">
               <Select
-                value={clear ? null : statusSelectedStatus1}
+                value={clear ? null : statusSelectedStatus1||null}
                 onChange={onChangeStatus1}
                 options={orgAllList1}
                 isSearchable={false}
@@ -175,7 +176,7 @@ const HeaderFiltersPatients = ({
             <label className={styles.label} style={{ marginTop: "40px" }}>
               Select Status
             </label>
-            <div class="form-group has-search custom-react-selects">
+            <div class="form-group has-search custom-react-selects reviewerFilterSelect">
               <Select
                 value={clear ? null : statusSelectedStatus?statusSelectedStatus:null}
                 onChange={onChangeStatus}

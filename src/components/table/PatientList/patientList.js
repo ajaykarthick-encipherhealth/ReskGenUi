@@ -14,6 +14,8 @@ import { truncateString } from "../../patientDetails/details/components/function
 import { actions as supervisorActions } from "../../../stores/supervisor/auditedQueue";
 import { connect } from "react-redux";
 import { setStorage } from "../../../utils/storages";
+import { actions as reviewerWorkQueueAction } from "../../../stores/reviewer/workqueue";
+import { allFilters } from "../../../pages/reviewer/patients/headerFilters";
 
 function PatientTable({
   patinetListAll,
@@ -34,6 +36,7 @@ function PatientTable({
   gotoPatientDetails,
   supervisorActions,
   activeFilters,
+  getFilteredList,
 }) {
   const router = useRouter();
   const handlePriorityChange = async (
@@ -55,15 +58,15 @@ function PatientTable({
     // /reviewer/patients/details
     const targetTd = e.target.closest("td");
     if (targetTd) {
-      setStorage("reviewerFilter", JSON.stringify(activeFilters));
-      setStorage("reviewerEncodedValue", JSON.stringify(params));
+      getFilteredList(allFilters),
+        // setStorage("reviewerEncodedValue", JSON.stringify(params));
       router?.push(
+        { pathname: "/reviewer/patients/details", query: params },
         "/reviewer/patients/details"
-        // query: { ...params, filter:activeFilters },
       );
       const dataIndex = targetTd.parentElement.rowIndex - 1;
       const clickedData = patinetListAll[dataIndex];
-      gotoPatientDetails(clickedData);
+      // gotoPatientDetails(clickedData);
     }
   };
   const renderRows = () => {
@@ -253,5 +256,6 @@ function PatientTable({
 
 const connector = connect((state) => ({}), {
   supervisorActions: supervisorActions.getPriorityChange,
+  getFilteredList: reviewerWorkQueueAction.reviewerFilterList,
 });
 export default connector(PatientTable);

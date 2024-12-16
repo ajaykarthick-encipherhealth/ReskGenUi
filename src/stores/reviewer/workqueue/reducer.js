@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { patientsAction,flagsAction ,getPatientDetails} from "./actions";
+import { patientsAction,flagsAction ,getPatientDetails, reviewerFilterList} from "./actions";
 
 const initialState = {
   loading: true,
@@ -49,6 +49,7 @@ const dashbaordReducer = combineReducers({
   patientsLoading:getReportLoading(patientsAction),
   flags:createReducer(flagsAction),
   patientDetails:getPatientReviewerDetailsState(getPatientDetails),
+  reviewerPatientFilterList: getPatientReviewerDetailsState(reviewerFilterList),
 });
 
 export default dashbaordReducer;

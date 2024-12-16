@@ -42,7 +42,7 @@ const MoreFilter = ({
           type="checkbox"
           onChange={handleHeaderCheckboxChange}
           className={`${styles.customChecked}`}
-          checked={selectAll}
+          checked={selectAll || allFilters?.length===activeFilters?.length}
         />{" "}
         <span style={{ margin: "0 5px" }}>Select All</span>
       </div>

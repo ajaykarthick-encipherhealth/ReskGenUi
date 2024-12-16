@@ -13,6 +13,8 @@ import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { actions as ReviewerAction } from "../../../../stores/reviewer/dashboard";
 import { setStorage } from "../../../../utils/storages";
+import{actions as ReviewerWorkQueueAction} from '../../../../stores/reviewer/workqueue'
+import { allFilters } from "../../patients/headerFilters";
 const DailyTask = ({ getAllDailyTask, getFilteredList, dailyStatusDatas }) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
@@ -298,16 +300,18 @@ const DailyTask = ({ getAllDailyTask, getFilteredList, dailyStatusDatas }) => {
                         onClick={() => {
                           setStorage("filter", JSON.stringify(activeFilters));
                           const params = {
-                            // processedStart: data?.dateString,
-                            // processedEnd: data?.dateString,
-                            dueDateStart: data?.dateString? data?.dateString:"",
-                            dueDateEnd: data?.dateString?data?.dateString:"",
+                            dueDateStart: data?.dateString,
+                            dueDateEnd: data?.dateString,
                           };
-                          setStorage("reviewerDate",JSON.stringify(params))
-                          router?.push({
-                            pathname: "/reviewer/patients",
-                            // query: params,
-                          });
+                          setStorage("reviewerDate", JSON.stringify(params));
+                          getFilteredList(allFilters);
+                          router?.push(
+                            {
+                              pathname: "/reviewer/patients",
+                              query: params,
+                            },
+                            "/reviewer/patients"
+                          );
                         }}
                       >
                         <div className={styles.headerDisplay}>
@@ -340,23 +344,34 @@ const DailyTask = ({ getAllDailyTask, getFilteredList, dailyStatusDatas }) => {
                                   <div
                                     style={{ display: "flex" }}
                                     onClick={() => {
-                                      const params ={
-                                          // processedStart: data?.dateString,
-                                          // processedEnd: data?.dateString,
-                                          dueDateStart: data?.dateString?data?.dateString:"",
-                                          dueDateEnd: data?.dateString? data?.dateString:'',
-                                          statusSelectedStatus: item?.name?item?.name:"",
-                                        }
-                                      
+                                      const params = {
+                                        // processedStart: data?.dateString,
+                                        // processedEnd: data?.dateString,
+                                        dueDateStart: data?.dateString
+                                          ? data?.dateString
+                                          : "",
+                                        dueDateEnd: data?.dateString
+                                          ? data?.dateString
+                                          : "",
+                                        statusSelectedStatus: item?.name,
+                                      };
+
                                       setStorage(
                                         "filter",
                                         JSON.stringify(activeFilters)
                                       );
-                                      setStorage("reviewerDueDate",JSON.stringify(params))
-                                      router?.push({
-                                        pathname: "/reviewer/patients",
-                                        // search: `params=${params}`,
-                                      });
+                                      setStorage(
+                                        "reviewerDueDate",
+                                        JSON.stringify(params)
+                                      );
+                                      getFilteredList(allFilters);
+                                      router?.push(
+                                        {
+                                          pathname: "/reviewer/patients",
+                                          query: params,
+                                        },
+                                        "/reviewer/patients"
+                                      );
                                     }}
                                   >
                                     <div
@@ -410,7 +425,7 @@ const connector = connect(
   }),
   {
     getAllDailyTask: ReviewerAction.dailyTaskAction,
-    getFilteredList: ReviewerAction.reviewerFilterList,
+    getFilteredList: ReviewerWorkQueueAction.reviewerFilterList,
   }
 );
 export default connector(DailyTask);

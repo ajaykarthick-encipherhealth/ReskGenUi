@@ -7,11 +7,10 @@ export const patientsAction = createActionThunk(
   network.patientsList
 );
 
-export const flagsAction = createActionThunk(
-  "FLAGS_LIST",
-  network.flagsList
-);
+export const flagsAction = createActionThunk("FLAGS_LIST", network.flagsList);
 
 export const getPatientDetails = createAction(
   "GET_ALL_REVIEWER_PATIENTS_FILES"
 );
+
+export const reviewerFilterList = createAction("GET_REVIEWER_FILTERED_LIST");
