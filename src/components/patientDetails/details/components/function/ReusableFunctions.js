@@ -246,7 +246,7 @@ export const getEncounterDateBackgroundLab = ({
                 ite.dos == res
             );
             if (selectedMeatData) {
-              setSearch({
+               return setSearch({
                 value: moment(selectedMeatData?.dos).format("MM/DD/YYYY"),
                 page: selectedMeatData?.startPageNumber,
               });

@@ -62,7 +62,7 @@ export const getProviderNameTag = ({
               // } else {
               //   getCurrentDiseaseType && getCurrentDiseaseType(true);
               // }
-              // storeFileDetails(headerResult[0]?.fileId)
+              // storeFileDetails(headerResult[0]?.fileId)      
               isShow && findProviderNameDocument({
                 data: headerResult[0],
                 diagnosisCode: diagnosisCode,

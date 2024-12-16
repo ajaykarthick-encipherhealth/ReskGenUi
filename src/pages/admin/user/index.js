@@ -532,6 +532,7 @@ const UserList = ({
                       allowClear
                       style={{ height: "42px" }}
                     >
+                      <Select.Option value="TENANT_ADMIN">TENANT ADMIN</Select.Option>
                       <Select.Option value="REVIEWER">REVIEWER</Select.Option>
                       <Select.Option value="SUPERVISOR">
                         SUPERVISOR

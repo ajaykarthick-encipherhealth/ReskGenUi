@@ -287,7 +287,8 @@ const LabCards = ({
                                     setSelectMeatResult: "",
                                     getSelectedDosPageNumber:
                                       getSelectedDosPageNumber,
-                                      setLabData: setLabData
+                                      setLabData: setLabData,
+                                      isShow: data?.isShow,
                                   })}
                                 </div>
                                 <div
@@ -309,9 +310,10 @@ const LabCards = ({
                                       patientDocumentResult,
                                     popup,
                                     hyperlinks: data?.hyperlinks,
+                                    isShow: data?.isShow,
                                   })}
                                 </div>
-                                {data.providerName.length == 0 && (
+                                {/* {data.providerName.length == 0 && (
                                   <div
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
@@ -351,10 +353,11 @@ const LabCards = ({
                                       popup: "",
                                       getSelectedDosPageNumber:
                                         getSelectedDosPageNumber,
-                                        setLabData: setLabData
+                                        setLabData: setLabData,
+                                        isShow: data?.isShow,
                                     })}
                                   </div>
-                                )}
+                                )} */}
                               </div>
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
@@ -537,6 +540,7 @@ const LabCards = ({
                                     popup: "",
                                     getSelectedDosPageNumber:
                                       getSelectedDosPageNumber,
+                                      isShow: data?.isShow,
                                   })}
                                 </div>
                                 <div

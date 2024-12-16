@@ -162,7 +162,7 @@ const DetailedPdfTable = ({
                       <td className={`${TableStyle.childBorder} px-1`}>
                         {row?.fileId ? row?.fileId : "---"}
                       </td>
-                      <td className="px-0">
+                      <td className={`${TableStyle.childBorder} px-0`}>
                         {row?.fileName ? row?.fileName : "---"}
                       </td>
                       <td
