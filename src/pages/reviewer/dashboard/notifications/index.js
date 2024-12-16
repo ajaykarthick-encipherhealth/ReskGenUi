@@ -65,7 +65,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       <HeadTitle
         header="Notifications"
         anchorTag="anchor"
-        handleOpen={handleOpen}
+        handleOpen={notificationResult?.length>0 && handleOpen}
       />
 
       <div className={styles.card4}>

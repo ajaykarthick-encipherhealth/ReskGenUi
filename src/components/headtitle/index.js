@@ -77,7 +77,7 @@ const HeadTitle = ({
         )}
       </div>
       {anchorTag && (
-        <span className={styles.anchor} onClick={handleOpen}>
+        <span className={styles.anchor} onClick={typeof handleOpen === "function" ?handleOpen:undefined}>
           View All
         </span>
       )}

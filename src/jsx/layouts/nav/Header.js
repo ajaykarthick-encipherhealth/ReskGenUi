@@ -885,6 +885,9 @@ const Header = ({
                   deleteProfile();
                   setOpenUploader(false);
                   setSelectedFile(null);
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                  }
                 }}
                 disabled={loading}
               >
