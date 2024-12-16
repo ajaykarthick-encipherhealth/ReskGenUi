@@ -16027,9 +16027,11 @@ overflow: scroll;
 }
 
 .custom-spreadsheet .Spreadsheet__cell {
-  min-width: 40px; 
   height: auto;
   white-space: nowrap; 
   overflow: hidden;
   text-overflow: ellipsis;
+  padding:10px !important;
+  min-width: 20rem !important;
 }
+
