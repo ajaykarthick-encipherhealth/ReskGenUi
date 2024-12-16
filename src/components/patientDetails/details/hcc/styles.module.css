@@ -340,7 +340,7 @@
 }
 .dosContainer {
   border: 1px solid #e6e6e6 !important;
-  padding: 3px 0px;
+  padding: 5px 0px;
   border-radius: 6px;
   cursor: pointer;
   margin-bottom: 5px;
@@ -421,6 +421,7 @@
 .dosLable {
   font-size: 14px;
   font-weight: 600;
+  margin-top: 3px;
 }
 .substringHead {
   color: rgba(0, 0, 0, 0.88);
@@ -474,3 +475,6 @@
 .tabslistConatiner{
   display: flex;
 }
+ .header{
+  width:100%;
+ }

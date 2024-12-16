@@ -10478,7 +10478,7 @@ p,
 
 .profile-tab .nav-item .nav-link {
   font-size: 1rem;
-  margin-right: 1.875rem;
+  /* margin-right: 7px; */
   transition: all 0.5s ease-in-out;
   border: none;
   border-bottom: 0.0125rem solid transparent;
@@ -15011,7 +15011,7 @@ input::-webkit-inner-spin-button {
   scrollbar-width: none;
 }
 .dosSelect > .ant-select-selector {
-  width: 200px !important;
+  width: 170px !important;
   text-align: center;
   font-size: 13px !important;
   font-weight: 600;

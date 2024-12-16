@@ -1694,10 +1694,10 @@
   background: #c2e1f9 !important;
   border: none !important;
   box-shadow: none !important;
-  border-radius: 6px;
-  width: 170px !important;
+  border-radius: 5px;
+  width: 150px !important;
   padding: 10px;
-  /* height: 35px !important; */
+  height: 35px !important;
 }
 
 .holdBtnHcc {

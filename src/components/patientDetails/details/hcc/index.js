@@ -82,12 +82,12 @@ const Hcc = ({
         if (res) {
           var dosLable = (
             <>
-              <div className="d-flex justify-content-between">
-                <div>
+              <div className="d-flex justify-content-between gap-1 align-items-center ">
+                <div className="d-flex gap-1">
                   <span>
                     {res?.stateIndicators?.includes("CHART") && (
                       <span
-                        className="p-1 rounded-2 mx-1"
+                        className="p-1 rounded-1"
                         style={{
                           background: "#87d068",
                           color: "#fff",
@@ -164,72 +164,70 @@ const Hcc = ({
 
   const handleOptions = (value) => {
     // if (value) {
-      setIsLoading(true);
-      setSelectDosValue(value);
-      const filteredDos = pageNumberOptions?.filter(
-        (data) => data?.dos === value
+    setIsLoading(true);
+    setSelectDosValue(value);
+    const filteredDos = pageNumberOptions?.filter(
+      (data) => data?.dos === value
+    );
+    const filteredDos1 = dosSummariesList?.find(
+      (data) => data?.value === value
+    );
+    storeFileDetails(filteredDos1?.details?.fileId || null);
+    setSelectedFile(filteredDos1?.details?.fileId || "");
+    if (filteredDos1?.details?.stateIndicators?.includes("LAB")) {
+      // getLabPDFFile({ fileId: filteredDos1.details?.fileId });
+    } else if (filteredDos1?.details?.stateIndicators?.includes("RADIOLOGY")) {
+      // getLabPDFFile({ fileId: filteredDos1.details?.fileId });
+    } else {
+      // if (!filteredDos1?.details?.fileId) {
+      //   getLabPDFFile({
+      //     fileId:
+      //       patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath,
+      //   });
+      //   getPatientHccFile(
+      //     patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
+      //   );
+      // } else {
+      //   getLabPDFFile({ fileId: filteredDos1?.details?.fileId });
+      // }
+
+      getSelectedDosPageNumber(
+        filteredDos?.length > 0 ? filteredDos[0]?.startPageNumber : null
       );
-      const filteredDos1 = dosSummariesList?.find(
-        (data) => data?.value === value
+    }
+
+    if (value) {
+      getSelectedDos(value);
+    } else {
+      getSelectedDos("");
+    }
+    const patientId = getStorage("patientId");
+    const role = getStorage("role");
+
+    if (value) {
+      getpatientDetailsData(
+        patientId,
+        null,
+        moment(value).format("YYYY-MM-DD"),
+        "",
+        role
       );
-      storeFileDetails(filteredDos1?.details?.fileId || null);
-      setSelectedFile(filteredDos1?.details?.fileId || "");
-      if (filteredDos1?.details?.stateIndicators?.includes("LAB")) {
-        // getLabPDFFile({ fileId: filteredDos1.details?.fileId });
-      } else if (
-        filteredDos1?.details?.stateIndicators?.includes("RADIOLOGY")
-      ) {
-        // getLabPDFFile({ fileId: filteredDos1.details?.fileId });
-      } else {
-        // if (!filteredDos1?.details?.fileId) {
-        //   getLabPDFFile({
-        //     fileId:
-        //       patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath,
-        //   });
-        //   getPatientHccFile(
-        //     patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
-        //   );
-        // } else {
-        //   getLabPDFFile({ fileId: filteredDos1?.details?.fileId });
-        // }
-
-        getSelectedDosPageNumber(
-          filteredDos?.length > 0 ? filteredDos[0]?.startPageNumber : null
-        );
-      }
-
-      if (value) {
-        getSelectedDos(value);
-      } else {
-        getSelectedDos("");
-      }
-      const patientId = getStorage("patientId");
-      const role = getStorage("role");
-
-      if (value) {
-        getpatientDetailsData(
-          patientId,
-          null,
-          moment(value).format("YYYY-MM-DD"),
-          "",
-          role
-        );
-      } else {
-        getpatientDetailsData(
-          patientId,
-          patientDetailsResult?.data?.response?.processedYear,
-          null,
-          "",
-          role
-        );
-      }
+    } else {
+      getpatientDetailsData(
+        patientId,
+        patientDetailsResult?.data?.response?.processedYear,
+        null,
+        "",
+        role
+      );
+    }
     // } else {
-      setActions({
-        showDisease: !value && false,
-        reEvaluate: !value && false,
-        showActionsPop: !value &&false,
-      });
-      // setSelectDosValue(null)
+    setActions({
+      showDisease: !value && false,
+      reEvaluate: !value && false,
+      showActionsPop: !value && false,
+    });
+    // setSelectDosValue(null)
     // }
   };
   const handleChangePageNumber = async (value) => {
@@ -378,7 +376,6 @@ const Hcc = ({
           </div>
         </div>
       </div>
-
       {/* <div className="d-flex justify-content-end align-items-center cursor-pointer">
         {" "}
         <button
@@ -405,141 +402,140 @@ const Hcc = ({
             <div className="row">
               <div className="col-12">
                 <Nav as="ul" className="nav nav-tabs">
-                  <div className="w-100 d-flex justify-content-between">
+                  <div
+                    className={`d-flex justify-content-between flex-wrap   ${styles.header}`}
+                  >
                     <div className="d-flex">
-                      <Nav.Item as="li" className="nav-item ">
-                        <Nav.Link
-                          to="#my-posts"
-                          eventKey={1}
-                          className={visitStyles.navColor}
-                          onClick={() => {
-                            selectTab(
-                              1,
-                              setFlagTagActive,
-                              setActiveTabHead,
-                              setActiveComboTree,
-                              setPopoverVisible
-                            );
-                            getCurrentDiseaseType(true);
-                          }}
-                        >
-                          File
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <Nav.Link
-                          to="#my-posts"
-                          eventKey={2}
-                          className={` text-truncate ${visitStyles.navColor}`}
-                          activeClassName={visitStyles.activeLink}
-                          onClick={() =>
-                            selectTab(
-                              2,
-                              setFlagTagActive,
-                              setActiveTabHead,
-                              setActiveComboTree,
-                              setPopoverVisible
-                            )
-                          }
-                        >
-                          Visit Data
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <Nav.Link
-                          to="#my-posts"
-                          eventKey={3}
-                          className={` text-truncate ${visitStyles.navColor}`}
-                          onClick={() =>
-                            selectTab(
-                              3,
-                              setFlagTagActive,
-                              setActiveTabHead,
-                              setActiveComboTree,
-                              setPopoverVisible
-                            )
-                          }
-                        >
-                          Combination Codes
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <Nav.Link
-                          to="#my-posts"
-                          eventKey={4}
-                          className={` text-truncate ${visitStyles.navColor}`}
-                          onClick={() =>
-                            selectTab(
-                              4,
-                              setFlagTagActive,
-                              setActiveTabHead,
-                              setActiveComboTree,
-                              setPopoverVisible
-                            )
-                          }
-                        >
-                          MEAT Criteria
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <Nav.Link
-                          to="#my-posts"
-                          eventKey={5}
-                          className={` text-truncate ${visitStyles.navColor}`}
-                          onClick={() =>
-                            selectTab(
-                              5,
-                              setFlagTagActive,
-                              setActiveTabHead,
-                              setActiveComboTree,
-                              setPopoverVisible,
-                              setActiveMeatTitle
-                            )
-                          }
-                        >
-                          RAF Score
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <Nav.Link
-                          to="#my-posts"
-                          eventKey={6}
-                          className={` text-truncate ${visitStyles.navColor}`}
-                          onClick={() =>
-                            selectTab(
-                              6,
-                              setFlagTagActive,
-                              setActiveTabHead,
-                              setActiveComboTree,
-                              setPopoverVisible
-                            )
-                          }
-                        >
-                          Query
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <Select
-                          placeholder="Select DOS"
-                          onChange={handleOptions}
-                          className="dosSelect"
-                          allowClear={true}
-                          value={selectDosValue ? selectDosValue : null}
-                        >
-                          {dosSummariesList?.map((data) => (
-                            <Option key={data?.value} value={data?.value}>
-                              {data.label}
-                            </Option>
-                          ))}
-                        </Select>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item mx-2">
-                        {getStorage("role") != "admin" && selectDosValue && (
-                          <YearAndDosStatus setIsLoading={setIsLoading} />
-                        )}
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item ">
-                      {activeTabHead == 1 && (
+                    <Nav.Item as="li" className="nav-item ">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey={1}
+                        className={visitStyles.navColor}
+                        onClick={() => {
+                          selectTab(
+                            1,
+                            setFlagTagActive,
+                            setActiveTabHead,
+                            setActiveComboTree,
+                            setPopoverVisible
+                          );
+                          getCurrentDiseaseType(true);
+                        }}
+                      >
+                        File
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey={2}
+                        className={` text-truncate ${visitStyles.navColor}`}
+                        activeClassName={visitStyles.activeLink}
+                        onClick={() =>
+                          selectTab(
+                            2,
+                            setFlagTagActive,
+                            setActiveTabHead,
+                            setActiveComboTree,
+                            setPopoverVisible
+                          )
+                        }
+                      >
+                        Visit Data
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey={3}
+                        className={` text-truncate ${visitStyles.navColor}`}
+                        onClick={() =>
+                          selectTab(
+                            3,
+                            setFlagTagActive,
+                            setActiveTabHead,
+                            setActiveComboTree,
+                            setPopoverVisible
+                          )
+                        }
+                      >
+                        Combination Codes
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey={4}
+                        className={` text-truncate ${visitStyles.navColor}`}
+                        onClick={() =>
+                          selectTab(
+                            4,
+                            setFlagTagActive,
+                            setActiveTabHead,
+                            setActiveComboTree,
+                            setPopoverVisible
+                          )
+                        }
+                      >
+                        MEAT Criteria
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey={5}
+                        className={` text-truncate ${visitStyles.navColor}`}
+                        onClick={() =>
+                          selectTab(
+                            5,
+                            setFlagTagActive,
+                            setActiveTabHead,
+                            setActiveComboTree,
+                            setPopoverVisible,
+                            setActiveMeatTitle
+                          )
+                        }
+                      >
+                        RAF Score
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey={6}
+                        className={` text-truncate ${visitStyles.navColor}`}
+                        onClick={() =>
+                          selectTab(
+                            6,
+                            setFlagTagActive,
+                            setActiveTabHead,
+                            setActiveComboTree,
+                            setPopoverVisible
+                          )
+                        }
+                      >
+                        Query
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <div className="d-flex gap-3 mt-1 mx-2">
+                      <Select
+                        placeholder="Select DOS"
+                        onChange={handleOptions}
+                        className="dosSelect"
+                        allowClear={true}
+                        value={selectDosValue ? selectDosValue : null}
+                      >
+                        {dosSummariesList?.map((data) => (
+                          <Option key={data?.value} value={data?.value}>
+                            {data.label}
+                          </Option>
+                        ))}
+                      </Select>
+                      {getStorage("role") != "admin" && selectDosValue && (
+                        <YearAndDosStatus setIsLoading={setIsLoading} isDosStatus={true}/>
+                      )}
+                       {activeTabHead == 1 && (
                         <Popover
                           open={popoverVisible}
                           content={PopContent}
@@ -549,16 +545,18 @@ const Hcc = ({
                           onOpenChange={() => setPopoverVisible(false)}
                         >
                           <div
-                            className={` d-flex align-items-center justify-content-center ${styles.dosContainer}`}
+                            className={` d-flex align-items-center  justify-content-center gap-2 ${styles.dosContainer}`}
                             onClick={() => {
                               setPopoverVisible(true);
                             }}
                           >
-                            <span className={`text-truncate  ${styles.dosPageNumber}`}>
+                            <span
+                              className={`text-truncate  ${styles.dosPageNumber}`}
+                            >
                               Select Dos Page Number
                             </span>
                             <FontAwesomeIcon
-                            className="mt-1"
+                              className="mt-1"
                               icon={faAngleDown}
                               style={{
                                 size: 10,
@@ -569,9 +567,7 @@ const Hcc = ({
                           </div>
                         </Popover>
                       )}
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                         {flagTagActive ? (
+                          {flagTagActive ? (
                         <div>
                           <div>
                             <Popover
@@ -652,20 +648,19 @@ const Hcc = ({
                       </div> */}
                         </div>
                       ) : null}
-                      </Nav.Item>
-                    
+                      </div>
+                    </Nav.Item> 
                     </div>
-                    {/* <div
-                      className="d-flex justify-content-end align-items-center"
-                    >
-                      <Popover
+                    <div>
+                      <Nav.Item as="li" className="nav-item">
+                    <Popover
                         open={actions.showActionsPop}
                         trigger={["click"]}
                         placement="bottom"
                         content={hideDiseasePopContent}
                       >
                         <button
-                          className={`${visitStyles.actionBtn} px-4 py-1 rounded-md`}
+                          className={`${visitStyles.actionBtn} px-3 mb-1 py-1 rounded-md`}
                           onClick={() =>
                             setActions({
                               showActionsPop: !actions.showActionsPop,
@@ -677,12 +672,12 @@ const Hcc = ({
                           Action
                         </button>
                       </Popover>
-                    </div> */}
+                      </Nav.Item>
+                    </div>
                   </div>
                 </Nav>
               </div>
             </div>
-
             <Tab.Content>
               <Tab.Pane id="my-posts" eventKey={1}>
                 <File

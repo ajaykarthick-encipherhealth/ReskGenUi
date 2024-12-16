@@ -382,7 +382,7 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title="COMPLETED">
           <Image
             src={Completed}
-            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            style={{ height: "20px", width: "20px",marginTop: "1px"}}
           />
         </Tooltip>
       );
@@ -392,7 +392,7 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title="PENDING">
           <Image
             src={Pending}
-            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            style={{ height: "20px", width: "20px", marginTop: "1px" }}
           />
         </Tooltip>
       );
@@ -402,7 +402,7 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title="DECLINED">
           <Image
             src={Declined}
-            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
         </Tooltip>
       );
@@ -412,7 +412,7 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title="NOT COMPUTED">
           <Image
             src={Pending}
-            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
         </Tooltip>
       );
@@ -421,7 +421,7 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title="PENDING">
           <Image
             src={Pending}
-            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
         </Tooltip>
       );
@@ -430,7 +430,7 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title="HOLD">
           <Image
             src={Hold}
-            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
         </Tooltip>
       );
@@ -439,7 +439,7 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title="ABORTED BY CRON">
           <Image
             src={Abort}
-            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
         </Tooltip>
       );
@@ -448,7 +448,7 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title="AUDIT PENDING">
           <Image
             src={AuditPending}
-            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
         </Tooltip>
       );
@@ -458,7 +458,7 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title=" AUDIT HOLD">
           <Image
             src={AuditHold}
-            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
         </Tooltip>
       );
@@ -467,7 +467,7 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title=" REAUDIT">
           <Image
             src={ReAudit}
-            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
         </Tooltip>
       );
@@ -476,7 +476,7 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title=" AUDITED">
           <Image
             src={AuditedTrack}
-            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
         </Tooltip>
       );
@@ -485,7 +485,7 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title=" NOT AUDIT">
           <Image
             src={NotAudited}
-            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
         </Tooltip>
       );
@@ -494,7 +494,7 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title=" AUDIT DECLINED">
           <Image
             src={AuditedDeclineTrack}
-            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            style={{ height: "20px", width: "20px", marginTop: "1px" }}
           />
         </Tooltip>
       );

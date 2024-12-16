@@ -15,6 +15,7 @@ const YearAndDosStatus = ({
   getpatientDetailsData,
   setIsLoading,
   getPatientDosList,
+  isDosStatus
 }) => {
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
