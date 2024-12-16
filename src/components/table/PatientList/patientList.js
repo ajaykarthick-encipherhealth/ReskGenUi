@@ -59,14 +59,14 @@ function PatientTable({
     const targetTd = e.target.closest("td");
     if (targetTd) {
       getFilteredList(allFilters),
-        // setStorage("reviewerEncodedValue", JSON.stringify(params));
+        setStorage("reviewerEncodedValue", JSON.stringify(params));
       router?.push(
         { pathname: "/reviewer/patients/details", query: params },
         "/reviewer/patients/details"
       );
       const dataIndex = targetTd.parentElement.rowIndex - 1;
       const clickedData = patinetListAll[dataIndex];
-      // gotoPatientDetails(clickedData);
+      gotoPatientDetails(clickedData);
     }
   };
   const renderRows = () => {

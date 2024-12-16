@@ -87,7 +87,6 @@ const File = ({
       setMeatCriteriaList,
       patientDetailsResult,
       "",
-      "",
       setAllDisList,
       "",
       "",

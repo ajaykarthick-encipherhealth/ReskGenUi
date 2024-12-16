@@ -420,10 +420,12 @@ const getEncounterDetails = async ({
   storeFileDetails,
 }) => {
   selectMeatResult ? selectMeatResult(datas) : "";
-  const findPageNumber = fileDosPageNumberList?.filter(
+  const findPageNumber = !fileDosPageNumberList ? [] : fileDosPageNumberList?.filter(
     (i) =>
       moment(i.dos).format("MM-DD-YYYY") === moment(date).format("MM-DD-YYYY")
   );
+  console.log(findPageNumber, fileDosPageNumberList, "findPageNumber");
+  
   if (findPageNumber?.length != 0) {
     storeFileDetails && storeFileDetails(findPageNumber[0]?.fileId);
     if (setIsModalOpenValidCodes) {

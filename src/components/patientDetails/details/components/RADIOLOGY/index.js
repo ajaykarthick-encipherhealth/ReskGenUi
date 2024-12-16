@@ -65,7 +65,8 @@ const RadiologyCards = ({
   popup,
   getSelectedDosPageNumber,
   loading,
-  isMeatBlocked
+  isMeatBlocked,
+  isBlockedEdit
 }) => {
  
   const [fileInitialPage, setFileInitialPage] = useState(null);
@@ -167,7 +168,7 @@ const RadiologyCards = ({
                                     {data.diagnosisCode}
                                   </span>
 
-                                  {!isDeletedCodes && (
+                                  {!isDeletedCodes || isBlockedEdit && (
                                     <FontAwesomeIcon
                                       icon={faPen}
                                       style={{ cursor: "pointer" }}
@@ -286,7 +287,8 @@ const RadiologyCards = ({
                                     setSelectMeatResult: "",
                                     getSelectedDosPageNumber:
                                       getSelectedDosPageNumber,
-                                      setLabData: setLabData
+                                      setLabData: setLabData,
+                                      isShow: data?.isShow,
                                   })}
                                 </div>
                                 <div
@@ -308,6 +310,7 @@ const RadiologyCards = ({
                                       patientDocumentResult,
                                     popup,
                                     hyperlinks: data?.hyperlinks,
+                                    isShow: data?.isShow,
                                   })}
                                 </div>
                                 {data.providerName.length == 0 && (
@@ -536,6 +539,7 @@ const RadiologyCards = ({
                                     popup: "",
                                     getSelectedDosPageNumber:
                                       getSelectedDosPageNumber,
+                                      isShow: data?.isShow,
                                   })}
                                 </div>
                                 <div
@@ -606,7 +610,7 @@ const RadiologyCards = ({
 
 const enhancer = connect(
   (state) => ({
-    fileDosPageNumberList: state?.patientDetails?.details?.labDosResult,
+    fileDosPageNumberList: state?.patientDetails?.details?.radiologyDosResult,
     loading: state?.patientDetails?.details?.loading,
     labFile: state?.patientDetails?.details?.labPDFDetails,
   }),

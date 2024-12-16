@@ -84,20 +84,21 @@ const Radiology = ({
       getRadiologyDetails(
         patientId,
         selectedYearValue,
-        moment(dosSummariesList[0]?.value).format("YYYY-MM-DD"),
+        "",
+        // moment(dosSummariesList[0]?.value).format("YYYY-MM-DD"),
         ""
       );
     }
   };
 
-  useEffect(() => {
-    if (patientDosResult?.data?.response?.length>0) {
-      getRadiologyFileDetails(
-        radiologyDetailsResult?.data?.response[0]?.fileId||""
-      );
-      setIsLoading(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (patientDosResult?.data?.response?.length > 0) {
+  //     getRadiologyFileDetails(
+  //       radiologyDetailsResult?.data?.response[0]?.fileId || ""
+  //     );
+  //     setIsLoading(true);
+  //   }
+  // }, []);
 
   const getAllProcessYearSelect = async (result) => {
     var dosYearArr = [];
@@ -115,22 +116,21 @@ const Radiology = ({
   }, [processedYearResult]);
 
   useEffect(() => {
-    if (patientDosResult?.data?.response?.length>0) {
+    if (patientDosResult?.data?.response?.length > 0) {
       getRadiologyFileDetails(
-        radiologyDetailsResult?.data?.response[0]?.fileId || ""
+        patientDosResult?.data?.response[0]?.fileId || ""
       );
       setIsLoading(true);
     }
-  }, []);
+  }, [radiologyDetailsResult?.data?.response]);
 
   useEffect(() => {
     setTimeout(() => {
       setActiveMeatTitle(null);
     }, 10000);
   }, [activeMeatTitle]);
-
   useEffect(() => {
-    if (patientDosResult?.data?.response?.length>0) {
+    if (patientDosResult?.data?.response?.length > 0) {
       setSelectDosValue();
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
@@ -149,6 +149,7 @@ const Radiology = ({
         }
       });
       setDosSummariesList(dosList);
+
       if (dosList?.length != 0) {
         setSelectDosValue(dosList[0]?.value);
         const patientId = getStorage("patientId");
@@ -163,7 +164,7 @@ const Radiology = ({
         );
       }
     }
-  }, []);
+  }, [patientDosResult?.data?.response]);
 
   const handleChangePageNumber = async (value) => {
     setPopoverVisible(false);
