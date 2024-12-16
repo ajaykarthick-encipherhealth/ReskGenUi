@@ -475,7 +475,7 @@ const Export = ({
                     </div>
                   </div>
                   <div className={`p-2 ${styles.reportLabel}`}>
-                    Select the fields you want to sent
+                    Select the fields you want to send
                   </div>
                   <div
                     style={{
@@ -519,7 +519,7 @@ const Export = ({
               <div className={`col-md-${selectedReportInfo ? "12" : "9"}`}>
                 <div className={`p-2 `}>Sent To</div>
                 <div className={`p-2 ${styles.reportLabel}`}>
-                  Select the fields you want to sent
+                  Select the users you want to send
                 </div>
                 <div className="d-flex">
                   <div className="col-md-9">
@@ -621,7 +621,8 @@ const Export = ({
                   {display ? (
                     <div>
                       {userList?.map((item, index) => (
-                        <div className={styles.userName}>
+                        <div className="pt-1">
+   <div className={styles.userName}>
                           <div key={index} className={styles.userRoleContainer}>
                             {item?.user?.length > 0 && Array.isArray(item?.user)
                               ? item?.user?.map(
@@ -641,6 +642,8 @@ const Export = ({
                             {SVGICON.deleteIcon}
                           </div>
                         </div>
+                          </div>
+                     
                       ))}
                     </div>
                   ) : (
