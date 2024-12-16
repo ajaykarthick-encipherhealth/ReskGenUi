@@ -15991,10 +15991,6 @@ input::-webkit-inner-spin-button {
 .searchStyle .ant-input-affix-wrapper {
   align-items: center;
 }
-.custom-spreadsheet .Spreadsheet__cell {
-  height: auto; /* Adjust the value as needed */
-  line-height: 0px; /* Make the text vertically centered */
-}
 
 .dateRangesHeight .ant-picker{
   height: 48px !important;
@@ -16023,4 +16019,11 @@ border-color: red !important;
 .custom-menu ul {
 height: 190px !important;
 overflow: scroll;
+}
+.custom-spreadsheet .Spreadsheet__cell {
+  min-width: 40px; 
+  height: auto;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
