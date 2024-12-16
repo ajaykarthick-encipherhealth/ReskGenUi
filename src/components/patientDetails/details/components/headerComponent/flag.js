@@ -16,7 +16,7 @@ const Flag = ({ patienIdDetails, patientDetails, flagsDetailsResult }) => {
         >
           <h5 className={`font-weight-bold`}>Flag</h5>
           <div className="pt-1">
-            {flagsDetailsResult?.response?.length > 0 &&
+            {flagsDetailsResult?.response?.length > 0 ?
               (() => {
                 const sortedFlags = flagsDetailsResult.response.sort(
                   (a, b) => a.flagDetails?.priority - b.flagDetails?.priority
@@ -79,7 +79,7 @@ const Flag = ({ patienIdDetails, patientDetails, flagsDetailsResult }) => {
                     </div>
                   </div>
                 );
-              })()}
+              }):"---"}
           </div>
         </div>
         <div

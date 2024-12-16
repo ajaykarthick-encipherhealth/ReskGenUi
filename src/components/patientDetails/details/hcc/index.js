@@ -403,9 +403,9 @@ const Hcc = ({
               <div className="col-12">
                 <Nav as="ul" className="nav nav-tabs">
                   <div
-                    className={`d-flex justify-content-between flex-wrap   ${styles.header}`}
+                    className={`d-flex justify-content-between flex-wrap `}
                   >
-                    <div className="d-flex">
+                    {/* <div className="d-flex"> */}
                     <Nav.Item as="li" className="nav-item ">
                       <Nav.Link
                         to="#my-posts"
@@ -517,6 +517,8 @@ const Hcc = ({
                         Query
                       </Nav.Link>
                     </Nav.Item>
+                   
+                    <div>
                     <Nav.Item as="li" className="nav-item">
                       <div className="d-flex gap-3 mt-1 mx-2">
                       <Select
@@ -651,7 +653,8 @@ const Hcc = ({
                       </div>
                     </Nav.Item> 
                     </div>
-                    <div>
+                    </div>
+                    <div className="mt-1">
                       <Nav.Item as="li" className="nav-item">
                     <Popover
                         open={actions.showActionsPop}
@@ -660,7 +663,7 @@ const Hcc = ({
                         content={hideDiseasePopContent}
                       >
                         <button
-                          className={`${visitStyles.actionBtn} px-3 mb-1 py-1 rounded-md`}
+                          className={`${visitStyles.actionBtn} px-3  py-1 rounded-md`}
                           onClick={() =>
                             setActions({
                               showActionsPop: !actions.showActionsPop,
@@ -674,7 +677,7 @@ const Hcc = ({
                       </Popover>
                       </Nav.Item>
                     </div>
-                  </div>
+                  {/* </div> */}
                 </Nav>
               </div>
             </div>

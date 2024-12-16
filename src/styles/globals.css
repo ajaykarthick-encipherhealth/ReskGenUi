@@ -14269,7 +14269,7 @@ overflow: scroll;
   border: none !important;
   box-shadow: none !important;
   width: 100% !important;
-  padding: 10px !important;
+  padding: 8px !important;
 }
 .auditHoldBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #ce9900 !important;
@@ -14309,6 +14309,7 @@ overflow: scroll;
   width: 170px !important;
   padding: 10px !important;
 }
+
 
 .auditPendingBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #e28213 !important;

@@ -490,16 +490,16 @@ const YearAndDosStatus = ({
                   type="primary"
                   className={
                     patienIdDetails?.processedStatus == "AUDITHOLD"
-                      ? `auditHoldBtnHcc`
+                      ? `${isDosStatus && `${visitStyles.statusBtn}`} auditHoldBtnHcc`
                       : patienIdDetails?.processedStatus == "AUDIT_PENDING"
-                      ? `auditPendingBtnHcc`
+                           ? `${isDosStatus && `${visitStyles.statusAuditBtn}`} auditPendingBtnHcc`
                       : patienIdDetails?.processedStatus == "AUDITED"
-                      ? `auditBtnHcc`
+                           ? `${isDosStatus && `${visitStyles.statusBtn}`} auditBtnHcc`
                       : patienIdDetails?.processedStatus == "REAUDIT"
-                      ? `reauditBtnHcc`
+                           ? `${isDosStatus && `${visitStyles.statusAuditBtn}`} reauditBtnHcc`
                       : patienIdDetails?.processedStatus == "AUDIT_DECLINED"
-                      ? `declineBtnHcc`
-                      : `auditBtnHcc`
+                           ? `${isDosStatus && `${visitStyles.statusAuditBtn}`} declineBtnHcc`
+                           : `${isDosStatus && `${visitStyles.statusBtn}`} auditHoldBtnHcc`
                   }
                 >
                   <span>
@@ -530,7 +530,8 @@ const YearAndDosStatus = ({
                 >
                   <Button
                     type="primary"
-                    className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
+                    className={`${visitStyles.completedBtnHcc} ${isDosStatus && `${visitStyles.statusBtn}`} completedBtnHcc`}
+
                   >
                     <span>COMPLETED</span>
                     <span style={{ marginLeft: "10px" }}>
@@ -553,7 +554,8 @@ const YearAndDosStatus = ({
                 >
                   <Button
                     type="primary"
-                    className={`declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
+                    className={`${visitStyles.declinedBtnHcc} ${isDosStatus && `${visitStyles.statusBtn}`} declinedBtnHcc`}
+
                   >
                     <span>DECLINED</span>
                     <span style={{ marginLeft: "10px" }}>
@@ -576,7 +578,8 @@ const YearAndDosStatus = ({
                 >
                   <Button
                     type="primary"
-                    className={`holdBtnHcc ${visitStyles.holdBtnHccs}`}
+                    className={`${visitStyles.holdBtnHccs} ${isDosStatus && `${visitStyles.statusBtn}`} holdBtnHcc`}
+
                   >
                     <span>HOLD</span>
                     <span style={{ marginLeft: "10px" }}>
@@ -596,11 +599,11 @@ const YearAndDosStatus = ({
                   }
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
-                  className={`pendingBtn ${visitStyles.pendingBtn}`}
+                  className={`pendingBtn${visitStyles.pendingBtn}` }
                 >
                   <Button
                     type="primary"
-                    className={`pendingBtn ${visitStyles.pendingBtn}`}
+                    className={`${visitStyles.pendingBtn} ${isDosStatus && `${visitStyles.statusBtn}`} pendingBtn`}
                   >
                     <span>PENDING</span>
                     <span style={{ marginLeft: "10px" }}>

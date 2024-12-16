@@ -102,7 +102,7 @@ const Flag = ({ patienIdDetails, patientDetails, flagFirstData }) => {
                 </i>
                 {underScoreRemove(flagFirstData?.flag)}
               </Tooltip>
-            ) : null}
+            ) : "----"}
           </span>
         </div>
         <div className={styles.flagCard2}>
