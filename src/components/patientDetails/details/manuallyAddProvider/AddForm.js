@@ -35,7 +35,7 @@ const AddForm = ({
     return Promise.reject(new Error("Please enter a valid page number"));
   };
 
-  const AddProvider = async (values, providersList) => {
+  const AddProvider = async (values, providersLists) => {
     const customFileId =
       values?.fileType === "CHART"
         ? patientDetailsResult?.fileId
@@ -53,11 +53,11 @@ const AddForm = ({
       patientId: patientId,
       ...values,
       dos: dayjs(values.dos).format("YYYY-MM-DD"),
-      fileId: providersList ? providersList?.fileId : customFileId || "",
+      fileId: providersLists ? providersLists?.fileId : customFileId || "",
     };
 
     if (data?.dos) {
-      const result = dosAndProvidersList?.some(
+      const result = providersList ? false : dosAndProvidersList?.some(
         (item) => item?.dateOfService === data?.dos
       );
       if (!result) {
@@ -72,6 +72,8 @@ const AddForm = ({
             dosYear?.length > 0 ? dosYear[0]?.value : ""
           );
           form.resetFields();
+        } else {
+          getResponePopup(res)
         }
       } else {
         return notification.warning({

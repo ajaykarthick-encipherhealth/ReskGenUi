@@ -140,9 +140,9 @@ const Patient = ({
           setSearchVal(decodedParams?.search || null);
           setComputedStartDate(decodedParams?.computedStartDate || "");
           setComputedEndDate(decodedParams?.computedEndDate || "");
-          setSelAllocatedBy(decodedParams?.selAllocatedBy || "");
+          setSelAllocatedBy(decodedParams?.selAllocatedBy || null);
           setSelAllocatedTo(decodedParams?.setSelAllocatedTo || "");
-          setSelCreatedBy(decodedParams?.createdBy || "");
+          setSelCreatedBy(decodedParams?.createdBy || null);
           setSelectedDate2s(
             decodedParams?.completedStartDate && [
               dayjs(decodedParams?.completedStartDate),

@@ -1,6 +1,7 @@
 import { notification } from "antd";
 import { requestPortal } from "../../../utils/network";
 import { getStorage } from "../../../utils/storages";
+import { getResponePopup } from "../../../utils/reusable";
 
 export async function getAllOrganization() {
   const options = {
@@ -53,9 +54,9 @@ export const AddUser = async (data, setFormData) => {
       options
     );
     if (response) {
-      if (response?.data?.status === "SUCCESS") {
+      if (response.status === "SUCCESS") {
         notification.success({
-          message: response?.data?.message,
+          message: response.message,
           duration: 1,
         });
         setFormData({
@@ -68,9 +69,10 @@ export const AddUser = async (data, setFormData) => {
           mobileNumber: "",
           confirmPassword: "",
         });
+        return response
       } else {
         notification.warning({
-          message: response?.data?.message,
+          message: response.message,
           duration: 1,
         });
         setFormData({
@@ -97,7 +99,7 @@ export const AddUser = async (data, setFormData) => {
       mobileNumber: "",
       confirmPassword: "",
     });
-    notification.error({ description: err?.response?.data?.message });
+    getResponePopup(err)
   }
 };
 
