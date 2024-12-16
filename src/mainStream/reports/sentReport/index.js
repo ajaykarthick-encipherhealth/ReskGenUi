@@ -32,6 +32,10 @@ const SentReport = ({
   loader,
   userRole,
   selectedReport,
+  setReceivedPageNo,
+  setPaginationFirst,
+  setViewIndividualReport,
+  viewIndividualReport
 }) => {
   const router = useRouter();
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
@@ -122,12 +126,36 @@ const SentReport = ({
       receivedEndDate: receivedEndDate,
     };
     selectedReport(info);
-    router?.push(
-      `/${currentRole}/report/individualreport?reportId=${
-        item?._id
-      }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
-    );
+    // router?.push(
+    //   `/${currentRole}/report/individualreport?reportId=${
+    //     item?._id
+    //   }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
+    // );
+    setViewIndividualReport({
+      status: true,
+      data: {
+        reportId: item?._id,
+        sentreport: true,
+        page: receivedPageNo,
+        limit: paginationFirst,
+      },
+    });
   };
+
+  useEffect(() => {
+    const isSent = viewIndividualReport?.data
+      ? viewIndividualReport?.data?.sentreport
+      : false;
+
+    if (isSent) {
+      setReceivedPageNo(
+        viewIndividualReport?.data?.page ||0
+      );
+      setPaginationFirst(
+        viewIndividualReport?.data?.limit || 0
+      );
+    }
+  }, [viewIndividualReport]);
 
   return (
     <>
@@ -291,7 +319,7 @@ const SentReport = ({
       </div>
       {details?.receivedReportDTOList?.data?.length > 0 ? (
         <Pagination
-          first={receivedPageNo === 0 ? 0 : paginationFirst}
+          first={receivedPageNo == 0 ? 0 : paginationFirst}
           totalRecords={details?.receivedReportDTOList?.totalElements}
           onPageChange={onSentPageChange}
           row={8}

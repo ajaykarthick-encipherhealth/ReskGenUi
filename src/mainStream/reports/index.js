@@ -26,7 +26,11 @@ import { getStorage, setStorage } from "../../utils/storages";
 import { debounce } from "../../components/input";
 import { actions as allActions } from "../../stores/admin/report";
 import { actions as adminActions } from "../../stores/admin/dashboard";
-import {actions as allPatientActions} from '../../stores/admin/workqueue'
+import { actions as allPatientActions } from "../../stores/admin/workqueue";
+import IndividualReceiverReport from "../../pages/reviewer/report/individualreport";
+import AdminIndividualReport from "../../pages/admin/report/individualreport";
+import SupervisorIndividualReport from "../../pages/supervisor/report/individualreport";
+import TenantAdminIndividualReport from "../../pages/tenantAdmin/report/individualreport";
 const statusOptions = [
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
@@ -64,7 +68,7 @@ const Reports = ({
   getReportDetails,
   getActiveTab,
   teamReportLoading,
-  getSelectUserListReport
+  getSelectUserListReport,
 }) => {
   const rowsLength = selectedRow;
   const activeTab = activeTabName ? activeTabName : tab;
@@ -97,6 +101,10 @@ const Reports = ({
   const [paginationTeamFirst, setPaginationTeamFirst] = useState(0);
   const [selectAllFlags, setSelectAllFlags] = useState(false);
   const [flagPatientsList, setFlagPatientsList] = useState("");
+  const [viewIndividualReport, setViewIndividualReport] = useState({
+    status: false,
+    data: null,
+  });
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -163,6 +171,8 @@ const Reports = ({
   };
 
   const handleTabs = (name) => {
+    const reportStatus =
+      name === "Sent" ? { sentreport: true } : { isAdminPage: true };
     setSelectedDates(null);
     setSelecteddateRanges([]);
     getActiveTab(name);
@@ -177,6 +187,10 @@ const Reports = ({
     }
     setSelectedRows([]);
     setSelectAll(false);
+    setViewIndividualReport({
+      status: false,
+      data: { page: 0, limit: 0, reportId: "", ...reportStatus },
+    });
   };
   const dosOnChange = (selectedOption, name) => {
     const nameString = name?.split(" ").join("");
@@ -317,12 +331,64 @@ const Reports = ({
       });
     }
   };
+
+  const resetPageState =
+    activeTab === "Sent"
+      ? setSentPageNo
+      : activeTab === "Received"
+      ? setReceivedPageNo
+      : activeTab === "Audit"
+      ? setTeamPageNo
+      : setPageNo;
+
+  const renderIndividualReport = () => {
+    const currentRole = userRole
+      ?.split("_")
+      .map((item, index) =>
+        index === 0 ? item : item.charAt(0).toUpperCase() + item?.slice(1)
+      )
+      .join("");
+
+    switch (currentRole) {
+      case "reviewer":
+        return (
+          <IndividualReceiverReport
+            setViewIndividualReport={setViewIndividualReport}
+            viewIndividualReport={viewIndividualReport}
+          />
+        );
+      case "admin":
+        return (
+          <AdminIndividualReport
+            setViewIndividualReport={setViewIndividualReport}
+            viewIndividualReport={viewIndividualReport}
+          />
+        );
+      case "supervisor":
+        return (
+          <SupervisorIndividualReport
+            setViewIndividualReport={setViewIndividualReport}
+            viewIndividualReport={viewIndividualReport}
+          />
+        );
+      case "tenantAdmin":
+        return (
+          <TenantAdminIndividualReport
+            setViewIndividualReport={setViewIndividualReport}
+            viewIndividualReport={viewIndividualReport}
+          />
+        );
+      default:
+        return <></>;
+    }
+  };
+
   useEffect(() => {
     workFgetFlagsowData();
   }, []);
 
   useEffect(() => {
-    const coderSearchString = searchVal.find(
+    const coderSearchString = searchVal?.find(
       (item) => item.field === "initialSearch"
     )?.search;
     if (activeTab === "Sent") {
@@ -418,8 +484,10 @@ const Reports = ({
   }, [AdminReportDetails]);
 
   useEffect(() => {
-    const page = new URLSearchParams(window.location.search).get("page");
-    const limit = new URLSearchParams(window.location.search).get("limit");
+    const page = viewIndividualReport?.data?.page;
+    // new URLSearchParams(window.location.search).get("page");
+    const limit = viewIndividualReport?.data?.limit;
+    // new URLSearchParams(window.location.search).get("limit");
     if (activeTab === "Received" && page) {
       setReceivedPageNo(page);
       setPaginationReceivedFirst(limit);
@@ -428,23 +496,17 @@ const Reports = ({
       setPaginationSentFirst(limit);
     }
     setUserRole(getStorage("userRole"));
-  }, [activeTab]);
+  }, [activeTab, viewIndividualReport?.data]);
 
   useEffect(() => {
     if (selectedOptions?.UserRole) {
-     getSelectUserListReport({role:selectedOptions?.UserRole || ""});
+      getSelectUserListReport({ role: selectedOptions?.UserRole || "" });
     }
   }, [selectedOptions?.UserRole]);
 
-  const resetPageState =
-    activeTab === "Sent"
-      ? setSentPageNo
-      : activeTab === "Received"
-      ? setReceivedPageNo
-      : activeTab === "Audit"
-      ? setTeamPageNo
-      : setPageNo;
-  return (
+  return viewIndividualReport?.status ? (
+    renderIndividualReport()
+  ) : (
     <div>
       <Header />
       <div className="content-body">
@@ -869,11 +931,15 @@ const Reports = ({
                         sortOrder={sentSortOrder}
                         setSort={setSort}
                         receivedPageNo={sentPageNo}
+                        setReceivedPageNo={setSentPageNo}
+                        setPaginationFirst={setPaginationSentFirst}
                         receivedStartDate={selectedDateRanges?.Sent?.from}
                         receivedEndDate={selectedDateRanges?.Sent?.to}
                         isPhysician={true}
                         loader={sentLoader}
                         userRole={userRole}
+                        setViewIndividualReport={setViewIndividualReport}
+                        viewIndividualReport={viewIndividualReport}
                       />
                     </div>
                   )}
@@ -884,6 +950,8 @@ const Reports = ({
                         details={ReceivedReportDetails?.data?.response}
                         onPageChange={onReceivedPageChange}
                         receivedPageNo={receivedPageNo}
+                        setReceivedPageNo={setReceivedPageNo}
+                        setPaginationFirst={setPaginationReceivedFirst}
                         receivedStartDate={selectedDateRanges?.Reviewer?.from}
                         receivedEndDate={selectedDateRanges?.Reviewer?.to}
                         loading={ReceivedReportDetails?.loading}
@@ -892,6 +960,8 @@ const Reports = ({
                         setSort={setSort}
                         isPhysician={true}
                         loader={receivedLoader}
+                        setViewIndividualReport={setViewIndividualReport}
+                        viewIndividualReport={viewIndividualReport}
                       />
                     </div>
                   )}
@@ -976,8 +1046,7 @@ const enhancer = connect(
     selectUserList: state?.admin?.dashboard?.managersList,
     selectedRow: state?.admin?.report?.selectedRow,
     ExportResponse: state?.admin?.report?.exportData,
-    teamReportLoading:state?.supervisor?.report?.teamReportLoading,
-    
+    teamReportLoading: state?.supervisor?.report?.teamReportLoading,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -989,9 +1058,9 @@ const enhancer = connect(
     selectedReport: allActions.selectedReport,
     getReportDetails: allActions.adminReport,
     getSelectUserListReport: adminActions.getSelectUserList,
-    patientDetails:allPatientActions.getPatientDetails,
-    getActiveTab:allActions.activeTab,
-    getExportDetails:allActions.getExportDetails
+    patientDetails: allPatientActions.getPatientDetails,
+    getActiveTab: allActions.activeTab,
+    getExportDetails: allActions.getExportDetails,
   }
 );
 export default enhancer(Reports);

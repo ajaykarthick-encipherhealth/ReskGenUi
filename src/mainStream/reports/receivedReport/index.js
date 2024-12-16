@@ -30,14 +30,12 @@ const ReceivedReport = ({
   receivedEndDate,
   loader,
   selectedReport,
+  setReceivedPageNo,
+  setPaginationFirst,
+  viewIndividualReport,
+  setViewIndividualReport
 }) => {
   const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
-
-  useEffect(() => {
-    if (details?.reportStatusDTOList && details?.reportStatusDTOList > 0) {
-      handleCardSelection(details?.reportStatusDTOList[0], 0);
-    }
-  }, [details]);
 
   const router = useRouter();
   const handleTabs = (tab) => {
@@ -58,11 +56,20 @@ const ReceivedReport = ({
         index === 0 ? item : item.charAt(0).toUpperCase() + item?.slice(1)
       )
       .join("");
-    router?.push(
-      `/${currentRole}/report/individualreport?reportId=${
-        item?.reportId
-      }&isAdminPage=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
-    );
+    // router?.push(
+    //   `/${currentRole}/report/individualreport?reportId=${
+    //     item?.reportId
+    //   }&isAdminPage=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
+    // );
+    setViewIndividualReport({
+      status: true,
+      data: {
+        reportId: item?.reportId,
+        isAdminPage: true,
+        page: receivedPageNo,
+        limit: paginationFirst,
+      },
+    });
   };
   const options = getChartOption(details);
   const userOptions = getChartUserOption(details);
@@ -102,6 +109,27 @@ const ReceivedReport = ({
       })
     );
 
+   useEffect(() => {
+      const isReceived = viewIndividualReport?.data
+        ? viewIndividualReport?.data?.isAdminPage
+        : false;
+  
+      if (isReceived) {
+        setReceivedPageNo(
+          viewIndividualReport?.data?.page ||0
+        );
+        setPaginationFirst(
+          viewIndividualReport?.data?.limit || 0
+        );
+      }
+    }, [viewIndividualReport]);
+
+
+  useEffect(() => {
+    if (details?.reportStatusDTOList && details?.reportStatusDTOList > 0) {
+      handleCardSelection(details?.reportStatusDTOList[0], 0);
+    }
+  }, [details]);
   return (
     <>
       <div>
@@ -266,8 +294,7 @@ const ReceivedReport = ({
   );
 };
 
-const connector = connect(
-  (state) => ({}),
-  { selectedReport: allActions.selectedReport }
-);
+const connector = connect((state) => ({}), {
+  selectedReport: allActions.selectedReport,
+});
 export default connector(ReceivedReport);

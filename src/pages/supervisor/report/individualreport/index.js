@@ -33,6 +33,8 @@ const IndividualReceiverReport = ({
   uploadFile,
   getSelectedReportDetails,
   getActiveTab,
+  setViewIndividualReport,
+  viewIndividualReport,
 }) => {
   const router = useRouter();
   const [tableData, setTableData] = useState([]);
@@ -106,14 +108,14 @@ const IndividualReceiverReport = ({
     setLoadingList(true);
     if (reportConfirm) {
       setIsSentReport(true);
-      getSentDetails(0, "", "", searchValue, sort);
+      getSentDetails(viewIndividualReport?.data?.page||0, "", "", searchValue, sort);
       const res = await getSelectedReportDetails(id);
       if (res?.status === "SUCCESS") {
         setReportPath(res?.response);
         setLoadingList(false);
       }
     } else {
-      getReceivedDetails(0, "", "", searchValue || "", sort);
+      getReceivedDetails(viewIndividualReport?.data?.page||0, "", "", searchValue || "", sort);
       const res = await getSelectedReportDetails(id);
       if (res?.status === "SUCCESS") {
         setReportPath(res?.response);
@@ -129,11 +131,13 @@ const IndividualReceiverReport = ({
           ? sentReportDatas?.data?.response?.receivedReportDTOList?.data
           : reportDatas?.data?.response?.reportStatusDTOList?.content
       );
-      if (window.location.search && !reportInfo?.id) {
-        const id = new URLSearchParams(window.location.search).get("reportId");
-        const reportConfirm = new URLSearchParams(window.location.search).get(
-          "sentreport"
-        );
+      if (!reportInfo?.id) {
+        const id = viewIndividualReport?.data?.reportId;
+        // new URLSearchParams(window.location.search).get("reportId");
+        const reportConfirm = viewIndividualReport?.data?.sentreport;
+        // new URLSearchParams(window.location.search).get(
+        //   "sentreport"
+        // );
         if (id) {
           const reportDataId =
             reportDatas?.data?.response?.reportStatusDTOList?.content?.find(
@@ -158,19 +162,22 @@ const IndividualReceiverReport = ({
         }
       }
     }
-  }, [reportDatas, sentReportDatas, isSentReport]);
+  }, [reportDatas, sentReportDatas, isSentReport, viewIndividualReport?.data]);
 
   useEffect(() => {
     if (window.location.search) {
       setLoadingList(true);
-      const id = new URLSearchParams(window.location.search).get("reportId");
-      const reportConfirm = new URLSearchParams(window.location.search).get(
-        "sentreport"
-      );
+      const id = viewIndividualReport?.data?.reportId;
+      // new URLSearchParams(window.location.search).get("reportId");
+      const reportConfirm = viewIndividualReport?.data?.sentreport;
+      // new URLSearchParams(window.location.search).get(
+      //   "sentreport"
+      // );
       setIsSentReport(reportConfirm);
-      const isAdminPage = new URLSearchParams(window.location.search).get(
-        "isAdminPage"
-      );
+      const isAdminPage = viewIndividualReport?.data?.isAdminPage;
+      // new URLSearchParams(window.location.search).get(
+      //   "isAdminPage"
+      // );
       setIsAdminPage(isAdminPage);
       callGetFileApi({
         reportConfirm: reportConfirm,
@@ -178,7 +185,7 @@ const IndividualReceiverReport = ({
         id: id,
       });
     }
-  }, [searchValue, sort]);
+  }, [searchValue, sort, viewIndividualReport?.data]);
 
   useEffect(() => {
     if (reportPath) {
@@ -199,7 +206,11 @@ const IndividualReceiverReport = ({
               <button
                 className="border-0 bg-white text-white"
                 onClick={() => {
-                  router.push(`/supervisor/report`);
+                  // router.push(`/supervisor/report`);
+                  setViewIndividualReport({
+                    status: false,
+                    data: viewIndividualReport,
+                  });
                   setLoading(true);
                   setIsSentReport(false);
                   getActiveTab(isSentReport ? "Sent" : "Received");
@@ -295,7 +306,9 @@ const IndividualReceiverReport = ({
                       </div>
                     </div>
                     <div className={styles.date}>
-                      {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
+                      {viewIndividualReport?.data?.sentreport
+                        ? dayjs(item?.sendDate).format("MM-DD-YYYY")
+                        : dayjs(item?.receiveDate).format("MM-DD-YYYY")}
                     </div>
                   </div>
                 );
@@ -310,7 +323,7 @@ const IndividualReceiverReport = ({
             <div className={`${styles.header}`}>
               {" "}
               <Image src={id} alt="noimg" />
-              Id: 
+              Id:
               {reportInfo?.id || "---"}
             </div>
             <div className="d-flex">
@@ -321,14 +334,16 @@ const IndividualReceiverReport = ({
             <div className="d-flex">
               {" "}
               <Image src={send} alt="noimg" />
-            {isSentReport ? "Reciever" : "Sender"}:
+              {viewIndividualReport?.data?.sentreport ? "Receiver" : "Sender"}:
               {reportInfo?.data?.sender}
             </div>
             <div className="d-flex">
               {" "}
               <Image src={calender} alt="noimg" />
-               Date:
-              {dayjs(reportInfo?.data?.receiveDate).format("DD/MM/YYYY")}
+              Date:
+              {viewIndividualReport?.data?.sentreport
+                ? dayjs(reportInfo?.sendDate).format("MM-DD-YYYY")
+                : dayjs(reportInfo?.receiveDate).format("MM-DD-YYYY")}
             </div>
             <div>
               {reportInfo?.data?.role === "DOWNLOAD" ? (
