@@ -132,7 +132,8 @@ const Details = ({
   getPatientID,
   selectPatientId,
   getActiveTab,
-  getFilteredList
+  getFilteredList,
+  hccFileDetails
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -209,7 +210,8 @@ const Details = ({
   };
   useEffect(() => {
     const patientId = getStorage("patientId");
-    if (activeTab == 1) {
+    const fileId = getStorage("fileId");
+    if (activeTab == 1 || activeTab == 2) {
       getAllProcessYear(patientId, "HCC");
     }
     // if (activeTab == 3) {
@@ -218,6 +220,10 @@ const Details = ({
     // if (activeTab == 4) {
     //   getAllProcessYear(patientId, "LAB");
     // }
+    getPatientListToDetails(patientId)
+    if (patientDetailsResult?.data?.response?.fileId != fileId) {
+      getPatientHccFile(patientDetailsResult?.data?.response?.fileId);
+    }
     var dosYearArr = processedYearResult?.data?.response?.map((res) => {
       return { value: res, label: res };
     });
@@ -1473,6 +1479,7 @@ const enhancer = connect(
     preStoreFileDetails:
       state.patientDetails?.details?.getStoreFileIdDetailsPre,
     selectPatientId: state.patientDetails?.details?.selectPatientId,
+    hccFileDetails: state?.patientDetails?.details?.hccFileResult,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
