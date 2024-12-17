@@ -51,7 +51,7 @@ const ContentGroupCard = ({
       const currentRole = getStorage("userRole");
       let modifiedRole = currentRole;
 
-      if (currentRole === "tenant_admin") {
+      if (currentRole === "tenant_admin" || currentRole==="Tenant_Admin") {
         modifiedRole = "tenantAdmin";
       } else if (currentRole === "admin") {
         modifiedRole = "admin";
@@ -63,8 +63,8 @@ const ContentGroupCard = ({
       setStorage("patientId", data.patientId);
       navigate.push({
         pathname: `/${modifiedRole}/patients/details`,
-        query: page,
-      });
+        query: {...page,fromReport:modifiedRole},
+      },`/${modifiedRole}/patients/details`);
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",

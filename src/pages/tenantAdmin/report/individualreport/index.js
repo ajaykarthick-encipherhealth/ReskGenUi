@@ -214,7 +214,7 @@ const IndividualReceiverReport = ({
                     data: viewIndividualReport,
                   });
                   setIsSentReport(false);
-                  getActiveTab(isSentReport ? "Sent" : "Received");
+                  getActiveTab(viewIndividualReport?.data?.sentreport ? "Sent" : "Received");
                   setReportInfo({ data: null, id: null });
                 }}
                 allowClear

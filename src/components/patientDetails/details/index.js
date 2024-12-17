@@ -65,7 +65,7 @@ import {
 import { actions as allReportActions } from "../../../stores/admin/report";
 import { connect } from "react-redux";
 import HeaderComponent from "./components/headerComponent";
-import {actions as reviewerWorkQueueAction} from '../../../stores/reviewer/workqueue'
+import { actions as reviewerWorkQueueAction } from "../../../stores/reviewer/workqueue";
 import { allFilters } from "../../../pages/reviewer/patients/headerFilters";
 export const navigetPageDetails = async (
   pageTitle,
@@ -248,7 +248,7 @@ const Details = ({
       // );
       getPatientLabDosList(
         selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0]?.value||""
+        dosYearArr[0]?.value || ""
       );
     }
   }, [activeTab]);
@@ -513,7 +513,15 @@ const Details = ({
     const isSupervisorUserDetails = getStorage("isSupervisorUserDetails");
     const isSupervisorAuited = getStorage("isSupervisorAuited");
     if (user && user.toLowerCase() === "admin") {
-      if (isAdminTracking) {
+      if (navigate.query?.fromReport) {
+        navigate.push(
+          {
+            pathname: `/${navigate?.query?.fromReport}/report`,
+            query: navigate.query,
+          },
+          `/${navigate?.query?.fromReport}/report`
+        );
+      } else if (isAdminTracking) {
         navigate.push("/admin/tracking");
       } else {
         navigate.push("/admin/patients");
@@ -521,7 +529,15 @@ const Details = ({
     } else if (user && user.toLowerCase() === "tenant_admin") {
       if (user && user.toLowerCase() === "tenant_admin") {
         const fromPatientSync = getStorage("fromPatientSync");
-        if (fromPatientSync === "true") {
+        if (navigate.query?.fromReport) {
+          navigate.push(
+            {
+              pathname: `/${navigate?.query?.fromReport}/report`,
+              query: navigate.query,
+            },
+            `/${navigate?.query?.fromReport}/report`
+          );
+        } else if (fromPatientSync === "true") {
           navigate.push("/tenantAdmin/patientSync");
           getActiveTab("PDF");
         } else if (isTenantAdminTracking) {
@@ -531,8 +547,15 @@ const Details = ({
         }
       }
     } else if (user && user.toLowerCase() === "supervisor") {
-        if( JSON.parse(getStorage("isSupervisorAuited")))
-        {
+      if (navigate.query?.fromReport) {
+        navigate.push(
+          {
+            pathname: `/${navigate?.query?.fromReport}/report`,
+            query: navigate.query,
+          },
+          `/${navigate?.query?.fromReport}/report`
+        );
+      } else if (JSON.parse(getStorage("isSupervisorAuited"))) {
         navigate.push("/supervisor/auditing");
       } else if (JSON.parse(getStorage("isSupervisorUserDetails"))) {
         navigate.push("/supervisor/user/userQueue");
@@ -540,8 +563,21 @@ const Details = ({
         navigate.back();
       }
     } else if (user && user.toLowerCase() === "reviewer") {
-      getFilteredList(allFilters)
-      navigate.push({pathname:"/reviewer/patients",query:navigate.query},"/reviewer/patients");
+      if (navigate.query?.fromReport) {
+        navigate.push(
+          {
+            pathname: `/${navigate?.query?.fromReport}/report`,
+            query: navigate.query,
+          },
+          `/${navigate?.query?.fromReport}/report`
+        );
+      } else {
+        getFilteredList(allFilters);
+        navigate.push(
+          { pathname: "/reviewer/patients", query: navigate.query },
+          "/reviewer/patients"
+        );
+      }
     } else {
       navigate.back();
     }

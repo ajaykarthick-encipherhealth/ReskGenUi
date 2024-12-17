@@ -296,8 +296,8 @@ const InitialCard = ({
       setStorage("patientId", data.patientId);
       navigate.push({
         pathname: `/${currentRole}/patients/details`,
-        query: page,
-      });
+        query: {...page,fromReport:currentRole},
+      }, `/${currentRole}/patients/details`);
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",

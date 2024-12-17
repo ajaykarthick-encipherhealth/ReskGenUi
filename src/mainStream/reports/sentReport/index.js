@@ -35,7 +35,9 @@ const SentReport = ({
   setReceivedPageNo,
   setPaginationFirst,
   setViewIndividualReport,
-  viewIndividualReport
+  viewIndividualReport,
+  searchVal,
+  selectedDates,
 }) => {
   const router = useRouter();
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
@@ -138,6 +140,10 @@ const SentReport = ({
         sentreport: true,
         page: receivedPageNo,
         limit: paginationFirst,
+        receivedStartDate: receivedStartDate,
+        receivedEndDate: receivedEndDate,
+        searchVal,
+        selectedDates,
       },
     });
   };
@@ -148,12 +154,8 @@ const SentReport = ({
       : false;
 
     if (isSent) {
-      setReceivedPageNo(
-        viewIndividualReport?.data?.page ||0
-      );
-      setPaginationFirst(
-        viewIndividualReport?.data?.limit || 0
-      );
+      setReceivedPageNo(viewIndividualReport?.data?.page || 0);
+      setPaginationFirst(viewIndividualReport?.data?.limit || 0);
     }
   }, [viewIndividualReport]);
 

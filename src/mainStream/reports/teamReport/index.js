@@ -397,7 +397,7 @@ const TeamReport = ({
                           {reportListAll?.response?.response?.data?.map(
                             (item, id) => (
                               <ContentGroupCard
-                                content={reportListAll?.response?.data}
+                                content={reportListAll?.response?.response?.data}
                                 key={id}
                                 item={item}
                                 flag={item?.patientFlagResponseDTOs}

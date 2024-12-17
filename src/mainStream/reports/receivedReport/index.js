@@ -33,7 +33,9 @@ const ReceivedReport = ({
   setReceivedPageNo,
   setPaginationFirst,
   viewIndividualReport,
-  setViewIndividualReport
+  setViewIndividualReport,
+  searchVal,
+  selectedDates
 }) => {
   const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
 
@@ -68,6 +70,10 @@ const ReceivedReport = ({
         isAdminPage: true,
         page: receivedPageNo,
         limit: paginationFirst,
+        receivedStartDate: receivedStartDate,
+        receivedEndDate: receivedEndDate,
+        searchVal,
+        selectedDates,
       },
     });
   };

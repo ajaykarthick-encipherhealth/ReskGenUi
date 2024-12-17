@@ -31,6 +31,9 @@ import IndividualReceiverReport from "../../pages/reviewer/report/individualrepo
 import AdminIndividualReport from "../../pages/admin/report/individualreport";
 import SupervisorIndividualReport from "../../pages/supervisor/report/individualreport";
 import TenantAdminIndividualReport from "../../pages/tenantAdmin/report/individualreport";
+import { useRouter } from "next/router";
+import dayjs from "dayjs";
+
 const statusOptions = [
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
@@ -70,6 +73,7 @@ const Reports = ({
   teamReportLoading,
   getSelectUserListReport,
 }) => {
+  const router = useRouter();
   const rowsLength = selectedRow;
   const activeTab = activeTabName ? activeTabName : tab;
   const [userRole, setUserRole] = useState("");
@@ -85,7 +89,7 @@ const Reports = ({
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
   const [modal, setModal] = useState(false);
-  const [selectedDates, setSelectedDates] = useState(null);
+  const [selectedDates, setSelectedDates] = useState([]);
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
@@ -176,8 +180,8 @@ const Reports = ({
     setSelectedDates(null);
     setSelecteddateRanges([]);
     getActiveTab(name);
-    setSearch();
-    setSearchVal([]);
+    setSearch(null);
+    setSearchVal(null);
     setFlagPatientsList();
     setSelectAllFlags(false);
     setSelectAll(false);
@@ -192,7 +196,7 @@ const Reports = ({
       data: { page: 0, limit: 0, reportId: "", ...reportStatus },
     });
   };
-  const dosOnChange = (selectedOption, name) => {
+  const dosOnChange = (selectedOption, name, tabName) => {
     const nameString = name?.split(" ").join("");
     if (name == "User Role" && !selectedOption) {
       setSelectedOptions((prevOptions) => ({
@@ -203,26 +207,27 @@ const Reports = ({
     } else {
       setSelectedOptions((prevOptions) => ({
         ...prevOptions,
-        [nameString]: selectedOption,
+        [tabName]: selectedOption,
       }));
     }
   };
 
   const debouncedSearch = useCallback(
     debounce((text, setSearchVal, field) => {
-      setSearchVal((prev) => {
-        const existingIndex = prev.findIndex((item) => item.field === field);
-        if (existingIndex !== -1) {
-          return prev.map((item, index) => {
-            if (index === existingIndex) {
-              return { ...item, search: text };
-            }
-            return item;
-          });
-        } else {
-          return [...prev, { search: text, field: field }];
-        }
-      });
+      // setSearchVal((prev) => {
+      //   const existingIndex = prev.findIndex((item) => item.field === field);
+      //   if (existingIndex !== -1) {
+      //     return prev.map((item, index) => {
+      //       if (index === existingIndex) {
+      //         return { ...item, search: text };
+      //       }
+      //       return item;
+      //     });
+      //   } else {
+      //     return [...prev, { search: text, field: field }];
+      //   }
+      // });
+      setSearchVal(text);
     }, 700),
     []
   );
@@ -232,10 +237,11 @@ const Reports = ({
     let _filters = { ...filters };
     _filters["patientId"].value = value;
     setFilters(_filters);
-    setSearch({
-      name: event.target.name,
-      searchval: value,
-    });
+    // setSearch({
+    //   name: event.target.name,
+    //   searchval: value,
+    // });
+    setSearch(value);
 
     const field = event.target.name;
     debouncedSearch(value, setSearchVal, field);
@@ -349,7 +355,7 @@ const Reports = ({
       )
       .join("");
 
-    switch (currentRole) {
+    switch (currentRole.toLowerCase()) {
       case "reviewer":
         return (
           <IndividualReceiverReport
@@ -371,7 +377,7 @@ const Reports = ({
             viewIndividualReport={viewIndividualReport}
           />
         );
-      case "tenantAdmin":
+      case "tenantadmin":
         return (
           <TenantAdminIndividualReport
             setViewIndividualReport={setViewIndividualReport}
@@ -388,15 +394,16 @@ const Reports = ({
   }, []);
 
   useEffect(() => {
-    const coderSearchString = searchVal?.find(
-      (item) => item.field === "initialSearch"
-    )?.search;
+    // const coderSearchString = searchVal?.find(
+    //   (item) => item.field === "initialSearch"
+    // )?.search;
+    // console.log(selectedDateRanges,searchVal,"fil")
     if (activeTab === "Sent") {
       sentReport({
         pagenum: sentPageNo,
         startDate: selectedDateRanges?.Sent?.from,
         endDate: selectedDateRanges?.Sent?.to,
-        search: coderSearchString ? coderSearchString : "",
+        search: searchVal ? searchVal : "",
         sort: sort,
       });
     } else if (activeTab === "Received") {
@@ -404,7 +411,7 @@ const Reports = ({
         pagenum: receivedPageNo,
         startDate: selectedDateRanges?.Received?.from,
         endDate: selectedDateRanges?.Received?.to,
-        search: coderSearchString ? coderSearchString : "",
+        search: searchVal ? searchVal : "",
         sort: sort,
       });
     } else if (activeTab === "Admin") {
@@ -412,7 +419,7 @@ const Reports = ({
         pagenum: pageNo,
         startDate: selectedDateRanges?.Admin?.from,
         endDate: selectedDateRanges?.Admin?.to,
-        search: coderSearchString ? coderSearchString : "",
+        search: searchVal ? searchVal : "",
         filter: selectedOptions?.Status,
         userName: selectedOptions?.UserRole ? selectedOptions?.UserRole : "",
         sort: sort,
@@ -428,9 +435,9 @@ const Reports = ({
         pagenum: teamPageNo,
         startDate: selectedDateRanges?.Audit?.from,
         endDate: selectedDateRanges?.Audit?.to,
-        search: coderSearchString ? coderSearchString : "",
-        filter: selectedOptions?.reviewerStatus
-          ? selectedOptions?.reviewerStatus
+        search: searchVal ? searchVal : "",
+        filter:  selectedOptions
+          ?  selectedOptions[activeTab]
           : "",
         sort: sort,
         flagsList: selectAllFlags,
@@ -440,9 +447,9 @@ const Reports = ({
         pagenum: teamPageNo,
         startDate: selectedDateRanges?.Team?.from,
         endDate: selectedDateRanges?.Team?.to,
-        search: coderSearchString ? coderSearchString : "",
-        filter: selectedOptions?.reviewerStatus
-          ? selectedOptions?.reviewerStatus
+        search: searchVal ? searchVal : "",
+        filter:  selectedOptions
+          ?  selectedOptions[activeTab]
           : "",
         sort: sort,
         flagsList: selectAllFlags,
@@ -452,8 +459,8 @@ const Reports = ({
         pagenum: pageNo,
         startDate: selectedDateRanges?.Reviewer?.from,
         endDate: selectedDateRanges?.Reviewer?.to,
-        search: coderSearchString ? coderSearchString : "",
-        filter: selectedOptions?.reviewerStatus,
+        search: searchVal ? searchVal : "",
+        filter: selectedOptions?selectedOptions[activeTab]:"",
         sort: sort,
         flagsList: selectAllFlags,
       });
@@ -488,12 +495,30 @@ const Reports = ({
     // new URLSearchParams(window.location.search).get("page");
     const limit = viewIndividualReport?.data?.limit;
     // new URLSearchParams(window.location.search).get("limit");
-    if (activeTab === "Received" && page) {
+    if (activeTab === "Received" && page && !router.query) {
       setReceivedPageNo(page);
       setPaginationReceivedFirst(limit);
-    } else if (activeTab === "Sent" && page) {
+      setSelectedDates(viewIndividualReport?.data?.selectedDates);
+      setSearchVal(viewIndividualReport?.data?.searchVal);
+      setSelecteddateRanges({
+        sent: {
+          from: viewIndividualReport?.data?.receivedStartDate,
+          t0: viewIndividualReport?.data?.receivedEndDate,
+        },
+      });
+      setSearch(viewIndividualReport?.data?.searchVal);
+    } else if (activeTab === "Sent" && page && !router.query) {
       setSentPageNo(page);
       setPaginationSentFirst(limit);
+      setSelectedDates(viewIndividualReport?.data?.selectedDates);
+      setSearchVal(viewIndividualReport?.data?.searchVal);
+      setSelecteddateRanges({
+        sent: {
+          from: viewIndividualReport?.data?.receivedStartDate,
+          t0: viewIndividualReport?.data?.receivedEndDate,
+        },
+      });
+      setSearch(viewIndividualReport?.data?.searchVal);
     }
     setUserRole(getStorage("userRole"));
   }, [activeTab, viewIndividualReport?.data]);
@@ -503,6 +528,37 @@ const Reports = ({
       getSelectUserListReport({ role: selectedOptions?.UserRole || "" });
     }
   }, [selectedOptions?.UserRole]);
+
+  useEffect(() => {
+    const routeData = router?.query;
+    if (routeData) {
+      const dates = routeData?.selectedDates
+        ? JSON.parse(routeData?.selectedDates)
+        : [];
+      setPageNo(routeData?.pageNo ? JSON.parse(routeData?.pageNo) : 0);
+      setPaginationFirst(
+        routeData?.paginationFirst ? JSON.parse(routeData?.paginationFirst) : 0
+      );
+      setSelectedDates(dates);
+      setSearchVal(routeData?.searchVal);
+      setSelecteddateRanges(
+        routeData?.selectedDateRanges
+          ? JSON.parse(routeData?.selectedDateRanges)
+          : null
+      );
+      setSearch(routeData?.searchVal);
+      setSelectAllFlags(
+        routeData?.selectAllFlags
+          ? JSON.parse(routeData?.selectAllFlags)
+          : false
+      );
+      setSelectedOptions(
+        routeData?.selectedOptions
+          ? JSON.parse(routeData?.selectedOptions)
+          : null
+      );
+    }
+  }, [router]);
 
   return viewIndividualReport?.status ? (
     renderIndividualReport()
@@ -545,7 +601,7 @@ const Reports = ({
                                   }
                                   placeholder="Search"
                                   maxLength={25}
-                                  value={search ? search?.searchVal : ""}
+                                  value={search ? search : null}
                                   onKeyDown={(e) => {
                                     // Prevent input of backslash ("\")
                                     if (e.key === "\\") {
@@ -583,7 +639,8 @@ const Reports = ({
                                     onChange={(selectedOption) => {
                                       dosOnChange(
                                         selectedOption,
-                                        "reviewer Status"
+                                        "reviewer Status",
+                                        activeTab
                                       );
                                       resetPageNumber(resetPageState);
                                     }}
@@ -592,6 +649,11 @@ const Reports = ({
                                     // className={`custom-react-report-select`}
                                     isSearchable={false}
                                     allowClear={true}
+                                    value={
+                                      selectedOptions
+                                        ? selectedOptions[activeTab]
+                                        : null
+                                    }
                                   />
                                 </div>
                                 {/* </div> */}
@@ -614,8 +676,10 @@ const Reports = ({
                                   format="MM-DD-YYYY"
                                   value={
                                     selectedDates
-                                      ? selectedDates[activeTab]
-                                      : undefined
+                                      ? selectedDates[activeTab]?.map((info) =>
+                                          dayjs(info)
+                                        )
+                                      : []
                                   }
                                   onChange={(date, dateString) => {
                                     handleCoderPicker(
@@ -681,7 +745,9 @@ const Reports = ({
                                           }}
                                           value={
                                             selectedDates
-                                              ? selectedDates[info?.name]
+                                              ? selectedDates[info?.name]?.map(
+                                                  (item) => dayjs(item)
+                                                )
                                               : undefined
                                           }
                                           onChange={(date, dateString) => {
@@ -840,8 +906,18 @@ const Reports = ({
                         setSortOrder={setCoderSortOrder}
                         sortOrder={coderSortOrder}
                         setSort={setSort}
-                        gotoPatientDetails={gotoPatientDetails}
-                        page={{ pageNo, paginationFirst }}
+                        // gotoPatientDetails={gotoPatientDetails}
+                        page={{
+                          pageNo,
+                          paginationFirst,
+                          searchVal,
+                          selectedDateRanges:
+                            JSON.stringify(selectedDateRanges),
+                          selectedDates: JSON.stringify(selectedDates),
+                          selectedOptions: JSON.stringify(selectedOptions),
+                          sort,
+                          selectAllFlags,
+                        }}
                         loader={AdminReportLoader}
                         activeTab={activeTab}
                         handleHeaderCheckbox={handleHeaderCheckboxChange}
@@ -855,13 +931,7 @@ const Reports = ({
                             endDate: selectedDateRanges?.Admin?.to
                               ? selectedDateRanges?.Admin?.to
                               : "",
-                            search: searchVal.find(
-                              (item) => item.field === "initialSearch"
-                            )?.search
-                              ? searchVal.find(
-                                  (item) => item.field === "initialSearch"
-                                )?.search
-                              : "",
+                            search: searchVal || "",
                             filter: selectedOptions?.Status?.value
                               ? selectedOptions?.Status?.value
                               : "",
@@ -907,8 +977,17 @@ const Reports = ({
                       setSortOrder={setCoderSortOrder}
                       sortOrder={coderSortOrder}
                       setSort={setSort}
-                      gotoPatientDetails={gotoPatientDetails}
-                      page={{ teamPageNo, paginationTeamFirst }}
+                      // gotoPatientDetails={gotoPatientDetails}
+                      page={{
+                        pageNo: teamPageNo,
+                        paginationFirst: paginationTeamFirst,
+                        searchVal,
+                        selectedDateRanges: JSON.stringify(selectedDateRanges),
+                        selectedDates: JSON.stringify(selectedDates),
+                        selectedOptions,
+                        sort,
+                        selectAllFlags,
+                      }}
                       loader={
                         activeTab === "Team"
                           ? teamReportLoading
@@ -940,6 +1019,8 @@ const Reports = ({
                         userRole={userRole}
                         setViewIndividualReport={setViewIndividualReport}
                         viewIndividualReport={viewIndividualReport}
+                        searchVal={searchVal}
+                        selectedDates={selectedDates}
                       />
                     </div>
                   )}
@@ -962,6 +1043,8 @@ const Reports = ({
                         loader={receivedLoader}
                         setViewIndividualReport={setViewIndividualReport}
                         viewIndividualReport={viewIndividualReport}
+                        searchVal={searchVal}
+                        selectedDates={selectedDates}
                       />
                     </div>
                   )}

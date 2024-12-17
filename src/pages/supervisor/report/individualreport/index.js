@@ -165,7 +165,7 @@ const IndividualReceiverReport = ({
   }, [reportDatas, sentReportDatas, isSentReport, viewIndividualReport?.data]);
 
   useEffect(() => {
-    if (window.location.search) {
+    // if (window.location.search) {
       setLoadingList(true);
       const id = viewIndividualReport?.data?.reportId;
       // new URLSearchParams(window.location.search).get("reportId");
@@ -184,7 +184,7 @@ const IndividualReceiverReport = ({
         searchValue: searchValue,
         id: id,
       });
-    }
+    // }
   }, [searchValue, sort, viewIndividualReport?.data]);
 
   useEffect(() => {
@@ -213,7 +213,7 @@ const IndividualReceiverReport = ({
                   });
                   setLoading(true);
                   setIsSentReport(false);
-                  getActiveTab(isSentReport ? "Sent" : "Received");
+                  getActiveTab(viewIndividualReport?.data?.sentreport ? "Sent" : "Received");
                   setReportInfo({ data: null, id: null });
                 }}
                 allowClear
