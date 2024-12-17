@@ -179,5 +179,5 @@ export const emrTypeOptions=[
   },
   { label: "Micro MD", value: "Micro MD" },
   { label: "IMS", value: "IMS" },
-  { label: "Other", value: "-" },
+  { label: "Other", value: "Other" },
 ]

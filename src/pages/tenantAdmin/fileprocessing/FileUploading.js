@@ -132,7 +132,7 @@ const FileUploading = ({
                 className={`ant_select_form hcc_form mb-2`}
                 onChange={(selOption, val) => {
                   handleChange(selOption, "dos");
-                  setEmrType(selOption);
+                  setEmrType(selOption === "Other" ? "-" : selOption);
                 }}
                 showSearch
                 value={emrType || null}

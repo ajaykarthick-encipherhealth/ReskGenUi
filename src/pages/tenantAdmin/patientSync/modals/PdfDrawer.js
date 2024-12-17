@@ -81,7 +81,11 @@ const PdfDrawer = ({
     if (reportActiveTab === "PDF") {
       if (uploadType !== "upload") {
         const res = await getCreateBatch({
-          info: { ...formVal, fileExtension: "pdf" },
+          info: {
+            ...formVal,
+            emrType: formVal?.emrType === "Other" ? "-" : formVal?.emrType,
+            fileExtension: "pdf",
+          },
         });
         if (res.status === "SUCCESS") {
           await getAllBatches({ page: pageNo });
