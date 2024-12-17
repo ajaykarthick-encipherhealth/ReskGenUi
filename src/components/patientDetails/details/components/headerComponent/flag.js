@@ -8,6 +8,14 @@ import SvgFlag from "../svg/svg";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 
 const Flag = ({ patienIdDetails, patientDetails, flagsDetailsResult }) => {
+  const sortedFlags =
+    flagsDetailsResult?.response?.length > 0
+      ? [...flagsDetailsResult.response].sort(
+          (a, b) => a.flagDetails?.priority - b.flagDetails?.priority
+        )
+      : [];
+
+  const highestPriorityFlag = sortedFlags[0];
   return (
     <>
       <div className="w-100 d-flex justify-content-between">
@@ -15,71 +23,44 @@ const Flag = ({ patienIdDetails, patientDetails, flagsDetailsResult }) => {
           className={`${styles.flagHccCard1} ${styles.rafscoreheader} p-2 mx-2`}
         >
           <h5 className={`font-weight-bold`}>Flag</h5>
-          <div className="pt-1">
-            {flagsDetailsResult?.response?.length > 0 ?
-              (() => {
-                const sortedFlags = flagsDetailsResult.response.sort(
-                  (a, b) => a.flagDetails?.priority - b.flagDetails?.priority
-                );
-
-                const highestPriorityFlag = sortedFlags[0];
-
-                return (
-                  <div className="mt-3">
-                    <div
-                      className="d-flex align-items-center justify-content-center cr-pointer"
-                      // onClick={() => setFlagContainerActive("Flag")}
-                    >
-                      <Popover
-                        content={
-                          <div
-                            style={{
-                              height: "auto",
-                              overflowY: "scroll",
-                            }}
-                          >
-                            <strong>Flag details</strong>
-                            {sortedFlags?.map((flag, flagIndex) => (
-                              <div key={flagIndex} className="p-1">
-                                <SvgFlag
-                                  fillColor={flag?.flagDetails?.flagColour}
-                                />
-                                <span className="ml-2">
-                                  {flag?.flagDetails?.flagName.replaceAll(
-                                    "_",
-                                    " "
-                                  )}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        }
-                        placement="right"
-                      >
-                        <Badge
-                          count={flagsDetailsResult?.response?.length}
-                          offset={[5, -3]}
-                          size="small"
-                          style={{
-                            right: "3px",
-                            background: "#04306f",
-                          }}
-                        >
-                          <span>
-                            <SvgFlag
-                              fillColor={
-                                highestPriorityFlag?.flagDetails?.flagColour
-                              }
-                              height="25px"
-                              width="25px"
-                            />
+          <div className="mt-3">
+            {sortedFlags.length > 0 ? (
+              <div className="d-flex align-items-center justify-content-center cr-pointer">
+                <Popover
+                  content={
+                    <div style={{ height: "auto", overflowY: "scroll" }}>
+                      <strong>Flag details</strong>
+                      {sortedFlags.map((flag, index) => (
+                        <div key={index} className="p-1">
+                          <SvgFlag fillColor={flag?.flagDetails?.flagColour} />
+                          <span className="ml-2">
+                            {flag?.flagDetails?.flagName.replaceAll("_", " ")}
                           </span>
-                        </Badge>
-                      </Popover>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                );
-              }):"---"}
+                  }
+                  placement="right"
+                >
+                  <Badge
+                    count={sortedFlags.length}
+                    offset={[5, -3]}
+                    size="small"
+                    style={{ right: "3px", background: "#04306f" }}
+                  >
+                    <span>
+                      <SvgFlag
+                        fillColor={highestPriorityFlag?.flagDetails?.flagColour}
+                        height="25px"
+                        width="25px"
+                      />
+                    </span>
+                  </Badge>
+                </Popover>
+              </div>
+            ) : (
+              "---"
+            )}
           </div>
         </div>
         <div
@@ -156,7 +137,9 @@ const Flag = ({ patienIdDetails, patientDetails, flagsDetailsResult }) => {
                 )}
               </h5>
             ) : (
-              <h5 className="pt-3" style={{fontWeight:400}}>0.00</h5>
+              <h5 className="pt-3" style={{ fontWeight: 400 }}>
+                0.00
+              </h5>
             )}
           </div>
         </div>

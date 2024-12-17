@@ -124,14 +124,7 @@ const NonHccCards = ({
                     }
                     okText={okText}
                     cancelText={cancelText}
-                    onCancel={() =>
-                      moveToAnotherAction(
-                        setConfirmNotesModalValid,
-                        setIsValidAction,
-                        cancelText,
-                        cardTitle
-                      )
-                    }
+                    onCancel={() => setConfirmNotesModalValid(false)}
                     okButtonProps={{
                       type: "default",
                     }}
@@ -183,24 +176,24 @@ const NonHccCards = ({
                       setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
                       isMulitpleHeaderCode: isMulitpleHeaderCode,
                       setSelectMeatResult: "",
-                      getSelectedDosPageNumber:
-                      getSelectedDosPageNumber,
-                      storeFileDetails:storeFileDetails
+                      getSelectedDosPageNumber: getSelectedDosPageNumber,
+                      storeFileDetails: storeFileDetails,
                     })}
                   </div>
                   <div className={`${visitStyles.encounterAndSectionHeader}`}>
                     {getEncounterDateBackground({
                       value: data?.encounterDateSplit,
                       encounterDateMatching: encounterDateMatching,
-                      fileDosPageNumberList:  patientDetailsResult?.data?.response
-                      ?.fileDetailDTO?.dosSummaries,
+                      fileDosPageNumberList:
+                        patientDetailsResult?.data?.response?.fileDetailDTO
+                          ?.dosSummaries,
                       setIsModalOpenValidCodes: setIsModalOpenValidCodes
                         ? setIsModalOpenValidCodes
                         : null,
                       setSearch: setSearch,
                       setFileModalHeader: setFileModalHeader,
                       patientDocumentResult: patientDocumentResult,
-                      storeFileDetails:storeFileDetails
+                      storeFileDetails: storeFileDetails,
                     })}
                   </div>
                   <div className={`${visitStyles.encounterAndSectionHeader}`}>
@@ -217,7 +210,7 @@ const NonHccCards = ({
                       setIsModalOpenRadiology: setIsModalOpenRadiology,
                       setIsModalOpenValidCodes: setIsModalOpenValidCodes,
                       setFileModalHeader: setFileModalHeader,
-                     
+
                       patientDocumentResult: patientDocumentResult,
                       fileInitialPage: fileInitialPage,
                       setFileInitialPage: setFileInitialPage,
@@ -230,7 +223,7 @@ const NonHccCards = ({
                       diseaseName: data.dbDescription,
                       popup: "",
                       getSelectedDosPageNumber,
-                      storeFileDetails:storeFileDetails
+                      storeFileDetails: storeFileDetails,
                     })}
                   </div>
                 </div>

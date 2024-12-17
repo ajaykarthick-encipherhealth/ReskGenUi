@@ -245,7 +245,6 @@ const Hcc = ({
           marginBottom: "25px",
           position: "relative",
           bottom: "24px",
-          right: "26px",
         }}
       >
         <FontAwesomeIcon
