@@ -68,7 +68,7 @@ const NonHcc = ({
         if (res) {
           var dosLable = (
             <>
-              <div className="d-flex justify-content-between">
+              <div className="d-flex align-items-center justify-content-between">
                 <span className={styles.dosLable}>
                   {moment(res.dateOfService).format("MM-DD-YYYY")}
                 </span>

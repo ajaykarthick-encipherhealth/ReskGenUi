@@ -349,7 +349,7 @@ const Radiology = ({
                         <Select
                           placeholder="Select DOS"
                           onChange={handleOptions}
-                          value={selectDosValue}
+                          value={selectDosValue ? selectDosValue : null}
                           style={{ width: "220px" }}
                         >
                           {dosSummariesList?.map((data) => (
