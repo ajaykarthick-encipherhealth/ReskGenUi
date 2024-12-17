@@ -204,6 +204,7 @@ const Notification = ({
           placement: "top",
           duration: 1,
         });
+        setSelectedList([]);
       }
     }
   };

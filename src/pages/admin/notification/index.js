@@ -197,6 +197,7 @@ const Notification = ({ getAllCustomUsers, allCustomUsers, getUsers,getNotificat
           placement: "top",
           duration: 1,
         });
+        setSelectedList([]);
       }
     }
   };

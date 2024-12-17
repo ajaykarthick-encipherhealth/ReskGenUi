@@ -66,8 +66,8 @@ import { actions as authActions } from "../../../stores/authFlows";
 import { actions as reportActions } from "../../../stores/admin/report";
 import { actions as uploadImagesAction } from "../../../stores/authflow/imageUpload";
 import { actions as userAction } from "../../../stores/supervisor/users";
-import newHeaderLogo from '../../../images/logo/newChatImage.png';
-import newLoginLogo from '../../../images/logo/newLoginLogo.png';
+import newHeaderLogo from "../../../images/logo/newChatImage.png";
+import newLoginLogo from "../../../images/logo/newLoginLogo.png";
 import Profile from "./profile";
 import { getResponePopup } from "../../../utils/reusable";
 
@@ -319,14 +319,17 @@ const Header = ({
       notificationResponse?.data?.response?.totalUnreadCount + count?.length;
     setNotificationCount(countUnread ? countUnread : 0);
 
+    // console.log(open,"open")
+
     notificationSoundRef.current = new Audio("/messageSound.mp3");
+
     // Play notification sound
-    if (countUnread > 0) {
+    if (countUnread > 0 && !open) {
       notificationSoundRef.current.play().catch((error) => {
         console.error("Error playing notification sound:", error);
       });
     }
-  }, [webSocketNotificationData, notificationResponse]);
+  }, [webSocketNotificationData, notificationResponse, open]);
   useEffect(() => {
     if (
       !open &&
@@ -440,7 +443,9 @@ const Header = ({
             >
               {stateActive === data.to ? data.activeIcon : data.iconStyle}
             </div>
-            <span className={`nav-text header-nav-text text-truncate`}>{data.title}</span>
+            <span className={`nav-text header-nav-text text-truncate`}>
+              {data.title}
+            </span>
             <span></span>
           </div>
         </li>
@@ -479,7 +484,7 @@ const Header = ({
       };
     }
   }, [router, menuList]);
-  const handleChange = async(event) => {
+  const handleChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
       setSelectedFile(file);
@@ -544,7 +549,7 @@ const Header = ({
             status: "SUCCESS",
             message: "Profile Upload Successfully!",
           });
-         await getCurrentUserInfo({ userId });
+          await getCurrentUserInfo({ userId });
           setOpenContent(false);
         }
       }
@@ -556,7 +561,7 @@ const Header = ({
   };
 
   useEffect(() => {
-  const userId = getStorage("userId");
+    const userId = getStorage("userId");
     if (deleteImage?.status === "SUCCESS") {
       getCurrentUserInfo({ userId });
     }
@@ -568,8 +573,8 @@ const Header = ({
         <nav className="navbar navbar-expand">
           <div className="collapse navbar-collapse justify-content-between">
             <div className="d-flex">
-              <div className="header-logo" >
-                <Image src={newLoginLogo} alt="noImg"/>
+              <div className="header-logo">
+                <Image src={newLoginLogo} alt="noImg" />
               </div>
               {tenent?.data?.response?.companyLogoLink && (
                 <div className="d-flex justify-content-center align-items-center">
@@ -761,7 +766,9 @@ const Header = ({
                           </div>
                         )}
                         <div
-                          className={`notificationIcon ${notificationCount < 9 ? 'me-3' : "me-4"}`}
+                          className={`notificationIcon ${
+                            notificationCount < 9 ? "me-3" : "me-4"
+                          }`}
                           onClick={() => notificationDrawer()}
                         >
                           <Badge count={notificationCount} color="#04306F">
@@ -873,8 +880,12 @@ const Header = ({
         //     : []
         // }
         footer={[
-          <Button key="ok" type="primary" onClick={handleSubmit}
-          disabled={loading}>
+          <Button
+            key="ok"
+            type="primary"
+            onClick={handleSubmit}
+            disabled={loading}
+          >
             Ok
           </Button>,
           profileImg && (
@@ -905,7 +916,6 @@ const Header = ({
                 fileInputRef.current.value = "";
               }
             }}
-            
           >
             Cancel
           </Button>,
