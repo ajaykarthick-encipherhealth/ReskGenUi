@@ -48,8 +48,8 @@ const ManuallyAddProvider = ({
   };
 
   useEffect(() => {
-    if (hccFileDetails?.data?.response?.length>0) {
-      setSelectFileURL(hccFileDetails?.data?.response);
+    if (hccFileDetails?.data?.response) {
+      setSelectFileURL(hccFileDetails?.data?.response?.azureBlobPath);
     }
     if (dosYear) {
       getAddProviderAndDOSList(dosYear?.length > 0 ? dosYear[0]?.value : "");
@@ -79,7 +79,6 @@ const ManuallyAddProvider = ({
       <div style={{ width: "20%" }}>
         {providersList && (
           <div className="d-flex justify-content-end align-items-center">
-            {" "}
             <Button
               className={style.cancelBtn}
               onClick={(e) => {
@@ -92,22 +91,28 @@ const ManuallyAddProvider = ({
           </div>
         )}
         <div className="w-100 h-100 overflow-scroll">
-          {Array.isArray(dosAndProvidersList) ? dosAndProvidersList?.map((item) => (
-            <button className={`${style.providerButton} my-2`}>
-              <span className={style.dateField}>{item?.dateOfService}</span>
-              <span className={style.providerText}>Provider</span>
-              <Popover content={viewProvidersList({ list: item })}>
-                <span className={style.count}>
-                  {item?.hyperlinks?.length < 10
-                    ? `0${item?.hyperlinks?.length}`
-                    : item?.hyperlinks?.length}
+          {Array.isArray(dosAndProvidersList) ? (
+            dosAndProvidersList?.map((item) => (
+              <button className={`${style.providerButton} my-2`}>
+                <span className={style.dateField}>{item?.dateOfService}</span>
+                <span className={style.providerText}>Provider</span>
+                <Popover content={viewProvidersList({ list: item })}>
+                  <span className={style.count}>
+                    {item?.hyperlinks?.length < 10
+                      ? `0${item?.hyperlinks?.length}`
+                      : item?.hyperlinks?.length}
+                  </span>
+                </Popover>
+                <span onClick={(e) => handleEdit(e, item)}>
+                  <EditOutlined
+                    style={{ color: "#06439D", fontSize: "16px" }}
+                  />
                 </span>
-              </Popover>
-              <span onClick={(e) => handleEdit(e, item)}>
-                <EditOutlined style={{ color: "#06439D", fontSize: "16px" }} />
-              </span>
-            </button>
-          )):<Empty/>}
+              </button>
+            ))
+          ) : (
+            <Empty />
+          )}
         </div>
       </div>
     </div>
