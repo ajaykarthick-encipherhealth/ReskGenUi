@@ -263,6 +263,7 @@ const Details = ({
   }, [processedYearResult]);
 
   useEffect(() => {
+    getSelectedDos("");
     getLabFileDetailsClear();
     getLabDetailsClear();
     getRadiologyDetailsClear();
