@@ -77,7 +77,7 @@ const HeadTitle = ({
           {header}
         </div>
         {icon && (
-          <div className={styles.imgContainer}>
+          <div className={`cursor-pointer ${styles.imgContainer}`}>
             <FontAwesomeIcon onClick={handleOpenPicker} icon={faCalendar} />
           </div>
         )}
