@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, DatePicker, Modal } from "antd";
 import dayjs from "dayjs";
 import { connect } from "react-redux";
@@ -23,34 +23,43 @@ const HeadTitle = ({
   getDateRange,
   defaultDateRange,
 }) => {
-  const [selectedDates, setSelectedDates] = useState(
-    defaultDateRange
-      ? [dayjs(defaultDateRange.startDate), dayjs(defaultDateRange.endDate)]
-      : []
-  );
-  useEffect(() => {
-    if (defaultDateRange?.startDate && defaultDateRange?.endDate) {
-      setSelectedDates([
-        dayjs(defaultDateRange.startDate),
-        dayjs(defaultDateRange.endDate),
-      ]);
-    }
-  }, [defaultDateRange]);
+  const [tempDates, setTempDates] = useState([]);
+  const [backupDates, setBackupDates] = useState([]);
+  const [clearFlag, setClearFlag] = useState(false);
 
-  const handleDatePickerChange = (date, dateStrings) => {
+  const handleDatePickerChange = (date) => {
     if (date) {
-      const dates = {
-        startDate: dayjs(date[0]).format("YYYY-MM-DD") + "T00:00:00.000Z",
-        endDate: dayjs(date[1]).format("YYYY-MM-DD") + "T23:59:59.000Z",
-      };
-      setSelectedDates(date);
-      getDateRange(dates);
-      setOpenPicker(false);
+      setTempDates(date);
+      setClearFlag(false);
     } else {
-      setSelectedDates([]);
-      getDateRange(null);
-      setOpenPicker(false);
+      setTempDates([]);
+      setClearFlag(true);
     }
+  };
+
+  const handleOk = () => {
+    if (clearFlag) {
+      getDateRange(null);
+    } else if (tempDates?.length) {
+      const dates = {
+        startDate: dayjs(tempDates[0]).format("YYYY-MM-DD") + "T00:00:00.000Z",
+        endDate: dayjs(tempDates[1]).format("YYYY-MM-DD") + "T23:59:59.000Z",
+      };
+      getDateRange(dates);
+    }
+    setBackupDates(tempDates);
+    setOpenPicker(false);
+  };
+
+  const handleCancel = () => {
+    setTempDates(backupDates);
+    setClearFlag(false);
+    setOpenPicker(false);
+  };
+
+  const handleOpenPicker = () => {
+    setBackupDates(tempDates);
+    setOpenPicker(true);
   };
 
   return (
@@ -69,15 +78,15 @@ const HeadTitle = ({
         </div>
         {icon && (
           <div className={styles.imgContainer}>
-            <FontAwesomeIcon
-              onClick={() => setOpenPicker(!openPicker)}
-              icon={faCalendar}
-            />
+            <FontAwesomeIcon onClick={handleOpenPicker} icon={faCalendar} />
           </div>
         )}
       </div>
       {anchorTag && (
-        <span className={styles.anchor} onClick={typeof handleOpen === "function" ?handleOpen:undefined}>
+        <span
+          className={styles.anchor}
+          onClick={typeof handleOpen === "function" ? handleOpen : undefined}
+        >
           View All
         </span>
       )}
@@ -85,11 +94,17 @@ const HeadTitle = ({
         open={openPicker}
         width={650}
         closable={false}
-        onCancel={() => {
-          setOpenPicker(false);
-          setSelectedDates([]);
-        }}
-        footer={null}
+        onCancel={handleCancel}
+        footer={
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button onClick={handleCancel} style={{ marginRight: "10px" }}>
+              Cancel
+            </Button>
+            <Button onClick={handleOk} type="primary">
+              Ok
+            </Button>
+          </div>
+        }
         className={styles.customModal}
       >
         <div
@@ -97,36 +112,15 @@ const HeadTitle = ({
         >
           <RangePicker
             getPopupContainer={() => document.getElementById("date-popup")}
-            value={selectedDates?.length ? selectedDates : null}
+            value={tempDates?.length ? tempDates : null}
             onChange={handleDatePickerChange}
             format="MM-DD-YYYY"
             disabledDate={(current) => disableFutureDate(current)}
+            allowClear={true}
             inputReadOnly={true}
             open={openPicker}
           />
         </div>
-        {/* <div
-          className="modal-footer"
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginTop: "20px",
-          }}
-        >
-          <Button
-            onClick={handleRefresh}
-            type="default"
-            style={{ marginRight: "10px" }}
-          >
-            Refresh
-          </Button>
-          <Button
-            onClick={() => setOpenPicker(false)}
-            style={{ marginLeft: "10px", marginRight: "20px" }}
-          >
-            Cancel
-          </Button>
-        </div> */}
         <div id="date-popup" style={{ position: "relative" }} />
       </Modal>
     </div>
