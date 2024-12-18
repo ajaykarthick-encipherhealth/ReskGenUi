@@ -733,7 +733,7 @@ const Reports = ({
                                         }
                                         // className={`custom-react-report-select`}
                                         isSearchable={false}
-                                        value={selectedOptions[info?.name]}
+                                        value={selectedOptions ? selectedOptions[info?.name]: null}
                                         allowClear={true}
                                         style={{width:"150px"}}
                                       />
