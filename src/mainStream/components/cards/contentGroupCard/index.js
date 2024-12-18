@@ -62,9 +62,9 @@ const ContentGroupCard = ({
       controller.abort();
       setStorage("patientId", data.patientId);
       navigate.push({
-        pathname: `/${modifiedRole}/patients/details`,
+        pathname: `/${modifiedRole}/report/reportDetails`,
         query: {...page,fromReport:modifiedRole},
-      },`/${modifiedRole}/patients/details`);
+      },`/${modifiedRole}/report/reportDetails`);
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",

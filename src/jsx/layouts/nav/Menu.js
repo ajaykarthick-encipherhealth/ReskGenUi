@@ -71,6 +71,7 @@ export const PhysicanMenuList = [
     activeIcon: <FileFilled />,
     to: "/reviewer/report",
     childRoute: "/reviewer/report/individualreport",
+    childRoute2: "/reviewer/report/reportDetails",
   },
   // {
   //   title: "Report",
@@ -218,6 +219,7 @@ export const L2AuditorMenuList = () => {
       activeIcon: <FileFilled />,
       to: "/supervisor/report",
       childRoute: "/supervisor/report/individualreport",
+      childRoute2: "/supervisor/report/reportDetails",
     },
   ];
 };
@@ -287,6 +289,7 @@ export const ProviderMenuList = [
     activeIcon: <FileTextFilled />,
     to: "/tenantAdmin/report",
     childRoute: "/tenantAdmin/report/individualreport",
+    childRoute2: "/tenantAdmin/report/reportDetails",
   },
   {
     title: "Tracking",
