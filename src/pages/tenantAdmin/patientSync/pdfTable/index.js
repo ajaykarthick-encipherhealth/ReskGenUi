@@ -49,6 +49,8 @@ const DetailedViewPdfTable = ({
   setViewDetailedBatch,
   webSocketData,
   viewDetailedBatch,
+  routedData,
+  getRoutedData
 }) => {
   const router = useRouter();
   const [searchVal, setSearchVal] = useState(null);
@@ -94,19 +96,14 @@ const DetailedViewPdfTable = ({
   };
 
   useEffect(() => {
-    const encodedParams = JSON.parse(getStorage("patientSyncEncodedValue"));
-    if (encodedParams) {
-      try {
-        const decodedParams = JSON.parse(atob(encodedParams));
-        setSearchVal(decodedParams?.searchVal);
-        setSearch({
-          searchVal: decodedParams?.searchVal,
-          name: "initialSearch",
-        });
-        setPageNo(decodedParams?.pageNo);
-      } catch (error) {
-        console.log(error);
-      }
+    // const decodedParams = router.query;
+    if (routedData) {
+      setSearchVal(routedData?.searchVal);
+      setSearch({
+        searchVal: routedData?.searchVal,
+        name: "initialSearch",
+      });
+      setPageNo(routedData?.pageNo||0);
     }
   }, []);
   useEffect(() => {
@@ -156,13 +153,13 @@ const DetailedViewPdfTable = ({
     }
   }, [reportActiveTab, pdfTabledata, params]);
   useEffect(() => {
-    if(batchId){
-    getBatchInfo({
-      batchId: batchId,
-      page: pageNo,
-      search: searchVal || "",
-    });
-  }
+    if (batchId) {
+      getBatchInfo({
+        batchId: batchId,
+        page: pageNo,
+        search: searchVal || "",
+      });
+    }
   }, [batchId, pageNo, searchVal]);
   const headerData = [
     {
@@ -302,6 +299,7 @@ const DetailedViewPdfTable = ({
                             setSearch();
                             setSearchVal(null);
                             setViewDetailedBatch({ status: false, data: null });
+                            getRoutedData("");
                           }}
                         >
                           <Image src={leftArrow} />
@@ -366,7 +364,7 @@ const DetailedViewPdfTable = ({
                             params={{
                               searchVal: searchVal,
                               pageNo: pageNo,
-                              viewDetailedBatch: viewDetailedBatch,
+                              viewDetailedBatch
                             }}
                             currentId={currentId}
                           />
@@ -391,11 +389,13 @@ const connector = connect(
     pdfTabledata: state.tenantAdmin?.patientSync?.allBatches?.data?.response,
     reportActiveTab: state.admin?.report?.activeTab,
     webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
+    routedData: state.tenantAdmin?.patientSync?.routedData,
   }),
   {
     getBatchInfo: allActions.getBatchInfo,
     getAllBatches: allActions.getAllBatches,
     getActiveTab: allReportActions.activeTab,
+    getRoutedData:allActions.getRoutedData
   }
 );
 export default connector(DetailedViewPdfTable);

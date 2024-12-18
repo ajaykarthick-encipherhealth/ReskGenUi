@@ -1,3 +1,4 @@
+import { createAction } from "redux-actions";
 import { createActionThunk } from "../../../utils/redux";
 import * as network from "./network";
 
@@ -25,3 +26,4 @@ export const getTriggerBatch=createActionThunk(
   'TRIGGER_BATCH',
   network.triggerBatch
 )
+export const getRoutedData = createAction("GET_ROUTED_DATA");

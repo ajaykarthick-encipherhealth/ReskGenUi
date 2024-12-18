@@ -23,6 +23,7 @@ import { connect } from "react-redux";
 import { getResponePopup } from "../../../utils/reusable";
 import { getStorage } from "../../../utils/storages";
 import UploadModal from "./uploadFile/uploadModal";
+import { useRouter } from "next/router";
 
 const { RangePicker } = DatePicker;
 
@@ -308,9 +309,9 @@ const Index = ({
   pdfLoader,
   getActiveTab,
   reportActiveTab,
-  uploadFiles,
-  uploadFilesLoader,
+  routedData
 }) => {
+  const router = useRouter();
   const [filteredCOder, setFilteredCoder] = useState(null);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -410,14 +411,11 @@ const Index = ({
     }));
   };
   useEffect(() => {
-    const encodedParams = JSON.parse(getStorage("patientSyncEncodedValue"));
-    if (encodedParams) {
-      try {
-        const decodedParams = JSON.parse(atob(encodedParams));
-        setViewDetailedBatch(decodedParams?.viewDetailedBatch);
-      } catch (error) {
-        console.log(error);
-      }
+    if (routedData) {
+      setViewDetailedBatch(
+        routedData?.viewDetailedBatch
+         
+      );
     }
   }, []);
   useEffect(() => {
@@ -717,6 +715,7 @@ const connector = connect(
     pdfLoader: state.tenantAdmin?.patientSync?.batchLoader,
     reportActiveTab: state.admin?.report?.activeTab,
     uploadFilesLoader: state?.tenantAdmin?.patientSync?.uploadFilesLoader,
+    routedData: state.tenantAdmin?.patientSync?.routedData,
   }),
   {
     getAllBatches: allActions.getAllBatches,

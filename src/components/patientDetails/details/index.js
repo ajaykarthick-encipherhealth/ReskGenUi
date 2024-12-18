@@ -67,6 +67,7 @@ import { connect } from "react-redux";
 import HeaderComponent from "./components/headerComponent";
 import { actions as reviewerWorkQueueAction } from "../../../stores/reviewer/workqueue";
 import { allFilters } from "../../../pages/reviewer/patients/headerFilters";
+import { actions as allActions } from "../../../stores/tenantAdmin/patientSync";
 export const navigetPageDetails = async (
   pageTitle,
   setSideNavLabelActiveKey,
@@ -133,7 +134,8 @@ const Details = ({
   selectPatientId,
   getActiveTab,
   getFilteredList,
-  hccFileDetails
+  getRoutedData,
+  routedData,
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -220,7 +222,7 @@ const Details = ({
     // if (activeTab == 4) {
     //   getAllProcessYear(patientId, "LAB");
     // }
-    getPatientListToDetails(patientId)
+    getPatientListToDetails(patientId);
     if (patientDetailsResult?.data?.response?.fileId != fileId) {
       getPatientHccFile(patientDetailsResult?.data?.response?.fileId);
     }
@@ -510,8 +512,7 @@ const Details = ({
     const user = getStorage("userRole");
     const isAdminTracking = getStorage("isAdminTracking");
     const isTenantAdminTracking = getStorage("isTenantAdminTracking");
-    const isSupervisorUserDetails = getStorage("isSupervisorUserDetails");
-    const isSupervisorAuited = getStorage("isSupervisorAuited");
+    const backRoute = getStorage("routeBackTo");
     if (user && user.toLowerCase() === "admin") {
       if (navigate.query?.fromReport) {
         navigate.push(
@@ -528,7 +529,6 @@ const Details = ({
       }
     } else if (user && user.toLowerCase() === "tenant_admin") {
       if (user && user.toLowerCase() === "tenant_admin") {
-        const fromPatientSync = getStorage("fromPatientSync");
         if (navigate.query?.fromReport) {
           navigate.push(
             {
@@ -537,8 +537,9 @@ const Details = ({
             },
             `/${navigate?.query?.fromReport}/report`
           );
-        } else if (fromPatientSync === "true") {
-          navigate.push("/tenantAdmin/patientSync");
+        } else if (routedData||backRoute) {
+          getRoutedData(routedData);
+          navigate.push(backRoute);
           getActiveTab("PDF");
         } else if (isTenantAdminTracking == "true") {
           navigate.push("/tenantAdmin/tracking");
@@ -1519,6 +1520,7 @@ const enhancer = connect(
       state.patientDetails?.details?.getStoreFileIdDetailsPre,
     selectPatientId: state.patientDetails?.details?.selectPatientId,
     hccFileDetails: state?.patientDetails?.details?.hccFileResult,
+    routedData: state.tenantAdmin?.patientSync?.routedData,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -1547,6 +1549,7 @@ const enhancer = connect(
     getPatientID: detailsActions.getPatientID,
     getActiveTab: allReportActions.activeTab,
     getFilteredList: reviewerWorkQueueAction.reviewerFilterList,
+    getRoutedData: allActions.getRoutedData,
   }
 );
 export default enhancer(Details);

@@ -18,6 +18,7 @@ import { useRouter } from "next/router";
 import { setStorage } from "../../../../utils/storages";
 import { faRotate } from "@fortawesome/free-solid-svg-icons";
 import UploadModal from "../../../../pages/tenantAdmin/patientSync/uploadFile/uploadModal";
+import {actions as allActions} from "../../../../stores/tenantAdmin/patientSync";
 
 export const getColors = (rowStatus) => {
   let strokeColor;
@@ -65,7 +66,8 @@ const DetailedPdfTable = ({
   loader,
   webSocketData,
   params,
-  currentId
+  currentId,
+  getRoutedData
 }) => {
   const navigate = useRouter();
   const [socketData, setSocketData] = useState(tableData);
@@ -81,12 +83,12 @@ const DetailedPdfTable = ({
   const gotoPatientDetails = (row) => {
     if (row?.processStage === "FINISHED") {
       setStorage("patientId", row?.patientId);
-      const encodedValue = btoa(JSON.stringify(params));
-      setStorage("patientSyncEncodedValue", JSON.stringify(encodedValue));
-      setStorage("fromPatientSync", true);
-      navigate.push({
-        pathname: "/tenantAdmin/patientSync/batchFilesView",
-      });
+      // const encodedValue = btoa(JSON.stringify(params));
+      // setStorage("patientSyncEncodedValue", JSON.stringify(encodedValue));
+      // setStorage("fromPatientSync", true);
+      setStorage("routeBackTo","/tenantAdmin/patientSync")
+      getRoutedData(params)
+      navigate.push("/tenantAdmin/patientSync/batchFilesView");
     } else {
       notification.warning({
         message: row?.patientId + " file not processed. Please wait.",
@@ -315,6 +317,8 @@ const DetailedPdfTable = ({
 };
 const connector = connect((state) => ({
   webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
-}));
+}),{
+  getRoutedData:allActions.getRoutedData
+});
 
 export default connector(DetailedPdfTable);
