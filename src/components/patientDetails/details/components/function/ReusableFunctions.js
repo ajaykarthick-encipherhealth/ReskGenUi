@@ -1785,13 +1785,17 @@ export const getCaptureSectionBackgroundMeatNew = (
   getRadiologyPDF,
   getLabPDF,
   getCurrentDiseaseType,
-  setLabData
+  setLabData,
+  storeFileDetails
 ) => {
   var dublicateCaptureRemove = removeDuplicatesArray(value);
 
   return dublicateCaptureRemove?.map((res) => {
     const result = captureSectionMatching?.filter(
       (res2) => res2.sectionName === res.header
+    );
+    const headerResult = value?.filter(
+      (res2) => res2.header == result[0]?.sectionName
     );
     var backColor = result[0]?.backgroundColor;
     var textColor = result[0]?.sectionColor;
@@ -1804,28 +1808,29 @@ export const getCaptureSectionBackgroundMeatNew = (
           const selectedMeatData = dublicateCaptureRemove?.find(
             (item) => item?.header === res.header
           );
-          if (selectedMeatData?.stateIndicator) {
-            setLabData && setLabData(selectedMeatData?.fileId);
-            getCurrentDiseaseType && getCurrentDiseaseType(false);
-            selectedMeatData?.stateIndicator === "LAB" ||
-            selectedMeatData?.stateIndicator === "RADIOLOGY"
-              ? getLabPDF &&
-                getLabPDF({
-                  fileId: selectedMeatData?.fileId,
-                })
-              : getRadiologyPDF &&
-                getRadiologyPDF(
-                  patientId,
-                  "",
-                  selectedMeatData?.dateOfService,
-                  "",
-                  selectedMeatData?.diagnosticTestName
-                );
-          } else {
-            getCurrentDiseaseType && getCurrentDiseaseType(true);
-          }
+          
+          // if (selectedMeatData?.stateIndicator) {
+          //   setLabData && setLabData(selectedMeatData?.fileId);
+          //   getCurrentDiseaseType && getCurrentDiseaseType(false);
+          //   selectedMeatData?.stateIndicator === "LAB" ||
+          //   selectedMeatData?.stateIndicator === "RADIOLOGY"
+          //     ? getLabPDF &&
+          //       getLabPDF({
+          //         fileId: selectedMeatData?.fileId,
+          //       })
+          //     : getRadiologyPDF &&
+          //       getRadiologyPDF(
+          //         patientId,
+          //         "",
+          //         selectedMeatData?.dateOfService,
+          //         "",
+          //         selectedMeatData?.diagnosticTestName
+          //       );
+          // } else {
+          //   getCurrentDiseaseType && getCurrentDiseaseType(true);
+          // }
           newFindValueDocument(
-            res,
+            headerResult[0],
             documentPlace,
             setSearch,
             setFileLoading,
@@ -1840,8 +1845,11 @@ export const getCaptureSectionBackgroundMeatNew = (
             setSelectMeatResult,
             meatresult,
             setSelectHyperlink,
-            value
+            value,
+            "",
+            storeFileDetails
           );
+
         }}
         style={{
           backgroundColor: stringToColour(res.header) + 33,
