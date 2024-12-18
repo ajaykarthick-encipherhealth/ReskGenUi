@@ -555,8 +555,11 @@ const Details = ({
           },
           `/${navigate?.query?.fromReport}/report`
         );
-      } else if (JSON.parse(getStorage("isSupervisorAuited"))) {
-        navigate.push("/supervisor/auditing");
+      } else if (JSON.parse(getStorage("isSupervisorAudited"))) {
+        navigate.push(
+          { pathname: "/supervisor/auditing", query: navigate.query },
+          "/supervisor/auditing"
+        );
       } else if (JSON.parse(getStorage("isSupervisorUserDetails"))) {
         navigate.push("/supervisor/user/userQueue");
       } else {

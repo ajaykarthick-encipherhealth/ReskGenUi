@@ -8,8 +8,14 @@ import Search from "../../../../components/search";
 import { resetPageNumber } from "../../../../components/headerFilters/functions";
 import { InfoCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../../tenantAdmin/tracking/filters";
-import { removeStorage } from '../../../../utils/storages'
-const allFilters = ["Reviewer Status", "Select Audited Status", "Audited Date"];
+import { removeStorage } from "../../../../utils/storages";
+import dayjs from 'dayjs'
+export const allFilters = [
+  "Reviewer Status",
+  "Select Audited Status",
+  "Audited Date",
+  "Audited Due Date",
+];
 
 const Filters = ({
   setSearch,
@@ -53,6 +59,9 @@ const Filters = ({
   setClear,
   activeFilters,
   setActiveFilters,
+  setSelectedDateRange,
+  selectedDateRange,
+  selectedDates,
 }) => {
   const [selectAll, setSelectAll] = useState(false);
   const handleClearAllFilters = () => {
@@ -80,7 +89,7 @@ const Filters = ({
     switch (filter) {
       case "Select Audited Status":
         return (
-          <div className="col-2">
+          <div className="col-xl-2 col-md-4">
             <label className={`${styles.label} responsiveLabel`}>
               {selectlabel}
             </label>
@@ -92,36 +101,42 @@ const Filters = ({
                     resetPageNumber(setPageNo);
                   }
                   setClear(false);
-                  removeStorage("supervisorStatus")
+                  removeStorage("supervisorStatus");
                 }}
                 options={selectOptions}
                 isSearchable={false}
                 placeholder="Select"
                 allowClear={true}
-                value={selectedOption ? selectedOption :null}
+                value={selectedOption ? selectedOption : null}
               />
             </div>
           </div>
         );
       case "Audited Date":
+      case "Audited Due Date":
         return (
-          <div className="col-2">
+          <div className="col-xl-2 col-md-4">
             <DateRangePicker
-              selectedDates={selectedDates2}
-              pickerlabel={pickerlabe2}
-              defaultStartDate={defaultStartDate}
-              defaultEndDate={defaultEndDate}
+              selectedDates={selectedDates}
+              pickerlabel={filter}
+              // defaultStartDate={defaultStartDate}
+              // defaultEndDate={defaultEndDate}
               setStartDate={setStartDate2}
               setEndDate={setEndDate2}
               disabled={false}
-              setSelectedDates={setSelectedDates2}
+              setSelectedDates={setSelectedDates}
               setPageNo={setPageNo}
+              handleMultipleValues={true}
+              pickerName={filter?.replace(/\s+/g, "")}
+              setSelectedDateRange={setSelectedDateRange}
+              selectedDateRange={selectedDateRange}
             />
           </div>
         );
+
       case "Reviewer Status":
         return (
-          <div className="col-2">
+          <div className="col-xl-2 col-md-4">
             <label className={`${styles.label} responsiveLabel`}>
               {createdTolabel}
             </label>
@@ -150,20 +165,12 @@ const Filters = ({
   return (
     <div className="d-flex">
       <div className={`row filter-contain ${styles.containerStyle}`}>
-        <div className="col-2">
+        <div className="col-xl-2 col-md-4">
           <Search
             searchlabel={searchlabel}
-            setSearch={setSearch}
-            activeTab={activeTab}
-            setSentSearch={setSentSearch}
-            setReceivedSearch={setReceivedSearch}
-            setCoderSearch={setCoderSearch}
-            coderSearch={coderSearch}
-            receivedSearch={receivedSearch}
-            sentSearch={sentSearch}
             search={search}
-            searchVal={searchVal}
-            setSearchVal={setSearchVal}
+            value={search}
+            setSearch={setSearchVal}
             setPageNo={setPageNo}
           />
         </div>

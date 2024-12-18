@@ -48,7 +48,7 @@ export async function GetWorkListFilters({ data }) {
     method: "GET",
   };
   const res = await requestPortal(
-    `dbservice/auditor/patient/workqueue/filter?&page=${data?.pageNo}&size=15&auditedStatus=${data?.selectedOption}&auditDueDateStart=${data?.computedStartDate}&auditDueDateEnd=${data?.computedEndDate}&auditedDateStart=${data?.completedStartDate}&auditedDateEnd=${data?.completedEndDate}&searchString=${data?.search}&sortField=${data?.sort?.sortField}&sortdirection=${data?.sort?.sortDir}&patientAllocated=${data?.selCreatedBy}`,
+    `dbservice/auditor/patient/workqueue/filter?&page=${data?.pageNo}&size=15&auditedStatus=${data?.selectedOption}&auditDueDateStart=${data?.auditDueDateStart}&auditDueDateEnd=${data?.auditDueDateEnd}&auditedDateStart=${data?.auditDateStart}&auditedDateEnd=${data?.auditDateEnd}&searchString=${data?.search}&sortField=${data?.sort?.sortField}&sortdirection=${data?.sort?.sortDir}&patientAllocated=${data?.selCreatedBy}`,
     options
   );
   return res;

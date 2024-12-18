@@ -13,6 +13,7 @@ const Search = ({
   setPageNo,
   id = "search",
   name = "search",
+  value,
 }) => {
   return (
     <div>
@@ -34,6 +35,8 @@ const Search = ({
         setPageNo={setPageNo}
         id={id}
         name={name}
+        value={value}
+    
       />
     </div>
   );

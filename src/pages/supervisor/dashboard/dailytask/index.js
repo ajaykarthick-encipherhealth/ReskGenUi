@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import { actions as supervisorAction } from "../../../../stores/supervisor/dashboard";
 import { dailyTaskData } from "../../../../stores/supervisor/dashboard/actions";
 import { setStorage } from "../../../../utils/storages";
+import moment from "moment";
 
 const DailyTask = ({
   dailyStatusDatas,
@@ -45,7 +46,7 @@ const DailyTask = ({
     },
     {
       color: "#C26100",
-      name: "ReAudited",
+      name: "ReAudit",
     },
     {
       color: "#EB5252",
@@ -120,7 +121,7 @@ const DailyTask = ({
         pending: matchingStatusData?.auditPending || 0,
         hold: matchingStatusData?.auditHold || 0,
         audited: matchingStatusData?.audited || 0,
-        reAudited: matchingStatusData?.reAudited || 0,
+        reAudit: matchingStatusData?.reAudit || 0,
         allocated: matchingStatusData?.auditAllocated || 0,
         declined: matchingStatusData?.auditDeclined || 0,
       };
@@ -136,7 +137,7 @@ const DailyTask = ({
     allocated,
     pending,
     hold,
-    reAudited,
+    reAudit,
     audited,
     declined
   ) => {
@@ -179,8 +180,8 @@ const DailyTask = ({
               },
             },
             {
-              value: reAudited,
-              name: "ReAudited",
+              value: reAudit,
+              name: "ReAudit",
               itemStyle: {
                 color: "#C26100",
               },
@@ -321,17 +322,38 @@ const DailyTask = ({
                             JSON.stringify(allFilters)
                           );
                           const params = {
-                            auditedDateStart: data?.dateString
-                              ? data?.dateString
-                              : "",
-                            auditedDateEnd: data?.dateString
-                              ? data?.dateString
-                              : "",
+                            // AuditedDueDate: JSON.stringify({
+                            selectedDates: JSON.stringify({
+                              AuditedDueDate: [
+                                dayjs(data?.date),
+                                dayjs(data?.date),
+                              ],
+                            }),
+                            selectedDateRange: JSON.stringify({
+                              AuditedDueDate: {
+                                startDate: data?.date
+                                  ? `${moment(data?.date, "MM-DD-YYYY").format(
+                                      "YYYY-MM-DD"
+                                    )}T00:00:00.000Z`
+                                  : "",
+
+                                endDate: data?.date
+                                  ? `${moment(data?.date, "MM-DD-YYYY").format(
+                                      "YYYY-MM-DD"
+                                    )}T23:59:59.999Z`
+                                  : "",
+                              },
+                            }),
+                            // })
                           };
-                          setStorage("supervisorDate", JSON.stringify(params));
-                          router?.push({
-                            pathname: "/supervisor/auditing",
-                          });
+                          // setStorage("supervisorDate", JSON.stringify(params));
+                          router?.push(
+                            {
+                              pathname: "/supervisor/auditing",
+                              query: params,
+                            },
+                            "/supervisor/auditing"
+                          );
                         }}
                       >
                         <div className={styles.headerDisplay}>
@@ -350,7 +372,7 @@ const DailyTask = ({
                                 data?.allocated,
                                 data?.pending,
                                 data?.hold,
-                                data?.reAudited,
+                                data?.reAudit,
                                 data?.audited,
                                 data?.declined
                               )}
@@ -367,24 +389,64 @@ const DailyTask = ({
                                     style={{ display: "flex" }}
                                     onClick={() => {
                                       const params = {
-                                        statusSelectedStatus: item?.name
-                                          ? (item?.name === 'AuditPending' || item?.name === 'AuditDeclined'
-                                            ? item?.name.replace(/([a-z])([A-Z])/g, "$1_$2").toUpperCase()
-                                            : item?.name
-                                                .toUpperCase())
+                                        selectedOption: item?.name
+                                          ? item?.name === "AuditPending" ||
+                                            item?.name === "AuditDeclined"
+                                            ? item?.name
+                                                .replace(
+                                                  /([a-z])([A-Z])/g,
+                                                  "$1_$2"
+                                                )
+                                                .toUpperCase()
+                                            : item?.name.toUpperCase()
                                           : "",
+                                        selectedDates: JSON.stringify({
+                                          AuditedDueDate: [
+                                            data?.date,
+                                            data?.date,
+                                          ],
+                                        }),
+                                        selectedDateRange: JSON.stringify({
+                                          AuditedDueDate: {
+                                            startDate: data?.date
+                                              ? `${moment(
+                                                  data?.date,
+                                                  "MM-DD-YYYY"
+                                                ).format(
+                                                  "YYYY-MM-DD"
+                                                )}T00:00:00.000Z`
+                                              : "",
+
+                                            endDate: data?.date
+                                              ? `${moment(
+                                                  data?.date,
+                                                  "MM-DD-YYYY"
+                                                ).format(
+                                                  "YYYY-MM-DD"
+                                                )}T23:59:59.999Z`
+                                              : "",
+                                          },
+                                        }),
                                       };
-                                      setStorage(
-                                        "SuperVisorfilter",
-                                        JSON.stringify(allFilters)
+                                      // setStorage(
+                                      //   "SuperVisorfilter",
+                                      //   JSON.stringify(allFilters)
+                                      // );
+                                      // setStorage(
+                                      //   "supervisorStatus",
+                                      //   JSON.stringify(params)
+                                      // );
+                                      // setStorage(
+                                      //   "supervisorDate",
+                                      //   JSON.stringify(params)
+                                      // );
+                                      router?.push(
+                                        {
+                                          pathname: "/supervisor/auditing",
+                                          query: params,
+                                        },
+                                        "/supervisor/auditing"
                                       );
-                                      setStorage(
-                                        "supervisorStatus",
-                                        JSON.stringify(params)
-                                      );
-                                      router?.push({
-                                        pathname: "/supervisor/auditing",
-                                      });
                                     }}
                                   >
                                     <div
@@ -402,8 +464,8 @@ const DailyTask = ({
                                       ? data?.audited
                                       : item.name === "AuditHold"
                                       ? data.hold
-                                      : item.name === "ReAudited"
-                                      ? data?.reAudited
+                                      : item.name === "ReAudit"
+                                      ? data?.reAudit
                                       : item.name === "AuditDeclined" &&
                                         data.declined}
                                   </div>

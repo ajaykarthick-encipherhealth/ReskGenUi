@@ -30,7 +30,6 @@ PatientTable({
   params,
   activeFilters,
   setActiveFilters,
-
 }) {
   const navigate = useRouter();
   const priorityOptions = [
@@ -88,13 +87,14 @@ PatientTable({
       const { signal } = controller;
       controller.abort();
       setStorage("patientId", data.patientId);
-      setStorage("isSupervisorAuited", true);
+      setStorage("isSupervisorAudited", true);
       setStorage("isSupervisorUserDetails",false)
-      setStorage("supervisorFilters", JSON.stringify(activeFilters));
-      setStorage("supervisorEncodedValue", JSON.stringify(params));
+      // setStorage("supervisorFilters", JSON.stringify(activeFilters));
+      // setStorage("supervisorEncodedValue", JSON.stringify(params));
       removeStorage("SuperVisorfilter") 
       navigate.push({
         pathname: "/supervisor/patients/details",
+        query:params
       },"/supervisor/patients/details");
     } else {
       notification.warning({
@@ -346,7 +346,7 @@ PatientTable({
           )}
         </tbody>
       </table>
-      <div></div>
+
     </div>
   );
 }

@@ -9,8 +9,6 @@ import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../jsx/layouts/nav/Header";
 import dayjs from "dayjs";
 import PatientTable from "../table/PatientList/patientList";
-import SpinnerDots from "../../../components/spinner";
-import HeaderFilters from "../../../components/headerFilters";
 import { generateOptionsListSupervisor } from "../../../components/headerFilters/functions";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
 import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
@@ -41,8 +39,8 @@ import Image from "next/image";
 import { patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
-import Filters from "./filters";
-import { get } from "http";
+import Filters, { allFilters } from "./filters";
+import moment from "moment";
 const bullets = [
   {
     color: "#377880",
@@ -88,12 +86,11 @@ const Patient = ({
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
-  const [completedStartDate, setCompletedStartDate] = useState(""
-  );
+  const [completedStartDate, setCompletedStartDate] = useState("");
   const [completedEndDate, setCompletedEndDate] = useState("");
   const [computedStartDate, setComputedStartDate] = useState("");
   const [computedEndDate, setComputedEndDate] = useState("");
-  const [selectedOption, SetSelectedOption] = useState("" );
+  const [selectedOption, SetSelectedOption] = useState("");
   const [patientSortOrder, setPatientSortOrder] = useState("ASC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [selecteddates2, setSelectedDate2s] = useState([]);
@@ -115,62 +112,16 @@ const Patient = ({
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [parsedData, setParsedData] = useState([]);
-  const [search, setSearch] = useState(
-   ""
-  );
-  const [selCreatedBy, setSelCreatedBy] = useState(
-   ""
-  );
+  const [search, setSearch] = useState("");
+  const [selCreatedBy, setSelCreatedBy] = useState("");
   const [selectedDates, setSelectedDates] = useState([]);
+  const [selectedDateRange, setSelectedDateRange] = useState([]);
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
   const [clear, setClear] = useState(false);
-  const [activeFilters, setActiveFilters] = useState([
-  ]);
-  useEffect(() => {
-    let tenId = getStorage("tenantId");
-    let orgId = getStorage("orgId");
-    setTenantId(tenId);
-    setLocalOrgId(orgId);
-    setLocalUserId(uId);
-    const uId = getStorage("user")
-    const data = {
-      pageNo,
-      computedStartDate,
-      computedEndDate,
-      selectedOption: clear ? "" : selectedOption,
-      search :clear ? "" : search,
-      completedStartDate: clear ? "" : selecteddates2?.[0]?selecteddates2?.[0]:"",
-      completedEndDate: clear ? "" : selecteddates2?.[1]?selecteddates2?.[1]:"",
-      patientSortOrder,
-      selAllocatedBy,
-      sort,
-      selCreatedBy: clear ? "" : selCreatedBy,
-    };
-    getWorkListFilter({ data: data });
-    getFilters({ field: "patientAllocated" });
-  }, [
-    pageNo,
-    computedStartDate,
-    computedEndDate,
-    selectedOption,
-    selAllocatedBy,
-    search,
-    completedStartDate,
-    selecteddates2,
-    completedEndDate,
-    patientSortOrder,
-    sort,
-    selCreatedBy,
-  ]);
-
-  useEffect(() => {
-    if (response?.data?.response?.content) {
-      getAllList();
-    }
-  }, [parsedData, response, pageNo, pageSize]);
-
+  const [activeFilters, setActiveFilters] = useState([]);
+  const [paramsFilter, setParamsFilter] = useState(null);
   const getAllList = () => {
     if (response) {
       let resultMap = [];
@@ -243,51 +194,6 @@ const Patient = ({
     }
   };
 
- useEffect(()=>{
-  const decodedParams = JSON.parse(getStorage("supervisorEncodedValue"));
-  const sessionActiveFilters = JSON.parse(getStorage("supervisorFilters"));
-  if (decodedParams) {
-    setSelectedDate2s([
-      decodedParams?.completedStartDate
-        ? dayjs(decodedParams?.completedStartDate)
-        : null,
-      decodedParams?.completedEndDate ? dayjs(decodedParams?.completedEndDate) : null,
-    ]);
-    SetSelectedOption(
-      decodedParams?.selectedOption? decodedParams?.selectedOption:""
-    );
-    setSearch(
-      decodedParams?.search? decodedParams?.search:""
-    );
-    setSelCreatedBy(
-      decodedParams?.selCreatedBy? decodedParams?.selCreatedBy:""
-    );
-    setPageNo(decodedParams?.pageNo);
-    setPaginationFirst(decodedParams?.paginationFirst);
-  }
-  if (sessionActiveFilters) {
-    setActiveFilters(sessionActiveFilters);
-  }
- },[])
-
-
- useEffect(() => {
-  const reviewerFilters = JSON.parse(getStorage("SuperVisorfilter"));
-  const decodedParams = JSON.parse(getStorage("supervisorStatus"));
-  const params = JSON.parse(getStorage("supervisorDate"));
-  if (reviewerFilters) {
-    setActiveFilters(reviewerFilters);
-  }
-  if(params){
-    setSelectedDate2s([
-      params?.auditedDateStart
-        ? dayjs(decodedParams?.auditedDateStart)
-        : null,
-        params?.auditedDateEnd ? dayjs(params?.auditedDateEnd) : null,
-    ]);
-  }
-  SetSelectedOption(decodedParams?.statusSelectedStatus?decodedParams?.statusSelectedStatus:"")
-}, []);
   const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes
@@ -394,6 +300,120 @@ const Patient = ({
     // getAllList(response?.data?.response);
   };
 
+  useEffect(() => {
+    let tenId = getStorage("tenantId");
+    let orgId = getStorage("orgId");
+    setTenantId(tenId);
+    setLocalOrgId(orgId);
+    setLocalUserId(uId);
+    const uId = getStorage("user");
+    setParamsFilter("check");
+    const data = {
+      pageNo,
+      auditDueDateStart: clear
+        ? ""
+        : selectedDateRange?.AuditedDueDate?.startDate || "",
+      auditDueDateEnd: clear
+        ? ""
+        : selectedDateRange?.AuditedDueDate?.endDate || "",
+      selectedOption: clear ? "" : selectedOption,
+      search: clear ? "" : search,
+      auditDateStart: clear
+        ? ""
+        : selectedDateRange?.AuditedDate?.startDate || "",
+      auditDateEnd: clear ? "" : selectedDateRange?.AuditedDate?.endDate || "",
+      // patientSortOrder,
+      // selAllocatedBy,
+      sort,
+      selCreatedBy: clear ? "" : selCreatedBy,
+    };
+    if (window !== "undefined" && paramsFilter) {
+      getWorkListFilter({ data: data });
+      getFilters({ field: "patientAllocated" });
+    }
+  }, [
+    pageNo,
+    // computedStartDate,
+    // computedEndDate,
+    selectedOption,
+    // selAllocatedBy,
+    search,
+    selectedDateRange,
+    // completedStartDate,
+    // selecteddates2,
+    // completedEndDate,
+    // patientSortOrder,
+    sort,
+    selCreatedBy,
+  ]);
+
+  useEffect(() => {
+    if (response?.data?.response?.content) {
+      getAllList();
+    }
+  }, [parsedData, response, pageNo, pageSize]);
+  useEffect(() => {
+    const decodedParams = navigate.query;
+    if (decodedParams) {
+      const dates = decodedParams?.selectedDates
+        ? JSON.parse(decodedParams?.selectedDates)
+        : [];
+      const AuditedDate = dates?.AuditedDate?.map((date) => dayjs(date));
+      const AuditedDueDate = dates?.AuditedDueDate?.map((date) => dayjs(date));
+
+      setParamsFilter("check");
+      setSelectedDates({
+        AuditedDate: AuditedDate,
+        AuditedDueDate: AuditedDueDate,
+      });
+      setSelectedDateRange(
+        decodedParams?.selectedDateRange
+          ? JSON.parse(decodedParams?.selectedDateRange)
+          : {}
+      );
+      // setSelectedDates({
+      //   AuditedDueDate: [
+      //     decodedParams?.auditedDueDateStart
+      //       ? dayjs(decodedParams?.auditedDueDateStart)
+      //       : null,
+      //     decodedParams?.auditedDueDateEnd
+      //       ? dayjs(decodedParams?.auditedDueDateEnd)
+      //       : null,
+      //   ],
+      // });
+      // setSelectedDateRange({
+      //   AuditedDueDate: {
+      //     startDate: decodedParams?.auditedDueDateStart
+      //       ? `${moment(
+      //           decodedParams?.auditedDueDateStart,
+      //           "MM-DD-YYYY"
+      //         ).format("YYYY-MM-DD")}T00:00:00.000Z`
+      //       : "",
+
+      //     endDate: decodedParams?.auditedDueDateEnd
+      //       ? `${moment(decodedParams?.auditedDueDateEnd, "MM-DD-YYYY").format(
+      //           "YYYY-MM-DD"
+      //         )}T23:59:59.999Z`
+      //       : "",
+      //   },
+      // });
+      SetSelectedOption(
+        decodedParams?.selectedOption ? decodedParams?.selectedOption : ""
+      );
+      setSearch(decodedParams?.search ? decodedParams?.search : "");
+      setSelCreatedBy(
+        decodedParams?.selCreatedBy ? decodedParams?.selCreatedBy : ""
+      );
+      setPageNo(decodedParams?.pageNo ? JSON.parse(decodedParams?.pageNo) : 0);
+      setPaginationFirst(
+        decodedParams?.paginationFirst
+          ? JSON.parse(decodedParams?.paginationFirst)
+          : 0
+      );
+      setActiveFilters(allFilters);
+    }
+  }, []);
+console.log(selectedDates,"dates")
   return (
     <div className={`show `}>
       <Header />
@@ -456,6 +476,10 @@ const Patient = ({
                           activeFilters={activeFilters}
                           setActiveFilters={setActiveFilters}
                           setClear={setClear}
+                          setSelectedDateRange={setSelectedDateRange}
+                          selectedDateRange={selectedDateRange}
+                          searchVal={search}
+                          setSearchVal={setSearch}
                         />
                       </div>
                     </div>
@@ -487,14 +511,11 @@ const Patient = ({
                             activeFilters={activeFilters}
                             params={{
                               pageNo,
-                              computedStartDate,
-                              computedEndDate,
+                              selectedDates: JSON.stringify(selectedDates),
                               selectedOption,
                               search,
-                              completedStartDate,
-                              completedEndDate,
-                              patientSortOrder,
-                              selAllocatedBy,
+                              selectedDateRange:
+                                JSON.stringify(selectedDateRange),
                               sort,
                               selCreatedBy,
                             }}

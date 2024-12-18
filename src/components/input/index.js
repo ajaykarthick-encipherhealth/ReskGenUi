@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 // import { InputText } from "primereact/inputtext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -51,9 +51,10 @@ const InputField = ({
   isReport,
   setPageNo,
   id,
-  name
+  name,
+  value,
 }) => {
-  const [inputStr, setInputStr] = useState("");
+  const [inputStr, setInputStr] = useState(value);
 
   const debounceFunc = useCallback(
     debounce((text, activeTab) => {
@@ -86,9 +87,12 @@ const InputField = ({
     }
     debounceFunc(text, activeTab);
   };
+  useEffect(() => {
+    setInputStr(value);
+  }, [value]);
 
   return (
-    <div style={{height:"45px"}}>
+    <div style={{ height: "45px" }}>
       <Input
         type={type}
         value={
@@ -100,8 +104,11 @@ const InputField = ({
             ? searchVal
             : inputStr
         }
+        autoComplete="off"
         onChange={handleChange}
-        className={`w-100 ${isReport ? "new-search-control1" : 'new-search-control'} border-none`}
+        className={`w-100 ${
+          isReport ? "new-search-control1" : "new-search-control"
+        } border-none`}
         placeholder={placeholder}
         maxLength={25}
         disabled={isDisabled ? true : false}
