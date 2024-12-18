@@ -540,7 +540,7 @@ const Details = ({
         } else if (fromPatientSync === "true") {
           navigate.push("/tenantAdmin/patientSync");
           getActiveTab("PDF");
-        } else if (isTenantAdminTracking) {
+        } else if (isTenantAdminTracking == "true") {
           navigate.push("/tenantAdmin/tracking");
         } else {
           navigate.push("/tenantAdmin/patients");

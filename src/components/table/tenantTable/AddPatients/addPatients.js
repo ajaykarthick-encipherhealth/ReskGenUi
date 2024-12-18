@@ -3,7 +3,14 @@ import { useRouter } from "next/router";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
-import { notification, Select as AntSelect, Empty, Tooltip, Popover, Badge } from "antd";
+import {
+  notification,
+  Select as AntSelect,
+  Empty,
+  Tooltip,
+  Popover,
+  Badge,
+} from "antd";
 import {
   renderUserPrfoileAvatar,
   sortFunction,
@@ -29,42 +36,44 @@ function AddPatientListTable({
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
   const navigate = useRouter();
 
-   const gotoPatientDetails = (data) => {
-     patientDetails(data);
-     if (data?.computing === 2) {
-       const controller = new AbortController();
-       const { signal } = controller;
-       controller.abort();
-       setStorage("patientId", data?.patientId);
-       var role = getStorage("role");
-       if (role == "tenant_admin") {
-         const encodedValue = btoa(JSON.stringify(page));
-         setStorage("TenantAdminPatientsEncodedValue", encodedValue);
-         navigate.push({
-           pathname: "/tenantAdmin/patients/details",
-         });
-       } else {
-         const encodedValue = btoa(JSON.stringify(page))
-           .replace(/\+/g, "-")
-           .replace(/\//g, "_")
-           .replace(/=+$/, ""); // Remove padding '='
+  const gotoPatientDetails = (data) => {
+    patientDetails(data);
+    if (data?.computing === 2) {
+      const controller = new AbortController();
+      const { signal } = controller;
+      controller.abort();
+      setStorage("patientId", data?.patientId);
+      setStorage("fromPatientSync", false);
+      setStorage("isTenantAdminTracking", false);
+      var role = getStorage("role");
+      if (role == "tenant_admin") {
+        const encodedValue = btoa(JSON.stringify(page));
+        setStorage("TenantAdminPatientsEncodedValue", encodedValue);
+        navigate.push({
+          pathname: "/tenantAdmin/patients/details",
+        });
+      } else {
+        const encodedValue = btoa(JSON.stringify(page))
+          .replace(/\+/g, "-")
+          .replace(/\//g, "_")
+          .replace(/=+$/, ""); // Remove padding '='
 
-         // const encodedValue = btoa(JSON.stringify(page));
-         setStorage("AdminPatientsEncodedValue", encodedValue);
-         navigate.push({
-           pathname: "/admin/patients/details",
-           // query: {
-           //   params: encodedValue,
-           // },
-         });
-       }
-       // setStorage('paginations', JSON.stringify(page))
-     } else {
-       notification.warning({
-         message: data?.patientId + " file not processed. Please wait.",
-       });
-     }
-   };
+        // const encodedValue = btoa(JSON.stringify(page));
+        setStorage("AdminPatientsEncodedValue", encodedValue);
+        navigate.push({
+          pathname: "/admin/patients/details",
+          // query: {
+          //   params: encodedValue,
+          // },
+        });
+      }
+      // setStorage('paginations', JSON.stringify(page))
+    } else {
+      notification.warning({
+        message: data?.patientId + " file not processed. Please wait.",
+      });
+    }
+  };
 
   const handleTableRowClick = (e) => {
     const targetTd = e.target.closest("td");
@@ -345,7 +354,6 @@ function AddPatientListTable({
           )}
         </tbody>
       </table>
-     
     </div>
   );
 }
