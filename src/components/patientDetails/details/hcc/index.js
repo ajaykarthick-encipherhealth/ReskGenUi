@@ -236,6 +236,7 @@ const Hcc = ({
       value: "",
       page: value,
     });
+    getSelectedDosPageNumber(value)
   };
 
   const PopContent = (
