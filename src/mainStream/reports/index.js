@@ -654,6 +654,7 @@ const Reports = ({
                                         ? selectedOptions[activeTab]
                                         : null
                                     }
+                                    style={{width:"150px"}}
                                   />
                                 </div>
                                 {/* </div> */}
@@ -734,6 +735,7 @@ const Reports = ({
                                         isSearchable={false}
                                         value={selectedOptions[info?.name]}
                                         allowClear={true}
+                                        style={{width:"150px"}}
                                       />
                                     )}
                                     {info?.isRangePikcer && (
