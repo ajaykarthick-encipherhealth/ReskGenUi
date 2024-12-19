@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
 import { actions as tenantActions } from "../../../../stores/tenantAdmin/patientSync";
 import { connect } from "react-redux";
-import { Drawer, Form, Input, Select } from "antd";
+import { Button, Drawer, Form, Input, Select } from "antd";
 import { emrTypeOptions } from "../../../../utils/reusable";
+import styles from '../fhir.module.css'
 
 const getYears = () => {
   const currentYear = new Date().getFullYear();
@@ -131,7 +131,7 @@ const PdfDrawer = ({
                 },
               ]}
             >
-              <Input placeholder="Batch Name" />
+              <Input placeholder="Batch Name" autoComplete="off" />
             </Form.Item>
           )}
           {uploadType !== "upload" && (
@@ -179,7 +179,7 @@ const PdfDrawer = ({
                     },
                   ]}
                 >
-                  <Input placeholder="FilePath / FolderPath" />
+                  <Input placeholder="FilePath / FolderPath" autoComplete="off"/>
                 </Form.Item>
               )}
               <Form.Item
@@ -238,7 +238,7 @@ const PdfDrawer = ({
                   },
                 ]}
               >
-                <Input placeholder="File Count" />
+                <Input placeholder="File Count" autoComplete="off"/>
               </Form.Item>
               <Form.Item
                 label={
@@ -336,7 +336,7 @@ const PdfDrawer = ({
 
           <Form.Item>
             <div className="col-xl-12 mb-3 d-grid justify-content-center">
-              <Button type="submit">
+              <Button type="primary" disabled={loader} htmlType="submit"  className={`px-4 py-2 ${styles.formBtn}`} >
                 {uploadType === "upload"
                   ? "Upload"
                   : loader

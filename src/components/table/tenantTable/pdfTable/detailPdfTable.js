@@ -63,11 +63,11 @@ const DetailedPdfTable = ({
   paginationFirst,
   onPageChange,
   tableData,
-  loader,
   webSocketData,
   params,
   currentId,
-  getRoutedData
+  getRoutedData,
+  loader
 }) => {
   const navigate = useRouter();
   const [socketData, setSocketData] = useState(tableData);
@@ -317,6 +317,7 @@ const DetailedPdfTable = ({
 };
 const connector = connect((state) => ({
   webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
+  loader: state?.tenantAdmin?.patientSync?.getBatchLoader,
 }),{
   getRoutedData:allActions.getRoutedData
 });

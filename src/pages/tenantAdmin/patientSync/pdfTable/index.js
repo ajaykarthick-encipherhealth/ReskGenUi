@@ -373,7 +373,7 @@ const DetailedViewPdfTable = ({
                             paginationFirst={paginationFirst}
                             onPageChange={onPageChange}
                             tableData={getBatch}
-                            loader={loader}
+                            // loader={loader}
                             params={{
                               searchVal: searchVal,
                               pageNo: pageNo,

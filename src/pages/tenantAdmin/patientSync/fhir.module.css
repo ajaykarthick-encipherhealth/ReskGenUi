@@ -391,3 +391,10 @@
   border-radius: 3px;
   margin: 0px 0 0 7px;
 }
+.formBtn,
+.formBtn:hover,
+.formBtn:active,
+.formBtn:focus {
+  background-color: #04306f !important;
+  color:#fff !important;
+}
