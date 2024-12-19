@@ -41,7 +41,7 @@ function TrackingTable({
       const { signal } = controller;
       controller.abort();
       setStorage("patientId", data?.patientId);
-      setStorage("fromPatientSync", false);      
+      // setStorage("fromPatientSync", false);      
       var role = getStorage("role");
       if (role == "tenant_admin") {
         setStorage("patientId", data.patientId);

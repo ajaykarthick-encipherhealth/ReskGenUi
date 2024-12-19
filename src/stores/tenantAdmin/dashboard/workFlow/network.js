@@ -1,4 +1,5 @@
 import { requestPortal } from "../../../../utils/network";
+import { getStorage } from "../../../../utils/storages";
 
 
 export async function getUserStatus(startDate, endDate,organizationId) {
@@ -61,8 +62,9 @@ export async function getAllOrganization() {
   const options = {
     method: "GET",
   };
+  const tenantId=getStorage("tenantId")
   const data = await requestPortal(
-    `dbservice/organization/getallorganisation/page`,
+    `dbservice/organization/getallorganisation/page?tenantId=${tenantId||""}`,
     options
   );
   return data;
