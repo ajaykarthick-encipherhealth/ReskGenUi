@@ -363,17 +363,26 @@ const ChatCommunication = ({
   }, [chatAction, message]);
 
   const handleSearchUser = (e) => {
+    const searchTerm = e.target.value.trim();
     setUserData({ ...userData, searchNewUserMessage: e.target.value });
-    if (e.target.value.length > 0) {
-      const regexp = new RegExp(e.target.value, "i");
+    if (searchTerm.length > 0) {
+      const regexp = new RegExp(searchTerm, "i");
       const filteredUsers = users
         .filter((user) => user?.userName !== userData?.username)
-        .filter((user) => regexp.test(user));
+        .filter((user) => {
+          const fullName = `${user.firstName} ${user.lastName}`.trim();
+          return (
+            regexp.test(user.firstName) ||
+            regexp.test(user.lastName) ||
+            regexp.test(fullName) 
+          );
+        });
       setSearchedUsers([...filteredUsers]);
     } else {
       setSearchedUsers(users);
     }
   };
+  
 
   const handleUsername = (userName) => {
     setUserData({ ...userData, username: userName });
@@ -478,11 +487,17 @@ const ChatCommunication = ({
   };
 
   const handleSearchMembers = (e) => {
-    if (e.target.value.length > 0) {
-      const regexp = new RegExp(e.target.value, "i");
-      const filteredMember = messagedMembersList.filter((member) =>
-        regexp.test(member.secondaryUser)
-      );
+    const searchTerm = e.target.value.trim();
+    if (searchTerm.length > 0) {
+      const regexp = new RegExp(searchTerm, "i");
+      const filteredMember = messagedMembersList.filter((member) => {
+        const fullName = `${member.secondaryUserFirstName} ${member.secondaryUserLastName}`.trim();
+        return (
+          regexp.test(member.secondaryUserFirstName) || 
+          regexp.test(member.secondaryUserLastName) || 
+          regexp.test(fullName)
+        );
+      });
       setSearchedInMembersList(filteredMember);
       searchedInMembersListRef.current = filteredMember;
     } else {
@@ -490,6 +505,7 @@ const ChatCommunication = ({
       searchedInMembersListRef.current = messagedMembersList;
     }
   };
+  
 
   const handleCreateNewChat = (newUser) => {
     const isAlreadyMember = searchedInMembersList
