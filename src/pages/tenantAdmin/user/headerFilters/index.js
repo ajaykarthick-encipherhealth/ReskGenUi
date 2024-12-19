@@ -79,6 +79,7 @@ const HeaderFilters = ({
       case "Status":
         return (
           <div className={defaultSize}>
+               <div className="mt-1">
             <label className={styles.label}>Status</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -93,19 +94,20 @@ const HeaderFilters = ({
                 allowClear={true}
               />
             </div>
+            </div>
           </div>
         );
 
       case "Created date Range":
         return (
           <div className= "col-3">
+            <div className="mt-1">
             <label className={styles.label}>Created date Range</label>
-            <div className="dateRangeSize">
               <RangePicker
                 value={clear ? ["", ""] : selectedDates}
                 format="MM-DD-YYYY"
                 onCalendarChange={(val) => setSelectedDates(val)}
-                onChange={(date, dateString) => {
+                onChange={(date, dateString) => { 
                   handleRnagePicker2({
                     date,
                     dateString,
@@ -123,7 +125,9 @@ const HeaderFilters = ({
       case "Organization":
         return (
           <div className={defaultSize}>
+            <div>
             <label className={` text-truncate ${styles.label}`}>Select Organization</label>
+           
             <div class="form-group has-search custom-react-select">
               <Select
                 value={orgValue ? orgValue : null}
@@ -138,6 +142,7 @@ const HeaderFilters = ({
                 placeholder="Select Organization"
                 allowClear={true}
               />
+            </div>
             </div>
           </div>
         );
@@ -172,6 +177,7 @@ const HeaderFilters = ({
 
         {isSelector && (
           <div className={defaultSize}>
+            <div className="mt-1">
             <label className={styles.label}>Role</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -188,6 +194,7 @@ const HeaderFilters = ({
                 isSearchable={false}
                 allowClear={true}
               />
+            </div>
             </div>
           </div>
         )}
