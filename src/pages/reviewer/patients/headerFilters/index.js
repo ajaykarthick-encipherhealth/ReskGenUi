@@ -129,7 +129,6 @@ const HeaderFiltersPatients = ({
                 format="MM-DD-YYYY"
                 onChange={onchangeRangePicker}
                 onCalendarChange={(val) => setSelectedDates(val)}
-                disabledDate={(current) => disableFutureDate(current)}
               />
             </div>
           </div>
