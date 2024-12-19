@@ -33,6 +33,7 @@ import TableRisk from "../../../../tableRisk";
 import moment from "moment";
 import { getStorage } from "../../../../../utils/storages";
 import { isLocalEdit } from "../../../../../utils/config";
+import { getResponePopup } from "../../../../../utils/reusable";
 const HccCards = ({
   list,
   hccVersionDetails,
@@ -195,6 +196,9 @@ const HccCards = ({
     if (res?.status==='SUCCESS') {
       getPatientDetailsData(patientId, null, selectDosValue, "", role);
       setOpenContent(false);
+      getResponePopup(res)
+    } else {
+      getResponePopup(res)
     }
   };
 
@@ -278,7 +282,7 @@ const HccCards = ({
                                       color: "#d9d9d9",
                                     }}
                                   >
-                                    {"Hide"}
+                                    {"Show"}
                                   </span>
                                   <FontAwesomeIcon
                                     icon={faEyeSlash}

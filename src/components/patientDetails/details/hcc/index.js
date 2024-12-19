@@ -221,14 +221,13 @@ const Hcc = ({
         role
       );
     }
-    // } else {
-    setActions({
-      showDisease: !value && false,
-      reEvaluate: !value && false,
-      showActionsPop: !value && false,
-    });
-    // setSelectDosValue(null)
-    // }
+    
+    // setActions({
+    //   showDisease: !value && false,
+    //   reEvaluate: !value && false,
+    //   showActionsPop: !value && false,
+    // });
+
   };
   const handleChangePageNumber = async (value) => {
     // setPopoverVisible(false);
@@ -236,7 +235,7 @@ const Hcc = ({
       value: "",
       page: value,
     });
-    getSelectedDosPageNumber(value)
+    getSelectedDosPageNumber(value);
   };
 
   const PopContent = (
@@ -351,7 +350,7 @@ const Hcc = ({
         <div
           className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer"
           onClick={() => {
-            selectDosValue &&
+            // selectDosValue &&
               setActions({
                 showDisease: !actions?.showDisease,
                 reEvaluate: actions?.reEvaluate,
@@ -402,9 +401,7 @@ const Hcc = ({
             <div className="row">
               <div className="col-12">
                 <Nav as="ul" className="nav nav-tabs">
-                  <div
-                    className={`d-flex justify-content-between flex-wrap `}
-                  >
+                  <div className={`d-flex justify-content-between flex-wrap `}>
                     {/* <div className="d-flex"> */}
                     <Nav.Item as="li" className="nav-item ">
                       <Nav.Link
@@ -517,7 +514,7 @@ const Hcc = ({
                         Query
                       </Nav.Link>
                     </Nav.Item>
-                   
+
                     <div>
                     <Nav.Item as="li" className="nav-item">
                       <div className="d-flex gap-3 mt-1 mx-2">
@@ -570,65 +567,79 @@ const Hcc = ({
                         </Popover>
                       )}
                           {flagTagActive ? (
-                        <div>
-                          <div>
-                            <Popover
-                              content={
-                                <>
-                                  <div className={visitStyles.flags}>
-                                    <div className={visitStyles.flags}>
-                                      <span
-                                        className={visitStyles.hccFlag}
-                                      ></span>
-                                      <span className={visitStyles.flagCodes}>
-                                        HCC
-                                      </span>
-                                    </div>
-                                    <div className={visitStyles.flags}>
-                                      <span
-                                        className={visitStyles.suggestedFlag}
-                                      ></span>
-                                      <span className={visitStyles.flagCodes}>
-                                        SUGGESTED
-                                      </span>
-                                    </div>
-                                    <div className={visitStyles.flags}>
-                                      <span
-                                        className={visitStyles.deleteFlag}
-                                      ></span>
-                                      <span className={visitStyles.flagCodes}>
-                                        DELETED
-                                      </span>
-                                    </div>
-                                    <div className={visitStyles.flags}>
-                                      <span
-                                        className={visitStyles.nonhccFlag}
-                                      ></span>
-                                      <span className={visitStyles.flagCodes}>
-                                        NON HCC
-                                      </span>
-                                    </div>
-                                    <div className={visitStyles.flags}>
-                                      <span
-                                        className={visitStyles.potentialFlag}
-                                      ></span>
-                                      <span className={visitStyles.flagCodes}>
-                                        POTENTIAL DIAGNOSIS
-                                      </span>
-                                    </div>
-                                  </div>
-                                </>
-                              }
-                              trigger={["click"]}
-                              placement="bottom"
-                            >
-                              <Image
-                                src={warning}
-                                style={{ cursor: "pointer" }}
-                              />
-                            </Popover>
-                          </div>
-                          {/* <div className={visitStyles.flags}>
+                            <div>
+                              <div>
+                                <Popover
+                                  content={
+                                    <>
+                                      <div className={visitStyles.flags}>
+                                        <div className={visitStyles.flags}>
+                                          <span
+                                            className={visitStyles.hccFlag}
+                                          ></span>
+                                          <span
+                                            className={visitStyles.flagCodes}
+                                          >
+                                            HCC
+                                          </span>
+                                        </div>
+                                        <div className={visitStyles.flags}>
+                                          <span
+                                            className={
+                                              visitStyles.suggestedFlag
+                                            }
+                                          ></span>
+                                          <span
+                                            className={visitStyles.flagCodes}
+                                          >
+                                            SUGGESTED
+                                          </span>
+                                        </div>
+                                        <div className={visitStyles.flags}>
+                                          <span
+                                            className={visitStyles.deleteFlag}
+                                          ></span>
+                                          <span
+                                            className={visitStyles.flagCodes}
+                                          >
+                                            DELETED
+                                          </span>
+                                        </div>
+                                        <div className={visitStyles.flags}>
+                                          <span
+                                            className={visitStyles.nonhccFlag}
+                                          ></span>
+                                          <span
+                                            className={visitStyles.flagCodes}
+                                          >
+                                            NON HCC
+                                          </span>
+                                        </div>
+                                        <div className={visitStyles.flags}>
+                                          <span
+                                            className={
+                                              visitStyles.potentialFlag
+                                            }
+                                          ></span>
+                                          <span
+                                            className={visitStyles.flagCodes}
+                                          >
+                                            POTENTIAL DIAGNOSIS
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </>
+                                  }
+                                  trigger={["click"]}
+                                  placement="bottom"
+                                >
+                                  <Image
+                                    src={warning}
+                                    style={{ cursor: "pointer" }}
+                                  />
+                                </Popover>
+                              </div>
+                              {/* <div className={visitStyles.flags}>
                         <div className={visitStyles.flags}>
                           <span className={visitStyles.hccFlag}></span>
                           <span className={visitStyles.flagCodes}>HCC</span>
@@ -648,19 +659,26 @@ const Hcc = ({
                           <span className={visitStyles.flagCodes}>NON HCC</span>
                         </div>
                       </div> */}
+                            </div>
+                          ) : null}
                         </div>
-                      ) : null}
-                      </div>
-                    </Nav.Item> 
+                      </Nav.Item>
                     </div>
-                    </div>
-                    <div className="mt-1">
-                      <Nav.Item as="li" className="nav-item">
-                    <Popover
+                  </div>
+                  <div className="mt-1">
+                    <Nav.Item as="li" className="nav-item">
+                      <Popover
                         open={actions.showActionsPop}
                         trigger={["click"]}
                         placement="bottom"
                         content={hideDiseasePopContent}
+                        onOpenChange={() =>
+                          setActions({
+                            showActionsPop: !actions.showActionsPop,
+                            showDisease: actions?.showDisease,
+                            reEvaluate: actions?.reEvaluate,
+                          })
+                        }
                       >
                         <button
                           className={`${visitStyles.actionBtn} px-3  py-1 rounded-md`}
@@ -675,8 +693,8 @@ const Hcc = ({
                           Action
                         </button>
                       </Popover>
-                      </Nav.Item>
-                    </div>
+                    </Nav.Item>
+                  </div>
                   {/* </div> */}
                 </Nav>
               </div>
@@ -807,6 +825,13 @@ const Hcc = ({
                   : ""
               }
             />
+          </div>
+          <div className="text-center mt-2">
+            <span>
+              <button className="btns-primary btn-app-primary px-3">
+                Submit
+              </button>
+            </span>
           </div>
         </div>
       </Modal>

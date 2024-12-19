@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Empty, Popover, Select, Switch } from "antd";
+import { Empty, Popover, Select, Switch, Tooltip } from "antd";
 import dayjs from "dayjs";
 import TableStyle from "../../table.module.css";
 import styles from "../../../../styles/auth.module.css";
@@ -11,6 +11,7 @@ import {
   renderUserPrfoileAvatarDisabled,
   sortFunction,
 } from "../../../headerFilters/functions";
+import { truncateString } from "../../../patientDetails/details/components/function/ReusableFunctions";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
@@ -32,7 +33,7 @@ const UserList = ({
   getAllUsersList,
   setPageCount,
   getTenantAdminSelectUserList,
-  selectUserList
+  selectUserList,
 }) => {
   const usersData = usersList;
   const [rowData, setRowData] = useState();
@@ -145,7 +146,7 @@ const UserList = ({
   };
   useEffect(() => {
     // getEnableUser({ checked: "no", user: rowData });
-    getTenantAdminSelectUserList({role:"SUPERVISOR"});
+    getTenantAdminSelectUserList({ role: "SUPERVISOR" });
   }, [rowData]);
   useEffect(() => {
     if (usersData?.data?.response?.content) {
@@ -163,7 +164,7 @@ const UserList = ({
         <thead className={TableStyle.classThead}>
           <tr>
             <th className={TableStyle.rowEmailStyle}>NAME</th>
-            <th style={{ paddingLeft: "50px" }}>EMAIL</th>
+            <th style={{ paddingLeft: "50px" }}>USER NAME</th>
             <th
               style={{
                 textAlign: "center",
@@ -271,7 +272,9 @@ const UserList = ({
                       item.accountStatus === true ? "" : "#0000001a",
                   }}
                 >
-                  <span>{item?.email ? item?.email : "---"}</span>
+                  <span>
+                    {item?.userName ? <Tooltip title={item?.userName}>{truncateString(item?.userName, 40)}</Tooltip> : "---"}
+                  </span>
                 </td>
                 <td
                   className={TableStyle.childBorder}
@@ -427,7 +430,7 @@ const UserList = ({
                     onChange={(checked) => {
                       onChange(item, checked);
                       setPopoverVisible(true);
-                      setPageCount(0)
+                      setPageCount(0);
                     }}
                   />
                 </td>
@@ -449,12 +452,12 @@ const UserList = ({
 const enhancer = connect(
   (state) => ({
     usersList: state?.tenantAdmin?.users?.allUsers,
-    selectUserList:state?.admin.dashboard?.managersList
+    selectUserList: state?.admin.dashboard?.managersList,
   }),
   {
     getAllUsersList: tenantAdminAction.getAllUsersAction,
     getEnableUser: tenantAdminAction.getEnableUser,
-    getTenantAdminSelectUserList:adminAction.getSelectUserList
+    getTenantAdminSelectUserList: adminAction.getSelectUserList,
   }
 );
 export default enhancer(UserList);
