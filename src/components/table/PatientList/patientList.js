@@ -16,6 +16,7 @@ import { connect } from "react-redux";
 import { setStorage } from "../../../utils/storages";
 import { actions as reviewerWorkQueueAction } from "../../../stores/reviewer/workqueue";
 import { allFilters } from "../../../pages/reviewer/patients/headerFilters";
+import { actions as patientSyncActions } from '../../../stores/tenantAdmin/patientSync'
 
 function PatientTable({
   patinetListAll,
@@ -37,6 +38,7 @@ function PatientTable({
   supervisorActions,
   activeFilters,
   getFilteredList,
+  getRoutedData
 }) {
   const router = useRouter();
   const handlePriorityChange = async (
@@ -59,7 +61,8 @@ function PatientTable({
     const targetTd = e.target.closest("td");
     if (targetTd) {
       getFilteredList(allFilters),
-        setStorage("reviewerEncodedValue", JSON.stringify(params));
+      setStorage("routeBackTo", "/reviewer/patients/details");
+      getRoutedData(params);
       router?.push(
         { pathname: "/reviewer/patients/details", query: params },
         "/reviewer/patients/details"
@@ -257,5 +260,6 @@ function PatientTable({
 const connector = connect((state) => ({}), {
   supervisorActions: supervisorActions.getPriorityChange,
   getFilteredList: reviewerWorkQueueAction.reviewerFilterList,
+  getRoutedData: patientSyncActions.getRoutedData,
 });
 export default connector(PatientTable);

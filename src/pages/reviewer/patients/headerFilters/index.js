@@ -78,7 +78,8 @@ const HeaderFiltersPatients = ({
   setSelectedDates3,
   setSelectedDates4,
   setSelectedDates5,
-  filtersData
+  filtersData,
+  getRoutedData
 
 }) => {
   const [trackInput, setTrackInput] = useState("");
@@ -90,30 +91,6 @@ const HeaderFiltersPatients = ({
     setClear(true);
     setSelectedDates([]);
     setSelectedDates2([]);
-
-  
-    // setStartDate([]);
-    // setEndDate([]);
-    // setStartDate4([]);
-    // setEndDate4([]);
-    // setStartDate5([]);
-    // setEndDate5([]);
-    // setStartDate6([]);
-    // setEndDate6([]);
-    // setSearch("");
-    // setSelectedDates([]);
-    // setSelectedDates2([]);
-    // setSelectedDates3([]);
-    // setSelectedDates4([]);
-    // setSelectedDates5([]);
-    // setSelAllocatedTo(null);
-    // setAuditSelAllocatedTo(null);
-    // setSelectedOption(null);
-    // setAuditSelectedOption(null);
-    // setSelAllocatedBy(null);
-    // setSelAuditAllocatedBy(null);
-    // setTrackInput(null);
-    // setPopoverVisible(false);
   };
   const renderFilter = (filter) => {
     switch (filter) {
@@ -157,7 +134,7 @@ const HeaderFiltersPatients = ({
             <label className={styles.label} style={{ marginTop: "40px" }}>
               Select Priority
             </label>
-            <div class="form-group has-search custom-react-selects reviewerFilterSelect">
+            <div class="form-group has-search custom-react-selects reviewerFilterSelect customClear">
               <Select
                 value={clear ? null : statusSelectedStatus1||null}
                 onChange={onChangeStatus1}
@@ -175,7 +152,7 @@ const HeaderFiltersPatients = ({
             <label className={styles.label} style={{ marginTop: "40px" }}>
               Select Status
             </label>
-            <div class="form-group has-search custom-react-selects reviewerFilterSelect">
+            <div class="form-group has-search custom-react-selects reviewerFilterSelect customClear">
               <Select
                 value={clear ? null : statusSelectedStatus?statusSelectedStatus:null}
                 onChange={onChangeStatus}
@@ -267,6 +244,7 @@ const HeaderFiltersPatients = ({
             setSelectAll={setSelectAll}
             setClear={setClear}
             handleClearAllFilters={handleClearAllFilters}
+            getRoutedData={getRoutedData}
           />
 
           {bullets && (

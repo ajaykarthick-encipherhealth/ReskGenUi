@@ -17,39 +17,28 @@ import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import Abort from "../../../../src/images/trackingImages/Abort.png";
 import { actions as workqueueActions } from "../../../stores/reviewer/workqueue";
 import {
-  disableFutureDate,
-  disableFutureDates,
   priorityOptions,
   resetPageNumber,
 } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
-import HeaderFilters from "../../../components/headerFilters";
 import Image from "next/image";
-import styles from "../report/report.module.css";
-import filter from "../../../images/svg/filter.svg";
 import { extractLatestData } from "../../supervisor/auditing";
 import InputField, {
   debounce,
-  disallowedCharacters,
 } from "../../../components/input";
-import { patientDetails } from "../../../stores/authflow/actions";
-// import SkeletonLoading from "../../../jsx/components/skeleton/skeleton";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { InputText } from "primereact/inputtext";
 import { getStorage, removeStorage, setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import HeaderFiltersPatients, { allFilters } from "./headerFilters";
+import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 
 const { RangePicker } = DatePicker;
 
 const statusOptions = [
   { label: "COMPLETED", value: "COMPLETED" },
   { label: "PENDING", value: "PENDING" },
-  // { label: "COMPUTED", value: "COMPUTED" },
   { label: "DECLINED", value: "DECLINED" },
   { label: "HOLD", value: "HOLD" },
-  // { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
 ];
 const bullets = [
   {
@@ -68,10 +57,6 @@ const bullets = [
         name: "Completed",
       },
       { color: "#AD94FA", name: "Hold" },
-      // {
-      //   color: "#3B3486",
-      //   name: "ABORTED BY CRON",
-      // },
     ],
   },
 ];
@@ -81,7 +66,9 @@ const Patient = ({
   getpatientsListFilter,
   loading,
   patientDetails,
-  filtersData
+  filtersData,
+  routedData,
+  getRoutedData
 }) => {
   const navigate = useRouter();
   const [isLoading, setIsLoading] = useState(true);
@@ -106,33 +93,12 @@ const Patient = ({
     HOLD: 0,
   });
   const [selectedPriority, setSelectedPriority] = useState(null);
-  const dueStartDate = "";
-  // query?.dueDateStart
-  //   ? moment(query?.dueDateStart)?.format("YYYY-MM-DD") +
-  //     "T00:00:00.000Z"
-  //   : "";
-  const dueEndDate = "";
-  // query?.dueDateStart
-  //   ? moment(query?.dueDateStart)?.format("YYYY-MM-DD") +
-  //     "T23:59:59.000Z"
-  //   : "";
   const [dueDateStart, setDueDateStart] = useState(null);
   const [dueDateEnd, setDueDateEnd] = useState(null);
   const [processedStart, setProcessedStart] = useState(null);
   const [processedEnd, setProcessedEnd] = useState(null);
   const [statusSelectedStatus, setStatusSelectedStatus] = useState(null);
   const [searchTextValue, setSearchTextValue] = useState("");
-
-  // const dayDateFormated = "";
-  // // query?.dueDateStart
-  // //   ? dayjs(query?.dueDateStart).format("MM-DD-YYYY")
-  // //   : dayjs(query?.dueDateStart).format("MM-DD-YYYY");
-  // const [defaultStartDate, setDefaultStartDate] = useState(
-  //   dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
-  // );
-  // const [defaultEndDate, setDefaultEndDate] = useState(
-  //   dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z"
-  // );
   const [sort, setSort] = useState({
     sortDir: "",
     sortField: "",
@@ -143,14 +109,6 @@ const Patient = ({
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedDates2, setSelectedDates2] = useState([]);
   const [paramsFilter, setParamsFilter] = useState(null);
-  // useEffect(() => {
-  //   setDefaultStartDate(
-  //     dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
-  //   );
-  //   setDefaultEndDate(
-  //     dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z"
-  //   );
-  // }, [dayDateFormated]);
 
   const getFilteApi = async ({
     pageNo,
@@ -209,6 +167,7 @@ const Patient = ({
   const gotoPatientDetails = (data) => {
     // getpatientsListFilter(data);
     patientDetails(data);
+    setStorage("patientId", data.patientId);
     if (data.computing == 2) {
       const controller = new AbortController();
       controller.abort();
@@ -365,84 +324,66 @@ const Patient = ({
 
   const options = [...priorityOptions];
   useEffect(() => {
-    // const decodedParams = JSON.parse(getStorage("reviewerEncodedValue"));
-    const decodedParams=navigate.query
-    if (decodedParams) {
+    if (filtersData) {
+      setActiveFilters(filtersData);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (routedData) {
       setParamsFilter("check");
-      setStatusSelectedStatus(
-        decodedParams?.statusSelectedStatus?.toUpperCase()
+      setPageNo(routedData?.pageNo);
+      setPaginationFirst(routedData?.paginationFirst);
+      setSearchTextValue(routedData?.searchTextValue);
+      setSelectedDates(routedData?.selectedDates);
+      setSort(routedData?.sort);
+      setClear(routedData?.clear);
+      setSelectedPriority(routedData?.selectedPriority);
+      setActiveFilters(
+        routedData?.activeFilters ? routedData?.activeFilters : activeFilters
       );
-      setSelectedDates([
-        decodedParams?.dueDateStart ? dayjs(decodedParams?.dueDateStart) : null,
-        decodedParams?.dueDateEnd ? dayjs(decodedParams?.dueDateEnd) : null,
-      ]);
-      setSelectedDates2([
-        decodedParams?.processedStart
-          ? dayjs(decodedParams?.processedStart)
-          : null,
-        decodedParams?.processedEnd ? dayjs(decodedParams?.processedEnd) : null,
-      ]);
-      setSearchTextValue(decodedParams?.searchTextValue);
-      setSelectedPriority(decodedParams?.selectedPriority);
-      setPageNo(decodedParams?.pageNo || 0);
-      setPaginationFirst(decodedParams?.paginationFirst || 0);
       setDueDateStart(
-        decodedParams?.dueDateStart
-          ? moment(decodedParams?.dueDateStart)?.format("YYYY-MM-DD") +
+        routedData?.dueDateStart
+          ? moment(routedData?.dueDateStart)?.format("YYYY-MM-DD") +
               "T00:00:00.000Z"
           : null
       );
       setDueDateEnd(
-        decodedParams?.dueDateEnd
-          ? moment(decodedParams?.dueDateEnd)?.format("YYYY-MM-DD") +
+        routedData?.dueDateEnd
+          ? moment(routedData?.dueDateEnd)?.format("YYYY-MM-DD") +
               "T23:59:59.000Z"
           : null
       );
       setProcessedStart(
-        decodedParams?.processedStart
-          ? moment(decodedParams?.processedStart)?.format("YYYY-MM-DD") +
+        routedData?.processedStart
+          ? moment(routedData?.processedStart)?.format("YYYY-MM-DD") +
               "T00:00:00.000Z"
           : null
       );
       setProcessedEnd(
-        decodedParams?.processedEnd
-          ? moment(decodedParams?.processedEnd)?.format("YYYY-MM-DD") +
+        routedData?.processedEnd
+          ? moment(routedData?.processedEnd)?.format("YYYY-MM-DD") +
               "T23:59:59.000Z"
           : null
       );
       setStatusSelectedStatus(
-        decodedParams?.statusSelectedStatus?.toUpperCase()
+        routedData?.statusSelectedStatus?.toUpperCase()
       );
-      setSearchVal(decodedParams?.searchTextValue?decodedParams?.searchTextValue:"")
-      setSort(decodedParams?.sort);
-      setSortDueOrder(decodedParams?.sortDueOrder);
-      setSortCompleteOrder(decodedParams?.sortCompleteOrder);
-      setSortAllocateOrder(decodedParams?.sortAllocateOrder);
+      setSearchVal(routedData?.searchTextValue?routedData?.searchTextValue:"")
+      setSort(routedData?.sort);
+      setSortDueOrder(routedData?.sortDueOrder);
+      setSortCompleteOrder(routedData?.sortCompleteOrder);
+      setSortAllocateOrder(routedData?.sortAllocateOrder);
+      setSelectedDates2([
+        routedData?.processedStart
+          ? dayjs(routedData?.processedStart)
+          : null,
+          routedData?.processedEnd ? dayjs(routedData?.processedEnd) : null,
+      ]);
     }
-    // if (allFilters) {
-    //   setActiveFilters(sessionActiveFilters);
-    // }
+ 
   }, []);
   useEffect(() => {
-    // const reviewerFilters = JSON.parse(getStorage("filter"));
-    // const decodedParams = JSON.parse(getStorage("reviewerDate"));
-    // const params=JSON.parse(getStorage("reviewerDueDate"));
-    if (filtersData) {
-      setActiveFilters(filtersData);
-    }
-    // if(decodedParams){
-      
-    //   setSelectedDates([
-    //     decodedParams?.dueDateStart ? dayjs(decodedParams?.dueDateStart) : null,
-    //     decodedParams?.dueDateEnd ? dayjs(decodedParams?.dueDateEnd) : null,
-    //   ]);
-    // }
-    // setStatusSelectedStatus(params?.statusSelectedStatus?params?.statusSelectedStatus:"")
-  }, []);
-
-  useEffect(() => {
-    const uId = sessionStorage.getItem("userId");
-    setLocalUserId(uId);
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
       getFilteApi({
@@ -470,6 +411,7 @@ const Patient = ({
     statusSelectedStatus,
     navigate.query,
     clear,
+    paramsFilter
   ]);
   return (
     <div className={`show `}>
@@ -522,18 +464,12 @@ const Patient = ({
                           }}
                           setClear={setClear}
                           clear={clear}
+                          getRoutedData={getRoutedData}
                         />
                       </div>
                       <div className="col-2">
                         <div className="row">
-                          {/* <div className="col-2">
-                              {" "}
-                             <div style={{marginTop:"62px"}}>
-                             <HeaderFilters bullets={bullets} />
-                             </div>
-                            </div> */}
                           <div className=" mt-1 mb-1">
-                            {" "}
                             <DailyTask trackChart={trackChart} />
                           </div>
                         </div>
@@ -578,6 +514,7 @@ const Patient = ({
                               selectedPriority,
                               searchTextValue,
                               pageNo,
+                              selectedDates,
                               paginationFirst,
                               sortDueOrder,
                               sortCompleteOrder,
@@ -616,11 +553,13 @@ const enhancer = connect(
   (state) => ({
     patientsListFilter: state?.reviewer?.workQueue?.patients,
     loading: state?.reviewer?.workQueue?.patientsLoading,
-    filtersData:state.reviewer?.workQueue?.reviewerPatientFilterList
+    filtersData:state.reviewer?.workQueue?.reviewerPatientFilterList,
+    routedData: state.tenantAdmin?.patientSync?.routedData,
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,
     patientDetails: allActions.getPatientDetails,
+    getRoutedData: allPatientSyncAction.getRoutedData,
   }
 );
 export default enhancer(Patient);
