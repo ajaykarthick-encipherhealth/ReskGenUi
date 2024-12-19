@@ -11,8 +11,8 @@ import {
 } from "../../../headerFilters/functions";
 import { renderSkeleton } from "../../../reuseableFunctions";
 import { getStorage, setStorage } from "../../../../utils/storages";
-import {actions as allActions} from '../../../../stores/admin/users'
-
+import { actions as allActions } from "../../../../stores/admin/users";
+import { actions as patientSyncActions } from "../../../../stores/tenantAdmin/patientSync";
 
 function TrackingTable({
   patinetListAll,
@@ -30,8 +30,8 @@ function TrackingTable({
   setSortDueOrder,
   sortAuditDueOrder,
   setSortAuditDueOrder,
+  getRoutedData,
 }) {
-
   const navigate = useRouter();
 
   const gotoPatientDetails = (data) => {
@@ -44,12 +44,12 @@ function TrackingTable({
       setStorage("fromPatientSync", false);      
       var role = getStorage("role");
       if (role == "tenant_admin") {
-        setStorage("isTenantAdminTracking", true);
-        setStorage("tenantAdminTrackingEncodedValue", JSON.stringify(page));
-        navigate.push({
-          pathname: "/tenantAdmin/patients/details",
-          // query: { ...page, isTenantAdminTracking: true },
-        });
+        setStorage("patientId", data.patientId);
+        setStorage("routeBackTo", "/tenantAdmin/tracking");
+        getRoutedData(page);
+        // setStorage("isTenantAdminTracking", true);
+        // setStorage("tenantAdminTrackingEncodedValue", JSON.stringify(page));
+        navigate.push("/tenantAdmin/tracking/details");
       } else {
         setStorage("isAdminTracking", true);
         setStorage("adminTrackingEncodedValue", JSON.stringify(page));
@@ -407,13 +407,8 @@ function TrackingTable({
   );
 }
 
-
-const connector = connect(
-  (state) => ({
-  }),
-  {
-    patientDetails: allActions.getPatientDetails, 
-  }
-);
+const connector = connect((state) => ({}), {
+  patientDetails: allActions.getPatientDetails,
+  getRoutedData: patientSyncActions.getRoutedData,
+});
 export default connector(TrackingTable);
-

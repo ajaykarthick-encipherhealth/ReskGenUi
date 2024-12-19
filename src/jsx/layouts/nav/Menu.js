@@ -296,7 +296,7 @@ export const ProviderMenuList = [
     iconStyle: <EnvironmentOutlined />,
     activeIcon: <EnvironmentFilled />,
     to: "/tenantAdmin/tracking",
-    childRoute3: "/tenantAdmin/patients/details",
+    childRoute2: "/tenantAdmin/tracking/details",
   },
   {
     title: "Notification",

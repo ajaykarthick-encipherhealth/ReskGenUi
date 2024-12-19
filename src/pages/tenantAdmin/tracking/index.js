@@ -5,13 +5,11 @@ import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { Popover,notification } from "antd";
+import { Popover, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import HeaderFilters from "./headerFilters";
 import TrackingTable from "../../../components/table/tenantTable/trackingList";
-import {
-  generateOptionsForNewStore,
-} from "../../../components/headerFilters/functions";
+import { generateOptionsForNewStore } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
 import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
@@ -32,6 +30,7 @@ import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { actions as workFlowActions } from "../../../stores/admin/workqueue";
+import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 const bullets = [
   {
     title: "Processed Status",
@@ -116,162 +115,36 @@ const Patient = ({
   allocatedByFilters,
   getPatientAllocatedList,
   getAuditAssignedList,
-  getAllocatedByList
+  getAllocatedByList,
+  getRoutedData,
+  routedData,
 }) => {
   const navigate = useRouter();
-  const [validated, setValidated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [addPatient, setAddPatient] = useState(false);
-  const [selectedOption, SetSelectedOption] = useState(null);
   const [searchTextValue, setSearchTextValue] = useState("");
-  const [dueDateStart, setDueDateStart] = useState("");
-  const [dueDateEnd, setDueDateEnd] = useState("");
-  const [processedStart, setProcessedStart] = useState("");
-  const [processedEnd, setProcessedEnd] = useState("");
-  const [inputValue, setInputValue] = useState({
+  const inputValue = {
     year: "",
     name: "",
     patientId: "",
     processStageId: "",
     patientId: "",
-  });
+  };
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [tableLoading, setTableLoading] = useState(true);
-  const [allocatedStartDate, setAllocatedStartDate] = useState("");
-  const [allocatedEndDate, setAllocatedEndDate] = useState("");
-  const [auditedStartDate, setAuditedStartDate] = useState("");
-  const [auditedEndDate, setAuditedEnsDate] = useState("");
-  const [auditedDueStartDate, setAuditedDueStartDate] = useState("");
-  const [auditedDueEndDate, setAuditedDueEndDate] = useState("");
-  const [selAllocatedBy, setSelAllocatedBy] = useState(null);
   const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortAuditDueOrder, setSortAuditDueOrder] = useState("DESC");
-  const [selAllocatedTo, setSelAllocatedTo] = useState(null);
-  const [auditSelectedOption, setAuditSelectedOption] = useState(null);
-  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState(null);
   const [allocatedSortOrder, setAllocatedSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [clear, setClear] = useState(false);
   const [selectedDates, setSelectedDates] = useState();
-  const [selectedDates2, setSelectedDates2] = useState();
-  const [selectedDates3, setSelectedDates3] = useState();
-  const [selectedDates4, setSelectedDates4] = useState();
-  const [selectedDates5, setSelectedDates5] = useState();
-  const [selectOrgList, setSelectedOrgList] = useState(null);
+  const [selectedDateRange, setSelectedDateRange] = useState({});
+  const [selectedOptions, setSelectedOptions] = useState({});
   const [orgAllList, setOrgAllList] = useState([]);
-
-  // new changes
-
-  const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
-
-  useEffect(() => {
-    // if (window !== "undefined") {
-    //   setIsLoading(true);
-    //   if (navigate) {
-    //     setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
-    //     setPaginationFirst(
-    //       navigate?.query?.paginationFirst
-    //         ? navigate?.query?.paginationFirst
-    //         : 0
-    //     );
-    //   }
-    // }
-    // setIsLoading(false);
-        const encodedVal = JSON.parse(getStorage("TeantAdminTrackingEncodedValue"));
-        setIsLoading(true);
-        if (encodedVal) {
-          setPageNo(encodedVal?.pageNo || 0);
-          setPaginationFirst(encodedVal?.paginationFirst || 0);
-          setIsLoading(false);
-        }
-  }, []);
-  getAllOrganizationList,
-    organizationList,
-    useEffect(() => {
-      if (!organizationList?.response) {
-        getAllOrganizationList();
-      }
-    }, []);
-
-  useEffect(() => {
-    var orgListArray = [];
-    organizationList?.response?.map((res) => {
-      orgListArray.push({
-        value: res.id,
-        label: res.name,
-      });
-    });
-    setOrgAllList(orgListArray);
-  }, [organizationList]);
-  useEffect(() => {
-    const datas = {
-      pageNo,
-      dueDateStart: clear ? "" : dueDateStart,
-      dueDateEnd: clear ? "" : dueDateEnd,
-      searchTextValue: clear ? "" : searchTextValue,
-      selectedOption: clear ? "" : selectedOption ? selectedOption : "",
-      processedStart: clear ? "" : processedStart,
-      processedEnd: clear ? "" : processedEnd,
-      selAllocatedTo: clear ? "" : selAllocatedTo ? selAllocatedTo : "",
-      auditedStartDate: clear ? "" : auditedStartDate,
-      auditedEndDate: clear ? "" : auditedEndDate,
-      allocatedStartDate: clear ? "" : allocatedStartDate,
-      allocatedEndDate: clear ? "" : allocatedEndDate,
-      selAllocatedBy: clear ? "" : selAllocatedBy ? selAllocatedBy : "",
-      auditedDueStartDate: clear ? "" : auditedDueStartDate,
-      auditedDueEndDate: clear ? "" : auditedDueEndDate,
-      auditSelectedOption: clear
-        ? ""
-        : auditSelectedOption
-        ? auditSelectedOption
-        : "",
-      selAuditAllocatedBy: clear
-        ? ""
-        : selAuditAllocatedBy
-        ? selAuditAllocatedBy
-        : "",
-      auditSelAllocatedTo: clear
-        ? ""
-        : auditSelAllocatedTo
-        ? auditSelAllocatedTo
-        : "",
-      sort,
-      selectOrgId: clear ? "" : selectOrgList ? selectOrgList : "",
-    };
-    setIsLoading(true);
-    getAllTrackingList(datas);
-    getFilters({ field: "auditAllocatedBy" });
-    getPatientAllocatedList({ field: "patientAllocated" });
-    getAuditAssignedList({ field: "auditedAssigned" });
-    getAllocatedByList({ field: "allocatedBy" });
-    // setIsLoading(false);
-  }, [
-    pageNo,
-    dueDateStart,
-    dueDateEnd,
-    searchTextValue,
-    processedStart,
-    processedEnd,
-    selAllocatedTo,
-    selectedOption,
-    auditedStartDate,
-    auditedEndDate,
-    allocatedStartDate,
-    allocatedEndDate,
-    selAllocatedBy,
-    auditedDueStartDate,
-    auditedDueEndDate,
-    auditSelectedOption,
-    selAuditAllocatedBy,
-    auditSelAllocatedTo,
-    sort,
-    clear,
-    selectOrgList,
+  const [activeFilters, setActiveFilters] = useState([
+    "Reviewer",
+    "Supervisor",
   ]);
-
+  const [paramsFilter, setParamsFilter] = useState(null);
   // useEffect(() => {
   //   if (trackingList?.data?.response) {
   //     // setIsLoading(true);
@@ -334,25 +207,48 @@ const Patient = ({
     inputValue.name = data.patientName;
     inputValue.processStageId = data.processStageId;
     inputValue.patientId = data.patientId;
-    setValidated(false);
-    setAddPatient(true);
     // setIsLoadingBtn(false);
   };
 
-  const gotoPatientDetails = (data) => {
-    patientDetails({ data: data });
-    if (data.computing == 2) {
-      const controller = new AbortController();
-      const { signal } = controller;
-      controller.abort();
-      setStorage("patientId", data.patientId);
-      navigate.push("/reviewer/patients/details");
-    } else {
-      notification.warning({
-        message: data.patientId + " file not processed Please wait",
-      });
-    }
-  };
+  // const gotoPatientDetails = (data) => {
+  //   patientDetails({ data: data });
+  //   if (data.computing == 2) {
+  //     const controller = new AbortController();
+  //     const { signal } = controller;
+  //     controller.abort();
+  //     const params={
+  //       pageNo,
+  //       dueDateStart,
+  //       dueDateEnd,
+  //       searchTextValue,
+  //       processedStart,
+  //       processedEnd,
+  //       selAllocatedTo,
+  //       selectedOption,
+  //       auditedStartDate,
+  //       auditedEndDate,
+  //       allocatedStartDate,
+  //       allocatedEndDate,
+  //       selAllocatedBy,
+  //       auditedDueStartDate,
+  //       auditedDueEndDate,
+  //       auditSelectedOption,
+  //       selAuditAllocatedBy,
+  //       auditSelAllocatedTo,
+  //       sort,
+  //       clear,
+  //       selectOrgList,
+  //     }
+  //     setStorage("patientId", data.patientId);
+  //     setStorage("routeBackTo", "/tenantAdmin/tracking");
+  //     getRoutedData(params)
+  //     navigate.push("/tenantAdmin/patients/details");
+  //   } else {
+  //     notification.warning({
+  //       message: data.patientId + " file not processed Please wait",
+  //     });
+  //   }
+  // };
 
   const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
@@ -550,11 +446,8 @@ const Patient = ({
   };
 
   const onPageChange = (e) => {
-    setIsLoading(true);
     setPaginationFirst(e.first);
     setPageNo(e.page);
-    setPageSize(e.rows);
-    setTableLoading(true);
     // getAllList(response?.response);
   };
 
@@ -575,6 +468,115 @@ const Patient = ({
     setOrgAllList(orgListArray);
   }, [organizationList]);
 
+  // useEffect(() => {
+  //   // if (window !== "undefined") {
+  //   //   setIsLoading(true);
+  //   //   if (navigate) {
+  //   //     setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
+  //   //     setPaginationFirst(
+  //   //       navigate?.query?.paginationFirst
+  //   //         ? navigate?.query?.paginationFirst
+  //   //         : 0
+  //   //     );
+  //   //   }
+  //   // }
+  //   // setIsLoading(false);
+  //   const encodedVal = JSON.parse(getStorage("TeantAdminTrackingEncodedValue"));
+  //   if (encodedVal) {
+  //     setPageNo(encodedVal?.pageNo || 0);
+  //     setPaginationFirst(encodedVal?.paginationFirst || 0);
+  //   }
+  // }, []);
+  useEffect(() => {
+    if (!organizationList?.response) {
+      getAllOrganizationList();
+    }
+  }, []);
+
+  useEffect(() => {
+    var orgListArray = [];
+    organizationList?.response?.map((res) => {
+      orgListArray.push({
+        value: res.id,
+        label: res.name,
+      });
+    });
+    setOrgAllList(orgListArray);
+  }, [organizationList]);
+  useEffect(() => {
+    if (routedData) {
+      setParamsFilter("check");
+      setPageNo(routedData?.pageNo);
+      setPaginationFirst(routedData?.paginationFirst);
+      setSearchTextValue(routedData?.searchTextValue);
+      setSelectedDateRange(routedData?.selectedDateRange);
+      setSelectedDates(routedData?.selectedDates);
+      setSelectedOptions(routedData?.selectedOptions);
+      setSort(routedData?.sort);
+      setClear(routedData?.clear);
+      setActiveFilters(
+        routedData?.activeFilters ? routedData?.activeFilters : activeFilters
+      );
+    }
+  }, []);
+  useEffect(() => {
+    setParamsFilter("check");
+    if (window !== "undefined" && paramsFilter) {
+      const data = {
+        pageNo,
+        dueDateStart: clear
+          ? ""
+          : selectedDateRange?.ReviewedDate?.startDate || "",
+        dueDateEnd: clear ? "" : selectedDateRange?.ReviewedDate?.endDate || "",
+        searchTextValue: clear ? "" : searchTextValue || "",
+        selectedOption: clear ? "" : selectedOptions?.ProcessedStatus || "",
+        // processedStart: clear ? "" : "",
+        // processedEnd: clear ? "" : "",
+        selAllocatedTo: clear ? "" : selectedOptions?.Reviewer || "",
+        auditedStartDate: clear
+          ? ""
+          : selectedDateRange?.AuditAllocatedDate?.startDate || "",
+        auditedEndDate: clear
+          ? ""
+          : selectedDateRange?.AuditAllocatedDate?.endDate || "",
+        allocatedStartDate: clear
+          ? ""
+          : selectedDateRange?.AllocatedDate?.startDate || "",
+        allocatedEndDate: clear
+          ? ""
+          : selectedDateRange?.AllocatedDate?.endDate || "",
+        selAllocatedBy: clear ? "" : selectedOptions?.AllocatedBy || "",
+        auditedDueStartDate: clear
+          ? ""
+          : selectedDateRange?.AuditedDate?.startDate || "",
+        auditedDueEndDate: clear
+          ? ""
+          : selectedDateRange?.AuditedDate?.endDate || "",
+        auditSelectedOption: clear ? "" : selectedOptions?.AuditStatus || "",
+        selAuditAllocatedBy: clear
+          ? ""
+          : selectedOptions?.AuditAllocatedBy || "",
+        auditSelAllocatedTo: clear ? "" : selectedOptions?.Supervisor || "",
+        sort,
+        selectOrgId: clear ? "" : selectedOptions?.Organization || "",
+      };
+      getAllTrackingList(data);
+      getFilters({ field: "auditAllocatedBy" });
+      getPatientAllocatedList({ field: "patientAllocated" });
+      getAuditAssignedList({ field: "auditedAssigned" });
+      getAllocatedByList({ field: "allocatedBy" });
+    }
+    // setIsLoading(false);
+  }, [
+    pageNo,
+    searchTextValue,
+    sort,
+    clear,
+    selectedDateRange,
+    selectedOptions,
+    paramsFilter
+  ]);
+
   return (
     <>
       <div className={`show `}>
@@ -592,104 +594,42 @@ const Patient = ({
                           style={{ padding: "20px 0px 20px 20px" }}
                         >
                           <HeaderFilters
-                            // audioAllocatedTo
-                            isAuditAllocatedToSelector={true}
-                            auditAllocatedTolabel="Audit Allocated to"
                             auditallocatedToOptoons={generateOptionsForNewStore(
                               auditAssignedFilters?.data?.response
                             )}
-                            setAuditSelAllocatedTo={setAuditSelAllocatedTo}
                             setSearch={setSearchTextValue}
                             isSearch={true}
                             search={searchTextValue}
-                            searchlabel="Patient Name / ID"
-                            // select status
-                            selectlabel="Select Status"
-                            isSelector={true}
-                            setSelectedOption={SetSelectedOption}
                             selectOptions={statusOptions}
-                            defaultSelectValue1={"Select Status"}
-                            // due date
-                            isRangePicker={true}
-                            setStartDate={setDueDateStart}
-                            setEndDate={setDueDateEnd}
-                            pickerlabel="Due date"
-                            defaultStartDate={""}
-                            defaultEndDate={""}
-                            disabled="pastDate"
-                            // completed date
-                            isAnotherPicker={true}
-                            setStartDate2={setProcessedStart}
-                            setEndDate2={setProcessedEnd}
-                            pickerlabe2="Audited date"
-                            defaultStartDate2={""}
-                            defaultEndDate2={""}
-                            // Audit allocated date
-                            pickerlabe5="Audit Allocated Date"
-                            defaultStartDate5={""}
-                            defaultEndDate5={""}
-                            setStartDate5={setAllocatedStartDate}
-                            setEndDate5={setAllocatedEndDate}
-                            isAnotherPicker5={true}
-                            // Auditeddate
-                            pickerlabe4="Allocated Date"
-                            defaultStartDate4={""}
-                            defaultEndDate4={""}
-                            setStartDate4={setAuditedStartDate}
-                            setEndDate4={setAuditedEnsDate}
-                            isAnotherPicker3={true}
-                            // allocatedTo
-                            isAllocatedToSelector={true}
-                            allocatedTolabel="Allocated to"
                             allocatedToOptoons={generateOptionsForNewStore(
                               patientAllocatedFilters?.data?.response
                             )}
-                            setSelAllocatedTo={setSelAllocatedTo}
-                            // defaultAllocateTo="All"
-                            tracking={true}
-                            // allocated by
-                            isAllocatedBySelector={true}
-                            allocatedBylabel=" Allocated By"
                             allocatedByOptoons={generateOptionsForNewStore(
                               allocatedByFilters?.data?.response
                             )}
-                            setSelAllocatedBy={setSelAllocatedBy}
                             // defaultAllocatedBy={"All"}
                             bullets={bullets}
                             isNextRow={true}
                             defaultShow={true}
                             defaultSize={"col-2"}
-                            auditStatusOptions={auditStatusOptions}
-                            setAuditSelectedOption={setAuditSelectedOption}
-                            setStartDate6={setAuditedDueStartDate}
-                            setEndDate6={setAuditedDueEndDate}
-                            setSelAuditAllocatedBy={setSelAuditAllocatedBy}
                             auditAllocatedByOptoons={generateOptionsForNewStore(
                               filteredList?.data?.response
                             )}
                             orgAllList={orgAllList}
-                            setSelectedOrgList={setSelectedOrgList}
-                            selectOrgList={selectOrgList}
                             setClear={setClear}
                             clear={clear}
                             selectedDates={selectedDates}
-                            selectedDates2={selectedDates2}
-                            selectedDates3={selectedDates3}
-                            selectedDates4={selectedDates4}
-                            selectedDates5={selectedDates5}
+                            selectedDateRange={selectedDateRange}
+                            setSelectedDateRange={setSelectedDateRange}
                             setSelectedDates={setSelectedDates}
-                            setSelectedDates2={setSelectedDates2}
-                            setSelectedDates3={setSelectedDates3}
-                            setSelectedDates4={setSelectedDates4}
-                            setSelectedDates5={setSelectedDates5}
-                            selector7value={selAuditAllocatedBy}
-                            selector6value={selAllocatedBy}
-                            selector5value={auditSelectedOption}
-                            selector4value={selectedOption}
-                            selector2value={auditSelAllocatedTo}
-                            selectorValue={selAllocatedTo}
-                            auditSelAllocatedTo={auditSelAllocatedTo}
+                            selectedOptions={selectedOptions}
+                            setSelectedOptions={setSelectedOptions}
                             setPageNo={setPageNo}
+                            getRoutedData={getRoutedData}
+                            auditStatusOptions={auditStatusOptions}
+                            activeFilters={activeFilters}
+                            setActiveFilters={setActiveFilters}
+                            searchTextValue={searchTextValue}
                           />
                         </div>
                         <div className="col-2">
@@ -714,12 +654,22 @@ const Patient = ({
                               actionBodyTemplate={actionBodyTemplate}
                               statusBodyTemplate={processstatusBodyTemplate}
                               auditBodyTemplate={auditstatusBodyTemplate}
-                              gotoPatientDetails={gotoPatientDetails}
+                              // gotoPatientDetails={gotoPatientDetails}
                               patientDetails={patientDetails}
                               setSortOrder={setAllocatedSortOrder}
                               sortOrder={allocatedSortOrder}
                               setSort={setSort}
-                              page={{ pageNo, paginationFirst }}
+                              page={{
+                                pageNo,
+                                paginationFirst,
+                                selectedDates,
+                                selectedDateRange,
+                                selectedOptions,
+                                searchTextValue,
+                                sort,
+                                clear,
+                                activeFilters,
+                              }}
                               loader={loader}
                               sortAuditOrder={sortAuditOrder}
                               setSortAuditOrder={setSortAuditOrder}
@@ -768,6 +718,7 @@ const enhancer = connect(
       state.admin.patientAllocate.patientAllocatedFilters,
     auditAssignedFilters: state.admin.patientAllocate.auditAssignedFilters,
     allocatedByFilters: state.admin.patientAllocate.allocatedByFilters,
+    routedData: state.tenantAdmin?.patientSync?.routedData,
   }),
   {
     getAllOrganizationList: tenantUserAdminAction.getAllOrganizationAction,
@@ -777,6 +728,7 @@ const enhancer = connect(
     getAuditAssignedList: allActions.getAuditAssignedList,
     getAllocatedByList: allActions.getAllocatedByList,
     patientDetails: workFlowActions.getPatientDetails,
+    getRoutedData: allPatientSyncAction.getRoutedData,
   }
 );
 export default enhancer(Patient);

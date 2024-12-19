@@ -20,8 +20,7 @@ import PdfDrawer from "./modals/PdfDrawer";
 import FhirDrawer from "./modals/FhirDrawer";
 import UploadFile from "./uploadFile";
 import { connect } from "react-redux";
-import { getResponePopup } from "../../../utils/reusable";
-import { getStorage } from "../../../utils/storages";
+import { actions as patientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import UploadModal from "./uploadFile/uploadModal";
 import { useRouter } from "next/router";
 
@@ -309,7 +308,8 @@ const Index = ({
   pdfLoader,
   getActiveTab,
   reportActiveTab,
-  routedData
+  routedData,
+  getRoutedData,
 }) => {
   const router = useRouter();
   const [filteredCOder, setFilteredCoder] = useState(null);
@@ -333,6 +333,7 @@ const Index = ({
     status: false,
     data: null,
   });
+  const [paramsFilter, setParamsFilter] = useState(null);
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
     setUploadType(e.target.name);
@@ -412,20 +413,18 @@ const Index = ({
   };
   useEffect(() => {
     if (routedData) {
-      setViewDetailedBatch(
-        routedData?.viewDetailedBatch
-         
-      );
+      setParamsFilter("check");
+      setViewDetailedBatch(routedData?.viewDetailedBatch);
     }
   }, []);
   useEffect(() => {
     setFilteredCoder(null);
-  }, []);
-
-  useEffect(() => {
     if (reportActiveTab) {
       getActiveTab(reportActiveTab);
     }
+  }, []);
+
+  useEffect(() => {
     if (reportActiveTab === "PDF") {
       getAllBatches({
         page: pageNo,
@@ -435,7 +434,7 @@ const Index = ({
         batchUploadStatus: selectedOptions?.PDF,
       });
     }
-  }, [reportActiveTab, pageNo, selectedDateRanges, searchVal, selectedOptions]);
+  }, [reportActiveTab, pageNo, selectedDateRanges, searchVal, selectedOptions,viewDetailedBatch?.status]);
 
   return (
     <>
@@ -445,9 +444,22 @@ const Index = ({
           params={{
             batchId: viewDetailedBatch?.data?.id,
             pageNo: pageNo,
+            viewDetailedBatch,
+            selectedDateRanges,
+            selectedOptions,
+            search,
+            selectedDates,
           }}
           setViewDetailedBatch={setViewDetailedBatch}
           viewDetailedBatch={viewDetailedBatch}
+          paramsFilter={paramsFilter}
+          setParamsFilter={setParamsFilter}
+          setSelectedDates={setSelectedDates}
+          setSelecteddateRanges={setSelecteddateRanges}
+          setListSearch={setSearch}
+          setSelectedOptions={setSelectedOptions}
+          setListPageNo={setPageNo}
+          setListSearchVal={setSearchVal}
         />
       ) : (
         <div className={styles.maincontainer}>
@@ -533,6 +545,7 @@ const Index = ({
                                       reportActiveTab
                                     );
                                   }}
+                                  value={selectedOptions[reportActiveTab]}
                                   allowClear
                                 />
                               </div>
@@ -721,6 +734,7 @@ const connector = connect(
     getAllBatches: allActions.getAllBatches,
     getActiveTab: allReportActions.activeTab,
     uploadFiles: allActions.upoloadFiles,
+    getRoutedData: patientSyncAction.getRoutedData,
   }
 );
 export default connector(Index);

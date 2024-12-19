@@ -38,7 +38,6 @@ function PdfTable({
   getAllBatches,
   pageNo,
   setViewDetailedBatch,
-  viewDetailedBatch,
 }) {
   const router = useRouter();
   const [filelList, setFileList] = useState();
@@ -222,8 +221,6 @@ function PdfTable({
                                 {row?.totalFailedCount > 0
                                   ? row?.totalFailedCount
                                   : 0}
-                                
-                               
                               </>
                             }
                           >
@@ -310,7 +307,6 @@ function PdfTable({
                                     className="mx-2"
                                     style={{
                                       color: "#FF7D2A",
-                                      
                                     }}
                                   />
                                 ) : row?.batchUploadStatus === "FAILED" ? (

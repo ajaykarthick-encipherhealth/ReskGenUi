@@ -21,6 +21,7 @@ import { truncateString } from "../../../patientDetails/details/components/funct
 import { actions as adminActions } from "../../../../stores/admin/users";
 import { actions as allActions } from "../../../../stores/admin/workqueue";
 import { connect } from "react-redux";
+import { actions as patientSyncActions } from "../../../../stores/tenantAdmin/patientSync";
 function AddPatientListTable({
   patinetListAll,
   actionBodyTemplate,
@@ -33,6 +34,7 @@ function AddPatientListTable({
   sortCompleteOrder,
   setSortCompleteOrder,
   selectedRoWDetails,
+  getRoutedData,
 }) {
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
   const navigate = useRouter();
@@ -46,10 +48,10 @@ function AddPatientListTable({
       setStorage("patientId", data?.patientId);
       var role = getStorage("role");
       if (role == "tenant_admin") {
-        const encodedValue = btoa(JSON.stringify(page));
-        setStorage("TenantAdminPatientsEncodedValue",encodedValue)
+        setStorage("routeBackTo", "/tenantAdmin/patients");
+        getRoutedData(page);
         navigate.push({
-          pathname: "/tenantAdmin/patients/details"
+          pathname: "/tenantAdmin/patients/details",
         });
       } else {
         const encodedValue = btoa(JSON.stringify(page))
@@ -58,9 +60,9 @@ function AddPatientListTable({
           .replace(/=+$/, ""); // Remove padding '='
 
         // const encodedValue = btoa(JSON.stringify(page));
-        setStorage("AdminPatientsEncodedValue",encodedValue)
+        setStorage("AdminPatientsEncodedValue", encodedValue);
         navigate.push({
-          pathname: "/admin/patients/details"
+          pathname: "/admin/patients/details",
           // query: {
           //   params: encodedValue,
           // },
@@ -334,6 +336,7 @@ function AddPatientListTable({
 
 const connector = connect((state) => ({}), {
   selectedRoWDetails: adminActions.selectedRoWDetails,
-  patientDetails:allActions.getPatientDetails
+  patientDetails: allActions.getPatientDetails,
+  getRoutedData: patientSyncActions.getRoutedData,
 });
 export default connector(AddPatientListTable);

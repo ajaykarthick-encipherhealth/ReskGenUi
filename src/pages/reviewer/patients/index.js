@@ -367,7 +367,6 @@ const Patient = ({
   useEffect(() => {
     // const decodedParams = JSON.parse(getStorage("reviewerEncodedValue"));
     const decodedParams=navigate.query
-    const sessionActiveFilters = JSON.parse(getStorage("reviewerFilter"));
     if (decodedParams) {
       setParamsFilter("check");
       setStatusSelectedStatus(

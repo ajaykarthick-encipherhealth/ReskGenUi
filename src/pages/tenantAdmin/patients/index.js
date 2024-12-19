@@ -66,6 +66,7 @@ const Patient = ({
   patientDetails,
   getFilters,
   filteredList,
+  routedData,
 }) => {
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
@@ -478,48 +479,36 @@ const Patient = ({
   };
 
   useEffect(() => {
-    const encodedString = navigate.query;
     // getStorage("TenantAdminPatientsEncodedValue");
-    if (encodedString && typeof encodedString === "string") {
-      try {
-        setParamsFilter("check");
-        const decodedParams = JSON.parse(
-          atob(encodedString?.replace(/-/g, "+").replace(/_/g, "/"))
-        );
-        setPageNo(decodedParams?.pageNo ? decodedParams?.pageNo : 0);
-        setPaginationFirst(
-          decodedParams?.paginationFirst ? decodedParams?.paginationFirst : 0
-        );
-        setCompletedStartDate(decodedParams?.completedStartDate);
-        setCompletedEndDate(decodedParams?.completedEndDate || "");
-        SetSelectedOption(decodedParams?.selectedOption || "");
-        setSearch(decodedParams?.search || null);
-        setSearchVal(decodedParams?.search || null);
-        setComputedStartDate(decodedParams?.computedStartDate || "");
-        setComputedEndDate(decodedParams?.computedEndDate || "");
-        setSelAllocatedBy(decodedParams?.selAllocatedBy || null);
-        setSelAllocatedTo(decodedParams?.setSelAllocatedTo || "");
-        setSelCreatedBy(decodedParams?.createdBy || null);
-        setSelectedDate2s(
-          decodedParams?.completedStartDate && [
-            dayjs(decodedParams?.completedStartDate),
-            dayjs(decodedParams?.completedEndDate),
-          ]
-        );
-        setSelectedDates(
-          (decodedParams?.computedStartDate && [
-            dayjs(decodedParams?.computedStartDate),
-            dayjs(decodedParams?.computedEndDate),
-          ]) ||
-            []
-        );
-        setSelectedOrgList(decodedParams?.selectOrgList || "");
-        setActiveFilters(decodedParams?.activeFilters || []);
-      } catch (error) {
-        console.error("Error decoding or parsing query:", error);
-      }
-    } else {
-      console.error("Encoded value not found or not a string:", encodedString);
+    if (routedData) {
+      setParamsFilter("check");
+      setPageNo(routedData?.pageNo || 0);
+      setPaginationFirst(routedData?.paginationFirst || 0);
+      setCompletedStartDate(routedData?.completedStartDate);
+      setCompletedEndDate(routedData?.completedEndDate || "");
+      SetSelectedOption(routedData?.selectedOption || "");
+      setSearch(routedData?.search || null);
+      setSearchVal(routedData?.search || null);
+      setComputedStartDate(routedData?.computedStartDate || "");
+      setComputedEndDate(routedData?.computedEndDate || "");
+      setSelAllocatedBy(routedData?.selAllocatedBy || null);
+      setSelAllocatedTo(routedData?.setSelAllocatedTo || "");
+      setSelCreatedBy(routedData?.createdBy || null);
+      setSelectedDate2s(
+        routedData?.completedStartDate && [
+          dayjs(routedData?.completedStartDate),
+          dayjs(routedData?.completedEndDate),
+        ]
+      );
+      setSelectedDates(
+        (routedData?.computedStartDate && [
+          dayjs(routedData?.computedStartDate),
+          dayjs(routedData?.computedEndDate),
+        ]) ||
+          []
+      );
+      setSelectedOrgList(routedData?.selectOrgList || "");
+      setActiveFilters(routedData?.activeFilters || []);
     }
     // }
   }, []);
@@ -533,21 +522,23 @@ const Patient = ({
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    getAllPatients(
-      pageNo,
-      computedStartDate,
-      computedEndDate,
-      selectedOption,
-      searchVal || "",
-      completedStartDate || "",
-      completedEndDate || "",
-      selAllocatedTo || "",
-      selAllocatedBy || "",
-      selCreatedBy || "",
-      sort,
-      (orgId = selectOrgList)
-    );
-    getFilters({ field: "createdBy" });
+    if (paramsFilter) {
+      getAllPatients(
+        pageNo,
+        computedStartDate,
+        computedEndDate,
+        selectedOption,
+        searchVal || "",
+        completedStartDate || "",
+        completedEndDate || "",
+        selAllocatedTo || "",
+        selAllocatedBy || "",
+        selCreatedBy || "",
+        sort,
+        (orgId = selectOrgList)
+      );
+      getFilters({ field: "createdBy" });
+    }
   }, [
     pageNo,
     computedStartDate,
@@ -795,6 +786,7 @@ const enhancer = connect(
     webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
     loading: state?.tenantAdmin?.patients?.allPatientsLoading,
     filteredList: state.admin?.patientAllocate?.filtersList,
+    routedData: state.tenantAdmin?.patientSync?.routedData,
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

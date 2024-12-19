@@ -50,28 +50,28 @@ const DailyTask = ({ trackChart }) => {
           },
           data: [
             {
-              value: pending,
+              value: pending || 0,
               name: "Pending",
               itemStyle: {
                 color: "#5da9e4",
               },
             },
             {
-              value: hold,
+              value: hold || 0,
               name: "Hold",
               itemStyle: {
                 color: "#AD94FA",
               },
             },
             {
-              value: decline,
+              value: decline || 0,
               name: "Declined",
               itemStyle: {
                 color: "#EB5252",
               },
             },
             {
-              value: completed,
+              value: completed || 0,
               name: "Completed",
               itemStyle: {
                 color: "#B4EFBA",
@@ -86,7 +86,9 @@ const DailyTask = ({ trackChart }) => {
           label: {
             show: true,
             position: "center",
-            formatter: `{b|${pending + hold + decline + completed}}`,
+            formatter: `{b|${
+              pending || 0 + hold || 0 + decline || 0 + completed || 0
+            }}`,
             backgroundColor: "transparent",
 
             rich: {
@@ -103,7 +105,7 @@ const DailyTask = ({ trackChart }) => {
           },
           data: [
             {
-              value: pending + hold + decline + completed,
+              value: pending || 0 + hold || 0 + decline || 0 + completed || 0,
               name: "Allocated",
               itemStyle: {
                 color: "#fff",
@@ -147,7 +149,10 @@ const DailyTask = ({ trackChart }) => {
                       {bullets?.map((item) => {
                         return (
                           <div className={styles.container}>
-                            <div className={styles.fontSize} style={{ display: "flex", fontSize: "12px" }}>
+                            <div
+                              className={styles.fontSize}
+                              style={{ display: "flex", fontSize: "12px" }}
+                            >
                               <div
                                 className={styles.bgColor}
                                 style={{

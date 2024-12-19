@@ -6,20 +6,20 @@ export async function getAllTracking(data) {
   const options = {
     method: "GET",
   };
-  const filteredStatus =
-    data?.selectedOption === undefined ? "" : data?.selectedOption;
-  const filteredDStart =
-    data?.dueDateStart === undefined ? "" : data?.dueDateStart;
+  // const filteredStatus =
+  //   data?.selectedOption === undefined ? "" : data?.selectedOption;
+  // const filteredDStart =
+  //   data?.dueDateStart === undefined ? "" : data?.dueDateStart;
 
   const res = await requestPortal(
     `dbservice/patient/admin/filter?userId=${uId}&organizationId=${
       data?.selectOrgId
     }&page=${
       data?.pageNo
-    }&size=15&processedStatus=${filteredStatus}&processedStart=${filteredDStart}&processedEnd=${
+    }&size=15&processedStatus=${data?.selectedOption}&processedStart=${ data?.dueDateStart}&processedEnd=${
       data?.dueDateEnd
     }&searchString=${data?.searchTextValue}&patientAllocated=${
-      data?.selAllocatedTo === "All" ? "" : data?.selAllocatedTo
+      data?.selAllocatedTo
     }&auditAllocatedStart=${data?.allocatedStartDate}&auditAllocatedEnd=${
       data?.allocatedEndDate
     }&allocatedOnStart=${data?.auditedStartDate}&allocatedOnEnd=${

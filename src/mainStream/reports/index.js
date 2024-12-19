@@ -72,6 +72,7 @@ const Reports = ({
   getActiveTab,
   teamReportLoading,
   getSelectUserListReport,
+  routeData,
 }) => {
   const router = useRouter();
   const rowsLength = selectedRow;
@@ -109,6 +110,7 @@ const Reports = ({
     status: false,
     data: null,
   });
+  const [paramsFilter, setParamsFilter] = useState(null);
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -197,12 +199,23 @@ const Reports = ({
     });
   };
   const dosOnChange = (selectedOption, name, tabName) => {
-    const nameString = name?.split(" ").join("");
-    if (name == "User Role" && !selectedOption) {
+    const nameString = name?.replace(/\s+/g, "");
+    if (nameString == "UserRole" && selectedOption) {
       setSelectedOptions((prevOptions) => ({
         ...prevOptions,
-        UserRole: undefined,
-        User: undefined,
+        ["UserRole"]: selectedOption,
+      }));
+      getSelectUserListReport({ role: selectedOption || "" });
+    } else if (name && nameString !== "UserRole") {
+      setSelectedOptions((prevOptions) => ({
+        ...prevOptions,
+        [nameString]: selectedOption,
+      }));
+    } else if (nameString == "UserRole" && !selectedOption) {
+      setSelectedOptions((prevOptions) => ({
+        ...prevOptions,
+        ["UserRole"]: null,
+        ["User"]: null,
       }));
     } else {
       setSelectedOptions((prevOptions) => ({
@@ -274,7 +287,6 @@ const Reports = ({
         label: res.firstName + " " + res.lastName,
       }))
     : [];
-
   const checkedList = [
     {
       id: 1,
@@ -323,20 +335,20 @@ const Reports = ({
     // }
   };
 
-  const gotoPatientDetails = (data) => {
-    patientDetails(data);
-    if (data.computing == 2) {
-      const controller = new AbortController();
-      const { signal } = controller;
-      controller.abort();
-      setStorage("patientId", data.patientId);
-      navigate.push("/reviewer/patients/details");
-    } else {
-      notification.warning({
-        message: data.patientId + " file not processed Please wait",
-      });
-    }
-  };
+  // const gotoPatientDetails = (data) => {
+  //   patientDetails(data);
+  //   if (data.computing == 2) {
+  //     const controller = new AbortController();
+  //     const { signal } = controller;
+  //     controller.abort();
+  //     setStorage("patientId", data.patientId);
+  //     navigate.push("/reviewer/patients/details");
+  //   } else {
+  //     notification.warning({
+  //       message: data.patientId + " file not processed Please wait",
+  //     });
+  //   }
+  // };
 
   const resetPageState =
     activeTab === "Sent"
@@ -398,75 +410,74 @@ const Reports = ({
     //   (item) => item.field === "initialSearch"
     // )?.search;
     // console.log(selectedDateRanges,searchVal,"fil")
-    if (activeTab === "Sent") {
-      sentReport({
-        pagenum: sentPageNo,
-        startDate: selectedDateRanges?.Sent?.from,
-        endDate: selectedDateRanges?.Sent?.to,
-        search: searchVal ? searchVal : "",
-        sort: sort,
-      });
-    } else if (activeTab === "Received") {
-      receivedReport({
-        pagenum: receivedPageNo,
-        startDate: selectedDateRanges?.Received?.from,
-        endDate: selectedDateRanges?.Received?.to,
-        search: searchVal ? searchVal : "",
-        sort: sort,
-      });
-    } else if (activeTab === "Admin") {
-      getReportDetails({
-        pagenum: pageNo,
-        startDate: selectedDateRanges?.Admin?.from,
-        endDate: selectedDateRanges?.Admin?.to,
-        search: searchVal ? searchVal : "",
-        filter: selectedOptions?.Status,
-        userName: selectedOptions?.UserRole ? selectedOptions?.UserRole : "",
-        sort: sort,
-        selectManager:
-          selectedOptions?.User && selectedOptions?.UserRole !== ""
-            ? selectedOptions?.User
-            : "",
-        flagsList: selectAllFlags,
-        allPatientIds: false,
-      });
-    } else if (activeTab === "Audit") {
-      auditReport({
-        pagenum: teamPageNo,
-        startDate: selectedDateRanges?.Audit?.from,
-        endDate: selectedDateRanges?.Audit?.to,
-        search: searchVal ? searchVal : "",
-        filter:  selectedOptions
-          ?  selectedOptions[activeTab]
-          : "",
-        sort: sort,
-        flagsList: selectAllFlags,
-      });
-    } else if (activeTab === "Team") {
-      teamReport({
-        pagenum: teamPageNo,
-        startDate: selectedDateRanges?.Team?.from,
-        endDate: selectedDateRanges?.Team?.to,
-        search: searchVal ? searchVal : "",
-        filter:  selectedOptions
-          ?  selectedOptions[activeTab]
-          : "",
-        sort: sort,
-        flagsList: selectAllFlags,
-      });
-    } else if (activeTab === "Reviewer") {
-      reviewerReport({
-        pagenum: pageNo,
-        startDate: selectedDateRanges?.Reviewer?.from,
-        endDate: selectedDateRanges?.Reviewer?.to,
-        search: searchVal ? searchVal : "",
-        filter: selectedOptions?selectedOptions[activeTab]:"",
-        sort: sort,
-        flagsList: selectAllFlags,
-      });
-    }
-    if (ExportResponse) {
-      setIsModalVisible(false);
+    setParamsFilter("check");
+    if (window !== "undefined" && paramsFilter) {
+      if (activeTab === "Sent") {
+        sentReport({
+          pagenum: sentPageNo,
+          startDate: selectedDateRanges?.Sent?.from,
+          endDate: selectedDateRanges?.Sent?.to,
+          search: searchVal ? searchVal : "",
+          sort: sort,
+        });
+      } else if (activeTab === "Received") {
+        receivedReport({
+          pagenum: receivedPageNo,
+          startDate: selectedDateRanges?.Received?.from,
+          endDate: selectedDateRanges?.Received?.to,
+          search: searchVal ? searchVal : "",
+          sort: sort,
+        });
+      } else if (activeTab === "Admin") {
+        getReportDetails({
+          pagenum: pageNo,
+          startDate: selectedDateRanges?.Admin?.from,
+          endDate: selectedDateRanges?.Admin?.to,
+          search: searchVal ? searchVal : "",
+          filter: selectedOptions?.Status,
+          userName: selectedOptions?.UserRole ? selectedOptions?.UserRole : "",
+          sort: sort,
+          selectManager:
+            selectedOptions?.User && selectedOptions?.UserRole !== ""
+              ? selectedOptions?.User
+              : "",
+          flagsList: selectAllFlags,
+          allPatientIds: false,
+        });
+      } else if (activeTab === "Audit") {
+        auditReport({
+          pagenum: teamPageNo,
+          startDate: selectedDateRanges?.Audit?.from,
+          endDate: selectedDateRanges?.Audit?.to,
+          search: searchVal ? searchVal : "",
+          filter: selectedOptions ? selectedOptions[activeTab] : "",
+          sort: sort,
+          flagsList: selectAllFlags,
+        });
+      } else if (activeTab === "Team") {
+        teamReport({
+          pagenum: teamPageNo,
+          startDate: selectedDateRanges?.Team?.from,
+          endDate: selectedDateRanges?.Team?.to,
+          search: searchVal ? searchVal : "",
+          filter: selectedOptions ? selectedOptions[activeTab] : "",
+          sort: sort,
+          flagsList: selectAllFlags,
+        });
+      } else if (activeTab === "Reviewer") {
+        reviewerReport({
+          pagenum: pageNo,
+          startDate: selectedDateRanges?.Reviewer?.from,
+          endDate: selectedDateRanges?.Reviewer?.to,
+          search: searchVal ? searchVal : "",
+          filter: selectedOptions ? selectedOptions[activeTab] : "",
+          sort: sort,
+          flagsList: selectAllFlags,
+        });
+      }
+      if (ExportResponse) {
+        setIsModalVisible(false);
+      }
     }
   }, [
     teamPageNo,
@@ -480,6 +491,7 @@ const Reports = ({
     selectedDateRanges,
     activeTab,
     selectAllFlags,
+    paramsFilter,
   ]);
 
   useEffect(() => {
@@ -495,7 +507,7 @@ const Reports = ({
     // new URLSearchParams(window.location.search).get("page");
     const limit = viewIndividualReport?.data?.limit;
     // new URLSearchParams(window.location.search).get("limit");
-    if (activeTab === "Received" && page && !router.query) {
+    if (activeTab === "Received" && page && !routeData) {
       setReceivedPageNo(page);
       setPaginationReceivedFirst(limit);
       setSelectedDates(viewIndividualReport?.data?.selectedDates);
@@ -507,7 +519,7 @@ const Reports = ({
         },
       });
       setSearch(viewIndividualReport?.data?.searchVal);
-    } else if (activeTab === "Sent" && page && !router.query) {
+    } else if (activeTab === "Sent" && page && !routeData) {
       setSentPageNo(page);
       setPaginationSentFirst(limit);
       setSelectedDates(viewIndividualReport?.data?.selectedDates);
@@ -523,42 +535,26 @@ const Reports = ({
     setUserRole(getStorage("userRole"));
   }, [activeTab, viewIndividualReport?.data]);
 
-  useEffect(() => {
-    if (selectedOptions?.UserRole) {
-      getSelectUserListReport({ role: selectedOptions?.UserRole || "" });
-    }
-  }, [selectedOptions?.UserRole]);
+  // useEffect(() => {
+  //   if (selectedOptions?.UserRole) {
+  //     getSelectUserListReport({ role: selectedOptions?.UserRole || "" });
+  //   }
+  // }, [selectedOptions?.UserRole]);
 
   useEffect(() => {
-    const routeData = router?.query;
     if (routeData) {
-      const dates = routeData?.selectedDates
-        ? JSON.parse(routeData?.selectedDates)
-        : [];
-      setPageNo(routeData?.pageNo ? JSON.parse(routeData?.pageNo) : 0);
-      setPaginationFirst(
-        routeData?.paginationFirst ? JSON.parse(routeData?.paginationFirst) : 0
-      );
-      setSelectedDates(dates);
+      setParamsFilter("check");
+      setPageNo(routeData?.pageNo || 0);
+      setPaginationFirst(routeData?.paginationFirst || 0);
+      setSelectedDates(routeData?.selectedDates);
       setSearchVal(routeData?.searchVal);
-      setSelecteddateRanges(
-        routeData?.selectedDateRanges
-          ? JSON.parse(routeData?.selectedDateRanges)
-          : null
-      );
+      setSelecteddateRanges(routeData?.selectedDateRanges || null);
       setSearch(routeData?.searchVal);
-      setSelectAllFlags(
-        routeData?.selectAllFlags
-          ? JSON.parse(routeData?.selectAllFlags)
-          : false
-      );
-      setSelectedOptions(
-        routeData?.selectedOptions
-          ? JSON.parse(routeData?.selectedOptions)
-          : null
-      );
+      setSelectAllFlags(routeData?.selectAllFlags || false);
+      setSelectedOptions(routeData?.selectedOptions || null);
+      setSelectedData(selectedData)
     }
-  }, [router]);
+  }, []);
 
   return viewIndividualReport?.status ? (
     renderIndividualReport()
@@ -654,7 +650,7 @@ const Reports = ({
                                         ? selectedOptions[activeTab]
                                         : null
                                     }
-                                    style={{width:"150px"}}
+                                    style={{ width: "150px" }}
                                   />
                                 </div>
                                 {/* </div> */}
@@ -733,9 +729,13 @@ const Reports = ({
                                         }
                                         // className={`custom-react-report-select`}
                                         isSearchable={false}
-                                        value={selectedOptions ? selectedOptions[info?.name]: null}
+                                        value={
+                                          selectedOptions
+                                            ? selectedOptions[info?.name]
+                                            : null
+                                        }
                                         allowClear={true}
-                                        style={{width:"150px"}}
+                                        style={{ width: "150px" }}
                                       />
                                     )}
                                     {info?.isRangePikcer && (
@@ -913,12 +913,12 @@ const Reports = ({
                           pageNo,
                           paginationFirst,
                           searchVal,
-                          selectedDateRanges:
-                            JSON.stringify(selectedDateRanges),
-                          selectedDates: JSON.stringify(selectedDates),
-                          selectedOptions: JSON.stringify(selectedOptions),
+                          selectedDateRanges,
+                          selectedDates,
+                          selectedOptions,
                           sort,
                           selectAllFlags,
+                          selectedData
                         }}
                         loader={AdminReportLoader}
                         activeTab={activeTab}
@@ -950,6 +950,7 @@ const Reports = ({
                             allPatientIds: true,
                           },
                         }}
+                        
                       />
                     </div>
                   )}
@@ -989,6 +990,7 @@ const Reports = ({
                         selectedOptions,
                         sort,
                         selectAllFlags,
+                        selectedData
                       }}
                       loader={
                         activeTab === "Team"
@@ -1132,6 +1134,7 @@ const enhancer = connect(
     selectedRow: state?.admin?.report?.selectedRow,
     ExportResponse: state?.admin?.report?.exportData,
     teamReportLoading: state?.supervisor?.report?.teamReportLoading,
+    routeData: state.tenantAdmin?.patientSync?.routedData,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,

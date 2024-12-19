@@ -50,7 +50,15 @@ const DetailedViewPdfTable = ({
   webSocketData,
   viewDetailedBatch,
   routedData,
-  getRoutedData
+  getRoutedData,
+  paramsFilter,
+  setParamsFilter,
+  setSelectedDates,
+  setSelecteddateRanges,
+  setListSearch,
+  setSelectedOptions,
+  setListPageNo,
+  setListSearchVal
 }) => {
   const router = useRouter();
   const [searchVal, setSearchVal] = useState(null);
@@ -103,7 +111,7 @@ const DetailedViewPdfTable = ({
         searchVal: routedData?.searchVal,
         name: "initialSearch",
       });
-      setPageNo(routedData?.pageNo||0);
+      setPageNo(routedData?.pageNo || 0);
     }
   }, []);
   useEffect(() => {
@@ -153,7 +161,8 @@ const DetailedViewPdfTable = ({
     }
   }, [reportActiveTab, pdfTabledata, params]);
   useEffect(() => {
-    if (batchId) {
+    setParamsFilter("check");
+    if (batchId && paramsFilter) {
       getBatchInfo({
         batchId: batchId,
         page: pageNo,
@@ -294,12 +303,16 @@ const DetailedViewPdfTable = ({
                           className={`${styles.backButtonStyle} mx-2`}
                           onClick={() => {
                             getActiveTab("PDF");
-                            removeStorage("patientSyncEncodedValue");
-                            router.push("/tenantAdmin/patientSync");
-                            setSearch();
-                            setSearchVal(null);
+                            // removeStorage("patientSyncEncodedValue");
+                            // router.push("/tenantAdmin/patientSync");
+                            setSelectedDates(params?.selectedDates);
+                            setSelecteddateRanges(params?.selectedDateRanges);
+                            setListSearch(params?.search);
+                            setSelectedOptions(params?.selectedOptions);
+                            setListPageNo(params?.pageNo);
                             setViewDetailedBatch({ status: false, data: null });
                             getRoutedData("");
+                            setListSearchVal(params?.search?.searchVal)
                           }}
                         >
                           <Image src={leftArrow} />
@@ -364,7 +377,7 @@ const DetailedViewPdfTable = ({
                             params={{
                               searchVal: searchVal,
                               pageNo: pageNo,
-                              viewDetailedBatch
+                              viewDetailedBatch,
                             }}
                             currentId={currentId}
                           />
@@ -395,7 +408,7 @@ const connector = connect(
     getBatchInfo: allActions.getBatchInfo,
     getAllBatches: allActions.getAllBatches,
     getActiveTab: allReportActions.activeTab,
-    getRoutedData:allActions.getRoutedData
+    getRoutedData: allActions.getRoutedData,
   }
 );
 export default connector(DetailedViewPdfTable);

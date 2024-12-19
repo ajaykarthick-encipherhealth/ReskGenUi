@@ -19,6 +19,7 @@ import { getStorage, setStorage } from "../../../../utils/storages";
 import SvgFlag from "../../../patientDetails/details/components/svg/svg";
 import { actions as adminActions } from "../../../../stores/admin/users";
 import { actions as allActions } from "../../../../stores/admin/workqueue";
+import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
 import { connect } from "react-redux";
 function AddPatientListTable({
   patinetListAll,
@@ -32,6 +33,7 @@ function AddPatientListTable({
   sortCompleteOrder,
   setSortCompleteOrder,
   selectedRoWDetails,
+  getRoutedData,
 }) {
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
   const navigate = useRouter();
@@ -43,23 +45,21 @@ function AddPatientListTable({
       const { signal } = controller;
       controller.abort();
       setStorage("patientId", data?.patientId);
-      setStorage("fromPatientSync", false);
-      setStorage("isTenantAdminTracking", false);
       var role = getStorage("role");
       if (role == "tenant_admin") {
-        const encodedValue = btoa(JSON.stringify(page));
-        setStorage("TenantAdminPatientsEncodedValue", encodedValue);
+        setStorage("routeBackTo", "/tenantAdmin/patients");
+        getRoutedData(page);
         navigate.push({
           pathname: "/tenantAdmin/patients/details",
         });
       } else {
         const encodedValue = btoa(JSON.stringify(page))
-          .replace(/\+/g, "-")
-          .replace(/\//g, "_")
-          .replace(/=+$/, ""); // Remove padding '='
+           .replace(/\+/g, "-")
+           .replace(/\//g, "_")
+           .replace(/=+$/, ""); // Remove padding '='
 
-        // const encodedValue = btoa(JSON.stringify(page));
-        setStorage("AdminPatientsEncodedValue", encodedValue);
+         // const encodedValue = btoa(JSON.stringify(page));
+         setStorage("AdminPatientsEncodedValue", encodedValue);
         navigate.push({
           pathname: "/admin/patients/details",
           // query: {
@@ -360,5 +360,6 @@ function AddPatientListTable({
 const connector = connect((state) => ({}), {
   selectedRoWDetails: adminActions.selectedRoWDetails,
   patientDetails: allActions.getPatientDetails,
+  getRoutedData: allPatientSyncAction.getRoutedData,
 });
 export default connector(AddPatientListTable);

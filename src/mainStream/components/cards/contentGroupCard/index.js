@@ -7,7 +7,7 @@ import {
   dateFormate,
   renderUserPrfoileAvatar,
 } from "../../../../components/headerFilters/functions";
-import { patientDetails } from "../../../../stores/authflow/actions";
+import { actions as patientSyncActions } from "../../../../stores/tenantAdmin/patientSync";
 import { useRouter } from "next/router";
 import { getMaskData } from "../../../../utils/reusable";
 import { handleCopyToClipboard } from "../../../../components/commonFunctions";
@@ -15,7 +15,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlag } from "@fortawesome/free-regular-svg-icons";
 import { getStorage, setStorage } from "../../../../utils/storages";
-
+import { connect } from "react-redux";
 
 const ContentGroupCard = ({
   item,
@@ -39,6 +39,7 @@ const ContentGroupCard = ({
   page,
   loading,
   patientDetails,
+  getRoutedData
 }) => {
   const navigate = useRouter();
   const [copied, setCopied] = useState(false);
@@ -51,7 +52,7 @@ const ContentGroupCard = ({
       const currentRole = getStorage("userRole");
       let modifiedRole = currentRole;
 
-      if (currentRole === "tenant_admin" || currentRole==="Tenant_Admin") {
+      if (currentRole === "tenant_admin" || currentRole === "Tenant_Admin") {
         modifiedRole = "tenantAdmin";
       } else if (currentRole === "admin") {
         modifiedRole = "admin";
@@ -61,10 +62,9 @@ const ContentGroupCard = ({
 
       controller.abort();
       setStorage("patientId", data.patientId);
-      navigate.push({
-        pathname: `/${modifiedRole}/report/reportDetails`,
-        query: {...page,fromReport:modifiedRole},
-      },`/${modifiedRole}/report/reportDetails`);
+      setStorage("routeBackTo",`/${modifiedRole}/report`)
+      getRoutedData(page)
+      navigate.push(`/${modifiedRole}/report/reportDetails`);
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",
@@ -265,4 +265,8 @@ const ContentGroupCard = ({
   );
 };
 
-export default ContentGroupCard;
+const connector=connect((state)=>({state}),{
+  getRoutedData:patientSyncActions.getRoutedData
+})
+
+export default connector(ContentGroupCard);

@@ -11,14 +11,20 @@ const MoreFilter = ({
   activeFilters,
   setClear,
   handleClearAllFilters,
+  getRoutedData,
+  byDefault,
 }) => {
   const [popoverVisible, setPopoverVisible] = useState(false);
 
-  const handleHeaderCheckboxChange = () => {
-    const updatedSelectAll = !selectAll;
-    setSelectAll(updatedSelectAll);
-    const updatedFilters = updatedSelectAll ? allFilters : [];
-    setActiveFilters(updatedFilters);
+  const handleHeaderCheckboxChange = (val) => {
+    setSelectAll(val.target.checked);
+    setActiveFilters(
+      val.target.checked
+        ? allFilters
+        : byDefault
+        ? allFilters.slice(0, byDefault)
+        : []
+    );
   };
 
   const handleRowCheckboxChange = (filter) => {
@@ -31,8 +37,9 @@ const MoreFilter = ({
 
   const handleClearFilters = () => {
     setSelectAll(false);
-    setActiveFilters([]);
+    setActiveFilters(byDefault ? allFilters.slice(0, byDefault) : []);
     setClear(true);
+    getRoutedData("");
   };
 
   const PopContent = (
@@ -42,7 +49,7 @@ const MoreFilter = ({
           type="checkbox"
           onChange={handleHeaderCheckboxChange}
           className={`${styles.customChecked}`}
-          checked={selectAll || allFilters?.length===activeFilters?.length}
+          checked={allFilters?.length === activeFilters?.length}
         />{" "}
         <span style={{ margin: "0 5px" }}>Select All</span>
       </div>
@@ -63,7 +70,7 @@ const MoreFilter = ({
           style={{ marginTop: "10px", cursor: "pointer", color: "blue" }}
           onClick={handleClearAllFilters}
         >
-          Clear Filters 
+          Clear Filters
         </div>
         <div
           style={{ marginTop: "10px", cursor: "pointer", color: "blue" }}

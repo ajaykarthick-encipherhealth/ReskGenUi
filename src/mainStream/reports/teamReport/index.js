@@ -278,29 +278,29 @@ const TeamReport = ({
       value: reportListAll?.response?.totalHccCount,
     },
   ];
-  const gotoPatientDetails = (data) => {
-    patientDetails(data);
+  // const gotoPatientDetails = (data) => {
+  //   patientDetails(data);
 
-    if (data?.processedStatus === "COMPLETED") {
-      const controller = new AbortController();
-      const currentRole = getStorage("userRole");
-      controller.abort();
-      setStorage("patientId", data.patientId);
-      navigate.push({
-        pathname: `/${currentRole}/patients/details`,
-        query: page,
-      });
-    } else {
-      notification.warning({
-        message: data?.patientId + " file not processed. Please wait.",
-      });
-    }
-  };
+  //   if (data?.processedStatus === "COMPLETED") {
+  //     const controller = new AbortController();
+  //     const currentRole = getStorage("userRole");
+  //     controller.abort();
+  //     setStorage("patientId", data.patientId);
+  //     navigate.push({
+  //       pathname: `/${currentRole}/patients/details`,
+  //       query: page,
+  //     });
+  //   } else {
+  //     notification.warning({
+  //       message: data?.patientId + " file not processed. Please wait.",
+  //     });
+  //   }
+  // };
 
-  const handleTableRowClick = (id) => {
-    const clickedData = reportListAll?.response?.response?.data?.[id];
-    gotoPatientDetails(clickedData);
-  };
+  // const handleTableRowClick = (id) => {
+  //   const clickedData = reportListAll?.response?.response?.data?.[id];
+  //   gotoPatientDetails(clickedData);
+  // };
   const allocationCountData = [
     {
       title: "Supervisor",
@@ -406,7 +406,7 @@ const TeamReport = ({
                                   handleRowCheckboxChange
                                 }
                                 selectedRows={selectedRows}
-                                handleTableRowClick={handleTableRowClick}
+                                // handleTableRowClick={handleTableRowClick}
                                 auditstatusBodyTemplate={auditstatusBodyTemplate(
                                   item
                                 )}
