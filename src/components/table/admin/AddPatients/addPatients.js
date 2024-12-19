@@ -46,7 +46,7 @@ function AddPatientListTable({
       const { signal } = controller;
       controller.abort();
       setStorage("patientId", data?.patientId);
-      var role = getStorage("role");
+      var role = getStorage("userRole");
       if (role == "tenant_admin") {
         setStorage("routeBackTo", "/tenantAdmin/patients");
         getRoutedData(page);

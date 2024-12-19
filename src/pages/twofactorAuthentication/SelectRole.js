@@ -66,7 +66,7 @@ const SelectRole = ({ loginData, getLogin }) => {
     const selectedRoleInfo = rolesMapping[selectedRole];
     if (selectedRoleInfo && !roleError) {
       setStorage("userRole", selectedRoleInfo?.userRole);
-      setStorage("role", selectedRole);
+      // setStorage("userRole", selectedRole);
       setLoading(true);
       router?.push(selectedRoleInfo?.route);
     }
@@ -75,7 +75,7 @@ const SelectRole = ({ loginData, getLogin }) => {
   useEffect(() => {
     const mfa = JSON.parse(getStorage("mfa"));
     const skipEntry = JSON.parse(getStorage("skipEntry"));
-    const username = getStorage("username");
+    const username = getStorage("userId");
     const sessionPassword = JSON.parse(getStorage("password"));
     const code = getStorage("code");
     setPassword(sessionPassword);

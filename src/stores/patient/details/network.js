@@ -20,7 +20,7 @@ export async function patientDetails(
   setIsSpinnerLoading,
   role
 ) {
-  const roles = getStorage("role");
+  const roles = getStorage("userRole");
   const options = {
     method: "GET",
   };
@@ -61,7 +61,7 @@ export async function radiologyDetails(
   setIsSpinnerLoading,
   testName
 ) {
-  const roles = getStorage("role");
+  const roles = getStorage("userRole");
   const options = {
     method: "GET",
   };
@@ -85,7 +85,7 @@ export async function labDetails(
   setIsSpinnerLoading,
   testName
 ) {
-  const roles = getStorage("role");
+  const roles = getStorage("userRole");
   const options = {
     method: "GET",
   };

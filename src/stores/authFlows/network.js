@@ -22,7 +22,7 @@ export async function mfaValidation({ username, password, route }) {
   const mfa = data?.response?.mfaIsEnabled;
 
   if (data?.response) {;
-    setStorage("username", username);
+    setStorage("userId", username);
     setStorage("password", JSON.stringify(password));
     setStorage("skipEntry", skip);
     setStorage("mfa", mfa);
@@ -69,15 +69,15 @@ export async function login({ email, router, code, password, mfa, skip }) {
       setStorage("roles", JSON.stringify(data?.response?.roles));
       setStorage("refreshToken", data?.response?.refresh_token);
       setStorage("userName", emailSplit[0]);
-      setStorage("username", email);
+      // setStorage("username", email);
       setStorage("password", JSON.stringify(password));
       setStorage("skipEntry", skip);
       setStorage("mfa", mfa);
-      setStorage("refreshTokenTime", Date.now());
+      // setStorage("refreshTokenTime", Date.now());
       router?.push({
         pathname: `/twofactorAuthentication/SelectRole`
       });
-      setStorage("loginTime", Date.now());
+      // setStorage("loginTime", Date.now());
     }
     if (data?.response === null) {
       notification.error({

@@ -143,7 +143,7 @@ const Hcc = ({
         // setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
         if (isDosSelected) {
           const patientId = getStorage("patientId");
-          const role = getStorage("role");
+          const role = getStorage("userRole");
           getpatientDetailsData(
             patientId,
             null,
@@ -202,7 +202,7 @@ const Hcc = ({
       getSelectedDos("");
     }
     const patientId = getStorage("patientId");
-    const role = getStorage("role");
+    const role = getStorage("userRole");
 
     if (value) {
       getpatientDetailsData(
@@ -534,7 +534,7 @@ const Hcc = ({
                           </Option>
                         ))}
                       </Select>
-                      {getStorage("role") != "admin" && selectDosValue && (
+                      {getStorage("userRole") != "admin" && selectDosValue && (
                         <YearAndDosStatus setIsLoading={setIsLoading} isDosStatus={true}/>
                       )}
                        {activeTabHead == 1 && (

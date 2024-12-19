@@ -161,7 +161,7 @@ const Header = ({
       closeOnConfirm: false,
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const userRole = getStorage("role");
+        const userRole = getStorage("userRole");
         await logoutAllDevice();
         sessionStorage.clear();
         removeStorage();
@@ -177,7 +177,7 @@ const Header = ({
   const getUserIdDetails = async (currentUserInfo) => {
     const token = getStorage("token");
     const getUserId = getStorage("userId");
-    const userRole = getStorage("role");
+    const userRole = getStorage("userRole");
 
     setUserIdDetails(currentUserInfo?.data?.response);
     setProfileImg(currentUserInfo?.data?.response?.profileImageUrl);
@@ -360,7 +360,7 @@ const Header = ({
     var loginCheck = getStorage("loginCheck");
     const userRoleLocal = getStorage("userRole");
     const userId = getStorage("userId");
-    const userRole = getStorage("role");
+    const userRole = getStorage("userRole");
     const tenentId = getStorage("tenantId");
     getCurrentUserInfo({ userId });
     setUserRole(userRoleLocal);

@@ -41,8 +41,9 @@ function TrackingTable({
       const { signal } = controller;
       controller.abort();
       setStorage("patientId", data?.patientId);
+//       setStorage("fromPatientSync", false);      
+      var role = getStorage("userRole");
       // setStorage("fromPatientSync", false);      
-      var role = getStorage("role");
       if (role == "tenant_admin") {
         setStorage("patientId", data.patientId);
         setStorage("routeBackTo", "/tenantAdmin/tracking");

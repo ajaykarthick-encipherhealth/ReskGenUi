@@ -69,7 +69,7 @@ const Radiology = ({
     setIsLoading(true);
     setSelectDosValue(value);
     const patientId = getStorage("patientId");
-    const role = getStorage("role");
+    const role = getStorage("userRole");
     if (value) {
       getRadiologyDetails(
         patientId,

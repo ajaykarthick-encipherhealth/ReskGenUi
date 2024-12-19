@@ -48,7 +48,7 @@ export const holdStatus = async () => {
 };
 
 export const accuracy = async ({ btn,month,year,user }) => {
-  const role = getStorage("role");
+  const role = getStorage("userRole");
   const url =
   btn === "DAILY"
     ? `daily?month=${month}&role=${

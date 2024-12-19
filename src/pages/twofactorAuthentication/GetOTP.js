@@ -51,11 +51,11 @@ const GetOTP = ({ getQrCode, getValidateCode, url, codeValidateLoader }) => {
 
   useEffect(() => {
     inputRefs[1]?.current?.focus();
-    setUsername(getStorage("username"));
+    setUsername(getStorage("userId"));
     setPassword(getStorage("password"));
-    getQrCode({ username: getStorage("username") });
+    getQrCode({ username: getStorage("userId") });
     removeStorage("password");
-    if(!getStorage("username")){
+    if(!getStorage("userId")){
       router.push("/login")
     }
   }, []);

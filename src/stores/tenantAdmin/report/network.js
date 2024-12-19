@@ -88,7 +88,7 @@ export async function checkAllApi({
     method: "GET",
   };
   const orgId = getStorage("orgId");
-  const role = getStorage("role");
+  const role = getStorage("userRole");
   const data = await requestPortal(
     `dbservice/patient/adminreport?pageno=${pagenum}&size=${
       size ? size : 7

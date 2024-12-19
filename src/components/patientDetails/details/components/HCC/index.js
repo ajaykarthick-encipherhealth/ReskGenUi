@@ -181,7 +181,7 @@ const HccCards = ({
 
   const unHideDisease = async (data, action) => {
     const patientId = getStorage("patientId");
-    const role = getStorage("role");
+    const role = getStorage("userRole");
     const res = await diseaseEdit({
       patientId: patientId,
       ...data,

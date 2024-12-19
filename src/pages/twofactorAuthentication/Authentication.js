@@ -65,7 +65,7 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
   useEffect(() => {
     inputRefs[1]?.current?.focus();
     const mfa=JSON.parse(getStorage("mfa"))
-    const username=getStorage("username")
+    const username=getStorage("userId")
     const password=getStorage("password")
     const skipParam =JSON.parse(getStorage("skipEntry"));
     setEnableMFA(mfa);

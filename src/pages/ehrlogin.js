@@ -74,7 +74,7 @@ export default function Login() {
           duration: 1,
         });
         let rolesArray = ["EHR"];
-        setStorage("role", "ehr");
+        setStorage("userRole", "ehr");
         setStorage("roles", rolesArray);
         setStorage("token", result.access_token);
         setStorage("refreshToken", result?.refresh_token);

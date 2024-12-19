@@ -838,7 +838,7 @@ const ManuallyAdd = ({
       patientDetailsResult?.data?.response?.processedYear,
       patientDetailsResult?.data?.response?.dateOfService,
       "",
-      await getStorage("role")
+      await getStorage("userRole")
     );
     // }
   };

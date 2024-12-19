@@ -119,7 +119,7 @@ const InitialCard = ({
       // try {
       // setIsLoading(true);
       // const orgId = getStorage("orgId");
-      // const role = getStorage("role");
+      // const role = getStorage("userRole");
       // const searchValue = filter === "ALL" ? "" : filter;
       // const url = `dbservice/patient/adminreport?pageno=${0}&size=${
       //   size ? size : 7

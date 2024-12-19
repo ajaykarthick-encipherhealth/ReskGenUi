@@ -37,7 +37,7 @@ function TrackingTable({
       const { signal } = controller;
       controller.abort();
       setStorage("patientId", data?.patientId);
-      var role = getStorage("role");
+      var role = getStorage("userRole");
       if (role == "tenant_admin") {
         // setStorage("isTenantAdminTracking", true);
         // setStorage("tenantAdminTrackingEncodedValue", JSON.stringify(page));

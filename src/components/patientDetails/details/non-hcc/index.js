@@ -39,7 +39,7 @@ const NonHcc = ({
       getSelectedDos("");
     }
     const patientId = getStorage("patientId");
-    const role = getStorage("role");
+    const role = getStorage("userRole");
 
     if (value) {
       getpatientDetailsData(
@@ -137,7 +137,7 @@ const NonHcc = ({
                   </Select>
                 </Nav.Item>
                 <Nav.Item as="li" className="nav-item mx-2">
-                  {getStorage("role") != "admin" &&
+                  {getStorage("userRole") != "admin" &&
                     selectDosValue && (
                       <YearAndDosStatus setIsLoading={setIsLoading} />
                     )}
