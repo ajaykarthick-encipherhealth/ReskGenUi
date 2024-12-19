@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Popover, Avatar, Tooltip, notification } from "antd";
+import { Popover, Avatar, Tooltip, notification, Select } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserCircle,
@@ -14,7 +14,6 @@ import {
 import moment from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { connect } from "react-redux";
-import Select from "react-select";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
 import { DeleteOutlined } from "@ant-design/icons";
@@ -178,11 +177,11 @@ const Flag = ({
     }));
   };
 
-  const handleChangeFlag = (selectedOption) => {
+  const handleChangeFlag = (selectedOption, e) => {    
     setInputValue((prevState) => ({
       ...prevState,
-      flagId: selectedOption.value,
-      flag: selectedOption.label,
+      flagId: e.value,
+      flag: e.label,
     }));
   };
 
@@ -221,7 +220,8 @@ const Flag = ({
                 <Select
                   options={flagPostList}
                   className="customize-react-select"
-                  isSearchable={true}
+                  showSearch={true}
+                  placeholder="Select Flag"
                   id="flag"
                   name="flag"
                   value={
@@ -230,7 +230,10 @@ const Flag = ({
                     ) || null
                   } 
                   onChange={handleChangeFlag}
-                 
+                  filterOption={(input, option) =>
+                    (option?.name ?? '').toLowerCase().includes(input.toLowerCase())
+                  }
+                  allowClear
                 />
               </div>
             </div>
