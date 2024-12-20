@@ -100,24 +100,26 @@ const HeaderFilters = ({
 
       case "Created date Range":
         return (
-          <div className= "col-3">
+          <div className="col-xl-2 col-md-3">
             <div className="mt-1">
-            <label className={styles.label}>Created date Range</label>
-              <RangePicker
-                value={clear ? ["", ""] : selectedDates}
-                format="MM-DD-YYYY"
-                onCalendarChange={(val) => setSelectedDates(val)}
-                onChange={(date, dateString) => { 
-                  handleRnagePicker2({
-                    date,
-                    dateString,
-                    setStartDate,
-                    setEndDate,
-                  });
-                  setClear(false);
-                }}
-                disabledDate={(current) => disableFutureDate(current)}
-              />
+              <label className={styles.label}>Created Date Range</label>
+              <div className="dateRangeSize">
+                <RangePicker
+                  value={clear ? ["", ""] : selectedDates}
+                  format="MM-DD-YYYY"
+                  onCalendarChange={(val) => setSelectedDates(val)}
+                  onChange={(date, dateString) => {
+                    handleRnagePicker2({
+                      date,
+                      dateString,
+                      setStartDate,
+                      setEndDate,
+                    });
+                    setClear(false);
+                  }}
+                  disabledDate={(current) => disableFutureDate(current)}
+                />
+              </div>
             </div>
           </div>
         );
