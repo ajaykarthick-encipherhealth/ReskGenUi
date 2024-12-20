@@ -120,7 +120,11 @@ const InputField = ({
         }}
         prefix={
           isSearch && (
-            <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
+            <FontAwesomeIcon
+              className="searchPrefix"
+              icon={faSearch}
+              data-testid="searchPrefix"
+            />
           )
         }
         allowClear={true}

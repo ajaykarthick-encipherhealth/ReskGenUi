@@ -10,6 +10,7 @@ const Card = ({
   bg,
   display,
   placeItems,
+  "data-testid": testId
 }) => {
   const cardStyle = {
     // backgroundColor: Bgcolor,
@@ -22,7 +23,7 @@ const Card = ({
     placeItems: placeItems && placeItems,
   };
   return (
-    <div className={styles.card} style={cardStyle}>
+    <div className={styles.card} style={cardStyle} data-testid={testId}>
       {children}
     </div>
   );
