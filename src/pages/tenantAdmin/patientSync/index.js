@@ -309,7 +309,7 @@ const Index = ({
   getActiveTab,
   reportActiveTab,
   routedData,
-  getRoutedData,
+  webSocketData,
 }) => {
   const router = useRouter();
   const [filteredCOder, setFilteredCoder] = useState(null);
@@ -333,6 +333,7 @@ const Index = ({
     status: false,
     data: null,
   });
+  const[socketData,setSocketData]=useState(null)
   const [paramsFilter, setParamsFilter] = useState(null);
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -434,8 +435,33 @@ const Index = ({
         batchUploadStatus: selectedOptions?.PDF,
       });
     }
-  }, [reportActiveTab, pageNo, selectedDateRanges, searchVal, selectedOptions,viewDetailedBatch?.status]);
-
+  }, [
+    reportActiveTab,
+    pageNo,
+    selectedDateRanges,
+    searchVal,
+    selectedOptions,
+    viewDetailedBatch?.status,
+  ]);
+  useEffect(() => {
+    if (webSocketData && webSocketData?.webSocketType === "BATCH_STATUS") {
+      const updatedTableData = pdfTableData?.content?.map((item) => {
+        if (item?.id === webSocketData?.id) {
+          return {
+            ...item,
+            batchUploadStatus: webSocketData?.batchUploadStatus||"PROCESSING",
+          };
+        }
+        return item;
+      });
+      setSocketData((prevState) => ({
+        ...prevState,
+        content: updatedTableData,
+      }));
+    } else {
+      setSocketData(pdfTableData);
+    }
+  }, [webSocketData,pdfTableData]);
   return (
     <>
       <Header />
@@ -460,6 +486,7 @@ const Index = ({
           setSelectedOptions={setSelectedOptions}
           setListPageNo={setPageNo}
           setListSearchVal={setSearchVal}
+          initialTableData={socketData}
         />
       ) : (
         <div className={styles.maincontainer}>
@@ -660,7 +687,7 @@ const Index = ({
                                       paginationFirst={paginationFirst}
                                       setSelectedBatch={setSelectedBatch}
                                       onPageChange={onPageChange}
-                                      tableData={pdfTableData}
+                                      tableData={socketData}
                                       selectedBatch={selectedBatch}
                                       loader={pdfLoader}
                                       openUpload={openUpload}
@@ -729,6 +756,7 @@ const connector = connect(
     reportActiveTab: state.admin?.report?.activeTab,
     uploadFilesLoader: state?.tenantAdmin?.patientSync?.uploadFilesLoader,
     routedData: state.tenantAdmin?.patientSync?.routedData,
+    webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
   }),
   {
     getAllBatches: allActions.getAllBatches,

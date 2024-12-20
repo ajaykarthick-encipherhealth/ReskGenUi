@@ -41,7 +41,7 @@ function PdfTable({
 }) {
   const router = useRouter();
   const [filelList, setFileList] = useState();
-  const [socketData, setSocketData] = useState(tableData);
+  // const [socketData, setSocketData] = useState(tableData);
   const [triggeredBatch, setTriggeredBatch] = useState({
     status: false,
     id: null,
@@ -132,25 +132,25 @@ function PdfTable({
     }
   };
 
-  useEffect(() => {
-    if (webSocketData && webSocketData?.webSocketType === "BATCH_STATUS") {
-      const updatedTableData = socketData?.content?.map((item) => {
-        if (item.id === webSocketData?.id) {
-          return {
-            ...item,
-            batchUploadStatus: webSocketData?.batchUploadStatus,
-          };
-        }
-        return item;
-      });
-      setSocketData((prevState) => ({
-        ...prevState,
-        content: updatedTableData,
-      }));
-    } else {
-      setSocketData(tableData);
-    }
-  }, [webSocketData, socketData?.content, tableData]);
+  // useEffect(() => {
+  //   if (webSocketData && webSocketData?.webSocketType === "BATCH_STATUS") {
+  //     const updatedTableData = socketData?.content?.map((item) => {
+  //       if (item.id === webSocketData?.id) {
+  //         return {
+  //           ...item,
+  //           batchUploadStatus: webSocketData?.batchUploadStatus,
+  //         };
+  //       }
+  //       return item;
+  //     });
+  //     setSocketData((prevState) => ({
+  //       ...prevState,
+  //       content: updatedTableData,
+  //     }));
+  //   } else {
+  //     setSocketData(tableData);
+  //   }
+  // }, [webSocketData, socketData?.content, tableData]);
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -176,8 +176,8 @@ function PdfTable({
               </tr>
             </thead>
             <tbody className={TableStyle.bodytable}>
-              {socketData?.content?.length > 0 ? (
-                socketData?.content?.map((row, index) => {
+              {tableData?.content?.length > 0 ? (
+                tableData?.content?.map((row, index) => {
                   const processingCount =
                     row?.totalFileCount > 0
                       ? row?.totalFileCount -
@@ -283,7 +283,7 @@ function PdfTable({
                             style={{ width: "65%" }}
                             className="d-flex justify-content-center align-items-center"
                           >
-                            {row?.batchUploadStatus ? (
+                            {row?.batchUploadStatus && (
                               <div
                                 style={{
                                   width: "100%",
@@ -332,7 +332,11 @@ function PdfTable({
                                   .toUpperCase() +
                                   row?.batchUploadStatus.slice(1).toLowerCase()}
                               </div>
-                            ) : (
+                            )}
+                            {(
+                              row?.source === "CogentUpload" &&
+                              !row?.batchUploadStatus
+                            ) &&(
                               <div className="w-100 d-flex justify-content-center align-items-center">
                                 <button
                                   className={`w-100 px-4 py-1  ${
@@ -363,9 +367,7 @@ function PdfTable({
                                 >
                                   {row?.source === "CogentUpload"
                                     ? "Upload"
-                                    : !row?.batchUploadStatus
-                                    ? "Trigger"
-                                    : ""}
+                                    : "Trigger"}
                                 </button>
                               </div>
                             )}

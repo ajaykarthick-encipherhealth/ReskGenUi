@@ -58,7 +58,8 @@ const DetailedViewPdfTable = ({
   setListSearch,
   setSelectedOptions,
   setListPageNo,
-  setListSearchVal
+  setListSearchVal,
+  initialTableData
 }) => {
   const router = useRouter();
   const [searchVal, setSearchVal] = useState(null);
@@ -67,7 +68,7 @@ const DetailedViewPdfTable = ({
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [currentId, setCurrentId] = useState({});
   const [batchPageNo, setBatchPageNo] = useState(0);
-  const [socketData, setSocketData] = useState(pdfTabledata);
+  // const [socketData, setSocketData] = useState(pdfTabledata);
   const [batchId, setBatchId] = useState(null);
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -112,34 +113,35 @@ const DetailedViewPdfTable = ({
         name: "initialSearch",
       });
       setPageNo(routedData?.pageNo || 0);
+      setBatchId(routedData?.batchId);
     }
   }, []);
-  useEffect(() => {
-    getAllBatches({ page: batchPageNo });
-  }, [batchPageNo]);
-  useEffect(() => {
-    if (
-      webSocketData &&
-      webSocketData?.webSocketType === "BATCH_STATUS" &&
-      pdfTabledata?.content
-    ) {
-      const updatedTableData = socketData?.content?.map((item) => {
-        if (item.patientId === webSocketData?.patientId) {
-          return {
-            ...item,
-            batchUploadStatus: webSocketData?.batchUploadStatus || "PROCESSING",
-          };
-        }
-        return item;
-      });
-      setSocketData((prevState) => ({
-        ...prevState,
-        content: updatedTableData,
-      }));
-    } else {
-      setSocketData(pdfTabledata);
-    }
-  }, [webSocketData, socketData?.content, pdfTabledata?.content]);
+  // useEffect(() => {
+  //   getAllBatches({ page: batchPageNo });
+  // }, [batchPageNo]);
+  // useEffect(() => {
+  //   if (
+  //     webSocketData &&
+  //     webSocketData?.webSocketType === "BATCH_STATUS" &&
+  //     pdfTabledata?.content
+  //   ) {
+  //     const updatedTableData = socketData?.content?.map((item) => {
+  //       if (item.patientId === webSocketData?.patientId) {
+  //         return {
+  //           ...item,
+  //           batchUploadStatus: webSocketData?.batchUploadStatus || "PROCESSING",
+  //         };
+  //       }
+  //       return item;
+  //     });
+  //     setSocketData((prevState) => ({
+  //       ...prevState,
+  //       content: updatedTableData,
+  //     }));
+  //   } else {
+  //     setSocketData(pdfTabledata);
+  //   }
+  // }, [webSocketData, socketData?.content, pdfTabledata?.content]);
 
   useEffect(() => {
     if (reportActiveTab) {
@@ -151,8 +153,8 @@ const DetailedViewPdfTable = ({
       setBatchPageNo(decodedParams?.pageNo);
       if (pdfTabledata) {
         const filterData =
-          socketData?.content?.length > 0
-            ? socketData?.content?.filter(
+        initialTableData?.content?.length > 0
+            ? initialTableData?.content?.filter(
                 (item) => item?.id === decodedParams?.batchId
               )
             : [];
@@ -378,6 +380,7 @@ const DetailedViewPdfTable = ({
                               searchVal: searchVal,
                               pageNo: pageNo,
                               viewDetailedBatch,
+                              batchId
                             }}
                             currentId={currentId}
                           />

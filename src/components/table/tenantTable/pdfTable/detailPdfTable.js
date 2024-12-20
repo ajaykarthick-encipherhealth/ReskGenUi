@@ -110,13 +110,13 @@ const DetailedPdfTable = ({
     if (
       webSocketData &&
       webSocketData?.webSocketType === "PROCESS_STAGE" &&
-      tableData?.content
+      tableData?.content?.length>0
     ) {
-      const updatedTableData = socketData?.content?.map((item) => {
+      const updatedTableData = tableData?.content?.map((item) => {
         if (item.patientId === webSocketData?.patientId) {
           return {
             ...item,
-            processStage: webSocketData?.processStageChart || "PROCESSING",
+            processStage: webSocketData?.processStageChart || "FILE_UPLOADING",
           };
         }
         return item;

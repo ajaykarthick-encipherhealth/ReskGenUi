@@ -1,4 +1,4 @@
-import { Form, Modal } from "antd";
+import { Button, Form, Modal } from "antd";
 import React from "react";
 import { getResponePopup } from "../../../../utils/reusable";
 import { connect } from "react-redux";
@@ -87,8 +87,9 @@ const uploadModal = ({
         {uploadAction && (
           <Form.Item>
             <div className="col-xl-12 mb-3 d-flex justify-content-center">
-              <button
+              <Button
                 type="submit"
+                htmlType="submit"
                 style={{ backgroundColor: "#04306f" }}
                 className="border-0 px-4 py-2 text-white rounded-1"
                 disabled={
@@ -98,7 +99,7 @@ const uploadModal = ({
                 }
               >
                 {uploadFilesLoader ? "Loading..." : "Submit"}
-              </button>
+              </Button>
               {/* <button
             type="submit"
             style={{ backgroundColor: "#04306f" }}
