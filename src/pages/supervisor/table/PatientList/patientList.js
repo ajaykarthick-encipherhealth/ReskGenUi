@@ -28,6 +28,7 @@ PatientTable({
   sortAuditOrder,
   setSortAuditOrder,
   params,
+  getRoutedData,
   activeFilters,
   setActiveFilters,
 }) {
@@ -87,21 +88,28 @@ PatientTable({
       const { signal } = controller;
       controller.abort();
       setStorage("patientId", data.patientId);
-      setStorage("isSupervisorAudited", true);
-      setStorage("isSupervisorUserDetails",false)
+      // setStorage("isSupervisorAudited", true);
+      // setStorage("isSupervisorUserDetails", false);
       // setStorage("supervisorFilters", JSON.stringify(activeFilters));
       // setStorage("supervisorEncodedValue", JSON.stringify(params));
-      removeStorage("SuperVisorfilter") 
-      navigate.push({
-        pathname: "/supervisor/patients/details",
-        query:params
-      },"/supervisor/patients/details");
+      removeStorage("SuperVisorfilter");
+      setStorage("routeBackTo", "/supervisor/auditing");
+
+      getRoutedData(params);
+      navigate.push(
+        {
+          pathname: "/supervisor/patients/details",
+          query: params,
+        },
+        "/supervisor/patients/details"
+      );
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
       });
     }
   };
+
   const handleTableRowClick = (e) => {
     const targetTd = e.target.closest("td");
     if (targetTd) {

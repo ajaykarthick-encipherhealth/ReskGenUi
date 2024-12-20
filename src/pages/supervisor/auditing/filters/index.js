@@ -9,7 +9,7 @@ import { resetPageNumber } from "../../../../components/headerFilters/functions"
 import { InfoCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../../tenantAdmin/tracking/filters";
 import { removeStorage } from "../../../../utils/storages";
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 export const allFilters = [
   "Reviewer Status",
   "Select Audited Status",
@@ -62,10 +62,12 @@ const Filters = ({
   setSelectedDateRange,
   selectedDateRange,
   selectedDates,
+  getRoutedData,
 }) => {
   const [selectAll, setSelectAll] = useState(false);
   const handleClearAllFilters = () => {
     setClear(true);
+    getRoutedData("");
     setStartDate([]);
     setEndDate([]);
     setSearch("");
@@ -102,6 +104,7 @@ const Filters = ({
                   }
                   setClear(false);
                   removeStorage("supervisorStatus");
+                  getRoutedData(null)
                 }}
                 options={selectOptions}
                 isSearchable={false}
@@ -130,6 +133,7 @@ const Filters = ({
               pickerName={filter?.replace(/\s+/g, "")}
               setSelectedDateRange={setSelectedDateRange}
               selectedDateRange={selectedDateRange}
+              getRoutedData={getRoutedData}
             />
           </div>
         );
@@ -148,6 +152,7 @@ const Filters = ({
                   if (setPageNo) {
                     resetPageNumber(setPageNo);
                   }
+                  getRoutedData(null)
                 }}
                 options={createdByOptoons}
                 isSearchable={false}
@@ -163,7 +168,7 @@ const Filters = ({
     }
   };
   return (
-    <div className="d-flex">
+    <div className="d-flex align-items-center">
       <div className={`row filter-contain ${styles.containerStyle}`}>
         <div className="col-xl-2 col-md-4">
           <Search
@@ -174,6 +179,7 @@ const Filters = ({
             setPageNo={setPageNo}
           />
         </div>
+        
         {activeFilters?.map((filter) => (
           <React.Fragment key={filter}>{renderFilter(filter)}</React.Fragment>
         ))}
@@ -185,11 +191,12 @@ const Filters = ({
         <MoreFilter
           selectAll={selectAll}
           setSelectAll={setSelectAll}
+          activeFilters={activeFilters}
+          setActiveFilters={setActiveFilters}
           allFilters={allFilters}
           setClear={setClear}
-          setActiveFilters={setActiveFilters}
           handleClearAllFilters={handleClearAllFilters}
-          activeFilters={activeFilters}
+          getRoutedData={getRoutedData}
         />
         <div className="mt-2 cursor-pointer">
           <Popover

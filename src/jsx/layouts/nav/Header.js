@@ -66,6 +66,7 @@ import { actions as authActions } from "../../../stores/authFlows";
 import { actions as reportActions } from "../../../stores/admin/report";
 import { actions as uploadImagesAction } from "../../../stores/authflow/imageUpload";
 import { actions as userAction } from "../../../stores/supervisor/users";
+import { actions as tenantAction } from "../../../stores/tenantAdmin/patientSync";
 import newHeaderLogo from "../../../images/logo/newChatImage.png";
 import newLoginLogo from "../../../images/logo/newLoginLogo.png";
 import Profile from "./profile";
@@ -95,6 +96,7 @@ const Header = ({
   preSendURl,
   getUrl,
   updateImage,
+  getRoutedData
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -426,6 +428,7 @@ const Header = ({
             getPatientID(null);
             getActiveTab(null);
             getReportActiveTab(null);
+            getRoutedData(null)
             router.push(
               {
                 pathname: `${data?.to}`,
@@ -977,6 +980,7 @@ const enhancer = connect(
     getUrl: uploadImagesAction.getURL,
     updateImage: uploadImagesAction.updateImage,
     getCurrentUser: userAction.getCurrentUserInfo,
+    getRoutedData: tenantAction.getRoutedData
   }
 );
 export default enhancer(Header);

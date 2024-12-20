@@ -21,7 +21,7 @@ import MoreFilter from "../../../tenantAdmin/tracking/filters";
 
 const { RangePicker } = DatePicker;
 
-const allFilters = [
+export const allFilters = [
   "Audit Due Date",
   "Audit Completed Date",
   "Audited AllocatedBy",
@@ -131,6 +131,7 @@ const HeaderFilters = ({
   clear,
   activeFilters,
   setActiveFilters,
+  getRoutedData,
 }) => {
   const router = useRouter();
   // const [activeFilters, setActiveFilters] = useState([]);
@@ -149,6 +150,7 @@ const HeaderFilters = ({
   };
   const handleClearAllFilters = () => {
     setClear(true);
+    getRoutedData("");
     setStartDate([]);
     setEndDate([]);
     setSelectedDates([]);
@@ -204,14 +206,16 @@ const HeaderFilters = ({
               <Select
                 onChange={(selectedOption) => {
                   audisetSelAllocatedBy(selectedOption ? selectedOption : "");
-                  setSelAuditAllocatedByVal(selectedOption?.label);
+                   setSelAuditAllocatedByVal(
+                     selectedOption ? selectedOption : []
+                   );
                   if (setPageNo) {
                     resetPageNumber(setPageNo);
                   }
                 }}
                 options={auditallocatedByOptions}
-                value={selAuditAllocatedByVal ? selAuditAllocatedBy : null}
-                className="custom-react-select-audit"
+                value={selAuditAllocatedByVal}
+                className="custom-react-select-audit w-100"
                 isSearchable={false}
                 placeholder={audidefaultAllocatedBy}
                 allowClear={true}
@@ -290,7 +294,7 @@ const HeaderFilters = ({
 
   return (
     <div className="d-flex">
-           <div className={`row filter-contain ${styles.mainDiv}`}>
+      <div className={`row filter-contain ${styles.mainDiv}`}>
         <div className="col-xl-2 col-md-4">
           <label style={{ marginLeft: "8px" }} className="responsiveLabel">
             {searchlabel}
@@ -319,7 +323,7 @@ const HeaderFilters = ({
       </div>
       <div
         className={`d-flex justify-content-end  align-items-center `}
-        style={{ width: "10%" ,flexDirection: "column" }}
+        style={{ width: "10%", flexDirection: "column" }}
       >
         <MoreFilter
           selectAll={selectAll}
@@ -329,6 +333,7 @@ const HeaderFilters = ({
           setActiveFilters={setActiveFilters}
           handleClearAllFilters={handleClearAllFilters}
           activeFilters={activeFilters}
+          getRoutedData={getRoutedData}
         />
         <Popover
           content={
@@ -357,14 +362,12 @@ const HeaderFilters = ({
           }
           trigger={["click"]}
           placement="bottom"
-        >
-         
-        </Popover>
+        ></Popover>
         <div className=" cursor-pointer">
-        <div className={styles.iconBorder}>
-                    <InfoCircleFilled />
-                  </div>
+          <div className={styles.iconBorder}>
+            <InfoCircleFilled />
           </div>
+        </div>
       </div>
     </div>
   );

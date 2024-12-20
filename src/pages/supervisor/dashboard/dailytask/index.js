@@ -16,12 +16,14 @@ import { actions as supervisorAction } from "../../../../stores/supervisor/dashb
 import { dailyTaskData } from "../../../../stores/supervisor/dashboard/actions";
 import { setStorage } from "../../../../utils/storages";
 import moment from "moment";
+import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
 
 const DailyTask = ({
   dailyStatusDatas,
   getAllDailyTask,
   getDailyTaskData,
   dailytask,
+  getRoutedData,
 }) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
@@ -317,19 +319,20 @@ const DailyTask = ({
                         className={styles.headerTitle}
                         style={{ fontSize: "16px" }}
                         onClick={() => {
-                          setStorage(
-                            "SuperVisorfilter",
-                            JSON.stringify(allFilters)
-                          );
+                          // setStorage(
+                          //   "SuperVisorfilter",
+                          //   JSON.stringify(allFilters)
+                          // );
+
                           const params = {
                             // AuditedDueDate: JSON.stringify({
-                            selectedDates: JSON.stringify({
+                            selectedDates: {
                               AuditedDueDate: [
                                 dayjs(data?.date),
                                 dayjs(data?.date),
                               ],
-                            }),
-                            selectedDateRange: JSON.stringify({
+                            },
+                            selectedDateRange: {
                               AuditedDueDate: {
                                 startDate: data?.date
                                   ? `${moment(data?.date, "MM-DD-YYYY").format(
@@ -343,17 +346,22 @@ const DailyTask = ({
                                     )}T23:59:59.999Z`
                                   : "",
                               },
-                            }),
+                            },
+
                             // })
                           };
+
                           // setStorage("supervisorDate", JSON.stringify(params));
-                          router?.push(
-                            {
-                              pathname: "/supervisor/auditing",
-                              query: params,
-                            },
-                            "/supervisor/auditing"
-                          );
+                          // router?.push(
+                          //   {
+                          //     pathname: "/supervisor/auditing",
+                          //     query: params,
+                          //   },
+                          //   "/supervisor/auditing"
+                          // );
+                          getRoutedData(params);
+                          // getFilteredList(allFilters);
+                          router.push(`/supervisor/auditing`);
                         }}
                       >
                         <div className={styles.headerDisplay}>
@@ -400,13 +408,13 @@ const DailyTask = ({
                                                 .toUpperCase()
                                             : item?.name.toUpperCase()
                                           : "",
-                                        selectedDates: JSON.stringify({
+                                        selectedDates: {
                                           AuditedDueDate: [
-                                            data?.date,
-                                            data?.date,
+                                            dayjs(data?.date),
+                                            dayjs(data?.date),
                                           ],
-                                        }),
-                                        selectedDateRange: JSON.stringify({
+                                        },
+                                        selectedDateRange: {
                                           AuditedDueDate: {
                                             startDate: data?.date
                                               ? `${moment(
@@ -426,7 +434,7 @@ const DailyTask = ({
                                                 )}T23:59:59.999Z`
                                               : "",
                                           },
-                                        }),
+                                        },
                                       };
                                       // setStorage(
                                       //   "SuperVisorfilter",
@@ -440,13 +448,15 @@ const DailyTask = ({
                                       //   "supervisorDate",
                                       //   JSON.stringify(params)
                                       // );
-                                      router?.push(
-                                        {
-                                          pathname: "/supervisor/auditing",
-                                          query: params,
-                                        },
-                                        "/supervisor/auditing"
-                                      );
+                                      // router?.push(
+                                      //   {
+                                      //     pathname: "/supervisor/auditing",
+                                      //     query: params,
+                                      //   },
+                                      //   "/supervisor/auditing"
+                                      // );
+                                      getRoutedData(params);
+                                      router.push("/supervisor/auditing");
                                     }}
                                   >
                                     <div
@@ -510,6 +520,7 @@ const connector = connect(
   {
     getAllDailyTask: supervisorAction.dailyTaskAction,
     // getDailyTaskData: supervisorAction.dailyTaskData,
+    getRoutedData: allPatientSyncAction.getRoutedData,
   }
 );
 export default connector(DailyTask);

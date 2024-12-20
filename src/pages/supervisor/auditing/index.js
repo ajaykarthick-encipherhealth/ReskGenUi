@@ -17,6 +17,7 @@ import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
 import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
 import AuditeDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 import { actions as allActions } from "../../../stores/supervisor/auditedQueue";
+import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -79,6 +80,8 @@ const Patient = ({
   loader,
   filteredList,
   getFilters,
+  routedData,
+  getRoutedData,
 }) => {
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
@@ -122,6 +125,7 @@ const Patient = ({
   const [clear, setClear] = useState(false);
   const [activeFilters, setActiveFilters] = useState([]);
   const [paramsFilter, setParamsFilter] = useState(null);
+
   const getAllList = () => {
     if (response) {
       let resultMap = [];
@@ -169,7 +173,6 @@ const Patient = ({
     setValidated(false);
     setAddPatientId(true);
   };
-
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
     inputValue.name = data.patientName;
@@ -309,7 +312,7 @@ const Patient = ({
     const uId = getStorage("user");
     setParamsFilter("check");
     const data = {
-      pageNo,
+      pageNo: "",
       auditDueDateStart: clear
         ? ""
         : selectedDateRange?.AuditedDueDate?.startDate || "",
@@ -345,75 +348,39 @@ const Patient = ({
     // patientSortOrder,
     sort,
     selCreatedBy,
+    paramsFilter,
   ]);
-
   useEffect(() => {
     if (response?.data?.response?.content) {
       getAllList();
     }
   }, [parsedData, response, pageNo, pageSize]);
   useEffect(() => {
-    const decodedParams = navigate.query;
-    if (decodedParams) {
-      const dates = decodedParams?.selectedDates
-        ? JSON.parse(decodedParams?.selectedDates)
-        : [];
+    if (routedData) {
+      const dates = routedData?.selectedDates ? routedData?.selectedDates : [];
       const AuditedDate = dates?.AuditedDate?.map((date) => dayjs(date));
       const AuditedDueDate = dates?.AuditedDueDate?.map((date) => dayjs(date));
 
       setParamsFilter("check");
-      setSelectedDates({
-        AuditedDate: AuditedDate,
-        AuditedDueDate: AuditedDueDate,
-      });
+      setSelectedDates(routedData?.selectedDates ?  routedData?.selectedDates  : "" );
       setSelectedDateRange(
-        decodedParams?.selectedDateRange
-          ? JSON.parse(decodedParams?.selectedDateRange)
-          : {}
+        routedData?.selectedDateRange ? routedData?.selectedDateRange : ""
       );
-      // setSelectedDates({
-      //   AuditedDueDate: [
-      //     decodedParams?.auditedDueDateStart
-      //       ? dayjs(decodedParams?.auditedDueDateStart)
-      //       : null,
-      //     decodedParams?.auditedDueDateEnd
-      //       ? dayjs(decodedParams?.auditedDueDateEnd)
-      //       : null,
-      //   ],
-      // });
-      // setSelectedDateRange({
-      //   AuditedDueDate: {
-      //     startDate: decodedParams?.auditedDueDateStart
-      //       ? `${moment(
-      //           decodedParams?.auditedDueDateStart,
-      //           "MM-DD-YYYY"
-      //         ).format("YYYY-MM-DD")}T00:00:00.000Z`
-      //       : "",
-
-      //     endDate: decodedParams?.auditedDueDateEnd
-      //       ? `${moment(decodedParams?.auditedDueDateEnd, "MM-DD-YYYY").format(
-      //           "YYYY-MM-DD"
-      //         )}T23:59:59.999Z`
-      //       : "",
-      //   },
-      // });
       SetSelectedOption(
-        decodedParams?.selectedOption ? decodedParams?.selectedOption : ""
+        routedData?.selectedOption ? routedData?.selectedOption : ""
       );
-      setSearch(decodedParams?.search ? decodedParams?.search : "");
-      setSelCreatedBy(
-        decodedParams?.selCreatedBy ? decodedParams?.selCreatedBy : ""
-      );
-      setPageNo(decodedParams?.pageNo ? JSON.parse(decodedParams?.pageNo) : 0);
+      setSearch(routedData?.search ? routedData?.search : "");
+      setSelCreatedBy(routedData?.selCreatedBy ? routedData?.selCreatedBy : "");
+      setPageNo(routedData?.pageNo ? routedData?.pageNo : 0);
       setPaginationFirst(
-        decodedParams?.paginationFirst
-          ? JSON.parse(decodedParams?.paginationFirst)
-          : 0
+        routedData?.paginationFirst ? routedData?.paginationFirst : 0
       );
-      setActiveFilters(allFilters);
+      setActiveFilters(
+        routedData?.allFilters ? routedData?.allFilters : allFilters
+      );
     }
   }, []);
-console.log(selectedDates,"dates")
+
   return (
     <div className={`show `}>
       <Header />
@@ -480,6 +447,7 @@ console.log(selectedDates,"dates")
                           selectedDateRange={selectedDateRange}
                           searchVal={search}
                           setSearchVal={setSearch}
+                          getRoutedData={getRoutedData}
                         />
                       </div>
                     </div>
@@ -509,13 +477,13 @@ console.log(selectedDates,"dates")
                             setSortAuditOrder={setSortAuditOrder}
                             setActiveFilters={setActiveFilters}
                             activeFilters={activeFilters}
+                            getRoutedData={getRoutedData}
                             params={{
                               pageNo,
-                              selectedDates: JSON.stringify(selectedDates),
+                              selectedDates,
                               selectedOption,
                               search,
-                              selectedDateRange:
-                                JSON.stringify(selectedDateRange),
+                              selectedDateRange,
                               sort,
                               selCreatedBy,
                             }}
@@ -552,10 +520,12 @@ const connector = connect(
     response: state.supervisor?.audited?.filteredList,
     filteredList: state.supervisor?.audited?.filterUsers,
     loader: state.supervisor?.audited?.loading,
+    routedData: state.tenantAdmin?.patientSync?.routedData,
   }),
   {
     getWorkListFilter: allActions.getWorkListFilter,
     getFilters: allActions.getFilterUsers,
+    getRoutedData: allPatientSyncAction.getRoutedData,
   }
 );
 export default connector(Patient);

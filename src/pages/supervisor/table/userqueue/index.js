@@ -38,7 +38,8 @@ const UserQueueTable = ({
   setAuditDateSort,
   params,
   setActiveFilters,
-  activeFilters
+  activeFilters,
+  getRoutedData
 }) => {
   const router = useRouter();
   const auditstatusBodyTemplate = (rowData) => {
@@ -140,16 +141,14 @@ const UserQueueTable = ({
     const targetTd = e.target.closest("td");
     if (targetTd) {
       setStorage("patientId", id);
-      setStorage("isSupervisorUserDetails", true);
-      setStorage("isSupervisorAuited",false)
-      setStorage("supervisorUserFilter", JSON.stringify(activeFilters));
-      setStorage("supervisorUserEncodedValue", JSON.stringify(params));
-      router?.push(
-        {
-          pathname: "/supervisor/user/details",
-        },
-        "/supervisor/user/details"
-      );
+      // setStorage("isSupervisorUserDetails", true);
+      // setStorage("isSupervisorAuited",false)
+      // setStorage("isSupervisorAudited",false)
+      // setStorage("supervisorUserFilter", JSON.stringify(activeFilters));
+      // setStorage("supervisorUserEncodedValue", JSON.stringify(params));
+      setStorage("routeBackTo", "/supervisor/user/userQueue");
+      getRoutedData(params);
+      router?.push( "/supervisor/user/details")
     }
   };
 

@@ -30,6 +30,7 @@ const DateRangePicker = ({
   pickerName,
   setSelectedDateRange,
   selectedDateRange,
+  getRoutedData
 }) => {
 
   return (
@@ -79,12 +80,6 @@ const DateRangePicker = ({
               }));
             }}
             onChange={(date, dateString) => {
-              // handleRnagePicker2({
-              //   date,
-              //   dateString,
-              //   setStartDate,
-              //   setEndDate,
-              // });
               const formattedDates = dateString?.map((date, index) => {
                 const formattedDate =
                   index === 1
@@ -109,7 +104,7 @@ const DateRangePicker = ({
               if (setPageNo) {
                 resetPageNumber(setPageNo);
               }
-              // setClear(false);
+              getRoutedData(null)
             }}
             disabledDate={(current) => {
               let customDate = moment().format("MM-DD-YYYY");
@@ -133,6 +128,7 @@ const DateRangePicker = ({
               if (setPageNo) {
                 resetPageNumber(setPageNo);
               }
+              getRoutedData(null)
               // setClear(false);
             }}
             disabledDate={(current) => {

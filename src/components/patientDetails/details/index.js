@@ -512,6 +512,7 @@ const Details = ({
     getCurrentDiseaseType(true);
     const user = getStorage("userRole");
     const isAdminTracking = getStorage("isAdminTracking");
+    const isTenantAdminTracking = getStorage("isTenantAdminTracking");
     const backRoute = getStorage("routeBackTo");
     if (user && user.toLowerCase() === "admin") {
       if (navigate.query?.fromReport) {
@@ -537,12 +538,14 @@ const Details = ({
             },
             `/${navigate?.query?.fromReport}/report`
           );
-        } else if (routedData || backRoute) {
+        } else if (routedData||backRoute) {
           getRoutedData(routedData);
           navigate.push(backRoute);
-          if (backRoute === "/tenantAdmin/patientSync") {
-            getActiveTab("PDF");
-          }
+          getActiveTab("PDF");
+        } else if (isTenantAdminTracking == "true") {
+          navigate.push("/tenantAdmin/tracking");
+        } else {
+          navigate.push("/tenantAdmin/patients");
         }
       }
     } else if (user && user.toLowerCase() === "supervisor") {

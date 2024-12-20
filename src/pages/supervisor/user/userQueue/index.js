@@ -23,8 +23,9 @@ import { actions as allActions } from "../../../../stores/supervisor/users";
 import { actions as allActions2 } from "../../../../stores/supervisor/auditedQueue";
 import { renderSkeleton } from "../../../../components/reuseableFunctions";
 import UserFilters from "../filters/usersFilters";
-import HeaderFilters from "../filters/headerFilters";
+import HeaderFilters, { allFilters } from "../filters/headerFilters";
 import { getStorage } from "../../../../utils/storages";
+import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
 
 const bullets = [
   {
@@ -83,6 +84,8 @@ const Index = ({
   loader,
   filteredList,
   getFilters,
+  routedData,
+  getRoutedData,
 }) => {
   const router = useRouter();
   const [processSort, setProcessSort] = useState("DESC");
@@ -108,7 +111,7 @@ const Index = ({
   const [userName, setUserName] = useState();
   const [selectedAuditOption, setSelectedAuditOption] = useState("");
   const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
-  const [selAuditAllocatedByVal, setSelAuditAllocatedByVal] = useState("");
+  const [selAuditAllocatedByVal, setSelAuditAllocatedByVal] = useState([]);
   const [aduitCompletedStartDate, setAduitCompletedStartDate] = useState("");
   const [aduitCompletedEndDate, setAduitCompletedEndDate] = useState("");
   const [aduitDueStartDate, setAduitDueStartDate] = useState("");
@@ -118,13 +121,13 @@ const Index = ({
   const [selectedDates3, setSelectedDates3] = useState([]);
   const [selectedDates4, setSelectedDates4] = useState([]);
   const [sort, setSort] = useState({
-    sortDir:"DESC",
-    sortField:"auditDueDate",
+    sortDir: "DESC",
+    sortField: "auditDueDate",
   });
   const [clear, setClear] = useState(false);
-  const [activeFilters, setActiveFilters] = useState([
-    router?.query?.filters || [],
-  ]);
+  const [activeFilters, setActiveFilters] = useState([[]]);
+  const [paramsFilter, setParamsFilter] = useState(null);
+
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -136,8 +139,10 @@ const Index = ({
       setTotalElements(usersData?.data?.response?.totalElements);
     }
   }, [usersData]);
+  
   useEffect(() => {
     const uId = getStorage("user");
+    setParamsFilter("check");
     setUserName(uId);
     if (uId) {
       const data = {
@@ -162,8 +167,10 @@ const Index = ({
         aduitDueEndDate: clear ? "" : aduitDueEndDate,
         sort,
       };
-      getIndividualUser({ data: data });
-      getCurrentUserDetails({ userId: uId });
+      if (window !== "undefined" && paramsFilter) {
+        getIndividualUser({ data: data });
+        getCurrentUserDetails({ userId: uId });
+      }
     }
   }, [
     pageNo,
@@ -186,7 +193,9 @@ const Index = ({
     aduitDueStartDate,
     aduitDueEndDate,
     sort,
-  ])
+    paramsFilter,
+    paginationFirst,
+  ]);
   const auditstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes
@@ -278,44 +287,48 @@ const Index = ({
     getFilters({ field: "auditAllocatedBy", username: userName });
   }, [userName]);
   useEffect(() => {
-    const decodedParams = JSON.parse(getStorage("supervisorUserEncodedValue"));
-    const sessionActiveFilters = JSON.parse(getStorage("supervisorUserFilter"));
-    if (decodedParams) {
-      setSelectedDates3([
-        decodedParams?.dueStartDate ? dayjs(decodedParams?.dueStartDate) : null,
-        decodedParams?.dueEndDate ? dayjs(decodedParams?.dueEndDate) : null,
-      ]);
-      setSelectedDates4([
-        decodedParams?.completedStartDate
-          ? dayjs(decodedParams?.completedStartDate)
-          : null,
-        decodedParams?.completedEndDate
-          ? dayjs(decodedParams?.completedEndDate)
-          : null,
-      ]);
-      setSelectedDates2([
-        decodedParams?.aduitCompletedStartDate
-          ? dayjs(decodedParams?.aduitCompletedStartDate)
-          : null,
-        decodedParams?.aduitCompletedEndDate
-          ? dayjs(decodedParams?.aduitCompletedEndDate)
-          : null,
-      ]);
-      setSelectedDates([
-        decodedParams?.aduitDueStartDate
-          ? dayjs(decodedParams?.aduitDueStartDate)
-          : null,
-        decodedParams?.aduitDueEndDate
-          ? dayjs(decodedParams?.aduitDueEndDate)
-          : null,
-      ]);
-      setSearch(decodedParams?.searchTextValue?decodedParams?.searchTextValue:"");
-      setPageNo(decodedParams?.pageNo);
-      setPaginationFirst(decodedParams?.paginationFirst);
-      setSelectedOption(decodedParams?.selectedOption)
-    }
-    if (sessionActiveFilters) {
-      setActiveFilters(sessionActiveFilters);
+    if (routedData) {
+      setParamsFilter("check");
+      // setSelectedDates3([
+      //   routedData?.dueDateStart
+
+      //   || null,
+      //   routedData?.dueDateEnd || null,
+      // ]);
+      // setSelectedDates4([
+      //   routedData?.processedStart || null,
+      //   routedData?.processedEnd || null,
+      // ]);
+      // setSelectedDates2([
+      //   routedData?.aduitCompletedStartDate
+      //    || null,
+      //   routedData?.aduitCompletedEndDate
+      //  || null,
+      // ]);
+      setSelectedDates(routedData?.selectedDates || []);
+      setSelectedDates2(routedData?.selectedDates2 || []);
+      setSelectedDates3(routedData?.selectedDates3 || []);
+      setSelectedDates4(routedData?.selectedDates4 || []);
+      setSelAuditAllocatedByVal(routedData?.selAuditAllocatedBy || []);
+      setAduitDueStartDate(routedData?.aduitDueStartDate || "");
+      setAduitDueEndDate(routedData?.aduitDueEndDate || "");
+      setAduitCompletedStartDate(routedData?.aduitCompletedStartDate || "");
+      setAduitCompletedEndDate(routedData?.aduitCompletedEndDate || "");
+      setDueStartDate(routedData?.dueStartDate || "");
+      setDueEndDate(routedData?.dueEndDate || "");
+      setCompletedStartDate(routedData?.processedStart || "");
+      setCompletedEndDate(routedData?.processedEnd || "");
+      setSearch(routedData?.searchTextValue ? routedData?.searchTextValue : "");
+      setPageNo(routedData?.pageNo ? routedData?.pageNo : 0);
+      setPaginationFirst(
+        routedData?.paginationFirst ? routedData?.paginationFirst : ""
+      );
+      setSelectedOption(
+        routedData?.selectedOption ? routedData?.selectedOption : ""
+      );
+      setActiveFilters(
+        routedData?.allFilters ? routedData?.allFilters : allFilters
+      );
     }
   }, []);
   return (
@@ -392,7 +405,7 @@ const Index = ({
                       selectedDates2={selectedDates2}
                       // allocated by
                       // isAuditAllocatedBy={true}
-                      audiallocatedBylabel="Audit AllocatedBy"
+                      audiallocatedBylabel="Audit Allocated By"
                       auditallocatedByOptions={generateOptionsListSupervisor(
                         filteredList
                       )}
@@ -460,6 +473,7 @@ const Index = ({
                       activeFilters={activeFilters}
                       setActiveFilters={setActiveFilters}
                       setClear={setClear}
+                      getRoutedData={getRoutedData}
                     />
                   </div>
                   <div
@@ -474,7 +488,6 @@ const Index = ({
                         sort={sort}
                         setSort={setSort}
                         auditBodyTemplate={auditstatusBodyTemplate}
-                        page={{ ...router.query, pageNo, paginationFirst }}
                         auditDueSort={auditDueSort}
                         setAuditDueSort={setAuditDueSort}
                         processSort={processSort}
@@ -485,6 +498,41 @@ const Index = ({
                         setAuditDateSort={setAuditDateSort}
                         activeFilters={activeFilters}
                         setActiveFilters={setActiveFilters}
+                        getRoutedData={getRoutedData}
+                        // params={{
+                        //   pageNo,
+                        //   selectedDates,
+                        //   search,
+                        //   searchTextValue,
+                        //   selectedOption,
+                        //   statusOptions,
+                        //   selAllocatedBy,
+                        //   dueStartDate,
+                        //   dueEndDate,
+                        //   completedStartDate,
+                        //   completedEndDate,
+                        //   auditedStartDate,
+                        //   auditedEndDate,
+                        //   allocatedStartDate,
+                        //   allocatedEndDate,
+                        //   selectedAuditOption,
+                        //   selAuditAllocatedBy,
+                        //   aduitCompletedStartDate,
+                        //   aduitCompletedEndDate,
+                        //   aduitDueStartDate,
+                        //   aduitDueEndDate,
+                        //   sortDirection: sort.sortDir,
+                        //   sortField: sort.sortField,
+                        //   paginationFirst,
+                        //   userName,
+                        //   processSort,
+                        //   auditAllocatedSort,
+                        //   audirDateSort,
+                        //   auditDueSort,
+                        //   activeFilters,
+
+                        // }}
+
                         params={{
                           pageNo,
                           searchTextValue,
@@ -492,6 +540,7 @@ const Index = ({
                           selAllocatedBy,
                           dueStartDate,
                           dueEndDate,
+                          search,
                           completedStartDate,
                           completedEndDate,
                           auditedStartDate,
@@ -504,14 +553,11 @@ const Index = ({
                           aduitCompletedEndDate,
                           aduitDueStartDate,
                           aduitDueEndDate,
-                          sortDirection: sort.sortDir,
-                          sortField: sort.sortField,
+                          selectedDates3,
+                          selectedDates,
+                          selectedDates2,
+                          selectedDates4,
                           paginationFirst,
-                          userName,
-                          processSort,
-                          auditAllocatedSort,
-                          audirDateSort,
-                          auditDueSort,
                         }}
                       />
                     )}
@@ -544,11 +590,13 @@ const connector = connect(
     usersData: state.supervisor.users?.getIndividualUsersList,
     loader: state.supervisor.users?.individualUserLoading,
     filteredList: state.supervisor?.audited?.filterUsers,
+    routedData: state.tenantAdmin?.patientSync?.routedData,
   }),
   {
     getIndividualUser: allActions.getIndividualUsers,
     getCurrentUserDetails: allActions.getCurrentUserAction,
     getFilters: allActions2.getFilterUsers,
+    getRoutedData: allPatientSyncAction.getRoutedData,
   }
 );
 export default connector(Index);
