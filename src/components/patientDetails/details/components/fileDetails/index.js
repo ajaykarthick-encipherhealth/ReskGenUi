@@ -16,10 +16,10 @@ const FileDetails = ({
   return (
     <>
       <div className={`row ${styles.container}`}>
-        <div className="col-1">
+        {/* <div className="col-1">
           <Title title={title} />
-        </div>
-        <div className="col-4">
+        </div> */}
+        <div className="col-5">
           <Details fileResult={fileResult} />
         </div>
         <div className="col-4">

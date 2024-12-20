@@ -26,7 +26,7 @@ const Details = ({ fileResult, fromHcc }) => {
 
   return (
     <>
-      <div className={fromHcc ? styles.detailsCardHcc : styles.detailsCard}>
+      <div className={styles.detailsCardHcc}>
         <div className="row" style={{ lineHeight: "0" }}>
           <div className="col-4">
             <FontAwesomeIcon icon={faIdCardClip} style={{ color: "#241571" }} />
@@ -99,7 +99,7 @@ const Details = ({ fileResult, fromHcc }) => {
           <div className="col-5">
             <i className={styles.dob_icon}>{SVGICON.DatebirthIcon}</i>
             <label className="px-2" style={{ fontWeight: 600 }}>
-              Date Of Birth
+             Date Of Birth   
             </label>
             <h6 className="px-4">
             {fileResult?.dob ? dayjs(fileResult.dob).format("MM-DD-YYYY") : "---"}

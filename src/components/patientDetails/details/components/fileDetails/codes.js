@@ -2,7 +2,7 @@ import styles from "./styles.module.css";
 const Codes = ({ hccCounts,hccValidCount,fromHcc }) => {
   return (
     <>
-      <div className={fromHcc?styles.codesCardHcc:styles.codesCard}>
+      <div className={styles.codesCardHcc}>
         <div className={`text-center ${styles.rafscoreheader}`}>
           <h5>Codes</h5>
         </div>
