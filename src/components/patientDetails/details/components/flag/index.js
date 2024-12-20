@@ -180,8 +180,8 @@ const Flag = ({
   const handleChangeFlag = (selectedOption, e) => {    
     setInputValue((prevState) => ({
       ...prevState,
-      flagId: e.value,
-      flag: e.label,
+      flagId: e?.value,
+      flag: e?.label,
     }));
   };
 
@@ -231,8 +231,12 @@ const Flag = ({
                   } 
                   onChange={handleChangeFlag}
                   filterOption={(input, option) =>
-                    (option?.name ?? '').toLowerCase().includes(input.toLowerCase())
+                    (option?.name ?? '')
+                      .toLowerCase()
+                      .replace(/_/g, ' ')  
+                      .includes(input.toLowerCase().replace(/_/g, ' ')) 
                   }
+                  
                   allowClear
                 />
               </div>
