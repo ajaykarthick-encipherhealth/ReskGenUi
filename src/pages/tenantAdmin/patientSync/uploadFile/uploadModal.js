@@ -1,5 +1,5 @@
 import { Button, Form, Modal } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { getResponePopup } from "../../../../utils/reusable";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";
@@ -24,18 +24,19 @@ const uploadModal = ({
   const [form] = Form.useForm();
   const handleUpload = async () => {
     if (fileList && fileList?.length > 0) {
+      setFileLoading(true);
       const uploadPromises = fileList?.map((item) => {
         const formData = new FormData();
         formData.append("file", item);
         formData.append("batchId", openUpload?.data?.id);
         formData.append("yearOfServices", openUpload?.data?.yearOfService);
-        formData.append("batchProcessFor", "COGENT_AI")
+        formData.append("batchProcessFor", "COGENT_AI");
         // for single upload
         const formData2 = new FormData();
         formData2.append("file", item);
         formData2.append("batchId", currentId?.id);
         formData2.append("batchUploadDetailsId", openUpload?.data?.id);
-        formData2.append("batchProcessFor", "COGENT_AI")
+        formData2.append("batchProcessFor", "COGENT_AI");
         return uploadFiles({ obj: singleUpload ? formData2 : formData });
       });
       const responses = await Promise.all(uploadPromises);

@@ -522,6 +522,7 @@ const Details = ({
 
   const backToPatientData = () => {
     getPatientID(null);
+    getSelectedDosPageNumber(1),
     // setSelectDosValue("");
     getSelectedDos("");
     getCurrentDiseaseType(true);
@@ -698,7 +699,7 @@ const Details = ({
       getActiveLabels();
     }
   }, [isDosSelected, dosYearDefalutSelect]);
-
+  
   return (
     <>
       <div className={`show `} style={{ height: "100vh", background: "#fff" }}>
@@ -1372,7 +1373,7 @@ const Details = ({
                           <ul className="">
                             {flagList?.map((data) => {
                               const isFlagDisabled =
-                                data.name === "Flag" && !isDosSelected;
+                                (data.name === "Flag" && !isDosSelected);
 
                               return (
                                 <Tooltip

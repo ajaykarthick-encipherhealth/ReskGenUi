@@ -117,6 +117,7 @@ const DetailedPdfTable = ({
           return {
             ...item,
             processStage: webSocketData?.processStageChart || "FILE_UPLOADING",
+            percentage:webSocketData?.processedPercentage||10
           };
         }
         return item;
