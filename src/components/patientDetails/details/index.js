@@ -54,7 +54,7 @@ import LogoLoader from "../../logoLoader";
 import FileDetails from "./components/fileDetails";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import ManuallyAddProvider from "./manuallyAddProvider";
-import { getAge } from "../../../utils/reusable";
+import { getAge, getResponePopup } from "../../../utils/reusable";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { truncateString } from "./components/function/ReusableFunctions";
 import SvgFlag from "./components/svg/svg";
@@ -136,6 +136,7 @@ const Details = ({
   getFilteredList,
   getRoutedData,
   routedData,
+  getSelectedDosPageNumber,
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -222,7 +223,7 @@ const Details = ({
     // if (activeTab == 4) {
     //   getAllProcessYear(patientId, "LAB");
     // }
-    getPatientListToDetails(patientId);
+    dosYearDefalutSelect && getPatientListToDetails(patientId);
     if (patientDetailsResult?.data?.response?.fileId != fileId) {
       getPatientHccFile(patientDetailsResult?.data?.response?.fileId);
     }
@@ -484,17 +485,31 @@ const Details = ({
     },
   ];
 
-  const getPatientListToDetails = (userId, orgId, tenantId) => {
+  const getPatientListToDetails = async (userId) => {
     setIsLoading(true);
-    getpatientDetailsData(
-      userId,
-      selectedDosValue,
-      null,
-      setIsLoading,
-      userRole
-    );
-    getPatientIdData(userId);
-    setLocalPatientId(userId);
+    try {
+      const res = await getpatientDetailsData(
+        userId,
+        selectedDosValue,
+        null,
+        setIsLoading,
+        userRole
+      );
+      if (res.status == "SUCCESS") {
+        getPatientHccFile(res.response?.fileDetailDTO?.fileId);
+        getSelectedDos("");
+        setSelectDosValue("");
+        getSelectedDosPageNumber(1);
+        setIsModalComments(false);
+        setFilterModalOpen(false);
+        setWorkListPatientId(null);
+        getPatientIdData(userId);
+        setLocalPatientId(userId);
+      } else {
+        getResponePopup(res);
+      }
+    } catch (error) {}
+   
   };
 
   const handleToogleCloseNav = () => {
@@ -538,7 +553,7 @@ const Details = ({
             },
             `/${navigate?.query?.fromReport}/report`
           );
-        } else if (routedData||backRoute) {
+        } else if (routedData || backRoute) {
           getRoutedData(routedData);
           navigate.push(backRoute);
           getActiveTab("PDF");
@@ -587,6 +602,7 @@ const Details = ({
       navigate.back();
     }
     setSelectDosValue("");
+    getSelectedDosPageNumber(1);
   };
   const splitUserName = (name) => {
     if (name) {
@@ -1451,18 +1467,21 @@ const Details = ({
                             localUserId={localUserId}
                             setWorkListPatientId={setWorkListPatientId}
                             setIsModalComments={setIsModalComments}
+                            getPatientListToDetails={getPatientListToDetails}
                           />
                         ) : userRole == "supervisor" ? (
                           <SupervisorWorkList
                             localUserId={localUserId}
                             setWorkListPatientId={setWorkListPatientId}
                             setIsModalComments={setIsModalComments}
+                            getPatientListToDetails={getPatientListToDetails}
                           />
                         ) : (
                           <ReviwerWorkList
                             localUserId={localUserId}
                             setWorkListPatientId={setWorkListPatientId}
                             setIsModalComments={setIsModalComments}
+                            getPatientListToDetails={getPatientListToDetails}
                           />
                         )}
                       </>
@@ -1551,6 +1570,7 @@ const enhancer = connect(
     getActiveTab: allReportActions.activeTab,
     getFilteredList: reviewerWorkQueueAction.reviewerFilterList,
     getRoutedData: allActions.getRoutedData,
+    getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
   }
 );
 export default enhancer(Details);

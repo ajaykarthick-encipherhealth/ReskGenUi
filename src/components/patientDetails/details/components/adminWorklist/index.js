@@ -33,6 +33,7 @@ const AdminWorkList = ({
   setIsModalComments,
   getPatients,
   result,
+  getPatientListToDetails
 }) => {
   const [patientList, setPatientList] = useState([]);
   const [pageNo, setPageNo] = useState(0);
@@ -73,11 +74,11 @@ const AdminWorkList = ({
     setFilterModalOpen(false);
   };
 
-  const getPatientListToDetails = (id) => {
-    setWorkListPatientId(id);
-    setIsModalComments(false);
-    setFilterModalOpen(false);
-  };
+  // const getPatientListToDetails = (id) => {
+  //   setWorkListPatientId(id);
+  //   // setIsModalComments(false);
+  //   // setFilterModalOpen(false);
+  // };
 
   const statusOptions = [
     { label: "ALL", value: "" },

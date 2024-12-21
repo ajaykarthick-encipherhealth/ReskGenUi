@@ -14,6 +14,7 @@ const ReviwerWorkList = ({
   setWorkListPatientId,
   setIsModalComments,
   patientListFilter,
+  getPatientListToDetails
 }) => {
   const [patientList, setPatientList] = useState([]);
   const [processedStatus, setProcessedStatus] = useState("ALL");
@@ -54,11 +55,11 @@ const ReviwerWorkList = ({
     setPageNo(e.page);
     setFilterModalOpen(false);
   };
-  const getPatientListToDetails = (id) => {
-    setWorkListPatientId(id);
-    setFilterModalOpen(false);
-    setIsModalComments(false);
-  };
+  // const getPatientListToDetails = (id) => {
+  //   setWorkListPatientId(id);
+  //   setFilterModalOpen(false);
+  //   setIsModalComments(false);
+  // };
   const statuses = [
     { label: "ALL", value: "ALL" },
     { label: "PENDING", value: "PENDING" },

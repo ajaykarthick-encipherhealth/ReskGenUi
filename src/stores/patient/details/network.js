@@ -39,6 +39,7 @@ export async function patientDetails(
     return data;
   } catch (error) {
     setIsSpinnerLoading(false);
+    return error
   }
 }
 

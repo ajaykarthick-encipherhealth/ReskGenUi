@@ -1044,15 +1044,13 @@
 }
 
 .circleCard {
+  border: 1px solid #c4bfbf;
   width: 42px;
-  /* Set the width and height to make it a circle */
   height: 42px;
   border-radius: 8px !important;
-  /* Border-radius 50% makes it a circle */
   background: #fff;
   fill: #fff;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  /* Add a background color */
+  /* box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); */
   display: flex;
   align-items: center;
   justify-content: center;

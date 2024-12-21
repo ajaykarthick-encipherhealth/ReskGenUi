@@ -39,6 +39,7 @@ const SupervisorWorkList = ({
   setWorkListPatientId,
   getWorkListFilter,
   setIsModalComments,
+  getPatientListToDetails
 }) => {
   const [patientList, setPatientList] = useState([]);
   const [pageNo, setPageNo] = useState(0);
@@ -75,11 +76,11 @@ const SupervisorWorkList = ({
     setFilterModalOpen(false);
   };
 
-  const getPatientListToDetails = (id) => {
-    setWorkListPatientId(id);
-    setIsModalComments(false);
-    setFilterModalOpen(false);
-  };
+  // const getPatientListToDetails = (id) => {
+  //   setWorkListPatientId(id);
+  //   setIsModalComments(false);
+  //   setFilterModalOpen(false);
+  // };
 
   const statusOptions = [
     { label: "ALL", value: "" },
