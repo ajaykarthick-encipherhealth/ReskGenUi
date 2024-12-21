@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import moment from "moment";
 import Image from "next/image";
-import { Modal, Skeleton, Spin } from "antd";
+import { Empty, Modal, Skeleton, Spin } from "antd";
 import styles from "./styles.module.css";
 import spinSTYles from "../../../../styles/auth.module.css";
 import Card from "../../../../components/card/index";
@@ -65,7 +65,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       <HeadTitle
         header="Notifications"
         anchorTag="anchor"
-        handleOpen={notificationResult?.length>0 && handleOpen}
+        handleOpen={handleOpen}
       />
 
       <div className={styles.card4}>
@@ -98,7 +98,11 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       >
         {notificationResponse?.loading ? (
           <div className={spinSTYles.spinStyle}>{NotifiAvatar()}</div>
-        ) : (
+        ) : notificationResult?.length <=0 ?(
+          <div className="my-2">
+          <Empty />
+         </div>
+        ) :(
           <div className={styles.container} style={{ height: "500px" }}>
             {notificationData}
           </div>
