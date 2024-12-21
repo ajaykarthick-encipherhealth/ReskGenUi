@@ -161,7 +161,7 @@ const Details = ({
   const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC");
   const [isSideNavShow, setIsSideNavShow] = useState(false);
   const [timelineData, setTimeLineData] = useState([]);
-  const [patienIdDetails, setPatienIdDetails] = useState("");
+  const [lastActiveTab, setLastActiveTab] = useState(3);
   const [userDetails, setUserDetails] = useState("");
   const [flagFirstData, setFlagFirstData] = useState([]);
   const [filterDataLoading, setFilterDataLoading] = useState(true);
@@ -214,46 +214,29 @@ const Details = ({
   useEffect(() => {
     const patientId = getStorage("patientId");
     const fileId = getStorage("fileId");
-    if (activeTab == 1 || activeTab == 2) {
+    if (activeTab == 1 && lastActiveTab > 2) {
       getAllProcessYear(patientId, "HCC");
-    }
-    // if (activeTab == 3) {
-    //   getAllProcessYear(patientId, "RADIOLOGY");
-    // }
-    // if (activeTab == 4) {
-    //   getAllProcessYear(patientId, "LAB");
-    // }
-    dosYearDefalutSelect && getPatientListToDetails(patientId);
-    if (patientDetailsResult?.data?.response?.fileId != fileId) {
-      getPatientHccFile(patientDetailsResult?.data?.response?.fileId);
+      dosYearDefalutSelect && getPatientListToDetails(patientId);
+      if (patientDetailsResult?.data?.response?.fileId != fileId) {
+        getPatientHccFile(patientDetailsResult?.data?.response?.fileId);
+      }
     }
     var dosYearArr = processedYearResult?.data?.response?.map((res) => {
       return { value: res, label: res };
     });
     if (activeTab == 3) {
-      // getRadiologyDetails(
-      //   selectPatientId ? selectPatientId?.patirntId : patientId,
-      //   dosYearArr[0]?.value,
-      //   null,
-      //   setIsSpinnerLoading
-      // );
       getPatientRadiologyDosList(
         selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0]?.value
       );
     }
     if (activeTab == 4) {
-      // getLabDetails(
-      //   selectPatientId ? selectPatientId?.patirntId : patientId,
-      //   dosYearArr[0]?.value,
-      //   null,
-      //   setIsSpinnerLoading
-      // );
       getPatientLabDosList(
         selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0]?.value || ""
       );
     }
+    setLastActiveTab(activeTab);
   }, [activeTab]);
 
   useEffect(() => {
@@ -374,6 +357,7 @@ const Details = ({
       }
     }
   };
+
   const getPatientDetails = async (patientId, fileResponse) => {
     setHccValidCount(0);
     if (fileResponse) {
@@ -485,21 +469,21 @@ const Details = ({
     },
   ];
 
-  const getPatientListToDetails = async (userId) => {
+  const getPatientListToDetails = async (userId, isClear) => {
     setIsLoading(true);
     try {
       const res = await getpatientDetailsData(
         userId,
         selectedDosValue,
-        null,
+        isClear ? "" : selectDosValue,
         setIsLoading,
         userRole
       );
       if (res.status == "SUCCESS") {
         getPatientHccFile(res.response?.fileDetailDTO?.fileId);
-        getSelectedDos("");
-        setSelectDosValue("");
-        getSelectedDosPageNumber(1);
+        isClear && getSelectedDos("");
+        isClear && setSelectDosValue("");
+        isClear && getSelectedDosPageNumber(1);
         setIsModalComments(false);
         setFilterModalOpen(false);
         setWorkListPatientId(null);
@@ -509,7 +493,6 @@ const Details = ({
         getResponePopup(res);
       }
     } catch (error) {}
-   
   };
 
   const handleToogleCloseNav = () => {
@@ -523,8 +506,8 @@ const Details = ({
   const backToPatientData = () => {
     getPatientID(null);
     getSelectedDosPageNumber(1),
-    // setSelectDosValue("");
-    getSelectedDos("");
+      // setSelectDosValue("");
+      getSelectedDos("");
     getCurrentDiseaseType(true);
     const user = getStorage("userRole");
     const isAdminTracking = getStorage("isAdminTracking");
@@ -699,7 +682,7 @@ const Details = ({
       getActiveLabels();
     }
   }, [isDosSelected, dosYearDefalutSelect]);
-  
+
   return (
     <>
       <div className={`show `} style={{ height: "100vh", background: "#fff" }}>
@@ -1373,7 +1356,7 @@ const Details = ({
                           <ul className="">
                             {flagList?.map((data) => {
                               const isFlagDisabled =
-                                (data.name === "Flag" && !isDosSelected);
+                                data.name === "Flag" && !isDosSelected;
 
                               return (
                                 <Tooltip

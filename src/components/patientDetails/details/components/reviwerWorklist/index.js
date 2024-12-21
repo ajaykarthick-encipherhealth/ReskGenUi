@@ -163,7 +163,7 @@ const ReviwerWorkList = ({
                   <li
                     className={`${visitStyles.nameList} ${visitStyles.patientList}`}
                     key={index}
-                    onClick={() => getPatientListToDetails(data.patientId)}
+                    onClick={() => getPatientListToDetails(data.patientId, true)}
                   >
                     {data.patientId} - {data.patientName}
                     {data.processedStatus == "COMPLETED" ? (

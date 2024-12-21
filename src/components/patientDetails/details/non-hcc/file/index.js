@@ -88,15 +88,12 @@ const File = ({
       setNonHccDiseasesList
     );
   }, [patientDetailsResult]);
-
-  useEffect(() => {
-    if (hccFileDetails?.data?.response && patientDetailsResult?.data?.response?.fileDetailDTO) {
-      setSelectFileURL(hccFileDetails?.data?.response);
-    }
   
-   
-  }, [hccFileDetails, ]);
-
+  useEffect(() => {
+    if (patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath) {
+      setSelectFileURL(patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath);
+    } 
+  }, []);
  
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
