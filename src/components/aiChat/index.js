@@ -3,24 +3,29 @@ import Image from "next/image";
 import Form from "react-bootstrap/Form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
+import { faComments, faCopy } from "@fortawesome/free-regular-svg-icons";
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import styles from "./styles.module.css";
-import { IMAGES } from "../../jsx/constant/theme";
-import { faComments, faCopy } from "@fortawesome/free-regular-svg-icons"; // Import the desired icon
-import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"; // Import the close icon if needed
-import chatAssistant from "../../images/chat/chatAssistant.svg";
 import { handleCopyToClipboard } from "../commonFunctions";
 import { actions as allActions } from "../../stores/chatService";
 import { connect } from "react-redux";
-import neChatImage from '../../images/logo/newChatImage.png'
+import neChatImage from "../../images/logo/newChatImage.png";
+import chatAssistant from "../../images/chat/chatAssistant.svg";
+import { Skeleton } from "antd";
+
 const AICHAT = ({ openMsg, getChatReply }) => {
   const [activeChat, setActiveChat] = useState(false);
-  const [inputValue, setInputValue] = useState({
-    question: "",
-  });
+  const [inputValue, setInputValue] = useState({ question: "" });
   const [validated, setValidated] = useState(false);
-  const [startChart, setStartChat] = useState(false);
-  let messagesEndRef = useRef(null);
+  const [startChat, setStartChat] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [chatResponse, setChatResponse] = useState([]);
+  const messagesEndRef = useRef(null);
+
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatResponse]);
 
   const handleChange = (e) => {
     const key = e.target.name;
@@ -29,26 +34,45 @@ const AICHAT = ({ openMsg, getChatReply }) => {
   };
 
   const handleNewUserMessage = async (event) => {
-    const form = event.currentTarget;
     event.preventDefault();
+    const form = event.currentTarget;
     if (form.checkValidity() === true) {
-      const res = await getChatReply(inputValue?.question);
-      if (res.status === "SUCCESS") {
-        setChatResponse((prev) => [
-          ...prev,
-          {
-            question: inputValue.question,
-            details: res?.response[0],
-          },
-        ]);
-        setInputValue({ question: "" });
-        setStartChat(true);
-        setValidated(false);
-      }
+     setValidated(false);
+     const userMessage = {
+       question: inputValue.question,
+       details: (
+           <Skeleton.Input style={{ width: 10 }} active />
+       ),
+       loading: true,
+     };
+      setChatResponse((prev) => [...prev, userMessage]);
+      setInputValue({ question: "" });
+      getChatReply(inputValue?.question).then((res) => {
+        if (res.status === "SUCCESS") {
+          setChatResponse((prev) => {
+            const updatedChat = [...prev];
+            const lastMessageIndex = updatedChat.length - 1;
+            if (
+              updatedChat[lastMessageIndex]?.question === inputValue.question
+            ) {
+              updatedChat[lastMessageIndex].details = res?.response[0];
+            }
+            return updatedChat;
+          });
+        }
+      });
     } else {
       setValidated(true);
     }
   };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleNewUserMessage(event);
+    }
+  };
+
   return (
     <>
       <button
@@ -72,18 +96,14 @@ const AICHAT = ({ openMsg, getChatReply }) => {
                 openMsg ? "" : "d-none"
               } ${styles.chatContainer}`}
             >
-              {startChart ? (
+              {startChat ? (
                 <>
                   <div
                     className={`card-header chat-list-header text-center ${styles.chatTitleCard} rounded-0 m-2`}
                   >
                     <div className="text-white">Hello user</div>
                     <div className={`${styles.chatHead} mt-4`}>
-                      <Image
-                        src={neChatImage}
-                        width={30}
-                        height={40}
-                      />
+                      <Image src={neChatImage} width={30} height={40} />
                       <h4 className={`${styles.chatTitle} text-white`}>
                         Chat with CogentAI
                       </h4>
@@ -97,58 +117,57 @@ const AICHAT = ({ openMsg, getChatReply }) => {
                     </div>
                   </div>
                   <div
-                    ref={messagesEndRef}
                     className={`card-body msg_card_body ${
                       openMsg ? "ps ps--active-y" : ""
                     } ${styles.detailsContainer}`}
                     id="chat-scroll"
                   >
                     <div className="d-flex justify-content-start mb-0">
-                      {/* <div className="img_cont_msg">
-                        <Image src={IMAGES.loginPageLogo3} />
-                      </div> */}
-                      <div className="msg_cotainer">
-                        Welcome to CogentAI!
-                        {/* <span className="msg_time">8:40 AM, Today</span> */}
-                      </div>
+                      <div className="msg_cotainer">Welcome to CogentAI!</div>
                     </div>
-                    {chatResponse?.map((data) => (
-                      <>
-                        <div name="test1" className="element">
-                          <div className="d-flex justify-content-end mb-1">
-                            <div className="msg_cotainer_send">
-                              {data?.question}
-                            </div>
-                          </div>
-                          <div
-                            className="d-flex justify-content-end align-items-end my-1 cursor-pointer mx-2"
-                            onClick={() =>
-                              handleCopyToClipboard({ text: data?.question })
-                            }
-                          >
-                            <FontAwesomeIcon
-                              icon={faCopy}
-                              className={styles.copyIcon}
-                            />
-                          </div>
-                          <div className="d-flex justify-content-start my-2">
-                            <div className="msg_cotainer">{data?.details}</div>
-                          </div>
-                          <div
-                            className="d-flex justify-content-start align-items-start my-1 mx-1 cursor-pointer"
-                            onClick={() =>
-                              handleCopyToClipboard({ text: data?.details })
-                            }
-                          >
-                            <FontAwesomeIcon
-                              icon={faCopy}
-                              className={styles.copyIcon}
-                            />
+                    {chatResponse?.map((data, index) => (
+                      <div key={index}>
+                        <div className="d-flex justify-content-end mb-1">
+                          <div className="msg_cotainer_send">
+                            {data?.question}
                           </div>
                         </div>
-                        <div ref={messagesEndRef} />
-                      </>
+                        <div
+                          className="d-flex justify-content-end align-items-end my-1 cursor-pointer mx-2"
+                          onClick={() =>
+                            handleCopyToClipboard({ text: data?.question })
+                          }
+                        >
+                          <FontAwesomeIcon
+                            icon={faCopy}
+                            className={styles.copyIcon}
+                          />
+                        </div>
+                        <div className="d-flex justify-content-start my-2">
+                          <div className="msg_cotainer">{data?.details}</div>
+                        </div>
+                        <div
+                          className="d-flex justify-content-start align-items-start my-1 mx-1 cursor-pointer"
+                          onClick={() =>
+                            handleCopyToClipboard({ text: data?.details })
+                          }
+                        >
+                          <FontAwesomeIcon
+                            icon={faCopy}
+                            className={styles.copyIcon}
+                          />
+                        </div>
+                      </div>
                     ))}
+                    {loading && (
+                      <div className="d-flex justify-content-start my-2">
+                        <div className="msg_cotainer">
+                          <i>Loading...</i>
+                        </div>
+                      </div>
+                    )}
+                    {/* Scroll Target */}
+                    <div ref={messagesEndRef} />
                   </div>
                   <div className="card-footer type_msg">
                     <Form
@@ -164,17 +183,16 @@ const AICHAT = ({ openMsg, getChatReply }) => {
                           className={`form-control ${styles.textareaContainer}`}
                           placeholder="Type your message..."
                           onChange={handleChange}
+                          onKeyDown={handleKeyDown}
                           id="question"
                           name="question"
                           value={inputValue.question}
-                        ></input>
+                        />
                         <div className="input-group-append">
                           <button type="submit" className="btn btn-primary">
                             <FontAwesomeIcon
                               icon={faLocationArrow}
-                              style={{
-                                color: "#fff",
-                              }}
+                              style={{ color: "#fff" }}
                             />
                           </button>
                         </div>
@@ -196,10 +214,8 @@ const AICHAT = ({ openMsg, getChatReply }) => {
                         alt="no Img"
                         width={250}
                         height={250}
-                        className="d-flex justify-content-center align-items-center"
                       />
                     </div>
-
                     <div className="d-flex justify-content-center align-items-center text-white font-weight-bold fs-3">
                       Welcome to CogentAI
                     </div>
@@ -225,6 +241,7 @@ const AICHAT = ({ openMsg, getChatReply }) => {
     </>
   );
 };
+
 const connector = connect(
   (state) => ({
     msgReply: state.chartService?.chatReply,
