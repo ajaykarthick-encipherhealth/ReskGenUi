@@ -44,6 +44,7 @@ const CustomSelect = ({
               placeholder="Please enter item"
               value={name}
               onChange={onNameChange}
+              onMouseDown={(e) => e.stopPropagation()}
               onKeyDown={(e) => e.stopPropagation()}
               style={{ width: "70%" }}
             />
