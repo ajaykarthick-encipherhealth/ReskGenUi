@@ -31,6 +31,7 @@
     "net": "^1.0.2",
     "next": "^13.5.4",
     "next-redux-wrapper": "^8.1.0",
+    "nprogress": "^0.2.0",
     "pdfjs-dist": "^3.11.174",
     "primereact": "^10.0.5",
     "react": "^18.2.0",
