@@ -203,7 +203,7 @@ function MyApp({ Component, pageProps }) {
     const handleStart = () => NProgress.start();
     const handleComplete = () => NProgress.done();
   
-    // NProgress.configure({showSpinner:false})
+    NProgress.configure({showSpinner:false})
     Router.events.on("routeChangeStart", handleStart);
     Router.events.on("routeChangeComplete", handleComplete);
     Router.events.on("routeChangeError", handleComplete);

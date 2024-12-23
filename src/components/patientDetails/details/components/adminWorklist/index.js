@@ -11,6 +11,7 @@ import { actions as allActions } from "../../../../../stores/admin/workqueue";
 import { connect } from "react-redux";
 import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import Search from "../../../../search";
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -33,7 +34,7 @@ const AdminWorkList = ({
   setIsModalComments,
   getPatients,
   result,
-  getPatientListToDetails
+  getPatientListToDetails,
 }) => {
   const [patientList, setPatientList] = useState([]);
   const [pageNo, setPageNo] = useState(0);
@@ -185,57 +186,52 @@ const AdminWorkList = ({
   return (
     <>
       <div className={`row ${visitStyles.patientListHead}`}>
-        <div
-          className={visitStyles.flags}
-          style={{ marginTop: "15px", marginBottom: "20px" }}
-        >
+        <div className={visitStyles.flags} style={{ marginTop: "15px" }}>
           <Legends bullets={bullets} display="ruby" padding="0 0px 10px 0" />
         </div>
-        <div className="col-xl-9">
-          <div class="form-group has-search searchStyle">
-            <div>
-              <Input
-                type="text"
-                onChange={(e) => filterChangePatientId(e)}
+        <div className="row">
+          <div className="col-xl-9 ">
+            <div class="form-group has-search searchStyle">
+              <Search
                 className={`input-form-control align-items-center`}
-                placeholder="Search"
-                maxLength={25}
-                onKeyDown={(e) => {
-                  if (e.key === "\\") {
-                    e.preventDefault();
-                  }
-                }}
-                prefix={<SearchOutlined className="text-muted" />}
+                searchlabel={Search}
+                search={search}
+                value={search}
+                setSearch={setSearch}
+              />
+            </div>
+          </div>
+
+          <div className="col-xl-3 mt-4">
+            <div className={visitStyles.content}>
+              <MyWorkQueueFilter
+                setComputedStartDate={setComputedStartDate}
+                setComputedEndDate={setComputedEndDate}
+                setCompletedStartDate={setCompletedStartDate}
+                setCompletedEndDate={setCompletedEndDate}
+                completedStartDate={completedStartDate}
+                completedEndDate={completedEndDate}
+                computedStartDate={computedStartDate}
+                computedEndDate={computedEndDate}
+                selectedOption={selectedOption}
+                setSelectedOption={setSelectedOption}
+                statusOptions={statusOptions}
+                selectCompletedPicker={selectCompletedPicker}
+                setSelectCompletedPicker={setSelectCompletedPicker}
+                selectComputedPicker={selectComputedPicker}
+                setSelectComputedPicker={setSelectComputedPicker}
+                datePicker1Lable="Created Date"
+                datePicker2Lable="Completed Date"
+                filterModalOpen={filterModalOpen}
+                setFilterModalOpen={setFilterModalOpen}
               />
             </div>
           </div>
         </div>
 
-        <div className="col-xl-3">
-          <div className={visitStyles.content}>
-            <MyWorkQueueFilter
-              setComputedStartDate={setComputedStartDate}
-              setComputedEndDate={setComputedEndDate}
-              setCompletedStartDate={setCompletedStartDate}
-              setCompletedEndDate={setCompletedEndDate}
-              completedStartDate={completedStartDate}
-              completedEndDate={completedEndDate}
-              computedStartDate={computedStartDate}
-              computedEndDate={computedEndDate}
-              selectedOption={selectedOption}
-              setSelectedOption={setSelectedOption}
-              statusOptions={statusOptions}
-              selectCompletedPicker={selectCompletedPicker}
-              setSelectCompletedPicker={setSelectCompletedPicker}
-              selectComputedPicker={selectComputedPicker}
-              setSelectComputedPicker={setSelectComputedPicker}
-              datePicker1Lable="Created Date"
-              datePicker2Lable="Completed Date"
-              filterModalOpen={filterModalOpen}
-              setFilterModalOpen={setFilterModalOpen}
-            />
-          </div>
-        </div>
+        {/* </div>
+        </div> */}
+
         {!filterDataLoading ? (
           <>
             <div className={visitStyles.patientListHead}>
@@ -244,7 +240,9 @@ const AdminWorkList = ({
                   <li
                     className={`${visitStyles.nameList} ${visitStyles.patientList}`}
                     key={index}
-                    onClick={() => getPatientListToDetails(data.patientId, true)}
+                    onClick={() =>
+                      getPatientListToDetails(data.patientId, true)
+                    }
                   >
                     {data.patientId} - {data.patientName}
                     {processstatusBodyTemplate(data)}

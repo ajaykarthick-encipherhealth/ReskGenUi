@@ -70,7 +70,7 @@ const Patient = ({
     setTableLoading(true);
     // let resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
     const response = await getUsersList({pageNo:pageNo, pageSize:pageSize,selectOrgList:selectOrgList||""});
-    if (response.data) {
+    if (response?.data) {
       let resultMap = [];
       let result = response?.data?.response?.content;
       setTotalElements(response?.data?.response?.totalElements);
