@@ -477,7 +477,7 @@ const Patient = ({
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
                           <div
-                            className={`${isPatientList && "d-flex"} col-xlz-2`}
+                            className={`${isPatientList && "d-flex"} col-xl-2`}
                           >
                             {isPatientList && activeTab != 1 && (
                               <div className={reportStyles.backDiv}>
