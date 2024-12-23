@@ -230,9 +230,9 @@ const ContentGroupCard = ({
                 </Tooltip>
               </div>
               <div className={styles.avatarAlign}>
-                {auditstatusBodyTemplate}
+                {auditstatusBodyTemplate || '--'}
               </div>
-              <div>{processstatusBodyTemplate}</div>
+              <div>{processstatusBodyTemplate || '--'}</div>
             </div>
             <div className={`${styles.headText}`}>
               REVIEWER

@@ -204,6 +204,7 @@ const Reports = ({
       setSelectedOptions((prevOptions) => ({
         ...prevOptions,
         ["UserRole"]: selectedOption,
+        ["User"]: null,
       }));
       getSelectUserListReport({ role: selectedOption || "" });
     } else if (name && nameString !== "UserRole") {
@@ -224,7 +225,6 @@ const Reports = ({
       }));
     }
   };
-
   const debouncedSearch = useCallback(
     debounce((text, setSearchVal, field) => {
       // setSearchVal((prev) => {

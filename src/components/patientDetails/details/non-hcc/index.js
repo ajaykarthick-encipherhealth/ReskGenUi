@@ -139,7 +139,7 @@ const NonHcc = ({
                 <Nav.Item as="li" className="nav-item mx-2">
                   {getStorage("userRole") != "admin" &&
                     selectDosValue && (
-                      <YearAndDosStatus setIsLoading={setIsLoading} />
+                      <YearAndDosStatus isDosStatus={true}  setIsLoading={setIsLoading} />
                     )}
                 </Nav.Item>
               </Nav>
