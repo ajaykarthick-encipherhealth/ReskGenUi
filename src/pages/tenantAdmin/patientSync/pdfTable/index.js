@@ -59,9 +59,10 @@ const DetailedViewPdfTable = ({
   setSelectedOptions,
   setListPageNo,
   setListSearchVal,
-  initialTableData
+  initialTableData,
 }) => {
   const router = useRouter();
+  const [socketData, setSocketData] = useState();
   const [searchVal, setSearchVal] = useState(null);
   const [search, setSearch] = useState();
   const [pageNo, setPageNo] = useState(0);
@@ -101,6 +102,8 @@ const DetailedViewPdfTable = ({
       name: event.target.name,
       searchVal: value,
     });
+    setPageNo(0);
+    setPaginationFirst(0);
     debouncedSearch(value, setSearchVal, field);
   };
 
@@ -143,6 +146,20 @@ const DetailedViewPdfTable = ({
   //   }
   // }, [webSocketData, socketData?.content, pdfTabledata?.content]);
 
+  const handleBack = () => {
+    getActiveTab("PDF");
+    // removeStorage("patientSyncEncodedValue");
+    // router.push("/tenantAdmin/patientSync");
+    setSelectedDates(params?.selectedDates);
+    setSelecteddateRanges(params?.selectedDateRanges);
+    setListSearch(params?.search);
+    setSelectedOptions(params?.selectedOptions);
+    setListPageNo(params?.pageNo);
+    setViewDetailedBatch({ status: false, data: null });
+    getRoutedData("");
+    setListSearchVal(params?.search?.searchVal);
+    setSocketData();
+  };
   useEffect(() => {
     if (reportActiveTab) {
       getActiveTab(reportActiveTab);
@@ -153,7 +170,7 @@ const DetailedViewPdfTable = ({
       setBatchPageNo(decodedParams?.pageNo);
       if (pdfTabledata) {
         const filterData =
-        initialTableData?.content?.length > 0
+          initialTableData?.content?.length > 0
             ? initialTableData?.content?.filter(
                 (item) => item?.id === decodedParams?.batchId
               )
@@ -167,7 +184,7 @@ const DetailedViewPdfTable = ({
     if (batchId && paramsFilter) {
       getBatchInfo({
         batchId: batchId,
-        page: pageNo,
+        page:pageNo,
         search: searchVal || "",
       });
     }
@@ -304,17 +321,7 @@ const DetailedViewPdfTable = ({
                         <button
                           className={`${styles.backButtonStyle} mx-2`}
                           onClick={() => {
-                            getActiveTab("PDF");
-                            // removeStorage("patientSyncEncodedValue");
-                            // router.push("/tenantAdmin/patientSync");
-                            setSelectedDates(params?.selectedDates);
-                            setSelecteddateRanges(params?.selectedDateRanges);
-                            setListSearch(params?.search);
-                            setSelectedOptions(params?.selectedOptions);
-                            setListPageNo(params?.pageNo);
-                            setViewDetailedBatch({ status: false, data: null });
-                            getRoutedData("");
-                            setListSearchVal(params?.search?.searchVal)
+                            handleBack();
                           }}
                         >
                           <Image src={leftArrow} />
@@ -380,9 +387,11 @@ const DetailedViewPdfTable = ({
                               searchVal: searchVal,
                               pageNo: pageNo,
                               viewDetailedBatch,
-                              batchId
+                              batchId,
                             }}
                             currentId={currentId}
+                            socketData={socketData}
+                            setSocketData={setSocketData}
                           />
                         </div>
                       </div>

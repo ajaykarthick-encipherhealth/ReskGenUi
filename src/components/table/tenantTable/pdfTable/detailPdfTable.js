@@ -18,7 +18,7 @@ import { useRouter } from "next/router";
 import { setStorage } from "../../../../utils/storages";
 import { faRotate } from "@fortawesome/free-solid-svg-icons";
 import UploadModal from "../../../../pages/tenantAdmin/patientSync/uploadFile/uploadModal";
-import {actions as allActions} from "../../../../stores/tenantAdmin/patientSync";
+import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";
 
 export const getColors = (rowStatus) => {
   let strokeColor;
@@ -67,10 +67,12 @@ const DetailedPdfTable = ({
   params,
   currentId,
   getRoutedData,
-  loader
+  loader,
+  socketData,
+  setSocketData,
 }) => {
   const navigate = useRouter();
-  const [socketData, setSocketData] = useState(tableData);
+  // const [socketData, setSocketData] = useState(tableData);
   const [fileList, setFileList] = useState([]);
   const [openUpload, setOpenUpload] = useState({ status: false, data: null });
   const [fileLoading, setFileLoading] = useState(false);
@@ -86,8 +88,8 @@ const DetailedPdfTable = ({
       // const encodedValue = btoa(JSON.stringify(params));
       // setStorage("patientSyncEncodedValue", JSON.stringify(encodedValue));
       // setStorage("fromPatientSync", true);
-      setStorage("routeBackTo","/tenantAdmin/patientSync")
-      getRoutedData(params)
+      setStorage("routeBackTo", "/tenantAdmin/patientSync");
+      getRoutedData(params);
       navigate.push("/tenantAdmin/patientSync/batchFilesView");
     } else {
       notification.warning({
@@ -110,14 +112,14 @@ const DetailedPdfTable = ({
     if (
       webSocketData &&
       webSocketData?.webSocketType === "PROCESS_STAGE" &&
-      tableData?.content?.length>0
+      tableData?.content?.length > 0
     ) {
       const updatedTableData = tableData?.content?.map((item) => {
         if (item.patientId === webSocketData?.patientId) {
           return {
             ...item,
             processStage: webSocketData?.processStageChart || "FILE_UPLOADING",
-            percentage:webSocketData?.processedPercentage||10
+            percentage: webSocketData?.processedPercentage || 10,
           };
         }
         return item;
@@ -126,10 +128,14 @@ const DetailedPdfTable = ({
         ...prevState,
         content: updatedTableData,
       }));
-    } else {
-      setSocketData(tableData);
     }
-  }, [webSocketData, socketData?.content, tableData?.content]);
+    // else {
+    //   setSocketData(tableData);
+    // }
+  }, [webSocketData, tableData?.content]);
+
+  const tableRenderData =
+    socketData?.content?.length > 0 ? socketData?.content : tableData?.content;
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -150,8 +156,8 @@ const DetailedPdfTable = ({
             </thead>
 
             <tbody className={TableStyle.bodytable}>
-              {socketData?.content?.length > 0 ? (
-                socketData?.content?.map((row) => {
+              {tableRenderData?.length > 0 ? (
+                tableRenderData?.map((row) => {
                   const errStatus = row?.processStage?.split("_");
                   return (
                     <tr
@@ -316,11 +322,14 @@ const DetailedPdfTable = ({
     </div>
   );
 };
-const connector = connect((state) => ({
-  webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
-  loader: state?.tenantAdmin?.patientSync?.getBatchLoader,
-}),{
-  getRoutedData:allActions.getRoutedData
-});
+const connector = connect(
+  (state) => ({
+    webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
+    loader: state?.tenantAdmin?.patientSync?.getBatchLoader,
+  }),
+  {
+    getRoutedData: allActions.getRoutedData,
+  }
+);
 
 export default connector(DetailedPdfTable);

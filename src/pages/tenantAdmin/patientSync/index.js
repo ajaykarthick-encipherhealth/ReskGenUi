@@ -383,6 +383,8 @@ const Index = ({
       name: event.target.name,
       searchVal: value,
     });
+    setPageNo(0);
+    setPaginationFirst(0);
     debouncedSearch(value, setSearchVal, field);
   };
   const handleRangePicker = (date, dateString, tabName) => {
@@ -458,9 +460,10 @@ const Index = ({
         ...prevState,
         content: updatedTableData,
       }));
-    } else {
-      setSocketData(pdfTableData);
-    }
+    } 
+    // else {
+    //   setSocketData(pdfTableData);
+    // }
   }, [webSocketData,pdfTableData]);
   return (
     <>
@@ -486,7 +489,7 @@ const Index = ({
           setSelectedOptions={setSelectedOptions}
           setListPageNo={setPageNo}
           setListSearchVal={setSearchVal}
-          initialTableData={socketData}
+          initialTableData={socketData?.content?.length>0?socketData:pdfTableData}
         />
       ) : (
         <div className={styles.maincontainer}>
@@ -687,7 +690,7 @@ const Index = ({
                                       paginationFirst={paginationFirst}
                                       setSelectedBatch={setSelectedBatch}
                                       onPageChange={onPageChange}
-                                      tableData={socketData}
+                                      tableData={socketData?.content?.length>0?socketData:pdfTableData}
                                       selectedBatch={selectedBatch}
                                       loader={pdfLoader}
                                       openUpload={openUpload}
