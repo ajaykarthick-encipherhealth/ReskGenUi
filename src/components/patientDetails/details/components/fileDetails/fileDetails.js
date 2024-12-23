@@ -17,6 +17,7 @@ import { SVGICON } from "../../../../../jsx/constant/theme";
 import { notification, Tooltip } from "antd";
 import { truncateString } from "../function/ReusableFunctions";
 import { handleCopyToClipboard } from "../../../../commonFunctions";
+
 const Details = ({ fileResult, fromHcc }) => {
   const getMastData = (value) => {
     if (value) {
@@ -24,6 +25,11 @@ const Details = ({ fileResult, fromHcc }) => {
     }
   };
 
+  const calculateAge = (dob) => {
+    if (dob) {
+      return dayjs().diff(dob, "year");
+    }
+  };
   return (
     <>
       <div className={styles.detailsCardHcc}>
@@ -67,7 +73,7 @@ const Details = ({ fileResult, fromHcc }) => {
             <label className="px-2" style={{ fontWeight: 600 }}>
               Age
             </label>
-            <h6 className="px-4">{fileResult?.age || "--"}</h6>
+            <h6 className="px-4">{fileResult?.dob?calculateAge(fileResult?.dob) : "--"}</h6>
           </div>
           <div className="col-4 ">
             <FontAwesomeIcon icon={faFile} style={{ color: "#241571" }} />
@@ -82,14 +88,14 @@ const Details = ({ fileResult, fromHcc }) => {
               }}
               onClick={() =>
                 handleCopyToClipboard({
-                  text: fileResult?.fileDetailDTO?.fileName,
+                  text: fileResult?.fileName,
                   setCopied: setCopied,
                 })
               }
             >
-              {fileResult?.fileDetailDTO?.fileName ? (
-                <Tooltip title={fileResult?.fileDetailDTO?.fileName}>
-                  {truncateString(fileResult?.fileDetailDTO?.fileName, 12)}
+              {fileResult?.fileName ? (
+                <Tooltip title={fileResult?.fileName}>
+                  {truncateString(fileResult?.fileName, 12)}
                 </Tooltip>
               ) : (
                 "--"

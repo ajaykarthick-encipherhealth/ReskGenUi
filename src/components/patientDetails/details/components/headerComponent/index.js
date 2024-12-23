@@ -25,7 +25,7 @@ const HeaderComponent = ({
   return (
     <div className={`row ${styles.HccContainer}`}>
       <div className="col-5" style={{ padding: "0px" }}>
-        <Details fileResult={fileResult} fromHcc={true} setCopied = {setCopied}/>
+        <Details fileResult={patienIdDetails} fromHcc={true} setCopied = {setCopied}/>
       </div>
       <div className="col-3" style={{ padding: "0px" }}>
         <Flag
