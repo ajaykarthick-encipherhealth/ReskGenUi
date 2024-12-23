@@ -10,7 +10,6 @@ export async function patientDetailsBasedOnACtionType() {
     `dbservice/patient/compute/process-scope?patientId=${patientId}`,
     options
   );
-  console.log(data,"dosVal")
   return data;
 }
 export async function patientDetails(

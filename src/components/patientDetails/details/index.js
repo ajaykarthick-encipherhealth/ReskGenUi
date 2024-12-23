@@ -491,8 +491,11 @@ const Details = ({
         setLocalPatientId(userId);
       } else {
         getResponePopup(res);
+        setIsSpinnerLoading(false)
       }
-    } catch (error) {}
+    } catch (error) {
+      setIsSpinnerLoading(false)
+    }
   };
 
   const handleToogleCloseNav = () => {
