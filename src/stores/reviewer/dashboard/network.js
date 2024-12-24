@@ -24,7 +24,7 @@ export const dailyTask = async ({ date }) => {
   return data;
 };
 export const accuracy = async ({ btn, month, year, isAdmin = false }) => {
-  const role = getStorage('role')
+  const role = getStorage("userRole");
   const url = isAdmin
     ? btn === "Daily"
       ? `daily?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
