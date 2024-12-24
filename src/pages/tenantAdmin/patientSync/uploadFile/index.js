@@ -83,7 +83,7 @@ const UploadFile = ({
       }
     }
   }, [openUpload]);
-  
+
   return uploadAction || singleUpload ? (
     <div className={`${styles.cover} `}>
       <label className="cr-pointer">
@@ -96,6 +96,7 @@ const UploadFile = ({
           multiple={uploadAction === "uploadMultipleFiles" ? true : false}
           ref={fileInputRef}
           onChange={fileHandleChange}
+          disabled={filesList?.length>0?true:false}
         />
         <div
           className={styles.videoflex}
@@ -127,7 +128,7 @@ const UploadFile = ({
                 <Progress
                   percent={uploadProgress}
                   strokeColor={
-                    isLoading
+                    uploadProgress !==100
                       ? getColors("PENDING")?.strokeColor
                       : getColors("COMPLETED")?.strokeColor
                   }

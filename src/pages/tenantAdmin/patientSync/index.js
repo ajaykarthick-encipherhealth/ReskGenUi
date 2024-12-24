@@ -700,6 +700,7 @@ const Index = ({
                                         setViewDetailedBatch
                                       }
                                       viewDetailedBatch={viewDetailedBatch}
+                                      pdfTableData={pdfTableData}
                                     />
                                   </Tab.Pane>
                                 </Tab.Content>

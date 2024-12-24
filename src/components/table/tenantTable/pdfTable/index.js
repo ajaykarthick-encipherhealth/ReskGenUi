@@ -38,6 +38,7 @@ function PdfTable({
   getAllBatches,
   pageNo,
   setViewDetailedBatch,
+  pdfTableData
 }) {
   const router = useRouter();
   const [filelList, setFileList] = useState();
@@ -412,11 +413,11 @@ function PdfTable({
             <Paginator
               first={paginationFirst}
               rows={15}
-              totalRecords={tableData?.totalElements}
+              totalRecords={pdfTableData?.totalElements}
               onPageChange={onPageChange}
             />
             <div className="total-pages">
-              Total count: {tableData?.totalElements}
+              Total count: {pdfTableData?.totalElements}
             </div>
           </div>
         </>
