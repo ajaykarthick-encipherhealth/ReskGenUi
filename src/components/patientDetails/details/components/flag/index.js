@@ -78,6 +78,15 @@ const Flag = ({
   const handleSubmitFlag = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
+    if (!inputValue.flagId) {
+      getResponePopup({
+        data: {
+          status: "USER_DEFINED_ERROR",
+          message: "Please select a flag",
+        },
+      });
+      return; 
+    }
     if (inputValue.comments.trim() === "") {
       getResponePopup({
         data: {
@@ -222,6 +231,12 @@ const Flag = ({
                   className="customize-react-select"
                   showSearch={true}
                   placeholder="Select Flag"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please select a flag',
+                    },
+                  ]}
                   id="flag"
                   name="flag"
                   value={
@@ -238,6 +253,7 @@ const Flag = ({
                   }
                   
                   allowClear
+                  
                 />
               </div>
             </div>
