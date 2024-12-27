@@ -176,7 +176,7 @@ const Notification = ({
       setIsBtnLoading(true);
       setErrmessage({ msg: "", userErr: "" });
       let data = {
-        managerId: null,
+        managerId: selectCheckBox == "TEAM" ? inputValue.managerId : "",
         isAdmin: selectCheckBox == "ADMIN" ? true : false,
         isSupervisor: selectCheckBox == "SUPERVISOR" ? true : false,
         isReviewer: selectCheckBox == "REVIEWER" ? true : false,
