@@ -405,19 +405,19 @@ const FileProcessingTable = ({
     const mappedSteps = stepsItem
       ? stepsItem?.map((step, index) => ({
           ...step,
-          status: step.status,
+          status: stageChartMap[findPreviousStep(data?.processStageChart)]!==undefined?step.status:"WAIT",
           style: {
             color: step.info === "FINISHED" ? "green" : "inherit",
           },
         }))
       : stepsItemBase.map((step, index) => ({
           ...step,
-          status: step.status,
+          status: stageChartMap[findPreviousStep(data?.processStageChart)] !==undefined?step?.status:"WAIT",
           style: {
             color: step.info === "FINISHED" ? "green" : "inherit",
           },
         }));
-
+console.log(stepsItem)
     return (
       <div style={{ display: "flex" }}>
         <div style={{ width: "100%" }}>
@@ -432,7 +432,7 @@ const FileProcessingTable = ({
                 percent={
                   currentIndex
                     ? uploadStatus
-                    : `${
+                    :  stageChartMap[findPreviousStep(data?.processStageChart)]===undefined?0:`${
                         stageChartMap[findPreviousStep(data?.processStageChart)]
                       }0`
                 }
@@ -523,7 +523,7 @@ const FileProcessingTable = ({
           >{`${
             currentIndex
               ? uploadStatus
-              : `${stageChartMap[findPreviousStep(data?.processStageChart)]}0`
+              :  stageChartMap[findPreviousStep(data?.processStageChart)]===undefined?0:`${stageChartMap[findPreviousStep(data?.processStageChart)]}0`
           }% Complete`}</div>
         </div>
       </div>

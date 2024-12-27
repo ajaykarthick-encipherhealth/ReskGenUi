@@ -14069,6 +14069,9 @@ tbody > tr {
   > .ant-steps-item-tail::after {
   background: #04306f !important;
 }
+.fileprocessingstepper .ant-steps .ant-steps-item-icon .ant-steps-icon{
+  color:#fff !important;
+}
 /* 
 /* .ant-modal-content {
   background: #f5f9ff !important;
