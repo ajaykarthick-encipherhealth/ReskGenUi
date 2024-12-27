@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DatePicker, Popover, Tooltip,Select } from "antd";
+import { DatePicker, Popover, Tooltip, Select } from "antd";
 import Image from "next/image";
 import styles from "../../../../pages/reviewer/report/report.module.css";
 import Tracking from "../../tracking/tracking.module.css";
@@ -17,11 +17,7 @@ import { Button } from "react-bootstrap";
 
 const { RangePicker } = DatePicker;
 
-const allFilters = [
-  "Status",
-  "Organization",
-  "Created date Range",
-];
+const allFilters = ["Status", "Organization", "Created date Range"];
 
 const HeaderFilters = ({
   setSearch,
@@ -78,8 +74,7 @@ const HeaderFilters = ({
     switch (filter) {
       case "Status":
         return (
-          <div className={defaultSize}>
-               <div className="mt-1">
+          <div className="col-xl-2 col-md-3">
             <label className={styles.label}>Status</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -94,42 +89,38 @@ const HeaderFilters = ({
                 allowClear={true}
               />
             </div>
-            </div>
           </div>
         );
 
       case "Created date Range":
         return (
           <div className="col-xl-2 col-md-3">
-            <div className="mt-1">
-              <label className={styles.label}>Created Date Range</label>
-              <div className="dateRangeSize">
-                <RangePicker
-                  value={clear ? ["", ""] : selectedDates}
-                  format="MM-DD-YYYY"
-                  onCalendarChange={(val) => setSelectedDates(val)}
-                  onChange={(date, dateString) => {
-                    handleRnagePicker2({
-                      date,
-                      dateString,
-                      setStartDate,
-                      setEndDate,
-                    });
-                    setClear(false);
-                  }}
-                  disabledDate={(current) => disableFutureDate(current)}
-                />
-              </div>
+            <label className={styles.label}>Created Date Range</label>
+            <div className="dateRangeSize">
+              <RangePicker
+                value={clear ? ["", ""] : selectedDates}
+                format="MM-DD-YYYY"
+                onCalendarChange={(val) => setSelectedDates(val)}
+                onChange={(date, dateString) => {
+                  handleRnagePicker2({
+                    date,
+                    dateString,
+                    setStartDate,
+                    setEndDate,
+                  });
+                  setClear(false);
+                }}
+                disabledDate={(current) => disableFutureDate(current)}
+              />
             </div>
           </div>
         );
 
       case "Organization":
         return (
-          <div className={defaultSize}>
-            <div>
-            <label className={` text-truncate ${styles.label}`}>Select Organization</label>
-           
+          <div className="col-xl-2 col-md-3">
+            <label className={`${styles.label}`}>Select Organization</label>
+
             <div class="form-group has-search custom-react-select">
               <Select
                 value={orgValue ? orgValue : null}
@@ -145,7 +136,6 @@ const HeaderFilters = ({
                 allowClear={true}
               />
             </div>
-            </div>
           </div>
         );
       default:
@@ -157,8 +147,8 @@ const HeaderFilters = ({
     <div style={{ display: "flex", alignItems: "center" }}>
       <div className="row filter-contain" style={{ width: "95%" }}>
         {isSearch && (
-          <div className={defaultSize} onClick={() => setClear(false)}>
-            <label className="text-truncate" style={{ marginLeft: "8px" }}>Search By Username</label>
+          <div className="col-xl-2 col-md-3" onClick={() => setClear(false)}>
+            <label style={{ marginLeft: "8px" }}>Search By Username</label>
             <div class="form-group has-search">
               <InputField
                 isSearch={true}
@@ -178,8 +168,7 @@ const HeaderFilters = ({
         )}
 
         {isSelector && (
-          <div className={defaultSize}>
-            <div className="mt-1">
+          <div className="col-xl-2 col-md-3">
             <label className={styles.label}>Role</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -196,7 +185,6 @@ const HeaderFilters = ({
                 isSearchable={false}
                 allowClear={true}
               />
-            </div>
             </div>
           </div>
         )}
