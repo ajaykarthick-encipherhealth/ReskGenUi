@@ -561,7 +561,7 @@ const Index = ({
                             </div>
                             <div className="col-4 mx-2">
                               <label>Status</label>
-                              <div className={`custom-react-select1`}>
+                              <div className={`custom-react-select`}>
                                 <Select
                                   placeholder={"Select"}
                                   options={
@@ -584,7 +584,7 @@ const Index = ({
                               (reportActiveTab === "FHIR" && (
                                 <div className="col-4 mx-2">
                                   <label>Initiated By</label>
-                                  <div className={`custom-react-select1`}>
+                                  <div className={`custom-react-select`}>
                                     <Select
                                       placeholder={"Select"}
                                       options={statusOptions}
