@@ -23,9 +23,7 @@ import {
 import DailyTask from "./dailytask";
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
-import InputField, {
-  debounce,
-} from "../../../components/input";
+import InputField, { debounce } from "../../../components/input";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, removeStorage, setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
@@ -40,26 +38,26 @@ const statusOptions = [
   { label: "DECLINED", value: "DECLINED" },
   { label: "HOLD", value: "HOLD" },
 ];
-const bullets = [
-  {
-    title: "Processed Status",
-    option: [
-      {
-        color: "#5da9e4",
-        name: "Pending",
-      },
-      {
-        color: "red",
-        name: "Declined",
-      },
-      {
-        color: "#3a9b94",
-        name: "Completed",
-      },
-      { color: "#AD94FA", name: "Hold" },
-    ],
-  },
-];
+// const bullets = [
+//   {
+//     title: "Processed Status",
+//     option: [
+//       {
+//         color: "#5da9e4",
+//         name: "Pending",
+//       },
+//       {
+//         color: "red",
+//         name: "Declined",
+//       },
+//       {
+//         color: "#3a9b94",
+//         name: "Completed",
+//       },
+//       { color: "#AD94FA", name: "Hold" },
+//     ],
+//   },
+// ];
 
 const Patient = ({
   patientsListFilter,
@@ -68,7 +66,7 @@ const Patient = ({
   patientDetails,
   filtersData,
   routedData,
-  getRoutedData
+  getRoutedData,
 }) => {
   const navigate = useRouter();
   const [isLoading, setIsLoading] = useState(true);
@@ -203,7 +201,7 @@ const Patient = ({
   const onChangeStatus = (selectedOption) => {
     let value = selectedOption;
     setStatusSelectedStatus(value);
-    removeStorage("reviewerDueDate")
+    removeStorage("reviewerDueDate");
     removeStorage("reviewerDate");
   };
   const onChangePriority = (selectedOption) => {
@@ -223,7 +221,7 @@ const Patient = ({
     } else {
       setDueDateStart("");
       setDueDateEnd("");
-      removeStorage("reviewerDueDate")
+      removeStorage("reviewerDueDate");
       removeStorage("reviewerDate");
     }
   };
@@ -335,53 +333,27 @@ const Patient = ({
       setPageNo(routedData?.pageNo);
       setPaginationFirst(routedData?.paginationFirst);
       setSearchTextValue(routedData?.searchTextValue);
-      setSelectedDates(routedData?.selectedDates);
+      setSelectedDates(routedData?.selectedDates||[]);
       setSort(routedData?.sort);
       setClear(routedData?.clear);
       setSelectedPriority(routedData?.selectedPriority);
       setActiveFilters(
         routedData?.activeFilters ? routedData?.activeFilters : activeFilters
       );
-      setDueDateStart(
-        routedData?.dueDateStart
-          ? moment(routedData?.dueDateStart)?.format("YYYY-MM-DD") +
-              "T00:00:00.000Z"
-          : null
+      setDueDateStart(routedData?.dueDateStart || null);
+      setDueDateEnd(routedData?.dueDateEnd || null);
+      setProcessedStart(routedData?.processedStart || null);
+      setProcessedEnd(routedData?.processedEnd || null);
+      setStatusSelectedStatus(routedData?.statusSelectedStatus?.toUpperCase());
+      setSearchVal(
+        routedData?.searchTextValue ? routedData?.searchTextValue : ""
       );
-      setDueDateEnd(
-        routedData?.dueDateEnd
-          ? moment(routedData?.dueDateEnd)?.format("YYYY-MM-DD") +
-              "T23:59:59.000Z"
-          : null
-      );
-      setProcessedStart(
-        routedData?.processedStart
-          ? moment(routedData?.processedStart)?.format("YYYY-MM-DD") +
-              "T00:00:00.000Z"
-          : null
-      );
-      setProcessedEnd(
-        routedData?.processedEnd
-          ? moment(routedData?.processedEnd)?.format("YYYY-MM-DD") +
-              "T23:59:59.000Z"
-          : null
-      );
-      setStatusSelectedStatus(
-        routedData?.statusSelectedStatus?.toUpperCase()
-      );
-      setSearchVal(routedData?.searchTextValue?routedData?.searchTextValue:"")
       setSort(routedData?.sort);
       setSortDueOrder(routedData?.sortDueOrder);
       setSortCompleteOrder(routedData?.sortCompleteOrder);
       setSortAllocateOrder(routedData?.sortAllocateOrder);
-      setSelectedDates2([
-        routedData?.processedStart
-          ? dayjs(routedData?.processedStart)
-          : null,
-          routedData?.processedEnd ? dayjs(routedData?.processedEnd) : null,
-      ]);
+      setSelectedDates2(routedData?.selectedDates2||[]);
     }
- 
   }, []);
   useEffect(() => {
     setParamsFilter("check");
@@ -411,8 +383,9 @@ const Patient = ({
     statusSelectedStatus,
     navigate.query,
     clear,
-    paramsFilter
+    paramsFilter,
   ]);
+ 
   return (
     <div className={`show `}>
       <Header />
@@ -521,6 +494,8 @@ const Patient = ({
                               sortAllocateOrder,
                               sortDir: sort?.sortDir,
                               sortField: sort?.sortField,
+                              selectedDates2,
+                              selectedDates
                             }}
                           />
                           <div>
@@ -553,7 +528,7 @@ const enhancer = connect(
   (state) => ({
     patientsListFilter: state?.reviewer?.workQueue?.patients,
     loading: state?.reviewer?.workQueue?.patientsLoading,
-    filtersData:state.reviewer?.workQueue?.reviewerPatientFilterList,
+    filtersData: state.reviewer?.workQueue?.reviewerPatientFilterList,
     routedData: state.tenantAdmin?.patientSync?.routedData,
   }),
   {
