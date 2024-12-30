@@ -14,8 +14,7 @@ import {
 import { removeStorage, setStorage } from "../../../../utils/storages";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 
-function 
-PatientTable({
+function PatientTable({
   patinetListAll,
   statusBodyTemplate,
   patientDetails,
@@ -92,16 +91,16 @@ PatientTable({
       // setStorage("isSupervisorUserDetails", false);
       // setStorage("supervisorFilters", JSON.stringify(activeFilters));
       // setStorage("supervisorEncodedValue", JSON.stringify(params));
-      removeStorage("SuperVisorfilter");
+      // removeStorage("SuperVisorfilter");
       setStorage("routeBackTo", "/supervisor/auditing");
 
       getRoutedData(params);
       navigate.push(
         {
           pathname: "/supervisor/patients/details",
-          query: params,
-        },
-        "/supervisor/patients/details"
+          // query: params,
+        }
+        // "/supervisor/patients/details"
       );
     } else {
       notification.warning({
@@ -123,10 +122,10 @@ PatientTable({
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
       <tr>
-      <td colSpan="9">
-        <Empty />
-      </td>
-    </tr>
+        <td colSpan="9">
+          <Empty />
+        </td>
+      </tr>
     ) : (
       patinetListAll?.map((data, index) => (
         <tr key={index}>
@@ -134,7 +133,13 @@ PatientTable({
             className={TableStyle.firstTdBorder}
             onClick={handleTableRowClick}
           >
-            <div> <Tooltip title={data.patientId}> {truncateString(data.patientId, 20)}</Tooltip></div>
+            <div>
+              {" "}
+              <Tooltip title={data.patientId}>
+                {" "}
+                {truncateString(data.patientId, 20)}
+              </Tooltip>
+            </div>
             <div> {data.patientName ? data.patientName : ""}</div>
           </td>
 
@@ -191,12 +196,20 @@ PatientTable({
             )}
           </td>
 
-          <td className={TableStyle.childBorder} onClick={handleTableRowClick} style={{padding:"0px 50px"}}>
+          <td
+            className={TableStyle.childBorder}
+            onClick={handleTableRowClick}
+            style={{ padding: "0px 50px" }}
+          >
             {data.auditAllocatedDate
               ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
               : "---"}
           </td>
-          <td className={TableStyle.childBorder} onClick={handleTableRowClick} style={{padding:"0px 30px"}}>
+          <td
+            className={TableStyle.childBorder}
+            onClick={handleTableRowClick}
+            style={{ padding: "0px 30px" }}
+          >
             {data.auditDueDate
               ? moment(data.auditDueDate).format("MM-DD-YYYY")
               : "---"}
@@ -263,20 +276,20 @@ PatientTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENTS</th>
-            <th >REVIEWER</th>
+            <th>REVIEWER</th>
             <th style={{ cursor: "pointer", textAlign: "center" }}>
               <Tooltip placement="bottom" title="REVIEWER CHANGES">
                 RC
               </Tooltip>
             </th>
             <th style={{ cursor: "pointer", textAlign: "center" }}>
-
               <Tooltip placement="bottom" title="REVIEWER CHANGES REJECTION">
                 RCR
               </Tooltip>
             </th>
 
-            <th className="text-truncate"
+            <th
+              className="text-truncate"
               onClick={() => {
                 sortFunction(
                   sortAuditOrder,
@@ -284,7 +297,6 @@ PatientTable({
                   setSort,
                   "auditAllocatedDate"
                 );
-               
               }}
             >
               AUDIT ALLOCATED DATE
@@ -296,9 +308,9 @@ PatientTable({
                 )}
               </span>
             </th>
-            <th className="text-truncate"
+            <th
+              className="text-truncate"
               onClick={() => {
-               
                 sortFunction(
                   sortDueOrder,
                   setSortDueOrder,
@@ -316,7 +328,8 @@ PatientTable({
                 )}
               </span>
             </th>
-            <th className="text-truncate"
+            <th
+              className="text-truncate"
               onClick={() => {
                 sortFunction(
                   sortCompleteOrder,
@@ -336,9 +349,13 @@ PatientTable({
               </span>
             </th>
 
-            <th className="text-truncate" style={{ paddingLeft: "30px" }}>AUDIT ALLOCATED BY</th>
-            <th  className="text-truncate"style={{ paddingLeft: "30px" }}>PRIORITY</th>
-            <th  className={TableStyle.rowStyle2}>AUDIT STATUS</th>
+            <th className="text-truncate" style={{ paddingLeft: "30px" }}>
+              AUDIT ALLOCATED BY
+            </th>
+            <th className="text-truncate" style={{ paddingLeft: "30px" }}>
+              PRIORITY
+            </th>
+            <th className={TableStyle.rowStyle2}>AUDIT STATUS</th>
           </tr>
         </thead>
 
@@ -354,7 +371,6 @@ PatientTable({
           )}
         </tbody>
       </table>
-
     </div>
   );
 }

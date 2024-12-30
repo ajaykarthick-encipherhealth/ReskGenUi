@@ -347,6 +347,7 @@ const DailyTask = ({
                                   : "",
                               },
                             },
+                            activeFilters: ["Audited Due Date"],
 
                             // })
                           };
@@ -435,6 +436,12 @@ const DailyTask = ({
                                               : "",
                                           },
                                         },
+                                        activeFilters: [
+                                          // "Reviewer Status",
+                                          "Select Audited Status",
+                                          // "Audited Date",
+                                          "Audited Due Date",
+                                        ],
                                       };
                                       // setStorage(
                                       //   "SuperVisorfilter",

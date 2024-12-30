@@ -376,7 +376,7 @@ const Patient = ({
         routedData?.paginationFirst ? routedData?.paginationFirst : 0
       );
       setActiveFilters(
-        routedData?.allFilters ? routedData?.allFilters : allFilters
+        routedData?.activeFilters ? routedData?.activeFilters : []
       );
     }
   }, []);
@@ -486,6 +486,7 @@ const Patient = ({
                               selectedDateRange,
                               sort,
                               selCreatedBy,
+                              activeFilters
                             }}
                           />
                           <div>
