@@ -450,7 +450,7 @@ const Reports = ({
           startDate: selectedDateRanges?.Audit?.from,
           endDate: selectedDateRanges?.Audit?.to,
           search: searchVal ? searchVal : "",
-          filter: selectedOptions ? selectedOptions[activeTab] : "",
+          filter: selectedOptions?.reviewerStatus?selectedOptions?.reviewerStatus:"" ,
           sort: sort,
           flagsList: selectAllFlags,
         });
@@ -460,7 +460,7 @@ const Reports = ({
           startDate: selectedDateRanges?.Team?.from,
           endDate: selectedDateRanges?.Team?.to,
           search: searchVal ? searchVal : "",
-          filter: selectedOptions ? selectedOptions[activeTab] : "",
+          filter: selectedOptions?.reviewerStatus?selectedOptions?.reviewerStatus:"" ,
           sort: sort,
           flagsList: selectAllFlags,
         });
