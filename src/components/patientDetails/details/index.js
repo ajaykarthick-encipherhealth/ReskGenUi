@@ -1441,7 +1441,7 @@ const Details = ({
                   >
                     {flagContainerActive == "Timeline" ? (
                       <Timeline
-                        timelineData={timelineData}
+                        timelineData={timelineData}    
                         filterDataLoading={filterDataLoading}
                         splitUserName={splitUserName}
                         userDetails={userDetails}

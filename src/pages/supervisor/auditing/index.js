@@ -18,6 +18,7 @@ import AuditPending from "../../../../src/images/trackingImages/AuditPending.png
 import AuditeDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 import { actions as allActions } from "../../../stores/supervisor/auditedQueue";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
+import { actions as supervisorActions } from '../../../stores/supervisor/auditedQueue'
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -42,6 +43,7 @@ import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
 import Filters, { allFilters } from "./filters";
 import moment from "moment";
+import { getResponePopup } from "../../../utils/reusable";
 const bullets = [
   {
     color: "#377880",
@@ -82,6 +84,7 @@ const Patient = ({
   getFilters,
   routedData,
   getRoutedData,
+  supervisorPriority
 }) => {
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
@@ -125,6 +128,7 @@ const Patient = ({
   const [clear, setClear] = useState(false);
   const [activeFilters, setActiveFilters] = useState([]);
   const [paramsFilter, setParamsFilter] = useState(null);
+  const [priority, setPriority] = useState(null);
 
   const getAllList = () => {
     if (response) {
@@ -300,7 +304,6 @@ const Patient = ({
     setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
-    // getAllList(response?.data?.response);
   };
 
   useEffect(() => {
@@ -325,8 +328,6 @@ const Patient = ({
         ? ""
         : selectedDateRange?.AuditedDate?.startDate || "",
       auditDateEnd: clear ? "" : selectedDateRange?.AuditedDate?.endDate || "",
-      // patientSortOrder,
-      // selAllocatedBy,
       sort,
       selCreatedBy: clear ? "" : selCreatedBy,
     };
@@ -336,16 +337,9 @@ const Patient = ({
     }
   }, [
     pageNo,
-    // computedStartDate,
-    // computedEndDate,
     selectedOption,
-    // selAllocatedBy,
     search,
     selectedDateRange,
-    // completedStartDate,
-    // selecteddates2,
-    // completedEndDate,
-    // patientSortOrder,
     sort,
     selCreatedBy,
     paramsFilter,
@@ -380,7 +374,50 @@ const Patient = ({
       );
     }
   }, []);
-
+  
+  const handlePriorityChange = async (
+    patientId,
+    selectedValue,
+    lastModifiedDate
+  ) => {
+    const res = await supervisorPriority({
+      patientId: patientId,
+      year: dayjs(lastModifiedDate).format("YYYY"),
+      priority: selectedValue,
+    });
+    getResponePopup(res)
+    setPriority({selectedValue:selectedValue,patientId:patientId});
+    if (res.status === "SUCCESS") {
+      let tenId = getStorage("tenantId");
+      let orgId = getStorage("orgId");
+      setTenantId(tenId);
+      setLocalOrgId(orgId);
+      setLocalUserId(uId);
+      const uId = getStorage("user");
+      setParamsFilter("check");
+      const data = {
+        pageNo: "",
+        auditDueDateStart: clear
+          ? ""
+          : selectedDateRange?.AuditedDueDate?.startDate || "",
+        auditDueDateEnd: clear
+          ? ""
+          : selectedDateRange?.AuditedDueDate?.endDate || "",
+        selectedOption: clear ? "" : selectedOption,
+        search: clear ? "" : search,
+        auditDateStart: clear
+          ? ""
+          : selectedDateRange?.AuditedDate?.startDate || "",
+        auditDateEnd: clear ? "" : selectedDateRange?.AuditedDate?.endDate || "",
+        sort,
+        selCreatedBy: clear ? "" : selCreatedBy,
+      };
+      if (window !== "undefined" && paramsFilter) {
+        getWorkListFilter({ data: data })
+      }
+    }
+  };
+  
   return (
     <div className={`show `}>
       <Header />
@@ -488,6 +525,9 @@ const Patient = ({
                               selCreatedBy,
                               activeFilters
                             }}
+                            getWorkListFilter={getWorkListFilter}
+                            handlePriorityChange={handlePriorityChange}
+                            priority={priority}
                           />
                           <div>
                             <div className="pagination-container">
@@ -527,6 +567,8 @@ const connector = connect(
     getWorkListFilter: allActions.getWorkListFilter,
     getFilters: allActions.getFilterUsers,
     getRoutedData: allPatientSyncAction.getRoutedData,
+    supervisorPriority: supervisorActions.getPriorityChange,
   }
+
 );
 export default connector(Patient);

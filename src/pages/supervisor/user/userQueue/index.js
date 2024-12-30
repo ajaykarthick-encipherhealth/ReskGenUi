@@ -25,7 +25,9 @@ import { renderSkeleton } from "../../../../components/reuseableFunctions";
 import UserFilters from "../filters/usersFilters";
 import HeaderFilters, { allFilters } from "../filters/headerFilters";
 import { getStorage } from "../../../../utils/storages";
+import { actions as supervisorActions } from "../../../../stores/supervisor/auditedQueue";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
+import { getResponePopup } from "../../../../utils/reusable";
 
 const bullets = [
   {
@@ -86,6 +88,7 @@ const Index = ({
   getFilters,
   routedData,
   getRoutedData,
+  supervisorPriority
 }) => {
   const router = useRouter();
   const [processSort, setProcessSort] = useState("DESC");
@@ -120,6 +123,8 @@ const Index = ({
   const [selectedDates2, setSelectedDates2] = useState([]);
   const [selectedDates3, setSelectedDates3] = useState([]);
   const [selectedDates4, setSelectedDates4] = useState([]);
+  const [priority,setPriority]=useState(null)
+
   const [sort, setSort] = useState({
     sortDir: "DESC",
     sortField: "auditDueDate",
@@ -139,7 +144,7 @@ const Index = ({
       setTotalElements(usersData?.data?.response?.totalElements);
     }
   }, [usersData]);
-  
+
   useEffect(() => {
     const uId = getStorage("user");
     setParamsFilter("check");
@@ -150,7 +155,7 @@ const Index = ({
         pageNo,
         search: search,
         selectedOption,
-        selAllocatedBy,
+        selAllocatedBy,   
         dueStartDate: clear ? "" : dueStartDate,
         dueEndDate: clear ? "" : dueEndDate,
         completedStartDate: clear ? "" : completedStartDate,
@@ -289,22 +294,6 @@ const Index = ({
   useEffect(() => {
     if (routedData) {
       setParamsFilter("check");
-      // setSelectedDates3([
-      //   routedData?.dueDateStart
-
-      //   || null,
-      //   routedData?.dueDateEnd || null,
-      // ]);
-      // setSelectedDates4([
-      //   routedData?.processedStart || null,
-      //   routedData?.processedEnd || null,
-      // ]);
-      // setSelectedDates2([
-      //   routedData?.aduitCompletedStartDate
-      //    || null,
-      //   routedData?.aduitCompletedEndDate
-      //  || null,
-      // ]);
       setSelectedDates(routedData?.selectedDates || []);
       setSelectedDates2(routedData?.selectedDates2 || []);
       setSelectedDates3(routedData?.selectedDates3 || []);
@@ -331,6 +320,53 @@ const Index = ({
       );
     }
   }, []);
+
+  
+  const handlePriorityChange = async (
+    patientId,
+    selectedValue,
+    lastModifiedDate
+  ) => {
+    const res = await supervisorPriority({
+      patientId: patientId,
+      year: dayjs(lastModifiedDate).format("YYYY"),
+      priority: selectedValue,
+    });
+    setPriority({selectedValue:selectedValue,patientId:patientId});
+    if (res.status === "SUCCESS") {
+      const uId = getStorage("user");
+      setParamsFilter("check");
+      setUserName(uId);
+      if (uId) {
+        const data = {
+          uId,
+          pageNo,
+          search: search,
+          selectedOption,
+          selAllocatedBy,
+          dueStartDate: clear ? "" : dueStartDate,
+          dueEndDate: clear ? "" : dueEndDate,
+          completedStartDate: clear ? "" : completedStartDate,
+          completedEndDate: clear ? "" : completedEndDate,
+          auditedStartDate,
+          auditedEndDate,
+          allocatedStartDate,
+          allocatedEndDate,
+          selectedAuditOption,
+          selAuditAllocatedBy,
+          aduitCompletedStartDate: clear ? "" : aduitCompletedStartDate,
+          aduitCompletedEndDate: clear ? "" : aduitCompletedEndDate,
+          aduitDueStartDate: clear ? "" : aduitDueStartDate,
+          aduitDueEndDate: clear ? "" : aduitDueEndDate,
+          sort,
+        };
+        if (window !== "undefined" && paramsFilter) {
+          getIndividualUser({ data: data });
+        }
+      }
+    }
+  };
+
   return (
     <div className={`show `}>
       <Header />
@@ -485,6 +521,7 @@ const Index = ({
                     ) : (
                       <UserQueueTable
                         userList={userListAll?.content}
+                        userName={userName}
                         sort={sort}
                         setSort={setSort}
                         auditBodyTemplate={auditstatusBodyTemplate}
@@ -499,40 +536,9 @@ const Index = ({
                         activeFilters={activeFilters}
                         setActiveFilters={setActiveFilters}
                         getRoutedData={getRoutedData}
-                        // params={{
-                        //   pageNo,
-                        //   selectedDates,
-                        //   search,
-                        //   searchTextValue,
-                        //   selectedOption,
-                        //   statusOptions,
-                        //   selAllocatedBy,
-                        //   dueStartDate,
-                        //   dueEndDate,
-                        //   completedStartDate,
-                        //   completedEndDate,
-                        //   auditedStartDate,
-                        //   auditedEndDate,
-                        //   allocatedStartDate,
-                        //   allocatedEndDate,
-                        //   selectedAuditOption,
-                        //   selAuditAllocatedBy,
-                        //   aduitCompletedStartDate,
-                        //   aduitCompletedEndDate,
-                        //   aduitDueStartDate,
-                        //   aduitDueEndDate,
-                        //   sortDirection: sort.sortDir,
-                        //   sortField: sort.sortField,
-                        //   paginationFirst,
-                        //   userName,
-                        //   processSort,
-                        //   auditAllocatedSort,
-                        //   audirDateSort,
-                        //   auditDueSort,
-                        //   activeFilters,
-
-                        // }}
-
+                        getIndividualUser={getIndividualUser}
+                        handlePriorityChange={handlePriorityChange}
+                        priority={priority}
                         params={{
                           pageNo,
                           searchTextValue,
@@ -597,6 +603,7 @@ const connector = connect(
     getCurrentUserDetails: allActions.getCurrentUserAction,
     getFilters: allActions2.getFilterUsers,
     getRoutedData: allPatientSyncAction.getRoutedData,
+    supervisorPriority: supervisorActions.getPriorityChange,
   }
 );
 export default connector(Index);

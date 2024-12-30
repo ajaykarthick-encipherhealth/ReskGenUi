@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { Empty, Select, Badge, Popover, Tooltip } from "antd";
+import { Empty, Select as AntSelect, Popover, Tooltip } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
@@ -20,8 +20,9 @@ import {
   sortFunction,
 } from "../../../../components/headerFilters/functions";
 import { extractLatestData } from "../../auditing";
-import {  setStorage } from "../../../../utils/storages";
+import {  getStorage, setStorage } from "../../../../utils/storages";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
+import { connect } from "react-redux";
 
 const UserQueueTable = ({
   userList,
@@ -39,7 +40,12 @@ const UserQueueTable = ({
   params,
   setActiveFilters,
   activeFilters,
-  getRoutedData
+  getRoutedData,
+  supervisorPriority,
+  getIndividualUser,
+  currentUser,
+  handlePriorityChange,
+  priority
 }) => {
   const router = useRouter();
   const auditstatusBodyTemplate = (rowData) => {
@@ -141,16 +147,13 @@ const UserQueueTable = ({
     const targetTd = e.target.closest("td");
     if (targetTd) {
       setStorage("patientId", id);
-      // setStorage("isSupervisorUserDetails", true);
-      // setStorage("isSupervisorAuited",false)
-      // setStorage("isSupervisorAudited",false)
-      // setStorage("supervisorUserFilter", JSON.stringify(activeFilters));
-      // setStorage("supervisorUserEncodedValue", JSON.stringify(params));
       setStorage("routeBackTo", "/supervisor/user/userQueue");
       getRoutedData(params);
       router?.push( "/supervisor/user/details")
     }
   };
+
+
 
   const renderRows = () => {
     return userList?.length === 0 ? (
@@ -315,16 +318,20 @@ const UserQueueTable = ({
                 : "---"}
             </Popover>
           </td>
-
           <td className={TableStyle.childBorder}>
-            <Select
+            {console.log(data,"data")}
+          <AntSelect
               options={priorityOptions}
               placeholder="Set priority"
               className={`custom-ant-select ${TableStyle.customAntSelect}`}
               showSearch={false}
-              defaultValue={data?.priority ? data.priority : "Set Priority"}
-              disabled={!data?.priority ? true : false}
+              value={  data?.priority ? data?.priority :  priority?.patientId === data?.patientId ?priority?.selectedValue : "Set Priority"}
               onChange={(value) => {
+                handlePriorityChange(
+                  data?.patientId,
+                  value,
+                  data?.lastModifiedDate
+                );
               }}
             />
           </td>
@@ -454,5 +461,5 @@ const UserQueueTable = ({
     </div>
   );
 };
-
-export default UserQueueTable;
+ 
+export default UserQueueTable

@@ -147,7 +147,7 @@ const HeaderFilters = ({
     setSearchVal(e.target.value);
     debounceText(e.target.value);
     resetPageNumber(setPageNo);
-  };
+  };       
   const handleClearAllFilters = () => {
     setClear(true);
     getRoutedData("");

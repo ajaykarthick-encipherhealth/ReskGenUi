@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
 import TableStyle from "../../../../components/table/table.module.css";
 import { SVGICON } from "../../../../jsx/constant/theme";
-// import { getPriorityChange } from "../../../../store/actions/PatientsActions";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import {
   renderUserPrfoileAvatar,
@@ -13,6 +12,7 @@ import {
 } from "../../../../components/headerFilters/functions";
 import { removeStorage, setStorage } from "../../../../utils/storages";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
+import { connect } from "react-redux";
 
 function PatientTable({
   patinetListAll,
@@ -30,6 +30,8 @@ function PatientTable({
   getRoutedData,
   activeFilters,
   setActiveFilters,
+  handlePriorityChange,
+  priority
 }) {
   const navigate = useRouter();
   const priorityOptions = [
@@ -73,13 +75,7 @@ function PatientTable({
     },
   ];
 
-  const handlePriorityChange = (patientId, selectedValue) => {
-    setSelectedPriority((prev) => ({
-      ...prev,
-      id: patientId,
-      value: selectedValue,
-    }));
-  };
+
 
   const gotoPatientDetails = (data) => {
     if (data.computing === 2) {
@@ -87,11 +83,7 @@ function PatientTable({
       const { signal } = controller;
       controller.abort();
       setStorage("patientId", data.patientId);
-      // setStorage("isSupervisorAudited", true);
-      // setStorage("isSupervisorUserDetails", false);
-      // setStorage("supervisorFilters", JSON.stringify(activeFilters));
-      // setStorage("supervisorEncodedValue", JSON.stringify(params));
-      // removeStorage("SuperVisorfilter");
+      removeStorage("SuperVisorfilter");
       setStorage("routeBackTo", "/supervisor/auditing");
 
       getRoutedData(params);
@@ -115,10 +107,9 @@ function PatientTable({
       const dataIndex = targetTd.parentElement.rowIndex - 1;
       const clickedData = patinetListAll[dataIndex];
       gotoPatientDetails(clickedData);
-      // router?.push(`/supervisor/user/details?page=${page}`);
     }
   };
-
+  
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
       <tr>
@@ -254,8 +245,7 @@ function PatientTable({
               placeholder="Set priority"
               className={`custom-ant-select ${TableStyle.customAntSelect}`}
               showSearch={false}
-              defaultValue={data?.priority ? data.priority : "Set Priority"}
-              disabled={!data?.priority ? true : false}
+              value={  data?.priority ? data?.priority :  priority?.patientId === data?.patientId ?priority?.selectedValue : "Set Priority"}
               onChange={(value) => {
                 handlePriorityChange(data?.patientId, value);
               }}
@@ -375,4 +365,6 @@ function PatientTable({
   );
 }
 
-export default PatientTable;
+export default PatientTable
+
+
