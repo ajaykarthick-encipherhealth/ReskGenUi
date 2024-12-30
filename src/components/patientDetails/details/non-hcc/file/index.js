@@ -30,11 +30,8 @@ const File = ({
   setActiveMeatTitle,
   setActiveComboTree,
   patientDetailsResult,
-  hccFileDetails
+  hccFileDetails,
 }) => {
- 
- 
- 
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
@@ -88,18 +85,24 @@ const File = ({
       setNonHccDiseasesList
     );
   }, [patientDetailsResult]);
-  
+
   useEffect(() => {
     if (patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath) {
-      setSelectFileURL(patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath);
-    } 
+      setSelectFileURL(
+        patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
+      );
+    }
   }, []);
- 
+
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
-    data.dos = patientDetailsResult?.result?.response?.dos;
-    setSelectDiseasesName(title);
+    // data.dos = patientDetailsResult?.result?.response?.dos;
+    data.processedYear = patientDetailsResult?.data?.response?.processedYear;
+    data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
+    (data.fileId = patientDetailsResult?.data?.response?.fileId),
     setSelectDisDetails(data);
+    setSelectDiseasesName(title);
+    // setSelectDisDetails(data);
   };
 
   const handleCloseModal = () => {
@@ -123,7 +126,7 @@ const File = ({
       </div>
     );
 
-    const response = await getValidHccDetailsApi(year.value,code)
+    const response = await getValidHccDetailsApi(year.value, code);
     if (response?.response) {
       var value = [];
       result = response?.response;
@@ -145,9 +148,6 @@ const File = ({
     }
   };
 
-  
-
-
   return (
     <>
       {fileLoading ? (
@@ -162,7 +162,7 @@ const File = ({
 
       <div className="my-post-content row pt-3 px-2">
         <div className="col-3">
-          <div className="timeline" style={{height:"74vh"}}>
+          <div className="timeline" style={{ height: "74vh" }}>
             <div
               className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
             >
@@ -174,7 +174,7 @@ const File = ({
               </div>
             </div>
             <div className={visitStyles.labContainer}>
-              <div className={''}>
+              <div className={""}>
                 <NonHccCards
                   list={nonHccDiseasesList?.filter((item) => item.isShow)}
                   hccVersionDetails={hccVersionDetails}
@@ -227,12 +227,12 @@ const File = ({
           </div>
         </div>
         <div className="col-3">
-          <div className="timeline" style={{height:"74vh"}}>
+          <div className="timeline" style={{ height: "74vh" }}>
             <div
               className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
             >
               <span className={`${visitStyles.deleted_title_name}`}>
-              DELETED CODES
+                DELETED CODES
               </span>
               <div className="d-flex justify-content-center">
                 <span className={`${visitStyles.deleted_title_badge}`}>
@@ -290,10 +290,8 @@ const File = ({
   );
 };
 
-const enhancer = connect(
-  (state) => ({
-    patientDetailsResult :state?.patientDetails?.details?.patientResult,
-    hccFileDetails :state?.patientDetails?.details?.hccFileResult,
-  }),
-);
+const enhancer = connect((state) => ({
+  patientDetailsResult: state?.patientDetails?.details?.patientResult,
+  hccFileDetails: state?.patientDetails?.details?.hccFileResult,
+}));
 export default enhancer(File);
