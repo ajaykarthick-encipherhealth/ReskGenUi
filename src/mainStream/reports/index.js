@@ -555,7 +555,6 @@ const Reports = ({
       setSelectedData(selectedData)
     }
   }, []);
-
   return viewIndividualReport?.status ? (
     renderIndividualReport()
   ) : (
@@ -621,9 +620,7 @@ const Reports = ({
                             </div>
                           </div>
 
-                          {!activeTab ||
-                          activeTab === "Reviewer" ||
-                          userRole == "supervisor" ? (
+                          {!(activeTab === "Sent" || activeTab === "Received") && (
                             <div className="col-2">
                               <div className="d-flex w-100">
                                 <label className="labelStyle d-flex m-auto  p-2">
@@ -656,7 +653,7 @@ const Reports = ({
                                 {/* </div> */}
                               </div>
                             </div>
-                          ) : null}
+                          ) }
 
                           <div className="col-3 d-flex">
                             <div className="d-flex w-100">
