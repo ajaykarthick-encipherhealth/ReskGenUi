@@ -286,7 +286,7 @@ const Header = ({
   };
 
   const handleResize = () => {
-    const newWidth = drawerWidth - 200;
+    const newWidth = drawerWidth - 100;
     const limitedWidth = Math.max(newWidth, 500);
     setDrawerWidth(limitedWidth);
   };
@@ -307,7 +307,7 @@ const Header = ({
           className="lead"
           onClick={() => handleResize()}
           style={{
-            color: drawerWidth <= 600 ? "gray" : "#241571",
+            color: drawerWidth <= 500 ? "gray" : "#241571",
           }}
         />
       </div>
