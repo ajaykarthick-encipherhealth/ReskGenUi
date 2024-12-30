@@ -16064,3 +16064,7 @@ overflow: scroll;
   /* background-color: gray; */
   /* z-index: 999; */
 }
+
+.customPicker .ant-picker-outlined:hover {
+  border:1px solid gray !important
+}

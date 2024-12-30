@@ -106,6 +106,7 @@ const RiskAdjustment = ({
         <div className="col-6">
           <div className={style.text}>Year</div>
           <div className="mt-1">
+          <div className= "customPicker">
             <YearPicker
               className={style.year}
               onChangeYear={handleYearChange}
@@ -113,6 +114,7 @@ const RiskAdjustment = ({
               hideMonth={true}
               disabledDate={disabledDate}
             />
+            </div>
             {yearErrorMessage && (
               <div className="text-danger ml-2">{yearErrorMessage}</div>
             )}
@@ -138,14 +140,6 @@ const RiskAdjustment = ({
           )}
         </div>
       </div>
-      {/* <div className="col-12 mt-4">
-        <div className={style.text}> Description</div>
-        <textarea
-          className={`${style.textarea} `}
-          placeholder="Description"
-          rows="2"
-        ></textarea>
-      </div> */}
       <div className="d-flex align-items-center justify-content-center mt-4 ">
         <Button className={style.btn} onClick={handleSearchClick}>
           <div className={style.search}>Search</div>
