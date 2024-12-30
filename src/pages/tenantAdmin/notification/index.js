@@ -99,14 +99,14 @@ const Notification = ({
     setOpenDropdown(false);
   };
 
-  const debouncedSearch = debounce((value) => {
-    setSearch(value);
-  }, 300);
+  // const debouncedSearch = debounce((value) => {
+  //   setSearch(value);
+  // }, 300);
 
-  const handleSearch = (e) => {
-    setSearchUser(e);
-    debouncedSearch(e);
-  };
+  // const handleSearch = (e) => {
+  //   setSearchUser(e);
+  //   debouncedSearch(e);
+  // };
 
   const onChange = ({ target: { value } }) => {
     setErrmessageRadio("");
@@ -205,13 +205,20 @@ const Notification = ({
           duration: 1,
         });
         setSelectedList([]);
+      }else{
+        setIsBtnLoading(false);
+        notification.error({
+          message:result.message
+        })
       }
     }
   };
 
   const getNotificationResult = async () => {
     let result = await getNotificationList();
+   if(result){
     setNotificationList(result);
+   }
   };
 
   const getTeamUser = async () => {
@@ -320,6 +327,7 @@ const Notification = ({
                           setOpenDropdown(visible)
                         }
                         style={{ height: "42px", width: "515px" }}
+                        allowClear={true}
                       >
                         {selectedListTeam?.map((data) => (
                           <Option key={data?.value} value={data?.value}>
