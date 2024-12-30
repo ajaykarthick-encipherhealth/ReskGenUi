@@ -24,7 +24,6 @@ import { Tab, Nav } from "react-bootstrap";
 import moment from "moment";
 import { actions as allActions } from "../../stores/chatService";
 
-
 let stompClient = null;
 let pageSize = 10;
 import { portalUrl } from "../../utils/config";
@@ -96,9 +95,10 @@ const ChatCommunication = ({
         : "",
     });
     const temp = [];
-    data?.forEach((item) => {
-      temp.push(item);
-    });
+    data?.length > 0 &&
+      data?.forEach((item) => {
+        temp.push(item);
+      });
     setUsers(temp);
     setSearchedUsers(temp);
   };
@@ -291,7 +291,11 @@ const ChatCommunication = ({
           token: getStorage("token"),
         };
       }
-      stompClient?.send("/app/private-message", {}, JSON.stringify(chatMessage));
+      stompClient?.send(
+        "/app/private-message",
+        {},
+        JSON.stringify(chatMessage)
+      );
       messagesRef.current = [...message, chatMessage];
       setMessages([...message, chatMessage]);
       setFileModal(false);
@@ -374,7 +378,7 @@ const ChatCommunication = ({
           return (
             regexp.test(user.firstName) ||
             regexp.test(user.lastName) ||
-            regexp.test(fullName) 
+            regexp.test(fullName)
           );
         });
       setSearchedUsers([...filteredUsers]);
@@ -382,7 +386,6 @@ const ChatCommunication = ({
       setSearchedUsers(users);
     }
   };
-  
 
   const handleUsername = (userName) => {
     setUserData({ ...userData, username: userName });
@@ -491,10 +494,11 @@ const ChatCommunication = ({
     if (searchTerm.length > 0) {
       const regexp = new RegExp(searchTerm, "i");
       const filteredMember = messagedMembersList.filter((member) => {
-        const fullName = `${member.secondaryUserFirstName} ${member.secondaryUserLastName}`.trim();
+        const fullName =
+          `${member.secondaryUserFirstName} ${member.secondaryUserLastName}`.trim();
         return (
-          regexp.test(member.secondaryUserFirstName) || 
-          regexp.test(member.secondaryUserLastName) || 
+          regexp.test(member.secondaryUserFirstName) ||
+          regexp.test(member.secondaryUserLastName) ||
           regexp.test(fullName)
         );
       });
@@ -505,7 +509,6 @@ const ChatCommunication = ({
       searchedInMembersListRef.current = messagedMembersList;
     }
   };
-  
 
   const handleCreateNewChat = (newUser) => {
     const isAlreadyMember = searchedInMembersList
@@ -614,6 +617,13 @@ const ChatCommunication = ({
       fetchChatHistory(userData?.username);
     }
   };
+  useEffect(() => {
+    const body = document.querySelector("body");
+    body.classList.add("no-scroll");
+    return () => {
+      body.classList.remove("no-scroll");
+    };
+  }, []);
 
   return (
     <>

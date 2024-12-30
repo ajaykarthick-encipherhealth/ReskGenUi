@@ -14520,6 +14520,9 @@ overflow: scroll;
   box-shadow: 0px 5px 35px 9px #ccc;
   margin-bottom: 100px;
 }
+.no-scroll{
+  overflow: hidden !important;
+}
 
 .chat-box-toggle {
   float: right;
