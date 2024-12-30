@@ -36,7 +36,7 @@ const ExcelDisplay = ({ tableData, loading, extention }) => {
   );
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <div style={{ width: "100%", height: "400px" }}>
       {loading ? (
         <div className="d-flex align-items-center justify-content-center">
           Loading....
