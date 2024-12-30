@@ -7,7 +7,7 @@ export async function getNotifications() {
     method: "GET",
   };
   const data = await requestPortal(
-    `communication/push-notifications/get/sentnotification`,
+    `dbservice/notification/get/sentnotification`,
     options
   );
   return data;
