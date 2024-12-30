@@ -116,11 +116,11 @@ const DetailedFhirTable = ({
                           style={{ margin: "3px 5px 0 0px" }}
                         />
                         {row?.status}
-                        {row?.status === "failed" && (
+                        {/* {row?.status === "failed" && (
                           <div className={styles.refreshBtn}>
                             <Image src={refresh} width={15} height={15} />
                           </div>
-                        )}
+                        )} */}
                       </div>
                     </td>
                     <td className={TableStyle.childBorder}>
