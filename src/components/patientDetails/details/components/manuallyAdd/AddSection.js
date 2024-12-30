@@ -50,9 +50,13 @@ const AddSection = ({
                 required: true,
                 message: "Please enter Page Number",
               },
-            ]}
+              {
+                pattern: /^[0-9]*$/,
+                message: "Please enter a number only",
+              },
+            ]}  
           >
-            <Input name="pageNumber" type="number" />
+            <Input name="pageNumber" type="text"       />
           </Form.Item>
         </div>
         <div className="col-12">
