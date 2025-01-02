@@ -10,36 +10,11 @@ const Addpatients = ({
   handleChangePatientId,
   orgAllList,
 }) => {
-  const [error, setError] = useState("");
   const [form] = Form.useForm();
-
-  const handleValidation = (event) => {
-    const patientId = event.target.value;
-    if (/\s/.test(patientId)) {
-      setError("Patient ID cannot contain spaces.");
-    } else if (!/\d/.test(patientId)) {
-      setError("Patient ID must contain at least one number.");
-    } else {
-      setError("");
-    }
+  const handleCancel = () => {
+    form.resetFields();
+    setAddPatientId(false); 
   };
-
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    const patientId = event.target.patientId.value;
-    if (
-      !/\d/.test(patientId) ||
-      !/[a-zA-Z]/.test(patientId) ||
-      !/[@$!%*?&-]/.test(patientId)
-    ) {
-      setError(
-        "Patient ID must contain at least one letter, one number, and one special character."
-      );
-    } else {
-      handleSubmitPatientId(event);
-    }
-  };
-
   return (
     <Offcanvas
       onHide={() => setAddPatientId(false)}
@@ -132,7 +107,7 @@ const Addpatients = ({
               <Form.Item>
                 <Button
                   className="btn btn-danger btn-sm light ms-1"
-                  onClick={() => setAddPatientId(false)}
+                  onClick={() => handleCancel()}
                 >
                   Cancel
                 </Button>
