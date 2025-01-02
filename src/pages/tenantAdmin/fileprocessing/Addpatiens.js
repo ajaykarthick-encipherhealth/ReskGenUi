@@ -13,11 +13,14 @@ const Addpatients = ({
   const [form] = Form.useForm();
   const handleCancel = () => {
     form.resetFields();
-    setAddPatientId(false); 
+    setAddPatientId(false);
   };
   return (
     <Offcanvas
-      onHide={() => setAddPatientId(false)}
+      onHide={() => {
+        setAddPatientId(false);
+        form.resetFields();
+      }}
       show={addPatientId}
       className="offcanvas-end"
       placement="end"
@@ -29,7 +32,10 @@ const Addpatients = ({
         <button
           type="button"
           className="btn-close"
-          onClick={() => setAddPatientId(false)}
+          onClick={() => {
+            setAddPatientId(false);
+            form.resetFields();
+          }}
         >
           <i className="fa-solid fa-xmark"></i>
         </button>
@@ -38,9 +44,12 @@ const Addpatients = ({
         <div className="container-fluid">
           <Form
             form={form}
-            onFinish={handleSubmitPatientId}
+            onFinish={(values) => {
+              handleSubmitPatientId(values, form);
+            }}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
+            autoComplete="off"
           >
             {" "}
             <Row gutter={16}>

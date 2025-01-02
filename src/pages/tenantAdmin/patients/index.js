@@ -194,38 +194,43 @@ const Patient = ({
     setValidated(true);
   };
 
-  const handleSubmitPatientId = async (form) => {
+  const handleSubmitPatientId = async (formData, form) => {
     var orgId = selectOrgList;
-    form.allocatedBy = localUserId;
-    form.computing = 0;
-    form.patientId = form.patientId.trim();
+    formData.allocatedBy = localUserId;
+    formData.computing = 0;
+    formData.patientId = formData.patientId.trim();
     try {
       setIsLoadingBtn(true);
-      const response = await getPatientId({ obj: form });
-      getAllPatients(
-        pageNo,
-        computedStartDate,
-        computedEndDate,
-        selectedOption,
-        search,
-        completedStartDate || "",
-        completedEndDate || "",
-        selAllocatedTo || "",
-        selAllocatedBy || "",
-        selCreatedBy || "",
-        sort,
-        orgId
-      );
+      const response = await getPatientId({ obj: formData });
 
-      setAddPatientId(false);
-      setIsLoadingBtn(false);
-      getResponePopup(response);
-      setIsLoadingBtn(false);
-      form.resetFields();
+      if (response?.status === "SUCCESS") {
+        getAllPatients(
+          pageNo,
+          computedStartDate,
+          computedEndDate,
+          selectedOption,
+          search,
+          completedStartDate || "",
+          completedEndDate || "",
+          selAllocatedTo || "",
+          selAllocatedBy || "",
+          selCreatedBy || "",
+          sort,
+          orgId
+        );
+        setAddPatientId(false);
+        setIsLoadingBtn(false);
+        getResponePopup(response);
+        setIsLoadingBtn(false);
+        form.resetFields();
+        setValidated(true);
+      } else {
+        setValidated(false);
+        getResponePopup(response);
+      }
     } catch (Err) {
       getResponePopup(Err?.response);
     }
-    setValidated(true);
   };
 
   const gotoPatientDetails = (data) => {
