@@ -636,6 +636,14 @@ export const getPatientDetails = async (
           });
         });
       });
+      result?.potentialDiseases?.map((res) => {
+        res.capturedSections?.map((res2, index) => {
+          capturedSectionsArr?.push({
+            name: res2,
+            diagnosisCode: res?.diagnosisCode,
+          });
+        });
+      });
 
       result?.hccDiseases?.map((res) => {
         res.providerNames?.map((res2, index) => {

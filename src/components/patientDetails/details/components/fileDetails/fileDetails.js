@@ -81,9 +81,9 @@ const Details = ({ fileResult, fromHcc }) => {
               File Name
             </label>
             <h6
-              className="px-2"
+              // className="px-2"
               style={{
-                // paddingLeft: "25px",
+                paddingLeft: "25px",
                 cursor: "pointer",
               }}
               onClick={() =>

@@ -125,34 +125,6 @@ export const getEncounterDateBackground = ({
                           ite?.header?.toLocaleLowerCase() == "cogent_dos" &&
                           ite.dateOfService == item
                       );
-                      // if (selectedMeatData?.stateIndicator) {
-                      //   getCurrentDiseaseType && getCurrentDiseaseType(false);
-                      //   if (selectedMeatData?.stateIndicator === "LAB" || selectedMeatData?.stateIndicator === "RADIOLOGY") {
-                      //     setSelectedDos && setSelectedDos(item);
-                      //     if (getLabPDF) {
-                      //       getLabPDF({
-                      //         fileId: selectedMeatData?.fileId,
-                      //       });
-                      //       // setSearch({
-                      //       //   value: moment(findPageNumber[0]?.dos).format("MM/DD/YYYY"),
-                      //       //   page: findPageNumber[0]?.startPageNumber,
-                      //       // });
-                      //     }
-                      //   } else {
-                      //     setSelectedDos && setSelectedDos("");
-                      //     getRadiologyPDF &&
-                      //       getRadiologyPDF(
-                      //         patientId,
-                      //         "",
-                      //         selectedMeatData?.dateOfService,
-                      //         "",
-                      //         selectedMeatData?.diagnosticTestName
-                      //       );
-                      //   }
-                      // } else {
-                      //   setSelectedDos && setSelectedDos("");
-                      //   getCurrentDiseaseType && getCurrentDiseaseType(true);
-                      // }
                       getEncounterDetails({
                         date: item,
                         fileDosPageNumberList: fileDosPageNumberList,
@@ -424,8 +396,6 @@ const getEncounterDetails = async ({
     (i) =>
       moment(i.dos).format("MM-DD-YYYY") === moment(date).format("MM-DD-YYYY")
   );
-  console.log(findPageNumber, fileDosPageNumberList, "findPageNumber");
-  
   if (findPageNumber?.length != 0) {
     storeFileDetails && storeFileDetails(findPageNumber[0]?.fileId);
     if (setIsModalOpenValidCodes) {

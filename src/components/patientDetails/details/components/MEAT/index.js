@@ -212,6 +212,7 @@ const MeatCard = ({
                                       getCurrentDiseaseType:
                                         getCurrentDiseaseType,
                                       storeFileDetails: storeFileDetails,
+                                      isShow: item?.isShow,
                                     })}
                                     {/* {getProviderNameTag(
                               item?.providerName,
@@ -252,6 +253,7 @@ const MeatCard = ({
                                       getCurrentDiseaseType:
                                         getCurrentDiseaseType,
                                       storeFileDetails: storeFileDetails,
+                                      isShow: item?.isShow,
                                     })}
                                   </div>
                                 </div>

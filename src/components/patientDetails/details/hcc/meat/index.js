@@ -562,6 +562,7 @@ const Meat = ({
                           getLabPDF: getLabPDF,
                           getCurrentDiseaseType: getCurrentDiseaseType,
                           storeFileDetails: storeFileDetails,
+                          isShow: selectMeatResult.isShow
                         })}
                       </div>
                       <div
@@ -581,6 +582,7 @@ const Meat = ({
                           patientDocumentResult: patientDocumentResult,
                           getCurrentDiseaseType: getCurrentDiseaseType,
                           storeFileDetails: storeFileDetails,
+                          isShow: selectMeatResult.isShow
                         })}
                       </div>
                     </div>

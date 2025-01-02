@@ -109,7 +109,7 @@ const Lab = ({
   }, [processedYearResult]);
 
   useEffect(() => {
-    if (patientDosResult?.data?.response) {
+    if (patientDosResult?.data?.response.length > 0) {
       getLabFileDetails(
         patientDosResult?.data?.response[0]?.fileId||""
       );
@@ -352,7 +352,7 @@ const Lab = ({
                               onOpenChange={() => setPopoverVisible(false)}
                             >
                               <div
-                                className={styles.dosContainer}
+                                className={styles.dosContainerLab}
                                 onClick={() => {
                                   setPopoverVisible(true);
                                 }}

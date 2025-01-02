@@ -369,7 +369,7 @@ const Radiology = ({
                           onOpenChange={() => setPopoverVisible(false)}
                         >
                           <div
-                            className={styles.dosContainer}
+                            className={styles.dosContainerLab}
                             onClick={() => {
                               setPopoverVisible(true);
                             }}
