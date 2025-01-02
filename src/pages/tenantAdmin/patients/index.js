@@ -242,7 +242,6 @@ const Patient = ({
       });
     }
   };
-
   const processstatusBodyTemplate = (rowData) => {
     const isFinished =
       parsedData?.length > 0 &&

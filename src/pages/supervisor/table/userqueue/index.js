@@ -319,7 +319,6 @@ const UserQueueTable = ({
             </Popover>
           </td>
           <td className={TableStyle.childBorder}>
-            {console.log(data,"data")}
           <AntSelect
               options={priorityOptions}
               placeholder="Set priority"

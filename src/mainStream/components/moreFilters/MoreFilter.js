@@ -31,6 +31,7 @@ const MoreFilter = ({
 
     setSelectedData(updatedRows);
   };
+
   const PopContent = (
     <>
       <div className="d-flex my-2">

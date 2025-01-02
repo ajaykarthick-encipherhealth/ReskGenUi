@@ -316,7 +316,7 @@ const Index = ({
         routedData?.selectedOption ? routedData?.selectedOption : ""
       );
       setActiveFilters(
-        routedData?.allFilters ? routedData?.allFilters : []
+        routedData?.activeFilters ? routedData?.activeFilters : []
       );
     }
   }, []);
@@ -476,7 +476,7 @@ const Index = ({
                       defaultAllocateTo={""}
                       // allocated by
                       // isAllocatedBySelector={true}
-                      allocatedBylabel=" AllocatedBy"
+                      allocatedBylabel="AllocatedBy"
                       allocatedByOptoons={generateOptionsList(filteredList)}
                       setSelAllocatedBy={setSelAllocatedBy}
                       defaultAllocatedBy={"All"}
@@ -564,6 +564,7 @@ const Index = ({
                           selectedDates2,
                           selectedDates4,
                           paginationFirst,
+                          activeFilters
                         }}
                       />
                     )}
