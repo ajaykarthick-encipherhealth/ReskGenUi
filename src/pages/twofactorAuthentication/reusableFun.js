@@ -14,8 +14,8 @@ export const getLogoImage = () => {
           style={{
             display: "block",
             margin: "0 auto",
-            width: "550px",
-            height: "230px",
+            width: "500px",
+            // height: "230px",
           }}
         />
       );
@@ -40,8 +40,8 @@ export const getLogoImage = () => {
           style={{
             display: "block",
             margin: "0 auto",
-            width: "550px",
-            height: "230px",
+            width: "500px",
+            // height: "230px",
           }}
         />
       );
@@ -52,7 +52,7 @@ export const getHeaderLoge = () => {
   switch (companyDeatils) {
     case "cogentai":
       return (
-        <Image src={cogentHeaderLogo} alt="noImg" width={200} height={150} />
+        <Image src={cogentHeaderLogo} alt="noImg" width={170} height={170} />
       );
     case "c360":
       return (
