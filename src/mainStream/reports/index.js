@@ -207,15 +207,10 @@ const Reports = ({
         ["User"]: null,
       }));
       getSelectUserListReport({ role: selectedOption || "" });
-    } else if (name && nameString === "User") {
-      setSelectedOptions((prevOptions) => ({
-        ...prevOptions,
-        [nameString]: selectedOption,
-      }));
     } else if (name && nameString !== "UserRole") {
       setSelectedOptions((prevOptions) => ({
         ...prevOptions,
-        [tabName]: selectedOption,
+        [nameString]: selectedOption,
       }));
     } else if (nameString == "UserRole" && !selectedOption) {
       setSelectedOptions((prevOptions) => ({
@@ -293,12 +288,12 @@ const Reports = ({
       }))
     : [];
   const checkedList = [
-    // {
-    //   id: 1,
-    //   name: "Status",
-    //   isSelect: !activeTab || activeTab === "Admin" ? true : false,
-    //   options: statusOptions,
-    // },
+    {
+      id: 1,
+      name: "Status",
+      isSelect: !activeTab || activeTab === "Admin" ? true : false,
+      options: statusOptions,
+    },
     {
       id: 2,
       name: "User Role",
@@ -439,7 +434,7 @@ const Reports = ({
           startDate: selectedDateRanges?.Admin?.from,
           endDate: selectedDateRanges?.Admin?.to,
           search: searchVal ? searchVal : "",
-          filter: selectedOptions?.Admin || "",
+          filter: selectedOptions?.Status,
           userName: selectedOptions?.UserRole ? selectedOptions?.UserRole : "",
           sort: sort,
           selectManager:
@@ -455,7 +450,7 @@ const Reports = ({
           startDate: selectedDateRanges?.Audit?.from,
           endDate: selectedDateRanges?.Audit?.to,
           search: searchVal ? searchVal : "",
-          filter: selectedOptions?.Audit ? selectedOptions?.Audit : "",
+          filter: selectedOptions?.reviewerStatus?selectedOptions?.reviewerStatus:"" ,
           sort: sort,
           flagsList: selectAllFlags,
         });
@@ -465,7 +460,7 @@ const Reports = ({
           startDate: selectedDateRanges?.Team?.from,
           endDate: selectedDateRanges?.Team?.to,
           search: searchVal ? searchVal : "",
-          filter: selectedOptions?.Team ? selectedOptions?.Team : "",
+          filter: selectedOptions?.reviewerStatus?selectedOptions?.reviewerStatus:"" ,
           sort: sort,
           flagsList: selectAllFlags,
         });
@@ -512,7 +507,6 @@ const Reports = ({
     // new URLSearchParams(window.location.search).get("page");
     const limit = viewIndividualReport?.data?.limit;
     // new URLSearchParams(window.location.search).get("limit");
-    // getActiveTab(routeData?.activeTab || activeTab);
     if (activeTab === "Received" && page && !routeData) {
       setReceivedPageNo(page);
       setPaginationReceivedFirst(limit);
@@ -558,11 +552,9 @@ const Reports = ({
       setSearch(routeData?.searchVal);
       setSelectAllFlags(routeData?.selectAllFlags || false);
       setSelectedOptions(routeData?.selectedOptions || null);
-      setSelectedData(routeData?.selectedData);
-      setSelectAll(routeData?.selectAll);
+      setSelectedData(selectedData)
     }
   }, []);
-
   return viewIndividualReport?.status ? (
     renderIndividualReport()
   ) : (
@@ -628,9 +620,7 @@ const Reports = ({
                             </div>
                           </div>
 
-                          {!(
-                            activeTab === "Sent" || activeTab === "Received"
-                          ) && (
+                          {!(activeTab === "Sent" || activeTab === "Received") && (
                             <div className="col-2">
                               <div className="d-flex w-100">
                                 <label className="labelStyle d-flex m-auto  p-2">
@@ -642,7 +632,7 @@ const Reports = ({
                                     onChange={(selectedOption) => {
                                       dosOnChange(
                                         selectedOption,
-                                        "Status",
+                                        "reviewer Status",
                                         activeTab
                                       );
                                       resetPageNumber(resetPageState);
@@ -663,7 +653,7 @@ const Reports = ({
                                 {/* </div> */}
                               </div>
                             </div>
-                          )}
+                          ) }
 
                           <div className="col-3 d-flex">
                             <div className="d-flex w-100">
@@ -738,9 +728,7 @@ const Reports = ({
                                         isSearchable={false}
                                         value={
                                           selectedOptions
-                                            ? selectedOptions[
-                                                info?.name.replace(" ", "")
-                                              ]
+                                            ? selectedOptions[info?.name]
                                             : null
                                         }
                                         allowClear={true}
@@ -927,9 +915,7 @@ const Reports = ({
                           selectedOptions,
                           sort,
                           selectAllFlags,
-                          selectedData,
-                          selectAll,
-                          getActiveTab,
+                          selectedData
                         }}
                         loader={AdminReportLoader}
                         activeTab={activeTab}
@@ -961,6 +947,7 @@ const Reports = ({
                             allPatientIds: true,
                           },
                         }}
+                        
                       />
                     </div>
                   )}
@@ -1000,10 +987,7 @@ const Reports = ({
                         selectedOptions,
                         sort,
                         selectAllFlags,
-                        selectedData,
-                        activeTab,
-                        selectAll,
-                        getActiveTab,
+                        selectedData
                       }}
                       loader={
                         activeTab === "Team"

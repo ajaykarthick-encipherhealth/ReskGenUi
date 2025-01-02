@@ -7,8 +7,6 @@ import {
   resetPageNumber,
 } from "../headerFilters/functions";
 import moment from "moment";
-import { connect } from "react-redux";
-import {actions as allPatientsSyncActions} from '../../stores/tenantAdmin/patientSync'
 
 const { RangePicker } = DatePicker;
 const DateRangePicker = ({
@@ -145,8 +143,5 @@ const DateRangePicker = ({
     </>
   );
 };
-const connector=connect((state)=>({}),{
-  getRoutedData:allPatientsSyncActions.getRoutedData
-})
 
-export default connector(DateRangePicker);
+export default DateRangePicker;

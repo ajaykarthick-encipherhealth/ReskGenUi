@@ -61,10 +61,10 @@ function PatientTable({
     const targetTd = e.target.closest("td");
     if (targetTd) {
       getFilteredList(allFilters),
-      setStorage("routeBackTo", "/reviewer/patients");
+      setStorage("routeBackTo", "/reviewer/patients/details");
       getRoutedData(params);
       router?.push(
-        // { pathname: "/reviewer/patients/details", query: params },
+        { pathname: "/reviewer/patients/details", query: params },
         "/reviewer/patients/details"
       );
       const dataIndex = targetTd.parentElement.rowIndex - 1;
