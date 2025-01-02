@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, DatePicker, Modal } from "antd";
 import dayjs from "dayjs";
 import { connect } from "react-redux";
@@ -26,6 +26,16 @@ const HeadTitle = ({
   const [tempDates, setTempDates] = useState([]);
   const [backupDates, setBackupDates] = useState([]);
   const [clearFlag, setClearFlag] = useState(false);
+
+  
+  useEffect(() => {
+    if (defaultDateRange?.startDate && defaultDateRange?.endDate) {
+      const start = dayjs(defaultDateRange.startDate);
+      const end = dayjs(defaultDateRange.endDate);
+      setTempDates([start, end]);
+      setBackupDates([start, end]);
+    }
+  }, [defaultDateRange]);
 
   const handleDatePickerChange = (date) => {
     if (date) {

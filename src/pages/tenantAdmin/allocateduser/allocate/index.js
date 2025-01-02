@@ -206,7 +206,7 @@ const AllocateModal = ({
                           Charts Selected:{" "}
                           {selectedChart.length > 0 ? selectedChart.length : 0}
                         </span>
-                        <div className="d-flex py-2">
+                        <div className="d-flex py-2 align-items-center">
                           <span className={`${modalStyle.title} py-3`}>
                             Due Date
                           </span>

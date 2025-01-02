@@ -16,6 +16,7 @@ import { setStorage } from "../../../../utils/storages";
 import { actions as ReviewerWorkQueueAction } from "../../../../stores/reviewer/workqueue";
 import { allFilters } from "../../patients/headerFilters";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
+import moment from "moment";
 
 const DailyTask = ({
   getAllDailyTask,
@@ -305,6 +306,7 @@ const DailyTask = ({
                             dueDateEnd: data?.dateString,
                             selectedDates:[dayjs(data?.date),dayjs(data?.date)]
                           };
+
                           getRoutedData(params);
                           router?.push("/reviewer/patients");
                         }}
@@ -340,16 +342,30 @@ const DailyTask = ({
                                     style={{ display: "flex" }}
                                     onClick={() => {
                                       const params = {
-                                        dueDateStart: data?.dateString
-                                          ? data?.dateString
+                                        dueDateStart: data?.date
+                                          ? `${moment(
+                                              data?.date,
+                                              "MM-DD-YYYY"
+                                            ).format(
+                                              "YYYY-MM-DD"
+                                            )}T00:00:00.000Z`
                                           : "",
-                                        dueDateEnd: data?.dateString
-                                          ? data?.dateString
+
+                                        dueDateEnd: data?.date
+                                          ? `${moment(
+                                              data?.date,
+                                              "MM-DD-YYYY"
+                                            ).format(
+                                              "YYYY-MM-DD"
+                                            )}T23:59:59.999Z`
                                           : "",
                                         statusSelectedStatus: item?.name,
-                                        selectedDates:[dayjs(data?.date),dayjs(data?.date)]
+                                        selectedDates: [
+                                          dayjs(data?.date),
+                                          dayjs(data?.date),
+                                        ],
                                       };
-                                     
+              
                                       setStorage(
                                         "filter",
                                         JSON.stringify(activeFilters)
