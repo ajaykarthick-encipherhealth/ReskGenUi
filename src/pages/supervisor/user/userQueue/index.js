@@ -316,7 +316,7 @@ const Index = ({
         routedData?.selectedOption ? routedData?.selectedOption : ""
       );
       setActiveFilters(
-        routedData?.allFilters ? routedData?.allFilters : allFilters
+        routedData?.allFilters ? routedData?.allFilters : []
       );
     }
   }, []);
