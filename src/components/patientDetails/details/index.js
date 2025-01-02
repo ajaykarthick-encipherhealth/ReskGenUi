@@ -491,10 +491,10 @@ const Details = ({
         setLocalPatientId(userId);
       } else {
         getResponePopup(res);
-        setIsSpinnerLoading(false)
+        setIsSpinnerLoading(false);
       }
     } catch (error) {
-      setIsSpinnerLoading(false)
+      setIsSpinnerLoading(false);
     }
   };
 
@@ -507,14 +507,8 @@ const Details = ({
   };
 
   const backToPatientData = () => {
-    getPatientID(null);
-    getSelectedDosPageNumber(1),
-      // setSelectDosValue("");
-      getSelectedDos("");
-    getCurrentDiseaseType(true);
     const user = getStorage("userRole");
     const isAdminTracking = getStorage("isAdminTracking");
-    const isTenantAdminTracking = getStorage("isTenantAdminTracking");
     const backRoute = getStorage("routeBackTo");
     if (user && user.toLowerCase() === "admin") {
       if (navigate.query?.fromReport) {
@@ -530,66 +524,23 @@ const Details = ({
       } else {
         navigate.push("/admin/patients");
       }
-    } else if (user && user.toLowerCase() === "tenant_admin") {
-      if (user && user.toLowerCase() === "tenant_admin") {
-        if (navigate.query?.fromReport) {
-          navigate.push(
-            {
-              pathname: `/${navigate?.query?.fromReport}/report`,
-              query: navigate.query,
-            },
-            `/${navigate?.query?.fromReport}/report`
-          );
-        } else if (routedData || backRoute) {
-          getRoutedData(routedData);
-          navigate.push(backRoute);
-          getActiveTab("PDF");
-        } else if (isTenantAdminTracking == "true") {
-          navigate.push("/tenantAdmin/tracking");
-        } else {
-          navigate.push("/tenantAdmin/patients");
-        }
-      }
-    } else if (user && user.toLowerCase() === "supervisor") {
-      if (navigate.query?.fromReport) {
-        navigate.push(
-          {
-            pathname: `/${navigate?.query?.fromReport}/report`,
-            query: navigate.query,
-          },
-          `/${navigate?.query?.fromReport}/report`
-        );
-      } else if (JSON.parse(getStorage("isSupervisorAudited"))) {
-        navigate.push(
-          { pathname: "/supervisor/auditing", query: navigate.query },
-          "/supervisor/auditing"
-        );
-      } else if (JSON.parse(getStorage("isSupervisorUserDetails"))) {
-        navigate.push("/supervisor/user/userQueue");
-      } else {
-        navigate.back();
-      }
-    } else if (user && user.toLowerCase() === "reviewer") {
-      if (navigate.query?.fromReport) {
-        navigate.push(
-          {
-            pathname: `/${navigate?.query?.fromReport}/report`,
-            query: navigate.query,
-          },
-          `/${navigate?.query?.fromReport}/report`
-        );
-      } else {
-        getFilteredList(allFilters);
-        navigate.push(
-          { pathname: "/reviewer/patients", query: navigate.query },
-          "/reviewer/patients"
-        );
-      }
+      setSelectDosValue("");
+      getSelectedDosPageNumber(1);
+      getPatientID(null);
+      getSelectedDos("");
+      getCurrentDiseaseType(true);
     } else {
-      navigate.back();
+      getRoutedData(routedData);
+      navigate.push(backRoute);
+      if (user && user.toLowerCase() === "tenant_admin") {
+        getActiveTab("PDF");
+      }
+      setSelectDosValue("");
+      getSelectedDosPageNumber(1);
+      getPatientID(null);
+      getSelectedDos("");
+      getCurrentDiseaseType(true);
     }
-    setSelectDosValue("");
-    getSelectedDosPageNumber(1);
   };
   const splitUserName = (name) => {
     if (name) {
@@ -1441,7 +1392,7 @@ const Details = ({
                   >
                     {flagContainerActive == "Timeline" ? (
                       <Timeline
-                        timelineData={timelineData}    
+                        timelineData={timelineData}
                         filterDataLoading={filterDataLoading}
                         splitUserName={splitUserName}
                         userDetails={userDetails}
