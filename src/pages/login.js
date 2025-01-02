@@ -1,21 +1,17 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import { connect } from "react-redux";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "../styles/auth.module.css";
 import LoginBack from "../images/logo/login-back.jpg";
-import { IMAGES } from "../jsx/constant/theme";
 import { encyptingPass } from "../components/headerFilters/functions";
 import RegularButton from "../components/button";
 import { actions as allActions } from "../stores/authFlows";
 import { getResponePopup } from "../utils/reusable";
-import newLoginLogo from '../images/logo/newLoginLogo.png';
+import { getLogoImage } from "./twofactorAuthentication/reusableFun";
+
 const Login = ({ getMFAValidation, loginResponse }) => {
   const router = useRouter();
   const [enteredEmail, setEmail] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
   const [password, setPassword] = useState("");
@@ -77,12 +73,7 @@ const Login = ({ getMFAValidation, loginResponse }) => {
                 style={{ position: "relative", textAlign: "center" }}
               >
                 <p className="sub-title"></p>
-                <Image
-                  className="login-logo"
-                  src={newLoginLogo}
-                  style={{ display: "block", margin: "0 auto",width:"350px",height:"280px" }}
-                />
-                {/* <div className="company-name">Encipher Health Inc.</div> */}
+                {getLogoImage()}
               </div>
             </div>
           </div>

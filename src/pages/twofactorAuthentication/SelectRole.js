@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Select, notification, Modal } from "antd";
-import Image from "next/image";
 import { useRouter } from "next/router";
-import { IMAGES } from "../../jsx/constant/theme";
 import LoginBack from "../../images/logo/login-back.jpg";
 import styles from "../../styles/auth.module.css";
 import RegularButton from "../../components/button";
 import { getStorage, removeStorage, setStorage } from "../../utils/storages";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/authFlows";
-import newLoginLogo from '../../images/logo/newLoginLogo.png';
-const SelectRole = ({ loginData, getLogin }) => {
+import { getLogoImage } from "./reusableFun";
+
+const SelectRole = ({ getLogin }) => {
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
@@ -106,8 +105,8 @@ const SelectRole = ({ loginData, getLogin }) => {
         skip: skipEntry,
       });
     }
-    if(!username){
-      router.push("/login")
+    if (!username) {
+      router.push("/login");
     }
   }, []);
 
@@ -131,12 +130,7 @@ const SelectRole = ({ loginData, getLogin }) => {
             >
               <div className="login-content">
                 <p className="sub-title"></p>
-                <Image
-                  className="login-logo"
-                  src={newLoginLogo}
-                  style={{ display: "block", margin: "0 auto",width:"350px",height:"280px" }}
-                />
-                {/* <div className="company-name">Encipher Health Inc.</div> */}
+                {getLogoImage()}
               </div>
             </div>
           </div>

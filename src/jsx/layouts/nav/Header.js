@@ -1,25 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import "react-chat-widget/lib/styles.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { Badge, Dropdown, Tooltip, Drawer, Modal, Button } from "antd";
 import {
-  Badge,
-  Dropdown,
-  Tooltip,
-  Drawer,
-  Popover,
-  Modal,
-  Divider,
-  Spin,
-  Button,
-} from "antd";
-import {
-  LoadingOutlined,
-  CloseCircleOutlined,
   DownOutlined,
   SettingOutlined,
   MinusCircleOutlined,
@@ -27,14 +14,12 @@ import {
 } from "@ant-design/icons";
 import CodeRoot from "../../../images/menu/coderootv4.png";
 import styles from "../../../styles/file-managemnt.module.css";
-import { IMAGES, SVGICON } from "../../constant/theme";
 import {
   AdminMenuList,
   PhysicanMenuList,
   L2AuditorMenuList,
   ProviderMenuList,
   EHRMenuList,
-  PhysicianMenuList,
   PhysicanMenu,
   Analyst,
 } from "./Menu";
@@ -44,17 +29,10 @@ import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
 import {
-  faBook,
   faChevronLeft,
   faChevronRight,
-  faFilter,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  getAccuracy,
-  getCoderDetails,
-  getCurrentUser,
-  logoutAllDevice,
-} from "../../../stores/authflow/actions";
+import { logoutAllDevice } from "../../../stores/authflow/actions";
 import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
 import { actions as userActions } from "../../../stores/supervisor/users";
 import Codify from "../../../pages/codify";
@@ -65,12 +43,10 @@ import { actions as detailsActions } from "../../../stores/patient/details";
 import { actions as authActions } from "../../../stores/authFlows";
 import { actions as reportActions } from "../../../stores/admin/report";
 import { actions as uploadImagesAction } from "../../../stores/authflow/imageUpload";
-import { actions as userAction } from "../../../stores/supervisor/users";
 import { actions as tenantAction } from "../../../stores/tenantAdmin/patientSync";
-import newHeaderLogo from "../../../images/logo/newChatImage.png";
-import newLoginLogo from "../../../images/logo/newLoginLogo.png";
 import Profile from "./profile";
 import { getResponePopup } from "../../../utils/reusable";
+import { getHeaderLoge } from "../../../pages/twofactorAuthentication/reusableFun";
 
 const Header = ({
   notificationResponse,
@@ -92,11 +68,10 @@ const Header = ({
   getReportActiveTab,
   deleteProfile,
   deleteImage,
-  isFolderUplaod,
   preSendURl,
   getUrl,
   updateImage,
-  getRoutedData
+  getRoutedData,
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -428,7 +403,7 @@ const Header = ({
             getPatientID(null);
             getActiveTab(null);
             getReportActiveTab(null);
-            getRoutedData(null)
+            getRoutedData(null);
             router.push(
               {
                 pathname: `${data?.to}`,
@@ -576,9 +551,7 @@ const Header = ({
         <nav className="navbar navbar-expand">
           <div className="collapse navbar-collapse justify-content-between">
             <div className="d-flex">
-              <div className="header-logo">
-                <Image src={newLoginLogo} alt="noImg" />
-              </div>
+              {getHeaderLoge()}
               {tenent?.data?.response?.companyLogoLink && (
                 <div className="d-flex justify-content-center align-items-center">
                   <span
@@ -979,8 +952,8 @@ const enhancer = connect(
     preSendURl: uploadImagesAction.getuploadurl,
     getUrl: uploadImagesAction.getURL,
     updateImage: uploadImagesAction.updateImage,
-    getCurrentUser: userAction.getCurrentUserInfo,
-    getRoutedData: tenantAction.getRoutedData
+    getCurrentUser: userActions.getCurrentUserInfo,
+    getRoutedData: tenantAction.getRoutedData,
   }
 );
 export default enhancer(Header);
