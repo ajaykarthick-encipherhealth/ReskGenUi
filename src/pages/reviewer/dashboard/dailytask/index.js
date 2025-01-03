@@ -303,19 +303,20 @@ const DailyTask = ({
                           setStorage("filter", JSON.stringify(activeFilters));
                           const params = {
                             dueDateStart: data?.dateString
-                              ? `${moment(
-                                  data?.dateString
-                                ).format("YYYY-MM-DD")}T00:00:00.000Z`
+                              ? `${moment(data?.dateString).format(
+                                  "YYYY-MM-DD"
+                                )}T00:00:00.000Z`
                               : "",
                             dueDateEnd: data?.dateString
-                              ? `${moment(
-                                  data?.dateString
-                                ).format("YYYY-MM-DD")}T23:59:59.999Z`
+                              ? `${moment(data?.dateString).format(
+                                  "YYYY-MM-DD"
+                                )}T23:59:59.999Z`
                               : "",
                             selectedDates: [
                               dayjs(data?.date),
                               dayjs(data?.date),
                             ],
+                            activeFilters: ["Due Date"],
                           };
                           getRoutedData(params);
                           router?.push("/reviewer/patients");
@@ -373,6 +374,10 @@ const DailyTask = ({
                                         selectedDates: [
                                           dayjs(data?.date),
                                           dayjs(data?.date),
+                                        ],
+                                        activeFilters: [
+                                          "Select Status",
+                                          "Due Date",
                                         ],
                                       };
 

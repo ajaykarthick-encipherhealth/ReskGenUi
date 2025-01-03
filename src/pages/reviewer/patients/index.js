@@ -83,7 +83,7 @@ const Patient = ({
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
   const [clear, setClear] = useState(false);
-  const [activeFilters, setActiveFilters] = useState(allFilters);
+  const [activeFilters, setActiveFilters] = useState([]);
   const [trackChart, setTrackChart] = useState({
     COMPLETED: 0,
     PENDING: 0,
@@ -333,12 +333,12 @@ const Patient = ({
       setPageNo(routedData?.pageNo);
       setPaginationFirst(routedData?.paginationFirst);
       setSearchTextValue(routedData?.searchTextValue);
-      setSelectedDates(routedData?.selectedDates||[]);
+      setSelectedDates(routedData?.selectedDates || []);
       setSort(routedData?.sort);
       setClear(routedData?.clear);
       setSelectedPriority(routedData?.selectedPriority);
       setActiveFilters(
-        routedData?.activeFilters ? routedData?.activeFilters : activeFilters
+        routedData?.activeFilters ? routedData?.activeFilters : []
       );
       setDueDateStart(routedData?.dueDateStart || null);
       setDueDateEnd(routedData?.dueDateEnd || null);
@@ -352,7 +352,7 @@ const Patient = ({
       setSortDueOrder(routedData?.sortDueOrder);
       setSortCompleteOrder(routedData?.sortCompleteOrder);
       setSortAllocateOrder(routedData?.sortAllocateOrder);
-      setSelectedDates2(routedData?.selectedDates2||[]);
+      setSelectedDates2(routedData?.selectedDates2 || []);
     }
   }, []);
   useEffect(() => {
@@ -385,7 +385,7 @@ const Patient = ({
     clear,
     paramsFilter,
   ]);
- 
+
   return (
     <div className={`show `}>
       <Header />
@@ -495,7 +495,8 @@ const Patient = ({
                               sortDir: sort?.sortDir,
                               sortField: sort?.sortField,
                               selectedDates2,
-                              selectedDates
+                              selectedDates,
+                              activeFilters,
                             }}
                           />
                           <div>
