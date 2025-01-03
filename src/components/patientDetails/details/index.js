@@ -471,24 +471,35 @@ const Details = ({
 
   const getPatientListToDetails = async (userId, isClear) => {
     setIsLoading(true);
+    const getYear = await getAllProcessYear(userId, "HCC");
+    const year = getYear.response.length > 0 ? getYear.response[0] : selectedDosValue
     try {
       const res = await getpatientDetailsData(
         userId,
-        selectedDosValue,
+        year,
         isClear ? "" : selectDosValue,
         setIsLoading,
         userRole
-      );
+      ); 
       if (res.status == "SUCCESS") {
+        getPatientIdData(userId);
         getPatientHccFile(res.response?.fileDetailDTO?.fileId);
+        setLocalPatientId(userId);
+        getPatientDosList(
+          userId,
+          year
+        );
+        activeLabels({
+          patientId: userId,
+          year: year,
+          dos: '',
+        })
         isClear && getSelectedDos("");
         isClear && setSelectDosValue("");
         isClear && getSelectedDosPageNumber(1);
         setIsModalComments(false);
         setFilterModalOpen(false);
         setWorkListPatientId(null);
-        getPatientIdData(userId);
-        setLocalPatientId(userId);
       } else {
         getResponePopup(res);
         setIsSpinnerLoading(false);

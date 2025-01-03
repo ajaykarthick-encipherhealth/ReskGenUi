@@ -18,6 +18,7 @@ import AuditeDeclineTrack from "../../../../../../src/images/trackingImages/Audi
 import Legends from "../../../../../components/legends";
 import MyWorkQueueFilter from "../MyWorkQueueFilter";
 import { actions as workflowActions } from "../../../../../stores/supervisor/auditedQueue";
+import { truncateString } from "../function/ReusableFunctions";
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -321,7 +322,10 @@ const SupervisorWorkList = ({
                     key={index}
                     onClick={() => getPatientListToDetails(data.patientId, true)}
                   >
-                    {data.patientId} - {data.patientName}
+                    <span>
+                      <span>{truncateString(data.patientId, 35)}</span> <span>-</span>
+                      <span>{data.patientName}</span>
+                    </span>
                     {processstatusBodyTemplate(data)}
                   </li>
                 ))}

@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Search from "../../../../search";
+import { truncateString } from "../function/ReusableFunctions";
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -244,7 +245,10 @@ const AdminWorkList = ({
                       getPatientListToDetails(data.patientId, true)
                     }
                   >
-                    {data.patientId} - {data.patientName}
+                    <span>
+                      <span>{truncateString(data.patientId, 35)}</span> <span>-</span>{" "}
+                      <span>{data.patientName}</span>
+                    </span>
                     {processstatusBodyTemplate(data)}
                   </li>
                 ))}

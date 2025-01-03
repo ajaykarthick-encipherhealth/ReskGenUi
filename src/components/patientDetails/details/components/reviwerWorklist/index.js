@@ -8,13 +8,14 @@ import LoadingSpinner from "../../../../../components/loadingSpinner";
 import MyWorkQueueFilter from "../MyWorkQueueFilter";
 import { actions as patientsActions } from "../../../../../stores/patient/details";
 import { connect } from "react-redux";
+import { truncateString } from "../function/ReusableFunctions";
 
 const ReviwerWorkList = ({
   localUserId,
   setWorkListPatientId,
   setIsModalComments,
   patientListFilter,
-  getPatientListToDetails
+  getPatientListToDetails,
 }) => {
   const [patientList, setPatientList] = useState([]);
   const [processedStatus, setProcessedStatus] = useState("ALL");
@@ -163,9 +164,15 @@ const ReviwerWorkList = ({
                   <li
                     className={`${visitStyles.nameList} ${visitStyles.patientList}`}
                     key={index}
-                    onClick={() => getPatientListToDetails(data.patientId, true)}
+                    onClick={() =>
+                      getPatientListToDetails(data.patientId, true)
+                    }
                   >
-                    {data.patientId} - {data.patientName}
+                    <span>
+                      <span>{truncateString(data.patientId, 35)}</span>{" "}
+                      <span>-</span>
+                      <span>{data.patientName}</span>
+                    </span>
                     {data.processedStatus == "COMPLETED" ? (
                       <span
                         className={visitStyles.completed}
