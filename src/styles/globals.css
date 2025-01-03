@@ -5561,7 +5561,8 @@ textarea.form-control {
 
 .form-control[type="file"] {
   line-height: 2.375rem;
-  padding-left: 0.75rem;
+  /* padding-left: 0.75rem; */
+  padding: 0 0 0 0.75rem;
 }
 
 .form-control-sm[type="file"] {
@@ -14093,7 +14094,6 @@ overflow: scroll;
   height: 730px !important;
   overflow-y: scroll !important;
 }
-
 .ant_select_form {
   width: 100% !important;
 }
@@ -14110,10 +14110,10 @@ overflow: scroll;
   /* border: 1px solid #e6e6e6 !important; */
   box-shadow: none !important;
 }
-
-/* .ant_select_form > .ant-select-arrow {
-  margin-top: 0px !important;
-} */
+.ant_select_form_dos > .ant-select-selector,
+.ant-select-selection-overflow-item{
+  height: 34px;
+}
 
 .overlay-loading {
   cursor: pointer;

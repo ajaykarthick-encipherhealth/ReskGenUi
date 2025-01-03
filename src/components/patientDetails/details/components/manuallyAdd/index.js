@@ -1201,7 +1201,7 @@ const ManuallyAdd = ({
                   <Select
                     mode="multiple"
                     maxTagCount="responsive"
-                    className={`ant_select_form hcc_form mb-2`}
+                    className={`ant_select_form_dos hcc_form mb-2`}
                     onChange={(selOption, val) => {
                       handleSelectChange(selOption, "dos");
                     }}

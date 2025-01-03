@@ -109,6 +109,9 @@
 .highFlag path {
   fill: #cf940a;
 }
+.urgentFlag path {
+  fill: #D40B0B;
+}
 .lowFlag path {
   fill: #87909e;
 }

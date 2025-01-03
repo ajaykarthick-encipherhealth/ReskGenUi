@@ -7,6 +7,7 @@ import TableStyle from "../../../../components/table/table.module.css";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import {
+  priorityOptions,
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../../components/headerFilters/functions";
@@ -34,48 +35,6 @@ function PatientTable({
   priority
 }) {
   const navigate = useRouter();
-  const priorityOptions = [
-    {
-      value: "URGENT",
-      label: (
-        <>
-          <i>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "HIGH",
-      label: (
-        <>
-          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "NORMAL",
-      label: (
-        <>
-          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px", color: "#4466ff " }}>
-            Normal
-          </span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "LOW",
-      label: (
-        <>
-          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
-        </>
-      ),
-    },
-  ];
-
-
 
   const gotoPatientDetails = (data) => {
     if (data.computing === 2) {
@@ -340,7 +299,7 @@ function PatientTable({
             </th>
 
             <th className="text-truncate" style={{ paddingLeft: "30px" }}>
-              AUDIT ALLOCATED BY
+              AUDIT ALLOCATED BY              
             </th>
             <th className="text-truncate" style={{ paddingLeft: "30px" }}>
               PRIORITY

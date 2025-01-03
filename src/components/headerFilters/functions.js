@@ -215,7 +215,7 @@ export const priorityOptions = [
     value: "URGENT",
     label: (
       <div className="d-flex gap-1">
-        <i>
+        <i className={TableStyle.urgentFlag}>
           <FontAwesomeIcon icon={faTriangleExclamation} />
         </i>
         <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}

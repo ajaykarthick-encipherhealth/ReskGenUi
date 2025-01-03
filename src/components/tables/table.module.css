@@ -114,6 +114,9 @@
 .normalFlag path {
   fill: #4466ff;
 }
+.urgentFlag path {
+  fill: #D40B0B;
+}
 .custom-ant-select {
   width: 100%;
 }

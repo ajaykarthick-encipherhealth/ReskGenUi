@@ -10,7 +10,7 @@ export const priorityStatus = (value, iconsOnly) => {
     case "URGENT":
       return (
         <>
-          <i>{SVGICON.alert}</i>{" "}
+          <i className={TableStyle.urgentFlag}>{SVGICON.alert}</i>{" "}
           {!iconsOnly && (
             <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>
           )}

@@ -28,7 +28,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
     notificationResult?.length > 0 ? (
       notificationResult?.map((info) => (
         <div className={styles.msgDiv} key={info?.id}>
-          <div className="mt-2">
+          <div style={{ marginTop: "10px" }}>
             <FontAwesomeIcon
               icon={faBell}
               className={`${styles.notifyIconColor}`}

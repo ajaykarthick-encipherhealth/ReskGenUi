@@ -211,7 +211,7 @@ const AllocateModal = ({
                             Due Date
                           </span>
                           <DatePicker
-                            style={{ width: "150px", marginLeft: "5px" }}
+                            style={{ width: "150px", marginLeft: "10px" }}
                             onChange={(date, dateS) => {
                               if (dateS) {
                                 setAllocateDate(dateS);
@@ -228,43 +228,83 @@ const AllocateModal = ({
                             <div key={status.id}>
                               <div className="d-flex my-3">
                                 <div>
-                                <FontAwesomeIcon icon={faCircle} color="#3276CD" style={{ fontSize: "8px" }}/>
-                                  
+                                  <FontAwesomeIcon
+                                    icon={faCircle}
+                                    color="#3276CD"
+                                    style={{ fontSize: "8px" }}
+                                  />
+
                                   <span className="p-2">Allocated</span>
                                 </div>
-                                <span>{status.totalFileAllocated ?status.totalFileAllocated  : 0}</span>
+                                <span>
+                                  {status.totalFileAllocated
+                                    ? status.totalFileAllocated
+                                    : 0}
+                                </span>
                               </div>
 
                               <div className="d-flex my-3">
                                 <div>
-                                <FontAwesomeIcon icon={faCircle} color="#00BC13" style={{ fontSize: "8px" }}/>
+                                  <FontAwesomeIcon
+                                    icon={faCircle}
+                                    color="#00BC13"
+                                    style={{ fontSize: "8px" }}
+                                  />
                                   <span className="p-2">Completed</span>
                                 </div>
-                                <span>{status.totalFileProcessed ? status.totalFileProcessed : 0}</span>
+                                <span>
+                                  {status.totalFileProcessed
+                                    ? status.totalFileProcessed
+                                    : 0}
+                                </span>
                               </div>
 
                               <div className="d-flex my-3">
                                 <div>
-                                <FontAwesomeIcon icon={faCircle} color="#EA8715" style={{ fontSize: "8px" }}/>
+                                  <FontAwesomeIcon
+                                    icon={faCircle}
+                                    color="#EA8715"
+                                    style={{ fontSize: "8px" }}
+                                  />
                                   <span className="p-2">Pending</span>
                                 </div>
-                                <span>{status.totalFilePending ? status.totalFilePending : 0}</span>
+                                <span>
+                                  {status.totalFilePending
+                                    ? status.totalFilePending
+                                    : 0}
+                                </span>
                               </div>
 
                               <div className="d-flex my-3">
                                 <div>
-                                <FontAwesomeIcon icon={faCircle} color="#BCA7FB" style={{ fontSize: "8px" }}/>
+                                  <FontAwesomeIcon
+                                    icon={faCircle}
+                                    color="#BCA7FB"
+                                    style={{ fontSize: "8px" }}
+                                  />
                                   <span className="p-2">Hold</span>
                                 </div>
-                                <span>{status.totalFileHold ? status.totalFileHold  : 0}</span>
+                                <span>
+                                  {status.totalFileHold
+                                    ? status.totalFileHold
+                                    : 0}
+                                </span>
                               </div>
 
                               <div className="d-flex my-3">
                                 <div>
-                                <FontAwesomeIcon icon={faCircle} color="#EB5252" style={{ fontSize: "8px" }}/>
+                                  <FontAwesomeIcon
+                                    icon={faCircle}
+                                    color="#EB5252"
+                                    style={{ fontSize: "8px" }}
+                                  />
                                   <span className="p-2">Declined</span>
                                 </div>
-                                <span>{status.totalFileDeclined ? status.totalFileDeclined : 0}</span>
+                                <span>
+                                  {status.totalFileDeclined
+                                    ? status.totalFileDeclined
+                                    : 0}
+                                </span>
                               </div>
                             </div>
                           ))}
@@ -274,12 +314,12 @@ const AllocateModal = ({
                           {selectedChart.length + chart.hold + chart.pending >
                             100 && "Maximum upto 100 charts to pending"}
                         </span>
-                        <p>Selected Charts</p>
+                        <span>Selected Charts</span>
 
                         <ul className={`${modalStyle.selectChart}`}>
                           {selectedChart.map((item) => (
                             <li
-                              className={`${modalStyle.listing} ${modalStyle.listings}`}
+                              className={`${modalStyle.listing} ${modalStyle.listings} my-3`}
                               key={item.id}
                               onClick={() => {
                                 let remove = selectedChart.filter(

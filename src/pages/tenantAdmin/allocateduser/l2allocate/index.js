@@ -129,10 +129,10 @@ const L2AllocateModal = ({
                   Charts Selected:{" "}
                   {selectedChart?.length > 0 ? selectedChart?.length : 0}
                 </span>
-                <div className="d-flex py-2">
+                <div className="d-flex py-2 align-items-center">
                   <span className={`${modalStyle.title} py-3`}>Due Date</span>
                   <DatePicker
-                    style={{ width: "150px", marginLeft: "5px" }}
+                    style={{ width: "150px", marginLeft: "10px" }}
                     onChange={(date, dateS) => {
                       if (dateS) {
                         setAllocateDate(dateS);
@@ -227,12 +227,12 @@ const L2AllocateModal = ({
                   {selectedChart?.length + chart.hold + chart.pending > 19 &&
                     "Maximum upto 20 charts to pending"}
                 </span>
-                <p>Selected Charts</p>
+                <span>Selected Charts</span>
 
                 <ul className={`${modalStyle.selectChart}`}>
                   {selectedChart?.map((item) => (
                     <li
-                      className={`${modalStyle.listing} ${modalStyle.listings}`}
+                      className={`${modalStyle.listing} ${modalStyle.listings} my-3`}
                       key={item.id}
                       onClick={() => {
                         let remove = selectedChart?.filter(
