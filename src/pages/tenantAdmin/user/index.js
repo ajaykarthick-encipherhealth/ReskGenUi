@@ -122,7 +122,7 @@ const UserList = ({
       getResponePopup(response);
       setRoleValue([]);
       setValidated(true);
-
+      setAddUser(false);
     }
    else  if(response?.status == 'FAILED'){
       setAddUser(true);
@@ -254,7 +254,7 @@ const UserList = ({
 
   const onFinish = (values) => {
     handleSubmit(values);
-    setAddUser(false);
+   
   };
 
   return (

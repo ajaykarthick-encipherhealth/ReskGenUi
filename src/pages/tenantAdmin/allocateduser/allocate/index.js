@@ -4,9 +4,14 @@ import modalStyle from "./style.module.css";
 import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
 import Router from "next/router";
-import { faSearch, faXmark, faUser, faCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSearch,
+  faXmark,
+  faUser,
+  faCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { disablePastDate } from "../../../../components/headerFilters/functions";
-import {actions as allActions} from '../../../../stores/admin/patientAllocation'
+import { actions as allActions } from "../../../../stores/admin/patientAllocation";
 import { connect } from "react-redux";
 import { getResponePopup } from "../../../../utils/reusable";
 
@@ -20,7 +25,7 @@ const AllocateModal = ({
   setSelectedChart,
   getAllList,
   getL1UsersList,
-  getAllocateUsers
+  getAllocateUsers,
 }) => {
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
@@ -44,12 +49,10 @@ const AllocateModal = ({
   };
 
   const getUserList = async (search) => {
-    // const orgId = getStorage("orgId");
-    // let resoureUrl = `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=${orgId}&searchString=${search}`;
     const response = await getL1UsersList({
-      search: search || "",})
-    // axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response?.status==='SUCCESS') {
+      search: search || "",
+    });
+    if (response?.status === "SUCCESS") {
       let result = response?.response;
       const user = result?.map((item) => {
         return {
@@ -60,45 +63,37 @@ const AllocateModal = ({
           email: item.userName,
         };
       });
-      setStatusCount(response?.data?.response);
+      setStatusCount(response?.response);
       setUserDetails(user);
     }
   };
   const setAllocate = async () => {
-    // let resoureUrl = `dbservice/patient/admin/assignPatients`;
-    const response = await getAllocateUsers({data:{ userId: activeEmail,
-      dueDate: `${allocateDate + "T00:00:00.000Z"}`,
-      patientIds: selectedRowsId.map((item) => item.id),
-    }})
-    // axios.post(ENDPOINTS.apiEndoint + resoureUrl, {
-   
-    if (response) {
-      if (response?.status == "SUCCESS") {
-       getResponePopup(response)
-        getAllList({
-          pageNo: 0,
-          pageSize: 15,
-          allocate: true,
-          status: 2,
-        });
-        setOpen(false);
-        setAllocateClicked(true);
-        setAllocateDate("");
-        setActiveCard("");
-        setActiveEmail("");
-        setSearch("");
-      }
+    const response = await getAllocateUsers({
+      data: {
+        userId: activeEmail,
+        dueDate: `${allocateDate + "T00:00:00.000Z"}`,
+        patientIds: selectedRowsId.map((item) => item.id),
+      },
+    });
+    if (response?.status == "SUCCESS") {
+      getResponePopup(response);
+      getAllList({
+        pageNo: 0,
+        pageSize: 15,
+        allocate: true,
+        status: 2,
+      });
+      setOpen(false);
+      setAllocateClicked(true);
+      setAllocateDate("");
+      setActiveCard("");
+      setActiveEmail("");
+      setSearch("");
+      setSelectedRowsId([]);
+    } else {
+      getResponePopup(response);
     }
   };
-
-  // const getAllCheckList = async (selectEmail) => {
-  //   let resoureUrl = `/management/admin/getProcessedStatus?userName=${selectEmail}`;
-  //   const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-  //   if (response.data) {
-  //     let result = response?.data?.response;
-  //     setChart(result);
-  //   }
-  // };
 
   useEffect(() => {
     getUserList(search);
@@ -325,7 +320,7 @@ const AllocateModal = ({
                                 let remove = selectedChart.filter(
                                   (chart) => chart.id != item.id
                                 );
-                                setSelectedChart(remove);
+                                setSelectedRowsId(remove);
                               }}
                             >
                               <span>{item.name}</span>
@@ -386,8 +381,8 @@ const AllocateModal = ({
   );
 };
 
-const connector=connect((state)=>({}),{
-  getL1UsersList:allActions.getL1UsersList,
-  getAllocateUsers:allActions.getAllocateUsers
-})
+const connector = connect((state) => ({}), {
+  getL1UsersList: allActions.getL1UsersList,
+  getAllocateUsers: allActions.getAllocateUsers,
+});
 export default connector(AllocateModal);
