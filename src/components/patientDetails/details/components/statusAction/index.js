@@ -53,7 +53,7 @@ const StatusAction = ({
           {patienIdDetails?.auditedStatus != "AUDITED" && (
             <Menu.Item key="1" onClick={() => auditPatient(1)}>
               <div className="patient-status">
-                <span className={`badge ${visitStyles.audit_text}`}>AUDIT</span>
+                <span className={`badge ${visitStyles.audit_text}`}>AUDITED</span>
               </div>
             </Menu.Item>
           )}

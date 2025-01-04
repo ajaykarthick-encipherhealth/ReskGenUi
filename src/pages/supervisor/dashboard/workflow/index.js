@@ -98,7 +98,7 @@ const WorkFlow = ({ worlFlowData, DateRanges }) => {
       id: 6,
       icon: <FontAwesomeIcon icon={faCircleXmark} />,
       title: "Audit Declined",
-      charts: worlFlowData?.data?.response?.auditDecliend,
+      charts: worlFlowData?.data?.response?.auditDeclined,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
       } days`,

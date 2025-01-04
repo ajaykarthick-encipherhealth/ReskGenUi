@@ -72,7 +72,7 @@ const InputField = ({
   );
 
   const handleChange = (event) => {
-    const text = event.target.value.trim();
+    const text = event.target.value.trimStart();
     if (isTracking) {
       setTrackInput(text);
     } else {

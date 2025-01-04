@@ -355,7 +355,7 @@ const InitialCard = ({
             >
               {/* {reportListAll?.response?.data?.length > 0 && (
                   <> */}
-              <div className="col-1 d-flex">
+              <div className="d-flex me-3">
                 <div>
                   <input
                     type="checkbox"

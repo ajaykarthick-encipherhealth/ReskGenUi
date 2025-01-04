@@ -388,6 +388,7 @@ const IndividualReceiverReport = ({
               style={{
                 width: "100%",
                 overflowX: "scroll",
+                height: '70vh'
               }}
             >
               {fileResult?.extention === "csv" && (

@@ -221,13 +221,12 @@ const Hcc = ({
         role
       );
     }
-    
+
     // setActions({
     //   showDisease: !value && false,
     //   reEvaluate: !value && false,
     //   showActionsPop: !value && false,
     // });
-
   };
   const handleChangePageNumber = async (value) => {
     // setPopoverVisible(false);
@@ -351,11 +350,11 @@ const Hcc = ({
           className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer"
           onClick={() => {
             // selectDosValue &&
-              setActions({
-                showDisease: !actions?.showDisease,
-                reEvaluate: actions?.reEvaluate,
-                showActionsPop: actions?.showActionsPop,
-              });
+            setActions({
+              showDisease: !actions?.showDisease,
+              reEvaluate: actions?.reEvaluate,
+              showActionsPop: actions?.showActionsPop,
+            });
           }}
         >
           <span
@@ -514,132 +513,120 @@ const Hcc = ({
                         Query
                       </Nav.Link>
                     </Nav.Item>
-
-                    <div>
                     <Nav.Item as="li" className="nav-item">
-                      <div className="d-flex gap-3 mt-1 mx-2">
-                      <Select
-                        placeholder="Select DOS"
-                        onChange={handleOptions}
-                        className="dosSelect"
-                        allowClear={true}
-                        value={selectDosValue ? selectDosValue : null}
-                      >
-                        {dosSummariesList?.map((data) => (
-                          <Option key={data?.value} value={data?.value}>
-                            {data.label}
-                          </Option>
-                        ))}
-                      </Select>
-                      {getStorage("userRole") != "admin" && selectDosValue && (
-                        <YearAndDosStatus setIsLoading={setIsLoading} isDosStatus={true}/>
-                      )}
-                       {activeTabHead == 1 && (
-                        <Popover
-                          open={popoverVisible}
-                          content={PopContent}
-                          placement="bottom"
-                          trigger={"click"}
-                          overlayStyle={{ zIndex: 1000 }}
-                          onOpenChange={() => setPopoverVisible(false)}
+                      <div className="d-flex gap-3 mx-2">
+                        <Select
+                          placeholder="Select DOS"
+                          onChange={handleOptions}
+                          className="dosSelect"
+                          allowClear={true}
+                          value={selectDosValue ? selectDosValue : null}
                         >
-                          <div
-                            className={` d-flex align-items-center  justify-content-center gap-2 ${styles.dosContainer}`}
-                            onClick={() => {
-                              setPopoverVisible(true);
-                            }}
-                          >
-                            <span
-                              className={`text-truncate  ${styles.dosPageNumber}`}
-                            >
-                              Select Dos Page Number
-                            </span>
-                            <FontAwesomeIcon
-                              className="mt-1"
-                              icon={faAngleDown}
-                              style={{
-                                size: 10,
-                                color: "#e6e6e6",
-                                // marginLeft: "5px",
-                              }}
+                          {dosSummariesList?.map((data) => (
+                            <Option key={data?.value} value={data?.value}>
+                              {data.label}
+                            </Option>
+                          ))}
+                        </Select>
+                        {getStorage("userRole") != "admin" &&
+                          selectDosValue && (
+                            <YearAndDosStatus
+                              setIsLoading={setIsLoading}
+                              isDosStatus={true}
                             />
-                          </div>
-                        </Popover>
-                      )}
-                          {flagTagActive ? (
+                          )}
+                        {activeTabHead == 1 && (
+                          <Popover
+                            open={popoverVisible}
+                            content={PopContent}
+                            placement="bottom"
+                            trigger={"click"}
+                            overlayStyle={{ zIndex: 1000 }}
+                            onOpenChange={() => setPopoverVisible(false)}
+                          >
+                            <div
+                              className={` d-flex align-items-center  justify-content-center gap-2 ${styles.dosContainer}`}
+                              onClick={() => {
+                                setPopoverVisible(true);
+                              }}
+                            >
+                              <span
+                                className={`text-truncate  ${styles.dosPageNumber}`}
+                              >
+                                Select Dos Page Number
+                              </span>
+                              <FontAwesomeIcon
+                                className="mt-1"
+                                icon={faAngleDown}
+                                style={{
+                                  size: 10,
+                                  color: "#e6e6e6",
+                                  // marginLeft: "5px",
+                                }}
+                              />
+                            </div>
+                          </Popover>
+                        )}
+                        {flagTagActive ? (
+                          <div>
                             <div>
-                              <div>
-                                <Popover
-                                  content={
-                                    <>
+                              <Popover
+                                content={
+                                  <>
+                                    <div className={visitStyles.flags}>
                                       <div className={visitStyles.flags}>
-                                        <div className={visitStyles.flags}>
-                                          <span
-                                            className={visitStyles.hccFlag}
-                                          ></span>
-                                          <span
-                                            className={visitStyles.flagCodes}
-                                          >
-                                            HCC
-                                          </span>
-                                        </div>
-                                        <div className={visitStyles.flags}>
-                                          <span
-                                            className={
-                                              visitStyles.suggestedFlag
-                                            }
-                                          ></span>
-                                          <span
-                                            className={visitStyles.flagCodes}
-                                          >
-                                            SUGGESTED
-                                          </span>
-                                        </div>
-                                        <div className={visitStyles.flags}>
-                                          <span
-                                            className={visitStyles.deleteFlag}
-                                          ></span>
-                                          <span
-                                            className={visitStyles.flagCodes}
-                                          >
-                                            DELETED
-                                          </span>
-                                        </div>
-                                        <div className={visitStyles.flags}>
-                                          <span
-                                            className={visitStyles.nonhccFlag}
-                                          ></span>
-                                          <span
-                                            className={visitStyles.flagCodes}
-                                          >
-                                            NON HCC
-                                          </span>
-                                        </div>
-                                        <div className={visitStyles.flags}>
-                                          <span
-                                            className={
-                                              visitStyles.potentialFlag
-                                            }
-                                          ></span>
-                                          <span
-                                            className={visitStyles.flagCodes}
-                                          >
-                                            POTENTIAL DIAGNOSIS
-                                          </span>
-                                        </div>
+                                        <span
+                                          className={visitStyles.hccFlag}
+                                        ></span>
+                                        <span className={visitStyles.flagCodes}>
+                                          HCC
+                                        </span>
                                       </div>
-                                    </>
-                                  }
-                                  trigger={["click"]}
-                                  placement="bottom"
-                                >
-                                  <Image
-                                    src={warning}
-                                    style={{ cursor: "pointer" }}
-                                  />
-                                </Popover>
-                              </div>
-                              {/* <div className={visitStyles.flags}>
+                                      <div className={visitStyles.flags}>
+                                        <span
+                                          className={visitStyles.suggestedFlag}
+                                        ></span>
+                                        <span className={visitStyles.flagCodes}>
+                                          SUGGESTED
+                                        </span>
+                                      </div>
+                                      <div className={visitStyles.flags}>
+                                        <span
+                                          className={visitStyles.deleteFlag}
+                                        ></span>
+                                        <span className={visitStyles.flagCodes}>
+                                          DELETED
+                                        </span>
+                                      </div>
+                                      <div className={visitStyles.flags}>
+                                        <span
+                                          className={visitStyles.nonhccFlag}
+                                        ></span>
+                                        <span className={visitStyles.flagCodes}>
+                                          NON HCC
+                                        </span>
+                                      </div>
+                                      <div className={visitStyles.flags}>
+                                        <span
+                                          className={visitStyles.potentialFlag}
+                                        ></span>
+                                        <span className={visitStyles.flagCodes}>
+                                          POTENTIAL DIAGNOSIS
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </>
+                                }
+                                trigger={["click"]}
+                                placement="bottom"
+                              >
+                                <Image
+                                  src={warning}
+                                  style={{ cursor: "pointer" }}
+                                />
+                              </Popover>
+                            </div>
+                            {/* <div className={visitStyles.flags}>
                         <div className={visitStyles.flags}>
                           <span className={visitStyles.hccFlag}></span>
                           <span className={visitStyles.flagCodes}>HCC</span>
@@ -659,13 +646,10 @@ const Hcc = ({
                           <span className={visitStyles.flagCodes}>NON HCC</span>
                         </div>
                       </div> */}
-                            </div>
-                          ) : null}
-                        </div>
-                      </Nav.Item>
-                    </div>
-                  </div>
-                  <div className="mt-1">
+                          </div>
+                        ) : null}
+                      </div>
+                    </Nav.Item>
                     <Nav.Item as="li" className="nav-item">
                       <Popover
                         open={actions.showActionsPop}
@@ -695,7 +679,6 @@ const Hcc = ({
                       </Popover>
                     </Nav.Item>
                   </div>
-                  {/* </div> */}
                 </Nav>
               </div>
             </div>

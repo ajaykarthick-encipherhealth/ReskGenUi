@@ -583,7 +583,7 @@ const Reports = ({
                   <div className="tbl-caption  align-items-center">
                     <div className={`row filter-contain mt-4 mb-0 d-flex`}>
                       <div className="col-xl-10 d-flex">
-                        <div className={`w-100 row mb-0 d-flex gap-4`}>
+                        <div className={`w-100 row mb-0 d-flex`}>
                           <div className="col-2">
                             <div className="d-flex w-100">
                               <label className="labelStyle d-flex m-auto p-3">
@@ -637,7 +637,7 @@ const Reports = ({
                                   {" "}
                                   Status
                                 </label>
-                                <div className="form-group has-search w-100 custom-react-report-select">
+                                <div className="form-group has-search w-100 custom-react-report-select custom-react-report-status">
                                   <Select
                                     onChange={(selectedOption) => {
                                       dosOnChange(
@@ -657,7 +657,7 @@ const Reports = ({
                                         ? selectedOptions[activeTab]
                                         : null
                                     }
-                                    style={{ width: "150px" }}
+                                    // style={{ width: "150px" }}
                                   />
                                 </div>
                                 {/* </div> */}
@@ -667,7 +667,7 @@ const Reports = ({
 
                           <div className="col-3 d-flex">
                             <div className="d-flex w-100">
-                              <label className="labelStyle d-flex  p-2">
+                              <label className="labelStyle labelStyleDate d-flex m-0 p-2">
                                 {" "}
                                 Date
                               </label>

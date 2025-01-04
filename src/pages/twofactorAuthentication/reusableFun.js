@@ -1,7 +1,7 @@
 import Image from "next/image";
 import cogentLogo from "../../images/logo/cogentAI-logo-loginpage.png";
 import c360Logo from "../../images/logo/newLoginLogo.png";
-import cogentHeaderLogo from "../../images/logo/CogentAIlogo22.png";
+import cogentHeaderLogo from "../../images/logo/header_logo.png";
 import { companyDeatils } from "../../utils/config";
 
 export const getLogoImage = () => {
@@ -52,7 +52,8 @@ export const getHeaderLoge = () => {
   switch (companyDeatils) {
     case "cogentai":
       return (
-        <Image src={cogentHeaderLogo} alt="noImg" width={170} height={170} />
+        <div className="mx-3">
+        <Image src={cogentHeaderLogo} alt="noImg" width={170} height={60} /></div>
       );
     case "c360":
       return (

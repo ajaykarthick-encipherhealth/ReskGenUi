@@ -334,7 +334,7 @@ const TeamReport = ({
                     //   <Spin />
                     // ) : (
                     <> */}
-              <div className="col-1 d-flex">
+              <div className="d-flex me-3">
                 <div>
                   <input
                     type="checkbox"
