@@ -19,7 +19,8 @@ const L2AllocateModal = ({
   setSelectedChart,
   selectedUser,
   getAllocateUsers,
-  getL2UsersList
+  getL2UsersList,
+  setIsSupervisorAllocated
 }) => {
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
@@ -51,6 +52,7 @@ const L2AllocateModal = ({
     });
     if (response?.status == "SUCCESS") {
       getResponePopup(response);
+      setIsSupervisorAllocated(true)
       setAllocateClicked(true);
       setAllocateDate("");
       setActiveCard("");
@@ -228,17 +230,17 @@ const L2AllocateModal = ({
                     "Maximum upto 20 charts to pending"}
                 </span>
                 <span>Selected Charts</span>
-
                 <ul className={`${modalStyle.selectChart}`}>
                   {selectedChart?.map((item) => (
                     <li
-                      className={`${modalStyle.listing} ${modalStyle.listings} my-3`}
+                      className={`${modalStyle.listing} ${modalStyle.listings} `}
                       key={item.id}
                       onClick={() => {
                         let remove = selectedChart?.filter(
                           (chart) => chart.id != item.id
                         );
                         setSelectedChart(remove);
+                        setSelectedRowsId(remove)
                       }}
                     >
                       <span>{item.name}</span>

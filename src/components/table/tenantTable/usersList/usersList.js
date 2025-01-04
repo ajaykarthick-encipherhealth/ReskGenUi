@@ -99,6 +99,7 @@ const UserList = ({
                 options={optionsUser?.length > 0 ? optionsUser : []}
                 placeholder={"Change Manager"}
                 // open={openManager}
+                value={selectedManager}
                 onDropdownVisibleChange={(visible) => setOpenManager(visible)}
               />
             </>
@@ -273,7 +274,13 @@ const UserList = ({
                   }}
                 >
                   <span>
-                    {item?.userName ? <Tooltip title={item?.userName}>{truncateString(item?.userName, 40)}</Tooltip> : "---"}
+                    {item?.userName ? (
+                      <Tooltip title={item?.userName}>
+                        {truncateString(item?.userName, 40)}
+                      </Tooltip>
+                    ) : (
+                      "---"
+                    )}
                   </span>
                 </td>
                 <td
@@ -378,6 +385,10 @@ const UserList = ({
                             setRowData(item);
                             setPopoverVisible(item?.id);
                             setSelectedRoles(item?.role);
+                            const manager = optionsUser.find(
+                              (data) => data.value == item.managerId
+                            );
+                            setSelectedManager(manager.value);
                           }}
                         >
                           <EditButton />

@@ -314,7 +314,7 @@ const AllocateModal = ({
                         <ul className={`${modalStyle.selectChart}`}>
                           {selectedChart.map((item) => (
                             <li
-                              className={`${modalStyle.listing} ${modalStyle.listings} my-3`}
+                              className={`${modalStyle.listing} ${modalStyle.listings}`}
                               key={item.id}
                               onClick={() => {
                                 let remove = selectedChart.filter(

@@ -78,7 +78,7 @@ const Patient = ({
   const [pageNoL2User, setPageNoL2User] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [supervisorPageSize, setSupervisorPageSize] = useState(15);
-
+  const [isSupervisorAllocated, setIsSupervisorAllocated] = useState(false);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [tableLoading, setTableLoading] = useState(true);
 
@@ -275,8 +275,7 @@ const Patient = ({
   const handleOpneModal = () => {
     setValidated(false);
     setAddPatientId(false);
-    if (        batchCount,
-      activeTab == 2) {
+    if ((batchCount, activeTab == 2)) {
       setAllocateModalL2(true);
     } else {
       setAllocateModal(true);
@@ -302,7 +301,7 @@ const Patient = ({
     } else {
       setSelectedRowsId([]);
     }
-  }, [selectAllChecked, sort, isPatientList,  activeTab]);
+  }, [selectAllChecked, sort, isPatientList, activeTab]);
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab == 1 && !isPatientList) {
@@ -334,7 +333,7 @@ const Patient = ({
     selectedOption,
     selectOrgList,
     isPatientList,
-    selectedSupervisorSearch
+    selectedSupervisorSearch,
   ]);
 
   useEffect(() => {
@@ -527,11 +526,24 @@ const Patient = ({
         pageNoL2Patient: pageNoL2Patient,
         selectedOptions: selectedOptions,
         allocatedOption: allocatedOption,
-       
       });
     }
-   
   }, [selectedOptions, allocatedOption, isPatientList, supervisorPageSize]);
+
+  useEffect(() => {
+    if (isSupervisorAllocated) {
+      getL2PatientList({
+        data: l2selectUser,
+        pageNoL2Patient: pageNoL2Patient,
+        sort: sort,
+        selectedOptions: selectedOptions,
+        allocatedOption: allocatedOption,
+      });
+      setIsSupervisorAllocated(false)
+      setSelectAllChecked(false)
+    }
+  }, [isSupervisorAllocated]);
+
   return (
     <>
       <div className={`show `}>
@@ -545,9 +557,7 @@ const Patient = ({
                     <div className="table-responsive active-projects task-table supervisor-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          <div
-                            className={`${isPatientList && "d-flex"} col-2`}
-                          >
+                          <div className={`${isPatientList && "d-flex"} col-2`}>
                             {isPatientList && activeTab !== 1 && (
                               <div className={reportStyles.backDiv}>
                                 <button
@@ -800,8 +810,7 @@ const Patient = ({
                                     setPageNo={setPageNo}
                                     onChanges={() => {
                                       setPageNoL2Patient(0);
-                                      setSupervisorPageSize(15)
-
+                                      setSupervisorPageSize(15);
                                     }}
                                   />
                                 </div>
@@ -818,7 +827,7 @@ const Patient = ({
                                     // isClose={true}
                                     onChanges={() => {
                                       setPageNoL2Patient(0);
-                                      setSupervisorPageSize(15)
+                                      setSupervisorPageSize(15);
                                     }}
                                   />
                                 </div>
@@ -1076,7 +1085,7 @@ const Patient = ({
                                         ) : (
                                           <>
                                             <AllocatedL2AdminList
-                                            setBatchCount={setBatchCount}
+                                              setBatchCount={setBatchCount}
                                               patinetListAll={
                                                 selectedSupervisors?.response
                                                   ?.content
@@ -1091,12 +1100,16 @@ const Patient = ({
                                               setSelectedRowsId={
                                                 setSelectedRowsId
                                               }
-                                              totalElements={selectedSupervisors?.response
-                                                ?.totalElements}
+                                              totalElements={
+                                                selectedSupervisors?.response
+                                                  ?.totalElements
+                                              }
                                               selectedChart={
                                                 headerCheckValidation
                                               }
-                                              setSupervisorPageSize={setSupervisorPageSize}
+                                              setSupervisorPageSize={
+                                                setSupervisorPageSize
+                                              }
                                               setSort={setSort}
                                               sort={sort}
                                               loading={supervisorCheckBoxLoader}
@@ -1179,6 +1192,7 @@ const Patient = ({
         setSelectedChart={setSelectedChart}
         selectedChart={selectedChart}
         selectedUser={l2selectUser}
+        setIsSupervisorAllocated={setIsSupervisorAllocated}
       />
     </>
   );
