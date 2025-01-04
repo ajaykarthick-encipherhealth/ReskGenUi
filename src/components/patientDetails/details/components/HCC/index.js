@@ -246,13 +246,10 @@ const HccCards = ({
                             className={`hccActiveCard ${visitStyles.hcc_card} ${
                               snapshot?.isDragging &&
                               visitStyles.drag_and_drop_movement_bg
-                            } ${
-                              !data?.isShow &&
-                              visitStyles.isSHowHccBlurHcc
-                            }`}
+                            } ${!data?.isShow && visitStyles.isSHowHccBlurHcc}`}
                             ref={provided.innerRef}
                             {...provided.draggableProps}
-                            {...provided.dragHandleProps}                           
+                            {...provided.dragHandleProps}
                             onMouseOver={() =>
                               !data?.isShow &&
                               setHoveredIem(data?.diagnosisCode)
@@ -686,7 +683,7 @@ const HccCards = ({
                                               </span>
                                             </div>
                                           )}
-                                        {data?.isShow && (
+                                        {data?.isShow && isDosSelected && (
                                           <div
                                             className="cursor-pointer"
                                             onClick={() =>
