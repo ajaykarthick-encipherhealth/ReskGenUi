@@ -123,7 +123,7 @@ const DailyTask = ({
         pending: matchingStatusData?.auditPending || 0,
         hold: matchingStatusData?.auditHold || 0,
         audited: matchingStatusData?.audited || 0,
-        reAudit: matchingStatusData?.reAudit || 0,
+        reAudited: matchingStatusData?.reAudited || 0,
         allocated: matchingStatusData?.auditAllocated || 0,
         declined: matchingStatusData?.auditDeclined || 0,
       };
@@ -139,7 +139,7 @@ const DailyTask = ({
     allocated,
     pending,
     hold,
-    reAudit,
+    reAudited,
     audited,
     declined
   ) => {
@@ -182,7 +182,7 @@ const DailyTask = ({
               },
             },
             {
-              value: reAudit,
+              value: reAudited,
               name: "ReAudit",
               itemStyle: {
                 color: "#C26100",
@@ -381,7 +381,7 @@ const DailyTask = ({
                                 data?.allocated,
                                 data?.pending,
                                 data?.hold,
-                                data?.reAudit,
+                                data?.reAudited,
                                 data?.audited,
                                 data?.declined
                               )}
@@ -482,7 +482,7 @@ const DailyTask = ({
                                       : item.name === "AuditHold"
                                       ? data.hold
                                       : item.name === "ReAudit"
-                                      ? data?.reAudit
+                                      ? data?.reAudited
                                       : item.name === "AuditDeclined" &&
                                         data.declined}
                                   </div>
