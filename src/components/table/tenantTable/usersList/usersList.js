@@ -19,7 +19,7 @@ import { connect } from "react-redux";
 import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin/users";
 import { actions as adminAction } from "../../../../stores/admin/dashboard";
 const items = [
-  { value: "ADMIN", label: "Admin", role: "admin" },
+  // { value: "ADMIN", label: "Admin", role: "admin" },
   { value: "REVIEWER", label: "Reviewer", role: "REVIEWER" },
   { value: "SUPERVISOR", label: "Supervisor", role: "SUPERVISOR" },
 ];
@@ -81,7 +81,7 @@ const UserList = ({
         <div style={{ height: "200px", width: "100%" }}>
           <div className="my-2">Change Role</div>
           <Select
-            style={{ width: "300px", height: "30px" }}
+            style={{ width: "300px" }}
             mode={"multiple"}
             onChange={(e) => handleRows(e, data?.role)}
             options={items}
@@ -100,6 +100,7 @@ const UserList = ({
                 placeholder={"Change Manager"}
                 // open={openManager}
                 value={selectedManager}
+                allowClear
                 onDropdownVisibleChange={(visible) => setOpenManager(visible)}
               />
             </>
@@ -388,7 +389,7 @@ const UserList = ({
                             const manager = optionsUser.find(
                               (data) => data.value == item.managerId
                             );
-                            setSelectedManager(manager.value);
+                            setSelectedManager(manager?.value);
                           }}
                         >
                           <EditButton />

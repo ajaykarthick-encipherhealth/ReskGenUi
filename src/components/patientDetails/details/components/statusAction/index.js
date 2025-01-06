@@ -603,7 +603,7 @@ const StatusAction = ({
     <>
       {patientIdDetailsData?.data?.response && (
         <>
-          {userRole == "admin" || userRole === "tenant_admin" ? (
+          {userRole && userRole?.toLowerCase() == "admin" || userRole && userRole?.toLowerCase() === "tenant_admin" ? (
             <div className={`${visitStyles.actionbtnContainer}`}>
               {/* <Dropdown
                 overlay={adminActionItems}
@@ -632,7 +632,7 @@ const StatusAction = ({
                 </span>
               </Button>
             </div>
-          ) : userRole == "supervisor" ? (
+          ) : userRole && userRole?.toLowerCase() == "supervisor" ? (
             <div className={`${visitStyles.actionbtnContainer}`}>
               <Dropdown
                 overlay={renderAuditMenu()}
@@ -670,7 +670,7 @@ const StatusAction = ({
                 >
                   <span>
                     {patienIdDetails?.auditedStatus != null
-                      ? patienIdDetails?.auditedStatus
+                      ? patienIdDetails?.auditedStatus.replaceAll('_', " ")
                       : "AUDIT"}
                   </span>
                   <span style={{ marginLeft: "10px" }}>
