@@ -54,12 +54,12 @@ function AddPatientListTable({
         });
       } else {
         const encodedValue = btoa(JSON.stringify(page))
-           .replace(/\+/g, "-")
-           .replace(/\//g, "_")
-           .replace(/=+$/, ""); // Remove padding '='
+          .replace(/\+/g, "-")
+          .replace(/\//g, "_")
+          .replace(/=+$/, ""); // Remove padding '='
 
-         // const encodedValue = btoa(JSON.stringify(page));
-         setStorage("AdminPatientsEncodedValue", encodedValue);
+        // const encodedValue = btoa(JSON.stringify(page));
+        setStorage("AdminPatientsEncodedValue", encodedValue);
         navigate.push({
           pathname: "/admin/patients/details",
           // query: {
@@ -282,18 +282,16 @@ function AddPatientListTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>Flag </th>
-            <th>PATIENT ID</th>
-            <th className="text-truncate">FILE NAME</th>
-            <th className="text-truncate">EMR TYPE</th>
-            <th className="text-truncate">TOTAL PAGES</th>
-            <th style={{ textAlign: "center" }} className="text-truncate">
-              CREATED BY
-            </th>
+            <th className="px-3">PATIENT ID</th>
+            <th className="text-truncate px-3">FILE NAME</th>
+            <th className="text-truncate px-3">EMR TYPE</th>
+            <th className="text-truncate px-3">TOTAL PAGES</th>
+            <th className="text-truncate px-3">CREATED BY</th>
 
             <th
               style={{
                 cursor: "pointer",
-                paddingLeft: "15px",
+                // paddingLeft: "15px",
                 textAlign: "center",
               }}
               onClick={() => {
