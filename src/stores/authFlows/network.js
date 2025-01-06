@@ -77,7 +77,7 @@ export async function login({ email, router, code, password, mfa, skip }) {
       router?.push({
         pathname: `/twofactorAuthentication/SelectRole`
       });
-      // setStorage("loginTime", Date.now());
+      setStorage("loginTime", Date.now());
     }
     if (data?.response === null) {
       notification.error({
