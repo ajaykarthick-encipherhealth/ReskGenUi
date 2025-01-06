@@ -27,7 +27,7 @@ const RiskAdjustment = ({
 
   const disabledDate = (date) => {
     const year = date.year();
-    return year < 2016 || year > 2024;
+    return year < 2016 || year > currentDate.getFullYear();
   };
 
   const handleCode = (e) => {
