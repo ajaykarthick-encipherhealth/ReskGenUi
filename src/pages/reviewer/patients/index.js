@@ -330,7 +330,7 @@ const Patient = ({
   useEffect(() => {
     if (routedData) {
       setParamsFilter("check");
-      setPageNo(routedData?.pageNo);
+      setPageNo(routedData?.pageNo ? routedData?.pageNo : 0);
       setPaginationFirst(routedData?.paginationFirst);
       setSearchTextValue(routedData?.searchTextValue);
       setSelectedDates(routedData?.selectedDates || []);

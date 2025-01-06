@@ -173,7 +173,7 @@ function PatientTable({
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th style={{ paddingLeft: "60px" }}>PATIENT ID</th>
+            <th>PATIENT ID</th>
             <th style={{ paddingLeft: "60px" }}>FILE NAME</th>
             {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
               <th>HCC COUNT</th>
@@ -236,7 +236,7 @@ function PatientTable({
 
             <th className={TableStyle.rowStyle}> ALLOCATED BY</th>
             <th style={{ paddingLeft: "35px" }}>PRIORITY</th>
-            <th>STATUS</th>
+            <th style={{ paddingLeft: "30px" }}>STATUS</th>
           </tr>
         </thead>
 

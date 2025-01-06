@@ -15,8 +15,6 @@ import moment from "moment";
 const { RangePicker } = DatePicker;
 
 const allFilters = [
-  "Reviewer",
-  "Supervisor",
   "Allocated Date",
   "Audit Allocated Date",
   "Processed Status",

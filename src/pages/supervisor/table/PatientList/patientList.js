@@ -225,7 +225,7 @@ function PatientTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENTS</th>
-            <th>REVIEWER</th>
+            <th style={{ paddingLeft: "30px" }}> REVIEWER</th>
             <th style={{ cursor: "pointer", textAlign: "center" }}>
               <Tooltip placement="bottom" title="REVIEWER CHANGES">
                 RC
@@ -299,7 +299,7 @@ function PatientTable({
             </th>
 
             <th className="text-truncate" style={{ paddingLeft: "30px" }}>
-              AUDIT ALLOCATED BY              
+              AUDIT ALLOCATED BY
             </th>
             <th className="text-truncate" style={{ paddingLeft: "30px" }}>
               PRIORITY
