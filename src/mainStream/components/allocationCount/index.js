@@ -1,4 +1,4 @@
-import { Empty } from "antd";
+import { Empty, Tooltip } from "antd";
 import React from "react";
 
 const AllocationCount = ({
@@ -38,8 +38,16 @@ const AllocationCount = ({
                     )}
                   </span>
                 </div>
-                <div className={styles.count}>
-                  {item?.count ? item?.count : 0}
+                <div className={`cr-pointer ${styles.count}`}>
+                  {item?.count ? (
+                    item.count < 99 ? (
+                      item.count
+                    ) : (
+                      <Tooltip title={item.count}>99+</Tooltip>
+                    )
+                  ) : (
+                    0
+                  )}
                 </div>
               </div>
             ))
@@ -54,7 +62,6 @@ const AllocationCount = ({
         </div>
       </div>
     </div>
-
   );
 };
 

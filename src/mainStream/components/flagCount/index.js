@@ -53,6 +53,7 @@ const Flags = ({ reportListAll, styles, activeTab }) => {
                       overflow: "scroll",
                     }}
                   >
+                    <h5 className="border-bottom">Total Flags: {flagItem.patientIds.length}</h5>
                     {flagItem.patientIds.map((item) => (
                       <label className="d-block">{item}</label>
                     ))}
@@ -61,7 +62,11 @@ const Flags = ({ reportListAll, styles, activeTab }) => {
                 trigger="hover"
               >
                 <div className={`cr-pointer ${styles.count}`}>
-                  {flagItem.count ? flagItem.count : 0}
+                  {flagItem.count
+                    ? flagItem.count < 99
+                      ? flagItem.count
+                      : "99+"
+                    : 0}
                 </div>
               </Popover>
             </div>

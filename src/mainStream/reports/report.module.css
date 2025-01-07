@@ -253,14 +253,14 @@
 }
 .count {
   background-color: #04306f;
-  height: 30px;
-  width: 30px;
+  height: 33px;
+  width: 33px;
   border-radius: 50%;
   color: white;
   text-align: center;
-  padding: 5px;
+  padding: 7px 6px;
   margin-right: 10px;
-  font-size: 14px !important;
+  font-size: 13px !important;
 }
 .contentGroups {
   display: flex;
