@@ -309,8 +309,7 @@ const AllocateModal = ({
                           {selectedChart.length + chart.hold + chart.pending >
                             100 && "Maximum upto 100 charts to pending"}
                         </span>
-                        <span>Selected Charts</span>
-
+                        <div className="mb-3">Selected Charts</div>
                         <ul className={`${modalStyle.selectChart}`}>
                           {selectedChart.map((item) => (
                             <li

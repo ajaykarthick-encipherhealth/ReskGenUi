@@ -229,7 +229,7 @@ const L2AllocateModal = ({
                   {selectedChart?.length + chart.hold + chart.pending > 19 &&
                     "Maximum upto 20 charts to pending"}
                 </span>
-                <span>Selected Charts</span>
+                <div className="mb-3">Selected Charts</div>
                 <ul className={`${modalStyle.selectChart}`}>
                   {selectedChart?.map((item) => (
                     <li
@@ -240,7 +240,7 @@ const L2AllocateModal = ({
                           (chart) => chart.id != item.id
                         );
                         setSelectedChart(remove);
-                        setSelectedRowsId(remove)
+                        setSelectedRowsId(remove);
                       }}
                     >
                       <span>{item.name}</span>
