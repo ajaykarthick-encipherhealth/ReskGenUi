@@ -40,19 +40,19 @@ const DailyTask = ({
     },
     {
       color: "#FFB54D",
-      name: "AuditPending",
+      name: "Audit Pending",
     },
     {
       color: "#F4CE14",
-      name: "AuditHold",
+      name: "Audit Hold",
     },
     {
       color: "#C26100",
-      name: "ReAudit",
+      name: "Re Audit",
     },
     {
       color: "#EB5252",
-      name: "AuditDeclined",
+      name: "Audit Declined",
     },
   ];
   const daysOfWeek = [
@@ -284,7 +284,7 @@ const DailyTask = ({
               </div>
             </Col>
             <Col span={12} className={styles.headerTitle}>
-              <div style={{ paddingLeft: "10px" }}>
+              <div>
                 {Array.from({ length: bullets.length }).map((_, i) => (
                   <div className={styles.container} key={i}>
                     <Skeleton.Input style={{ width: 30 }} active />
@@ -443,25 +443,6 @@ const DailyTask = ({
                                           "Audited Due Date",
                                         ],
                                       };
-                                      // setStorage(
-                                      //   "SuperVisorfilter",
-                                      //   JSON.stringify(allFilters)
-                                      // );
-                                      // setStorage(
-                                      //   "supervisorStatus",
-                                      //   JSON.stringify(params)
-                                      // );
-                                      // setStorage(
-                                      //   "supervisorDate",
-                                      //   JSON.stringify(params)
-                                      // );
-                                      // router?.push(
-                                      //   {
-                                      //     pathname: "/supervisor/auditing",
-                                      //     query: params,
-                                      //   },
-                                      //   "/supervisor/auditing"
-                                      // );
                                       getRoutedData(params);
                                       router.push("/supervisor/auditing");
                                     }}
@@ -472,20 +453,21 @@ const DailyTask = ({
                                         backgroundColor: item.color,
                                       }}
                                     ></div>
-                                    {item.name}
-                                  </div>
-                                  <div className={styles.subText}>
-                                    {item.name === "AuditPending"
+                                    <div className={styles.statusName}>{item.name}</div>
+                                    <div className={styles.subText}>
+                                    {item.name === "Audit Pending"
                                       ? data.pending
                                       : item.name === "Audited"
                                       ? data?.audited
-                                      : item.name === "AuditHold"
+                                      : item.name === "Audit Hold"
                                       ? data.hold
-                                      : item.name === "ReAudit"
+                                      : item.name === "Re Audit"
                                       ? data?.reAudited
-                                      : item.name === "AuditDeclined" &&
+                                      : item.name === "Audit Declined" &&
                                         data.declined}
                                   </div>
+                                  </div>
+                                 
                                 </div>
                               );
                             })}

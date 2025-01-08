@@ -16,10 +16,10 @@
   cursor: pointer;
 }
 .container {
-  width: 100%;
-  display: flex;
+  /* width: 100%; */
+  /* display: flex; */
   margin-bottom: 10px;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   cursor: pointer;
 }
 
@@ -67,11 +67,16 @@
   cursor: pointer;
 }
 .subText {
-  width: 100%;
-  display: flex;
-  justify-content: end;
-  align-items: end;
-  margin-left: 20px;
+  /* width: 100%; */
+  /* display: flex; */
+  /* justify-content: end;
+  align-items: end; */
+  /* margin-left: 20px; */
+  
+}
+
+.statusName {
+  width: 110px;
 }
 @media screen and (min-width: 768px) and( max-width: 1024px) {
   .headerTitle {

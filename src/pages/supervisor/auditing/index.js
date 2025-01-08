@@ -70,7 +70,7 @@ const bullets = [
 
 const statusOptions = [
   { label: "AUDITED", value: "AUDITED" },
-  { label: "AUDIT_PENDING", value: "AUDIT_PENDING" },
+  { label: "AUDIT PENDING", value: "AUDIT_PENDING" },
   { label: "RE AUDIT", value: "REAUDIT" },
   { label: "AUDIT HOLD", value: "AUDITHOLD" },
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
