@@ -237,6 +237,9 @@ const Header = ({
     setOpenMsg(true);
     setPopoverVisible(false);
   };
+  const handleSettingsClick = () => {
+    router.push("/tenantAdmin/settings");
+  };
   useEffect(() => {
     if (selectedbtn) {
       getCoderDetails({
@@ -702,8 +705,8 @@ const Header = ({
                         )}
                         {userRole === "tenant_admin" && (
                           <div
-                            className="chatheaderIcon"
-                            onClick={() => router.push("/tenantAdmin/settings")}
+                            className="chatheaderIcon cr-pointer"
+                            onClick={handleSettingsClick}
                           >
                             <SettingOutlined
                               style={{
@@ -712,8 +715,24 @@ const Header = ({
                                 marginTop: "8px",
                                 fontWeight: "700",
                                 marginRight: "10px",
-                                color: "#04306F",
                                 fontSize: "30px",
+                                cursor: "pointer",
+                                color:
+                                  stateActive === "/tenantAdmin/settings"
+                                    ? "#fff"
+                                    : "#04306F",
+                                backgroundColor:
+                                  stateActive === "/tenantAdmin/settings"
+                                    ? "#04306F"
+                                    : "",
+                                padding:
+                                  stateActive === "/tenantAdmin/settings"
+                                    ? "3px"
+                                    : "",
+                                borderRadius:
+                                  stateActive === "/tenantAdmin/settings"
+                                    ? "3px"
+                                    : "",
                               }}
                             />
                           </div>

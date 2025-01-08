@@ -111,7 +111,7 @@ const Profile = ({
             <div className="header-info2 d-flex align-items-center">
               <div
                 className="header-media"
-                style={{ marginTop: "-3px" }}
+                style={{ marginTop: "-1px" }}
                 onClick={() => setOpenContent(true)}
               >
                 {profileUploadedTime ? (
