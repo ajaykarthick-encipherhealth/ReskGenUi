@@ -545,25 +545,13 @@ const Hcc = ({
                             onOpenChange={() => setPopoverVisible(false)}
                           >
                             <div
-                              className={` d-flex align-items-center  justify-content-center gap-2 ${styles.dosContainer}`}
+                              className={`${styles.actionDosPageBtn} px-3  py-1 rounded-md`}
                               onClick={() => {
                                 setPopoverVisible(true);
                               }}
+                              // style={{ marginLeft: "10px" }}
                             >
-                              <span
-                                className={`text-truncate  ${styles.dosPageNumber}`}
-                              >
-                                Select Dos Page Number
-                              </span>
-                              <FontAwesomeIcon
-                                className="mt-1"
-                                icon={faAngleDown}
-                                style={{
-                                  size: 10,
-                                  color: "#e6e6e6",
-                                  // marginLeft: "5px",
-                                }}
-                              />
+                              Select Dos Page Number
                             </div>
                           </Popover>
                         )}

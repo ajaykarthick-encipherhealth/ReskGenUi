@@ -27,7 +27,7 @@ const Lab = ({
   patientDosResult,
   getPatientLabDosList,
   year,
-  setDosYearDefalutSelect
+  setDosYearDefalutSelect,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -37,7 +37,7 @@ const Lab = ({
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [dosYear, setDosYear] = useState([]);
   const [selectedDosValue, setSelectedDosValue] = useState([]);
-  const [selectedYearValue, setSelectedYearValue] = useState('');
+  const [selectedYearValue, setSelectedYearValue] = useState("");
   const [search, setSearch] = useState();
   const [labForm, setLabForm] = useState(false);
 
@@ -48,20 +48,18 @@ const Lab = ({
     }
   };
 
-  const getDosList = async(year) => {
-    const patientId = getStorage("patientId")
+  const getDosList = async (year) => {
+    const patientId = getStorage("patientId");
     try {
-      const res = await getPatientLabDosList(patientId, year)
-    } catch (error) {
-      
-    }
-  }
+      const res = await getPatientLabDosList(patientId, year);
+    } catch (error) {}
+  };
 
   const handleYearOptions = (value) => {
     setSelectedYearValue(value);
-    getDosList(value)
-    setDosYearDefalutSelect(value)
-  }
+    getDosList(value);
+    setDosYearDefalutSelect(value);
+  };
 
   const handleOptions = (value) => {
     var selectData = patientDosResult?.data?.response.find(
@@ -74,18 +72,18 @@ const Lab = ({
     if (value) {
       getLabDetails(
         patientId,
-        selectedYearValue||"",
+        selectedYearValue || "",
         moment(value).format("YYYY-MM-DD"),
         "",
         selectData?.testName
       );
       getLabFileDetails(selectData?.fileId);
     } else {
-      setSelectDosValue(null)
+      setSelectDosValue(null);
       // setSelectDosValue(dosSummariesList[0]?.value);
       getLabDetails(
         patientId,
-        selectedYearValue||"",
+        selectedYearValue || "",
         "",
         // moment(dosSummariesList[0]?.value).format("YYYY-MM-DD"),
         ""
@@ -110,9 +108,7 @@ const Lab = ({
 
   useEffect(() => {
     if (patientDosResult?.data?.response.length > 0) {
-      getLabFileDetails(
-        patientDosResult?.data?.response[0]?.fileId||""
-      );
+      getLabFileDetails(patientDosResult?.data?.response[0]?.fileId || "");
       setIsLoading(true);
     }
   }, [patientDosResult?.data?.response]);
@@ -204,7 +200,7 @@ const Lab = ({
       <div className={styles.displayDiv}>
         {patientDosResult?.data?.response
           ? getUniqueListBy(
-            patientDosResult?.data?.response[0]?.fileDetailDTO?.dosSummaries,
+              patientDosResult?.data?.response[0]?.fileDetailDTO?.dosSummaries,
               "dos"
             )?.map((data) => (
               <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
@@ -260,7 +256,7 @@ const Lab = ({
       </div>
     </div>
   );
-  
+
   return (
     <>
       <div className={visitStyles.visitdata_tab_body}>
@@ -325,20 +321,22 @@ const Lab = ({
                         </Select>
                       </Nav.Item>
                       <Nav.Item as="li" className="nav-item">
-                        <Select
-                          placeholder="Select DOS"
-                          onChange={handleOptions}
-                          // allowClear
-                          style={{ width: "220px" }}
-                          value={selectDosValue}
-                          allowClear={true}
-                        >
-                          {dosSummariesList?.map((data) => (
-                            <Option key={data?.value} value={data?.value}>
-                              {data.label}
-                            </Option>
-                          ))}
-                        </Select>
+                        <div className="d-flex gap-3 mx-2">
+                          <Select
+                            placeholder="Select DOS"
+                            onChange={handleOptions}
+                            className="dosSelect"
+                            // allowClear
+                            value={selectDosValue}
+                            allowClear={true}
+                          >
+                            {dosSummariesList?.map((data) => (
+                              <Option key={data?.value} value={data?.value}>
+                                {data.label}
+                              </Option>
+                            ))}
+                          </Select>
+                        </div>
                       </Nav.Item>
                       <Nav.Item as="li" className="nav-item">
                         <>
@@ -352,23 +350,13 @@ const Lab = ({
                               onOpenChange={() => setPopoverVisible(false)}
                             >
                               <div
-                                className={styles.dosContainerLab}
+                                className={`${styles.actionDosPageBtn} px-3  py-1 rounded-md`}
                                 onClick={() => {
                                   setPopoverVisible(true);
                                 }}
                                 style={{ marginLeft: "10px" }}
                               >
-                                <span className={styles.dosPageNumber}>
-                                  Select Dos Page Number
-                                </span>
-                                <FontAwesomeIcon
-                                  icon={faAngleDown}
-                                  style={{
-                                    size: 10,
-                                    color: "#e6e6e6",
-                                    marginLeft: "5px",
-                                  }}
-                                />
+                                Select Dos Page Number
                               </div>
                             </Popover>
                           )}
@@ -419,7 +407,7 @@ const Lab = ({
           </div>
         </div>
       </div>
-      <AddLabForm setOpen={setLabForm} open={labForm} title="LAB"/>
+      <AddLabForm setOpen={setLabForm} open={labForm} title="LAB" />
     </>
   );
 };

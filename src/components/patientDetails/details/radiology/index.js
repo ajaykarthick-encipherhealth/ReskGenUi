@@ -346,49 +346,43 @@ const Radiology = ({
                         </Select>
                       </Nav.Item>
                       <Nav.Item as="li" className="nav-item">
-                        <Select
-                          placeholder="Select DOS"
-                          onChange={handleOptions}
-                          value={selectDosValue ? selectDosValue : null}
-                          style={{ width: "220px" }}
-                        >
-                          {dosSummariesList?.map((data) => (
-                            <Option key={data?.value} value={data?.value}>
-                              {data.label}
-                            </Option>
-                          ))}
-                        </Select>
-                      </Nav.Item>
-                      {activeTabHead == 1 && (
-                        <Popover
-                          open={popoverVisible}
-                          content={PopContent}
-                          placement="bottom"
-                          trigger={"click"}
-                          overlayStyle={{ zIndex: 1000 }}
-                          onOpenChange={() => setPopoverVisible(false)}
-                        >
-                          <div
-                            className={styles.dosContainerLab}
-                            onClick={() => {
-                              setPopoverVisible(true);
-                            }}
-                            style={{ marginLeft: "10px" }}
+                        <div className="d-flex gap-3 mx-2">
+                          <Select
+                            placeholder="Select DOS"
+                            className="dosSelect"
+                            onChange={handleOptions}
+                            value={selectDosValue ? selectDosValue : null}
                           >
-                            <span className={styles.dosPageNumber}>
-                              Select Dos Page Number
-                            </span>
-                            <FontAwesomeIcon
-                              icon={faAngleDown}
-                              style={{
-                                size: 10,
-                                color: "#e6e6e6",
-                                marginLeft: "5px",
+                            {dosSummariesList?.map((data) => (
+                              <Option key={data?.value} value={data?.value}>
+                                {data.label}
+                              </Option>
+                            ))}
+                          </Select>
+                        </div>
+                      </Nav.Item>
+                      <Nav.Item as="li" className="nav-item">
+                        {activeTabHead == 1 && (
+                          <Popover
+                            open={popoverVisible}
+                            content={PopContent}
+                            placement="bottom"
+                            trigger={"click"}
+                            overlayStyle={{ zIndex: 1000 }}
+                            onOpenChange={() => setPopoverVisible(false)}
+                          >
+                            <div
+                              className={`${styles.actionDosPageBtn} px-3  py-1 rounded-md`}
+                              onClick={() => {
+                                setPopoverVisible(true);
                               }}
-                            />
-                          </div>
-                        </Popover>
-                      )}
+                              style={{ marginLeft: "10px" }}
+                            >
+                              Select Dos Page Number
+                            </div>
+                          </Popover>
+                        )}
+                      </Nav.Item>
                     </div>
                     <div>
                       <Button
