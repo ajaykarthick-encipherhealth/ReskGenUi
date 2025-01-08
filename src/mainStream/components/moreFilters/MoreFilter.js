@@ -12,8 +12,8 @@ const MoreFilter = ({
   setSelectAll,
 }) => {
   const handleHeaderCheckboxChange = (e) => {
-      setSelectAll(e.target.checked);
-      setSelectedData(e.target.checked?checkedList:[]);
+    setSelectAll(e.target.checked);
+    setSelectedData(e.target.checked ? checkedList : []);
   };
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedData?.some(
@@ -39,8 +39,8 @@ const MoreFilter = ({
           type="checkbox"
           onChange={handleHeaderCheckboxChange}
           className={`${styles.customChecked}`}
-          checked={selectedData?.length===checkedList?.length}
-        />{" "}
+          checked={selectedData?.length === checkedList?.length}
+        />
         <div style={{ margin: "0 5px" }} className="mx-2">
           Select All
         </div>
