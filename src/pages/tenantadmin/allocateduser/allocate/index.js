@@ -26,6 +26,7 @@ const AllocateModal = ({
   getAllList,
   getL1UsersList,
   getAllocateUsers,
+  setBatchCount
 }) => {
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
@@ -77,6 +78,7 @@ const AllocateModal = ({
     });
     if (response?.status == "SUCCESS") {
       getResponePopup(response);
+      setBatchCount(null)
       getAllList({
         pageNo: 0,
         pageSize: 15,

@@ -316,6 +316,7 @@ const Patient = ({
         sort: sort,
         selectedOption: selectedOption,
         selectOrgList: selectOrgList,
+        batchCount: batchCount
       });
     }
     if (activeTab == 2 && !isPatientList) {
@@ -749,12 +750,14 @@ const Patient = ({
                                           /[^\d]/g,
                                           ""
                                         );
-                                        if (inputValue.length > 3) {
-                                          inputValue = inputValue.slice(0, 3);
+                                        if (inputValue.length > 5) {
+                                          inputValue = inputValue.slice(0, 5);
                                         }
                                         setBatchCount(inputValue);
                                         if (inputValue.length <= 0) {
                                           setFilterBatchCount(true);
+                                          setSelectAllChecked(false)
+                                          setSelectedRowsId([])
                                           getAllList({
                                             batchCount: "",
                                             selectOrgList: selectOrgList,
@@ -776,6 +779,10 @@ const Patient = ({
                                     <button
                                       onClick={() => {
                                         setFilterBatchCount(true);
+                                        if (batchCount != selectedRowsId.length) {
+                                          setSelectAllChecked(false)
+                                          setSelectedRowsId([])
+                                        }
                                         getAllList({
                                           batchCount: batchCount,
                                           selectOrgList: selectOrgList,
@@ -1181,6 +1188,7 @@ const Patient = ({
         setSelectedChart={setSelectedChart}
         selectedChart={selectedChart}
         getAllList={getAllList}
+        setBatchCount={setBatchCount}
       />
       <L2AllocateModal
         open={allocateModalL2}
