@@ -20,7 +20,7 @@ import statusIcon from "../../../../images/fihr/status.svg";
 import calender from "../../../../images/fihr/calender.svg";
 import DetailedFhirTable from "../../../../components/table/tenantTable/fhirPatient/DetailedFhirTable";
 import { actions as activeTab } from "../../../../stores/admin/report";
-import { statusOptions3 } from "../pdfTable";
+import { statusOptions3 } from "../pdftable";
 const statusOptions = [
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },

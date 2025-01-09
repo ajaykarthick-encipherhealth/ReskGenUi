@@ -17,7 +17,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import { InfoCircleFilled } from "@ant-design/icons";
-import MoreFilter from "../../../tenantAdmin/tracking/filters";
+import MoreFilter from "../../../tenantadmin/tracking/filters";
 
 const { RangePicker } = DatePicker;
 

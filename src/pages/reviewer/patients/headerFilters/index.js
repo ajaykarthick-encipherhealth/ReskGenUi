@@ -19,7 +19,7 @@ import InputField from "../../../../components/input";
 import { getFilters } from "../../../../stores/authflow/actions";
 // import MoreFilter from "../filters";
 import { InfoCircleFilled } from "@ant-design/icons";
-import MoreFilter from "../../../tenantAdmin/tracking/filters";
+import MoreFilter from "../../../tenantadmin/tracking/filters";
 import HeaderFilters from "../../../../components/headerFilters";
 const { RangePicker } = DatePicker;
 

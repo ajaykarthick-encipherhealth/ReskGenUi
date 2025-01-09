@@ -11,7 +11,7 @@ const AdminList = ({ userList }) => {
 
   const gotoUserQueue = (item) => {
     setStorage("user",item?.userName)
-      router.push(`/supervisor/user/userQueue`);
+      router.push(`/supervisor/user/userqueue`);
   };
   return (
     <div className={TableStyle.classContaineer}>

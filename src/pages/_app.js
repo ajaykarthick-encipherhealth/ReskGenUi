@@ -120,7 +120,7 @@ function MyApp({ Component, pageProps }) {
             currentPath === "/" ||
             currentPath?.includes("/login") ||
             currentPath?.includes("/ehrlogin") ||
-            currentPath?.includes("/twofactorAuthentication/") ||
+            currentPath?.includes("/twofactorauthentication/") ||
             currentPath?.includes("search") ||
             currentPath?.includes("/reviewer/patients/details")
           ) {
@@ -195,9 +195,9 @@ function MyApp({ Component, pageProps }) {
     "/admin/patients/details",
     "/reviewer/patients/details",
     "/supervisor/patients/details",
-    "/tenantAdmin/patients/details",
+    "/tenantadmin/patients/details",
     "/supervisor/user/details", 
-    "/tenantAdmin/patientSync/batchFilesView"
+    "/tenantadmin/patientsync/batchfilesview"
   ];
   const showFooter = !hideFooterPaths.includes(router.pathname);
   useEffect(() => {

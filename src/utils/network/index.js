@@ -62,7 +62,7 @@ export async function requestAUthflow(url, options) {
       const searchParams = new URLSearchParams();
       searchParams.append("params", encodedParams);
       window.open(
-        `/twofactorAuthentication/Authentication?params=${searchParams.toString()}`,
+        `/twofactorauthentication/authentication?params=${searchParams.toString()}`,
         "_self"
       );
     } else {

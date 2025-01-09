@@ -1,5 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
-import { getFaviconUrl } from "./twofactorAuthentication/reusableFun";
+import { getFaviconUrl } from "./twofactorauthentication/reusableFun";
 
 export default function Document() {
   return (

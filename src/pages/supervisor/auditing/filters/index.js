@@ -7,7 +7,7 @@ import DateRangePicker from "../../../../components/rangepicker";
 import Search from "../../../../components/search";
 import { resetPageNumber } from "../../../../components/headerFilters/functions";
 import { InfoCircleFilled } from "@ant-design/icons";
-import MoreFilter from "../../../tenantAdmin/tracking/filters";
+import MoreFilter from "../../../tenantadmin/tracking/filters";
 import { removeStorage } from "../../../../utils/storages";
 import dayjs from "dayjs";
 export const allFilters = [

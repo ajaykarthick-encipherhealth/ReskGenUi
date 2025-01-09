@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import styles from "../../../../components/imageUploading/styles.module.css";
 import Image from "next/image";
 import { Progress } from "antd";
-import progressStyles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
+import progressStyles from "../../../../pages/tenantadmin/patientsync/fhir.module.css";
 import { useEffect } from "react";
 
 const UploadFile = ({

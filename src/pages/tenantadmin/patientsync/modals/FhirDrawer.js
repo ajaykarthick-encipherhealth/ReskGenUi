@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Divider, Drawer, Form, Input, Select, Space } from "antd";
 import downloadImg from "../../../../images/fihr/download.png";
 import uploaderImg from "../../../../images/fihr/uploaderImg.png";
-import UploadFile from "../uploadFile";
+import UploadFile from "../uploadfile";
 import { useState } from "react";
 import ENDPOINTS from "../../../../utility/enpoints";
 import axios from "../../../../utility/axiosConfig";

@@ -47,10 +47,10 @@ function AddPatientListTable({
       setStorage("patientId", data?.patientId);
       var role = getStorage("userRole");
       if (role == "tenant_admin") {
-        setStorage("routeBackTo", "/tenantAdmin/patients");
+        setStorage("routeBackTo", "/tenantadmin/patients");
         getRoutedData(page);
         navigate.push({
-          pathname: "/tenantAdmin/patients/details",
+          pathname: "/tenantadmin/patients/details",
         });
       } else {
         const encodedValue = btoa(JSON.stringify(page))

@@ -208,7 +208,7 @@ const IndividualReceiverReport = ({
               <button
                 className="border-0 bg-white text-white"
                 onClick={() => {
-                  // router.push(`/tenantAdmin/report`);
+                  // router.push(`/tenantadmin/report`);
                   setViewIndividualReport({
                     status: false,
                     data: viewIndividualReport,

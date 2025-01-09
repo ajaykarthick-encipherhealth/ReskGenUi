@@ -295,9 +295,9 @@ const InitialCard = ({
       controller.abort();
       setStorage("patientId", data.patientId);
       navigate.push({
-        pathname: `/${currentRole}/report/reportDetails`,
+        pathname: `/${currentRole}/report/reportdetails`,
         query: {...page,fromReport:currentRole},
-      }, `/${currentRole}/report/reportDetails`);
+      }, `/${currentRole}/report/reportdetails`);
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",

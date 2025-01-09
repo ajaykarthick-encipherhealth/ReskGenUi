@@ -66,7 +66,7 @@ export const getMFAValidation =
         );
 
         route?.push({
-          pathname: `/twofactorAuthentication/Authentication`,
+          pathname: `/twofactorauthentication/authentication`,
           search: `params=${encodedParams}`,
         });
       } else {
@@ -196,7 +196,7 @@ export const loginAction =
             })
           );
           router?.push({
-            pathname: `/twofactorAuthentication/SelectRole`,
+            pathname: `/twofactorauthentication/selectrole`,
             search: `params=${encodedParams}`,
           });
           setStorage("loginTime", Date.now());

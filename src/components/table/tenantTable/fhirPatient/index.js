@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Empty, Popover, Progress, Tooltip } from "antd";
-import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
+import styles from "../../../../pages/tenantadmin/patientsync/fhir.module.css";
 import TableStyle from "../../table.module.css";
 import { Paginator } from "primereact/paginator";
 import dayjs from "dayjs";
@@ -57,7 +57,7 @@ function FIHRPatinetTable({
   };
 
   const handleRow = (row) => {
-    router?.push("/tenantAdmin/patientSync/details");
+    router?.push("/tenantadmin/patientsync/details");
   };
 
   return (

@@ -46,7 +46,7 @@ import { actions as uploadImagesAction } from "../../../stores/authflow/imageUpl
 import { actions as tenantAction } from "../../../stores/tenantAdmin/patientSync";
 import Profile from "./profile";
 import { getResponePopup } from "../../../utils/reusable";
-import { getHeaderLoge } from "../../../pages/twofactorAuthentication/reusableFun";
+import { getHeaderLoge } from "../../../pages/twofactorauthentication/reusableFun";
 
 const Header = ({
   notificationResponse,
@@ -206,7 +206,7 @@ const Header = ({
     } else if (key === "Supervisor") {
       router.push("/supervisor/dashboard");
     } else if (key === "Tenant Admin") {
-      router.push("/tenantAdmin/dashboard");
+      router.push("/tenantadmin/dashboard");
     } else if (key === "Ehr") {
       router.push("/ehr/patients");
     }
@@ -238,7 +238,7 @@ const Header = ({
     setPopoverVisible(false);
   };
   const handleSettingsClick = () => {
-    router.push("/tenantAdmin/settings");
+    router.push("/tenantadmin/settings");
   };
   useEffect(() => {
     if (selectedbtn) {
@@ -718,19 +718,19 @@ const Header = ({
                                 fontSize: "30px",
                                 cursor: "pointer",
                                 color:
-                                  stateActive === "/tenantAdmin/settings"
+                                  stateActive === "/tenantadmin/settings"
                                     ? "#fff"
                                     : "#04306F",
                                 backgroundColor:
-                                  stateActive === "/tenantAdmin/settings"
+                                  stateActive === "/tenantadmin/settings"
                                     ? "#04306F"
                                     : "",
                                 padding:
-                                  stateActive === "/tenantAdmin/settings"
+                                  stateActive === "/tenantadmin/settings"
                                     ? "3px"
                                     : "",
                                 borderRadius:
-                                  stateActive === "/tenantAdmin/settings"
+                                  stateActive === "/tenantadmin/settings"
                                     ? "3px"
                                     : "",
                               }}

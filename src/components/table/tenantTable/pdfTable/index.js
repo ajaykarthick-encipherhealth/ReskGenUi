@@ -4,8 +4,8 @@ import TableStyle from "../../table.module.css";
 import { Paginator } from "primereact/paginator";
 import { connect } from "react-redux";
 import dayjs from "dayjs";
-import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
-import FhirDrawer from "../../../../pages/tenantAdmin/patientSync/modals/PdfDrawer";
+import styles from "../../../../pages/tenantadmin/patientsync/fhir.module.css";
+import FhirDrawer from "../../../../pages/tenantadmin/patientsync/modals/PdfDrawer";
 import { useRouter } from "next/router";
 import { renderSkeleton } from "../../../reuseableFunctions";
 import Image from "next/image";
@@ -193,7 +193,7 @@ function PdfTable({
                         row?.batchUploadStatus &&
                           setViewDetailedBatch({ status: true, data: row });
                         // router?.push({
-                        //   pathname: `/tenantAdmin/patientSync/pdfTable`,
+                        //   pathname: `/tenantadmin/patientsync/pdftable`,
                         //   search: `params=${encodedParams}`,
                         // });
                       }}

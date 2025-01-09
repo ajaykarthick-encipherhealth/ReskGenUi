@@ -6,7 +6,7 @@ import processing from "../../../../images/fihr/processing.svg";
 import completed from "../.././../../images/fihr/completed.svg";
 import failed from "../.././../../images/fihr/failed.svg";
 import TableStyle from "../../table.module.css";
-import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
+import styles from "../../../../pages/tenantadmin/patientsync/fhir.module.css";
 import { renderSkeleton } from "../../../reuseableFunctions";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,7 +17,7 @@ import {
 import { useRouter } from "next/router";
 import { setStorage } from "../../../../utils/storages";
 import { faRotate } from "@fortawesome/free-solid-svg-icons";
-import UploadModal from "../../../../pages/tenantAdmin/patientSync/uploadFile/uploadModal";
+import UploadModal from "../../../../pages/tenantadmin/patientsync/uploadfile/uploadModal";
 import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";
 
 export const getColors = (rowStatus) => {
@@ -88,9 +88,9 @@ const DetailedPdfTable = ({
       // const encodedValue = btoa(JSON.stringify(params));
       // setStorage("patientSyncEncodedValue", JSON.stringify(encodedValue));
       // setStorage("fromPatientSync", true);
-      setStorage("routeBackTo", "/tenantAdmin/patientSync");
+      setStorage("routeBackTo", "/tenantadmin/patientsync");
       getRoutedData(params);
-      navigate.push("/tenantAdmin/patientSync/batchFilesView");
+      navigate.push("/tenantadmin/patientsync/batchfilesview");
     } else {
       notification.warning({
         message: row?.patientId + " file not processed. Please wait.",

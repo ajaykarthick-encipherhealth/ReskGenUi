@@ -46,11 +46,11 @@ function TrackingTable({
       // setStorage("fromPatientSync", false);      
       if (role == "tenant_admin") {
         setStorage("patientId", data.patientId);
-        setStorage("routeBackTo", "/tenantAdmin/tracking");
+        setStorage("routeBackTo", "/tenantadmin/tracking");
         getRoutedData(page);
         // setStorage("isTenantAdminTracking", true);
         // setStorage("tenantAdminTrackingEncodedValue", JSON.stringify(page));
-        navigate.push("/tenantAdmin/tracking/details");
+        navigate.push("/tenantadmin/tracking/details");
       } else {
         setStorage("isAdminTracking", true);
         setStorage("adminTrackingEncodedValue", JSON.stringify(page));

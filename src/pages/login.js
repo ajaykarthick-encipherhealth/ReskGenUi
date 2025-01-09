@@ -7,7 +7,7 @@ import { encyptingPass } from "../components/headerFilters/functions";
 import RegularButton from "../components/button";
 import { actions as allActions } from "../stores/authFlows";
 import { getResponePopup } from "../utils/reusable";
-import { getLogoImage } from "./twofactorAuthentication/reusableFun";
+import { getLogoImage } from "./twofactorauthentication/reusableFun";
 
 const Login = ({ getMFAValidation, loginResponse }) => {
   const router = useRouter();

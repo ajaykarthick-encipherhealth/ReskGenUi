@@ -219,10 +219,10 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
                     );
 
                     router?.push({
-                      pathname: `/twofactorAuthentication/GetOTP`,
+                      pathname: `/twofactorauthentication/getotp`,
                       query: password
                     },
-                    '/twofactorAuthentication/GetOTP',
+                    '/twofactorauthentication/getotp',
                     { shallow: true }
                     );
                   }}

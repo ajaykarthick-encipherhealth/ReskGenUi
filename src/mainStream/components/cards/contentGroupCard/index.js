@@ -64,7 +64,7 @@ const ContentGroupCard = ({
       setStorage("patientId", data.patientId);
       setStorage("routeBackTo",`/${modifiedRole}/report`)
       getRoutedData(page)
-      navigate.push(`/${modifiedRole}/report/reportDetails`);
+      navigate.push(`/${modifiedRole}/report/reportdetails`);
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",

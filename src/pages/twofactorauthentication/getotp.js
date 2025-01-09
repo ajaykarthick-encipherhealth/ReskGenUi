@@ -7,7 +7,7 @@ import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
 import redirect from "../../images/svg/redirect.svg";
 import hamburgermenu from "../../images/svg/hamburgermenu.svg";
 import settings from "../../images/svg/settings.svg";
-import { codeLength, generateCodeArray } from "./Authentication";
+import { codeLength, generateCodeArray } from "./authentication";
 import { encyptingPass } from "../../components/headerFilters/functions";
 import RegularButton from "../../components/button";
 import { actions as allActions } from "../../stores/authFlows";

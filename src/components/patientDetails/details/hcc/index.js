@@ -545,7 +545,7 @@ const Hcc = ({
                             onOpenChange={() => setPopoverVisible(false)}
                           >
                             <div
-                              className={`${styles.actionDosPageBtn} px-3  py-1 rounded-md`}
+                              className={`${styles.actionDosPageBtn} d-flex align-items-center px-3 rounded-md`}
                               onClick={() => {
                                 setPopoverVisible(true);
                               }}

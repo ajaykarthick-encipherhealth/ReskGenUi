@@ -4,7 +4,7 @@ import { Paginator } from "primereact/paginator";
 import dayjs from "dayjs";
 import Image from "next/image";
 import refresh from "../.././../../images/fihr/detailedFhirRefresh.svg";
-import styles from "../../../../pages/tenantAdmin/patientSync/fhir.module.css";
+import styles from "../../../../pages/tenantadmin/patientsync/fhir.module.css";
 import TableStyle from "../../table.module.css";
 import PropTypes from "prop-types";
 import SpinnerDots from "../../../spinner";

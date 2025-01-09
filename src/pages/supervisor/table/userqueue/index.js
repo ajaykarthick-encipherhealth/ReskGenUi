@@ -147,7 +147,7 @@ const UserQueueTable = ({
     const targetTd = e.target.closest("td");
     if (targetTd) {
       setStorage("patientId", id);
-      setStorage("routeBackTo", "/supervisor/user/userQueue");
+      setStorage("routeBackTo", "/supervisor/user/userqueue");
       getRoutedData(params);
       router?.push( "/supervisor/user/details")
     }

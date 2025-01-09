@@ -42,7 +42,7 @@ function TrackingTable({
         // setStorage("isTenantAdminTracking", true);
         // setStorage("tenantAdminTrackingEncodedValue", JSON.stringify(page));
         navigate.push({
-          pathname: "/tenantAdmin/patients/details",
+          pathname: "/tenantadmin/patients/details",
           // query: { ...page, isTenantAdminTracking: true },
         });
       } else {

@@ -30,7 +30,7 @@ import { actions as allPatientActions } from "../../stores/admin/workqueue";
 import IndividualReceiverReport from "../../pages/reviewer/report/individualreport";
 import AdminIndividualReport from "../../pages/admin/report/individualreport";
 import SupervisorIndividualReport from "../../pages/supervisor/report/individualreport";
-import TenantAdminIndividualReport from "../../pages/tenantAdmin/report/individualreport";
+import TenantAdminIndividualReport from "../../pages/tenantadmin/report/individualreport";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 

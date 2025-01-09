@@ -27,7 +27,7 @@ export async function mfaValidation({ username, password, route }) {
     setStorage("skipEntry", skip);
     setStorage("mfa", mfa);
     route?.push({
-      pathname: `/twofactorAuthentication/Authentication`
+      pathname: `/twofactorauthentication/authentication`
     });
   } else {
     getResponePopup(data);
@@ -75,7 +75,7 @@ export async function login({ email, router, code, password, mfa, skip }) {
       setStorage("mfa", mfa);
       // setStorage("refreshTokenTime", Date.now());
       router?.push({
-        pathname: `/twofactorAuthentication/SelectRole`
+        pathname: `/twofactorauthentication/selectrole`
       });
       setStorage("loginTime", Date.now());
     }
