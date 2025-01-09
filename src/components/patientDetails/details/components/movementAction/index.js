@@ -162,7 +162,16 @@ const MovementAction = ({
             {isShow||fromMeat ? (
               <Popconfirm
                 onConfirm={() => {
-                  onConfirmValidMove();
+                  handleSubmitValidNotes({
+                    values: null,
+                    setFileLoading,
+                    setConfirmNotesModalValid,
+                    isValidAction,
+                    selectDisDetails,
+                    getpatientDetailsData,
+                    patientDetailsResult,
+                    handleCloseModal,
+                  });
                 }}
                 title="You want move to potential?"
                 placement="bottom"

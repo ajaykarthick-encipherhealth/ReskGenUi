@@ -12,7 +12,11 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { getStorage } from "../../../../../utils/storages";
-import { getPageNumber, getPageNumberLatest, movementApiCall } from "../../../../../stores/patient/details/network";
+import {
+  getPageNumber,
+  getPageNumberLatest,
+  movementApiCall,
+} from "../../../../../stores/patient/details/network";
 
 export const getEncounterDateBackground = ({
   value,
@@ -32,7 +36,7 @@ export const getEncounterDateBackground = ({
   setSelectedDos,
   setLabData,
   storeFileDetails,
-  isShow
+  isShow,
 }) => {
   return value?.map((res, index) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -73,17 +77,18 @@ export const getEncounterDateBackground = ({
             // } else {
             //   getCurrentDiseaseType && getCurrentDiseaseType(true);
             // }
-            isShow && getEncounterDetails({
-              date: res,
-              fileDosPageNumberList: fileDosPageNumberList,
-              setIsModalOpenValidCodes: setIsModalOpenValidCodes,
-              setSearch: setSearch,
-              setFileModalHeader: setFileModalHeader,
-              patientDocumentResult: patientDocumentResult,
-              selectMeatResult: selectMeatResult,
-              datas: datas,
-              storeFileDetails: storeFileDetails,
-            });
+            isShow &&
+              getEncounterDetails({
+                date: res,
+                fileDosPageNumberList: fileDosPageNumberList,
+                setIsModalOpenValidCodes: setIsModalOpenValidCodes,
+                setSearch: setSearch,
+                setFileModalHeader: setFileModalHeader,
+                patientDocumentResult: patientDocumentResult,
+                selectMeatResult: selectMeatResult,
+                datas: datas,
+                storeFileDetails: storeFileDetails,
+              });
           }}
           style={{
             borderColor: stringToColour(res) + 33,
@@ -108,8 +113,8 @@ export const getEncounterDateBackground = ({
       );
       return sectionMapArr;
     } else if (value.length - 1 == index) {
-      var sectionMapArr = (
-        isShow? <Popover
+      var sectionMapArr = isShow ? (
+        <Popover
           trigger={["hover"]}
           placement="bottom"
           overlayStyle={{ zIndex: 1000 }}
@@ -169,15 +174,17 @@ export const getEncounterDateBackground = ({
           >
             {value.length - 2}+
           </span>
-        </Popover>:<span
-            style={{
-              background: "#a0b1a0",
-              color: "#fff",
-            }}
-            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-          >
-            {value.length - 2}+
-          </span>
+        </Popover>
+      ) : (
+        <span
+          style={{
+            background: "#a0b1a0",
+            color: "#fff",
+          }}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+        >
+          {value.length - 2}+
+        </span>
       );
 
       return sectionMapArr;
@@ -218,7 +225,7 @@ export const getEncounterDateBackgroundLab = ({
                 ite.dos == res
             );
             if (selectedMeatData) {
-               return setSearch({
+              return setSearch({
                 value: moment(selectedMeatData?.dos).format("MM/DD/YYYY"),
                 page: selectedMeatData?.startPageNumber,
               });
@@ -392,10 +399,13 @@ const getEncounterDetails = async ({
   storeFileDetails,
 }) => {
   selectMeatResult ? selectMeatResult(datas) : "";
-  const findPageNumber = !fileDosPageNumberList ? [] : fileDosPageNumberList?.filter(
-    (i) =>
-      moment(i.dos).format("MM-DD-YYYY") === moment(date).format("MM-DD-YYYY")
-  );
+  const findPageNumber = !fileDosPageNumberList
+    ? []
+    : fileDosPageNumberList?.filter(
+        (i) =>
+          moment(i.dos).format("MM-DD-YYYY") ===
+          moment(date).format("MM-DD-YYYY")
+      );
   if (findPageNumber?.length != 0) {
     storeFileDetails && storeFileDetails(findPageNumber[0]?.fileId);
     if (setIsModalOpenValidCodes) {
@@ -638,7 +648,7 @@ export const getCaptureSectionBackgroundFile = ({
   getCurrentDiseaseType,
   setLabData,
   storeFileDetails,
-  isShow
+  isShow,
 }) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res, index) => {
@@ -683,26 +693,27 @@ export const getCaptureSectionBackgroundFile = ({
               // } else {
               //   getCurrentDiseaseType && getCurrentDiseaseType(true);
               // }
-              isShow && newFindValueDocument(
-                headerResult[0],
-                documentPlace,
-                setSearch,
-                setFileLoading,
-                setIsModalOpenLab,
-                setIsModalOpenRadiology,
-                setIsModalOpenValidCodes,
-                setFileModalHeader,
-                patientDocumentResult,
-                fileInitialPage,
-                setFileInitialPage,
-                diagnosisCode,
-                "",
-                "",
-                "",
-                "",
-                diseaseName,
-                storeFileDetails
-              );
+              isShow &&
+                newFindValueDocument(
+                  headerResult[0],
+                  documentPlace,
+                  setSearch,
+                  setFileLoading,
+                  setIsModalOpenLab,
+                  setIsModalOpenRadiology,
+                  setIsModalOpenValidCodes,
+                  setFileModalHeader,
+                  patientDocumentResult,
+                  fileInitialPage,
+                  setFileInitialPage,
+                  diagnosisCode,
+                  "",
+                  "",
+                  "",
+                  "",
+                  diseaseName,
+                  storeFileDetails
+                );
             }}
             style={{ backgroundColor: backColor, color: textColor }}
             className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
@@ -714,8 +725,8 @@ export const getCaptureSectionBackgroundFile = ({
           return sectionMapArr;
         }
       } else {
-        var sectionMapArr = (
-          isShow?<Popover
+        var sectionMapArr = isShow ? (
+          <Popover
             overlayStyle={{ zIndex: !popup && 1000 }}
             placement="bottom"
             content={
@@ -754,12 +765,14 @@ export const getCaptureSectionBackgroundFile = ({
             >
               {truncateString(res, 30)}
             </span>
-          </Popover>:<span
-              style={{ backgroundColor: backColor, color: textColor }}
-              className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
-            >
-              {truncateString(res, 30)}
-            </span>
+          </Popover>
+        ) : (
+          <span
+            style={{ backgroundColor: backColor, color: textColor }}
+            className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
+          >
+            {truncateString(res, 30)}
+          </span>
         );
         if (res != "") {
           return sectionMapArr;
@@ -802,26 +815,27 @@ export const getCaptureSectionBackgroundFile = ({
                           //   getCurrentDiseaseType &&
                           //     getCurrentDiseaseType(true);
                           // }
-                          isShow && newFindValueDocument(
-                            findSectionHyperlink(hyperlinks, item)[0],
-                            documentPlace,
-                            setSearch,
-                            setFileLoading,
-                            setIsModalOpenLab,
-                            setIsModalOpenRadiology,
-                            setIsModalOpenValidCodes,
-                            setFileModalHeader,
-                            patientDocumentResult,
-                            fileInitialPage,
-                            setFileInitialPage,
-                            diagnosisCode,
-                            "",
-                            "",
-                            "",
-                            "",
-                            diseaseName,
-                            storeFileDetails
-                          );
+                          isShow &&
+                            newFindValueDocument(
+                              findSectionHyperlink(hyperlinks, item)[0],
+                              documentPlace,
+                              setSearch,
+                              setFileLoading,
+                              setIsModalOpenLab,
+                              setIsModalOpenRadiology,
+                              setIsModalOpenValidCodes,
+                              setFileModalHeader,
+                              patientDocumentResult,
+                              fileInitialPage,
+                              setFileInitialPage,
+                              diagnosisCode,
+                              "",
+                              "",
+                              "",
+                              "",
+                              diseaseName,
+                              storeFileDetails
+                            );
                         }}
                         style={{
                           background: stringToColour(item) + 33,
@@ -872,58 +886,62 @@ export const getCaptureSectionBackgroundFile = ({
               );
               return i > 1 ? (
                 duplicateHeaders?.length > 1 ? (
-                  isShow ?<Popover
-                    overlayStyle={{ zIndex: 9999 }}
-                    placement="bottom"
-                    content={getHeaderHyperlink(
-                      findSectionHyperlink(hyperlinks, item),
-                      encounterDateMatching,
-                      documentPlace,
-                      setSearch,
-                      setFileLoading,
-                      setIsModalOpenLab,
-                      setIsModalOpenRadiology,
-                      setIsModalOpenValidCodes,
-                      setFileModalHeader,
-                      patientDocumentResult,
-                      fileInitialPage,
-                      setFileInitialPage,
-                      diagnosisCode,
-                      "",
-                      "",
-                      diseaseName,
-                      getSelectedDosPageNumber,
-                      getLabPDF,
-                      getRadiologyPDF,
-                      getCurrentDiseaseType,
-                      setLabData,
-                      storeFileDetails
-                    )}
-                  >
-                    {isMulitpleHeader &&
-                      diagnosisCode == isMulitpleHeaderCode && (
-                        <span
-                          style={{
-                            background: stringToColour(item) + 33,
-                            color: stringToColour(item),
-                          }}
-                          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-                        >
-                          {item}
-                        </span>
+                  isShow ? (
+                    <Popover
+                      overlayStyle={{ zIndex: 9999 }}
+                      placement="bottom"
+                      content={getHeaderHyperlink(
+                        findSectionHyperlink(hyperlinks, item),
+                        encounterDateMatching,
+                        documentPlace,
+                        setSearch,
+                        setFileLoading,
+                        setIsModalOpenLab,
+                        setIsModalOpenRadiology,
+                        setIsModalOpenValidCodes,
+                        setFileModalHeader,
+                        patientDocumentResult,
+                        fileInitialPage,
+                        setFileInitialPage,
+                        diagnosisCode,
+                        "",
+                        "",
+                        diseaseName,
+                        getSelectedDosPageNumber,
+                        getLabPDF,
+                        getRadiologyPDF,
+                        getCurrentDiseaseType,
+                        setLabData,
+                        storeFileDetails
                       )}
-                  </Popover>:isMulitpleHeader &&
-                      diagnosisCode == isMulitpleHeaderCode && (
-                        <span
-                          style={{
-                            background: stringToColour(item) + 33,
-                            color: stringToColour(item),
-                          }}
-                          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-                        >
-                          {item}
-                        </span>
-                      )
+                    >
+                      {isMulitpleHeader &&
+                        diagnosisCode == isMulitpleHeaderCode && (
+                          <span
+                            style={{
+                              background: stringToColour(item) + 33,
+                              color: stringToColour(item),
+                            }}
+                            className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+                          >
+                            {item}
+                          </span>
+                        )}
+                    </Popover>
+                  ) : (
+                    isMulitpleHeader &&
+                    diagnosisCode == isMulitpleHeaderCode && (
+                      <span
+                        style={{
+                          background: stringToColour(item) + 33,
+                          color: stringToColour(item),
+                        }}
+                        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+                      >
+                        {item}
+                      </span>
+                    )
+                  )
                 ) : (
                   <>
                     {isMulitpleHeader &&
@@ -957,26 +975,27 @@ export const getCaptureSectionBackgroundFile = ({
                             //   getCurrentDiseaseType &&
                             //     getCurrentDiseaseType(true);
                             // }
-                            isShow && newFindValueDocument(
-                              findSectionHyperlink(hyperlinks, item)[0],
-                              documentPlace,
-                              setSearch,
-                              setFileLoading,
-                              setIsModalOpenLab,
-                              setIsModalOpenRadiology,
-                              setIsModalOpenValidCodes,
-                              setFileModalHeader,
-                              patientDocumentResult,
-                              fileInitialPage,
-                              setFileInitialPage,
-                              diagnosisCode,
-                              "",
-                              "",
-                              "",
-                              "",
-                              diseaseName,
-                              storeFileDetails
-                            );
+                            isShow &&
+                              newFindValueDocument(
+                                findSectionHyperlink(hyperlinks, item)[0],
+                                documentPlace,
+                                setSearch,
+                                setFileLoading,
+                                setIsModalOpenLab,
+                                setIsModalOpenRadiology,
+                                setIsModalOpenValidCodes,
+                                setFileModalHeader,
+                                patientDocumentResult,
+                                fileInitialPage,
+                                setFileInitialPage,
+                                diagnosisCode,
+                                "",
+                                "",
+                                "",
+                                "",
+                                diseaseName,
+                                storeFileDetails
+                              );
                           }}
                           style={{
                             background: stringToColour(item) + 33,
@@ -1253,6 +1272,18 @@ export const handleSubmitValidNotes = async ({
   setConfirmNotesModalValid(false);
   handleCloseModal();
 
+  console.log(
+    values,
+    setFileLoading,
+    setConfirmNotesModalValid,
+    getPatientDetailsReload,
+    isValidAction,
+    selectDisDetails,
+    getpatientDetailsData,
+    patientDetailsResult,
+    handleCloseModal
+  );
+
   var apiURL = "";
   if (
     isValidAction.name == "Move to Suggested" &&
@@ -1361,7 +1392,11 @@ export const handleSubmitValidNotes = async ({
   ) {
     apiURL = "management/disease/move/deletedtopotential";
   }
-  if (isValidAction.name == "Move to HCC" && isValidAction.title == "DELETED" && selectDisDetails?.defaultPosition == "INVALID") {
+  if (
+    isValidAction.name == "Move to HCC" &&
+    isValidAction.title == "DELETED" &&
+    selectDisDetails?.defaultPosition == "INVALID"
+  ) {
     apiURL = "management/disease/move/deletedtoinvalid";
   }
   try {
@@ -1380,7 +1415,7 @@ export const handleSubmitValidNotes = async ({
         ? "DATE_OF_SERVICE"
         : "YEAR",
     };
-    const response = await movementApiCall(dataFormatSuggested,apiURL);
+    const response = await movementApiCall(dataFormatSuggested, apiURL);
     if (response?.status == "SUCCESS") {
       setFileLoading(false);
       notification.success({
@@ -1400,7 +1435,6 @@ export const handleSubmitValidNotes = async ({
       getResponePopup(result);
     }
   } catch (err) {
-    
     setFileLoading(false);
     getResponePopup(err);
   }
@@ -1778,7 +1812,7 @@ export const getCaptureSectionBackgroundMeatNew = (
           const selectedMeatData = dublicateCaptureRemove?.find(
             (item) => item?.header === res.header
           );
-          
+
           // if (selectedMeatData?.stateIndicator) {
           //   setLabData && setLabData(selectedMeatData?.fileId);
           //   getCurrentDiseaseType && getCurrentDiseaseType(false);
@@ -1819,7 +1853,6 @@ export const getCaptureSectionBackgroundMeatNew = (
             "",
             storeFileDetails
           );
-
         }}
         style={{
           backgroundColor: stringToColour(res.header) + 33,
@@ -1848,9 +1881,8 @@ export function removeDuplicatesArray(arr) {
   }
 }
 
-export const getSuspectTypes = (title, value,isShow) => {
-  var popOver = (
-    isShow?
+export const getSuspectTypes = (title, value, isShow) => {
+  var popOver = isShow ? (
     <Popover
       overlayStyle={{ zIndex: 999 }}
       className="suspectContainer"
@@ -1882,9 +1914,11 @@ export const getSuspectTypes = (title, value,isShow) => {
       <div>
         <FontAwesomeIcon icon={faCircle} className={styles.suspectCircle} />
       </div>
-    </Popover>:<div>
-        <FontAwesomeIcon icon={faCircle} className={styles.suspectCircle} />
-      </div>
+    </Popover>
+  ) : (
+    <div>
+      <FontAwesomeIcon icon={faCircle} className={styles.suspectCircle} />
+    </div>
   );
 
   return popOver;
