@@ -53,7 +53,7 @@ const ContentGroupCard = ({
       let modifiedRole = currentRole;
 
       if (currentRole === "tenant_admin" || currentRole === "Tenant_Admin") {
-        modifiedRole = "tenantAdmin";
+        modifiedRole = "tenantadmin";
       } else if (currentRole === "admin") {
         modifiedRole = "admin";
       } else if (currentRole === "reviewer") {

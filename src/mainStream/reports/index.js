@@ -403,7 +403,6 @@ const Reports = ({
   useEffect(() => {
     workFgetFlagsowData();
   }, []);
-
   useEffect(() => {
     // const coderSearchString = searchVal?.find(
     //   (item) => item.field === "initialSearch"
@@ -554,6 +553,7 @@ const Reports = ({
       setSelectedOptions(routeData?.selectedOptions || null);
       setSelectedData(routeData?.selectedData);
       setSelectAll(routeData?.selectAll);
+      getActiveTab(routeData?.activeTab || "admin")
     }
   }, []);
 
@@ -883,6 +883,7 @@ const Reports = ({
                           selectedData,
                           selectAll,
                           getActiveTab,
+                          activeTab,
                         }}
                         loader={AdminReportLoader}
                         activeTab={activeTab}

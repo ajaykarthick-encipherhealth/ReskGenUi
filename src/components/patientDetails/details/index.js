@@ -543,9 +543,9 @@ const Details = ({
     } else {
       getRoutedData(routedData);
       navigate.push(backRoute);
-      if (user && user.toLowerCase() === "tenant_admin") {
-        getActiveTab("PDF");
-      }
+      // if (user && user.toLowerCase() === "tenant_admin") {
+      //   getActiveTab("PDF");
+      // }
       setSelectDosValue("");
       getSelectedDosPageNumber(1);
       getPatientID(null);
@@ -1246,7 +1246,7 @@ const Details = ({
                                               size="large"
                                             >
                                               <Image 
-                                                style={{width:"30px",height:'30px',}}
+                                                 style={{width:"30px",height:'30px',}}
                                                 src={data.iconStyle}
                                                 alt={data.title}
                                               />
