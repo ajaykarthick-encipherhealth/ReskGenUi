@@ -38,7 +38,7 @@ function PdfTable({
   getAllBatches,
   pageNo,
   setViewDetailedBatch,
-  pdfTableData
+  pdfTableData,
 }) {
   const router = useRouter();
   const [filelList, setFileList] = useState();
@@ -334,10 +334,7 @@ function PdfTable({
                                   row?.batchUploadStatus.slice(1).toLowerCase()}
                               </div>
                             )}
-                            {(
-                              row?.source === "CogentUpload" &&
-                              !row?.batchUploadStatus
-                            ) &&(
+                            {!row?.batchUploadStatus && (
                               <div className="w-100 d-flex justify-content-center align-items-center">
                                 <button
                                   className={`w-100 px-4 py-1  ${

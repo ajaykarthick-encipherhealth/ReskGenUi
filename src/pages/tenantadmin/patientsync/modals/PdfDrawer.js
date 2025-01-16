@@ -85,6 +85,7 @@ const PdfDrawer = ({
             ...formVal,
             emrType: formVal?.emrType === "Other" ? "-" : formVal?.emrType,
             fileExtension: "pdf",
+            totalFileCount:parseInt(formVal?.totalFileCount)
           },
         });
         if (res.status === "SUCCESS") {
