@@ -18,7 +18,7 @@ const options3 = [
   { value: "false", label: "Disabled" },
 ];
 const RoleList = [
-  { value: "ADMIN", label: "ADMIN" },
+  // { value: "ADMIN", label: "ADMIN" },
   { value: "REVIEWER", label: "REVIEWER" },
   { value: "SUPERVISOR", label: "SUPERVISOR" },
   { value: "TENANT_ADMIN", label: "TENANT ADMIN" },
@@ -104,7 +104,7 @@ const UserList = ({
     userFormData.password = encryptedData?.pass;
     userFormData.passwordIv = encryptedData.iv;
     const response = await getAddUser(userFormData, setFormData);
-    if(response?.status == 'SUCCESS'){
+    if (response?.status == "SUCCESS") {
       setFormData({
         firstName: "",
         lastName: "",
@@ -123,16 +123,13 @@ const UserList = ({
       setRoleValue([]);
       setValidated(true);
       setAddUser(false);
-    }
-   else  if(response?.status == 'FAILED'){
+    } else if (response?.status == "FAILED") {
       setAddUser(true);
       notification.warning({
         message: response.message,
         duration: 2,
       });
-    }
-    else 
-    setAddUser(false);
+    } else setAddUser(false);
   };
 
   const switchHandler = (event, id) => {
@@ -254,7 +251,6 @@ const UserList = ({
 
   const onFinish = (values) => {
     handleSubmit(values);
-   
   };
 
   return (
@@ -566,10 +562,12 @@ const UserList = ({
                         allowClear
                         style={{ height: "42px" }}
                       >
-                        <Select.Option value="ADMIN">ADMIN</Select.Option>
                         <Select.Option value="REVIEWER">REVIEWER</Select.Option>
                         <Select.Option value="SUPERVISOR">
                           SUPERVISOR
+                        </Select.Option>
+                        <Select.Option value="TENANT_ADMIN">
+                          TENANT ADMIN
                         </Select.Option>
                       </Select>
                     </Form.Item>
