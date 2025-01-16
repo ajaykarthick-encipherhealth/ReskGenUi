@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Buttonscroller from "../../../../components/buttonSroller";
 import { Buttons } from "../../workingstatus";
-import accuracy from "../../../../images/dashboard/accuracy.png";
 import Image from "next/image";
 import Card from "../../../../components/card/index";
 import styles from "./styles.module.css";
@@ -18,6 +17,8 @@ import {
   getGraphData,
   getHighlightedIndex,
 } from "../../../admin/dashboard/accuracy";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGaugeHigh } from "@fortawesome/free-solid-svg-icons";
 
 export const getISOWeekNumber = (date) => {
   const currentDate = new Date(date);
@@ -400,7 +401,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
             ) : (
               <div className={styles.accuracy}>
                 <div className={styles.header}>
-                  <Image src={accuracy} className={styles.Img} />
+                <FontAwesomeIcon className= {`mt-1 ${ styles.Img}`} icon={faGaugeHigh}   />
                   <div className={styles.heading}>Average Quality</div>
                 </div>
                 <div className={styles.percentage}>

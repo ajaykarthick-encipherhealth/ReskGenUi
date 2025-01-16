@@ -2,12 +2,13 @@ import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import Image from "next/image";
 import styles from "./styles.module.css";
-import upload from "../../images/fihr/upload.png";
 import { getStorage } from "../../utils/storages";
 import { actions as uploadImagesAction } from "../../stores/authflow/imageUpload";
 import { actions as userAction } from "../../stores/supervisor/users";
 import { getResponePopup } from "../../utils/reusable";
 import { Spin } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 
 const ImageUploader = ({
   setOpenUploader,
@@ -41,7 +42,7 @@ const ImageUploader = ({
           ) : (
             <div>
               <div className="d-flex justify-content-center cursor-pointer">
-                <Image src={upload} alt="Image" />
+                <FontAwesomeIcon icon={faUpload} />
               </div>
               {isFolderUplaod ? "Upload a File" : selectedFile?.name || "Upload Profile"}
             </div>

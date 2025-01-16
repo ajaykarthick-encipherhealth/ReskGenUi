@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Image from "next/image";
 import ReactECharts from "echarts-for-react";
-import left from "../../../../images/dashboard/left.png";
-import right from "../../../../images/dashboard/right.png";
 import { Col, Row, Skeleton, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
@@ -17,6 +15,8 @@ import { dailyTaskData } from "../../../../stores/supervisor/dashboard/actions";
 import { setStorage } from "../../../../utils/storages";
 import moment from "moment";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 const DailyTask = ({
   dailyStatusDatas,
@@ -305,7 +305,7 @@ const DailyTask = ({
           <Row>
             <Col span={1}>
               <div onClick={showPrevious} className={styles.ImgDIv}>
-                <Image src={left} />
+                <FontAwesomeIcon className="font4 mt-5" icon={faChevronLeft} />
               </div>
             </Col>
             <Col span={22}>
@@ -488,7 +488,7 @@ const DailyTask = ({
             <Col span={1}>
               <div onClick={showNext} className={styles.ImgDIv}>
                 {" "}
-                <Image src={right} />
+                <FontAwesomeIcon className="lead mt-5" icon={faAngleRight} />
               </div>
             </Col>
           </Row>

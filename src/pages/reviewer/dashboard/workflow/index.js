@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
 import dayjs from "dayjs";
-import calender from "../../../../images/dashboard/calender.png";
 import Card from "../../../../components/card";
 import { Col, Empty, Row, Skeleton, Spin } from "antd";
 import HeadTitle from "../../../../components/headtitle";
@@ -13,7 +12,7 @@ import spinSTYles from "../../../../styles/auth.module.css";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 import declinedBg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
 import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
- import { faCircleCheck ,faClockRotateLeft,faUsers} from "@fortawesome/free-solid-svg-icons";
+ import { faCalendar, faCircleCheck ,faClockRotateLeft,faUsers} from "@fortawesome/free-solid-svg-icons";
 
 const WorkFlow = ({ worlFlowData ,DateRanges}) => {
   const currentDate = dayjs();
@@ -112,7 +111,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges}) => {
                 .subtract(1, "day")
                 .format("MM-DD-YYYY")}`
         }
-        icon={calender}
+        icon={<FontAwesomeIcon icon={faCalendar} />}
         handleOpen={handleOpen}
         openPicker={openPicker}
         setOpenPicker={setOpenPicker}

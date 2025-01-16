@@ -29,12 +29,12 @@
   box-shadow: 0 0px 3px 0 rgba(0, 0, 0, 0.2);
 }
 .Img {
-  background-color: #e0eaff;
-  padding: 8px;
-  border-radius: 50%;
-  height: 30px;
-  width: 30px;
-}
+    background-color: #e0eaff;
+    padding: 8px;
+    border-radius: 50%;
+    color:#3352c1;
+    font-size: 14px;
+  }
 .heading {
   font-size: 18px;
   color: #000000;

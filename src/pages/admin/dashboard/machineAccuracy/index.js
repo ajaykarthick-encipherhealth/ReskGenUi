@@ -15,6 +15,8 @@ import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import { actions as allActions } from "../../../../stores/admin/dashboard";
 import { renderCardSkeleton } from "../../../reviewer/dashboard/accuracy";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGaugeHigh } from "@fortawesome/free-solid-svg-icons";
 
 export const TabButtons = [
   {
@@ -561,7 +563,8 @@ const MachineAccuracy = ({ accuracyDetails, loading, getAccuracyScore }) => {
             ) : (
               <div className={styles.accuracy}>
                 <div className={styles.header}>
-                  <Image src={accuracy} className={styles.Img} />
+                  {/* <Image src={accuracy} className={styles.Img} /> */}
+                  <FontAwesomeIcon icon={faGaugeHigh} />
                   <div className={styles.heading}>
                     {currentTabBtn === "CogentAI Accuracy"
                       ? "Accuracy"

@@ -227,13 +227,13 @@ const Details = ({
     if (activeTab == 3) {
       getPatientRadiologyDosList(
         selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0]?.value
+        dosYearArr?.[0]?.value
       );
     }
     if (activeTab == 4) {
       getPatientLabDosList(
         selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0]?.value || ""
+        dosYearArr?.[0]?.value || ""
       );
     }
     setLastActiveTab(activeTab);
@@ -1245,7 +1245,8 @@ const Details = ({
                                               offset={[10, 10]}
                                               size="large"
                                             >
-                                              <Image
+                                              <Image 
+                                                style={{width:"30px",height:'30px',}}
                                                 src={data.iconStyle}
                                                 alt={data.title}
                                               />
@@ -1254,6 +1255,7 @@ const Details = ({
                                         ) : (
                                           <div className="menu-icon">
                                             <Image
+                                           style={{width:"30px",height:'30px',}}
                                               src={data.iconStyle}
                                               alt={data.title}
                                             />

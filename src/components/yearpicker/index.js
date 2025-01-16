@@ -2,10 +2,11 @@ import { DatePicker, Select } from "antd";
 import React from "react";
 import styles from "./style.module.css";
 import Image from "next/image";
-import arrow from "../../images/workingstatus/downArrow.png";
 import dayjs from "dayjs";
 import { monthNames } from "../../pages/admin/dashboard/accuracy";
 import moment from "moment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 const YearPicker = ({
   onChangeMonth,
@@ -31,7 +32,7 @@ const YearPicker = ({
             value={val1 && dayjs(val1 ? val1 : currentDate, "YYYY")}
             format={"YYYY"}
             className={className}
-            suffixIcon={<Image src={arrow} />}
+            suffixIcon={<FontAwesomeIcon icon={faAngleDown} />}
             disabledDate={disabledDate}
           />
         ) : (
@@ -44,7 +45,7 @@ const YearPicker = ({
               format={"YYYY"}
               className={`${styles.picker} pickerChnages`}
               style={{ backgroundColor: bgColor }}
-              suffixIcon={<Image src={arrow} />}
+              suffixIcon={<FontAwesomeIcon icon={faAngleDown} />}
               disabledDate={(current) => {
                 let customDate = moment().format("YYYY");
                 return current && current > moment(customDate, "YYYY");

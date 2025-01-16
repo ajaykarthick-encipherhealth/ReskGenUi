@@ -3,6 +3,21 @@
   --app-primary-hover: #6c9ddd;
   --borderColor: #b6b6b6;
 }
+.font1 {
+  font-size: 12px;
+}
+.font2 {
+  font-size: 14px;
+}
+.font3 {
+  font-size: 16px;
+}
+.font4 {
+  font-size: 18px;
+}
+.font5{
+  font-size: 20px;
+}
 
 .btns-primary {
   padding: 7px;

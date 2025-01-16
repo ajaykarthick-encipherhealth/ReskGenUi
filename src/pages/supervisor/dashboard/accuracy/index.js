@@ -19,6 +19,8 @@ import {
 } from "../../../admin/dashboard/accuracy";
 import { renderCardSkeleton } from "../../../reviewer/dashboard/accuracy";
 import { actions as dashbaordActions } from "../../../../stores/supervisor/dashboard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGaugeHigh } from "@fortawesome/free-solid-svg-icons";
 
 export const getDateWeek = ({ date, accuracyDatass }) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -429,7 +431,7 @@ const Accuracy = ({ accuracyDatas ,getAccuracyScore,getUserByIndividual,individu
             ) : (
               <div className={styles.accuracy}>
                 <div className={styles.header}>
-                  <Image src={accuracy} className={styles.Img} />
+                  <FontAwesomeIcon className= {`mt-1 ${ styles.Img}`} icon={faGaugeHigh}   />
                   <div className={styles.heading}>Quality</div>
                 </div>
                 <div className={styles.percentage}>
