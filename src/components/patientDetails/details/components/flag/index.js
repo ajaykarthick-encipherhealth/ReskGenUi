@@ -234,7 +234,7 @@ const Flag = ({
                   rules={[
                     {
                       required: true,
-                      message: 'Please select a flag',
+                      message: "Please select a flag",
                     },
                   ]}
                   id="flag"
@@ -243,17 +243,15 @@ const Flag = ({
                     flagPostList.find(
                       (option) => option.value === inputValue.flagId
                     ) || null
-                  } 
+                  }
                   onChange={handleChangeFlag}
                   filterOption={(input, option) =>
-                    (option?.name ?? '')
+                    (option?.name ?? "")
                       .toLowerCase()
-                      .replace(/_/g, ' ')  
-                      .includes(input.toLowerCase().replace(/_/g, ' ')) 
+                      .replace(/_/g, " ")
+                      .includes(input.toLowerCase().replace(/_/g, " "))
                   }
-                  
                   allowClear
-                  
                 />
               </div>
             </div>
@@ -277,6 +275,7 @@ const Flag = ({
             <div className="row">
               <div className="d-flex justify-content-center">
                 <Button
+                  className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
                   type="submit"
                   disabled={commentsTrigger}
                   // className={visitStyles.commentSendIcon}

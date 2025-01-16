@@ -266,7 +266,7 @@ const Notification = ({
                 justifyContent: "space-between",
               }}
             >
-              <div style={{ paddingTop: "8px",width:"600px" }}>
+              <div style={{ paddingTop: "8px", width: "600px" }}>
                 <Radio.Group
                   options={radioOptions}
                   onChange={onChange}
@@ -344,7 +344,7 @@ const Notification = ({
 
                 <div>
                   <Button
-                    className={styles.notificationSentBtn}
+                    className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
                     onClick={() => handleSubmit()}
                   >
                     {isBtnLoading ? (

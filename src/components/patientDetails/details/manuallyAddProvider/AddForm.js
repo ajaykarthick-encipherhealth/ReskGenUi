@@ -343,7 +343,11 @@ const AddForm = ({
             </Radio.Group>
           </Form.Item>
           <Form.Item className="d-flex justify-content-center">
-            <Button htmlType="submit" type="primary">
+            <Button
+              htmlType="submit"
+              type="primary"
+              className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
+            >
               {providersList ? "UPDATE" : "ADD"}
             </Button>
           </Form.Item>

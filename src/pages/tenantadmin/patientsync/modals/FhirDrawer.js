@@ -292,7 +292,12 @@ const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch, upoloadFi
 
           <Form.Item>
             <div className="col-xl-12 mb-3 d-grid justify-content-center">
-              <Button type="submit">SUBMIT</Button>
+              <Button
+                className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
+                type="submit"
+              >
+                SUBMIT
+              </Button>
             </div>
           </Form.Item>
         </Form>

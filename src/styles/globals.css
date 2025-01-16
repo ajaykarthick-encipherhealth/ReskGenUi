@@ -16091,3 +16091,19 @@ overflow: scroll;
 .customPicker .ant-picker-outlined:hover {
   border:1px solid gray !important
 }
+.custom-btn-style {
+  background-color: #04306f !important;
+  color: white !important;
+}
+
+.custom-btn-style:disabled {
+  background-color: #043069 !important;
+  color: #fff !important;
+  cursor: no-drop !important;
+}
+
+.custom-btn-style:hover {
+  background-color: #6c9ddd !important;
+  color: #fff !important;
+}
+

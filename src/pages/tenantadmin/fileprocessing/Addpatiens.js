@@ -109,7 +109,10 @@ const Addpatients = ({
             </Row>
             <div style={{ display: "flex", gap: "8px" }}>
               <Form.Item>
-                <Button type="submit" className="btn btn-primary btn-sm me-1">
+                <Button
+                  type="submit"
+                  className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
+                >
                   {"Submit"}
                 </Button>
               </Form.Item>

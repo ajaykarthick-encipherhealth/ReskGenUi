@@ -508,10 +508,11 @@ const UserList = ({
                       rules={[
                         { required: true, message: "Please enter your email!" },
                         {
-                          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$",
+                          pattern:
+                            "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(?:.[a-zA-Z]{2,})?$",
                           required: true,
-                          message: 'Enter the Valid Email ',
-                      },
+                          message: "Enter the Valid Email ",
+                        },
                       ]}
                     >
                       <div>
@@ -677,10 +678,10 @@ const UserList = ({
                         },
                         {
                           pattern: /^[0-9]{10}$/,
-                          message: "Please enter a valid 10-digit mobile number!",
+                          message:
+                            "Please enter a valid 10-digit mobile number!",
                         },
                       ]}
-                      
                     >
                       <div>
                         <Input
@@ -708,7 +709,11 @@ const UserList = ({
                     style={{ display: "none" }}
                   />
                   <Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button
+                      type="primary"
+                      className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
+                      htmlType="submit"
+                    >
                       Submit
                     </Button>
                   </Form.Item>
