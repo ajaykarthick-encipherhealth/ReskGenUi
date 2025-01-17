@@ -331,8 +331,6 @@ const Patient = ({
   };
 
   const submitPatientFile = async () => {
-    // setIsLoadingBtn(false);
-    // setAddPatient(false);
     const formData = new FormData();
     formData.append("file", selectFile);
     formData.append("dos", inputValue?.year);
@@ -342,44 +340,34 @@ const Patient = ({
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
     formData.append("emrtype", emrType);
-    // const headers = {
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    // };
-    setSelectFile(formData);
+    
     const response = await uploadFiles({ obj: formData });
-
-    // axios.post(
-    //   ENDPOINTS.apiEndoint +
-    //     `aiservice/ai/upload
-    //   `,
-    //   formData,
-    //   headers
-    // );
-
     var orgId = selectOrgList;
-    getAllPatients(
-      pageNo,
-      computedStartDate,
-      computedEndDate,
-      selectedOption,
-      search || "",
-      completedStartDate || "",
-      completedEndDate || "",
-      selAllocatedTo || "",
-      selAllocatedBy || "",
-      selCreatedBy || "",
-      sort,
-      orgId
-    );
-    handleClose();
-    setAddPatient(false);
-    setAddPatient(false);
-    setIsLoadingBtn(false);
-    getResponePopup(response);
+    console.log(response, "respo");
+    if (response?.result == "SUCCESS") {
+      setSelectFile(formData);
+      getAllPatients(
+        pageNo,
+        computedStartDate,
+        computedEndDate,
+        selectedOption,
+        search || "",
+        completedStartDate || "",
+        completedEndDate || "",
+        selAllocatedTo || "",
+        selAllocatedBy || "",
+        selCreatedBy || "",
+        sort,
+        orgId
+      );
+      handleClose();
+      setIsLoadingBtn(false);
+      getResponePopup(response);
+      setAddPatient(false);
+    } else {
+      getResponePopup(response);
+    }
 
-    setAddPatient(false);
     setIsLoadingBtn(false);
   };
   const submitRadiology = async () => {

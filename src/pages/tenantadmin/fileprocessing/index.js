@@ -266,22 +266,9 @@ const Patient = ({
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
-    // const headers = {
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    // };
-
     setSelectFile(formData);
     const response = await getUploadFile({obj:formData})
-    
-    // axios.post(
-    //   ENDPOINTS.apiEndoint +
-    //     `aiservice/ai/upload
-    //   `,
-    //   formData,
-    //   headers
-    // );
+
     if (response?.status == 202) {
       getAllList(localUserId, pageNo, pageSize,selectOrgList);
 
