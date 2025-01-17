@@ -354,14 +354,20 @@ const Codify = ({
         <div className="col-11">
           <div className="d-flex gap-2">
             <Button
-              className={activeButton === "ICD-10" ? style.btn : style.button}
+              className={
+                activeButton === "ICD-10"
+                  ? "btn btn-sm ms-2 flr width-max-content custom-btn-style"
+                  : style.button
+              }
               onClick={handleButtonClick}
             >
               ICD-10
             </Button>
             <Button
               className={
-                activeButton === "Risk Adjustment" ? style.btn : style.button
+                activeButton === "Risk Adjustment"
+                  ? "btn btn-sm ms-2 flr width-max-content custom-btn-style"
+                  : style.button
               }
               onClick={handleRiskAdjustment}
             >
@@ -403,7 +409,11 @@ const Codify = ({
             </div>
             <div className="d-flex gap-2 px-1 ">
               <Button
-                className={currentButton === "Codes" ? style.both : style.code}
+                className={
+                  currentButton === "Codes"
+                    ? "btn btn-sm ms-2 flr width-max-content custom-btn-style"
+                    : style.code
+                }
                 onClick={() => {
                   setCurrentButton("Codes");
                   setHideButton(false);
@@ -413,7 +423,9 @@ const Codify = ({
               </Button>
               <Button
                 className={
-                  currentButton === "Description" ? style.both : style.code
+                  currentButton === "Description"
+                    ? "btn btn-sm ms-2 flr width-max-content custom-btn-style"
+                    : style.code
                 }
                 onClick={() => {
                   setCurrentButton("Description"), setHideButton(false);
@@ -423,7 +435,9 @@ const Codify = ({
               </Button>
               <Button
                 className={
-                  currentButton === "Indexes" ? style.both : style.code
+                  currentButton === "Indexes"
+                    ? "btn btn-sm ms-2 flr width-max-content custom-btn-style"
+                    : style.code
                 }
                 onClick={() => {
                   setCurrentButton("Indexes"), setHideButton(false);
