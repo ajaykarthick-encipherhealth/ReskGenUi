@@ -6,7 +6,7 @@ import { Modal, Spin } from "antd";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
-import NoNotification from "../../../../images/dashboard/no-notification.png";
+import NoNotification from "../../../../images/dashboard/no-notification.webp";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
@@ -55,7 +55,9 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
         {!notificationResponse?.loading &&
           (!notificationResponse?.data?.response?.notificationList?.content ||
             notificationResponse?.data?.response?.notificationList?.content
-              ?.length === 0) && <Image src={NoNotification} alt="" />}
+              ?.length === 0) &&  <div className="my-2 d-flex align-items-center justify-content-center">
+              <Image  className ={styles.img} src={NoNotification} alt="no-notification" />
+              </div>}
       </div>
     );
 
@@ -85,9 +87,13 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
         closable={true}
         onCancel={handleOk}
       >
-        {notificationResponse?.loading ? (
+          {notificationResponse?.loading ? (
           <div className={spinSTYles.spinStyle}>{NotifiAvatar()}</div>
-        ) : (
+        ) : notificationResult?.length <=0 ?(
+          <div className="d-flex align-items-center justify-content-center">
+         <Image className ={styles.img}src={NoNotification} alt="no-notification" />
+         </div>
+        ) :(
           <div className={styles.container} style={{ height: "500px" }}>
             {notificationData}
           </div>

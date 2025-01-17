@@ -4,13 +4,13 @@ import dayjs from "dayjs";
 import Card from "../../../../components/card";
 import { Col, Empty, Row, Skeleton, Spin } from "antd";
 import HeadTitle from "../../../../components/headtitle";
-import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.png";
-import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
-import completedbg from "../../.../../../../images/dashboard/completedbg.png";
+import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.webp";
+import pendingbg from "../../.../../../../images/dashboard/pendingbg.webp";
+import completedbg from "../../.../../../../images/dashboard/completedbg.webp";
 import { connect } from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
-import declinedBg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
+import declinedBg from "../../.../../../../images/dashboard/declinedbg.webp";
 import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
  import { faCalendar, faCircleCheck ,faClockRotateLeft,faUsers} from "@fortawesome/free-solid-svg-icons";
 
@@ -81,7 +81,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges}) => {
           key={index}
           span={10}
           style={{
-            backgroundColor: '#f0f0f0', // Light gray background to simulate card background
+            backgroundColor: '#f0f0f0',
             borderRadius: '8px',
             padding: '16px',
             marginBottom: '16px',
@@ -89,10 +89,10 @@ const WorkFlow = ({ worlFlowData ,DateRanges}) => {
           className={styles.colData}
         >
           <Skeleton.Avatar
-            size={30} // Adjust the size to match your profile image
+            size={30} 
             style={{
               marginBottom: '16px',
-              borderRadius: '50%', // Circular avatar
+              borderRadius: '50%', 
             }}
           />
           <Skeleton active title={{ width: '70%' }} paragraph={{ rows: 1 }} />
