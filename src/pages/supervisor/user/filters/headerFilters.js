@@ -148,7 +148,7 @@ const HeaderFilters = ({
     setSearchVal(e.target.value);
     debounceText(e.target.value);
     resetPageNumber(setPageNo);
-  };       
+  };
   const handleClearAllFilters = () => {
     setClear(true);
     getRoutedData("");
@@ -207,9 +207,9 @@ const HeaderFilters = ({
               <Select
                 onChange={(selectedOption) => {
                   audisetSelAllocatedBy(selectedOption ? selectedOption : "");
-                   setSelAuditAllocatedByVal(
-                     selectedOption ? selectedOption : []
-                   );
+                  setSelAuditAllocatedByVal(
+                    selectedOption ? selectedOption : []
+                  );
                   if (setPageNo) {
                     resetPageNumber(setPageNo);
                   }
@@ -366,12 +366,13 @@ const HeaderFilters = ({
           }
           trigger={["click"]}
           placement="bottom"
-        ></Popover>
-        <div className=" cursor-pointer">
-          <div className={styles.iconBorder}>
-            <InfoCircleFilled />
+        >
+          <div className="cursor-pointer">
+            <div className={styles.iconBorder}>
+              <InfoCircleFilled />
+            </div>
           </div>
-        </div>
+        </Popover>
       </div>
     </div>
   );
