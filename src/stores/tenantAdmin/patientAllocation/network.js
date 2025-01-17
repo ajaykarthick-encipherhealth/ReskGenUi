@@ -20,6 +20,16 @@ export const allocateUsers = async ({ data }) => {
   const res = await requestPortal(`${url}`, options);
   return res;
 };
+export const errorHandling = async ({ data }) => {
+  const url = `dbservice/sample/exceptionhandling`;
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+
+  const res = await requestPortal(`${url}`, options);
+  return res;
+};
 export const getL2PatientList = async ({ value }) => {
   const url = `dbservice/l2audit/patients?username=${value}`;
 

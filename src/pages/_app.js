@@ -18,6 +18,8 @@ import ConnectWebSocket from "../components/websocket";
 import { getStorage, setStorage } from "../utils/storages";
 import { serverControl } from "../utils/config";
 import { authRequestPortal, requestPortal } from "../utils/network";
+import Swal from "sweetalert2";
+import InternetError from "../utils/internetError";
 
 config.autoAddCss = false;
 
@@ -215,12 +217,33 @@ function MyApp({ Component, pageProps }) {
         Router.events.off("routeChangeError", handleComplete);
     };
 }, []);
+  useEffect(() => {
+    const handleOffline = () => {
+      Swal.fire({
+        title: "No Internet Connection",
+        text: "Please check your network.",
+        icon: "error",
+        confirmButtonText: "Retry",
+      }).then(() => window.location.reload());
+    };
+
+    const handleOnline = () => console.log("Back online!");
+
+    window.addEventListener("offline", handleOffline);
+    window.addEventListener("online", handleOnline);
+
+    return () => {
+      window.removeEventListener("offline", handleOffline);
+      window.removeEventListener("online", handleOnline);
+    };
+  }, []);
 
   return (
     <PrimeReactProvider>
       <Provider store={store}>
         {showTerminal && <AICHAT openMsg={true} />}
         <Component {...pageProps} />
+        <InternetError/>
         {loginCheck == true && <ConnectWebSocket />}
         {showFooter && showTerminal && <Footer />}
       </Provider>

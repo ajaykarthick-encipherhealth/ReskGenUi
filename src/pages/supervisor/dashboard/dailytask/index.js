@@ -323,7 +323,7 @@ const DailyTask = ({
                           //   "SuperVisorfilter",
                           //   JSON.stringify(allFilters)
                           // );
-
+                          
                           const params = {
                             // AuditedDueDate: JSON.stringify({
                             selectedDates: {
@@ -339,7 +339,6 @@ const DailyTask = ({
                                       "YYYY-MM-DD"
                                     )}T00:00:00.000Z`
                                   : "",
-
                                 endDate: data?.date
                                   ? `${moment(data?.date, "MM-DD-YYYY").format(
                                       "YYYY-MM-DD"
@@ -409,6 +408,7 @@ const DailyTask = ({
                                                 .toUpperCase()
                                             : item?.name.toUpperCase()
                                           : "",
+                                        
                                         selectedDates: {
                                           AuditedDueDate: [
                                             dayjs(data?.date),
