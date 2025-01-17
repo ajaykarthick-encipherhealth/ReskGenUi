@@ -7,7 +7,6 @@ import Highcharts from "highcharts";
 import { Empty, Spin, Select, Skeleton } from "antd";
 import Buttonscroller from "../../../../components/buttonSroller";
 import { Buttons } from "../../../reviewer/workingstatus";
-import accuracy from "../../../../images/dashboard/accuracy.png";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
 import { connect } from "react-redux";

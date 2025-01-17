@@ -2,15 +2,16 @@ import React, { use, useEffect, useState } from "react";
 import Style from "./../../style.module.css";
 import { Button, Input, notification } from "antd";
 import Image from "next/image";
-import CopyImage from "../../../../../images/fihr/copy.png";
 import ButtonStyles from "../../../../../components/button/style.module.css";
-import Pending from "../../../../../images/trackingImages/PendingTrack.png";
-import Completed from "../../../../../images/trackingImages/CompletedTrack.png";
+import Pending from "../../../../../images/trackingImages/pending.webp";
+import Completed from "../../../../../images/trackingImages/completed.webp";
 import Swal from "sweetalert2";
 import { handleCopyToClipboard } from "../../../../../components/commonFunctions";
 import { connect } from "react-redux";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 import { getResponePopup } from "../../../../../utils/reusable";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCopy } from "@fortawesome/free-regular-svg-icons";
 
 const ConnectStep = ({
   setIsConnectNext,
@@ -142,7 +143,7 @@ const ConnectStep = ({
             })
           }
         >
-          <Image src={CopyImage} width={20} alt="epic" />
+          <FontAwesomeIcon  icon={faCopy} />
           <span className={Style.stepsHeading} style={{ marginLeft: "5px" }}>
             Copy
           </span>
@@ -192,9 +193,8 @@ const ConnectStep = ({
               <div className={Style.statusImg}>
                 <Image
                   src={Pending}
-                  width={20}
                   alt="epic"
-                  style={{ marginRight: "5px" }}
+                  style={{ marginRight: "5px" ,width:"30px",height:"30px"}}
                 />
                 <span style={{ color: "#0078D4" }}>Pending</span>
               </div>
@@ -218,9 +218,8 @@ const ConnectStep = ({
               <div className={Style.statusImgCompleted}>
                 <Image
                   src={Completed}
-                  width={20}
                   alt="epic"
-                  style={{ marginRight: "5px" }}
+                  style={{ marginRight: "5px",width:"30px",height:"30px" }}
                 />
                 <span style={{ color: "#009910" }}>Completed</span>
               </div>

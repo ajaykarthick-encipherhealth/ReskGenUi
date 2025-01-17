@@ -6,8 +6,8 @@ import { Paginator } from "primereact/paginator";
 import { Popover } from "antd";
 import styles from "../../../reviewer/report/report.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
-import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
-import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
+import Completed from "../../../../../src/images/trackingImages/completed.webp";
+import Declined from "../../../../../src/images/trackingImages/declined.webp";
 import { extractLatestData } from "../../auditing";
 import {
   generateOptionsList,

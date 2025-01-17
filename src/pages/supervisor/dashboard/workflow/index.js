@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { Col, Empty, Row, Skeleton, Spin } from "antd";
 import styles from "./styles.module.css";
-import calender from "../../../../images/dashboard/calender.png";
 import Card from "../../../../components/card";
-import allocated from "../../../../images/dashboard/allocation.png";
 import HeadTitle from "../../../../components/headtitle";
 import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.webp";
-import reAuditbg from "../../.../../../../images/dashboard/reAuditbg.png";
+import reAuditbg from "../../.../../../../images/dashboard/reauditbg.webp";
 import auditedbg from "../../.../../../../images/dashboard/auditedbg.webp";
 import auditHold from "../../.../../../../images/dashboard/auditHoldbg.webp";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.webp";
@@ -22,6 +20,7 @@ import {
   faCirclePause,
   faCircleXmark,
   faUsers,
+  faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/supervisor/dashboard";
@@ -165,7 +164,7 @@ const WorkFlow = ({ worlFlowData, DateRanges }) => {
                 .subtract(1, "day")
                 .format("MM-DD-YYYY")}`
         }
-        icon={calender}
+        icon={<FontAwesomeIcon icon={faCalendar} />}
         handleOpen={handleOpen}
         openPicker={openPicker}
         setOpenPicker={setOpenPicker}

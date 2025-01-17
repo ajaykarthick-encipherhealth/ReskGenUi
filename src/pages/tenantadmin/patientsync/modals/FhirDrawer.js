@@ -13,6 +13,8 @@ import Image from "next/image";
 import style from "../fhir.module.css";
 import CustomSelect from "../../../../components/customSelect";
 import { CloseOutlined } from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 export const getYears = () => {
   const currentYear = new Date().getFullYear();
   let year = [];
@@ -277,14 +279,17 @@ const FhirDrawer = ({ isDrawerOpen, setIsDrawerOpen, setSelectedBatch, upoloadFi
                     : selectedType === "JSON"
                     ? "Sample Json File.json"
                     : "Sample Excel File.xlsx"}
-                  <Image
+                  {/* <Image
                     src={downloadImg}
                     alt="noImage"
                     className={style.sampleFileImg}
                     onClick={() => {
                       handleDownload();
                     }}
-                  />
+                  /> */}
+                  <FontAwesomeIcon  className={style.sampleFileImg} onClick={() => {
+                      handleDownload();
+                    }} icon={faDownload} />
                 </Button>
               </Form.Item>
             </>

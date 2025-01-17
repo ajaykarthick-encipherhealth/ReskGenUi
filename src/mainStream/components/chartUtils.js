@@ -1,15 +1,15 @@
 import { extractLatestData } from "../../pages/supervisor/auditing";
-import AuditedTrack from "../../../src/images/trackingImages/AuditedTrack.png";
-import NotAudited from "../../../src/images/trackingImages/NotAuditedTrack.png";
-import AuditHold from "../../../src/images/trackingImages/AuditHoldTrack.png";
-import ReAudit from "../../../src/images/trackingImages/reAuditTrack.png";
-import AuditPending from "../../../src/images/trackingImages/AuditPending.png";
-import Hold from "../../../src/images/trackingImages/HoldTrack.png";
-import Pending from "../../../src/images/trackingImages/PendingTrack.png";
-import Completed from "../../../src/images/trackingImages/CompletedTrack.png";
-import Declined from "../../../src/images/trackingImages/DeclineTrack.png";
-import AuditedDeclineTrack from "../../../src/images/trackingImages/AuditDeclined.png";
-import Abort from "../../../src/images/trackingImages/Abort.png";
+import AuditedTrack from "../../../src/images/trackingImages/audited.webp";
+import NotAudited from "../../../src/images/trackingImages/notaudited.webp";
+import AuditHold from "../../../src/images/trackingImages/audithold.webp";
+import ReAudit from "../../../src/images/trackingImages/reaudited.webp";
+import AuditPending from "../../../src/images/trackingImages/auditpending.webp";
+import Hold from "../../../src/images/trackingImages/hold.webp";
+import Pending from "../../../src/images/trackingImages/pending.webp";
+import Completed from "../../../src/images/trackingImages/completed.webp";
+import Declined from "../../../src/images/trackingImages/declined.webp";
+import AuditedDeclineTrack from "../../../src/images/trackingImages/auditdeclined.webp";
+import Abort from "../../../src/images/trackingImages/abort.webp";
 import Image from "next/image";
 import { Popover } from "antd";
 import styles from "../reports/report.module.css"

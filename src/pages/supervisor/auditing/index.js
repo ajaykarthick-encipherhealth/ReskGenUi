@@ -10,12 +10,12 @@ import Header from "../../../jsx/layouts/nav/Header";
 import dayjs from "dayjs";
 import PatientTable from "../table/PatientList/patientList";
 import { generateOptionsListSupervisor } from "../../../components/headerFilters/functions";
-import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
-import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
-import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
-import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
-import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
-import AuditeDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
+import AuditedTrack from "../../../../src/images/trackingImages/audited.webp";
+import NotAudited from "../../../../src/images/trackingImages/notaudited.webp";
+import AuditHold from "../../../../src/images/trackingImages/audithold.webp";
+import ReAudit from "../../../../src/images/trackingImages/reaudited.webp";
+import AuditPending from "../../../../src/images/trackingImages/auditpending.webp";
+import AuditeDeclineTrack from "../../../../src/images/trackingImages/auditdeclined.webp";
 import { actions as allActions } from "../../../stores/supervisor/auditedQueue";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import { actions as supervisorActions } from '../../../stores/supervisor/auditedQueue'
@@ -214,7 +214,7 @@ const Patient = ({
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image
                 src={AuditPending}
-                style={{ height: "25%", width: "25%" }}
+                style={{ height: "30px", width: "30px" }}
               />
             </div>
           </Popover>
@@ -224,7 +224,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: AUDIT HOLD">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={AuditHold} style={{ height: "25%", width: "25%" }} />
+              <Image src={AuditHold} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -232,7 +232,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: REAUDIT">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={ReAudit} style={{ height: "25%", width: "25%" }} />
+              <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -242,7 +242,7 @@ const Patient = ({
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image
                 src={AuditedTrack}
-                style={{ height: "25%", width: "25%" }}
+                style={{ height: "30px", width: "30px" }}
               />
             </div>
           </Popover>
@@ -257,7 +257,7 @@ const Patient = ({
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image
                 src={AuditeDeclineTrack}
-                style={{ height: "25%", width: "25%" }}
+                style={{ height: "30px", width: "30px" }}
               />
             </div>
           </Popover>
@@ -265,14 +265,14 @@ const Patient = ({
       case "AUDITED":
         return (
           <div className="patient-status" style={{ textAlign: "center" }}>
-            <Image src={AuditedTrack} style={{ height: "25%", width: "25%" }} />
+            <Image src={AuditedTrack} style={{ height: "30px", width: "30px" }} />
           </div>
         );
       case "NOT_AUDIT":
         return (
           <Popover placement="bottom" title=" Status: NOT AUDIT">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={NotAudited} style={{ height: "25%", width: "25%" }} />
+              <Image src={NotAudited} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );

@@ -9,11 +9,11 @@ import {
 import moment from "moment";
 import TableStyle from "../../table.module.css";
 import { Select as AntSelect, Empty, Spin, Popover } from "antd";
-import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
-import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
-import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
-import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
-import Abort from "../../../../../src/images/trackingImages/Abort.png";
+import Pending from "../../../../../src/images/trackingImages/pending.webp";
+import Hold from "../../../../../src/images/trackingImages/hold.webp";
+import Completed from "../../../../../src/images/trackingImages/completed.webp";
+import Declined from "../../../../../src/images/trackingImages/declined.webp";
+import Abort from "../../../../../src/images/trackingImages/abort.webp";
 import {
   sortFunction,
   renderUserPrfoileAvatar,

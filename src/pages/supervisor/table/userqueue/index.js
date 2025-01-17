@@ -6,13 +6,12 @@ import moment from "moment";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import TableStyle from "../../../../components/table/table.module.css";
-import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.png";
-
-import NotAudited from "../../../../../src/images/trackingImages/NotAuditedTrack.png";
-import AuditHold from "../../../../../src/images/trackingImages/AuditHoldTrack.png";
-import ReAudit from "../../../../../src/images/trackingImages/reAuditTrack.png";
-import AuditPending from "../../../../../src/images/trackingImages/AuditPending.png";
-import AuditedDeclineTrack from "../../../../../src/images/trackingImages/AuditDeclined.png";
+import AuditedTrack from "../../../../../src/images/trackingImages/audited.webp";
+import NotAudited from "../../../../../src/images/trackingImages/notaudited.webp";
+import AuditHold from "../../../../../src/images/trackingImages/audithold.webp";
+import ReAudit from "../../../../../src/images/trackingImages/reaudited.webp";
+import AuditPending from "../../../../../src/images/trackingImages/auditpending.webp";
+import AuditedDeclineTrack from "../../../../../src/images/trackingImages/auditdeclined.webp";
 import {
   priorityOptions,
   renderUserPrfoile,

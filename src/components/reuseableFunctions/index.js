@@ -4,17 +4,17 @@ import { Tooltip, Skeleton } from "antd";
 import Image from "next/image";
 import visitStyles from "../../../src/styles/visitdata.module.css";
 import { SVGICON } from "../../jsx/constant/theme";
-import Completed from "../../images/trackingImages/CompletedTrack.png";
-import Pending from "../../images/trackingImages/PendingTrack.png";
-import Hold from "../../images/trackingImages/HoldTrack.png";
-import Declined from "../../images/trackingImages/DeclineTrack.png";
-import AuditedTrack from "../../images/trackingImages/AuditedTrack.png";
-import NotAudited from "../../images/trackingImages/NotAuditedTrack.png";
-import AuditHold from "../../images/trackingImages/AuditHoldTrack.png";
-import ReAudit from "../../images/trackingImages/reAuditTrack.png";
-import AuditPending from "../../images/trackingImages/AuditPending.png";
-import AuditedDeclineTrack from "../../images/trackingImages/AuditDeclined.png";
-import Abort from "../../images/trackingImages/Abort.png";
+import Completed from "../../images/trackingImages/completed.webp";
+import Pending from "../../images/trackingImages/pending.webp";
+import Hold from "../../images/trackingImages/hold.webp";
+import Declined from "../../images/trackingImages/declined.webp";
+import AuditedTrack from "../../images/trackingImages/audited.webp";
+import NotAudited from "../../images/trackingImages/notaudited.webp";
+import AuditHold from "../../images/trackingImages/audithold.webp";
+import ReAudit from "../../images/trackingImages/reaudited.webp";
+import AuditPending from "../../images/trackingImages/auditpending.webp";
+import AuditedDeclineTrack from "../../images/trackingImages/auditdeclined.webp";
+import Abort from "../../images/trackingImages/abort.webp";
 
 export const getFlag = (data) => {
   switch (data.flags) {
@@ -381,6 +381,7 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title="COMPLETED">
           <Image
+          alt="completed"
             src={Completed}
             style={{ height: "20px", width: "20px",marginTop: "1px"}}
           />
@@ -391,6 +392,7 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title="PENDING">
           <Image
+          alt ="pending"
             src={Pending}
             style={{ height: "20px", width: "20px", marginTop: "1px" }}
           />
@@ -401,6 +403,7 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title="DECLINED">
           <Image
+          alt ="declined"
             src={Declined}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
@@ -411,6 +414,7 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title="NOT COMPUTED">
           <Image
+          alt="notComputed"
             src={Pending}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
@@ -420,6 +424,7 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title="PENDING">
           <Image
+          alt="computed"
             src={Pending}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
@@ -429,6 +434,7 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title="HOLD">
           <Image
+          alt = "hold"
             src={Hold}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
@@ -438,6 +444,7 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title="ABORTED BY CRON">
           <Image
+          alt ="abort"
             src={Abort}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
@@ -447,6 +454,7 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title="AUDIT PENDING">
           <Image
+          alt ="auditPending"
             src={AuditPending}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
@@ -457,6 +465,7 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title=" AUDIT HOLD">
           <Image
+          alt ="auditHold"
             src={AuditHold}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
@@ -466,6 +475,7 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title=" REAUDIT">
           <Image
+          alt="reAudit"
             src={ReAudit}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
@@ -475,6 +485,7 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title=" AUDITED">
           <Image
+          alt ="audited"
             src={AuditedTrack}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
@@ -484,6 +495,7 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title=" NOT AUDIT">
           <Image
+          alt="notAudit"
             src={NotAudited}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
@@ -493,6 +505,7 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title=" AUDIT DECLINED">
           <Image
+          alt ="auditDeclined"
             src={AuditedDeclineTrack}
             style={{ height: "20px", width: "20px", marginTop: "1px" }}
           />

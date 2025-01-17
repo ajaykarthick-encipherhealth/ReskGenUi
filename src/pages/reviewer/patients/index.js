@@ -10,11 +10,11 @@ import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
 import Header from "../../../jsx/layouts/nav/Header";
 import PatientTable from "../../../components/table/PatientList/patientList";
-import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
-import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
-import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
-import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
-import Abort from "../../../../src/images/trackingImages/Abort.png";
+import Pending from "../../../../src/images/trackingImages/pending.webp";
+import Hold from "../../../../src/images/trackingImages/hold.webp";
+import Completed from "../../../../src/images/trackingImages/completed.webp";
+import Declined from "../../../../src/images/trackingImages/declined.webp";
+import Abort from "../../../../src/images/trackingImages/abort.webp";
 import { actions as workqueueActions } from "../../../stores/reviewer/workqueue";
 import {
   priorityOptions,
@@ -249,7 +249,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
             <div className="patient-status text-center">
-              <Image src={Completed} style={{ height: "25%", width: "25%" }} />
+              <Image src={Completed}  style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -258,7 +258,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status text-center">
-              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
+              <Image src={Pending}  style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -273,7 +273,7 @@ const Patient = ({
             }`}
           >
             <div className="patient-status text-center">
-              <Image src={Declined} style={{ height: "25%", width: "25%" }} />
+              <Image src={Declined}  style={{ height: "30px", width: "30px" }}/>
             </div>
           </Popover>
         );
@@ -281,7 +281,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: NOT COMPUTED">
             <div className="patient-status text-center">
-              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
+              <Image src={Pending}  style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -289,7 +289,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: COMPUTED">
             <div className="patient-status text-center">
-              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
+              <Image src={Pending}  style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -297,7 +297,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: HOLD">
             <div className="patient-status text-center">
-              <Image src={Hold} style={{ height: "25%", width: "25%" }} />
+              <Image src={Hold}  style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -305,7 +305,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: ABORTED BY CRON">
             <div className="patient-status text-center">
-              <Image src={Abort} style={{ height: "25%", width: "25%" }} />
+              <Image src={Abort}  style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -313,7 +313,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="">
             <div className="patient-status text-center">
-              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
+              <Image src={Pending}  style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
