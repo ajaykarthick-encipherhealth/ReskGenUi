@@ -599,7 +599,7 @@ const Hcc = ({
                                           className={visitStyles.potentialFlag}
                                         ></span>
                                         <span className={visitStyles.flagCodes}>
-                                          POTENTIAL DIAGNOSIS
+                                          POTENTIAL / SUGGESTED DIAGNOSES
                                         </span>
                                       </div>
                                     </div>

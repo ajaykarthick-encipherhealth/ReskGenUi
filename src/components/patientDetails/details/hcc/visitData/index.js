@@ -337,7 +337,7 @@ const VisitData = ({
                               }
                             />
                           </span>
-                            CARE GAP  / SUGGESTED CODES
+                            CARE GAP 
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
@@ -430,13 +430,13 @@ const VisitData = ({
                               }
                             />
                           </span>
-                          POTENTIAL DIAGNOSIS
+                          POTENTIAL / SUGGESTED DIAGNOSES
                         </span>
                         <div className="d-flex justify-content-center">
                           <span
                             className={`${visitStyles.potential_title_badge}`}
                           >
-                          {potentialList?.length}
+                            {potentialList?.length}
                           </span>
                         </div>
                       </div>
@@ -450,7 +450,7 @@ const VisitData = ({
                                 : showList.length == 2
                                 ? "27vh"
                                 : "18vh",
-                                overflow: "scroll",
+                            overflow: "scroll",
                           }}
                         >
                           <div className={visitStyles.hccStickey_head}>
@@ -752,7 +752,7 @@ const VisitData = ({
                           <span
                             className={`${visitStyles.suggested_title_name}`}
                           >
-                            CARE GAP / SUGGESTED CODES
+                            CARE GAP 
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
@@ -826,7 +826,7 @@ const VisitData = ({
                           <span
                             className={`${visitStyles.potential_title_name}`}
                           >
-                            POTENTIAL DIAGNOSIS
+                            POTENTIAL / SUGGESTED DIAGNOSES
                           </span>
                           <div className="d-flex justify-content-center">
                             <span

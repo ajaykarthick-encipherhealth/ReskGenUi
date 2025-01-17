@@ -427,7 +427,7 @@ const File = ({
                               }
                             />
                           </span>
-                          CARE GAP / SUGGESTED CODES
+                          CARE GAP 
                         </span>
                         <div className="d-flex justify-content-center">
                           <span
@@ -517,7 +517,7 @@ const File = ({
                               }
                             />
                           </span>
-                          POTENTIAL DIAGNOSIS
+                          POTENTIAL / SUGGESTED DIAGNOSES
                         </span>
                         <div className="d-flex justify-content-center">
                           <span

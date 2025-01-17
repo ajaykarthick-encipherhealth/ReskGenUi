@@ -1162,7 +1162,7 @@ const HccCards = ({
           ) : (
             <div className={styles.noMsContainer}>
               {`${
-                cardTitle == "SUGGESTED" ? "CARE GAP / SUGGESTED" : cardTitle
+                cardTitle == "SUGGESTED" ? "CARE GAP" : cardTitle == "POTENTIAL" ? "POTENTIAL / SUGGESTED " : cardTitle
               } Codes Not Found`}
             </div>
           )}
