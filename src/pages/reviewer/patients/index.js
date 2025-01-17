@@ -398,47 +398,49 @@ const Patient = ({
                   <div className="table-responsive active-projects task-table">
                     <div className="row">
                       <div className="col-10">
-                        <HeaderFiltersPatients
-                          activeFilters={activeFilters}
-                          setActiveFilters={setActiveFilters}
-                          isAllocatedToSelector={true}
-                          value={searchVal}
-                          onChange={(e) => getNameSearch(e)}
-                          orgAllList={statusOptions}
-                          onChangeStatus={(selectedOption) => {
-                            onChangeStatus(selectedOption);
-                            resetPageNumber(setPageNo);
-                            setClear(false);
-                          }}
-                          statusSelectedStatus={statusSelectedStatus}
-                          statusSelectedStatus1={selectedPriority}
-                          onChangeStatus1={(selectedOption) => {
-                            onChangePriority(selectedOption);
-                            resetPageNumber(setPageNo);
-                            setClear(false);
-                          }}
-                          orgAllList1={options}
-                          selectedDates={selectedDates}
-                          setSelectedDates={setSelectedDates}
-                          onchangeRangePicker={(dates, dateStrings) => {
-                            handleDatePickerChange(dates, dateStrings);
-                            resetPageNumber(setPageNo);
-                            setClear(false);
-                          }}
-                          selectedDates2={selectedDates2}
-                          setSelectedDates2={setSelectedDates2}
-                          onchangeRangePicker2={(dates, dateStrings) => {
-                            handleDatePickerChangeProcesseDate(
-                              dates,
-                              dateStrings
-                            );
-                            resetPageNumber(setPageNo);
-                            setClear(false);
-                          }}
-                          setClear={setClear}
-                          clear={clear}
-                          getRoutedData={getRoutedData}
-                        />
+                        <div className="">
+                          <HeaderFiltersPatients
+                            activeFilters={activeFilters}
+                            setActiveFilters={setActiveFilters}
+                            isAllocatedToSelector={true}
+                            value={searchVal}
+                            onChange={(e) => getNameSearch(e)}
+                            orgAllList={statusOptions}
+                            onChangeStatus={(selectedOption) => {
+                              onChangeStatus(selectedOption);
+                              resetPageNumber(setPageNo);
+                              setClear(false);
+                            }}
+                            statusSelectedStatus={statusSelectedStatus}
+                            statusSelectedStatus1={selectedPriority}
+                            onChangeStatus1={(selectedOption) => {
+                              onChangePriority(selectedOption);
+                              resetPageNumber(setPageNo);
+                              setClear(false);
+                            }}
+                            orgAllList1={options}
+                            selectedDates={selectedDates}
+                            setSelectedDates={setSelectedDates}
+                            onchangeRangePicker={(dates, dateStrings) => {
+                              handleDatePickerChange(dates, dateStrings);
+                              resetPageNumber(setPageNo);
+                              setClear(false);
+                            }}
+                            selectedDates2={selectedDates2}
+                            setSelectedDates2={setSelectedDates2}
+                            onchangeRangePicker2={(dates, dateStrings) => {
+                              handleDatePickerChangeProcesseDate(
+                                dates,
+                                dateStrings
+                              );
+                              resetPageNumber(setPageNo);
+                              setClear(false);
+                            }}
+                            setClear={setClear}
+                            clear={clear}
+                            getRoutedData={getRoutedData}
+                          />
+                        </div>
                       </div>
                       <div className="col-2">
                         <div className="row">

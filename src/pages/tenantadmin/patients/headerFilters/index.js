@@ -199,7 +199,7 @@ const HeaderFilters = ({
         // );
         return (
           <div className={defaultSize}>
-            <label className={styles.label}>Created date Range</label>
+            <label className={styles.label}>Created Date Range</label>
             <div className="dateRangeSize">
               <RangePicker
                 value={clear ? ["", ""] : selectedDates2}

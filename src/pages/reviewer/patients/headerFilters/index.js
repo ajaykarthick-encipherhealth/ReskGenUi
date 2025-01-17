@@ -97,7 +97,7 @@ const HeaderFiltersPatients = ({
     switch (filter) {
       case "Due Date":
         return (
-          <div className="col-3">
+          <div className="" style={{width: "250px"}}>
             <label className={styles.label} style={{ marginTop: "40px" }}>
               Due Date
             </label>
@@ -117,7 +117,7 @@ const HeaderFiltersPatients = ({
 
       case "Completed Date":
         return (
-          <div className="col-3">
+          <div className="" style={{width: "250px"}}>
             <label className={styles.label} style={{ marginTop: "40px" }}>
               Completed Date
             </label>
@@ -137,7 +137,7 @@ const HeaderFiltersPatients = ({
         );
       case "Select Priority":
         return (
-          <div className={defaultSize}>
+          <div className={defaultSize} style={{width: "250px"}}>
             <label className={styles.label} style={{ marginTop: "40px" }}>
               Select Priority
             </label>
@@ -155,7 +155,7 @@ const HeaderFiltersPatients = ({
         );
       case "Select Status":
         return (
-          <div className={defaultSize}>
+          <div className={defaultSize} style={{width: "250px"}}>
             <label className={styles.label} style={{ marginTop: "40px" }}>
               Select Status
             </label>
@@ -203,10 +203,10 @@ const HeaderFiltersPatients = ({
   ];
 
   return (
-    <div style={{ display: "flex" }}>
+    <div className="d-flex justify-content-end">
       <div className="row filter-contain" style={{ width: "95%" }}>
         {isAllocatedToSelector && (
-          <div className={defaultSize} onClick={() => setClear(false)}>
+          <div className={defaultSize} style={{width: "250px"}} onClick={() => setClear(false)}>
             <label className="text-truncate" style={{ marginLeft: "8px", marginTop: "35px" }}>
               {" "}
               Patient Name / ID
@@ -239,9 +239,10 @@ const HeaderFiltersPatients = ({
 
       <div
         // className={Tracking}
-        style={{ width: "5%", display: "flex", justifyContent: "end" }}
+        // style={{ width: "5%", display: "flex", justifyContent: "end" }}
+        className="d-flex justify-content-end"
       >
-        <div style={{ marginTop: "30px" }}>
+        {/* <div style={{ marginTop: "30px" }}> */}
           <MoreFilter
             clear={clear}
             activeFilters={activeFilters}
@@ -253,7 +254,6 @@ const HeaderFiltersPatients = ({
             handleClearAllFilters={handleClearAllFilters}
             getRoutedData={getRoutedData}
           />
-
           {bullets && (
             <div style={{ cursor: "pointer" }}>
               <Popover
@@ -282,11 +282,10 @@ const HeaderFiltersPatients = ({
               </Popover>
             </div>
           )}
-          <div style={{ marginLeft: "12px" }}>
-            {" "}
+          <div className="m-1">
             <HeaderFilters bullets={bulletsIcon} />
           </div>
-        </div>
+        {/* </div> */}
       </div>
     </div>
   );

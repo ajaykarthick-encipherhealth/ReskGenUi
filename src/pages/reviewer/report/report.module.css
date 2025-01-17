@@ -221,8 +221,8 @@
   font-size: 15px;
 }
 .iconStyleColor2{
-  font-size: 27px;
-  margin-top: 10px;
+  font-size: 22px;
+  /* margin-top: 10px; */
   cursor: pointer;
   color: #04306f;
 }
