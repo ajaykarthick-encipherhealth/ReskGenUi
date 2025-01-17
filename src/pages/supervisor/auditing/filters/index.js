@@ -104,7 +104,7 @@ const Filters = ({
                   }
                   setClear(false);
                   removeStorage("supervisorStatus");
-                  getRoutedData(null)
+                  getRoutedData(null);
                 }}
                 options={selectOptions}
                 isSearchable={false}
@@ -122,8 +122,6 @@ const Filters = ({
             <DateRangePicker
               selectedDates={selectedDates}
               pickerlabel={filter}
-              // defaultStartDate={defaultStartDate}
-              // defaultEndDate={defaultEndDate}
               setStartDate={setStartDate2}
               setEndDate={setEndDate2}
               disabled={false}
@@ -134,6 +132,7 @@ const Filters = ({
               setSelectedDateRange={setSelectedDateRange}
               selectedDateRange={selectedDateRange}
               getRoutedData={getRoutedData}
+              isDueDate={filter === "Audited Due Date"} 
             />
           </div>
         );
@@ -152,7 +151,7 @@ const Filters = ({
                   if (setPageNo) {
                     resetPageNumber(setPageNo);
                   }
-                  getRoutedData(null)
+                  getRoutedData(null);
                 }}
                 options={createdByOptoons}
                 isSearchable={false}

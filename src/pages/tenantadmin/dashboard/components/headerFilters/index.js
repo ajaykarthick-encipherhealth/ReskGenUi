@@ -4,8 +4,10 @@ import { actions as dashboardActions } from "../../../../../stores/tenantAdmin/d
 import styles from "./styles.module.css";
 import { DatePicker, Select } from "antd";
 import moment from "moment";
-import { disableFutureDates } from "../../../../../components/headerFilters/functions";
+import { disabledDate as reusableDisabledDate } from "../../../../../utils/reusable"; // Import reusable function
+import dayjs from "dayjs";
 const { RangePicker } = DatePicker;
+
 const index = ({
   activeBtn,
   setActiveBtn,
@@ -17,6 +19,7 @@ const index = ({
   dateRange,
 }) => {
   const [isCustom, setIsCustom] = useState(false);
+  const [selectedDates, setSelectedDates] = useState([]);
 
   const handleDateChange = (value) => {
     if (value == "custom") {
@@ -43,6 +46,7 @@ const index = ({
     }
   };
   const handleRange = (e) => {
+    setSelectedDates(e); 
     if (!e || !e[0] || !e[1]) {
       const range = {
         startDate:
@@ -58,6 +62,23 @@ const index = ({
       setDateRange(range);
     }
   };
+  const disabled1YearDate = (current) => {
+    const isDisabledByReusableFunction = reusableDisabledDate(
+      current,
+      selectedDates
+    );
+
+    if (isDisabledByReusableFunction) {
+      return true;
+    }
+
+    if (selectedDates && selectedDates[0]) {
+      const from = dayjs(selectedDates[0]);
+      return Math.abs(current.diff(from, "years")) >= 1;
+    }
+
+    return false;
+  };
 
   useEffect(() => {
     getOrganizationStatusData();
@@ -69,16 +90,6 @@ const index = ({
       label: org.name,
     })
   );
-
-  const disabled1YearDate = (current, { from }) => {
-    if (disableFutureDates(current)) {
-      return true;
-    }
-    if (from) {
-      return Math.abs(current.diff(from, "years")) >= 1;
-    }
-    return false;
-  };
 
   return (
     <div className={styles.container}>
@@ -128,9 +139,11 @@ const index = ({
               <RangePicker
                 size="large"
                 disabledDate={disabled1YearDate}
-                onChange={(e, value) => handleRange(value)}
+                onCalendarChange={(val) => setSelectedDates(val)}
+                onChange={(dates, value) => handleRange(dates)}
                 format={"MM-DD-YYYY"}
                 allowClear={true}
+                value={selectedDates}
               />
             </div>
           </div>

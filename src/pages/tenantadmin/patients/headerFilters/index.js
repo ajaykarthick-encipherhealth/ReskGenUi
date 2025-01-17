@@ -19,6 +19,7 @@ import { InfoCircleFilled, PlusCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../tracking/filters";
 import DateRangePicker from "../../../../components/rangepicker";
 import Search from "../../../../components/search";
+import { disabledDate } from "../../../../utils/reusable";
 
 const { RangePicker } = DatePicker;
 
@@ -213,7 +214,10 @@ const HeaderFilters = ({
                   });
                   setClear(false);
                 }}
-                disabledDate={(current) => disableFutureDate(current)}
+                // disabledDate={(current) => disableFutureDate(current)}
+                disabledDate={(currentDate) =>
+                  disabledDate(currentDate, selectedDates2)
+                }
                 id="create-date"
                 name="create-date"
               />

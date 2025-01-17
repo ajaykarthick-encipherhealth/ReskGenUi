@@ -11,6 +11,7 @@ import InputField from "../../../../components/input";
 import MoreFilter from "../filters";
 import { InfoCircleFilled } from "@ant-design/icons";
 import moment from "moment";
+import { disabledDate } from "../../../../utils/reusable";
 
 const { RangePicker } = DatePicker;
 
@@ -96,20 +97,20 @@ const HeaderFilters = ({
             <label className={styles.label}>{filter}</label>
             <div className="dateRangeSize">
               <RangePicker
+                format="MM-DD-YYYY"
                 value={
                   clear
                     ? ["", ""]
-                    : selectedDates
+                    : selectedDates && selectedDates[pickerName]
                     ? selectedDates[pickerName]
                     : []
                 }
-                format="MM-DD-YYYY"
-                onCalendarChange={(val) =>
+                onCalendarChange={(val) => {
                   setSelectedDates((prev) => ({
                     ...prev,
                     [pickerName]: val,
-                  }))
-                }
+                  }));
+                }}
                 onChange={(date, dateString) => {
                   const formattedDates = dateString?.map((date, index) => {
                     const formattedDate =
@@ -135,7 +136,14 @@ const HeaderFilters = ({
 
                   setClear(false);
                 }}
-                disabledDate={(current) => disableFutureDate(current)}
+                disabledDate={(currentDate) =>
+                  disabledDate(
+                    currentDate,
+                    selectedDates && selectedDates[pickerName]
+                      ? selectedDates[pickerName]
+                      : []
+                  )
+                }
               />
             </div>
           </div>

@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import { InfoCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../../tenantadmin/tracking/filters";
+import { disabledDate } from "../../../../utils/reusable";
 
 const { RangePicker } = DatePicker;
 
@@ -282,7 +283,10 @@ const HeaderFilters = ({
                       ]
                     : []
                 }
-                disabledDate={(current) => disableFutureDate(current)}
+                // disabledDate={(current) => disableFutureDate(current)}
+                disabledDate={(currentDate) =>
+                  disabledDate(currentDate, selectedDates4)
+                }
               />
             </div>
           </div>

@@ -23,6 +23,7 @@ import { connect } from "react-redux";
 import { actions as patientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import UploadModal from "./uploadfile/uploadModal";
 import { useRouter } from "next/router";
+import { disabledDate } from "../../../utils/reusable";
 
 const { RangePicker } = DatePicker;
 
@@ -489,7 +490,9 @@ const Index = ({
           setSelectedOptions={setSelectedOptions}
           setListPageNo={setPageNo}
           setListSearchVal={setSearchVal}
-          initialTableData={socketData?.content?.length>0?socketData:pdfTableData}
+          initialTableData={
+            socketData?.content?.length > 0 ? socketData : pdfTableData
+          }
         />
       ) : (
         <div className={styles.maincontainer}>
@@ -538,6 +541,7 @@ const Index = ({
                             <div className="col-5 mx-2">
                               <label>Date</label>
                               <div class="form-group has-search">
+                              
                                 <RangePicker
                                   format="MM-DD-YYYY"
                                   value={
@@ -546,16 +550,27 @@ const Index = ({
                                       : undefined
                                   }
                                   onChange={(dates, dateStrings) => {
-                                    // setDateRange(dateStrings);
                                     handleRangePicker(
                                       dates,
                                       dateStrings,
                                       reportActiveTab
                                     );
                                   }}
-                                  disabledDate={(current) =>
-                                    disableFutureDate(current)
-                                  }
+                                  onCalendarChange={(val) => {
+                                    setSelectedDates((prev) => ({
+                                      ...prev,
+                                      [reportActiveTab]: val, 
+                                    }));
+                                  }}
+                                  disabledDate={(currentDate) => {
+                                    const selectedRange = selectedDates
+                                      ? selectedDates[reportActiveTab]
+                                      : [];
+                                    return disabledDate(
+                                      currentDate,
+                                      selectedRange
+                                    ); 
+                                  }}
                                 />
                               </div>
                             </div>
@@ -690,7 +705,11 @@ const Index = ({
                                       paginationFirst={paginationFirst}
                                       setSelectedBatch={setSelectedBatch}
                                       onPageChange={onPageChange}
-                                      tableData={socketData?.content?.length>0?socketData:pdfTableData}
+                                      tableData={
+                                        socketData?.content?.length > 0
+                                          ? socketData
+                                          : pdfTableData
+                                      }
                                       selectedBatch={selectedBatch}
                                       loader={pdfLoader}
                                       openUpload={openUpload}

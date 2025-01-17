@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styles from "../../../../mainStream/components/moreFilters/report.module.css";
 import { Divider, Popover, Tooltip } from "antd";
 import Tracking from "../tracking.module.css";
+import { connect } from "react-redux";
+import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
 
 const MoreFilter = ({
   selectAll,
@@ -115,4 +117,7 @@ const MoreFilter = ({
   );
 };
 
-export default MoreFilter;
+const enhancer = connect((state) => ({}), {
+  getRoutedData: allPatientSyncAction.getRoutedData,
+});
+export default enhancer(MoreFilter);

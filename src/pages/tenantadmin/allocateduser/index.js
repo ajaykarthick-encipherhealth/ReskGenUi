@@ -32,7 +32,7 @@ import { actions as tenantAdminUsersAction } from "../../../stores/tenantAdmin/u
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
-import { getResponePopup } from "../../../utils/reusable";
+import { disabledDate, getResponePopup } from "../../../utils/reusable";
 
 const { RangePicker } = DatePicker;
 const statusOption = [
@@ -660,6 +660,9 @@ const Patient = ({
                                 <div>
                                   <RangePicker
                                     format="MM-DD-YYYY"
+                                    onCalendarChange={(val) => {
+                                      setDateRange(val);
+                                    }}
                                     onChange={(dates, dateStrings) => {
                                       resetPageNumber(setPageNo);
                                       setDateRange(dateStrings);
@@ -670,8 +673,11 @@ const Patient = ({
                                       setSelectedRowsId([]);
                                       setSelectAllChecked(false);
                                     }}
-                                    disabledDate={(current) =>
-                                      disableFutureDate(current)
+                                    // disabledDate={(current) =>
+                                    //   disableFutureDate(current)
+                                    // }
+                                    disabledDate={(currentDate) =>
+                                      disabledDate(currentDate, dateRange)
                                     }
                                   />
                                 </div>

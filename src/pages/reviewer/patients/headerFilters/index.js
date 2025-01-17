@@ -21,6 +21,7 @@ import { getFilters } from "../../../../stores/authflow/actions";
 import { InfoCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../../tenantadmin/tracking/filters";
 import HeaderFilters from "../../../../components/headerFilters";
+import { disabledDate, EnableFuturedDisabledDate } from "../../../../utils/reusable";
 const { RangePicker } = DatePicker;
 
 export const allFilters = [
@@ -106,6 +107,9 @@ const HeaderFiltersPatients = ({
                 format="MM-DD-YYYY"
                 onChange={onchangeRangePicker}
                 onCalendarChange={(val) => setSelectedDates(val)}
+                disabledDate={(currentDate) =>
+                  disabledDate(currentDate, selectedDates, true)
+                }
               />
             </div>
           </div>
@@ -123,7 +127,10 @@ const HeaderFiltersPatients = ({
                 format="MM-DD-YYYY"
                 onChange={onchangeRangePicker2}
                 onCalendarChange={(val) => setSelectedDates2(val)}
-                disabledDate={(current) => disableFutureDate(current)}
+                // disabledDate={(current) => disableFutureDate(current)}
+                disabledDate={(currentDate) =>
+                  disabledDate(currentDate, selectedDates2)
+                }
               />
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { notification } from "antd";
 import moment from "moment";
-
+import dayjs from "dayjs";
 export const getResponePopup = (res) => {
   switch (res?.data?.status ? res?.data?.status : res?.status) {
     case "USER_DEFINED_ERROR":
@@ -181,3 +181,38 @@ export const emrTypeOptions=[
   { label: "IMS", value: "IMS" },
   { label: "Other", value: "Other" },
 ]
+
+export const disabledDate = (
+  currentDate,
+  selectedDates = [],
+  allowFuture = false
+) => {
+  const today = dayjs().endOf("day");
+  const [startDate, endDate] = Array.isArray(selectedDates)
+    ? selectedDates
+    : [null, null];
+
+  const startDay = startDate ? dayjs(startDate) : null;
+  const endDay = endDate ? dayjs(endDate) : null;
+
+
+  if (!allowFuture && currentDate && currentDate.isAfter(today, "day")) {
+    return true;
+  }
+  if (startDay && !endDay) {
+    return currentDate && currentDate.isBefore(startDay, "day");
+  }
+  if (endDay && !startDay) {
+    return currentDate && currentDate.isAfter(endDay, "day");
+  }
+  if (startDay && endDay) {
+    return (
+      currentDate &&
+      (currentDate.isBefore(startDay, "day") ||
+        currentDate.isAfter(endDay, "day"))
+    );
+  }
+  return false;
+};
+
+

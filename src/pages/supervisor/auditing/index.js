@@ -356,7 +356,7 @@ const Patient = ({
       const AuditedDueDate = dates?.AuditedDueDate?.map((date) => dayjs(date));
 
       setParamsFilter("check");
-      setSelectedDates(routedData?.selectedDates ?  routedData?.selectedDates  : "" );
+      setSelectedDates(routedData?.selectedDates ?  routedData?.selectedDates  : [] );
       setSelectedDateRange(
         routedData?.selectedDateRange ? routedData?.selectedDateRange : ""
       );

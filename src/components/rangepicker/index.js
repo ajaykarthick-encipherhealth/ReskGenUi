@@ -9,6 +9,7 @@ import {
 import moment from "moment";
 import { connect } from "react-redux";
 import {actions as allPatientsSyncActions} from '../../stores/tenantAdmin/patientSync'
+import { disabledDate } from "../../utils/reusable";
 
 const { RangePicker } = DatePicker;
 const DateRangePicker = ({
@@ -32,9 +33,9 @@ const DateRangePicker = ({
   pickerName,
   setSelectedDateRange,
   selectedDateRange,
-  getRoutedData
+  getRoutedData,
+  isDueDate,
 }) => {
-
   return (
     <>
       <label style={{ marginLeft: "8px" }} className="responsiveLabel">
@@ -106,18 +107,25 @@ const DateRangePicker = ({
               if (setPageNo) {
                 resetPageNumber(setPageNo);
               }
-              getRoutedData(null)
+              getRoutedData(null);
             }}
-            disabledDate={(current) => {
-              let customDate = moment().format("MM-DD-YYYY");
-              return current && current > moment(customDate, "MM-DD-YYYY");
-            }}
+            // disabledDate={(current) => {
+            //   let customDate = moment().format("MM-DD-YYYY");
+            //   return current && current > moment(customDate, "MM-DD-YYYY");
+            // }}
+            disabledDate={(currentDate) =>
+              disabledDate(
+                currentDate,
+                selectedDates[pickerName],
+                isDueDate // Pass true only for Audited Due Date
+              )
+            }
             id={id}
             name={name}
           />
         ) : (
           <RangePicker
-            value={selectedDates ? selectedDates : ""}
+            value={selectedDates ? selectedDates : []}
             format="MM-DD-YYYY"
             onCalendarChange={(val) => setSelectedDates(val)}
             onChange={(date, dateString) => {
@@ -130,13 +138,16 @@ const DateRangePicker = ({
               if (setPageNo) {
                 resetPageNumber(setPageNo);
               }
-              getRoutedData(null)
+              getRoutedData(null);
               // setClear(false);
             }}
-            disabledDate={(current) => {
-              let customDate = moment().format("MM-DD-YYYY");
-              return current && current > moment(customDate, "MM-DD-YYYY");
-            }}
+            // disabledDate={(current) => {
+            //   let customDate = moment().format("MM-DD-YYYY");
+            //   return current && current > moment(customDate, "MM-DD-YYYY");
+            // }}
+            disabledDate={(currentDate) =>
+              disabledDate(currentDate, selectedDates)
+            }
             id={id}
             name={name}
           />

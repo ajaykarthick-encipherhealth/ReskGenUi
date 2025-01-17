@@ -7,6 +7,7 @@ import { disableFutureDate } from "../headerFilters/functions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import styles from "./styles.module.css";
+import { disabledDate } from "../../utils/reusable";
 
 const { RangePicker } = DatePicker;
 
@@ -124,8 +125,10 @@ const HeadTitle = ({
             getPopupContainer={() => document.getElementById("date-popup")}
             value={tempDates?.length ? tempDates : null}
             onChange={handleDatePickerChange}
+            onCalendarChange={(val) => setTempDates(val)}
             format="MM-DD-YYYY"
-            disabledDate={(current) => disableFutureDate(current)}
+            // disabledDate={(current) => disableFutureDate(current)}
+            disabledDate={(currentDate) => disabledDate(currentDate, tempDates)}
             allowClear={true}
             inputReadOnly={true}
             open={openPicker}

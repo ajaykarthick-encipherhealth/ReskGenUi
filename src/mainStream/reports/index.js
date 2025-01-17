@@ -33,6 +33,7 @@ import SupervisorIndividualReport from "../../pages/supervisor/report/individual
 import TenantAdminIndividualReport from "../../pages/tenantadmin/report/individualreport";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
+import { disabledDate } from "../../utils/reusable";
 
 const statusOptions = [
   { label: "Completed", value: "COMPLETED" },
@@ -662,7 +663,13 @@ const Reports = ({
                             handleCoderPicker(date, dateString, activeTab);
                             resetPageNumber(resetPageState);
                           }}
-                          disabledDate={(current) => disableFutureDate(current)}
+                          onCalendarChange={(val) => {
+                            setSelectedDates(val);
+                          }}
+                          // disabledDate={(current) => disableFutureDate(current)}
+                          disabledDate={(currentDate) =>
+                            disabledDate(currentDate, selectedDates)
+                          }
                           className="newReportPicker"
                         />
                       </div>

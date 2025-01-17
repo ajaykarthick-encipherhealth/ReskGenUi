@@ -14,6 +14,7 @@ import InputField from "../../../../components/input";
 import { InfoCircleFilled, PlusCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../tracking/filters";
 import { Button } from "react-bootstrap";
+import { disabledDate } from "../../../../utils/reusable";
 
 const { RangePicker } = DatePicker;
 
@@ -56,7 +57,6 @@ const HeaderFilters = ({
   const [activeFilters, setActiveFilters] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
-
   const handleClearAllFilters = () => {
     setClear(true);
     setStartDate([]);
@@ -100,7 +100,9 @@ const HeaderFilters = ({
               <RangePicker
                 value={clear ? ["", ""] : selectedDates}
                 format="MM-DD-YYYY"
-                onCalendarChange={(val) => setSelectedDates(val)}
+                onCalendarChange={(val) => {
+                  setSelectedDates(val);
+                }}
                 onChange={(date, dateString) => {
                   handleRnagePicker2({
                     date,
@@ -110,7 +112,9 @@ const HeaderFilters = ({
                   });
                   setClear(false);
                 }}
-                disabledDate={(current) => disableFutureDate(current)}
+                disabledDate={(currentDate) =>
+                  disabledDate(currentDate, selectedDates)
+                }
               />
             </div>
           </div>
