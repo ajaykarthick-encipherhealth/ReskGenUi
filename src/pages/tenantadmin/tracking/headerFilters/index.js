@@ -4,9 +4,7 @@ import Image from "next/image";
 import styles from "../../../../pages/reviewer/report/report.module.css";
 import Tracking from "../../tracking/tracking.module.css";
 import Legends from "../../../../components/legends";
-import {
-  disableFutureDate,
-} from "../../../../components/headerFilters/functions";
+import { disableFutureDate } from "../../../../components/headerFilters/functions";
 import InputField from "../../../../components/input";
 import MoreFilter from "../filters";
 import { InfoCircleFilled } from "@ant-design/icons";
@@ -16,6 +14,8 @@ import { disabledDate } from "../../../../utils/reusable";
 const { RangePicker } = DatePicker;
 
 const allFilters = [
+  // "Reviewer",
+  // "Supervisor",
   "Allocated Date",
   "Audit Allocated Date",
   "Processed Status",
@@ -51,8 +51,9 @@ const HeaderFilters = ({
   getRoutedData,
   selectedOptions,
   setSelectedOptions,
-  activeFilters, setActiveFilters,
-  searchTextValue
+  activeFilters,
+  setActiveFilters,
+  searchTextValue,
 }) => {
   const [trackInput, setTrackInput] = useState("");
   const [selectAll, setSelectAll] = useState(false);
@@ -63,6 +64,7 @@ const HeaderFilters = ({
     setSearch("");
     setSelectedDates([]);
     setTrackInput(null);
+    setSelectedOptions([])
   };
 
   const getOptions = (name) => {
@@ -205,13 +207,51 @@ const HeaderFilters = ({
     }
   };
 
-  useEffect(()=>{
-    setTrackInput(searchTextValue)
-  },[searchTextValue])
+  useEffect(() => {
+    setTrackInput(searchTextValue);
+  }, [searchTextValue]);
 
   return (
     <div style={{ display: "flex" }}>
       <div className="row filter-contain" style={{ width: "95%" }}>
+        <div className={"col-2"}>
+          <label className={styles.label}>Reviewer</label>
+          <div class="form-group has-search custom-react-select">
+            <Select
+              onChange={(selectedOption) => {
+                setSelectedOptions((prevOptions) => ({
+                  ...prevOptions,
+                  ["Reviewer"]: selectedOption,
+                }));
+                setClear(false);
+              }}
+              options={getOptions("Reviewer")}
+              value={clear ? null : selectedOptions?.Reviewer}
+              isSearchable={false}
+              placeholder={`Select Reviewer`}
+              allowClear={true}
+            />
+          </div>
+        </div>
+        <div className={"col-2"}>
+          <label className={styles.label}>Supervisor</label>
+          <div class="form-group has-search custom-react-select">
+            <Select
+              value={clear ? null : selectedOptions?.Supervisor}
+              onChange={(selectedOption) => {
+                setSelectedOptions((prevOptions) => ({
+                  ...prevOptions,
+                  ["Supervisor"]: selectedOption,
+                }));
+                setClear(false);
+              }}
+              options={getOptions("Supervisor")}
+              isSearchable={false}
+              placeholder={`Select Supervisor`}
+              allowClear={true}
+            />
+          </div>
+        </div>
         {activeFilters?.map((filter) => (
           <React.Fragment key={filter}>{renderFilter(filter)}</React.Fragment>
         ))}

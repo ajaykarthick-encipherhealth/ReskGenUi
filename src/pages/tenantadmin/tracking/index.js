@@ -138,12 +138,12 @@ const Patient = ({
   const [clear, setClear] = useState(false);
   const [selectedDates, setSelectedDates] = useState();
   const [selectedDateRange, setSelectedDateRange] = useState({});
-  const [selectedOptions, setSelectedOptions] = useState({});
+  const [selectedOptions, setSelectedOptions] = useState({
+    Supervisor: null,
+    Reviewer: null
+  });
   const [orgAllList, setOrgAllList] = useState([]);
-  const [activeFilters, setActiveFilters] = useState([
-    "Reviewer",
-    "Supervisor",
-  ]);
+  const [activeFilters, setActiveFilters] = useState([]);
   const [paramsFilter, setParamsFilter] = useState(null);
   // useEffect(() => {
   //   if (trackingList?.data?.response) {
@@ -574,7 +574,7 @@ const Patient = ({
     clear,
     selectedDateRange,
     selectedOptions,
-    paramsFilter
+    paramsFilter,
   ]);
 
   return (
