@@ -344,8 +344,8 @@ const Patient = ({
     
     const response = await uploadFiles({ obj: formData });
     var orgId = selectOrgList;
-    console.log(response, "respo");
     if (response?.result == "SUCCESS") {
+      setAddPatient(false);
       setSelectFile(formData);
       getAllPatients(
         pageNo,
@@ -367,6 +367,7 @@ const Patient = ({
       setAddPatient(false);
     } else {
       getResponePopup(response);
+      setAddPatient(false);
     }
 
     setIsLoadingBtn(false);

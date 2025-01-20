@@ -155,8 +155,9 @@ function PatientTable({
             <AntSelect
               options={priorityOptions}
               placeholder="Set priority"
-              className={`custom-ant-select ${TableStyle.customAntSelect}`}
+              className={`custom-ant-select  ${TableStyle.customAntSelect}`}
               showSearch={false}
+              disabled 
               value={data?.priority ? data?.priority : "Set Priority"}
               onChange={(value) => {
                 handlePriorityChange(
