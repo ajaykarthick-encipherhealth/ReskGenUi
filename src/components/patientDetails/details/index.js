@@ -540,6 +540,7 @@ const Details = ({
       getPatientID(null);
       getSelectedDos("");
       getCurrentDiseaseType(true);
+      
     } else {
       getRoutedData(routedData);
       navigate.push(backRoute);
@@ -625,12 +626,6 @@ const Details = ({
     setShowTerminal(false);
   }, []);
 
-  const getMastData = (value) => {
-    if (value) {
-      return value.split("").splice(0, 3).join("") + "xxxx";
-    }
-  };
-
   const getActiveLabels = async () => {
     const patientId = getStorage("patientId");
     const res = await activeLabels({
@@ -647,7 +642,6 @@ const Details = ({
       getActiveLabels();
     }
   }, [isDosSelected, dosYearDefalutSelect]);
-
   return (
     <>
       <div className={`show `} style={{ height: "100vh", background: "#fff" }}>
@@ -1449,7 +1443,7 @@ const Details = ({
 
               {/* <Footer/> */}
             </div>
-          )}
+          )} 
         </div>
       </div>
 

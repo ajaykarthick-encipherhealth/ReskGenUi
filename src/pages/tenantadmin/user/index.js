@@ -12,6 +12,7 @@ import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
 import HeaderFilters from "./headerFilters";
+import TableSkeleton from "../../../components/skeleton/table";
 
 const options3 = [
   { value: "true", label: "Enabled" },
@@ -318,7 +319,7 @@ const UserList = ({
                       className="dataTables_wrapper no-footer"
                     >
                       {loading ? (
-                        renderSkeleton()
+                        <TableSkeleton/>
                       ) : (
                         <>
                           <UsersList

@@ -134,8 +134,7 @@ const enhancer = connect(
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     overAllRafScore: state?.tenantAdmin?.dashboard?.default?.allRafScore?.data,
-    rafLoader: state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
-  
+    rafLoader: state?.tenantAdmin?.dashboard?.default?.rafScoreLoader,
   }),
 
   {

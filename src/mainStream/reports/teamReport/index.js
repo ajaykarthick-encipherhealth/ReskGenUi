@@ -26,6 +26,8 @@ import { actions as supervisorAction } from "../../../stores/supervisor/report";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/admin/report";
 import { actions as patientsAction } from "../../../stores/admin/workqueue";
+import TableSkeleton from "../../../components/skeleton/table";
+import CardSkeleton from "../../../components/skeleton/card";
 const TeamReport = ({
   patientDetails,
   paginationFirst,
@@ -379,9 +381,11 @@ const TeamReport = ({
                   // ))
                 } */}
             </div>
-            {loader ? (
-              <SpinnerDots />
-            ) : (
+            {/* {loader ? (
+              <div className="mt-4">
+                <TableSkeleton />
+              </div>
+            ) : ( */}
               <div className="row">
                 <div>
                   <div className=" col-12 d-flex" style={{ height: "100%" }}>
@@ -393,116 +397,132 @@ const TeamReport = ({
                       </div>
                     ) : (
                       <div className={`col-6 ${styles.cardDiv}`}>
-                        <div className={styles.cardContainer}>
-                          {reportListAll?.response?.response?.data?.map(
-                            (item, id) => (
-                              <ContentGroupCard
-                                content={reportListAll?.response?.response?.data}
-                                key={id}
-                                item={item}
-                                flag={item?.patientFlagResponseDTOs}
-                                page={page}
-                                handleRowCheckboxChange={
-                                  handleRowCheckboxChange
-                                }
-                                selectedRows={selectedRows}
-                                // handleTableRowClick={handleTableRowClick}
-                                auditstatusBodyTemplate={auditstatusBodyTemplate(
-                                  item
-                                )}
-                                processstatusBodyTemplate={processstatusBodyTemplate(
-                                  item
-                                )}
-                                rafSum={item.rafSum}
-                                patientName={item.patientName}
-                                processedDate={item?.processedDate}
-                                patientId={item?.patientId}
-                                validDiseaseCount={item?.validDiseaseCount}
-                                auditedByFirstName={item?.auditedByFirstName}
-                                auditedByLastName={item?.auditedByLastName}
-                                auditedByProfileImage={
-                                  item?.auditedByProfileImage
-                                }
-                                patientAllocatedFirstName={
-                                  item?.patientAllocatedFirstName
-                                }
-                                patientAllocatedLastName={
-                                  item?.patientAllocatedLastName
-                                }
-                                patientAllocatedProfileImage={
-                                  item?.patientAllocatedProfileImage
-                                }
-                                loading={
-                                  activeTab === "Audit"
-                                    ? auditCheckedLoader
-                                    : teamCheckedLoader
-                                }
-                                patientDetails={patientDetails}
-                              />
-                            )
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    <div className={`col-6 ${styles.cardSeperation}`}>
-                      <div className={styles.cardContainer}>
-                        <div className={styles.card1}>
-                          <div className={styles.summaryText}>Summary</div>
-                          <div className="col-12 d-flex mt-4">
-                            {subCardData.map((card, index) => (
-                              <SubCard
-                                key={index}
-                                title={card.title}
-                                value={card.value}
-                              />
-                            ))}
+                        {loader ? (
+                          <div className="mt-4">
+                            <CardSkeleton count={6} width={900} height={100} />
                           </div>
-                          <div className={` pt-2 ${styles.summaryText}`}>
-                            Overall Status
-                          </div>
-                          <div className="col-12 d-flex mt-2">
-                            <div className="row g-2" style={{ width: "100%" }}>
-                              {card1Data?.map((data) => (
-                                <MiniCards
-                                  key={data?.id}
-                                  backgroundColor={data.bg}
-                                  icon={data?.icon}
-                                  title={data.title}
-                                  charts={data.charts}
-                                  styles={styles}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                          <div className="col-12  d-flex mt-4">
-                            <Flags
-                              reportListAll={reportListAll?.response}
-                              styles={styles}
-                            />
-                            {allocationCountData.map((item, index) =>
-                              userRole === "supervisor" ? (
-                                ""
-                              ) : (
-                                <AllocationCount
-                                  key={index}
-                                  title={item.title}
-                                  allocationCount={item.allocationCount}
-                                  renderUserPrfoileAvatar={
-                                    renderUserPrfoileAvatar
+                        ) : (
+                          <div className={styles.cardContainer}>
+                            {reportListAll?.response?.response?.data?.map(
+                              (item, id) => (
+                                <ContentGroupCard
+                                  content={
+                                    reportListAll?.response?.response?.data
                                   }
-                                  styles={styles}
+                                  key={id}
+                                  item={item}
+                                  flag={item?.patientFlagResponseDTOs}
+                                  page={page}
+                                  handleRowCheckboxChange={
+                                    handleRowCheckboxChange
+                                  }
+                                  selectedRows={selectedRows}
+                                  // handleTableRowClick={handleTableRowClick}
+                                  auditstatusBodyTemplate={auditstatusBodyTemplate(
+                                    item
+                                  )}
+                                  processstatusBodyTemplate={processstatusBodyTemplate(
+                                    item
+                                  )}
+                                  rafSum={item.rafSum}
+                                  patientName={item.patientName}
+                                  processedDate={item?.processedDate}
+                                  patientId={item?.patientId}
+                                  validDiseaseCount={item?.validDiseaseCount}
+                                  auditedByFirstName={item?.auditedByFirstName}
+                                  auditedByLastName={item?.auditedByLastName}
+                                  auditedByProfileImage={
+                                    item?.auditedByProfileImage
+                                  }
+                                  patientAllocatedFirstName={
+                                    item?.patientAllocatedFirstName
+                                  }
+                                  patientAllocatedLastName={
+                                    item?.patientAllocatedLastName
+                                  }
+                                  patientAllocatedProfileImage={
+                                    item?.patientAllocatedProfileImage
+                                  }
+                                  loading={
+                                    activeTab === "Audit"
+                                      ? auditCheckedLoader
+                                      : teamCheckedLoader
+                                  }
+                                  patientDetails={patientDetails}
                                 />
                               )
                             )}
                           </div>
-                        </div>
+                        )}
                       </div>
+                    )}
+                    <div className={`col-6 ${styles.cardSeperation}`}>
+                      {loader ? (
+                        <div className="mt-4">
+                          <CardSkeleton count={6} width={900} height={100} />
+                        </div>
+                      ) : (
+                        <div className={styles.cardContainer}>
+                          <div className={styles.card1}>
+                            <div className={styles.summaryText}>Summary</div>
+                            <div className="col-12 d-flex mt-4">
+                              {subCardData.map((card, index) => (
+                                <SubCard
+                                  key={index}
+                                  title={card.title}
+                                  value={card.value}
+                                />
+                              ))}
+                            </div>
+                            <div className={` pt-2 ${styles.summaryText}`}>
+                              Overall Status
+                            </div>
+                            <div className="col-12 d-flex mt-2">
+                              <div
+                                className="row g-2"
+                                style={{ width: "100%" }}
+                              >
+                                {card1Data?.map((data) => (
+                                  <MiniCards
+                                    key={data?.id}
+                                    backgroundColor={data.bg}
+                                    icon={data?.icon}
+                                    title={data.title}
+                                    charts={data.charts}
+                                    styles={styles}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                            <div className="col-12  d-flex mt-4">
+                              <Flags
+                                reportListAll={reportListAll?.response}
+                                styles={styles}
+                              />
+                              {allocationCountData.map((item, index) =>
+                                userRole === "supervisor" ? (
+                                  ""
+                                ) : (
+                                  <AllocationCount
+                                    key={index}
+                                    title={item.title}
+                                    allocationCount={item.allocationCount}
+                                    renderUserPrfoileAvatar={
+                                      renderUserPrfoileAvatar
+                                    }
+                                    styles={styles}
+                                  />
+                                )
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
-            )}
+            {/* )} */}
           </div>
         </div>
       </div>

@@ -29,6 +29,7 @@ import { getStorage, removeStorage, setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import HeaderFiltersPatients, { allFilters } from "./headerFilters";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
+import TableSkeleton from "../../../components/skeleton/table";
 
 const { RangePicker } = DatePicker;
 
@@ -456,7 +457,7 @@ const Patient = ({
                       className="dataTables_wrapper no-footer"
                     >
                       {loading ? (
-                        renderSkeleton()
+                        <TableSkeleton/>
                       ) : (
                         <>
                           <PatientTable

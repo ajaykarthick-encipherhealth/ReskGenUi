@@ -22,6 +22,7 @@ const index = ({
   revenueChartLoader,
   rafScorechartLoader,
   customDate,
+  getRafScoreLoader,
 }) => {
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap
@@ -97,7 +98,7 @@ const index = ({
             </div>
           </div>
         </div>
-        {rafScorechartLoader ? (
+        {getRafScoreLoader ? (
           <div>
             <Skeleton.Input
               className="w-100"
@@ -180,10 +181,10 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
-    totalCodesLoader:
-      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
+    getRafScoreLoader: state?.tenantAdmin?.dashboard?.default?.rafScoreLoader,
+    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalHccLoader,
     revenueChartLoader:
-      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.loading,
+      state?.tenantAdmin?.dashboard?.default?.revenueChartLoader,
   }),
   {
     getAllHccCodesData: HccCodes,

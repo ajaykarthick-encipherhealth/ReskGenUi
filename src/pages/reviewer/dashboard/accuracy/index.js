@@ -19,6 +19,7 @@ import {
 } from "../../../admin/dashboard/accuracy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGaugeHigh } from "@fortawesome/free-solid-svg-icons";
+import CardSkeleton from "../../../../components/skeleton/card";
 
 export const getISOWeekNumber = (date) => {
   const currentDate = new Date(date);
@@ -394,23 +395,27 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                 <div className={spinSTYles.spinStyle}>{<Empty />}</div>
               )}
             </div>
-            {accuracyLoading ? (
+          
               <div className={styles.accuracy}>
-                {renderCardSkeleton(200, 250)}
-              </div>
-            ) : (
-              <div className={styles.accuracy}>
+                <div className="mt-5">
                 <div className={styles.header}>
                 <FontAwesomeIcon className= {`mt-1 ${ styles.Img}`} icon={faGaugeHigh}   />
                   <div className={styles.heading}>Average Quality</div>
                 </div>
                 <div className={styles.percentage}>
-                  <span className={styles.insideTitle}>
-                    {average ? `${average?.toFixed(2)}%` : "0%"}
-                  </span>
+                <div className={styles.insideTitle}>
+                  {accuracyLoading ? (
+                    <>
+                      <CardSkeleton />
+                    </>
+                  ) : (
+                    <> {average ? `${average?.toFixed(2)}%` : `0%`}</>
+                  )}
+                </div>
+                </div>
                 </div>
               </div>
-            )}
+       
           </div>
         </Card>
       </div>

@@ -59,8 +59,7 @@ const enhancer = connect(
     top10DiseasesData:
       state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data,
     top10DisesesLoader:
-      state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.loading
-      ,
+      state?.tenantAdmin?.dashboard?.default?.topTenDiseasesLoader,
   }),
   {
     getTop10DiseasesData: allActions?.top10Diseases,

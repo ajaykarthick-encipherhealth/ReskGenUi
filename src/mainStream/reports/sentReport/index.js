@@ -22,6 +22,8 @@ import {
 } from "../../../mainStream/components/chartUtils";
 import Pagination from "../../components/pagination";
 import { actions as allActions } from "../../../stores/admin/report";
+import TableSkeleton from "../../../components/skeleton/table";
+import CardSkeleton from "../../../components/skeleton/card";
 const SentReport = ({
   details,
   onSentPageChange,
@@ -166,11 +168,18 @@ const SentReport = ({
           <div className="container-fluid py-4 px-2">
             <div className="row">
               <div>
-                {loader ? (
-                  <SpinnerDots />
-                ) : (
-                  <div className=" col-xl-12 d-flex">
-                    <div className={`col-xl-6 ${styles.cardDiv}`}>
+                {/* {loader ? (
+                  <div className="mt-4">
+                  <TableSkeleton/>
+                  </div>
+                ) : ( */}
+                <div className=" col-xl-12 d-flex">
+                  <div className={`col-xl-6 ${styles.cardDiv}`}>
+                    {loader ? (
+                      <div className="mt-4">
+                        <CardSkeleton count={6} width={900} height={100} />
+                      </div>
+                    ) : (
                       <div className={styles.cardContainer}>
                         {details?.receivedReportDTOList?.data?.length > 0 ? (
                           details?.receivedReportDTOList?.data.map(
@@ -195,8 +204,14 @@ const SentReport = ({
                           </div>
                         )}
                       </div>
-                    </div>
-                    <div className="col-xl-6" style={{ marginLeft: "10px" }}>
+                    )}
+                  </div>
+                  <div className="col-xl-6" style={{ marginLeft: "10px" }}>
+                    {loader ? (
+                      <div className="mt-4">
+                        <CardSkeleton count={6} width={900} height={100} />
+                      </div>
+                    ) : (
                       <div className={styles.cardContainer}>
                         <div className={styles.card2}>
                           <div className={styles.summaryText}>Summary</div>
@@ -311,9 +326,10 @@ const SentReport = ({
                           </div> */}
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
-                )}
+                </div>
+                {/* )} */}
               </div>
             </div>
           </div>

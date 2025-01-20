@@ -21,6 +21,8 @@ import GroupCard from "../../../mainStream/components/cards/groupCard";
 import Pagination from "../../components/pagination";
 import { getStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/admin/report";
+import TableSkeleton from "../../../components/skeleton/table";
+import CardSkeleton from "../../../components/skeleton/card";
 const ReceivedReport = ({
   details,
   onPageChange,
@@ -35,7 +37,7 @@ const ReceivedReport = ({
   viewIndividualReport,
   setViewIndividualReport,
   searchVal,
-  selectedDates
+  selectedDates,
 }) => {
   const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
 
@@ -115,21 +117,16 @@ const ReceivedReport = ({
       })
     );
 
-   useEffect(() => {
-      const isReceived = viewIndividualReport?.data
-        ? viewIndividualReport?.data?.isAdminPage
-        : false;
-  
-      if (isReceived) {
-        setReceivedPageNo(
-          viewIndividualReport?.data?.page ||0
-        );
-        setPaginationFirst(
-          viewIndividualReport?.data?.limit || 0
-        );
-      }
-    }, [viewIndividualReport]);
+  useEffect(() => {
+    const isReceived = viewIndividualReport?.data
+      ? viewIndividualReport?.data?.isAdminPage
+      : false;
 
+    if (isReceived) {
+      setReceivedPageNo(viewIndividualReport?.data?.page || 0);
+      setPaginationFirst(viewIndividualReport?.data?.limit || 0);
+    }
+  }, [viewIndividualReport]);
 
   useEffect(() => {
     if (details?.reportStatusDTOList && details?.reportStatusDTOList > 0) {
@@ -143,11 +140,18 @@ const ReceivedReport = ({
           <div className="container-fluid py-4 px-2">
             <div className="row">
               <div>
-                {loader ? (
-                  <SpinnerDots />
-                ) : (
-                  <div className=" col-12 d-flex">
-                    <div className={`col-6 ${styles.cardDiv}`}>
+                {/* {loader ? (
+                  <div className="mt-4">
+                    <TableSkeleton />
+                  </div>
+                ) : ( */}
+                <div className=" col-12 d-flex">
+                  <div className={`col-6 ${styles.cardDiv}`}>
+                    {loader ? (
+                      <div className="mt-4">
+                        <CardSkeleton count={6} width={900} height={100} />
+                      </div>
+                    ) : (
                       <div className={styles.cardContainer}>
                         {details?.reportStatusDTOList.content.length > 0 ? (
                           details?.reportStatusDTOList.content.map(
@@ -169,8 +173,14 @@ const ReceivedReport = ({
                           </div>
                         )}
                       </div>
-                    </div>
-                    <div className="col-6" style={{ marginLeft: "10px" }}>
+                    )}
+                  </div>
+                  <div className="col-6" style={{ marginLeft: "10px" }}>
+                    {loader ? (
+                      <div className="mt-4">
+                        <CardSkeleton count={6} width={900} height={100} />
+                      </div>
+                    ) : (
                       <div className={styles.cardContainer}>
                         <div className={styles.card2}>
                           <div className={styles.summaryText}>Summary</div>
@@ -280,9 +290,10 @@ const ReceivedReport = ({
                           </div> */}
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
-                )}
+                </div>
+                {/* )} */}
               </div>
             </div>
           </div>

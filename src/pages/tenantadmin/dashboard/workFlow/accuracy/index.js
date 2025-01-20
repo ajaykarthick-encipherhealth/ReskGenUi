@@ -359,7 +359,6 @@ const Accuracy = ({
       },
     ],
   };
-
   return (
     <>
       <div className={styles.card3}>

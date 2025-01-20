@@ -225,7 +225,6 @@ const Index = ({
       selectedOrganization
     );
   }, [dateRange, selectedOrganization]);
-
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
@@ -459,11 +458,11 @@ const enhancer = connect(
     organizationStatusData:
       state?.tenantAdmin?.dashboard?.workFlow?.organizationStatus?.data,
 
-    userLoader: state?.tenantAdmin?.workFlow?.userLoader,
-    auditorLoader: state?.tenantAdmin?.workFlow?.auditorLoader,
-    allocatedLoader: state?.tenantAdmin?.workFlow?.allocatedLoader,
-    reviewerLoader: state?.tenantAdmin?.workFlow?.reviewerLoader,
-    orgLoader: state?.tenantAdmin?.workFlow?.organizationLoader,
+    userLoader: state?.tenantAdmin?.dashboard?.workFlow?.userLoader,
+    auditorLoader: state?.tenantAdmin?.dashboard?.workFlow?.auditorLoader,
+    allocatedLoader: state?.tenantAdmin?.dashboard?.workFlow?.allocatedLoader,
+    reviewerLoader: state?.tenantAdmin?.dashboard?.workFlow?.reviewerLoader,
+    orgLoader: state?.tenantAdmin?.dashboard?.workFlow?.organizationLoader,
     top10DiseasesData:
       state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data?.response,
   }),
@@ -476,7 +475,7 @@ const enhancer = connect(
       dashboardWorkflowActions?.organizationStatusAction,
     getTop10DiseasesData: defaultActions.top10Diseases,
     getAccuracyScore: dashboardWorkflowActions.getAccuracyWorkflow,
-    getAllLabAndRadiologyChart:defaultActions.getAllLabAndRadiologyChart
+    getAllLabAndRadiologyChart: defaultActions.getAllLabAndRadiologyChart,
   }
 );
 export default enhancer(Index);

@@ -20,6 +20,7 @@ import { renderCardSkeleton } from "../../../reviewer/dashboard/accuracy";
 import { actions as dashbaordActions } from "../../../../stores/supervisor/dashboard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGaugeHigh } from "@fortawesome/free-solid-svg-icons";
+import CardSkeleton from "../../../../components/skeleton/card";
 
 export const getDateWeek = ({ date, accuracyDatass }) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -49,7 +50,13 @@ export const monthNames = [
   "DEC",
 ];
 
-const Accuracy = ({ accuracyDatas ,getAccuracyScore,getUserByIndividual,individualDetails,accuracyLoading}) => {
+const Accuracy = ({
+  accuracyDatas,
+  getAccuracyScore,
+  getUserByIndividual,
+  individualDetails,
+  accuracyLoading,
+}) => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const [initialAccuracyData, setInitialAccuracyData] = useState(null);
@@ -112,14 +119,14 @@ const Accuracy = ({ accuracyDatas ,getAccuracyScore,getUserByIndividual,individu
   }, [individualDetails]);
 
   useEffect(() => {
-      getAccuracyScore(
-       {btn: currentBtn.toUpperCase(),
-        date : currentDate.getDate(),
-        month: selectedMonth,
-        year: selectedYear,
-        user:selectUser}
-      )
-      getUserByIndividual();
+    getAccuracyScore({
+      btn: currentBtn.toUpperCase(),
+      date: currentDate.getDate(),
+      month: selectedMonth,
+      year: selectedYear,
+      user: selectUser,
+    });
+    getUserByIndividual();
   }, [currentBtn, selectedMonth, selectedYear, selectMemberType, selectUser]);
 
   const handleButtonClick = (index, btn) => {
@@ -423,23 +430,27 @@ const Accuracy = ({ accuracyDatas ,getAccuracyScore,getUserByIndividual,individu
                 </div>
               )}
             </div>
-            {accuracyLoading? (
-              <div className={styles.accuracy}>
-                {renderCardSkeleton(130, 250)}
+
+            <div className={styles.accuracy}>
+              <div className={styles.header}>
+                <FontAwesomeIcon
+                  className={`mt-1 ${styles.Img}`}
+                  icon={faGaugeHigh}
+                />
+                <div className={styles.heading}>Quality</div>
               </div>
-            ) : (
-              <div className={styles.accuracy}>
-                <div className={styles.header}>
-                  <FontAwesomeIcon className= {`mt-1 ${ styles.Img}`} icon={faGaugeHigh}   />
-                  <div className={styles.heading}>Quality</div>
-                </div>
-                <div className={styles.percentage}>
-                  <span className={styles.insideTitle}>
-                {average ? `${average?.toFixed(2)}%` : `0%`}
-                  </span>
-                </div>
+              <div className={styles.percentage}>
+                <span className={styles.insideTitle}>
+                  {accuracyLoading ? (
+                    <>
+                      <CardSkeleton />
+                    </>
+                  ) : (
+                    <> {average ? `${average?.toFixed(2)}%` : `0%`}</>
+                  )}
+                </span>
               </div>
-            )}
+            </div>
           </div>
         </Card>
       </div>
@@ -455,7 +466,7 @@ const enhancer = connect(
   }),
   {
     getAccuracyScore: dashbaordActions.accuracyAction,
-    getUserByIndividual:dashbaordActions.getUserByIndividualAction,
+    getUserByIndividual: dashbaordActions.getUserByIndividualAction,
   }
 );
 export default enhancer(Accuracy);

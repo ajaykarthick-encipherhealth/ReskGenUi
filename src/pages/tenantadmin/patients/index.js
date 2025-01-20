@@ -25,6 +25,7 @@ import { getResponePopup } from "../../../utils/reusable";
 import { actions as allocationAction } from "../../../stores/admin/patientAllocation";
 import { actions as allActions } from "../../../stores/admin/workqueue";
 import HeaderFilters from "./headerFilters";
+import TableSkeleton from "../../../components/skeleton/table";
 
 const bullets = [
   {
@@ -675,7 +676,7 @@ const Patient = ({
                         className="dataTables_wrapper no-footer"
                       >
                         {loading ? (
-                          renderSkeleton()
+                             <TableSkeleton/>
                         ) : (
                           <>
                             <AddPatientListTable

@@ -31,6 +31,7 @@ import { getStorage, setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { actions as workFlowActions } from "../../../stores/admin/workqueue";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
+import TableSkeleton from "../../../components/skeleton/table";
 const bullets = [
   {
     title: "Processed Status",
@@ -644,7 +645,7 @@ const Patient = ({
                         className="dataTables_wrapper no-footer"
                       >
                         {loader ? (
-                          <div>{renderSkeleton()}</div>
+                          <div>   <TableSkeleton/></div>
                         ) : (
                           <>
                             <TrackingTable

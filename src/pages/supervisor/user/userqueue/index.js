@@ -28,6 +28,7 @@ import { getStorage } from "../../../../utils/storages";
 import { actions as supervisorActions } from "../../../../stores/supervisor/auditedQueue";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
 import { getResponePopup } from "../../../../utils/reusable";
+import TableSkeleton from "../../../../components/skeleton/table";
 
 const bullets = [
   {
@@ -517,7 +518,9 @@ const Index = ({
                     className="dataTables_wrapper no-footer"
                   >
                     {loader ? (
-                      renderSkeleton()
+                      <div className="mt-1">
+                     <TableSkeleton/>
+                       </div>
                     ) : (
                       <UserQueueTable
                         userList={userListAll?.content}

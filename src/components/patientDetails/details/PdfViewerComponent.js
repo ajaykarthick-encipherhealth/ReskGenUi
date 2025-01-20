@@ -6,6 +6,7 @@ import { portalPdfUrl } from "../../../utils/config";
 import { pdfEncrypt } from "../../headerFilters/functions";
 import { getStorage } from "../../../utils/storages";
 import { serverControl } from "../../..//utils/config";
+import { Skeleton } from "antd";
 const PdfViewer = ({
   src,
   searchQuery,
@@ -106,9 +107,11 @@ const PdfViewer = ({
       ) : (
         <div className={Style.emptyFileView}>
           {!emptyText ? (
-            <div className={Style?.loaderDiv}>
-              <Spinner />
-            </div>
+              <Skeleton.Input
+              className="w-100"
+              style={{ height: "900px" }}
+              active
+            />
           ) : (
             <span>File Not Found</span>
           )}

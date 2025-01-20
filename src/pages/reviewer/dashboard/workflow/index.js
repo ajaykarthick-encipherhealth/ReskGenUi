@@ -14,7 +14,7 @@ import declinedBg from "../../.../../../../images/dashboard/declinedbg.webp";
 import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
  import { faCalendar, faCircleCheck ,faClockRotateLeft,faUsers} from "@fortawesome/free-solid-svg-icons";
 
-const WorkFlow = ({ worlFlowData ,DateRanges}) => {
+const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
   const currentDate = dayjs();
   const [openPicker, setOpenPicker] = useState(false);
 
@@ -100,7 +100,6 @@ const WorkFlow = ({ worlFlowData ,DateRanges}) => {
       ))}
     </Row>
   );
-
   return (
     <div className={styles.card1}>
       <HeadTitle
@@ -118,7 +117,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges}) => {
         defaultDateRange={DateRanges}
       />
       <Card borderRadius="28px">
-        {worlFlowData?.loading ? (
+        {workFlowLoader ? (
           renderCardSkeleton()
         ) : worlFlowData?.data?.response ? (
           <Row className={styles.carddiv}>
@@ -158,6 +157,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges}) => {
 };
 const enhancer = connect((state) => ({
   worlFlowData: state?.reviewer?.dashboard?.workFlow,
+  workFlowLoader:state?.reviewer?.dashboard?.workFlowLoader,
   DateRanges:state?.admin?.dashboard?.dateRanges,
 }));
  export default enhancer(WorkFlow);

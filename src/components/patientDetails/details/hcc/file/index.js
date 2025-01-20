@@ -10,7 +10,7 @@ import {
   faAngleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Drawer, Modal, Popover, notification } from "antd";
+import { Drawer, Modal, Popover, Skeleton, notification } from "antd";
 import { Button, Offcanvas, Spinner } from "react-bootstrap";
 import styles from "../styles.module.css";
 import PdfViewer from "../../PdfViewerComponent";
@@ -51,7 +51,7 @@ const File = ({
   labFileLoad,
   fileLoadingStatus,
   actions,
-  selectDosValue
+  selectDosValue,
 }) => {
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
@@ -116,7 +116,7 @@ const File = ({
       setPotentialList,
       actions?.showDisease
     );
-  }, [patientDetailsResult,actions?.showDisease]);
+  }, [patientDetailsResult, actions?.showDisease]);
 
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
@@ -226,7 +226,7 @@ const File = ({
   }, [patientDetailsResult]);
 
   const handleShowList = (value) => {
-    console.log("show",value)
+    console.log("show", value);
     if (showList.includes(value)) {
       setShowList((prev) => {
         return prev.filter((item) => item != value);
@@ -252,7 +252,10 @@ const File = ({
           )
         }
       >
-        <div className="my-post-content row pt-3 px-2" style={{ height: "100%" }}>
+        <div
+          className="my-post-content row pt-3 px-2"
+          style={{ height: "100%" }}
+        >
           {!isFileFormShow ? (
             <div className="col-3">
               <Droppable droppableId={"HCC"} key={"HCC"}>
@@ -363,9 +366,11 @@ const File = ({
             </Popover> */}
             <div className="card-body p-0">
               {fileLoadingStatus ? (
-                <div className={visitStyles?.loaderDiv}>
-                  <Spinner />
-                </div>
+                <Skeleton.Input
+                  className="w-100"
+                  style={{ height: "900px" }}
+                  active
+                />
               ) : (
                 <>
                   {selectFileURL && (
@@ -375,7 +380,7 @@ const File = ({
                       pageNumber={search?.page ? search?.page : 1}
                       headers={search?.headers}
                       // height={true}
-                      fileHeightFrames={window.screen.availHeight - 300}
+                      // fileHeightFrames={window.screen?.availHeight - 300}
                       fileHeights={"80vh"}
                       isFillView={true}
                     />
@@ -427,7 +432,7 @@ const File = ({
                               }
                             />
                           </span>
-                          CARE GAP 
+                          CARE GAP
                         </span>
                         <div className="d-flex justify-content-center">
                           <span

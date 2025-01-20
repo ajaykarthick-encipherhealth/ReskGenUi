@@ -278,9 +278,9 @@ const enhancer = connect(
     getFilesWorkflowLoader:
       state?.tenantAdmin?.dashboard?.workFlow?.getFilesWorkflowLoader,
     computingTileStatusLoader:
-      state?.tenantAdmin?.dashboard?.default?.allComputingTileStatus?.loading,
+      state?.tenantAdmin?.dashboard?.default?.computingTileStatusLoader,
     computingStatusLoader:
-      state?.tenantAdmin?.dashboard?.default?.allComputingStatus?.loading,
+      state?.tenantAdmin?.dashboard?.default?.computingStatusLoader,
   }),
   {
     getAllComputing: defaultActions.ComputingStatus,

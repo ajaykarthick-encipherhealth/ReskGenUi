@@ -26,6 +26,8 @@ import {
 import { actions as adminActions } from "../../../stores/admin/report";
 import { actions as patientsActions } from "../../../stores/admin/workqueue";
 import { getStorage, setStorage } from "../../../utils/storages";
+import TableSkeleton from "../../../components/skeleton/table";
+import CardSkeleton from "../../../components/skeleton/card";
 
 const InitialCard = ({
   patientDetails,
@@ -294,10 +296,13 @@ const InitialCard = ({
       const currentRole = getStorage("userRole");
       controller.abort();
       setStorage("patientId", data.patientId);
-      navigate.push({
-        pathname: `/${currentRole}/report/reportdetails`,
-        query: {...page,fromReport:currentRole},
-      }, `/${currentRole}/report/reportdetails`);
+      navigate.push(
+        {
+          pathname: `/${currentRole}/report/reportdetails`,
+          query: { ...page, fromReport: currentRole },
+        },
+        `/${currentRole}/report/reportdetails`
+      );
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",
@@ -398,71 +403,80 @@ const InitialCard = ({
               {/* </>
                 // )} */}
             </div>
-            {loader ? (
-              <SpinnerDots />
-            ) : (
-              <div className="row">
-                <div>
-                  <div className=" col-12 d-flex">
-                    <div className={`col-6 ${styles.cardDiv}`}>
-                      {reportListAll?.response?.data?.length > 0 ? (
-                        <div className={styles.cardContainer}>
-                          {reportListAll?.response?.data?.map((item, id) => (
-                            <ContentGroupCard
-                              content={reportListAll?.response?.data}
-                              key={item?.id}
-                              item={item}
-                              flag={
-                                item?.patientFlagResponseDTOs
-                                  ? item?.patientFlagResponseDTOs
-                                  : []
-                              }
-                              page={page}
-                              handleRowCheckboxChange={handleRowCheckboxChange}
-                              selectedRows={selectedRows}
-                              handleTableRowClick={handleTableRowClick}
-                              auditstatusBodyTemplate={auditstatusBodyTemplate(
-                                item
-                              )}
-                              processstatusBodyTemplate={processstatusBodyTemplate(
-                                item
-                              )}
-                              rafSum={item.rafSum}
-                              patientName={item.patientName}
-                              processedDate={item?.processedDate}
-                              patientId={item?.patientId}
-                              validDiseaseCount={item?.validDiseaseCount}
-                              auditedByFirstName={item?.auditedByFirstName}
-                              auditedByLastName={item?.auditedByLastName}
-                              auditedByProfileImage={
-                                item?.auditedByProfileImage
-                              }
-                              patientAllocatedFirstName={
-                                item?.patientAllocatedFirstName
-                              }
-                              patientAllocatedLastName={
-                                item?.patientAllocatedLastName
-                              }
-                              patientAllocatedProfileImage={
-                                item?.patientAllocatedProfileImage
-                              }
-                              loading={
-                                activeTab === "Reviewer"
-                                  ? checkedLoader
-                                  : adminCheckedLoader
-                              }
-                              patientDetails={patientDetails}
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <div className={styles.card}>
-                          <Empty />
-                        </div>
-                      )}
-                    </div>
+            {/* {loader ? (
+              <div className="mt-4">
+            <TableSkeleton/>
+            </div> */}
+            {/* ) : ( */}
+            <div className="row">
+              <div>
+                <div className=" col-12 d-flex">
+                  <div className={`col-6 ${styles.cardDiv}`}>
+                    {loader ? (
+                      <div className="mt-4">
+                        <CardSkeleton count={6} width={900} height={100} />
+                      </div>
+                    ) : reportListAll?.response?.data?.length > 0 ? (
+                      <div className={styles.cardContainer}>
+                        {reportListAll?.response?.data?.map((item, id) => (
+                          <ContentGroupCard
+                            content={reportListAll?.response?.data}
+                            key={item?.id}
+                            item={item}
+                            flag={
+                              item?.patientFlagResponseDTOs
+                                ? item?.patientFlagResponseDTOs
+                                : []
+                            }
+                            page={page}
+                            handleRowCheckboxChange={handleRowCheckboxChange}
+                            selectedRows={selectedRows}
+                            handleTableRowClick={handleTableRowClick}
+                            auditstatusBodyTemplate={auditstatusBodyTemplate(
+                              item
+                            )}
+                            processstatusBodyTemplate={processstatusBodyTemplate(
+                              item
+                            )}
+                            rafSum={item.rafSum}
+                            patientName={item.patientName}
+                            processedDate={item?.processedDate}
+                            patientId={item?.patientId}
+                            validDiseaseCount={item?.validDiseaseCount}
+                            auditedByFirstName={item?.auditedByFirstName}
+                            auditedByLastName={item?.auditedByLastName}
+                            auditedByProfileImage={item?.auditedByProfileImage}
+                            patientAllocatedFirstName={
+                              item?.patientAllocatedFirstName
+                            }
+                            patientAllocatedLastName={
+                              item?.patientAllocatedLastName
+                            }
+                            patientAllocatedProfileImage={
+                              item?.patientAllocatedProfileImage
+                            }
+                            loading={
+                              activeTab === "Reviewer"
+                                ? checkedLoader
+                                : adminCheckedLoader
+                            }
+                            patientDetails={patientDetails}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div className={styles.card}>
+                        <Empty />
+                      </div>
+                    )}
+                  </div>
 
-                    <div className={`col-6 ${styles.cardSeperation}`}>
+                  <div className={`col-6 ${styles.cardSeperation}`}>
+                    {loader ? (
+                      <div className="mt-4">
+                        <CardSkeleton count={6} width={900} height={100} />
+                      </div>
+                    ) : (
                       <div className={styles.cardContainer}>
                         <div className={styles.card1}>
                           <div className={styles.summaryText}>Summary</div>
@@ -530,11 +544,12 @@ const InitialCard = ({
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
-            )}
+            </div>
+            {/* )} */}
           </div>
         </div>
       </div>

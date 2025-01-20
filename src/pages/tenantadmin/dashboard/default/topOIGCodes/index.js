@@ -57,7 +57,7 @@ const enhancer = connect(
   (state) => ({
     top0ijHccCodes:
       state?.tenantAdmin?.dashboard?.default?.allTopOigCodes?.data,
-    top0ijCodesLoader: state?.tenantAdmin?.dashboard?.default?.allTopOigCodes?.loading,
+    top0ijCodesLoader: state?.tenantAdmin?.dashboard?.default?.topTenOigCodes,
   }),
   {
     getTopOigCodesData: allActions?.topOigCodes,

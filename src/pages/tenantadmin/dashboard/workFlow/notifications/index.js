@@ -11,7 +11,11 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 import NoNotification from "../../../../../images/dashboard/no-notification.png";
 import spinSTYles from "../../../../../styles/auth.module.css";
 
-const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
+const Notifications = ({
+  notificationResponse,
+  webSocketNotificationData,
+  notificationLoader,
+}) => {
   const notificationResult = webSocketNotificationData
     ? webSocketNotificationData
     : notificationResponse?.data?.response?.notificationList?.content;
@@ -33,7 +37,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
               className={`${styles.notifyIconColor}`}
             />
           </div>
-          <div className={`${styles.msgCOntainer } m-2`}>
+          <div className={`${styles.msgCOntainer} m-2`}>
             <span className={styles.description}>{info.content}</span>
             <div className={styles.time}>
               {moment(info?.createdDate).format("MM-DD-YYYY")}&nbsp;{" "}
@@ -53,12 +57,10 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       <div className={styles.no_notificarion_container}>
         {!notificationResponse?.loading &&
           (!notificationResponse?.data?.response?.notificationList?.content ||
-            notificationResponse?.data?.response?.notificationList?.content?.length === 0) && (
-            <Image src={NoNotification} alt="" />
-          )}
+            notificationResponse?.data?.response?.notificationList?.content
+              ?.length === 0) && <Image src={NoNotification} alt="" />}
       </div>
     );
-
   return (
     <>
       <HeadTitle
@@ -66,27 +68,24 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
         anchorTag="anchor"
         handleOpen={handleOpen}
         fontSize="20px"
-        
       />
 
       <div className={styles.card4}>
-
-          {notificationResponse?.loading ? (
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Spin loading={notificationResponse?.loading} />
-            </div>
-          ) : (
-            <div className={styles.container}>{notificationData}</div>
-          )}
-     
+        {notificationResponse?.loading ? (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Spin loading={notificationResponse?.loading} />
+          </div>
+        ) : (
+          <div className={styles.container}>{notificationData}</div>
+        )}
       </div>
       <Modal
         title="Notifications"
@@ -97,9 +96,9 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
         closable={true}
         onCancel={handleOk}
       >
-        {notificationResponse?.loading ? (
+        {notificationLoader ? (
           <div className={spinSTYles.spinStyle}>
-            <Spin loading={notificationResponse?.loading} />
+            <Spin loading={notificationLoader} />
           </div>
         ) : (
           <div className={styles.container} style={{ height: "500px" }}>
@@ -112,6 +111,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
 };
 const enhancer = connect((state) => ({
   notificationResponse: state?.reviewer?.dashboard?.notification,
+  notificationLoader: state?.reviewer?.dashboard?.notificationLoader,
   webSocketNotificationData:
     state?.webSocket?.webSocketNotificationDetails?.data,
 }));

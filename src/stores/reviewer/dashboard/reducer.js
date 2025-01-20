@@ -50,6 +50,7 @@ const getDailyTaskDatas = (action) =>
   );
 const dashbaordReducer = combineReducers({
   workFlow: createReducer(workFlowAction),
+  workFlowLoader: getUsersDetailsLoading(workFlowAction),
   dailyTask: createReducer(dailyTaskAction),
   dailyTaskLoader: getUsersDetailsLoading(dailyTaskAction),
   accuracyLoading: getUsersDetailsLoading(accuracyAction),
@@ -58,6 +59,7 @@ const dashbaordReducer = combineReducers({
   completedScoreLoading: getUsersDetailsLoading(completedScoreAction),
   holdStatus:createReducer(holdStatusAction),
   notification:createReducer(notificationAction),
+  notificationLoader:getUsersDetailsLoading(notificationAction),
   tenentLogo:createReducer(tenentLogoAction),
   dailyTaskDatas: getDailyTaskDatas(dailyTaskData),
   reviwerPatientFilterList:createReducer(reviewerFilterList),

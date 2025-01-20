@@ -34,6 +34,7 @@ import moment from "moment";
 import { getStorage } from "../../../../../utils/storages";
 import { isLocalEdit } from "../../../../../utils/config";
 import { getResponePopup } from "../../../../../utils/reusable";
+import CardSkeleton from "../../../../skeleton/card";
 const HccCards = ({
   list,
   hccVersionDetails,
@@ -102,6 +103,7 @@ const HccCards = ({
   const [labData, setLabData] = useState("");
   const [selectedDos, setSelectedDos] = useState("");
   const [hoveredItem, setHoveredIem] = useState(null);
+  const patientId = getStorage("patientId")
 
   const getPdfEmptyFunction = () => {};
   const getRadiologyPDF =
@@ -201,15 +203,12 @@ const HccCards = ({
       getResponePopup(res)
     }
   };
-
   return (
     <>
       {provided && (
         <div ref={provided?.innerRef} {...provided?.droppableProps}>
-          {loading ? (
-            <div className={styles.noMsContainer}>
-              <Spinner />
-            </div>
+          {loading  ? (
+              <CardSkeleton count={6} width={360} height={100} />
           ) : list?.length > 0 ? (
             list?.map(
               (

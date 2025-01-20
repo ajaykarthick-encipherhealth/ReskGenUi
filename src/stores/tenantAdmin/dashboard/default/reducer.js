@@ -47,7 +47,7 @@ const createReducer = (actionType) =>
 const getReportLoading = (type) =>
   handleActions(
     {
-      [type.STARTED]: () => true,
+      [type.START]: () => true,
       [type.SUCCEEDED]: () => false,
       [type.FAILED]: () => false,
     },
@@ -69,7 +69,7 @@ const tenantAdminDefault = combineReducers({
   allRafScore: createReducer(rafScore),
   totalCountsLoader: getReportLoading(FilesCount),
   rafScoreLoader: getReportLoading(rafScore),
-  totalCodesLoader: getReportLoading(HccCodes),
+  totalHccLoader: getReportLoading(HccCodes),
   totalCodesLoader: getReportLoading(ComputingStatus),
   computingTileStatusLoader: getReportLoading(computingTileStatus),
   computingStatusLoader: getReportLoading(ComputingStatus),

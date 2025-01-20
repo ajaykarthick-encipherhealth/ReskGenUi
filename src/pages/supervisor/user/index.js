@@ -7,6 +7,7 @@ import HeaderFilters from "../../../components/headerFilters";
 import SpinnerDots from "../../../components/spinner";
 import {actions as allActions} from '../../../stores/supervisor/users'
 import { renderSkeleton } from "../../../components/reuseableFunctions";
+import TableSkeleton from "../../../components/skeleton/table";
 const UserList = ({getUsers,loader,usersData}) => {
   
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -55,7 +56,9 @@ const UserList = ({getUsers,loader,usersData}) => {
                       className="dataTables_wrapper no-footer"
                     >
                       {loader ? (
-                         renderSkeleton()
+                        <div className="mt-2">
+                       <TableSkeleton/>
+                        </div>
                       ) : (
                         <AdminList
                           userList={userListAll?.content}

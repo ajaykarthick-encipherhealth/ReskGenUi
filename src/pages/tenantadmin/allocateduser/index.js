@@ -33,6 +33,7 @@ import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
 import { disabledDate, getResponePopup } from "../../../utils/reusable";
+import TableSkeleton from "../../../components/skeleton/table";
 
 const { RangePicker } = DatePicker;
 const statusOption = [
@@ -954,7 +955,7 @@ const Patient = ({
                                   eventKey="validDiseases"
                                 >
                                   {loader && activeTab == 1 ? (
-                                    renderSkeleton()
+                                      <TableSkeleton/>
                                   ) : (
                                     <>
                                       <AllocatedAdminList
@@ -1003,7 +1004,7 @@ const Patient = ({
 
                                 <Tab.Pane id="my-posts" eventKey="team">
                                   {loader2 && activeTab == 2 ? (
-                                    renderSkeleton()
+                                    <TableSkeleton/>
                                   ) : (
                                     <>
                                       <div
