@@ -52,8 +52,30 @@ export const getHeaderLoge = () => {
   switch (companyDeatils) {
     case "cogentai":
       return (
-        <div className="mx-3">
-        <Image src={cogentHeaderLogo} alt="noImg" width={170} height={60} /></div>
+        // <div className="mx-3">
+        //   {/* <Image
+        //     src={cogentHeaderLogo}
+        //     alt="Logo"
+        //   /> */}
+        // </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            width: "120px", 
+            aspectRatio: "2 / 1", 
+          }}
+          className="mx-3"
+        >
+          <Image
+            src={cogentHeaderLogo}
+            alt="Logo"
+            style={{
+              width: "100%", 
+              height: "auto",
+            }}
+          />
+        </div>
       );
     case "c360":
       return (
