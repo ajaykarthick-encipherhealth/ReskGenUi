@@ -168,6 +168,7 @@ const WorkFlow = ({ worlFlowData, DateRanges }) => {
         handleOpen={handleOpen}
         openPicker={openPicker}
         setOpenPicker={setOpenPicker}
+        defaultDateRange={DateRanges}
       />
       <Card borderRadius="28px">
         {worlFlowData?.loading ? (
