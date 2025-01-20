@@ -62,6 +62,7 @@ const dashboardReducer = combineReducers({
   workFlow: createReducer(supervisorWorkFlowAction),
   workFlowLoading: getUsersDetailsLoading(supervisorWorkFlowAction),
   dailyTask: createReducer(dailyTaskAction),
+  dailyTaskLoader:getUsersDetailsLoading(dailyTaskAction),
   dailyTaskDatas: getDailyTaskDatas(dailyTaskData),
   accuracyLoading: getUsersDetailsLoading(accuracyAction),
   accuracy: createReducer(accuracyAction),

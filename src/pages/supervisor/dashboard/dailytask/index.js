@@ -23,6 +23,7 @@ const DailyTask = ({
   getAllDailyTask,
   getDailyTaskData,
   dailytask,
+  dailyTaskLoader,
   getRoutedData,
 }) => {
   const [selectedDate, setSelectedDate] = useState();
@@ -263,13 +264,13 @@ const DailyTask = ({
           key={index}
           xs={24}
           sm={12}
-          md={8}
+          md={20}
           lg={7}
           className={styles.sliderdiv}
           style={{
             backgroundColor: "#f0f0f0",
             borderRadius: "12px",
-            padding: "5px",
+            padding: "35px",
             marginBottom: "16px",
             height: "260px",
           }}
@@ -284,10 +285,10 @@ const DailyTask = ({
               </div>
             </Col>
             <Col span={12} className={styles.headerTitle}>
-              <div>
+              <div style={{ paddingLeft: "20px" }}>
                 {Array.from({ length: bullets.length }).map((_, i) => (
                   <div className={styles.container} key={i}>
-                    <Skeleton.Input style={{ width: 30 }} active />
+                    <Skeleton.Input style={{ width: 10 }} active />
                   </div>
                 ))}
               </div>
@@ -313,172 +314,179 @@ const DailyTask = ({
                 <Row
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  {uniqueData?.slice(0, 3)?.map((data, index) => (
-                    <Col key={index} span={7} className={styles.sliderdiv}>
-                      <h4
-                        className={styles.headerTitle}
-                        style={{ fontSize: "16px" }}
-                        onClick={() => {
-                          // setStorage(
-                          //   "SuperVisorfilter",
-                          //   JSON.stringify(allFilters)
-                          // );
-                          
-                          const params = {
-                            // AuditedDueDate: JSON.stringify({
-                            selectedDates: {
-                              AuditedDueDate: [
-                                dayjs(data?.date),
-                                dayjs(data?.date),
-                              ],
-                            },
-                            selectedDateRange: {
-                              AuditedDueDate: {
-                                startDate: data?.date
-                                  ? `${moment(data?.date, "MM-DD-YYYY").format(
-                                      "YYYY-MM-DD"
-                                    )}T00:00:00.000Z`
-                                  : "",
-                                endDate: data?.date
-                                  ? `${moment(data?.date, "MM-DD-YYYY").format(
-                                      "YYYY-MM-DD"
-                                    )}T23:59:59.999Z`
-                                  : "",
+                  {dailyTaskLoader ? (
+                    <> {renderCardSkeleton()}</>
+                  ) : (
+                    uniqueData?.slice(0, 3)?.map((data, index) => (
+                      <Col key={index} span={7} className={styles.sliderdiv}>
+                        <h4
+                          className={styles.headerTitle}
+                          style={{ fontSize: "16px" }}
+                          onClick={() => {
+                            // setStorage(
+                            //   "SuperVisorfilter",
+                            //   JSON.stringify(allFilters)
+                            // );
+
+                            const params = {
+                              // AuditedDueDate: JSON.stringify({
+                              selectedDates: {
+                                AuditedDueDate: [
+                                  dayjs(data?.date),
+                                  dayjs(data?.date),
+                                ],
                               },
-                            },
-                            activeFilters: ["Audited Due Date"],
+                              selectedDateRange: {
+                                AuditedDueDate: {
+                                  startDate: data?.date
+                                    ? `${moment(
+                                        data?.date,
+                                        "MM-DD-YYYY"
+                                      ).format("YYYY-MM-DD")}T00:00:00.000Z`
+                                    : "",
+                                  endDate: data?.date
+                                    ? `${moment(
+                                        data?.date,
+                                        "MM-DD-YYYY"
+                                      ).format("YYYY-MM-DD")}T23:59:59.999Z`
+                                    : "",
+                                },
+                              },
+                              activeFilters: ["Audited Due Date"],
 
-                            // })
-                          };
+                              // })
+                            };
 
-                          // setStorage("supervisorDate", JSON.stringify(params));
-                          // router?.push(
-                          //   {
-                          //     pathname: "/supervisor/auditing",
-                          //     query: params,
-                          //   },
-                          //   "/supervisor/auditing"
-                          // );
-                          getRoutedData(params);
-                          // getFilteredList(allFilters);
-                          router.push(`/supervisor/auditing`);
-                        }}
-                      >
-                        <div className={styles.headerDisplay}>
-                          <span> {data.day}</span>
-                          <span className={styles.dateDisplay}>
-                            {" "}
-                            {`(${data.date})`}{" "}
-                          </span>
-                        </div>
-                      </h4>
-                      <Row>
-                        <Col span={11}>
-                          <div className={styles.container}>
-                            <ReactECharts
-                              option={getChartOption(
-                                data?.allocated,
-                                data?.pending,
-                                data?.hold,
-                                data?.reAudited,
-                                data?.audited,
-                                data?.declined
-                              )}
-                              style={{ width: "100%", height: "200px" }}
-                            />
+                            // setStorage("supervisorDate", JSON.stringify(params));
+                            // router?.push(
+                            //   {
+                            //     pathname: "/supervisor/auditing",
+                            //     query: params,
+                            //   },
+                            //   "/supervisor/auditing"
+                            // );
+                            getRoutedData(params);
+                            // getFilteredList(allFilters);
+                            router.push(`/supervisor/auditing`);
+                          }}
+                        >
+                          <div className={styles.headerDisplay}>
+                            <span> {data.day}</span>
+                            <span className={styles.dateDisplay}>
+                              {" "}
+                              {`(${data.date})`}{" "}
+                            </span>
                           </div>
-                        </Col>
-                        <Col span={12} className={styles.headerTitle}>
-                          <div style={{ paddingLeft: "10px" }}>
-                            {bullets?.map((item) => {
-                              return (
-                                <div className={styles.container}>
-                                  <div
-                                    style={{ display: "flex" }}
-                                    onClick={() => {
-                                      const params = {
-                                        selectedOption: item?.name
-                                          ? item?.name === "AuditPending" ||
-                                            item?.name === "AuditDeclined"
-                                            ? item?.name
-                                                .replace(
-                                                  /([a-z])([A-Z])/g,
-                                                  "$1_$2"
-                                                )
-                                                .toUpperCase()
-                                            : item?.name.toUpperCase()
-                                          : "",
-                                        
-                                        selectedDates: {
-                                          AuditedDueDate: [
-                                            dayjs(data?.date),
-                                            dayjs(data?.date),
-                                          ],
-                                        },
-                                        selectedDateRange: {
-                                          AuditedDueDate: {
-                                            startDate: data?.date
-                                              ? `${moment(
-                                                  data?.date,
-                                                  "MM-DD-YYYY"
-                                                ).format(
-                                                  "YYYY-MM-DD"
-                                                )}T00:00:00.000Z`
-                                              : "",
-
-                                            endDate: data?.date
-                                              ? `${moment(
-                                                  data?.date,
-                                                  "MM-DD-YYYY"
-                                                ).format(
-                                                  "YYYY-MM-DD"
-                                                )}T23:59:59.999Z`
-                                              : "",
-                                          },
-                                        },
-                                        activeFilters: [
-                                          // "Reviewer Status",
-                                          "Select Audited Status",
-                                          // "Audited Date",
-                                          "Audited Due Date",
-                                        ],
-                                      };
-                                      getRoutedData(params);
-                                      router.push("/supervisor/auditing");
-                                    }}
-                                  >
+                        </h4>
+                        <Row>
+                          <Col span={11}>
+                            <div className={styles.container}>
+                              <ReactECharts
+                                option={getChartOption(
+                                  data?.allocated,
+                                  data?.pending,
+                                  data?.hold,
+                                  data?.reAudited,
+                                  data?.audited,
+                                  data?.declined
+                                )}
+                                style={{ width: "100%", height: "200px" }}
+                              />
+                            </div>
+                          </Col>
+                          <Col span={12} className={styles.headerTitle}>
+                            <div style={{ paddingLeft: "10px" }}>
+                              {bullets?.map((item) => {
+                                return (
+                                  <div className={styles.container}>
                                     <div
-                                      className={styles.bgColor}
-                                      style={{
-                                        backgroundColor: item.color,
+                                      style={{ display: "flex" }}
+                                      onClick={() => {
+                                        const params = {
+                                          selectedOption: item?.name
+                                            ? item?.name === "AuditPending" ||
+                                              item?.name === "AuditDeclined"
+                                              ? item?.name
+                                                  .replace(
+                                                    /([a-z])([A-Z])/g,
+                                                    "$1_$2"
+                                                  )
+                                                  .toUpperCase()
+                                              : item?.name.toUpperCase()
+                                            : "",
+
+                                          selectedDates: {
+                                            AuditedDueDate: [
+                                              dayjs(data?.date),
+                                              dayjs(data?.date),
+                                            ],
+                                          },
+                                          selectedDateRange: {
+                                            AuditedDueDate: {
+                                              startDate: data?.date
+                                                ? `${moment(
+                                                    data?.date,
+                                                    "MM-DD-YYYY"
+                                                  ).format(
+                                                    "YYYY-MM-DD"
+                                                  )}T00:00:00.000Z`
+                                                : "",
+
+                                              endDate: data?.date
+                                                ? `${moment(
+                                                    data?.date,
+                                                    "MM-DD-YYYY"
+                                                  ).format(
+                                                    "YYYY-MM-DD"
+                                                  )}T23:59:59.999Z`
+                                                : "",
+                                            },
+                                          },
+                                          activeFilters: [
+                                            // "Reviewer Status",
+                                            "Select Audited Status",
+                                            // "Audited Date",
+                                            "Audited Due Date",
+                                          ],
+                                        };
+                                        getRoutedData(params);
+                                        router.push("/supervisor/auditing");
                                       }}
-                                    ></div>
-                                    <div className={styles.statusName}>{item.name}</div>
-                                    <div className={styles.subText}>
-                                    {item.name === "Audit Pending"
-                                      ? data.pending
-                                      : item.name === "Audited"
-                                      ? data?.audited
-                                      : item.name === "Audit Hold"
-                                      ? data.hold
-                                      : item.name === "Re Audit"
-                                      ? data?.reAudited
-                                      : item.name === "Audit Declined" &&
-                                        data.declined}
+                                    >
+                                      <div
+                                        className={styles.bgColor}
+                                        style={{
+                                          backgroundColor: item.color,
+                                        }}
+                                      ></div>
+                                      <div className={styles.statusName}>
+                                        {item.name}
+                                      </div>
+                                      <div className={styles.subText}>
+                                        {item.name === "Audit Pending"
+                                          ? data.pending
+                                          : item.name === "Audited"
+                                          ? data?.audited
+                                          : item.name === "Audit Hold"
+                                          ? data.hold
+                                          : item.name === "Re Audit"
+                                          ? data?.reAudited
+                                          : item.name === "Audit Declined" &&
+                                            data.declined}
+                                      </div>
+                                    </div>
                                   </div>
-                                  </div>
-                                 
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </Col>
-                      </Row>
-                    </Col>
-                  ))}
+                                );
+                              })}
+                            </div>
+                          </Col>
+                        </Row>
+                      </Col>
+                    ))
+                  )}
                 </Row>
               ) : (
-                renderCardSkeleton()
+                <></>
               )}
 
               <div className={styles.infoCards}>
@@ -500,15 +508,12 @@ const DailyTask = ({
 
 const connector = connect(
   (state) => ({
-    // dailyStatusDatas: state?.workFlow?.dailyTask,
     dailyStatusDatas: state.supervisor?.dashboard?.dailyTask,
-
-    dailytask: state,
     loader: state.admin?.workqueue?.patientsLoading,
+    dailyTaskLoader: state?.supervisor?.dashboard?.dailyTaskLoader,
   }),
   {
     getAllDailyTask: supervisorAction.dailyTaskAction,
-    // getDailyTaskData: supervisorAction.dailyTaskData,
     getRoutedData: allPatientSyncAction.getRoutedData,
   }
 );

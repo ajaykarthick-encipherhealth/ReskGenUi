@@ -23,6 +23,7 @@ const DailyTask = ({
   getFilteredList,
   dailyStatusDatas,
   getRoutedData,
+  dailyTaskLoader,
 }) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
@@ -233,7 +234,6 @@ const DailyTask = ({
     );
     return index === firstIndex;
   });
-
   const renderCardSkeleton = () => (
     <Row
       gutter={[16, 16]}
@@ -244,13 +244,13 @@ const DailyTask = ({
           key={index}
           xs={24}
           sm={12}
-          md={8}
+          md={20}
           lg={7}
           className={styles.sliderdiv}
           style={{
             backgroundColor: "#f0f0f0",
             borderRadius: "12px",
-            padding: "5px",
+            padding: "35px",
             marginBottom: "16px",
             height: "260px",
           }}
@@ -265,10 +265,10 @@ const DailyTask = ({
               </div>
             </Col>
             <Col span={12} className={styles.headerTitle}>
-              <div style={{ paddingLeft: "10px" }}>
+              <div style={{ paddingLeft: "20px" }}>
                 {Array.from({ length: bullets.length }).map((_, i) => (
                   <div className={styles.container} key={i}>
-                    <Skeleton.Input style={{ width: 30 }} active />
+                    <Skeleton.Input style={{ width: 10 }} active />
                   </div>
                 ))}
               </div>
@@ -286,146 +286,152 @@ const DailyTask = ({
           <Row>
             <Col span={1}>
               <div onClick={showPrevious} className={styles.ImgDIv}>
-             <FontAwesomeIcon className="font5 mt-5" icon={faChevronLeft} />
+                <FontAwesomeIcon className="font5 mt-5" icon={faChevronLeft} />
               </div>
             </Col>
-            <Col span={22}>
-              {currentDays?.length > 0 ? (
-                <Row
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  {uniqueData?.slice(0, 3)?.map((data, index) => (
-                    <Col key={index} span={7} className={styles.sliderdiv}>
-                      <h4
-                        className={styles.headerTitle}
-                        style={{ fontSize: "16px" }}
-                        onClick={() => {
-                          setStorage("filter", JSON.stringify(activeFilters));
-                          const params = {
-                            dueDateStart: data?.dateString
-                              ? `${moment(data?.dateString).format(
-                                  "YYYY-MM-DD"
-                                )}T00:00:00.000Z`
-                              : "",
-                            dueDateEnd: data?.dateString
-                              ? `${moment(data?.dateString).format(
-                                  "YYYY-MM-DD"
-                                )}T23:59:59.999Z`
-                              : "",
-                            selectedDates: [
-                              dayjs(data?.date),
-                              dayjs(data?.date),
-                            ],
-                            activeFilters: ["Due Date"],
-                          };
-                          getRoutedData(params);
-                          router?.push("/reviewer/patients");
-                        }}
-                      >
-                        <div className={styles.headerDisplay}>
-                          <span> {data.day}</span>
-                          <span className={styles.dateDisplay}>
-                            {`(${data.date})`}
-                          </span>
-                        </div>
-                      </h4>
-                      <Row>
-                        <Col span={12}>
-                          <div className={styles.container}>
-                            <ReactECharts
-                              option={getChartOption(
-                                data?.allocated,
-                                data?.pending,
-                                data?.hold,
-                                data?.decline,
-                                data?.completed
-                              )}
-                              style={{ width: "100%", height: "200px" }}
-                            />
+            {dailyTaskLoader ? (
+              <> {renderCardSkeleton()}</>
+            ) : (
+              <Col span={22}>
+                {currentDays?.length > 0 ? (
+                  <Row
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    {uniqueData?.slice(0, 3)?.map((data, index) => (
+                      <Col key={index} span={7} className={styles.sliderdiv}>
+                        <h4
+                          className={styles.headerTitle}
+                          style={{ fontSize: "16px" }}
+                          onClick={() => {
+                            setStorage("filter", JSON.stringify(activeFilters));
+                            const params = {
+                              dueDateStart: data?.dateString
+                                ? `${moment(data?.dateString).format(
+                                    "YYYY-MM-DD"
+                                  )}T00:00:00.000Z`
+                                : "",
+                              dueDateEnd: data?.dateString
+                                ? `${moment(data?.dateString).format(
+                                    "YYYY-MM-DD"
+                                  )}T23:59:59.999Z`
+                                : "",
+                              selectedDates: [
+                                dayjs(data?.date),
+                                dayjs(data?.date),
+                              ],
+                              activeFilters: ["Due Date"],
+                            };
+                            getRoutedData(params);
+                            router?.push("/reviewer/patients");
+                          }}
+                        >
+                          <div className={styles.headerDisplay}>
+                            <span> {data.day}</span>
+                            <span className={styles.dateDisplay}>
+                              {`(${data.date})`}
+                            </span>
                           </div>
-                        </Col>
-                        <Col span={12} className={styles.headerTitle}>
-                          <div>
-                            {bullets?.map((item) => {
-                              return (
-                                <div className={styles.container}>
-                                  <div
-                                    style={{ display: "flex" }}
-                                    onClick={() => {
-                                      const params = {
-                                        dueDateStart: data?.date
-                                          ? `${moment(
-                                              data?.date,
-                                              "MM-DD-YYYY"
-                                            ).format(
-                                              "YYYY-MM-DD"
-                                            )}T00:00:00.000Z`
-                                          : "",
-
-                                        dueDateEnd: data?.date
-                                          ? `${moment(
-                                              data?.date,
-                                              "MM-DD-YYYY"
-                                            ).format(
-                                              "YYYY-MM-DD"
-                                            )}T23:59:59.999Z`
-                                          : "",
-                                        statusSelectedStatus: item?.name,
-                                        selectedDates: [
-                                          dayjs(data?.date),
-                                          dayjs(data?.date),
-                                        ],
-                                        activeFilters: [
-                                          "Select Status",
-                                          "Due Date",
-                                        ],
-                                      };
-
-                                      setStorage(
-                                        "filter",
-                                        JSON.stringify(activeFilters)
-                                      );
-
-                                      getRoutedData(params);
-                                      getFilteredList(allFilters);
-                                      router?.push("/reviewer/patients");
-                                    }}
-                                  >
+                        </h4>
+                        <Row>
+                          <Col span={12}>
+                            <div className={styles.container}>
+                              <ReactECharts
+                                option={getChartOption(
+                                  data?.allocated,
+                                  data?.pending,
+                                  data?.hold,
+                                  data?.decline,
+                                  data?.completed
+                                )}
+                                style={{ width: "100%", height: "200px" }}
+                              />
+                            </div>
+                          </Col>
+                          <Col span={12} className={styles.headerTitle}>
+                            <div>
+                              {bullets?.map((item) => {
+                                return (
+                                  <div className={styles.container}>
                                     <div
-                                      className={styles.bgColor}
-                                      style={{
-                                        backgroundColor: item.color,
+                                      style={{ display: "flex" }}
+                                      onClick={() => {
+                                        const params = {
+                                          dueDateStart: data?.date
+                                            ? `${moment(
+                                                data?.date,
+                                                "MM-DD-YYYY"
+                                              ).format(
+                                                "YYYY-MM-DD"
+                                              )}T00:00:00.000Z`
+                                            : "",
+
+                                          dueDateEnd: data?.date
+                                            ? `${moment(
+                                                data?.date,
+                                                "MM-DD-YYYY"
+                                              ).format(
+                                                "YYYY-MM-DD"
+                                              )}T23:59:59.999Z`
+                                            : "",
+                                          statusSelectedStatus: item?.name,
+                                          selectedDates: [
+                                            dayjs(data?.date),
+                                            dayjs(data?.date),
+                                          ],
+                                          activeFilters: [
+                                            "Select Status",
+                                            "Due Date",
+                                          ],
+                                        };
+
+                                        setStorage(
+                                          "filter",
+                                          JSON.stringify(activeFilters)
+                                        );
+
+                                        getRoutedData(params);
+                                        getFilteredList(allFilters);
+                                        router?.push("/reviewer/patients");
                                       }}
-                                    ></div>
-                                    {item.name}
+                                    >
+                                      <div
+                                        className={styles.bgColor}
+                                        style={{
+                                          backgroundColor: item.color,
+                                        }}
+                                      ></div>
+                                      {item.name}
+                                    </div>
+                                    <div className={styles.subText}>
+                                      {item.name === "Pending" && data.pending}
+                                      {item.name === "Declined" &&
+                                        data?.decline}
+                                      {item.name === "Hold"
+                                        ? data.hold
+                                        : item.name === "Completed" &&
+                                          data?.completed}
+                                    </div>
                                   </div>
-                                  <div className={styles.subText}>
-                                    {item.name === "Pending" && data.pending}
-                                    {item.name === "Declined" && data?.decline}
-                                    {item.name === "Hold"
-                                      ? data.hold
-                                      : item.name === "Completed" &&
-                                        data?.completed}
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </Col>
-                      </Row>
-                    </Col>
-                  ))}
-                </Row>
-              ) : (
-                renderCardSkeleton()
-              )}
-              <div className={styles.infoCards}>
-                <Legends bullets={bullets} />
-              </div>
-            </Col>
+                                );
+                              })}
+                            </div>
+                          </Col>
+                        </Row>
+                      </Col>
+                    ))}
+                  </Row>
+                ) : (
+                <></>
+                )}
+                <div className={styles.infoCards}>
+                  <Legends bullets={bullets} />
+                </div>
+              </Col>
+            )}
+
             <Col span={1}>
               <div onClick={showNext} className={styles.ImgDIv}>
-              <FontAwesomeIcon className="font5 mt-5" icon={faAngleRight} />
+                <FontAwesomeIcon className="font5 mt-5" icon={faAngleRight} />
               </div>
             </Col>
           </Row>
@@ -439,6 +445,7 @@ const connector = connect(
   (state) => ({
     dailyStatusDatas: state?.reviewer?.dashboard?.dailyTask,
     loader: state.admin?.workqueue?.patientsLoading,
+    dailyTaskLoader: state?.reviewer?.dashboard?.dailyTaskLoader,
   }),
   {
     getAllDailyTask: ReviewerAction.dailyTaskAction,

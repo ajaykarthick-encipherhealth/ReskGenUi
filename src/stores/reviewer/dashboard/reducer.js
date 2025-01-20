@@ -51,6 +51,7 @@ const getDailyTaskDatas = (action) =>
 const dashbaordReducer = combineReducers({
   workFlow: createReducer(workFlowAction),
   dailyTask: createReducer(dailyTaskAction),
+  dailyTaskLoader: getUsersDetailsLoading(dailyTaskAction),
   accuracyLoading: getUsersDetailsLoading(accuracyAction),
   accuracy: createReducer(accuracyAction),
   completedScore:createReducer(completedScoreAction),
