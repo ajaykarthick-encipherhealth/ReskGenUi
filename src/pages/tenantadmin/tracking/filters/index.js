@@ -24,7 +24,7 @@ const MoreFilter = ({
       val.target.checked
         ? allFilters
         : byDefault
-        ? allFilters.slice(0, byDefault)
+        ? allFilters.slice(3, byDefault)
         : []
     );
   };
@@ -39,7 +39,7 @@ const MoreFilter = ({
 
   const handleClearFilters = () => {
     setSelectAll(false);
-    setActiveFilters(byDefault ? allFilters.slice(0, byDefault) : []);
+    setActiveFilters(byDefault ? allFilters.slice(3, byDefault) : []);
     setClear(true);
     getRoutedData("");
   };
