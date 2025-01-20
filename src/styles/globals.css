@@ -18,7 +18,9 @@
 .font5{
   font-size: 20px;
 }
-
+body{
+  overflow-x: hidden;
+}
 .btns-primary {
   padding: 7px;
   border-radius: 0.375rem;

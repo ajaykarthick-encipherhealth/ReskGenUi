@@ -358,14 +358,14 @@
 
 .visitdata_tab_body {
   padding: 0;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 .provider_name {
   /* color: #008000bf !important; */
   /* background: #c4ffc4 !important; */
   font-weight: 600;
-  font-size: 11px !important;
+  font-size: 10px !important;
   border-radius: 30px !important;
   margin: 0px 0px 0px 5px;
   height: 20px;
@@ -749,6 +749,7 @@
     max-height: 64vh;
     overflow-y: scroll;
     overflow: hidden; */
+    padding-right: 12px;
 }
 
 .hccStickeyRaf_head {
