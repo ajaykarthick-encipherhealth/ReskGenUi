@@ -215,4 +215,16 @@ export const disabledDate = (
   return false;
 };
 
+export const getSpacesWithUnderscoresAuditing = (value) => {
+  if (value) {
+    if (value == "AUDIT PENDING" || value == "AUDIT DECLINED") {
+      return value.split(" ").join("_");
+    } else if (value == "AUDIT HOLD" || value == "RE AUDIT") {
+      return value.split(" ").join("");
+    } else {
+      return value;
+    }
+  }
+};
+
 

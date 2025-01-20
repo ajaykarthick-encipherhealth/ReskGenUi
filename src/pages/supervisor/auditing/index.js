@@ -43,7 +43,7 @@ import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
 import Filters, { allFilters } from "./filters";
 import moment from "moment";
-import { getResponePopup } from "../../../utils/reusable";
+import { getResponePopup, getSpacesWithUnderscoresAuditing } from "../../../utils/reusable";
 const bullets = [
   {
     color: "#377880",
@@ -361,7 +361,7 @@ const Patient = ({
         routedData?.selectedDateRange ? routedData?.selectedDateRange : ""
       );
       SetSelectedOption(
-        routedData?.selectedOption ? routedData?.selectedOption : ""
+        routedData?.selectedOption ? getSpacesWithUnderscoresAuditing(routedData?.selectedOption) : ""
       );
       setSearch(routedData?.search ? routedData?.search : "");
       setSelCreatedBy(routedData?.selCreatedBy ? routedData?.selCreatedBy : "");
