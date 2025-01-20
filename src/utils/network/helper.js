@@ -52,33 +52,27 @@ function decryptData(encryptedData, key, iv) {
 
 export async function checkStatus(response) {
   setStorage("loginCheck", false);
-
-  const handleLogout = async (
+  const showModal = async (
     message,
+    buttonText = "Back", 
     showCloseButton = true,
     clearStorage = false
   ) => {
-     if (showCloseButton) {
-       appendCloseButtonStyle(); 
-     }
+    if (showCloseButton) appendCloseButtonStyle();
     const result = await Swal.fire({
       title: "",
       text: message,
       icon: "warning",
-      confirmButtonText: "Logout",
+      confirmButtonText: buttonText,
       confirmButtonColor: "#DD6B55",
-      closeOnConfirm: false,
       showCloseButton,
     });
 
-    if (result.isConfirmed) {
-      if (clearStorage) {
-        removeStorage();
-        window.location = "/login"; 
-      }
+    if (result.isConfirmed && clearStorage) {
+      removeStorage();
+      window.location = "/login";
     }
   };
-
   const appendCloseButtonStyle = () => {
     const existingStyle = document.getElementById("swal2-close-style");
     if (!existingStyle) {
@@ -113,42 +107,54 @@ export async function checkStatus(response) {
 
   const { status } = response;
 
-  if (status === 401) {
-    handleLogout(
-      "Your session has timed out. Please log in again.",
-      false,
-      true
-    ); 
-  } else if (status === 500) {
-    handleLogout("Something went wrong on our end. Please try again later.");
-  } else if (status === 403) {
-    handleLogout("You don't have permission to access this page.");
-  } else if (status === 512) {
-    handleLogout(
-      "An error occurred due to unhandled exceptions or unexpected conditions within the system."
-    );
-  } else if (status === 513) {
-    handleLogout(
-      "An error occurred due to unhandled exceptions or unexpected conditions within the system."
-    );
-  } else {
-    const data =
-      isEncrypted === "true" ? await response.text() : await response.json();
-    if (isEncrypted === "true") {
-      return await handleDecryption(data);
-    } else {
-      if (data.logout) {
-        await removeStorage(tokenKey);
-        window.open("/", "_self");
-        return;
+  switch (status) {
+    case 401: {
+      await showModal(
+        "Your session has timed out. Please log in again.",
+        "Logout",
+        false,
+        true
+      );
+      break;
+    }
+    case 500: {
+      await showModal(
+        "Something went wrong on our end. Please try again later."
+      );
+      break;
+    }
+    case 403: {
+      await showModal("You don't have permission to access this page.");
+      break;
+    }
+    case 512:
+    case 513: {
+      await showModal(
+        "An error occurred due to unhandled exceptions or unexpected conditions within the system."
+      );
+      break;
+    }
+    default: {
+      const data =
+        isEncrypted === "true" ? await response.text() : await response.json();
+      if (isEncrypted === "true") {
+        return await handleDecryption(data);
+      } else {
+        if (data.logout) {
+          await removeStorage(tokenKey);
+          window.open("/", "_self");
+          return;
+        }
+        if (status !== 200) {
+          throw { ...data };
+        }
+        return data;
       }
-      if (status !== 200) {
-        throw { ...data };
-      }
-      return data;
     }
   }
 }
+
+
 
 export async function checkAuth(response) {
   const data = await response.json();

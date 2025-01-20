@@ -224,6 +224,7 @@ function MyApp({ Component, pageProps }) {
         text: "Please check your network.",
         icon: "error",
         confirmButtonText: "Retry",
+        confirmButtonColor: "#DD6B55",
       }).then(() => window.location.reload());
     };
 

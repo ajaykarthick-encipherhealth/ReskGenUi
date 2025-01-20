@@ -211,40 +211,40 @@ const Patient = ({
       case "AUDIT_PENDING":
         return (
           <Popover placement="bottom" title="Status: AUDIT PENDING">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <span className="patient-status" style={{ textAlign: "center" }}>
               <Image
                 src={AuditPending}
                 style={{ height: "30px", width: "30px" }}
               />
-            </div>
+            </span>
           </Popover>
         );
 
       case "AUDITHOLD":
         return (
           <Popover placement="bottom" title="Status: AUDIT HOLD">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <span className="patient-status" style={{ textAlign: "center" }}>
               <Image src={AuditHold} style={{ height: "30px", width: "30px" }} />
-            </div>
+            </span>
           </Popover>
         );
       case "REAUDIT":
         return (
           <Popover placement="bottom" title="Status: REAUDIT">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <span className="patient-status" style={{ textAlign: "center" }}>
               <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
-            </div>
+            </span>
           </Popover>
         );
       case "AUDITED":
         return (
           <Popover placement="bottom" title="Status: AUDITED">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <span className="patient-status" style={{ textAlign: "center" }}>
               <Image
                 src={AuditedTrack}
                 style={{ height: "30px", width: "30px" }}
               />
-            </div>
+            </span>
           </Popover>
         );
       case "AUDIT_DECLINED":
@@ -254,33 +254,33 @@ const Patient = ({
             title="Status: AUDIT DECLINED"
             content={`Reason: ${declinedData ? declinedData : "---"}`}
           >
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <span className="patient-status" style={{ textAlign: "center" }}>
               <Image
                 src={AuditeDeclineTrack}
                 style={{ height: "30px", width: "30px" }}
               />
-            </div>
+            </span>
           </Popover>
         );
       case "AUDITED":
         return (
-          <div className="patient-status" style={{ textAlign: "center" }}>
+          <span className="patient-status" style={{ textAlign: "center" }}>
             <Image src={AuditedTrack} style={{ height: "30px", width: "30px" }} />
-          </div>
+          </span>
         );
       case "NOT_AUDIT":
         return (
           <Popover placement="bottom" title=" Status: NOT AUDIT">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <span className="patient-status" style={{ textAlign: "center" }}>
               <Image src={NotAudited} style={{ height: "30px", width: "30px" }} />
-            </div>
+            </span>
           </Popover>
         );
       case null:
         return (
-          <div className="patient-status" style={{ textAlign: "center" }}>
+          <span className="patient-status" style={{ textAlign: "center" }}>
             ---
-          </div>
+          </span>
         );
     }
   };

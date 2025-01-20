@@ -87,7 +87,7 @@ function PatientTable({
               {" "}
               <Tooltip title={data.patientId}>
                 {" "}
-                {truncateString(data.patientId, 20)}
+                {truncateString(data.patientId, 40)}
               </Tooltip>
             </div>
             <div> {data.patientName ? data.patientName : ""}</div>
@@ -212,7 +212,7 @@ function PatientTable({
             />
           </td>
 
-          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+          <td className={`${TableStyle.childBorder} text-center `} onClick={handleTableRowClick}>
             {statusBodyTemplate(data)}
           </td>
         </tr>
@@ -225,7 +225,7 @@ function PatientTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENTS</th>
-            <th style={{ paddingLeft: "30px" }}> REVIEWER</th>
+            <th> REVIEWER</th>
             <th style={{ cursor: "pointer", textAlign: "center" }}>
               <Tooltip placement="bottom" title="REVIEWER CHANGES">
                 RC
@@ -298,13 +298,9 @@ function PatientTable({
               </span>
             </th>
 
-            <th className="text-truncate" style={{ paddingLeft: "30px" }}>
-              AUDIT ALLOCATED BY
-            </th>
-            <th className="text-truncate" style={{ paddingLeft: "30px" }}>
-              PRIORITY
-            </th>
-            <th className={TableStyle.rowStyle2}>AUDIT STATUS</th>
+            <th className="text-truncate">AUDIT ALLOCATED BY</th>
+            <th className="text-truncate">PRIORITY</th>
+            <th className={`text-truncate}`}>AUDIT STATUS</th>
           </tr>
         </thead>
 

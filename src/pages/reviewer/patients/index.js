@@ -248,18 +248,18 @@ const Patient = ({
       case "COMPLETED":
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
-            <div className="patient-status text-center">
+            <span className="patient-status text-center">
               <Image src={Completed}  style={{ height: "30px", width: "30px" }} />
-            </div>
+            </span>
           </Popover>
         );
 
       case "PENDING":
         return (
           <Popover placement="bottom" title="Status: PENDING">
-            <div className="patient-status text-center">
+            <span className="patient-status text-center">
               <Image src={Pending}  style={{ height: "30px", width: "30px" }} />
-            </div>
+            </span>
           </Popover>
         );
 
@@ -272,49 +272,49 @@ const Patient = ({
               declinedDataFromDeclined ? declinedDataFromDeclined : "---"
             }`}
           >
-            <div className="patient-status text-center">
+            <span className="patient-status text-center">
               <Image src={Declined}  style={{ height: "30px", width: "30px" }}/>
-            </div>
+            </span>
           </Popover>
         );
       case "NOTCOMPUTED":
         return (
           <Popover placement="bottom" title="Status: NOT COMPUTED">
-            <div className="patient-status text-center">
+            <span className="patient-status text-center">
               <Image src={Pending}  style={{ height: "30px", width: "30px" }} />
-            </div>
+            </span>
           </Popover>
         );
       case "COMPUTED":
         return (
           <Popover placement="bottom" title="Status: COMPUTED">
-            <div className="patient-status text-center">
+            <span className="patient-status text-center">
               <Image src={Pending}  style={{ height: "30px", width: "30px" }} />
-            </div>
+            </span>
           </Popover>
         );
       case "HOLD":
         return (
           <Popover placement="bottom" title="Status: HOLD">
-            <div className="patient-status text-center">
+            <span className="patient-status text-center">
               <Image src={Hold}  style={{ height: "30px", width: "30px" }} />
-            </div>
+            </span>
           </Popover>
         );
       case "ABORTED_BY_CRON":
         return (
           <Popover placement="bottom" title="Status: ABORTED BY CRON">
-            <div className="patient-status text-center">
+            <span className="patient-status text-center">
               <Image src={Abort}  style={{ height: "30px", width: "30px" }} />
-            </div>
+            </span>
           </Popover>
         );
       case null:
         return (
           <Popover placement="bottom" title="">
-            <div className="patient-status text-center">
+            <span className="patient-status text-center">
               <Image src={Pending}  style={{ height: "30px", width: "30px" }} />
-            </div>
+            </span>
           </Popover>
         );
     }

@@ -209,7 +209,7 @@ function AddPatientListTable({
               {data.emr ? data.emr : "---"}
             </td>
             <td
-              className={TableStyle.childBorder}
+              className={`${TableStyle.childBorder} text-center`}
               onClick={handleTableRowClick}
             >
               {data.totalPages ? data.totalPages : "---"}
@@ -285,7 +285,7 @@ function AddPatientListTable({
             <th className="px-3">PATIENT ID</th>
             <th className="text-truncate px-3">FILE NAME</th>
             <th className="text-truncate px-3">EMR TYPE</th>
-            <th className="text-truncate px-3">TOTAL PAGES</th>
+            <th className="text-truncate px-3 text-center">TOTAL PAGES</th>
             <th className="text-truncate px-3">CREATED BY</th>
 
             <th

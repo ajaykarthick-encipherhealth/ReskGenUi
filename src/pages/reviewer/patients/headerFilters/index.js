@@ -206,8 +206,15 @@ const HeaderFiltersPatients = ({
     <div className="d-flex justify-content-end">
       <div className="row filter-contain" style={{ width: "95%" }}>
         {isAllocatedToSelector && (
-          <div className={defaultSize} style={{width: "250px"}} onClick={() => setClear(false)}>
-            <label className="text-truncate" style={{ marginLeft: "8px", marginTop: "35px" }}>
+          <div
+            className={defaultSize}
+            style={{ width: "250px" }}
+            onClick={() => setClear(false)}
+          >
+            <label
+              className="text-truncate"
+              style={{ marginLeft: "8px", marginTop: "35px" }}
+            >
               {" "}
               Patient Name / ID
             </label>
@@ -240,51 +247,49 @@ const HeaderFiltersPatients = ({
       <div
         // className={Tracking}
         // style={{ width: "5%", display: "flex", justifyContent: "end" }}
-        className="d-flex justify-content-end"
+        className="d-flex justify-content-end align-items-center  "
       >
         {/* <div style={{ marginTop: "30px" }}> */}
-          <MoreFilter
-            clear={clear}
-            activeFilters={activeFilters}
-            setActiveFilters={setActiveFilters}
-            allFilters={allFilters}
-            selectAll={selectAll}
-            setSelectAll={setSelectAll}
-            setClear={setClear}
-            handleClearAllFilters={handleClearAllFilters}
-            getRoutedData={getRoutedData}
-          />
-          {bullets && (
-            <div style={{ cursor: "pointer" }}>
-              <Popover
-                content={
-                  <>
-                    <Legends bullets={bullets} display="block" />
-                    {badges?.length > 0 &&
-                      badges?.map((data) => (
-                        <div style={{ marginBottom: "10px" }}>
-                          <Image src={data.src} width={20} height={30} />
-                          <span style={{ marginLeft: "5px" }}>
-                            {data?.name}
-                          </span>
-                        </div>
-                      ))}
-                  </>
-                }
-                trigger={["click"]}
-                placement="bottom"
-              >
-                <Tooltip title="Click here for status information.">
-                  <div className={Tracking.iconBorder}>
-                    <InfoCircleFilled />
-                  </div>
-                </Tooltip>
-              </Popover>
-            </div>
-          )}
-          <div className="m-1">
-            <HeaderFilters bullets={bulletsIcon} />
+        <MoreFilter
+          clear={clear}
+          activeFilters={activeFilters}
+          setActiveFilters={setActiveFilters}
+          allFilters={allFilters}
+          selectAll={selectAll}
+          setSelectAll={setSelectAll}
+          setClear={setClear}
+          handleClearAllFilters={handleClearAllFilters}
+          getRoutedData={getRoutedData}
+        />
+        {bullets && (
+          <div style={{ cursor: "pointer" }}>
+            <Popover
+              content={
+                <>
+                  <Legends bullets={bullets} display="block" />
+                  {badges?.length > 0 &&
+                    badges?.map((data) => (
+                      <div style={{ marginBottom: "10px" }} className="m-2">
+                        <Image src={data.src} width={20} height={30} />
+                        <span style={{ marginLeft: "5px" }}>{data?.name}</span>
+                      </div>
+                    ))}
+                </>
+              }
+              trigger={["click"]}
+              placement="bottom"
+            >
+              <Tooltip title="Click here for status information.">
+                <div className={Tracking.iconBorder}>
+                  <InfoCircleFilled />
+                </div>
+              </Tooltip>
+            </Popover>
           </div>
+        )}
+        <div className="m-1">
+          <HeaderFilters bullets={bulletsIcon} />
+        </div>
         {/* </div> */}
       </div>
     </div>

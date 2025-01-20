@@ -95,22 +95,30 @@ function PatientTable({
           </td>
           {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
             <td
-              className={TableStyle.childBorder}
+              className={`text-center ${TableStyle.childBorder}`}
               onClick={handleTableRowClick}
-              style={{ paddingLeft: "30px" }}
             >
               {data?.validDiseaseCount ? data?.validDiseaseCount : "---"}
             </td>
           )}
-          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+          <td
+            className={`text-center ${TableStyle.childBorder}`}
+            onClick={handleTableRowClick}
+          >
             {data?.allocatedOn
               ? moment(data?.allocatedOn).format("MM-DD-YYYY")
               : "---"}
           </td>
-          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+          <td
+            className={`text-center ${TableStyle.childBorder}`}
+            onClick={handleTableRowClick}
+          >
             {data?.dueDate ? moment(data?.dueDate).format("MM-DD-YYYY") : "---"}
           </td>
-          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+          <td
+            className={`text-center ${TableStyle.childBorder}`}
+            onClick={handleTableRowClick}
+          >
             {data?.processedDate
               ? moment(data?.processedDate).format("MM-DD-YYYY")
               : "---"}
@@ -143,7 +151,7 @@ function PatientTable({
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle?.childBorder}>
             <AntSelect
               options={priorityOptions}
               placeholder="Set priority"
@@ -160,7 +168,10 @@ function PatientTable({
             />
           </td>
 
-          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+          <td
+            className={` text-center ${TableStyle.childBorder}`}
+            onClick={handleTableRowClick}
+          >
             {statusBodyTemplate(data)}
           </td>
         </tr>
@@ -174,12 +185,12 @@ function PatientTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENT ID</th>
-            <th style={{ paddingLeft: "60px" }}>FILE NAME</th>
+            <th>FILE NAME</th>
             {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
-              <th>HCC COUNT</th>
+              <th className="text-center">HCC COUNT</th>
             )}
             <th
-              className="text-truncate"
+              className="text-truncate text-center"
               onClick={() => {
                 sortFunction(
                   sortAllocateOrder,
@@ -190,7 +201,7 @@ function PatientTable({
               }}
             >
               ALLOCATED DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
+              <span style={{ cursor: "pointer" }}>
                 {sortAllocateOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
@@ -199,13 +210,13 @@ function PatientTable({
               </span>
             </th>
             <th
-              className="text-truncate"
+              className="text-truncate text-center"
               onClick={() => {
                 sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
               }}
             >
               DUE DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
+              <span style={{ cursor: "pointer" }}>
                 {sortDueOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
@@ -214,7 +225,7 @@ function PatientTable({
               </span>
             </th>
             <th
-              className="text-truncate"
+              className="text-truncate text-center"
               onClick={() => {
                 sortFunction(
                   sortCompleteOrder,
@@ -225,7 +236,7 @@ function PatientTable({
               }}
             >
               COMPLETED DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
+              <span style={{ cursor: "pointer" }}>
                 {sortCompleteOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
@@ -235,8 +246,8 @@ function PatientTable({
             </th>
 
             <th className={TableStyle.rowStyle}> ALLOCATED BY</th>
-            <th style={{ paddingLeft: "35px" }}>PRIORITY</th>
-            <th style={{ paddingLeft: "30px" }}>STATUS</th>
+            <th>PRIORITY</th>
+            <th className="text-center">STATUS</th>
           </tr>
         </thead>
 

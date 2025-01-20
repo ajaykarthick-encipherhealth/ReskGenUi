@@ -310,7 +310,7 @@ const Patient = ({
 
   const actionBodyTemplate = (rowData) => {
     return (
-      <div className="d-flex ">
+      <div className="d-flex justify-content-center">
         <button
           onClick={() => {
             if (rowData?.processedStatus !== "PROCESSING") {

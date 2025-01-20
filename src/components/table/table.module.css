@@ -125,6 +125,7 @@
 .customAntSelect > div {
   border: none !important;
   background-color: transparent !important;
+  padding: 0 !important;
 }
 
 .customAntSelect > span {

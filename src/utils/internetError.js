@@ -59,7 +59,6 @@ function InternetError() {
 
   return (
     <div>
-      <button onClick={showOfflineAlert}>Retry</button>
     </div>
   );
 }

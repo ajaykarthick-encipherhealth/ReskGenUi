@@ -291,7 +291,7 @@ function TrackingTable({
                   <ArrowDownOutlined />
                 )}
               </th>
-              <th style={{ paddingLeft: "45px" }}>REVIEWER</th>
+              <th>REVIEWER</th>
 
               <th
                 onClick={() => {
