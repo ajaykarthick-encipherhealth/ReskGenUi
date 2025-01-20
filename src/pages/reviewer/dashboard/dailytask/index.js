@@ -17,6 +17,7 @@ import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import CardSkeleton from "../../../../components/skeleton/card";
 
 const DailyTask = ({
   getAllDailyTask,
@@ -234,64 +235,27 @@ const DailyTask = ({
     );
     return index === firstIndex;
   });
-  const renderCardSkeleton = () => (
-    <Row
-      gutter={[16, 16]}
-      style={{ display: "flex", justifyContent: "space-between" }}
-    >
-      {Array.from({ length: 3 }).map((_, index) => (
-        <Col
-          key={index}
-          xs={24}
-          sm={12}
-          md={20}
-          lg={7}
-          className={styles.sliderdiv}
-          style={{
-            backgroundColor: "#f0f0f0",
-            borderRadius: "12px",
-            padding: "35px",
-            marginBottom: "16px",
-            height: "260px",
-          }}
-        >
-          <Row>
-            <Col span={12}>
-              <div>
-                <Skeleton.Input
-                  style={{ width: "100%", height: "200px" }}
-                  active
-                />
-              </div>
-            </Col>
-            <Col span={12} className={styles.headerTitle}>
-              <div style={{ paddingLeft: "20px" }}>
-                {Array.from({ length: bullets.length }).map((_, i) => (
-                  <div className={styles.container} key={i}>
-                    <Skeleton.Input style={{ width: 10 }} active />
-                  </div>
-                ))}
-              </div>
-            </Col>
-          </Row>
-        </Col>
-      ))}
-    </Row>
-  );
+
   return (
     <>
       <HeadTitle header="Daily Task" />
       <div className={styles.card2}>
         <Card borderRadius="28px" style={{ display: "flex" }}>
-          <Row>
-            <Col span={1}>
-              <div onClick={showPrevious} className={styles.ImgDIv}>
-                <FontAwesomeIcon className="font5 mt-5" icon={faChevronLeft} />
-              </div>
-            </Col>
-            {dailyTaskLoader ? (
-              <> {renderCardSkeleton()}</>
-            ) : (
+          {dailyTaskLoader ? (
+            <div className="d-flex justify-content-center mt-4">
+              <CardSkeleton count={1} width={1100} height={270} />
+            </div>
+          ) : (
+            <Row>
+              <Col span={1}>
+                <div onClick={showPrevious} className={styles.ImgDIv}>
+                  <FontAwesomeIcon
+                    className="font5 mt-5"
+                    icon={faChevronLeft}
+                  />
+                </div>
+              </Col>
+
               <Col span={22}>
                 {currentDays?.length > 0 ? (
                   <Row
@@ -421,20 +385,20 @@ const DailyTask = ({
                     ))}
                   </Row>
                 ) : (
-                <></>
+                  <></>
                 )}
                 <div className={styles.infoCards}>
                   <Legends bullets={bullets} />
                 </div>
               </Col>
-            )}
 
-            <Col span={1}>
-              <div onClick={showNext} className={styles.ImgDIv}>
-                <FontAwesomeIcon className="font5 mt-5" icon={faAngleRight} />
-              </div>
-            </Col>
-          </Row>
+              <Col span={1}>
+                <div onClick={showNext} className={styles.ImgDIv}>
+                  <FontAwesomeIcon className="font5 mt-5" icon={faAngleRight} />
+                </div>
+              </Col>
+            </Row>
+          )}
         </Card>
       </div>
     </>
