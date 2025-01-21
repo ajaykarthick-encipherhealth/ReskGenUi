@@ -8662,7 +8662,7 @@ button:focus {
   /* background: linear-gradient(90deg, hsla(180, 33%, 88%, 1) 0%, hsla(310, 76%, 82%, 1) 50%, hsla(256, 83%, 72%, 1) 100%); */
   /* display: flex; */
   /* justify-content: center; */
-  background-image: url("../images/login/back_1.webp");
+  background-image: url("../images/login/back_2.webp");
   background-repeat: no-repeat;
   background-size: cover;
 }
