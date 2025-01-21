@@ -6297,11 +6297,12 @@ textarea.form-control {
 
 body > * {
   scrollbar-width: 1px !important;
-  scrollbar-color: rgba(111, 133, 147, 0.1) #fff0;
+  /* scrollbar-color: rgba(111, 133, 147, 0.1) #fff0; */
+  scrollbar-color: rgba(0, 0, 0, 0.1);
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 3px;
   opacity: 0;
 }
 
