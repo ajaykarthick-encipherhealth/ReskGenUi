@@ -9,9 +9,9 @@ import styles from "./styles.module.css";
 import { handleCopyToClipboard } from "../commonFunctions";
 import { actions as allActions } from "../../stores/chatService";
 import { connect } from "react-redux";
-import neChatImage from "../../images/logo/newChatImage.png";
 import chatAssistant from "../../images/chat/chatAssistant.svg";
 import { Skeleton } from "antd";
+import { getLogo } from "../../pages/twofactorauthentication/reusableFun";
 
 const AICHAT = ({ openMsg, getChatReply }) => {
   const [activeChat, setActiveChat] = useState(false);
@@ -102,8 +102,9 @@ const AICHAT = ({ openMsg, getChatReply }) => {
                     className={`card-header chat-list-header text-center ${styles.chatTitleCard} rounded-0 m-2`}
                   >
                     <div className="text-white">Hello user</div>
-                    <div className={`${styles.chatHead} mt-4`}>
-                      <Image src={neChatImage} width={30} height={40} />
+                    <div className={`${styles.chatHead} align-items-center`}>
+                     
+                      {getLogo()}
                       <h4 className={`${styles.chatTitle} text-white`}>
                         Chat with CogentAI
                       </h4>

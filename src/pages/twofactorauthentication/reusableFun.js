@@ -2,6 +2,8 @@ import Image from "next/image";
 import cogentLogo from "../../images/logo/cogentAI-logo-loginpage.png";
 import c360Logo from "../../images/logo/newLoginLogo.png";
 import cogentHeaderLogo from "../../images/logo/header_logo.png";
+import neChatImage from "../../images/logo/newChatImage.png";
+import cogentChat from "../../images/logo/CAICell.png";
 import { companyDeatils } from "../../utils/config";
 
 export const getLogoImage = () => {
@@ -52,12 +54,6 @@ export const getHeaderLoge = () => {
   switch (companyDeatils) {
     case "cogentai":
       return (
-        // <div className="mx-3">
-        //   {/* <Image
-        //     src={cogentHeaderLogo}
-        //     alt="Logo"
-        //   /> */}
-        // </div>
         <div
           style={{
             display: "flex",
@@ -102,7 +98,25 @@ export const getFaviconUrl = () => {
   }
 };
 
+export const getLogo = () => {
+  switch (companyDeatils) {
+    case "cogentai":
+      return (
+        <Image src={cogentChat} width={40} height={50} />
+      );
+    case "c360":
+      return (
+        <div className="header-logo">
+           <Image src={neChatImage} width={30} height={40} />
+        </div>
+      );
 
+    default:
+      return (
+        <Image src={cogentChat} width={30} height={40} />
+      );
+  }
+}
 
 const ReusableFunction = () => {
   return <></>;
