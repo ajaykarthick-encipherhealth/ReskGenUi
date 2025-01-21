@@ -1,9 +1,9 @@
 import React, { use, useEffect, useState } from "react";
 import Style from "./../style.module.css";
-import Epic from "../../../../images/svg/settingsIcons/icons/epic.png";
-import Athena from "../../../../images/svg/settingsIcons/icons/athena.png";
-import Cerner from "../../../../images/svg/settingsIcons/icons/cerner.png";
-import EClinical from "../../../../images/svg/settingsIcons/icons/eclinicalworks.png";
+import Epic from "../../../../images/svg/settingsIcons/icons/epic.webp";
+import Athena from "../../../../images/svg/settingsIcons/icons/athena.webp";
+import Cerner from "../../../../images/svg/settingsIcons/icons/cerner.webp";
+import EClinical from "../../../../images/svg/settingsIcons/icons/eclinicalworks.webp";
 import Image from "next/image";
 import { notification, Tag } from "antd";
 import { connect } from "react-redux";

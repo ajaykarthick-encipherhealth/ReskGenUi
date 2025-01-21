@@ -1,5 +1,5 @@
 import Image from "next/image";
-import cogentLogo from "../../images/logo/cogentAI-logo-loginpage.png";
+import cogentLogo from "../../images/logo/cogentAI-logo-loginpage.webp";
 import c360Logo from "../../images/logo/newLoginLogo.png";
 import cogentHeaderLogo from "../../images/logo/header_logo.png";
 import neChatImage from "../../images/logo/newChatImage.png";

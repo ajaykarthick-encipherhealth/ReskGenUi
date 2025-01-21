@@ -8698,15 +8698,17 @@ button:focus {
 }}
 @media  screen and (min-width: 1530px) and (max-width:1600px) {
   .login-account .account-info-area {
-    margin-left: 271px;
+    margin-left: 177px;
 }}
 @media  screen and (min-width: 1080px) and (max-width:1100px) {
   .login-account .account-info-area {
     min-height: 340px;
+    margin-left: 100px;
 }}
 @media  screen and (min-width: 1250px) and (max-width:1300px) {
   .login-account .account-info-area {
     min-height: 340px;
+   
   }
 }
 
