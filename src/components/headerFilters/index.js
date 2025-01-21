@@ -455,6 +455,7 @@ const HeaderFilters = ({
                   ? "col-xl-1"
                   : "col-xl-4"
               } d-flex justify-content-center align-items-center`}
+              style={{marginTop: "5px"}}
             >
               <Popover
                 content={
