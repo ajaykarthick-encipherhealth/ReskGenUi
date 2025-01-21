@@ -3,6 +3,7 @@ import { Popover } from "antd";
 import { connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import style from "./styles.module.css";
+import { reusableEllipses } from "../../components/function/ReusableFunctions";
 
 const RafScore = ({ patientDetailsResult }) => {
   const rafScoreList = patientDetailsResult?.data?.response?.rafScore;
@@ -89,10 +90,9 @@ const RafScore = ({ patientDetailsResult }) => {
     const output = [];
     const intractionEntries = [];
 
-  
     // Separate V24 and V28 entries
-    data?.forEach(item => {
-      item?.dx_hccs.forEach(dx => {
+    data?.forEach((item) => {
+      item?.dx_hccs.forEach((dx) => {
         const entry = {
           dx_code: dx.dx_name || "Intraction Code",
           dx_desc: dx.dx_desc || dx.hcc_list[0]?.hcc_desc || null,
@@ -100,10 +100,10 @@ const RafScore = ({ patientDetailsResult }) => {
           raf: dx.hcc_list[0]?.hcc_raf || null,
           monthly_premium: dx.hcc_list[0]?.premium || null,
         };
-  
-        if (item.hcc_model.version === 'V24') {
+
+        if (item.hcc_model.version === "V24") {
           v24Entries.push(entry);
-        } else if (item.hcc_model.version === 'V28') {
+        } else if (item.hcc_model.version === "V28") {
           if (!v28Entries.has(dx.dx_name)) {
             v28Entries.set(dx.dx_name, []);
           }
@@ -111,19 +111,19 @@ const RafScore = ({ patientDetailsResult }) => {
         }
       });
     });
-  
+
     // Track visited entries
     const visitedV28Entries = new Map();
     const visitedV24Entries = new Map();
-  
+
     // Process V24 entries and match with V28 entries
-    v24Entries.forEach(v24Entry => {
+    v24Entries.forEach((v24Entry) => {
       const v28List = v28Entries.get(v24Entry.dx_code) || [];
-  
+
       if (v28List.length > 0) {
         // Create pairs of V24 and V28 entries
         let v28Entry = v28List.shift(); // Get the first unvisited V28 entry
-  
+
         output.push({
           dx_code: v24Entry.dx_code,
           dx_desc: v24Entry.dx_desc || v28Entry.dx_desc,
@@ -132,17 +132,17 @@ const RafScore = ({ patientDetailsResult }) => {
           v24_monthly_premium: v24Entry.monthly_premium,
           v28_hcc: v28Entry.hcc,
           v28_raf: v28Entry.raf,
-          v28_monthly_premium: v28Entry.monthly_premium
+          v28_monthly_premium: v28Entry.monthly_premium,
         });
-  
+
         // Mark this V28 entry as visited
         if (!visitedV28Entries.has(v24Entry.dx_code)) {
           visitedV28Entries.set(v24Entry.dx_code, []);
         }
         visitedV28Entries.get(v24Entry.dx_code).push(v28Entry);
-  
+
         // Add remaining V28 entries
-        v28List.forEach(entry => {
+        v28List.forEach((entry) => {
           output.push({
             dx_code: entry.dx_code,
             dx_desc: entry.dx_desc,
@@ -151,9 +151,9 @@ const RafScore = ({ patientDetailsResult }) => {
             v24_monthly_premium: null,
             v28_hcc: entry.hcc,
             v28_raf: entry.raf,
-            v28_monthly_premium: entry.monthly_premium
+            v28_monthly_premium: entry.monthly_premium,
           });
-  
+
           // Mark this V28 entry as visited
           if (!visitedV28Entries.has(entry.dx_code)) {
             visitedV28Entries.set(entry.dx_code, []);
@@ -170,15 +170,18 @@ const RafScore = ({ patientDetailsResult }) => {
           v24_monthly_premium: v24Entry.monthly_premium,
           v28_hcc: null,
           v28_raf: null,
-          v28_monthly_premium: null
+          v28_monthly_premium: null,
         });
       }
     });
-  
+
     // Add remaining V28 entries that haven't been visited
     v28Entries.forEach((v28List, dx_code) => {
-      v28List.forEach(entry => {
-        if (!visitedV28Entries.has(dx_code) || !visitedV28Entries.get(dx_code).includes(entry)) {
+      v28List.forEach((entry) => {
+        if (
+          !visitedV28Entries.has(dx_code) ||
+          !visitedV28Entries.get(dx_code).includes(entry)
+        ) {
           output.push({
             dx_code: entry.dx_code,
             dx_desc: entry.dx_desc,
@@ -187,22 +190,22 @@ const RafScore = ({ patientDetailsResult }) => {
             v24_monthly_premium: null,
             v28_hcc: entry.hcc,
             v28_raf: entry.raf,
-            v28_monthly_premium: entry.monthly_premium
+            v28_monthly_premium: entry.monthly_premium,
           });
         }
       });
     });
-    const finalOutput = output?.filter(entry => {
+    const finalOutput = output?.filter((entry) => {
       if (entry?.dx_code === "Intraction Code") {
         intractionEntries.push(entry);
         return false;
       }
       return true;
     });
-    
+
     return finalOutput.concat(intractionEntries);
   };
-  
+
   useEffect(() => {
     var rafScroeArray = [];
     rafScoreList?.scoreOutputDTOList?.map((res) => {
@@ -281,10 +284,16 @@ const RafScore = ({ patientDetailsResult }) => {
                       <div className="row">
                         <div className="col-3">HCC</div>
                         <div className="col-2">RAF</div>
-                        <div className="col-5  d-flex align-items-center justify-content-center ">Monthly Premium</div>
+                        <div className="col-5  d-flex align-items-center justify-content-center ">
+                          Monthly Premium
+                        </div>
                         <div
                           className="col-2 rounded d-flex align-items-center justify-content-center "
-                          style={{ background: "#ffffff", color: "#8262ce",marginLeft:"-5px" }}
+                          style={{
+                            background: "#ffffff",
+                            color: "#8262ce",
+                            marginLeft: "-5px",
+                          }}
                         >
                           <span
                             className="d-flex align-items-center justify-content-center"
@@ -308,7 +317,11 @@ const RafScore = ({ patientDetailsResult }) => {
                             {/* {rafScoreDetails.map((item) => ( */}
                             <>
                               <div className="col-3">
-                                <div>{item.v24_hcc ? item.v24_hcc : ""}</div>
+                                {/* <div>{item.v24_hcc ? item.v24_hcc : ""}</div> */}
+                                {reusableEllipses({
+                                  str: item.v24_hcc ? item.v24_hcc : "",
+                                  count: 6,
+                                })}
                               </div>
 
                               <div className="col-2">
@@ -363,10 +376,16 @@ const RafScore = ({ patientDetailsResult }) => {
                       <div className="row">
                         <div className="col-3">HCC</div>
                         <div className="col-2">RAF</div>
-                        <div className="col-5 d-flex align-items-center justify-content-center ">Monthly Premium</div>
+                        <div className="col-5 d-flex align-items-center justify-content-center ">
+                          Monthly Premium
+                        </div>
                         <div
                           className="col-2 rounded d-flex align-items-center justify-content-center"
-                          style={{ background: "#ffffff", color: "#e47e7e",marginLeft:"-5px"  }}
+                          style={{
+                            background: "#ffffff",
+                            color: "#e47e7e",
+                            marginLeft: "-5px",
+                          }}
                         >
                           <span
                             className="d-flex align-items-center justify-content-center"
@@ -389,7 +408,11 @@ const RafScore = ({ patientDetailsResult }) => {
                           >
                             <>
                               <div className="col-3">
-                                <div>{item.v28_hcc ? item.v28_hcc : ""}</div>
+                                {/* <div>{item.v28_hcc ? item.v28_hcc : ""}</div> */}
+                                {reusableEllipses({
+                                  str: item.v28_hcc ? item.v28_hcc : "",
+                                  count: 6,
+                                })}
                               </div>
 
                               <div className="col-2">
@@ -454,9 +477,7 @@ const RafScore = ({ patientDetailsResult }) => {
                   >
                     <div className="row">
                       <div className="col-6 text-center">Overall score</div>
-                      <div className="col-6 text-center">
-                        Overall premium
-                      </div>
+                      <div className="col-6 text-center">Overall premium</div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>

@@ -1129,7 +1129,17 @@ export const getProviderNameManually = ({ data }) => {
     return sectionMapArr;
   });
 };
-
+export const reusableEllipses = ({ str, count }) => {
+  if (str?.length > count) {
+    return (
+      <Tooltip placement="top" title={str}>
+        {`${str?.substring(0, count)}...`}
+      </Tooltip>
+    );
+  } else {
+    return str;
+  }
+};
 export const getSectionNameManually = ({
   data,
   sectionDelete,
