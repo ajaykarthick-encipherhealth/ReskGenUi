@@ -30,11 +30,7 @@ const DailyTask = ({
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
   const [responseArray, setReponseArray] = useState([]);
-  const allFilters = [
-    "Reviewer Status",
-    "Select Audited Status",
-    "Audited Date",
-  ];
+   const [loading, setLoading] = useState(false)
   const bullets = [
     {
       color: "#64B4BE",
@@ -235,6 +231,7 @@ const DailyTask = ({
     };
   };
   const showNext = () => {
+    setLoading(true);
     if (currentDays?.length > 3) {
       const updatedData = currentDays?.shift();
       const datas = [];
@@ -248,6 +245,9 @@ const DailyTask = ({
       });
       setSelectedDate(datas);
     }
+    setTimeout(() => {
+      setLoading(false); 
+    }, 300); 
   };
   const uniqueData = currentDays?.filter((value, index, self) => {
     const firstIndex = self?.findIndex(
@@ -260,7 +260,7 @@ const DailyTask = ({
       <HeadTitle header="Daily Task" />
       <div className={styles.card2}>
         <Card borderRadius="28px" style={{ display: "flex" }}>
-          {dailyTaskLoader ? (
+          {dailyTaskLoader || loading ? (
             <div className="d-flex justify-content-center mt-4">
               <CardSkeleton count={1} width={1100} height={270} />
             </div>

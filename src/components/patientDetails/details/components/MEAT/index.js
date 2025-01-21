@@ -78,7 +78,7 @@ const MeatCard = ({
     <>
       {provided && (
         <div ref={provided?.innerRef} {...provided?.droppableProps}>
-          <div className={`my-post-content pt-3 `}>
+          <div className={`my-post-content pt-3  `} style={{paddingRight:"12px"}}>
             <div className={visitStyles.meat_head_card}>
               <div className="row">
                 <div className="col-3 text-center text-uppercase">

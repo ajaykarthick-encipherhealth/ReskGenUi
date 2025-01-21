@@ -256,6 +256,7 @@
   min-height: 20vh;
   max-height: 45vh;
   overflow-y: hidden;
+  padding-right: 12px;
 }
 .stickyHeader:hover {
   overflow-y: scroll;
