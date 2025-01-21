@@ -130,7 +130,7 @@ const Header = ({
     setOpenContent(false);
     Swal.fire({
       title: "Warning!",
-      text: "Do you want Logout!",
+      text: "Do you want to Logout!",
       icon: "warning",
       confirmButtonText: "Logout",
       showCancelButton: true,
