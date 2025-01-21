@@ -21,7 +21,10 @@ import { getFilters } from "../../../../stores/authflow/actions";
 import { InfoCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../../tenantadmin/tracking/filters";
 import HeaderFilters from "../../../../components/headerFilters";
-import { disabledDate, EnableFuturedDisabledDate } from "../../../../utils/reusable";
+import {
+  disabledDate,
+  EnableFuturedDisabledDate,
+} from "../../../../utils/reusable";
 const { RangePicker } = DatePicker;
 
 export const allFilters = [
@@ -49,12 +52,9 @@ const HeaderFiltersPatients = ({
   selectedDates,
   setSelectedDates,
 
-
-
   // allocatedBY
 
   setSelAllocatedBy,
-
 
   // allocatedTo
   isAllocatedToSelector,
@@ -80,8 +80,7 @@ const HeaderFiltersPatients = ({
   setSelectedDates4,
   setSelectedDates5,
   filtersData,
-  getRoutedData
-
+  getRoutedData,
 }) => {
   const [trackInput, setTrackInput] = useState("");
 
@@ -97,10 +96,8 @@ const HeaderFiltersPatients = ({
     switch (filter) {
       case "Due Date":
         return (
-          <div className="" style={{width: "250px"}}>
-            <label className={styles.label} style={{ marginTop: "40px" }}>
-              Due Date
-            </label>
+          <div className="" style={{ width: "250px", marginTop: "30px" }}>
+            <label className={styles.label}>Due Date</label>
             <div className="dateRangeSize dateRangesHeight">
               <RangePicker
                 value={clear ? ["", ""] : selectedDates}
@@ -117,10 +114,8 @@ const HeaderFiltersPatients = ({
 
       case "Completed Date":
         return (
-          <div className="" style={{width: "250px"}}>
-            <label className={styles.label} style={{ marginTop: "40px" }}>
-              Completed Date
-            </label>
+          <div className="" style={{ width: "250px", marginTop: "30px" }}>
+            <label className={styles.label}>Completed Date</label>
             <div className="dateRangeSize dateRangesHeight">
               <RangePicker
                 value={clear ? ["", ""] : selectedDates2}
@@ -137,13 +132,14 @@ const HeaderFiltersPatients = ({
         );
       case "Select Priority":
         return (
-          <div className={defaultSize} style={{width: "250px"}}>
-            <label className={styles.label} style={{ marginTop: "40px" }}>
-              Select Priority
-            </label>
+          <div
+            className={defaultSize}
+            style={{ width: "250px", marginTop: "30px" }}
+          >
+            <label className={styles.label}>Select Priority</label>
             <div class="form-group has-search custom-react-selects reviewerFilterSelect customClear">
               <Select
-                value={clear ? null : statusSelectedStatus1||null}
+                value={clear ? null : statusSelectedStatus1 || null}
                 onChange={onChangeStatus1}
                 options={orgAllList1}
                 isSearchable={false}
@@ -155,13 +151,20 @@ const HeaderFiltersPatients = ({
         );
       case "Select Status":
         return (
-          <div className={defaultSize} style={{width: "250px"}}>
-            <label className={styles.label} style={{ marginTop: "40px" }}>
-              Select Status
-            </label>
+          <div
+            className={defaultSize}
+            style={{ width: "250px", marginTop: "30px" }}
+          >
+            <label className={styles.label}>Select Status</label>
             <div class="form-group has-search custom-react-selects reviewerFilterSelect customClear">
               <Select
-                value={clear ? null : statusSelectedStatus?statusSelectedStatus:null}
+                value={
+                  clear
+                    ? null
+                    : statusSelectedStatus
+                    ? statusSelectedStatus
+                    : null
+                }
                 onChange={onChangeStatus}
                 options={orgAllList}
                 isSearchable={false}
@@ -207,17 +210,10 @@ const HeaderFiltersPatients = ({
       <div className="row filter-contain" style={{ width: "95%" }}>
         {isAllocatedToSelector && (
           <div
-            className={defaultSize}
-            style={{ width: "250px" }}
+            style={{ width: "250px", marginTop: "30px" }}
             onClick={() => setClear(false)}
           >
-            <label
-              className="text-truncate"
-              style={{ marginLeft: "8px", marginTop: "35px" }}
-            >
-              {" "}
-              Patient Name / ID
-            </label>
+            <label className={styles.label}>Patient Name / ID</label>
             <div class="form-group has-search">
               <Input
                 value={value}
@@ -247,7 +243,7 @@ const HeaderFiltersPatients = ({
       <div
         // className={Tracking}
         // style={{ width: "5%", display: "flex", justifyContent: "end" }}
-        className="d-flex justify-content-end align-items-center  "
+        className="d-flex justify-content-end align-items-center mt-3 "
       >
         {/* <div style={{ marginTop: "30px" }}> */}
         <MoreFilter

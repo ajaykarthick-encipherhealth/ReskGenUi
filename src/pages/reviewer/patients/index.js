@@ -459,7 +459,7 @@ const Patient = ({
                       {loading ? (
                         <TableSkeleton/>
                       ) : (
-                        <>
+                        <div className="mt-3">
                           <PatientTable
                             activeFilters={activeFilters}
                             setActiveFilters={setActiveFilters}
@@ -515,7 +515,7 @@ const Patient = ({
                               </div>
                             </div>
                           </div>
-                        </>
+                        </div>
                       )}
                     </div>
                   </div>
