@@ -2224,6 +2224,7 @@
   height: 36vh;
   border-radius: 10px;
   background-color: transparent !important;
+  padding-right: 12px;
   /* box-shadow: rgba(99, 99, 99, 0.1) 0px -50px 36px -28px inset; */
   /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
   /* box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
