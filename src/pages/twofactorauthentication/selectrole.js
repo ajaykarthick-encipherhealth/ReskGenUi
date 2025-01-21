@@ -30,7 +30,14 @@ const SelectRole = ({ getLogin }) => {
     if (!selectedRole) {
       setRoleError(true);
     } else {
-      loginSuccessCallBack();
+      if (selectedRole.toLowerCase() == "admin") {
+        notification.warning({
+          message: "Unprivileged access!",
+          duration: 1,
+        });
+      } else {
+         loginSuccessCallBack();
+      }
     }
   };
 
