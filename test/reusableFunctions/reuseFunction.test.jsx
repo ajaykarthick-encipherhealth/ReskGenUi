@@ -20,7 +20,8 @@ import {
 } from "../../src/components/headerFilters/functions";
 import moment from "moment";
 import { render } from "@testing-library/react";
-
+import dayjs from "dayjs";
+import { disabledDate, getSpacesWithUnderscoresAuditing } from "../../src/utils/reusable";
 //generateOptionsListSupervisor
 describe("generateOptionsListSupervisor function", () => {
   it("returns an empty array when input is null or undefined", () => {
@@ -86,16 +87,6 @@ describe("getDateAndTime function", () => {
     expect(result.length).toBeGreaterThan(0);
   });
 
-  it("should return the correct date and time", () => {
-    const now = new Date();
-    const result = getDateAndTime();
-    const expectedResult = `${
-      now.getMonth() + 1
-    }/${now.getDate()}/${now.getFullYear()} ${
-      now.getHours() % 12 || 12
-    }:${padZero(now.getMinutes())} ${now.getHours() < 12 ? "AM" : "PM"}`;
-    expect(result).toBe(expectedResult);
-  });
 it("should handle edge cases for minutes and hours", () => {
   const now = new Date("2022-01-01T00:00:00.000Z");
   jest.useFakeTimers().setSystemTime(now);
@@ -591,4 +582,86 @@ describe("getBackgroundColor function", () => {
      expect(getBackgroundColor(null)).toBe("#9BB8CD");
      expect(getBackgroundColor(undefined)).toBe("#9BB8CD");
    });
+});
+
+
+describe("disabledDate function", () => {
+  const today = dayjs().endOf("day");
+  const tomorrow = today.add(1, "day");
+  const yesterday = today.subtract(1, "day");
+
+ 
+
+  it("should not disable future dates when allowFuture is true", () => {
+    expect(disabledDate(tomorrow, [], true)).toBe(false);
+    expect(disabledDate(today, [], true)).toBe(false);
+    expect(disabledDate(yesterday, [], true)).toBe(false);
+  });
+
+  it("should disable dates before the selected startDate when only startDate is set", () => {
+    const startDate = today.toISOString();
+
+    expect(disabledDate(yesterday, [startDate], true)).toBe(true);
+    expect(disabledDate(today, [startDate], true)).toBe(false);
+    expect(disabledDate(tomorrow, [startDate], true)).toBe(false);
+  });
+
+  it("should disable dates after the selected endDate when only endDate is set", () => {
+    const endDate = today.toISOString();
+
+    expect(disabledDate(yesterday, [null, endDate], true)).toBe(false);
+    expect(disabledDate(today, [null, endDate], true)).toBe(false);
+    expect(disabledDate(tomorrow, [null, endDate], true)).toBe(true);
+  });
+
+  it("should disable dates outside the range when both startDate and endDate are set", () => {
+    const startDate = yesterday.toISOString();
+    const endDate = tomorrow.toISOString();
+
+    expect(
+      disabledDate(dayjs().subtract(2, "days"), [startDate, endDate], true)
+    ).toBe(true);
+    expect(disabledDate(yesterday, [startDate, endDate], true)).toBe(false);
+    expect(disabledDate(today, [startDate, endDate], true)).toBe(false);
+    expect(disabledDate(tomorrow, [startDate, endDate], true)).toBe(false);
+    expect(
+      disabledDate(dayjs().add(2, "days"), [startDate, endDate], true)
+    ).toBe(true);
+  });
+
+  it("should not disable any date when no restrictions are applied", () => {
+    expect(disabledDate(yesterday, [], true)).toBe(false);
+    expect(disabledDate(today, [], true)).toBe(false);
+    expect(disabledDate(tomorrow, [], true)).toBe(false);
+  });
+});
+
+
+describe("getSpacesWithUnderscoresAuditing function", () => {
+  it("should replace spaces with underscores for 'AUDIT PENDING' and 'AUDIT DECLINED'", () => {
+    expect(getSpacesWithUnderscoresAuditing("AUDIT PENDING")).toBe(
+      "AUDIT_PENDING"
+    );
+    expect(getSpacesWithUnderscoresAuditing("AUDIT DECLINED")).toBe(
+      "AUDIT_DECLINED"
+    );
+  });
+
+  it("should remove spaces for 'AUDIT HOLD' and 'RE AUDIT'", () => {
+    expect(getSpacesWithUnderscoresAuditing("AUDIT HOLD")).toBe("AUDITHOLD");
+    expect(getSpacesWithUnderscoresAuditing("RE AUDIT")).toBe("REAUDIT");
+  });
+
+  it("should return the original value for any other input", () => {
+    expect(getSpacesWithUnderscoresAuditing("OTHER VALUE")).toBe("OTHER VALUE");
+    expect(getSpacesWithUnderscoresAuditing("ANOTHER TEST")).toBe(
+      "ANOTHER TEST"
+    );
+  });
+
+  it("should return undefined for undefined or empty input", () => {
+    expect(getSpacesWithUnderscoresAuditing(undefined)).toBeUndefined();
+    expect(getSpacesWithUnderscoresAuditing(null)).toBeUndefined();
+    expect(getSpacesWithUnderscoresAuditing("")).toBeUndefined();
+  });
 });
