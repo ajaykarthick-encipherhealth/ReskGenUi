@@ -130,7 +130,7 @@ export async function checkStatus(response) {
     case 512:
     case 513: {
       await showModal(
-        "An error occurred due to unhandled exceptions or unexpected conditions within the system."
+        "An error occurred due to unhandled exceptions or unexpected conditions within the system. The admin will be notified by email."
       );
       break;
     }
