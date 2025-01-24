@@ -130,10 +130,25 @@ export function formatValues(values, dates) {
       formatobj[formattedKey] = values[key];
     });
   }
+  let resultArray = [];
+  if (dates.length === 1) {
+    const singleDate = dates[0];
+    const nextDate = new Date(singleDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+    const currentFormatted = formatDate(singleDate);
+    const nextFormatted = formatDate(nextDate);
 
-  const resultArray = dates.map((date) => formatobj[formatDate(date)] || 0);
+    resultArray = [
+      formatobj[currentFormatted] || 0,
+      formatobj[nextFormatted] || 0,
+    ];
+  } else {
+    resultArray = dates.map((date) => formatobj[formatDate(date)] || 0);
+  }
+
   return resultArray;
 }
+
 
 export const getAge = (dob) => {
   if (dob) {

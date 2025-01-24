@@ -128,7 +128,7 @@ export async function checkStatus(response) {
       break;
     }
     case 512:
-    case 513: {
+     {
       await showModal(
         "An error occurred due to unhandled exceptions or unexpected conditions within the system. The admin will be notified by email."
       );

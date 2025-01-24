@@ -33,6 +33,7 @@ import { reducer as patientDeatilsReducer } from "./patient/details";
 import { reducer as tenantAdminDefault } from "../stores/tenantAdmin/dashboard/default";
 import { reducer as webSocketReducer } from "./websocket";
 import { reducer as workFlowReducer } from "./tenantAdmin/dashboard/workFlow";
+import { reducer as invalidReducer } from "./tenantAdmin/dashboard/invalid";
 import { reducer as codifyReducer } from "./codify/dashboard";
 import { reducer as adminPatientsReducer } from "./admin/workqueue";
 import { reducer as allocatedReducer } from "./admin/patientAllocation";
@@ -62,7 +63,7 @@ const reducers = combineReducers({
   // posts: PostsReducer,
   auth: AuthReducer,
   authReducer: authReducer,
-  filters:filterReducer,
+  filters: filterReducer,
   // patientDetails: PatientStore,
   // workFlow: DashboardReducer,
   // report: ReportReducer,
@@ -101,8 +102,8 @@ const reducers = combineReducers({
     workqueue: adminPatientsReducer,
     patientAllocate: allocatedReducer,
     users: adminUsersReducer,
-    dashboard:dashboardReducer,
-    notification:notificationReducer
+    dashboard: dashboardReducer,
+    notification: notificationReducer,
   }),
   codify: combineReducers({
     codify: codifyReducer,
@@ -120,6 +121,7 @@ const reducers = combineReducers({
     dashboard: combineReducers({
       default: tenantAdminDefault,
       workFlow: workFlowReducer,
+      invalid: invalidReducer,
     }),
     webSocket: webSocketReducer,
     users: tenantUsersReducer,
@@ -129,10 +131,10 @@ const reducers = combineReducers({
     notification: tenantAminNotificationReducer,
     settings: tenantAminSettingsReducer,
     fileProcessing: tenantFileProcessing,
-    tenantAdmin:updatedTenantAdminReportReducer
+    tenantAdmin: updatedTenantAdminReportReducer,
   }),
   tenatOnBoarding: tenantOnBoarding,
-  chartService:chartReducer,
+  chartService: chartReducer,
   imageUploadReducer: imageUploadReducer,
 });
 

@@ -18,6 +18,15 @@
 .font5{
   font-size: 20px;
 }
+.fontWeight1{
+  font-weight: 500;
+}
+.fontWeight2{
+  font-weight: 600;
+}
+.fontWeight3{
+  font-weight: 700;
+}
 body{
   overflow-x: hidden;
 }
@@ -16112,6 +16121,11 @@ overflow: scroll;
   color: #fff !important;
 }
 
+.invalidChart > div > div > canvas {
+bottom :20px !important;
+top:-38px !important
+
+}
 .send_details {
   display: block;
   max-width: 100%; 

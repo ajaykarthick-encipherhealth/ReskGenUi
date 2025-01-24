@@ -136,14 +136,13 @@ const index = ({
               Custom Date
             </div>
             <div className="tenantSelector" style={{ width: "100%" }}>
-              <RangePicker
+               <RangePicker
                 size="large"
                 disabledDate={disabled1YearDate}
                 onCalendarChange={(val) => setSelectedDates(val)}
-                onChange={(dates, value) => handleRange(dates)}
+                onChange={(e, value) => handleRange(value)}
                 format={"MM-DD-YYYY"}
                 allowClear={true}
-                value={selectedDates}
               />
             </div>
           </div>
@@ -170,6 +169,17 @@ const index = ({
           }}
         >
           Workflow
+        </button>
+        <button
+          className={
+            activeBtn === "Invalid" ? styles.activeBtn : styles.headerBtn
+          }
+          onClick={() => {
+            setActiveBtn("Invalid");
+            setSelectedValue("last_1_month");
+          }}
+        >
+          Invalid
         </button>
       </div>
     </div>
