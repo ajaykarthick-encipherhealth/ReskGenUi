@@ -16123,9 +16123,18 @@ overflow: scroll;
 
 .invalidChart > div > div > canvas {
 bottom :20px !important;
-top:-38px !important
-
+top:-45px !important
 }
+.customReactModal .modal-content{
+ width :900px !important
+}
+.customReactModal .modal-dialog{
+  max-width: none !important;
+}
+.customReactModal .modal-header {
+ border-bottom: 1px solid #fff !important;
+}
+
 .send_details {
   display: block;
   max-width: 100%; 

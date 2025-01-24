@@ -72,12 +72,12 @@ const InvalidChart = ({
               <Image src={images} alt="no Img" width={25} height={25} />
             </div>
           </div>
-          <div className="d-flex flex-column">
+          <div className="d-flex flex-column justify-content-center">
             {header}
 
             {hideContent && (
               <p
-                // onClick={() => onClick(values)}
+                onClick={() => onClick(values)}
                 className="font1 text-decoration-underline cursor-pointer "
                 style={{ color: "#3B82F6" }}
               >
@@ -86,16 +86,13 @@ const InvalidChart = ({
             )}
           </div>
         </div>
-        {hideContent && (
         <div className="p-2">
           <div className="d-flex font2 text-muted">Current/OverAll</div>
           <div className="font4 fontWeight3">
             {count} {""} / {""} {overAll}
           </div>
         </div>
-        )}
       </div>
-
       <div className="invalidChart">
         <ReactECharts className="invalidChart" option={graphOptions} />
       </div>

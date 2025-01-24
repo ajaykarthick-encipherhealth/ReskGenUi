@@ -23,7 +23,7 @@ import Notifications from "./workFlow/notifications";
 import HeadTitle from "../../../components/headtitle";
 import PieChartInfo from "./components/pieChart/PieChartInfo";
 import OrgPieChartInfo from "./components/OrgPieChart/OrgPieChartInfo";
-import { Modal, Row, Skeleton, Spin } from "antd";
+import {  Row, Skeleton, Spin } from "antd";
 import moment from "moment";
 import teleVisit from "../../../../src/images/invalid/televisit.webp";
 import scope from "../../../../src/images/invalid/scope.webp";
@@ -41,6 +41,7 @@ import {
   getResponePopup,
 } from "../../../utils/reusable";
 import CardSkeleton from "../../../components/skeleton/card";
+import Modal from "react-bootstrap/Modal";
 
 const Index = ({
   getUserStatusData,
@@ -82,9 +83,6 @@ const Index = ({
     setIsModalOpen(data);
   };
   const handleOk = () => {
-    setIsModalOpen(null);
-  };
-  const handleCancel = () => {
     setIsModalOpen(null);
   };
 
@@ -682,15 +680,10 @@ const Index = ({
           )}
         </div>
       </div>
-      {console.log(isModalOpen, "isModalOpen")}
-      <Modal
-        footer={null}
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        width={800}
-      >
-        <div style={{ height: "400px" }}>
+      <Modal className=" customReactModal d-flex align-items-center justify-content-center" show={isModalOpen} onHide={handleOk}>
+        <Modal.Header closeButton>
+        </Modal.Header>
+        <Modal.Body>
           <InvalidChart
             selectedValue={selectedValue}
             header={isModalOpen?.header}
@@ -705,9 +698,9 @@ const Index = ({
             hideContent={false}
             id={isModalOpen?.id}
           />
-        </div>
+        </Modal.Body>
       </Modal>
-    </div>
+      </div>
   );
 };
 
