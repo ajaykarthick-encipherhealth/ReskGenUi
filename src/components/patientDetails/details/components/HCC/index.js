@@ -35,6 +35,7 @@ import { getStorage } from "../../../../../utils/storages";
 import { isLocalEdit } from "../../../../../utils/config";
 import { getResponePopup } from "../../../../../utils/reusable";
 import CardSkeleton from "../../../../skeleton/card";
+
 const HccCards = ({
   list,
   hccVersionDetails,
@@ -86,8 +87,12 @@ const HccCards = ({
   year,
   getPatientDetailsData,
   diseaseEdit,
-  selectDosValue
+  selectDosValue,
+  patientDetailsLoad,
+  isSpinnerLoading
 }) => {
+  console.log(patientDetailsLoad, "patientDetailsLoad");
+  
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [openContent, setOpenContent] = useState(null);
@@ -207,8 +212,11 @@ const HccCards = ({
     <>
       {provided && (
         <div ref={provided?.innerRef} {...provided?.droppableProps}>
-          {loading  ? (
-              <CardSkeleton count={6} width={360} height={100} />
+          {loading || patientDetailsLoad || isSpinnerLoading ? (
+            <div >
+              {/* <Spinner /> */}
+              <CardSkeleton count={6} height={100}/>
+            </div>
           ) : list?.length > 0 ? (
             list?.map(
               (
@@ -1190,6 +1198,7 @@ const enhancer = connect(
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     loading: state?.patientDetails?.details?.loading,
+    patientDetailsLoad: state?.patientDetails?.details?.patientsLoading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
     labFile: state?.patientDetails?.details?.labPDFDetails,

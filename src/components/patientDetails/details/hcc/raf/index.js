@@ -3,9 +3,9 @@ import { Popover } from "antd";
 import { connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import style from "./styles.module.css";
-import { reusableEllipses } from "../../components/function/ReusableFunctions";
+import CardSkeleton from "../../../../skeleton/card";
 
-const RafScore = ({ patientDetailsResult }) => {
+const RafScore = ({ patientDetailsResult, patientDetailsLoad }) => {
   const rafScoreList = patientDetailsResult?.data?.response?.rafScore;
   const [rafScoreData, setRafScoreData] = useState([]);
   const [rafScoreDetails, setRafScoreDetails] = useState([]);
@@ -251,24 +251,32 @@ const RafScore = ({ patientDetailsResult }) => {
                       </div>
                     </div>
                     <div className={style.stickyHeader}>
-                      {rafScoreDetails?.map((item, i) => (
+                      {patientDetailsLoad ? (
                         <div className={style.detailsHead}>
-                          <div
-                            className={
-                              rafScoreDetails?.length != i + 1
-                                ? `row ${style.rafchildBorder}`
-                                : `row`
-                            }
-                          >
-                            <div className="col-4"> {item.dx_code}</div>
-                            <div className={`col-7 ${style.rafDescription}`}>
-                              <Popover title={item.dx_desc}>
-                                {item.dx_desc}{" "}
-                              </Popover>
-                            </div>
+                          <div className={`row`} style={{ overflow: "hidden" }}>
+                            <CardSkeleton />
                           </div>
                         </div>
-                      ))}
+                      ) : (
+                        rafScoreDetails?.map((item, i) => (
+                          <div className={style.detailsHead}>
+                            <div
+                              className={
+                                rafScoreDetails?.length != i + 1
+                                  ? `row ${style.rafchildBorder}`
+                                  : `row`
+                              }
+                            >
+                              <div className="col-4"> {item.dx_code}</div>
+                              <div className={`col-7 ${style.rafDescription}`}>
+                                <Popover title={item.dx_desc}>
+                                  {item.dx_desc}{" "}
+                                </Popover>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
                     </div>
                   </div>
                 </div>
@@ -305,39 +313,42 @@ const RafScore = ({ patientDetailsResult }) => {
                       </div>
                     </div>
                     <div className={style.stickyHeader}>
-                      {rafScoreDetails?.map((item, i) => (
+                      {patientDetailsLoad ? (
                         <div className={style.detailsHead}>
-                          <div
-                            className={
-                              rafScoreDetails?.length != i + 1
-                                ? `row ${style.rafchildBorder}`
-                                : `row`
-                            }
-                          >
-                            {/* {rafScoreDetails.map((item) => ( */}
-                            <>
-                              <div className="col-3">
-                                {/* <div>{item.v24_hcc ? item.v24_hcc : ""}</div> */}
-                                {reusableEllipses({
-                                  str: item.v24_hcc ? item.v24_hcc : "",
-                                  count: 6,
-                                })}
-                              </div>
-
-                              <div className="col-2">
-                                <div>{item.v24_raf ? item.v24_raf : ""}</div>
-                              </div>
-
-                              <div className="col-5 d-flex align-items-center justify-content-center  text-center">
-                                <div>
-                                  {item.v24_monthly_premium
-                                    ? "$" + item.v24_monthly_premium
-                                    : ""}
+                          <div className={`row`} style={{ overflow: "hidden" }}>
+                            <CardSkeleton />
+                          </div>
+                        </div>
+                      ) : (
+                        rafScoreDetails?.map((item, i) => (
+                          <div className={style.detailsHead}>
+                            <div
+                              className={
+                                rafScoreDetails?.length != i + 1
+                                  ? `row ${style.rafchildBorder}`
+                                  : `row`
+                              }
+                            >
+                              {/* {rafScoreDetails.map((item) => ( */}
+                              <>
+                                <div className="col-3">
+                                  <div>{item.v24_hcc ? item.v24_hcc : ""}</div>
                                 </div>
-                              </div>
-                            </>
-                            {/* ))} */}
-                            {/* <div className="col-3">
+
+                                <div className="col-2">
+                                  <div>{item.v24_raf ? item.v24_raf : ""}</div>
+                                </div>
+
+                                <div className="col-5 d-flex align-items-center justify-content-center  text-center">
+                                  <div>
+                                    {item.v24_monthly_premium
+                                      ? "$" + item.v24_monthly_premium
+                                      : ""}
+                                  </div>
+                                </div>
+                              </>
+                              {/* ))} */}
+                              {/* <div className="col-3">
                               {getRafDetails(item.dx_name, "V24")?.map(
                                 (item) => (
                                   <div>{item.hcc_name}</div>
@@ -358,9 +369,10 @@ const RafScore = ({ patientDetailsResult }) => {
                                 )
                               )}
                             </div> */}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))
+                      )}
                     </div>
                   </div>
                 </div>
@@ -397,37 +409,40 @@ const RafScore = ({ patientDetailsResult }) => {
                       </div>
                     </div>
                     <div className={style.stickyHeader}>
-                      {rafScoreDetails?.map((item, i) => (
+                      {patientDetailsLoad ? (
                         <div className={style.detailsHead}>
-                          <div
-                            className={
-                              rafScoreDetails?.length != i + 1
-                                ? `row ${style.rafchildBorder}`
-                                : `row`
-                            }
-                          >
-                            <>
-                              <div className="col-3">
-                                {/* <div>{item.v28_hcc ? item.v28_hcc : ""}</div> */}
-                                {reusableEllipses({
-                                  str: item.v28_hcc ? item.v28_hcc : "",
-                                  count: 6,
-                                })}
-                              </div>
-
-                              <div className="col-2">
-                                <div>{item.v28_raf ? item.v28_raf : ""}</div>
-                              </div>
-
-                              <div className="col-5 d-flex align-items-center justify-content-center   text-center">
-                                <div>
-                                  {item.v28_monthly_premium
-                                    ? "$" + item.v28_monthly_premium
-                                    : ""}
+                          <div className={`row`} style={{ overflow: "hidden" }}>
+                            <CardSkeleton />
+                          </div>
+                        </div>
+                      ) : (
+                        rafScoreDetails?.map((item, i) => (
+                          <div className={style.detailsHead}>
+                            <div
+                              className={
+                                rafScoreDetails?.length != i + 1
+                                  ? `row ${style.rafchildBorder}`
+                                  : `row`
+                              }
+                            >
+                              <>
+                                <div className="col-3">
+                                  <div>{item.v28_hcc ? item.v28_hcc : ""}</div>
                                 </div>
-                              </div>
-                            </>
-                            {/* <div className="col-3">
+
+                                <div className="col-2">
+                                  <div>{item.v28_raf ? item.v28_raf : ""}</div>
+                                </div>
+
+                                <div className="col-5 d-flex align-items-center justify-content-center   text-center">
+                                  <div>
+                                    {item.v28_monthly_premium
+                                      ? "$" + item.v28_monthly_premium
+                                      : ""}
+                                  </div>
+                                </div>
+                              </>
+                              {/* <div className="col-3">
                               {getRafDetails(item.dx_name, "V28")?.length >
                               0 ? (
                                 getRafDetails(item.dx_name, "V28")?.map(
@@ -457,9 +472,10 @@ const RafScore = ({ patientDetailsResult }) => {
                                 <div>&nbsp;</div>
                               )}
                             </div> */}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))
+                      )}
                     </div>
                   </div>
                 </div>
@@ -481,18 +497,26 @@ const RafScore = ({ patientDetailsResult }) => {
                     </div>
                   </div>
                   <div className={style.detailsHead}>
-                    <div className="row">
-                      <div className="col-6 text-center">
-                        {" "}
-                        {rafScoreList?.rafVersionDTO?.overAllScore}
+                    {patientDetailsLoad ? (
+                      <div className={style.detailsHead}>
+                        <div className={`row`} style={{ overflow: "hidden" }}>
+                          <CardSkeleton />
+                        </div>
                       </div>
-                      <div className="col-6 text-center">
-                        {" "}
-                        {rafScoreList?.rafVersionDTO?.overAllPremium
-                          ? "$" + rafScoreList?.rafVersionDTO?.overAllPremium
-                          : "---"}
+                    ) : (
+                      <div className="row">
+                        <div className="col-6 text-center">
+                          {" "}
+                          {rafScoreList?.rafVersionDTO?.overAllScore}
+                        </div>
+                        <div className="col-6 text-center">
+                          {" "}
+                          {rafScoreList?.rafVersionDTO?.overAllPremium
+                            ? "$" + rafScoreList?.rafVersionDTO?.overAllPremium
+                            : "---"}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
                 <div
@@ -511,15 +535,23 @@ const RafScore = ({ patientDetailsResult }) => {
                     </div>
                   </div>
                   <div className={style.detailsHead}>
-                    <div className="row">
-                      <div className="col-6">
-                        {rafScoreList?.rafVersionDTO?.v24Score}
+                    {patientDetailsLoad ? (
+                      <div className={style.detailsHead}>
+                        <div className={`row`} style={{ overflow: "hidden" }}>
+                          <CardSkeleton />
+                        </div>
                       </div>
-                      <div className="col-6">
-                        {" "}
-                        {rafScoreList?.rafVersionDTO?.v24PercentageScore}
+                    ) : (
+                      <div className="row">
+                        <div className="col-6">
+                          {rafScoreList?.rafVersionDTO?.v24Score}
+                        </div>
+                        <div className="col-6">
+                          {" "}
+                          {rafScoreList?.rafVersionDTO?.v24PercentageScore}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
                 <div
@@ -537,16 +569,24 @@ const RafScore = ({ patientDetailsResult }) => {
                       </div>
                     </div>
                   </div>
-                  <div className={style.detailsHead}>
-                    <div className="row">
-                      <div className="col-6">
-                        {rafScoreList?.rafVersionDTO?.v28Score}
-                      </div>
-                      <div className="col-6">
-                        {rafScoreList?.rafVersionDTO?.v28PercentageScore}
+                  {patientDetailsLoad ? (
+                    <div className={style.detailsHead}>
+                      <div className={`row`} style={{ overflow: "hidden" }}>
+                        <CardSkeleton />
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className={style.detailsHead}>
+                      <div className="row">
+                        <div className="col-6">
+                          {rafScoreList?.rafVersionDTO?.v28Score}
+                        </div>
+                        <div className="col-6">
+                          {rafScoreList?.rafVersionDTO?.v28PercentageScore}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -559,5 +599,6 @@ const RafScore = ({ patientDetailsResult }) => {
 
 const enhancer = connect((state) => ({
   patientDetailsResult: state?.patientDetails?.details?.patientResult,
+  patientDetailsLoad: state?.patientDetails?.details?.patientsLoading,
 }));
 export default enhancer(RafScore);

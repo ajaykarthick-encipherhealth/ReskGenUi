@@ -3,11 +3,12 @@ import { connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import moment, { months } from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
-import { Empty, Modal } from "antd";
+import { Card, Empty, Modal } from "antd";
 import styles from "../styles.module.css";
 import AddMeatQuery from "../../components/addMeatQuery";
-
-const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year }) => {
+import TableSkeleton from "../../../../skeleton/table";
+import CardSkeleton from "../../../../skeleton/card";
+const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year, patientDetailsLoad }) => {
   const [isMeatQueryModal, setIsMeatQueryModal] = useState(false);
   const [meatQueriedDetailsModal, setMeatQueriedDetailsModal] = useState(false);
   const [selectPreviousCode, setSelectPreviousCode] = useState(null);
@@ -84,85 +85,91 @@ const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year }) => {
             </div>
           </div>
         </div>
-        {meatQueryDetails?.data?.response?.length != 0 ? (
+        {patientDetailsLoad ? (
+          <CardSkeleton height={100} count={6}/>
+        ) : meatQueryDetails?.data?.response?.length != 0 ? (
           <div className={visitStyles.container}>
             <div className={visitStyles.hccStickey_head}>
-              {meatQueryDetails?.data?.response?.filter((res) => res.currentQuery)?.map((item) => (
-                <>
-                  {item.isShow ? (
-                    <div className={`${visitStyles.meat_details_card}`}>
-                      <>
-                        {item.diagnosisCode == selectPreviousCode ? (
-                          <div className="d-flex justify-content-between">
-                            <span className={styles.currentBadge}>Current</span>
-                            <span
-                              className={styles.moreBtn}
-                              onClick={() => setSelectPreviousCode(null)}
-                            >
-                              Less
+              {meatQueryDetails?.data?.response
+                ?.filter((res) => res.currentQuery)
+                ?.map((item) => (
+                  <>
+                    {item.isShow ? (
+                      <div className={`${visitStyles.meat_details_card}`}>
+                        <>
+                          {item.diagnosisCode == selectPreviousCode ? (
+                            <div className="d-flex justify-content-between">
+                              <span className={styles.currentBadge}>
+                                Current
+                              </span>
+                              <span
+                                className={styles.moreBtn}
+                                onClick={() => setSelectPreviousCode(null)}
+                              >
+                                Less
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="text-end">
+                              <span
+                                className={styles.moreBtn}
+                                onClick={() =>
+                                  getPreviousData(item.diagnosisCode)
+                                }
+                              >
+                                More
+                              </span>
+                            </div>
+                          )}
+                        </>
+                        <div className="row">
+                          <div className="col-1 d-grid">
+                            <span className="meat-name-details font-bold">
+                              {item.diagnosisCode}
                             </span>
                           </div>
-                        ) : (
-                          <div className="text-end">
-                            <span
-                              className={styles.moreBtn}
-                              onClick={() =>
-                                getPreviousData(item.diagnosisCode)
-                              }
-                            >
-                              More
+                          <div className="col-2">
+                            <span className="meat-name-details">
+                              {item.description}
                             </span>
                           </div>
-                        )}
-                      </>
-                      <div className="row">
-                        <div className="col-1 d-grid">
-                          <span className="meat-name-details font-bold">
-                            {item.diagnosisCode}
-                          </span>
-                        </div>
-                        <div className="col-2">
-                          <span className="meat-name-details">
-                            {item.description}
-                          </span>
-                        </div>
-                        <div className="col-2 d-grid">
-                          <span className="meat-name-details">
-                            {item.createdBy}
-                          </span>
-                          {/* <span className={styles.l1auditorBadge}>
+                          <div className="col-2 d-grid">
+                            <span className="meat-name-details">
+                              {item.createdBy}
+                            </span>
+                            {/* <span className={styles.l1auditorBadge}>
                                         L1 Auditor
                                       </span> */}
-                        </div>
-                        <div className="col-2 d-grid">
-                          <span className="meat-name-details">
-                            {moment(item.createdAt).format(
-                              "MM-DD-YYYY & HH:mm"
-                            )}
-                          </span>
-                        </div>
-                        <div className="col-2 d-grid">
-                          <span
-                            onClick={() => meatQueriedComments(item)}
-                            className="cr-pointer meat-name-details"
-                          >
-                            {SVGICON.comment}
-                          </span>
-                        </div>
-                        <div className="col-2 d-grid">
-                          <span className="meat-name-details">
-                            {item.queryReason}
-                          </span>
-                        </div>
-                        <div className="col-1">
-                          <div className="d-flex">
-                            <div
-                              onClick={() => addMeatQuery(item, "Update")}
-                              className={styles.edit_meat_query}
+                          </div>
+                          <div className="col-2 d-grid">
+                            <span className="meat-name-details">
+                              {moment(item.createdAt).format(
+                                "MM-DD-YYYY & HH:mm"
+                              )}
+                            </span>
+                          </div>
+                          <div className="col-2 d-grid">
+                            <span
+                              onClick={() => meatQueriedComments(item)}
+                              className="cr-pointer meat-name-details"
                             >
-                              {SVGICON.meatQueryEdit}
-                            </div>
-                            {/* <Popconfirm
+                              {SVGICON.comment}
+                            </span>
+                          </div>
+                          <div className="col-2 d-grid">
+                            <span className="meat-name-details">
+                              {item.queryReason}
+                            </span>
+                          </div>
+                          <div className="col-1">
+                            <div className="d-flex">
+                              <div
+                                onClick={() => addMeatQuery(item, "Update")}
+                                className={styles.edit_meat_query}
+                              >
+                                {SVGICON.meatQueryEdit}
+                              </div>
+                              {/* <Popconfirm
                                           title="Are you sure to delete this query?"
                                           okText="Yes"
                                           cancelText="No"
@@ -182,62 +189,66 @@ const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year }) => {
                                             />
                                           </div>
                                         </Popconfirm> */}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      {item.diagnosisCode == selectPreviousCode ? (
-                        <>
-                          <span className={styles.previousBadge}>Previous</span>
-                          {meatQueryListPrevious?.map((item) => (
-                            <div>
-                              <div className="row">
-                                <div className="col-1 d-grid">
-                                  <span className="meat-name-details font-bold">
-                                    {item.diagnosisCode}
-                                  </span>
-                                </div>
-                                <div className="col-2">
-                                  <span className="meat-name-details">
-                                    {item.description}
-                                  </span>
-                                </div>
-                                <div className="col-2 d-grid">
-                                  <span className="meat-name-details">
-                                    {item.createdBy}
-                                  </span>
-                                </div>
-                                <div className="col-2 d-grid">
-                                  <span className="meat-name-details">
-                                    {moment(item.createdAt).format(
-                                      "MM-DD-YYYY & HH:MM:SS"
-                                    )}
-                                  </span>
-                                </div>
-                                <div className="col-2 d-grid">
-                                  <span
-                                    onClick={() => meatQueriedComments(item)}
-                                    className="cr-pointer meat-name-details"
-                                  >
-                                    {SVGICON.comment}
-                                  </span>
-                                </div>
-                                <div className="col-2 d-grid">
-                                  <span className="meat-name-details">
-                                    {item.queryReason}
-                                  </span>
+                        {item.diagnosisCode == selectPreviousCode ? (
+                          <>
+                            <span className={styles.previousBadge}>
+                              Previous
+                            </span>
+                            {meatQueryListPrevious?.map((item) => (
+                              <div>
+                                <div className="row">
+                                  <div className="col-1 d-grid">
+                                    <span className="meat-name-details font-bold">
+                                      {item.diagnosisCode}
+                                    </span>
+                                  </div>
+                                  <div className="col-2">
+                                    <span className="meat-name-details">
+                                      {item.description}
+                                    </span>
+                                  </div>
+                                  <div className="col-2 d-grid">
+                                    <span className="meat-name-details">
+                                      {item.createdBy}
+                                    </span>
+                                  </div>
+                                  <div className="col-2 d-grid">
+                                    <span className="meat-name-details">
+                                      {moment(item.createdAt).format(
+                                        "MM-DD-YYYY & HH:MM:SS"
+                                      )}
+                                    </span>
+                                  </div>
+                                  <div className="col-2 d-grid">
+                                    <span
+                                      onClick={() => meatQueriedComments(item)}
+                                      className="cr-pointer meat-name-details"
+                                    >
+                                      {SVGICON.comment}
+                                    </span>
+                                  </div>
+                                  <div className="col-2 d-grid">
+                                    <span className="meat-name-details">
+                                      {item.queryReason}
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          ))}
-                        </>
-                      ) : null}
-                    </div>
-                  ) : null}
-                </>
-              ))}
+                            ))}
+                          </>
+                        ) : null}
+                      </div>
+                    ) : null}
+                  </>
+                ))}
             </div>
           </div>
-        ) : <Empty />}
+        ) : (
+          <Empty />
+        )}
       </div>
       <AddMeatQuery
         queryFormValues={queryFormValues}
@@ -301,5 +312,6 @@ const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year }) => {
 const enhancer = connect((state) => ({
   patientDetailsResult: state?.patientDetails?.details?.result,
   meatQueryDetails: state?.patientDetails?.details?.meatQueryResult,
+  patientDetailsLoad: state?.patientDetails?.details?.patientsLoading,
 }));
 export default enhancer(MeatQuery);

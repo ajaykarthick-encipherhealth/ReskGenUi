@@ -20,12 +20,12 @@ import {
   getProviderNameList,
   moveToAnotherAction,
 } from "../function/ReusableFunctions";
-import {  connect } from "react-redux";
+import { connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
-
+import CardSkeleton from "../../../../skeleton/card";
 
 const NonHccCards = ({
   list,
@@ -62,10 +62,9 @@ const NonHccCards = ({
   fileDosPageNumberList,
   getSelectedDosPageNumber,
   storeFileDetails,
-  patientDetailsResult
+  patientDetailsResult,
+  patientDetailsLoad,
 }) => {
- 
-
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [openContent, setOpenContent] = useState(null);
@@ -81,178 +80,190 @@ const NonHccCards = ({
 
   return (
     <>
-      {list?.map((data, i) => (
-        <>
-          <li key={data?.id}>
-            <div className={`hccActiveCard ${visitStyles.hcc_card}`}>
-              <div
-                className={` justify-content-between ${visitStyles.hcc_card_nameHead}`}
-              >
-                <div>
-                  <span className="disease-name d-flex mb-1">
-                    <span className="valid-dis-name">{data.diagnosisCode}</span>
+      {patientDetailsLoad ? (
+        <CardSkeleton count={6} />
+      ) : (
+        list?.map((data, i) => (
+          <>
+            <li key={data?.id}>
+              <div className={`hccActiveCard ${visitStyles.hcc_card}`}>
+                <div
+                  className={` justify-content-between ${visitStyles.hcc_card_nameHead}`}
+                >
+                  <div>
+                    <span className="disease-name d-flex mb-1">
+                      <span className="valid-dis-name">
+                        {data.diagnosisCode}
+                      </span>
 
-                    <Popover
-                      content={
-                        data.dbDescription
-                          ? data.dbDescription
-                          : data.actualDescription
+                      <Popover
+                        content={
+                          data.dbDescription
+                            ? data.dbDescription
+                            : data.actualDescription
+                        }
+                        title=""
+                        trigger="hover"
+                        overlayStyle={{ zIndex: 1000 }}
+                      >
+                        <>
+                          {" "}
+                          -{" "}
+                          {data.dbDescription
+                            ? data.dbDescription
+                            : data.actualDescription}
+                        </>
+                      </Popover>
+                    </span>
+                  </div>
+                  <div className="d-flex">
+                    <Popconfirm
+                      title="Choose an action"
+                      icon={
+                        <QuestionCircleOutlined
+                          style={{
+                            color: "blue",
+                          }}
+                        />
                       }
-                      title=""
-                      trigger="hover"
-                      overlayStyle={{ zIndex: 1000 }}
+                      okText={okText}
+                      cancelText={cancelText}
+                      onCancel={() => setConfirmNotesModalValid(false)}
+                      okButtonProps={{
+                        type: "default",
+                      }}
+                      cancelButtonProps={{
+                        type: "default",
+                      }}
+                      description={data.diagnosisCode}
+                      onConfirm={() =>
+                        moveToAnotherAction(
+                          setConfirmNotesModalValid,
+                          setIsValidAction,
+                          okText,
+                          cardTitle
+                        )
+                      }
+                      placement="bottom"
+                      onOpenChange={() =>
+                        onchangeValid(data.diagnosisCode, data)
+                      }
                     >
-                      <>
-                        {" "}
-                        -{" "}
-                        {data.dbDescription
-                          ? data.dbDescription
-                          : data.actualDescription}
-                      </>
-                    </Popover>
-                  </span>
-                </div>
-                <div className="d-flex">
-                  <Popconfirm
-                    title="Choose an action"
-                    icon={
-                      <QuestionCircleOutlined
-                        style={{
-                          color: "blue",
-                        }}
-                      />
-                    }
-                    okText={okText}
-                    cancelText={cancelText}
-                    onCancel={() => setConfirmNotesModalValid(false)}
-                    okButtonProps={{
-                      type: "default",
-                    }}
-                    cancelButtonProps={{
-                      type: "default",
-                    }}
-                    description={data.diagnosisCode}
-                    onConfirm={() =>
-                      moveToAnotherAction(
-                        setConfirmNotesModalValid,
-                        setIsValidAction,
-                        okText,
-                        cardTitle
-                      )
-                    }
-                    placement="bottom"
-                    onOpenChange={() => onchangeValid(data.diagnosisCode, data)}
-                  >
-                    {
-                      <div className="cr-pointer d-flex">
-                        <div className={visitStyles.close_icon}>
-                          <FontAwesomeIcon
-                            icon={faArrowsAlt}
-                            style={{
-                              size: 8,
-                              color: "#a80404",
-                            }}
-                          />
+                      {
+                        <div className="cr-pointer d-flex">
+                          <div className={visitStyles.close_icon}>
+                            <FontAwesomeIcon
+                              icon={faArrowsAlt}
+                              style={{
+                                size: 8,
+                                color: "#a80404",
+                              }}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    }
-                  </Popconfirm>
+                      }
+                    </Popconfirm>
+                  </div>
                 </div>
-              </div>
-              <div className="d-flex justify-content-between">
-                <div className={`${visitStyles.hoverActiveHcc}`}>
-                  <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                    {getProviderNameTag({
-                      providerNames: data?.providerName,
-                      hyperlinks: data?.providerHyperlinks,
-                      setSearch: setSearch,
-                      diagnosisCode: data.diagnosisCode,
-                      diseaseName: data.dbDescription,
-                      setIsModalOpen: setIsModalOpenValidCodes,
-                      setFileModalHeader: setFileModalHeader,
-                      patientDocumentResult: patientDocumentResult,
-                      setIsMulitpleHeader: setIsMulitpleProvider,
-                      isMulitpleHeader: isMulitpleProvider,
-                      setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
-                      isMulitpleHeaderCode: isMulitpleHeaderCode,
-                      setSelectMeatResult: "",
-                      getSelectedDosPageNumber: getSelectedDosPageNumber,
-                      storeFileDetails: storeFileDetails,
-                    })}
-                  </div>
-                  <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                    {getEncounterDateBackground({
-                      value: data?.encounterDateSplit,
-                      encounterDateMatching: encounterDateMatching,
-                      fileDosPageNumberList:
-                        patientDetailsResult?.data?.response?.fileDetailDTO
-                          ?.dosSummaries,
-                      setIsModalOpenValidCodes: setIsModalOpenValidCodes
-                        ? setIsModalOpenValidCodes
-                        : null,
-                      setSearch: setSearch,
-                      setFileModalHeader: setFileModalHeader,
-                      patientDocumentResult: patientDocumentResult,
-                      storeFileDetails: storeFileDetails,
-                    })}
-                  </div>
-                  <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                    {getCaptureSectionBackgroundFile({
-                      value: data?.capturedSections,
-                      encounterDate: data?.encounterDate,
-                      actualDescription: data?.actualDescription,
-                      diagnosisCode: data?.diagnosisCode,
-                      documentPlace: data?.getPlace,
-                      captureSectionMatching: captureSectionMatching,
-                      setSearch: setSearch,
-                      setFileLoading: setFileLoading,
-                      setIsModalOpenLab: setIsModalOpenLab,
-                      setIsModalOpenRadiology: setIsModalOpenRadiology,
-                      setIsModalOpenValidCodes: setIsModalOpenValidCodes,
-                      setFileModalHeader: setFileModalHeader,
+                <div className="d-flex justify-content-between">
+                  <div className={`${visitStyles.hoverActiveHcc}`}>
+                    <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                      {getProviderNameTag({
+                        providerNames: data?.providerName,
+                        hyperlinks: data?.providerHyperlinks,
+                        setSearch: setSearch,
+                        diagnosisCode: data.diagnosisCode,
+                        diseaseName: data.dbDescription,
+                        setIsModalOpen: setIsModalOpenValidCodes,
+                        setFileModalHeader: setFileModalHeader,
+                        patientDocumentResult: patientDocumentResult,
+                        setIsMulitpleHeader: setIsMulitpleProvider,
+                        isMulitpleHeader: isMulitpleProvider,
+                        setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
+                        isMulitpleHeaderCode: isMulitpleHeaderCode,
+                        setSelectMeatResult: "",
+                        getSelectedDosPageNumber: getSelectedDosPageNumber,
+                        storeFileDetails: storeFileDetails,
+                      })}
+                    </div>
+                    <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                      {getEncounterDateBackground({
+                        value: data?.encounterDateSplit,
+                        encounterDateMatching: encounterDateMatching,
+                        fileDosPageNumberList:
+                          patientDetailsResult?.data?.response?.fileDetailDTO
+                            ?.dosSummaries,
+                        setIsModalOpenValidCodes: setIsModalOpenValidCodes
+                          ? setIsModalOpenValidCodes
+                          : null,
+                        setSearch: setSearch,
+                        setFileModalHeader: setFileModalHeader,
+                        patientDocumentResult: patientDocumentResult,
+                        storeFileDetails: storeFileDetails,
+                      })}
+                    </div>
+                    <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                      {getCaptureSectionBackgroundFile({
+                        value: data?.capturedSections,
+                        encounterDate: data?.encounterDate,
+                        actualDescription: data?.actualDescription,
+                        diagnosisCode: data?.diagnosisCode,
+                        documentPlace: data?.getPlace,
+                        captureSectionMatching: captureSectionMatching,
+                        setSearch: setSearch,
+                        setFileLoading: setFileLoading,
+                        setIsModalOpenLab: setIsModalOpenLab,
+                        setIsModalOpenRadiology: setIsModalOpenRadiology,
+                        setIsModalOpenValidCodes: setIsModalOpenValidCodes,
+                        setFileModalHeader: setFileModalHeader,
 
-                      patientDocumentResult: patientDocumentResult,
-                      fileInitialPage: fileInitialPage,
-                      setFileInitialPage: setFileInitialPage,
-                      hyperlinks: data?.hyperlinks,
-                      encounterDateMatching: encounterDateMatching,
-                      setIsMulitpleHeader: setIsMulitpleHeader,
-                      isMulitpleHeader: isMulitpleHeader,
-                      setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
-                      isMulitpleHeaderCode: isMulitpleHeaderCode,
-                      diseaseName: data.dbDescription,
-                      popup: "",
-                      getSelectedDosPageNumber,
-                      storeFileDetails: storeFileDetails,
-                    })}
+                        patientDocumentResult: patientDocumentResult,
+                        fileInitialPage: fileInitialPage,
+                        setFileInitialPage: setFileInitialPage,
+                        hyperlinks: data?.hyperlinks,
+                        encounterDateMatching: encounterDateMatching,
+                        setIsMulitpleHeader: setIsMulitpleHeader,
+                        isMulitpleHeader: isMulitpleHeader,
+                        setIsMulitpleHeadeCode: setIsMulitpleHeadeCode,
+                        isMulitpleHeaderCode: isMulitpleHeaderCode,
+                        diseaseName: data.dbDescription,
+                        popup: "",
+                        getSelectedDosPageNumber,
+                        storeFileDetails: storeFileDetails,
+                      })}
+                    </div>
                   </div>
-                </div>
-                <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                  <div className="d-flex justify-content-end mt-2">
-                    {data.isCmsHcc && (
-                      <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>
-                    )}
-                    {data.isRxHcc && (
-                      <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>
-                    )}
+                  <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                    <div className="d-flex justify-content-end mt-2">
+                      {data.isCmsHcc && (
+                        <div className={`${visitStyles.cmsStatus} mx-1`}>
+                          CMS
+                        </div>
+                      )}
+                      {data.isRxHcc && (
+                        <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </li>
-        </>
-      ))}
+            </li>
+          </>
+        ))
+      )}
     </>
   );
 };
 
-const enhancer = connect((state) => ({
-  fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
-  patientDetailsResult: state?.patientDetails?.details?.patientResult,
-}),
-{
-  getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
-  storeFileDetails: detailsActions.storeFileIdAction,
-}
+const enhancer = connect(
+  (state) => ({
+    fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    patientDetailsLoad: state?.patientDetails?.details?.patientsLoading,
+  }),
+  {
+    getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
+    storeFileDetails: detailsActions.storeFileIdAction,
+  }
 );
 export default enhancer(NonHccCards);

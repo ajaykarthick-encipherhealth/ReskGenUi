@@ -10,7 +10,7 @@ import {
   faAngleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Drawer, Modal, Popover, Skeleton, notification } from "antd";
+import { Drawer, Modal, Popover, notification } from "antd";
 import { Button, Offcanvas, Spinner } from "react-bootstrap";
 import styles from "../styles.module.css";
 import PdfViewer from "../../PdfViewerComponent";
@@ -24,6 +24,7 @@ import ManuallyAdd from "../../components/manuallyAdd";
 import LogoLoader from "../../../../logoLoader";
 import { getStorage } from "../../../../../utils/storages";
 import { getValidHccDetailsApi } from "../../../../../stores/patient/details/network";
+import CardSkeleton from "../../../../skeleton/card";
 
 const File = ({
   patientDetailsResult,
@@ -52,6 +53,7 @@ const File = ({
   fileLoadingStatus,
   actions,
   selectDosValue,
+  isSpinnerLoading,
 }) => {
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
@@ -226,7 +228,6 @@ const File = ({
   }, [patientDetailsResult]);
 
   const handleShowList = (value) => {
-    console.log("show", value);
     if (showList.includes(value)) {
       setShowList((prev) => {
         return prev.filter((item) => item != value);
@@ -238,7 +239,7 @@ const File = ({
 
   return (
     <>
-      {fileLoading ? <LogoLoader /> : null}
+      {/* {fileLoading ? <LogoLoader /> : null} */}
       <DragDropContext
         onDragEnd={(result) =>
           onDragEnd(
@@ -286,40 +287,44 @@ const File = ({
                       </div>
                       <div className={visitStyles.HccContainer}>
                         <div className={visitStyles.hccStickey_head}>
-                          <HccCards
-                            list={newValidDiseaseList}
-                            hccVersionDetails={hccVersionDetails}
-                            captureSectionMatching={captureSectionMatching}
-                            encounterDateMatching={encounterDateMatching}
-                            meatCriteriaList={allMeatList}
-                            onchangeValid={onchangeValid}
-                            getValidHccDetails={getValidHccDetails}
-                            setFormValues={setFormValues}
-                            setIsEditHccForm={setIsEditHccForm}
-                            setFormEditPlace={setFormEditPlace}
-                            okText="Move to Deleted"
-                            cancelText="Move to Suggested"
-                            editFormPlace={"VALID_DISEASE"}
-                            setOpens={setOpens}
-                            setCombiTree={setCombiTree}
-                            setActiveTabHead={setActiveTabHead}
-                            setActiveMeatTitle={setActiveMeatTitle}
-                            setActiveComboTree={setActiveComboTree}
-                            setSearch={setSearch}
-                            setFileLoading={setFileLoading}
-                            setIsModalOpenLab={setIsModalOpenLab}
-                            setIsModalOpenRadiology={setIsModalOpenRadiology}
-                            setFileModalHeader={setFileModalHeader}
-                            setConfirmNotesModalValid={
-                              setConfirmNotesModalValid
-                            }
-                            setIsValidAction={setIsValidAction}
-                            cardTitle="HCC"
-                            provided={provided}
-                            year={year}
-                            actions={actions}
-                            selectDosValue={selectDosValue}
-                          />
+                          {isSpinnerLoading ? (
+                            <CardSkeleton count={6} />
+                          ) : (
+                            <HccCards
+                              list={newValidDiseaseList}
+                              hccVersionDetails={hccVersionDetails}
+                              captureSectionMatching={captureSectionMatching}
+                              encounterDateMatching={encounterDateMatching}
+                              meatCriteriaList={allMeatList}
+                              onchangeValid={onchangeValid}
+                              getValidHccDetails={getValidHccDetails}
+                              setFormValues={setFormValues}
+                              setIsEditHccForm={setIsEditHccForm}
+                              setFormEditPlace={setFormEditPlace}
+                              okText="Move to Deleted"
+                              cancelText="Move to Suggested"
+                              editFormPlace={"VALID_DISEASE"}
+                              setOpens={setOpens}
+                              setCombiTree={setCombiTree}
+                              setActiveTabHead={setActiveTabHead}
+                              setActiveMeatTitle={setActiveMeatTitle}
+                              setActiveComboTree={setActiveComboTree}
+                              setSearch={setSearch}
+                              setFileLoading={setFileLoading}
+                              setIsModalOpenLab={setIsModalOpenLab}
+                              setIsModalOpenRadiology={setIsModalOpenRadiology}
+                              setFileModalHeader={setFileModalHeader}
+                              setConfirmNotesModalValid={
+                                setConfirmNotesModalValid
+                              }
+                              setIsValidAction={setIsValidAction}
+                              cardTitle="HCC"
+                              provided={provided}
+                              year={year}
+                              actions={actions}
+                              selectDosValue={selectDosValue}
+                            />
+                          )}
                         </div>
                       </div>
                     </div>
@@ -366,11 +371,9 @@ const File = ({
             </Popover> */}
             <div className="card-body p-0">
               {fileLoadingStatus ? (
-                <Skeleton.Input
-                  className="w-100"
-                  style={{ height: "900px" }}
-                  active
-                />
+                <div className={visitStyles?.loaderDiv}>
+                  <Spinner />
+                </div>
               ) : (
                 <>
                   {selectFileURL && (
@@ -380,7 +383,7 @@ const File = ({
                       pageNumber={search?.page ? search?.page : 1}
                       headers={search?.headers}
                       // height={true}
-                      // fileHeightFrames={window.screen?.availHeight - 300}
+                      // fileHeightFrames={window.screen.availHeight - 300}
                       fileHeights={"80vh"}
                       isFillView={true}
                     />
@@ -455,6 +458,9 @@ const File = ({
                           }}
                         >
                           <div className={visitStyles.hccStickey_head}>
+                          {isSpinnerLoading ? (
+                            <CardSkeleton count={6} />
+                          ) : (
                             <HccCards
                               list={suggestedHccList}
                               hccVersionDetails={hccVersionDetails}
@@ -491,7 +497,7 @@ const File = ({
                               year={year}
                               actions={actions}
                               selectDosValue={selectDosValue}
-                            />
+                            />)}
                           </div>
                         </div>
                       )}

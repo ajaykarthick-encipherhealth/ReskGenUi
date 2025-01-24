@@ -21,13 +21,16 @@ const NonHcc = ({
   patientDetailsResult,
   getSelectedDos,
   isDosSelected,
-  selectDosValue, setSelectDosValue
+  selectDosValue,
+  setSelectDosValue,
+  patientDetailsLoad,
 }) => {
   // const [selectDosValue, setSelectDosValue] = useState("");
   const [dosSummariesList, setDosSummariesList] = useState([]);
   const selectTab = async (number) => {};
   const handleOptions = (value) => {
     setIsLoading(true);
+    patientDetailsLoad(true)
     setSelectDosValue(value);
     // const filteredDos = pageNumberOptions?.filter(
     //   (data) => data?.dos === value
@@ -49,6 +52,9 @@ const NonHcc = ({
         "",
         role
       );
+      setTimeout(() => {
+        patientDetailsLoad(false);
+      }, 800);
     } else {
       getpatientDetailsData(
         patientId,
@@ -57,6 +63,9 @@ const NonHcc = ({
         "",
         role
       );
+      setTimeout(() => {
+        patientDetailsLoad(false);
+      }, 800);
     }
   };
 
@@ -88,10 +97,10 @@ const NonHcc = ({
 
   useEffect(() => {
     if (isDosSelected) {
-      setSelectDosValue(isDosSelected)
-      getSelectedDos(isDosSelected)
+      setSelectDosValue(isDosSelected);
+      getSelectedDos(isDosSelected);
     }
-  }, [isDosSelected])
+  }, [isDosSelected]);
   return (
     <>
       <div className={visitStyles.visitdata_tab_body}>
@@ -137,10 +146,12 @@ const NonHcc = ({
                   </Select>
                 </Nav.Item>
                 <Nav.Item as="li" className="nav-item mx-2">
-                  {getStorage("userRole") != "admin" &&
-                    selectDosValue && (
-                      <YearAndDosStatus isDosStatus={true}  setIsLoading={setIsLoading} />
-                    )}
+                  {getStorage("userRole") != "admin" && selectDosValue && (
+                    <YearAndDosStatus
+                      isDosStatus={true}
+                      setIsLoading={setIsLoading}
+                    />
+                  )}
                 </Nav.Item>
               </Nav>
               <Tab.Content>
@@ -168,6 +179,7 @@ const enhancer = connect(
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
     getSelectedDos: detailsActions.getSelectedDos,
+    patientDetailsLoad: detailsActions.patientDetailsLoad,
   }
 );
 

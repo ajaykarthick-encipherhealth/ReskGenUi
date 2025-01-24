@@ -23,6 +23,7 @@ import { actions as detailsAction } from "../../../../../stores/patient/details"
 import { Draggable } from "react-beautiful-dnd";
 import { Spinner } from "react-bootstrap";
 import hccstyles from "../HCC/styles.module.css";
+import CardSkeleton from "../../../../skeleton/card";
 
 const ComboCard = ({
   list,
@@ -57,6 +58,7 @@ const ComboCard = ({
   setSelectCardTitle,
   loading,
   provided,
+  patientDetailsLoad,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -82,13 +84,13 @@ const ComboCard = ({
             <div className={visitStyles.combo_head_card}>
               <div className="row p-0">
                 <div className="col-4 d-flex align-items-center justify-content-center text-truncate">
-                  <label  htmlFor="combo">Combo Codes</label>
+                  <label htmlFor="combo">Combo Codes</label>
                 </div>
                 <div className="col-2 d-flex align-items-center justify-content-center text-truncate">
                   <label htmlFor="additional">Addons</label>
                 </div>
                 <div className="col-5 d-flex align-items-center justify-content-center text-truncate">
-                  <label  htmlFor="description">Description</label>
+                  <label htmlFor="description">Description</label>
                 </div>
                 <div className="col-1">
                   {/* {isAddComboCode && (
@@ -110,10 +112,8 @@ const ComboCard = ({
                 </div>
               </div>
             </div>
-            {loading ? (
-              <div className={hccstyles.noMsContainer}>
-                <Spinner />
-              </div>
+            {loading || patientDetailsLoad ? (
+              <CardSkeleton count={6} />
             ) : list?.length != 0 ? (
               <div className={visitStyles.container}>
                 <div className={visitStyles.hccStickey_head}>
@@ -472,7 +472,7 @@ const ComboCard = ({
               </div>
             ) : null}
 
-            {list?.length == 0 && !loading ? (
+            {list?.length == 0 && !loading && !patientDetailsLoad ? (
               <div>
                 <span className="no-patient-data">No Combination Codes</span>
               </div>
@@ -490,6 +490,7 @@ const enhancer = connect(
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     loading: state?.patientDetails?.details?.loading,
+    patientDetailsLoad: state?.patientDetails?.details?.patientsLoading,
   }),
   {
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,

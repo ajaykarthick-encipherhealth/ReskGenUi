@@ -35,6 +35,7 @@ import {
   storeFileIdAction,
   stroeFileIdPreAction,
   getPatientID,
+  patientDetailsLoad,
 } from "./actions";
 
 const initialState = {
@@ -91,13 +92,13 @@ const getSelectedDetails = (action) =>
     },
     ""
   );
-// const getCurrentDiseaseDetails = (action) =>
-//   handleActions(
-//     {
-//       [action.toString()]: (state, { payload }) => payload,
-//     },
-//     true
-//   );
+
+  const patientsLoading =  handleActions(
+    {
+      [patientDetailsLoad.toString()]: (state, { payload }) => payload,
+    },
+    true
+  );
 
 const getPatientsLoading = (type) =>
   handleActions(
@@ -133,6 +134,7 @@ const patientDetailsReducer = combineReducers({
   getSelectedDosDetails: getSelectedDosDetails,
   selectedDosPageNumber: getSelectedDetails(getSelectedDosPageNumber),
   currentDiseaseType: getSelectedDetails(getCurrentDiseaseType),
+  patientsLoading: patientsLoading,
   manuallyAdd: createReducer(manuallyAdd),
   diseaseEdit: createReducer(diseaseEdit),
   diseaseEditMeat: createReducer(diseaseEditMeat),

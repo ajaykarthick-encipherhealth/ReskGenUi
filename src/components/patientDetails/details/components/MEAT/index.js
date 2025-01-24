@@ -18,6 +18,7 @@ import MovementAction from "../movementAction";
 import { Draggable } from "react-beautiful-dnd";
 import { Spinner } from "react-bootstrap";
 import hccstyles from "../HCC/styles.module.css";
+import CardSkeleton from "../../../../skeleton/card";
 
 const MeatCard = ({
   list,
@@ -59,6 +60,7 @@ const MeatCard = ({
   setSelectCardTitle,
   provided,
   loading,
+  patientDetailsLoad
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
@@ -102,9 +104,10 @@ const MeatCard = ({
               </div>
             </div>
 
-            {loading ? (
-              <div className={hccstyles.noMsContainer}>
-                <Spinner />
+            {loading || patientDetailsLoad ? (
+              <div>
+                {/* <Spinner /> */}
+                <CardSkeleton count={6} />
               </div>
             ) : (
               list?.map((item, i) => {
@@ -630,6 +633,7 @@ const enhancer = connect(
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     labFile: state?.patientDetails?.details?.labFileResult,
     loading: state?.patientDetails?.details?.loading,
+    patientDetailsLoad: state?.patientDetails?.details?.patientsLoading,
   }),
   {
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,

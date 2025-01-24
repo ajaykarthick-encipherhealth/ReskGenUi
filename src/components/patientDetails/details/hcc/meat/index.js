@@ -57,6 +57,8 @@ const Meat = ({
   getRadiologyPDF,
   getLabPDFFile,
   storeFileDetails,
+  isSpinnerLoading,
+  patientDetailsLoad
 }) => {
   const [meatEdit, setMeatEdit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -318,7 +320,7 @@ const Meat = ({
 
   return (
     <div className={visitStyles?.meatContainer}>
-      {fileLoading ? <LogoLoader /> : null}
+      {/* {fileLoading ? <LogoLoader /> : null} */}
       <DragDropContext
         onDragEnd={(result) =>
           onDragEnd(
@@ -382,7 +384,7 @@ const Meat = ({
             {(provided) => {
               return (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {deletedMeatList?.length != 0 && (
+                  {deletedMeatList?.length != 0 && !patientDetailsLoad && (
                     <>
                       <div className="invalid-combo">
                         <span>Deleted MeatCriteria</span>
@@ -997,6 +999,7 @@ const enhancer = connect(
     radiologyResult: state?.patientDetails?.details?.radiologyResult,
     labResult: state?.patientDetails?.details?.labResult,
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
+    patientDetailsLoad: state?.patientDetails?.details?.patientsLoading,
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,

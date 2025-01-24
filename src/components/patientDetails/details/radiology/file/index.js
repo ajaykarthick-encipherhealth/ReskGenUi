@@ -185,7 +185,7 @@ const File = ({
 
   return (
     <>
-      {fileLoading ? <LogoLoader /> : null}
+      {/* {fileLoading ? <LogoLoader /> : null} */}
       <DragDropContext
         onDragEnd={(result) =>
           onDragEnd(

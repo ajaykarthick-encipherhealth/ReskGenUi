@@ -68,6 +68,7 @@ import HeaderComponent from "./components/headerComponent";
 import { actions as reviewerWorkQueueAction } from "../../../stores/reviewer/workqueue";
 import { allFilters } from "../../../pages/reviewer/patients/headerFilters";
 import { actions as allActions } from "../../../stores/tenantAdmin/patientSync";
+import CardSkeleton from "../../skeleton/card";
 export const navigetPageDetails = async (
   pageTitle,
   setSideNavLabelActiveKey,
@@ -137,6 +138,8 @@ const Details = ({
   getRoutedData,
   routedData,
   getSelectedDosPageNumber,
+  loading,
+  patientDetailsLoad,
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -211,11 +214,24 @@ const Details = ({
       setIsLoading
     );
   };
+
+  const getYear = async (patientId) => {
+    patientDetailsLoad(true);
+    try {
+      const res = await getAllProcessYear(patientId, "HCC");
+      if (res.status !== "SUCCESS") {
+        patientDetailsLoad(false);
+      }
+    } catch (error) {
+      patientDetailsLoad(false);
+    }
+  };
+
   useEffect(() => {
     const patientId = getStorage("patientId");
     const fileId = getStorage("fileId");
     if (activeTab == 1 && lastActiveTab > 2) {
-      getAllProcessYear(patientId, "HCC");
+      getYear(patientId);
       dosYearDefalutSelect && getPatientListToDetails(patientId);
       if (patientDetailsResult?.data?.response?.fileId != fileId) {
         getPatientHccFile(patientDetailsResult?.data?.response?.fileId);
@@ -303,15 +319,12 @@ const Details = ({
         patientId == patientDetailsResult?.data?.response.patientId
       ) {
         getPatientHccFile(patientDetailsResult?.data?.response?.fileId);
-        // setStorage(
-        //   "fileId",
-        //   patientDetailsResult?.data?.response?.fileId
-        // );
         storePrePatientFileId(patientDetailsResult?.data?.response?.fileId);
         setIsFileCheck(true);
       }
     } else {
       setIsSpinnerLoading(false);
+      // patientDetailsLoad(false)
     }
   }, [patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath]);
 
@@ -340,9 +353,10 @@ const Details = ({
           selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
           dosYearArr[0]?.value,
           null,
-          setIsSpinnerLoading,
+          "",
           userRole
         );
+        patientDetailsLoad(false);
         getPatientIdData(
           selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
         );
@@ -364,6 +378,7 @@ const Details = ({
       var result = fileResponse;
       if (patientId == result.patientId) {
         setIsSpinnerLoading(false);
+        // patientDetailsLoad(false)
       }
       getMeatQueryList(patientId, result?.processedYear, selectDosValue || "");
       setPatientDocumentResult(result);
@@ -414,9 +429,11 @@ const Details = ({
     setDosYearDefalutSelect(e);
     setPatientResultReload(false);
     setIsLoading(true);
+    patientDetailsLoad(true)
     getPatientDosList(localPatientId, e);
     getSelectedDos("");
-    getpatientDetailsData(localPatientId, e, null, setIsLoading, userRole);
+    await getpatientDetailsData(localPatientId, e, null, setIsLoading, userRole);
+    patientDetailsLoad(false)
   };
 
   const addComments = async (value) => {
@@ -471,8 +488,10 @@ const Details = ({
 
   const getPatientListToDetails = async (userId, isClear) => {
     setIsLoading(true);
+    patientDetailsLoad(true);
     const getYear = await getAllProcessYear(userId, "HCC");
-    const year = getYear.response.length > 0 ? getYear.response[0] : selectedDosValue
+    const year =
+      getYear.response.length > 0 ? getYear.response[0] : selectedDosValue;
     try {
       const res = await getpatientDetailsData(
         userId,
@@ -480,32 +499,32 @@ const Details = ({
         isClear ? "" : selectDosValue,
         setIsLoading,
         userRole
-      ); 
+      );
       if (res.status == "SUCCESS") {
         getPatientIdData(userId);
         getPatientHccFile(res.response?.fileDetailDTO?.fileId);
         setLocalPatientId(userId);
-        getPatientDosList(
-          userId,
-          year
-        );
+        getPatientDosList(userId, year);
         activeLabels({
           patientId: userId,
           year: year,
-          dos: '',
-        })
+          dos: "",
+        });
         isClear && getSelectedDos("");
         isClear && setSelectDosValue("");
         isClear && getSelectedDosPageNumber(1);
+        patientDetailsLoad(false);
         setIsModalComments(false);
         setFilterModalOpen(false);
         setWorkListPatientId(null);
       } else {
         getResponePopup(res);
         setIsSpinnerLoading(false);
+        patientDetailsLoad(false)
       }
     } catch (error) {
       setIsSpinnerLoading(false);
+      patientDetailsLoad(false)
     }
   };
 
@@ -518,41 +537,19 @@ const Details = ({
   };
 
   const backToPatientData = () => {
-    const user = getStorage("userRole");
-    const isAdminTracking = getStorage("isAdminTracking");
     const backRoute = getStorage("routeBackTo");
-    if (user && user.toLowerCase() === "admin") {
-      if (navigate.query?.fromReport) {
-        navigate.push(
-          {
-            pathname: `/${navigate?.query?.fromReport}/report`,
-            query: navigate.query,
-          },
-          `/${navigate?.query?.fromReport}/report`
-        );
-      } else if (isAdminTracking) {
-        navigate.push("/admin/tracking");
-      } else {
-        navigate.push("/admin/patients");
-      }
-      setSelectDosValue("");
-      getSelectedDosPageNumber(1);
-      getPatientID(null);
-      getSelectedDos("");
-      getCurrentDiseaseType(true);
-      
-    } else {
-      getRoutedData(routedData);
-      navigate.push(backRoute);
-      // if (user && user.toLowerCase() === "tenant_admin") {
-      //   getActiveTab("PDF");
-      // }
-      setSelectDosValue("");
-      getSelectedDosPageNumber(1);
-      getPatientID(null);
-      getSelectedDos("");
-      getCurrentDiseaseType(true);
-    }
+    
+    getRoutedData(routedData);
+    navigate.push(backRoute);
+    // if (user && user.toLowerCase() === "tenant_admin") {
+    //   getActiveTab("PDF");
+    // }
+    setSelectDosValue("");
+    getSelectedDosPageNumber(1);
+    getPatientID(null);
+    getSelectedDos("");
+    getCurrentDiseaseType(true);
+    patientDetailsLoad(true)
   };
   const splitUserName = (name) => {
     if (name) {
@@ -647,36 +644,38 @@ const Details = ({
       <div className={`show `} style={{ height: "100vh", background: "#fff" }}>
         <NavBar />
         <div className={visitStyles.headerFixed} style={{ height: "100%" }}>
-          {isSpinnerLoading ? (
+          {/* {isSpinnerLoading ? (
             <LogoLoader />
-          ) : (
-            <div class="content-body">
-              {isLoading ? <LogoLoader /> : null}
-              {/* {sectionColorList?.loading == true ? (
-              <SpinnerDots />
-            ) : ( */}
-              <div className={`${visitStyles.container_fluid_patient}`}>
-                <div className="row patient-file-container">
-                  <div className="row p-0">
-                    {activeTab == "2" || activeTab == "1" ? (
-                      <div className="d-flex">
-                        <div
-                          className="col-1"
-                          style={{ zIndex: "1", marginTop: "20px" }}
+          ) : ( */}
+          <div class="content-body">
+            {/* {isLoading ? <LogoLoader /> : null} */}
+            <div className={`${visitStyles.container_fluid_patient}`}>
+              <div className="row patient-file-container">
+                <div className="row p-0">
+                  {activeTab == "2" || activeTab == "1" ? (
+                    <div className="d-flex">
+                      <div
+                        className="col-1"
+                        style={{ zIndex: "1", marginTop: "20px" }}
+                      >
+                        <Button
+                          onClick={backToPatientData}
+                          className={`ms-2 ${visitStyles.backArrowBtn}`}
                         >
-                          <Button
-                            onClick={backToPatientData}
-                            className={`ms-2 ${visitStyles.backArrowBtn}`}
-                          >
-                            <FontAwesomeIcon
-                              icon={faArrowLeft}
-                              style={{
-                                color: "rgb(38 50 107)",
-                              }}
-                            />
-                          </Button>
-                        </div>
-                        <div className="col-11">
+                          <FontAwesomeIcon
+                            icon={faArrowLeft}
+                            style={{
+                              color: "rgb(38 50 107)",
+                            }}
+                          />
+                        </Button>
+                      </div>
+                      <div className="col-11">
+                        {loading || isSpinnerLoading ? (
+                          <div className="my-3">
+                            <CardSkeleton height={100} />
+                          </div>
+                        ) : (
                           <HeaderComponent
                             patienIdDetails={
                               patientIdDetailsData?.data?.response
@@ -694,756 +693,337 @@ const Details = ({
                             dosYear={dosYear}
                             setCopied={setCopied}
                           />
-                        </div>
-                        {/* <div style={{ zIndex: "1" }}>
-                          <Button
-                            onClick={backToPatientData}
-                            className={`ms-2 ${visitStyles.backArrowBtn}`}
-                          >
-                            <FontAwesomeIcon
-                              icon={faArrowLeft}
-                              style={{
-                                color: "rgb(38 50 107)",
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div
+                        className="col-1"
+                        style={{ zIndex: "1", marginTop: "20px" }}
+                      >
+                        <Button
+                          onClick={backToPatientData}
+                          className={`ms-2 ${visitStyles.backArrowBtn}`}
+                        >
+                          <FontAwesomeIcon
+                            icon={faArrowLeft}
+                            style={{
+                              color: "rgb(38 50 107)",
+                            }}
+                          />
+                        </Button>
+                      </div>
+                      <div className="col-11">
+                        <FileDetails
+                          title={activeTab == 3 ? "Radiology" : "LAB"}
+                          patienIdDetails={patientIdDetailsData?.data?.response}
+                          patientDetails={patientDetails}
+                          fileResult={patientDocumentResult}
+                          hccCounts={hccCounts}
+                          hccValidCount={hccValidCount}
+                          flagFirstData={flagFirstData}
+                        />
+                      </div>
+                    </>
+                  )}
+                  <div
+                    className={
+                      isSideNavShow
+                        ? `${visitStyles.visitDataMain}`
+                        : `${visitStyles.visitDataMainClose}`
+                    }
+                  >
+                    <div className={`${visitStyles.firstContainer}`}>
+                      <div
+                        className={
+                          isSideNavShow
+                            ? `${visitStyles.sideTab}`
+                            : `${visitStyles.sideTabClose}`
+                        }
+                      >
+                        <div className={`${visitStyles.sideNav}`}>
+                          <div className="sideNavscroll">
+                            <div
+                              className="nav-control"
+                              onClick={() => {
+                                handleToogleCloseNav();
                               }}
-                            />
-                          </Button>
-                        </div> */}
-                        {/* <div className="w-100">
-                          <div
-                            className={`${visitStyles.patient_info_details}`}
-                          >
-                            <div className="card-body w-100">
-                              <div className="d-flex justify-content-between">
-                                <div className="">
-                                  <FontAwesomeIcon icon={faIdCardClip} />
-                                  <label>Patient ID</label>
-
-                                  <h6
-                                    onClick={() =>
-                                      handleCopyToClipboard({
-                                        text: patientDocumentResult.patientId,
-                                        setCopied: setCopied,
-                                      })
+                            >
+                              <div className={`${visitStyles.sideNavArrow}`}>
+                                <span className="line">
+                                  <FontAwesomeIcon
+                                    className="fa fa-search form-control-feedback"
+                                    icon={
+                                      isSideNavShow
+                                        ? faAngleDoubleLeft
+                                        : faAngleDoubleRight
                                     }
-                                    className="ageDtails"
                                     style={{
-                                      paddingLeft: "25px",
-                                      cursor: "pointer",
+                                      fontSize: "16px",
                                     }}
-                                  >
-                                    {patientDocumentResult.patientId
-                                      ? getMastData(
-                                          patientDocumentResult.patientId
-                                        )
-                                      : "--"}
-                                  </h6>
-                                </div>
-                                <div className="">
-                                  <FontAwesomeIcon icon={faUserCircle} />
-
-                                  <label>Patient Name</label>
-
-                                  <h6 className="ageDtails">
-                                    {patientIdDetailsData?.data?.response
-                                      ?.patientName ? (
-                                      getMastData(
-                                        patientIdDetailsData?.data?.response
-                                          ?.patientName
-                                      )
-                                    ) : (
-                                      <div className="px-4">--</div>
-                                    )}
-                                  </h6>
-                                </div>
-                                <div className="">
-                                  <FontAwesomeIcon icon={faFile} />
-
-                                  <label>File Name</label>
-                                  <div className="cr-pointer">
-                                    <h6
-                                      onClick={() =>
-                                        handleCopyToClipboard({
-                                          text: patientDocumentResult
-                                            ?.fileDetailDTO?.fileName,
-                                          setCopied: setCopied,
-                                        })
-                                      }
-                                    >
-                                      {patientDocumentResult?.fileDetailDTO
-                                        ?.fileName ? (
-                                        <Tooltip
-                                          title={
-                                            patientDocumentResult?.fileDetailDTO
-                                              ?.fileName
-                                          }
-                                        >
-                                          {truncateString(
-                                            patientDocumentResult?.fileDetailDTO
-                                              ?.fileName,
-                                            7
-                                          )}
-                                        </Tooltip>
-                                      ) : (
-                                        <div className="px-4">--</div>
-                                      )}
-                                    </h6>
-                                  </div>
-                                </div>
-                                <div className="">
-                                  <FontAwesomeIcon icon={faCalendarAlt} />
-                                  <label>Age</label>
-                                  <h6
-                                    className="ageDtails"
-                                    style={{ paddingLeft: "20px" }}
-                                  >
-                                    {patientIdDetailsData?.data?.response?.dob
-                                      ? getAge(
-                                          patientIdDetailsData?.data?.response
-                                            ?.dob
-                                        )
-                                      : "--"}
-                                  </h6>
-                                </div>
-                                <div className="">
-                                  <div>
-                                    <FontAwesomeIcon icon={faVenusMars} />
-                                    <label>Gender</label>
-                                    <h6
-                                      className="ageDtails"
-                                      style={{ paddingLeft: "25px" }}
-                                    >
-                                      {patientIdDetailsData?.data?.response
-                                        ?.gender || "--"}
-                                    </h6>
-                                  </div>
-                                </div>
-                                <div>
-                                  <i className={visitStyles.dob_icon}>
-                                    {SVGICON.DatebirthIcon}
-                                  </i>
-                                  <label>DOB</label>
-                                  <h6 className="ageDtails">
-                                    {patientIdDetailsData?.data?.response
-                                      ?.dob || <div className="px-4">--</div>}
-                                  </h6>
-                                </div>
-                                <div className="">
-                                  {flagsDetailsResult?.response?.length > 0 &&
-                                    (() => {
-                                      const sortedFlags =
-                                        flagsDetailsResult.response.sort(
-                                          (a, b) =>
-                                            a.flagDetails?.priority -
-                                            b.flagDetails?.priority
-                                        );
-
-                                      const highestPriorityFlag =
-                                        sortedFlags[0];
-
-                                      return (
-                                        <div className="mt-2">
-                                          <div
-                                            className="d-flex align-items-center justify-content-center cr-pointer"
-                                            onClick={() =>
-                                              setFlagContainerActive("Flag")
-                                            }
-                                          >
-                                            <Popover
-                                              content={
-                                                <div
-                                                  style={{
-                                                    height: "auto",
-                                                    overflowY: "scroll",
-                                                  }}
-                                                >
-                                                  <strong>Flag details</strong>
-                                                  {sortedFlags?.map(
-                                                    (flag, flagIndex) => (
-                                                      <div
-                                                        key={flagIndex}
-                                                        className="p-1"
-                                                      >
-                                                        <SvgFlag
-                                                          fillColor={
-                                                            flag?.flagDetails
-                                                              ?.flagColour
-                                                          }
-                                                        />
-                                                        <span className="ml-2">
-                                                          {flag?.flagDetails?.flagName.replaceAll(
-                                                            "_",
-                                                            " "
-                                                          )}
-                                                        </span>
-                                                      </div>
-                                                    )
-                                                  )}
-                                                </div>
-                                              }
-                                              placement="right"
-                                            >
-                                              <Badge
-                                                count={
-                                                  flagsDetailsResult?.response
-                                                    ?.length
-                                                }
-                                                offset={[5, 5]}
-                                                size="medium"
-                                                style={{
-                                                  right: "10px",
-                                                  background: "#04306f",
-                                                }}
-                                              >
-                                                <span>
-                                                  <SvgFlag
-                                                    fillColor={
-                                                      highestPriorityFlag
-                                                        ?.flagDetails
-                                                        ?.flagColour
-                                                    }
-                                                    height="35px"
-                                                    width="35px"
-                                                  />
-                                                </span>
-                                              </Badge>
-                                            </Popover>
-                                          </div>
-                                        </div>
-                                      );
-                                    })()}
-                                </div>
-                                <div className="">
-                                  <div
-                                    className={`${visitStyles.priorityStatus} p-0`}
-                                  >
-                                    {patientIdDetailsData?.data?.response
-                                      ?.priority == "URGENT" ? (
-                                      <div
-                                        className={
-                                          visitStyles.priorityStatusIcon
-                                        }
-                                      >
-                                        <i>{SVGICON.alert}</i>
-                                        <span
-                                          style={{
-                                            fontSize: "13px",
-                                            fontWeight: 500,
-                                            color: "red",
-                                          }}
-                                        >
-                                          Urgent
-                                        </span>
-                                      </div>
-                                    ) : patientIdDetailsData?.data?.response
-                                        ?.priority == "HIGH" ? (
-                                      <div
-                                        className={
-                                          visitStyles.priorityStatusIcon
-                                        }
-                                      >
-                                        <i className={TableStyle.highFlag}>
-                                          {SVGICON.alert}
-                                        </i>
-                                        <span
-                                          style={{
-                                            fontSize: "13px",
-                                            fontWeight: 500,
-                                            color: "#cf940a",
-                                          }}
-                                        >
-                                          High
-                                        </span>
-                                      </div>
-                                    ) : patientIdDetailsData?.data?.response
-                                        ?.priority == "NORMAL" ? (
-                                      <div
-                                        className={
-                                          visitStyles.priorityStatusIcon
-                                        }
-                                      >
-                                        <i className={TableStyle.normalFlag}>
-                                          {SVGICON.alert}
-                                        </i>
-                                        <span
-                                          style={{
-                                            fontSize: "13px",
-                                            fontWeight: 500,
-                                            color: "#4466ff ",
-                                          }}
-                                        >
-                                          Normal
-                                        </span>
-                                      </div>
-                                    ) : (
-                                      <div
-                                        className={
-                                          visitStyles.priorityStatusIcon
-                                        }
-                                      >
-                                        <i className={TableStyle.lowFlag}>
-                                          {SVGICON.alert}
-                                        </i>
-                                        <span
-                                          style={{
-                                            fontSize: "13px",
-                                            fontWeight: 500,
-                                            color: "#87909e",
-                                          }}
-                                        >
-                                          Low
-                                        </span>
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                                <div>
-                                  <div
-                                    className={`${visitStyles.priorityStatus} p-0`}
-                                  >
-                                    <div
-                                      className={`${visitStyles.hccCountHeader} `}
-                                    >
-                                      <label>CMS</label>
-
-                                      <h6 className="ageDtails">
-                                        {hccCounts.isCmsHcc || 0}
-                                      </h6>
-                                    </div>
-                                    {localUserId !=
-                                      "reviewer@3gencogentai.onmicrosoft.com" && (
-                                      <>
-                                        <div
-                                          className={`${visitStyles.hccCountHeader} `}
-                                        >
-                                          <label>RX</label>
-
-                                          <h6 className="ageDtails">
-                                            {hccCounts.isRxHcc || 0}
-                                          </h6>
-                                        </div>
-                                        <div
-                                          className={`${visitStyles.hccCountHeader} `}
-                                        >
-                                          <label>TOTAL</label>
-
-                                          <h6 className="ageDtails">
-                                            {hccValidCount || 0}
-                                          </h6>
-                                        </div>
-                                      </>
-                                    )}
-                                  </div>
-                                </div>
-                                <div>
-                                  <div
-                                    className={`${visitStyles.rafscoreheader} p-0`}
-                                  >
-                                    <label>Score</label>
-                                    {patientDetails?.rafScore?.rafVersionDTO
-                                      ?.overAllScore != null ? (
-                                      <h6 className="ageDtails">
-                                        {patientDetails?.rafScore?.rafVersionDTO?.overAllScore?.toFixed(
-                                          3
-                                        )}
-                                      </h6>
-                                    ) : (
-                                      <h6 className="ageDtails">0.00</h6>
-                                    )}
-                                  </div>
-                                </div>
-
-                                <div className="">
-                                  {!isLoadingDos ? (
-                                    <>
-                                      <Select
-                                        placeholder="Year"
-                                        value={dosYearDefalutSelect}
-                                        onChange={(e) => {
-                                          dosOnChange(e);
-                                          setSelectDosValue("");
-                                          getSelectedDos("");
-                                        }}
-                                        className={`custom_select_type ${visitStyles.custom_select_type}`}
-                                        options={dosYear}
-                                        style={{
-                                          backgroundColor: "#F3F3FF",
-                                          width: "120px",
-                                        }}
-                                      />
-                                    </>
-                                  ) : null}
-                                </div>
-                                <div>
-                                  <StatusAction />
-                                </div>
+                                  />
+                                </span>
                               </div>
                             </div>
-                          </div>
-                          
-                        </div> */}
-                      </div>
-                    ) : (
-                      <>
-                        <div
-                          className="col-1"
-                          style={{ zIndex: "1", marginTop: "20px" }}
-                        >
-                          <Button
-                            onClick={backToPatientData}
-                            className={`ms-2 ${visitStyles.backArrowBtn}`}
-                          >
-                            <FontAwesomeIcon
-                              icon={faArrowLeft}
-                              style={{
-                                color: "rgb(38 50 107)",
-                              }}
-                            />
-                          </Button>
-                        </div>
-                        <div className="col-11">
-                          <FileDetails
-                            title={activeTab == 3 ? "Radiology" : "LAB"}
-                            patienIdDetails={
-                              patientIdDetailsData?.data?.response
-                            }
-                            patientDetails={patientDetails}
-                            fileResult={patientDocumentResult}
-                            hccCounts={hccCounts}
-                            hccValidCount={hccValidCount}
-                            flagFirstData={flagFirstData}
-                          />
-                        </div>
-                      </>
-                    )}
-                    <div
-                      className={
-                        isSideNavShow
-                          ? `${visitStyles.visitDataMain}`
-                          : `${visitStyles.visitDataMainClose}`
-                      }
-                    >
-                      <div className={`${visitStyles.firstContainer}`}>
-                        <div
-                          className={
-                            isSideNavShow
-                              ? `${visitStyles.sideTab}`
-                              : `${visitStyles.sideTabClose}`
-                          }
-                        >
-                          <div className={`${visitStyles.sideNav}`}>
-                            <div className="sideNavscroll">
-                              <div
-                                className="nav-control"
-                                onClick={() => {
-                                  handleToogleCloseNav();
-                                }}
-                              >
-                                <div className={`${visitStyles.sideNavArrow}`}>
-                                  <span className="line">
-                                    <FontAwesomeIcon
-                                      className="fa fa-search form-control-feedback"
-                                      icon={
-                                        isSideNavShow
-                                          ? faAngleDoubleLeft
-                                          : faAngleDoubleRight
-                                      }
-                                      style={{
-                                        fontSize: "16px",
-                                      }}
-                                    />
-                                  </span>
-                                </div>
-                              </div>
-                              {/* <ul>
-                                  {tabList.map((data, index) => (
-                                    <Tooltip
-                                      title={data.title}
-                                      placement="right"
-                                    >
-                                      <li
-                                        className={`${visitStyles.sideNavLabel}`}
-                                        onClick={() =>
-                                          navigetPageDetails(
-                                            data.type,
-                                            setSideNavLabelActiveKey,
-                                            setPatientDocumentResult,
-                                            setActiveTab,
-                                            setIsLoadingDos,
-                                            setIsLoading
-                                          )
-                                        }
-                                      >
-                                        <a
-                                          className={` ${
-                                            sideNavLabelActiveKey === data.title
-                                              ? visitStyles.sideNavLabelActive
-                                              : ""
-                                          }`}
-                                        >
-                                          <div className="menu-icon">
-                                            <Image src={data.iconStyle} />
-                                          </div>
-                                          <span
-                                            className={`${visitStyles.sideNavText}`}
-                                          >
-                                            {data.title}
-                                          </span>
-                                        </a>
-                                      </li>
-                                    </Tooltip>
-                                  ))}
-                                </ul> */}
-                              <ul>
-                                {tabList.map((data, index) => (
-                                  <Tooltip
-                                    key={index}
-                                    title={data.title}
-                                    placement="right"
+                            <ul>
+                              {tabList.map((data, index) => (
+                                <Tooltip
+                                  key={index}
+                                  title={data.title}
+                                  placement="right"
+                                >
+                                  <li
+                                    className={`${visitStyles.sideNavLabel}`}
+                                    onClick={() => handleNavigation(data)}
                                   >
-                                    <li
-                                      className={`${visitStyles.sideNavLabel}`}
-                                      onClick={() => handleNavigation(data)}
+                                    <a
+                                      className={`${
+                                        sideNavLabelActiveKey === data.title
+                                          ? visitStyles.sideNavLabelActive
+                                          : ""
+                                      }`}
                                     >
-                                      <a
-                                        className={`${
-                                          sideNavLabelActiveKey === data.title
-                                            ? visitStyles.sideNavLabelActive
-                                            : ""
-                                        }`}
-                                      >
-                                        {isActives?.response[
-                                          data.defaultComplete
-                                        ] ? (
-                                          <div className="menu-icon">
-                                            <Badge
-                                              count={
-                                                <svg
-                                                  width="20"
-                                                  height="20"
-                                                  viewBox="0 0 20 20"
-                                                  fill="none"
-                                                  xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                  <circle
-                                                    cx="10"
-                                                    cy="10"
-                                                    r="5"
-                                                    fill="green"
-                                                  />
-                                                </svg>
-                                              }
-                                              style={{
-                                                background: "transparent",
-                                                margin: "8px",
-                                              }}
-                                              offset={[10, 10]}
-                                              size="large"
-                                            >
-                                              <Image 
-                                                 style={{width:"30px",height:'30px',}}
-                                                src={data.iconStyle}
-                                                alt={data.title}
-                                              />
-                                            </Badge>
-                                          </div>
-                                        ) : (
-                                          <div className="menu-icon">
+                                      {isActives?.response[
+                                        data.defaultComplete
+                                      ] ? (
+                                        <div className="menu-icon">
+                                          <Badge
+                                            count={
+                                              <svg
+                                                width="20"
+                                                height="20"
+                                                viewBox="0 0 20 20"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                              >
+                                                <circle
+                                                  cx="10"
+                                                  cy="10"
+                                                  r="5"
+                                                  fill="green"
+                                                />
+                                              </svg>
+                                            }
+                                            style={{
+                                              background: "transparent",
+                                              margin: "8px",
+                                            }}
+                                            offset={[10, 10]}
+                                            size="large"
+                                          >
                                             <Image
-                                           style={{width:"30px",height:'30px',}}
+                                              style={{
+                                                width: "30px",
+                                                height: "30px",
+                                              }}
                                               src={data.iconStyle}
                                               alt={data.title}
                                             />
-                                          </div>
-                                        )}
+                                          </Badge>
+                                        </div>
+                                      ) : (
+                                        <div className="menu-icon">
+                                          <Image
+                                            style={{
+                                              width: "30px",
+                                              height: "30px",
+                                            }}
+                                            src={data.iconStyle}
+                                            alt={data.title}
+                                          />
+                                        </div>
+                                      )}
 
-                                        <span
-                                          className={`${visitStyles.sideNavText}`}
-                                        >
-                                          {data.title}
-                                        </span>
-                                      </a>
-                                    </li>
-                                  </Tooltip>
-                                ))}
-                              </ul>
-                            </div>
+                                      <span
+                                        className={`${visitStyles.sideNavText}`}
+                                      >
+                                        {data.title}
+                                      </span>
+                                    </a>
+                                  </li>
+                                </Tooltip>
+                              ))}
+                            </ul>
                           </div>
                         </div>
                       </div>
-                      <div
-                        className={`${visitStyles.secondContainer}`}
-                        style={{ height: "100%" }}
-                      >
-                        <>
-                          {activeTab == 1 ? (
-                            <Hcc
-                              patientHccResult={patientDocumentResult}
-                              year={dosYearDefalutSelect}
-                              setIsLoading={setIsLoading}
-                              selectDosValue={selectDosValue}
-                              setSelectDosValue={setSelectDosValue}
-                            />
-                          ) : activeTab == 2 ? (
-                            <NonHcc
-                              patientNonHccResult={patientDocumentResult}
-                              setIsLoading={setIsLoading}
-                              selectDosValue={selectDosValue}
-                              setSelectDosValue={setSelectDosValue}
-                            />
-                          ) : activeTab == 3 ? (
-                            <Radiology
-                              year={
-                                dosYearDefalutSelect.value
-                                  ? dosYearDefalutSelect.value
-                                  : dosYearDefalutSelect
-                              }
-                              setDosYearDefalutSelect={setDosYearDefalutSelect}
-                            />
-                          ) : (
-                            <Lab
-                              year={
-                                dosYearDefalutSelect?.value
-                                  ? dosYearDefalutSelect?.value
-                                  : dosYearDefalutSelect
-                              }
-                              setDosYearDefalutSelect={setDosYearDefalutSelect}
-                            />
-                          )}
-                        </>
-                      </div>
-
-                      <div className={`${visitStyles.thirdContainer}`}>
-                        <div className={`${visitStyles.flag_container}`}>
-                          <ul className="">
-                            {flagList?.map((data) => {
-                              const isFlagDisabled =
-                                data.name === "Flag" && !isDosSelected;
-
-                              return (
-                                <Tooltip
-                                  title={data.name}
-                                  placement="left"
-                                  key={data.name}
-                                >
-                                  <li
-                                    className={
-                                      flagContainerActive == data.name
-                                        ? `${visitStyles.commentsTagActive}`
-                                        : `${visitStyles.commentsTag}`
-                                    }
-                                    onClick={() => {
-                                      if (!isFlagDisabled) {
-                                        addComments(data.name);
-                                      }
-                                    }}
-                                    style={
-                                      isFlagDisabled
-                                        ? {
-                                            cursor: "not-allowed",
-                                            opacity: 0.5,
-                                          }
-                                        : {}
-                                    }
-                                  >
-                                    {data.name === "Flag" ? (
-                                      <Badge
-                                        count={
-                                          flagsDetailsResult?.response?.length
-                                        }
-                                        style={{
-                                          background: "#04306f",
-                                          margin: "-2px",
-                                        }}
-                                        size="large"
-                                      >
-                                        <i>{data.icon}</i>
-                                      </Badge>
-                                    ) : (
-                                      <i>{data.icon}</i>
-                                    )}
-                                  </li>
-                                </Tooltip>
-                              );
-                            })}
-                          </ul>
-                        </div>
-                      </div>
                     </div>
-                  </div>
-
-                  {/* Modals */}
-
-                  <Drawer
-                    onClose={handleCloseModal}
-                    open={isModalComments}
-                    width={
-                      flagContainerActiveTitle === "Timeline"
-                        ? "460px"
-                        : flagContainerActiveTitle === "Add DOS & Provider"
-                        ? "1400px"
-                        : null
-                    }
-                    title={flagContainerActiveTitle}
-                    placement="right"
-                    className="myworkqueueDrawer"
-                    closable={false}
-                    extra={
-                      <button
-                        type="button"
-                        className="btn-close"
-                        onClick={() => handleCloseModal()}
-                      >
-                        <i className="fa-solid fa-xmark"></i>
-                      </button>
-                    }
-                  >
-                    {flagContainerActive == "Timeline" ? (
-                      <Timeline
-                        timelineData={timelineData}
-                        filterDataLoading={filterDataLoading}
-                        splitUserName={splitUserName}
-                        userDetails={userDetails}
-                        renderUserDetails={renderUserDetails}
-                      />
-                    ) : flagContainerActive == "Filter" ? (
+                    <div
+                      className={`${visitStyles.secondContainer}`}
+                      style={{ height: "100%" }}
+                    >
                       <>
-                        {userRole == "admin" || userRole == "tenant_admin" ? (
-                          <AdminWorkList
-                            localUserId={localUserId}
-                            setWorkListPatientId={setWorkListPatientId}
-                            setIsModalComments={setIsModalComments}
-                            getPatientListToDetails={getPatientListToDetails}
+                        {activeTab == 1 ? (
+                          <Hcc
+                            patientHccResult={patientDocumentResult}
+                            year={dosYearDefalutSelect}
+                            setIsLoading={setIsLoading}
+                            selectDosValue={selectDosValue}
+                            setSelectDosValue={setSelectDosValue}
+                            isSpinnerLoading={isSpinnerLoading}
                           />
-                        ) : userRole == "supervisor" ? (
-                          <SupervisorWorkList
-                            localUserId={localUserId}
-                            setWorkListPatientId={setWorkListPatientId}
-                            setIsModalComments={setIsModalComments}
-                            getPatientListToDetails={getPatientListToDetails}
+                        ) : activeTab == 2 ? (
+                          <NonHcc
+                            patientNonHccResult={patientDocumentResult}
+                            setIsLoading={setIsLoading}
+                            selectDosValue={selectDosValue}
+                            setSelectDosValue={setSelectDosValue}
+                          />
+                        ) : activeTab == 3 ? (
+                          <Radiology
+                            year={
+                              dosYearDefalutSelect.value
+                                ? dosYearDefalutSelect.value
+                                : dosYearDefalutSelect
+                            }
+                            setDosYearDefalutSelect={setDosYearDefalutSelect}
                           />
                         ) : (
-                          <ReviwerWorkList
-                            localUserId={localUserId}
-                            setWorkListPatientId={setWorkListPatientId}
-                            setIsModalComments={setIsModalComments}
-                            getPatientListToDetails={getPatientListToDetails}
+                          <Lab
+                            year={
+                              dosYearDefalutSelect?.value
+                                ? dosYearDefalutSelect?.value
+                                : dosYearDefalutSelect
+                            }
+                            setDosYearDefalutSelect={setDosYearDefalutSelect}
                           />
                         )}
                       </>
-                    ) : flagContainerActive === "Add DOS & Provider" ? (
-                      <ManuallyAddProvider
-                        selectDosValue={selectDosValue}
-                        dosYear={dosYear}
-                        selectedDosValue={selectedDosValue}
-                      />
-                    ) : null}
-                  </Drawer>
-                </div>
-              </div>
+                    </div>
 
-              {/* <Footer/> */}
+                    <div className={`${visitStyles.thirdContainer}`}>
+                      <div className={`${visitStyles.flag_container}`}>
+                        <ul className="">
+                          {flagList?.map((data) => {
+                            const isFlagDisabled =
+                              data.name === "Flag" && !isDosSelected;
+
+                            return (
+                              <Tooltip
+                                title={data.name}
+                                placement="left"
+                                key={data.name}
+                              >
+                                <li
+                                  className={
+                                    flagContainerActive == data.name
+                                      ? `${visitStyles.commentsTagActive}`
+                                      : `${visitStyles.commentsTag}`
+                                  }
+                                  onClick={() => {
+                                    if (!isFlagDisabled) {
+                                      addComments(data.name);
+                                    }
+                                  }}
+                                  style={
+                                    isFlagDisabled
+                                      ? {
+                                          cursor: "not-allowed",
+                                          opacity: 0.5,
+                                        }
+                                      : {}
+                                  }
+                                >
+                                  {data.name === "Flag" ? (
+                                    <Badge
+                                      count={
+                                        flagsDetailsResult?.response?.length
+                                      }
+                                      style={{
+                                        background: "#04306f",
+                                        margin: "-2px",
+                                      }}
+                                      size="large"
+                                    >
+                                      <i>{data.icon}</i>
+                                    </Badge>
+                                  ) : (
+                                    <i>{data.icon}</i>
+                                  )}
+                                </li>
+                              </Tooltip>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Modals */}
+
+                <Drawer
+                  onClose={handleCloseModal}
+                  open={isModalComments}
+                  width={
+                    flagContainerActiveTitle === "Timeline"
+                      ? "460px"
+                      : flagContainerActiveTitle === "Add DOS & Provider"
+                      ? "1400px"
+                      : null
+                  }
+                  title={flagContainerActiveTitle}
+                  placement="right"
+                  className="myworkqueueDrawer"
+                  closable={false}
+                  extra={
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={() => handleCloseModal()}
+                    >
+                      <i className="fa-solid fa-xmark"></i>
+                    </button>
+                  }
+                >
+                  {flagContainerActive == "Timeline" ? (
+                    <Timeline
+                      timelineData={timelineData}
+                      filterDataLoading={filterDataLoading}
+                      splitUserName={splitUserName}
+                      userDetails={userDetails}
+                      renderUserDetails={renderUserDetails}
+                    />
+                  ) : flagContainerActive == "Filter" ? (
+                    <>
+                      {userRole == "admin" || userRole == "tenant_admin" ? (
+                        <AdminWorkList
+                          localUserId={localUserId}
+                          setWorkListPatientId={setWorkListPatientId}
+                          setIsModalComments={setIsModalComments}
+                          getPatientListToDetails={getPatientListToDetails}
+                        />
+                      ) : userRole == "supervisor" ? (
+                        <SupervisorWorkList
+                          localUserId={localUserId}
+                          setWorkListPatientId={setWorkListPatientId}
+                          setIsModalComments={setIsModalComments}
+                          getPatientListToDetails={getPatientListToDetails}
+                        />
+                      ) : (
+                        <ReviwerWorkList
+                          localUserId={localUserId}
+                          setWorkListPatientId={setWorkListPatientId}
+                          setIsModalComments={setIsModalComments}
+                          getPatientListToDetails={getPatientListToDetails}
+                        />
+                      )}
+                    </>
+                  ) : flagContainerActive === "Add DOS & Provider" ? (
+                    <ManuallyAddProvider
+                      selectDosValue={selectDosValue}
+                      dosYear={dosYear}
+                      selectedDosValue={selectedDosValue}
+                    />
+                  ) : null}
+                </Drawer>
+              </div>
             </div>
-          )} 
+
+            {/* <Footer/> */}
+          </div>
+          {/* )} */}
         </div>
       </div>
 
@@ -1486,6 +1066,7 @@ const enhancer = connect(
     selectPatientId: state.patientDetails?.details?.selectPatientId,
     hccFileDetails: state?.patientDetails?.details?.hccFileResult,
     routedData: state.tenantAdmin?.patientSync?.routedData,
+    loading: state?.patientDetails?.details?.loading,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -1516,6 +1097,7 @@ const enhancer = connect(
     getFilteredList: reviewerWorkQueueAction.reviewerFilterList,
     getRoutedData: allActions.getRoutedData,
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
+    patientDetailsLoad: detailsActions.patientDetailsLoad,
   }
 );
 export default enhancer(Details);

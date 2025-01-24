@@ -56,6 +56,8 @@ const Hcc = ({
   getLabPDFFile,
   getPatientHccFile,
   storeFileDetails,
+  isSpinnerLoading,
+  patientDetailsLoad,
 }) => {
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
@@ -162,10 +164,10 @@ const Hcc = ({
     }, 10000);
   }, [activeMeatTitle]);
 
-  const handleOptions = (value) => {
-    // if (value) {
+  const handleOptions = async (value) => {
     setIsLoading(true);
     setSelectDosValue(value);
+    patientDetailsLoad(true);
     const filteredDos = pageNumberOptions?.filter(
       (data) => data?.dos === value
     );
@@ -179,18 +181,6 @@ const Hcc = ({
     } else if (filteredDos1?.details?.stateIndicators?.includes("RADIOLOGY")) {
       // getLabPDFFile({ fileId: filteredDos1.details?.fileId });
     } else {
-      // if (!filteredDos1?.details?.fileId) {
-      //   getLabPDFFile({
-      //     fileId:
-      //       patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath,
-      //   });
-      //   getPatientHccFile(
-      //     patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
-      //   );
-      // } else {
-      //   getLabPDFFile({ fileId: filteredDos1?.details?.fileId });
-      // }
-
       getSelectedDosPageNumber(
         filteredDos?.length > 0 ? filteredDos[0]?.startPageNumber : null
       );
@@ -205,31 +195,31 @@ const Hcc = ({
     const role = getStorage("userRole");
 
     if (value) {
-      getpatientDetailsData(
+      await getpatientDetailsData(
         patientId,
         null,
         moment(value).format("YYYY-MM-DD"),
         "",
         role
       );
+      setTimeout(() => {
+        patientDetailsLoad(false);
+      }, 500)
     } else {
-      getpatientDetailsData(
+      await getpatientDetailsData(
         patientId,
         patientDetailsResult?.data?.response?.processedYear,
         null,
         "",
         role
       );
+      setTimeout(() => {
+        patientDetailsLoad(false);
+      }, 500)
     }
-
-    // setActions({
-    //   showDisease: !value && false,
-    //   reEvaluate: !value && false,
-    //   showActionsPop: !value && false,
-    // });
+    // patientDetailsLoad(false)
   };
   const handleChangePageNumber = async (value) => {
-    // setPopoverVisible(false);
     setSearch({
       value: "",
       page: value,
@@ -685,6 +675,7 @@ const Hcc = ({
                   setSearch={setSearch}
                   actions={actions}
                   selectDosValue={selectDosValue}
+                  isSpinnerLoading={isSpinnerLoading}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={2}>
@@ -824,6 +815,7 @@ const enhancer = connect(
     getLabPDFFile: detailsActions.labPDFDetails,
     getPatientHccFile: detailsActions.patientHccFileAction,
     storeFileDetails: detailsActions.storeFileIdAction,
+    patientDetailsLoad: detailsActions.patientDetailsLoad,
   }
 );
 export default enhancer(Hcc);

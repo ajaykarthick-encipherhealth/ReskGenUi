@@ -186,3 +186,4 @@ export const getManuallyAddComboCode = createActionThunk(
   "MANUALLY_ADD_COMBO_CODE",
   network.manuallyAddComboCode
 );
+export const patientDetailsLoad = createAction("PATIENT_DETAILS_LOAD");
