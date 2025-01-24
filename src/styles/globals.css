@@ -13883,7 +13883,7 @@ tbody > tr {
 
 .chatbox .contacts li > div {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
 }
 
 .chatbox .contacts li:hover {
@@ -16112,3 +16112,11 @@ overflow: scroll;
   color: #fff !important;
 }
 
+.send_details {
+  display: block;
+  max-width: 100%; 
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  word-break: break-word;                                     
+}

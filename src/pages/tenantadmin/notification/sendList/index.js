@@ -22,7 +22,10 @@ const SendList = ({ result }) => {
                       "40px"
                     )}
                   </div>
-                  <div className="ms-3">
+                  <div
+                    className="ms-3"
+                    style={{ height: "auto", width: "100%" }}
+                  >
                     <span className={styles.sendCardHead}>{data.userFrom}</span>
                     <p className={styles.send_details}>{data.content}</p>
                   </div>

@@ -845,6 +845,7 @@ const Header = ({
         closable={true}
         onClose={onClose}
         open={open}
+        width={600}
       >
         {!openMsg ? <Notification open={open} /> : null}
       </Drawer>

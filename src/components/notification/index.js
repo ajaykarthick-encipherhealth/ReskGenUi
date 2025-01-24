@@ -69,7 +69,12 @@ const Notification = ({
                     </Tooltip>
                     <div className="user_info">
                       <div className="d-flex">
-                        <span>{data?.content}</span>
+                        <span
+                          className="send_details"
+                         
+                        >
+                          {data?.content}
+                        </span>
                       </div>
                       <p>{moment(data?.createdDate).fromNow()}</p>
                     </div>

@@ -9,6 +9,7 @@ import { actions as tenantAdminActions } from "../../../stores/tenantAdmin/notif
 import { actions as AdminAction } from "../../../stores/admin/users";
 import { actions as notificationAction } from "../../../stores/admin/notifications";
 import { actions as allActions } from "../../../stores/admin/dashboard";
+import CardSkeleton from "../../../components/skeleton/card";
 const { Option } = Select;
 const { TextArea } = Input;
 export const debounce = (func, delay) => {
@@ -27,6 +28,7 @@ const Notification = ({
   getNotificationList,
   postNotification,
   SelectUserList,
+  loader,
 }) => {
   const options = allCustomUsers?.data?.response?.map((data) => ({
     label: data?.firstName + " " + data?.lastName,
@@ -205,20 +207,20 @@ const Notification = ({
           duration: 1,
         });
         setSelectedList([]);
-      }else{
+      } else {
         setIsBtnLoading(false);
         notification.error({
-          message:result.message
-        })
+          message: result.message,
+        });
       }
     }
   };
 
   const getNotificationResult = async () => {
     let result = await getNotificationList();
-   if(result){
-    setNotificationList(result);
-   }
+    if (result) {
+      setNotificationList(result);
+    }
   };
 
   const getTeamUser = async () => {
@@ -252,7 +254,7 @@ const Notification = ({
       sort: "",
     });
   }, [searchUser]);
-
+  console.log(loader, "loader");
   return (
     <>
       <div className={`menu-toggle`}>
@@ -376,9 +378,13 @@ const Notification = ({
               />
               <p className={styles.errorMessage}>{errMessage?.msg}</p>
             </div>
-            <div className={styles.sendListContainer}>
-              <SendList result={notificationList} />
-            </div>
+            {loader ? (
+              <CardSkeleton count={6} height={100} />
+            ) : (
+              <div className={styles.sendListContainer}>
+                <SendList result={notificationList} />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -389,6 +395,7 @@ const Notification = ({
 const enhancer = connect(
   (state) => ({
     allCustomUsers: state?.tenantAdmin?.notification?.customUsers,
+    loader : state?.admin?.notification?.loader
   }),
   {
     getAllCustomUsers: tenantAdminActions.getCustomUsersAction,

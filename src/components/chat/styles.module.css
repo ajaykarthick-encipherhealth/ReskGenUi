@@ -156,7 +156,7 @@
 
 .chatbox .contacts li > div {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
 }
 .chatbox .contacts li:hover {
   background: var(--rgba-primary-1);
