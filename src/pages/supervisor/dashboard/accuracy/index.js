@@ -443,7 +443,7 @@ const Accuracy = ({
                 <span className={styles.insideTitle}>
                   {accuracyLoading ? (
                     <>
-                      <CardSkeleton />
+                      <CardSkeleton height={40} />
                     </>
                   ) : (
                     <> {average ? `${average?.toFixed(2)}%` : `0%`}</>

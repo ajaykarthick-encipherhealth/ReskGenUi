@@ -406,7 +406,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                 <div className={styles.insideTitle}>
                   {accuracyLoading ? (
                     <>
-                      <CardSkeleton />
+                      <CardSkeleton height={40} />
                     </>
                   ) : (
                     <> {average ? `${average?.toFixed(2)}%` : `0%`}</>

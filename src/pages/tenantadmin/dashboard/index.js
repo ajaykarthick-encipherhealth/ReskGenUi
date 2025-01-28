@@ -579,7 +579,7 @@ const Index = ({
                           Current / Overall
                           </div>
                           {invalidLoader ? (
-                            <CardSkeleton height={30} />
+                            <CardSkeleton height={40} />
                           ) : (
                             <div className="fontWeight3 font5">
                                {currentCountSum} / {totalCountSum}

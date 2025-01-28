@@ -261,8 +261,8 @@ const DailyTask = ({
       <div className={styles.card2}>
         <Card borderRadius="28px" style={{ display: "flex" }}>
           {dailyTaskLoader || loading ? (
-            <div className="d-flex justify-content-center mt-4">
-              <CardSkeleton count={6}  height={270} />
+            <div className="mt-4">
+              <CardSkeleton count={1} height={270} />
             </div>
           ) : (
             <Row>
