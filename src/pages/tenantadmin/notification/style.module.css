@@ -143,5 +143,16 @@
   font-weight: 500;
   padding-right: 10px;
 }
-
+.send_count {
+background-color: #04306f;
+    height: 33px;
+    width: 33px;
+    border-radius: 50%;
+    color: white;
+    text-align: center;
+    padding: 7px 6px;
+    margin-left: 10px;
+    font-size: 13px !important;
+    cursor: pointer;
+}
 

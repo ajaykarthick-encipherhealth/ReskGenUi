@@ -20,6 +20,7 @@ import {
 import { actions as allActions } from "../../../../stores/admin/report";
 import { actions as patientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
 import { getResponePopup } from "../../../../utils/reusable";
+import { renderUserPrfoileAvatar } from "../../../headerFilters/functions";
 
 function PdfTable({
   paginationFirst,
@@ -213,15 +214,30 @@ function PdfTable({
                           <Popover
                             content={
                               <>
-                                Computed:
-                                {row?.totalSuccessCount > 0
-                                  ? row?.totalSuccessCount
-                                  : 0}
+                                <span> Computed&nbsp; :</span>
+                                <span>
+                                  &nbsp;{" "}
+                                  {row?.totalSuccessCount > 0
+                                    ? row?.totalSuccessCount
+                                    : 0}
+                                </span>
+
                                 <br />
-                                Failed:
-                                {row?.totalFailedCount > 0
-                                  ? row?.totalFailedCount
-                                  : 0}
+                                <span> Failed &nbsp; :</span>
+                                <span>
+                                  &nbsp;{" "}
+                                  {row?.totalFailedCount > 0
+                                    ? row?.totalFailedCount
+                                    : 0}
+                                </span>
+                                <br />
+                                <span> Processing&nbsp; :</span>
+                                <span>
+                                  &nbsp;{" "}
+                                  {row?.totalProcessingCount > 0
+                                    ? row?.totalProcessingCount
+                                    : 0}
+                                </span>
                               </>
                             }
                           >
@@ -245,7 +261,7 @@ function PdfTable({
                         )} */}
                       </td>
 
-                      <td className={TableStyle.childBorder}>
+                      <td className={`${TableStyle.childBorder}`}>
                         {row?.yearOfService
                           ? dateFormateAlign(row?.yearOfService)
                           : "000"}
@@ -277,6 +293,7 @@ function PdfTable({
                           ? dayjs(row?.createdDate).format("MM-DD-YYYY:hh:mm A")
                           : "---"}
                       </td>
+                   
 
                       <td className={`${TableStyle.childBorder} text-center`}>
                         <div className="w-100 text-center d-flex justify-content-center align-items-center">

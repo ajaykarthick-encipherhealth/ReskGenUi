@@ -254,7 +254,6 @@ const Notification = ({
       sort: "",
     });
   }, [searchUser]);
-  console.log(loader, "loader");
   return (
     <>
       <div className={`menu-toggle`}>
