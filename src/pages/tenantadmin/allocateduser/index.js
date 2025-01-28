@@ -1095,7 +1095,7 @@ const Patient = ({
                                         ) : !loader2 &&
                                           loader3 &&
                                           activeTab == 2 ? (
-                                          <SpinnerDots />
+                                         <TableSkeleton/>
                                         ) : (
                                           <>
                                             <AllocatedL2AdminList
