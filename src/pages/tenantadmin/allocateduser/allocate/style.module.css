@@ -4,9 +4,10 @@
 }
 
 .modalBtn:disabled {
-  border-color: "#0d6efd";
-  color: #62666b;
+  border-color: #62666b;
+  color: black !important;
   cursor: no-drop;
+  background-color:#62666b;
 }
 .modalBtn:hover {
   border-color: "#93bcfb";
@@ -18,7 +19,7 @@
 }
 
 .listContentLarge {
-  height: 420px !important;
+  height: 450px !important;
   cursor: pointer;
 }
 
@@ -84,4 +85,11 @@
 .scroll{
   height: 700px;
   overflow: scroll;
+  overflow-x: hidden;
+}
+.prioritySelect{
+  width : 150px;
+  height:40px  ;
+  border-radius: 5px ;
+  border:1px solid #fff
 }

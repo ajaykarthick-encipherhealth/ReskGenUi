@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, DatePicker, Modal, notification } from "antd";
+import { Avatar, DatePicker, Modal, Select  } from "antd";
 import modalStyle from "./style.module.css";
 import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
@@ -10,7 +10,10 @@ import {
   faUser,
   faCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { disablePastDate } from "../../../../components/headerFilters/functions";
+import {
+  disablePastDate,
+  priorityOptions,
+} from "../../../../components/headerFilters/functions";
 import { actions as allActions } from "../../../../stores/admin/patientAllocation";
 import { connect } from "react-redux";
 import { getResponePopup } from "../../../../utils/reusable";
@@ -26,7 +29,7 @@ const AllocateModal = ({
   getAllList,
   getL1UsersList,
   getAllocateUsers,
-  setBatchCount
+  setBatchCount,
 }) => {
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
@@ -42,13 +45,17 @@ const AllocateModal = ({
     allocated: null,
   });
   const [statusCount, setStatusCount] = useState([]);
+  const [priority, setPriority] = useState([])
   const getInitials = (firstName, lastName) => {
     const firstNameInitial = firstName?.charAt(0) || "";
     const secondNameInitial = lastName?.charAt(0) || "";
 
     return firstNameInitial?.toUpperCase() + secondNameInitial?.toUpperCase();
   };
-
+  const handleChange = (value) => {
+    setPriority(value)
+  };
+  
   const getUserList = async (search) => {
     const response = await getL1UsersList({
       search: search || "",
@@ -74,11 +81,12 @@ const AllocateModal = ({
         userId: activeEmail,
         dueDate: `${allocateDate + "T00:00:00.000Z"}`,
         patientIds: selectedRowsId.map((item) => item.id),
+        priority:priority,
       },
     });
     if (response?.status == "SUCCESS") {
       getResponePopup(response);
-      setBatchCount(null)
+      setBatchCount(null);
       getAllList({
         pageNo: 0,
         pageSize: 15,
@@ -91,6 +99,7 @@ const AllocateModal = ({
       setActiveCard("");
       setActiveEmail("");
       setSearch("");
+      setPriority([])
       setSelectedRowsId([]);
     } else {
       getResponePopup(response);
@@ -115,6 +124,7 @@ const AllocateModal = ({
         setActiveEmail("");
         setSearch("");
         setAllocateDate("");
+        setPriority([])
       }}
       title="Select User"
       footer={false}
@@ -163,6 +173,7 @@ const AllocateModal = ({
                       setActiveCard(item.id);
                       setActiveEmail(item.email);
                       setAllocateDate("");
+                      setPriority([])
                     }
                   }}
                 >
@@ -203,12 +214,12 @@ const AllocateModal = ({
                           Charts Selected:{" "}
                           {selectedChart.length > 0 ? selectedChart.length : 0}
                         </span>
-                        <div className="d-flex py-2 align-items-center">
+                        <div className="d-flex gap-3 py-2 align-items-center">
                           <span className={`${modalStyle.title} py-3`}>
                             Due Date
                           </span>
                           <DatePicker
-                            style={{ width: "150px", marginLeft: "10px" }}
+                            style={{ width: "150px"}}
                             onChange={(date, dateS) => {
                               if (dateS) {
                                 setAllocateDate(dateS);
@@ -218,6 +229,20 @@ const AllocateModal = ({
                             }}
                             disabledDate={(current) => disablePastDate(current)}
                           />
+                      
+                        </div>
+                        <div className="d-flex py-1 gap-1 align-items-center">
+                       <span>Set Priority</span> 
+                       <div className="antdCustomSelect">
+                        <Select
+                           className={modalStyle.prioritySelect}
+                            options={priorityOptions}
+                            placeholder="Set priority"
+                            showSearch={false}
+                            onChange={handleChange}
+                            value={priority}
+                          />
+                        </div>
                         </div>
                         {statusCount
                           ?.filter((status) => status.id === item.id)
@@ -351,7 +376,7 @@ const AllocateModal = ({
                         className={`btn btn-primary px-5 p-1 ${modalStyle.modalBtn}`}
                         disabled={
                           !selectedChart.length > 0 ||
-                          allocateDate == "" ||
+                          allocateDate == "" || priority == "" ||
                           selectedChart.length + chart.hold + chart.pending >
                             100
                         }
