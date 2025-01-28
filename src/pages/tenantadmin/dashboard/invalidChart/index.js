@@ -75,7 +75,7 @@ const InvalidChart = ({
           <div className="d-flex flex-column justify-content-center">
             {header}
 
-            {hideContent && (
+            {hideContent ? (
               <p
                 onClick={() => onClick(values)}
                 className="font1 text-decoration-underline cursor-pointer "
@@ -83,13 +83,13 @@ const InvalidChart = ({
               >
                 Maximize
               </p>
-            )}
+            ): null}
           </div>
         </div>
         <div className="p-2">
-          <div className="d-flex font2 text-muted">Current/OverAll</div>
-          <div className="font4 fontWeight3">
-            {count} {""} / {""} {overAll}
+          <div className="d-flex font1 text-muted">Current / Overall</div>
+          <div style={{fontSize:"24px"}} className="fontWeight3">
+          {count} / {overAll}
           </div>
         </div>
       </div>

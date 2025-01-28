@@ -23,7 +23,7 @@ import Notifications from "./workFlow/notifications";
 import HeadTitle from "../../../components/headtitle";
 import PieChartInfo from "./components/pieChart/PieChartInfo";
 import OrgPieChartInfo from "./components/OrgPieChart/OrgPieChartInfo";
-import {  Row, Skeleton, Spin } from "antd";
+import { Row, Skeleton, Spin } from "antd";
 import moment from "moment";
 import teleVisit from "../../../../src/images/invalid/televisit.webp";
 import scope from "../../../../src/images/invalid/scope.webp";
@@ -322,18 +322,21 @@ const Index = ({
       overAll: flagData?.inValidDoc?.response?.totalCount || 0,
     },
   ];
-  const totalCount = invalidChartData.map((item) => item.count);
+  const totalCount = invalidChartData
+    .filter((item) => item.id >= 4)
+    ?.map((item) => item.count);
   const initialValue = 0;
   const totalCountSum = totalCount?.reduce(
     (accumulator, currentValue) => accumulator + currentValue,
     initialValue
   );
-  const currentCount = invalidChartData.map((item) => item.overAll);
+  const currentCount = invalidChartData
+    .filter((item) => item.id >= 4)
+    .map((item) => item.overAll);
   const currentCountSum = currentCount?.reduce(
     (accumulator, currentValue) => accumulator + currentValue,
     initialValue
   );
-
   const flagNameList = [
     { flagName: "IN_VALID_DOC", label: "dosCount" },
     { flagName: "AUDIO_VISIT", label: "teleVisit" },
@@ -573,13 +576,13 @@ const Index = ({
                         <h5 className="fontWeight3">Data Discrepancies </h5>
                         <div>
                           <div className="font2 text-muted">
-                            current/Overall
+                          Current / Overall
                           </div>
                           {invalidLoader ? (
-                            <CardSkeleton />
+                            <CardSkeleton height={30} />
                           ) : (
                             <div className="fontWeight3 font5">
-                              {currentCountSum}/{totalCountSum}
+                               {currentCountSum} / {totalCountSum}
                             </div>
                           )}
                         </div>
@@ -680,9 +683,12 @@ const Index = ({
           )}
         </div>
       </div>
-      <Modal className=" customReactModal d-flex align-items-center justify-content-center" show={isModalOpen} onHide={handleOk}>
-        <Modal.Header closeButton>
-        </Modal.Header>
+      <Modal
+        className=" customReactModal d-flex align-items-center justify-content-center"
+        show={isModalOpen}
+        onHide={handleOk}
+      >
+        <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
           <InvalidChart
             selectedValue={selectedValue}
