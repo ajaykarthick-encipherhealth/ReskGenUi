@@ -262,7 +262,7 @@ const DailyTask = ({
         <Card borderRadius="28px" style={{ display: "flex" }}>
           {dailyTaskLoader || loading ? (
             <div className="d-flex justify-content-center mt-4">
-              <CardSkeleton count={1} width={1100} height={270} />
+              <CardSkeleton count={6}  height={270} />
             </div>
           ) : (
             <Row>

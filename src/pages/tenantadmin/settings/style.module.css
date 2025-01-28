@@ -189,3 +189,22 @@
   border: 1px solid #8c9097 !important;
   border-radius: 5px !important;
 }
+.container_fluid_patient {
+  /* height: 100vh !important; */
+  overflow: hidden;
+  padding-top: 25px !important;
+  background-color: #fff !important;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.backButtonStyle {
+  width: 40px;
+  height: 42px;
+  border: none;
+  border-radius: 8px;
+  padding-left: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 20px;
+}

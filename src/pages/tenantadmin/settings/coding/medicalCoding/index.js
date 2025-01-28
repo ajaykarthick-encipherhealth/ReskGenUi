@@ -72,7 +72,7 @@ const MedicalCoding = ({ getCodingDetails, updateSettings, list }) => {
         onValuesChange={onChange}
       >
         <div className="d-flex flex-column" style={{ height: "100%" }}>
-          <div style={{ width: "50%" }}>
+          <div style={{ width: "50%"}}>
             <div className="p-3">
               <div className="d-flex justify-content-between">
                 <div className={Style.title}>Medical Coding</div>

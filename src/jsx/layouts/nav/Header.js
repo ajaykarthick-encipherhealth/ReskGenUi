@@ -710,8 +710,14 @@ const Header = ({
                           >
                             <SettingOutlined
                               style={{
-                                width: "23px",
-                                height: "26px",
+                                width:
+                                  stateActive === "/tenantadmin/settings"
+                                    ? "30px"
+                                    : "23px",
+                                height:
+                                  stateActive === "/tenantadmin/settings"
+                                    ? "30px"
+                                    : "26px",
                                 marginTop: "8px",
                                 fontWeight: "700",
                                 marginRight: "10px",
@@ -727,11 +733,11 @@ const Header = ({
                                     : "",
                                 padding:
                                   stateActive === "/tenantadmin/settings"
-                                    ? "3px"
+                                    ? "6px"
                                     : "",
                                 borderRadius:
                                   stateActive === "/tenantadmin/settings"
-                                    ? "3px"
+                                    ? "9px"
                                     : "",
                               }}
                             />

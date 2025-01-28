@@ -30,6 +30,10 @@ import ConflictConfig from "./coding/conflictConfig";
 import OldMiConfig from "./coding/oldMiConfig";
 import PmhConditionConfig from "./coding/pmhConditionConfig";
 import FTPSETPIntegration from "./coding/ftpSetpIntegration";
+import leftArrow from "../../../images/svg/leftArrow.svg";
+import Image from "next/image";
+import { useRouter } from "next/router";
+
 const { Sider } = Layout;
 
 const menuList = [
@@ -155,6 +159,7 @@ const menuList = [
 ];
 
 const Settings = () => {
+  const router = useRouter();
   const [activePage, setActivePage] = useState("Chat_Audit_Config");
   const handleMenuClick = (e) => {
     setActivePage(e.key);
@@ -162,12 +167,27 @@ const Settings = () => {
   return (
     <div>
       <HeaderFile />
-      <div className={Style.headerContainer}>
-        <div className={`${Style.title} mb-2`}>Settings</div>
-        <div style={{ minHeight: "78vh" }}>
-          <Card>
+      <div className="row patient-file-container">
+        <div className={Style.container_fluid_patient}>
+          <div style={{ minHeight: "95vh" }}>
             <div className="d-flex py-4">
               <div>
+                <div className="font2 m-2 cr-pointer">
+                  <div
+                    className={`${Style.backButtonStyle}`}
+                    onClick={() => {
+                      router.back();
+                    }}
+                  >
+                    <Image src={leftArrow} alt="Left Arrow" /> <div>BACK</div>
+                  </div>
+                </div>
+
+                <hr style={{ border: "0.5px solid #8C9097" }} />
+                <div className={`${Style.title} m-2`}>
+                  <div style={{ paddingLeft: "25px" }}>Settings</div>
+                </div>
+                <hr style={{ border: "0.5px solid #8C9097" }} />
                 <Layout>
                   <Sider width={250}>
                     <div className={Style.menuLists} style={{ width: "100%" }}>
@@ -183,10 +203,19 @@ const Settings = () => {
                   </Sider>
                 </Layout>
               </div>
-              <div
-                className="border rounded-3 mx-4 border-bottom-2"
-                style={{ minHeight: "74vh", width: "100%" }}
-              >
+              <div style={{ height: "1000px" }}>
+                <hr
+                  style={{
+                    border: "0.5px solid #8C9097",
+                    width: "100%",
+                    margin: "10px 0",
+                    boxSizing: "border-box",
+                    height: "1000px",
+                  }}
+                />
+              </div>
+
+              <div style={{ minHeight: "74vh", width: "100%", }}>
                 {activePage == "Chat_Audit_Config" && <ChatAuditConfig />}
                 {activePage == "Flag_Config" && <FlagConfig />}
                 {activePage == "File_Processing_Config" && (
@@ -217,7 +246,7 @@ const Settings = () => {
                 {activePage == "EMR-FHIR" && <EmrFhir />}
               </div>
             </div>
-          </Card>
+          </div>
         </div>
       </div>
     </div>

@@ -199,7 +199,8 @@ function MyApp({ Component, pageProps }) {
     "/supervisor/patients/details",
     "/tenantadmin/patients/details",
     "/supervisor/user/details", 
-    "/tenantadmin/patientsync/batchfilesview"
+    "/tenantadmin/patientsync/batchfilesview",
+    "/tenantadmin/settings"
   ];
   const showFooter = !hideFooterPaths.includes(router.pathname);
   useEffect(() => {
