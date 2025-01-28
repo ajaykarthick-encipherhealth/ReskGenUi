@@ -271,7 +271,9 @@ const Notes = ({
                 className={`${visitStyles.commentNameHead}`}
                 style={{ paddingTop: "20px" }}
               >
-                <span className={visitStyles.commentsName}>{data?.note}</span>
+                <span className={` send_details ${visitStyles.commentsName}`}>
+                  {data?.note}
+                </span>
                 <Tooltip placement="bottom" title={data?.createdBy}>
                   <Popover
                     placement="bottom"

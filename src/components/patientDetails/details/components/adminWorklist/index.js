@@ -13,6 +13,7 @@ import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Search from "../../../../search";
 import { truncateString } from "../function/ReusableFunctions";
+import CardSkeleton from "../../../../skeleton/card";
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -246,8 +247,8 @@ const AdminWorkList = ({
                     }
                   >
                     <span>
-                      <span>{truncateString(data.patientId, 35)}</span> <span>-</span>{" "}
-                      <span>{data.patientName}</span>
+                      <span>{truncateString(data.patientId, 35)}</span>{" "}
+                      <span>-</span> <span>{data.patientName}</span>
                     </span>
                     {processstatusBodyTemplate(data)}
                   </li>
@@ -259,10 +260,8 @@ const AdminWorkList = ({
             </div>
           </>
         ) : (
-          <div
-            className={`${visitStyles.userDetailsCard} ${visitStyles.loadingContainer}`}
-          >
-            <LoadingSpinner />
+          <div className="mt-2">
+            <CardSkeleton height={500} />
           </div>
         )}
       </div>

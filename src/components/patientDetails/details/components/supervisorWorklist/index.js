@@ -19,6 +19,7 @@ import Legends from "../../../../../components/legends";
 import MyWorkQueueFilter from "../MyWorkQueueFilter";
 import { actions as workflowActions } from "../../../../../stores/supervisor/auditedQueue";
 import { truncateString } from "../function/ReusableFunctions";
+import CardSkeleton from "../../../../skeleton/card";
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -320,10 +321,13 @@ const SupervisorWorkList = ({
                   <li
                     className={`${visitStyles.nameList} ${visitStyles.patientList}`}
                     key={index}
-                    onClick={() => getPatientListToDetails(data.patientId, true)}
+                    onClick={() =>
+                      getPatientListToDetails(data.patientId, true)
+                    }
                   >
                     <span>
-                      <span>{truncateString(data.patientId, 35)}</span> <span>-</span>
+                      <span>{truncateString(data.patientId, 35)}</span>{" "}
+                      <span>-</span>
                       <span>{data.patientName}</span>
                     </span>
                     {processstatusBodyTemplate(data)}
@@ -336,10 +340,8 @@ const SupervisorWorkList = ({
             </div>
           </>
         ) : (
-          <div
-            className={`${visitStyles.userDetailsCard} ${visitStyles.loadingContainer}`}
-          >
-            <LoadingSpinner />
+          <div className="mt-2">
+            <CardSkeleton height={500} />
           </div>
         )}
       </div>

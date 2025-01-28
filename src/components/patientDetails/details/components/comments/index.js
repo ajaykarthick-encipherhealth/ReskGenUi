@@ -16,13 +16,15 @@ import { getStorage } from "../../../../../utils/storages";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getCommentList, getUserDetails } from "../../../../../stores/patient/details/network";
+import CardSkeleton from "../../../../skeleton/card";
 
 const Comments = ({
   setOpen,
   open,
   patientDetailsResult,
   isDeleteComments,
-  isAddComments
+  isAddComments,
+  commentListLoader,
 }) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
@@ -37,7 +39,10 @@ const Comments = ({
 
   const getCommentsList = async () => {
     const yearData = patientDetailsResult?.data?.response;
-    const response = await getCommentList(patientDetailsResult?.data?.response?.patientId,yearData)
+    const response = await getCommentList(
+      patientDetailsResult?.data?.response?.patientId,
+      yearData
+    );
     setCommentList(response?.response);
     setFilterDataLoading(false);
   };
@@ -67,7 +72,7 @@ const Comments = ({
       };
 
       try {
-        const response = await isAddComments(dataFormatSuggested)
+        const response = await isAddComments(dataFormatSuggested);
         getResponePopup(response);
         setInputValue({ ...inputValue, comments: "" });
         getCommentsList();
@@ -99,7 +104,7 @@ const Comments = ({
         dateOfService: patientDetailsResult?.data?.response?.dateOfService,
       };
       try {
-        const response = await isAddComments(dataFormatSuggested)
+        const response = await isAddComments(dataFormatSuggested);
         getResponePopup(response);
         setInputValue({ ...inputValue, comments: "" });
         getCommentsList();
@@ -112,7 +117,7 @@ const Comments = ({
   const handleDelete = async (commentId) => {
     const payload = {
       patientId: patientDetailsResult?.data?.response?.patientId,
-      commentId:commentId,
+      commentId: commentId,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
     };
@@ -174,7 +179,6 @@ const Comments = ({
 
     setUserDetails(data);
   };
-
   const handleChange = async (e) => {
     const key = e.target.name;
     const value = e.target.value;
@@ -242,59 +246,62 @@ const Comments = ({
             </div>
           </Form>
 
-          {commentList?.map((data, index) => (
-            <div
-              className={`${visitStyles.comments_card} position-relative`}
-              key={index}
-            >
+          {commentListLoader ? (
+            <CardSkeleton count={5} />
+          ) : (
+            commentList?.map((data, index) => (
               <div
-                className="position-absolute top-0 end-0 mt-2 me-2 p-9"
-                style={{ cursor: "pointer" }}
+                className={` ${visitStyles.comments_card} position-relative`}
+                key={index}
               >
-                <FontAwesomeIcon
-                  icon={faXmarkCircle}
-                  onClick={() => handleDelete(data.commentId)} 
-                  style={{ color: "#be3144" }}
-                />
-              </div>
+                <div
+                  className="position-absolute top-0 end-0 mt-2 me-2 p-9"
+                  style={{ cursor: "pointer" }}
+                >
+                  <FontAwesomeIcon
+                    icon={faXmarkCircle}
+                    onClick={() => handleDelete(data.commentId)}
+                    style={{ color: "#be3144" }}
+                  />
+                </div>
 
-              <div
-                className={`${visitStyles.commentNameHead}`}
-                style={{ paddingTop: "20px" }}
-              >
-                <span className={visitStyles.commentsName}>{data.userComment}</span>
-                <Tooltip placement="bottom" title={data.commentCreatedBy}>
-                  <Popover
-                    placement="bottom"
-                    content={userDetails}
-                    onOpenChange={() =>
-                      renderUserDetails(data.commentCreatedBy)
-                    }
-                  >
-                    {/* <Avatar className={visitStyles.timeLineUsername}>
-                      {splitUserName(data?.commentCreatedBy)}
-                    </Avatar> */}
-                    <Avatar
-                      className={
-                        !data?.createdByDetails?.profileImageUrl &&
-                        visitStyles.timeLineUsername
+                <div
+                  className={`${visitStyles.commentNameHead}`}
+                  style={{ paddingTop: "20px" }}
+                >
+                  <span className={`send_details ${visitStyles.commentsName}`}>
+                    {data.userComment}
+                  </span>
+                  <Tooltip placement="bottom" title={data.commentCreatedBy}>
+                    <Popover
+                      placement="bottom"
+                      content={userDetails}
+                      onOpenChange={() =>
+                        renderUserDetails(data.commentCreatedBy)
                       }
-                      src={data?.createdByDetails?.profileImageUrl}
                     >
-                      {!data?.createdByDetails?.profileImageUrl &&
-                        splitUserName(
-                          data?.createdByDetails?.firstName ||
-                            data?.createdByDetails?.lastName
-                        )}
-                    </Avatar>
-                  </Popover>
-                </Tooltip>
+                      <Avatar
+                        className={
+                          !data?.createdByDetails?.profileImageUrl &&
+                          visitStyles.timeLineUsername
+                        }
+                        src={data?.createdByDetails?.profileImageUrl}
+                      >
+                        {!data?.createdByDetails?.profileImageUrl &&
+                          splitUserName(
+                            data?.createdByDetails?.firstName ||
+                              data?.createdByDetails?.lastName
+                          )}
+                      </Avatar>
+                    </Popover>
+                  </Tooltip>
+                </div>
+                <span className={visitStyles.commentsTime}>
+                  {moment(data.commentCreatedAt).format("MM-DD-YYYY hh:mm:A")}
+                </span>
               </div>
-              <span className={visitStyles.commentsTime}>
-                {moment(data.commentCreatedAt).format("MM-DD-YYYY hh:mm:A")}
-              </span>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </Offcanvas>
@@ -304,11 +311,11 @@ const Comments = ({
 const enhancer = connect(
   (state) => ({
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    commentListLoader: state?.patientDetails?.details?.CommentListLoader,
   }),
   {
     isDeleteComments: detailsActions.isDeleteComments,
     isAddComments: detailsActions.isAddComments,
-
   }
 );
 export default enhancer(Comments);

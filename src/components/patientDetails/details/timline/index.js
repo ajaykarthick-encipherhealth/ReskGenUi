@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import visitStyles from "../../../../styles/visitdata.module.css";
-import { Popover, Tooltip } from "antd";
+import { Card, Popover, Tooltip } from "antd";
 import { CalendarOutlined } from "@ant-design/icons";
 import moment from "moment";
 import styles from "./styles.module.css";
@@ -14,6 +14,7 @@ import {
   getSectionHeaderBackground,
   getSectionHeadersBackground,
 } from "../components/function/SectionHeader";
+import CardSkeleton from "../../../skeleton/card";
 
 const Timeline = ({
   timelineData,
@@ -1014,12 +1015,8 @@ const Timeline = ({
           </ul>
         </div>
       ) : (
-        <div className={visitStyles.userDetailsCard}>
-          <div className="bouncing-loader">
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
+        <div className="m-3">
+          <CardSkeleton height={800} />
         </div>
       )}
     </div>
@@ -1027,3 +1024,4 @@ const Timeline = ({
 };
 
 export default Timeline;
+

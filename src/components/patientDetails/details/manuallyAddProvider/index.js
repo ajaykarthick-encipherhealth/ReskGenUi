@@ -7,7 +7,8 @@ import { Button, Empty, Form, Popover } from "antd";
 import { stringToColour } from "../components/function/ReusableFunctions";
 import AddForm from "./AddForm";
 import { actions as allActions } from "../../../../stores/patient/details";
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
+import CardSkeleton from "../../../skeleton/card";
 export const viewProvidersList = ({ list }) => (
   <div
     className={`${style.listShow}`}
@@ -26,6 +27,7 @@ const ManuallyAddProvider = ({
   getAddProviderAndDOSList,
   dosAndProvidersList,
   selectedDosValue,
+  loader,
 }) => {
   const [form] = Form.useForm();
   const [selectFileURL, setSelectFileURL] = useState([]);
@@ -91,9 +93,11 @@ const ManuallyAddProvider = ({
           </div>
         )}
         <div className="w-100 h-100 overflow-scroll">
-          {Array.isArray(dosAndProvidersList) ? (
+          {loader ? (
+            <CardSkeleton height={200} />
+          ) : Array.isArray(dosAndProvidersList) ? (
             dosAndProvidersList?.map((item) => (
-              <button className={`${style.providerButton} my-2`}>
+              <button className={`${style.providerButton} my-2`} key={item?.id}>
                 <span className={style.dateField}>{item?.dateOfService}</span>
                 <span className={style.providerText}>Provider</span>
                 <Popover content={viewProvidersList({ list: item })}>
@@ -123,6 +127,7 @@ const enhancer = connect(
     hccFileDetails: state.patientDetails?.details?.hccFileResult,
     dosAndProvidersList:
       state.patientDetails?.details?.dosAndProvidersList?.data?.response,
+    loader: state?.patientDetails?.details?.dosAndProvidersListLoader,
   }),
   {
     getAddProviderAndDOSList: allActions.getAddProviderAndDOSList,

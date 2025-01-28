@@ -36,7 +36,9 @@ import {
   stroeFileIdPreAction,
   getPatientID,
   patientDetailsLoad,
+  getCommentListAction,
 } from "./actions";
+
 
 const initialState = {
   loading: true,
@@ -124,7 +126,7 @@ const patientDetailsReducer = combineReducers({
   labFileResultLoad: getPatientsLoading(labFileAction),
   flagsDetailsResult: createReducer(getFlagDetailsAction),
   sectionDetails: createReducer(getProviderSection),
-  deleteFlag : createReducer(isDeleteFlag),
+  deleteFlag: createReducer(isDeleteFlag),
   deleteNotes: createReducer(isDeleteNotes),
   deleteComments: createReducer(isDeleteComments),
   addNotes: createReducer(isAddNotes),
@@ -143,11 +145,15 @@ const patientDetailsReducer = combineReducers({
   labDosResult: createReducer(labDosDeatilsAction),
   activeLabel: createReducer(activeLabels),
   labPDFDetails: createReducer(labPDFDetails),
-  dosAndProvidersList:createReducer(getAddProviderAndDOSList),
-  getStoreFileIdDetails:getStoreFileIdDetails,
-  getStoreFileIdDetailsPre:getStoreFileIdDetailsPre,
-  fileLoading:getPatientsLoading(patientHccFileAction),
-  selectPatientId:createReducer(getPatientID)
+  dosAndProvidersList: createReducer(getAddProviderAndDOSList),
+  dosAndProvidersListLoader: getPatientsLoading(getAddProviderAndDOSList),
+
+  getStoreFileIdDetails: getStoreFileIdDetails,
+  getStoreFileIdDetailsPre: getStoreFileIdDetailsPre,
+  fileLoading: getPatientsLoading(patientHccFileAction),
+  selectPatientId: createReducer(getPatientID),
+  getCommentList: createReducer(getCommentListAction),
+  CommentListLoader: getPatientsLoading(getCommentListAction),
 });
 
 export default patientDetailsReducer;
