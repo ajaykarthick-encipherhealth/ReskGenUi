@@ -68,6 +68,8 @@ const Patient = ({
   getFilters,
   filteredList,
   routedData,
+  getAllBatchList,
+  batchList,
 }) => {
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
@@ -116,7 +118,9 @@ const Patient = ({
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [errors, setErrors] = useState({ year: "", emr: "" });
   const [selectOrgList, setSelectedOrgList] = useState(null);
+  const [selectBatchList, setSelectedBatchList] = useState(null);
   const [orgAllList, setOrgAllList] = useState([]);
+  const [batchAllList, setBatchAllList] = useState([]);
   const [searchVal, setSearchVal] = useState("");
   const [paramsFilter, setParamsFilter] = useState(null);
   const [clear, setClear] = useState(false);
@@ -127,7 +131,6 @@ const Patient = ({
     setValidated(false);
     setAddPatientId(true);
   };
-
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
     inputValue.name = data.patientName;
@@ -217,7 +220,8 @@ const Patient = ({
           selAllocatedBy || "",
           selCreatedBy || "",
           sort,
-          orgId
+          orgId,
+          selectBatchList
         );
         setAddPatientId(false);
         setIsLoadingBtn(false);
@@ -341,7 +345,6 @@ const Patient = ({
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
     formData.append("emrtype", emrType);
-    
     const response = await uploadFiles({ obj: formData });
     var orgId = selectOrgList;
     if (response?.result == "SUCCESS") {
@@ -502,6 +505,7 @@ const Patient = ({
           []
       );
       setSelectedOrgList(routedData?.selectOrgList || "");
+      setSelectedBatchList(routedData?.selectBatchList || "");
       setActiveFilters(routedData?.activeFilters || []);
     }
     // }
@@ -529,7 +533,8 @@ const Patient = ({
         selAllocatedBy || "",
         selCreatedBy || "",
         sort,
-        (orgId = selectOrgList)
+        (orgId = selectOrgList),
+        selectBatchList
       );
       getFilters({ field: "createdBy" });
     }
@@ -546,12 +551,18 @@ const Patient = ({
     selCreatedBy,
     sort,
     selectOrgList,
+    selectBatchList,
     paramsFilter,
   ]);
 
   useEffect(() => {
     if (!organizationList?.response) {
       getAllOrganizationList();
+    }
+  }, []);
+  useEffect(() => {
+    if (!batchList?.response) {
+      getAllBatchList();
     }
   }, []);
 
@@ -565,6 +576,16 @@ const Patient = ({
     });
     setOrgAllList(orgListArray);
   }, [organizationList]);
+  useEffect(() => {
+    var batchListArray = [];
+    batchList?.response?.map((res) => {
+      batchListArray.push({
+        value: res.id,
+        label: res.name,
+      });
+    });
+    setBatchAllList(batchListArray);
+  }, [batchList]);
 
   useEffect(() => {
     if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
@@ -660,8 +681,17 @@ const Patient = ({
                             selectOptionsOrg={orgAllList}
                             defaultSelectValueOrg={""}
                             selectedValueOrg={selectOrgList}
-                            setPageNo={setPageNo}
                             orgValue={selectOrgList}
+                            // selectBatch
+                            setSelectedOptionBatch={setSelectedBatchList}
+                            selectOptionsBatch={batchAllList}
+                            defaultSelectValueBatch={""}
+                            selectedValueBatch={selectBatchList}
+                            selectlabelBatch="Select Batch"
+                      
+                            isSelectBatch={true}
+                            batchValue={selectBatchList}
+                            setPageNo={setPageNo}
                             setClear={setClear}
                             clear={clear}
                             selectAll={selectAll}
@@ -677,7 +707,7 @@ const Patient = ({
                         className="dataTables_wrapper no-footer"
                       >
                         {loading ? (
-                             <TableSkeleton/>
+                          <TableSkeleton />
                         ) : (
                           <>
                             <AddPatientListTable
@@ -704,6 +734,7 @@ const Patient = ({
                                 selAllocatedBy,
                                 selCreatedBy,
                                 selectOrgList,
+                                selectBatchList,
                                 activeFilters,
                               }}
                               sortCompleteOrder={sortCompleteOrder}
@@ -776,6 +807,7 @@ const enhancer = connect(
   (state) => ({
     response: state.admin.workqueue?.patients?.data,
     organizationList: state?.tenantAdmin?.patients?.allOrganization?.data,
+    batchList : state?.tenantAdmin?.patients?.allBatch?.data,
     allPatientList: state?.tenantAdmin?.patients?.allPatients,
     webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
     loading: state?.tenantAdmin?.patients?.allPatientsLoading,
@@ -784,6 +816,7 @@ const enhancer = connect(
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
+    getAllBatchList: tenantAdminAction.getAllBatchAction,
     getAllPatients: tenantAdminAction.getAllPatientAction,
     getPatientId: tenantAdminAction.submitPatientId,
     uploadFiles: tenantAdminAction.uploadFiles,

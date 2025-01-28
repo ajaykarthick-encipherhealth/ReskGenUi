@@ -11,7 +11,13 @@ export async function getAllOrganization() {
   );
   return data;
 }
-
+export async function getAllBatch() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`dbservice/batch/getallbatch`, options);
+  return data;
+}
 export async function getAllPatient(
   pageNo,
   computationStart = "",
@@ -24,7 +30,8 @@ export async function getAllPatient(
   selAllocatedBy,
   selCreatedBy,
   sort,
-  orgId
+  orgId,
+  selectBatchList
 ) {
   const options = {
     method: "GET",
@@ -32,8 +39,20 @@ export async function getAllPatient(
   const uId = getStorage("userId");
   const filteredStatus = status === undefined ? "" : status;
   const selectOrgId = orgId === "ALL" || orgId == undefined ? "" : orgId;
+  const selectBatchId =
+    selectBatchList === "ALL" || selectBatchList == undefined
+      ? ""
+      : selectBatchList;
   const data = await requestPortal(
-    `dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&organizationId=${selectOrgId || ""}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus || ""}&searchString=${search || ""}&createdStartDate=${createdStartDate || ""}&createdEndDate=${createdEndDate || ""}&patientCreatedBy=${
+    `dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&organizationId=${
+      selectOrgId || ""
+    }&batchId=${
+      selectBatchId || ""
+    }&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${
+      filteredStatus || ""
+    }&searchString=${search || ""}&createdStartDate=${
+      createdStartDate || ""
+    }&createdEndDate=${createdEndDate || ""}&patientCreatedBy=${
       selAllocatedBy === "All" ? "" : selAllocatedBy
     }&patientAllocatedTo=${
       selAllocatedTo === "All" ? "" : selAllocatedTo

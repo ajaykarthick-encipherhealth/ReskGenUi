@@ -5,7 +5,10 @@ export const getAllOrganizationAction = createActionThunk(
   "GET_ALL_ORGANIZATION",
   network.getAllOrganization
 );
-
+export const getAllBatchAction = createActionThunk(
+  "GET_ALL_BATCH",
+  network.getAllBatch
+);
 export const getAllPatientAction = createActionThunk(
   "GET_ALL_PATIENT",
   network.getAllPatient

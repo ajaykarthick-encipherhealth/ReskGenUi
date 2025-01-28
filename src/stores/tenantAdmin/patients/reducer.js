@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import {
+  getAllBatchAction,
   getAllOrganizationAction,
   getAllPatientAction,
   submitPatientId
@@ -48,6 +49,7 @@ const getReportLoading = (type) =>
 
 const adminPatientsReducer = combineReducers({
   allOrganization: createReducer(getAllOrganizationAction),
+  allBatch: createReducer(getAllBatchAction),
   allPatients: createReducer(getAllPatientAction),
   submitPatientId: createReducer(submitPatientId),
   // loaders

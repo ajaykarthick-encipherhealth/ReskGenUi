@@ -29,6 +29,7 @@ const allFilters = [
   "Created Date",
   "Created By",
   "Computed Date",
+  "Batch"
 ];
 
 const HeaderFilters = ({
@@ -113,6 +114,9 @@ const HeaderFilters = ({
   selectAll,
   activeFilters,
   setActiveFilters,
+  setSelectedOptionBatch,
+  batchValue,
+  selectOptionsBatch,
 }) => {
   const [trackInput, setTrackInput] = useState("");
   const [popoverVisible, setPopoverVisible] = useState(false);
@@ -247,30 +251,6 @@ const HeaderFilters = ({
           </div>
         );
 
-      case "Select Organization":
-        return (
-          <div className={defaultSize}>
-            <label className={styles.label}>Select Organization</label>
-            <div class="form-group has-search custom-react-select">
-              <Select
-                value={orgValue ? orgValue : null}
-                onChange={(selectOrg) => {
-                  if (setPageNo) {
-                    resetPageNumber(setPageNo);
-                  }
-                  setSelectedOptionOrg(selectOrg ? selectOrg : null);
-                }}
-                options={selectOptionsOrg}
-                isSearchable={false}
-                placeholder="Select Organization"
-                allowClear={true}
-                id="select-organization"
-                name="select-organization"
-              />
-            </div>
-          </div>
-        );
-
       case "Computed Date":
         return (
           <div className={defaultSize}>
@@ -292,6 +272,53 @@ const HeaderFilters = ({
                 setPageNo={setPageNo}
                 id="select-date-range"
                 name="select-date-range"
+              />
+            </div>
+          </div>
+        );
+      case "Batch":
+        return (
+          <div className={defaultSize}>
+            <label className={styles.label}>Select Batch</label>
+            <div class="form-group has-search custom-react-select">
+              <Select
+                value={batchValue ? batchValue : null}
+                onChange={(selectBatch) => {
+                  if (setPageNo) {
+                    resetPageNumber(setPageNo);
+                  }
+                  setSelectedOptionBatch(selectBatch ? selectBatch : null);
+                }}
+                options={selectOptionsBatch}
+                isSearchable={false}
+                placeholder="Select Batch"
+                allowClear={true}
+                id="select-organization"
+                name="select-organization"
+              />
+            </div>
+          </div>
+        );
+
+      case "Select Organization":
+        return (
+          <div className={defaultSize}>
+            <label className={styles.label}>Select Organization</label>
+            <div class="form-group has-search custom-react-select">
+              <Select
+                value={orgValue ? orgValue : null}
+                onChange={(selectOrg) => {
+                  if (setPageNo) {
+                    resetPageNumber(setPageNo);
+                  }
+                  setSelectedOptionOrg(selectOrg ? selectOrg : null);
+                }}
+                options={selectOptionsOrg}
+                isSearchable={false}
+                placeholder="Select Organization"
+                allowClear={true}
+                id="select-organization"
+                name="select-organization"
               />
             </div>
           </div>
