@@ -39,6 +39,7 @@ import { getStateIndicators } from "../../components/function/GetData";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import PdfViewer from "../../PdfViewerComponent";
 import ManuallyAdd from "../../components/manuallyAdd";
+import CardSkeleton from "../../../../skeleton/card";
 
 const addOnCodeColor = [
   "magenta",
@@ -406,7 +407,9 @@ const CamboTree = ({
         </button>
         <div className={`overflow-x-auto ${Style.chart}`}>
           {isLoading ? (
-            <SpinnerDots />
+            <div className="p-3 text-center" >
+              <CardSkeleton height={800} />
+            </div>
           ) : (
             <OrganizationChart value={trees} nodeTemplate={nodeTemplate} />
           )}
