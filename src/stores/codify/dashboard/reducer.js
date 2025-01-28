@@ -3,9 +3,8 @@ import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import {indexesAction,addCodesAction,autoCompleteAction,searchesAction,riskadjustmentAction,codesAction,codifyAction} from "./actions";
 import{codify} from './network'
-
 const initialState = {
-  loading: false,
+  loading: true,
   data: null,
   error: null,
 };
@@ -35,13 +34,13 @@ const createReducer = (actionType) =>
 
 
   const getCodifyLoading=(type) => handleActions(
-    {
-      [type.START]: () => true,
-      [type.SUCCEEDED]: () => false,
-      [type.FAILED]: () => false,
-    },
-    false
-  );
+  {
+    [type.START]: () => true,
+    [type.SUCCEEDED]: () => false,
+    [type.FAILED]: () => false,
+  },
+  false
+);
   
 const codifyReducer = combineReducers({
   
@@ -54,6 +53,7 @@ const codifyReducer = combineReducers({
   indexesLoading:getCodifyLoading(indexesAction),
   codifyLoader:getCodifyLoading(codifyAction),
   addCodes:createReducer(addCodesAction),
+  codesLoader:getCodifyLoading(codesAction),
   
 });
 

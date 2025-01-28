@@ -11,6 +11,8 @@ import Riskadjustment from "../../components/riskadjustment";
 import { AutoComplete, Input } from "antd";
 import { Tree } from "antd";
 import { Spin } from "antd";
+import CardSkeleton from "../../components/skeleton/card";
+import TableSkeleton from "../../components/skeleton/table";
 
 const mockVal = (str, repeat = 1) => ({
   value: str.repeat(repeat),
@@ -24,6 +26,7 @@ const Codify = ({
   indexesData,
   codifyDataLoading,
   drawerWidth,
+  expansionData,
 }) => {
   const [showButtons, setShowButtons] = useState(false);
   const [currentButton, setCurrentButton] = useState("Codes");
@@ -32,11 +35,6 @@ const Codify = ({
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [codeData, setCodeData] = useState([]);
-  const [noData, setNoData] = useState({
-    codeData: false,
-    indexData: false,
-    data: false,
-  });
   const [searches, setSearches] = useState([]);
   const [options, setOptions] = useState([]);
   const [expandedKeys, setExpandedKeys] = useState([]);
@@ -59,7 +57,6 @@ const Codify = ({
     setParentCode(null);
   };
   const handleInputChange = (e) => {
-    setNoData({ codeData: false, indexData: false, data: false });
     setSearchInput(e.target.value);
     setParentCode(null);
   };
@@ -126,33 +123,6 @@ const Codify = ({
       completeFetch();
     }
   }, [searchInput]);
-
-  useEffect(() => {
-    if (
-      !data?.length &&
-      !indexData?.length &&
-      !codeData?.name &&
-      !searchInput?.length > 2
-    ) {
-      setNoData({ codeData: true, indexData: true, data: true });
-    } else if (
-      !data?.length &&
-      !indexData?.length &&
-      !searchInput?.length > 2
-    ) {
-      setNoData({ codeData: false, indexData: true, data: true });
-    } else if (!data?.length && !codeData?.name && !searchInput?.length > 2) {
-      setNoData({ codeData: true, indexData: false, data: true });
-    } else if (
-      !codeData?.name &&
-      !indexData?.length &&
-      !searchInput?.length > 2
-    ) {
-      setNoData({ codeData: true, indexData: true, data: false });
-    } else {
-      setNoData({ codeData: false, indexData: false, data: false });
-    }
-  }, [data, codeData, indexData, searchInput]);
 
   const convertToAntdTreeData = (node) => {
     const { name, desc, children, requiredCharacter } = node;
@@ -347,7 +317,6 @@ const Codify = ({
       setCodeData(null);
     }
   }, [searchInput, data, indexData, codeData]);
-
   return (
     <div className="container-fluid">
       <div className="row  mt-3 px-1">
@@ -446,18 +415,20 @@ const Codify = ({
                 Indexes
               </Button>
             </div>
-
-            <div className="p-3 d-flex gap-3 ">
-              <div className={style.p}>Recent searches</div>
-              <CaretDownOutlined
-                style={{ fontSize: "20px" }}
-                onClick={() => {
-                  setShowButtons(!showButtons);
-                  recentSearchTreeView();
-                  recentSearchTreeCode();
-                }}
-              />
-            </div>
+            {currentButton !==
+              "Indexes" &&(
+                <div className="p-3 d-flex gap-3 ">
+                  <div className={style.p}>Recent searches</div>
+                  <CaretDownOutlined
+                    style={{ fontSize: "20px" }}
+                    onClick={() => {
+                      setShowButtons(!showButtons);
+                      recentSearchTreeView();
+                      recentSearchTreeCode();
+                    }}
+                  />
+                </div>
+              )}
 
             {showButtons && currentButton === "Codes" && (
               <div className="d-flex gap-3  flex-wrap mx-2">
@@ -499,60 +470,60 @@ const Codify = ({
                 expandedKeys={expandedKeys}
                 setLoading={setLoading}
               />
+            ) : data?.length === 0 && currentButton == "Codes" ? (
+              <div className="mx-3">
+                "Uh oh! It seems there might be a typo. Please review your
+                spelling or try a different keyword."
+              </div>
             ) : (
               <div></div>
             )}
             {currentButton === "Indexes" && indexData?.length ? (
               <div className=" mt-1 antdstyle">
                 {codifyDataLoading ? (
-                  <div className="d-flex justify-content-center align-items-center">
-                    <Spin size="large" />
-                  </div>
+                  <TableSkeleton />
                 ) : (
+                  <div className="mt-4">
                   <Tree
                     showLine={true}
                     treeData={indexData}
                     onExpand={onExpand}
                     expandedKeys={expandedKeys}
                   />
+                  </div>
                 )}
+              </div>
+            ) : indexData?.length === 0 && currentButton == "Indexes" ? (
+              <div className="mx-3 mt-4">
+                "Uh oh! It seems there might be a typo. Please review your
+                spelling or try a different keyword."
               </div>
             ) : (
               <div></div>
             )}
-            {currentButton === "Codes" && noData?.data && (
-              <p className="d-flex justify-content-center">
-                "Uh oh! It seems there might be a typo. Please review your
-                spelling or try a different keyword."
-              </p>
-            )}
-            {currentButton === "Indexes" && noData?.indexData && (
-              <p className="d-flex justify-content-center">
-                "Uh oh! It seems there might be a typo. Please review your
-                spelling or try a different keyword."
-              </p>
-            )}
-            {currentButton === "Description" && noData?.codeData && (
-              <p className="d-flex justify-content-center">
-                "Uh oh! It seems there might be a typo. Please review your
-                spelling or try a different keyword."
-              </p>
-            )}
-            {currentButton == "Description" && (
-              <Tables
-                setCodeData={setCodeData}
-                loading={loading}
-                codeData={codeData}
-                parentCode={parentCode}
-                setLoading={setLoading}
-                setSearchInput={setSearchInput}
-                searchInput={searchInput}
-                setParentCode={setParentCode}
-                hideButton={hideButton}
-                setHideButton={setHideButton}
-                setIndexData={setIndexData}
-              />
-            )}
+
+            {currentButton == "Description" &&
+              (expansionData?.parentData?.length === 0 &&
+              currentButton == "Description" ? (
+                <div className="mx-3">
+                  "Uh oh! It seems there might be a typo. Please review your
+                  spelling or try a different keyword."
+                </div>
+              ) : (
+                <Tables
+                  setCodeData={setCodeData}
+                  loading={loading}
+                  codeData={codeData}
+                  parentCode={parentCode}
+                  setLoading={setLoading}
+                  setSearchInput={setSearchInput}
+                  searchInput={searchInput}
+                  setParentCode={setParentCode}
+                  hideButton={hideButton}
+                  setHideButton={setHideButton}
+                  setIndexData={setIndexData}
+                />
+              ))}
           </div>
         )}
       </div>
@@ -573,6 +544,7 @@ const Codify = ({
 const enhancer = connect(
   (state) => ({
     codifyDataLoading: state.codify.codify.codifyLoader,
+    expansionData: state?.codify?.codify?.codes?.data?.response,
   }),
   {
     codifyData: dashbaordActions.codifyAction,

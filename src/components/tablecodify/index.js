@@ -9,12 +9,13 @@ import {
   CheckOutlined,
 } from "@ant-design/icons";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import TableSkeleton from "../skeleton/table";
+import CardSkeleton from "../skeleton/card";
 
 const Tables = (props) => {
   const {
     codeData,
     setCodeData,
-    loading,
     setLoading,
     setParentCode,
     parentCode,
@@ -23,6 +24,7 @@ const Tables = (props) => {
     setSearchInput,
     setHideButton,
     hideButton,
+    codesLoader,
   } = props;
 
   const [isCopied, setCopied] = useState(false);
@@ -109,300 +111,340 @@ const Tables = (props) => {
         </div>
       )}
       <div className={style.code}>
-        <div className="d-flex justify-content-center">
-          {loading && <Spin size="large" />}
-        </div>
-        {codeData?.requiredCharacter && (
-          <div className={style.symbols}>
-            <div>
-              Related Symbols
-              <div className={style.digit}>
-                <span className={style.term}>
-                  {codeData?.requiredCharacter}
-                </span>
-                : Additional {codeData?.requiredCharacter}Digit Required
-              </div>
+        <div className="mt-2 ">
+          {codesLoader ? (
+            <div className="mt-2 mx-3">
+              <CardSkeleton height={50} />
             </div>
-          </div>
-        )}
-        {(codeData?.excludes1 ||
-          codeData?.includes ||
-          codeData?.name ||
-          codeData?.excludes2) && (
-          <div className={`${style.card} mt-2`}>
-            <div className={style.head}>
-              {codeData?.name} -{codeData?.desc}
-              <CopyToClipboard
-                text={`${codeData?.name} - ${codeData?.desc}`}
-                onCopy={() => setCopied(true)}
-              >
-                {isCopied ? <CheckOutlined /> : <CopyOutlined />}
-              </CopyToClipboard>
-            </div>
-            <div className="card-group">
-              <div className="card">
-                <div className="card-body border border-secondary p-0">
-                  <h5 className="card-title bg-success text-white d-flex justify-content-center">
-                    Include
-                  </h5>
-                  <p
-                    className="card-text "
-                    style={{
-                      height: "160px",
-                      padding: "4px",
-                      overflow: "scroll",
-                    }}
-                  >
-                    {codeData?.includes ? (
-                      codeData.includes.split("\n").map((data, index) => (
-                        <p className={style.para} key={index}>
-                          {data}
-                        </p>
-                      ))
-                    ) : (
-                      <Empty />
-                    )}
-                  </p>
-                </div>
-              </div>
-              <div className="card">
-                <div className="card-body border border-secondary p-0">
-                  <h5
-                    class="card-title  bg- text-white d-flex justify-content-center"
-                    style={{ background: "blue" }}
-                  >
-                    Excludes1
-                  </h5>
-                  <p
-                    className="card-text"
-                    style={{
-                      height: "160px",
-                      padding: "4px",
-                      overflow: "scroll",
-                    }}
-                  >
-                    {codeData?.excludes1 ? (
-                      codeData.excludes1.split("\n").map((data, index) => (
-                        <p className={style.para} key={index}>
-                          {data}
-                        </p>
-                      ))
-                    ) : (
-                      <Empty />
-                    )}
-                  </p>
-                </div>
-              </div>
-              <div className="card">
-                <div className="card-body border border-secondary p-0 ">
-                  <h5 class="card-title bg-danger text-white d-flex justify-content-center">
-                    Excludes2
-                  </h5>
-                  <p
-                    className="card-text "
-                    style={{
-                      height: "160px",
-                      padding: "4px",
-                      overflow: "scroll",
-                      scrollbarwidth: "none",
-                    }}
-                  >
-                    {codeData?.excludes2 ? (
-                      codeData.excludes2.split("\n").map((data, index) => (
-                        <p className={style.para} key={index}>
-                          {data}
-                        </p>
-                      ))
-                    ) : (
-                      <Empty />
-                    )}
-                  </p>
-                </div>
-              </div>
-            </div>
-            {codeData?.useAdditionalCode && (
-              <div className="mt-1">
-                <span className={style.add}>Use additional</span>
-                {codeData?.useAdditionalCode &&
-                  codeData.useAdditionalCode.split("\n").map((data, index) => (
-                    <p className={style.para} key={index}>
-                      {data}
-                    </p>
-                  ))}
-              </div>
-            )}
-            {codeData?.inclusionTerm && (
-              <div className="mt-1">
-                <span className={style.Inclusion}>Inclusion Term </span>
-                {codeData?.inclusionTerm &&
-                  codeData.inclusionTerm.split("\n").map((data, index) => (
-                    <p className={style.para} key={index}>
-                      {data}
-                    </p>
-                  ))}
-              </div>
-            )}
-            {codeData?.codeFirst && (
-              <div className="mt-1">
-                <span className={style.first}>Code First </span>
-                {codeData?.codeFirst &&
-                  codeData.codeFirst.split("\n").map((data, index) => (
-                    <p className={style.para} key={index}>
-                      {data}
-                    </p>
-                  ))}
-              </div>
-            )}
-            {codeData?.codeAlso && (
-              <div className="mt-1">
-                <span className={style.codealso}>Code also </span>
-                {codeData?.codeAlso &&
-                  codeData.codeAlso.split("\n").map((data, index) => (
-                    <p className={style.para} key={index}>
-                      {data}
-                    </p>
-                  ))}
-              </div>
-            )}
-          </div>
-        )}
-        <>
-          {parentCode?.length ?
-            parentCode?.map((data) => {
-              return (
-                (data?.includes ||
-                  data?.excludes1 ||
-                  data?.excludes2 ||
-                  data?.useAdditionalCode ||
-                  data?.codeAlso ||
-                  data?.codeFirst ||
-                  data?.inclusionTerm) && (
-                  <div className={style.parent}>
-                    <div>
-                      {(data?.includes ||
-                        data?.excludes1 ||
-                        data?.excludes2 ||
-                        data?.useAdditionalCode ||
-                        data?.codeAlso ||
-                        data?.codeFirst ||
-                        data?.inclusionTerm) && (
-                        <div className={style.head}>
-                          {data.name} - {data.desc}
-                        </div>
-                      )}
-
-                      {data?.includes && (
-                        <div>
-                          <span className={style.includes}>Includes</span>
-                          {data?.includes &&
-                            data.includes?.split("\n").map((line, index) => (
-                              <p className={style.para} key={index}>
-                                {line}
-                              </p>
-                            ))}
-                        </div>
-                      )}
-                      {data?.excludes1 && (
-                        <div className=" mt-1 ">
-                          <span className={style.excludes}>Excludes1</span>
-                          {data?.excludes1 &&
-                            data.excludes1?.split("\n").map((line, index) => (
-                              <p className={style.para} key={index}>
-                                {line}
-                              </p>
-                            ))}
-                        </div>
-                      )}
-
-                      {data?.excludes2 && (
-                        <div className="mt-1 ">
-                          <span className={style.excludes2}>Excludes2</span>
-                          {data?.excludes2 &&
-                            data.excludes2?.split("\n").map((line, index) => (
-                              <p className={style.para} key={index}>
-                                {line}
-                              </p>
-                            ))}
-                        </div>
-                      )}
-                      {data?.useAdditionalCode && (
-                        <div className="mt-1">
-                          <span className={style.add}>Use additional</span>
-                          {data?.useAdditionalCode &&
-                            data.useAdditionalCode
-                              ?.split("\n")
-                              .map((line, index) => (
-                                <p className={style.para} key={index}>
-                                  {line}
-                                </p>
-                              ))}
-                        </div>
-                      )}
-                      {data?.codeFirst && (
-                        <div className="mt-1">
-                          <span className={style.first}>codeFirst</span>
-                          {data?.codeFirst &&
-                            data.codeFirst?.split("\n").map((line, index) => (
-                              <p className={style.para} key={index}>
-                                {line}
-                              </p>
-                            ))}
-                        </div>
-                      )}
-                      {data?.codeAlso && (
-                        <div className="mt-1">
-                          <span className={style.codealso}>code also</span>
-                          {data?.codeAlso &&
-                            data.codeAlso?.split("\n").map((line, index) => (
-                              <p className={style.para} key={index}>
-                                {line}
-                              </p>
-                            ))}
-                        </div>
-                      )}
-                      {data?.inclusionTerm && (
-                        <div className="mt-1">
-                          <span className={style.Inclusion}>
-                            Inclusion Term
-                          </span>
-                          {data?.inclusionTerm &&
-                            data.inclusionTerm
-                              ?.split("\n")
-                              .map((line, index) => (
-                                <p className={style.para} key={index}>
-                                  {line}
-                                </p>
-                              ))}
-                        </div>
-                      )}
-                    </div>
+          ) : (
+            codeData?.requiredCharacter && (
+              <div className={style.symbols}>
+                <div>
+                  Related Symbols
+                  <div className={style.digit}>
+                    <span className={style.term}>
+                      {codeData?.requiredCharacter}
+                    </span>
+                    : Additional {codeData?.requiredCharacter}Digit Required
                   </div>
-                )
-              );
-            }):<></>}
-        </>
-        <div></div>
-
-        <div className={style.list}>
-          {codeData?.children?.map((s, i) => (
-            <div key={i} onClick={() => handleViewTable(s, i)}>
-              <p class={`${style.card2} mt-3`}>
-                {s?.requiredCharacter && (
-                  <span className={style.term}>{s.requiredCharacter}</span>
-                )}
-                <ArrowRightOutlined />
-                <span className={style.codes}>{s.name} </span>
-                <span>- {s.desc}</span>
-              </p>
-            </div>
-          ))}
+                </div>
+              </div>
+            )
+          )}
         </div>
+
+        {codesLoader ? (
+          <div className="mt-4 mx-3">
+            <CardSkeleton height={200} />
+          </div>
+        ) : (
+          (codeData?.excludes1 ||
+            codeData?.includes ||
+            codeData?.name ||
+            codeData?.excludes2) && (
+            <div className={`${style.card} mt-2`}>
+              <div className={style.head}>
+                {codeData?.name} -{codeData?.desc}
+                <CopyToClipboard
+                  text={`${codeData?.name} - ${codeData?.desc}`}
+                  onCopy={() => setCopied(true)}
+                >
+                  {isCopied ? <CheckOutlined /> : <CopyOutlined />}
+                </CopyToClipboard>
+              </div>
+              <div className="card-group">
+                <div className="card">
+                  <div className="card-body border border-secondary p-0">
+                    <h5 className="card-title bg-success text-white d-flex justify-content-center">
+                      Include
+                    </h5>
+                    <p
+                      className="card-text "
+                      style={{
+                        height: "160px",
+                        padding: "4px",
+                        overflow: "scroll",
+                      }}
+                    >
+                      {codeData?.includes ? (
+                        codeData.includes.split("\n").map((data, index) => (
+                          <p className={style.para} key={index}>
+                            {data}
+                          </p>
+                        ))
+                      ) : (
+                        <Empty />
+                      )}
+                    </p>
+                  </div>
+                </div>
+                <div className="card">
+                  <div className="card-body border border-secondary p-0">
+                    <h5
+                      class="card-title  bg- text-white d-flex justify-content-center"
+                      style={{ background: "blue" }}
+                    >
+                      Excludes1
+                    </h5>
+                    <p
+                      className="card-text"
+                      style={{
+                        height: "160px",
+                        padding: "4px",
+                        overflow: "scroll",
+                      }}
+                    >
+                      {codeData?.excludes1 ? (
+                        codeData.excludes1.split("\n").map((data, index) => (
+                          <p className={style.para} key={index}>
+                            {data}
+                          </p>
+                        ))
+                      ) : (
+                        <Empty />
+                      )}
+                    </p>
+                  </div>
+                </div>
+                <div className="card">
+                  <div className="card-body border border-secondary p-0 ">
+                    <h5 class="card-title bg-danger text-white d-flex justify-content-center">
+                      Excludes2
+                    </h5>
+                    <p
+                      className="card-text "
+                      style={{
+                        height: "160px",
+                        padding: "4px",
+                        overflow: "scroll",
+                        scrollbarwidth: "none",
+                      }}
+                    >
+                      {codeData?.excludes2 ? (
+                        codeData.excludes2.split("\n").map((data, index) => (
+                          <p className={style.para} key={index}>
+                            {data}
+                          </p>
+                        ))
+                      ) : (
+                        <Empty />
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              {codeData?.useAdditionalCode && (
+                <div className="mt-1">
+                  <span className={style.add}>Use additional</span>
+                  {codeData?.useAdditionalCode &&
+                    codeData.useAdditionalCode
+                      .split("\n")
+                      .map((data, index) => (
+                        <p className={style.para} key={index}>
+                          {data}
+                        </p>
+                      ))}
+                </div>
+              )}
+              {codeData?.inclusionTerm && (
+                <div className="mt-1">
+                  <span className={style.Inclusion}>Inclusion Term </span>
+                  {codeData?.inclusionTerm &&
+                    codeData.inclusionTerm.split("\n").map((data, index) => (
+                      <p className={style.para} key={index}>
+                        {data}
+                      </p>
+                    ))}
+                </div>
+              )}
+              {codeData?.codeFirst && (
+                <div className="mt-1">
+                  <span className={style.first}>Code First </span>
+                  {codeData?.codeFirst &&
+                    codeData.codeFirst.split("\n").map((data, index) => (
+                      <p className={style.para} key={index}>
+                        {data}
+                      </p>
+                    ))}
+                </div>
+              )}
+              {codeData?.codeAlso && (
+                <div className="mt-1">
+                  <span className={style.codealso}>Code also </span>
+                  {codeData?.codeAlso &&
+                    codeData.codeAlso.split("\n").map((data, index) => (
+                      <p className={style.para} key={index}>
+                        {data}
+                      </p>
+                    ))}
+                </div>
+              )}
+            </div>
+          )
+        )}
+
+        {codesLoader ? (
+          <div>
+            <TableSkeleton />
+          </div>
+        ) : (
+          <>
+            <>
+              {parentCode?.length ? (
+                parentCode?.map((data) => {
+                  return (
+                    (data?.includes ||
+                      data?.excludes1 ||
+                      data?.excludes2 ||
+                      data?.useAdditionalCode ||
+                      data?.codeAlso ||
+                      data?.codeFirst ||
+                      data?.inclusionTerm) && (
+                      <div className={style.parent}>
+                        <div>
+                          {(data?.includes ||
+                            data?.excludes1 ||
+                            data?.excludes2 ||
+                            data?.useAdditionalCode ||
+                            data?.codeAlso ||
+                            data?.codeFirst ||
+                            data?.inclusionTerm) && (
+                            <div className={style.head}>
+                              {data.name} - {data.desc}
+                            </div>
+                          )}
+
+                          {data?.includes && (
+                            <div>
+                              <span className={style.includes}>Includes</span>
+                              {data?.includes &&
+                                data.includes
+                                  ?.split("\n")
+                                  .map((line, index) => (
+                                    <p className={style.para} key={index}>
+                                      {line}
+                                    </p>
+                                  ))}
+                            </div>
+                          )}
+                          {data?.excludes1 && (
+                            <div className=" mt-1 ">
+                              <span className={style.excludes}>Excludes1</span>
+                              {data?.excludes1 &&
+                                data.excludes1
+                                  ?.split("\n")
+                                  .map((line, index) => (
+                                    <p className={style.para} key={index}>
+                                      {line}
+                                    </p>
+                                  ))}
+                            </div>
+                          )}
+
+                          {data?.excludes2 && (
+                            <div className="mt-1 ">
+                              <span className={style.excludes2}>Excludes2</span>
+                              {data?.excludes2 &&
+                                data.excludes2
+                                  ?.split("\n")
+                                  .map((line, index) => (
+                                    <p className={style.para} key={index}>
+                                      {line}
+                                    </p>
+                                  ))}
+                            </div>
+                          )}
+                          {data?.useAdditionalCode && (
+                            <div className="mt-1">
+                              <span className={style.add}>Use additional</span>
+                              {data?.useAdditionalCode &&
+                                data.useAdditionalCode
+                                  ?.split("\n")
+                                  .map((line, index) => (
+                                    <p className={style.para} key={index}>
+                                      {line}
+                                    </p>
+                                  ))}
+                            </div>
+                          )}
+                          {data?.codeFirst && (
+                            <div className="mt-1">
+                              <span className={style.first}>codeFirst</span>
+                              {data?.codeFirst &&
+                                data.codeFirst
+                                  ?.split("\n")
+                                  .map((line, index) => (
+                                    <p className={style.para} key={index}>
+                                      {line}
+                                    </p>
+                                  ))}
+                            </div>
+                          )}
+                          {data?.codeAlso && (
+                            <div className="mt-1">
+                              <span className={style.codealso}>code also</span>
+                              {data?.codeAlso &&
+                                data.codeAlso
+                                  ?.split("\n")
+                                  .map((line, index) => (
+                                    <p className={style.para} key={index}>
+                                      {line}
+                                    </p>
+                                  ))}
+                            </div>
+                          )}
+                          {data?.inclusionTerm && (
+                            <div className="mt-1">
+                              <span className={style.Inclusion}>
+                                Inclusion Term
+                              </span>
+                              {data?.inclusionTerm &&
+                                data.inclusionTerm
+                                  ?.split("\n")
+                                  .map((line, index) => (
+                                    <p className={style.para} key={index}>
+                                      {line}
+                                    </p>
+                                  ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  );
+                })
+              ) : (
+                <></>
+              )}
+            </>
+            <div></div>
+            <div className={` cursor-pointer ${style.list}`}>
+              {codeData?.children?.map((s, i) => (
+                <div key={i} onClick={() => handleViewTable(s, i)}>
+                  <p class={`${style.card2} mt-3`}>
+                    {s?.requiredCharacter && (
+                      <span className={style.term}>{s.requiredCharacter}</span>
+                    )}
+                    <ArrowRightOutlined />
+                    <span className={style.codes}>{s.name} </span>
+                    <span>- {s.desc}</span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
 };
 
-const enhancer = connect((state) => ({ state }), {
-  codesData: dashbaordActions.codesAction,
-});
+const enhancer = connect(
+  (state) => ({
+    codesLoader: state.codify.codify?.codesLoader,
+  }),
+  {
+    codesData: dashbaordActions.codesAction,
+  }
+);
 export default enhancer(Tables);
