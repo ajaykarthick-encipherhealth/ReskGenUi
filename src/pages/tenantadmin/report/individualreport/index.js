@@ -222,6 +222,8 @@ const IndividualReceiverReport = ({
                 <Image src={leftArrow} />
               </button>
               <Input
+              id="report-input"
+              name="report-input"
                 type="text"
                 onChange={(e) => filterChange(e)}
                 placeholder="Search"
@@ -254,11 +256,14 @@ const IndividualReceiverReport = ({
           <div className={styles.list}>
             {loadingList ? (
               <div className={styles.sideContainer}>Loading...</div>
+              
             ) : detailsContent?.length > 0 ? (
               detailsContent?.map((item) => {
                 const id = item?._id ? item?._id : item?.reportId;
                 return (
                   <div
+                  id={detailsContent?.reportName}
+                  name={detailsContent?.reportName}
                     key={id}
                     onClick={() => {
                       setReportInfo({ data: item, id: id });
@@ -268,7 +273,7 @@ const IndividualReceiverReport = ({
                       });
                     }}
                   >
-                    <div className="d-flex mb-2" style={{ cursor: "pointer" }}>
+                    <div className="d-flex mb-2"  style={{ cursor: "pointer" }}>
                       <div className={`${styles.user}`}>
                         <div
                           className="text-truncate"

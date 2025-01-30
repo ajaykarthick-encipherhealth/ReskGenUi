@@ -20,11 +20,12 @@ const CardComponent = ({
   const handleDateFormat = (date) => {
     return dayjs(date).format("MM-DD-YYYY");
   };
-
   return (
     <div>
       {data?.length > 0 ? (
         <div
+          id={data?.reportName}
+          name={data?.reportName}
           key={index}
           style={{ marginBottom: "0px", cursor: "pointer" }}
           className={`${styles.card} ${

@@ -216,6 +216,8 @@ const HeaderFilters = ({
               </label>
               <div class="form-group has-search custom-react-select">
                 <Select
+                id={selectlabel}
+                name={selectlabel}
                   onChange={(selectOptions) => {
                     setSelectedOption(selectOptions ? selectOptions : "");
                     if (setPageNo) {
@@ -238,6 +240,8 @@ const HeaderFilters = ({
               </label>
               <div class="form-group has-search custom-react-select">
                 <Select
+                id={createdTolabel}
+                name={createdTolabel}
                   onChange={(selectedOption) => {
                     setSelCreatedBy(selectedOption ? selectedOption : "");
                     if (setPageNo) {
@@ -260,6 +264,8 @@ const HeaderFilters = ({
               </label>
               <div class="form-group has-search custom-react-select">
                 <Select
+                id={selectlabel2}
+                name={selectlabel2}
                   value={defaultSelectValue2 ? defaultSelectValue2 : ""}
                   onChange={(selectedOption) => {
                     if (setPageNo) {
@@ -287,6 +293,8 @@ const HeaderFilters = ({
               </label>
               <div class="form-group has-search custom-react-select ">
                 <Select
+                id={selectlabel2}
+                name={selectlabel2}
                   // value={defaultSelectValue2}
                   onChange={(selectedOption) => {
                     if (setPageNo) {
@@ -310,6 +318,8 @@ const HeaderFilters = ({
               </label>
               <div class="form-group has-search custom-react-select">
                 <Select
+                id={selectlabel3}
+                name={selectlabel3}
                   showSearch
                   value={value ? value : ""}
                   onChange={(selectedOption) => {
@@ -339,6 +349,8 @@ const HeaderFilters = ({
               </label>
               <div class="form-group has-search custom-react-select">
                 <Select
+                id={selectlabelOrg}
+                name={selectlabelOrg}
                   value={orgValue ? orgValue : null}
                   onChange={(selectOrg) => {
                     if (setPageNo) {
@@ -383,6 +395,8 @@ const HeaderFilters = ({
                 </label>
                 <div>
                   <RangePicker
+                  id={timePickerlabel}
+                  name={timePickerlabel}
                     showTime={{ format: "HH:mm" }} // Specify the time format
                     format="YYYY-MM-DD HH:mm" // Specify the combined date and time format
                     // value={dayjs(selectedDates2).format('MM-DD-YYYY')}
@@ -567,6 +581,8 @@ const HeaderFilters = ({
                 </label>
                 <div class="form-group has-search custom-react-select">
                   <Select
+                  id={allocatedBylabel}
+                  name={allocatedBylabel}
                     value={selAllocatedBy ? selAllocatedBy : null}
                     onChange={(selectedOption) => {
                       setSelAllocatedBy(selectedOption ? selectedOption : null);
@@ -615,6 +631,8 @@ const HeaderFilters = ({
                 </label>
                 <div class="form-group has-search custom-react-select">
                   <Select
+                  id={allocatedTolabel}
+                  name={allocatedTolabel}
                     onChange={(selectedOption) => {
                       setSelAllocatedTo(selectedOption ? selectedOption : "");
                       if (setPageNo) {
@@ -636,6 +654,8 @@ const HeaderFilters = ({
                 </label>
                 <div class="form-group has-search custom-react-select">
                   <Select
+                  id={createdTolabel}
+                  name={createdTolabel}
                     onChange={(selectedOption) => {
                       setSelCreatedBy(selectedOption ? selectedOption : "");
                       if (setPageNo) {
@@ -658,6 +678,8 @@ const HeaderFilters = ({
                   </label>
                   <div>
                     <RangePicker
+                    id={pickerlabe3}
+                    name={pickerlabe3}
                       format="YYYY-MM-DD"
                       onChange={(date, dateString) => {
                         handleRnagePicker2({
@@ -683,6 +705,8 @@ const HeaderFilters = ({
                   </label>
                   <div>
                     <RangePicker
+                    id={pickerlabe4}
+                    name={pickerlabe4}
                       format="YYYY-MM-DD"
                       onChange={(date, dateString) => {
                         handleRnagePicker2({
@@ -709,6 +733,8 @@ const HeaderFilters = ({
                   </label>
                   <div>
                     <RangePicker
+                    id={pickerlabe5}
+                    name={pickerlabe5}
                       format="YYYY-MM-DD"
                       onChange={(date, dateString) => {
                         handleRnagePicker2({
@@ -735,6 +761,8 @@ const HeaderFilters = ({
                   </label>
                   <div className="custom-react-select">
                     <Select
+                    id={pickerlabe6}
+                    name={pickerlabe6}
                       onChange={(selectedOption) => {
                         setPriority(selectedOption ? selectedOption : "");
                         if (setPageNo) {

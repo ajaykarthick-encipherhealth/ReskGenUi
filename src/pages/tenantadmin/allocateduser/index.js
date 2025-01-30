@@ -584,6 +584,8 @@ const Patient = ({
                               </label>
                               <div style={{ height: "42px" }}>
                                 <Input
+                                id="search-name"
+                                name="search-name"
                                   type="text"
                                   onChange={(e) => {
                                     resetPageNumber(setPageNo);
@@ -626,18 +628,11 @@ const Patient = ({
                             (!isPatientList && activeTab == 2)) && (
                             <div className="col-2">
                               <div>
-                                {/* <Selector
-                                    selectlabel={"Select Organization"}
-                                    setSelectedOption={setSelectedOrgList}
-                                    selectOptions={orgAllList}
-                                    selectDefaultValue={defaultOrgValue}
-                                    // setDefaultValue={setDefaultOrgValue}
-                                    // isClose={true}
-                                    setPageNo={setPageNo}
-                                  /> */}
                                 <label>Select Organization</label>
                                 <div class="form-group has-search custom-react-select-admin">
                                   <Select
+                                  id="select-organization"
+                                  name="select-organization"
                                     options={orgAllList}
                                     style={{ width: "100%", height: "42px" }}
                                     placeholder={"Select Organization"}
@@ -660,6 +655,8 @@ const Patient = ({
                                 <label>Computed Date</label>
                                 <div>
                                   <RangePicker
+                                  id="computed-date"
+                                  name="computed-date"
                                     format="MM-DD-YYYY"
                                     onCalendarChange={(val) => {
                                       setDateRange(val);
@@ -697,6 +694,8 @@ const Patient = ({
                                   <label>Select Priority</label>
                                   <div class="form-group has-search custom-react-select-admin">
                                     <Select
+                                    id="select-priority"
+                                    name="select-priority"
                                       options={statusOption}
                                       style={{ width: "100%", height: "42px" }}
                                       placeholder={"Select Priority"}
@@ -751,6 +750,8 @@ const Patient = ({
                                   </button> */}
                                   <Space.Compact style={{ width: "100%" }}>
                                     <Input
+                                    id="batchCount"
+                                    name="batchCount"
                                       type="number"
                                       onChange={(e) => {
                                         let inputValue = e.target.value.replace(

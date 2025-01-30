@@ -24,6 +24,8 @@ const Selector = ({
       </label>
       <div class="form-group has-search custom-react-select">
         <Select
+        name={selectlabel}
+        id={selectlabel}
           options={selectOptions}
           aria-labelledby={labelId}
           placeholder={selectlabel || defaultSelectValue1}

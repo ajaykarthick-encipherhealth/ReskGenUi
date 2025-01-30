@@ -36,6 +36,8 @@ const MoreFilter = ({
     <>
       <div className="d-flex my-2">
         <input
+        id="select-all"
+        name="select-all"
           type="checkbox"
           onChange={handleHeaderCheckboxChange}
           className={`${styles.customChecked}`}
@@ -49,6 +51,8 @@ const MoreFilter = ({
       {checkedList?.map((item, index) => (
         <div key={item?.id} style={{ margin: "10px 0px" }}>
           <input
+          name={item.name}
+          id={item.name}
             type="checkbox"
             onChange={() => {
               handleRowCheckboxChange(item);
@@ -67,7 +71,7 @@ const MoreFilter = ({
   return (
     <div className="d-flex" style={{ cursor: "pointer" }}>
       <Popover content={PopContent} trigger="click" placement="bottom">
-        <span className={`${styles.moreStyle} text-truncate`}>
+        <span id="more-filters" name="more-filters" className={`${styles.moreStyle} text-truncate`}>
           More Filters
         </span>
       </Popover>

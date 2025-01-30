@@ -514,6 +514,7 @@ const Index = ({
                                 <Input
                                   type="text"
                                   name="initialSearch"
+                                  id="initialSearch"
                                   onChange={(e) => getNameSearch(e)}
                                   value={search?.searchVal || ""}
                                   className={
@@ -543,6 +544,8 @@ const Index = ({
                               <div class="form-group has-search">
                               
                                 <RangePicker
+                                id="select-date"
+                                name="select-date"
                                   format="MM-DD-YYYY"
                                   value={
                                     selectedDates
@@ -578,6 +581,8 @@ const Index = ({
                               <label>Status</label>
                               <div className={`custom-react-select`}>
                                 <Select
+                                id="select-status"
+                                name="select-status"
                                   placeholder={"Select"}
                                   options={
                                     reportActiveTab === "FHIR"

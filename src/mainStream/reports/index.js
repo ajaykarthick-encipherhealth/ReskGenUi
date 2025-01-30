@@ -581,7 +581,8 @@ const Reports = ({
                       </label>
                       <div style={{ height: "43px" }}>
                         <Input
-                          name="initialSearch"
+                          name="report-search"
+                          id="report-search"
                           type="text"
                           onChange={(e) => {
                             filterChangePatientId(e);
@@ -621,6 +622,8 @@ const Reports = ({
                         </label>
                         <div className="form-group has-search w-100 custom-react-report-select custom-react-report-status">
                           <Select
+                          id ="report-status"
+                          name="report-status"
                             onChange={(selectedOption) => {
                               dosOnChange(selectedOption, "Status", activeTab);
                               resetPageNumber(resetPageState);
@@ -647,6 +650,8 @@ const Reports = ({
                       </label>
                       <div>
                         <RangePicker
+                        id ="report-dateRange"
+                        name="report-dateRange"
                           style={{
                             borderRadius: "0 5px 5px 0",
                             width: "100%",
@@ -693,6 +698,8 @@ const Reports = ({
                               )}
                               {info?.isSelect && (
                                 <Select
+                                id="select-userRole"
+                                name="select-userRole"
                                   onChange={(selectedOption) => {
                                     dosOnChange(selectedOption, info?.name);
                                     resetPageNumber(resetPageState);
@@ -719,6 +726,8 @@ const Reports = ({
                               {info?.isRangePikcer && (
                                 <div className="dateRangeSize">
                                   <RangePicker
+                                  name="select-rangePicker"
+                                  id="select-rangePicker"
                                     style={{
                                       borderRadius: "0 5px 5px 0",
                                       width: "100%",
@@ -748,6 +757,7 @@ const Reports = ({
 
                               {info?.isSearch && (
                                 <InputText
+                                id="report-input"
                                   name={info?.name}
                                   type="text"
                                   onChange={(e) => {
@@ -803,6 +813,8 @@ const Reports = ({
                         }
                       >
                         <button
+                        id="export-button"
+                        name="export-button"
                           onClick={() => {
                             setIsModalVisible(true);
                             selectedReport(null);

@@ -97,6 +97,8 @@ const ContentGroupCard = ({
             />
           ) : (
             <input
+            id={selectedRows}
+            name={selectedRows}
               type="checkbox"
               onChange={() => handleRowCheckboxChange(item)}
               className={TableStyle.customChecked}
@@ -110,6 +112,8 @@ const ContentGroupCard = ({
           )}
         </div>
         <div
+        id={patientId}
+        name={patientId}
           style={{
             width: "95%",
             display: "flex",

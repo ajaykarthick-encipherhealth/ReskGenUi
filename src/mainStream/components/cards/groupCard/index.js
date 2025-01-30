@@ -25,6 +25,8 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
     <div className="cursor-pointer">
       {data?.length > 0 ? (
         <div
+          id={data?.reportId}
+          name={data?.reportId}
           style={{ marginBottom: "0px" }}
           className={`${styles.card} ${styles.selectedCard} py-3`}
           onClick={() => handleReceiverReport(item)}

@@ -128,9 +128,8 @@ const InputField = ({
           )
         }
         allowClear={true}
-        data-testid="searchPrefix"
-        id={id}
-        name={name}
+        name="searchPrefix"
+        id="searchPrefix"
       />
     </div>
   );

@@ -7,6 +7,8 @@ const Tab = ({ activeTab, handleTabs, tabs }) => {
       <div className={styles.group}>
         {tabs?.map((tab) => (
           <button
+            id={activeTab}
+            name={activeTab}
             key={tab}
             className={activeTab === tab ? `${styles.active}` : ""}
             onClick={() => handleTabs(tab)}

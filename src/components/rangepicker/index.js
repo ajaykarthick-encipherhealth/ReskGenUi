@@ -74,6 +74,8 @@ const DateRangePicker = ({
         /> */}
         {handleMultipleValues ? (
           <RangePicker
+          id={pickerlabel}
+          name={pickerlabel}
             value={selectedDates ? selectedDates[pickerName] : ""}
             format="MM-DD-YYYY"
             onCalendarChange={(val) => {
@@ -120,11 +122,11 @@ const DateRangePicker = ({
                 isDueDate // Pass true only for Audited Due Date
               )
             }
-            id={id}
-            name={name}
           />
         ) : (
           <RangePicker
+          id={pickerlabel}
+          name={pickerlabel}
             value={selectedDates ? selectedDates : []}
             format="MM-DD-YYYY"
             onCalendarChange={(val) => setSelectedDates(val)}
@@ -148,8 +150,6 @@ const DateRangePicker = ({
             disabledDate={(currentDate) =>
               disabledDate(currentDate, selectedDates)
             }
-            id={id}
-            name={name}
           />
         )}
       </div>

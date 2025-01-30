@@ -78,6 +78,8 @@ const HeaderFilters = ({
             <label className={styles.label}>Status</label>
             <div class="form-group has-search custom-react-select">
               <Select
+                id="select-status"
+                name="select-status"
                 value={clear ? null : selector4value}
                 onChange={(selectedOption) => {
                   setSelectedOption(selectedOption);
@@ -98,6 +100,8 @@ const HeaderFilters = ({
             <label className={styles.label}>Created Date Range</label>
             <div className="dateRangeSize">
               <RangePicker
+                id="select-dateRange"
+                name="select-dateRange"
                 value={clear ? ["", ""] : selectedDates}
                 format="MM-DD-YYYY"
                 onCalendarChange={(val) => {
@@ -127,6 +131,8 @@ const HeaderFilters = ({
 
             <div class="form-group has-search custom-react-select">
               <Select
+               id="select-organization"
+                name="select-organization"
                 value={orgValue ? orgValue : null}
                 onChange={(selectOrg) => {
                   if (setPageNo) {
@@ -188,6 +194,8 @@ const HeaderFilters = ({
                 placeholder={selectlabel2}
                 isSearchable={false}
                 allowClear={true}
+                id ="select-role"
+                name="select-role"
               />
             </div>
           </div>

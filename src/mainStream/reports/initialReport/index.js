@@ -363,6 +363,8 @@ const InitialCard = ({
               <div className="d-flex me-3">
                 <div>
                   <input
+                  id="check-all"
+                  name="check-all"
                     type="checkbox"
                     onChange={() => {
                       setSelectAll((prevState) => {
@@ -387,6 +389,8 @@ const InitialCard = ({
               <div className="col-4 d-flex">
                 <div>
                   <input
+                  id="check-allFlags"
+                  name="check-allFlags"
                     type="checkbox"
                     onChange={handleHeaderCheckbox}
                     className={

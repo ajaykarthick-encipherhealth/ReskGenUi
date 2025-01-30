@@ -46,7 +46,7 @@ const index = ({
     }
   };
   const handleRange = (e) => {
-    setSelectedDates(e); 
+    setSelectedDates(e);
     if (!e || !e[0] || !e[1]) {
       const range = {
         startDate:
@@ -98,6 +98,8 @@ const index = ({
           <div className={styles.flterContainer}>Organization</div>
           <div className="tenantSelector" style={{ width: "100%" }}>
             <Select
+              id="select-organization"
+              name="select-organization"
               placeholder="Organization"
               options={organizationOptions}
               allowClear
@@ -116,6 +118,8 @@ const index = ({
           <div className={styles.flterContainer}>Date</div>
           <div className="tenantSelector" style={{ width: "100%" }}>
             <Select
+              id="select-days"
+              name="select-days"
               placeholder="Date"
               defaultValue="Last 30 days"
               options={[
@@ -136,7 +140,9 @@ const index = ({
               Custom Date
             </div>
             <div className="tenantSelector" style={{ width: "100%" }}>
-               <RangePicker
+              <RangePicker
+                id="select-customDate"
+                name="select-customDate"
                 size="large"
                 disabledDate={disabled1YearDate}
                 onCalendarChange={(val) => setSelectedDates(val)}

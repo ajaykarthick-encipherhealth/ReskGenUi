@@ -83,7 +83,7 @@
   padding: 10px 0px 0px 10px;
   min-height: 100px;
   max-height: 210px;
-  overflow: scroll;
+  overflow: hidden;
 }
 .sendListContainer {
   margin-top: 20px;

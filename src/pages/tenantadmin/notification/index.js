@@ -272,6 +272,8 @@ const Notification = ({
                   options={radioOptions}
                   onChange={onChange}
                   value={selectCheckBox}
+                  id={selectCheckBox}
+                  name={selectCheckBox}
                 />
                 <p className={styles.errorMessage}>{errMessageRadio}</p>
               </div>
@@ -282,6 +284,8 @@ const Notification = ({
                     <>
                       <div className="d-flex" style={{ width: "600px" }}>
                         <Select
+                        id="select-custom"
+                        name="select-custom"
                           className={`ant_select_form ${styles.ant_select_form}`}
                           mode="multiple"
                           placeholder="Please select"
@@ -321,6 +325,8 @@ const Notification = ({
                   {selectCheckBox == "TEAM" ? (
                     <div style={{ width: "600px" }}>
                       <Select
+                      id="select-team"
+                      name="select-team"
                         className={`ant_select_form ${styles.ant_select_form}`}
                         placeholder="Please select"
                         onChange={handleSelectedOptionTeam}
@@ -345,6 +351,8 @@ const Notification = ({
 
                 <div>
                   <Button
+                  id="send-Button"
+                  name="send-Button"
                     className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
                     onClick={() => handleSubmit()}
                   >
