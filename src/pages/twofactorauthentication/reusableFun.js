@@ -13,11 +13,11 @@ export const getLogoImage = () => {
         <Image
           className="login-logo"
           src={cogentLogo}
+          alt="Cogentai Logo"
           style={{
             display: "block",
             margin: "0 auto",
             width: "500px",
-            // height: "230px",
           }}
         />
       );
@@ -26,6 +26,7 @@ export const getLogoImage = () => {
         <Image
           className="login-logo"
           src={c360Logo}
+          alt="C360 Logo"
           style={{
             display: "block",
             margin: "0 auto",
@@ -39,11 +40,11 @@ export const getLogoImage = () => {
         <Image
           className="login-logo"
           src={cogentLogo}
+          alt="Default Logo"
           style={{
             display: "block",
             margin: "0 auto",
             width: "500px",
-            // height: "230px",
           }}
         />
       );
@@ -58,16 +59,16 @@ export const getHeaderLoge = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            width: "120px", 
-            aspectRatio: "2 / 1", 
+            width: "120px",
+            aspectRatio: "2 / 1",
           }}
           className="mx-3"
         >
           <Image
             src={cogentHeaderLogo}
-            alt="Logo"
+            alt="Cogentai Header Logo"
             style={{
-              width: "100%", 
+              width: "100%",
               height: "auto",
             }}
           />
@@ -76,13 +77,18 @@ export const getHeaderLoge = () => {
     case "c360":
       return (
         <div className="header-logo">
-          <Image src={c360Logo} alt="noImg" />
+          <Image src={c360Logo} alt="C360 Header Logo" />
         </div>
       );
 
     default:
       return (
-        <Image src={cogentHeaderLogo} alt="noImg" width={200} height={150} />
+        <Image
+          src={cogentHeaderLogo}
+          alt="Default Header Logo"
+          width={200}
+          height={150}
+        />
       );
   }
 };
@@ -102,21 +108,36 @@ export const getLogo = () => {
   switch (companyDeatils) {
     case "cogentai":
       return (
-        <Image src={cogentChat} width={40} height={50} />
+        <Image
+          src={cogentChat}
+          alt="Cogentai Chat Logo"
+          width={40}
+          height={50}
+        />
       );
     case "c360":
       return (
         <div className="header-logo">
-           <Image src={neChatImage} width={30} height={40} />
+          <Image
+            src={neChatImage}
+            alt="C360 Chat Logo"
+            width={30}
+            height={40}
+          />
         </div>
       );
 
     default:
       return (
-        <Image src={cogentChat} width={30} height={40} />
+        <Image
+          src={cogentChat}
+          alt="Default Chat Logo"
+          width={30}
+          height={40}
+        />
       );
   }
-}
+};
 
 const ReusableFunction = () => {
   return <></>;
