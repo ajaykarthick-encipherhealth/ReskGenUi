@@ -9,7 +9,7 @@ import MyWorkQueueFilter from "../MyWorkQueueFilter";
 import { actions as patientsActions } from "../../../../../stores/patient/details";
 import { connect } from "react-redux";
 import { truncateString } from "../function/ReusableFunctions";
-import CardSkeleton from "../../../../skeleton/card";
+import TableSkeleton from "../../../../skeleton/table";
 
 const ReviwerWorkList = ({
   localUserId,
@@ -199,7 +199,7 @@ const ReviwerWorkList = ({
           </>
         ) : (
           <div className="mt-2">
-            <CardSkeleton height={500} />
+             <TableSkeleton/>
           </div>
         )}
       </div>

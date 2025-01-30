@@ -8,7 +8,7 @@ import { stringToColour } from "../components/function/ReusableFunctions";
 import AddForm from "./AddForm";
 import { actions as allActions } from "../../../../stores/patient/details";
 import dayjs from "dayjs";
-import CardSkeleton from "../../../skeleton/card";
+import TableSkeleton from "../../../skeleton/table";
 export const viewProvidersList = ({ list }) => (
   <div
     className={`${style.listShow}`}
@@ -94,7 +94,7 @@ const ManuallyAddProvider = ({
         )}
         <div className="w-100 h-100 overflow-scroll">
           {loader ? (
-            <CardSkeleton height={200} />
+           <TableSkeleton/>
           ) : Array.isArray(dosAndProvidersList) ? (
             dosAndProvidersList?.map((item) => (
               <button className={`${style.providerButton} my-2`} key={item?.id}>

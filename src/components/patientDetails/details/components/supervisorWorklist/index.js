@@ -19,7 +19,7 @@ import Legends from "../../../../../components/legends";
 import MyWorkQueueFilter from "../MyWorkQueueFilter";
 import { actions as workflowActions } from "../../../../../stores/supervisor/auditedQueue";
 import { truncateString } from "../function/ReusableFunctions";
-import CardSkeleton from "../../../../skeleton/card";
+import TableSkeleton from "../../../../skeleton/table";
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -341,7 +341,7 @@ const SupervisorWorkList = ({
           </>
         ) : (
           <div className="mt-2">
-            <CardSkeleton height={500} />
+              <TableSkeleton/>
           </div>
         )}
       </div>

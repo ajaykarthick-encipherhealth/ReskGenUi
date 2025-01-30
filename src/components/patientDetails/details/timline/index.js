@@ -1016,7 +1016,9 @@ const Timeline = ({
         </div>
       ) : (
         <div className="m-3">
-          <CardSkeleton height={800} />
+          <div className="d-flex flex-column gap-2">
+          <CardSkeleton  count={6} height={100} />
+          </div>
         </div>
       )}
     </div>

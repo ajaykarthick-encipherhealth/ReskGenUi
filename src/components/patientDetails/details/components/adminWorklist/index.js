@@ -13,7 +13,7 @@ import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Search from "../../../../search";
 import { truncateString } from "../function/ReusableFunctions";
-import CardSkeleton from "../../../../skeleton/card";
+import TableSkeleton from "../../../../skeleton/table";
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -261,7 +261,9 @@ const AdminWorkList = ({
           </>
         ) : (
           <div className="mt-2">
-            <CardSkeleton height={500} />
+         
+            <TableSkeleton/>
+            
           </div>
         )}
       </div>
