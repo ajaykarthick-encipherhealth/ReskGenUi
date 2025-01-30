@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Button, DatePicker, Empty, Input, Space, Spin } from "antd";
 import TableRisk from "../tableRisk";
 import YearPicker from "../yearpicker";
-
+import CardSkeleton from "../skeleton/card";
 
 const RiskAdjustment = ({
   RiskAdjustmentData,
@@ -14,15 +14,14 @@ const RiskAdjustment = ({
   activeButton,
   setActiveButton,
   setSearchInput,
+  riskAdjustmentLoader,
 }) => {
   const [code, setCode] = useState("");
   const [data, setData] = useState([]);
   const [year, setYear] = useState();
   const [selectedYear, setSelectedYear] = useState(currentDate);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [codeErrorMessage, setCodeErrorMessage] = useState("");
-  const [yearErrorMessage, setYearErrorMessage] = useState("");
   const [noData, setNoData] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
   const currentDate = new Date();
 
   const disabledDate = (date) => {
@@ -37,26 +36,13 @@ const RiskAdjustment = ({
       setCode(inputValue);
       setErrorMessage(null);
       setNoData(null);
-      setCodeErrorMessage(null);
     } else {
       setErrorMessage("Only characters and dots are allowed");
     }
   };
 
   const handleSearchClick = () => {
-    if (!code && !selectedYear) {
-      setCodeErrorMessage("Please enter a Diagnosis Code");
-      setYearErrorMessage("Please select a Year");
-    } else if (!code) {
-      setCodeErrorMessage("Please enter a Diagnosis Code");
-      setYearErrorMessage(null);
-    } else if (!selectedYear) {
-      setYearErrorMessage("Please select a Year");
-      setCodeErrorMessage(null);
-    } else {
-      setCodeErrorMessage("");
-      setYearErrorMessage("");
-      setLoading(true);
+    if (!errorMessage) {
       fetch();
     }
   };
@@ -66,19 +52,18 @@ const RiskAdjustment = ({
       year: selectedYear,
       code: code,
     });
-    if (riskData?.status == "SUCCESS") 
-      setLoading(false);
+    if (riskData?.status == "SUCCESS") setLoading(false);
     if (!riskData?.response?.length) {
       setNoData(true);
     } else {
       setNoData(false);
     }
     setLoading(false);
-
     setData(riskData?.response);
   };
+
   function handleKeyDown(event) {
-    if (event.keyCode === 13) {
+    if (event.keyCode === 13 && !errorMessage) {
       fetch();
     }
   }
@@ -86,7 +71,6 @@ const RiskAdjustment = ({
   const handleYearChange = (date, dateString) => {
     setYear(date);
     setSelectedYear(dateString);
-    setYearErrorMessage(null);
   };
 
   useEffect(() => {
@@ -115,9 +99,6 @@ const RiskAdjustment = ({
                 disabledDate={disabledDate}
               />
             </div>
-            {yearErrorMessage && (
-              <div className="text-danger ml-2">{yearErrorMessage}</div>
-            )}
           </div>
         </div>
         <div className="col-6 ">
@@ -132,9 +113,6 @@ const RiskAdjustment = ({
               maxLength={10}
             />
           </div>
-          {codeErrorMessage && (
-            <div className="text-danger ml-2">{codeErrorMessage}</div>
-          )}
           {errorMessage && (
             <div className="text-danger ml-2">{errorMessage}</div>
           )}
@@ -144,30 +122,36 @@ const RiskAdjustment = ({
         <Button
           className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
           onClick={handleSearchClick}
+          disabled={!year || !code}
         >
           <div className={style.search}>Search</div>
         </Button>
       </div>
-      <div className="d-flex justify-content-center mt-4">
-        {loading && <Spin size="large" />}
-      </div>
-
-      {data?.[0]?.year && data?.length ? (
-        <TableRisk
-          activeButton={activeButton}
-          setActiveButton={setActiveButton}
-          setSearchInput={setSearchInput}
-          data={data}
-        />
-      ) : (
-        ""
-      )}
+      {riskAdjustmentLoader ? (
+        <div className="mt-3">
+          <CardSkeleton height={250} />
+        </div>
+      ) : data?.[0]?.year && data?.length ? (
+        <div className="mt-3">
+          <TableRisk
+            activeButton={activeButton}
+            setActiveButton={setActiveButton}
+            setSearchInput={setSearchInput}
+            data={data}
+          />
+        </div>
+      ) : null}
       {noData && <Empty />}
     </div>
   );
 };
 
-const enhancer = connect((state) => ({ state }), {
-  RiskAdjustmentData: dashbaordActions.riskadjustmentAction,
-});
+const enhancer = connect(
+  (state) => ({
+    riskAdjustmentLoader: state.codify.codify?.riskAdjustmentLoader,
+  }),
+  {
+    RiskAdjustmentData: dashbaordActions.riskadjustmentAction,
+  }
+);
 export default enhancer(RiskAdjustment);

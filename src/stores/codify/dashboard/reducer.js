@@ -53,6 +53,7 @@ const codifyReducer = combineReducers({
   indexesLoading:getCodifyLoading(indexesAction),
   codifyLoader:getCodifyLoading(codifyAction),
   addCodes:createReducer(addCodesAction),
+  riskAdjustmentLoader:getCodifyLoading(riskadjustmentAction),
   codesLoader:getCodifyLoading(codesAction),
   
 });
