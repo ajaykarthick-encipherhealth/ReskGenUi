@@ -15,7 +15,7 @@ const FileDetails = ({
 }) => {
   return (
     <>
-      <div className={`row ${styles.container}`}>
+      <div className={`row mt-3 ${styles.container}`}>
         {/* <div className="col-1">
           <Title title={title} />
         </div> */}

@@ -266,7 +266,7 @@
 }
 
 .backArrowBtn {
-  margin: 1.25rem;
+  /* margin: 1.25rem; */
   height: 32px !important;
   width: 32px !important;
   padding: 0 !important;
@@ -1250,7 +1250,7 @@
 
 .visitDataMainClose .secondContainer {
   width: 88% !important;
-  margin-left: 0px !important;
+  /* margin-left: 0px !important; */
 }
 
 .visitDataMainClose .thirdContainer {

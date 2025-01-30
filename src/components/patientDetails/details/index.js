@@ -653,14 +653,14 @@ const Details = ({
               <div className="row patient-file-container">
                 <div className="row p-0">
                   {activeTab == "2" || activeTab == "1" ? (
-                    <div className="d-flex">
+                    <div className="row">
                       <div
-                        className="col-1"
-                        style={{ zIndex: "1", marginTop: "20px" }}
+                        className="col-1 d-flex align-items-center justify-content-start "
+                        // style={{ zIndex: "1", marginTop: "20px" }}
                       >
                         <Button
                           onClick={backToPatientData}
-                          className={`ms-2 ${visitStyles.backArrowBtn}`}
+                          className={` ${visitStyles.backArrowBtn}`}
                         >
                           <FontAwesomeIcon
                             icon={faArrowLeft}
@@ -697,14 +697,14 @@ const Details = ({
                       </div>
                     </div>
                   ) : (
-                    <>
+                    <div className="row">
                       <div
-                        className="col-1"
-                        style={{ zIndex: "1", marginTop: "20px" }}
+                        className="col-1 d-flex align-items-center justify-content-start"
+                        // style={{ zIndex: "1", marginTop: "20px" }}
                       >
                         <Button
                           onClick={backToPatientData}
-                          className={`ms-2 ${visitStyles.backArrowBtn}`}
+                          className={` ${visitStyles.backArrowBtn}`}
                         >
                           <FontAwesomeIcon
                             icon={faArrowLeft}
@@ -725,13 +725,13 @@ const Details = ({
                           flagFirstData={flagFirstData}
                         />
                       </div>
-                    </>
+                    </div>
                   )}
                   <div
                     className={
                       isSideNavShow
-                        ? `${visitStyles.visitDataMain}`
-                        : `${visitStyles.visitDataMainClose}`
+                        ? ` mt-3 ${visitStyles.visitDataMain}`
+                        : ` mt-3 ${visitStyles.visitDataMainClose}`
                     }
                   >
                     <div className={`${visitStyles.firstContainer}`}>

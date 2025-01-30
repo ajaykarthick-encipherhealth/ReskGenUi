@@ -79,8 +79,8 @@
   padding: 0 !important;
   background: #e1edfe !important;
   border: none;
-  margin-left: 15px !important;
-  margin-top: 8px;
+  /* margin-left: 15px !important; */
+  /* margin-top: 8px; */
 }
 .scroll{
   height: 700px;
