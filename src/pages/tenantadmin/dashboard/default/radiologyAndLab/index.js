@@ -34,7 +34,7 @@ const index = ({
       endDate: dateRange.endDate,
       organizationId: selectedOrganization,
     });
-  }, [dateRange]);
+  }, [dateRange,selectedOrganization]);
 
   return (
     <>

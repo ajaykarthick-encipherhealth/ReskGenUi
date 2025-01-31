@@ -1,9 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, DatePicker, Modal, notification } from "antd";
+import { Avatar, DatePicker, Modal, notification, Select } from "antd";
 import { faXmark, faUser } from "@fortawesome/free-solid-svg-icons";
 import modalStyle from "./style.module.css";
 import { useEffect, useState } from "react";
-import { disablePastDate } from "../../../../components/headerFilters/functions";
+import {
+  disablePastDate,
+  priorityOptions,
+} from "../../../../components/headerFilters/functions";
 import moment from "moment";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/tenantAdmin/patientAllocation";
@@ -20,7 +23,7 @@ const L2AllocateModal = ({
   selectedUser,
   getAllocateUsers,
   getL2UsersList,
-  setIsSupervisorAllocated
+  setIsSupervisorAllocated,
 }) => {
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
@@ -35,29 +38,33 @@ const L2AllocateModal = ({
     hold: null,
     allocated: null,
   });
-
+  const [priority, setPriority] = useState([]);
   const getInitials = (firstName, lastName) => {
     const firstNameInitial = firstName?.charAt(0) || "";
     const secondNameInitial = lastName?.charAt(0) || "";
     return firstNameInitial?.toUpperCase() + secondNameInitial?.toUpperCase();
   };
-
+  const handleChange = (value) => {
+    setPriority(value);
+  };
   const setAllocate = async () => {
     const response = await getAllocateUsers({
       data: {
         userId: selectedUser?.userName,
         dueDate: `${allocateDate + "T23:00:00.999Z"}`,
         patientIds: selectedRowsId.map((item) => item.id),
+        priority: priority,
       },
     });
     if (response?.status == "SUCCESS") {
       getResponePopup(response);
-      setIsSupervisorAllocated(true)
+      setIsSupervisorAllocated(true);
       setAllocateClicked(true);
       setAllocateDate("");
       setActiveCard("");
       setActiveEmail("");
       setSearch("");
+      setPriority([]);
       setOpen(false);
     }
   };
@@ -92,6 +99,7 @@ const L2AllocateModal = ({
         setActiveEmail("");
         setSearch("");
         setAllocateDate("");
+        setPriority([]);
       }}
       title="Select User"
       footer={false}
@@ -131,10 +139,10 @@ const L2AllocateModal = ({
                   Charts Selected:{" "}
                   {selectedChart?.length > 0 ? selectedChart?.length : 0}
                 </span>
-                <div className="d-flex py-2 align-items-center">
+                <div className="d-flex py-2 gap-3 align-items-center">
                   <span className={`${modalStyle.title} py-3`}>Due Date</span>
                   <DatePicker
-                    style={{ width: "150px", marginLeft: "10px" }}
+                    style={{ width: "150px" }}
                     onChange={(date, dateS) => {
                       if (dateS) {
                         setAllocateDate(dateS);
@@ -147,6 +155,19 @@ const L2AllocateModal = ({
                       allocateDate ? moment(allocateDate, "YYYY-MM-DD") : ""
                     }
                   />
+                </div>
+                <div className="d-flex py-1 gap-1 align-items-center">
+                  <span>Set Priority</span>
+                  <div className="antdCustomSelect">
+                    <Select
+                      className={modalStyle.prioritySelect}
+                      options={priorityOptions}
+                      placeholder="Set priority"
+                      showSearch={false}
+                      onChange={handleChange}
+                      value={priority}
+                    />
+                  </div>
                 </div>
                 <div className="d-flex my-3">
                   <div>
@@ -268,7 +289,11 @@ const L2AllocateModal = ({
             <div className={`d-flex justify-content-center`}>
               <button
                 className={`btn btn-primary px-5 p-1 ${modalStyle.modalBtn}`}
-                disabled={!selectedChart?.length > 0 || allocateDate == ""}
+                disabled={
+                  !selectedChart?.length > 0 ||
+                  allocateDate == "" ||
+                  priority == ""
+                }
                 onClick={setAllocate}
               >
                 Allocate
