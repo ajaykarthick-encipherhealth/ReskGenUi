@@ -76,13 +76,13 @@ const InvalidChart = ({
             {header}
 
             {hideContent ? (
-              <p
+              <span
                 onClick={() => onClick(values)}
                 className="font1 text-decoration-underline cursor-pointer "
                 style={{ color: "#3B82F6" }}
               >
                 Maximize
-              </p>
+              </span>
             ): null}
           </div>
         </div>

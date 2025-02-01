@@ -2,6 +2,8 @@ import CryptoJS from "crypto-js";
 import { isEncrypted, salt } from "../config";
 import Swal from "sweetalert2";
 import { removeStorage, setStorage } from "../storages";
+import { exceptionMail } from "../../stores/websocket/network";
+import { notification } from "antd";
 const defaultHeaders = {
   "Content-Type": "application/json",
 };
@@ -52,9 +54,10 @@ function decryptData(encryptedData, key, iv) {
 
 export async function checkStatus(response) {
   setStorage("loginCheck", false);
+
   const showModal = async (
     message,
-    buttonText = "Back", 
+    buttonText = "Back",
     showCloseButton = true,
     clearStorage = false
   ) => {
@@ -67,24 +70,24 @@ export async function checkStatus(response) {
       confirmButtonColor: "#DD6B55",
       showCloseButton,
     });
-
     if (result.isConfirmed && clearStorage) {
       removeStorage();
       window.location = "/login";
     }
   };
+
   const appendCloseButtonStyle = () => {
     const existingStyle = document.getElementById("swal2-close-style");
     if (!existingStyle) {
       const style = document.createElement("style");
       style.id = "swal2-close-style";
       style.innerHTML = `
-        .swal2-close {
-          font-size: 32px !important;
-          top: 10px !important;
-          right: 10px !important;
-        }
-      `;
+          .swal2-close {
+            font-size: 32px !important;
+            top: 10px !important;
+            right: 10px !important;
+          }
+        `;
       document.head.appendChild(style);
     }
   };
@@ -104,9 +107,34 @@ export async function checkStatus(response) {
   };
 
   if (!response) return;
-
   const { status } = response;
-
+  if(status === 513 || status === 500 || status === 502 || status === 512){
+  // if ([500, 513, 502, 512].includes(status)) {
+    try {
+      const res = await exceptionMail({
+        obj: {
+          exceptionMessage: "Error occurring.",
+          exceptionSubject: "Error in DB",
+          stackTrace: "Stack trace details go here.",
+          subject: "Exception Email",
+          exceptionMailServiceEnum: "DB",
+        },
+      });
+      if (res?.status === "SUCCESS") {
+        notification.success({
+          description: "The admin has been notified via email",
+          duration: 2,
+        });
+      } else {
+        notification.error({
+          description: "Something went wrong while sending the email",
+          duration: 2,
+        });
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
+  }
   switch (status) {
     case 401: {
       await showModal(
@@ -128,7 +156,7 @@ export async function checkStatus(response) {
       break;
     }
     case 512:
-     {
+    case 513: {
       await showModal(
         "An error occurred due to unhandled exceptions or unexpected conditions within the system. The admin will be notified by email."
       );
@@ -153,8 +181,6 @@ export async function checkStatus(response) {
     }
   }
 }
-
-
 
 export async function checkAuth(response) {
   const data = await response.json();

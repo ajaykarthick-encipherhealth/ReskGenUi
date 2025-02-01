@@ -16123,7 +16123,7 @@ overflow: scroll;
 
 .invalidChart > div > div > canvas {
 bottom :20px !important;
-top:-45px !important
+top:-16px !important
 }
 .customReactModal .modal-content{
  width :900px !important

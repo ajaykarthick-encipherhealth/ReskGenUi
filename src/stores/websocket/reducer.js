@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { websocketAction, websocketNotificationAction } from "./actions";
+import { websocketAction, websocketNotificationAction,exceptionAction } from "./actions";
+import { exceptionMail } from "./network";
 
 const initialState = {
   loading: true,
@@ -33,6 +34,7 @@ const createReducer = (actionType) =>
 const WebSocketReducer = combineReducers({
   webSocketDetails: createReducer(websocketAction),
   webSocketNotificationDetails: createReducer(websocketNotificationAction),
+  exceptionMail:createReducer(exceptionAction)
 
 });
 

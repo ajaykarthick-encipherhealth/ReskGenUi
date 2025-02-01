@@ -9,3 +9,7 @@ export const websocketNotificationAction = createActionThunk(
   "WEB_SOCKET_NOTIFICATION",
   network.websocketNotificationList
 );
+export const exceptionAction = createActionThunk(
+  "EXCEPTION_MAIL",
+  network.exceptionMail
+);
