@@ -27,7 +27,7 @@ const CardComponent = ({
           id={data?.reportName}
           name={data?.reportName}
           key={index}
-          style={{ marginBottom: "0px", cursor: "pointer" }}
+          style={{ marginBottom: "0px" }}
           className={`${styles.card} ${
             index === selectedCardIndex ? styles.selectedCard : ""
           } py-3`}
@@ -35,7 +35,7 @@ const CardComponent = ({
         >
           <div className={styles.contentGroup}>
             <div className="col-xl-12">
-              <div
+              <div className="cr-pointer"
                 style={{
                   display: "flex",
                   justifyContent: "space-between",

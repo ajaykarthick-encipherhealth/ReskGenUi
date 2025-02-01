@@ -315,20 +315,26 @@ const SupervisorWorkList = ({
         </div>
         {!filterDataLoading ? (
           <>
-            <div className={visitStyles.patientListHead}>
-              <ul className={`${visitStyles.patientDetailsHead}`}>
+            <div id="dosSelect" className={visitStyles.patientListHead}>
+              <ul
+                id="dosSelect"
+                className={`${visitStyles.patientDetailsHead}`}
+              >
                 {patientList?.map((data, index) => (
                   <li
+                    id="dosSelect"
                     className={`${visitStyles.nameList} ${visitStyles.patientList}`}
                     key={index}
                     onClick={() =>
                       getPatientListToDetails(data.patientId, true)
                     }
                   >
-                    <span>
-                      <span>{truncateString(data.patientId, 35)}</span>{" "}
-                      <span>-</span>
-                      <span>{data.patientName}</span>
+                    <span id="dosSelect">
+                      <span id="dosSelect">
+                        {truncateString(data.patientId, 35)}
+                      </span>{" "}
+                      <span id="dosSelect">-</span>
+                      <span id="dosSelect">{data.patientName}</span>
                     </span>
                     {processstatusBodyTemplate(data)}
                   </li>

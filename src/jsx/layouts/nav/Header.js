@@ -389,7 +389,7 @@ const Header = ({
 
       return (
         <li
-          className={` ${
+          className={`header-transition ${
             stateActive === data.to ||
             ((currentRole === "Admin" || currentRole === "Tenant Admin") &&
             encodedParams
@@ -576,7 +576,7 @@ const Header = ({
               )}
             </div>
             {stateActive != "/reviewer/home" ? (
-              <div>
+              <div header-transition>
                 <ul className={`metismenu header-menu d-flex`} id="menu">
                   {nextMenuList && screenSize?.width <= 1527 && (
                     <div className="d-flex justify-content-center align-items-center">
@@ -630,10 +630,10 @@ const Header = ({
             <div className="header-right d-flex align-items-center">
               <ul className="navbar-nav ">
                 <li className="nav-item">
-                  <div className="header-profile2 cr-pointer">
-                    <div className="nav-link i-false cr-pointer" as="div">
-                      <div className="header-info2 d-flex align-items-center cursor-pointer">
-                        <div className={styles.codify}>
+                  <div className="header-profile2 ">
+                    <div className="nav-link i-false " as="div">
+                      <div className="header-info2 d-flex align-items-center">
+                        <div  className={styles.codify}>
                           {/* <div>{SVGICON.codify}</div> */}
                           <Tooltip placement="bottom" title={"CodeRoot"}>
                             <img

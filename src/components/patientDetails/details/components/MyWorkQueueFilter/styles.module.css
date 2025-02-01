@@ -16,6 +16,7 @@
   border-radius: 4px;
   box-shadow: 1px 4px 8px rgba(0,0,0,0.55);
   margin-top: 5px;
+  z-index: 1000;
 }
 
 .popover.right {

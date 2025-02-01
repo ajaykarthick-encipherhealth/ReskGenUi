@@ -86,7 +86,7 @@ const ContentGroupCard = ({
   return (
     <div className={styles.card}>
       <div
-        className={`${styles.contentGroup} my-2`}
+        className={`report-effect ${styles.contentGroup} my-2`}
         style={{ cursor: "pointer", display: "flex" }}
       >
         <div style={{ width: "5%" }}>
@@ -234,9 +234,9 @@ const ContentGroupCard = ({
                 </Tooltip>
               </div>
               <div className={styles.avatarAlign}>
-                {auditstatusBodyTemplate || '--'}
+                {auditstatusBodyTemplate || "--"}
               </div>
-              <div>{processstatusBodyTemplate || '--'}</div>
+              <div>{processstatusBodyTemplate || "--"}</div>
             </div>
             <div className={`${styles.headText}`}>
               REVIEWER

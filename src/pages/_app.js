@@ -26,26 +26,106 @@ config.autoAddCss = false;
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [showTerminal, setShowTerminal] = useState(false);
-  let loginCheck = typeof window !== "undefined" ? Boolean(getStorage("loginCheck")) : false;
+  let loginCheck =
+    typeof window !== "undefined" ? Boolean(getStorage("loginCheck")) : false;
 
   const refreshToken = async () => {
     const refreshToken = getStorage("refreshToken");
     const options = {
       method: "POST",
-      body: JSON.stringify({refreshToken: refreshToken }),
+      body: JSON.stringify({ refreshToken: refreshToken }),
     };
-      const response = await requestPortal(
-        `securityservice/token/refreshtoken`,
-        options
-      );
-      if (response?.status === "SUCCESS") { 
-        const newToken = response?.response;
-        setStorage("refreshTokenTime", Date.now());
-        setStorage("token", newToken);
-        setStorage("loginTime", Date.now());
-      }
-      return response;
+    const response = await requestPortal(
+      `securityservice/token/refreshtoken`,
+      options
+    );
+    if (response?.status === "SUCCESS") {
+      const newToken = response?.response;
+      setStorage("refreshTokenTime", Date.now());
+      setStorage("token", newToken);
+      setStorage("loginTime", Date.now());
+    }
+    return response;
   };
+
+  const isTableElement = (element) => {
+    return ["TABLE", "TR", "TD", "TH"].includes(element.tagName);
+  };
+
+  const applyHoverEffect = (target, isEntering, pathname) => {
+    if (
+      (target.tagName === "A" ||
+        target.tagName === "BUTTON" ||
+        target.classList.contains("cursor-pointer") ||
+        window.getComputedStyle(target).cursor === "pointer") &&
+      !isTableElement(target)
+    ) {
+      if (isEntering) {
+        target.style.transition = "all 0.5s ease-in-out";
+        if (target.id === "auditbtn") {
+          target.style.transform = "scale(1)";
+        } else if (target.id === "dosSelect") {
+          target.style.transform = "scale(1.01)";
+        } else {
+          target.style.transform = pathname.endsWith("/report")
+            ? "scale(1.01)"
+            : pathname.endsWith("/details")
+            ? "scale(1.05)"
+            : "scale(1.02)";
+        }
+        target.classList.add("hover-effect");
+      } else {
+        target.classList.add("hover-effect-remove");
+        target.style.transform = "scale(1)";
+        setTimeout(() => {
+          target.classList.remove("hover-effect", "hover-effect-remove");
+        }, 300);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleClick = (event) => {
+      let target = event.target;
+      while (target && target !== document.body) {
+        if (
+          (target.tagName === "A" ||
+            target.tagName === "BUTTON" ||
+            target.classList.contains("cursor-pointer") ||
+            window.getComputedStyle(target).cursor === "pointer") &&
+          !isTableElement(target)
+        ) {
+          target.classList.add("smooth-transition");
+          break;
+        }
+        target = target.parentElement;
+      }
+    };
+
+    const handleMouseEnter = (event) => {
+      if (event.target instanceof Element) {
+        applyHoverEffect(event.target, true, router.pathname);
+      }
+    };
+
+    const handleMouseLeave = (event) => {
+      if (event.target instanceof Element) {
+        applyHoverEffect(event.target, false, router.pathname);
+      }
+    };
+
+    document.addEventListener("click", handleClick);
+    document.addEventListener("mouseenter", handleMouseEnter, true);
+    document.addEventListener("mouseleave", handleMouseLeave, true);
+
+    return () => {
+      document.removeEventListener("click", handleClick);
+      document.removeEventListener("mouseenter", handleMouseEnter, true);
+      document.removeEventListener("mouseleave", handleMouseLeave, true);
+    };
+  }, [router.pathname]);
+
+
   useEffect(() => {
     if (serverControl === "production") {
       const handleKeyDown = (event) => {
@@ -161,7 +241,7 @@ function MyApp({ Component, pageProps }) {
         checkLoginTime();
       } else {
         clearInterval(intervalId);
-        pauseTime = Date.now(); 
+        pauseTime = Date.now();
       }
     }, 30 * 60 * 1000);
 
@@ -198,26 +278,26 @@ function MyApp({ Component, pageProps }) {
     "/reviewer/patients/details",
     "/supervisor/patients/details",
     "/tenantadmin/patients/details",
-    "/supervisor/user/details", 
+    "/supervisor/user/details",
     "/tenantadmin/patientsync/batchfilesview",
-    "/tenantadmin/settings"
+    "/tenantadmin/settings",
   ];
   const showFooter = !hideFooterPaths.includes(router.pathname);
   useEffect(() => {
     const handleStart = () => NProgress.start();
     const handleComplete = () => NProgress.done();
-  
-    NProgress.configure({showSpinner:false})
+
+    NProgress.configure({ showSpinner: false });
     Router.events.on("routeChangeStart", handleStart);
     Router.events.on("routeChangeComplete", handleComplete);
     Router.events.on("routeChangeError", handleComplete);
 
     return () => {
-        Router.events.off("routeChangeStart", handleStart);
-        Router.events.off("routeChangeComplete", handleComplete);
-        Router.events.off("routeChangeError", handleComplete);
+      Router.events.off("routeChangeStart", handleStart);
+      Router.events.off("routeChangeComplete", handleComplete);
+      Router.events.off("routeChangeError", handleComplete);
     };
-}, []);
+  }, []);
   useEffect(() => {
     const handleOffline = () => {
       Swal.fire({
@@ -241,12 +321,22 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
+    // <PrimeReactProvider>
+    //   <Provider store={store}>
+    //     {showTerminal && <AICHAT openMsg={true} />}
+    //     <Component {...pageProps} />
+    //     <InternetError/>
+    //     {loginCheck == true && <ConnectWebSocket />}
+    //     {showFooter && showTerminal && <Footer />}
+    //   </Provider>
+    // </PrimeReactProvider>
     <PrimeReactProvider>
       <Provider store={store}>
         {showTerminal && <AICHAT openMsg={true} />}
-        <Component {...pageProps} />
-        <InternetError/>
-        {loginCheck == true && <ConnectWebSocket />}
+        <span>
+          <Component {...pageProps} />
+        </span>
+        <InternetError />
         {showFooter && showTerminal && <Footer />}
       </Provider>
     </PrimeReactProvider>

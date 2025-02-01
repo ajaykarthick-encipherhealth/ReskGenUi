@@ -20,6 +20,7 @@ import {
   faAngleDoubleLeft,
   faFile,
   faTimeline,
+  faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -790,24 +791,17 @@ const Details = ({
                                         <div className="menu-icon">
                                           <Badge
                                             count={
-                                              <svg
-                                                width="20"
-                                                height="20"
-                                                viewBox="0 0 20 20"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                              >
-                                                <circle
-                                                  cx="10"
-                                                  cy="10"
-                                                  r="5"
-                                                  fill="green"
-                                                />
-                                              </svg>
+                                              <FontAwesomeIcon
+                                                icon={faCircle}
+                                                style={{
+                                                  color: "green",
+                                                  fontSize: "10px",
+                                                }}
+                                              />
                                             }
                                             style={{
                                               background: "transparent",
-                                              margin: "8px",
+                                              margin: "7px",
                                             }}
                                             offset={[10, 10]}
                                             size="large"

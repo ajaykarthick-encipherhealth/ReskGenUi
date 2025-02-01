@@ -84,11 +84,15 @@ const Hcc = ({
         if (res) {
           var dosLable = (
             <>
-              <div className="d-flex justify-content-between gap-1 align-items-center ">
-                <div className="d-flex gap-1">
-                  <span>
+              <div
+                id="dosSelect"
+                className="d-flex justify-content-between gap-1 align-items-center "
+              >
+                <div id="dosSelect" className="d-flex gap-1">
+                  <span id="dosSelect">
                     {res?.stateIndicators?.includes("CHART") && (
                       <span
+                        id="dosSelect"
                         className="p-1 rounded-1"
                         style={{
                           background: "#87d068",
@@ -101,6 +105,7 @@ const Hcc = ({
                     )}
                     {res?.stateIndicators?.includes("LAB") && (
                       <span
+                        id="dosSelect"
                         className="p-1 rounded-2 mx-1 me-2"
                         style={{
                           background: "#108ee9",
@@ -113,6 +118,7 @@ const Hcc = ({
                     )}
                     {res?.stateIndicators?.includes("RADIOLOGY") && (
                       <span
+                        id="dosSelect"
                         className="p-1 rounded-2 mx-1"
                         style={{
                           background: "#f50",
@@ -125,7 +131,7 @@ const Hcc = ({
                     )}
                   </span>
 
-                  <span className={styles.dosLable}>
+                  <span id="dosSelect" className={styles.dosLable}>
                     {moment(res.dateOfService).format("MM-DD-YYYY")}
                   </span>
                 </div>
@@ -504,16 +510,21 @@ const Hcc = ({
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item as="li" className="nav-item">
-                      <div className="d-flex gap-3 mx-2">
+                      <div id="dosSelect" className="d-flex gap-3 mx-2">
                         <Select
+                          id="dosSelect"
                           placeholder="Select DOS"
                           onChange={handleOptions}
                           className="dosSelect"
                           allowClear={true}
                           value={selectDosValue ? selectDosValue : null}
                         >
-                          {dosSummariesList?.map((data) => (
-                            <Option key={data?.value} value={data?.value}>
+                          {dosSummariesList?.map((data, index) => (
+                            <Option
+                              id={`dosSelect`}
+                              key={data?.value}
+                              value={data?.value}
+                            >
                               {data.label}
                             </Option>
                           ))}

@@ -1037,7 +1037,7 @@
   font-weight: 500;
   line-height: normal;
   padding: 10px;
-  cursor: pointer;
+  cursor: default;
 }
 
 .nameList h5 {
@@ -1852,6 +1852,7 @@
   box-shadow: 0 3px 10px rgba(220, 199, 199, 0.2);
   border: 1px solid rgba(220, 199, 199, 0.2);
   border-radius: 10px;
+  cursor: pointer;
 }
 
 .patientDetailsHead {

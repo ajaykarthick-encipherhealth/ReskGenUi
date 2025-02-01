@@ -22,7 +22,7 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
   };
 
   return (
-    <div className="cursor-pointer">
+    <div>
       {data?.length > 0 ? (
         <div
           id={data?.reportId}
@@ -31,9 +31,10 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
           className={`${styles.card} ${styles.selectedCard} py-3`}
           onClick={() => handleReceiverReport(item)}
         >
-          <div className={styles.contentGroup}>
+          <div className={` ${styles.contentGroup}`}>
             <div className="col-12">
               <div
+                className="cursor-pointer report-effect"
                 style={{
                   display: "flex",
                   justifyContent: "space-between",

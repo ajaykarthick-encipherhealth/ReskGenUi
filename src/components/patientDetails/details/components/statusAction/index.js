@@ -48,19 +48,27 @@ const StatusAction = ({
 
   const renderAuditMenu = (value) => {
     var value = (
-      <Menu>
+      <Menu id="auditbtn">
         <>
           {patienIdDetails?.auditedStatus != "AUDITED" && (
             <Menu.Item key="1" onClick={() => auditPatient(1)}>
-              <div className="patient-status">
-                <span className={`badge ${visitStyles.audit_text}`}>AUDITED</span>
+              <div id="auditbtn" className="patient-status">
+                <span
+                  id="auditbtn"
+                  className={`badge ${visitStyles.audit_text}`}
+                >
+                  AUDITED
+                </span>
               </div>
             </Menu.Item>
           )}
           {patienIdDetails?.auditedStatus != "REAUDIT" && (
             <Menu.Item key="2" onClick={() => auditPatient(2)}>
-              <div className="patient-status">
-                <span className={`badge ${visitStyles.reaudit_text}`}>
+              <div id="auditbtn" className="patient-status">
+                <span
+                  id="auditbtn"
+                  className={`badge ${visitStyles.reaudit_text}`}
+                >
                   RE AUDIT
                 </span>
               </div>
@@ -68,8 +76,11 @@ const StatusAction = ({
           )}
           {patienIdDetails?.auditedStatus != "AUDIT_PENDING" && (
             <Menu.Item key="3" onClick={() => auditPatient(3)}>
-              <div className="patient-status">
-                <span className={`badge ${visitStyles.auditpending_text}`}>
+              <div id="auditbtn" className="patient-status">
+                <span
+                  id="auditbtn"
+                  className={`badge ${visitStyles.auditpending_text}`}
+                >
                   AUDIT PENDING
                 </span>
               </div>
@@ -77,8 +88,11 @@ const StatusAction = ({
           )}
           {patienIdDetails?.auditedStatus != "AUDITHOLD" && (
             <Menu.Item key="4" onClick={() => auditPatient(4)}>
-              <div className="patient-status">
-                <span className={`badge ${visitStyles.audithold_text}`}>
+              <div id="auditbtn" className="patient-status">
+                <span
+                  id="auditbtn"
+                  className={`badge ${visitStyles.audithold_text}`}
+                >
                   AUDIT HOLD
                 </span>
               </div>
@@ -86,8 +100,11 @@ const StatusAction = ({
           )}
           {patienIdDetails?.auditedStatus != "AUDIT_DECLINED" && (
             <Menu.Item key="5" onClick={() => auditPatient(5)}>
-              <div className="patient-status">
-                <span className={`badge ${visitStyles.auditdecline_text}`}>
+              <div id="auditbtn" className="patient-status">
+                <span
+                  id="auditbtn"
+                  className={`badge ${visitStyles.auditdecline_text}`}
+                >
                   AUDIT DECLINE
                 </span>
               </div>
@@ -143,7 +160,7 @@ const StatusAction = ({
     ];
     setSelectedRowsId(data);
     const menu = (
-      <Menu>
+      <Menu id="auditbtn">
         {result?.processedStatus != "HOLD" ? (
           <Menu.Item
             key="1"
@@ -152,8 +169,10 @@ const StatusAction = ({
               setMenuIsOpen(false);
             }}
           >
-            <div className="patient-status">
-              <span className={`badge hold-text`}>HOLD</span>
+            <div id="auditbtn" className="patient-status">
+              <span id="auditbtn" className={`badge hold-text`}>
+                HOLD
+              </span>
             </div>
           </Menu.Item>
         ) : null}
@@ -166,8 +185,10 @@ const StatusAction = ({
               setMenuIsOpen(false);
             }}
           >
-            <div className="patient-status">
-              <span className={`badge processing-text`}>PENDING</span>
+            <div id="auditbtn" className="patient-status">
+              <span id="auditbtn" className={`badge processing-text`}>
+                PENDING
+              </span>
             </div>
           </Menu.Item>
         ) : null}
@@ -186,8 +207,12 @@ const StatusAction = ({
             //   "Add flag to disable Decline"
             // }
             >
-              <div className="patient-status">
-                <span className={`badge failed-text`} style={{ color: "red" }}>
+              <div id="auditbtn" className="patient-status">
+                <span
+                  id="auditbtn"
+                  className={`badge failed-text`}
+                  style={{ color: "red" }}
+                >
                   DECLINE
                 </span>
               </div>
@@ -203,8 +228,10 @@ const StatusAction = ({
               setMenuIsOpen(false);
             }}
           >
-            <div className="patient-status">
-              <span className={`badge processed-text`}>COMPLETED</span>
+            <div id="auditbtn" className="patient-status">
+              <span id="auditbtn" className={`badge processed-text`}>
+                COMPLETED
+              </span>
             </div>
           </Menu.Item>
         ) : null}
@@ -603,7 +630,8 @@ const StatusAction = ({
     <>
       {patientIdDetailsData?.data?.response && (
         <>
-          {userRole && userRole?.toLowerCase() == "admin" || userRole && userRole?.toLowerCase() === "tenant_admin" ? (
+          {(userRole && userRole?.toLowerCase() == "admin") ||
+          (userRole && userRole?.toLowerCase() === "tenant_admin") ? (
             <div className={`${visitStyles.actionbtnContainer}`}>
               {/* <Dropdown
                 overlay={adminActionItems}
@@ -635,6 +663,7 @@ const StatusAction = ({
           ) : userRole && userRole?.toLowerCase() == "supervisor" ? (
             <div className={`${visitStyles.actionbtnContainer}`}>
               <Dropdown
+                id="auditbtn"
                 overlay={renderAuditMenu()}
                 onVisibleChange={(v) => setMenuIsOpen(v)}
                 visible={menuIsOpen}
@@ -653,6 +682,7 @@ const StatusAction = ({
                 }
               >
                 <Button
+                  id="auditbtn"
                   type="primary"
                   className={
                     patienIdDetails?.auditedStatus == "AUDITHOLD"
@@ -670,7 +700,7 @@ const StatusAction = ({
                 >
                   <span>
                     {patienIdDetails?.auditedStatus != null
-                      ? patienIdDetails?.auditedStatus.replaceAll('_', " ")
+                      ? patienIdDetails?.auditedStatus.replaceAll("_", " ")
                       : "AUDIT"}
                   </span>
                   <span style={{ marginLeft: "10px" }}>
@@ -683,6 +713,7 @@ const StatusAction = ({
             <div className={`${visitStyles.actionbtnContainer}`}>
               {patienIdDetails?.processedStatus == "COMPLETED" ? (
                 <Dropdown
+                  id="auditbtn"
                   overlay={
                     activeTab == 3
                       ? actionItems2
@@ -695,6 +726,7 @@ const StatusAction = ({
                   className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
                 >
                   <Button
+                    id="auditbtn"
                     type="primary"
                     className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
                   >

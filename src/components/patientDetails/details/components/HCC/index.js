@@ -878,9 +878,10 @@ const HccCards = ({
                                   {data.isLab != true &&
                                     data.isRadiology != true && (
                                       <div
-                                        className={`cr-pointer ${styles.meatFoundContainer}`}
+                                        className={`${styles.meatFoundContainer}`}
                                       >
                                         <div
+                                          className="cr-pointer "
                                           onClick={() => {
                                             if (data?.isShow) {
                                               setActiveTabHead(4);
@@ -899,6 +900,7 @@ const HccCards = ({
                                           )}
                                         </div>
                                         <div
+                                          className="cr-pointer "
                                           onClick={() => {
                                             if (data?.isShow) {
                                               setActiveTabHead(4);
@@ -917,6 +919,7 @@ const HccCards = ({
                                           )}
                                         </div>
                                         <div
+                                          className="cr-pointer "
                                           onClick={() => {
                                             if (data?.isShow) {
                                               setActiveTabHead(4);
@@ -935,6 +938,7 @@ const HccCards = ({
                                           )}
                                         </div>
                                         <div
+                                          className="cr-pointer "
                                           onClick={() => {
                                             if (data?.isShow) {
                                               setActiveTabHead(4);

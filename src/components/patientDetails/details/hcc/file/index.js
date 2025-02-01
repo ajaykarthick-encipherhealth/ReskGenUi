@@ -543,11 +543,13 @@ const File = ({
                           className={visitStyles.suggestedcontainer2}
                           style={{
                             height:
-                              showList.length == 1
+                              showList.length === 1
                                 ? "55vh"
-                                : showList.length == 2
+                                : showList.length === 2
                                 ? "27vh"
                                 : "18vh",
+                            transition: "height 0.7s ease-in-out", 
+                            backgroundColor: "lightblue",
                           }}
                         >
                           <div className={visitStyles.hccStickey_head}>

@@ -3,6 +3,87 @@
   --app-primary-hover: #6c9ddd;
   --borderColor: #b6b6b6;
 }
+/* transition codes*/
+.ant-drawer-content-wrapper {
+  transition: transform 0.3s ease-in-out !important;
+}
+.hover-effect, 
+.hover-effect-remove {
+  transition: background-color 0.8s ease-in-out, transform 0.8s ease-in-out !important;
+}
+
+.ant-select-item {
+  transition: all 0.3s ease-in-out;
+  transform: none !important;
+}
+
+.ant-select-item :hover {
+  transform: none !important;
+}
+
+.hover-effect {
+  transform: scale(1.01);
+}
+
+.hover-effect-remove {
+  transform: scale(1);
+}
+.ant-picker{
+  cursor: auto !important;
+}
+.ant-picker-clear{
+    cursor: auto !important;
+}
+.ant-select{
+  cursor: auto !important;
+}
+
+.smooth-transition {
+  transition: background-color 0.8s ease-in-out, transform 0.4s ease-in-out !important;
+  transform: scale(1.03) !important;
+}
+.header-transition:hover {
+  transform: scale(1.03);
+  transition: background-color 0.8s ease-in-out, transform 0.4s ease-in-out !important;
+}
+
+.smooth-transition:hover {
+  transition: transform 0.8s ease-in-out, opacity 0.3s ease-in-out !important;
+  transform: scale(1.03);
+
+}
+
+
+.smooth-transition .nav-item {
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transform: scale(1.05);
+}
+.smooth-transition .nav-item :hover {
+  transform: scale(1.05);
+}
+tbody tr {
+  transition: background-color 0.8s ease-in-out, box-shadow 0.4s ease-in-out !important;
+}
+
+thead th {
+  transition: none !important;
+}
+
+tbody tr:hover {
+  background-color: rgba(166, 166, 182, 0.1) !important;
+    transition: box-shadow 0.5s ease-in-out !important;
+      transform: scale(1);
+  box-shadow: 0 4px 15px rgba(138, 138, 148, 0.2); 
+}
+
+tbody tr.active {
+  background-color: rgba(0, 0, 255, 0.2) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 255, 0.3); 
+  transition: box-shadow 0.8s ease-in-out !important;
+}
+
+
+
 .font1 {
   font-size: 12px;
 }
@@ -15,19 +96,19 @@
 .font4 {
   font-size: 18px;
 }
-.font5{
+.font5 {
   font-size: 20px;
 }
-.fontWeight1{
+.fontWeight1 {
   font-weight: 500;
 }
-.fontWeight2{
+.fontWeight2 {
   font-weight: 600;
 }
-.fontWeight3{
+.fontWeight3 {
   font-weight: 700;
 }
-body{
+body {
   overflow-x: hidden;
 }
 .btns-primary {
@@ -331,7 +412,6 @@ body {
     height: 30px !important;
   }
 }
-
 
 .form-control[type="file"] {
   overflow: hidden;
@@ -2754,7 +2834,8 @@ textarea.form-control.is-invalid {
   width: var(--bs-offcanvas-width);
   border-left: var(--bs-offcanvas-border-width) solid
     var(--bs-offcanvas-border-color);
-  transform: translateX(100%);
+
+  transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
 .offcanvas.offcanvas-top {
@@ -2822,6 +2903,13 @@ textarea.form-control.is-invalid {
   margin-top: calc(-0.5 * var(--bs-offcanvas-padding-y));
   margin-right: calc(-0.5 * var(--bs-offcanvas-padding-x));
   margin-bottom: calc(-0.5 * var(--bs-offcanvas-padding-y));
+  transition: transform 0.3s ease-in-out !important; /* Adding transition to the button */
+}
+
+.offcanvas-header .btn-close:hover {
+  transform: scale(
+    1.1
+  ); /* Example of how you can apply a transformation effect on hover */
 }
 
 .offcanvas-title {
@@ -8697,27 +8785,30 @@ button:focus {
   background-blend-mode: luminosity;
   margin-left: 0px;
 }
-@media  screen and (min-width: 1915px) and (max-width:1980px) {
+@media screen and (min-width: 1915px) and (max-width: 1980px) {
   .login-account .account-info-area {
     margin-left: 271px;
-}}
-@media  screen and (min-width: 1740px) and (max-width:1800px) {
+  }
+}
+@media screen and (min-width: 1740px) and (max-width: 1800px) {
   .login-account .account-info-area {
     margin-left: 271px;
-}}
-@media  screen and (min-width: 1530px) and (max-width:1600px) {
+  }
+}
+@media screen and (min-width: 1530px) and (max-width: 1600px) {
   .login-account .account-info-area {
     margin-left: 177px;
-}}
-@media  screen and (min-width: 1080px) and (max-width:1100px) {
+  }
+}
+@media screen and (min-width: 1080px) and (max-width: 1100px) {
   .login-account .account-info-area {
     min-height: 340px;
     margin-left: 100px;
-}}
-@media  screen and (min-width: 1250px) and (max-width:1300px) {
+  }
+}
+@media screen and (min-width: 1250px) and (max-width: 1300px) {
   .login-account .account-info-area {
     min-height: 340px;
-   
   }
 }
 
@@ -8935,72 +9026,71 @@ button:focus {
   }
 }
 
-
 @media only screen and (max-width: 1024px) {
   .login-account .login-form {
     padding: 0;
   }
 }
-@media  screen and (max-width:600px )  {
+@media screen and (max-width: 600px) {
   .login-account .login-form {
     max-width: 1000px !important;
   }
 }
-@media  screen and (min-width: 400px) and (max-width:1000px) {
+@media screen and (min-width: 400px) and (max-width: 1000px) {
   .login-account .login-form {
     padding: 0 35px;
     max-width: 300px;
     /* background-color: #0000ff; */
   }
-  
 }
-@media  screen and (min-width: 1700px) and (max-width:1800px) {
+@media screen and (min-width: 1700px) and (max-width: 1800px) {
   .login-account .login-form {
-    padding:30px 40px;
-    max-width: 443px;  
-  }}
-@media  screen and (min-width: 1500px) and (max-width:1699px) {
-    .login-account .login-form {
-      max-width: 388px;
-    }}
-@media  screen and (min-width: 1230px) and (max-width:1300px) {
-      .login-account .login-form {
-        max-width: 340px;
-        min-height: 335px;
-}}
-@media  screen and (min-width: 1080px) and (max-width:1100px) {
+    padding: 30px 40px;
+    max-width: 443px;
+  }
+}
+@media screen and (min-width: 1500px) and (max-width: 1699px) {
+  .login-account .login-form {
+    max-width: 388px;
+  }
+}
+@media screen and (min-width: 1230px) and (max-width: 1300px) {
+  .login-account .login-form {
+    max-width: 340px;
+    min-height: 335px;
+  }
+}
+@media screen and (min-width: 1080px) and (max-width: 1100px) {
   .login-account .login-form {
     max-width: 307px;
     min-height: 336px;
-}}
-
+  }
+}
 
 .login-account .login-form .login-head {
   text-align: center;
   margin-bottom: 2rem;
 }
-@media  screen and (min-width: 1500px) and (max-width:1699px) {
+@media screen and (min-width: 1500px) and (max-width: 1699px) {
   .login-account .login-form .login-head {
     margin-bottom: 0px;
   }
 }
-@media  screen and (min-width: 1250px) and (max-width:1300px) {
+@media screen and (min-width: 1250px) and (max-width: 1300px) {
   .login-account .login-form .login-head {
     margin-bottom: 0px;
   }
 }
-@media  screen and (min-width: 1080px) and (max-width:1100px) {
+@media screen and (min-width: 1080px) and (max-width: 1100px) {
   .login-account .login-form .login-head {
     margin-bottom: 0px;
   }
 }
-
-
 
 .login-account .login-form .login-head .title {
   font-size: 36px;
   font-weight: 600;
-  padding: 10px ;
+  padding: 10px;
 }
 
 @media only screen and (max-width: 1024px) {
@@ -9014,23 +9104,23 @@ button:focus {
     font-size: 20px;
   }
 }
-@media  screen and (min-width: 1700px) and (max-width:1800px){
+@media screen and (min-width: 1700px) and (max-width: 1800px) {
   .login-account .login-form .login-head .title {
     font-size: 34px;
     padding: 0px;
   }
 }
-@media  screen and (min-width: 1500px) and (max-width:1699px){
+@media screen and (min-width: 1500px) and (max-width: 1699px) {
   .login-account .login-form .login-head .title {
     font-size: 21px;
   }
 }
-@media  screen and (min-width: 1250px) and (max-width:1300px){
+@media screen and (min-width: 1250px) and (max-width: 1300px) {
   .login-account .login-form .login-head .title {
     font-size: 23px;
   }
 }
-@media  screen and (min-width: 1080px) and (max-width:1100px){
+@media screen and (min-width: 1080px) and (max-width: 1100px) {
   .login-account .login-form .login-head .title {
     font-size: 20px;
     margin-bottom: 0px;
@@ -9045,23 +9135,22 @@ button:focus {
   display: flex;
   align-items: center;
 }
-@media  screen and (min-width: 1250px) and (max-width:1300px){
-  .login-account .login-form .login-title{
+@media screen and (min-width: 1250px) and (max-width: 1300px) {
+  .login-account .login-form .login-title {
     margin-bottom: 10px;
   }
 }
-@media  screen and (min-width: 1500px) and (max-width:1699px){
-  .login-account .login-form .login-title{
-    margin-bottom: 10px;
-  }
-}
-
-@media screen and (min-width: 1700px) and (max-width:1800px) {
-  .login-account .login-form .login-title{
+@media screen and (min-width: 1500px) and (max-width: 1699px) {
+  .login-account .login-form .login-title {
     margin-bottom: 10px;
   }
 }
 
+@media screen and (min-width: 1700px) and (max-width: 1800px) {
+  .login-account .login-form .login-title {
+    margin-bottom: 10px;
+  }
+}
 
 .login-account .login-form .login-title:before,
 .login-account .login-form .login-title:after {
@@ -9182,7 +9271,7 @@ button:focus {
   z-index: 999 !important;
   background-color: #edf5fd !important;
 }
-.body{
+.body {
   scrollbar-width: 0px !important;
 }
 
@@ -9226,7 +9315,7 @@ button:focus {
   text-align: center;
   /* width:80px; */
   width: 110px;
-  height:55px;
+  height: 55px;
 }
 
 .header-logo img {
@@ -9259,6 +9348,7 @@ button:focus {
 
 .offcanvas-end.offcanvas.offcanvas-end.show {
   background: #fff !important;
+  transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
 button.btn.btn-primary.btn-sm.me-1.btn.btn-primary,
@@ -9462,7 +9552,7 @@ tr>td{
   border-color: red !important;
 }
 .custom-react-selects .ant-select .ant-select-arrow {
-  top:25px !important
+  top: 25px !important;
 }
 /* .ant-select .ant-select-arrow {
   margin-top: 0px !important;
@@ -9498,6 +9588,13 @@ tr>td{
 .cr-pointer {
   cursor: pointer !important;
 }
+/* .cr-pointer:hover{
+   transform: scale(1.01);
+   transition: background-color 0.8s ease-in-out, transform 0.8s ease-in-out !important;
+
+} */
+
+
 
 form#step-form-horizontal .form-group .text-label {
   text-align: left;
@@ -14099,8 +14196,8 @@ tbody > tr {
   > .ant-steps-item-tail::after {
   background: #04306f !important;
 }
-.fileprocessingstepper .ant-steps .ant-steps-item-icon .ant-steps-icon{
-  color:#fff !important;
+.fileprocessingstepper .ant-steps .ant-steps-item-icon .ant-steps-icon {
+  color: #fff !important;
 }
 /* 
 /* .ant-modal-content {
@@ -14140,7 +14237,7 @@ overflow: scroll;
   box-shadow: none !important;
 }
 .ant_select_form_dos > .ant-select-selector,
-.ant-select-selection-overflow-item{
+.ant-select-selection-overflow-item {
   height: 34px;
 }
 
@@ -14341,7 +14438,6 @@ overflow: scroll;
   width: 170px !important;
   padding: 10px !important;
 }
-
 
 .auditPendingBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #e28213 !important;
@@ -14549,7 +14645,7 @@ overflow: scroll;
   box-shadow: 0px 5px 35px 9px #ccc;
   margin-bottom: 100px;
 }
-.no-scroll{
+.no-scroll {
   overflow: hidden !important;
 }
 
@@ -15150,7 +15246,7 @@ input::-webkit-inner-spin-button {
   white-space: nowrap;
 }
 
-@media screen and (min-width: 1700px) and (max-width:1800px) {
+@media screen and (min-width: 1700px) and (max-width: 1800px) {
   .company-name {
     font-size: 12px;
   }
@@ -15877,8 +15973,8 @@ input::-webkit-inner-spin-button {
 @media (max-width: 1344px) {
   .header-menu li span {
     font-size: 11px !important;
-  font-size: 700 !important;
-  margin-top: 5px !important;
+    font-size: 700 !important;
+    margin-top: 5px !important;
   }
 }
 .hospitalIcon {
@@ -16033,7 +16129,7 @@ input::-webkit-inner-spin-button {
   align-items: center;
 }
 
-.dateRangesHeight .ant-picker{
+.dateRangesHeight .ant-picker {
   height: 48px !important;
 }
 .new-search,
@@ -16048,47 +16144,46 @@ input::-webkit-inner-spin-button {
   border: none !important;
 }
 .customDelete .ant-btn-default {
-color:red !important;
-border-color: red !important;
+  color: red !important;
+  border-color: red !important;
 }
 
 .custom-card .card {
-    box-shadow: 0 6px 6px 0 #523f690d !important;
-    background-color: #F9FAFC;
-
+  box-shadow: 0 6px 6px 0 #523f690d !important;
+  background-color: #f9fafc;
 }
 .custom-menu ul {
-height: 190px !important;
-overflow: scroll;
+  height: 190px !important;
+  overflow: scroll;
 }
 
-.reviewerFilterSelect .ant-select-single{
-  width:100%;
+.reviewerFilterSelect .ant-select-single {
+  width: 100%;
 }
 
 .custom-spreadsheet .Spreadsheet__cell {
   height: auto;
-  white-space: nowrap; 
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding:10px !important;
+  padding: 10px !important;
   min-width: 15rem !important;
 }
 .customClear .ant-select .ant-select-clear {
-  top:70% !important
+  top: 70% !important;
 }
 
 #nprogress .spinner {
- display: flex !important;
- align-items: center !important;
- justify-content: center !important;
- height: 5px !important;
- width: 100px;
- }
- #nprogress .spinner {
-  display: none; 
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 5px !important;
+  width: 100px;
+}
+#nprogress .spinner {
+  display: none;
   /* backdrop-filter: blur(5px); */
-} 
+}
 #nprogress .spinner {
   /* content: url('https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif'); */
   /* content: url('https://media.tenor.com/Kwq2I-vIuOQAAAAi/downsign-loading.gif'); */
@@ -16103,7 +16198,7 @@ overflow: scroll;
 }
 
 .customPicker .ant-picker-outlined:hover {
-  border:1px solid gray !important
+  border: 1px solid gray !important;
 }
 .custom-btn-style {
   background-color: #04306f !important;
@@ -16125,26 +16220,26 @@ overflow: scroll;
 bottom :20px !important;
 top:-16px !important
 }
-.customReactModal .modal-content{
- width :900px !important
+.customReactModal .modal-content {
+  width: 900px !important;
 }
-.customReactModal .modal-dialog{
+.customReactModal .modal-dialog {
   max-width: none !important;
 }
 .customReactModal .modal-header {
- border-bottom: 1px solid #fff !important;
+  border-bottom: 1px solid #fff !important;
 }
 
 .send_details {
   display: block;
-  max-width: 100%; 
+  max-width: 100%;
   white-space: normal;
   overflow: visible;
   text-overflow: unset;
-  word-break: break-word;                                     
+  word-break: break-word;
 }
-.antdCustomSelect .ant-select-outlined .ant-select-selector{
- border: 1px solid #fff !important;
- border-color: #fff !important;
- box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
- }
+.antdCustomSelect .ant-select-outlined .ant-select-selector {
+  border: 1px solid #fff !important;
+  border-color: #fff !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+}
