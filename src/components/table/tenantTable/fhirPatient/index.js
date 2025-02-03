@@ -82,12 +82,15 @@ function FIHRPatinetTable({
           <tbody className={TableStyle.bodytable}>
             {tableData?.length > 0 ? (
               tableData?.map((row, index) => (
+               
                 <tr
                   key={index}
                   onClick={() => {
                     handleRow(row);
                   }}
                   style={{ height: "40px" }}
+                  id={row?.batchID}
+                  name={row?.batchID}
                 >
                   <>
                     <td className={TableStyle.childBorder}>
@@ -110,6 +113,8 @@ function FIHRPatinetTable({
                       <div style={{ width: "100%", display: "flex" }}>
                         {triggeredBatch?.id !== row?.batchID && (
                           <button
+                          id="trigger-btn"
+                          name="trigger-btn"
                             className={styles.triggerButton}
                             onClick={(e) => {
                               e.stopPropagation();
@@ -220,6 +225,8 @@ function FIHRPatinetTable({
       )}
       <div className="pagination-container">
         <Paginator
+        id="fhir-paginator"
+        name="fhir-paginator"
           first={paginationFirst}
           rows={15}
           totalRecords={tableData?.length}

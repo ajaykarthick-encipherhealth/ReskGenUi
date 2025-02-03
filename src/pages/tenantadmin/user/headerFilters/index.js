@@ -255,6 +255,8 @@ const HeaderFilters = ({
       {addUser && (
         <div style={{ marginTop: "29px" }}>
           <Button
+          id={btnTitle}
+          name={btnTitle}
             onClick={() => {
               if (form || setMobileNumber) {
                 form.resetFields();

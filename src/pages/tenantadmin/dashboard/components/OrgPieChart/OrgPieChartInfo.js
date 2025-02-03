@@ -95,6 +95,8 @@ const OrgPieChartInfo = ({ data, orgLoader }) => {
         <>
           <div style={{ display: "flex", justifyContent: "end" }}>
             <Button
+            id="click-viewAll"
+            name="click-viewAll"
               type="link"
               onClick={() => {
                 showModal();

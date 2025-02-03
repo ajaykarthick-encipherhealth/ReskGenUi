@@ -160,6 +160,8 @@ const SelectRole = ({ getLogin }) => {
                     }}
                   >
                     <Select
+                     id="select-role"
+                     name="select-role"
                       style={{ width: "100%", height: "2.75rem" }}
                       placeholder="Select Role"
                       onChange={(value) => {

@@ -143,6 +143,8 @@ const L2AllocateModal = ({
                   <span className={`${modalStyle.title} py-3`}>Due Date</span>
                   <DatePicker
                     style={{ width: "150px" }}
+                  id="select-date"
+                  name="select-date"
                     onChange={(date, dateS) => {
                       if (dateS) {
                         setAllocateDate(dateS);
@@ -256,6 +258,8 @@ const L2AllocateModal = ({
                     <li
                       className={`${modalStyle.listing} ${modalStyle.listings} `}
                       key={item.id}
+                      id={item.id}
+                      name={item.id}
                       onClick={() => {
                         let remove = selectedChart?.filter(
                           (chart) => chart.id != item.id
@@ -287,7 +291,7 @@ const L2AllocateModal = ({
               </div>
             </div>
             <div className={`d-flex justify-content-center`}>
-              <button
+              <button id="allocate-btn" name="allocate-btn"
                 className={`btn btn-primary px-5 p-1 ${modalStyle.modalBtn}`}
                 disabled={
                   !selectedChart?.length > 0 ||

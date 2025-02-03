@@ -27,6 +27,7 @@ const ImageUploader = ({
     <div className={styles.cover}>
       <label style={{ height: height }}>
         <input
+        id="uploadInput"
           className="input"
           type={"file"}
           onChange={handleChange}

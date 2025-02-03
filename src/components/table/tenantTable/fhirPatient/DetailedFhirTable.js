@@ -78,6 +78,8 @@ const DetailedFhirTable = ({
                   >
                     <div style={{ margin: "0px 5px 0 0" }}> ALL</div>
                     <input
+                    id="check-all"
+                    name="check-all"
                       type="checkbox"
                       onChange={handleHeaderCheckboxChange}
                       className={
@@ -136,6 +138,8 @@ const DetailedFhirTable = ({
                     >
                       {row?.status === "failed" && (
                         <input
+                        id={row?.mrnNumber}
+                        name={row?.mrnNumber}
                           type="checkbox"
                           onChange={() => handleRowCheckboxChange(row)}
                           className={TableStyle.customChecked}
@@ -159,6 +163,8 @@ const DetailedFhirTable = ({
           </table>
           <div className="pagination-container">
             <Paginator
+            id="fhirDetail-paginator"
+            name="fhirDetail-paginator"
               first={paginationFirst}
               rows={15}
               totalRecords={20}

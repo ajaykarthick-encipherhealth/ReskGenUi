@@ -289,8 +289,8 @@ export const auditstatusBodyTemplate = (rowData) => {
   switch (rowData.auditedStatus) {
     case "AUDIT_PENDING":
       return (
-        <Popover placement="bottom" title="Status: AUDIT PENDING">
-          <span className="patient-status">
+        <Popover  placement="bottom" title="Status: AUDIT PENDING">
+          <span id="audit-pending" name="audit-pending" className="patient-status">
             <Image src={AuditPending} className={styles.imgSize} />
           </span>
         </Popover>
@@ -299,7 +299,7 @@ export const auditstatusBodyTemplate = (rowData) => {
     case "AUDITHOLD":
       return (
         <Popover placement="bottom" title=" Status: AUDIT HOLD">
-          <span className="patient-status">
+          <span  id="audit-hold" name="audit-hold" className="patient-status">
             <Image src={AuditHold} className={styles.imgSize} />
           </span>
         </Popover>
@@ -307,7 +307,7 @@ export const auditstatusBodyTemplate = (rowData) => {
     case "REAUDIT":
       return (
         <Popover placement="bottom" title=" Status: REAUDIT">
-          <span className="patient-status">
+          <span id="reAudit" name="reAudit" className="patient-status">
             <Image src={ReAudit} className={styles.imgSize} />
           </span>
         </Popover>
@@ -315,7 +315,7 @@ export const auditstatusBodyTemplate = (rowData) => {
     case "AUDITED":
       return (
         <Popover placement="bottom" title=" Status: AUDITED">
-          <span className="patient-status">
+          <span id="audited" name="audited" className="patient-status">
             <Image src={AuditedTrack} className={styles.imgSize} />
           </span>
         </Popover>
@@ -329,8 +329,8 @@ export const auditstatusBodyTemplate = (rowData) => {
 
     case "NOT_AUDIT":
       return (
-        <Popover placement="bottom" title=" Status: NOT AUDIT">
-          <span className="patient-status">
+        <Popover  placement="bottom" title=" Status: NOT AUDIT">
+          <span id="not-audit" name="not-audit" className="patient-status">
             <Image src={NotAudited} className={styles.imgSize} />
           </span>
         </Popover>
@@ -364,7 +364,7 @@ export const processstatusBodyTemplate = (rowData) => {
     case "COMPLETED":
       return (
         <Popover placement="bottom" title="Status: COMPLETED">
-          <span className={`patient-status ${styles.textCenter}`}>
+          <span id="completed" name="completed" className={`patient-status  ${styles.textCenter}`}>
             <Image src={Completed} className={styles.imgSize} />
           </span>
         </Popover>
@@ -373,7 +373,7 @@ export const processstatusBodyTemplate = (rowData) => {
     case "PENDING":
       return (
         <Popover placement="bottom" title="Status: PENDING">
-          <span className={`patient-status ${styles.textCenter}`}>
+          <span id="pending" name="pending" className={`patient-status ${styles.textCenter}`}>
             <Image src={Pending} className={styles.imgSize} />
           </span>
         </Popover>
@@ -386,7 +386,7 @@ export const processstatusBodyTemplate = (rowData) => {
           title="Status: DECLINED"
           content={`Reason: ${declinedData ? declinedData : "---"}`}
         >
-          <span className={`patient-status ${styles.textCenter}`}>
+          <span id="declined" name="declined" className={`patient-status ${styles.textCenter}`}>
             <Image src={Declined} className={styles.imgSize} />
           </span>
         </Popover>
@@ -395,7 +395,7 @@ export const processstatusBodyTemplate = (rowData) => {
     case "NOTCOMPUTED":
       return (
         <Popover placement="bottom" title="Status: NOT COMPUTED">
-          <span className={`patient-status ${styles.textCenter}`}>
+          <span id="notComputed" name="notComputed" className={`patient-status ${styles.textCenter}`}>
             <Image src={Pending} className={styles.imgSize} />
           </span>
         </Popover>
@@ -403,7 +403,7 @@ export const processstatusBodyTemplate = (rowData) => {
     case "COMPUTED":
       return (
         <Popover placement="bottom" title="Status: PENDING">
-          <span className={`patient-status ${styles.textCenter}`}>
+          <span id="computed" name="computed" className={`patient-status ${styles.textCenter}`}>
             <Image src={Pending} className={styles.imgSize} />
           </span>
         </Popover>
@@ -411,7 +411,7 @@ export const processstatusBodyTemplate = (rowData) => {
     case "HOLD":
       return (
         <Popover placement="bottom" title="Status: HOLD">
-          <span className={`patient-status ${styles.textCenter}`}>
+          <span id="hold" name="hold" className={`patient-status ${styles.textCenter}`}>
             <Image src={Hold} className={styles.imgSize} />
           </span>
         </Popover>
@@ -419,7 +419,7 @@ export const processstatusBodyTemplate = (rowData) => {
     case "ABORTED_BY_CRON":
       return (
         <Popover placement="bottom" title="Status: ABORTED BY CRON">
-          <span className={`patient-status ${styles.textCenter}`}>
+          <span id="abort" name="abort" className={`patient-status ${styles.textCenter}`}>
             <Image src={Abort} className={styles.imgSize} />
           </span>
         </Popover>
@@ -427,7 +427,7 @@ export const processstatusBodyTemplate = (rowData) => {
     case null:
       return (
         <Popover placement="bottom" title="Status: PENDING">
-          <span className={`patient-status ${styles.textCenter}`}>
+          <span id="nullPending" name="nullPending" className={`patient-status ${styles.textCenter}`}>
             <Image src={Pending} className={styles.imgSize} />
           </span>
         </Popover>

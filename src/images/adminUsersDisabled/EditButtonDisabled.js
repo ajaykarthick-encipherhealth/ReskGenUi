@@ -8,6 +8,8 @@ const EditButtonDisbled = () => {
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      id="editButtonDisabled"
+      name="editButtonDisabled"
     >
       <rect width="24" height="24" rx="4" fill="gray" />
       <g clip-path="url(#clip0_1405_2731)">

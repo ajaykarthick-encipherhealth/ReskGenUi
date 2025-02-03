@@ -13,6 +13,7 @@ const RegularButton = ({
 }) => {
   return (
     <button
+    id={name}
       className={`btn mx-1 ${
         type === "outline" ? Style.outer : Style.btnColor
       }`}

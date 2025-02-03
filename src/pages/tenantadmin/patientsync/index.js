@@ -606,6 +606,8 @@ const Index = ({
                                   <label>Initiated By</label>
                                   <div className={`custom-react-select`}>
                                     <Select
+                                    id="initiated-by"
+                                    name="initiated-by"
                                       placeholder={"Select"}
                                       options={statusOptions}
                                       onChange={(selectedOption) => {
@@ -681,7 +683,7 @@ const Index = ({
                                       handleTabs("FHIR");
                                     }}
                                   >
-                                    <Nav.Link to="#my-posts" eventKey="fhir">
+                                    <Nav.Link  id="fhir" name="fhir" to="#my-posts" eventKey="fhir">
                                       FHIR
                                     </Nav.Link>
                                   </Nav.Item>
@@ -692,7 +694,7 @@ const Index = ({
                                       handleTabs("PDF");
                                     }}
                                   >
-                                    <Nav.Link to="#my-posts" eventKey="pdf">
+                                    <Nav.Link  id="pdf" name="pdf" to="#my-posts" eventKey="pdf">
                                       PDF
                                     </Nav.Link>
                                   </Nav.Item>

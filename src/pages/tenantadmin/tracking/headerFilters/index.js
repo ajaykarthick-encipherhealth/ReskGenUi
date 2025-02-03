@@ -304,7 +304,7 @@ const HeaderFilters = ({
                 placement="bottom"
               >
                 <Tooltip title="Click here for status information.">
-                  <div className={Tracking.iconBorder}>
+                  <div id="click-info" name="click-info" className={Tracking.iconBorder}>
                     <InfoCircleFilled />
                   </div>
                 </Tooltip>

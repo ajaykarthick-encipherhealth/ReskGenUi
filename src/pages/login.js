@@ -90,6 +90,8 @@ const Login = ({ getMFAValidation, loginResponse }) => {
                 <div className="mb-4">
                   <label className="mb-1 text-dark">Email</label>
                   <input
+                   id="email"
+                   name="email"
                     type="email"
                     className="form-control px-2"
                     value={enteredEmail}
@@ -108,6 +110,8 @@ const Login = ({ getMFAValidation, loginResponse }) => {
                   <label className="mb-1 text-dark">Password</label>
                   <div>
                     <input
+                      id="password"
+                      name="password"
                       type={"password"}
                       className="form-control px-2"
                       value={password}

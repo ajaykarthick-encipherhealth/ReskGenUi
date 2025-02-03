@@ -397,7 +397,7 @@ const HeaderFilters = ({
                 placement="bottom"
               >
                 <Tooltip title="Click here for status information.">
-                  <div className={Tracking.iconBorderFlex}>
+                  <div  id="click-icon" name="click-icon" className={Tracking.iconBorderFlex}>
                     <InfoCircleFilled />
                   </div>
                 </Tooltip>
@@ -409,6 +409,8 @@ const HeaderFilters = ({
       {addUser && (
         <div style={{ marginTop: "29px" }}>
           <Button
+          id={btnTitle}
+          name={btnTitle}
             onClick={() => {
               if (form || setMobileNumber) {
                 form.resetFields();

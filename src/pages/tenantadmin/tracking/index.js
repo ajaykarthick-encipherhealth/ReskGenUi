@@ -146,110 +146,6 @@ const Patient = ({
   const [orgAllList, setOrgAllList] = useState([]);
   const [activeFilters, setActiveFilters] = useState([]);
   const [paramsFilter, setParamsFilter] = useState(null);
-  // useEffect(() => {
-  //   if (trackingList?.data?.response) {
-  //     // setIsLoading(true);
-  //     getAllList(trackingList?.data?.response);
-  //     // setIsLoading(false);
-  //   }
-  // }, [parsedData, trackingList, pageNo, pageSize]);
-
-  // const getAllList = (info) => {
-  //   if (info) {
-  //     var resultMap = [];
-  //     var result = info?.patientDTOList?.content;
-  //     setTotalElements(info?.patientDTOList?.totalElements);
-  //     result?.map((res) => {
-  //       resultMap?.push({
-  //         patientId: res.patientId,
-  //         patientName: res.patientName,
-  //         fileName: res.fileName,
-  //         computing: res.computing,
-  //         createdAt: res.createdAt,
-  //         lastModifiedDate: res.lastModifiedDate,
-  //         dueDate: res.dueDate,
-  //         allocatedBy: res.allocatedBy,
-  //         allocatedOn: res.allocatedOn,
-  //         priority: res.priority,
-  //         processedStatus: res.processedStatus,
-  //         processedDate: res.processedDate,
-  //         auditedDate: res.auditedDate,
-  //         createdAt: res.createdAt,
-  //         patientAllocated: res.patientAllocated,
-  //         allocatedByFirstName: res.allocatedByFirstName,
-  //         allocatedByLastName: res.allocatedByLastName,
-  //         auditAllocatedDate: res.auditAllocatedDate,
-  //         auditedStatus: res.auditedStatus,
-  //         auditAllocatedByFirstName: res.auditAllocatedByFirstName,
-  //         auditAllocatedByLastName: res.auditAllocatedByLastName,
-  //         patientAllocatedFirstName: res.patientAllocatedFirstName,
-  //         patientAllocatedLastName: res.patientAllocatedLastName,
-  //         patientAllocatedProfileImage: res.patientAllocatedProfileImage,
-  //         auditedAssignedFirstName: res.auditedAssignedFirstName,
-  //         auditedAssignedLastName: res.auditedAssignedLastName,
-  //         auditedAssignedProfileImage: res.auditedAssignedProfileImage,
-  //         allocatedByProfileImage: res.allocatedByProfileImage,
-  //         auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
-  //         auditDueDate: res.auditDueDate,
-  //         declinedNotes: res.declinedNotes,
-  //         auditDeclinedNotes: res.auditDeclinedNotes,
-  //       });
-  //     });
-  //     var newArray = [];
-  //     newArray = [...patinetListAll, ...resultMap];
-  //     setPatinetListAll(resultMap);
-
-  //     setIsLoading(false);
-  //     setTableLoading(false);
-  //   }
-  // };
-  const addPatientFile = (data) => {
-    inputValue.patientId = data.patientId;
-    inputValue.name = data.patientName;
-    inputValue.processStageId = data.processStageId;
-    inputValue.patientId = data.patientId;
-    // setIsLoadingBtn(false);
-  };
-
-  // const gotoPatientDetails = (data) => {
-  //   patientDetails({ data: data });
-  //   if (data.computing == 2) {
-  //     const controller = new AbortController();
-  //     const { signal } = controller;
-  //     controller.abort();
-  //     const params={
-  //       pageNo,
-  //       dueDateStart,
-  //       dueDateEnd,
-  //       searchTextValue,
-  //       processedStart,
-  //       processedEnd,
-  //       selAllocatedTo,
-  //       selectedOption,
-  //       auditedStartDate,
-  //       auditedEndDate,
-  //       allocatedStartDate,
-  //       allocatedEndDate,
-  //       selAllocatedBy,
-  //       auditedDueStartDate,
-  //       auditedDueEndDate,
-  //       auditSelectedOption,
-  //       selAuditAllocatedBy,
-  //       auditSelAllocatedTo,
-  //       sort,
-  //       clear,
-  //       selectOrgList,
-  //     }
-  //     setStorage("patientId", data.patientId);
-  //     setStorage("routeBackTo", "/tenantAdmin/tracking");
-  //     getRoutedData(params)
-  //     navigate.push("/tenantAdmin/patients/details");
-  //   } else {
-  //     notification.warning({
-  //       message: data.patientId + " file not processed Please wait",
-  //     });
-  //   }
-  // };
 
   const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
@@ -264,7 +160,7 @@ const Patient = ({
       case "COMPLETED":
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status" id="tracking-completed" name="tracking-completed" style={{ textAlign: "center" }}>
               <Image
                 src={Completed}
                 style={{ height: "30px", width: "30px" }}
@@ -276,7 +172,7 @@ const Patient = ({
       case "PENDING":
         return (
           <Popover placement="bottom" title="Status: PENDING">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status" id="tracking-pending" name="tracking-pending"  style={{ textAlign: "center" }}>
               <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
@@ -289,7 +185,7 @@ const Patient = ({
             title="Status: DECLINED"
             content={`Reason: ${declinedData ? declinedData : "---"}`}
           >
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status" id="tracking-declined" name="tracking-declined" style={{ textAlign: "center" }}>
               <Image src={Declined} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
@@ -298,7 +194,7 @@ const Patient = ({
       case "NOTCOMPUTED":
         return (
           <Popover placement="bottom" title="Status: NOT COMPUTED">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status" id="tracking-notComputed" name="tracking-notComputed"  style={{ textAlign: "center" }}>
               <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
@@ -306,7 +202,7 @@ const Patient = ({
       case "COMPUTED":
         return (
           <Popover placement="bottom" title="Status: PENDING">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status" id="tracking-computed" name="tracking-computed"  style={{ textAlign: "center" }}>
               <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
@@ -314,7 +210,7 @@ const Patient = ({
       case "HOLD":
         return (
           <Popover placement="bottom" title="Status: HOLD">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status"id="tracking-hold" name="tracking-hold"  style={{ textAlign: "center" }}>
               <Image src={Hold} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
@@ -322,7 +218,7 @@ const Patient = ({
       case "ABORTED_BY_CRON":
         return (
           <Popover placement="bottom" title="Status: ABORTED BY CRON">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status" id="tracking-abort" name="tracking-abort"  style={{ textAlign: "center" }}>
               <Image src={Abort} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
@@ -330,7 +226,7 @@ const Patient = ({
       case null:
         return (
           <Popover placement="bottom" title="Status: PENDING">
-            <div className="patient-status" style={{ textAlign: "center" }}>
+            <div className="patient-status" id="tracking-null" name="tracking-null"  style={{ textAlign: "center" }}>
               <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
@@ -352,7 +248,7 @@ const Patient = ({
       case "AUDIT_PENDING":
         return (
           <Popover placement="bottom" title="Status: AUDIT PENDING">
-            <div className="patient-status">
+            <div  id ="tracking-auditPending" name="tracking-auditPending" className="patient-status">
               <Image
                 src={AuditPending}
                 style={{ height: "30px", width: "30px" }}
@@ -364,7 +260,7 @@ const Patient = ({
       case "AUDITHOLD":
         return (
           <Popover placement="bottom" title=" Status: AUDIT HOLD">
-            <div className="patient-status">
+            <div id="tracking-auditHold" name="tracking-auditHold" className="patient-status">
               <Image
                 src={AuditHold}
                 // className={styles.ImgTrck}
@@ -376,7 +272,7 @@ const Patient = ({
       case "REAUDIT":
         return (
           <Popover placement="bottom" title=" Status: REAUDIT">
-            <div className="patient-status">
+            <div  id="tracking-reAudit" name="tracking-reAudit" className="patient-status">
               <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
@@ -384,7 +280,7 @@ const Patient = ({
       case "AUDITED":
         return (
           <Popover placement="bottom" title=" Status: AUDITED">
-            <div className="patient-status">
+            <div   id="tracking-audited" name="tracking-audited" className="patient-status">
               <Image
                 src={AuditedTrack}
                 style={{ height: "30px", width: "30px" }}
@@ -392,20 +288,10 @@ const Patient = ({
             </div>
           </Popover>
         );
-      case "AUDITED":
-        return (
-          <div className="patient-status">
-            <Image
-              src={AuditedTrack}
-              style={{ height: "30px", width: "30px" }}
-            />
-          </div>
-        );
-
       case "NOT_AUDIT":
         return (
           <Popover placement="bottom" title=" Status: NOT AUDIT">
-            <div className="patient-status">
+            <div   id="tracking-notAudit" name="tracking-notAudit" className="patient-status">
               <Image
                 src={NotAudited}
                 style={{ height: "30px", width: "30px" }}
@@ -420,7 +306,7 @@ const Patient = ({
             title=" Status: AUDIT DECLINED"
             content={`Reason: ${declinedData ? declinedData : "---"}`}
           >
-            <div className="patient-status">
+            <div  id="tracking-auditDeclined" name="tracking-auditDeclined" className="patient-status">
               <Image
                 src={AuditedDeclineTrack}
                 style={{ height: "30px", width: "30px" }}
@@ -469,25 +355,6 @@ const Patient = ({
     setOrgAllList(orgListArray);
   }, [organizationList]);
 
-  // useEffect(() => {
-  //   // if (window !== "undefined") {
-  //   //   setIsLoading(true);
-  //   //   if (navigate) {
-  //   //     setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
-  //   //     setPaginationFirst(
-  //   //       navigate?.query?.paginationFirst
-  //   //         ? navigate?.query?.paginationFirst
-  //   //         : 0
-  //   //     );
-  //   //   }
-  //   // }
-  //   // setIsLoading(false);
-  //   const encodedVal = JSON.parse(getStorage("TeantAdminTrackingEncodedValue"));
-  //   if (encodedVal) {
-  //     setPageNo(encodedVal?.pageNo || 0);
-  //     setPaginationFirst(encodedVal?.paginationFirst || 0);
-  //   }
-  // }, []);
   useEffect(() => {
     if (!organizationList?.response) {
       getAllOrganizationList();
@@ -682,6 +549,8 @@ const Patient = ({
                             <div>
                               <div className="pagination-container">
                                 <Paginator
+                                id="tracking-paginator"
+                                name="tracking-paginator"
                                   first={pageNo === 0 ? 0 : paginationFirst}
                                   rows={15}
                                   totalRecords={

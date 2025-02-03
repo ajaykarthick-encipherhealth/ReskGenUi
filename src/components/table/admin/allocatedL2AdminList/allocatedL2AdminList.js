@@ -198,6 +198,8 @@ function AllocatedL2AdminList({
             />
           ) : (
             <input
+            id={data?.patientId}
+            name={data?.patientId}
               type="checkbox"
               onChange={() => {
                 handleRowCheckboxChange(data);
@@ -232,7 +234,7 @@ function AllocatedL2AdminList({
           <th>PATIENT ID</th>
           <th>PATIENT NAME</th>
           <th style={{ paddingLeft: "60px" }}>REVIEWER</th>
-          <th
+          <th id="dueDate" name="dueDate"
             style={{ paddingLeft: "20px" }}
             onClick={() => {
               sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
@@ -249,7 +251,7 @@ function AllocatedL2AdminList({
             </span>
           </th>
 
-          <th
+          <th id="completedDate" name="completedDate"
             onClick={() => {
               sortFunction(
                 sortCompleteOrder,
@@ -292,6 +294,8 @@ function AllocatedL2AdminList({
                   />
                 ) : (
                   <input
+                  id="selectAll"
+                  name="selectAll"
                     type="checkbox"
                     onClick={() => {
                       setSupervisorPageSize(totalElements);

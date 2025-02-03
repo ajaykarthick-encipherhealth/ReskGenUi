@@ -11,10 +11,10 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
   const accessTemplate = (item) => {
     switch (item?.role) {
       case "READ":
-        return <span className={styles.readStyle}>Read</span>;
+        return <span id="read-btn" name="read-btn" className={styles.readStyle}>Read</span>;
 
       case "DOWNLOAD":
-        return <span className={styles.downloadStyle}>Download</span>;
+        return <span id="download-btn" name="download-btn" className={styles.downloadStyle}>Download</span>;
 
       default:
         return null;
@@ -72,7 +72,8 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
                         </div>
                       }
                     >
-                      <div
+                      <div id={data?.id}
+                      name={data?.id}
                         style={{
                           display: "inline-block",
                           marginRight: "5px",

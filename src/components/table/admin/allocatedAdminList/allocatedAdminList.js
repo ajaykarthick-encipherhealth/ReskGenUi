@@ -83,6 +83,8 @@ function AllocatedAdminList({
             ) : (
               <input
                 type="checkbox"
+                id={data?.patientId}
+                name={data?.patientId}
                 onChange={() => {
                   handleRowCheckboxChange(data);
                   setSelectedRowsId((prev) => {
@@ -126,6 +128,8 @@ function AllocatedAdminList({
             <th>PATIENT NAME</th>
 
             <th
+            id="computedDate"
+            name="computedDate"
               onClick={() => {
                 sortFunction(
                   sortCompleteOrder,
@@ -164,6 +168,8 @@ function AllocatedAdminList({
                   />
                 ) : (
                   <input
+                  id="checkall-header"
+                  name="checkall-header"
                     type="checkbox"
                     onClick={() => {
                       setSelectAllChecked(!selectAllChecked);

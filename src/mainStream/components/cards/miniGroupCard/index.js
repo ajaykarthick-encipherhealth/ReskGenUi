@@ -53,7 +53,7 @@ const CardComponent = ({
                   </div>
                 </div>
                 <div className={`${styles.text}`}>
-                  <Avatar.Group maxCount={2}>
+                  <Avatar.Group   maxCount={2} >
                     {item?.receivedUsers?.map((data, index) => {
                       const { firstName, lastName, profileImageUrl } =
                         data?.userDetails || {};
@@ -63,6 +63,7 @@ const CardComponent = ({
                           key={index}
                           content={
                             <div
+                            
                               style={{
                                 display: "flex",
                                 justifyContent: "center",
@@ -89,8 +90,9 @@ const CardComponent = ({
                               )}
                             </div>
                           }
-                        >
-                          <div
+                   >
+                          <div id={data?.user}
+                              name={data?.user}
                             style={{
                               display: "inline-block",
                               marginRight: "5px",
@@ -130,9 +132,11 @@ const CardComponent = ({
                       selectedReport(item);
                       setOpenEdit(true);
                     }}
+                    id="edit-Btn"
+                    name="edit-Btn"
                   >
                     {/* <EditButton /> */}
-                    <FontAwesomeIcon icon={faPenToSquare} />
+                    <FontAwesomeIcon id="editIcon" name="editIcon" icon={faPenToSquare} />
                   </div>
                 </div>
               </div>

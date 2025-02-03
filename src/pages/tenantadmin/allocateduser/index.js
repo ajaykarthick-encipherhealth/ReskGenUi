@@ -368,6 +368,8 @@ const Patient = ({
         <tr
           style={{ height: "35px" }}
           key={index}
+          id={data?.tenantId}
+          name={data?.tenantId}
           onClick={() => {
             getL2PatientList({
               data,
@@ -564,6 +566,8 @@ const Patient = ({
                               <div className={reportStyles.backDiv}>
                                 <button
                                   style={{ width: "40px", height: "40px" }}
+                                  id="backButton"
+                                  name="backButton"
                                   className={`${reportStyles.filterBtn} d-flex justify-content-center align-item-end`}
                                   onClick={() => {
                                     setIsPatientList(false);
@@ -785,6 +789,8 @@ const Patient = ({
                                       className="batch-form-control"
                                     />
                                     <button
+                                    id="select-btn"
+                                    name="select-btn"
                                       onClick={() => {
                                         setFilterBatchCount(true);
                                         if (batchCount != selectedRowsId.length) {
@@ -867,6 +873,8 @@ const Patient = ({
                                 >
                                   {" "}
                                   <button
+                                  id="allocate-btn"
+                                  name="allocate-btn"
                                     onClick={handleOpneModal}
                                     className={styles.export}
                                     style={{
@@ -920,6 +928,8 @@ const Patient = ({
                                   <Nav.Link
                                     to="#my-posts"
                                     eventKey="validDiseases"
+                                    id="reviewer-allocation"
+                                    name="reviewer-allocation"
                                   >
                                     Reviewer Allocation
                                   </Nav.Link>
@@ -944,6 +954,8 @@ const Patient = ({
                                     onClick={() => {
                                       setTableLoading(true);
                                     }}
+                                    id="supervisor-allocation"
+                                    name="supervisor-allocation"
                                   >
                                     Supervisor Allocation
                                   </Nav.Link>
@@ -980,6 +992,8 @@ const Patient = ({
                                       <div>
                                         <div className="pagination-container">
                                           <Paginator
+                                          id="allocation-paginator"
+                                          name="allocation-paginator"
                                             first={
                                               pageNo === 0 ? 0 : paginationFirst
                                             }
@@ -1141,6 +1155,8 @@ const Patient = ({
                                               <div>
                                                 <div className="pagination-container">
                                                   <Paginator
+                                                  id="allocatedUser-paginator"
+                                                  name="allocatedUser-paginator"
                                                     first={
                                                       pageNoL2Patient === 0
                                                         ? 0

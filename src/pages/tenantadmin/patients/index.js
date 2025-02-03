@@ -317,6 +317,8 @@ const Patient = ({
     return (
       <div className="d-flex justify-content-center">
         <button
+        id="click-upload"
+        nam="click-upload"
           onClick={() => {
             if (rowData?.processedStatus !== "PROCESSING") {
               addPatientFile(rowData);
@@ -743,6 +745,8 @@ const Patient = ({
                             <div>
                               <div className="pagination-container">
                                 <Paginator
+                                id="patients-paginator"
+                                name="patients-paginator"
                                   first={
                                     paginationFirst == 0
                                       ? pageNo

@@ -48,6 +48,8 @@ const MoreFilter = ({
     <>
       <div className="d-flex my-2">
         <input
+        id="selectAll"
+        name="selectAll"
           type="checkbox"
           onChange={handleHeaderCheckboxChange}
           className={`${styles.customChecked}`}
@@ -59,6 +61,8 @@ const MoreFilter = ({
       {allFilters?.map((filter, index) => (
         <div key={filter} style={{ margin: "10px 0px" }}>
           <input
+          id={activeFilters}
+          name={activeFilters}
             type="checkbox"
             onChange={() => handleRowCheckboxChange(filter)}
             className={`${styles.customChecked}`}
@@ -71,12 +75,16 @@ const MoreFilter = ({
         <div
           style={{ marginTop: "10px", cursor: "pointer", color: "blue" }}
           onClick={handleClearAllFilters}
+          id="clear-filters"
+          name="clear-filters"
         >
           Clear Filters
         </div>
         <div
           style={{ marginTop: "10px", cursor: "pointer", color: "blue" }}
           onClick={handleClearFilters}
+           id="reset-filters"
+          name="reset-filters"
         >
           Reset
         </div>
@@ -94,7 +102,8 @@ const MoreFilter = ({
         onVisibleChange={setPopoverVisible}
       >
         <Tooltip title={"More Filters"}>
-          <div className={Tracking.iconBorderFlex}>
+          <div  id="filter-img"
+            name="filter-img" className={Tracking.iconBorderFlex}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="#03316f"

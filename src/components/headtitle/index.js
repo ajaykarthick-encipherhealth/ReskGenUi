@@ -95,6 +95,8 @@ const HeadTitle = ({
       </div>
       {anchorTag && (
         <span
+        id="click-viewAll"
+        name="click-viewAll"
           className={styles.anchor}
           onClick={typeof handleOpen === "function" ? handleOpen : undefined}
         >
@@ -108,10 +110,10 @@ const HeadTitle = ({
         onCancel={handleCancel}
         footer={
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button onClick={handleCancel} style={{ marginRight: "10px" }}>
+            <Button name="cancel-btn" id="cancel-btn" onClick={handleCancel} style={{ marginRight: "10px" }}>
               Cancel
             </Button>
-            <Button onClick={handleOk} type="primary">
+            <Button name="ok-btn" id="ok-btn" onClick={handleOk} type="primary">
               Ok
             </Button>
           </div>
@@ -132,6 +134,8 @@ const HeadTitle = ({
             allowClear={true}
             inputReadOnly={true}
             open={openPicker}
+            id="custom-picker"
+            name="custom-picker"
           />
         </div>
         <div id="date-popup" style={{ position: "relative" }} />

@@ -4,6 +4,8 @@ const Pagination = ({ first, totalRecords, onPageChange ,row}) => {
   return (
     <div className="pagination-container">
       <Paginator
+      id="pagination"
+      name="pagination"
         first={first}
         rows={row? row:7}
         totalRecords={totalRecords}

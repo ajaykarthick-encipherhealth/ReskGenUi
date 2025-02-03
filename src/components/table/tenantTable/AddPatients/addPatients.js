@@ -96,6 +96,8 @@ function AddPatientListTable({
         {patinetListAll?.map((data, index) => (
           <tr
             key={index}
+            id={data?.patientId}
+            name={data?.patientId}
             onClick={() => {
               selectedRoWDetails({
                 patientId: data?.patientId,
@@ -104,6 +106,8 @@ function AddPatientListTable({
             }}
           >
             <td
+              id={data?.patientId}
+              name={data?.patientId}
               className={TableStyle.firstTdBorder}
               onClick={handleTableRowClick}
             >
@@ -153,7 +157,7 @@ function AddPatientListTable({
                 })()
               ) : (
                 <Tooltip title="No flag found">
-                  <span>
+                  <span >
                     <SvgFlag fillColor={"transparent"} />
                   </span>
                 </Tooltip>
@@ -162,6 +166,8 @@ function AddPatientListTable({
             <td
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
+              id={data?.patientId}
+              name={data?.patientId}
             >
               {data.patientId ? (
                 <Tooltip title={data.patientId}>
@@ -183,6 +189,8 @@ function AddPatientListTable({
             <td
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
+              id={data?.patientId}
+              name={data?.patientId}
             >
               {data.fileName ? (
                 <Tooltip title={data.fileName}>
@@ -205,12 +213,16 @@ function AddPatientListTable({
             <td
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
+              id={data?.patientId}
+              name={data?.patientId}
             >
               {data.emr ? data.emr : "---"}
             </td>
             <td
               className={`${TableStyle.childBorder} text-center`}
               onClick={handleTableRowClick}
+              id={data?.patientId}
+              name={data?.patientId}
             >
               {data.totalPages ? data.totalPages : "---"}
             </td>
@@ -218,6 +230,8 @@ function AddPatientListTable({
               className={TableStyle.childBorder}
               style={{ textAlign: "left" }}
               onClick={handleTableRowClick}
+              id={data?.patientId}
+              name={data?.patientId}
             >
               {data.createdByFirstName ||
               data.createdByLastName ||
@@ -243,6 +257,8 @@ function AddPatientListTable({
               style={{ textAlign: "center" }}
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
+              id={data?.patientId}
+              name={data?.patientId}
             >
               {data.computedDate
                 ? moment(data.computedDate).format("MM-DD-YYYY, h:mm a")
@@ -252,6 +268,8 @@ function AddPatientListTable({
               style={{ textAlign: "center" }}
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
+              id={data?.patientId}
+              name={data?.patientId}
             >
               {data.createdDate
                 ? moment(data.createdDate).format("MM-DD-YYYY, h:mm a")
@@ -261,6 +279,8 @@ function AddPatientListTable({
               style={{ marginLeft: "10px" }}
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
+              id={data?.patientId}
+              name={data?.patientId}
             >
               {statusBodyTemplate(data)}
             </td>
@@ -294,6 +314,8 @@ function AddPatientListTable({
                 // paddingLeft: "15px",
                 textAlign: "center",
               }}
+          id="computed-date"
+          name="computed-date"
               onClick={() => {
                 sortFunction(sortOrder, setSortOrder, setSort, "computedDate");
               }}
@@ -315,6 +337,8 @@ function AddPatientListTable({
                   "createdDate"
                 );
               }}
+              id="created-date"
+              name="created-date"
               style={{ textAlign: "center" }}
               className="text-truncate"
             >

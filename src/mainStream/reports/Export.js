@@ -422,6 +422,8 @@ const Export = ({
               <div className="col-md-2">
                 <div className={`text-right ${styles.btncontainer}`}>
                   <Button
+                    id="excel-btn"
+                    name="excel-btn"
                     style={{
                       marginRight: "10px",
                       backgroundColor:
@@ -434,6 +436,8 @@ const Export = ({
                     Excel
                   </Button>
                   <Button
+                    id="csv-btn"
+                    name="csv-btn"
                     style={{
                       backgroundColor:
                         activeButton === "csv" ? "white" : "transparent",
@@ -456,6 +460,8 @@ const Export = ({
                     <div style={{ marginRight: "10px" }}>Report Fields</div>
                     <div>
                       <Checkbox
+                        id="select-all"
+                        name="select-all"
                         key={0}
                         value={"all"}
                         onChange={(e) => {
@@ -491,6 +497,8 @@ const Export = ({
                       {checkall?.map((data) => (
                         <li key={data?.id} style={{ padding: "5px" }}>
                           <Checkbox
+                            id={data?.title}
+                            name={data?.title}
                             value={data?.title}
                             checked={data?.checked}
                             onChange={(e) => {
@@ -531,6 +539,8 @@ const Export = ({
                       }}
                     >
                       <Select
+                        id="export-select"
+                        name="export-select"
                         style={{
                           width: "100%",
                           marginRight: "10px",
@@ -563,6 +573,8 @@ const Export = ({
                   <div className="col-md-3">
                     <div className={`text-right ${styles.btncontainers}`}>
                       <Button
+                        id="readButton"
+                        name="readButton"
                         style={{
                           marginRight: "10px",
                           backgroundColor:
@@ -578,6 +590,8 @@ const Export = ({
                         Read
                       </Button>
                       <Button
+                        id="downloadButton"
+                        name="downloadButton"
                         style={{
                           backgroundColor:
                             activeBtn === "download" ? "white" : "transparent",
@@ -597,6 +611,8 @@ const Export = ({
 
                 <div>
                   <Button
+                    id="addButton"
+                    name="addButton"
                     onClick={() => {
                       setDisplay(true);
                       // setSelectedUser([]);
@@ -622,28 +638,36 @@ const Export = ({
                     <div>
                       {userList?.map((item, index) => (
                         <div className="pt-1">
-   <div className={styles.userName}>
-                          <div key={index} className={styles.userRoleContainer}>
-                            {item?.user?.length > 0 && Array.isArray(item?.user)
-                              ? item?.user?.map(
-                                  (info) =>
-                                    `${info?.firstName}  ${info?.lastName}`
-                                )
-                              : item?.user}
-                          </div>
-                          <div key={index} className={styles.userRoleContainer}>
-                            {item?.role}
-                          </div>
+                          <div className={styles.userName}>
+                            <div
+                              key={index}
+                              className={styles.userRoleContainer}
+                            >
+                              {item?.user?.length > 0 &&
+                              Array.isArray(item?.user)
+                                ? item?.user?.map(
+                                    (info) =>
+                                      `${info?.firstName}  ${info?.lastName}`
+                                  )
+                                : item?.user}
+                            </div>
+                            <div
+                              key={index}
+                              className={styles.userRoleContainer}
+                            >
+                              {item?.role}
+                            </div>
 
-                          <div
-                            style={{ cursor: "pointer" }}
-                            onClick={() => deleteUser(item.user)}
-                          >
-                            {SVGICON.deleteIcon}
+                            <div
+                            id={item?.user}
+                            name={item?.user}
+                              style={{ cursor: "pointer" }}
+                              onClick={() => deleteUser(item.user)}
+                            >
+                              {SVGICON.deleteIcon}
+                            </div>
                           </div>
                         </div>
-                          </div>
-                     
                       ))}
                     </div>
                   ) : (
@@ -666,6 +690,8 @@ const Export = ({
             disabled={userList?.length > 0 && isAnyChecked ? false : true}
           >
             <Button
+            id="generateBtn"
+            name="generateBtn"
               type="primary"
               htmlType="submit"
               style={{

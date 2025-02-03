@@ -417,14 +417,14 @@ const Header = ({
             localStorage.removeItem("patientId");
           }}
         >
-          <div className="d-flex cursor-pointer">
+          <div  id={data.title} name={data.title} className="d-flex cursor-pointer">
             <div
               className="menu-icon"
               style={{ paddingRight: "5px", color: "#04306f" }}
             >
               {stateActive === data.to ? data.activeIcon : data.iconStyle}
             </div>
-            <span className={`nav-text header-nav-text text-truncate`}>
+            <span id={data.title} name={data.title} className={`nav-text header-nav-text text-truncate`}>
               {data.title}
             </span>
             <span></span>
@@ -630,13 +630,14 @@ const Header = ({
             <div className="header-right d-flex align-items-center">
               <ul className="navbar-nav ">
                 <li className="nav-item">
-                  <div className="header-profile2 ">
-                    <div className="nav-link i-false " as="div">
-                      <div className="header-info2 d-flex align-items-center">
-                        <div  className={styles.codify}>
+                  <div className="header-profile2 cr-pointer">
+                    <div className="nav-link i-false cr-pointer" as="div">
+                      <div className="header-info2 d-flex align-items-center cursor-pointer">
+                        <div id="coderoot" name="coderoot" className={styles.codify}>
                           {/* <div>{SVGICON.codify}</div> */}
                           <Tooltip placement="bottom" title={"CodeRoot"}>
                             <img
+                              id="codify" name="codify"
                               src={CodeRoot.src}
                               width={"35px"}
                               height={"27px"}
@@ -705,6 +706,8 @@ const Header = ({
                         )}
                         {userRole === "tenant_admin" && (
                           <div
+                          id="settingsIcon"
+                          name="settingsIcon"
                             className="chatheaderIcon cr-pointer"
                             onClick={handleSettingsClick}
                           >
@@ -746,6 +749,8 @@ const Header = ({
                         {tenentId != "7f41538e-2329-4ecc-890f-03c93cccb934" && (
                           <div
                             className="chatheaderIcon"
+                            id="chatIcon"
+                            name="chatIcon"
                             onClick={() => gotoChat()}
                           >
                             <div style={{ color: "#04306F" }}>
@@ -771,6 +776,8 @@ const Header = ({
                             notificationCount < 9 ? "me-3" : "me-4"
                           }`}
                           onClick={() => notificationDrawer()}
+                          id="notificationIcon"
+                          nae="notificationIcon"
                         >
                           <Badge count={notificationCount} color="#04306F">
                             <div style={{ color: "#04306F" }}>

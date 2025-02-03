@@ -55,6 +55,7 @@ const Addpatients = ({
             <Row gutter={16}>
               <Col span={24}>
                 <Form.Item
+                  id="patientId"
                   label="Patient ID"
                   name="patientId"
                   rules={[
@@ -68,13 +69,14 @@ const Addpatients = ({
                     },
                   ]}
                 >
-                  <Input placeholder="Enter patient ID" />
+                  <Input  id="patientId" name="patientId" placeholder="Enter patient ID" />
                 </Form.Item>
               </Col>
               <Col span={24}>
                 <Form.Item
                   label="Patient Name"
                   name="patientName"
+                  id="patientName"
                   rules={[
                     {
                       required: true,
@@ -84,7 +86,7 @@ const Addpatients = ({
                 >
                   <div>
                     {" "}
-                    <Input placeholder="Enter patient name" />
+                    <Input  id="patientName" name="patientName" placeholder="Enter patient name" />
                   </div>
                 </Form.Item>
               </Col>
@@ -100,6 +102,8 @@ const Addpatients = ({
                   ]}
                 >
                   <Select
+                  id="organizationId"
+                  name="organizationId"
                     placeholder="Select"
                     options={orgAllList}
                     style={{ height: "42px" }}
@@ -110,6 +114,8 @@ const Addpatients = ({
             <div style={{ display: "flex", gap: "8px" }}>
               <Form.Item>
                 <Button
+                id="submit-btn"
+                name="submit-btn"
                   type="submit"
                   className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
                 >
@@ -118,6 +124,8 @@ const Addpatients = ({
               </Form.Item>
               <Form.Item>
                 <Button
+                id="cancel-btn"
+                name="cancel-btn"
                   className="btn btn-danger btn-sm light ms-1"
                   onClick={() => handleCancel()}
                 >

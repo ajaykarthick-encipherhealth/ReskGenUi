@@ -22,6 +22,8 @@ const Buttonscroller = ({
       {Buttons?.map((btn, index) => {
         return (
           <label
+          id={btn?.title}
+          name={btn?.title}
             key={index}
             className={`${
               activeButton === index ? styles.btnActive : styles.btnInactive

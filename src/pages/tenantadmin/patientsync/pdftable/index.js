@@ -319,6 +319,8 @@ const DetailedViewPdfTable = ({
                         style={{ marginBottom: "40px" }}
                       >
                         <button
+                          id="back-btn"
+                          name="back-btn"
                           className={`${styles.backButtonStyle} mx-2`}
                           onClick={() => {
                             handleBack();
@@ -347,6 +349,7 @@ const DetailedViewPdfTable = ({
                             <Input
                               type="text"
                               name="initialSearch"
+                              id="initialSearch"
                               onChange={(e) => getNameSearch(e)}
                               value={search?.searchVal || ""}
                               className={"w-100 new-search-control border-none"}

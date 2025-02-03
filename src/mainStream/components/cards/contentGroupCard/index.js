@@ -194,12 +194,12 @@ const ContentGroupCard = ({
           <div style={{ width: "30%" }}>
             <div className=" d-flex justify-content-between mb-1 ">
               <div className={styles.raf}>
-                <Tooltip title="Raf Score" placement="bottom">
+                <Tooltip id="rafScore" name="rafScore" title="Raf Score" placement="bottom">
                   {rafSum ? rafSum : "---"}
                 </Tooltip>
               </div>
               <div className={styles.avatarAlign}>
-                <Tooltip
+                <Tooltip 
                   title={flag?.length > 0 && flag[0]?.flagDetails?.flagName}
                 >
                   {/* <svg
@@ -221,6 +221,8 @@ const ContentGroupCard = ({
                   </svg> */}
 
                   <FontAwesomeIcon
+                  id="flagName"
+                  name="flagName"
                     icon={faFlag}
                     style={{
                       color:

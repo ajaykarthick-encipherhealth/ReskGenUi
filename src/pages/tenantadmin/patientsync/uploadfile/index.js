@@ -88,6 +88,8 @@ const UploadFile = ({
     <div className={`${styles.cover} `}>
       <label className="cr-pointer">
         <input
+          id="upload"
+          name="upload"
           key={openUpload?.status ? "open" : "closed"}
           className="input"
           type="file"

@@ -333,6 +333,8 @@ const UserList = ({
                           <div>
                             <div className="pagination-container">
                               <Paginator
+                              id="user-paginator"
+                              name="user-paginator"
                                 first={pageCount === 0 ? 0 : paginationFirst}
                                 rows={15}
                                 totalRecords={totalElements}
@@ -358,12 +360,16 @@ const UserList = ({
           show={addPatientId}
           className="offcanvas-end"
           placement="end"
+          id="patient-details"
+          name="patient-details"
         >
           <div className="offcanvas-header">
             <h5 className="modal-title" id="#gridSystemModal">
               Add Patient Details
             </h5>
             <button
+            id="add-btn"
+            name="add-btn"
               type="button"
               className="btn-close"
               onClick={() => {
@@ -388,6 +394,7 @@ const UserList = ({
                     </Form.Label>
                     <Form.Control
                       name="patientId"
+                      id="patientId"
                       required
                       type="text"
                       onChange={handleChangePatientId}
@@ -399,6 +406,7 @@ const UserList = ({
                     </Form.Label>
                     <Form.Control
                       name="patientName"
+                      id="patientName"
                       required
                       type="text"
                       onChange={handleChangePatientId}
@@ -407,10 +415,12 @@ const UserList = ({
                 </div>
 
                 <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
+                  <Button id="submit-btn" name="submit-btn" type="submit" className="btn btn-primary btn-sm me-1">
                     {isLoadingBtn ? "Loading..." : "Submit"}
                   </Button>
                   <Button
+                  id="cancel-btn"
+                  name="cancel-btn"
                     onClick={() => setAddPatientId(false)}
                     className="btn btn-danger btn-sm light ms-1"
                   >
@@ -422,6 +432,8 @@ const UserList = ({
           </div>
         </Offcanvas>
         <Offcanvas
+        id="add-user"
+        name="add-user"
           show={addUser}
           onHide={() => {
             setAddUser(false);
@@ -437,6 +449,8 @@ const UserList = ({
               Add User
             </h5>
             <button
+            id="user-btn"
+            name="user-btn"
               type="button"
               className="btn-close"
               onClick={() => {
@@ -471,6 +485,8 @@ const UserList = ({
                     >
                       <div>
                         <Input
+                        id="firstName"
+                        name="firstName"
                           placeholder="Enter first name"
                           autoComplete="off"
                         />
@@ -490,6 +506,8 @@ const UserList = ({
                     >
                       <div>
                         <Input
+                        id="lastName"
+                        name="lastName"
                           placeholder="Enter last name"
                           autoComplete="off"
                         />
@@ -513,7 +531,7 @@ const UserList = ({
                       ]}
                     >
                       <div>
-                        <Input placeholder="Enter email" autoComplete="off" />
+                        <Input id="emailId" name="emailId" placeholder="Enter email" autoComplete="off" />
                       </div>
                     </Form.Item>
                   </Col>
@@ -540,6 +558,8 @@ const UserList = ({
                     >
                       <div>
                         <Input
+                        id="userName"
+                        name="userName"
                           placeholder="Enter user name"
                           autoComplete="off"
                         />
@@ -559,6 +579,8 @@ const UserList = ({
                       ]}
                     >
                       <Select
+                      id="role"
+                      name="role"
                         placeholder="Select role"
                         allowClear
                         style={{ height: "42px" }}
@@ -585,6 +607,8 @@ const UserList = ({
                       ]}
                     >
                       <Select
+                      id="orgId"
+                      name="orgId"
                         placeholder="Select"
                         options={orgAllList}
                         style={{ height: "42px" }}
@@ -625,6 +649,8 @@ const UserList = ({
                       <div className="confirmPass">
                         <input type="password" style={{ display: "none" }} />
                         <Input.Password
+                        name="password"
+                        id="password"
                           placeholder="Enter password"
                           autoComplete="new-password"
                         />
@@ -656,9 +682,8 @@ const UserList = ({
                       <div className="confirmPass">
                         <input type="password" style={{ display: "none" }} />
                         <Input.Password
-                          // style={{
-                          //   height: "42px",
-                          // }}
+                         id="confirmPassword"
+                         name="confirmPassword"
                           placeholder="Re-enter the password"
                           autoComplete="new-password"
                         />
@@ -684,6 +709,8 @@ const UserList = ({
                     >
                       <div>
                         <Input
+                        id="mobileNumber"
+                        name="mobileNumber"
                           type="text"
                           placeholder="Enter mobile number"
                           autoComplete="off"
@@ -698,12 +725,14 @@ const UserList = ({
                   <input
                     type="text"
                     name="fakeusernameremembered"
+                    id="fakeusernameremembered"
                     value=""
                     style={{ display: "none" }}
                   />
                   <input
                     type="password"
                     name="fakepasswordremembered"
+                    id="fakepasswordremembered"
                     value=""
                     style={{ display: "none" }}
                   />
@@ -712,12 +741,16 @@ const UserList = ({
                       type="primary"
                       className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
                       htmlType="submit"
+                      id="submit-btn"
+                      name="submit-btn"
                     >
                       Submit
                     </Button>
                   </Form.Item>
                   <Form.Item>
                     <Button
+                    id="cancle-btn"
+                    name="cancel-btn"
                       style={{
                         backgroundColor: "#ffdede",
                         color: "#ff5e5e",

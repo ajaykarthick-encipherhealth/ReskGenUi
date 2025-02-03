@@ -86,6 +86,8 @@ function TrackingTable({
           className={TableStyle.firstTdBorder}
           style={{ padding: "2px 15px" }}
           onClick={handleTableRowClick}
+          id={data.patientId}
+          name={data.patientId}
         >
           <Tooltip title={data.patientId}>
             <div>{getMaskData(data.patientId)}</div>
@@ -96,6 +98,8 @@ function TrackingTable({
           className={TableStyle.childBorder}
           style={{ textAlign: "left" }}
           onClick={handleTableRowClick}
+          id={data.patientId}
+          name={data.patientId}
         >
           {data.allocatedByFirstName ||
           data.allocatedByLastName ||
@@ -123,6 +127,8 @@ function TrackingTable({
           className={TableStyle.childBorder}
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
+          id={data.patientId}
+          name={data.patientId}
         >
           {data.allocatedOn
             ? moment(data.allocatedOn).format("MM-DD-YYYY")
@@ -132,6 +138,8 @@ function TrackingTable({
           className={TableStyle.childBorder}
           style={{ textAlign: "left" }}
           onClick={handleTableRowClick}
+          id={data.patientId}
+          name={data.patientId}
         >
           {data.patientAllocatedFirstName ||
           data.patientAllocatedLastName ||
@@ -160,6 +168,8 @@ function TrackingTable({
           className={TableStyle.childBorder}
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
+          id={data.patientId}
+          name={data.patientId}
         >
           {data.processedDate
             ? moment(data.processedDate).format("MM-DD-YYYY")
@@ -169,6 +179,8 @@ function TrackingTable({
           className={TableStyle.childBorder}
           style={{ textAlign: "left" }}
           onClick={handleTableRowClick}
+          id={data.patientId}
+          name={data.patientId}
         >
           {data.auditAllocatedByFirstName ||
           data.auditAllocatedByLastName ||
@@ -196,6 +208,8 @@ function TrackingTable({
           className={TableStyle.childBorder}
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
+          id={data.patientId}
+          name={data.patientId}
         >
           {data.auditAllocatedDate
             ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
@@ -206,6 +220,8 @@ function TrackingTable({
           className={TableStyle.childBorder}
           style={{ textAlign: "left" }}
           onClick={handleTableRowClick}
+          id={data.patientId}
+          name={data.patientId}
         >
           {data.auditedAssignedFirstName ||
           data.auditedAssignedLastName ||
@@ -234,6 +250,8 @@ function TrackingTable({
           className={TableStyle.childBorder}
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
+          id={data.patientId}
+          name={data.patientId}
         >
           {data.auditedDate
             ? moment(data.auditedDate).format("MM-DD-YYYY")
@@ -244,6 +262,8 @@ function TrackingTable({
           className={TableStyle.lastBorder}
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
+          id={data.patientId}
+          name={data.patientId}
         >
           {statusBodyTemplate(data)}
         </td>
@@ -251,6 +271,8 @@ function TrackingTable({
           className={TableStyle.lastBorder}
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
+          id={data.patientId}
+          name={data.patientId}
         >
           {auditBodyTemplate(data)}
         </td>
@@ -273,7 +295,8 @@ function TrackingTable({
               >
                 ALLOCATED BY
               </th>
-              <th
+              <th id="allocated-Date"
+              name="allocated-Date"
                 style={{
                   cursor: "pointer",
                   paddingLeft: "15px",
@@ -294,6 +317,8 @@ function TrackingTable({
               <th>REVIEWER</th>
 
               <th
+              id="reviewer-date"
+              name="reviewer-date"
                 onClick={() => {
                   sortFunction(
                     sortDueOrder,
@@ -323,7 +348,8 @@ function TrackingTable({
               <th style={{ textAlign: "center" }} className="text-truncate">
                 AUDIT ALLOCATED BY
               </th>
-              <th
+              <th id="audit-allocated"
+              name="audit-allocated"
                 onClick={() => {
                   sortFunction(
                     sortAuditOrder,
@@ -353,7 +379,7 @@ function TrackingTable({
               <th style={{ textAlign: "center" }} className="text-truncate">
                 SUPERVISOR
               </th>
-              <th
+              <th id="audited-date" name="audited-date"
                 onClick={() => {
                   sortFunction(
                     sortAuditDueOrder,

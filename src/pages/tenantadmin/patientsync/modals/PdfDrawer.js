@@ -132,7 +132,7 @@ const PdfDrawer = ({
                 },
               ]}
             >
-              <Input placeholder="Batch Name" autoComplete="off" />
+              <Input placeholder="Batch Name" id="batchName" name="batchName" autoComplete="off" />
             </Form.Item>
           )}
           {uploadType !== "upload" && (
@@ -152,6 +152,7 @@ const PdfDrawer = ({
                 ]}
               >
                 <Select
+                id="source"
                   name="source"
                   style={{ width: "100%" }}
                   options={inputTypeOptions}
@@ -180,7 +181,7 @@ const PdfDrawer = ({
                     },
                   ]}
                 >
-                  <Input placeholder="FilePath / FolderPath" autoComplete="off"/>
+                  <Input id="sourceFolderPath" name="sourceFolderPath" placeholder="FilePath / FolderPath" autoComplete="off"/>
                 </Form.Item>
               )}
               <Form.Item
@@ -197,6 +198,7 @@ const PdfDrawer = ({
                 <Select
                   showSearch
                   name="emrType"
+                  id="emrType"
                   style={{ width: "100%" }}
                   options={emrTypeOptions}
                   size="large"
@@ -239,7 +241,7 @@ const PdfDrawer = ({
                   },
                 ]}
               >
-                <Input placeholder="File Count" autoComplete="off"/>
+                <Input id="totalFileCount" name="totalFileCount" placeholder="File Count" autoComplete="off"/>
               </Form.Item>
               <Form.Item
                 label={
@@ -257,6 +259,7 @@ const PdfDrawer = ({
               >
                 <Select
                   mode="tags"
+                  id="yearOfService"
                   name="yearOfService"
                   style={{ width: "100%" }}
                   options={options}
@@ -280,7 +283,7 @@ const PdfDrawer = ({
                 ]}
               >
                 <Select
-                  // mode="tags"
+                id="fileExtension"
                   name="fileExtension"
                   style={{ width: "100%" }}
                   value={"pdf"}
@@ -337,7 +340,7 @@ const PdfDrawer = ({
 
           <Form.Item>
             <div className="col-xl-12 mb-3 d-grid justify-content-center">
-              <Button type="primary" disabled={loader} htmlType="submit"  className={`px-4 py-2 ${styles.formBtn}`} >
+              <Button id="upload" name="upload" type="primary" disabled={loader} htmlType="submit"  className={`px-4 py-2 ${styles.formBtn}`} >
                 {uploadType === "upload"
                   ? "Upload"
                   : loader

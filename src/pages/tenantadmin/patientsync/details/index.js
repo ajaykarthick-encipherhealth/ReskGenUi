@@ -212,6 +212,8 @@ const Index = ({ getActiveTab, reportActiveTab }) => {
                         style={{ marginBottom: "40px" }}
                       >
                         <button
+                        id="back-btn"
+                        name="back-btn"
                           className={`${styles.backButtonStyle}`}
                           onClick={() => {
                             router.back();
@@ -245,6 +247,8 @@ const Index = ({ getActiveTab, reportActiveTab }) => {
                           <label htmlFor="search">Search by Name or ID</label>
                           <div style={{ height: "45px" }}>
                             <Input
+                            id="search-name"
+                            name="search-name"
                               type="text"
                               onChange={(e) => setSearch(e.target.value)}
                               className={"w-100 new-search-control border-none"}
@@ -270,6 +274,8 @@ const Index = ({ getActiveTab, reportActiveTab }) => {
                           <label htmlFor="date">Date</label>
                           <div>
                             <RangePicker
+                            id="select-date"
+                            name="select-date"
                               format="MM-DD-YYYY"
                               onChange={(dates, dateStrings) => {
                                 setDateRange(dateStrings);
@@ -292,6 +298,8 @@ const Index = ({ getActiveTab, reportActiveTab }) => {
                         </div>
                         <div className={`col-xl-2 ${styles.headerTriggerBtn}`}>
                           <button
+                          id="header-trigger"
+                          name="header-trigger"
                             className={
                               trigger
                                 ? styles.triggerButton

@@ -77,6 +77,8 @@ function PdfTable({
               placement="bottom"
             >
               <span
+              id="popover-year"
+              name="popover-year"
                 style={{ width: "22px", height: "22px" }}
                 className={`border border-success-subtle rounded-circle text-center mx-1`}
               >
@@ -188,15 +190,13 @@ function PdfTable({
                   return (
                     <tr
                       key={index}
+                      id={row?.id}
+                      name={row?.id}
                       onClick={(e) => {
                         e.stopPropagation();
                         getActiveTab("PDF");
                         row?.batchUploadStatus &&
                           setViewDetailedBatch({ status: true, data: row });
-                        // router?.push({
-                        //   pathname: `/tenantadmin/patientsync/pdftable`,
-                        //   search: `params=${encodedParams}`,
-                        // });
                       }}
                     >
                       <td className={TableStyle.childBorder}>
@@ -242,6 +242,8 @@ function PdfTable({
                             }
                           >
                             <FontAwesomeIcon
+                              id="totalCount"
+                             name="totalCount"
                               icon={faCircleInfo}
                               style={{
                                 color:
@@ -354,6 +356,8 @@ function PdfTable({
                             {!row?.batchUploadStatus && (
                               <div className="w-100 d-flex justify-content-center align-items-center">
                                 <button
+                                id="status-btn"
+                                name="status-btn"
                                   className={`w-100 px-4 py-1  ${
                                     row?.source === "CogentUpload"
                                       ? styles.uploadButton
@@ -459,5 +463,6 @@ const connector = connect(
     getAllBatches: patientSyncAction.getAllBatches,
   }
 );
+
 
 export default connector(PdfTable);

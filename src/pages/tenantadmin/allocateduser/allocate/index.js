@@ -138,6 +138,8 @@ const AllocateModal = ({
           icon={faSearch}
         />
         <InputText
+        id="search-input"
+        name="search-input"
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -163,7 +165,7 @@ const AllocateModal = ({
                     : modalStyle.listContent
                 }`}
               >
-                <div
+                <div id={item?.id} name={item?.id}
                   className="d-flex justify-content-between"
                   onClick={() => {
                     if (activeCard == item.id) {
@@ -219,6 +221,8 @@ const AllocateModal = ({
                             Due Date
                           </span>
                           <DatePicker
+                          id="select-dueDate"
+                          name="select-dueDate"
                             style={{ width: "150px"}}
                             onChange={(date, dateS) => {
                               if (dateS) {
@@ -235,6 +239,8 @@ const AllocateModal = ({
                        <span>Set Priority</span> 
                        <div className="antdCustomSelect">
                         <Select
+                        id="select-priority"
+                        name="select-priority"
                            className={modalStyle.prioritySelect}
                             options={priorityOptions}
                             placeholder="Set priority"
@@ -342,6 +348,8 @@ const AllocateModal = ({
                             <li
                               className={`${modalStyle.listing} ${modalStyle.listings}`}
                               key={item.id}
+                              name={item.id}
+                              id={item.id}
                               onClick={() => {
                                 let remove = selectedChart.filter(
                                   (chart) => chart.id != item.id
@@ -373,6 +381,8 @@ const AllocateModal = ({
                     </div>
                     <div className={`d-flex justify-content-center`}>
                       <button
+                      id="allocate-btn"
+                      name="allocate-btn"
                         className={`btn btn-primary px-5 p-1 ${modalStyle.modalBtn}`}
                         disabled={
                           !selectedChart.length > 0 ||
@@ -394,6 +404,8 @@ const AllocateModal = ({
       ) : (
         <div className="m-4">
           <button
+          id="addUser-btn"
+          name="addUser-btn"
             onClick={() => {
               Router.push("/admin/user");
             }}

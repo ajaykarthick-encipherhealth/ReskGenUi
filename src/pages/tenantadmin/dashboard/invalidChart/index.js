@@ -20,7 +20,7 @@ const InvalidChart = ({
   values,
   graphName,
 }) => {
-
+console.log(values,"values")
   const graphOptions = {
     xAxis: {
       type: "category",
@@ -77,6 +77,8 @@ const InvalidChart = ({
 
             {hideContent ? (
               <span
+                id="maximize-btn"
+              name="maximize-btn"
                 onClick={() => onClick(values)}
                 className="font1 text-decoration-underline cursor-pointer "
                 style={{ color: "#3B82F6" }}

@@ -21,7 +21,7 @@ const Profile = ({
 }) => {
   return (
     <>
-      <div className="header-media d-flex">
+      <div id="profileTab" name="profileTab" className="header-media d-flex">
         <Popover
           trigger="click"
           open={openContent}
@@ -61,6 +61,8 @@ const Profile = ({
                       setOpenContent(false);
                       setOpenUploader(!openUploader);
                     }}
+                    id="editIcon"
+                    name="editIcon"
                     className={styles.edit}
                   >
                     <span>
@@ -102,7 +104,7 @@ const Profile = ({
               <Divider className={styles.divider} />
               <div className={styles.footerDiv} onClick={logoutFunction}>
                 {/* <Image src={logout} /> */}
-                <span className={styles.footerCont}> Log out</span>
+                <span id="logout" name="logout" className={styles.footerCont}> Log out</span>
               </div>
             </div>
           }

@@ -81,6 +81,8 @@ const UserList = ({
         <div style={{ height: "200px", width: "100%" }}>
           <div className="my-2">Change Role</div>
           <Select
+          id="change-role"
+          name="change-role"
             style={{ width: "300px" }}
             mode={"multiple"}
             onChange={(e) => handleRows(e, data?.role)}
@@ -94,6 +96,8 @@ const UserList = ({
             <>
               <div className="mt-4 my-2">Change Manager</div>
               <Select
+              id="change-manager"
+              name="change-manager"
                 style={{ width: "300px" }}
                 onChange={handleManager}
                 options={optionsUser?.length > 0 ? optionsUser : []}
@@ -114,6 +118,8 @@ const UserList = ({
           }}
         >
           <button
+          id="save-btn"
+          name="save-btn"
             className={styles.sendBtn}
             onClick={() => {
               handleSave();
@@ -187,6 +193,8 @@ const UserList = ({
               onClick={() => {
                 sortFunction(sortOrder, setSortOrder, setSort, "createdDate");
               }}
+              id="date-created"
+              name="date-created"
               className="text-truncate"
             >
               DATE CREATED{" "}
@@ -277,7 +285,7 @@ const UserList = ({
                   <span>
                     {item?.userName ? (
                       <Tooltip title={item?.userName}>
-                        {truncateString(item?.userName, 40)}
+                        <span id={item?.userName} name={item?.userName}>{truncateString(item?.userName, 40)}</span>  
                       </Tooltip>
                     ) : (
                       "---"
@@ -375,6 +383,8 @@ const UserList = ({
                     <div>
                       {/* {popoverVisible ? ( */}
                       <Popover
+                        id="antd-popover"
+                        name="antd-popover"
                         content={() => getContent(item)}
                         // title="Change Role"
                         trigger="click"
@@ -395,16 +405,6 @@ const UserList = ({
                           <EditButton />
                         </div>
                       </Popover>
-                      {/* // ) : (
-                      //   <div
-                      //     onClick={() => {
-                      //       setRowData(item);
-                      //       setPopoverVisible(item?.id);
-                      //     }}
-                      //   >
-                      //     <EditButton />
-                      //   </div>
-                      // )} */}
                     </div>
                   </td>
                 ) : (
@@ -417,6 +417,8 @@ const UserList = ({
                       backgroundColor:
                         item.accountStatus === true ? "" : "#0000001a",
                     }}
+                    id="edit-disabled"
+                    name="edit-disabled"
                   >
                     <div>
                       <EditButtonDisbled />
@@ -438,6 +440,8 @@ const UserList = ({
                   }}
                 >
                   <Switch
+                    className="user-switch"
+                    name="user-switch"
                     checked={switchStates[item.email]}
                     onChange={(checked) => {
                       onChange(item, checked);

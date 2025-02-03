@@ -162,10 +162,14 @@ const index = ({
           onClick={() => {
             setActiveBtn("default");
           }}
+          id="default-btn"
+          name="default-btn"
         >
           Default
         </button>
         <button
+        id="workflow-btn"
+        name="workflow-btn"
           className={
             activeBtn === "workflow" ? styles.activeBtn : styles.headerBtn
           }
@@ -177,6 +181,8 @@ const index = ({
           Workflow
         </button>
         <button
+        id="invalid-btn"
+        name="invalid-btn"
           className={
             activeBtn === "Invalid" ? styles.activeBtn : styles.headerBtn
           }
