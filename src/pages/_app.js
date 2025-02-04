@@ -273,7 +273,7 @@ function MyApp({ Component, pageProps }) {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [showTerminal]);
-
+  const currentRole = getStorage("userRole");
   const hideFooterPaths = [
     "/admin/patients/details",
     "/reviewer/patients/details",
@@ -282,6 +282,7 @@ function MyApp({ Component, pageProps }) {
     "/supervisor/user/details",
     "/tenantadmin/patientsync/batchfilesview",
     "/tenantadmin/settings",
+    `/${currentRole}/report/reportdetails`,
   ];
   const showFooter = !hideFooterPaths.includes(router.pathname);
   useEffect(() => {
