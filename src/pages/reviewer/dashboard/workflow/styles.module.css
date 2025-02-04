@@ -17,6 +17,8 @@
 }
 .header {
   display: flex;
+  /* justify-content: center; */
+  align-items: center;
 }
 .Img {
   background-color: #fff;
@@ -30,7 +32,7 @@
   color: #000000;
   font-weight: 500;
   display: flex;
-  padding-top: 5px;
+  /* padding-top: 5px; */
   margin-left: 10px;
 }
 .title {
@@ -101,23 +103,38 @@
     background-color: #fff;
     padding: 3px;
     border-radius: 5px;
-    height: 25px;
-    width: 25px;
+    height: 18px;
+    width: 18px;
+  }
+  .icon{
+    font-size: 10px;
   }
   .heading {
     font-size: 10px;
     color: #000000;
     font-weight: 500;
     display: flex;
-    padding-top: 5px;
-    margin-left: 10px;
+    margin-left: 1px;
   }
   .card1 {
     width: 100%;
-    height: 330px;
+    height: 345px;
+  }
+  .charts {
+    margin: 10px 0;
+    font-size: 18px;
+    color: #000000;
+    font-weight: 700;
+  }
+  .days {
+    margin: 10px 0;
+    font-size: 12px;
+    color: #000000;
+    font-weight: 400;
   }
 }
-@media screen and (max-width: 1140px) {
+
+@media screen and  (max-width: 1024px) {
   .Img {
     background-color: #fff;
     padding: 3px;
@@ -126,22 +143,44 @@
     width: 18px;
   }
   .heading {
-    font-size: 8px;
+    font-size: 9px;
     color: #000000;
     font-weight: 500;
     display: flex;
-    padding-top: 5px;
-    margin-left: 3px;
+  margin-bottom: 5px;
   }
   .card1 {
     width: 100%;
-    height: 315px;
+    height: 345px;
   }
   .charts {
-    margin: 10px 0 ;
-    font-size: 12px;
+    margin: 10px 0;
+    font-size: 10px;
     color: #000000;
     font-weight: 700;
   }
-  
+  .days {
+    margin: 10px 0;
+    font-size: 12px;
+    color: #000000;
+    font-weight: 400;
+  }
 }
+@media screen and (max-width: 1377px) {
+  .charts {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #000000;
+    font-weight: 700;
+  }
+}
+@media screen and (max-width: 1265px) {
+  .charts {
+    margin: 10px 0;
+    font-size: 13px;
+    color: #000000;
+    font-weight: 700;
+  }
+}
+
+

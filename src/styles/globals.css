@@ -407,11 +407,11 @@ body {
   height: 42px !important;
   border-radius: 8px !important;
 }
-@media screen and (min-width: 1080px) and (max-width: 1100px) {
+/* @media screen and (min-width: 1080px) and (max-width: 1100px) {
   .form-control {
     height: 30px !important;
   }
-}
+} */
 
 .form-control[type="file"] {
   overflow: hidden;
@@ -8764,11 +8764,11 @@ button:focus {
   background-size: cover;
 }
 
-@media only screen and (max-width: 35.9375rem) {
+/* @media only screen and (max-width: 35.9375rem) {
   .login-account {
     padding: 20px;
   }
-}
+} */
 
 .login-account .account-info-area {
   border-radius: 2.5rem;
@@ -8785,7 +8785,7 @@ button:focus {
   background-blend-mode: luminosity;
   margin-left: 0px;
 }
-@media screen and (min-width: 1915px) and (max-width: 1980px) {
+/* @media screen and (min-width: 1915px) and (max-width: 1980px) {
   .login-account .account-info-area {
     margin-left: 271px;
   }
@@ -8810,7 +8810,7 @@ button:focus {
   .login-account .account-info-area {
     min-height: 340px;
   }
-}
+} */
 
 .login-account .account-info-area:after {
   content: "";
@@ -8822,28 +8822,29 @@ button:focus {
   top: 0;
   opacity: 0.9;
 }
-
+/* 
 @media only screen and (max-width: 1024px) {
   .login-account .account-info-area {
-    min-height: 570px;
+    /* min-height: 570px; */
+    /* overflow: hidden !important;
   }
 }
-
+/* 
 @media only screen and (max-width: 61.9375rem) {
   .login-account .account-info-area {
-    min-height: 500px;
-  }
-}
+    /* min-height: 500px; */
+  /* }
+} */
 
-@media only screen and (max-width: 768px) {
+/* @media only screen and (max-width: 768px) {
   .login-account .account-info-area {
     min-height: 450px;
     height: 450px;
     margin-bottom: 50px;
   }
-}
+} */ 
 
-@media only screen and (max-width: 600px) {
+/* @media only screen and (max-width: 600px) {
   .login-account .account-info-area {
     min-height: 400px;
     height: 400px;
@@ -8856,23 +8857,23 @@ button:focus {
     height: 350px;
     border-radius: 10px;
   }
-}
+} */
 
 .login-account .account-info-area .login-bg {
   transform: scale(1.3) translateX(-5%);
 }
 
-@media only screen and (max-width: 1024px) {
+/* @media only screen and (max-width: 1024px) {
   .login-account .account-info-area .login-bg {
     transform: scale(1.8) translateX(-7%);
   }
-}
-
+} */
+/* 
 @media only screen and (max-width: 35.9375rem) {
   .login-account .account-info-area .login-bg {
     transform: scale(1) translateX(0) translateY(-60%);
   }
-}
+} */ 
 
 .login-account .account-info-area .text {
   max-width: 420px;
@@ -8916,7 +8917,7 @@ button:focus {
   color: #fff;
 }
 
-@media only screen and (max-width: 1320px) {
+/* @media only screen and (max-width: 1320px) {
   .login-account .account-info-area .login-content {
     padding: 120px 5px 120px 35px;
   }
@@ -8930,29 +8931,27 @@ button:focus {
   .login-account .account-info-area .login-content .sub-title {
     font-size: 20px;
   }
-}
+} */
 
-@media only screen and (max-width: 1024px) {
+/* @media only screen and (max-width: 1024px) {
   .login-account .account-info-area .login-content {
-    padding: 120px 5px 120px 5px;
-  }
-}
+    /* padding: 120px 5px 120px 5px; */
+  /* }
+} */
 
-@media only screen and (max-width: 61.9375rem) {
+/* @media only screen and (max-width: 61.9375rem) {
   .login-account .account-info-area .login-content {
     padding: 120px 70px 120px 0px;
   }
-
-  .login-account .account-info-area .login-content .title {
-    font-size: 45px;
-  }
+/* 
+ 
 
   .login-account .account-info-area .login-content .sub-title {
     font-size: 25px;
   }
-}
+} */ 
 
-@media only screen and (max-width: 768px) {
+/* @media only screen and (max-width: 768px) {
   .login-account .account-info-area .login-content {
     padding: 120px 25px 120px 25px;
   }
@@ -8964,9 +8963,9 @@ button:focus {
   .login-account .account-info-area .login-content .sub-title {
     font-size: 20px;
   }
-}
+} */
 
-@media only screen and (max-width: 47.9375rem) {
+/* @media only screen and (max-width: 47.9375rem) {
   .login-account .account-info-area .login-content {
     padding: 100px 5px 120px 20px;
   }
@@ -8979,8 +8978,8 @@ button:focus {
   .login-account .account-info-area .login-content .sub-title {
     font-size: 19px;
   }
-}
-
+} */
+/* 
 @media only screen and (max-width: 35.9375rem) {
   .login-account .account-info-area .login-content {
     padding: 45px 20px;
@@ -8994,17 +8993,20 @@ button:focus {
   .login-account .account-info-area .login-content .sub-title {
     font-size: 16px;
   }
-}
+} */
 
 .login-account .social-btn {
   padding: 10px 10px;
 }
+.login-account .account-info-area .login-content .title {
+  font-size: 45px;
+}
 
-@media only screen and (max-width: 35.9375rem) {
+/* @media only screen and (max-width: 35.9375rem) {
   .login-account .apple {
     margin-top: 10px;
   }
-}
+} */
 
 .login-account .apple:hover svg path {
   fill: #fff;
@@ -9015,37 +9017,38 @@ button:focus {
   max-width: 485px;
   margin: 0 auto;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 15px;
   min-height: 420px;
+  box-shadow: 0px 2px 6px 0px #00000029;
 }
 
-@media only screen and (max-width: 87.5rem) {
+/* @media only screen and (max-width: 87.5rem) {
   .login-account .login-form {
     padding: 0 35px;
-    /* max-width: 300px; */
+    max-width: 300px;
   }
-}
+} */
 
-@media only screen and (max-width: 1024px) {
+/* @media only screen and (max-width: 1024px) {
   .login-account .login-form {
-    padding: 0;
-  }
+    /* padding: 0; */
+  /* }
 }
 @media screen and (max-width: 600px) {
   .login-account .login-form {
     max-width: 1000px !important;
   }
-}
-@media screen and (min-width: 400px) and (max-width: 1000px) {
+} */ 
+/* @media screen and (min-width: 400px) and (max-width: 1000px) {
   .login-account .login-form {
     padding: 0 35px;
     max-width: 300px;
     /* background-color: #0000ff; */
-  }
-}
-@media screen and (min-width: 1700px) and (max-width: 1800px) {
-  .login-account .login-form {
-    padding: 30px 40px;
+  /* }
+} */
+/* @media screen and (min-width: 1700px) and (max-width: 1800px) { */
+  /* .login-account .login-form {
+    padding: 30px 40px;   
     max-width: 443px;
   }
 }
@@ -9059,24 +9062,24 @@ button:focus {
     max-width: 340px;
     min-height: 335px;
   }
-}
-@media screen and (min-width: 1080px) and (max-width: 1100px) {
+} */
+/* @media screen and (min-width: 1080px) and (max-width: 1100px) {
   .login-account .login-form {
     max-width: 307px;
     min-height: 336px;
   }
-}
+} */
 
 .login-account .login-form .login-head {
   text-align: center;
   margin-bottom: 2rem;
 }
-@media screen and (min-width: 1500px) and (max-width: 1699px) {
+/* @media screen and (min-width: 1500px) and (max-width: 1699px) {
   .login-account .login-form .login-head {
     margin-bottom: 0px;
   }
-}
-@media screen and (min-width: 1250px) and (max-width: 1300px) {
+} */
+/* @media screen and (min-width: 1250px) and (max-width: 1300px) {
   .login-account .login-form .login-head {
     margin-bottom: 0px;
   }
@@ -9084,16 +9087,17 @@ button:focus {
 @media screen and (min-width: 1080px) and (max-width: 1100px) {
   .login-account .login-form .login-head {
     margin-bottom: 0px;
-  }
-}
+  } */
+/* } */
 
 .login-account .login-form .login-head .title {
-  font-size: 36px;
+  font-size: 33px;
   font-weight: 600;
   padding: 10px;
 }
 
-@media only screen and (max-width: 1024px) {
+
+/* @media only screen and (max-width: 1024px) {
   .login-account .login-form .login-head .title {
     font-size: 23px;
   }
@@ -9125,7 +9129,7 @@ button:focus {
     font-size: 20px;
     margin-bottom: 0px;
   }
-}
+} */
 
 .login-account .login-form .login-title {
   text-align: center;
@@ -9135,7 +9139,7 @@ button:focus {
   display: flex;
   align-items: center;
 }
-@media screen and (min-width: 1250px) and (max-width: 1300px) {
+/* @media screen and (min-width: 1250px) and (max-width: 1300px) {
   .login-account .login-form .login-title {
     margin-bottom: 10px;
   }
@@ -9150,7 +9154,7 @@ button:focus {
   .login-account .login-form .login-title {
     margin-bottom: 10px;
   }
-}
+} */
 
 .login-account .login-form .login-title:before,
 .login-account .login-form .login-title:after {
@@ -9169,14 +9173,14 @@ button:focus {
   padding: 0 18px;
 }
 
-@media only screen and (max-width: 1200px) {
+/* @media only screen and (max-width: 1200px) {
   .login-account .login-form .login-title {
     margin-bottom: 10px;
   }
   .profile-tab .nav-item .nav-link {
     font-size: 12px !important;
   }
-}
+} */
 
 .login-account .login-form .secure-input {
   position: relative;
@@ -9205,6 +9209,7 @@ button:focus {
   transform: rotate(15deg);
   opacity: 0;
 }
+
 
 .login-account .login-form .secure-input .show-pass.active:after {
   opacity: 1;
@@ -13028,13 +13033,11 @@ tbody > tr {
 .ant-picker {
   border-radius: 20px;
   background-color: #dedfdf;
-
   border-radius: 8px;
   background: #fff;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
-
   width: 100%;
-  height: 42px;
+  height: 43px;
   flex-shrink: 0;
   border: none;
 }
@@ -16105,7 +16108,19 @@ input::-webkit-inner-spin-button {
 }
 @media screen and (max-width: 1500px) {
   .responsiveLabel {
-    font-size: 12px !important;
+    font-size: 13px !important;
+    font-weight: 400;
+  }
+}
+@media screen and (max-width: 1353px) {
+  .responsiveLabel {
+    font-size: 13px !important;
+    font-weight: 400;
+  }
+}
+@media screen and (min-width : 1024px) and  (max-width: 1300px) {
+  .responsiveLabel {
+    font-size: 13px !important;
     font-weight: 400;
   }
 }

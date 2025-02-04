@@ -61,7 +61,7 @@
   align-items: center;
 }
 .insideTitle{
- font-size: 25px;;
+ font-size: 25px;
   color: #000000;
   font-weight: 700;
 }
@@ -73,4 +73,12 @@
   font-size:14px;
   color:#808080;
   margin-left:5px;
+}
+@media screen and (max-width: 1024px) {
+  .heading {
+  font-size: 12px;
+}
+.insideTitle{
+  font-size: 18px;
+ }
 }

@@ -79,8 +79,8 @@ const Login = ({ getMFAValidation, loginResponse }) => {
           </div>
           <div className="col-lg-6 col-md-7 col-sm-12 mx-auto align-self-center">
             <div className="login-form">
-              <div className="login-head">
-                <h5 className="title">Log in to your account</h5>
+              <div className=" d-flex align-items-center justify-content-center">
+                <h2 className="title fontWeight2 " >Login to Your Account</h2>
               </div>
               <h6 className="login-title">
                 <span>Login</span>

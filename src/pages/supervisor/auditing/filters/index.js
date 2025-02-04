@@ -91,7 +91,7 @@ const Filters = ({
     switch (filter) {
       case "Select Audited Status":
         return (
-          <div className="col-xl-2 col-md-4">
+          <div style={{ width: "250px"}}>
             <label className={`${styles.label} responsiveLabel`}>
               {selectlabel}
             </label>
@@ -118,7 +118,7 @@ const Filters = ({
       case "Audited Date":
       case "Audited Due Date":
         return (
-          <div className="col-xl-2 col-md-4">
+          <div style={{ width: "250px"}}>
             <DateRangePicker
               selectedDates={selectedDates}
               pickerlabel={filter}
@@ -139,7 +139,7 @@ const Filters = ({
 
       case "Reviewer Status":
         return (
-          <div className="col-xl-2 col-md-4">
+          <div style={{ width: "250px"}}>
             <label className={`${styles.label} responsiveLabel`}>
               {createdTolabel}
             </label>
@@ -167,9 +167,9 @@ const Filters = ({
     }
   };
   return (
-    <div className="d-flex align-items-center">
-      <div className={`row filter-contain ${styles.containerStyle}`}>
-        <div className="col-xl-2 col-md-4">
+    <div className="d-flex justify-content-start " style={{marginLeft:"22px"}}>
+      <div className="row " style={{ width: "95%" }}>
+      <div style={{ width: "250px"}}>
           <Search
             searchlabel={searchlabel}
             search={search}
@@ -184,8 +184,8 @@ const Filters = ({
         ))}
       </div>
       <div
-        className={`d-flex justify-content-end  align-items-center gap-2  ${styles.subDiv}`}
-        style={{ width: "5%" }}
+        className={`d-flex justify-content-center  align-items-center gap-2  ${styles.subDiv}`}
+        // style={{ width: "5%" }}
       >
         <MoreFilter
           selectAll={selectAll}

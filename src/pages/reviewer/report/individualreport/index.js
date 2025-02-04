@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import csvToJson from "csvtojson";
 import * as XLSX from "xlsx";
 import dayjs from "dayjs";
-import { Button, Empty, Input } from "antd";
+import { Button, Empty, Input, Tooltip } from "antd";
 import Image from "next/image";
 import ExcelDisplay from "../../../../components/table/receivedReport/ExcelDisplay";
 import CSVDisplay from "../../../../components/table/receivedReport/CSVDisplay";
@@ -24,6 +24,7 @@ import { actions as allReportActions } from "../../../.././stores/admin/report";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { getFileDetailsReport } from "../../../../stores/supervisor/report/network";
+import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 
 const IndividualReceiverReport = ({
   getReceivedDetails,
@@ -339,6 +340,8 @@ const IndividualReceiverReport = ({
               {" "}
               <Image src={id} alt="noimg" />
               Id:
+              <Tooltip placement="top" title={reportInfo?.id}>
+                  {truncateString(reportInfo?.id, 20)}</Tooltip>
               {reportInfo?.id || "---"}
             </div>
             <div className="d-flex">
@@ -354,7 +357,7 @@ const IndividualReceiverReport = ({
               :&nbsp;
               {reportInfo?.data?.sender}
             </div>
-            <div className="d-flex">
+            <div className="d-flex align-items-center justify-content-center gap-1" >
               <Image src={calender} alt="noimg" />
               Date:
               {viewIndividualReport?.data?.sentreport

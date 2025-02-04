@@ -207,7 +207,7 @@ const HeaderFiltersPatients = ({
 
   return (
     <div className="d-flex justify-content-end">
-      <div className="row filter-contain" style={{ width: "95%" }}>
+      <div className="row " style={{ width: "95%" }}>
         {isAllocatedToSelector && (
           <div
             style={{ width: "250px", marginTop: "30px" }}

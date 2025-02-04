@@ -133,7 +133,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
                 className={styles.colData}
               >
                 <div className={styles.header}>
-                  <div className="mt-1">{data?.icon}</div>
+                  <div className={styles.icon} >{data?.icon}</div>
                   {/* <Image src={data?.icon} className={styles.Img} /> */}
                   <div className={styles.heading}>{data.title}</div>
                 </div>

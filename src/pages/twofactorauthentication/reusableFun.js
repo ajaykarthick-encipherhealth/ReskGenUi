@@ -11,13 +11,13 @@ export const getLogoImage = () => {
     case "cogentai":
       return (
         <Image
-          className="login-logo"
+          className={`login-logo `}
           src={cogentLogo}
           alt="Cogentai Logo"
           style={{
             display: "block",
             margin: "0 auto",
-            width: "500px",
+            width: "450px",
           }}
         />
       );
@@ -38,13 +38,13 @@ export const getLogoImage = () => {
     default:
       return (
         <Image
-          className="login-logo"
-          src={cogentLogo}
+        className={`login-logo `}
+        src={cogentLogo}
           alt="Default Logo"
           style={{
             display: "block",
             margin: "0 auto",
-            width: "500px",
+            width: "450px",
           }}
         />
       );

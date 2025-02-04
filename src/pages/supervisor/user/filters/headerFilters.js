@@ -169,7 +169,7 @@ const HeaderFilters = ({
     switch (filter) {
       case "Audit Due Date":
         return (
-          <div className="col-xl-2 col-md-4">
+          <div style={{ width: "250px"}}>
             <DateRangePicker
               pickerlabel={audipickerlabel1}
               defaultStartDate={audidefaultStartDate}
@@ -185,7 +185,7 @@ const HeaderFilters = ({
         );
       case "Audit Completed Date":
         return (
-          <div className="col-xl-2 col-md-4">
+          <div style={{ width: "250px"}}>
             <DateRangePicker
               pickerlabel={audipickerlabe2}
               defaultStartDate={audidefaultStartDate2}
@@ -201,8 +201,8 @@ const HeaderFilters = ({
 
       case "Audited AllocatedBy":
         return (
-          <div className="col-xl-2 col-md-4">
-            <label className={styles.label}>{audiallocatedBylabel}</label>
+          <div style={{ width: "250px"}}>
+            <label  className="responsiveLabel">{audiallocatedBylabel}</label>
             <div class="form-group has-search custom-react-select-audit">
               <Select
                 onChange={(selectedOption) => {
@@ -226,7 +226,7 @@ const HeaderFilters = ({
         );
       case "Reviewed Status":
         return (
-          <div className="col-xl-2 col-md-4">
+          <div style={{ width: "250px"}}>
             <Selector
               selectlabel={selectlabel}
               setSelectedOption={setSelectedOption}
@@ -239,7 +239,7 @@ const HeaderFilters = ({
         );
       case "Due Date":
         return (
-          <div className="col-xl-2 col-md-4">
+          <div style={{ width: "250px"}}>
             <DateRangePicker
               pickerlabel={pickerlabel}
               defaultStartDate={defaultStartDate}
@@ -256,8 +256,8 @@ const HeaderFilters = ({
         );
       case "Completed Date":
         return (
-          <div className="col-xl-2 col-md-4">
-            <label className={styles.label}>{pickerlabe2}</label>
+            <div style={{ width: "250px"}}>
+            <label  className="responsiveLabel">{pickerlabe2}</label>
             <div>
               <RangePicker
                 format="MM-DD-YYYY"
@@ -297,10 +297,10 @@ const HeaderFilters = ({
   };
 
   return (
-    <div className="d-flex">
-      <div className={`row filter-contain ${styles.mainDiv}`}>
-        <div className="col-xl-2 col-md-4">
-          <label style={{ marginLeft: "8px" }} className="responsiveLabel">
+    <div className="d-flex justify-content-start " style={{marginLeft:"22px"}}>
+      <div className="row " style={{ width: "95%" }}>
+        <div style={{ width: "250px"}}>
+          <label className="responsiveLabel">
             {searchlabel}
           </label>
           <Input
@@ -326,8 +326,8 @@ const HeaderFilters = ({
         ))}
       </div>
       <div
-        className={`d-flex justify-content-end  align-items-center `}
-        style={{ width: "10%", flexDirection: "column" }}
+        // className={`d-flex justify-content-end  align-items-center `}
+        // style={{ width: "10%", flexDirection: "column" }}
       >
         <MoreFilter
           selectAll={selectAll}

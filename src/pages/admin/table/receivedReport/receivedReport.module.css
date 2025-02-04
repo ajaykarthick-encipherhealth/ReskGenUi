@@ -47,6 +47,7 @@ tbody.csvBody tr:nth-child(odd) td {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  align-items: center;
 }
 .container {
   width: auto;

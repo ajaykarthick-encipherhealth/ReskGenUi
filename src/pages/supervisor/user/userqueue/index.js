@@ -404,10 +404,10 @@ const Index = ({
                 </span>
               </div>
             </div>
-            <div className="col-xl-12">
+            <div className="col-12">
               <div className="card-body p-0">
                 <div className="table-responsive active-projects task-table">
-                  <div className="tbl-caption  align-items-center">
+                  <div className="">
                     <HeaderFilters
                       setSearchTextValue={setSearchTextValue}
                       searchlabel="Search By Patient ID / Name"

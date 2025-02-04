@@ -188,7 +188,7 @@ function PatientTable({
             <th>PATIENT ID</th>
             <th>FILE NAME</th>
             {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
-              <th className="text-center">HCC COUNT</th>
+              <th className="text-center text-truncate">HCC COUNT</th>
             )}
             <th
               className="text-truncate text-center"
@@ -246,7 +246,7 @@ function PatientTable({
               </span>
             </th>
 
-            <th className={TableStyle.rowStyle}> ALLOCATED BY</th>
+            <th className={`${TableStyle.rowStyle} text-truncate` }> ALLOCATED BY</th>
             <th>PRIORITY</th>
             <th className="text-center">STATUS</th>
           </tr>

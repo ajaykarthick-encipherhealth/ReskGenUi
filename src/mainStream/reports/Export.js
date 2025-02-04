@@ -385,9 +385,9 @@ const Export = ({
             Give a proper & suitable name for Report
           </div>
 
-          <div className="col-md-12">
+          <div className="col-12">
             <div className="d-flex text-center">
-              <div className="col-md-10" style={{ marginRight: "10px" }}>
+              <div className="col-10" style={{ marginRight: "10px" }}>
                 <div className="form-group">
                   <Form.Item
                     label={<div className={styles.fields}>Report Name</div>}
@@ -419,7 +419,7 @@ const Export = ({
                   </Form.Item>
                 </div>
               </div>
-              <div className="col-md-2">
+              <div className="col-2">
                 <div className={`text-right ${styles.btncontainer}`}>
                   <Button
                     id="excel-btn"
@@ -452,7 +452,7 @@ const Export = ({
               </div>
             </div>
           </div>
-          <div className="col-md-12" style={{ marginTop: "10px" }}>
+          <div className="col-12" style={{ marginTop: "10px" }}>
             <div className="d-flex ">
               {!selectedReportInfo && (
                 <div>
@@ -524,13 +524,13 @@ const Export = ({
                   </div>
                 </div>
               )}
-              <div className={`col-md-${selectedReportInfo ? "12" : "9"}`}>
+              <div className={`col-${selectedReportInfo ? "12" : "9"}`}>
                 <div className={`p-2 `}>Sent To</div>
                 <div className={`p-2 ${styles.reportLabel}`}>
                   Select the users you want to send
                 </div>
                 <div className="d-flex">
-                  <div className="col-md-9">
+                  <div className="col-9">
                     <div
                       style={{
                         width: "100%",
@@ -570,7 +570,7 @@ const Export = ({
                 </Select> */}
                     </div>
                   </div>
-                  <div className="col-md-3">
+                  <div className="col-3">
                     <div className={`text-right ${styles.btncontainers}`}>
                       <Button
                         id="readButton"

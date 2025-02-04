@@ -52,6 +52,7 @@ function MyApp({ Component, pageProps }) {
     return ["TABLE", "TR", "TD", "TH"].includes(element.tagName);
   };
 
+
   const applyHoverEffect = (target, isEntering, pathname) => {
     if (
       (target.tagName === "A" ||

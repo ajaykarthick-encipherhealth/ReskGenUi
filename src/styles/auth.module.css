@@ -57,6 +57,8 @@ background-color: red !important;
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+
 .innerdiv {
   width: 60%;
   height: auto;
@@ -338,4 +340,9 @@ img.auth_ehrLogo3 {
 :where(.css-dev-only-do-not-override-djtmh8).ant-input-affix-wrapper
   > input.ant-input:focus {
   background-color: none !important;
+}
+.cogentLogo{
+  display: block;
+  margin :0 auto;
+  width:500px
 }

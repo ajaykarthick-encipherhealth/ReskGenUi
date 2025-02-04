@@ -185,8 +185,8 @@ const WorkFlow = ({ worlFlowData, DateRanges }) => {
                 }}
                 className={styles.colData}
               >
-                <div className={styles.header}>
-                  <div>{data.icon}</div>
+                <div className={`${styles.header}`}>
+                  <div className={styles.icon}>{data.icon}</div>
                   <div className={styles.heading}>{data.title}</div>
                 </div>
                 <div className={styles.charts}>{`${
