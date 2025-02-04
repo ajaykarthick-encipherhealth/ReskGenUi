@@ -282,6 +282,10 @@ const HeaderFilters = ({
             <label className={styles.label}>Select Batch</label>
             <div class="form-group has-search custom-react-select">
               <Select
+                filterOption={(input, option) =>
+                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                }
+              
                 value={batchValue ? batchValue : null}
                 onChange={(selectBatch) => {
                   if (setPageNo) {
@@ -289,8 +293,8 @@ const HeaderFilters = ({
                   }
                   setSelectedOptionBatch(selectBatch ? selectBatch : null);
                 }}
+                showSearch
                 options={selectOptionsBatch}
-                isSearchable={false}
                 placeholder="Select Batch"
                 allowClear={true}
                 id="select-organization"
