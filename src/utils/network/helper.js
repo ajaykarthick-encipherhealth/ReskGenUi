@@ -1,9 +1,9 @@
+
 import CryptoJS from "crypto-js";
 import { isEncrypted, salt } from "../config";
 import Swal from "sweetalert2";
 import { removeStorage, setStorage } from "../storages";
 import { exceptionMail } from "../../stores/websocket/network";
-import { notification } from "antd";
 const defaultHeaders = {
   "Content-Type": "application/json",
 };
@@ -59,21 +59,67 @@ export async function checkStatus(response) {
     message,
     buttonText = "Back",
     showCloseButton = true,
-    clearStorage = false
+    clearStorage = false,
+    showSendMailButton = true 
   ) => {
     if (showCloseButton) appendCloseButtonStyle();
+    
     const result = await Swal.fire({
       title: "",
       text: message,
       icon: "warning",
       confirmButtonText: buttonText,
       confirmButtonColor: "#DD6B55",
+      showDenyButton: showSendMailButton,
+      denyButtonText: showSendMailButton ? `Send Mail` : "", 
+      denyButtonColor: "rgb(59, 130, 246)",
       showCloseButton,
     });
     if (result.isConfirmed && clearStorage) {
       removeStorage();
       window.location = "/login";
-    }
+    } else if (result.isDenied && (response?.status === 513 || response?.status === 500 || response?.status === 502 || response?.status === 512)) {
+      try {
+        Swal.fire({
+          title: 'Sending Email...',
+          text: 'Please wait while we notify the admin.',
+          icon: 'info',
+          showConfirmButton: false,
+          willOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        const res = await exceptionMail({
+          obj: {
+            exceptionMessage: "Error occurring.",
+            exceptionSubject: "Error in DB",
+            stackTrace: "Stack trace details go here.",
+            subject: "Exception Email",
+            exceptionMailServiceEnum: "DB",
+          }
+        });
+        if (res?.status === "SUCCESS") {
+          Swal.fire({
+            title: "Success!",
+            text: "The admin has been notified via email.",
+            icon: "success",
+            timer: 3000,
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Something went wrong while sending the email.",
+            icon: "error",
+          });
+        }
+      } catch (error) {
+        console.error("Error sending email:", error);
+        Swal.fire({
+          title: "Error",
+          text: "An error occurred while trying to send the email.",
+          icon: "error",
+        });
+      } }
   };
 
   const appendCloseButtonStyle = () => {
@@ -82,12 +128,12 @@ export async function checkStatus(response) {
       const style = document.createElement("style");
       style.id = "swal2-close-style";
       style.innerHTML = `
-          .swal2-close {
-            font-size: 32px !important;
-            top: 10px !important;
-            right: 10px !important;
-          }
-        `;
+        .swal2-close {
+          font-size: 32px !important;
+          top: 10px !important;
+          right: 10px !important;
+        }
+      `;
       document.head.appendChild(style);
     }
   };
@@ -108,63 +154,44 @@ export async function checkStatus(response) {
 
   if (!response) return;
   const { status } = response;
-  if(status === 513 || status === 500 || status === 502 || status === 512){
-  // if ([500, 513, 502, 512].includes(status)) {
-    try {
-      const res = await exceptionMail({
-        obj: {
-          exceptionMessage: "Error occurring.",
-          exceptionSubject: "Error in DB",
-          stackTrace: "Stack trace details go here.",
-          subject: "Exception Email",
-          exceptionMailServiceEnum: "DB",
-        },
-      });
-      if (res?.status === "SUCCESS") {
-        notification.success({
-          description: "The admin has been notified via email",
-          duration: 2,
-        });
-      } else {
-        notification.error({
-          description: "Something went wrong while sending the email",
-          duration: 2,
-        });
-      }
-    } catch (error) {
-      console.error("Error sending email:", error);
-    }
-  }
+  
   switch (status) {
     case 401: {
       await showModal(
         "Your session has timed out. Please log in again.",
         "Logout",
         false,
-        true
+        true,
+        false
       );
       break;
     }
-    case 500: {
+    case 500:
       await showModal(
-        "Something went wrong on our end. Please try again later."
+        "Something went wrong on our end. Please try again later.",
+        "Back",
+        true,
+        false, 
+        false
       );
       break;
-    }
     case 403: {
-      await showModal("You don't have permission to access this page.");
+      await showModal("You don't have permission to access this page.", "Back", true, false, false); 
       break;
     }
     case 512:
     case 513: {
       await showModal(
-        "An error occurred due to unhandled exceptions or unexpected conditions within the system. The admin will be notified by email."
+        "An error occurred due to unhandled exceptions or unexpected conditions within the system. The admin will be notified by email.",
+        "Back",
+        true,
+        false,
+        true
       );
       break;
     }
     default: {
-      const data =
-        isEncrypted === "true" ? await response.text() : await response.json();
+      const data = isEncrypted === "true" ? await response.text() : await response.json();
       if (isEncrypted === "true") {
         return await handleDecryption(data);
       } else {
@@ -181,6 +208,7 @@ export async function checkStatus(response) {
     }
   }
 }
+
 
 export async function checkAuth(response) {
   const data = await response.json();
