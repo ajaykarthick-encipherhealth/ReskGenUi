@@ -8,6 +8,15 @@ export const ChatBot = async (msg) => {
   const data = await requestPortal(`aiservice/ai/chat`, options);
   return data;
 };
+export const EhBot = async (msg) => {
+  const options = {
+    method: "POST",
+    body: JSON.stringify({ userMessage: msg }),
+  };
+  const data = await requestPortal(`aiservice/getresponse`, options);
+  return data;
+};
+
 
 export const chatHistory = async (userName) => {
   const options = {

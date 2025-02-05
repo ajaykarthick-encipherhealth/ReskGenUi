@@ -1,12 +1,9 @@
-
 import { createActionThunk } from "../../utils/redux";
 import * as network from "./network";
 
-export const getChatReply = createActionThunk(
-  "CHAT_BOT",
-  network.ChatBot
-);
-export const getChatHistory= createActionThunk(
+export const getChatReply = createActionThunk("CHAT_BOT", network.ChatBot);
+export const getEhChatReply = createActionThunk("EH_BOT", network.EhBot);
+export const getChatHistory = createActionThunk(
   "CHAT_HISTORY",
   network.chatHistory
 );
@@ -26,7 +23,4 @@ export const getHandleFilePost = createActionThunk(
   "HANDLE_FILE_POST",
   network.handleFilePost
 );
-export const getDddUser = createActionThunk(
-  "CHAT_ADD_USER",
-  network.addUser
-);
+export const getDddUser = createActionThunk("CHAT_ADD_USER", network.addUser);

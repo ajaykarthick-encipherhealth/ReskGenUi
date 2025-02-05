@@ -48,7 +48,7 @@ const AICHAT = ({ openMsg, getChatReply }) => {
       setChatResponse((prev) => [...prev, userMessage]);
       setInputValue({ question: "" });
       getChatReply(inputValue?.question).then((res) => {
-        if (res.status === "SUCCESS") {
+        if (res?.status === "SUCCESS") {
           setChatResponse((prev) => {
             const updatedChat = [...prev];
             const lastMessageIndex = updatedChat.length - 1;
