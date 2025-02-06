@@ -437,14 +437,15 @@ const Index = ({
           {activeBtn === "default" ? (
             <>
               <div className={`row ${styles.box}`}>
-                <div className={`col-lg-4`}>
-                  <Card padding="10px" borderRadius={"10px"}>
+                <div className="col-lg-4 col-md-6 col-sm-12">
+                  <Card padding="10px" borderRadius="10px">
                     <TotalCounts
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
                     />
                   </Card>
                 </div>
+
                 <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <RafAndRevenue
@@ -576,13 +577,13 @@ const Index = ({
                         <h5 className="fontWeight3">Data Discrepancies </h5>
                         <div>
                           <div className="font2 text-muted">
-                          Current / Overall
+                            Current / Overall
                           </div>
                           {invalidLoader ? (
                             <CardSkeleton height={40} />
                           ) : (
                             <div className="fontWeight3 font5">
-                               {currentCountSum} / {totalCountSum}
+                              {currentCountSum} / {totalCountSum}
                             </div>
                           )}
                         </div>
@@ -706,7 +707,7 @@ const Index = ({
           />
         </Modal.Body>
       </Modal>
-      </div>
+    </div>
   );
 };
 

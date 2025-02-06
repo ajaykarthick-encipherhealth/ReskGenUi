@@ -6,7 +6,7 @@ import pageIcon from "../../../../../images/tenantAdmin/page.svg";
 import Image from "next/image";
 import styles from "../../styles.module.css";
 import { FilesCount } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import { Skeleton, Spin } from "antd";
+import { Skeleton } from "antd";
 
 const index = ({
   getAllFilesCount,
@@ -57,7 +57,7 @@ const index = ({
           style={{
             backgroundColor:
               index === 0 ? "#FDF1F2" : index === 1 ? "#FDF8F2" : "#F0FFF7",
-            width: "32%",
+            width: "35%",
             height: "250px",
             display: "flex",
           }}
@@ -88,8 +88,8 @@ const index = ({
                     <Image src={item?.icon} />
                   </div>
                   <div
-                    style={{ fontSize: "16px" }}
-                    className="align-self-center"
+            
+                    className="tenant_count align-self-center"
                   >
                     {item?.title}
                   </div>

@@ -500,7 +500,7 @@ const Patient = ({
                             searchTextValue={searchTextValue}
                           />
                         </div>
-                        <div className="col-2">
+                        <div className="col-xl-2 col-sm-3">
                           <DailyTask
                             trackChart={trackingList?.processStatusCount}
                           />

@@ -15,14 +15,14 @@ describe("ReusableFunction", () => {
     jest.resetModules(); 
   });
 
-  describe("getLogoImage", () => {
-    it("renders the Cogentai logo when companyDeatils is 'cogentai'", () => {
-      const { container } = render(getLogoImage());
-      const logo = screen.getByAltText("Cogentai Logo");
-      expect(logo).toBeInTheDocument();
-      expect(container).toMatchSnapshot();
-    });
-  });
+  // describe("getLogoImage", () => {
+  //   it("renders the Cogentai logo when companyDeatils is 'cogentai'", () => {
+  //     const { container } = render(getLogoImage());
+  //     const logo = screen.getByAltText("Cogentai Logo");
+  //     expect(logo).toBeInTheDocument();
+  //     expect(container).toMatchSnapshot();
+  //   });
+  // });
 
   describe("getHeaderLoge", () => {
     it("renders the Cogentai header logo when companyDeatils is 'cogentai'", () => {

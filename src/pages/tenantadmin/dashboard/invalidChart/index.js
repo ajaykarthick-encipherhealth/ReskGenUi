@@ -73,6 +73,7 @@ console.log(values,"values")
             </div>
           </div>
           <div className="d-flex flex-column justify-content-center">
+            
             {header}
 
             {hideContent ? (

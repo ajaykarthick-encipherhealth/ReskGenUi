@@ -7,7 +7,7 @@
 .ant-drawer-content-wrapper {
   transition: transform 0.3s ease-in-out !important;
 }
-.hover-effect, 
+.hover-effect,
 .hover-effect-remove {
   transition: background-color 0.8s ease-in-out, transform 0.8s ease-in-out !important;
 }
@@ -28,16 +28,22 @@
 .hover-effect-remove {
   transform: scale(1);
 }
-.ant-picker{
+.ant-picker {
   cursor: auto !important;
 }
-.ant-picker-clear{
-    cursor: auto !important;
-}
-.ant-select{
+.ant-picker-clear {
   cursor: auto !important;
 }
-
+.ant-select {
+  cursor: auto !important;
+}
+.ant-progress-outer .hover-effect {
+  transform: none !important;
+}
+.ant-steps :hover {
+  transform: none !important;
+  cursor: default !important;
+}
 .smooth-transition {
   transition: background-color 0.8s ease-in-out, transform 0.4s ease-in-out !important;
   transform: scale(1.03) !important;
@@ -46,13 +52,33 @@
   transform: scale(1.03);
   transition: background-color 0.8s ease-in-out, transform 0.4s ease-in-out !important;
 }
-
+.ant-steps-item-container .hover-effect {
+  transform: none !important;
+}
+.ant-steps-item-tail {
+  transform: none !important;
+  cursor: default !important;
+}
+.ant-steps-item-container .hover-effect-remove {
+  transform: none !important;
+  cursor: default !important;
+}
 .smooth-transition:hover {
   transition: transform 0.8s ease-in-out, opacity 0.3s ease-in-out !important;
   transform: scale(1.03);
-
 }
-
+.ant-progress :hover {
+  transform: none !important;
+  cursor: default !important;
+}
+.ant-steps-item-icon {
+  transform: none !important;
+  cursor: default !important;
+}
+.ant-steps-progress-icon {
+  transform: none !important;
+  cursor: default !important;
+}
 
 .smooth-transition .nav-item {
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
@@ -71,18 +97,16 @@ thead th {
 
 tbody tr:hover {
   background-color: rgba(166, 166, 182, 0.1) !important;
-    transition: box-shadow 0.5s ease-in-out !important;
-      transform: scale(1);
-  box-shadow: 0 4px 15px rgba(138, 138, 148, 0.2); 
+  transition: box-shadow 0.5s ease-in-out !important;
+  transform: scale(1);
+  box-shadow: 0 4px 15px rgba(138, 138, 148, 0.2);
 }
 
 tbody tr.active {
   background-color: rgba(0, 0, 255, 0.2) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 255, 0.3); 
+  box-shadow: 0 6px 20px rgba(0, 0, 255, 0.3);
   transition: box-shadow 0.8s ease-in-out !important;
 }
-
-
 
 .font1 {
   font-size: 12px;
@@ -9599,8 +9623,6 @@ tr>td{
 
 } */
 
-
-
 form#step-form-horizontal .form-group .text-label {
   text-align: left;
   display: block;
@@ -16233,8 +16255,8 @@ input::-webkit-inner-spin-button {
 }
 
 .invalidChart > div > div > canvas {
-bottom :20px !important;
-top:-16px !important
+  bottom: 20px !important;
+  top: -16px !important;
 }
 .customReactModal .modal-content {
   width: 900px !important;
@@ -16258,4 +16280,42 @@ top:-16px !important
   border: 1px solid #fff !important;
   border-color: #fff !important;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+}
+@media (min-width: 1024px) and (max-width: 1097px) {
+  label {
+    font-size: 12px !important;
+  }
+}
+@media (min-width: 1200px) and (max-width: 1309px) {
+  label {
+    font-size: 12px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive_report {
+    padding: 10px;
+  }
+}
+.ant-tree-list-holder-inner :hover {
+  transition: none !important;
+  transform: none !important;
+}
+
+.ant-tree-show-line .ant-tree-switcher :hover {
+  transition: none !important;
+  transform: none !important;
+}
+
+:where(.css-dev-only-do-not-override-cdzvx5).ant-tree
+  .ant-tree-switcher:not(.ant-tree-switcher-noop):hover:before {
+  background-color: transparent !important;
+}
+.tenant_count{
+  font-size: 16px !important;
+}
+@media (min-width: 1024px) and (max-width: 1309px) {
+.tenant_count{
+  font-size: 12px !important;
+}
 }

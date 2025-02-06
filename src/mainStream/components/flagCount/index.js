@@ -1,5 +1,6 @@
-import { Empty, Popover } from "antd";
+import { Empty, Popover, Tooltip } from "antd";
 import React from "react";
+import { truncateString } from "../../../components/patientDetails/details/components/function/ReusableFunctions";
 
 const Flags = ({ reportListAll, styles, activeTab }) => {
   return (
@@ -35,14 +36,22 @@ const Flags = ({ reportListAll, styles, activeTab }) => {
                   />
                 </svg>
                 <span
+                className="cr-pointer"
                   style={{
                     fontSize: "12px",
                     paddingLeft: "10px",
+                    
                   }}
                 >
+                  <Tooltip
+                    title={flagItem?.flagDetail?.flagName.replaceAll("_", " ")}
+                  >
                   {flagItem?.flagDetail?.flagName
-                    ? flagItem?.flagDetail?.flagName.replaceAll("_", " ")
+                    ? truncateString(
+                        flagItem?.flagDetail?.flagName.replaceAll("_", " "), 13
+                      )
                     : "---"}
+                    </Tooltip>
                 </span>
               </div>
               <Popover
@@ -53,7 +62,9 @@ const Flags = ({ reportListAll, styles, activeTab }) => {
                       overflow: "scroll",
                     }}
                   >
-                    <h5 className="border-bottom">Total Flags: {flagItem.patientIds.length}</h5>
+                    <h5 className="border-bottom">
+                      Total Flags: {flagItem.patientIds.length}
+                    </h5>
                     {flagItem.patientIds.map((item) => (
                       <label className="d-block">{item}</label>
                     ))}

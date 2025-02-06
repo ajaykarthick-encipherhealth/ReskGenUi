@@ -32,7 +32,7 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
           onClick={() => handleReceiverReport(item)}
         >
           <div className={` ${styles.contentGroup}`}>
-            <div className="col-12">
+            <div className="col-12 responsive_report">
               <div
                 className="cursor-pointer report-effect"
                 style={{

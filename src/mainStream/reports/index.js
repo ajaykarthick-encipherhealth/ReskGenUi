@@ -574,7 +574,7 @@ const Reports = ({
                   tabs={tabs}
                 />
                 <div className="d-flex justify-content-between align-items-center mt-3">
-                  <div className="d-flex gap-3">
+                  <div className="d-flex gap-2">
                     <div className="d-flex w-100">
                       <label className="labelStyle d-flex m-auto p-3">
                         Search
@@ -679,7 +679,7 @@ const Reports = ({
                         />
                       </div>
                     </div>
-                    <div className="d-flex gap-3">
+                    <div className="d-flex gap-2">
                       {selectedData?.length > 0 ? (
                         selectedData?.map((info) => (
                           <div className="d-flex w-100" key={info.id}>

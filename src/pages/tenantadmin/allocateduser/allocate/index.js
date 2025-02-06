@@ -157,7 +157,7 @@ const AllocateModal = ({
       {userDetails.length > 0 ? (
         <div className={modalStyle.scroll}>
           {userDetails?.map((item) => (
-            <div className="mt-4 pe-auto">
+            <div className="mt-4 " style={{cursor:"default"}}>
               <div
                 className={`form-control new-item-control my-2 p-0 ${
                   item.id == activeCard

@@ -16,11 +16,15 @@
 .listContent {
   height: 65px !important;
   cursor: pointer;
+  transform: none!important;
+  transition: none!important;
 }
 
 .listContentLarge {
   height: 425px !important;
   cursor: pointer;
+  transform: none!important;
+  transition: none!important;
 }
 .listContentLargeL2 {
   height: 475px !important;

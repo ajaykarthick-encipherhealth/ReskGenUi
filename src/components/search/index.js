@@ -17,7 +17,10 @@ const Search = ({
 }) => {
   return (
     <div>
-      <label style={{ marginLeft: "8px" }} className="responsiveLabel">
+      <label
+        style={{ marginLeft: "8px" }}
+        className="text-truncate responsiveLabel"
+      >
         {searchlabel}
       </label>
       <InputField
@@ -36,7 +39,6 @@ const Search = ({
         id={id}
         name={name}
         value={value}
-    
       />
     </div>
   );

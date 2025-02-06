@@ -114,6 +114,7 @@ const ContentGroupCard = ({
         <div
         id={patientId}
         name={patientId}
+        className="responsive_report"
           style={{
             width: "95%",
             display: "flex",

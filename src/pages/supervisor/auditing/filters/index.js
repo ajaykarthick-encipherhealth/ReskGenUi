@@ -167,6 +167,7 @@ const Filters = ({
     }
   };
   return (
+
     <div className="d-flex justify-content-start " style={{marginLeft:"22px"}}>
       <div className="row " style={{ width: "98%" }}>
       <div style={{ width: "250px"}}>

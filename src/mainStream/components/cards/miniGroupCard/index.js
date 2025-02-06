@@ -34,8 +34,9 @@ const CardComponent = ({
           onClick={() => handleReceiverReport(item)}
         >
           <div className={styles.contentGroup}>
-            <div className="col-xl-12">
-              <div className="cr-pointer"
+            <div className="col-xl-12 responsive_report">
+              <div
+                className="cr-pointer "
                 style={{
                   display: "flex",
                   justifyContent: "space-between",

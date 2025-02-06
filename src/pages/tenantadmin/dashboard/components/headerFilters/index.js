@@ -93,8 +93,8 @@ const index = ({
 
   return (
     <div className={styles.container}>
-      <div className="row gap-4 w-100">
-        <div className="d-flex col-3">
+      <div className={`row  gap-5 w-100`}>
+        <div className="d-flex col-lg-3 col-md-4 col-sm-6 col-sm-12 ">
           <div className={styles.flterContainer}>Organization</div>
           <div className="tenantSelector" style={{ width: "100%" }}>
             <Select
@@ -114,7 +114,7 @@ const index = ({
             />
           </div>
         </div>
-        <div className="d-flex col-3">
+        <div className="d-flex col-lg-3 col-md-4 col-sm-6 col-sm-12">
           <div className={styles.flterContainer}>Date</div>
           <div className="tenantSelector" style={{ width: "100%" }}>
             <Select
@@ -132,14 +132,14 @@ const index = ({
           </div>
         </div>
         {isCustom && (
-          <div className="col-3 d-flex">
+          <div className="col-lg-3 col-md-4 col-sm-6 col-sm-12 d-flex">
             <div
               className={`${styles.flterContainer}`}
-              style={{ fontSize: "14px" }}
+         
             >
               Custom Date
             </div>
-            <div className="tenantSelector" style={{ width: "100%" }}>
+            <div className="tenantSelector" >
               <RangePicker
                 id="select-customDate"
                 name="select-customDate"

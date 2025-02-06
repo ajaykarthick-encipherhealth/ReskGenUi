@@ -30,7 +30,7 @@ function MiniCards({ backgroundColor, icon, title, charts, styles, activeTab }) 
         <div >
           <div style={{display:"flex", justifyContent:"center"}}>  <Image src={icon} className={styles.Img} /></div>
         
-          <div className="px-2"style={{textAlign:"center"}}>{title}</div>
+          <div className="px-2 font1"style={{textAlign:"center"}}>{title}</div>
         </div>
 
         <div>

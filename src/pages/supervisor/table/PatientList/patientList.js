@@ -130,32 +130,26 @@ function PatientTable({
                 </span>
               </div>
             ) : (
-              <div style={{ textAlign: "center" }}>---</div>
+              "---"
             )}
           </td>
           <td
-            className={TableStyle.childBorder}
+            className={`text-truncate ${TableStyle.childBorder}`}
             style={{ textAlign: "center", textAlign: "center" }}
             onClick={handleTableRowClick}
           >
-            {data?.accuracyScore?.correctCount ? (
-              data?.accuracyScore?.correctCount
-            ) : (
-              <div style={{ textAlign: "center" }}>---</div>
-            )}
+            {data?.accuracyScore?.correctCount
+              ? data?.accuracyScore?.correctCount
+              : "---"}
           </td>
           <td
-            className={TableStyle.childBorder}
+            className={`text-truncate ${TableStyle.childBorder}`}
             style={{ textAlign: "center" }}
             onClick={handleTableRowClick}
           >
-            {data?.accuracyScore?.wrongCount ? (
-              data?.accuracyScore?.wrongCount
-            ) : (
-              <div style={{ textAlign: "center", textAlign: "center" }}>
-                ---
-              </div>
-            )}
+            {data?.accuracyScore?.wrongCount
+              ? data?.accuracyScore?.wrongCount
+              : " ---"}
           </td>
 
           <td
@@ -321,6 +315,7 @@ function PatientTable({
 
             <th className="text-truncate">AUDIT ALLOCATED BY</th>
             <th className="text-truncate">PRIORITY</th>
+            <th className={`text-truncate`}>AUDIT STATUS</th>
             <th className="text-truncate" style={{ textAlign: "center" }}>
               <div className="d-flex align-items-center justify-content-center gap-2">
                 AUDITED STATUS

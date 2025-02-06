@@ -72,6 +72,8 @@ function MyApp({ Component, pageProps }) {
             ? "scale(1.01)"
             : pathname.endsWith("/details")
             ? "scale(1.05)"
+            : pathname.endsWith("/fileprocessing")
+            ? "scale(1)"
             : "scale(1.02)";
         }
         target.classList.add("hover-effect");
