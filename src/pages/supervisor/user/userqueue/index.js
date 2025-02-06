@@ -373,18 +373,17 @@ const Index = ({
       <Header />
       <div class="content-body">
         <div className="container-fluid">
-          <div className="row">
+          <div >
             <div
-              className={"col-xl-12 d-flex"}
-              style={{
-                position: "relative",
-                // left: "40px",
-                bottom: "10px",
-                cursor: "pointer",
-              }}
+              className={ " mx-3 col-12 d-flex"}
+              // style={{
+              //   position: "relative",
+              //   // left: "40px",
+              //   bottom: "10px",
+              // }}
             >
               <button
-                className={styles.filterBtn}
+                className={userStyles.filterBtn}
                 onClick={() => {
                   router.push("/supervisor/user");
                 }}
@@ -407,7 +406,7 @@ const Index = ({
             <div className="col-12">
               <div className="card-body p-0">
                 <div className="table-responsive active-projects task-table">
-                  <div className="">
+                  <div className="mt-2">
                     <HeaderFilters
                       setSearchTextValue={setSearchTextValue}
                       searchlabel="Search By Patient ID / Name"
