@@ -16,6 +16,8 @@ import Completed from "../../../../src/images/trackingImages/completed.webp";
 import Declined from "../../../../src/images/trackingImages/declined.webp";
 import Abort from "../../../../src/images/trackingImages/abort.webp";
 import { actions as workqueueActions } from "../../../stores/reviewer/workqueue";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
+
 import {
   priorityOptions,
   resetPageNumber,
@@ -68,6 +70,8 @@ const Patient = ({
   filtersData,
   routedData,
   getRoutedData,
+  getAllBatchList,
+  batchList,
 }) => {
   const navigate = useRouter();
   const [isLoading, setIsLoading] = useState(true);
@@ -108,6 +112,10 @@ const Patient = ({
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedDates2, setSelectedDates2] = useState([]);
   const [paramsFilter, setParamsFilter] = useState(null);
+  const [batchAllList, setBatchAllList] = useState([]);
+  const [selectBatchList, setSelectedBatchList] = useState(null);
+
+  
 
   const getFilteApi = async ({
     pageNo,
@@ -120,7 +128,12 @@ const Patient = ({
     sort,
     selectedPriority,
     searchTextValue,
+    selectBatchList,
   }) => {
+    const selectBatchId =
+      selectBatchList === "ALL" || selectBatchList == undefined
+        ? ""
+        : selectBatchList;
     const uId = getStorage("userId");
     const resoureUrl = `patientAllocated=${uId}&page=${
       pageNo ? pageNo : 0
@@ -130,11 +143,11 @@ const Patient = ({
       dEnd ? dEnd : ""
     }&processedStart=${pStart ? pStart : ""}&processedEnd=${
       pEnd ? pEnd : ""
-    }&searchString=${searchTextValue ? searchTextValue : ""}&sortfield=${
-      sort?.sortField ? sort?.sortField : ""
-    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&priority=${
-      selectedPriority ? selectedPriority : ""
-    }`;
+    }&batchId=${selectBatchId || ""}&searchString=${
+      searchTextValue ? searchTextValue : ""
+    }&sortfield=${sort?.sortField ? sort?.sortField : ""}&sortdirection=${
+      sort?.sortDir ? sort?.sortDir : ""
+    }&priority=${selectedPriority ? selectedPriority : ""}`;
     const res = await getpatientsListFilter({ url: resoureUrl });
     if (res?.status == "SUCCESS") {
       setTotalElements(res.response?.patientDTOList?.totalElements);
@@ -250,7 +263,10 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
             <span className="patient-status text-center">
-              <Image src={Completed}  style={{ height: "30px", width: "30px" }} />
+              <Image
+                src={Completed}
+                style={{ height: "30px", width: "30px" }}
+              />
             </span>
           </Popover>
         );
@@ -259,7 +275,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: PENDING">
             <span className="patient-status text-center">
-              <Image src={Pending}  style={{ height: "30px", width: "30px" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </span>
           </Popover>
         );
@@ -274,7 +290,7 @@ const Patient = ({
             }`}
           >
             <span className="patient-status text-center">
-              <Image src={Declined}  style={{ height: "30px", width: "30px" }}/>
+              <Image src={Declined} style={{ height: "30px", width: "30px" }} />
             </span>
           </Popover>
         );
@@ -282,7 +298,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: NOT COMPUTED">
             <span className="patient-status text-center">
-              <Image src={Pending}  style={{ height: "30px", width: "30px" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </span>
           </Popover>
         );
@@ -290,7 +306,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: COMPUTED">
             <span className="patient-status text-center">
-              <Image src={Pending}  style={{ height: "30px", width: "30px" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </span>
           </Popover>
         );
@@ -298,7 +314,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: HOLD">
             <span className="patient-status text-center">
-              <Image src={Hold}  style={{ height: "30px", width: "30px" }} />
+              <Image src={Hold} style={{ height: "30px", width: "30px" }} />
             </span>
           </Popover>
         );
@@ -306,7 +322,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: ABORTED BY CRON">
             <span className="patient-status text-center">
-              <Image src={Abort}  style={{ height: "30px", width: "30px" }} />
+              <Image src={Abort} style={{ height: "30px", width: "30px" }} />
             </span>
           </Popover>
         );
@@ -314,7 +330,7 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="">
             <span className="patient-status text-center">
-              <Image src={Pending}  style={{ height: "30px", width: "30px" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </span>
           </Popover>
         );
@@ -354,6 +370,8 @@ const Patient = ({
       setSortCompleteOrder(routedData?.sortCompleteOrder);
       setSortAllocateOrder(routedData?.sortAllocateOrder);
       setSelectedDates2(routedData?.selectedDates2 || []);
+       setSelectedBatchList(routedData?.selectBatchList || "");
+
     }
   }, []);
   useEffect(() => {
@@ -370,6 +388,7 @@ const Patient = ({
         sort,
         selectedPriority: clear ? "" : selectedPriority,
         searchTextValue: clear ? "" : searchTextValue,
+        selectBatchList: clear ? "" : selectBatchList,
       });
     }
   }, [
@@ -385,8 +404,23 @@ const Patient = ({
     navigate.query,
     clear,
     paramsFilter,
+    selectBatchList,
   ]);
-
+    useEffect(() => {
+      var batchListArray = [];
+      batchList?.response?.map((res) => {
+        batchListArray.push({
+          value: res.id,
+          label: res.name,
+        });
+      });
+      setBatchAllList(batchListArray);
+    }, [batchList]);
+  useEffect(() => {
+    if (!batchList?.response) {
+      getAllBatchList();
+    }
+  }, []);
   return (
     <div className={`show `}>
       <Header />
@@ -439,6 +473,13 @@ const Patient = ({
                             setClear={setClear}
                             clear={clear}
                             getRoutedData={getRoutedData}
+                            setSelectedOptionBatch={setSelectedBatchList}
+                            selectOptionsBatch={batchAllList}
+                            defaultSelectValueBatch={""}
+                            selectedValueBatch={selectBatchList}
+                            selectlabelBatch="Select Batch"
+                            isSelectBatch={true}
+                            batchValue={selectBatchList}
                           />
                       </div>
                       <div className="col-2">
@@ -455,7 +496,7 @@ const Patient = ({
                       className="dataTables_wrapper no-footer"
                     >
                       {loading ? (
-                        <TableSkeleton/>
+                        <TableSkeleton />
                       ) : (
                         <div className="mt-3">
                           <PatientTable
@@ -498,6 +539,7 @@ const Patient = ({
                               selectedDates2,
                               selectedDates,
                               activeFilters,
+                              selectBatchList
                             }}
                             bullets={bullets}
                           />
@@ -533,11 +575,13 @@ const enhancer = connect(
     loading: state?.reviewer?.workQueue?.patientsLoading,
     filtersData: state.reviewer?.workQueue?.reviewerPatientFilterList,
     routedData: state.tenantAdmin?.patientSync?.routedData,
+    batchList: state?.tenantAdmin?.patients?.allBatch?.data,
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,
     patientDetails: allActions.getPatientDetails,
     getRoutedData: allPatientSyncAction.getRoutedData,
+    getAllBatchList: tenantAdminAction.getAllBatchAction,
   }
 );
 export default enhancer(Patient);

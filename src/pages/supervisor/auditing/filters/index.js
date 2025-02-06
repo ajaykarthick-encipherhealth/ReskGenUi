@@ -15,6 +15,7 @@ export const allFilters = [
   "Select Audited Status",
   "Audited Date",
   "Audited Due Date",
+  "Batch",
 ];
 
 const Filters = ({
@@ -63,6 +64,9 @@ const Filters = ({
   selectedDateRange,
   selectedDates,
   getRoutedData,
+  setSelectedOptionBatch,
+  batchValue,
+  selectOptionsBatch,
 }) => {
   const [selectAll, setSelectAll] = useState(false);
   const handleClearAllFilters = () => {
@@ -91,7 +95,7 @@ const Filters = ({
     switch (filter) {
       case "Select Audited Status":
         return (
-          <div style={{ width: "250px"}}>
+          <div style={{ width: "250px" }}>
             <label className={`${styles.label} responsiveLabel`}>
               {selectlabel}
             </label>
@@ -118,7 +122,7 @@ const Filters = ({
       case "Audited Date":
       case "Audited Due Date":
         return (
-          <div style={{ width: "250px"}}>
+          <div style={{ width: "250px" }}>
             <DateRangePicker
               selectedDates={selectedDates}
               pickerlabel={filter}
@@ -132,14 +136,14 @@ const Filters = ({
               setSelectedDateRange={setSelectedDateRange}
               selectedDateRange={selectedDateRange}
               getRoutedData={getRoutedData}
-              isDueDate={filter === "Audited Due Date"} 
+              isDueDate={filter === "Audited Due Date"}
             />
           </div>
         );
 
       case "Reviewer Status":
         return (
-          <div style={{ width: "250px"}}>
+          <div style={{ width: "250px" }}>
             <label className={`${styles.label} responsiveLabel`}>
               {createdTolabel}
             </label>
@@ -162,6 +166,38 @@ const Filters = ({
             </div>
           </div>
         );
+      case "Batch":
+        return (
+          <div style={{ width: "250px" }}>
+            <label className={`${styles.label} responsiveLabel`}>
+              Select Batch
+            </label>
+            <div class="form-group has-search custom-react-select">
+              <Select
+                filterOption={(input, option) =>
+                  (option?.label ?? "")
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+                value={batchValue ? batchValue : null}
+                onChange={(selectBatch) => {
+                  setSelectedOptionBatch(selectBatch ? selectBatch : null);
+
+                  if (setPageNo) {
+                    resetPageNumber(setPageNo);
+                  }
+                  getRoutedData(null);
+                }}
+                showSearch
+                options={selectOptionsBatch}
+                placeholder="Select Batch"
+                allowClear={true}
+                id="select-organization"
+                name="select-organization"
+              />
+            </div>
+          </div>
+        );
       default:
         return null;
     }
@@ -179,7 +215,7 @@ const Filters = ({
             setPageNo={setPageNo}
           />
         </div>
-        
+
         {activeFilters?.map((filter) => (
           <React.Fragment key={filter}>{renderFilter(filter)}</React.Fragment>
         ))}

@@ -19,6 +19,7 @@ import AuditeDeclineTrack from "../../../../src/images/trackingImages/auditdecli
 import { actions as allActions } from "../../../stores/supervisor/auditedQueue";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import { actions as supervisorActions } from '../../../stores/supervisor/auditedQueue'
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -43,7 +44,11 @@ import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
 import Filters, { allFilters } from "./filters";
 import moment from "moment";
-import { getResponePopup, getSpacesWithUnderscoresAuditing } from "../../../utils/reusable";
+import {
+  getResponePopup,
+  getSpacesWithUnderscoresAuditing,
+
+} from "../../../utils/reusable";
 const bullets = [
   {
     color: "#377880",
@@ -84,7 +89,9 @@ const Patient = ({
   getFilters,
   routedData,
   getRoutedData,
-  supervisorPriority
+  supervisorPriority,
+  getAllBatchList,
+  batchList,
 }) => {
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
@@ -129,7 +136,8 @@ const Patient = ({
   const [activeFilters, setActiveFilters] = useState([]);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [priority, setPriority] = useState(null);
-
+  const [selectBatchList, setSelectedBatchList] = useState(null);
+  const [batchAllList, setBatchAllList] = useState([]);
   const getAllList = () => {
     if (response) {
       let resultMap = [];
@@ -172,7 +180,7 @@ const Patient = ({
       setTableLoading(false);
     }
   };
-
+  console.log(batchList, "batchList");
   const addPatientFormId = () => {
     setValidated(false);
     setAddPatientId(true);
@@ -224,7 +232,10 @@ const Patient = ({
         return (
           <Popover placement="bottom" title="Status: AUDIT HOLD">
             <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={AuditHold} style={{ height: "30px", width: "30px" }} />
+              <Image
+                src={AuditHold}
+                style={{ height: "30px", width: "30px" }}
+              />
             </span>
           </Popover>
         );
@@ -265,14 +276,20 @@ const Patient = ({
       case "AUDITED":
         return (
           <span className="patient-status" style={{ textAlign: "center" }}>
-            <Image src={AuditedTrack} style={{ height: "30px", width: "30px" }} />
+            <Image
+              src={AuditedTrack}
+              style={{ height: "30px", width: "30px" }}
+            />
           </span>
         );
       case "NOT_AUDIT":
         return (
           <Popover placement="bottom" title=" Status: NOT AUDIT">
             <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={NotAudited} style={{ height: "30px", width: "30px" }} />
+              <Image
+                src={NotAudited}
+                style={{ height: "30px", width: "30px" }}
+              />
             </span>
           </Popover>
         );
@@ -330,10 +347,12 @@ const Patient = ({
       auditDateEnd: clear ? "" : selectedDateRange?.AuditedDate?.endDate || "",
       sort,
       selCreatedBy: clear ? "" : selCreatedBy,
+      selectBatchList: clear ? "" : selectBatchList,
     };
     if (window !== "undefined" && paramsFilter) {
       getWorkListFilter({ data: data });
       getFilters({ field: "patientAllocated" });
+      getAllBatchList();
     }
   }, [
     pageNo,
@@ -343,6 +362,7 @@ const Patient = ({
     sort,
     selCreatedBy,
     paramsFilter,
+    selectBatchList,
   ]);
   useEffect(() => {
     if (response?.data?.response?.content) {
@@ -356,12 +376,16 @@ const Patient = ({
       const AuditedDueDate = dates?.AuditedDueDate?.map((date) => dayjs(date));
 
       setParamsFilter("check");
-      setSelectedDates(routedData?.selectedDates ?  routedData?.selectedDates  : [] );
+      setSelectedDates(
+        routedData?.selectedDates ? routedData?.selectedDates : []
+      );
       setSelectedDateRange(
         routedData?.selectedDateRange ? routedData?.selectedDateRange : ""
       );
       SetSelectedOption(
-        routedData?.selectedOption ? getSpacesWithUnderscoresAuditing(routedData?.selectedOption) : ""
+        routedData?.selectedOption
+          ? getSpacesWithUnderscoresAuditing(routedData?.selectedOption)
+          : ""
       );
       setSearch(routedData?.search ? routedData?.search : "");
       setSelCreatedBy(routedData?.selCreatedBy ? routedData?.selCreatedBy : "");
@@ -372,9 +396,10 @@ const Patient = ({
       setActiveFilters(
         routedData?.activeFilters ? routedData?.activeFilters : []
       );
+      setSelectedBatchList(routedData?.selectBatchList || "");
     }
   }, []);
-  
+
   const handlePriorityChange = async (
     patientId,
     selectedValue,
@@ -385,8 +410,8 @@ const Patient = ({
       year: dayjs(lastModifiedDate).format("YYYY"),
       priority: selectedValue,
     });
-    getResponePopup(res)
-    setPriority({selectedValue:selectedValue,patientId:patientId});
+    getResponePopup(res);
+    setPriority({ selectedValue: selectedValue, patientId: patientId });
     if (res.status === "SUCCESS") {
       let tenId = getStorage("tenantId");
       let orgId = getStorage("orgId");
@@ -408,16 +433,33 @@ const Patient = ({
         auditDateStart: clear
           ? ""
           : selectedDateRange?.AuditedDate?.startDate || "",
-        auditDateEnd: clear ? "" : selectedDateRange?.AuditedDate?.endDate || "",
+        auditDateEnd: clear
+          ? ""
+          : selectedDateRange?.AuditedDate?.endDate || "",
         sort,
         selCreatedBy: clear ? "" : selCreatedBy,
+        selectBatchList: clear ? "" : selectBatchList,
       };
       if (window !== "undefined" && paramsFilter) {
-        getWorkListFilter({ data: data })
+        getWorkListFilter({ data: data });
       }
     }
   };
-  
+  useEffect(() => {
+    var batchListArray = [];
+    batchList?.response?.map((res) => {
+      batchListArray.push({
+        value: res.id,
+        label: res.name,
+      });
+    });
+    setBatchAllList(batchListArray);
+  }, [batchList]);
+  useEffect(() => {
+    if (!batchList?.response) {
+      getAllBatchList();
+    }
+  }, []);
   return (
     <div className={`show `}>
       <Header />
@@ -429,64 +471,73 @@ const Patient = ({
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
                     <div>
-                        <Filters
-                          setSearch={setSearch}
-                          selectedOption={selectedOption}
-                          // isSearch={true}
-                          searchlabel="Search By Patient ID / Name"
-                          search={search}
-                          // select status
-                          selectlabel="Select Audited Status"
-                          // isSelector={true}
-                          setSelectedOption={SetSelectedOption}
-                          selectOptions={statusOptions}
-                          defaultSelectValue1={"Select Status"}
-                          // computation date
-                          pickerlabel="Audit Due Date"
-                          defaultStartDate={""}
-                          defaultEndDate={""}
-                          setStartDate={setComputedStartDate}
-                          setEndDate={setComputedEndDate}
-                          isRangePicker={true}
-                          selectedDates={selectedDates}
-                          setSelectedDates={setSelectedDates}
-                          // completed date
-                          pickerlabe2="Audited Date"
-                          defaultStartDate2={""}
-                          defaultEndDate2={""}
-                          setStartDate2={setCompletedStartDate}
-                          setEndDate2={setCompletedEndDate}
-                          // isAnotherPicker={true}
-                          defaultAllocateTo={"All"}
-                          selectedDates2={selecteddates2}
-                          setSelectedDates2={setSelectedDate2s}
-                          // created by
-                          isNextCreatedBySelector={true}
-                          createdTolabel="Reviewer"
-                          optionKey="patientAllocated"
-                          createdByOptoons={generateOptionsListSupervisor(
-                            filteredList
-                          )}
-                          setSelCreatedBy={setSelCreatedBy}
-                          selCreatedBy={selCreatedBy}
-                          addUser={false}
-                          addUserForm={addPatientFormId}
-                          bullets={bullets}
-                          setPageNo={setPageNo}
-                          defaultCreatedBy={"Select Reviewer"}
-                          // isNextRow={true}
-                          clear={clear}
-                          activeFilters={activeFilters}
-                          setActiveFilters={setActiveFilters}
-                          setClear={setClear}
-                          setSelectedDateRange={setSelectedDateRange}
-                          selectedDateRange={selectedDateRange}
-                          searchVal={search}
-                          setSearchVal={setSearch}
-                          getRoutedData={getRoutedData}
-                        />
-                      </div>
-                   
+
+                      <Filters
+                        setSearch={setSearch}
+                        selectedOption={selectedOption}
+                        // isSearch={true}
+                        searchlabel="Search By Patient ID / Name"
+                        search={search}
+                        // select status
+                        selectlabel="Select Audited Status"
+                        // isSelector={true}
+                        setSelectedOption={SetSelectedOption}
+                        selectOptions={statusOptions}
+                        defaultSelectValue1={"Select Status"}
+                        // computation date
+                        pickerlabel="Audit Due Date"
+                        defaultStartDate={""}
+                        defaultEndDate={""}
+                        setStartDate={setComputedStartDate}
+                        setEndDate={setComputedEndDate}
+                        isRangePicker={true}
+                        selectedDates={selectedDates}
+                        setSelectedDates={setSelectedDates}
+                        // completed date
+                        pickerlabe2="Audited Date"
+                        defaultStartDate2={""}
+                        defaultEndDate2={""}
+                        setStartDate2={setCompletedStartDate}
+                        setEndDate2={setCompletedEndDate}
+                        // isAnotherPicker={true}
+                        defaultAllocateTo={"All"}
+                        selectedDates2={selecteddates2}
+                        setSelectedDates2={setSelectedDate2s}
+                        // created by
+                        isNextCreatedBySelector={true}
+                        createdTolabel="Reviewer"
+                        optionKey="patientAllocated"
+                        createdByOptoons={generateOptionsListSupervisor(
+                          filteredList
+                        )}
+                        setSelCreatedBy={setSelCreatedBy}
+                        selCreatedBy={selCreatedBy}
+                        addUser={false}
+                        addUserForm={addPatientFormId}
+                        bullets={bullets}
+                        setPageNo={setPageNo}
+                        defaultCreatedBy={"Select Reviewer"}
+                        // selectBatch
+                        setSelectedOptionBatch={setSelectedBatchList}
+                        selectOptionsBatch={batchAllList}
+                        defaultSelectValueBatch={""}
+                        selectedValueBatch={selectBatchList}
+                        selectlabelBatch="Select Batch"
+                        isSelectBatch={true}
+                        batchValue={selectBatchList}
+                        // isNextRow={true}
+                        clear={clear}
+                        activeFilters={activeFilters}
+                        setActiveFilters={setActiveFilters}
+                        setClear={setClear}
+                        setSelectedDateRange={setSelectedDateRange}
+                        selectedDateRange={selectedDateRange}
+                        searchVal={search}
+                        setSearchVal={setSearch}
+                        getRoutedData={getRoutedData}
+                      />
+                    </div>
+
 
                     <div
                       id="task-tbl_wrapper"
@@ -523,7 +574,7 @@ const Patient = ({
                               selectedDateRange,
                               sort,
                               selCreatedBy,
-                              activeFilters
+                              activeFilters,
                             }}
                             getWorkListFilter={getWorkListFilter}
                             handlePriorityChange={handlePriorityChange}
@@ -562,13 +613,14 @@ const connector = connect(
     filteredList: state.supervisor?.audited?.filterUsers,
     loader: state.supervisor?.audited?.loading,
     routedData: state.tenantAdmin?.patientSync?.routedData,
+    batchList: state?.tenantAdmin?.patients?.allBatch?.data,
   }),
   {
     getWorkListFilter: allActions.getWorkListFilter,
     getFilters: allActions.getFilterUsers,
     getRoutedData: allPatientSyncAction.getRoutedData,
     supervisorPriority: supervisorActions.getPriorityChange,
+    getAllBatchList: tenantAdminAction.getAllBatchAction,
   }
-
 );
 export default connector(Patient);

@@ -157,7 +157,7 @@ function AddPatientListTable({
                 })()
               ) : (
                 <Tooltip title="No flag found">
-                  <span >
+                  <span>
                     <SvgFlag fillColor={"transparent"} />
                   </span>
                 </Tooltip>
@@ -185,6 +185,14 @@ function AddPatientListTable({
               ) : (
                 "---"
               )}
+            </td>
+            <td
+              className={TableStyle.childBorder}
+              onClick={handleTableRowClick}
+              id={data?.batchName}
+              name={data?.batchName}
+            >
+              {data.batchName ? data.batchName : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
@@ -303,6 +311,7 @@ function AddPatientListTable({
           <tr>
             <th>Flag </th>
             <th className="px-3">PATIENT ID</th>
+            <th className="px-3">BATCH NAME</th>
             <th className="text-truncate px-3">FILE NAME</th>
             <th className="text-truncate px-3">EMR TYPE</th>
             <th className="text-truncate px-3 text-center">TOTAL PAGES</th>
@@ -314,8 +323,8 @@ function AddPatientListTable({
                 // paddingLeft: "15px",
                 textAlign: "center",
               }}
-          id="computed-date"
-          name="computed-date"
+              id="computed-date"
+              name="computed-date"
               onClick={() => {
                 sortFunction(sortOrder, setSortOrder, setSort, "computedDate");
               }}

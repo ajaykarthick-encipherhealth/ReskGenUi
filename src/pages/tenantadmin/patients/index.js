@@ -562,11 +562,7 @@ const Patient = ({
       getAllOrganizationList();
     }
   }, []);
-  useEffect(() => {
-    if (!batchList?.response) {
-      getAllBatchList();
-    }
-  }, []);
+
 
   useEffect(() => {
     var orgListArray = [];
@@ -588,7 +584,11 @@ const Patient = ({
     });
     setBatchAllList(batchListArray);
   }, [batchList]);
-
+  useEffect(() => {
+    if (!batchList?.response) {
+      getAllBatchList();
+    }
+  }, []);
   useEffect(() => {
     if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
       const patientData = allPatientList?.data?.response?.content;

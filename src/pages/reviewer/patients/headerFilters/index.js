@@ -17,6 +17,7 @@ export const allFilters = [
   "Select Priority",
   "Due Date",
   "Completed Date",
+  "Batch",
 ];
 
 const HeaderFiltersPatients = ({
@@ -56,6 +57,9 @@ const HeaderFiltersPatients = ({
   setSelectedDates5,
   filtersData,
   getRoutedData,
+  setSelectedOptionBatch,
+  batchValue,
+  selectOptionsBatch,
 }) => {
   const [selectAll, setSelectAll] = useState(false);
 
@@ -146,7 +150,32 @@ const HeaderFiltersPatients = ({
             </div>
           </div>
         );
-
+      case "Batch":
+        return (
+          <div className={defaultSize}>
+            <label className={styles.label}>Select Batch</label>
+            <div class="form-group has-search custom-react-select">
+              <Select
+                filterOption={(input, option) =>
+                  (option?.label ?? "")
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+                value={batchValue ? batchValue : null}
+                onChange={(selectBatch) => {
+              
+                  setSelectedOptionBatch(selectBatch ? selectBatch : null);
+                }}
+                showSearch
+                options={selectOptionsBatch}
+                placeholder="Select Batch"
+                allowClear={true}
+                id="select-organization"
+                name="select-organization"
+              />
+            </div>
+          </div>
+        );
       default:
         return null;
     }

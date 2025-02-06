@@ -104,9 +104,11 @@ function PatientTable({
             </div>
             <div> {data.patientName ? data.patientName : ""}</div>
           </td>
-
+          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+            {data.batchName ? data.batchName  : "---" }
+          </td>
           <td
-            className={TableStyle.childBorder}
+            className={`text-truncate ${TableStyle.childBorder}`}
             style={{ textAlign: "center" }}
             onClick={handleTableRowClick}
           >
@@ -240,6 +242,7 @@ function PatientTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENTS</th>
+            <th className="text-truncate">BATCH NAME</th>
             <th> REVIEWER</th>
             <th style={{ cursor: "pointer", textAlign: "center" }}>
               <Tooltip placement="bottom" title="REVIEWER CHANGES">

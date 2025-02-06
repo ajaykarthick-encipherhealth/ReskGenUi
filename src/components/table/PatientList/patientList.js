@@ -92,6 +92,9 @@ function PatientTable({
               {truncateString(data?.patientId, 20)}
             </Tooltip>
           </td>
+          <td className={`${TableStyle.childBorder}`}>
+            {data.batchName ? data.batchName : "---"}
+          </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             <Tooltip title={data?.fileName}>
               {" "}
@@ -191,6 +194,7 @@ function PatientTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENT ID</th>
+            <th>BATCH NAME</th>
             <th>FILE NAME</th>
             {userId != "reviewer@3gencogentai.onmicrosoft.com" && (
               <th className="text-center text-truncate">HCC COUNT</th>
@@ -250,6 +254,7 @@ function PatientTable({
                 )}
               </span>
             </th>
+
             <th className={`${TableStyle.rowStyle} text-truncate`}>
               ALLOCATED BY
             </th>
