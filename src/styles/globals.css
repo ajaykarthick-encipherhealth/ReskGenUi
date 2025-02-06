@@ -14607,6 +14607,7 @@ overflow: scroll;
 .customScroll {
   height: 0px;
   overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 .customScroll:hover {

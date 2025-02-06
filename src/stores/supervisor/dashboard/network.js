@@ -81,7 +81,7 @@ export const CompletedStatus = async ({
       ? `daily?month=${month}&year=${year}`
       : btn === "Weekly"
       ? `weekly?month=${month}&year=${year}`
-      : `monthyly?year=${year}`;
+      : `monthly?year=${year}`;
   const options = {
     method: "GET",
   };
