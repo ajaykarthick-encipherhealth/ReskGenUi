@@ -4,7 +4,11 @@ import Image from "next/image";
 import { Empty, Select as AntSelect, Popover, Tooltip } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import {
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+  InfoCircleFilled,
+} from "@ant-design/icons";
 import TableStyle from "../../../../components/table/table.module.css";
 import AuditedTrack from "../../../../../src/images/trackingImages/audited.webp";
 import NotAudited from "../../../../../src/images/trackingImages/notaudited.webp";
@@ -19,12 +23,16 @@ import {
   sortFunction,
 } from "../../../../components/headerFilters/functions";
 import { extractLatestData } from "../../auditing";
-import {  getStorage, setStorage } from "../../../../utils/storages";
+import { getStorage, setStorage } from "../../../../utils/storages";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 import { connect } from "react-redux";
+import Legends from "../../../../components/legends";
+import styles from "../../../reviewer/report/report.module.css";
 
 const UserQueueTable = ({
   userList,
+  badges,
+  bullets,
   setSort,
   auditBodyTemplate,
   page,
@@ -44,7 +52,9 @@ const UserQueueTable = ({
   getIndividualUser,
   currentUser,
   handlePriorityChange,
-  priority
+  priority,
+  badgesTitle,
+  bulletsTitle,
 }) => {
   const router = useRouter();
   const auditstatusBodyTemplate = (rowData) => {
@@ -148,11 +158,9 @@ const UserQueueTable = ({
       setStorage("patientId", id);
       setStorage("routeBackTo", "/supervisor/user/userqueue");
       getRoutedData(params);
-      router?.push( "/supervisor/user/details")
+      router?.push("/supervisor/user/details");
     }
   };
-
-
 
   const renderRows = () => {
     return userList?.length === 0 ? (
@@ -164,7 +172,10 @@ const UserQueueTable = ({
             className={TableStyle.firstTdBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
-         <Tooltip title={data?.patientId}> {truncateString(data?.patientId, 20)}</Tooltip>
+            <Tooltip title={data?.patientId}>
+              {" "}
+              {truncateString(data?.patientId, 20)}
+            </Tooltip>
           </td>
           <td
             className={TableStyle.childBorder}
@@ -318,12 +329,18 @@ const UserQueueTable = ({
             </Popover>
           </td>
           <td className={TableStyle.childBorder}>
-          <AntSelect
+            <AntSelect
               options={priorityOptions}
               placeholder="Set priority"
               className={`custom-ant-select ${TableStyle.customAntSelect}`}
               showSearch={false}
-              value={  data?.priority ? data?.priority :  priority?.patientId === data?.patientId ?priority?.selectedValue : "Set Priority"}
+              value={
+                data?.priority
+                  ? data?.priority
+                  : priority?.patientId === data?.patientId
+                  ? priority?.selectedValue
+                  : "Set Priority"
+              }
               onChange={(value) => {
                 handlePriorityChange(
                   data?.patientId,
@@ -352,7 +369,6 @@ const UserQueueTable = ({
       ))
     );
   };
-
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -360,7 +376,8 @@ const UserQueueTable = ({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th className="text-truncate"
+            <th
+              className="text-truncate"
               onClick={() => {
                 sortFunction(
                   processSort,
@@ -379,7 +396,8 @@ const UserQueueTable = ({
                 )}
               </span>
             </th>
-            <th className="text-truncate" 
+            <th
+              className="text-truncate"
               onClick={() => {
                 sortFunction(
                   auditAllocatedSort,
@@ -398,7 +416,8 @@ const UserQueueTable = ({
                 )}
               </span>
             </th>
-            <th className="text-truncate"
+            <th
+              className="text-truncate"
               onClick={() => {
                 sortFunction(
                   auditDueSort,
@@ -417,8 +436,9 @@ const UserQueueTable = ({
                 )}
               </span>
             </th>
-            <th className="text-truncate" >AUDIT ALLOCATED BY</th>
-            <th className="text-truncate"
+            <th className="text-truncate">AUDIT ALLOCATED BY</th>
+            <th
+              className="text-truncate"
               onClick={() => {
                 sortFunction(
                   audirDateSort,
@@ -437,10 +457,73 @@ const UserQueueTable = ({
                 )}
               </span>
             </th>
-            {/* <th>ALLOCATED BY</th> */}
-            <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
-            <th style={{ textAlign: "center" }}>REVIEWED STATUS</th>
-            <th style={{ textAlign: "center" }}>AUDITED STATUS</th>
+            <th>PRIORITY</th>
+            <th style={{ textAlign: "center" }}>
+              <div className="d-flex align-items-center justify-content-center gap-2">
+                REVIEWED STATUS
+                <span style={{ cursor: "pointer" }}>
+                  <Popover
+                    content={
+                      <>
+                        <Legends display="block" padding="0 0px 10px 0" />
+                        {bulletsTitle && (
+                          <label
+                            className={styles.label}
+                            style={{ fontWeight: "700" }}
+                          >
+                            {bulletsTitle}
+                          </label>
+                        )}
+                        <Legends
+                          bullets={bullets}
+                          display="block"
+                          padding="0 0px 10px 0"
+                        />
+                      </>
+                    }
+                    trigger={["click"]}
+                    placement="bottom"
+                  >
+                    <InfoCircleFilled
+                      style={{ color: "#fff", fontSize: "14px" }}
+                    />
+                  </Popover>
+                </span>
+              </div>
+            </th>
+            <th style={{ textAlign: "center" }}>
+              <div className="d-flex align-items-center justify-content-center gap-2">
+                AUDITED STATUS
+                <span style={{ cursor: "pointer" }}>
+                  <Popover
+                    content={
+                      <>
+                        <Legends display="block" padding="0 0px 10px 0" />
+                        {badgesTitle && (
+                          <label
+                            className={styles.label}
+                            style={{ fontWeight: "700" }}
+                          >
+                            {badgesTitle}
+                          </label>
+                        )}
+                        <Legends
+                          bullets={badges}
+                          display="block"
+                          padding="0 0px 10px 0"
+                        />
+                      </>
+                    }
+                    trigger={["click"]}
+                    placement="bottom"
+                  >
+                    <InfoCircleFilled
+                      style={{ color: "#fff", fontSize: "14px" }}
+                    />
+                  </Popover>
+                </span>
+              </div>
+            </th>
           </tr>
         </thead>
 
@@ -459,5 +542,5 @@ const UserQueueTable = ({
     </div>
   );
 };
- 
-export default UserQueueTable
+
+export default UserQueueTable;

@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import moment from "moment";
 import TableStyle from "../table.module.css";
-import { Select as AntSelect, Empty, Tooltip } from "antd";
+import { Select as AntSelect, Empty, Popover, Tooltip } from "antd";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import {
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+  InfoCircleFilled,
+} from "@ant-design/icons";
 import {
   priorityOptions,
   sortFunction,
@@ -16,7 +20,8 @@ import { connect } from "react-redux";
 import { setStorage } from "../../../utils/storages";
 import { actions as reviewerWorkQueueAction } from "../../../stores/reviewer/workqueue";
 import { allFilters } from "../../../pages/reviewer/patients/headerFilters";
-import { actions as patientSyncActions } from '../../../stores/tenantAdmin/patientSync'
+import { actions as patientSyncActions } from "../../../stores/tenantAdmin/patientSync";
+import Legends from "../../legends";
 
 function PatientTable({
   patinetListAll,
@@ -38,7 +43,9 @@ function PatientTable({
   supervisorActions,
   activeFilters,
   getFilteredList,
-  getRoutedData
+  getRoutedData,
+  bullets,
+  badges,
 }) {
   const router = useRouter();
   const handlePriorityChange = async (
@@ -57,14 +64,12 @@ function PatientTable({
   };
 
   const handleTableRowClick = (e) => {
-    // /reviewer/patients/details
     const targetTd = e.target.closest("td");
     if (targetTd) {
       getFilteredList(allFilters),
-      setStorage("routeBackTo", "/reviewer/patients");
+        setStorage("routeBackTo", "/reviewer/patients");
       getRoutedData(params);
       router?.push(
-        // { pathname: "/reviewer/patients/details", query: params },
         "/reviewer/patients/details"
       );
       const dataIndex = targetTd.parentElement.rowIndex - 1;
@@ -157,7 +162,7 @@ function PatientTable({
               placeholder="Set priority"
               className={`custom-ant-select  ${TableStyle.customAntSelect}`}
               showSearch={false}
-              disabled 
+              disabled
               value={data?.priority ? data?.priority : "Set Priority"}
               onChange={(value) => {
                 handlePriorityChange(
@@ -245,13 +250,45 @@ function PatientTable({
                 )}
               </span>
             </th>
-
-            <th className={`${TableStyle.rowStyle} text-truncate` }> ALLOCATED BY</th>
+            <th className={`${TableStyle.rowStyle} text-truncate`}>
+              ALLOCATED BY
+            </th>
             <th>PRIORITY</th>
-            <th className="text-center">STATUS</th>
+            <th className="text-truncate" style={{ textAlign: "center" }}>
+              <div className="d-flex align-items-center justify-content-center gap-2">
+                STATUS
+                <span style={{ cursor: "pointer" }}>
+                  <Popover
+                    content={
+                      <>
+                        <Legends
+                          bullets={bullets}
+                          display="block"
+                          padding="0 0px 10px 0"
+                        />
+                        {badges?.length > 0 &&
+                          badges?.map((data) => (
+                            <div style={{ marginBottom: "10px" }}>
+                              <Image src={data.src} width={20} height={30} />
+                              <span style={{ marginLeft: "5px" }}>
+                                {data?.name}
+                              </span>
+                            </div>
+                          ))}
+                      </>
+                    }
+                    trigger={["click"]}
+                    placement="bottom"
+                  >
+                    <InfoCircleFilled
+                      style={{ color: "#fff", fontSize: "14px" }}
+                    />
+                  </Popover>
+                </span>
+              </div>
+            </th>
           </tr>
         </thead>
-
         <tbody>
           {patinetListAll?.length <= 0 ? (
             <tr>

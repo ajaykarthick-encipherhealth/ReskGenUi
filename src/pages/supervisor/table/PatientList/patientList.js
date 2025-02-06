@@ -2,10 +2,19 @@ import React, { useState } from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
-import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
+import {
+  notification,
+  Select as AntSelect,
+  Empty,
+  Tooltip,
+  Popover,
+} from "antd";
 import TableStyle from "../../../../components/table/table.module.css";
-import { SVGICON } from "../../../../jsx/constant/theme";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import {
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+  InfoCircleFilled,
+} from "@ant-design/icons";
 import {
   priorityOptions,
   renderUserPrfoileAvatar,
@@ -13,7 +22,8 @@ import {
 } from "../../../../components/headerFilters/functions";
 import { removeStorage, setStorage } from "../../../../utils/storages";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
-import { connect } from "react-redux";
+import styles from "../../../reviewer/report/report.module.css";
+import Legends from "../../../../components/legends";
 
 function PatientTable({
   patinetListAll,
@@ -32,7 +42,9 @@ function PatientTable({
   activeFilters,
   setActiveFilters,
   handlePriorityChange,
-  priority
+  priority,
+  bullets,
+  badges,
 }) {
   const navigate = useRouter();
 
@@ -68,7 +80,7 @@ function PatientTable({
       gotoPatientDetails(clickedData);
     }
   };
-  
+
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
       <tr>
@@ -204,7 +216,13 @@ function PatientTable({
               placeholder="Set priority"
               className={`custom-ant-select ${TableStyle.customAntSelect}`}
               showSearch={false}
-              value={  data?.priority ? data?.priority :  priority?.patientId === data?.patientId ?priority?.selectedValue : "Set Priority"}
+              value={
+                data?.priority
+                  ? data?.priority
+                  : priority?.patientId === data?.patientId
+                  ? priority?.selectedValue
+                  : "Set Priority"
+              }
               onChange={(value) => {
                 handlePriorityChange(data?.patientId, value);
               }}
@@ -212,7 +230,10 @@ function PatientTable({
             />
           </td>
 
-          <td className={`${TableStyle.childBorder} text-center `} onClick={handleTableRowClick}>
+          <td
+            className={`${TableStyle.childBorder} text-center `}
+            onClick={handleTableRowClick}
+          >
             {statusBodyTemplate(data)}
           </td>
         </tr>
@@ -300,7 +321,72 @@ function PatientTable({
 
             <th className="text-truncate">AUDIT ALLOCATED BY</th>
             <th className="text-truncate">PRIORITY</th>
-            <th className={`text-truncate}`}>AUDIT STATUS</th>
+            <th className="text-truncate" style={{ textAlign: "center" }}>
+              <div className="d-flex align-items-center justify-content-center gap-2">
+                AUDITED STATUS
+                <span style={{ cursor: "pointer" }}>
+                  <Popover
+                    content={
+                      <>
+                        <Legends
+                          bullets={bullets}
+                          display="block"
+                          padding="0 0px 10px 0"
+                        />
+                        {badges?.length > 0 &&
+                          badges?.map((data) => (
+                            <div style={{ marginBottom: "10px" }}>
+                              <Image src={data.src} width={20} height={30} />
+                              <span style={{ marginLeft: "5px" }}>
+                                {data?.name}
+                              </span>
+                            </div>
+                          ))}
+                      </>
+                    }
+                    trigger={["click"]}
+                    placement="bottom"
+                  >
+                    <InfoCircleFilled
+                      style={{ color: "#fff", fontSize: "14px" }}
+                    />
+                  </Popover>
+                </span>
+              </div>
+            </th>
+            {/* <th className="text-truncate" style={{ textAlign: "center" }}>
+              <div className="d-flex align-items-center justify-content-center">
+                AUDIT STATUS
+                <Popover
+                  content={
+                    <>
+                      <Legends
+                        bullets={bullets}
+                        display="block"
+                        padding="0 0px 10px 0"
+                      />
+                      {badges?.length > 0 &&
+                        badges?.map((data) => (
+                          <div style={{ marginBottom: "10px" }}>
+                            <Image src={data.src} width={20} height={30} />
+                            <span style={{ marginLeft: "5px" }}>
+                              {data?.name}
+                            </span>
+                          </div>
+                        ))}
+                    </>
+                  }
+                  trigger={["click"]}
+                  placement="bottom"
+                >
+                  <div className="cursor-pointer">
+                    <div className={styles.iconBorder}>
+                      <InfoCircleFilled style={{ color: "#fff" }} />
+                    </div>
+                  </div>
+                </Popover>
+              </div>
+            </th> */}
           </tr>
         </thead>
 
@@ -320,6 +406,4 @@ function PatientTable({
   );
 }
 
-export default PatientTable
-
-
+export default PatientTable;

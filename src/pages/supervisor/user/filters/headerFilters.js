@@ -298,7 +298,7 @@ const HeaderFilters = ({
 
   return (
     <div className="d-flex justify-content-start " style={{marginLeft:"22px"}}>
-      <div className="row " style={{ width: "95%" }}>
+      <div className="row " style={{ width: "98%" }}>
         <div style={{ width: "250px"}}>
           <label className="responsiveLabel">
             {searchlabel}
@@ -326,8 +326,7 @@ const HeaderFilters = ({
         ))}
       </div>
       <div
-        // className={`d-flex justify-content-end  align-items-center `}
-        // style={{ width: "10%", flexDirection: "column" }}
+
       >
         <MoreFilter
           selectAll={selectAll}
@@ -339,40 +338,7 @@ const HeaderFilters = ({
           activeFilters={activeFilters}
           getRoutedData={getRoutedData}
         />
-        <Popover
-          content={
-            <>
-              {bulletsTitle && (
-                <label className={styles.label} style={{ fontWeight: "700" }}>
-                  {bulletsTitle}
-                </label>
-              )}
-              <Legends
-                bullets={bullets}
-                display="block"
-                padding="0 0px 10px 0"
-              />
-              {badgesTitle && (
-                <label className={styles.label} style={{ fontWeight: "700" }}>
-                  {badgesTitle}
-                </label>
-              )}
-              <Legends
-                bullets={badges}
-                display="block"
-                padding="0 0px 10px 0"
-              />
-            </>
-          }
-          trigger={["click"]}
-          placement="bottom"
-        >
-          <div className="cursor-pointer">
-            <div className={styles.iconBorder}>
-              <InfoCircleFilled />
-            </div>
-          </div>
-        </Popover>
+    
       </div>
     </div>
   );

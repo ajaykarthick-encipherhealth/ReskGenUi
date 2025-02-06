@@ -168,7 +168,7 @@ const Filters = ({
   };
   return (
     <div className="d-flex justify-content-start " style={{marginLeft:"22px"}}>
-      <div className="row " style={{ width: "95%" }}>
+      <div className="row " style={{ width: "98%" }}>
       <div style={{ width: "250px"}}>
           <Search
             searchlabel={searchlabel}
@@ -183,10 +183,9 @@ const Filters = ({
           <React.Fragment key={filter}>{renderFilter(filter)}</React.Fragment>
         ))}
       </div>
-      <div
+      {/* <div
         className={`d-flex justify-content-center  align-items-center gap-2  ${styles.subDiv}`}
-        // style={{ width: "5%" }}
-      >
+      > */}
         <MoreFilter
           selectAll={selectAll}
           setSelectAll={setSelectAll}
@@ -197,34 +196,8 @@ const Filters = ({
           handleClearAllFilters={handleClearAllFilters}
           getRoutedData={getRoutedData}
         />
-        <div className="mt-2 cursor-pointer">
-          <Popover
-            content={
-              <>
-                <Legends
-                  bullets={bullets}
-                  display="block"
-                  padding="0 0px 10px 0"
-                />
-                {badges?.length > 0 &&
-                  badges?.map((data) => (
-                    <div style={{ marginBottom: "10px" }}>
-                      <Image src={data.src} width={20} height={30} />
-                      <span style={{ marginLeft: "5px" }}>{data?.name}</span>
-                    </div>
-                  ))}
-              </>
-            }
-            trigger={["click"]}
-            placement="bottom"
-          >
-            <Tooltip placement="top" title="View List of Status">
-              <InfoCircleFilled className={`${styles.iconStyleColor2} mt-4`} />
-            </Tooltip>
-          </Popover>
-        </div>
       </div>
-    </div>
+    // </div>
   );
 };
 

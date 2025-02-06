@@ -522,6 +522,10 @@ const Index = ({
                        </div>
                     ) : (
                       <UserQueueTable
+                      bullets={  bullets}
+                      badges={badges}
+                      bulletsTitle="Reviewed Status"
+                      badgesTitle="Audited Status"
                         userList={userListAll?.content}
                         userName={userName}
                         sort={sort}

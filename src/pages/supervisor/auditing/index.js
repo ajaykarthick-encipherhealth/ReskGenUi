@@ -429,7 +429,6 @@ const Patient = ({
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
                     <div>
-                  
                         <Filters
                           setSearch={setSearch}
                           selectedOption={selectedOption}
@@ -498,6 +497,7 @@ const Patient = ({
                       ) : (
                         <>
                           <PatientTable
+                            bullets={bullets}
                             patinetListAll={patinetListAll}
                             actionBodyTemplate={actionBodyTemplate}
                             statusBodyTemplate={processstatusBodyTemplate}

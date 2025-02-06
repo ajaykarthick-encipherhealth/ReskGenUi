@@ -1,29 +1,14 @@
 import React, { useState } from "react";
-import { DatePicker, Popover, Tooltip, Select, Input } from "antd";
+import { DatePicker, Select, Input } from "antd";
 import Image from "next/image";
 import styles from "../../../../pages/reviewer/report/report.module.css";
-// import Tracking from "../../tracking/tracking.module.css";
-import Legends from "../../../../components/legends";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPalette,
-  faChartSimple,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  disableFutureDate,
-  handleRnagePicker2,
-  searchFunction,
-} from "../../../../components/headerFilters/functions";
-import InputField from "../../../../components/input";
-import { getFilters } from "../../../../stores/authflow/actions";
-// import MoreFilter from "../filters";
-import { InfoCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../../tenantadmin/tracking/filters";
-import HeaderFilters from "../../../../components/headerFilters";
 import {
   disabledDate,
-  EnableFuturedDisabledDate,
 } from "../../../../utils/reusable";
 const { RangePicker } = DatePicker;
 
@@ -51,30 +36,20 @@ const HeaderFiltersPatients = ({
   setSelectedOption,
   selectedDates,
   setSelectedDates,
-
   // allocatedBY
-
   setSelAllocatedBy,
-
   // allocatedTo
   isAllocatedToSelector,
-
   setSelAllocatedTo,
-
   bullets,
   badges,
-
   defaultSize = "col-2",
   setAuditSelAllocatedTo,
-
   setAuditSelectedOption,
-
   setSelAuditAllocatedBy,
   clear,
   setClear,
-
   selectedDates2,
-
   setSelectedDates2,
   setSelectedDates3,
   setSelectedDates4,
@@ -82,10 +57,7 @@ const HeaderFiltersPatients = ({
   filtersData,
   getRoutedData,
 }) => {
-  const [trackInput, setTrackInput] = useState("");
-
   const [selectAll, setSelectAll] = useState(false);
-  const [popoverVisible, setPopoverVisible] = useState(false);
 
   const handleClearAllFilters = () => {
     setClear(true);
@@ -180,34 +152,10 @@ const HeaderFiltersPatients = ({
     }
   };
 
-  const bulletsIcon = [
-    {
-      title: "Processed Status",
-      option: [
-        {
-          color: "#5da9e4",
-          name: "Pending",
-        },
-        {
-          color: "red",
-          name: "Declined",
-        },
-        {
-          color: "#3a9b94",
-          name: "Completed",
-        },
-        { color: "#AD94FA", name: "Hold" },
-        // {
-        //   color: "#3B3486",
-        //   name: "ABORTED BY CRON",
-        // },
-      ],
-    },
-  ];
 
   return (
-    <div className="d-flex justify-content-end">
-      <div className="row " style={{ width: "95%" }}>
+    <div className="d-flex justify-content-center align-items-center">
+      <div className="row " style={{ width: "98%" }}>
         {isAllocatedToSelector && (
           <div
             style={{ width: "250px", marginTop: "30px" }}
@@ -241,11 +189,9 @@ const HeaderFiltersPatients = ({
       </div>
 
       <div
-        // className={Tracking}
-        // style={{ width: "5%", display: "flex", justifyContent: "end" }}
+        style={{ width: "2%"}}
         className="d-flex justify-content-end align-items-center mt-3 "
       >
-        {/* <div style={{ marginTop: "30px" }}> */}
         <MoreFilter
           clear={clear}
           activeFilters={activeFilters}
@@ -257,36 +203,6 @@ const HeaderFiltersPatients = ({
           handleClearAllFilters={handleClearAllFilters}
           getRoutedData={getRoutedData}
         />
-        {bullets && (
-          <div style={{ cursor: "pointer" }}>
-            <Popover
-              content={
-                <>
-                  <Legends bullets={bullets} display="block" />
-                  {badges?.length > 0 &&
-                    badges?.map((data) => (
-                      <div style={{ marginBottom: "10px" }} className="m-2">
-                        <Image src={data.src} width={20} height={30} />
-                        <span style={{ marginLeft: "5px" }}>{data?.name}</span>
-                      </div>
-                    ))}
-                </>
-              }
-              trigger={["click"]}
-              placement="bottom"
-            >
-              <Tooltip title="Click here for status information.">
-                <div className={Tracking.iconBorder}>
-                  <InfoCircleFilled />
-                </div>
-              </Tooltip>
-            </Popover>
-          </div>
-        )}
-        <div className="m-1">
-          <HeaderFilters bullets={bulletsIcon} />
-        </div>
-        {/* </div> */}
       </div>
     </div>
   );

@@ -39,26 +39,26 @@ const statusOptions = [
   { label: "DECLINED", value: "DECLINED" },
   { label: "HOLD", value: "HOLD" },
 ];
-// const bullets = [
-//   {
-//     title: "Processed Status",
-//     option: [
-//       {
-//         color: "#5da9e4",
-//         name: "Pending",
-//       },
-//       {
-//         color: "red",
-//         name: "Declined",
-//       },
-//       {
-//         color: "#3a9b94",
-//         name: "Completed",
-//       },
-//       { color: "#AD94FA", name: "Hold" },
-//     ],
-//   },
-// ];
+const bullets = [
+  {
+    title: "Processed Status",
+    option: [
+      {
+        color: "#5da9e4",
+        name: "Pending",
+      },
+      {
+        color: "red",
+        name: "Declined",
+      },
+      {
+        color: "#3a9b94",
+        name: "Completed",
+      },
+      { color: "#AD94FA", name: "Hold" },
+    ],
+  },
+];
 
 const Patient = ({
   patientsListFilter,
@@ -399,7 +399,6 @@ const Patient = ({
                   <div className="table-responsive active-projects task-table">
                     <div className="row">
                       <div className="col-10">
-                        <div className="">
                           <HeaderFiltersPatients
                             activeFilters={activeFilters}
                             setActiveFilters={setActiveFilters}
@@ -441,7 +440,6 @@ const Patient = ({
                             clear={clear}
                             getRoutedData={getRoutedData}
                           />
-                        </div>
                       </div>
                       <div className="col-2">
                         <div className="row">
@@ -501,6 +499,7 @@ const Patient = ({
                               selectedDates,
                               activeFilters,
                             }}
+                            bullets={bullets}
                           />
                           <div>
                             <div className="pagination-container">
