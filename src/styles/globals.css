@@ -57,7 +57,28 @@
 .ant-steps-item-container .hover-effect {
   transform: none !important;
 }
-.ant-steps-item-tail {
+.ant-steps-item-description{
+  transform: none !important;
+    cursor: default !important;
+
+}
+:where(.css-dev-only-do-not-override-cdzvx5).ant-progress .ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path:hover{
+   transform: none !important;
+    cursor: default !important;
+}
+:where(.css-dev-only-do-not-override-cdzvx5).ant-steps {
+    transform: none !important;
+    cursor: default !important;
+}
+:where(.css-dev-only-do-not-override-cdzvx5).ant-steps.ant-steps-with-progress.ant-steps-label-vertical .ant-steps-item .ant-steps-item-tail :hover{
+  transform: none !important;
+    cursor: default !important;
+}
+  :where(.css-cdzvx5).ant-progress .ant-progress-circle-trail :hover{
+     transform: none !important;
+    cursor: default !important; 
+  } 
+/* .ant-steps-item-tail {
   transform: none !important;
   cursor: default !important;
 }
@@ -65,6 +86,30 @@
   transform: none !important;
   cursor: default !important;
 }
+.ant-progress-circle{
+
+  cursor: default !important;
+
+}
+.ant-progress-circle-path{
+    transform: none !important;
+  cursor: default !important;
+}
+.ant-progress-inner{
+      transform: none !important;
+  cursor: default !important;
+}
+.ant-steps-icon{
+        transform: none !important;
+  cursor: default !important;
+}
+:where(.css-dev-only-do-not-override-cdzvx5).ant-progress .ant-progress-inner{
+     transform: none !important;
+  cursor: default !important;
+}
+:where(.css-dev-only-do-not-override-cdzvx5).ant-steps.ant-steps-with-progress .ant-steps-item-icon .ant-progress{
+    cursor: default !important;
+} */
 .smooth-transition:hover {
   transition: transform 0.8s ease-in-out, opacity 0.3s ease-in-out !important;
   transform: scale(1.03);
@@ -14206,6 +14251,7 @@ tbody > tr {
   .ant-steps.ant-steps-label-vertical
   .ant-steps-item-tail {
   background: #04306f !important;
+    cursor: default;
 }
 
 .fileprocessingstepper .ant-steps .ant-steps-item-tail {
@@ -14214,6 +14260,7 @@ tbody > tr {
   width: 100%;
   left: 16px;
   padding: 0px !important;
+    cursor: default;
   /* background: #04306f !important; */
 }
 .fileprocessingstepper
@@ -14222,9 +14269,11 @@ tbody > tr {
   > .ant-steps-item-container
   > .ant-steps-item-tail::after {
   background: #04306f !important;
+  cursor: default;
 }
 .fileprocessingstepper .ant-steps .ant-steps-item-icon .ant-steps-icon {
   color: #fff !important;
+    cursor: default;
 }
 /* 
 /* .ant-modal-content {
