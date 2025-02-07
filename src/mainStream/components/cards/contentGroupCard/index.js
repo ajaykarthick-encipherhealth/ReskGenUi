@@ -122,7 +122,7 @@ const ContentGroupCard = ({
           }}
           onClick={() => handleTableRowClick(patientId)}
         >
-          <div style={{ width: "70%" }}>
+          <div style={{ width: "67%" }}>
             <div
               className={`${styles.pName} mb-2`}
               onClick={() =>
@@ -192,8 +192,8 @@ const ContentGroupCard = ({
             </div>
           </div>
 
-          <div style={{ width: "30%" }}>
-            <div className=" d-flex justify-content-between mb-1 ">
+          <div style={{ width: "33%" }}>
+            <div className=" d-flex justify-content-between mb-1 " style={{gap:"1px"}}>
               <div className={styles.raf}>
                 <Tooltip id="rafScore" name="rafScore" title="Raf Score" placement="bottom">
                   {rafSum ? rafSum : "---"}

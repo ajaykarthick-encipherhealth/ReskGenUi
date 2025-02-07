@@ -247,6 +247,51 @@
   display: flex;
   margin-right: 5px;
 }
+@media screen and (max-width: 1300px) {
+  .meatFoundContainer {
+    display: none !important;
+    margin-right: 5px;
+  }
+  .captureheader{
+    font-size: 10px !important;
+  }
+}
+@media screen and (max-width: 1600px) {
+  .meatContainer {
+    display: none !important;
+  }
+ 
+}
+@media screen and (max-width: 3000px) {
+  .meatContainer {
+    display: none !important;
+  }
+ 
+}
+@media screen and (max-width: 3886px) {
+  .meatContainer {
+    display: none !important;
+  }
+}
+@media screen and (max-width: 5760px) {
+  .meatContainer {
+    display: none !important;
+  }
+}
+@media screen and (max-width: 7680px) {
+  .meatContainer {
+    display: none !important;
+  }
+}
+@media screen and (max-width: 1300px) {
+  .meatContainer {
+    display: flex !important;
+    position: relative;
+    left: 10px;
+  }
+ 
+}
+
 
 .badgeMeat {
   font-size: 11px !important;

@@ -716,7 +716,7 @@ export const getCaptureSectionBackgroundFile = ({
                 );
             }}
             style={{ backgroundColor: backColor, color: textColor }}
-            className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
+            className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} text-truncate`}
           >
             <Tooltip title={res}>{truncateString(res, 20)}</Tooltip>
           </span>
@@ -761,15 +761,17 @@ export const getCaptureSectionBackgroundFile = ({
           >
             <span
               style={{ backgroundColor: backColor, color: textColor }}
-              className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
+              className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} text-truncate`}
             >
-              {truncateString(res, 30)}
+              <Tooltip title={res}>{truncateString(res, 20)}</Tooltip>
+
+              {/* {truncateString(res, 30)} */}
             </span>
           </Popover>
         ) : (
           <span
             style={{ backgroundColor: backColor, color: textColor }}
-            className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
+            className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} text-truncate`}
           >
             {truncateString(res, 30)}
           </span>
@@ -1868,7 +1870,7 @@ export const getCaptureSectionBackgroundMeatNew = (
           backgroundColor: stringToColour(res.header) + 33,
           color: stringToColour(res.header),
         }}
-        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
+        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} text-truncate`}
       >
         {truncateString(res.header, 25)}
       </span>

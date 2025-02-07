@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Popconfirm, Popover, Tooltip } from "antd";
@@ -22,6 +22,7 @@ import {
   getProviderNameList,
   getSuspectTypes,
   moveToAnotherAction,
+  truncateString,
 } from "../function/ReusableFunctions";
 import { connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
@@ -35,6 +36,7 @@ import { getStorage } from "../../../../../utils/storages";
 import { isLocalEdit } from "../../../../../utils/config";
 import { getResponePopup } from "../../../../../utils/reusable";
 import CardSkeleton from "../../../../skeleton/card";
+import { debounce } from "../../../../input";
 
 const HccCards = ({
   list,
@@ -91,7 +93,6 @@ const HccCards = ({
   patientDetailsLoad,
   isSpinnerLoading
 }) => {
-  console.log(patientDetailsLoad, "patientDetailsLoad");
   
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -109,6 +110,39 @@ const HccCards = ({
   const [selectedDos, setSelectedDos] = useState("");
   const [hoveredItem, setHoveredIem] = useState(null);
   const patientId = getStorage("patientId")
+
+  const [truncateLimit, setTruncateLimit] = useState(30);
+
+  const updateTruncateLimit = useCallback(
+    debounce(() => {
+      const width = window.innerWidth;
+
+      if (width <= 1060 && width >= 1024) {
+        setTruncateLimit(10);
+      } else if (width <= 1090 && width >= 1061) {
+        setTruncateLimit(12);
+      } else if (width <= 1200 && width >= 1091) {
+        setTruncateLimit(15);
+      } else if (width <= 1275 && width >= 1201) {
+        setTruncateLimit(18);
+      } else if (width <= 1375 && width >= 1276) {
+        setTruncateLimit(20);
+      } else if (width <= 1475 && width >= 1376) {
+        setTruncateLimit(23);
+      } else if (width <= 1575 && width >= 1476) {
+        setTruncateLimit(25);
+      } else {
+        setTruncateLimit(30);
+      }
+    }, 200), 
+    []
+  );
+
+  useEffect(() => {
+    updateTruncateLimit(); 
+    window.addEventListener("resize", updateTruncateLimit);
+    return () => window.removeEventListener("resize", updateTruncateLimit);
+  }, [updateTruncateLimit]);
 
   const getPdfEmptyFunction = () => {};
   const getRadiologyPDF =
@@ -296,10 +330,10 @@ const HccCards = ({
                               }
                             >
                               <div
-                                className={` justify-content-between ${visitStyles.hcc_card_nameHead}`}
+                                className={` justify-content-between mt-2 ${visitStyles.hcc_card_nameHead}`}
                               >
                                 <div className="d-flex">
-                                  <span className="disease-name d-flex mb-1">
+                                  <span className="font2 d-flex mb-1">
                                     <span className="valid-dis-name">
                                       {data.diagnosisCode}
                                     </span>
@@ -339,13 +373,18 @@ const HccCards = ({
                                       trigger="hover"
                                       overlayStyle={{ zIndex: 1000 }}
                                     >
-                                      <>
-                                        {" "}
-                                        -{" "}
+                                      <span className="text-truncate">
+                                        - {" "}
                                         {data.dbDescription
-                                          ? data.dbDescription
-                                          : data.actualDescription}
-                                      </>
+                                          ? truncateString(
+                                              data.dbDescription,
+                                              truncateLimit
+                                            )
+                                          : truncateString(
+                                              data.actualDescription,
+                                              truncateLimit
+                                            )}
+                                      </span>
                                     </Popover>
                                   </span>
                                 </div>
@@ -850,12 +889,12 @@ const HccCards = ({
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                  <div className="d-flex justify-content-end mt-2">
+                                  <div className="d-flex justify-content-end mt-2 me-1 gap-1 text-center flex-wrap">
                                     {data?.riskAdjustmentDtoList?.some((item) =>
                                       item?.cmsHcc?.some((hcc) => hcc.value > 1)
                                     ) && (
                                       <div
-                                        className={`${visitStyles.cmsStatus} mx-1`}
+                                        className={`${visitStyles.cmsStatus} `}
                                       >
                                         CMS
                                       </div>
@@ -869,7 +908,7 @@ const HccCards = ({
                                       userId !=
                                         "reviewer@3gencogentai.onmicrosoft.com" && (
                                         <div
-                                          className={`${visitStyles.rxStatus} mx-1`}
+                                          className={`${visitStyles.rxStatus}`}
                                         >
                                           RX
                                         </div>
@@ -971,6 +1010,7 @@ const HccCards = ({
                                           </Badge>
                                         ) : null}
                                       </div>
+
                                       {data.isComboCode == true ? (
                                         <Badge
                                           className={`mt-2 text-start  ${visitStyles.isComboCode}`}
@@ -1020,7 +1060,7 @@ const HccCards = ({
                                 </div>
                               </div>
                               {data.providerName.length != 0 && (
-                                <div className="d-flex justify-content-between">
+                                <div className="d-flex flex-wrap p-1 justify-content-between">
                                   <div
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
@@ -1161,6 +1201,83 @@ const HccCards = ({
                                   </div>
                                 </div>
                               )}
+                              {data.isLab != true &&
+                                data.isRadiology != true && (
+                                  <div className={`${styles.meatContainer}`}>
+                                    <div
+                                      className="cr-pointer "
+                                      onClick={() => {
+                                        if (data?.isShow) {
+                                          setActiveTabHead(4);
+                                          setActiveMeatTitle({
+                                            header: "M",
+                                            diagnosisCode: data?.diagnosisCode,
+                                          });
+                                        }
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "M"
+                                      )}
+                                    </div>
+                                    <div
+                                      className="cr-pointer "
+                                      onClick={() => {
+                                        if (data?.isShow) {
+                                          setActiveTabHead(4);
+                                          setActiveMeatTitle({
+                                            header: "E",
+                                            diagnosisCode: data?.diagnosisCode,
+                                          });
+                                        }
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "E"
+                                      )}
+                                    </div>
+                                    <div
+                                      className="cr-pointer "
+                                      onClick={() => {
+                                        if (data?.isShow) {
+                                          setActiveTabHead(4);
+                                          setActiveMeatTitle({
+                                            header: "A",
+                                            diagnosisCode: data?.diagnosisCode,
+                                          });
+                                        }
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "A"
+                                      )}
+                                    </div>
+                                    <div
+                                      className="cr-pointer "
+                                      onClick={() => {
+                                        if (data?.isShow) {
+                                          setActiveTabHead(4);
+                                          setActiveMeatTitle({
+                                            header: "T",
+                                            diagnosisCode: data?.diagnosisCode,
+                                          });
+                                        }
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "T"
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
                             </Popover>
                           </div>
                         );

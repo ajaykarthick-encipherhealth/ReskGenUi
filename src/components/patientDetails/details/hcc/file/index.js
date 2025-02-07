@@ -518,7 +518,7 @@ const File = ({
                         className={`valid-text d-flex justify-content-sm-between cr-pointer ${visitStyles.potential_title_card}`}
                         onClick={() => handleShowList("potential")}
                       >
-                        <span className={`${visitStyles.potential_title_name}`}>
+                        <span className={`  ${visitStyles.potential_title_name}`}>
                           <span className="mx-1">
                             <FontAwesomeIcon
                               icon={

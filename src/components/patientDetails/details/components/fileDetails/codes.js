@@ -8,13 +8,13 @@ const Codes = ({ hccCounts,hccValidCount,fromHcc }) => {
         </div>
         <div className={styles.codesBottomCards}>
           <div className={fromHcc?styles.hccCodes1:styles.codes1}>
-            <label className="pt-2">{hccCounts?.isCmsHcc}<br/> CMS</label>
+            <label className="pt-2">{hccCounts?.isCmsHcc}<div className={styles.hccCounts}>CMS</div> </label>
           </div>
           <div className={fromHcc?styles.hccCodes2:styles.codes2}>
-            <label className="pt-2">{hccCounts?.isRxHcc}<br/> RX</label>
+            <label className="pt-2">{hccCounts?.isRxHcc} <div className={styles.hccCounts}>RX</div> </label>
           </div>
           <div className={fromHcc?styles.hccCodes3:styles.codes3}>
-            <label className="pt-2">{hccValidCount}<br/> TOTAL</label>
+            <label className="pt-2">{hccValidCount}<div className={styles.hccCounts}>TOTAL</div> </label>
           </div>
         </div>
       </div>

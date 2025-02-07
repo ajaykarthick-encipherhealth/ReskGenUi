@@ -81,15 +81,15 @@ const ComboCard = ({
       {provided && (
         <div ref={provided?.innerRef} {...provided?.droppableProps}>
           <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
-            <div className={visitStyles.combo_head_card}>
+            <div className={` ${visitStyles.combo_head_card}`}>
               <div className="row p-0">
-                <div className="col-4 d-flex align-items-center justify-content-center text-truncate">
+                <div className="col-4 d-flex align-items-center justify-content-center ">
                   <label htmlFor="combo">Combo Codes</label>
                 </div>
-                <div className="col-2 d-flex align-items-center justify-content-center text-truncate">
+                <div className="col-2 d-flex align-items-center justify-content-center ">
                   <label htmlFor="additional">Addons</label>
                 </div>
-                <div className="col-5 d-flex align-items-center justify-content-center text-truncate">
+                <div className="col-5 d-flex align-items-center justify-content-center ">
                   <label htmlFor="description">Description</label>
                 </div>
                 <div className="col-1">
@@ -170,7 +170,7 @@ const ComboCard = ({
                                     className="col-1"
                                     style={{
                                       position: "relative",
-                                      right: "18px",
+                                      right: "15px",
                                     }}
                                   >
                                     {/* <div>
@@ -396,9 +396,9 @@ const ComboCard = ({
                                       </div>
                                     </div>
                                     <div
-                                      className={`cr-pointer ${styles.meatFoundContainer}`}
+                                      className={` ${styles.meatFoundContainer}`}
                                     >
-                                      <div
+                                      <div  className="cr-pointer"
                                         onClick={() => {
                                           setActiveTabHead(4);
                                           setActiveMeatTitle({
@@ -413,7 +413,7 @@ const ComboCard = ({
                                           "M"
                                         )}
                                       </div>
-                                      <div
+                                      <div className="cr-pointer"
                                         onClick={() => {
                                           setActiveTabHead(4);
                                           setActiveMeatTitle({
@@ -428,7 +428,7 @@ const ComboCard = ({
                                           "E"
                                         )}
                                       </div>
-                                      <div
+                                      <div className="cr-pointer"
                                         onClick={() => {
                                           setActiveTabHead(4);
                                           setActiveMeatTitle({
@@ -443,7 +443,7 @@ const ComboCard = ({
                                           "A"
                                         )}
                                       </div>
-                                      <div
+                                      <div className="cr-pointer"
                                         onClick={() => {
                                           setActiveTabHead(4);
                                           setActiveMeatTitle({

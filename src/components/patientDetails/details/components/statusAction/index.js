@@ -632,7 +632,7 @@ const StatusAction = ({
         <>
           {(userRole && userRole?.toLowerCase() == "admin") ||
           (userRole && userRole?.toLowerCase() === "tenant_admin") ? (
-            <div className={`${visitStyles.actionbtnContainer}`}>
+            <div className={`${visitStyles.actionbtnContainer} text-truncate`}>
               {/* <Dropdown
                 overlay={adminActionItems}
                 onVisibleChange={(v) => setMenuIsOpen(v)}
@@ -661,7 +661,7 @@ const StatusAction = ({
               </Button>
             </div>
           ) : userRole && userRole?.toLowerCase() == "supervisor" ? (
-            <div className={`${visitStyles.actionbtnContainer}`}>
+            <div className={`${visitStyles.actionbtnContainer} text-truncate`}>
               <Dropdown
                 id="auditbtn"
                 overlay={renderAuditMenu()}
@@ -710,7 +710,7 @@ const StatusAction = ({
               </Dropdown>
             </div>
           ) : (
-            <div className={`${visitStyles.actionbtnContainer}`}>
+            <div className={`${visitStyles.actionbtnContainer} text-truncate`}>
               {patienIdDetails?.processedStatus == "COMPLETED" ? (
                 <Dropdown
                   id="auditbtn"

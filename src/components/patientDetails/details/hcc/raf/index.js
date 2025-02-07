@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Popover } from "antd";
+import { Popover, Tooltip } from "antd";
 import { connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import style from "./styles.module.css";
 import CardSkeleton from "../../../../skeleton/card";
+import { truncateString } from "../../components/function/ReusableFunctions";
 
 const RafScore = ({ patientDetailsResult, patientDetailsLoad }) => {
   const rafScoreList = patientDetailsResult?.data?.response?.rafScore;
@@ -292,7 +293,7 @@ const RafScore = ({ patientDetailsResult, patientDetailsLoad }) => {
                       <div className="row">
                         <div className="col-3">HCC</div>
                         <div className="col-2">RAF</div>
-                        <div className="col-5  d-flex align-items-center justify-content-center ">
+                        <div className="col-5  d-flex align-items-center justify-content-center  ">
                           Monthly Premium
                         </div>
                         <div
@@ -332,7 +333,19 @@ const RafScore = ({ patientDetailsResult, patientDetailsLoad }) => {
                               {/* {rafScoreDetails.map((item) => ( */}
                               <>
                                 <div className="col-3">
-                                  <div>{item.v24_hcc ? item.v24_hcc : ""}</div>
+                                  {/* <div>{item.v24_hcc ? item.v24_hcc : ""}</div> */}
+                                  <div className="cr-pointer">
+                                    {item.v24_hcc && item.v24_hcc.length > 6 ? (
+                                      <Tooltip
+                                        placement="top"
+                                        title={item.v24_hcc?item.v24_hcc:""}
+                                      >
+                                        {truncateString(item.v24_hcc?item.v24_hcc:"", 6)}
+                                      </Tooltip>
+                                    ) : (
+                                      <> {item.v28_hcc ? item.v24_hcc : ""}</>
+                                    )}
+                                  </div>
                                 </div>
 
                                 <div className="col-2">
@@ -347,28 +360,6 @@ const RafScore = ({ patientDetailsResult, patientDetailsLoad }) => {
                                   </div>
                                 </div>
                               </>
-                              {/* ))} */}
-                              {/* <div className="col-3">
-                              {getRafDetails(item.dx_name, "V24")?.map(
-                                (item) => (
-                                  <div>{item.hcc_name}</div>
-                                )
-                              )}
-                            </div>
-                            <div className="col-3">
-                              {getRafDetails(item.dx_name, "V24")?.map(
-                                (item) => (
-                                  <div>{item.hcc_raf}</div>
-                                )
-                              )}
-                            </div>
-                            <div className="col-4  text-center">
-                              {getRafDetails(item.dx_name, "V24")?.map(
-                                (item) => (
-                                  <div>${item.premium}</div>
-                                )
-                              )}
-                            </div> */}
                             </div>
                           </div>
                         ))
@@ -388,7 +379,7 @@ const RafScore = ({ patientDetailsResult, patientDetailsLoad }) => {
                       <div className="row">
                         <div className="col-3">HCC</div>
                         <div className="col-2">RAF</div>
-                        <div className="col-5 d-flex align-items-center justify-content-center ">
+                        <div className="col-5 d-flex align-items-center justify-content-center  ">
                           Monthly Premium
                         </div>
                         <div
@@ -427,7 +418,19 @@ const RafScore = ({ patientDetailsResult, patientDetailsLoad }) => {
                             >
                               <>
                                 <div className="col-3">
-                                  <div>{item.v28_hcc ? item.v28_hcc : ""}</div>
+                                  {/* <div>{item.v28_hcc ? item.v28_hcc : ""}</div> */}
+                                  <div className="cr-pointer">
+                                    {item.v28_hcc && item.v28_hcc.length > 6 ? (
+                                      <Tooltip
+                                        placement="top"
+                                        title={item.v28_hcc?item.v28_hcc:""}
+                                      >
+                                        {truncateString(item.v28_hcc?item.v28_hcc:'', 6)}
+                                      </Tooltip>
+                                    ) : (
+                                      <> {item.v28_hcc ? item.v28_hcc : ""}</>
+                                    )}
+                                  </div>
                                 </div>
 
                                 <div className="col-2">
@@ -442,36 +445,6 @@ const RafScore = ({ patientDetailsResult, patientDetailsLoad }) => {
                                   </div>
                                 </div>
                               </>
-                              {/* <div className="col-3">
-                              {getRafDetails(item.dx_name, "V28")?.length >
-                              0 ? (
-                                getRafDetails(item.dx_name, "V28")?.map(
-                                  (item) => <div>{item.hcc_name}</div>
-                                )
-                              ) : (
-                                <div>&nbsp;</div>
-                              )}
-                            </div>
-                            <div className="col-3">
-                              {getRafDetails(item.dx_name, "V28")?.length >
-                              0 ? (
-                                getRafDetails(item.dx_name, "V28")?.map(
-                                  (item) => <div>{item.hcc_raf}</div>
-                                )
-                              ) : (
-                                <div>&nbsp;</div>
-                              )}
-                            </div>
-                            <div className="col-4  text-center">
-                              {getRafDetails(item.dx_name, "V28")?.length >
-                              0 ? (
-                                getRafDetails(item.dx_name, "V28")?.map(
-                                  (item) => <div>${item.premium}</div>
-                                )
-                              ) : (
-                                <div>&nbsp;</div>
-                              )}
-                            </div> */}
                             </div>
                           </div>
                         ))

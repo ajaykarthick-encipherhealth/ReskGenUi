@@ -318,10 +318,10 @@ function PatientTable({
 
             <th className="text-truncate">AUDIT ALLOCATED BY</th>
             <th className="text-truncate">PRIORITY</th>
-            <th className={`text-truncate`}>AUDIT STATUS</th>
+            {/* <th className={`text-truncate`}>AUDIT STATUS</th> */}
             <th className="text-truncate" style={{ textAlign: "center" }}>
               <div className="d-flex align-items-center justify-content-center gap-2">
-                AUDITED STATUS
+                AUDIT STATUS
                 <span style={{ cursor: "pointer" }}>
                   <Popover
                     content={

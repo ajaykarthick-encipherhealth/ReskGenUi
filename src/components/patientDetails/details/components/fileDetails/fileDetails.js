@@ -73,7 +73,9 @@ const Details = ({ fileResult, fromHcc }) => {
             <label className="px-2" style={{ fontWeight: 600 }}>
               Age
             </label>
-            <h6 className="px-4">{fileResult?.dob?calculateAge(fileResult?.dob) : "--"}</h6>
+            <h6 className="px-4">
+              {fileResult?.dob ? calculateAge(fileResult?.dob) : "--"}
+            </h6>
           </div>
           <div className="col-4 ">
             <FontAwesomeIcon icon={faFile} style={{ color: "#241571" }} />
@@ -105,21 +107,38 @@ const Details = ({ fileResult, fromHcc }) => {
           <div className="col-5">
             <i className={styles.dob_icon}>{SVGICON.DatebirthIcon}</i>
             <label className="px-2" style={{ fontWeight: 600 }}>
-             Date Of Birth   
+              Date Of Birth
             </label>
             <h6 className="px-4">
-            {fileResult?.dob ? dayjs(fileResult.dob).format("MM-DD-YYYY") : "---"}
+              {fileResult?.dob
+                ? dayjs(fileResult.dob).format("MM-DD-YYYY")
+                : "---"}
             </h6>
           </div>
-          <div className="col-3">
-            <FontAwesomeIcon icon={faVenusMars} style={{ color: "#241571" }} />
+          {/* <div className="col-3">
+            <FontAwesomeIcon icon={faVenusMars} style={{ color: "#241571"}} />
             <label
-              className="px-2 font-weight-bold"
+              // className="px-2 "
               style={{ fontWeight: 600 }}
             >
               Gender
             </label>
             <h6 className="px-4">{fileResult?.gender || "--"}</h6>
+          </div> */}
+          <div className="col-3">
+            <FontAwesomeIcon icon={faVenusMars} style={{ color: "#241571" }} />
+            <div
+              style={{
+                position: "relative",
+                bottom: "10px",
+                paddingLeft: "6px",
+              }}
+            >
+              <label className="px-3" style={{ fontWeight: 600 }}>
+                Gender
+              </label>
+              <h6 className="px-2">{fileResult?.gender || "--"}</h6>
+            </div>
           </div>
         </div>
       </div>

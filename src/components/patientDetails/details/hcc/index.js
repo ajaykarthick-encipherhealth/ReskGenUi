@@ -510,7 +510,7 @@ const Hcc = ({
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item as="li" className="nav-item">
-                      <div id="dosSelect" className="d-flex gap-3 mx-2">
+                      <div id="dosSelect" className="d-flex gap-3 mx-2 mt-1">
                         <Select
                           id="dosSelect"
                           placeholder="Select DOS"
@@ -654,7 +654,7 @@ const Hcc = ({
                         }
                       >
                         <button
-                          className={`${visitStyles.actionBtn} px-3  py-1 rounded-md`}
+                          className={`${visitStyles.actionBtn} px-3  mt-1 py-1 rounded-md`}
                           onClick={() =>
                             setActions({
                               showActionsPop: !actions.showActionsPop,

@@ -38,7 +38,7 @@ export const getEncounterDateBackground = ({
             patientDocumentResult
           )
         }
-        className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
+        className={`cr-pointer mt-2 text-start text-truncate ${visitStyles.encounterDate} ${backColor}`}
       >
         <i>
           <CalendarOutlined className={visitStyles.calenderIcon} />
@@ -145,7 +145,7 @@ export const getCaptureSectionBackgroundFile = (
           })
         }
         style={{ backgroundColor: backColor, color: textColor }}
-        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+        className={`cr-pointer text-truncate mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
       >
         {res}
       </span>
@@ -228,7 +228,7 @@ export const getProviderNameList = ({ data, captureSectionMatching }) => {
       result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
     var sectionMapArr = (
       <span
-        className={`mt-2 text-start ${visitStyles.provider_name}`}
+        className={`mt-2 text-start text-truncate ${visitStyles.provider_name}`}
         style={{ backgroundColor: backColor, color: textColor }}
       >
         <i>

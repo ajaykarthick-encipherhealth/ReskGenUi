@@ -129,7 +129,7 @@ export const getProviderNameTag = ({
             }
           >
             <span
-              className={`mt-2 text-start ${visitStyles.provider_name}`}
+              className={`mt-2 text-start ${visitStyles.provider_name} text-truncate`}
               style={{
                 backgroundColor: stringToColour(res) + 33,
                 color: stringToColour(res),
@@ -148,7 +148,7 @@ export const getProviderNameTag = ({
               {truncateString(res, 20)}
             </span>
           </Popover>:<span
-              className={`mt-2 text-start ${visitStyles.provider_name}`}
+              className={`mt-2 text-start ${visitStyles.provider_name} text-truncate`}
               style={{
                 backgroundColor: stringToColour(res) + 33,
                 color: stringToColour(res),
@@ -224,7 +224,7 @@ export const getProviderNameTag = ({
                             storeFileDetails: storeFileDetails,
                           });
                         }}
-                        className={`mt-2 text-start ${visitStyles.provider_name}`}
+                        className={`mt-2 text-start ${visitStyles.provider_name} text-truncate`}
                         style={{
                           backgroundColor: stringToColour(item) + 33,
                           color: stringToColour(item),
@@ -255,7 +255,7 @@ export const getProviderNameTag = ({
                     : "#b3b3ec",
                 color: "#fff",
               }}
-              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+              className={`mt-2 text-start cr-pointer text-truncate ${visitStyles.captureheader}`}
               onClick={() => {
                 setIsMulitpleHeader(
                   isMulitpleHeader && diagnosisCode === isMulitpleHeaderCode
@@ -299,7 +299,7 @@ export const getProviderNameTag = ({
                   {isMulitpleHeader &&
                     diagnosisCode === isMulitpleHeaderCode && (
                       <span
-                        className={`mt-2 text-start ${visitStyles.provider_name}`}
+                        className={`mt-2 text-start text-truncate ${visitStyles.provider_name}`}
                         style={{
                           backgroundColor: stringToColour(item) + 33,
                           color: stringToColour(item),
@@ -330,7 +330,7 @@ export const getProviderNameTag = ({
                     : "#b3b3ec",
                 color: "#fff",
               }}
-              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+              className={`mt-2 text-start  text-truncate cr-pointer ${visitStyles.captureheader}`}
               onClick={() => {
                 setIsMulitpleHeader(
                   isMulitpleHeader && diagnosisCode === isMulitpleHeaderCode
@@ -417,7 +417,7 @@ export const getProviderPopoverHyperlink = ({
           color: stringToColour(res?.dateOfService),
           border: "1px solid",
         }}
-        className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate}`}
+        className={`cr-pointer text-truncate mt-2 text-start ${visitStyles.encounterDate}`}
       >
         <i>
           <CalendarOutlined className={visitStyles.calenderIconNew} />
@@ -489,7 +489,7 @@ export const getProviderNameTagList = ({ data }) => {
       if (index < 2) {
         var sectionMapArr = (
           <span
-            className={`mt-2 text-start ${visitStyles.provider_name}`}
+            className={`mt-2 text-start text-truncate ${visitStyles.provider_name}`}
             style={{
               backgroundColor: stringToColour(res) + 33,
               color: stringToColour(res),
@@ -517,7 +517,7 @@ export const getProviderNameTagList = ({ data }) => {
                 {data?.map((item, i) =>
                   i > 1 ? (
                     <span
-                      className={`mt-2 text-start ${visitStyles.provider_name}`}
+                      className={`mt-2 text-start  text-truncate${visitStyles.provider_name}`}
                       style={{
                         backgroundColor: stringToColour(item) + 33,
                         color: stringToColour(item),
@@ -545,7 +545,7 @@ export const getProviderNameTagList = ({ data }) => {
           >
             <span
               style={{ background: "#a6cfa6", color: "#fff" }}
-              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+              className={`mt-2 text-start text-truncate cr-pointer ${visitStyles.captureheader}`}
             >
               {data.length - 2}+
             </span>
@@ -557,7 +557,7 @@ export const getProviderNameTagList = ({ data }) => {
     })
   ) : (
     <span
-      className={`mt-2 text-start ${visitStyles.provider_name}`}
+      className={`mt-2 text-start  text-truncate ${visitStyles.provider_name}`}
       style={{
         backgroundColor: stringToColour(data) + 33,
         color: stringToColour(data),

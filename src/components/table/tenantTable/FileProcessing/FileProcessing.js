@@ -417,7 +417,6 @@ const FileProcessingTable = ({
             color: step.info === "FINISHED" ? "green" : "inherit",
           },
         }));
-console.log(stepsItem)
     return (
       <div style={{ display: "flex" }}>
         <div style={{ width: "100%" }}>

@@ -173,8 +173,8 @@ const SentReport = ({
                   <TableSkeleton/>
                   </div>
                 ) : ( */}
-                <div className=" col-xl-12 d-flex">
-                  <div className={`col-xl-6 ${styles.cardDiv}`}>
+                <div className=" co-12 d-flex">
+                  <div className={`col-6 ${styles.cardDiv}`}>
                     {loader ? (
                       <div className="mt-4">
                         <CardSkeleton count={6}  height={100} />
@@ -206,7 +206,7 @@ const SentReport = ({
                       </div>
                     )}
                   </div>
-                  <div className="col-xl-6" style={{ marginLeft: "10px" }}>
+                  <div className="col-6" style={{ marginLeft: "10px" }}>
                     {loader ? (
                       <div className="mt-4">
                         <CardSkeleton count={6}  height={100} />

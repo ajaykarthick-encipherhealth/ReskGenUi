@@ -152,9 +152,9 @@ const HeaderFiltersPatients = ({
         );
       case "Batch":
         return (
-          <div className={defaultSize}>
+          <div className={defaultSize}     style={{ width: "250px", marginTop: "30px" }}>
             <label className={styles.label}>Select Batch</label>
-            <div class="form-group has-search custom-react-select">
+            <div class="form-group has-search custom-react-selects reviewerFilterSelect customClear">
               <Select
                 filterOption={(input, option) =>
                   (option?.label ?? "")
