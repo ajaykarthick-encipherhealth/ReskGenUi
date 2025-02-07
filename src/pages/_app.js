@@ -54,6 +54,14 @@ function MyApp({ Component, pageProps }) {
 
 
   const applyHoverEffect = (target, isEntering, pathname) => {
+      if (target.id === "badge") {
+        return; 
+      }
+      if (
+        target.classList.contains("ant-badge") 
+      ) {
+        return;
+      }
     if (
       (target.tagName === "A" ||
         target.tagName === "BUTTON" ||

@@ -16,8 +16,10 @@
   transition: all 0.3s ease-in-out;
   transform: none !important;
 }
-
-.ant-select-item :hover {
+:where(.css-dev-only-do-not-override-cdzvx5).ant-badge .ant-scroll-number{
+    cursor: default !important;
+}
+.ant-steps-item-description{
   transform: none !important;
 }
 

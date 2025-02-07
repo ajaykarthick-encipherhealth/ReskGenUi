@@ -20,7 +20,6 @@ import {
   faAngleDoubleLeft,
   faFile,
   faTimeline,
-  faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -767,7 +766,7 @@ const Details = ({
                                 </span>
                               </div>
                             </div>
-                            <ul>
+                            <ul id="badge">
                               {tabList.map((data, index) => (
                                 <Tooltip
                                   key={index}
@@ -788,20 +787,29 @@ const Details = ({
                                       {isActives?.response[
                                         data.defaultComplete
                                       ] ? (
-                                        <div className="menu-icon">
+                                        <div className="menu-icon" id="badge">
                                           <Badge
+                                            id="badge"
                                             count={
-                                              <FontAwesomeIcon
-                                                icon={faCircle}
-                                                style={{
-                                                  color: "green",
-                                                  fontSize: "10px",
-                                                }}
-                                              />
+                                              <svg
+                                                id="badge"
+                                                width="20"
+                                                height="20"
+                                                viewBox="0 0 20 20"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                              >
+                                                <circle
+                                                  cx="10"
+                                                  cy="10"
+                                                  r="5"
+                                                  fill="green"
+                                                />
+                                              </svg>
                                             }
                                             style={{
                                               background: "transparent",
-                                              margin: "7px",
+                                              margin: "8px",
                                             }}
                                             offset={[10, 10]}
                                             size="large"
@@ -900,6 +908,7 @@ const Details = ({
                                 key={data.name}
                               >
                                 <li
+                       
                                   className={
                                     flagContainerActive == data.name
                                       ? `${visitStyles.commentsTagActive}`
@@ -921,6 +930,7 @@ const Details = ({
                                 >
                                   {data.name === "Flag" ? (
                                     <Badge
+                         
                                       count={
                                         flagsDetailsResult?.response?.length
                                       }
@@ -930,7 +940,7 @@ const Details = ({
                                       }}
                                       size="large"
                                     >
-                                      <i>{data.icon}</i>
+                                      <i >{data.icon}</i>
                                     </Badge>
                                   ) : (
                                     <i>{data.icon}</i>
