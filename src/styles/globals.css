@@ -12028,7 +12028,7 @@ span.mb-1.disease-name {
   display: -webkit-box !important;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-  /* overflow: hidden !important; */
+  overflow: hidden !important;
   text-overflow: ellipsis;
   /* overflow: hidden; */
   height: 20px;

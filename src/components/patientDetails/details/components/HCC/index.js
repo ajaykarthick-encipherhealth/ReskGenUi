@@ -111,38 +111,38 @@ const HccCards = ({
   const [hoveredItem, setHoveredIem] = useState(null);
   const patientId = getStorage("patientId")
 
-  const [truncateLimit, setTruncateLimit] = useState(30);
+  // const [truncateLimit, setTruncateLimit] = useState(30);
 
-  const updateTruncateLimit = useCallback(
-    debounce(() => {
-      const width = window.innerWidth;
+  // const updateTruncateLimit = useCallback(
+  //   debounce(() => {
+  //     const width = window.innerWidth;
 
-      if (width <= 1060 && width >= 1024) {
-        setTruncateLimit(10);
-      } else if (width <= 1090 && width >= 1061) {
-        setTruncateLimit(12);
-      } else if (width <= 1200 && width >= 1091) {
-        setTruncateLimit(15);
-      } else if (width <= 1275 && width >= 1201) {
-        setTruncateLimit(18);
-      } else if (width <= 1375 && width >= 1276) {
-        setTruncateLimit(20);
-      } else if (width <= 1475 && width >= 1376) {
-        setTruncateLimit(23);
-      } else if (width <= 1575 && width >= 1476) {
-        setTruncateLimit(25);
-      } else {
-        setTruncateLimit(30);
-      }
-    }, 200), 
-    []
-  );
+  //     if (width <= 1060 && width >= 1024) {
+  //       setTruncateLimit(10);
+  //     } else if (width <= 1090 && width >= 1061) {
+  //       setTruncateLimit(12);
+  //     } else if (width <= 1200 && width >= 1091) {
+  //       setTruncateLimit(15);
+  //     } else if (width <= 1275 && width >= 1201) {
+  //       setTruncateLimit(18);
+  //     } else if (width <= 1375 && width >= 1276) {
+  //       setTruncateLimit(20);
+  //     } else if (width <= 1475 && width >= 1376) {
+  //       setTruncateLimit(23);
+  //     } else if (width <= 1575 && width >= 1476) {
+  //       setTruncateLimit(25);
+  //     } else {
+  //       setTruncateLimit(30);
+  //     }
+  //   }, 200), 
+  //   []
+  // );
 
-  useEffect(() => {
-    updateTruncateLimit(); 
-    window.addEventListener("resize", updateTruncateLimit);
-    return () => window.removeEventListener("resize", updateTruncateLimit);
-  }, [updateTruncateLimit]);
+  // useEffect(() => {
+  //   updateTruncateLimit(); 
+  //   window.addEventListener("resize", updateTruncateLimit);
+  //   return () => window.removeEventListener("resize", updateTruncateLimit);
+  // }, [updateTruncateLimit]);
 
   const getPdfEmptyFunction = () => {};
   const getRadiologyPDF =
@@ -333,7 +333,7 @@ const HccCards = ({
                                 className={` justify-content-between mt-2 ${visitStyles.hcc_card_nameHead}`}
                               >
                                 <div className="d-flex">
-                                  <span className="font2 d-flex mb-1">
+                                  <span className=" d-flex disease-name mb-1">
                                     <span className="valid-dis-name">
                                       {data.diagnosisCode}
                                     </span>
@@ -373,18 +373,13 @@ const HccCards = ({
                                       trigger="hover"
                                       overlayStyle={{ zIndex: 1000 }}
                                     >
-                                      <span className="text-truncate">
-                                        - {" "}
+                                       <>
+                                        {" "}
+                                        -{" "}
                                         {data.dbDescription
-                                          ? truncateString(
-                                              data.dbDescription,
-                                              truncateLimit
-                                            )
-                                          : truncateString(
-                                              data.actualDescription,
-                                              truncateLimit
-                                            )}
-                                      </span>
+                                          ? data.dbDescription
+                                          : data.actualDescription}
+                                      </>
                                     </Popover>
                                   </span>
                                 </div>
