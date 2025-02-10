@@ -22,7 +22,18 @@
 .ant-steps-item-description{
   transform: none !important;
 }
-
+.ant-picker-header-super-prev-btn:hover{
+    cursor: default !important;
+}
+.ant-picker-header-prev-btn{
+      cursor: default !important;
+}
+.ant-picker-header-super-next-btn{
+        cursor: default !important;
+}
+.ant-picker-header-next-btn{
+      cursor: default !important;
+}
 .hover-effect {
   transform: scale(1.01);
 }
