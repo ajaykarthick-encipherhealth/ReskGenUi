@@ -116,3 +116,9 @@
   top: 15%;
   right: 20%;
 }
+@media screen and (max-width: 1200px) {
+ 
+  .title {
+  font-size: 12px;
+  }
+}

@@ -507,7 +507,7 @@ const Index = ({
               </div>
               {/* radiology */}
               <div className={`row ${styles.box}`}>
-                <div className={`col-lg-4`}>
+                <div className={`col-lg-4 `}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <RadiolodyAndLab
                       dateRange={dateRange}
@@ -516,7 +516,7 @@ const Index = ({
                     />
                   </Card>
                 </div>
-                <div className={`col-lg-8`}>
+                <div className={`col-lg-8 `}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <Files
                       activeBtn={activeBtn}
@@ -636,7 +636,7 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-3 col-sm-6 `}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
-                    <HeadTitle header="Allocated Status" fontSize="20px" />
+                    <HeadTitle header="Allocated Status" fontSize="17px" />
                     {allocatedLoader ? (
                       <div>{renderCardSkeleton()}</div>
                     ) : (
@@ -646,7 +646,7 @@ const Index = ({
                 </div>
                 <div className={`col-lg-3 col-sm-6 `}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
-                    <HeadTitle header="Reviewer Status" fontSize="20px" />
+                    <HeadTitle header="Reviewer Status" fontSize="17px" />
                     {reviewerLoader ? (
                       <div>{renderCardSkeleton()}</div>
                     ) : (
@@ -656,7 +656,7 @@ const Index = ({
                 </div>
                 <div className={`col-lg-3 col-sm-6 `}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
-                    <HeadTitle header="Sample Auditor Status" fontSize="20px" />
+                    <HeadTitle header="Sample Auditor Status" fontSize="17px" />
                     {auditorLoader ? (
                       <div>{renderCardSkeleton()}</div>
                     ) : (
@@ -666,7 +666,7 @@ const Index = ({
                 </div>
                 <div className={`col-lg-3 col-sm-6 `}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
-                    <HeadTitle header="Users" fontSize="20px" />
+                    <HeadTitle header="Users" fontSize="17px" />
                     {userLoader ? (
                       <div>{renderCardSkeleton()}</div>
                     ) : (

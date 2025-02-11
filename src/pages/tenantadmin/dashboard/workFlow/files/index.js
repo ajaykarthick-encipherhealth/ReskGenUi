@@ -194,10 +194,10 @@ const Files = ({
         <div className="d-flex justify-content-between w-100">
           {cardData?.map((item, index) => (
             <div
-              className="rounded-lg w-30"
+              className="rounded-lg "
               style={{
                 backgroundColor: item?.color,
-                width: "19%",
+                width: "20%",
                 height: "80px",
                 display: "flex",
                 // justifyContent: "center",
@@ -216,7 +216,7 @@ const Files = ({
                   />
                 </div>
               ) : (
-                <div className="d-flex w-100 mt-3">
+                <div className="d-flex  mt-3">
                   <div
                     style={{
                       width: "48px",
@@ -233,10 +233,10 @@ const Files = ({
                     <Image src={item?.icon} />
                   </div>
                   <div>
-                    <div style={{ fontSize: "16px", fontWeight: "900" }}>
+                    <div className={styles.title} >
                       {item?.title}
                     </div>
-                    <div style={{ fontSize: "18px", fontWeight: "700" }}>
+                    <div  className={styles.title} >
                       {item?.count}
                     </div>
                   </div>
