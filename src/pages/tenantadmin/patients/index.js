@@ -713,6 +713,7 @@ const Patient = ({
                         ) : (
                           <>
                             <AddPatientListTable
+                              bullets={bullets}
                               patinetListAll={
                                 allPatientList?.data?.response?.content
                               }

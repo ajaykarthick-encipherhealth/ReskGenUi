@@ -64,7 +64,7 @@ const HeaderFilters = ({
     setSearch("");
     setSelectedDates([]);
     setTrackInput(null);
-    setSelectedOptions([])
+    setSelectedOptions([]);
   };
 
   const getOptions = (name) => {
@@ -99,8 +99,8 @@ const HeaderFilters = ({
             <label className={styles.label}>{filter}</label>
             <div className="dateRangeSize">
               <RangePicker
-              id ={filter}
-              name={filter}
+                id={filter}
+                name={filter}
                 format="MM-DD-YYYY"
                 value={
                   clear
@@ -164,8 +164,8 @@ const HeaderFilters = ({
             <label className={styles.label}>{filter}</label>
             <div class="form-group has-search custom-react-select">
               <Select
-              id ={filter}
-              name={filter}
+                id={filter}
+                name={filter}
                 value={clear ? null : selectedOptions[pickerName]}
                 onChange={(selectedOption) => {
                   setSelectedOptions((prevOptions) => ({
@@ -222,8 +222,8 @@ const HeaderFilters = ({
           <label className={styles.label}>Reviewer</label>
           <div class="form-group has-search custom-react-select">
             <Select
-            id="select-reviewer"
-            name="select-reviewer"
+              id="select-reviewer"
+              name="select-reviewer"
               onChange={(selectedOption) => {
                 setSelectedOptions((prevOptions) => ({
                   ...prevOptions,
@@ -243,8 +243,8 @@ const HeaderFilters = ({
           <label className={styles.label}>Supervisor</label>
           <div class="form-group has-search custom-react-select">
             <Select
-            id="select-supervisor"
-            name="select-supervisor"
+              id="select-supervisor"
+              name="select-supervisor"
               value={clear ? null : selectedOptions?.Supervisor}
               onChange={(selectedOption) => {
                 setSelectedOptions((prevOptions) => ({
@@ -282,35 +282,6 @@ const HeaderFilters = ({
             handleClearAllFilters={handleClearAllFilters}
             byDefault={2}
           />
-
-          {bullets && (
-            <div style={{ cursor: "pointer" }}>
-              <Popover
-                content={
-                  <>
-                    <Legends bullets={bullets} display="block" />
-                    {badges?.length > 0 &&
-                      badges?.map((data) => (
-                        <div style={{ marginBottom: "10px" }}>
-                          <Image src={data.src} width={20} height={30} />
-                          <span style={{ marginLeft: "5px" }}>
-                            {data?.name}
-                          </span>
-                        </div>
-                      ))}
-                  </>
-                }
-                trigger={["click"]}
-                placement="bottom"
-              >
-                <Tooltip title="Click here for status information.">
-                  <div id="click-info" name="click-info" className={Tracking.iconBorder}>
-                    <InfoCircleFilled />
-                  </div>
-                </Tooltip>
-              </Popover>
-            </div>
-          )}
         </div>
       </div>
     </div>

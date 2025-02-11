@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { ArrowUpOutlined, ArrowDownOutlined, InfoCircleFilled } from "@ant-design/icons";
 import moment from "moment";
-import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
+import { notification, Select as AntSelect, Empty, Tooltip, Popover } from "antd";
 import TableStyle from "../../traclingTable.module.css";
 import {
   renderUserPrfoileAvatar,
@@ -13,6 +13,8 @@ import { renderSkeleton } from "../../../reuseableFunctions";
 import { getStorage, setStorage } from "../../../../utils/storages";
 import { actions as allActions } from "../../../../stores/admin/users";
 import { actions as patientSyncActions } from "../../../../stores/tenantAdmin/patientSync";
+import Legends from "../../../legends";
+import styles from '../../../../pages/reviewer/report/report.module.css'
 
 function TrackingTable({
   patinetListAll,
@@ -31,6 +33,8 @@ function TrackingTable({
   sortAuditDueOrder,
   setSortAuditDueOrder,
   getRoutedData,
+  bulletsTitle,badgesTitle,
+  bullets,badges
 }) {
   const navigate = useRouter();
 
@@ -407,12 +411,72 @@ function TrackingTable({
                 </span>
               </th>
 
-              <th style={{ textAlign: "center" }} className="text-truncate">
+              <th style={{ textAlign: "center" }}>
+              <div className="d-flex align-items-center justify-content-center gap-2">
                 PROCESSED STATUS
-              </th>
-              <th style={{ textAlign: "center" }} className="text-truncate">
-                AUDIT STATUS
-              </th>
+                <span style={{ cursor: "pointer" }}>
+                  <Popover
+                    content={
+                      <>
+                        <Legends display="block" padding="0 0px 10px 0" />
+                        {bulletsTitle && (
+                          <label
+                            className={styles.label}
+                            style={{ fontWeight: "700" }}
+                          >
+                            {bulletsTitle}
+                          </label>
+                        )}
+                        <Legends
+                          bullets={bullets}
+                          display="block"
+                          padding="0 0px 10px 0"
+                        />
+                      </>
+                    }
+                    trigger={["click"]}
+                    placement="bottom"
+                  >
+                    <InfoCircleFilled
+                      style={{ color: "#fff", fontSize: "14px" }}
+                    />
+                  </Popover>
+                </span>
+              </div>
+            </th>
+              <th style={{ textAlign: "center" }}>
+              <div className="d-flex align-items-center justify-content-center gap-2">
+                AUDITED STATUS
+                <span style={{ cursor: "pointer" }}>
+                  <Popover
+                    content={
+                      <>
+                        <Legends display="block" padding="0 0px 10px 0" />
+                        {badgesTitle && (
+                          <label
+                            className={styles.label}
+                            style={{ fontWeight: "700" }}
+                          >
+                            {badgesTitle}
+                          </label>
+                        )}
+                        <Legends
+                          bullets={badges}
+                          display="block"
+                          padding="0 0px 10px 0"
+                        />
+                      </>
+                    }
+                    trigger={["click"]}
+                    placement="bottom"
+                  >
+                    <InfoCircleFilled
+                      style={{ color: "#fff", fontSize: "14px" }}
+                    />
+                  </Popover>
+                </span>
+              </div>
+            </th>
             </tr>
           </thead>
 

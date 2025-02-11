@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { ArrowUpOutlined, ArrowDownOutlined, InfoCircleFilled } from "@ant-design/icons";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
 import {
@@ -21,6 +21,7 @@ import { actions as adminActions } from "../../../../stores/admin/users";
 import { actions as allActions } from "../../../../stores/admin/workqueue";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
 import { connect } from "react-redux";
+import Legends from "../../../legends";
 function AddPatientListTable({
   patinetListAll,
   actionBodyTemplate,
@@ -34,6 +35,8 @@ function AddPatientListTable({
   setSortCompleteOrder,
   selectedRoWDetails,
   getRoutedData,
+  bullets,
+  badges,
 }) {
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
   const navigate = useRouter();
@@ -57,17 +60,11 @@ function AddPatientListTable({
           .replace(/\+/g, "-")
           .replace(/\//g, "_")
           .replace(/=+$/, ""); // Remove padding '='
-
-        // const encodedValue = btoa(JSON.stringify(page));
         setStorage("AdminPatientsEncodedValue", encodedValue);
         navigate.push({
           pathname: "/admin/patients/details",
-          // query: {
-          //   params: encodedValue,
-          // },
         });
       }
-      // setStorage('paginations', JSON.stringify(page))
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",
@@ -367,8 +364,39 @@ function AddPatientListTable({
                 )}
               </span>
             </th>
-
-            <th style={{ paddingLeft: "55px" }}>STATUS</th>
+            <th style={{ paddingLeft: "55px" }}>
+              <span className="d-flex gap-2">
+              STATUS
+                <span style={{ cursor: "pointer" }}>
+                  <Popover
+                    content={
+                      <>
+                        <Legends
+                          bullets={bullets}
+                          display="block"
+                          padding="0 0px 10px 0"
+                        />
+                        {badges?.length > 0 &&
+                          badges?.map((data) => (
+                            <div style={{ marginBottom: "10px" }}>
+                              <Image src={data.src} width={20} height={30} />
+                              <span style={{ marginLeft: "5px" }}>
+                                {data?.name}
+                              </span>
+                            </div>
+                          ))}
+                      </>
+                    }
+                    trigger={["click"]}
+                    placement="bottom"
+                  >
+                    <InfoCircleFilled
+                      style={{ color: "#fff", fontSize: "14px" }}
+                    />
+                  </Popover>
+                </span>
+              </span>
+            </th>
             <th>UPLOAD</th>
           </tr>
         </thead>

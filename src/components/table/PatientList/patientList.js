@@ -254,7 +254,6 @@ function PatientTable({
                 )}
               </span>
             </th>
-
             <th className={`${TableStyle.rowStyle} text-truncate`}>
               ALLOCATED BY
             </th>

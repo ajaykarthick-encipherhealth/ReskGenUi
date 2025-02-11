@@ -184,23 +184,6 @@ const HeaderFilters = ({
           </div>
         );
       case "Created Date":
-        // return (
-        //   <div className={defaultSize}>
-        //     <div className="dateRangeSize">
-        //       <DateRangePicker
-        //         selectedDates={selectedDates2}
-        //         pickerlabel={pickerlabe2}
-        //         defaultStartDate={defaultStartDate}
-        //         defaultEndDate={defaultEndDate}
-        //         setStartDate={setStartDate2}
-        //         setEndDate={setEndDate2}
-        //         disabled={false}
-        //         setSelectedDates={setSelectedDates2}
-        //         setPageNo={setPageNo}
-        //       />
-        //     </div>
-        //   </div>
-        // );
         return (
           <div className={defaultSize}>
             <label className={styles.label}>Created Date Range</label>
@@ -379,35 +362,6 @@ const HeaderFilters = ({
             setClear={setClear}
             handleClearAllFilters={handleClearAllFilters}
           />
-
-          {bullets && (
-            <div style={{ cursor: "pointer" }}>
-              <Popover
-                content={
-                  <>
-                    <Legends bullets={bullets} display="block" />
-                    {badges?.length > 0 &&
-                      badges?.map((data) => (
-                        <div style={{ marginBottom: "10px" }}>
-                          <Image src={data.src} width={20} height={30} />
-                          <span style={{ marginLeft: "5px" }}>
-                            {data?.name}
-                          </span>
-                        </div>
-                      ))}
-                  </>
-                }
-                trigger={["click"]}
-                placement="bottom"
-              >
-                <Tooltip title="Click here for status information.">
-                  <div  id="click-icon" name="click-icon" className={Tracking.iconBorderFlex}>
-                    <InfoCircleFilled />
-                  </div>
-                </Tooltip>
-              </Popover>
-            </div>
-          )}
         </div>
       </div>
       {addUser && (

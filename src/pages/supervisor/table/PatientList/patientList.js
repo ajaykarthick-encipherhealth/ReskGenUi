@@ -318,10 +318,9 @@ function PatientTable({
 
             <th className="text-truncate">AUDIT ALLOCATED BY</th>
             <th className="text-truncate">PRIORITY</th>
-            {/* <th className={`text-truncate`}>AUDIT STATUS</th> */}
             <th className="text-truncate" style={{ textAlign: "center" }}>
               <div className="d-flex align-items-center justify-content-center gap-2">
-                AUDIT STATUS
+                AUDITED STATUS
                 <span style={{ cursor: "pointer" }}>
                   <Popover
                     content={
@@ -352,42 +351,8 @@ function PatientTable({
                 </span>
               </div>
             </th>
-            {/* <th className="text-truncate" style={{ textAlign: "center" }}>
-              <div className="d-flex align-items-center justify-content-center">
-                AUDIT STATUS
-                <Popover
-                  content={
-                    <>
-                      <Legends
-                        bullets={bullets}
-                        display="block"
-                        padding="0 0px 10px 0"
-                      />
-                      {badges?.length > 0 &&
-                        badges?.map((data) => (
-                          <div style={{ marginBottom: "10px" }}>
-                            <Image src={data.src} width={20} height={30} />
-                            <span style={{ marginLeft: "5px" }}>
-                              {data?.name}
-                            </span>
-                          </div>
-                        ))}
-                    </>
-                  }
-                  trigger={["click"]}
-                  placement="bottom"
-                >
-                  <div className="cursor-pointer">
-                    <div className={styles.iconBorder}>
-                      <InfoCircleFilled style={{ color: "#fff" }} />
-                    </div>
-                  </div>
-                </Popover>
-              </div>
-            </th> */}
           </tr>
         </thead>
-
         <tbody>
           {patinetListAll?.length <= 0 ? (
             <tr>
