@@ -206,7 +206,7 @@ function PatientTable({
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td className={TableStyle.childBorder} style={{ width: "200px" }}>
+          <td className={TableStyle.childBorder} >
             <AntSelect
               options={priorityOptions}
               placeholder="Set priority"

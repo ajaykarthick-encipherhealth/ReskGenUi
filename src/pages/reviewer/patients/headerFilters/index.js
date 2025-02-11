@@ -219,7 +219,7 @@ const HeaderFiltersPatients = ({
 
       <div
         style={{ width: "2%"}}
-        className="d-flex justify-content-end align-items-center mt-3 "
+        className="d-flex justify-content-end align-items-center mt-4 "
       >
         <MoreFilter
           clear={clear}
