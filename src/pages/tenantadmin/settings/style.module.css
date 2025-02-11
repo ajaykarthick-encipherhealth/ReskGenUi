@@ -190,9 +190,9 @@
   border-radius: 5px !important;
 }
 .container_fluid_patient {
-  /* height: 100vh !important; */
+  height: 99.8vh !important;
   overflow: hidden;
-  padding-top: 25px !important;
+  padding-top: 35px !important;
   background-color: #fff !important;
   padding-left: 10px;
   padding-right: 10px;

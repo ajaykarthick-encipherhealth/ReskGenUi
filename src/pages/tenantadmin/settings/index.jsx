@@ -183,9 +183,9 @@ const Settings = () => {
       <HeaderFile />
       <div className="row patient-file-container">
         <div className={Style.container_fluid_patient}>
-          <div style={{ minHeight: "95vh" }}>
+          <div>
             <div className="d-flex py-4">
-              <div>
+              <div style={{height:"90vh"}}>
                 <div className="font2 m-2 cr-pointer">
                   <div
                     className={`${Style.backButtonStyle}`}
@@ -202,7 +202,7 @@ const Settings = () => {
                   <div style={{ paddingLeft: "25px" }}>Settings</div>
                 </div>
                 <hr style={{ border: "0.5px solid #8C9097" }} />
-                <Layout>
+                <Layout className="settingsSidebar">
                   <Sider width={250}>
                     <div className={Style.menuLists} style={{ width: "100%" }}>
                       <Menu
@@ -229,7 +229,7 @@ const Settings = () => {
                 />
               </div>
 
-              <div style={{ minHeight: "74vh", width: "100%", }}>
+              <div style={{ height: "100vh", width: "100%"}}>
                 {activePage == "Chat_Audit_Config" && <ChatAuditConfig />}
                 {activePage == "Flag_Config" && <FlagConfig />}
                 {activePage == "File_Processing_Config" && (

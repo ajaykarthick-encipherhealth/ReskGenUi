@@ -16256,10 +16256,18 @@ input::-webkit-inner-spin-button {
   box-shadow: 0 6px 6px 0 #523f690d !important;
   background-color: #f9fafc;
 }
-.custom-menu ul {
-  height: 190px !important;
+.settingsSidebar{
+  height:75% !important;
   overflow: scroll;
 }
+.settingsSidebar > aside{
+  height: 100vh !important;
+  background-color: #fff;
+}
+/* .custom-menu ul {
+  height: 190px !important;
+  overflow: scroll;
+} */
 
 .reviewerFilterSelect .ant-select-single {
   width: 100%;

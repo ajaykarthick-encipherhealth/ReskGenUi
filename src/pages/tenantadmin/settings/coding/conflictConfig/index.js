@@ -38,8 +38,7 @@ const ConflictConfig = ({ getCodingDetails, updateSettings, list }) => {
     const payload = {
       type: "CONFLICT",
       conflictConfig: {
-        conflictConditionDontHide:
-          values.conflictConditionDontHide || false,
+        conflictConditionDontHide: values.conflictConditionDontHide || false,
       },
     };
 
@@ -54,51 +53,46 @@ const ConflictConfig = ({ getCodingDetails, updateSettings, list }) => {
   };
 
   return (
-    <>
-      <Form
-        id="chart-audit"
-        onFinish={handleSubmit}
-        form={form}
-        onValuesChange={onChange}
-      >
-        <div className="d-flex flex-column" style={{ height: "100%" }}>
-          <div style={{ width: "50%" }}>
-            <div className="p-3">
-              <div className="d-flex justify-content-between">
-                <div className={Style.title}>Conflict Configuration</div>
-              </div>
-              <div className="mt-4">
-                <div className="d-flex justify-content-between mt-1">
-                  <div>Conflict Proxy</div>
-                  <div className="d-flex justify-content-between">
-                    <Form.Item
-                      name="conflictConditionDontHide"
-                      valuePropName="checked"
-                    >
-                      <Switch />
-                    </Form.Item>
-                    <div className={`m-2`}>
-                      {medical.conflictConditionDontHide
-                        ? "Enable"
-                        : "Disable"}
-                    </div>
+    <Form
+      id="chart-audit"
+      onFinish={handleSubmit}
+      form={form}
+      onValuesChange={onChange}
+    >
+      <div className="d-flex flex-column" style={{ height: "100%" }}>
+        <div style={{ width: "50%" }}>
+          <div className="p-3">
+            <div className="d-flex justify-content-between">
+              <div className={Style.title}>Conflict Configuration</div>
+            </div>
+            <div className="mt-4">
+              <div className="d-flex justify-content-between mt-1">
+                <div>Conflict Proxy</div>
+                <div className="d-flex justify-content-between">
+                  <Form.Item
+                    name="conflictConditionDontHide"
+                    valuePropName="checked"
+                  >
+                    <Switch />
+                  </Form.Item>
+                  <div className={`m-2`}>
+                    {medical.conflictConditionDontHide ? "Enable" : "Disable"}
                   </div>
                 </div>
-          
               </div>
             </div>
           </div>
-
-          <div
-            className="d-flex justify-content-end p-2"
-            style={{ marginTop: "35pc" }}
-          >
-            <RegularButton type="outline" name="Restore" />
-            <RegularButton name="Save" />
-          </div>
         </div>
-      </Form>
-    </>
+
+        <div
+          className="d-flex justify-content-end p-2"
+          style={{ marginTop: "35pc" }}
+        >
+          <RegularButton type="outline" name="Restore" />
+          <RegularButton name="Save" />
+        </div>
+      </div>
+    </Form>
   );
 };
 

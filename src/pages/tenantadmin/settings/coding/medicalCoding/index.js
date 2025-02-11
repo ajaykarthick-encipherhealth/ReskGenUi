@@ -64,7 +64,7 @@ const MedicalCoding = ({ getCodingDetails, updateSettings, list }) => {
   };
 
   return (
-    <>
+
       <Form
         id={"chart-audit"}
         onFinish={handleSubmit}
@@ -132,7 +132,7 @@ const MedicalCoding = ({ getCodingDetails, updateSettings, list }) => {
 
           <div
             className="d-flex justify-content-end p-2"
-            style={{ marginTop: "25pc" }}
+            style={{ width:"95%", marginTop: "25pc" }}
           >
             <RegularButton
               type={"outline"}
@@ -141,7 +141,7 @@ const MedicalCoding = ({ getCodingDetails, updateSettings, list }) => {
           </div>
         </div>
       </Form>
-    </>
+    
   );
 };
 const enhancer = connect(
