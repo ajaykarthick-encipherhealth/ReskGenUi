@@ -34,6 +34,7 @@ const index = ({
   revenueChartLoader,
   rafScorechartLoader,
   customDate,
+  selectDos,
 }) => {
 
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
@@ -69,21 +70,20 @@ const index = ({
     getAllHccCodesData(
       dateRange?.startDate,
       dateRange?.endDate,
-      selectedOrganization
+      selectedOrganization,
+      selectDos
     );
-  }, [dateRange, selectedOrganization]);
-
-  useEffect(() => {
     getAllRafScore(
-      dateRange.startDate,
-      dateRange.endDate,
-      selectedOrganization
-    );
-  }, [dateRange, selectedOrganization]);
+          dateRange.startDate,
+          dateRange.endDate,
+          selectedOrganization,
+          selectDos
+        );
+  }, [dateRange, selectedOrganization,selectDos]);
 
   useEffect(() => {
-    getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization);
-  }, [dateRange, selectedOrganization]);
+    getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization,selectDos);
+  }, [dateRange, selectedOrganization,selectDos]);
 
   const options = {
     xAxis: {
@@ -284,6 +284,7 @@ const index = ({
               dateRange={dateRange}
               customDate={customDate}
               selectedOrganization={selectedOrganization}
+              selectDos={selectDos}
             />
           </div>
         ) : (

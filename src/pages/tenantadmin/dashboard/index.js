@@ -78,6 +78,7 @@ const Index = ({
   const [selectedOrganization, setSelectedOrganization] = useState("");
   const [customDate, setCustomDate] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(null);
+  const [selectDos,setSelectDos]= useState("DOSWISE")
 
   const showModal = (data) => {
     setIsModalOpen(data);
@@ -175,7 +176,6 @@ const Index = ({
       itemStyle: { color: "#4361EE" },
     },
   ];
-
   const orgData =
     organizationStatusData?.response?.map((org, index) => ({
       value: index + 1,
@@ -200,6 +200,9 @@ const Index = ({
   const handleOrganizationChange = (value) => {
     setSelectedOrganization(value);
   };
+  const handleChange=(value) =>{
+    setSelectDos(value)
+  }
 
   const renderCardSkeleton = () => (
     <div className="d-flex justify-content-around ">
@@ -372,44 +375,44 @@ const Index = ({
     }
   };
   useEffect(() => {
-    getOrganizationStatusData();
-    getUserStatusData(
-      dateRange.startDate,
-      dateRange.endDate,
-      selectedOrganization
-    );
-    getAuditorStatusData(
-      dateRange.startDate,
-      dateRange.endDate,
-      selectedOrganization
-    );
-    getAllocatedStatusData(
-      dateRange.startDate,
-      dateRange.endDate,
-      selectedOrganization
-    );
-    getReviewerStatusData(
-      dateRange.startDate,
-      dateRange.endDate,
-      selectedOrganization
-    );
+    if ( activeBtn === "workflow"){
+      getOrganizationStatusData();
+      getUserStatusData(
+        dateRange.startDate,
+        dateRange.endDate,
+        selectedOrganization,
+      );
+      getAuditorStatusData(
+        dateRange.startDate,
+        dateRange.endDate,
+        selectedOrganization
+      );
+      getAllocatedStatusData(
+        dateRange.startDate,
+        dateRange.endDate,
+        selectedOrganization
+      );
+      getReviewerStatusData(
+        dateRange.startDate,
+        dateRange.endDate,
+        selectedOrganization
+      );
+      getAccuracyScore(
+        dateRange.startDate,
+        dateRange.endDate,
+        selectedOrganization
+      );
+    }
 
-    getTop10DiseasesData(
-      dateRange.startDate,
-      dateRange.endDate,
-      selectedOrganization
-    );
-    getAccuracyScore(
-      dateRange.startDate,
-      dateRange.endDate,
-      selectedOrganization
-    );
+  }, [dateRange, selectedOrganization,activeBtn]);
+
+  useEffect(()=>{
     getAllLabAndRadiologyChart(
       dateRange.startDate,
       dateRange.endDate,
-      selectedOrganization
+      selectedOrganization,selectDos
     );
-  }, [dateRange, selectedOrganization]);
+  },[selectDos,dateRange,selectedOrganization])
 
   useEffect(() => {
     if (activeBtn === "Invalid") {
@@ -433,6 +436,7 @@ const Index = ({
             selectedOrganization={selectedOrganization}
             setSelectedValue={setSelectedValue}
             dateRange={dateRange}
+            handleChange={handleChange}
           />
           {activeBtn === "default" ? (
             <>
@@ -442,6 +446,7 @@ const Index = ({
                     <TotalCounts
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
+                      selectDos={selectDos}
                     />
                   </Card>
                 </div>
@@ -453,6 +458,7 @@ const Index = ({
                       selectedOrganization={selectedOrganization}
                       customDate={customDate}
                       selectedValue={selectedValue}
+                      selectDos={selectDos}
                     />
                   </Card>
                 </div>
@@ -466,6 +472,7 @@ const Index = ({
                       selectedOrganization={selectedOrganization}
                       selectedValue={selectedValue}
                       customDate={customDate}
+                      selectDos={selectDos}
                     />
                   </Card>
                 </div>
@@ -479,6 +486,7 @@ const Index = ({
                       selectedOrganization={selectedOrganization}
                       selectedValue={selectedValue}
                       customDate={customDate}
+                      selectDos={selectDos}
                     />
                   </Card>
                 </div>
@@ -492,6 +500,7 @@ const Index = ({
                       selectedOrganization={selectedOrganization}
                       selectedValue={selectedValue}
                       customDate={customDate}
+                      selectDos={selectDos}
                     />
                   </Card>
                 </div>
@@ -503,6 +512,7 @@ const Index = ({
                     <RadiolodyAndLab
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
+                      selectDos={selectDos}
                     />
                   </Card>
                 </div>
@@ -515,6 +525,7 @@ const Index = ({
                       selectedValue={selectedValue}
                       classNames="workflowChart"
                       customDate={customDate}
+                      selectDos={selectDos}
                     />
                   </Card>
                 </div>
@@ -526,6 +537,7 @@ const Index = ({
                     <Top10Diseases
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
+                      selectDos={selectDos}
                     />
                   </Card>
                 </div>
@@ -534,6 +546,7 @@ const Index = ({
                     <TopOIGCodes
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
+                      selectDos={selectDos}
                     />
                   </Card>
                 </div>

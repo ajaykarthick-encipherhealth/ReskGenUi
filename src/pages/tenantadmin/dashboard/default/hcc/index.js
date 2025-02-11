@@ -23,6 +23,7 @@ const index = ({
   revenueChartLoader,
   rafScorechartLoader,
   customDate,
+  selectDos,
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
@@ -113,6 +114,7 @@ const index = ({
               isHcc={true}
               selectedValue={selectedValue}
               customDate={customDate}
+              selectDos={selectDos}
             />
           </div>
         ) : (

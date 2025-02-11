@@ -18,10 +18,16 @@ const index = ({
   getAllRaf,
   selectedValue,
   customDate,
+  selectDos,
 }) => {
   useEffect(() => {
-    rafScoreData(dateRange.startDate, dateRange.endDate, selectedOrganization);
-  }, [dateRange, selectedOrganization]);
+    rafScoreData(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization,
+      selectDos
+    );
+  }, [dateRange, selectedOrganization, selectDos]);
 
   const speedometerOptions = {
     tooltip: {
@@ -97,22 +103,26 @@ const index = ({
         className="speedometerChart"
         style={{ width: "33%", height: "auto" }}
       >
-<div className={styles.headers}>
-        <div className={styles.header}>Raf Score Count</div>
+        <div className={styles.headers}>
+          <div className={styles.header}>Raf Score Count</div>
         </div>
         {rafLoader ? (
           <div className="skeletonantd d-flex justify-content-center align-items-center">
             <Skeleton.Avatar active size="large" shape="circle" />
           </div>
         ) : (
-          <ReactECharts   selectedValue={selectedValue} option={speedometerOptions} />
+          <ReactECharts
+            selectedValue={selectedValue}
+            option={speedometerOptions}
+          />
         )}
       </div>
       <div className="revenueChart" style={{ width: "65%" }}>
         <div className={styles.header}>
-          
           <div className="py-1">Revenue</div>
-          <div className={styles.price}>{`$ ${formatNumber(totalRev) || "0.00"}`}</div>
+          <div className={styles.price}>{`$ ${
+            formatNumber(totalRev) || "0.00"
+          }`}</div>
           {/* <div className={styles.revenue}>$ 3.1k Increase</div> */}
         </div>
         <CodeGraphRevenue

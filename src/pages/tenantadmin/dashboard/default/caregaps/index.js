@@ -23,6 +23,7 @@ const index = ({
   rafScorechartLoader,
   customDate,
   getRafScoreLoader,
+  selectDos,
 }) => {
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap
@@ -113,6 +114,7 @@ const index = ({
               isCargaps={true}
               selectedValue={selectedValue}
               customDate={customDate}
+              selectDos={selectDos}
             />
           </div>
         ) : (

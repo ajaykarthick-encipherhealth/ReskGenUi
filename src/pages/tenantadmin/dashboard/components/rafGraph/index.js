@@ -23,6 +23,7 @@ const RafGraph = ({
   selectedValue,
   selectedOrganization,
   customDate,
+  selectDos
 }) => {
   const [dateRange, setDateRange] = useState({
     startDate:
@@ -34,9 +35,10 @@ const RafGraph = ({
     getAllRafScoreAPI(
       dateRange.startDate,
       dateRange.endDate,
-      selectedOrganization
+      selectedOrganization,
+      selectDos,
     );
-  }, [dateRange, selectedOrganization]);
+  }, [dateRange, selectedOrganization,selectDos]);
 
   const dates =
     selectedValue === "custom"

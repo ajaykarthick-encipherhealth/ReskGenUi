@@ -16,7 +16,7 @@ const index = ({
   getOrganizationStatusData,
   handleOrganizationChange,
   setSelectedValue,
-  dateRange,
+  handleChange,
 }) => {
   const [isCustom, setIsCustom] = useState(false);
   const [selectedDates, setSelectedDates] = useState([]);
@@ -93,8 +93,8 @@ const index = ({
 
   return (
     <div className={styles.container}>
-      <div className={`row  gap-5 w-100`}>
-        <div className="d-flex col-lg-3 col-md-4 col-sm-6 col-sm-12 ">
+      <div className={`row  gap-2 w-100`}>
+        <div className="d-flex col-lg-2 col-md-4 col-sm-6 col-sm-12 ">
           <div className={styles.flterContainer}>Organization</div>
           <div className="tenantSelector" style={{ width: "100%" }}>
             <Select
@@ -114,7 +114,24 @@ const index = ({
             />
           </div>
         </div>
-        <div className="d-flex col-lg-3 col-md-4 col-sm-6 col-sm-12">
+       {activeBtn === "default"?( <div className="d-flex col-lg-2 col-md-4 col-sm-6 col-sm-12 ">
+          <div className={styles.flterContainer}>DOS/YEAR</div>
+          <div className="tenantSelector" style={{ width: "100%" }}>
+            <Select
+              id="dos-year"
+              name="dos-year"
+              placeholder="Dos"
+              options={[
+                { value: 'DOSWISE', label: 'DOS' },
+                { value: 'YEARWISE', label: 'Year' },
+              ]}
+              onChange={handleChange}
+              showSearch
+              defaultValue="DOSWISE"
+            />
+          </div>
+        </div>):""}
+        <div className="d-flex col-lg-2 col-md-4 col-sm-6 col-sm-12">
           <div className={styles.flterContainer}>Date</div>
           <div className="tenantSelector" style={{ width: "100%" }}>
             <Select
@@ -175,7 +192,6 @@ const index = ({
           }
           onClick={() => {
             setActiveBtn("workflow");
-            setSelectedValue("last_1_month");
           }}
         >
           Workflow
@@ -188,7 +204,6 @@ const index = ({
           }
           onClick={() => {
             setActiveBtn("Invalid");
-            setSelectedValue("last_1_month");
           }}
         >
           Invalid

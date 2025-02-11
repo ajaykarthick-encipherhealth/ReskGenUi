@@ -9,7 +9,7 @@ const index = ({
   dateRange,
   selectedOrganization,
   labAndRadiologyCount,
-  chartData
+  selectDos
 }) => {
   const cardData = [
     {
@@ -90,7 +90,6 @@ const enhancer = connect(
   (state) => ({
     labAndRadiologyCount:
       state?.tenantAdmin?.dashboard?.default?.getAllLabAndRadiologyCount?.data,
-      chartData:state
   }),
   {
     getAllLabAndRadiologyCount: allActions.getAllLabAndRadiologyCount,

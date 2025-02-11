@@ -100,11 +100,11 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   height:880px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 .cardDiv{
   height:880px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 .card1 h2 {
   margin-top: 0;
@@ -239,7 +239,7 @@
   background-color: #e1edfe;
   margin-right: 5px;
   padding: 10px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 .flag {
   width: 209px;
@@ -265,7 +265,7 @@
 .contentGroups {
   display: flex;
   padding: 5px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   justify-content: space-between;
 }
 .contentAuditor {

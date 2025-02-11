@@ -10,15 +10,16 @@ const index = ({
   dateRange,
   selectedOrganization,
   top10DisesesLoader,
-
+  selectDos
 }) => {
   useEffect(() => {
     getTop10DiseasesData(
       dateRange.startDate,
       dateRange.endDate,
-      selectedOrganization
+      selectedOrganization,
+      selectDos
     );
-  }, [dateRange]);
+  }, [dateRange, selectedOrganization,selectDos]);
  
 
   return (

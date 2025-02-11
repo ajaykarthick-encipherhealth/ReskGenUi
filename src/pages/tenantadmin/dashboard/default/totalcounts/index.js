@@ -14,6 +14,7 @@ const index = ({
   dateRange,
   selectedOrganization,
   totalCountsLoader,
+  selectDos
 }) => {
   const cardData = [
     {
@@ -43,9 +44,10 @@ const index = ({
     getAllFilesCount(
       dateRange.startDate,
       dateRange.endDate,
-      selectedOrganization
+      selectedOrganization,
+      selectDos
     );
-  }, [dateRange, selectedOrganization]);
+  }, [dateRange, selectedOrganization,selectDos]);
   return (
     <div
       className="d-flex justify-content-between w-100"

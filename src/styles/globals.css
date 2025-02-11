@@ -28,6 +28,8 @@
 .ant-picker-header-prev-btn{
       cursor: default !important;
 }
+.ant-picker-dropdown .ant-picker-header button{
+  cursor: default !important;}
 .ant-picker-header-super-next-btn{
         cursor: default !important;
 }

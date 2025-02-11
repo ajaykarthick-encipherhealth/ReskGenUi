@@ -11,15 +11,16 @@ const index = ({
   dateRange,
   selectedOrganization,
   top0ijCodesLoader,
+  selectDos
 
 }) => {
   useEffect(() => {
     getTopOigCodesData(
       dateRange.startDate,
       dateRange.endDate,
-      selectedOrganization
+      selectedOrganization,selectDos
     );
-  }, [dateRange,selectedOrganization]);
+  }, [dateRange,selectedOrganization,selectDos]);
 
   return (
     <>

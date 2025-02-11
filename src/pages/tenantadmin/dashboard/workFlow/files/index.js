@@ -31,6 +31,7 @@ const Files = ({
   classNames,
   customDate,
   getFilesWorkflowLoader,
+  selectDos,
 }) => {
   const dates =
     selectedValue === "custom"
@@ -176,14 +177,16 @@ const Files = ({
     getComputingStatus(
       dateRange?.startDate,
       dateRange?.endDate,
-      selectedOrganization
+      selectedOrganization,
+      selectDos,
     );
     getAllComputing(
       dateRange?.startDate,
       dateRange?.endDate,
-      selectedOrganization
+      selectedOrganization,
+      selectDos
     );
-  }, [dateRange, selectedOrganization]);
+  }, [dateRange, selectedOrganization,selectDos]);
 
   return (
     <div className="mt-3">
