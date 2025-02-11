@@ -187,7 +187,7 @@ const CompletedStatus = ({
                 activeColor="#fff"
                 inActiveColor="#000000"
                 activeBg="#1E1B39"
-                inActiveBg="#F3F3FF"
+                // inActiveBg="#F3F3FF"
                 containerBg="#F3F3FF"
               />
             </div>

@@ -397,8 +397,8 @@ const Accuracy = ({
                   inActiveColor="
                 #000000"
                   activeBg="#04306f"
-                  inActiveBg="
-                #E6EEFF"
+                //   inActiveBg="
+                // #E6EEFF"
                   containerBg="
                 #E6EEFF"
                 />

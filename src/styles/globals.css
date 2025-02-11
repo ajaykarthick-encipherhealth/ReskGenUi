@@ -11,7 +11,9 @@
 .hover-effect-remove {
   transition: background-color 0.8s ease-in-out, transform 0.8s ease-in-out !important;
 }
-
+.ant-empty{
+  cursor: default;
+}
 .ant-select-item {
   transition: all 0.3s ease-in-out;
   transform: none !important;

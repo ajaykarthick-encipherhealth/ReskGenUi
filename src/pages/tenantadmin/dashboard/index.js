@@ -557,7 +557,7 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 {invalidChartData.map((data, index) => (
                   <div className="col-4 mt-3" key={data.id}>
-                    <Card padding="10px" borderRadius="10px" height="330px">
+                    <Card padding="10px" borderRadius="10px" height="350px">
                       {invalidLoader ? (
                         <div>
                           <Skeleton.Input
@@ -634,7 +634,7 @@ const Index = ({
               </div>
               {/* total codes */}
               <div className={`row ${styles.box}`}>
-                <div className={`col-lg-3`}>
+                <div className={`col-lg-3 col-sm-6 `}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
                     <HeadTitle header="Allocated Status" fontSize="20px" />
                     {allocatedLoader ? (
@@ -644,7 +644,7 @@ const Index = ({
                     )}
                   </Card>
                 </div>
-                <div className={`col-lg-3`}>
+                <div className={`col-lg-3 col-sm-6 `}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
                     <HeadTitle header="Reviewer Status" fontSize="20px" />
                     {reviewerLoader ? (
@@ -654,7 +654,7 @@ const Index = ({
                     )}
                   </Card>
                 </div>
-                <div className={`col-lg-3`}>
+                <div className={`col-lg-3 col-sm-6 `}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
                     <HeadTitle header="Sample Auditor Status" fontSize="20px" />
                     {auditorLoader ? (
@@ -664,7 +664,7 @@ const Index = ({
                     )}
                   </Card>
                 </div>
-                <div className={`col-lg-3`}>
+                <div className={`col-lg-3 col-sm-6 `}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
                     <HeadTitle header="Users" fontSize="20px" />
                     {userLoader ? (

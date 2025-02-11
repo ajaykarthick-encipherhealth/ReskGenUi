@@ -378,7 +378,7 @@ const Accuracy = ({
                 activeColor="#fff"
                 inActiveColor="#000000"
                 activeBg="#043069"
-                inActiveBg="#E6EEFF"
+                // inActiveBg="#E6EEFF"
                 containerBg="#E6EEFF"
                 width="150px"
               />
