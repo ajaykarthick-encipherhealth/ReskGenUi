@@ -21,7 +21,7 @@ import HistoryCodes from "./coding/historyCodes";
 import DownCodes from "./coding/downCodes";
 import DirectConfirmCodes from "./coding/directConfirmCodes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHospital } from "@fortawesome/free-solid-svg-icons";
+import { faFileImport, faFireFlameCurved, faHospital, faSliders } from "@fortawesome/free-solid-svg-icons";
 import QueryTemplateConfig from "./configuration/queryTemplateCofig";
 import DiagnosticReportConfig from "./coding/diagnosticReportConfig";
 import MeatConfig from "./coding/meatCofig";
@@ -36,13 +36,18 @@ import { useRouter } from "next/router";
 
 const { Sider } = Layout;
 
-const menuList = [
+const menuList =(activePage)=> [
   {
     key: `Configuration`,
     icon: (
-      <span className="">
-        <ConfigIcon />
-      </span>
+      <FontAwesomeIcon
+        icon={faSliders}
+        style={{
+          color: "#04306f",
+          
+        }}
+        className="fs-4 fa-rotate-90"
+      />
     ),
     label: `Configuration`,
     children: [
@@ -72,6 +77,7 @@ const menuList = [
         style={{
           color: "#04306f",
         }}
+        className="fs-4"
       />
     ),
     label: `Coding Guidelines`,
@@ -142,7 +148,10 @@ const menuList = [
     key: `EMR-FHIR`,
     icon: (
       <span className="">
-        <Fire />
+        <FontAwesomeIcon icon={faFireFlameCurved} className={`${activePage==="EMR-FHIR"&& "text-white"} fs-3`}
+        style={{
+          color: activePage==="EMR-FHIR" ?"#fff": "#04306f",
+        }} />
       </span>
     ),
     label: `EMR-FHIR`,
@@ -151,7 +160,11 @@ const menuList = [
     key: `FTP-SFTP`,
     icon: (
       <span className="">
-        <Fire />
+        <FontAwesomeIcon icon={faFileImport}
+        style={{
+          color: activePage==="FTP-SFTP"?"#fff":"#04306f",
+          fontSize:"20px"
+        }} />
       </span>
     ),
     label: `FTP-SFTP`,
@@ -164,6 +177,7 @@ const Settings = () => {
   const handleMenuClick = (e) => {
     setActivePage(e.key);
   };
+  console.log(activePage)
   return (
     <div>
       <HeaderFile />
@@ -195,7 +209,7 @@ const Settings = () => {
                         mode="inline"
                         defaultSelectedKeys={["Chat_Audit_Config"]}
                         defaultOpenKeys={["Configuration"]}
-                        items={menuList}
+                        items={menuList(activePage)}
                         onClick={handleMenuClick}
                         className="custom-menu"
                       />
