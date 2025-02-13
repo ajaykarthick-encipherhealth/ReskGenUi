@@ -348,6 +348,24 @@ const Patient = ({
     formData.append("patientname", inputValue.name);
     formData.append("emrtype", emrType);
     const response = await uploadFiles({ obj: formData });
+    if (response?.status === "SUCCESS") {
+      getResponePopup(response)
+      getAllPatients(
+        pageNo,
+        computedStartDate,
+        computedEndDate,
+        selectedOption,
+        search,
+        completedStartDate || "",
+        completedEndDate || "",
+        selAllocatedTo || "",
+        selAllocatedBy || "",
+        selCreatedBy || "",
+        sort,
+        orgId,
+        selectBatchList
+      );
+    }
     var orgId = selectOrgList;
     if (response?.result == "SUCCESS") {
       setAddPatient(false);
@@ -374,7 +392,6 @@ const Patient = ({
       getResponePopup(response);
       setAddPatient(false);
     }
-
     setIsLoadingBtn(false);
   };
   const submitRadiology = async () => {
