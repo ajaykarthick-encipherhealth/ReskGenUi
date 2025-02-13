@@ -54,34 +54,32 @@ const bullets = [
       },
     ],
   },
-];
-const badges = [
   {
     title: "Audited Status",
     option: [
       {
         color: "#4AA1AB",
-        name: "Audited",
-      },
-      {
-        color: "#964B00",
-        name: "Re Audit",
-      },
-      {
-        color: "#EBAE00",
-        name: "Audit Hold",
+        name: "AUDITED",
       },
       {
         color: "#BD3A79",
-        name: "Audit Pending",
+        name: "AUDIT PENDING",
+      },
+      {
+        color: "#964B00",
+        name: "RE AUDIT",
+      },
+      {
+        color: "#FFEBAD",
+        name: "AUDIT HOLD",
       },
       {
         color: "#C21807",
-        name: "Audit Declined",
+        name: "AUDIT DECLINED",
       },
       {
-        color: "#EC8E27",
-        name: "Not Audit",
+        color: "#E69021",
+        name: "NOT AUDIT",
       },
     ],
   },
@@ -512,132 +510,128 @@ const Patient = ({
   ]);
 
   return (
-    <>
-      <div className={`show `}>
-        <Header />
-        <div class="content-body">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-12">
-                <div className="">
-                  <div className="card-body p-0">
-                    <div className="table-responsive active-projects task-table">
-                      <div className="tbl-caption row d-flex ">
-                        <div
-                          className="tbl-caption2 col-xl-10 align-items-center"
-                          style={{ padding: "20px 0px 20px 20px" }}
-                        >
-                          <HeaderFilters
-                            auditallocatedToOptoons={generateOptionsForNewStore(
-                              auditAssignedFilters?.data?.response
-                            )}
-                            setSearch={setSearchTextValue}
-                            isSearch={true}
-                            search={searchTextValue}
-                            selectOptions={statusOptions}
-                            allocatedToOptoons={generateOptionsForNewStore(
-                              patientAllocatedFilters?.data?.response
-                            )}
-                            allocatedByOptoons={generateOptionsForNewStore(
-                              allocatedByFilters?.data?.response
-                            )}
-                            // defaultAllocatedBy={"All"}
-                            bullets={bullets}
-                            isNextRow={true}
-                            defaultShow={true}
-                            defaultSize={"col-2"}
-                            auditAllocatedByOptoons={generateOptionsForNewStore(
-                              filteredList?.data?.response
-                            )}
-                            orgAllList={orgAllList}
-                            setClear={setClear}
-                            clear={clear}
-                            selectedDates={selectedDates}
-                            selectedDateRange={selectedDateRange}
-                            setSelectedDateRange={setSelectedDateRange}
-                            setSelectedDates={setSelectedDates}
-                            selectedOptions={selectedOptions}
-                            setSelectedOptions={setSelectedOptions}
-                            setPageNo={setPageNo}
-                            getRoutedData={getRoutedData}
-                            auditStatusOptions={auditStatusOptions}
-                            activeFilters={activeFilters}
-                            setActiveFilters={setActiveFilters}
-                            searchTextValue={searchTextValue}
-                          />
-                        </div>
-                        <div className="col-xl-2 col-sm-3">
-                          <DailyTask
-                            trackChart={trackingList?.processStatusCount}
-                          />
-                        </div>
-                      </div>
-
+    <div className={`show `}>
+      <Header />
+      <div class="content-body">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-12">
+              <div className="">
+                <div className="card-body p-0">
+                  <div className="table-responsive active-projects task-table">
+                    <div className="tbl-caption row d-flex ">
                       <div
-                        id="task-tbl_wrapper"
-                        className="dataTables_wrapper no-footer"
+                        className="tbl-caption2 col-xl-10 align-items-center"
+                        style={{ padding: "20px 0px 20px 20px" }}
                       >
-                        {loader ? (
+                        <HeaderFilters
+                          auditallocatedToOptoons={generateOptionsForNewStore(
+                            auditAssignedFilters?.data?.response
+                          )}
+                          setSearch={setSearchTextValue}
+                          isSearch={true}
+                          search={searchTextValue}
+                          selectOptions={statusOptions}
+                          allocatedToOptoons={generateOptionsForNewStore(
+                            patientAllocatedFilters?.data?.response
+                          )}
+                          allocatedByOptoons={generateOptionsForNewStore(
+                            allocatedByFilters?.data?.response
+                          )}
+                          // defaultAllocatedBy={"All"}
+                          bullets={bullets}
+                          isNextRow={true}
+                          defaultShow={true}
+                          defaultSize={"col-2"}
+                          auditAllocatedByOptoons={generateOptionsForNewStore(
+                            filteredList?.data?.response
+                          )}
+                          orgAllList={orgAllList}
+                          setClear={setClear}
+                          clear={clear}
+                          selectedDates={selectedDates}
+                          selectedDateRange={selectedDateRange}
+                          setSelectedDateRange={setSelectedDateRange}
+                          setSelectedDates={setSelectedDates}
+                          selectedOptions={selectedOptions}
+                          setSelectedOptions={setSelectedOptions}
+                          setPageNo={setPageNo}
+                          getRoutedData={getRoutedData}
+                          auditStatusOptions={auditStatusOptions}
+                          activeFilters={activeFilters}
+                          setActiveFilters={setActiveFilters}
+                          searchTextValue={searchTextValue}
+                        />
+                      </div>
+                      <div className="col-xl-2 col-sm-3">
+                        <DailyTask
+                          trackChart={trackingList?.processStatusCount}
+                        />
+                      </div>
+                    </div>
+
+                    <div
+                      id="task-tbl_wrapper"
+                      className="dataTables_wrapper no-footer"
+                    >
+                      {loader ? (
+                        <div>
+                          {" "}
+                          <TableSkeleton />
+                        </div>
+                      ) : (
+                        <>
+                          <TrackingTable
+                            patinetListAll={
+                              trackingList?.patientDTOList?.content
+                            }
+                            actionBodyTemplate={actionBodyTemplate}
+                            statusBodyTemplate={processstatusBodyTemplate}
+                            auditBodyTemplate={auditstatusBodyTemplate}
+                            // gotoPatientDetails={gotoPatientDetails}
+                            patientDetails={patientDetails}
+                            setSortOrder={setAllocatedSortOrder}
+                            sortOrder={allocatedSortOrder}
+                            setSort={setSort}
+                            page={{
+                              pageNo,
+                              paginationFirst,
+                              selectedDates,
+                              selectedDateRange,
+                              selectedOptions,
+                              searchTextValue,
+                              sort,
+                              clear,
+                              activeFilters,
+                            }}
+                            loader={loader}
+                            sortAuditOrder={sortAuditOrder}
+                            setSortAuditOrder={setSortAuditOrder}
+                            sortDueOrder={sortDueOrder}
+                            setSortDueOrder={setSortDueOrder}
+                            sortAuditDueOrder={sortAuditDueOrder}
+                            setSortAuditDueOrder={setSortAuditDueOrder}
+                          />
                           <div>
-                            {" "}
-                            <TableSkeleton />
-                          </div>
-                        ) : (
-                          <>
-                            <TrackingTable
-                              bullets={bullets}
-                              badges={badges}
-                              patinetListAll={
-                                trackingList?.patientDTOList?.content
-                              }
-                              actionBodyTemplate={actionBodyTemplate}
-                              statusBodyTemplate={processstatusBodyTemplate}
-                              auditBodyTemplate={auditstatusBodyTemplate}
-                              // gotoPatientDetails={gotoPatientDetails}
-                              patientDetails={patientDetails}
-                              setSortOrder={setAllocatedSortOrder}
-                              sortOrder={allocatedSortOrder}
-                              setSort={setSort}
-                              page={{
-                                pageNo,
-                                paginationFirst,
-                                selectedDates,
-                                selectedDateRange,
-                                selectedOptions,
-                                searchTextValue,
-                                sort,
-                                clear,
-                                activeFilters,
-                              }}
-                              loader={loader}
-                              sortAuditOrder={sortAuditOrder}
-                              setSortAuditOrder={setSortAuditOrder}
-                              sortDueOrder={sortDueOrder}
-                              setSortDueOrder={setSortDueOrder}
-                              sortAuditDueOrder={sortAuditDueOrder}
-                              setSortAuditDueOrder={setSortAuditDueOrder}
-                            />
-                            <div>
-                              <div className="pagination-container">
-                                <Paginator
-                                  id="tracking-paginator"
-                                  name="tracking-paginator"
-                                  first={pageNo === 0 ? 0 : paginationFirst}
-                                  rows={15}
-                                  totalRecords={
-                                    trackingList?.patientDTOList?.totalElements
-                                  }
-                                  onPageChange={onPageChange}
-                                />
-                                <div className="total-pages">
-                                  Total count:{" "}
-                                  {trackingList?.patientDTOList?.totalElements}
-                                </div>
+                            <div className="pagination-container">
+                              <Paginator
+                                id="tracking-paginator"
+                                name="tracking-paginator"
+                                first={pageNo === 0 ? 0 : paginationFirst}
+                                rows={15}
+                                totalRecords={
+                                  trackingList?.patientDTOList?.totalElements
+                                }
+                                onPageChange={onPageChange}
+                              />
+                              <div className="total-pages">
+                                Total count:{" "}
+                                {trackingList?.patientDTOList?.totalElements}
                               </div>
                             </div>
-                          </>
-                        )}
-                      </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -646,7 +640,7 @@ const Patient = ({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 const enhancer = connect(

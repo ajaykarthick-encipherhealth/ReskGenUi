@@ -20,10 +20,10 @@ export async function getAllTracking(data) {
       data?.dueDateEnd
     }&searchString=${data?.searchTextValue}&patientAllocated=${
       data?.selAllocatedTo
-    }&auditAllocatedStart=${data?.allocatedStartDate}&auditAllocatedEnd=${
-      data?.allocatedEndDate
-    }&allocatedOnStart=${data?.auditedStartDate}&allocatedOnEnd=${
+    }&auditAllocatedStart=${data?.auditedStartDate}&auditAllocatedEnd=${
       data?.auditedEndDate
+    }&allocatedOnStart=${data?.allocatedStartDate}&allocatedOnEnd=${
+      data?.allocatedEndDate
     }&allocatedBy=${data?.selAllocatedBy}&auditedStartDate=${
       data?.auditedDueStartDate
     }&auditedEndDate=${data?.auditedDueEndDate}&auditedStatus=${
