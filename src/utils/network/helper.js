@@ -78,7 +78,7 @@ export async function checkStatus(response) {
     if (result.isConfirmed && clearStorage) {
       removeStorage();
       window.location = "/login";
-    } else if (result.isDenied && (response?.status === 513 || response?.status === 500 || response?.status === 502 || response?.status === 512)) {
+    } else if (result.isDenied && ( response?.status === 500 || response?.status === 502 || response?.status === 512)) {
       try {
         Swal.fire({
           title: 'Sending Email...',
@@ -179,8 +179,7 @@ export async function checkStatus(response) {
       await showModal("You don't have permission to access this page.", "Back", true, false, false); 
       break;
     }
-    case 512:
-    case 513: {
+    case 512: {
       await showModal(
         "An error occurred due to unhandled exceptions or unexpected conditions within the system. The admin will be notified by email.",
         "Back",
