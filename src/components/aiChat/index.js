@@ -72,15 +72,18 @@ const AICHAT = ({ openMsg, getChatReply }) => {
       handleNewUserMessage(event);
     }
   };
-
+  const handleChat = () => {
+    setActiveChat(!activeChat);
+    if (activeChat) {
+      setChatResponse([]);
+    }
+    setStartChat(false);
+  };
   return (
     <>
       <button
         className={styles.clickBtn}
-        onClick={() => {
-          setActiveChat(activeChat ? false : true);
-          setStartChat(false);
-        }}
+        onClick={handleChat}
       >
         {activeChat ? (
           <FontAwesomeIcon icon={faTimesCircle} color="white" />
