@@ -484,8 +484,8 @@ const Meat = ({
         >
           <div className="section-container">
             <div className="row">
-              <div className="col-xl-4">
-                <div style={{ height: "98%", overflowY: "scroll" }}>
+              <div className="col-4">
+                <div style={{ height: "98%", overflowY: "scroll",paddingRight:"5px" }}>
                   <div
                     className={
                       selectMeatResult?.isMeatCriteriaPresent === true
@@ -495,17 +495,17 @@ const Meat = ({
                   >
                     <div className={visitStyles.meat_title_card2_meat}>
                       <div className="row">
-                        <div className="col-xl-6">
+                        <div className="col-6">
                           <label>Codes</label>
                         </div>
-                        <div className="col-xl-6">
+                        <div className="col-6">
                           <label>Description</label>
                         </div>
                       </div>
                     </div>
 
                     <div className="row p-2">
-                      <div className="col-xl-6 d-grid">
+                      <div className="col-6 d-grid">
                         <span className="font-bold">
                           {selectMeatResult?.diagnosisCode}
                         </span>
@@ -525,14 +525,14 @@ const Meat = ({
                           </Badge>
                         )}
                       </div>
-                      <div className="col-xl-6 d-grid">
+                      <div className="col-6 d-grid">
                         <Popover
                           placement="topLeft"
                           title="Description"
                           content={selectMeatResult?.diseaseName}
                           overlayStyle={{ zIndex: 1000 }}
                         >
-                          <span className="meat-name-details2">
+                          <span className="disease-name">
                             {selectMeatResult?.diseaseName}
                           </span>
                         </Popover>
@@ -598,7 +598,7 @@ const Meat = ({
                     }
                   >
                     <div className="row p-2">
-                      <div className="col-10 d-grid">
+                      <div className="col-10 ">
                         {getDisTitlePopover(
                           "Monitor",
                           selectMeatResult?.monitorAspect,
@@ -632,8 +632,8 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                      <div style={{ width: "auto" }}>
-                        <div className={`${visitStyles.meat_title_card2_meat}`}>
+                      <div  className="col-2">
+                        <div className={`${visitStyles.meat_box}`}>
                           <span
                             className={`text-center ${
                               selectMeatResult?.isMeatCriteriaPresent === true
@@ -656,7 +656,7 @@ const Meat = ({
                     }
                   >
                     <div className="row p-2">
-                      <div className="col-10 d-grid">
+                      <div className="col-10 ">
                         {getDisTitlePopover(
                           "Evaluate",
                           selectMeatResult?.evaluateAspect,
@@ -690,8 +690,8 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                      <div style={{ width: "auto" }}>
-                        <div className={visitStyles.meat_title_card2_meat}>
+                      <div className="col-2">
+                        <div className={visitStyles.meat_box}>
                           <span
                             className={`text-center ${
                               selectMeatResult?.isMeatCriteriaPresent === true
@@ -714,7 +714,7 @@ const Meat = ({
                     }
                   >
                     <div className="row p-2">
-                      <div className="col-10 d-grid">
+                      <div className="col-10 ">
                         {getDisTitlePopover(
                           "Assesssment",
                           selectMeatResult?.assessmentAspect,
@@ -748,8 +748,8 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                      <div style={{ width: "auto" }}>
-                        <div className={visitStyles.meat_title_card2_meat}>
+                      <div className="col-2">
+                        <div className={visitStyles.meat_box}>
                           <span
                             className={`text-center ${
                               selectMeatResult?.isMeatCriteriaPresent === true
@@ -772,7 +772,7 @@ const Meat = ({
                     }
                   >
                     <div className="row p-2">
-                      <div className="col-10 d-grid">
+                      <div className="col-10 ">
                         {getDisTitlePopover(
                           "Treatment",
                           selectMeatResult?.treatmentAspect,
@@ -806,8 +806,8 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                      <div style={{ width: "auto" }}>
-                        <div className={visitStyles.meat_title_card2_meat}>
+                      <div className="col-2">
+                        <div className={visitStyles.meat_box}>
                           <span
                             className={`text-center ${
                               selectMeatResult?.isMeatCriteriaPresent === true

@@ -312,7 +312,7 @@ const VisitData = ({
             </div>
           ) : null}
           {!isFileFormShow ? (
-            <div className="col-xl-3" style={{ height: "73vh" }}>
+            <div className="col-3" style={{ height: "73vh" }}>
               <div className="">
                 <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                   {(provided) => {

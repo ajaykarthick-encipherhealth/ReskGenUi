@@ -184,10 +184,12 @@
 .rafMainCard1 {
   width: 40%;
   margin-right: 10px;
+  box-shadow: 0px 2px 6px 0px #00000029;
 }
 .rafMainCard2 {
   width: 40%;
   margin-right: 10px;
+  box-shadow: 0px 2px 6px 0px #00000029;
 }
 .detailsHead {
   padding: 10px 20px 10px 20px;

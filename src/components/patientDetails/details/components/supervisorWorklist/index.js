@@ -266,7 +266,7 @@ const SupervisorWorkList = ({
         >
           <Legends bullets={bullets} display="ruby" padding="0 0px 10px 0" />
         </div>
-        <div className="col-xl-9">
+        <div className="col-9">
           <div class="form-group has-search">
             <FontAwesomeIcon
               className="fa fa-search form-control-feedback"
@@ -288,7 +288,7 @@ const SupervisorWorkList = ({
           </div>
         </div>
 
-        <div className="col-xl-3">
+        <div className="col-3">
           <div className={visitStyles.content}>
             <MyWorkQueueFilter
               setComputedStartDate={setCompletedStartDate}
@@ -352,14 +352,18 @@ const SupervisorWorkList = ({
         )}
       </div>
       <div className={visitStyles.paginationContiner}>
+        <div>
         <div className="patient-filte-page">
           <Paginator
+           className="paginator-workqueue"
             first={paginationFirst}
             rows={15}
             totalRecords={totalElements}
             onPageChange={onPageChange}
           />
         </div>
+        </div>
+       
       </div>
     </>
   );

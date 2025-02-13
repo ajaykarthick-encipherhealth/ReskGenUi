@@ -192,7 +192,7 @@ const AdminWorkList = ({
           <Legends bullets={bullets} display="ruby" padding="0 0px 10px 0" />
         </div>
         <div className="row">
-          <div className="col-xl-9 ">
+          <div className="col-9 ">
             <div class="form-group has-search searchStyle">
               <Search
                 className={`input-form-control align-items-center`}
@@ -204,7 +204,7 @@ const AdminWorkList = ({
             </div>
           </div>
 
-          <div className="col-xl-3 mt-4">
+          <div className="col-3 mt-4">
             <div className={visitStyles.content}>
               <MyWorkQueueFilter
                 setComputedStartDate={setComputedStartDate}
@@ -277,6 +277,7 @@ const AdminWorkList = ({
       <div className={visitStyles.paginationContiner}>
         <div className="patient-filte-page">
           <Paginator
+            className="paginator-workqueue"
             first={paginationFirst}
             rows={15}
             totalRecords={totalElements}

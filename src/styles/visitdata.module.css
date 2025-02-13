@@ -217,9 +217,6 @@
   /* z-index: 1; */
 }
 @media screen and (max-width: 1230px) {
-  .potential_title_name {
-    font-size: 9px !important;
-  }
   .provider_name {
     font-size: 8px !important;
   }
@@ -332,6 +329,7 @@
 
 .flag_container {
   width: 60px;
+  /* height: 100%; */
   max-height: 80vh;
   min-height: 80vh;
   border-radius: 8px;
@@ -678,7 +676,7 @@
 }
 
 .combo_head_card label {
-  font-size: 13px !important;
+  font-size: 14px !important;
   font-weight: 600;
 }
 
@@ -690,7 +688,7 @@
 }
 
 .combo_details_card span {
-  font-size: 12px;
+  font-size: 14px;
 }
 @media screen and (max-width: 1344px) {
   .combo_details_card {
@@ -751,6 +749,20 @@
   /* position: sticky; */
   top: 0;
   /* margin-top: 10px; */
+}
+.meat_box{
+  width:43px;
+  border-radius: 10px;
+  background: #e1edfe;
+  height: auto;
+  padding: 10px 15px;
+  font-weight: 700;
+  font-size: 16px;
+  /* margi-bottom: 10px; */
+  /* position: sticky; */
+  top: 0;
+  /* margin-top: 10px; */
+
 }
 
 .hccStickey_head {
@@ -890,8 +902,8 @@
 .meat_details_card2 {
   border-radius: 12px;
   border: 1px solid #e1e1e1;
-  padding: 10px 15px 10px 15px;
-  margin-bottom: 5px;
+  padding: 10px 19px 10px 15px;
+  margin-bottom: 3px;
 }
 
 .meat_head_card label {
@@ -1124,6 +1136,7 @@
 
 .sideTabClose {
   width: 66px;
+  /* height: 100%; */
   max-height: 80vh;
   min-height: 80vh;
   flex-shrink: 0;
@@ -1697,7 +1710,7 @@
 }
 
 .statusBtn {
-  width: 120px !important;
+  width: 125px !important;
   padding: 5px !important;
   /* height: 30px !important; */
 }
@@ -2240,7 +2253,7 @@
   /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
   /* box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
 }
-.meatContainer {
+.meatFoundContainer {
   /* max-height: 100vh;
   min-height: 100vh; */
   overflow-y: scroll;

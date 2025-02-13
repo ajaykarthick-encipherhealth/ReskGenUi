@@ -15,6 +15,7 @@ import {
   getMeatFound,
   getProviderNameList,
   moveToAnotherAction,
+  truncateString,
 } from "../function/ReusableFunctions";
 import { connect } from "react-redux";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
@@ -87,9 +88,9 @@ const ComboCard = ({
                   <label htmlFor="combo">Combo Codes</label>
                 </div>
                 <div className="col-2 d-flex align-items-center justify-content-center ">
-                  <label htmlFor="additional">Addons</label>
+                  <label htmlFor="additional ">Addons</label>
                 </div>
-                <div className="col-5 d-flex align-items-center justify-content-center ">
+                <div className="col-5 d-flex align-items-center justify-content-start ">
                   <label htmlFor="description">Description</label>
                 </div>
                 <div className="col-1">
@@ -140,12 +141,12 @@ const ComboCard = ({
                                 key={item?.id}
                               >
                                 <div className="row">
-                                  <div className="col-3 d-grid">
+                                  <div className="col-4 d-grid">
                                     <span className="font-bold ms-3">
                                       {item.diagnosisCode}
                                     </span>
                                   </div>
-                                  <div className="col-3">
+                                  <div className="col-2">
                                     {item.addOnCodes?.map(
                                       (addCombo, index) =>
                                         addCombo && (
@@ -163,14 +164,27 @@ const ComboCard = ({
                                         )
                                     )}
                                   </div>
-                                  <div className="col-5">
-                                    <span>{item.actualDescription}</span>
+                                  <div className="col-5 d-flex align-items-center justify-content-center ">
+                                    <div className="cursor-pointer"
+                                      style={{
+                                        marginLeft: "15px",
+                                      }}
+                                    >
+                                      {/* {item.actualDescription} */}
+                                      <Tooltip title={item.actualDescription}>
+                                        {truncateString(
+                                          item.actualDescription,
+                                          25
+                                        )}
+                                      </Tooltip>
+                                    </div>
                                   </div>
                                   <div
                                     className="col-1"
                                     style={{
                                       position: "relative",
-                                      right: "15px",
+                                      right: "19px",
+                                      paddingLeft: "15px",
                                     }}
                                   >
                                     {/* <div>
@@ -398,7 +412,8 @@ const ComboCard = ({
                                     <div
                                       className={` ${styles.meatFoundContainer}`}
                                     >
-                                      <div  className="cr-pointer"
+                                      <div
+                                        className="cr-pointer"
                                         onClick={() => {
                                           setActiveTabHead(4);
                                           setActiveMeatTitle({
@@ -413,7 +428,8 @@ const ComboCard = ({
                                           "M"
                                         )}
                                       </div>
-                                      <div className="cr-pointer"
+                                      <div
+                                        className="cr-pointer"
                                         onClick={() => {
                                           setActiveTabHead(4);
                                           setActiveMeatTitle({
@@ -428,7 +444,8 @@ const ComboCard = ({
                                           "E"
                                         )}
                                       </div>
-                                      <div className="cr-pointer"
+                                      <div
+                                        className="cr-pointer"
                                         onClick={() => {
                                           setActiveTabHead(4);
                                           setActiveMeatTitle({
@@ -443,7 +460,8 @@ const ComboCard = ({
                                           "A"
                                         )}
                                       </div>
-                                      <div className="cr-pointer"
+                                      <div
+                                        className="cr-pointer"
                                         onClick={() => {
                                           setActiveTabHead(4);
                                           setActiveMeatTitle({

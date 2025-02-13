@@ -110,7 +110,7 @@ const ReviwerWorkList = ({
             <span className={visitStyles.flagCodes}>Declined</span>
           </div>
         </div>
-        <div className="col-xl-9">
+        <div className="col-9">
           <div class="form-group has-search">
             <FontAwesomeIcon
               className="fa fa-search form-control-feedback"
@@ -132,7 +132,7 @@ const ReviwerWorkList = ({
           </div>
         </div>
 
-        <div className="col-xl-3">
+        <div className="col-3">
           <div className={visitStyles.content}>
             <MyWorkQueueFilter
               setComputedStartDate={setProcessedStart}
@@ -219,6 +219,7 @@ const ReviwerWorkList = ({
       <div className={visitStyles.paginationContiner}>
         <div className="patient-filte-page">
           <Paginator
+             className="paginator-workqueue"
             first={paginationFirst}
             rows={15}
             totalRecords={totalElements}

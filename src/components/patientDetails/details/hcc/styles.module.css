@@ -247,6 +247,18 @@
   display: flex;
   margin-right: 5px;
 }
+@media screen and (max-width: 1300px) {
+  .meatFoundContainer {
+    display: block !important;
+  }
+}
+@media screen and (max-width: 1500px) {
+  .meatFoundContainer {
+    display: block !important;
+  }
+ 
+}
+
 
 .badgeMeat {
   font-size: 11px !important;

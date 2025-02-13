@@ -10,7 +10,7 @@ import {
   faAngleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Drawer, Modal, Popover, notification } from "antd";
+import { Drawer, Modal, Popover, Tooltip, notification } from "antd";
 import { Button, Offcanvas, Spinner } from "react-bootstrap";
 import styles from "../styles.module.css";
 import PdfViewer from "../../PdfViewerComponent";
@@ -19,7 +19,10 @@ import HccCards from "../../components/HCC";
 import ModelIndex from "../../components/model/Index";
 import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { onDragEnd } from "../../components/function/ReusableFunctions";
+import {
+  onDragEnd,
+  truncateString,
+} from "../../components/function/ReusableFunctions";
 import ManuallyAdd from "../../components/manuallyAdd";
 import LogoLoader from "../../../../logoLoader";
 import { getStorage } from "../../../../../utils/storages";
@@ -458,46 +461,49 @@ const File = ({
                           }}
                         >
                           <div className={visitStyles.hccStickey_head}>
-                          {isSpinnerLoading ? (
-                            <CardSkeleton count={6} />
-                          ) : (
-                            <HccCards
-                              list={suggestedHccList}
-                              hccVersionDetails={hccVersionDetails}
-                              captureSectionMatching={captureSectionMatching}
-                              encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={allMeatList}
-                              onchangeValid={onchangeValid}
-                              getValidHccDetails={getValidHccDetails}
-                              setFormValues={setFormValues}
-                              setIsEditHccForm={setIsEditHccForm}
-                              setFormEditPlace={setFormEditPlace}
-                              okText={"Move to Deleted"}
-                              cancelText={"Move to HCC"}
-                              editFormPlace={"SUGGESTED_DISEASE"}
-                              setOpens={setOpens}
-                              setCombiTree={setCombiTree}
-                              setActiveTabHead={setActiveTabHead}
-                              setActiveMeatTitle={setActiveMeatTitle}
-                              setActiveComboTree={setActiveComboTree}
-                              setSearch={setSearch}
-                              setFileLoading={setFileLoading}
-                              setIsModalOpenLab={setIsModalOpenLab}
-                              setIsModalOpenRadiology={setIsModalOpenRadiology}
-                              patientDocumentResult={patientDocumentResult}
-                              setFileModalHeader={setFileModalHeader}
-                              setConfirmNotesModalValid={
-                                setConfirmNotesModalValid
-                              }
-                              setIsValidAction={setIsValidAction}
-                              cardTitle="SUGGESTED"
-                              provided={provided}
-                              setSuggestedMeatForm={setSuggestedMeatForm}
-                              setSelectCardTitle={setSelectCardTitle}
-                              year={year}
-                              actions={actions}
-                              selectDosValue={selectDosValue}
-                            />)}
+                            {isSpinnerLoading ? (
+                              <CardSkeleton count={6} />
+                            ) : (
+                              <HccCards
+                                list={suggestedHccList}
+                                hccVersionDetails={hccVersionDetails}
+                                captureSectionMatching={captureSectionMatching}
+                                encounterDateMatching={encounterDateMatching}
+                                meatCriteriaList={allMeatList}
+                                onchangeValid={onchangeValid}
+                                getValidHccDetails={getValidHccDetails}
+                                setFormValues={setFormValues}
+                                setIsEditHccForm={setIsEditHccForm}
+                                setFormEditPlace={setFormEditPlace}
+                                okText={"Move to Deleted"}
+                                cancelText={"Move to HCC"}
+                                editFormPlace={"SUGGESTED_DISEASE"}
+                                setOpens={setOpens}
+                                setCombiTree={setCombiTree}
+                                setActiveTabHead={setActiveTabHead}
+                                setActiveMeatTitle={setActiveMeatTitle}
+                                setActiveComboTree={setActiveComboTree}
+                                setSearch={setSearch}
+                                setFileLoading={setFileLoading}
+                                setIsModalOpenLab={setIsModalOpenLab}
+                                setIsModalOpenRadiology={
+                                  setIsModalOpenRadiology
+                                }
+                                patientDocumentResult={patientDocumentResult}
+                                setFileModalHeader={setFileModalHeader}
+                                setConfirmNotesModalValid={
+                                  setConfirmNotesModalValid
+                                }
+                                setIsValidAction={setIsValidAction}
+                                cardTitle="SUGGESTED"
+                                provided={provided}
+                                setSuggestedMeatForm={setSuggestedMeatForm}
+                                setSelectCardTitle={setSelectCardTitle}
+                                year={year}
+                                actions={actions}
+                                selectDosValue={selectDosValue}
+                              />
+                            )}
                           </div>
                         </div>
                       )}
@@ -518,7 +524,9 @@ const File = ({
                         className={`valid-text d-flex justify-content-sm-between cr-pointer ${visitStyles.potential_title_card}`}
                         onClick={() => handleShowList("potential")}
                       >
-                        <span className={`  ${visitStyles.potential_title_name}`}>
+                        <span
+                          className={`  ${visitStyles.potential_title_name} `}
+                        >
                           <span className="mx-1">
                             <FontAwesomeIcon
                               icon={
@@ -528,7 +536,13 @@ const File = ({
                               }
                             />
                           </span>
-                          POTENTIAL / SUGGESTED DIAGNOSES
+                          <span>POTENTIAL / SUGGESTED DIAGNOSES</span>
+                          {/* <Tooltip title="POTENTIAL / SUGGESTED DIAGNOSIS">
+                            {truncateString(
+                              "POTENTIAL / SUGGESTED DIAGNOSIS",
+                              10
+                            )}
+                          </Tooltip> */}
                         </span>
                         <div className="d-flex justify-content-center">
                           <span
@@ -548,7 +562,7 @@ const File = ({
                                 : showList.length === 2
                                 ? "27vh"
                                 : "18vh",
-                            transition: "height 0.7s ease-in-out", 
+                            transition: "height 0.7s ease-in-out",
                             backgroundColor: "lightblue",
                           }}
                         >
@@ -769,7 +783,7 @@ const File = ({
           </div>
           <div className="col-4">
             <div
-              className="px-4"
+              // className="px-1"
               style={{ height: "90vh", overflowY: "scroll" }}
             >
               <ManuallyAdd

@@ -319,7 +319,7 @@ const DailyTask = ({
                             <div>
                               {bullets?.map((item) => {
                                 return (
-                                  <div className={styles.container}>
+                                  <div className={`${styles.container}`}>
                                     <div
                                       style={{ display: "flex" }}
                                       onClick={() => {
@@ -391,7 +391,7 @@ const DailyTask = ({
                 ) : (
                   <></>
                 )}
-                <div className={styles.infoCards}>
+                <div className={` mt-3 ${styles.infoCards}`}>
                   <Legends bullets={bullets} />
                 </div>
               </Col>

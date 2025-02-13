@@ -55,11 +55,11 @@ const RafScore = ({ rafScoreList }) => {
                         <div
                           className={
                             rafScoreData?.length != i + 1
-                              ? `row ${style.rafchildBorder}`
+                              ? `row  ${style.rafchildBorder}`
                               : `row`
                           }
                         >
-                          <div className="col-3"> {item.dx_name}</div>
+                          <div className="col-3 "> {item.dx_name}</div>
                           <div className={`col-9 ${style.rafDescription}`}>
                             <Popover title={item.dx_desc}>
                               {item.dx_desc}{" "}
@@ -128,7 +128,7 @@ const RafScore = ({ rafScoreList }) => {
                         <div
                           className={
                             rafScoreData?.length != i + 1
-                              ? `row ${style.rafchildBorder}`
+                              ? `row  ${style.rafchildBorder}`
                               : `row`
                           }
                         >

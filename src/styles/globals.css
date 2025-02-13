@@ -13824,6 +13824,8 @@ tbody > tr {
 
 .section-container {
   height: 80vh;
+  /* overflow: scroll!important;
+  overflow-x: hidden!important; */
 }
 
 .hovered-text:hover {
@@ -13896,6 +13898,7 @@ tbody > tr {
 
 .ant-drawer .ant-drawer-body {
   padding: 0px !important;
+  overflow-x: hidden !important;
 }
 
 .chatbox {
@@ -14360,6 +14363,7 @@ overflow: scroll;
 .patient-filte-page {
   width: 20%;
   margin-top: 5px;
+  /* margin-left: 10px; */
 }
 
 .patient-filte-page > .p-paginator > span.p-paginator-pages {
@@ -16393,3 +16397,8 @@ input::-webkit-inner-spin-button {
   font-size: 12px !important;
 }
 }
+@media (min-width: 1024px) and (max-width: 1550px) {
+  .paginator-workqueue{
+    margin-right: -128px !important;
+  }
+  }

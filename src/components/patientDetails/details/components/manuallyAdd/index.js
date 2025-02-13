@@ -1190,7 +1190,7 @@ const ManuallyAdd = ({
                       DOS <span style={{ color: "red" }}>*</span>
                     </label>
                   }
-                  name="dos"
+                  name="dos"class="py-4"
                   rules={[
                     {
                       required: true,

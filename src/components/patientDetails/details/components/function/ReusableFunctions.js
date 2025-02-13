@@ -1109,7 +1109,7 @@ export const getProviderNameManually = ({ data }) => {
     // if (index < 2) {
     var sectionMapArr = (
       <span
-        className={`mt-2 text-start ${visitStyles.provider_name_manually}`}
+        className={`mt-2 text-start text-truncate ${visitStyles.provider_name_manually}`}
         style={{
           backgroundColor: stringToColour(res?.providerName) + 33,
           color: stringToColour(res?.providerName),
@@ -1150,7 +1150,7 @@ export const getSectionNameManually = ({
   return data.map((res, index) => {
     var sectionMapArr = (
       <span
-        className={`mt-2 text-start ${visitStyles.provider_name_manually} cr-pointer`}
+        className={`mt-2 text-start text-truncate ${visitStyles.provider_name_manually} cr-pointer`}
         style={{
           backgroundColor: stringToColour(res?.section) + 33,
           color: stringToColour(res?.section),

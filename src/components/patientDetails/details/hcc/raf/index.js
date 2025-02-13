@@ -268,7 +268,19 @@ const RafScore = ({ patientDetailsResult, patientDetailsLoad }) => {
                                   : `row`
                               }
                             >
-                              <div className="col-4"> {item.dx_code}</div>
+                              <div className="col-4"> 
+                              {item.dx_code && item.dx_code.length > 6 ? (
+                                      <Tooltip
+                                        placement="top"
+                                        title={item.dx_code}
+                                      >
+                                        {truncateString(item.dx_code, 6)}
+                                      </Tooltip>
+                                    ) : (
+                                      <> {item.dx_code}</>
+                                    )}
+                                    {/* {item.dx_code} */}
+                                    </div>
                               <div className={`col-7 ${style.rafDescription}`}>
                                 <Popover title={item.dx_desc}>
                                   {item.dx_desc}{" "}
