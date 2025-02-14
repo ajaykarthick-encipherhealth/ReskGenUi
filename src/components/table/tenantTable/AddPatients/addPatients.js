@@ -143,6 +143,7 @@ function AddPatientListTable({
                           right: "2px",
                           marginTop: "2px",
                           background: "#04306f",
+                          cursor:"default",
                         }}
                       >
                         <SvgFlag

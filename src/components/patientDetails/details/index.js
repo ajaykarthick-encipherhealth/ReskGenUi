@@ -937,6 +937,7 @@ const Details = ({
                                       style={{
                                         background: "#04306f",
                                         margin: "-2px",
+                                        cursor:"default"
                                       }}
                                       size="large"
                                     >
