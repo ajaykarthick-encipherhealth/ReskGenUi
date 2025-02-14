@@ -348,6 +348,7 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </span>
         <InternetError />
+        {loginCheck == true && <ConnectWebSocket />}
         {showFooter && showTerminal && <Footer />}
       </Provider>
     </PrimeReactProvider>
