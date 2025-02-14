@@ -22,6 +22,7 @@ const items = [
   // { value: "ADMIN", label: "Admin", role: "admin" },
   { value: "REVIEWER", label: "Reviewer", role: "REVIEWER" },
   { value: "SUPERVISOR", label: "Supervisor", role: "SUPERVISOR" },
+  { value: "TENANT_ADMIN", label: "Tenant Admin", role: "TENANT_ADMIN" },
 ];
 
 const UserList = ({
@@ -325,7 +326,7 @@ const UserList = ({
                         >
                           {item?.role
                             ?.map((data) => capitalizeFirstLetter(data))
-                            .join(",")}
+                            .join(",").replaceAll("_", " ")}
                         </span>
                       </>
                     ) : (

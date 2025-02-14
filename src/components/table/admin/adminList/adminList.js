@@ -24,6 +24,7 @@ const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
   { value: "REVIEWER", label: "Reviewer", role: "REVIEWER" },
   { value: "SUPERVISOR", label: "Supervisor", role: "SUPERVISOR" },
+  { value: "TENANT_ADMIN", label: "TENANT ADMIN" },
 ];
 
 const AdminList = ({
