@@ -1253,9 +1253,9 @@
   display: flex;
 }
 
-.firstContainer {
+/* .firstContainer {
   width: 13%;
-}
+} */
 
 .secondContainer {
   width: 81%;
@@ -1266,9 +1266,9 @@
   width: 6%;
 }
 
-.visitDataMainClose .firstContainer {
+/* .visitDataMainClose .firstContainer {
   width: 6% !important;
-}
+} */
 
 .visitDataMainClose .secondContainer {
   width: 88% !important;

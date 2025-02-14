@@ -14074,7 +14074,6 @@ tbody > tr {
 .chatbox .contacts li {
   padding: 0.75rem 1rem;
   border-bottom: 0.0625rem solid #eee;
-  cursor: pointer;
 }
 
 .chatbox .contacts li > div {
@@ -16397,6 +16396,16 @@ input::-webkit-inner-spin-button {
   font-size: 12px !important;
 }
 }
+.excelBtn{
+    padding: 0px 24px !important;
+
+}
+@media (min-width: 1024px) and (max-width: 1609px){
+.excelBtn{
+  padding: 0px 9px !important;
+}
+}
+
 @media (min-width: 1024px) and (max-width: 1550px) {
   .paginator-workqueue{
     margin-right: -128px !important;

@@ -422,10 +422,11 @@ const Export = ({
               <div className="col-2">
                 <div className={`text-right ${styles.btncontainer}`}>
                   <Button
+                    className="excelBtn"
                     id="excel-btn"
                     name="excel-btn"
                     style={{
-                      marginRight: "10px",
+                      // marginRight: "10px",
                       backgroundColor:
                         activeButton === "excel" ? "white" : "transparent",
                       border: "none",
@@ -436,6 +437,7 @@ const Export = ({
                     Excel
                   </Button>
                   <Button
+                    className="excelBtn"
                     id="csv-btn"
                     name="csv-btn"
                     style={{
@@ -530,7 +532,7 @@ const Export = ({
                   Select the users you want to send
                 </div>
                 <div className="d-flex">
-                  <div className="col-9">
+                  <div className="col-md-8 col-xl-9 col-lg-8">
                     <div
                       style={{
                         width: "100%",
@@ -570,13 +572,14 @@ const Export = ({
                 </Select> */}
                     </div>
                   </div>
-                  <div className="col-3">
+                  <div className="col-md-4 col-xl-3 col-lg-4">
                     <div className={`text-right ${styles.btncontainers}`}>
                       <Button
                         id="readButton"
                         name="readButton"
+                        className="excelBtn"
                         style={{
-                          marginRight: "10px",
+                          // marginRight: "10px",
                           backgroundColor:
                             activeBtn === "read" ? "white" : "transparent",
                           border: "none",
@@ -590,6 +593,7 @@ const Export = ({
                         Read
                       </Button>
                       <Button
+                        className="excelBtn"
                         id="downloadButton"
                         name="downloadButton"
                         style={{
@@ -659,8 +663,8 @@ const Export = ({
                             </div>
 
                             <div
-                            id={item?.user}
-                            name={item?.user}
+                              id={item?.user}
+                              name={item?.user}
                               style={{ cursor: "pointer" }}
                               onClick={() => deleteUser(item.user)}
                             >
@@ -690,8 +694,8 @@ const Export = ({
             disabled={userList?.length > 0 && isAnyChecked ? false : true}
           >
             <Button
-            id="generateBtn"
-            name="generateBtn"
+              id="generateBtn"
+              name="generateBtn"
               type="primary"
               htmlType="submit"
               style={{

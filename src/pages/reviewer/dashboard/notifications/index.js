@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import moment from "moment";
 import Image from "next/image";
-import { Empty, Modal, Skeleton, Spin } from "antd";
+import moment from "moment";
+import { Modal, Spin } from "antd";
 import styles from "./styles.module.css";
-import spinSTYles from "../../../../styles/auth.module.css";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
 import NoNotification from "../../../../images/dashboard/no-notification.webp";
+import spinSTYles from "../../../../styles/auth.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { NotifiAvatar } from "../../../admin/dashboard/notifications";
+import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 
 const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
   const notificationResult = webSocketNotificationData
@@ -29,14 +30,15 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       notificationResult?.map((info) => (
         <div className={styles.msgDiv} key={info?.id}>
           <div style={{ marginTop: "10px" }}>
-            {" "}
             <FontAwesomeIcon
               icon={faBell}
               className={`${styles.notifyIconColor}`}
             />
           </div>
-          <div className={styles.msgCOntainer}>
-            <span className={styles.description}>{info.content}</span>
+          <div className={`${styles.msgCOntainer} m-2`}>
+            <span className={`${styles.description}`}>
+              {truncateString(info.content, 40)}
+            </span>
             <div className={styles.time}>
               {moment(info?.createdDate).format("MM-DD-YYYY")}&nbsp;{" "}
               {moment(info?.createdDate).format("hh:mm:A")} &nbsp;{" "}
@@ -56,13 +58,18 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
         {!notificationResponse?.loading &&
           (!notificationResponse?.data?.response?.notificationList?.content ||
             notificationResponse?.data?.response?.notificationList?.content
-              ?.length === 0) &&
-              <div className="my-2 d-flex align-items-center justify-content-center">
-               <Image  className ={styles.img} src={NoNotification} alt="no-notification" />
-               </div>
-               }
+              ?.length === 0) && (
+            <div className="my-2 d-flex align-items-center justify-content-center">
+              <Image
+                className={styles.img}
+                src={NoNotification}
+                alt="no-notification"
+              />
+            </div>
+          )}
       </div>
     );
+
   return (
     <>
       <HeadTitle
@@ -74,17 +81,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       <div className={styles.card4}>
         <Card borderRadius="28px" padding="20px">
           {notificationResponse?.loading ? (
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {NotifiAvatar()}
-            </div>
+            NotifiAvatar()
           ) : (
             <div className={styles.container}>{notificationData}</div>
           )}
@@ -101,13 +98,61 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       >
         {notificationResponse?.loading ? (
           <div className={spinSTYles.spinStyle}>{NotifiAvatar()}</div>
-        ) : notificationResult?.length <=0 ?(
+        ) : notificationResult?.length <= 0 ? (
           <div className="d-flex align-items-center justify-content-center">
-         <Image className ={styles.img}src={NoNotification} alt="no-notification" />
-         </div>
-        ) :(
+            <Image
+              className={styles.img}
+              src={NoNotification}
+              alt="no-notification"
+            />
+          </div>
+        ) : (
           <div className={styles.container} style={{ height: "500px" }}>
-            {notificationData}
+            {/* {notificationData} */}
+            {notificationResult?.length > 0 ? (
+              notificationResult?.map((info) => (
+                <div className={styles.msgDiv} key={info?.id}>
+                  <div style={{ marginTop: "10px" }}>
+                    <FontAwesomeIcon
+                      icon={faBell}
+                      className={`${styles.notifyIconColor}`}
+                    />
+                  </div>
+                  <div className={`${styles.msgCOntainer} m-2`}>
+                    <span className="send_details">{info.content}</span>
+                    <div className={styles.time}>
+                      {moment(info?.createdDate).format("MM-DD-YYYY")}&nbsp;{" "}
+                      {moment(info?.createdDate).format("hh:mm:A")} &nbsp;{" "}
+                      {`${
+                        info?.fromUserDetails?.firstName
+                          ? info?.fromUserDetails?.firstName
+                          : ""
+                      } (${
+                        info?.fromUserDetails?.role
+                          ? info?.fromUserDetails?.role
+                          : ""
+                      })`}
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className={styles.no_notificarion_container}>
+                {!notificationResponse?.loading &&
+                  (!notificationResponse?.data?.response?.notificationList
+                    ?.content ||
+                    notificationResponse?.data?.response?.notificationList
+                      ?.content?.length === 0) && (
+                    <div className="my-2 d-flex align-items-center justify-content-center">
+                      <Image
+                        className={styles.img}
+                        src={NoNotification}
+                        alt="no-notification"
+                      />
+                    </div>
+                  )}
+              </div>
+            )}
           </div>
         )}
       </Modal>

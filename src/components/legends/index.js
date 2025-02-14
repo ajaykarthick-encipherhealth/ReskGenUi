@@ -3,13 +3,13 @@ import styles from "./styles.module.css";
 
 const Legends = ({ bullets, display, padding }) => {
   return (
-    <div className={styles.container} style={{ display: display }}>
+    <div className={`${styles.container}`} style={{ display: display }}>
       {bullets?.map((item) => (
         <>
           {item.title && <span className={styles.header}>{item?.title}</span>}
           {item?.option ? (
             item?.option?.map((info) => (
-              <div className={styles.bulletsData} style={{ padding: padding }}>
+              <div className={`${styles.bulletsData}`} style={{ padding: padding }}>
                 <div
                   className={styles.bgColor}
                   style={{
