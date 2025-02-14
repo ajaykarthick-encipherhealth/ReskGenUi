@@ -159,19 +159,19 @@ const Files = ({
     },
   ];
 
-  if (activeBtn == "default") {
-    cardData = [
-      ...cardData,
-      {
-        id: 5,
-        title: "Codes",
-        count: top10DiseasesData?.totalCount,
-        icon: codeCaptured,
-        color: "#FFEAE0",
-        iconBg: "#FFDBCC",
-      },
-    ];
-  }
+  // if (activeBtn == "default") {
+  //   cardData = [
+  //     ...cardData,
+  //     {
+  //       id: 5,
+  //       title: "Codes",
+  //       count: top10DiseasesData?.totalCount,
+  //       icon: codeCaptured,
+  //       color: "#FFEAE0",
+  //       iconBg: "#FFDBCC",
+  //     },
+  //   ];
+  // }
 
   useEffect(() => {
     getComputingStatus(

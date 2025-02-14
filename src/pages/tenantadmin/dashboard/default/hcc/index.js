@@ -91,7 +91,7 @@ const index = ({
           <div className="d-flex justify-content-between">
             <div className={`${styles.header} p-1`}>RAF</div>
             <div className="p-1">
-              <div className={styles.header}>Overall RAF</div>
+              <div className={styles.header}>HCC  RAF</div>
               <div className={styles.price}>
                 {(getAllRafScoreData?.totalHccRaf || 0).toFixed(2)}
               </div>
@@ -133,7 +133,7 @@ const index = ({
           <div className="d-flex justify-content-between">
             <div className={`${styles.header} p-1`}>Revenue</div>
             <div className="p-1">
-              <div className={styles.header}>Overall Revenue</div>
+              <div className={styles.header}>HCC Revenue</div>
               <div className={styles.price}>{`$ ${
                 TotalHccRevenue !== undefined
                   ? formatNumber(TotalHccRevenue.toFixed(2))

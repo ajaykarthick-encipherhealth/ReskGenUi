@@ -50,7 +50,7 @@ const index = ({
   }, [dateRange, selectedOrganization,selectDos]);
   return (
     <div
-      className="d-flex justify-content-between w-100"
+      className="d-flex justify-content-between w-100 gap-2"
       style={{ width: "100%" }}
     >
       {cardData?.map((item, index) => (
@@ -72,7 +72,7 @@ const index = ({
             ) : (
               <div>
                 <div
-                  className="d-flex justify-content-start align-items-center gap-1"
+                  className="d-flex justify-content-start align-items-center gap-2"
                   style={{ height: "50px" }}
                 >
                   <div

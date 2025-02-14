@@ -92,7 +92,7 @@ const index = ({
           <div className="d-flex justify-content-between">
             <div className={`${styles.header} p-2`}>RAF</div>
             <div className="p-2">
-              <div className={styles.header}>Overall RAF</div>
+              <div className={styles.header}>Care Gap RAF</div>
               <div className={styles.price}>
                 {(getAllRafScoreData?.totalSuggestedRaf || 0).toFixed(2)}
               </div>
@@ -133,7 +133,7 @@ const index = ({
           <div className="d-flex justify-content-between">
             <div className={`${styles.header} p-1`}>Revenue</div>
             <div className="p-1">
-              <div className={styles.header}>Overall Revenue</div>
+              <div className={styles.header}>Care Gap Revenue</div>
               <div className={styles.price}>
                 {`$ ${
                   TotalCareGapsRevenue !== undefined

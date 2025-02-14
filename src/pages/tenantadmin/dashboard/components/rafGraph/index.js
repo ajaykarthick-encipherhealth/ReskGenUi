@@ -90,10 +90,10 @@ const RafGraph = ({
     series: [
       {
         name: isCargaps
-          ? "Care Gap Codes"
+          ? "Care Gap  RAF"
           : isHcc
-          ? "HCC Codes"
-          : "Total Codes",
+          ? "HCC  RAF"
+          : "Total RAF",
         type: "line",
         itemStyle: {
           color: rafColor,
@@ -108,7 +108,7 @@ const RafGraph = ({
       },
 
       {
-        name: "HCC Codes",
+        name: "HCC RAF",
         type: "line",
         itemStyle: {
           color: rafColor2,
@@ -122,7 +122,7 @@ const RafGraph = ({
         data: rafColor2 && resultArrayHCC,
       },
       {
-        name: "Care Gaps Codes",
+        name: "Care Gaps RAF",
         type: "line",
         itemStyle: {
           color: rafColor3,

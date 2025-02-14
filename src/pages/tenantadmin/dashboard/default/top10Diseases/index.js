@@ -37,7 +37,7 @@ const index = ({
           }}
         >
           {" "}
-          {top10DiseasesData?.response?.totalCount}
+          {/* {top10DiseasesData?.response?.totalCount} */}
         </span>
       </div>
       {top10DisesesLoader ? (

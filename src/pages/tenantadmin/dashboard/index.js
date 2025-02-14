@@ -376,7 +376,6 @@ const Index = ({
   };
   useEffect(() => {
     if ( activeBtn === "workflow"){
-      getOrganizationStatusData();
       getUserStatusData(
         dateRange.startDate,
         dateRange.endDate,
@@ -413,6 +412,11 @@ const Index = ({
       selectedOrganization,selectDos
     );
   },[selectDos,dateRange,selectedOrganization])
+  useEffect(()=>{
+    if ( activeBtn === "workflow"){
+    getOrganizationStatusData();
+    }
+  },[])
 
   useEffect(() => {
     if (activeBtn === "Invalid") {

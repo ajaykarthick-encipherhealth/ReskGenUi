@@ -69,10 +69,10 @@ const RevenueGraph = ({
     series: [
       {
         name: isHcc
-          ? "Hcc Codes"
+          ? "Hcc  Revenue"
           : isCargaps
-          ? "Care Gap Codes"
-          : "Total Codes",
+          ? "Care Gap  Revenue"
+          : "Total Revenue",
         type: "line",
         step: "start",
         data: isHcc ? resultArrayHCC : isCargaps ? resultArrayCaregaps : totalCodes,
@@ -81,7 +81,7 @@ const RevenueGraph = ({
         },
       },
       {
-        name: "HCC Codes",
+        name: "HCC Revenue",
         type: "line",
         step: "middle",
         emphasis: {
@@ -95,7 +95,7 @@ const RevenueGraph = ({
         },
       },
       {
-        name: "Care Gap Codes",
+        name: "Care Gap Revenue",
         type: "line",
         step: "end",
         data: isMultiple ? resultArrayCaregaps : [""],

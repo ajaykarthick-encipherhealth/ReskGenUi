@@ -14,7 +14,6 @@ const OrgPieChartInfo = ({ data, orgLoader }) => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
   const option = {
     tooltip: {
       trigger: "item",
@@ -93,19 +92,23 @@ const OrgPieChartInfo = ({ data, orgLoader }) => {
         <Skeleton active />
       ) : (
         <>
-          <div style={{ display: "flex", justifyContent: "end" }}>
-            <Button
-            id="click-viewAll"
-            name="click-viewAll"
-              type="link"
-              onClick={() => {
-                showModal();
-                console.log("click");
-              }}
-            >
-              view all
-            </Button>
-          </div>
+          {data?.length > 5 ? (
+            <div style={{ display: "flex", justifyContent: "end" }}>
+              <Button
+                id="click-viewAll"
+                name="click-viewAll"
+                type="link"
+                onClick={() => {
+                  showModal();
+                  console.log("click");
+                }}
+              >
+                view all
+              </Button>
+            </div>
+          ) : (
+            ""
+          )}
           <div className={styles.bulletsDiv}>
             {data?.map((item) => (
               <div key={item.name} className={styles.container}>
