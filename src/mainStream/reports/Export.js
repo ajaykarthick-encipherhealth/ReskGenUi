@@ -356,7 +356,6 @@ const Export = ({
     getOptionsList();
   }, []);
   const isAnyChecked = checkall?.some((item) => item?.checked);
-
   return (
     <Modal
       title="Export "
@@ -711,7 +710,7 @@ const connector = connect(
     selectedReportInfo: state?.admin?.report.selectedReportInfo,
     usersList: state?.admin?.report?.usersLists,
     exportLoader: state?.admin?.report?.exportLoader,
-    updateReportLoader:state?.tenantAdmin?.report?.updateReportLoader,
+    updateReportLoader:state?.tenantAdmin?.tenantAdmin?.updateReportLoader,
   }),
   {
     getActiveTab: allActions.activeTab,
