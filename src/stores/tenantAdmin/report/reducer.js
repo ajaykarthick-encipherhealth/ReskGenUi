@@ -103,6 +103,7 @@ const ReportReducer = combineReducers({
   GetSelectedReport: createReducer(GetSelectedReport),
   sentReport: createReducer(sentReport),
   uploadFile:createReducer(getSelectedReportDetails),
+  updateReportLoader: getReportLoading(updateSentReport),
 });
 
 export default ReportReducer;

@@ -88,6 +88,7 @@ const ReportReducer = combineReducers({
   usersLists: createReducer(getUsersLists),
   selectedReport: getSelectedReport(selectedReport),
   exportData: createReducer(getExportDetails),
+  exportLoader:getReportLoading(getExportDetails),
   reportActiveTab: getActiveTabData(getReportActiveTab),
   receivedReport: createReducer(receivedReport),
   GetSelectedReport: createReducer(GetSelectedReport),

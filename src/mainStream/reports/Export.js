@@ -180,6 +180,8 @@ const Export = ({
   usersList,
   getUsersLists,
   getExportDetails,
+  exportLoader,
+  updateReportLoader,
 }) => {
   const [selectedUser, setSelectedUser] = useState([]);
   const [search, setSearch] = useState("");
@@ -239,13 +241,7 @@ const Export = ({
   const onFinish = async (values) => {
     const patientIds = rowsLength;
     const editUserAndAccess = userList?.reduce((result, { user, role }) => {
-      // if (Array.isArray(user)) {
-      //   user.forEach((info) => {
-      //     result[info.userName] = role;
-      //   });
-      // } else {
       result[user] = role;
-      // }
       return result;
     }, {});
     const filteredId = checkall?.filter((item) => item?.checked);
@@ -263,8 +259,14 @@ const Export = ({
       removedUsers: removedUsers,
     };
 
-    if (!isSent) {
-      const res = await getExportDetails(data);
+    try {
+      let res;
+      if (!isSent) {
+        res = await getExportDetails(data);
+      } else {
+        res = await updateSentReport(updatedData);
+      }
+
       if (res) {
         getResponePopup(res);
         form.resetFields();
@@ -280,24 +282,9 @@ const Export = ({
         setSelectAll(false);
         setIsModalVisible(false);
       }
-    } else {
-      const res = await updateSentReport(updatedData);
-      if (res) {
-        getResponePopup(res);
-        getActiveTab("Sent");
-        form.resetFields();
-        setSelectedUser([]);
-        setSelectedList([]);
-        setUsersList([]);
-        setCheckAll((prev) => {
-          return prev?.map((data) => {
-            return { ...data, checked: false };
-          });
-        });
-        setSelectedRows([]);
-        setSelectAll(false);
-        setIsModalVisible(false);
-      }
+    } catch (error) {
+      console.error("Error generating report:", error);
+    } finally {
     }
   };
 
@@ -704,7 +691,12 @@ const Export = ({
                 width: "100px",
                 height: "40px",
               }}
-              disabled={userList?.length > 0 && isAnyChecked ? false : true}
+              disabled={
+                userList?.length > 0 && isAnyChecked
+                  ? false
+                  : true || exportLoader || updateReportLoader
+              }
+              loading={exportLoader || updateReportLoader}
             >
               Generate
             </Button>
@@ -718,6 +710,8 @@ const connector = connect(
   (state) => ({
     selectedReportInfo: state?.admin?.report.selectedReportInfo,
     usersList: state?.admin?.report?.usersLists,
+    exportLoader: state?.admin?.report?.exportLoader,
+    updateReportLoader:state?.tenantAdmin?.report?.updateReportLoader,
   }),
   {
     getActiveTab: allActions.activeTab,
