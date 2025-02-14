@@ -35,7 +35,7 @@ const CardComponent = ({
         >
           <div className={styles.contentGroup}>
             <div className="col-12">
-              <div className="cr-pointer"
+              <div 
                 style={{
                   display: "flex",
                   justifyContent: "space-between",

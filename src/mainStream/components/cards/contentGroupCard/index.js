@@ -87,7 +87,7 @@ const ContentGroupCard = ({
     <div className={styles.card}>
       <div
         className={`report-effect ${styles.contentGroup} my-2`}
-        style={{ cursor: "pointer", display: "flex" }}
+        style={{  display: "flex" }}
       >
         <div style={{ width: "5%" }}>
           {loading ? (

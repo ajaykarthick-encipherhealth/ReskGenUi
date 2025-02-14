@@ -166,22 +166,27 @@ const InitialCard = ({
     }
   };
 
-  const handleRowCheckboxChange = (row) => {
-    const isSelected = selectedRows?.some(
-      (selectedRow) => selectedRow === row?.patientId
-    );
-    let updatedRows;
-    if (isSelected) {
-      updatedRows = selectedRows?.filter(
-        (selectedRow) => selectedRow !== row?.patientId
-      );
-    } else {
-      updatedRows = [...selectedRows, row?.patientId];
-    }
+ const handleRowCheckboxChange = (row) => {
+   const isSelected = selectedRows.some(
+     (selectedRow) => selectedRow === row.patientId
+   );
 
-    setSelectedRows(updatedRows);
-    getSelectedRow(updatedRows);
-  };
+   let updatedRows;
+   if (isSelected) {
+     updatedRows = selectedRows.filter(
+       (selectedRow) => selectedRow !== row.patientId
+     );
+   } else {
+     updatedRows = [...selectedRows, row.patientId];
+   }
+
+   setSelectedRows(updatedRows);
+   getSelectedRow(updatedRows);
+   const allRows =
+     reportListAll?.response?.data?.map((item) => item.patientId) || [];
+   setSelectAll(updatedRows.length === allRows.length);
+ };
+
 
   const card1Data = [
     {
@@ -346,6 +351,7 @@ const InitialCard = ({
     getSelectedRow(selectedRows);
   }, [selectedRows]);
 
+
   return (
     <>
       <div>
@@ -362,9 +368,9 @@ const InitialCard = ({
                   <> */}
               <div className="d-flex me-3">
                 <div>
-                  <input
-                  id="check-all"
-                  name="check-all"
+                  {/* <input
+                    id="check-all"
+                    name="check-all"
                     type="checkbox"
                     onChange={() => {
                       setSelectAll((prevState) => {
@@ -381,7 +387,37 @@ const InitialCard = ({
                       styles.checkAlign +
                       (selectAll ? " " + TableStyle.customChecked : "")
                     }
+                    // checked={selectAll && selectedRows?.length > 0}
+                    checked={
+                      selectedRows.length > 0 &&
+                      selectedRows.length ===
+                        reportListAll?.response?.data?.length 
+                    }
+                  /> */}
+
+                  <input
+                    id="check-all"
+                    name="check-all"
+                    type="checkbox"
+                    onChange={() => {
+                      const updatedSelectAll = !selectAll;
+                      setSelectAll(updatedSelectAll);
+                      handleHeaderCheckboxChange(
+                        activeTab,
+                        updatedSelectAll,
+                        setSelectAll
+                      );
+                    }}
                     checked={selectAll && selectedRows?.length > 0}
+                    className={
+                      styles.checkAlign +
+                      (selectAll ? " " + TableStyle.customChecked : "")
+                    }
+                    // checked={
+                    //   selectedRows.length > 0 &&
+                    //   selectedRows.length ===
+                    //     reportListAll?.response?.data?.length
+                    // }
                   />
                 </div>
                 <span className={`pl-0 text-start ${styles.pName}`}>All</span>
@@ -389,8 +425,8 @@ const InitialCard = ({
               <div className="col-4 d-flex">
                 <div>
                   <input
-                  id="check-allFlags"
-                  name="check-allFlags"
+                    id="check-allFlags"
+                    name="check-allFlags"
                     type="checkbox"
                     onChange={handleHeaderCheckbox}
                     className={

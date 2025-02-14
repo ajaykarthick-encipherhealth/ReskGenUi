@@ -34,7 +34,7 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
           <div className={` ${styles.contentGroup}`}>
             <div className="col-12 responsive_report">
               <div
-                className="cursor-pointer report-effect"
+                className=" report-effect"
                 style={{
                   display: "flex",
                   justifyContent: "space-between",

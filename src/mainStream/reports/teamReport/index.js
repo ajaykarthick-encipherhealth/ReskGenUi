@@ -98,13 +98,13 @@ const TeamReport = ({
         selectAllFlags,
         selectAll,
       });
-      if (res.status === "SUCCESS") {
+      if (res?.status === "SUCCESS") {
         setSelectAll(true);
         setSelectedRows(res?.response?.patientIds);
         getSelectedRow(res?.response?.patientIds);
       }
     } else if (activeTab === "Team" && selectAll) {
-      // teamReport({
+      // teamReport({ 
       //   pagenum: 0,
       //   size: ReportPatientDetails?.response?.response?.totalElements,
       // });
@@ -160,6 +160,10 @@ const TeamReport = ({
     }
 
     setSelectedRows(updatedRows);
+    getSelectedRow(updatedRows);
+    const allRows =
+      reportListAll?.response?.data?.map((item) => item.patientId) || [];
+    setSelectAll(updatedRows.length === allRows.length);
   };
 
   const card1Data = [
