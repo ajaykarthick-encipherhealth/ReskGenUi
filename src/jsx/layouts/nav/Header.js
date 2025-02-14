@@ -541,12 +541,24 @@ const Header = ({
     }
   };
 
-  useEffect(() => {
-    const userId = getStorage("userId");
-    if (deleteImage?.status === "SUCCESS") {
-      getCurrentUserInfo({ userId });
+  const handleDeleteImg = async() => {
+    try {
+      const userId = getStorage("userId");
+      const res = await deleteProfile();
+      if (res?.status === "SUCCESS") {
+        getResponePopup({
+          status: "SUCCESS",
+          message: "Profile Deleted Successfully!",
+        });
+        getCurrentUserInfo({ userId });
+      } else {
+        getResponePopup(res);
+      }
+      
+    } catch (error) {
+      console.error("error deleting profile", error);
     }
-  }, [deleteImage]);
+  }
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -902,7 +914,8 @@ const Header = ({
               <Button
                 key="delete"
                 onClick={() => {
-                  deleteProfile();
+                  handleDeleteImg()
+                 
                   setOpenUploader(false);
                   setSelectedFile(null);
                   if (fileInputRef.current) {
