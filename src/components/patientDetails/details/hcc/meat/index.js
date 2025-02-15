@@ -36,6 +36,7 @@ import { getProviderNameTag } from "../../components/function/ProviderHyperlinks
 import { getStorage } from "../../../../../utils/storages";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import LogoLoader from "../../../../logoLoader";
+import CardSkeleton from "../../../../skeleton/card";
 const { Option } = Select;
 
 const Meat = ({
@@ -339,6 +340,9 @@ const Meat = ({
             {(provided) => {
               return (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {patientDetailsLoad ? 
+                  <CardSkeleton count={6}/>
+                  :
                   <MeatCard
                     list={
                       userId == "reviewer@3gencogentai.onmicrosoft.com"
@@ -374,7 +378,7 @@ const Meat = ({
                     setSuggestedMeatForm={setSuggestedMeatForm}
                     setSelectCardTitle={setSelectCardTitle}
                     provided={provided}
-                  />
+                  />}
                 </div>
               );
             }}
