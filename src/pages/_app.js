@@ -282,7 +282,7 @@ function MyApp({ Component, pageProps }) {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [showTerminal]);
-  const currentRole = getStorage("userRole");
+  const currentRole = getStorage("userName");
   const hideFooterPaths = [
     "/admin/patients/details",
     "/reviewer/patients/details",
