@@ -61,7 +61,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.emptyCard{
+.emptyCard {
   background: #ffff !important;
   display: flex;
   align-items: center;
@@ -542,10 +542,10 @@
   height: 908px;
 }
 
-.reportDiv{
+.reportDiv {
   display: flex;
   flex-direction: column;
-  height:85px;
+  height: 85px;
   align-items: center;
   justify-content: center;
   margin: auto;
@@ -553,10 +553,10 @@
   padding: 10px 0 0px 0;
 }
 
-.reportDiv2{
+.reportDiv2 {
   display: flex;
   flex-direction: row;
-  height:275px;
+  height: 275px;
   align-items: center;
   justify-content: center;
   margin: auto;
@@ -570,4 +570,13 @@
   font-weight: 400;
   margin-right: 10px;
   border-radius: 8px;
+}
+@media (min-width: 1024px) and (max-width: 1609px) {
+  .buttonContainer {
+    width:27% !important;
+    height: 42px !important;
+  }
+  .group button{
+    padding : 7px !important
+  }
 }

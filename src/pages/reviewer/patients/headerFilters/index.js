@@ -72,7 +72,7 @@ const HeaderFiltersPatients = ({
     switch (filter) {
       case "Due Date":
         return (
-          <div className="" style={{ width: "250px", marginTop: "30px" }}>
+          <div className=" default-filter-size">
             <label className={styles.label}>Due Date</label>
             <div className="dateRangeSize dateRangesHeight">
               <RangePicker
@@ -90,7 +90,7 @@ const HeaderFiltersPatients = ({
 
       case "Completed Date":
         return (
-          <div className="" style={{ width: "250px", marginTop: "30px" }}>
+          <div className=" default-filter-size" >
             <label className={styles.label}>Completed Date</label>
             <div className="dateRangeSize dateRangesHeight">
               <RangePicker
@@ -109,8 +109,8 @@ const HeaderFiltersPatients = ({
       case "Select Priority":
         return (
           <div
-            className={defaultSize}
-            style={{ width: "250px", marginTop: "30px" }}
+            className=" default-filter-size"
+          
           >
             <label className={styles.label}>Select Priority</label>
             <div class="form-group has-search custom-react-selects reviewerFilterSelect customClear">
@@ -128,8 +128,8 @@ const HeaderFiltersPatients = ({
       case "Select Status":
         return (
           <div
-            className={defaultSize}
-            style={{ width: "250px", marginTop: "30px" }}
+            className=" default-filter-size"
+       
           >
             <label className={styles.label}>Select Status</label>
             <div class="form-group has-search custom-react-selects reviewerFilterSelect customClear">
@@ -152,7 +152,7 @@ const HeaderFiltersPatients = ({
         );
       case "Batch":
         return (
-          <div className={defaultSize}     style={{ width: "250px", marginTop: "30px" }}>
+          <div className=" default-filter-size"   >
             <label className={styles.label}>Select Batch</label>
             <div class="form-group has-search custom-react-selects reviewerFilterSelect customClear">
               <Select
@@ -187,7 +187,7 @@ const HeaderFiltersPatients = ({
       <div className="row " style={{ width: "98%" }}>
         {isAllocatedToSelector && (
           <div
-            style={{ width: "250px", marginTop: "30px" }}
+            className=" default-filter-size"
             onClick={() => setClear(false)}
           >
             <label className={styles.label}>Patient Name / ID</label>

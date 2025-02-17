@@ -579,7 +579,7 @@ const Reports = ({
                       <label className="labelStyle d-flex m-auto p-3">
                         Search
                       </label>
-                      <div style={{ height: "43px" }}>
+                      <div className="custom-reportInput" style={{ height: "43px" }}>
                         <Input
                           name="report-search"
                           id="report-search"
@@ -648,7 +648,7 @@ const Reports = ({
                       <label className="labelStyle labelStyleDate d-flex m-0 p-2">
                         Date
                       </label>
-                      <div>
+                      <div className="newReportPicker">
                         <RangePicker
                         id ="report-dateRange"
                         name="report-dateRange"

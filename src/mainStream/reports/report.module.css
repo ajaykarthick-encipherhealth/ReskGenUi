@@ -603,7 +603,15 @@
   border: 1px solid;
 }
 .iconReplaced{
-  
   margin-right: 10px;
-
+}
+@media (min-width: 1024px) and (max-width: 1400px) {
+  .buttonContainer {
+    width:27% !important;
+    height: 42px !important;
+  }
+  .group button{
+    padding : 5px !important;
+    font-size: 13px !important;
+  }
 }

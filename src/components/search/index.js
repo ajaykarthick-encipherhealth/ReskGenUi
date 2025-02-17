@@ -18,7 +18,7 @@ const Search = ({
   return (
     <div>
       <label
-        style={{ marginLeft: "8px" }}
+        style={{ marginLeft: "8px" ,marginBottom:"3px"}}
         className="text-truncate responsiveLabel"
       >
         {searchlabel}

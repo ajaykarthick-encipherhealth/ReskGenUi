@@ -543,7 +543,7 @@ const Patient = ({
                       {loader ? (
                         renderSkeleton()
                       ) : (
-                        <>
+                        <div className="mt-3">
                           <PatientTable
                             bullets={bullets}
                             patinetListAll={patinetListAll}
@@ -590,7 +590,7 @@ const Patient = ({
                               </div>
                             </div>
                           </div>
-                        </>
+                        </div>
                       )}
                     </div>
                   </div>

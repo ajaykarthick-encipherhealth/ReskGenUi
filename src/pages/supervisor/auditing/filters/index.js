@@ -95,11 +95,11 @@ const Filters = ({
     switch (filter) {
       case "Select Audited Status":
         return (
-          <div style={{ width: "250px" }}>
+          <div className = "default-filter-size">
             <label className={`${styles.label} responsiveLabel`}>
               {selectlabel}
             </label>
-            <div class="form-group has-search custom-react-select">
+            <div class="form-group has-search custom-react-select reviewerFilterSelect " >
               <Select
                 onChange={(selectOptions) => {
                   setSelectedOption(selectOptions ? selectOptions : "");
@@ -122,7 +122,7 @@ const Filters = ({
       case "Audited Date":
       case "Audited Due Date":
         return (
-          <div style={{ width: "250px" }}>
+          <div className = "default-filter-size">
             <DateRangePicker
               selectedDates={selectedDates}
               pickerlabel={filter}
@@ -143,11 +143,11 @@ const Filters = ({
 
       case "Reviewer Status":
         return (
-          <div style={{ width: "250px" }}>
+          <div className = "default-filter-size">
             <label className={`${styles.label} responsiveLabel`}>
               {createdTolabel}
             </label>
-            <div class="form-group has-search custom-react-select">
+            <div class="form-group has-search custom-react-select reviewerFilterSelect ">
               <Select
                 onChange={(selectedOption) => {
                   setSelCreatedBy(selectedOption ? selectedOption : "");
@@ -168,11 +168,11 @@ const Filters = ({
         );
       case "Batch":
         return (
-          <div style={{ width: "250px" }}>
+          <div className = "default-filter-size">
             <label className={`${styles.label} responsiveLabel`}>
               Select Batch
             </label>
-            <div class="form-group has-search custom-react-select">
+            <div class="form-group has-search custom-react-select reviewerFilterSelect ">
               <Select
                 filterOption={(input, option) =>
                   (option?.label ?? "")
@@ -206,7 +206,7 @@ const Filters = ({
 
     <div className="d-flex justify-content-start " style={{marginLeft:"22px"}}>
       <div className="row " style={{ width: "98%" }}>
-      <div style={{ width: "250px"}}>
+      <div className = "default-filter-size">
           <Search
             searchlabel={searchlabel}
             search={search}
@@ -220,9 +220,9 @@ const Filters = ({
           <React.Fragment key={filter}>{renderFilter(filter)}</React.Fragment>
         ))}
       </div>
-      {/* <div
-        className={`d-flex justify-content-center  align-items-center gap-2  ${styles.subDiv}`}
-      > */}
+      <div
+        className="mt-4"
+      >
         <MoreFilter
           selectAll={selectAll}
           setSelectAll={setSelectAll}
@@ -234,7 +234,7 @@ const Filters = ({
           getRoutedData={getRoutedData}
         />
       </div>
-    // </div>
+     </div>
   );
 };
 

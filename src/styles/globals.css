@@ -11,32 +11,33 @@
 .hover-effect-remove {
   transition: background-color 0.8s ease-in-out, transform 0.8s ease-in-out !important;
 }
-.ant-empty{
+.ant-empty {
   cursor: default !important;
 }
 .ant-select-item {
   transition: all 0.3s ease-in-out;
   transform: none !important;
 }
-:where(.css-dev-only-do-not-override-cdzvx5).ant-badge .ant-scroll-number{
-    cursor: default !important;
+:where(.css-dev-only-do-not-override-cdzvx5).ant-badge .ant-scroll-number {
+  cursor: default !important;
 }
-.ant-steps-item-description{
+.ant-steps-item-description {
   transform: none !important;
 }
-.ant-picker-header-super-prev-btn:hover{
-    cursor: default !important;
+.ant-picker-header-super-prev-btn:hover {
+  cursor: default !important;
 }
-.ant-picker-header-prev-btn{
-      cursor: default !important;
+.ant-picker-header-prev-btn {
+  cursor: default !important;
 }
-.ant-picker-dropdown .ant-picker-header button{
-  cursor: default !important;}
-.ant-picker-header-super-next-btn{
-        cursor: default !important;
+.ant-picker-dropdown .ant-picker-header button {
+  cursor: default !important;
 }
-.ant-picker-header-next-btn{
-      cursor: default !important;
+.ant-picker-header-super-next-btn {
+  cursor: default !important;
+}
+.ant-picker-header-next-btn {
+  cursor: default !important;
 }
 .hover-effect {
   transform: scale(1.01);
@@ -72,27 +73,33 @@
 .ant-steps-item-container .hover-effect {
   transform: none !important;
 }
-.ant-steps-item-description{
+.ant-steps-item-description {
   transform: none !important;
-    cursor: default !important;
-
+  cursor: default !important;
 }
-:where(.css-dev-only-do-not-override-cdzvx5).ant-progress .ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path:hover{
-   transform: none !important;
-    cursor: default !important;
+:where(.css-dev-only-do-not-override-cdzvx5).ant-progress
+  .ant-progress-inner:not(.ant-progress-circle-gradient)
+  .ant-progress-circle-path:hover {
+  transform: none !important;
+  cursor: default !important;
 }
 :where(.css-dev-only-do-not-override-cdzvx5).ant-steps {
-    transform: none !important;
-    cursor: default !important;
-}
-:where(.css-dev-only-do-not-override-cdzvx5).ant-steps.ant-steps-with-progress.ant-steps-label-vertical .ant-steps-item .ant-steps-item-tail :hover{
   transform: none !important;
-    cursor: default !important;
+  cursor: default !important;
 }
-  :where(.css-cdzvx5).ant-progress .ant-progress-circle-trail :hover{
-     transform: none !important;
-    cursor: default !important; 
-  } 
+:where(
+    .css-dev-only-do-not-override-cdzvx5
+  ).ant-steps.ant-steps-with-progress.ant-steps-label-vertical
+  .ant-steps-item
+  .ant-steps-item-tail
+  :hover {
+  transform: none !important;
+  cursor: default !important;
+}
+:where(.css-cdzvx5).ant-progress .ant-progress-circle-trail :hover {
+  transform: none !important;
+  cursor: default !important;
+}
 /* .ant-steps-item-tail {
   transform: none !important;
   cursor: default !important;
@@ -8912,14 +8919,14 @@ button:focus {
 @media only screen and (max-width: 1024px) {
   .login-account .account-info-area {
     /* min-height: 570px; */
-    /* overflow: hidden !important;
+/* overflow: hidden !important;
   }
 }
 /* 
 @media only screen and (max-width: 61.9375rem) {
   .login-account .account-info-area {
     /* min-height: 500px; */
-  /* }
+/* }
 } */
 
 /* @media only screen and (max-width: 768px) {
@@ -8928,7 +8935,7 @@ button:focus {
     height: 450px;
     margin-bottom: 50px;
   }
-} */ 
+} */
 
 /* @media only screen and (max-width: 600px) {
   .login-account .account-info-area {
@@ -8959,7 +8966,7 @@ button:focus {
   .login-account .account-info-area .login-bg {
     transform: scale(1) translateX(0) translateY(-60%);
   }
-} */ 
+} */
 
 .login-account .account-info-area .text {
   max-width: 420px;
@@ -9022,7 +9029,7 @@ button:focus {
 /* @media only screen and (max-width: 1024px) {
   .login-account .account-info-area .login-content {
     /* padding: 120px 5px 120px 5px; */
-  /* }
+/* }
 } */
 
 /* @media only screen and (max-width: 61.9375rem) {
@@ -9035,7 +9042,7 @@ button:focus {
   .login-account .account-info-area .login-content .sub-title {
     font-size: 25px;
   }
-} */ 
+} */
 
 /* @media only screen and (max-width: 768px) {
   .login-account .account-info-area .login-content {
@@ -9118,22 +9125,22 @@ button:focus {
 /* @media only screen and (max-width: 1024px) {
   .login-account .login-form {
     /* padding: 0; */
-  /* }
+/* }
 }
 @media screen and (max-width: 600px) {
   .login-account .login-form {
     max-width: 1000px !important;
   }
-} */ 
+} */
 /* @media screen and (min-width: 400px) and (max-width: 1000px) {
   .login-account .login-form {
     padding: 0 35px;
     max-width: 300px;
     /* background-color: #0000ff; */
-  /* }
+/* }
 } */
 /* @media screen and (min-width: 1700px) and (max-width: 1800px) { */
-  /* .login-account .login-form {
+/* .login-account .login-form {
     padding: 30px 40px;   
     max-width: 443px;
   }
@@ -9181,7 +9188,6 @@ button:focus {
   font-weight: 600;
   padding: 10px;
 }
-
 
 /* @media only screen and (max-width: 1024px) {
   .login-account .login-form .login-head .title {
@@ -9295,7 +9301,6 @@ button:focus {
   transform: rotate(15deg);
   opacity: 0;
 }
-
 
 .login-account .login-form .secure-input .show-pass.active:after {
   opacity: 1;
@@ -14268,7 +14273,7 @@ tbody > tr {
   .ant-steps.ant-steps-label-vertical
   .ant-steps-item-tail {
   background: #04306f !important;
-    cursor: default;
+  cursor: default;
 }
 
 .fileprocessingstepper .ant-steps .ant-steps-item-tail {
@@ -14277,7 +14282,7 @@ tbody > tr {
   width: 100%;
   left: 16px;
   padding: 0px !important;
-    cursor: default;
+  cursor: default;
   /* background: #04306f !important; */
 }
 .fileprocessingstepper
@@ -14290,7 +14295,7 @@ tbody > tr {
 }
 .fileprocessingstepper .ant-steps .ant-steps-item-icon .ant-steps-icon {
   color: #fff !important;
-    cursor: default;
+  cursor: default;
 }
 /* 
 /* .ant-modal-content {
@@ -16210,7 +16215,7 @@ input::-webkit-inner-spin-button {
     font-weight: 400;
   }
 }
-@media screen and (min-width : 1024px) and  (max-width: 1300px) {
+@media screen and (min-width: 1024px) and (max-width: 1300px) {
   .responsiveLabel {
     font-size: 13px !important;
     font-weight: 400;
@@ -16259,11 +16264,11 @@ input::-webkit-inner-spin-button {
   box-shadow: 0 6px 6px 0 #523f690d !important;
   background-color: #f9fafc;
 }
-.settingsSidebar{
-  height:75% !important;
+.settingsSidebar {
+  height: 75% !important;
   overflow: scroll;
 }
-.settingsSidebar > aside{
+.settingsSidebar > aside {
   height: 100vh !important;
   background-color: #fff;
 }
@@ -16388,30 +16393,111 @@ input::-webkit-inner-spin-button {
   .ant-tree-switcher:not(.ant-tree-switcher-noop):hover:before {
   background-color: transparent !important;
 }
-.tenant_count{
+.tenant_count {
   font-size: 16px !important;
 }
 @media (min-width: 1024px) and (max-width: 1309px) {
-.tenant_count{
-  font-size: 12px !important;
+  .tenant_count {
+    font-size: 12px !important;
+  }
 }
+.excelBtn {
+  padding: 0px 24px !important;
 }
-.excelBtn{
-    padding: 0px 24px !important;
-
-}
-@media (min-width: 1024px) and (max-width: 1609px){
-.excelBtn{
-  padding: 0px 9px !important;
-}
+@media (min-width: 1024px) and (max-width: 1609px) {
+  .excelBtn {
+    padding: 0px 9px !important;
+  }
 }
 
 @media (min-width: 1024px) and (max-width: 1550px) {
-  .paginator-workqueue{
+  .paginator-workqueue {
     margin-right: -128px !important;
   }
-  }
+}
+.default-filter-size {
+  width: 250px;
+  margin-top: 30px;
+}
 
+@media (min-width: 1024px) and (max-width: 1350px) {
+  .custom-react-selects .ant-select .ant-select-selector,
+  .custom-react-selects .ant-select .ant-select-selector:hover,
+  .custom-react-selects .ant-select .ant-select-selector:focus {
+    height: 35px !important;
+    border: none !important;
+    width: 100% !important;
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+    border-radius: 10px;
+  }
+  .custom-react-selects .ant-select .ant-select-arrow {
+    top: 20px !important;
+  }
+  .dateRangesHeight .ant-picker {
+    height: 35px !important;
+  }
+  .new-search-control,
+  .new-search--control:hover {
+    height: 35px !important;
+  }
+  .ant-input-affix-wrapper > input.ant-input {
+    margin-top: -8px;
+  }
+  .custom-reportInput  .ant-input-affix-wrapper > input.ant-input {
+    margin-top: -4px;
+  }
+  .ant-picker .ant-picker-suffix {
+    margin-bottom: 3px !important;
+  }
+  .custom-react-select .ant-select .ant-select-selector,
+  .custom-react-select .ant-select .ant-select-selector:hover,
+  .custom-react-select .ant-select .ant-select-selector:focus {
+    height: 35px !important;
+    border: none !important;
+    width: 100% !important;
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+    border-radius: 10px;
+  }
+  .custom-react-select .ant-select-arrow {
+    margin-top: -3px !important;
+  }
+  .custom-react-select {
+    border-radius: 8px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    height: 35px !important;
+    flex-shrink: 0;
+    border: none;
+    z-index: 10;
+    width: 100% !important;
+  }
+  .ant-picker {
+    height: 35px !important;
+  }
+  .new-search,
+.new-search:hover {
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  width: 100%;
+  flex-shrink: 0;
+  font-size: 15px;
+  height: 35px !important;
+  border: none !important;
+}
+.custom-react-select-audit .ant-select .ant-select-selector,
+.custom-react-select-audit .ant-select .ant-select-selector:hover,
+.custom-react-select-audit .ant-select .ant-select-selector:focus {
+  height: 35px !important;
+  border: none !important;
+  width: 100% !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 10px;
+}
+}
+.newReportPicker .ant-picker {
+  height: 42px !important;
+}
   .default-filter-size{
     width: 250px;
     margin-top: 30px
