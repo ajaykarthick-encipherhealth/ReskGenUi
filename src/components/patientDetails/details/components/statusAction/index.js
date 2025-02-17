@@ -592,9 +592,11 @@ const StatusAction = ({
       if (response?.status == "SUCCESS") {
         notification.success({
           message: response?.message,
-          placement: "top",
           duration: 1,
         });
+      }
+      else{
+        getResponePopup(response)
       }
       setConfirmNotesModal(false);
       setConfirmCompleteModal(false);
@@ -604,7 +606,12 @@ const StatusAction = ({
         notes: "",
       });
     } catch (e) {
-      getResponePopup(e?.response);
+      if (e?.status !== "SUCCESS") {
+        notification.warning({
+          message: e?.message,
+          duration: 1,
+        });
+      }
     }
   };
 
