@@ -84,7 +84,7 @@ function AddPatientListTable({
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
       <tr>
-        <td colSpan="10">
+        <td colSpan="11">
           <Empty />
         </td>
       </tr>

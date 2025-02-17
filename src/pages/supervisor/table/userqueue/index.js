@@ -459,7 +459,7 @@ const UserQueueTable = ({
             </th>
             <th>PRIORITY</th>
             <th style={{ textAlign: "center" }}>
-              <div className="d-flex align-items-center justify-content-center gap-2">
+              <div className="d-flex align-items-center justify-content-center gap-2 text-truncate" >
                 REVIEWED STATUS
                 <span style={{ cursor: "pointer" }}>
                   <Popover
@@ -492,7 +492,7 @@ const UserQueueTable = ({
               </div>
             </th>
             <th style={{ textAlign: "center" }}>
-              <div className="d-flex align-items-center justify-content-center gap-2">
+              <div className="d-flex align-items-center justify-content-center gap-2 text-truncate">
                 AUDITED STATUS
                 <span style={{ cursor: "pointer" }}>
                   <Popover
