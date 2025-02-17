@@ -143,7 +143,7 @@ function AddPatientListTable({
                           right: "2px",
                           marginTop: "2px",
                           background: "#04306f",
-                          cursor:"default",
+                          cursor: "default",
                         }}
                       >
                         <SvgFlag
@@ -233,7 +233,7 @@ function AddPatientListTable({
               {data.totalPages ? data.totalPages : "---"}
             </td>
             <td
-              className={TableStyle.childBorder}
+              className={`text-truncate ${TableStyle.childBorder}`}
               style={{ textAlign: "left" }}
               onClick={handleTableRowClick}
               id={data?.patientId}
@@ -261,7 +261,7 @@ function AddPatientListTable({
             </td>
             <td
               style={{ textAlign: "center" }}
-              className={TableStyle.childBorder}
+              className={`text-truncate ${TableStyle.childBorder}`}
               onClick={handleTableRowClick}
               id={data?.patientId}
               name={data?.patientId}
@@ -272,7 +272,7 @@ function AddPatientListTable({
             </td>
             <td
               style={{ textAlign: "center" }}
-              className={TableStyle.childBorder}
+              className={`text-truncate ${TableStyle.childBorder}`}
               onClick={handleTableRowClick}
               id={data?.patientId}
               name={data?.patientId}

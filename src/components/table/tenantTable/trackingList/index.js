@@ -148,7 +148,10 @@ function TrackingTable({
           {data.patientAllocatedFirstName ||
           data.patientAllocatedLastName ||
           data.patientAllocatedProfileImage ? (
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              className="text-truncate"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               {" "}
               <span style={{ marginRight: "10px" }}>
                 {" "}
@@ -180,7 +183,7 @@ function TrackingTable({
             : "---"}
         </td>
         <td
-          className={TableStyle.childBorder}
+          className={`${TableStyle.childBorder}text-truncate`}
           style={{ textAlign: "left" }}
           onClick={handleTableRowClick}
           id={data.patientId}
@@ -221,7 +224,7 @@ function TrackingTable({
         </td>
 
         <td
-          className={TableStyle.childBorder}
+          className={`text-truncate ${TableStyle.childBorder}`}
           style={{ textAlign: "left" }}
           onClick={handleTableRowClick}
           id={data.patientId}
@@ -299,8 +302,9 @@ function TrackingTable({
               >
                 ALLOCATED BY
               </th>
-              <th id="allocated-Date"
-              name="allocated-Date"
+              <th
+                id="allocated-Date"
+                name="allocated-Date"
                 style={{
                   cursor: "pointer",
                   paddingLeft: "15px",
@@ -321,8 +325,8 @@ function TrackingTable({
               <th>REVIEWER</th>
 
               <th
-              id="reviewer-date"
-              name="reviewer-date"
+                id="reviewer-date"
+                name="reviewer-date"
                 onClick={() => {
                   sortFunction(
                     sortDueOrder,
@@ -352,8 +356,9 @@ function TrackingTable({
               <th style={{ textAlign: "center" }} className="text-truncate">
                 AUDIT ALLOCATED BY
               </th>
-              <th id="audit-allocated"
-              name="audit-allocated"
+              <th
+                id="audit-allocated"
+                name="audit-allocated"
                 onClick={() => {
                   sortFunction(
                     sortAuditOrder,
@@ -383,7 +388,9 @@ function TrackingTable({
               <th style={{ textAlign: "center" }} className="text-truncate">
                 SUPERVISOR
               </th>
-              <th id="audited-date" name="audited-date"
+              <th
+                id="audited-date"
+                name="audited-date"
                 onClick={() => {
                   sortFunction(
                     sortAuditDueOrder,
@@ -412,71 +419,72 @@ function TrackingTable({
               </th>
 
               <th style={{ textAlign: "center" }}>
-              <div className="d-flex align-items-center justify-content-center gap-2 text-truncate">
-                PROCESSED STATUS
-                <span style={{ cursor: "pointer" }}>
-                  <Popover
-                    content={
-                      <>
-                        <Legends display="block" padding="0 0px 10px 0" />
-                        {bulletsTitle && (
-                          <label
-                            className={styles.label}
-                            style={{ fontWeight: "700" }}
-                          >
-                            {bulletsTitle}
-                          </label>
-                        )}
-                        <Legends
-                          bullets={bullets}
-                          display="block"
-                          padding="0 0px 10px 0"
-                        />
-                      </>
-                    }
-                    trigger={["click"]}
-                    placement="bottom"
-                  >
-                    <InfoCircleFilled
-                      style={{ color: "#fff", fontSize: "14px" }}
-                    />
-                  </Popover>
-                </span>
-              </div>
-            </th>
+                <div className="text-truncate d-flex align-items-center justify-content-center gap-2">
+                  PROCESSED STATUS
+                  <span style={{ cursor: "pointer" }}>
+                    <Popover
+                      content={
+                        <>
+                          <Legends display="block" padding="0 0px 10px 0" />
+                          {bulletsTitle && (
+                            <label
+                              className={styles.label}
+                              style={{ fontWeight: "700" }}
+                            >
+                              {bulletsTitle}
+                            </label>
+                          )}
+                          <Legends
+                            bullets={bullets}
+                            display="block"
+                            padding="0 0px 10px 0"
+                          />
+                        </>
+                      }
+                      trigger={["click"]}
+                      placement="bottom"
+                    >
+                      <InfoCircleFilled
+                        style={{ color: "#fff", fontSize: "14px" }}
+                      />
+                    </Popover>
+                  </span>
+                </div>
+              </th>
               <th style={{ textAlign: "center" }}>
-              <div className="d-flex align-items-center justify-content-center gap-2 text-truncate" >
-                AUDITED STATUS
-                <span style={{ cursor: "pointer" }}>
-                  <Popover
-                    content={
-                      <>
-                        <Legends display="block" padding="0 0px 10px 0" />
-                        {badgesTitle && (
-                          <label
-                            className={styles.label}
-                            style={{ fontWeight: "700" }}
-                          >
-                            {badgesTitle}
-                          </label>
-                        )}
-                        <Legends
-                          bullets={badges}
-                          display="block"
-                          padding="0 0px 10px 0"
-                        />
-                      </>
-                    }
-                    trigger={["click"]}
-                    placement="bottom"
-                  >
-                    <InfoCircleFilled
-                      style={{ color: "#fff", fontSize: "14px" }}
-                    />
-                  </Popover>
-                </span>
-              </div>
-            </th>
+                <div className="text-truncate d-flex align-items-center justify-content-center gap-2">
+                  AUDITED STATUS
+                  <span style={{ cursor: "pointer" }}>
+                    <Popover
+                      content={
+                        <>
+                          <Legends display="block" padding="0 0px 10px 0" />
+                          {badgesTitle && (
+                            <label
+                              className={styles.label}
+                              style={{ fontWeight: "700" }}
+                            >
+                              {badgesTitle}
+                            </label>
+                          )}
+                          <Legends
+                            bullets={badges}
+                            display="block"
+                            padding="0 0px 10px 0"
+                          />
+                        </>
+                      }
+                      trigger={["click"]}
+                      placement="bottom"
+                    >
+                      <InfoCircleFilled
+                        style={{ color: "#fff", fontSize: "14px" }}
+                      />
+                    </Popover>
+                  </span>
+                </div>
+              </th>
+
             </tr>
           </thead>
 

@@ -288,7 +288,7 @@ function PdfTable({
                         )}
                       </td>
                       <td
-                        className={`${TableStyle.childBorder} text-center`}
+                        className={`text-truncate ${TableStyle.childBorder} text-center`}
                         // style={{ textAlign: "left", paddingLeft: "110px" }}
                       >
                         {row?.createdDate

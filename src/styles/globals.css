@@ -16411,3 +16411,8 @@ input::-webkit-inner-spin-button {
     margin-right: -128px !important;
   }
   }
+
+  .default-filter-size{
+    width: 250px;
+    margin-top: 30px
+  }
