@@ -609,7 +609,7 @@ const StatusAction = ({
       if (e?.status !== "SUCCESS") {
         notification.warning({
           message: e?.message,
-          duration: 1,
+          duration: 4,
         });
       }
     }

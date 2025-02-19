@@ -175,6 +175,11 @@ const Index = ({
       name: "Admin",
       itemStyle: { color: "#4361EE" },
     },
+    {
+      value: userStatusData?.response?.TENANT_ADMIN,
+      name: "Tenant Admin", 
+      itemStyle: { color: "#3C0AD2" },
+    },
   ];
   const orgData =
     organizationStatusData?.response?.map((org, index) => ({

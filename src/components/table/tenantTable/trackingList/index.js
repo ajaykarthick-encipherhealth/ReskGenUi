@@ -183,7 +183,7 @@ function TrackingTable({
             : "---"}
         </td>
         <td
-          className={`${TableStyle.childBorder}text-truncate`}
+          className={`${TableStyle.childBorder} text-truncate`}
           style={{ textAlign: "left" }}
           onClick={handleTableRowClick}
           id={data.patientId}

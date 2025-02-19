@@ -349,7 +349,6 @@ const Patient = ({
     formData.append("emrtype", emrType);
     const response = await uploadFiles({ obj: formData });
     if (response?.status === "SUCCESS") {
-      getResponePopup(response)
       getAllPatients(
         pageNo,
         computedStartDate,
