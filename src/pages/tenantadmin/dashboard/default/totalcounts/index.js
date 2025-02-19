@@ -6,7 +6,8 @@ import pageIcon from "../../../../../images/tenantAdmin/page.svg";
 import Image from "next/image";
 import styles from "../../styles.module.css";
 import { FilesCount } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import { Skeleton } from "antd";
+import { Skeleton, Tooltip } from "antd";
+import { formatNumber } from "../../../../../utils/reusable.js";
 
 const index = ({
   getAllFilesCount,
@@ -105,7 +106,17 @@ const index = ({
               <div
                 className={`${styles.count}  h-50 d-flex align-items-center justify-content-center`}
               >
-                {item?.count}
+                 <Tooltip
+                  title={
+                    item?.count &&
+                    item?.count
+                  }
+                >
+                  {item?.count
+                    ? formatNumber(item?.count)
+                    : 0}
+                </Tooltip>
+                {/* {item?.count} */}
               </div>
             )}
           </div>

@@ -23,7 +23,8 @@ const RafGraph = ({
   selectedValue,
   selectedOrganization,
   customDate,
-  selectDos
+  selectDos,
+  isPotential
 }) => {
   const [dateRange, setDateRange] = useState({
     startDate:
@@ -93,7 +94,7 @@ const RafGraph = ({
           ? "Care Gap  RAF"
           : isHcc
           ? "HCC  RAF"
-          : "Total RAF",
+          : isPotential?"Potential Diagnosis RAF":"Total RAF",
         type: "line",
         itemStyle: {
           color: rafColor,
@@ -104,7 +105,7 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: isHcc ? resultArrayHCC : isCargaps ? resultArrayCaregaps : totalCodes,
+        data: isHcc ||isPotential? resultArrayHCC : isCargaps ? resultArrayCaregaps : totalCodes,
       },
 
       {

@@ -4,8 +4,7 @@ import { rafScore } from "../../../../../stores/tenantAdmin/dashboard/default/ac
 import { connect } from "react-redux";
 import ReactECharts from "echarts-for-react";
 import styles from "../../styles.module.css";
-import CodesGraph from "../../components/codeGraph";
-import { Skeleton, Spin } from "antd";
+import { Skeleton } from "antd";
 import CodeGraphRevenue from "../../components/codeGraphRevenue/index.js";
 import { formatNumber } from "../../../../../utils/reusable.js";
 
@@ -20,25 +19,22 @@ const index = ({
   customDate,
   selectDos,
 }) => {
-  useEffect(() => {
-    rafScoreData(
-      dateRange.startDate,
-      dateRange.endDate,
-      selectedOrganization,
-      selectDos
-    );
-  }, [dateRange, selectedOrganization, selectDos]);
+  // Function to round up to the nearest 1000
+  const getMaxValue = (value) => Math.ceil(value / 1000) * 1000;
+
+  const responseValue = parseFloat(overAllRafScore?.response ?? 0);
+  const maxValue = getMaxValue(responseValue);
 
   const speedometerOptions = {
     tooltip: {
-      formatter: "{a} <br/>{b} : {c}%",
+      formatter: "{a} <br/>{b} {c}",
     },
     series: [
       {
-        name: "Pressure",
+        name: "RAF Score",
         type: "gauge",
         min: 0,
-        max: 1000,
+        max: maxValue,
         progress: {
           show: true,
           roundCap: true,
@@ -78,7 +74,7 @@ const index = ({
           show: true,
           distance: -40,
           formatter: function (value) {
-            if (value === 0 || value === 1000) {
+            if (value === 0 || value === maxValue) {
               return value.toString();
             }
             return "";
@@ -94,6 +90,15 @@ const index = ({
       },
     ],
   };
+
+  useEffect(() => {
+    rafScoreData(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization,
+      selectDos
+    );
+  }, [dateRange, selectedOrganization, selectDos]);
 
   const totalRev = getAllRaf?.totalHccRafScore;
 

@@ -29,7 +29,8 @@ const CodesGraph = ({
   className,
   customDate,
   getAllLabAndRadiologyChart,
-  isLabValues
+  isLabValues,
+  isPotential
 }) => {
   const dates =
   selectedValue === "custom"
@@ -80,8 +81,8 @@ const CodesGraph = ({
           ? "HCC Codes"
           : isRevenue
           ? "Revenue"
-          : "Radiology",
-        data: isHcc
+          : isPotential?"Potential Diagnosis Codes":"Radiology",
+        data: isHcc||isPotential
           ? resultArrayHCC
           : isCargaps
           ? resultArrayCaregaps

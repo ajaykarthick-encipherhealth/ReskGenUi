@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import styles from "./styles.module.css";
-import ReactECharts from "echarts-for-react";
 import { connect } from "react-redux";
 import { actions as dashboardWorkflowActions } from "../../../stores/tenantAdmin/dashboard/workFlow";
 import { actions as defaultActions } from ".././../../stores/tenantAdmin/dashboard/default";
@@ -11,6 +10,7 @@ import HeaderFilters from "./components/headerFilters";
 import TotalCounts from "./default/totalcounts";
 import RafAndRevenue from "./default/rafAndRevenue";
 import HccCodes from "./default/hcc";
+import PotentialDiagnosis from './default/potentialDiagnosis'
 import CaregapCodes from "./default/caregaps";
 import TotalCodes from "./default/totalcodes";
 import RadiolodyAndLab from "./default/radiologyAndLab";
@@ -23,7 +23,7 @@ import Notifications from "./workFlow/notifications";
 import HeadTitle from "../../../components/headtitle";
 import PieChartInfo from "./components/pieChart/PieChartInfo";
 import OrgPieChartInfo from "./components/OrgPieChart/OrgPieChartInfo";
-import { Row, Skeleton, Spin } from "antd";
+import {  Skeleton } from "antd";
 import moment from "moment";
 import teleVisit from "../../../../src/images/invalid/televisit.webp";
 import scope from "../../../../src/images/invalid/scope.webp";
@@ -78,7 +78,7 @@ const Index = ({
   const [selectedOrganization, setSelectedOrganization] = useState("");
   const [customDate, setCustomDate] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(null);
-  const [selectDos,setSelectDos]= useState("DOSWISE")
+  const [selectDos, setSelectDos] = useState("DOSWISE");
 
   const showModal = (data) => {
     setIsModalOpen(data);
@@ -200,9 +200,9 @@ const Index = ({
   const handleOrganizationChange = (value) => {
     setSelectedOrganization(value);
   };
-  const handleChange=(value) =>{
-    setSelectDos(value)
-  }
+  const handleChange = (value) => {
+    setSelectDos(value);
+  };
 
   const renderCardSkeleton = () => (
     <div className="d-flex justify-content-around ">
@@ -375,11 +375,11 @@ const Index = ({
     }
   };
   useEffect(() => {
-    if ( activeBtn === "workflow"){
+    if (activeBtn === "workflow") {
       getUserStatusData(
         dateRange.startDate,
         dateRange.endDate,
-        selectedOrganization,
+        selectedOrganization
       );
       getAuditorStatusData(
         dateRange.startDate,
@@ -402,21 +402,21 @@ const Index = ({
         selectedOrganization
       );
     }
+  }, [dateRange, selectedOrganization, activeBtn]);
 
-  }, [dateRange, selectedOrganization,activeBtn]);
-
-  useEffect(()=>{
+  useEffect(() => {
     getAllLabAndRadiologyChart(
       dateRange.startDate,
       dateRange.endDate,
-      selectedOrganization,selectDos
+      selectedOrganization,
+      selectDos
     );
-  },[selectDos,dateRange,selectedOrganization])
-  useEffect(()=>{
-    if ( activeBtn === "workflow"){
-    getOrganizationStatusData();
+  }, [selectDos, dateRange, selectedOrganization]);
+  useEffect(() => {
+    if (activeBtn === "workflow") {
+      getOrganizationStatusData();
     }
-  },[])
+  }, [activeBtn]);
 
   useEffect(() => {
     if (activeBtn === "Invalid") {
@@ -509,6 +509,20 @@ const Index = ({
                   </Card>
                 </div>
               </div>
+              {/* potential diagnosis */}
+              <div className={`row`}>
+                <div className={`col ${styles.box}`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    <PotentialDiagnosis
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      selectedValue={selectedValue}
+                      customDate={customDate}
+                      selectDos={selectDos}
+                    />
+                  </Card>
+                </div>
+              </div>
               {/* radiology */}
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4 `}>
@@ -557,59 +571,57 @@ const Index = ({
               </div>
             </>
           ) : activeBtn === "Invalid" ? (
-            <>
-              <div className={`row ${styles.box}`}>
-                {invalidChartData.map((data, index) => (
-                  <div className="col-4 mt-3" key={data.id}>
-                    <Card padding="10px" borderRadius="10px" height="350px">
-                      {invalidLoader ? (
-                        <div>
-                          <Skeleton.Input
-                            className="w-100"
-                            style={{ height: "288px" }}
-                            active
-                          />
-                        </div>
-                      ) : (
-                        <InvalidChart
-                          selectedValue={selectedValue}
-                          header={data.header}
-                          count={data.count}
-                          images={data.images}
-                          background={data.bg}
-                          data={data.data}
-                          customDate={customDate}
-                          overAll={data.overAll}
-                          setIsModalOpen={setIsModalOpen}
-                          onClick={showModal}
-                          values={data}
-                          hideContent={true}
-                          id={data.id}
-                          graphName={data?.header}
+            <div className={`row ${styles.box}`}>
+              {invalidChartData.map((data, index) => (
+                <div className="col-4 mt-3" key={data.id}>
+                  <Card padding="10px" borderRadius="10px" height="350px">
+                    {invalidLoader ? (
+                      <div>
+                        <Skeleton.Input
+                          className="w-100"
+                          style={{ height: "288px" }}
+                          active
                         />
-                      )}
-                    </Card>
-                    {index === 0 && (
-                      <div className="d-flex gap-3 mt-3">
-                        <h5 className="fontWeight3">Data Discrepancies </h5>
-                        <div>
-                          <div className="font2 text-muted">
-                            Current / Overall
-                          </div>
-                          {invalidLoader ? (
-                            <CardSkeleton height={40} />
-                          ) : (
-                            <div className="fontWeight3 font5">
-                              {currentCountSum} / {totalCountSum}
-                            </div>
-                          )}
-                        </div>
                       </div>
+                    ) : (
+                      <InvalidChart
+                        selectedValue={selectedValue}
+                        header={data.header}
+                        count={data.count}
+                        images={data.images}
+                        background={data.bg}
+                        data={data.data}
+                        customDate={customDate}
+                        overAll={data.overAll}
+                        setIsModalOpen={setIsModalOpen}
+                        onClick={showModal}
+                        values={data}
+                        hideContent={true}
+                        id={data.id}
+                        graphName={data?.header}
+                      />
                     )}
-                  </div>
-                ))}
-              </div>
-            </>
+                  </Card>
+                  {index === 0 && (
+                    <div className="d-flex gap-3 mt-3">
+                      <h5 className="fontWeight3">Data Discrepancies </h5>
+                      <div>
+                        <div className="font2 text-muted">
+                          Current / Overall
+                        </div>
+                        {invalidLoader ? (
+                          <CardSkeleton height={40} />
+                        ) : (
+                          <div className="fontWeight3 font5">
+                            {currentCountSum} / {totalCountSum}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           ) : (
             <>
               <div className={`row ${styles.box1}`}>

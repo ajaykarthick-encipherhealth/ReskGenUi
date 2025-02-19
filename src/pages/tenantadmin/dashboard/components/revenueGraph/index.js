@@ -19,6 +19,7 @@ const RevenueGraph = ({
   isMultiple,
   className,
   customDate,
+  isPotential
 }) => {
   const dates =
     selectedValue === "custom"
@@ -72,10 +73,10 @@ const RevenueGraph = ({
           ? "Hcc  Revenue"
           : isCargaps
           ? "Care Gap  Revenue"
-          : "Total Revenue",
+          : isPotential?"Potential Diagnosis Revenue":"Total Revenue",
         type: "line",
         step: "start",
-        data: isHcc ? resultArrayHCC : isCargaps ? resultArrayCaregaps : totalCodes,
+        data: isHcc||isPotential ? resultArrayHCC : isCargaps ? resultArrayCaregaps : totalCodes,
         itemStyle: {
           color: isHcc ? "#02BBDE" : isCargaps ? "#5A75F2" : "#0095C2",
         },

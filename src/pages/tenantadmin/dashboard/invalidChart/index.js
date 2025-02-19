@@ -20,7 +20,7 @@ const InvalidChart = ({
   values,
   graphName,
 }) => {
-console.log(values,"values")
+
   const graphOptions = {
     xAxis: {
       type: "category",

@@ -65,7 +65,7 @@ const Notifications = ({
     <>
       <HeadTitle
         header="Notifications"
-        anchorTag="anchor"
+        anchorTag={notificationResult?.length>0 ?true:false}
         handleOpen={handleOpen}
         fontSize="20px"
       />

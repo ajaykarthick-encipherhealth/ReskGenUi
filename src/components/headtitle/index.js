@@ -3,7 +3,6 @@ import { Button, DatePicker, Modal } from "antd";
 import dayjs from "dayjs";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/admin/dashboard";
-import { disableFutureDate } from "../headerFilters/functions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import styles from "./styles.module.css";

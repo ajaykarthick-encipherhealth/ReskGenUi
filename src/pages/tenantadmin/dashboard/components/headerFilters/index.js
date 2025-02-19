@@ -93,9 +93,9 @@ const index = ({
 
   return (
     <div className={styles.container}>
-      <div style={{width:"80%"}}>
+      <div style={{ width: "80%" }}>
         <div className="d-flex gap-3 ">
-          <div style={{width:"250px"}}>
+          <div style={{ width: "20%" }}>
             <div className="d-flex">
               <div className={styles.flterContainer}>Organization</div>
               <div className="tenantSelector" style={{ width: "100%" }}>
@@ -117,108 +117,118 @@ const index = ({
               </div>
             </div>
           </div>
-          {activeBtn === "default" ? (
-          <div style={{width:"250px"}}>
-              <div className="d-flex">
-                <div className={styles.flterContainer}>DOS/YEAR</div>
+          <section className="d-flex justify-between" style={{ width: "78%" }}>
+            <section
+              className={`d-flex justify-between gap-2 ${
+                !isCustom ? styles.customFilter3 : styles.customFilter1
+              }`}
+            >
+              <div
+                className="d-flex"
+                style={{ width: !isCustom ? "95%" : "48%" }}
+              >
+                <div className={styles.flterContainer}>Date</div>
                 <div className="tenantSelector" style={{ width: "100%" }}>
                   <Select
-                    id="dos-year"
-                    name="dos-year"
-                    placeholder="Dos"
+                    id="select-days"
+                    name="select-days"
+                    placeholder="Date"
+                    defaultValue="Last 30 days"
                     options={[
-                      { value: "DOSWISE", label: "DOS" },
-                      { value: "YEARWISE", label: "Year" },
+                      { label: "Last 7 days", value: "last_1_week" },
+                      { label: "Last 30 days", value: "last_1_month" },
+                      { label: "Custom Date", value: "custom" },
                     ]}
-                    onChange={handleChange}
-                    showSearch
-                    defaultValue="DOSWISE"
+                    onChange={handleDateChange}
                   />
                 </div>
               </div>
-            </div>
-          ) : (
-            ""
-          )}
-          <div style={{width:"250px"}}>
-          <div  className="d-flex">
-              <div className={styles.flterContainer}>Date</div>
-              <div className="tenantSelector" style={{ width: "100%" }}>
-                <Select
-                  id="select-days"
-                  name="select-days"
-                  placeholder="Date"
-                  defaultValue="Last 30 days"
-                  options={[
-                    { label: "Last 7 days", value: "last_1_week" },
-                    { label: "Last 30 days", value: "last_1_month" },
-                    { label: "Custom Date", value: "custom" },
-                  ]}
-                  onChange={handleDateChange}
-                />
-              </div>
-            </div>
-          </div>
-          {isCustom && (
-              <div style={{width:"400px"}}>
-              <div className="d-flex">
-                <div className={`${styles.flterContainer}`}>Custom Date</div>
-                <div className="tenantSelector">
-                  <RangePicker
-                    id="select-customDate"
-                    name="select-customDate"
-                    size="large"
-                    disabledDate={disabled1YearDate}
-                    onCalendarChange={(val) => setSelectedDates(val)}
-                    onChange={(e, value) => handleRange(value)}
-                    format={"MM-DD-YYYY"}
-                    allowClear={true}
-                  />
+
+              {isCustom && (
+                <div className={`d-flex ${styles.customFilter2}`}>
+                  <div className={`${styles.flterContainer}`}>Custom Date</div>
+                  <div className="tenantSelector">
+                    <RangePicker
+                      id="select-customDate"
+                      name="select-customDate"
+                      size="large"
+                      disabledDate={disabled1YearDate}
+                      onCalendarChange={(val) => setSelectedDates(val)}
+                      onChange={(e, value) => handleRange(value)}
+                      format={"MM-DD-YYYY"}
+                      allowClear={true}
+                    />
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
+              )}
+            </section>
+            <section className={`${styles.customFilter2}`}>
+              {activeBtn === "default" ? (
+                <div style={{ width: "250px" }}>
+                  <div className="d-flex">
+                    <div className={styles.flterContainer}>DOS/YEAR</div>
+                    <div className="tenantSelector" style={{ width: "100%" }}>
+                      <Select
+                        id="dos-year"
+                        name="dos-year"
+                        placeholder="Dos"
+                        options={[
+                          { value: "DOSWISE", label: "DOS" },
+                          { value: "YEARWISE", label: "Year" },
+                        ]}
+                        onChange={handleChange}
+                        showSearch
+                        defaultValue="DOSWISE"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
+            </section>
+          </section>
+        </div>
       </div>
-      </div>
-      <div >
-      <div className={styles.btnContainer}>
-        <button
-          className={
-            activeBtn === "default" ? styles.activeBtn : styles.headerBtn
-          }
-          onClick={() => {
-            setActiveBtn("default");
-          }}
-          id="default-btn"
-          name="default-btn"
-        >
-          Default
-        </button>
-        <button
-          id="workflow-btn"
-          name="workflow-btn"
-          className={
-            activeBtn === "workflow" ? styles.activeBtn : styles.headerBtn
-          }
-          onClick={() => {
-            setActiveBtn("workflow");
-          }}
-        >
-          Workflow
-        </button>
-        <button
-          id="invalid-btn"
-          name="invalid-btn"
-          className={
-            activeBtn === "Invalid" ? styles.activeBtn : styles.headerBtn
-          }
-          onClick={() => {
-            setActiveBtn("Invalid");
-          }}
-        >
-          Invalid
-        </button>
-      </div>
+      <div>
+        <div className={styles.btnContainer}>
+          <button
+            className={
+              activeBtn === "default" ? styles.activeBtn : styles.headerBtn
+            }
+            onClick={() => {
+              setActiveBtn("default");
+            }}
+            id="default-btn"
+            name="default-btn"
+          >
+            Default
+          </button>
+          <button
+            id="workflow-btn"
+            name="workflow-btn"
+            className={
+              activeBtn === "workflow" ? styles.activeBtn : styles.headerBtn
+            }
+            onClick={() => {
+              setActiveBtn("workflow");
+            }}
+          >
+            Workflow
+          </button>
+          <button
+            id="invalid-btn"
+            name="invalid-btn"
+            className={
+              activeBtn === "Invalid" ? styles.activeBtn : styles.headerBtn
+            }
+            onClick={() => {
+              setActiveBtn("Invalid");
+            }}
+          >
+            Invalid
+          </button>
+        </div>
       </div>
     </div>
   );

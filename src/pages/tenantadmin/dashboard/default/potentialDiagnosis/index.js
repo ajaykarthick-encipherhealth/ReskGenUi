@@ -1,63 +1,59 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { connect } from "react-redux";
 import CodesGraph from "../../components/codeGraph";
 import styles from "../../styles.module.css";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
-import { connect } from "react-redux";
-import { Empty, Spin, Tooltip } from "antd";
-import { Skeleton } from "antd";
 import {
   HccCodes,
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import { Empty, Tooltip } from "antd";
+import { Skeleton } from "antd";
 import { formatNumber } from "../../../../../utils/reusable.js";
 
 const index = ({
   getAllHccCodes,
-  getAllRaf,
   getAllRafScoreData,
+  getAllRaf,
+  selectedOrganization,
   selectedValue,
   totalCodesLoader,
   revenueChartLoader,
   rafScorechartLoader,
   customDate,
-  getRafScoreLoader,
   selectDos,
 }) => {
-  const suggestedHccDiseaseCountMap =
-    getAllHccCodes?.suggestedHccDiseaseCountMap
-      ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
-      : [];
-
-  const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested
-    ? Object.values(getAllRaf.premiumByDateForSuggested)
+  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
+    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
     : [];
 
-  const rafScoreByDateForSuggested =
-    getAllRafScoreData?.rafScoreByDateForSuggested
-      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
-      : [];
+  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
+    ? Object.values(getAllRaf.premiumByDateForHcc)
+    : [];
 
-  const TotalCareGapsRevenue = getAllRaf?.totalSuggestedRafScore;
+  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
+    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
+    : [];
 
+  const TotalHccRevenue = getAllRaf?.totalHccRafScore;
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
         <div className={styles.headers}>
-          <div className="d-flex justify-content-between">
-            <div className={styles.header}>Care Gap Codes</div>
+          <div className="d-flex justify-content-between ">
+            <div className={styles.header}>Potential Diagnosis Codes</div>
             <div>
               <div className={styles.header}>Total Codes</div>
               <div className={styles.price}>
                 <Tooltip
                   title={
-                    getAllHccCodes?.suggestedCount &&
-                    getAllHccCodes?.suggestedCount
+                    getAllHccCodes?.totalCount && getAllHccCodes?.totalCount
                   }
                 >
-                  {getAllHccCodes?.suggestedCount
-                    ? formatNumber(getAllHccCodes?.suggestedCount)
+                  {getAllHccCodes?.totalCount
+                    ? formatNumber(getAllHccCodes?.totalCount)
                     : 0}
                 </Tooltip>
               </div>
@@ -73,15 +69,16 @@ const index = ({
               active
             />
           </div>
-        ) : suggestedHccDiseaseCountMap?.length > 0 ? (
+        ) : hccDiseaseCountValues?.length > 0 ? (
           <div className="totalCodesPies">
             <CodesGraph
-              gradientColor1={"#FF9209"}
-              gradientColor2={"#FFFDFA"}
-              borderColor={"#FF9209"}
-              isCargaps={true}
+              gradientColor1={"#04B700"}
+              gradientColor2={"#FAFFFA"}
+              borderColor={"#04B700"}
+              isPotential={true}
               selectedValue={selectedValue}
-              className="codesGraphStyle1"
+              selectedOrganization={selectedOrganization}
+              className="codesGraphStyle3"
               customDate={customDate}
             />
           </div>
@@ -90,35 +87,37 @@ const index = ({
         )}
       </div>
       <div
-        className=""
+        className="remianingAreaGraph"
         style={{
           width: "33%",
-          backgroundColor: "#E2F1F3",
+          backgroundColor: "#F0ECFE",
           borderRadius: "16px",
+          padding: "0px 5px 0 5px",
         }}
       >
         <div className={styles.headers}>
           <div className="d-flex justify-content-between">
-            <div className={`${styles.header} p-2`}>RAF</div>
-            <div className="p-2">
-              <div className={styles.header}>Care Gap RAF</div>
+            <div className={`${styles.header} p-1`}>RAF</div>
+            <div className="p-1">
+              <div className={styles.header}>Potential Diagnosis RAF</div>
               <div className={styles.price}>
                 <Tooltip
                   title={
-                    getAllRafScoreData?.totalSuggestedRaf &&
-                    getAllRafScoreData?.totalSuggestedRaf
+                    getAllRafScoreData?.totalHccRaf &&
+                    getAllRafScoreData?.totalHccRaf
                   }
                 >
-                  {getAllRafScoreData?.totalSuggestedRaf
-                    ? formatNumber(getAllRafScoreData?.totalSuggestedRaf)
+                  {getAllRafScoreData?.totalHccRaf
+                    ? formatNumber(getAllRafScoreData?.totalHccRaf)
                     : 0}
                 </Tooltip>
-                {/* {(getAllRafScoreData?.totalSuggestedRaf || 0).toFixed(2)} */}
+                {/* {(getAllRafScoreData?.totalHccRaf || 0).toFixed(2)} */}
               </div>
             </div>
           </div>
         </div>
-        {getRafScoreLoader ? (
+
+        {rafScorechartLoader ? (
           <div>
             <Skeleton.Input
               className="w-100"
@@ -126,11 +125,11 @@ const index = ({
               active
             />
           </div>
-        ) : rafScoreByDateForSuggested?.length > 0 ? (
-          <div>
+        ) : rafScoreByDateForHcc?.length > 0 ? (
+          <div className="totalCodesPies2">
             <RafGraph
-              rafColor={"#4AA1AB"}
-              isCargaps={true}
+              rafColor={"#8E68F7"}
+              isPotential={true}
               selectedValue={selectedValue}
               customDate={customDate}
               selectDos={selectDos}
@@ -143,7 +142,7 @@ const index = ({
       <div
         style={{
           width: "33%",
-          backgroundColor: "#DAE0FC",
+          backgroundColor: "#EBFCFF",
           borderRadius: "16px",
           padding: "0px 5px 0 5px",
         }}
@@ -152,14 +151,12 @@ const index = ({
           <div className="d-flex justify-content-between">
             <div className={`${styles.header} p-1`}>Revenue</div>
             <div className="p-1">
-              <div className={styles.header}>Care Gap Revenue</div>
-              <div className={styles.price}>
-                {`$ ${
-                  TotalCareGapsRevenue !== undefined
-                    ? formatNumber(TotalCareGapsRevenue.toFixed(2))
-                    : "0.00"
-                }`}
-              </div>
+              <div className={styles.header}>Potential Diagnosis Revenue</div>
+              <div className={styles.price}>{`$ ${
+                TotalHccRevenue !== undefined
+                  ? formatNumber(TotalHccRevenue.toFixed(2))
+                  : 0
+              }`}</div>
             </div>
           </div>
         </div>
@@ -172,14 +169,14 @@ const index = ({
               active
             />
           </div>
-        ) : premiumByDateForSuggested?.length > 0 ? (
+        ) : premiumByDateForHcc?.length > 0 ? (
           <div className="totalCodesPies">
             <div className="totalCodesPies2">
               <RevenueGraph
-                isCargaps={true}
-                cargapColor="#5A75F2"
+                isPotential={true}
+                hccColor="#02BBDE"
                 selectedValue={selectedValue}
-                className="revenueCharts3"
+                className="revenueCharts2"
                 customDate={customDate}
               />
             </div>
@@ -196,21 +193,20 @@ const enhancer = connect(
   (state) => ({
     getAllHccCodes:
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
-    getAllRaf:
-      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
-    rafScorechartLoader:
-      state?.tenantAdmin?.dashboard?.default?.allRafScore?.loading,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
-    getRafScoreLoader: state?.tenantAdmin?.dashboard?.default?.rafScoreLoader,
-    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalHccLoader,
+
+    getAllRaf:
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     revenueChartLoader:
       state?.tenantAdmin?.dashboard?.default?.revenueChartLoader,
+    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalHccLoader,
+    rafScorechartLoader: state?.tenantAdmin?.dashboard?.default?.rafScoreLoader,
   }),
   {
     getAllHccCodesData: HccCodes,
-    getAllRafData: RafCounts,
     getAllRafScore: getAllRafScore,
+    getAllRafData: RafCounts,
   }
 );
 

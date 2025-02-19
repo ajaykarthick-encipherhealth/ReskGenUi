@@ -241,5 +241,3 @@ export const getSpacesWithUnderscoresAuditing = (value) => {
     }
   }
 };
-
-

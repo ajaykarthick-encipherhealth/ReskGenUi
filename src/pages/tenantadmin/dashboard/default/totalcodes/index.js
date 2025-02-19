@@ -5,7 +5,7 @@ import styles from "../../styles.module.css";
 import * as echarts from "echarts";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
-import { Empty, Spin } from "antd";
+import { Empty, Spin, Tooltip } from "antd";
 import {
   HccCodes,
   RafCounts,
@@ -18,7 +18,6 @@ import {
   formatNumber,
   formatValues,
 } from "../../../../../utils/reusable.js";
-
 
 const index = ({
   getAllHccCodesData,
@@ -36,7 +35,6 @@ const index = ({
   customDate,
   selectDos,
 }) => {
-
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
   const dates =
     selectedValue === "custom"
@@ -74,16 +72,21 @@ const index = ({
       selectDos
     );
     getAllRafScore(
-          dateRange.startDate,
-          dateRange.endDate,
-          selectedOrganization,
-          selectDos
-        );
-  }, [dateRange, selectedOrganization,selectDos]);
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization,
+      selectDos
+    );
+  }, [dateRange, selectedOrganization, selectDos]);
 
   useEffect(() => {
-    getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization,selectDos);
-  }, [dateRange, selectedOrganization,selectDos]);
+    getAllRafData(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization,
+      selectDos
+    );
+  }, [dateRange, selectedOrganization, selectDos]);
 
   const options = {
     xAxis: {
@@ -190,7 +193,7 @@ const index = ({
 
   const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
-  const totalScoreTwo = (hccDiseaseCountMap + suggestedCount).toFixed(2);
+  // const totalScoreTwo = (hccDiseaseCountMap + suggestedCount).toFixed(2);
 
   const OverAllRevenue = totalScore;
 
@@ -219,7 +222,17 @@ const index = ({
               </div>
               <div>
                 <div className={styles.header}>Total Codes</div>
-                <div className={styles.price}>{`${getAllHccCodes?.totalCount || "0.00"} `}</div>
+                <div className={styles.price}>
+                  <Tooltip
+                    title={
+                      getAllHccCodes?.totalCount && getAllHccCodes?.totalCount
+                    }
+                  >
+                    {getAllHccCodes?.totalCount
+                      ? formatNumber(getAllHccCodes?.totalCount)
+                      : 0}
+                  </Tooltip>
+                </div>
               </div>
             </div>
           </div>
@@ -261,7 +274,14 @@ const index = ({
             <div className="p-1">
               <div className={styles.header}>Overall RAF</div>
 
-              <div className={styles.price}>{totalScoreTwo}</div>
+              <div className={styles.price}>
+                {
+                  <Tooltip title={suggestedCount && suggestedCount}>
+                    {suggestedCount ? formatNumber(suggestedCount) : 0}
+                  </Tooltip>
+                  // totalScoreTwo
+                }
+              </div>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import CodesGraph from "../../components/codeGraph";
 import styles from "../../styles.module.css";
@@ -9,7 +9,7 @@ import {
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import { Empty, Spin } from "antd";
+import { Empty, Tooltip } from "antd";
 import { Skeleton } from "antd";
 import { formatNumber } from "../../../../../utils/reusable.js";
 
@@ -47,7 +47,13 @@ const index = ({
             <div>
               <div className={styles.header}>Total Codes</div>
               <div className={styles.price}>
-                {(getAllHccCodes?.hccCount || 0).toFixed(2)}
+                <Tooltip
+                  title={getAllHccCodes?.hccCount && getAllHccCodes?.hccCount}
+                >
+                  {getAllHccCodes?.hccCount
+                    ? formatNumber(getAllHccCodes?.hccCount)
+                    : 0}
+                </Tooltip>
               </div>
             </div>
           </div>
@@ -91,9 +97,19 @@ const index = ({
           <div className="d-flex justify-content-between">
             <div className={`${styles.header} p-1`}>RAF</div>
             <div className="p-1">
-              <div className={styles.header}>HCC  RAF</div>
+              <div className={styles.header}>HCC RAF</div>
               <div className={styles.price}>
-                {(getAllRafScoreData?.totalHccRaf || 0).toFixed(2)}
+                <Tooltip
+                  title={
+                    getAllRafScoreData?.totalHccRaf &&
+                    getAllRafScoreData?.totalHccRaf
+                  }
+                >
+                  {getAllRafScoreData?.totalHccRaf
+                    ? formatNumber(getAllRafScoreData?.totalHccRaf)
+                    : 0}
+                </Tooltip>
+                {/* {(getAllRafScoreData?.totalHccRaf || 0).toFixed(2)} */}
               </div>
             </div>
           </div>

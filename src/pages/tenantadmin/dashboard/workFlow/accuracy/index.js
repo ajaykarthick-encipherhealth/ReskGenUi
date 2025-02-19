@@ -360,86 +360,81 @@ const Accuracy = ({
     ],
   };
   return (
-    <>
-      <div className={styles.card3}>
-        <div className="d-flex justify-content-between">
-          <div style={{ width: "50%" }}>
-            <HeadTitle
-              header="Accuracy and Quality Insights"
-              fontSize="20px"
-            />
-          </div>
-          <div className= {styles.btn}   >
-            <div className={styles.btnScroller}>
-              <Buttonscroller
-                Buttons={TabButtons}
-                handleButtonClick={handleTabButtonClick}
-                activeButton={activeTabButton}
-                activeColor="#fff"
-                inActiveColor="#000000"
-                activeBg="#043069"
-                // inActiveBg="#E6EEFF"
-                containerBg="#E6EEFF"
-                width="150px"
-              />
-            </div>
-          </div>
+    <div className={styles.card3}>
+      <div className="d-flex justify-content-between">
+        <div style={{ width: "50%" }}>
+          <HeadTitle header="Accuracy and Quality Insights" fontSize="20px" />
         </div>
-        <div className={styles.header}>
-          <div style={{ width: "85%", overflowX: "scroll" }}>
-            {getAccuracyWorkflowLoader ? (
-              <Skeleton.Input
-                className="w-100"
-                style={{ height: "288px" }}
-                active
-              />
-            ) : totalCodes.length > 0 ? (
-              <>
-                {currentTabBtn === "CogentAI Accuracy" ? (
-                  <div className={styles.highchartStyle}>
-                    <HighchartsReact
-                      highcharts={Highcharts}
-                      options={config}
-                      className={styles.hightchartStyles}
-                    />
-                  </div>
-                ) : (
-                  <AccuracyChart
-                    selectedValue={selectedValue}
-                    OrgTotalCode={OrgTotalCode}
-                    OrgRevScore={OrgRevScore}
-                    dateRange={dateRange}
-                    customDate={customDate}
-                  />
-                )}
-              </>
-            ) : (
-              <Empty className="mt-3" />
-            )}
-          </div>
-
-          <div className={styles.accuracy}>
-            <div className={styles.header}>
-              <Image src={accuracy} className={styles.Img} />
-              <div className={styles.heading}>
-                {currentTabBtn === "CogentAI Accuracy"
-                  ? "Accuracy"
-                  : "Average Score"}
-              </div>
-            </div>
-            <div className={styles.percentage}>
-              <span className={styles.insideTitle}>
-                {currentTabBtn === "CogentAI Accuracy" ? (
-                  <>{`${averageEngineScore.toFixed(2)}%`}</>
-                ) : (
-                  <>{`${averageReviewerScore.toFixed(2)}%`}</>
-                )}
-              </span>
-            </div>
+        <div className={styles.btn}>
+          <div className={styles.btnScroller}>
+            <Buttonscroller
+              Buttons={TabButtons}
+              handleButtonClick={handleTabButtonClick}
+              activeButton={activeTabButton}
+              activeColor="#fff"
+              inActiveColor="#000000"
+              activeBg="#043069"
+              // inActiveBg="#E6EEFF"
+              containerBg="#E6EEFF"
+              width="150px"
+            />
           </div>
         </div>
       </div>
-    </>
+      <div className={styles.header}>
+        <div style={{ width: "90%", overflowX: "scroll" }}>
+          {getAccuracyWorkflowLoader ? (
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          ) : totalCodes.length > 0 ? (
+            <>
+              {currentTabBtn === "CogentAI Accuracy" ? (
+                <div className={styles.highchartStyle}>
+                  <HighchartsReact
+                    highcharts={Highcharts}
+                    options={config}
+                    className={styles.hightchartStyles}
+                  />
+                </div>
+              ) : (
+                <AccuracyChart
+                  selectedValue={selectedValue}
+                  OrgTotalCode={OrgTotalCode}
+                  OrgRevScore={OrgRevScore}
+                  dateRange={dateRange}
+                  customDate={customDate}
+                />
+              )}
+            </>
+          ) : (
+            <Empty className="mt-3" />
+          )}
+        </div>
+
+        <div className={styles.accuracy}>
+          <div className={styles.header}>
+            <Image src={accuracy} className={styles.Img} />
+            <div className={styles.heading}>
+              {currentTabBtn === "CogentAI Accuracy"
+                ? "Accuracy"
+                : "Average Score"}
+            </div>
+          </div>
+          <div className={styles.percentage}>
+            <span className={styles.insideTitle}>
+              {currentTabBtn === "CogentAI Accuracy" ? (
+                <>{`${averageEngineScore.toFixed(2)}%`}</>
+              ) : (
+                <>{`${averageReviewerScore.toFixed(2)}%`}</>
+              )}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
