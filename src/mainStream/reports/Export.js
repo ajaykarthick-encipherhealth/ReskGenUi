@@ -7,6 +7,7 @@ import { SVGICON } from "../../jsx/constant/theme";
 import { getStorage } from "../../utils/storages";
 import { actions as allActions } from "../../stores/admin/report";
 import { getResponePopup } from "../../utils/reusable";
+import { actions as reviewerAction } from "../../stores/reviewer/report";
 export const checkBoxData = [
   {
     id: 1,
@@ -182,6 +183,12 @@ const Export = ({
   getExportDetails,
   exportLoader,
   updateReportLoader,
+  sentReport,
+  sort,
+  sentPageNo,
+  selectedDateRanges,
+  searchVal,
+
 }) => {
   const [selectedUser, setSelectedUser] = useState([]);
   const [search, setSearch] = useState("");
@@ -266,8 +273,15 @@ const Export = ({
       } else {
         res = await updateSentReport(updatedData);
       }
-
-      if (res) {
+      if (res?.status === 'SUCCESS' ) {
+        sentReport({
+          pagenum: "",
+          startDate: "",
+          endDate: "",
+          search: "",
+          sort: "",
+        });
+        console.log(res,"res")
         getResponePopup(res);
         form.resetFields();
         setSelectedUser([]);
@@ -717,6 +731,7 @@ const connector = connect(
     updateSentReport: allActions.updateSentReport,
     getUsersLists: allActions.getUsersLists,
     getExportDetails: allActions.getExportDetails,
+     sentReport: reviewerAction.sentReport,
   }
 );
 export default connector(Export);

@@ -1091,6 +1091,12 @@ const Reports = ({
                   setSelectedRows={setSelectedRows}
                   selectedRows={selectedRows}
                   setSelectAll={setSelectAll}
+                  sentReport={sentReport}
+                  sentPageNo={sentPageNo}
+                  selectedDateRanges={selectedDateRanges}
+                  searchVal={searchVal}
+                  sort={sort}
+                  
                 />
               </div>
             </div>

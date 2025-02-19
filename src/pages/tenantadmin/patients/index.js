@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { Spin, notification } from "antd";
+import { Form, Spin, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import visitStyles from "../../../styles/visitdata.module.css";
 import FileUploading from "../fileprocessing/FileUploading";
@@ -71,6 +71,7 @@ const Patient = ({
   getAllBatchList,
   batchList,
 }) => {
+  const [form] = Form.useForm();
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -349,6 +350,10 @@ const Patient = ({
     formData.append("emrtype", emrType);
     const response = await uploadFiles({ obj: formData });
     if (response?.status === "SUCCESS") {
+      getResponePopup(response)
+      form.resetFields()
+      setEmrType("");
+      setInputValue({})
       getAllPatients(
         pageNo,
         computedStartDate,
