@@ -2,7 +2,13 @@ import React, { useState, useEffect, useCallback, use } from "react";
 import { DatePicker, Input, Popover, Select } from "antd";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo, faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleInfo,
+  faCircleNotch,
+  faSearch,
+  faLaptopMedical,
+  faListOl,
+} from "@fortawesome/free-solid-svg-icons";
 import "react-circular-progressbar/dist/styles.css";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -22,6 +28,12 @@ import dayjs from "dayjs";
 import DetailedPdfTable from "../../../../components/table/tenantTable/pdfTable/detailPdfTable";
 import { actions as allReportActions } from "../../../../stores/admin/report";
 import { getStorage, removeStorage } from "../../../../utils/storages";
+import {
+  faUser,
+  faCalendar,
+  faCircleUser,
+  faCircleDot,
+} from "@fortawesome/free-regular-svg-icons";
 export const statusOptions = [
   { label: "Computed", value: "COMPUTED" },
   { label: "Processing", value: "PROCESSING" },
@@ -193,7 +205,7 @@ const DetailedViewPdfTable = ({
     {
       id: 1,
       title: "Batch Details",
-      icon: profile,
+      icon: <FontAwesomeIcon icon={faUser} color="#241571" className="mx-2" />,
       name: (
         <>
           {currentId?.name ? currentId?.name : "--"}
@@ -207,7 +219,9 @@ const DetailedViewPdfTable = ({
     {
       id: 2,
       title: "Count",
-      icon: statusIcon,
+      icon: (
+        <FontAwesomeIcon icon={faListOl} color="#241571" className="mx-2" />
+      ),
       name: (
         <>
           {
@@ -249,9 +263,11 @@ const DetailedViewPdfTable = ({
     {
       id: 3,
       title: "Year Of Services",
-      icon: calender,
+      icon: (
+        <FontAwesomeIcon icon={faCalendar} color="#241571" className="mx-2" />
+      ),
       name: (
-        <div className="text-start">
+        <div>
           {currentId?.yearOfService?.length > 0
             ? currentId?.yearOfService?.map(
                 (item, index) =>
@@ -266,19 +282,29 @@ const DetailedViewPdfTable = ({
     {
       id: 3,
       title: "EMR",
-      icon: computed,
+      icon: (
+        <FontAwesomeIcon
+          icon={faLaptopMedical}
+          color="#241571"
+          className="mx-2"
+        />
+      ),
       name: currentId?.emrType ? currentId?.emrType : "---",
     },
     {
       id: 3,
       title: "Source",
-      icon: computed,
+      icon: (
+        <FontAwesomeIcon icon={faCircleDot} color="#241571" className="mx-2" />
+      ),
       name: currentId?.source ? currentId?.source : "---",
     },
     {
       id: 4,
       title: "Initiated By",
-      icon: person,
+      icon: (
+        <FontAwesomeIcon icon={faCircleUser} color="#241571" className="mx-2" />
+      ),
       name: currentId?.createdBy ? (
         <Popover content={currentId?.createdBy}>
           {currentId?.createdBy.slice(0, 15) + "..."}
@@ -290,7 +316,9 @@ const DetailedViewPdfTable = ({
     {
       id: 5,
       title: "Batch Initiated",
-      icon: calender,
+      icon: (
+        <FontAwesomeIcon icon={faCalendar} color="#241571" className="mx-2" />
+      ),
       name: currentId?.createdDate
         ? dayjs(currentId?.createdDate).format("MM/DD/YYYY")
         : "---",
@@ -298,7 +326,13 @@ const DetailedViewPdfTable = ({
     {
       id: 6,
       title: "Status",
-      icon: calender,
+      icon: (
+        <FontAwesomeIcon
+          icon={faCircleNotch}
+          color="#241571"
+          className="mx-2"
+        />
+      ),
       name: currentId?.batchUploadStatus ? currentId?.batchUploadStatus : "---",
     },
   ];
@@ -328,16 +362,18 @@ const DetailedViewPdfTable = ({
                         >
                           <Image src={leftArrow} />
                         </button>
-                        <div className="w-100 d-flex justify-between">
+                        <div className="w-100 d-flex gap-4 flex-wrap justify-between">
                           {headerData?.map((item) => (
-                            <div style={{ width: "20%" }} key={item?.id}>
+                            <div key={item?.id}>
                               <div style={{ display: "flex" }}>
-                                {/* <Image src={item?.icon} alt="npimg" /> */}
-                                <div className={styles.topTitle}>
+                                <div
+                                  className={`text-truncate ${styles.topTitle}`}
+                                >
+                                  {item?.icon}
                                   {item?.title}
                                 </div>
                               </div>
-                              <div className="px-2">{item?.name}</div>
+                              <div className="px-2 text-center">{item?.name}</div>
                             </div>
                           ))}
                         </div>
