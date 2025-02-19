@@ -507,8 +507,8 @@ const Index = ({
                           className="d-flex justify-content-between"
                           style={{ width: "100%", margin: "auto" }}
                         >
-                          <div className="d-flex">
-                            <div className="col-4 mx-2">
+                          <div className="d-flex flex-wrap col-10 ">
+                            <div className="default-filter-size col-2 col-xl-2 col-md-4 mx-1">
                               <label>Search by Name or ID</label>
                               <div style={{ height: "45px" }}>
                                 <Input
@@ -539,13 +539,12 @@ const Index = ({
                                 />
                               </div>
                             </div>
-                            <div className="col-5 mx-2">
+                            <div className="default-filter-size col-2 col-xl-2 col-md-3 mx-1">
                               <label>Date</label>
                               <div class="form-group has-search">
-                              
                                 <RangePicker
-                                id="select-date"
-                                name="select-date"
+                                  id="select-date"
+                                  name="select-date"
                                   format="MM-DD-YYYY"
                                   value={
                                     selectedDates
@@ -562,7 +561,7 @@ const Index = ({
                                   onCalendarChange={(val) => {
                                     setSelectedDates((prev) => ({
                                       ...prev,
-                                      [reportActiveTab]: val, 
+                                      [reportActiveTab]: val,
                                     }));
                                   }}
                                   disabledDate={(currentDate) => {
@@ -572,17 +571,17 @@ const Index = ({
                                     return disabledDate(
                                       currentDate,
                                       selectedRange
-                                    ); 
+                                    );
                                   }}
                                 />
                               </div>
                             </div>
-                            <div className="col-4 mx-2">
+                            <div className="default-filter-size col-2 col-xl-2 col-md-3 mx-1">
                               <label>Status</label>
                               <div className={`custom-react-select`}>
                                 <Select
-                                id="select-status"
-                                name="select-status"
+                                  id="select-status"
+                                  name="select-status"
                                   placeholder={"Select"}
                                   options={
                                     reportActiveTab === "FHIR"
@@ -602,12 +601,12 @@ const Index = ({
                             </div>
                             {!reportActiveTab ||
                               (reportActiveTab === "FHIR" && (
-                                <div className="col-4 mx-2">
+                                <div className=" default-filter-size col-xl-2 col-md-4 mx-1">
                                   <label>Initiated By</label>
                                   <div className={`custom-react-select`}>
                                     <Select
-                                    id="initiated-by"
-                                    name="initiated-by"
+                                      id="initiated-by"
+                                      name="initiated-by"
                                       placeholder={"Select"}
                                       options={statusOptions}
                                       onChange={(selectedOption) => {
@@ -622,7 +621,7 @@ const Index = ({
                                 </div>
                               ))}
                           </div>
-                          <div className="d-flex mx-1 justify-content-end">
+                          <div className="d-flex mx-1 col-2 justify-content-end">
                             {!reportActiveTab || reportActiveTab === "FHIR" ? (
                               <div
                                 className={styles.btnContainer}
@@ -683,7 +682,12 @@ const Index = ({
                                       handleTabs("FHIR");
                                     }}
                                   >
-                                    <Nav.Link  id="fhir" name="fhir" to="#my-posts" eventKey="fhir">
+                                    <Nav.Link
+                                      id="fhir"
+                                      name="fhir"
+                                      to="#my-posts"
+                                      eventKey="fhir"
+                                    >
                                       FHIR
                                     </Nav.Link>
                                   </Nav.Item>
@@ -694,7 +698,12 @@ const Index = ({
                                       handleTabs("PDF");
                                     }}
                                   >
-                                    <Nav.Link  id="pdf" name="pdf" to="#my-posts" eventKey="pdf">
+                                    <Nav.Link
+                                      id="pdf"
+                                      name="pdf"
+                                      to="#my-posts"
+                                      eventKey="pdf"
+                                    >
                                       PDF
                                     </Nav.Link>
                                   </Nav.Item>
