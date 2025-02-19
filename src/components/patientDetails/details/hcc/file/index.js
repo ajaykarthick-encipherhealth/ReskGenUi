@@ -784,7 +784,7 @@ const File = ({
           <div className="col-4">
             <div
               // className="px-1"
-              style={{ height: "90vh", overflowY: "scroll" }}
+              style={{ height: "90vh", overflowY: "scroll" ,overflowX: "hidden"}}
             >
               <ManuallyAdd
                 handleCloseModal={handleCloseModal}

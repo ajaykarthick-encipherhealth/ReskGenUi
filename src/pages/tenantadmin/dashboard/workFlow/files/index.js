@@ -194,18 +194,13 @@ const Files = ({
         <div className="d-flex justify-content-between w-100">
           {cardData?.map((item, index) => (
             <div
-              className="rounded-lg "
+              // className="rounded-lg "
               style={{
                 backgroundColor: item?.color,
-                width: "20%",
-                height: "80px",
-                display: "flex",
-                // justifyContent: "center",
-                textAlign: "center",
-                alignItems: "center",
-                borderRadius: "10px",
-                padding: "5px",
+               
               }}
+              className= {` rounded-lg d-flex align-items-center  ${styles.fileCard}`}
+
             >
               {getFilesWorkflowLoader ? (
                 <div>
@@ -216,7 +211,7 @@ const Files = ({
                   />
                 </div>
               ) : (
-                <div className="d-flex  mt-3">
+                <div className="d-flex gap-2  mt-3">
                   <div
                     style={{
                       width: "48px",
