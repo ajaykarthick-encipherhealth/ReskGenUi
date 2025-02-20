@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button, DatePicker, Modal } from "antd";
 import dayjs from "dayjs";
 import { connect } from "react-redux";
@@ -23,11 +23,11 @@ const HeadTitle = ({
   getDateRange,
   defaultDateRange,
 }) => {
+  const pickerRef = useRef();
   const [tempDates, setTempDates] = useState([]);
   const [backupDates, setBackupDates] = useState([]);
   const [clearFlag, setClearFlag] = useState(false);
 
-  
   useEffect(() => {
     if (defaultDateRange?.startDate && defaultDateRange?.endDate) {
       const start = dayjs(defaultDateRange.startDate);
@@ -38,6 +38,10 @@ const HeadTitle = ({
   }, [defaultDateRange]);
 
   const handleDatePickerChange = (date) => {
+    if (!date || date.length === 0) {
+      // Focus on the "From" date field after clearing
+      setTimeout(() => pickerRef.current?.focus(), 100);
+    }
     if (date) {
       setTempDates(date);
       setClearFlag(false);
@@ -94,8 +98,8 @@ const HeadTitle = ({
       </div>
       {anchorTag && (
         <span
-        id="click-viewAll"
-        name="click-viewAll"
+          id="click-viewAll"
+          name="click-viewAll"
           className={styles.anchor}
           onClick={typeof handleOpen === "function" ? handleOpen : undefined}
         >
@@ -109,7 +113,12 @@ const HeadTitle = ({
         onCancel={handleCancel}
         footer={
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button name="cancel-btn" id="cancel-btn" onClick={handleCancel} style={{ marginRight: "10px" }}>
+            <Button
+              name="cancel-btn"
+              id="cancel-btn"
+              onClick={handleCancel}
+              style={{ marginRight: "10px" }}
+            >
               Cancel
             </Button>
             <Button name="ok-btn" id="ok-btn" onClick={handleOk} type="primary">
@@ -123,6 +132,7 @@ const HeadTitle = ({
           className={`${styles.modalDetails} d-flex justify-content-between`}
         >
           <RangePicker
+            ref={pickerRef}
             getPopupContainer={() => document.getElementById("date-popup")}
             value={tempDates?.length ? tempDates : null}
             onChange={handleDatePickerChange}
