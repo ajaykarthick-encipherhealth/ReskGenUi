@@ -35,7 +35,8 @@ const MovementAction = ({
   meatCriteriaList,
   setSelectCardTitle,
   isShow,
-  fromMeat
+  fromMeat,
+  patientDetailsLoad
 }) => {
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const onChangeValues = (data) => {
@@ -68,6 +69,7 @@ const MovementAction = ({
           getpatientDetailsData,
           patientDetailsResult,
           handleCloseModal,
+          patientDetailsLoad
         });
       }
     } else {
@@ -80,6 +82,7 @@ const MovementAction = ({
         getpatientDetailsData,
         patientDetailsResult,
         handleCloseModal,
+        patientDetailsLoad
       });
     }
   };
@@ -132,6 +135,7 @@ const MovementAction = ({
                     getpatientDetailsData,
                     patientDetailsResult,
                     handleCloseModal,
+                    patientDetailsLoad
                   });
                 }}
                 title="You want move to suggested?"
@@ -171,6 +175,7 @@ const MovementAction = ({
                     getpatientDetailsData,
                     patientDetailsResult,
                     handleCloseModal,
+                    patientDetailsLoad
                   });
                 }}
                 title="You want move to potential?"
@@ -180,19 +185,19 @@ const MovementAction = ({
               >
                 <span
                   className={`d-flex align-items-center justify-content-center ${styles.potentialIcon}`}
+                  onClick={() => {
+                    moveToStrightAction(
+                      setIsValidAction,
+                      "Move to Potential",
+                      cardTitle
+                    );
+                      onchangeValid(result.diagnosisCode, result);
+                      onChangeValues(result);
+                  }}
                 >
                   <FontAwesomeIcon
                     icon={faHandHoldingMedical}
                     style={{ fontSize: "9px" }}
-                    onClick={() => {
-                      moveToStrightAction(
-                        setIsValidAction,
-                        "Move to Potential",
-                        cardTitle
-                      ),
-                        onchangeValid(result.diagnosisCode, result),
-                        onChangeValues(result);
-                    }}
                   />
                 </span>
               </Popconfirm>
@@ -222,6 +227,7 @@ const MovementAction = ({
                     getpatientDetailsData,
                     patientDetailsResult,
                     handleCloseModal,
+                    patientDetailsLoad
                   });
                 }}
                 title="Do you want to move to delete?"
@@ -264,6 +270,7 @@ const enhancer = connect(
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
+    patientDetailsLoad: detailsActions.patientDetailsLoad
   }
 );
 export default enhancer(MovementAction);

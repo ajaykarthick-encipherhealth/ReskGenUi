@@ -1279,138 +1279,200 @@ export const handleSubmitValidNotes = async ({
   getpatientDetailsData,
   patientDetailsResult,
   handleCloseModal,
+  patientDetailsLoad
 }) => {
   setFileLoading(true);
   setConfirmNotesModalValid(false);
   handleCloseModal();
 
-  console.log(
-    values,
-    setFileLoading,
-    setConfirmNotesModalValid,
-    getPatientDetailsReload,
-    isValidAction,
-    selectDisDetails,
-    getpatientDetailsData,
-    patientDetailsResult,
-    handleCloseModal
-  );
+  // var apiURL = "";
+  // if (
+  //   isValidAction.name == "Move to Suggested" &&
+  //   isValidAction.title == "HCC"
+  // ) {
+  //   apiURL = "management/disease/move/validtosuggested";
+  // }
+  // if (isValidAction.name == "Move to Deleted" && isValidAction.title == "HCC") {
+  //   apiURL = "management/disease/move/validtodeleted";
+  // }
+  // if (
+  //   isValidAction.name == "Move to Deleted" &&
+  //   isValidAction.title == "SUGGESTED"
+  // ) {
+  //   apiURL = "management/disease/move/suggestedtodeleted";
+  // }
+  // if (
+  //   isValidAction.name == "Move to HCC" &&
+  //   isValidAction.title == "SUGGESTED"
+  // ) {
+  //   apiURL = "management/disease/move/suggestedtovalid";
+  // }
+  // if (
+  //   isValidAction.name == "Move to Suggested" &&
+  //   isValidAction.title == "DELETED"
+  // ) {
+  //   apiURL = "management/disease/move/deletedtoSuggested";
+  // }
+  // if (isValidAction.name == "Move to HCC" && isValidAction.title == "DELETED") {
+  //   apiURL = "management/disease/move/deletedtovalid";
+  // }
+  // if (isValidAction.name == "Move to Hcc" && isValidAction.title == "NONHCC") {
+  //   apiURL = "management/disease/move/invalidtovalid";
+  // }
+  // if (
+  //   isValidAction.name == "Move to Deleted" &&
+  //   isValidAction.title == "COMBO"
+  // ) {
+  //   apiURL = "management/disease/move/combovalidtodeleted";
+  // }
+  // if (isValidAction.name == "Move to HCC" && isValidAction.title == "COMBO") {
+  //   apiURL = "management/disease/move/combodeletedtovalid";
+  // }
+  // if (
+  //   isValidAction.name == "Move to Deleted" &&
+  //   isValidAction.title == "NON_MEAT"
+  // ) {
+  //   apiURL = "management/disease/move/suggestedtodeleted";
+  // }
+  // if (isValidAction.name == "Move to HCC" && isValidAction.title == "MEAT") {
+  //   apiURL = "management/meat/move/suggestedtovalid";
+  // }
 
-  var apiURL = "";
-  if (
-    isValidAction.name == "Move to Suggested" &&
-    isValidAction.title == "HCC"
-  ) {
-    apiURL = "management/disease/move/validtosuggested";
-  }
-  if (isValidAction.name == "Move to Deleted" && isValidAction.title == "HCC") {
-    apiURL = "management/disease/move/validtodeleted";
-  }
-  if (
-    isValidAction.name == "Move to Deleted" &&
-    isValidAction.title == "SUGGESTED"
-  ) {
-    apiURL = "management/disease/move/suggestedtodeleted";
-  }
-  if (
-    isValidAction.name == "Move to HCC" &&
-    isValidAction.title == "SUGGESTED"
-  ) {
-    apiURL = "management/disease/move/suggestedtovalid";
-  }
-  if (
-    isValidAction.name == "Move to Suggested" &&
-    isValidAction.title == "DELETED"
-  ) {
-    apiURL = "management/disease/move/deletedtoSuggested";
-  }
-  if (isValidAction.name == "Move to HCC" && isValidAction.title == "DELETED") {
-    apiURL = "management/disease/move/deletedtovalid";
-  }
-  if (isValidAction.name == "Move to Hcc" && isValidAction.title == "NONHCC") {
-    apiURL = "management/disease/move/invalidtovalid";
-  }
-  if (
-    isValidAction.name == "Move to Deleted" &&
-    isValidAction.title == "COMBO"
-  ) {
-    apiURL = "management/disease/move/combovalidtodeleted";
-  }
-  if (isValidAction.name == "Move to HCC" && isValidAction.title == "COMBO") {
-    apiURL = "management/disease/move/combodeletedtovalid";
-  }
-  if (
-    isValidAction.name == "Move to Deleted" &&
-    isValidAction.title == "NON_MEAT"
-  ) {
-    apiURL = "management/disease/move/suggestedtodeleted";
-  }
-  if (isValidAction.name == "Move to HCC" && isValidAction.title == "MEAT") {
-    apiURL = "management/meat/move/suggestedtovalid";
+  // if (
+  //   isValidAction.name == "Move to Deleted" &&
+  //   isValidAction.title == "NON_HCC_DISEASES"
+  // ) {
+  //   apiURL = "management/disease/move/invalidtodeleted";
+  // }
+
+  // if (
+  //   isValidAction.name == "Move to HCC" &&
+  //   isValidAction.title == "NON_MEAT"
+  // ) {
+  //   apiURL = "management/meat/move/suggestedtovalid";
+  // }
+  // if (
+  //   isValidAction.name == "Move to Deleted" &&
+  //   isValidAction.title == "MEAT"
+  // ) {
+  //   apiURL = "management/disease/move/validtosuggested";
+  // }
+  // if (
+  //   isValidAction.name == "Move to HCC" &&
+  //   isValidAction.title == "POTENTIAL"
+  // ) {
+  //   apiURL = "management/disease/move/potentialtovalid";
+  // }
+  // if (
+  //   isValidAction.name == "Move to Suggested" &&
+  //   isValidAction.title == "POTENTIAL"
+  // ) {
+  //   apiURL = "management/disease/move/potentialtosuggested";
+  // }
+  // if (
+  //   isValidAction.name == "Move to Deleted" &&
+  //   isValidAction.title == "POTENTIAL"
+  // ) {
+  //   apiURL = "management/disease/move/potentialtodeleted";
+  // }
+  // if (
+  //   isValidAction.name == "Move to Potential" &&
+  //   isValidAction.title == "HCC"
+  // ) {
+  //   apiURL = "management/disease/move/validtopotential";
+  // }
+  // if (
+  //   isValidAction.name == "Move to Potential" &&
+  //   isValidAction.title == "SUGGESTED"
+  // ) {
+  //   apiURL = "management/disease/move/suggestedtopotential";
+  // }
+  // if (
+  //   isValidAction.name == "Move to Potential" &&
+  //   isValidAction.title == "DELETED"
+  // ) {
+  //   apiURL = "management/disease/move/deletedtopotential";
+  // }
+  // if (
+  //   isValidAction.name == "Move to HCC" &&
+  //   isValidAction.title == "DELETED" &&
+  //   selectDisDetails?.defaultPosition == "INVALID"
+  // ) {
+  //   apiURL = "management/disease/move/deletedtoinvalid";
+  // }
+
+  let apiURL = "";
+  switch (`${isValidAction.name}_${isValidAction.title}`) {
+    case "Move to Suggested_HCC":
+      apiURL = "management/disease/move/validtosuggested";
+      break;
+    case "Move to Deleted_HCC":
+      apiURL = "management/disease/move/validtodeleted";
+      break;
+    case "Move to Deleted_SUGGESTED":
+      apiURL = "management/disease/move/suggestedtodeleted";
+      break;
+    case "Move to HCC_SUGGESTED":
+      apiURL = "management/disease/move/suggestedtovalid";
+      break;
+    case "Move to Suggested_DELETED":
+      apiURL = "management/disease/move/deletedtoSuggested";
+      break;
+    case "Move to HCC_DELETED":
+      apiURL = "management/disease/move/deletedtovalid";
+      break;
+    case "Move to Hcc_NONHCC":
+      apiURL = "management/disease/move/invalidtovalid";
+      break;
+    case "Move to Deleted_COMBO":
+      apiURL = "management/disease/move/combovalidtodeleted";
+      break;
+    case "Move to HCC_COMBO":
+      apiURL = "management/disease/move/combodeletedtovalid";
+      break;
+    case "Move to Deleted_NON_MEAT":
+      apiURL = "management/disease/move/suggestedtodeleted";
+      break;
+    case "Move to HCC_MEAT":
+      apiURL = "management/meat/move/suggestedtovalid";
+      break;
+    case "Move to Deleted_NON_HCC_DISEASES":
+      apiURL = "management/disease/move/invalidtodeleted";
+      break;
+    case "Move to HCC_NON_MEAT":
+      apiURL = "management/meat/move/suggestedtovalid";
+      break;
+    case "Move to Deleted_MEAT":
+      apiURL = "management/disease/move/validtosuggested";
+      break;
+    case "Move to HCC_POTENTIAL":
+      apiURL = "management/disease/move/potentialtovalid";
+      break;
+    case "Move to Suggested_POTENTIAL":
+      apiURL = "management/disease/move/potentialtosuggested";
+      break;
+    case "Move to Deleted_POTENTIAL":
+      apiURL = "management/disease/move/potentialtodeleted";
+      break;
+    case "Move to Potential_HCC":
+      apiURL = "management/disease/move/validtopotential";
+      break;
+    case "Move to Potential_SUGGESTED":
+      apiURL = "management/disease/move/suggestedtopotential";
+      break;
+    case "Move to Potential_DELETED":
+      apiURL = "management/disease/move/deletedtopotential";
+      break;
+    case "Move to HCC_DELETED":
+      if (selectDisDetails?.defaultPosition === "INVALID") {
+        apiURL = "management/disease/move/deletedtoinvalid";
+      }
+      break;
+    default:
+      apiURL = ""; // Default case to handle unexpected input
+      break;
   }
 
-  if (
-    isValidAction.name == "Move to Deleted" &&
-    isValidAction.title == "NON_HCC_DISEASES"
-  ) {
-    apiURL = "management/disease/move/invalidtodeleted";
-  }
-
-  if (
-    isValidAction.name == "Move to HCC" &&
-    isValidAction.title == "NON_MEAT"
-  ) {
-    apiURL = "management/meat/move/suggestedtovalid";
-  }
-  if (
-    isValidAction.name == "Move to Deleted" &&
-    isValidAction.title == "MEAT"
-  ) {
-    apiURL = "management/disease/move/validtosuggested";
-  }
-  if (
-    isValidAction.name == "Move to HCC" &&
-    isValidAction.title == "POTENTIAL"
-  ) {
-    apiURL = "management/disease/move/potentialtovalid";
-  }
-  if (
-    isValidAction.name == "Move to Suggested" &&
-    isValidAction.title == "POTENTIAL"
-  ) {
-    apiURL = "management/disease/move/potentialtosuggested";
-  }
-  if (
-    isValidAction.name == "Move to Deleted" &&
-    isValidAction.title == "POTENTIAL"
-  ) {
-    apiURL = "management/disease/move/potentialtodeleted";
-  }
-  if (
-    isValidAction.name == "Move to Potential" &&
-    isValidAction.title == "HCC"
-  ) {
-    apiURL = "management/disease/move/validtopotential";
-  }
-  if (
-    isValidAction.name == "Move to Potential" &&
-    isValidAction.title == "SUGGESTED"
-  ) {
-    apiURL = "management/disease/move/suggestedtopotential";
-  }
-  if (
-    isValidAction.name == "Move to Potential" &&
-    isValidAction.title == "DELETED"
-  ) {
-    apiURL = "management/disease/move/deletedtopotential";
-  }
-  if (
-    isValidAction.name == "Move to HCC" &&
-    isValidAction.title == "DELETED" &&
-    selectDisDetails?.defaultPosition == "INVALID"
-  ) {
-    apiURL = "management/disease/move/deletedtoinvalid";
-  }
   try {
     var patientId = getStorage("patientId");
     var dataFormatSuggested = {
@@ -1418,23 +1480,22 @@ export const handleSubmitValidNotes = async ({
       diagnosisCode: selectDisDetails.diagnosisCode
         ? selectDisDetails.diagnosisCode
         : selectDisDetails.diagnosisCodeCombo,
-      // description: selectDisDetails.actualDescription,
-      // dbDescription: selectDisDetails.dbDescription,
-      // reason: values?.reason,
       processedYear: selectDisDetails.processedYear,
       dateOfServices: selectDisDetails.dateOfServices,
       chartProcessType: selectDisDetails.dateOfService
         ? "DATE_OF_SERVICE"
         : "YEAR",
     };
+    patientDetailsLoad(true);
     const response = await movementApiCall(dataFormatSuggested, apiURL);
     if (response?.status == "SUCCESS") {
       setFileLoading(false);
-      notification.success({
-        message: response?.response,
-        placement: "top",
-        duration: 1,
-      });
+      // notification.success({
+      //   message: response?.response,
+      //   placement: "top",
+      //   duration: 1,
+      // });
+      getResponePopup(response);
       getpatientDetailsData(
         patientId,
         patientDetailsResult?.data?.response?.processedYear,
@@ -1442,9 +1503,11 @@ export const handleSubmitValidNotes = async ({
         setFileLoading,
         ""
       );
+      patientDetailsLoad(false);
     } else {
       setFileLoading(false);
-      getResponePopup(result);
+      getResponePopup(response);
+      patientDetailsLoad(false);
     }
   } catch (err) {
     setFileLoading(false);
