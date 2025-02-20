@@ -119,7 +119,9 @@ export const getEncounterDateBackground = ({
           placement="bottom"
           overlayStyle={{ zIndex: 1000 }}
           content={
-            <>
+            <div
+              style={{ width: "180px", height: "150px", overflowY: "scroll" }}
+            >
               {value?.map((item, i) =>
                 i > 1 ? (
                   <span
@@ -162,7 +164,7 @@ export const getEncounterDateBackground = ({
                   </span>
                 ) : null
               )}
-            </>
+            </div>
           }
         >
           <span
@@ -730,7 +732,7 @@ export const getCaptureSectionBackgroundFile = ({
             overlayStyle={{ zIndex: !popup && 1000 }}
             placement="bottom"
             content={
-              <>
+              <div className="patientDetailsPopSTyle">
                 {res?.length > 30 && <div>{res}</div>}
                 {getHeaderHyperlink(
                   headerResult,
@@ -756,7 +758,7 @@ export const getCaptureSectionBackgroundFile = ({
                   setLabData,
                   storeFileDetails
                 )}
-              </>
+              </div>
             }
           >
             <span
@@ -892,30 +894,34 @@ export const getCaptureSectionBackgroundFile = ({
                     <Popover
                       overlayStyle={{ zIndex: 9999 }}
                       placement="bottom"
-                      content={getHeaderHyperlink(
-                        findSectionHyperlink(hyperlinks, item),
-                        encounterDateMatching,
-                        documentPlace,
-                        setSearch,
-                        setFileLoading,
-                        setIsModalOpenLab,
-                        setIsModalOpenRadiology,
-                        setIsModalOpenValidCodes,
-                        setFileModalHeader,
-                        patientDocumentResult,
-                        fileInitialPage,
-                        setFileInitialPage,
-                        diagnosisCode,
-                        "",
-                        "",
-                        diseaseName,
-                        getSelectedDosPageNumber,
-                        getLabPDF,
-                        getRadiologyPDF,
-                        getCurrentDiseaseType,
-                        setLabData,
-                        storeFileDetails
-                      )}
+                      content={
+                        <div className="patientDetailsPopSTyle">
+                          {getHeaderHyperlink(
+                            findSectionHyperlink(hyperlinks, item),
+                            encounterDateMatching,
+                            documentPlace,
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpenValidCodes,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            diagnosisCode,
+                            "",
+                            "",
+                            diseaseName,
+                            getSelectedDosPageNumber,
+                            getLabPDF,
+                            getRadiologyPDF,
+                            getCurrentDiseaseType,
+                            setLabData,
+                            storeFileDetails
+                          )}
+                        </div>
+                      }
                     >
                       {isMulitpleHeader &&
                         diagnosisCode == isMulitpleHeaderCode && (

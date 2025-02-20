@@ -27,7 +27,7 @@ export const getProviderNameTag = ({
   getCurrentDiseaseType,
   setLabData,
   storeFileDetails,
-  isShow
+  isShow,
 }) => {
   return providerNames?.map((res, index) => {
     const normalizedRes = res?.toLowerCase().trim();
@@ -62,21 +62,22 @@ export const getProviderNameTag = ({
               // } else {
               //   getCurrentDiseaseType && getCurrentDiseaseType(true);
               // }
-              // storeFileDetails(headerResult[0]?.fileId)      
-              isShow && findProviderNameDocument({
-                data: headerResult[0],
-                diagnosisCode: diagnosisCode,
-                diseaseName: diseaseName,
-                setSearch: setSearch,
-                setIsModalOpen: setIsModalOpen,
-                setFileModalHeader: setFileModalHeader,
-                patientDocumentResult: patientDocumentResult,
-                setSelectMeatResult: setSelectMeatResult,
-                meatresult: meatresult,
-                getSelectedDosPageNumber: getSelectedDosPageNumber,
-                setLabData: setLabData,
-                storeFileDetails: storeFileDetails,
-              });
+              // storeFileDetails(headerResult[0]?.fileId)
+              isShow &&
+                findProviderNameDocument({
+                  data: headerResult[0],
+                  diagnosisCode: diagnosisCode,
+                  diseaseName: diseaseName,
+                  setSearch: setSearch,
+                  setIsModalOpen: setIsModalOpen,
+                  setFileModalHeader: setFileModalHeader,
+                  patientDocumentResult: patientDocumentResult,
+                  setSelectMeatResult: setSelectMeatResult,
+                  meatresult: meatresult,
+                  getSelectedDosPageNumber: getSelectedDosPageNumber,
+                  setLabData: setLabData,
+                  storeFileDetails: storeFileDetails,
+                });
             }}
             className={`mt-2 text-start ${visitStyles.provider_name} text-truncate`}
             style={{
@@ -101,12 +102,12 @@ export const getProviderNameTag = ({
           return sectionMapArr;
         }
       } else {
-        const sectionMapArr = (
-         isShow? <Popover
+        const sectionMapArr = isShow ? (
+          <Popover
             placement="bottom"
             overlayStyle={{ zIndex: 1000 }}
             content={
-              <>
+              <div className="patientDetailsPopSTyle">
                 {res?.length > 20 && <div>{res}</div>}
                 {getProviderPopoverHyperlink({
                   value: headerResult,
@@ -125,7 +126,7 @@ export const getProviderNameTag = ({
                   setLabData,
                   storeFileDetails: storeFileDetails,
                 })}
-              </>
+              </div>
             }
           >
             <span
@@ -147,25 +148,27 @@ export const getProviderNameTag = ({
               </i>
               {truncateString(res, 20)}
             </span>
-          </Popover>:<span
-              className={`mt-2 text-start ${visitStyles.provider_name} text-truncate`}
-              style={{
-                backgroundColor: stringToColour(res) + 33,
-                color: stringToColour(res),
-              }}
-            >
-              <i>
-                {" "}
-                <FontAwesomeIcon
-                  icon={faCircleUser}
-                  style={{
-                    size: 10,
-                    color: stringToColour(res),
-                  }}
-                />
-              </i>
-              {truncateString(res, 20)}
-            </span>
+          </Popover>
+        ) : (
+          <span
+            className={`mt-2 text-start ${visitStyles.provider_name} text-truncate`}
+            style={{
+              backgroundColor: stringToColour(res) + 33,
+              color: stringToColour(res),
+            }}
+          >
+            <i>
+              {" "}
+              <FontAwesomeIcon
+                icon={faCircleUser}
+                style={{
+                  size: 10,
+                  color: stringToColour(res),
+                }}
+              />
+            </i>
+            {truncateString(res, 20)}
+          </span>
         );
         if (res !== "") {
           return sectionMapArr;
@@ -281,20 +284,26 @@ export const getProviderNameTag = ({
               i > 1 ? (
                 <Popover
                   placement="bottom"
-                  content={getProviderPopoverHyperlink({
-                    value: findSectionHyperlink(hyperlinks, item),
-                    diagnosisCode: diagnosisCode,
-                    diseaseName: diseaseName,
-                    setSearch: setSearch,
-                    setIsModalOpen: setIsModalOpen,
-                    setFileModalHeader: setFileModalHeader,
-                    patientDocumentResult: patientDocumentResult,
-                    setSelectMeatResult: setSelectMeatResult,
-                    meatresult: meatresult,
-                    getSelectedDosPageNumber: getSelectedDosPageNumber,
-                    getRadiologyPDF,
-                    getLabPDF,
-                  })}
+                  content={
+                    <div
+                      className="patientDetailsPopSTyle"
+                    >
+                      {getProviderPopoverHyperlink({
+                        value: findSectionHyperlink(hyperlinks, item),
+                        diagnosisCode: diagnosisCode,
+                        diseaseName: diseaseName,
+                        setSearch: setSearch,
+                        setIsModalOpen: setIsModalOpen,
+                        setFileModalHeader: setFileModalHeader,
+                        patientDocumentResult: patientDocumentResult,
+                        setSelectMeatResult: setSelectMeatResult,
+                        meatresult: meatresult,
+                        getSelectedDosPageNumber: getSelectedDosPageNumber,
+                        getRadiologyPDF,
+                        getLabPDF,
+                      })}
+                    </div>
+                  }
                 >
                   {isMulitpleHeader &&
                     diagnosisCode === isMulitpleHeaderCode && (
