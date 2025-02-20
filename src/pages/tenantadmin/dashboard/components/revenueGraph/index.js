@@ -28,12 +28,12 @@ const RevenueGraph = ({
       ? getLast7Days()
       : getLast30Days();
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc;
-
+  const premiumByDateForPotential = getAllRaf?.premiumByDateForHcc;
   const resultArrayHCC = formatValues(premiumByDateForHcc, dates);
+  const resultArrayPotential=formatValues(premiumByDateForPotential, dates)
   const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested;
   const resultArrayCaregaps = formatValues(premiumByDateForSuggested, dates);
-  const totalCodes = resultArrayHCC.map((num, index) => num + resultArrayCaregaps[index]);
-
+  const totalCodes = resultArrayHCC.map((num, index) => num + resultArrayCaregaps[index]+resultArrayPotential[index]);
 
   const option = {
     tooltip: {
@@ -90,6 +90,20 @@ const RevenueGraph = ({
         },
 
         data: isMultiple ? resultArrayHCC : [""],
+
+        itemStyle: {
+          color: "#04B700",
+        },
+      },
+      {
+        name: "Potential Diagnosis Revenue",
+        type: "line",
+        step: "middle",
+        emphasis: {
+          focus: "series",
+        },
+
+        data: isMultiple ? resultArrayPotential : [""],
 
         itemStyle: {
           color: "#04B700",

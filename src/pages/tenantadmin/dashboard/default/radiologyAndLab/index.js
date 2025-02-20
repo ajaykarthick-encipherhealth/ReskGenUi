@@ -3,13 +3,15 @@ import styles from "../../styles.module.css";
 import CodesGraph from "../../components/codeGraph";
 import { actions as allActions } from "../../../../../stores/tenantAdmin/dashboard/default";
 import { connect } from "react-redux";
+import { Tooltip } from "antd";
+import { formatNumber } from "../../../../../utils/reusable";
 
 const index = ({
   getAllLabAndRadiologyCount,
   dateRange,
   selectedOrganization,
   labAndRadiologyCount,
-  selectDos
+  selectDos,
 }) => {
   const cardData = [
     {
@@ -34,7 +36,7 @@ const index = ({
       endDate: dateRange.endDate,
       organizationId: selectedOrganization,
     });
-  }, [dateRange,selectedOrganization]);
+  }, [dateRange, selectedOrganization]);
 
   return (
     <>
@@ -63,7 +65,13 @@ const index = ({
                     <div className="d-flex justify-content-center">
                       {item?.title}
                     </div>
-                    <div className={styles.count}>{item?.count}</div>
+                    <div className={styles.count}>
+                      {
+                        <Tooltip title={item?.count && item?.count}>
+                          {item?.count ? formatNumber(item?.count) : 0}
+                        </Tooltip>
+                      }
+                    </div>
                   </div>
                 </div>
               ))}
@@ -72,17 +80,25 @@ const index = ({
 
           <div>
             <div className={styles.header}>Overall Count</div>
-            <div className={styles.price}>{overallCount}</div>
+            <div className={styles.price}>
+              {
+                <Tooltip title={overallCount && overallCount}>
+                  {overallCount ? formatNumber(overallCount) : 0}
+                </Tooltip>
+              }
+            </div>
           </div>
         </div>
       </div>
-
-      <CodesGraph
-        borderColor={"#B51B75"}
-        borderColor2={"#0E46A3"}
-        isTwoWaves={true}
-        isLabValues={true}
-      />
+      <div className="totalCodesPies">
+        <CodesGraph
+          borderColor={"#B51B75"}
+          borderColor2={"#0E46A3"}
+          isTwoWaves={true}
+          isLabValues={true}
+          className="codesGraphStyle3"
+        />
+      </div>
     </>
   );
 };

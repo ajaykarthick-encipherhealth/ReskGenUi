@@ -17,6 +17,7 @@ const RafGraph = ({
   rafColor2,
   rafColor3,
   isCargaps,
+  rafColor4,
   isHcc,
   getAllRafScoreData,
   getAllRafScoreAPI,
@@ -24,7 +25,8 @@ const RafGraph = ({
   selectedOrganization,
   customDate,
   selectDos,
-  isPotential
+  isPotential,
+  className
 }) => {
   const [dateRange, setDateRange] = useState({
     startDate:
@@ -48,11 +50,13 @@ const RafGraph = ({
       ? getLast7Days()
       : getLast30Days();
   const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc;
+  const rafScoreByDateForPotential=getAllRafScoreData?.rafScoreByDateForHcc
   const resultArrayHCC = formatValues(rafScoreByDateForHcc, dates);
+  const resultArrayPotential = formatValues(rafScoreByDateForPotential, dates);
   const rafScoreByDateForSuggested =
     getAllRafScoreData?.rafScoreByDateForSuggested;
   const resultArrayCaregaps = formatValues(rafScoreByDateForSuggested, dates);
-  const totalCodes = resultArrayHCC.map((num, index) => num + resultArrayCaregaps[index]);
+  const totalCodes = resultArrayHCC.map((num, index) => num + resultArrayCaregaps[index]+ resultArrayPotential[index]);
 
 
   const option = {
@@ -123,6 +127,20 @@ const RafGraph = ({
         data: rafColor2 && resultArrayHCC,
       },
       {
+        name: "Potential Diagnosis RAF",
+        type: "line",
+        itemStyle: {
+          color: rafColor4,
+        },
+        areaStyle: {
+          color: rafColor4,
+        },
+        emphasis: {
+          focus: "series",
+        },
+        data: rafColor4 && resultArrayHCC,
+      },
+      {
         name: "Care Gaps RAF",
         type: "line",
         itemStyle: {
@@ -139,7 +157,7 @@ const RafGraph = ({
     ],
   };
   return (
-    <div className="carecapRAF">
+    <div className={`${className?className:"carecapRAF"}`}>
       <ReactECharts option={option} />
     </div>
   );

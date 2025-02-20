@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect } from "react";
 import { connect } from "react-redux";
 import CodesGraph from "../../components/codeGraph";
 import styles from "../../styles.module.css";
 import * as echarts from "echarts";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
-import { Empty, Spin, Tooltip } from "antd";
+import { Empty,Tooltip } from "antd";
 import {
   HccCodes,
   RafCounts,
@@ -34,8 +34,12 @@ const index = ({
   rafScorechartLoader,
   customDate,
   selectDos,
+  getAllPotentialCodes,
+  getAllPotentialCodesData
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
+  const potentialDiseaseCountValues = getAllPotentialCodes?.hccDiseaseCountMap;
+
   const dates =
     selectedValue === "custom"
       ? customDate
@@ -43,6 +47,7 @@ const index = ({
       ? getLast7Days()
       : getLast30Days();
   const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
+  const resultArrayPotential = formatValues(potentialDiseaseCountValues, dates);
 
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap;
@@ -61,7 +66,7 @@ const index = ({
       : [];
 
   const totalCodes = resultArrayHCC.map(
-    (num, index) => num + resultArrayCaregaps[index]
+    (num, index) => num + resultArrayCaregaps[index] + resultArrayPotential[index]
   );
 
   useEffect(() => {
@@ -153,6 +158,24 @@ const index = ({
         },
       },
       {
+        name: "Potential Diagnosis Codes",
+        data: resultArrayHCC,
+        type: "line",
+        lineStyle: { color: "#BEB531" },
+        smooth: true,
+        showSymbol: false,
+        areaStyle: {
+          opacity: 0.5,
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: "#BEB531" },
+            { offset: 1, color: "#FAFFFA" },
+          ]),
+        },
+        itemStyle: {
+          color: "#BEB531",
+        },
+      },
+      {
         name: "Care Gap Codes",
         data: resultArrayCaregaps,
         type: "line",
@@ -185,13 +208,17 @@ const index = ({
       title: "Care Gap Codes",
       color: "#FF9209",
     },
+    {
+      title: "Potential Diagnosis Codes",
+      color: "#beb531",
+    },
   ];
 
   const totalHccRafScore = getAllRaf?.totalHccRafScore || 0;
   const totalSuggestedRafScore = getAllRaf?.totalSuggestedRafScore || 0;
   const totalScore = (totalHccRafScore + totalSuggestedRafScore).toFixed(2);
 
-  const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
+  // const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
   // const totalScoreTwo = (hccDiseaseCountMap + suggestedCount).toFixed(2);
 
@@ -299,6 +326,7 @@ const index = ({
               overallData={true}
               rafColor={"#0095C2"}
               rafColor3={"#FF9209"}
+              rafColor4={"#BEB531"}
               rafColor2={"#00BC13"}
               selectedValue={selectedValue}
               dateRange={dateRange}
@@ -361,6 +389,8 @@ const enhancer = connect(
   (state) => ({
     getAllHccCodes:
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
+    getAllPotentialCodes:
+      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     rafScorechartLoader: state?.tenantAdmin?.dashboard?.default?.rafScoreLoader,
@@ -372,6 +402,7 @@ const enhancer = connect(
   }),
   {
     getAllHccCodesData: HccCodes,
+    getAllPotentialCodesData: HccCodes,
     getAllRafData: RafCounts,
     getAllRafScore: getAllRafScore,
   }

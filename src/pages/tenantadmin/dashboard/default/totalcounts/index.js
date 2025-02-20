@@ -52,7 +52,7 @@ const index = ({
   return (
     <div
       className="d-flex justify-content-between w-100 gap-2"
-      style={{ width: "100%" }}
+      
     >
       {cardData?.map((item, index) => (
         <div
@@ -73,12 +73,12 @@ const index = ({
             ) : (
               <div>
                 <div
-                  className="d-flex justify-content-start align-items-center gap-2"
-                  style={{ height: "50px" }}
+                  className="d-flex justify-content-start align-items-center gap-2 m-auto"
+                  style={{ height: "50px" ,width:"95%"}}
                 >
                   <div
                     style={{
-                      width: "40px",
+                      width: "30%",
                       height: "40px",
                       backgroundColor: item?.iconBg,
                       borderRadius: "10px",
@@ -92,7 +92,7 @@ const index = ({
                   </div>
                   <div
             
-                    className="tenant_count align-self-center"
+                    className="tenant_count align-self-center font-medium"
                   >
                     {item?.title}
                   </div>

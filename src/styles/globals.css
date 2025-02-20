@@ -15620,7 +15620,7 @@ input::-webkit-inner-spin-button {
 .codesGraphStyle1 > div > div > canvas {
   position: absolute;
   left: 0px;
-  top: 25px !important;
+  top: -18px !important;
   width: 592px;
   height: 300px !important;
   user-select: none;
@@ -15632,9 +15632,9 @@ input::-webkit-inner-spin-button {
 .codesGraphStyle2 > div > div > canvas {
   position: absolute;
   left: 0px;
-  top: 4px !important;
+  top: -30px !important;
   width: 592px;
-  height: 300px !important;
+  height: 360px !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   padding: 0px;
@@ -15645,22 +15645,33 @@ input::-webkit-inner-spin-button {
 .carecapRAF > div > div > canvas {
   position: absolute;
   left: 0px;
-  top: -34px !important;
+  top: -24px !important;
   width: 592px;
-  height: 300px;
+  height: 330px !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   padding: 0px;
   margin: 0px;
   border-width: 0px;
 }
-
-.revenueCharts1 > div > div > canvas {
+.carecapRAF2 > div > div > canvas {
   position: absolute;
   left: 0px;
   top: -34px !important;
   width: 592px;
-  height: 300px;
+  height: 300px !important;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
+}
+.revenueCharts1 > div > div > canvas {
+  position: absolute;
+  left: 0px;
+  top: -24px !important;
+  width: 592px;
+  height: 330px !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   padding: 0px;
@@ -15682,7 +15693,7 @@ input::-webkit-inner-spin-button {
 .codesGraphStyle3 > div > div > canvas {
   position: absolute;
   left: 0px;
-  top: 18px !important;
+  top: -24px !important;
   width: 592px;
   height: 300px !important;
   user-select: none;
@@ -16395,6 +16406,7 @@ input::-webkit-inner-spin-button {
 }
 .tenant_count {
   font-size: 16px !important;
+  width:70%;
 }
 @media (min-width: 1024px) and (max-width: 1309px) {
   .tenant_count {
@@ -16500,4 +16512,9 @@ input::-webkit-inner-spin-button {
 }
   .default-filter-size{
     width: 250px;
+  }
+
+  .default-filter-size{
+    width: 250px;
+    margin-top: 30px
   }

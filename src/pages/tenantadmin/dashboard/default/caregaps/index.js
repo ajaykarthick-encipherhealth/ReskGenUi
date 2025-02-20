@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import CodesGraph from "../../components/codeGraph";
 import styles from "../../styles.module.css";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
 import { connect } from "react-redux";
-import { Empty, Spin, Tooltip } from "antd";
+import { Empty, Tooltip } from "antd";
 import { Skeleton } from "antd";
 import {
   HccCodes,
@@ -12,19 +12,20 @@ import {
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import { formatNumber } from "../../../../../utils/reusable.js";
+import HederMinimization from "../../components/headerMinimization";
 
-const index = ({
+const Index = ({
   getAllHccCodes,
   getAllRaf,
   getAllRafScoreData,
   selectedValue,
   totalCodesLoader,
   revenueChartLoader,
-  rafScorechartLoader,
   customDate,
   getRafScoreLoader,
   selectDos,
 }) => {
+  const [minimize, setMinimize] = useState(false);
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
@@ -42,153 +43,163 @@ const index = ({
   const TotalCareGapsRevenue = getAllRaf?.totalSuggestedRafScore;
 
   return (
-    <div className="d-flex justify-content-between">
-      <div className="remianingLineGraph" style={{ width: "33%" }}>
-        <div className={styles.headers}>
-          <div className="d-flex justify-content-between">
-            <div className={styles.header}>Care Gap Codes</div>
-            <div>
-              <div className={styles.header}>Total Codes</div>
-              <div className={styles.price}>
-                <Tooltip
-                  title={
-                    getAllHccCodes?.suggestedCount &&
-                    getAllHccCodes?.suggestedCount
-                  }
-                >
-                  {getAllHccCodes?.suggestedCount
-                    ? formatNumber(getAllHccCodes?.suggestedCount)
-                    : 0}
-                </Tooltip>
+    <>
+      <HederMinimization
+        title={"Care Gap"}
+        minimize={minimize}
+        setMinimize={setMinimize}
+      />
+      {!minimize && (
+        <div className="d-flex justify-content-between">
+          <div className="remianingLineGraph" style={{ width: "33%" }}>
+            <div className={styles.headers}>
+              <div className="d-flex justify-content-between">
+                <div className={styles.header}>Care Gap Codes</div>
+                <div>
+                  <div className={styles.header}>Total Codes</div>
+                  <div className={styles.price}>
+                    <Tooltip
+                      title={
+                        getAllHccCodes?.suggestedCount &&
+                        getAllHccCodes?.suggestedCount
+                      }
+                    >
+                      {getAllHccCodes?.suggestedCount
+                        ? formatNumber(getAllHccCodes?.suggestedCount)
+                        : 0}
+                    </Tooltip>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        {totalCodesLoader ? (
-          <div>
-            <Skeleton.Input
-              className="w-100"
-              style={{ height: "288px" }}
-              active
-            />
+            {totalCodesLoader ? (
+              <div>
+                <Skeleton.Input
+                  className="w-100"
+                  style={{ height: "288px" }}
+                  active
+                />
+              </div>
+            ) : suggestedHccDiseaseCountMap?.length > 0 ? (
+              <div className="totalCodesPies">
+                <CodesGraph
+                  gradientColor1={"#FF9209"}
+                  gradientColor2={"#FFFDFA"}
+                  borderColor={"#FF9209"}
+                  isCargaps={true}
+                  selectedValue={selectedValue}
+                  className="codesGraphStyle1"
+                  customDate={customDate}
+                />
+              </div>
+            ) : (
+              <Empty className="mt-3" />
+            )}
           </div>
-        ) : suggestedHccDiseaseCountMap?.length > 0 ? (
-          <div className="totalCodesPies">
-            <CodesGraph
-              gradientColor1={"#FF9209"}
-              gradientColor2={"#FFFDFA"}
-              borderColor={"#FF9209"}
-              isCargaps={true}
-              selectedValue={selectedValue}
-              className="codesGraphStyle1"
-              customDate={customDate}
-            />
-          </div>
-        ) : (
-          <Empty className="mt-3" />
-        )}
-      </div>
-      <div
-        className=""
-        style={{
-          width: "33%",
-          backgroundColor: "#E2F1F3",
-          borderRadius: "16px",
-        }}
-      >
-        <div className={styles.headers}>
-          <div className="d-flex justify-content-between">
-            <div className={`${styles.header} p-2`}>RAF</div>
-            <div className="p-2">
-              <div className={styles.header}>Care Gap RAF</div>
-              <div className={styles.price}>
-                <Tooltip
-                  title={
-                    getAllRafScoreData?.totalSuggestedRaf &&
-                    getAllRafScoreData?.totalSuggestedRaf
-                  }
-                >
-                  {getAllRafScoreData?.totalSuggestedRaf
-                    ? formatNumber(getAllRafScoreData?.totalSuggestedRaf)
-                    : 0}
-                </Tooltip>
-                {/* {(getAllRafScoreData?.totalSuggestedRaf || 0).toFixed(2)} */}
+          <div
+            className=""
+            style={{
+              width: "33%",
+              backgroundColor: "#E2F1F3",
+              borderRadius: "16px",
+            }}
+          >
+            <div className={styles.headers}>
+              <div className="d-flex justify-content-between">
+                <div className={`${styles.header} p-2`}>RAF</div>
+                <div className="p-2">
+                  <div className={styles.header}>Care Gap RAF</div>
+                  <div className={styles.price}>
+                    <Tooltip
+                      title={
+                        getAllRafScoreData?.totalSuggestedRaf &&
+                        getAllRafScoreData?.totalSuggestedRaf
+                      }
+                    >
+                      {getAllRafScoreData?.totalSuggestedRaf
+                        ? formatNumber(getAllRafScoreData?.totalSuggestedRaf)
+                        : 0}
+                    </Tooltip>
+                    {/* {(getAllRafScoreData?.totalSuggestedRaf || 0).toFixed(2)} */}
+                  </div>
+                </div>
               </div>
             </div>
+            {getRafScoreLoader ? (
+              <div>
+                <Skeleton.Input
+                  className="w-100"
+                  style={{ height: "288px" }}
+                  active
+                />
+              </div>
+            ) : rafScoreByDateForSuggested?.length > 0 ? (
+              <div>
+                <RafGraph
+                  rafColor={"#4AA1AB"}
+                  isCargaps={true}
+                  selectedValue={selectedValue}
+                  customDate={customDate}
+                  selectDos={selectDos}
+                  className={"carecapRAF2"}
+                />
+              </div>
+            ) : (
+              <Empty className="mt-3" />
+            )}
           </div>
-        </div>
-        {getRafScoreLoader ? (
-          <div>
-            <Skeleton.Input
-              className="w-100"
-              style={{ height: "288px" }}
-              active
-            />
-          </div>
-        ) : rafScoreByDateForSuggested?.length > 0 ? (
-          <div>
-            <RafGraph
-              rafColor={"#4AA1AB"}
-              isCargaps={true}
-              selectedValue={selectedValue}
-              customDate={customDate}
-              selectDos={selectDos}
-            />
-          </div>
-        ) : (
-          <Empty className="mt-3" />
-        )}
-      </div>
-      <div
-        style={{
-          width: "33%",
-          backgroundColor: "#DAE0FC",
-          borderRadius: "16px",
-          padding: "0px 5px 0 5px",
-        }}
-      >
-        <div className={styles.headers}>
-          <div className="d-flex justify-content-between">
-            <div className={`${styles.header} p-1`}>Revenue</div>
-            <div className="p-1">
-              <div className={styles.header}>Care Gap Revenue</div>
-              <div className={styles.price}>
-                {`$ ${
-                  TotalCareGapsRevenue !== undefined
-                    ? formatNumber(TotalCareGapsRevenue.toFixed(2))
-                    : "0.00"
-                }`}
+          <div
+            style={{
+              width: "33%",
+              backgroundColor: "#DAE0FC",
+              borderRadius: "16px",
+              padding: "0px 5px 0 5px",
+            }}
+          >
+            <div className={styles.headers}>
+              <div className="d-flex justify-content-between">
+                <div className={`${styles.header} p-1`}>Revenue</div>
+                <div className="p-1">
+                  <div className={styles.header}>Care Gap Revenue</div>
+                  <div className={styles.price}>
+                    {`$ ${
+                      TotalCareGapsRevenue !== undefined
+                        ? formatNumber(TotalCareGapsRevenue.toFixed(2))
+                        : "0.00"
+                    }`}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        {revenueChartLoader ? (
-          <div>
-            <Skeleton.Input
-              className="w-100"
-              style={{ height: "288px" }}
-              active
-            />
+            {revenueChartLoader ? (
+              <div>
+                <Skeleton.Input
+                  className="w-100"
+                  style={{ height: "288px" }}
+                  active
+                />
+              </div>
+            ) : premiumByDateForSuggested?.length > 0 ? (
+              <div className="totalCodesPies">
+                <div className="totalCodesPies2">
+                  <RevenueGraph
+                    isCargaps={true}
+                    cargapColor="#5A75F2"
+                    selectedValue={selectedValue}
+                    className="revenueCharts3"
+                    customDate={customDate}
+                  />
+                </div>
+              </div>
+            ) : (
+              <Empty className="mt-3" />
+            )}
           </div>
-        ) : premiumByDateForSuggested?.length > 0 ? (
-          <div className="totalCodesPies">
-            <div className="totalCodesPies2">
-              <RevenueGraph
-                isCargaps={true}
-                cargapColor="#5A75F2"
-                selectedValue={selectedValue}
-                className="revenueCharts3"
-                customDate={customDate}
-              />
-            </div>
-          </div>
-        ) : (
-          <Empty className="mt-3" />
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 
@@ -214,4 +225,4 @@ const enhancer = connect(
   }
 );
 
-export default enhancer(index);
+export default enhancer(Index);

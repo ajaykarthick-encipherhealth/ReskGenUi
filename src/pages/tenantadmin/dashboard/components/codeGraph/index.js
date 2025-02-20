@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ReactECharts from "echarts-for-react";
 import * as echarts from "echarts";
 import { connect } from "react-redux";
@@ -30,27 +30,28 @@ const CodesGraph = ({
   customDate,
   getAllLabAndRadiologyChart,
   isLabValues,
-  isPotential
+  isPotential,
 }) => {
   const dates =
-  selectedValue === "custom"
-    ? customDate
-    : selectedValue === "last_1_week"
-    ? getLast7Days()
-    : getLast30Days();
+    selectedValue === "custom"
+      ? customDate
+      : selectedValue === "last_1_week"
+      ? getLast7Days()
+      : getLast30Days();
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
-  const radiologyCountValues =   getAllLabAndRadiologyChart?.radiologyCountMap;
-  const labCountValues =   getAllLabAndRadiologyChart?.labCountMap;
+  const radiologyCountValues = getAllLabAndRadiologyChart?.radiologyCountMap;
+  const labCountValues = getAllLabAndRadiologyChart?.labCountMap;
   const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
   const resultArrayRadiology = formatValues(radiologyCountValues, dates);
   const resultArrayLab = formatValues(labCountValues, dates);
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap;
   const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
-  
+
   const graphOptions = {
     xAxis: {
       type: "category",
+      boundaryGap: false,
       data:
         selectedValue === "custom"
           ? customDate
@@ -62,6 +63,12 @@ const CodesGraph = ({
     yAxis: {
       type: "value",
       show: true,
+    },
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
+      containLabel: true,
     },
     tooltip: {
       show: true,
@@ -94,7 +101,7 @@ const CodesGraph = ({
         smooth: true,
         showSymbol: false,
         itemStyle: {
-          color: isHcc ? gradientColor1 : isCargaps ? "orange" : "",
+          color: borderColor,
         },
         areaStyle: gradientColor1 &&
           gradientColor2 && {
@@ -106,14 +113,14 @@ const CodesGraph = ({
           },
       },
       {
-        name: isLabValues?"Lab":"",
-        data:isLabValues? resultArrayLab:"",
+        name: isLabValues ? "Lab" : "",
+        data: isLabValues ? resultArrayLab : "",
         type: "line",
         lineStyle: { color: borderColor2 },
         smooth: true,
         showSymbol: false,
         itemStyle: {
-          color: borderColor,
+          color: borderColor2,
         },
         areaStyle: gradientColor1 &&
           gradientColor2 && {
@@ -142,8 +149,9 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
-      getAllLabAndRadiologyChart:state?.tenantAdmin?.dashboard?.default?.
-      getAllLabAndRadiologyChart?.data?.response,
+    getAllLabAndRadiologyChart:
+      state?.tenantAdmin?.dashboard?.default?.getAllLabAndRadiologyChart?.data
+        ?.response,
   }),
   {
     getAllHccCodesData: HccCodes,
