@@ -31,7 +31,8 @@ export async function getAllPatient(
   selCreatedBy,
   sort,
   orgId,
-  selectBatchList
+  selectBatchList,
+  flagList
 ) {
   const options = {
     method: "GET",
@@ -48,7 +49,7 @@ export async function getAllPatient(
       selectOrgId || ""
     }&batchId=${
       selectBatchId || ""
-    }&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${
+    }&flagName=${flagList || ""}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${
       filteredStatus || ""
     }&searchString=${search || ""}&createdStartDate=${
       createdStartDate || ""

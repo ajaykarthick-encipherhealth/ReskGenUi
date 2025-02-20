@@ -10,7 +10,6 @@ import { Paginator } from "primereact/paginator";
 import visitStyles from "../../../styles/visitdata.module.css";
 import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
-import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
 import {
   generateOptionsForNewStore,
@@ -19,7 +18,6 @@ import {
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 import { connect } from "react-redux";
 import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
-import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
 import { actions as allocationAction } from "../../../stores/admin/patientAllocation";
@@ -51,6 +49,17 @@ const statusOptions = [
   { label: "COMPUTED", value: "2", status: 2 },
   { label: "FAILED", value: "3", status: 3 },
   { label: "NOT COMPUTED", value: "0", status: 0 },
+];
+export const flagOptions = [
+  { header: "DOS Count", label: "INVALID DOC", value: "IN_VALID_DOC", id: 1 },
+  { header: "Televist Count", label: "TELEVIST COUNT", value: "TELEVIST_COUNT", id: 2 },
+  { header: "Out of Scope", label: "OUT OF SCOPE", value: "OUT_OF_SCOPE", id: 3 },
+  { header: "Invalid Credentails", label: "INVALID CREDENTIALS", value: "INVALID_CREDENTIALS", id: 4 },
+  { header: "Improper Data", label: "IMPROPER DATA", value: "IMPROPER_DATA", id: 5 },
+  { header: "Multiple Patient Found", label: "MULTIPLE PATIENT FOUND", value: "MULTIPLE_PATIENT_FOUND", id: 6 },
+  { header: "MRN ID Mismatch", label: "MRN ID MISMATCH", value: "MRN_ID_MISMATCH", id: 7 },
+  { header: "Patient DOB Mismatch", label: "PATIENT DOB MISMATCH", value: "PATIENT_DOB_MISMATCH", id: 8 },
+  { header: "Illegial Format", label: "ILLEGAL FORMAT", value: "ILLEGAL_FORMAT", id: 9 },
 ];
 
 const Patient = ({
@@ -127,6 +136,7 @@ const Patient = ({
   const [clear, setClear] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [activeFilters, setActiveFilters] = useState([]);
+  const [flagList, setFlagList] = useState(null);
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -222,7 +232,8 @@ const Patient = ({
           selCreatedBy || "",
           sort,
           orgId,
-          selectBatchList
+          selectBatchList,
+          flagList
         );
         setAddPatientId(false);
         setIsLoadingBtn(false);
@@ -318,8 +329,8 @@ const Patient = ({
     return (
       <div className="d-flex justify-content-center">
         <button
-        id="click-upload"
-        nam="click-upload"
+          id="click-upload"
+          nam="click-upload"
           onClick={() => {
             if (rowData?.processedStatus !== "PROCESSING") {
               addPatientFile(rowData);
@@ -350,10 +361,10 @@ const Patient = ({
     formData.append("emrtype", emrType);
     const response = await uploadFiles({ obj: formData });
     if (response?.status === "SUCCESS") {
-      getResponePopup(response)
-      form.resetFields()
+      getResponePopup(response);
+      form.resetFields();
       setEmrType("");
-      setInputValue({})
+      setInputValue({});
       getAllPatients(
         pageNo,
         computedStartDate,
@@ -367,7 +378,8 @@ const Patient = ({
         selCreatedBy || "",
         sort,
         orgId,
-        selectBatchList
+        selectBatchList,
+        flagList
       );
     }
     var orgId = selectOrgList;
@@ -407,30 +419,15 @@ const Patient = ({
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
     formData.append("emrtype", emrType);
-    // const headers = {
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    // };
     setSelectFile(formData);
     const response = await uploadFilesRadiology({ obj: formData });
-
-    // axios.post(
-    //   ENDPOINTS.apiEndoint +
-    //     `aiservice/ai/upload/radiology
-    // `,
-    //   formData,
-    //   headers
-    // );
     if (response?.status == 202) {
-      // getAllList(localUserId, pageNo, pageSize);
       setAddPatient(false);
       setIsLoadingBtn(false);
     } else {
       setIsLoadingBtn(false);
     }
     setAddPatient(false);
-    // setIsLoadingBtn(false);
     setSelectFileRadiology(null);
   };
 
@@ -453,7 +450,6 @@ const Patient = ({
     setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
-    // getAllList(allPatientList?.data?.response);
   };
 
   const statusUpdateWebSockt = (result) => {
@@ -499,7 +495,6 @@ const Patient = ({
   };
 
   useEffect(() => {
-    // getStorage("TenantAdminPatientsEncodedValue");
     if (routedData) {
       setParamsFilter("check");
       setPageNo(routedData?.pageNo || 0);
@@ -529,17 +524,20 @@ const Patient = ({
       );
       setSelectedOrgList(routedData?.selectOrgList || "");
       setSelectedBatchList(routedData?.selectBatchList || "");
-      setActiveFilters(routedData?.activeFilters || []);
+      setFlagList(routedData?.flagList || "");
+      setActiveFilters(
+        routedData?.activeFilters ? routedData?.activeFilters : []
+      );
     }
-    // }
   }, []);
 
+  console.log(routedData);
+  
   useEffect(() => {
     setParamsFilter("check");
     var tenId = getStorage("tenantId");
     var uId = getStorage("userId");
     var orgId = getStorage("orgId");
-    // var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
@@ -557,7 +555,8 @@ const Patient = ({
         selCreatedBy || "",
         sort,
         (orgId = selectOrgList),
-        selectBatchList
+        selectBatchList,
+        flagList
       );
       getFilters({ field: "createdBy" });
     }
@@ -575,6 +574,7 @@ const Patient = ({
     sort,
     selectOrgList,
     selectBatchList,
+    flagList,
     paramsFilter,
   ]);
 
@@ -583,7 +583,6 @@ const Patient = ({
       getAllOrganizationList();
     }
   }, []);
-
 
   useEffect(() => {
     var orgListArray = [];
@@ -625,7 +624,6 @@ const Patient = ({
       statusUpdateWebSockt(patientData);
     }
   }, [webSocketData]);
-
   return (
     <>
       <div className={`show `}>
@@ -633,7 +631,7 @@ const Patient = ({
         <div class="content-body">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-xl-12">
+              <div className="col-12">
                 <div className="">
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
@@ -711,7 +709,9 @@ const Patient = ({
                             defaultSelectValueBatch={""}
                             selectedValueBatch={selectBatchList}
                             selectlabelBatch="Select Batch"
-                      
+                            // selectFlag
+                            selectLabelFlag="Select Flag"
+                            flagOptions={flagOptions}
                             isSelectBatch={true}
                             batchValue={selectBatchList}
                             setPageNo={setPageNo}
@@ -721,6 +721,8 @@ const Patient = ({
                             setSelectAll={setSelectAll}
                             activeFilters={activeFilters}
                             setActiveFilters={setActiveFilters}
+                            flagList={flagList}
+                            setFlagList={setFlagList}
                           />
                         </div>
                       </div>
@@ -732,7 +734,7 @@ const Patient = ({
                         {loading ? (
                           <TableSkeleton />
                         ) : (
-                          <>
+                          <div className="mt-2">
                             <AddPatientListTable
                               bullets={bullets}
                               patinetListAll={
@@ -760,6 +762,7 @@ const Patient = ({
                                 selectOrgList,
                                 selectBatchList,
                                 activeFilters,
+                                flagList,
                               }}
                               sortCompleteOrder={sortCompleteOrder}
                               setSortCompleteOrder={setSortCompleteOrder}
@@ -767,8 +770,8 @@ const Patient = ({
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                id="patients-paginator"
-                                name="patients-paginator"
+                                  id="patients-paginator"
+                                  name="patients-paginator"
                                   first={
                                     paginationFirst == 0
                                       ? pageNo
@@ -790,7 +793,7 @@ const Patient = ({
                                 </div>
                               </div>
                             </div>
-                          </>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -833,7 +836,7 @@ const enhancer = connect(
   (state) => ({
     response: state.admin.workqueue?.patients?.data,
     organizationList: state?.tenantAdmin?.patients?.allOrganization?.data,
-    batchList : state?.tenantAdmin?.patients?.allBatch?.data,
+    batchList: state?.tenantAdmin?.patients?.allBatch?.data,
     allPatientList: state?.tenantAdmin?.patients?.allPatients,
     webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
     loading: state?.tenantAdmin?.patients?.allPatientsLoading,

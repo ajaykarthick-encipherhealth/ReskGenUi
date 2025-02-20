@@ -1,21 +1,13 @@
 import React, { useState } from "react";
 import { DatePicker, Popover, Tooltip, Select } from "antd";
-import Image from "next/image";
 import styles from "../../../../pages/reviewer/report/report.module.css";
 import Tracking from "../../tracking/tracking.module.css";
-import Legends from "../../../../components/legends";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPalette, faChartSimple } from "@fortawesome/free-solid-svg-icons";
 import {
-  disableFutureDate,
   handleRnagePicker2,
   resetPageNumber,
-  searchFunction,
 } from "../../../../components/headerFilters/functions";
 import { Button } from "react-bootstrap";
-import InputField from "../../../../components/input";
-import { getFilters } from "../../../../stores/authflow/actions";
-import { InfoCircleFilled, PlusCircleFilled } from "@ant-design/icons";
+import { PlusCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../tracking/filters";
 import DateRangePicker from "../../../../components/rangepicker";
 import Search from "../../../../components/search";
@@ -23,13 +15,14 @@ import { disabledDate } from "../../../../utils/reusable";
 
 const { RangePicker } = DatePicker;
 
-const allFilters = [
+export const allFilters = [
   "Select Status",
   "Select Organization",
   "Created Date",
   "Created By",
   "Computed Date",
-  "Batch"
+  "Batch",
+  "Flag"
 ];
 
 const HeaderFilters = ({
@@ -117,6 +110,9 @@ const HeaderFilters = ({
   setSelectedOptionBatch,
   batchValue,
   selectOptionsBatch,
+  flagOptions,
+  flagList,
+  setFlagList
 }) => {
   const [trackInput, setTrackInput] = useState("");
   const [popoverVisible, setPopoverVisible] = useState(false);
@@ -135,13 +131,13 @@ const HeaderFilters = ({
     setPopoverVisible(false);
     setStartDate2(null);
     setEndDate2(null);
+    setFlagList(null)
   };
-
   const renderFilter = (filter) => {
     switch (filter) {
       case "Processed Status":
         return (
-          <div className={defaultSize}>
+          <div className=" default-filter">
             <label className={styles.label}>Processed Status</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -162,7 +158,7 @@ const HeaderFilters = ({
         );
       case "Select Status":
         return (
-          <div className={defaultSize}>
+          <div className=" default-filter">
             <label className={styles.label}>Select Status</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -185,7 +181,7 @@ const HeaderFilters = ({
         );
       case "Created Date":
         return (
-          <div className={defaultSize}>
+          <div className=" default-filter">
             <label className={styles.label}>Created Date Range</label>
             <div className="dateRangeSize">
               <RangePicker
@@ -214,7 +210,7 @@ const HeaderFilters = ({
 
       case "Created By":
         return (
-          <div className={defaultSize}>
+          <div className=" default-filter">
             <label className={styles.label}>Created By</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -236,7 +232,7 @@ const HeaderFilters = ({
 
       case "Computed Date":
         return (
-          <div className={defaultSize}>
+          <div className=" default-filter">
             <div className="dateRangeSize">
               <DateRangePicker
                 selectedDates={selectedDates}
@@ -259,9 +255,37 @@ const HeaderFilters = ({
             </div>
           </div>
         );
+        case "Flag":
+          return (
+            <div className=" default-filter">
+              <label className={styles.label}>Select Flag</label>
+              <div class="form-group has-search custom-react-select">
+                <Select
+                  filterOption={(input, option) =>
+                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                  }
+                
+                  value={flagList ? flagList : null}
+                  onChange={(selectFlag) => {
+                    if (setPageNo) {
+                      resetPageNumber(setPageNo);
+                    }
+                    setFlagList(selectFlag ? selectFlag : null);
+                  }}
+                  showSearch
+                  options={flagOptions}
+                  placeholder="Select Flag"
+                  allowClear={true}
+                  id="select-flag"
+                  name="select-flag"
+                />
+              </div>
+            </div>
+          );
+  
       case "Batch":
         return (
-          <div className={defaultSize}>
+          <div className=" default-filter">
             <label className={styles.label}>Select Batch</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -289,7 +313,7 @@ const HeaderFilters = ({
 
       case "Select Organization":
         return (
-          <div className={defaultSize}>
+          <div className=" default-filter">
             <label className={styles.label}>Select Organization</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -319,7 +343,7 @@ const HeaderFilters = ({
     <div style={{ display: "flex", alignItems: "center" }}>
       <div className="row filter-contain" style={{ width: "95%" }}>
         {isSearch && (
-          <div className={defaultSize} onClick={() => setClear(false)}>
+             <div className="default-filter" onClick={() => setClear(false)}>
             <div class="form-group has-search">
               <Search
                 searchlabel={searchlabel}

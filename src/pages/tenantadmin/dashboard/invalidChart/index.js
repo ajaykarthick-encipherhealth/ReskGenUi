@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ReactECharts from "echarts-for-react";
 import { getLast30Days, getLast7Days } from "../../../../utils/reusable";
 import Image from "next/image";
 import styles from "../styles.module.css";
 import { connect } from "react-redux";
 import { actions as invalidAction } from "../../../../stores/tenantAdmin/dashboard/invalid";
+import { useRouter } from "next/router";
+import {actions as allActions} from '../../../../stores/tenantAdmin/patientSync'
+import { flagOptions } from "../../patients";
 
 const InvalidChart = ({
   selectedValue,
@@ -19,8 +22,10 @@ const InvalidChart = ({
   hideContent,
   values,
   graphName,
+  getRoutedData,
+  invalidChartData
 }) => {
-
+  const router = useRouter();
   const graphOptions = {
     xAxis: {
       type: "category",
@@ -73,26 +78,39 @@ const InvalidChart = ({
             </div>
           </div>
           <div className="d-flex flex-column justify-content-center">
+            <div
             
-            {header}
+              className="cursor-pointer"
+              onClick={() => {
+                const selectedFlag = flagOptions.find(item => item.header === header);
+                const params = {
+                  flagList: selectedFlag ? selectedFlag.value : "",
+                  activeFilters: ["Flag"]
+                };
+                getRoutedData(params);
+                router.push("/tenantadmin/patients");
+              }}
+            >
+              {header}
+            </div>
 
             {hideContent ? (
               <span
                 id="maximize-btn"
-              name="maximize-btn"
+                name="maximize-btn"
                 onClick={() => onClick(values)}
                 className="font1 text-decoration-underline cursor-pointer "
                 style={{ color: "#3B82F6" }}
               >
                 Maximize
               </span>
-            ): null}
+            ) : null}
           </div>
         </div>
         <div className="p-2">
           <div className="d-flex font1 text-muted">Current / Overall</div>
-          <div style={{fontSize:"24px"}} className="fontWeight3">
-          {count} / {overAll}
+          <div style={{ fontSize: "24px" }} className="fontWeight3">
+            {count} / {overAll}
           </div>
         </div>
       </div>
@@ -109,6 +127,7 @@ const enhancer = connect(
   }),
   {
     getInvalidDashboard: invalidAction?.InvalidCounts,
+    getRoutedData: allActions.getRoutedData,
   }
 );
 export default enhancer(InvalidChart);

@@ -304,7 +304,7 @@ const Index = ({
     },
     {
       id: 7,
-      header: "MRN Id Mismatch",
+      header: "MRN ID Mismatch",
       count: flagData?.mrnMismatch?.response?.currentFilterCOunt || 0,
       images: mrn,
       bg: "#FFCC9E",
@@ -346,16 +346,16 @@ const Index = ({
     initialValue
   );
   const flagNameList = [
-    { flagName: "IN_VALID_DOC", label: "dosCount" },
-    { flagName: "AUDIO_VISIT", label: "teleVisit" },
-    { flagName: "VIDEO_VISIT", label: "videoVisit" },
-    { flagName: "OUT_OF_SCOPE", label: "outOfscope" },
-    { flagName: "PROVIDER_UNAUTHORIZED", label: "provider" },
-    { flagName: "IMPROPER_DATA", label: "imProper" },
-    { flagName: "MULTIPLE_PATIENT_FOUND", label: "mutiple" },
-    { flagName: "MRN_ID_MISMATCH", label: "mrnMismatch" },
-    { flagName: "PATIENT_DOB_MISMATCH", label: "patientDobMismatch" },
-    { flagName: "IN_VALID_DOC", label: "inValidDoc" },
+    { flagName: "IN_VALID_DOC", label: "dosCount" ,id :1},
+    { flagName: "AUDIO_VISIT", label: "teleVisit",id:2 },
+    { flagName: "VIDEO_VISIT", label: "videoVisit" ,id:3},
+    { flagName: "OUT_OF_SCOPE", label: "outOfscope",id:4 },
+    { flagName: "PROVIDER_UNAUTHORIZED", label: "provider" ,id:5},
+    { flagName: "IMPROPER_DATA", label: "imProper" ,id:6},
+    { flagName: "MULTIPLE_PATIENT_FOUND", label: "mutiple",id:7 },
+    { flagName: "MRN_ID_MISMATCH", label: "mrnMismatch",id:8 },
+    { flagName: "PATIENT_DOB_MISMATCH", label: "patientDobMismatch",id:9 },
+    { flagName: "IN_VALID_DOC", label: "inValidDoc" ,id:10},
   ];
   const chartData = async (item) => {
     try {
@@ -604,6 +604,7 @@ const Index = ({
                         hideContent={true}
                         id={data.id}
                         graphName={data?.header}
+                        flagNameList={flagNameList}
                       />
                     )}
                   </Card>
@@ -738,6 +739,7 @@ const Index = ({
             onClick={showModal}
             hideContent={false}
             id={isModalOpen?.id}
+            invalidChartData={invalidChartData}
           />
         </Modal.Body>
       </Modal>

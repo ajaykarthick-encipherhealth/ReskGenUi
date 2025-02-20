@@ -6485,11 +6485,11 @@ textarea.form-control {
   overflow-y: scroll;
 }
 
+
 body > * {
   scrollbar-width: 1px !important;
-  scrollbar-color: rgba(0, 0, 0, 0.316) #fff0;
-  /* scrollbar-color: rgba(0, 0, 0, 0.1); */
-}
+  scrollbar-color: rgba(111, 133, 147, 0.1) #fff0;
+} 
 
 ::-webkit-scrollbar {
   width: 3px;
@@ -16524,6 +16524,10 @@ input::-webkit-inner-spin-button {
 }
   .default-filter-size{
     width: 250px;
+  }
+  .default-filter{
+    width: 250px;
+    margin-top: 10px;
   }
 
   .default-filter-size{
