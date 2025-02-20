@@ -156,6 +156,13 @@
 .smooth-transition .nav-item :hover {
   transform: scale(1.05);
 }
+#badge:hover tbody tr:hover {
+  background-color: transparent !important;
+  transition: none !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 tbody tr {
   transition: background-color 0.8s ease-in-out, box-shadow 0.4s ease-in-out !important;
 }

@@ -249,6 +249,7 @@ const CamboTree = ({
   const nodeTemplate = (node, index) => {
     return (
       <div
+        id="badge"
         className={Style.cards}
         style={{
           width: zoom.width,
@@ -324,10 +325,20 @@ const CamboTree = ({
             )}
         </div>
         <Tooltip
-          title={node.diseaseName ? node.diseaseName : node.dbDescription ? node.dbDescription : node.actualDescription}
+          title={
+            node.diseaseName
+              ? node.diseaseName
+              : node.dbDescription
+              ? node.dbDescription
+              : node.actualDescription
+          }
         >
           <div className={Style.codeAlign}>
-            {node.diseaseName ? node.diseaseName : node.dbDescription ? node.dbDescription : node.actualDescription}
+            {node.diseaseName
+              ? node.diseaseName
+              : node.dbDescription
+              ? node.dbDescription
+              : node.actualDescription}
           </div>
         </Tooltip>
         <div className="text-start">
@@ -407,11 +418,15 @@ const CamboTree = ({
         </button>
         <div className={`overflow-x-auto ${Style.chart}`}>
           {isLoading ? (
-            <div className="p-3 text-center" >
+            <div className="p-3 text-center">
               <CardSkeleton height={800} />
             </div>
           ) : (
-            <OrganizationChart value={trees} nodeTemplate={nodeTemplate} />
+            <OrganizationChart
+              id="badge"
+              value={trees}
+              nodeTemplate={nodeTemplate}
+            />
           )}
         </div>
       </div>
