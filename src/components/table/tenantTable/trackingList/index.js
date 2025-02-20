@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
-import { ArrowUpOutlined, ArrowDownOutlined, InfoCircleFilled } from "@ant-design/icons";
+import {
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+  InfoCircleFilled,
+} from "@ant-design/icons";
 import moment from "moment";
-import { notification, Select as AntSelect, Empty, Tooltip, Popover } from "antd";
+import {
+  notification,
+  Select as AntSelect,
+  Empty,
+  Tooltip,
+  Popover,
+} from "antd";
 import TableStyle from "../../traclingTable.module.css";
 import {
+  priorityStatus,
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../headerFilters/functions";
@@ -14,7 +25,7 @@ import { getStorage, setStorage } from "../../../../utils/storages";
 import { actions as allActions } from "../../../../stores/admin/users";
 import { actions as patientSyncActions } from "../../../../stores/tenantAdmin/patientSync";
 import Legends from "../../../legends";
-import styles from '../../../../pages/reviewer/report/report.module.css'
+import styles from "../../../../pages/reviewer/report/report.module.css";
 
 function TrackingTable({
   patinetListAll,
@@ -33,8 +44,10 @@ function TrackingTable({
   sortAuditDueOrder,
   setSortAuditDueOrder,
   getRoutedData,
-  bulletsTitle,badgesTitle,
-  bullets,badges
+  bulletsTitle,
+  badgesTitle,
+  bullets,
+  badges,
 }) {
   const navigate = useRouter();
 
@@ -45,9 +58,9 @@ function TrackingTable({
       const { signal } = controller;
       controller.abort();
       setStorage("patientId", data?.patientId);
-//       setStorage("fromPatientSync", false);      
+      //       setStorage("fromPatientSync", false);
       var role = getStorage("userRole");
-      // setStorage("fromPatientSync", false);      
+      // setStorage("fromPatientSync", false);
       if (role == "tenant_admin") {
         setStorage("patientId", data.patientId);
         setStorage("routeBackTo", "/tenantadmin/tracking");
@@ -100,7 +113,7 @@ function TrackingTable({
         </td>
         <td
           className={TableStyle.childBorder}
-          style={{ textAlign: "left" }}
+          style={{ textAlign: "left", height: "100%" }}
           onClick={handleTableRowClick}
           id={data.patientId}
           name={data.patientId}
@@ -108,10 +121,15 @@ function TrackingTable({
           {data.allocatedByFirstName ||
           data.allocatedByLastName ||
           data.allocatedByProfileImage ? (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {" "}
+            <div
+              style={{
+                width: "80%",
+                margin: "auto",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <span style={{ marginRight: "10px" }}>
-                {" "}
                 {renderUserPrfoileAvatar(
                   data.allocatedByFirstName,
                   data.allocatedByLastName,
@@ -126,8 +144,19 @@ function TrackingTable({
           ) : (
             <div style={{ textAlign: "center" }}>---</div>
           )}
+          <div
+            className="text-center"
+            style={{
+              width: "80%",
+              margin: "auto",
+            }}
+          >
+            {data.allocatedOn
+              ? moment(data.allocatedOn).format("MM-DD-YYYY")
+              : "---"}
+          </div>
         </td>
-        <td
+        {/* <td
           className={TableStyle.childBorder}
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
@@ -137,7 +166,7 @@ function TrackingTable({
           {data.allocatedOn
             ? moment(data.allocatedOn).format("MM-DD-YYYY")
             : "---"}
-        </td>
+        </td> */}
         <td
           className={TableStyle.childBorder}
           style={{ textAlign: "left" }}
@@ -150,7 +179,12 @@ function TrackingTable({
           data.patientAllocatedProfileImage ? (
             <div
               className="text-truncate"
-              style={{ display: "flex", alignItems: "center" }}
+              style={{
+                width: "95%",
+                margin: "auto",
+                display: "flex",
+                alignItems: "center",
+              }}
             >
               {" "}
               <span style={{ marginRight: "10px" }}>
@@ -169,9 +203,14 @@ function TrackingTable({
           ) : (
             <div style={{ textAlign: "center" }}>---</div>
           )}
+          <div className="text-center" style={{ width: "95%", margin: "auto" }}>
+            {data.processedDate
+              ? moment(data.processedDate).format("MM-DD-YYYY")
+              : "---"}
+          </div>
         </td>
 
-        <td
+        {/* <td
           className={TableStyle.childBorder}
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
@@ -181,7 +220,7 @@ function TrackingTable({
           {data.processedDate
             ? moment(data.processedDate).format("MM-DD-YYYY")
             : "---"}
-        </td>
+        </td> */}
         <td
           className={`${TableStyle.childBorder} text-truncate`}
           style={{ textAlign: "left" }}
@@ -192,7 +231,14 @@ function TrackingTable({
           {data.auditAllocatedByFirstName ||
           data.auditAllocatedByLastName ||
           data.auditAllocatedByProfileImage ? (
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                width: "68%",
+                margin: "auto",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               {" "}
               <span style={{ marginRight: "10px" }}>
                 {" "}
@@ -210,8 +256,14 @@ function TrackingTable({
           ) : (
             <div style={{ textAlign: "center" }}>---</div>
           )}
+          <div className="text-center" style={{ width: "68%", margin: "auto" }}>
+            {" "}
+            {data.auditAllocatedDate
+              ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
+              : "---"}
+          </div>
         </td>
-        <td
+        {/* <td
           className={TableStyle.childBorder}
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
@@ -221,7 +273,7 @@ function TrackingTable({
           {data.auditAllocatedDate
             ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
             : "---"}
-        </td>
+        </td> */}
 
         <td
           className={`text-truncate ${TableStyle.childBorder}`}
@@ -264,7 +316,9 @@ function TrackingTable({
             ? moment(data.auditedDate).format("MM-DD-YYYY")
             : "---"}
         </td>
-
+        <td className="text-center">
+          {data?.priority ? priorityStatus(data?.priority) : "--"}
+        </td>
         <td
           className={TableStyle.lastBorder}
           onClick={handleTableRowClick}
@@ -299,10 +353,18 @@ function TrackingTable({
               <th
                 style={{ textAlign: "left", paddingLeft: "20px" }}
                 className="text-truncate"
+                onClick={() => {
+                  sortFunction(sortOrder, setSortOrder, setSort, "allocatedOn");
+                }}
               >
-                ALLOCATED BY
+                ALLOCATED BY | DATE
+                {sortOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
               </th>
-              <th
+              {/* <th
                 id="allocated-Date"
                 name="allocated-Date"
                 style={{
@@ -321,10 +383,26 @@ function TrackingTable({
                 ) : (
                   <ArrowDownOutlined />
                 )}
-              </th>
-              <th>REVIEWER</th>
-
+              </th> */}
               <th
+                onClick={() => {
+                  sortFunction(
+                    sortDueOrder,
+                    setSortDueOrder,
+                    setSort,
+                    "dueDate"
+                  );
+                }}
+              >
+                REVIEWER | DATE
+                {sortDueOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </th>
+
+              {/* <th
                 id="reviewer-date"
                 name="reviewer-date"
                 onClick={() => {
@@ -352,11 +430,27 @@ function TrackingTable({
                     <ArrowDownOutlined />
                   )}
                 </span>
-              </th>
-              <th style={{ textAlign: "center" }} className="text-truncate">
-                AUDIT ALLOCATED BY
-              </th>
+              </th> */}
               <th
+                style={{ textAlign: "center" }}
+                className="text-truncate"
+                onClick={() => {
+                  sortFunction(
+                    sortAuditOrder,
+                    setSortAuditOrder,
+                    setSort,
+                    "auditAllocatedDate"
+                  );
+                }}
+              >
+                AUDIT ALLOCATED BY | DATE
+                {sortAuditOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </th>
+              {/* <th
                 id="audit-allocated"
                 name="audit-allocated"
                 onClick={() => {
@@ -384,7 +478,7 @@ function TrackingTable({
                     <ArrowDownOutlined />
                   )}
                 </span>
-              </th>
+              </th> */}
               <th style={{ textAlign: "center" }} className="text-truncate">
                 SUPERVISOR
               </th>
@@ -417,7 +511,7 @@ function TrackingTable({
                   )}
                 </span>
               </th>
-
+              <th>PRIORITY</th>
               <th style={{ textAlign: "center" }}>
                 <div className="text-truncate d-flex align-items-center justify-content-center gap-2">
                   PROCESSED STATUS
@@ -484,11 +578,10 @@ function TrackingTable({
                   </span>
                 </div>
               </th>
-
             </tr>
           </thead>
 
-          <tbody>
+          <tbody style={{ overflowX: "scroll" }}>
             {!loader && patinetListAll?.length <= 0 ? (
               <tr>
                 <td colSpan="11">

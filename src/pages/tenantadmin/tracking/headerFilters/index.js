@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { DatePicker, Popover, Tooltip, Select } from "antd";
-import Image from "next/image";
+import { DatePicker,Select } from "antd";
 import styles from "../../../../pages/reviewer/report/report.module.css";
-import Tracking from "../../tracking/tracking.module.css";
-import Legends from "../../../../components/legends";
-import { disableFutureDate } from "../../../../components/headerFilters/functions";
+import Tracking from "../../tracking/tracking.module.css";;
+import { priorityOptions } from "../../../../components/headerFilters/functions";
 import InputField from "../../../../components/input";
 import MoreFilter from "../filters";
-import { InfoCircleFilled } from "@ant-design/icons";
 import moment from "moment";
 import { disabledDate } from "../../../../utils/reusable";
 
@@ -26,6 +23,7 @@ const allFilters = [
   "Audit Allocated By",
   "Organization",
   "Search By Patient Name / ID",
+  "Priority",
 ];
 
 const HeaderFilters = ({
@@ -83,6 +81,8 @@ const HeaderFilters = ({
         return allocatedToOptoons;
       case "Supervisor":
         return auditallocatedToOptoons;
+      case "Priority":
+        return priorityOptions;
       default:
         return [];
     }
@@ -159,6 +159,7 @@ const HeaderFilters = ({
       case "Audit Status":
       case "Reviewer":
       case "Supervisor":
+      case "Priority":
         return (
           <div className={defaultSize}>
             <label className={styles.label}>{filter}</label>

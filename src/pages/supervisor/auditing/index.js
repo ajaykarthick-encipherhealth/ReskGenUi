@@ -138,6 +138,7 @@ const Patient = ({
   const [priority, setPriority] = useState(null);
   const [selectBatchList, setSelectedBatchList] = useState(null);
   const [batchAllList, setBatchAllList] = useState([]);
+  const[selectedPriority,setSelectedPriority]=useState(null)
   const getAllList = () => {
     if (response) {
       let resultMap = [];
@@ -180,11 +181,12 @@ const Patient = ({
       setTableLoading(false);
     }
   };
-  console.log(batchList, "batchList");
+
   const addPatientFormId = () => {
     setValidated(false);
     setAddPatientId(true);
   };
+
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
     inputValue.name = data.patientName;
@@ -348,6 +350,7 @@ const Patient = ({
       sort,
       selCreatedBy: clear ? "" : selCreatedBy,
       selectBatchList: clear ? "" : selectBatchList,
+      priority:clear ? "" : selectedPriority||""
     };
     if (window !== "undefined" && paramsFilter) {
       getWorkListFilter({ data: data });
@@ -363,6 +366,7 @@ const Patient = ({
     selCreatedBy,
     paramsFilter,
     selectBatchList,
+    selectedPriority
   ]);
   useEffect(() => {
     if (response?.data?.response?.content) {
@@ -397,6 +401,7 @@ const Patient = ({
         routedData?.activeFilters ? routedData?.activeFilters : []
       );
       setSelectedBatchList(routedData?.selectBatchList || "");
+      setSelectedPriority(routedData?.selectedPriority||null)
     }
   }, []);
 
@@ -439,6 +444,7 @@ const Patient = ({
         sort,
         selCreatedBy: clear ? "" : selCreatedBy,
         selectBatchList: clear ? "" : selectBatchList,
+        priority:clear ? "" : selectedPriority||""
       };
       if (window !== "undefined" && paramsFilter) {
         getWorkListFilter({ data: data });
@@ -534,6 +540,9 @@ const Patient = ({
                         searchVal={search}
                         setSearchVal={setSearch}
                         getRoutedData={getRoutedData}
+                        // priority
+                        setSelectedPriority={setSelectedPriority}
+                        selectedPriority={selectedPriority}
                       />
                     </div>
                     <div
@@ -572,6 +581,7 @@ const Patient = ({
                               sort,
                               selCreatedBy,
                               activeFilters,
+                              selectedPriority
                             }}
                             getWorkListFilter={getWorkListFilter}
                             handlePriorityChange={handlePriorityChange}

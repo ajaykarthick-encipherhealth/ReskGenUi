@@ -5,7 +5,10 @@ import styles from "../../../../pages/reviewer/report/report.module.css";
 import Legends from "../../../../components/legends";
 import DateRangePicker from "../../../../components/rangepicker";
 import Search from "../../../../components/search";
-import { resetPageNumber } from "../../../../components/headerFilters/functions";
+import {
+  priorityOptions,
+  resetPageNumber,
+} from "../../../../components/headerFilters/functions";
 import { InfoCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../../tenantadmin/tracking/filters";
 import { removeStorage } from "../../../../utils/storages";
@@ -16,6 +19,7 @@ export const allFilters = [
   "Audited Date",
   "Audited Due Date",
   "Batch",
+  "Priority",
 ];
 
 const Filters = ({
@@ -67,6 +71,8 @@ const Filters = ({
   setSelectedOptionBatch,
   batchValue,
   selectOptionsBatch,
+  setSelectedPriority,
+  selectedPriority
 }) => {
   const [selectAll, setSelectAll] = useState(false);
   const handleClearAllFilters = () => {
@@ -95,11 +101,11 @@ const Filters = ({
     switch (filter) {
       case "Select Audited Status":
         return (
-          <div className = "default-filter-size">
+          <div className="default-filter-size">
             <label className={`${styles.label} responsiveLabel`}>
               {selectlabel}
             </label>
-            <div class="form-group has-search custom-react-select reviewerFilterSelect " >
+            <div class="form-group has-search custom-react-select reviewerFilterSelect ">
               <Select
                 onChange={(selectOptions) => {
                   setSelectedOption(selectOptions ? selectOptions : "");
@@ -122,7 +128,7 @@ const Filters = ({
       case "Audited Date":
       case "Audited Due Date":
         return (
-          <div className = "default-filter-size">
+          <div className="default-filter-size">
             <DateRangePicker
               selectedDates={selectedDates}
               pickerlabel={filter}
@@ -140,10 +146,34 @@ const Filters = ({
             />
           </div>
         );
-
+      case "Priority":
+        return (
+          <div className="default-filter-size">
+            <label className={`${styles.label} responsiveLabel`}>
+              Priority
+            </label>
+            <div class="form-group has-search custom-react-select reviewerFilterSelect ">
+              <Select
+                onChange={(selectedOption) => {
+                  setSelectedPriority(selectedOption ? selectedOption : "");
+                  setClear(false);
+                  if (setPageNo) {
+                    resetPageNumber(setPageNo);
+                  }
+                  getRoutedData(null);
+                }}
+                options={priorityOptions}
+                isSearchable={false}
+                placeholder="Select Priority"
+                allowClear={true}
+                value={selectedPriority ? selectedPriority : null}
+              />
+            </div>
+          </div>
+        );
       case "Reviewer Status":
         return (
-          <div className = "default-filter-size">
+          <div className="default-filter-size">
             <label className={`${styles.label} responsiveLabel`}>
               {createdTolabel}
             </label>
@@ -168,7 +198,7 @@ const Filters = ({
         );
       case "Batch":
         return (
-          <div className = "default-filter-size">
+          <div className="default-filter-size">
             <label className={`${styles.label} responsiveLabel`}>
               Select Batch
             </label>
@@ -203,10 +233,12 @@ const Filters = ({
     }
   };
   return (
-
-    <div className="d-flex justify-content-start " style={{marginLeft:"22px"}}>
+    <div
+      className="d-flex justify-content-start "
+      style={{ marginLeft: "22px" }}
+    >
       <div className="row " style={{ width: "98%" }}>
-      <div className = "default-filter-size">
+        <div className="default-filter-size">
           <Search
             searchlabel={searchlabel}
             search={search}
@@ -220,9 +252,7 @@ const Filters = ({
           <React.Fragment key={filter}>{renderFilter(filter)}</React.Fragment>
         ))}
       </div>
-      <div
-        className="mt-4"
-      >
+      <div className="mt-4">
         <MoreFilter
           selectAll={selectAll}
           setSelectAll={setSelectAll}
@@ -234,7 +264,7 @@ const Filters = ({
           getRoutedData={getRoutedData}
         />
       </div>
-     </div>
+    </div>
   );
 };
 

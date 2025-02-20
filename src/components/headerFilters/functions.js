@@ -263,7 +263,7 @@ export const priorityStatus = (value) => {
       return (
         <div data-testid="status-span">
           <i>
-            <FontAwesomeIcon icon={faTriangleExclamation} />
+            <FontAwesomeIcon icon={faTriangleExclamation} style={{color:"red"}} />
           </i>{" "}
           <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>
         </div>

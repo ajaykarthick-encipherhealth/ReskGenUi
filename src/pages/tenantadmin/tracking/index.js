@@ -491,6 +491,7 @@ const Patient = ({
         auditSelAllocatedTo: clear ? "" : selectedOptions?.Supervisor || "",
         sort,
         selectOrgId: clear ? "" : selectedOptions?.Organization || "",
+        priority:clear?"":selectedOptions?.Priority||""
       };
       getAllTrackingList(data);
       getFilters({ field: "auditAllocatedBy" });

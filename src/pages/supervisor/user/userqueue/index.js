@@ -125,7 +125,7 @@ const Index = ({
   const [selectedDates3, setSelectedDates3] = useState([]);
   const [selectedDates4, setSelectedDates4] = useState([]);
   const [priority,setPriority]=useState(null)
-
+ const[selectedPriority,setSelectedPriority]=useState(null)
   const [sort, setSort] = useState({
     sortDir: "DESC",
     sortField: "auditDueDate",
@@ -172,6 +172,7 @@ const Index = ({
         aduitDueStartDate: clear ? "" : aduitDueStartDate,
         aduitDueEndDate: clear ? "" : aduitDueEndDate,
         sort,
+        priority:selectedPriority||""
       };
       if (window !== "undefined" && paramsFilter) {
         getIndividualUser({ data: data });
@@ -201,6 +202,7 @@ const Index = ({
     sort,
     paramsFilter,
     paginationFirst,
+    selectedPriority
   ]);
   const auditstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
@@ -319,6 +321,7 @@ const Index = ({
       setActiveFilters(
         routedData?.activeFilters ? routedData?.activeFilters : []
       );
+      setSelectedPriority(routedData?.selectedPriority||null)
     }
   }, []);
 
@@ -360,6 +363,7 @@ const Index = ({
           aduitDueStartDate: clear ? "" : aduitDueStartDate,
           aduitDueEndDate: clear ? "" : aduitDueEndDate,
           sort,
+          priority:clear?"":selectedPriority
         };
         if (window !== "undefined" && paramsFilter) {
           getIndividualUser({ data: data });
@@ -510,6 +514,8 @@ const Index = ({
                       setActiveFilters={setActiveFilters}
                       setClear={setClear}
                       getRoutedData={getRoutedData}
+                      selectedPriority={selectedPriority}
+                      setSelectedPriority={setSelectedPriority}
                     />
                   </div>
                   <div
@@ -570,7 +576,8 @@ const Index = ({
                           selectedDates2,
                           selectedDates4,
                           paginationFirst,
-                          activeFilters
+                          activeFilters,
+                          selectedPriority
                         }}
                       />
                     )}

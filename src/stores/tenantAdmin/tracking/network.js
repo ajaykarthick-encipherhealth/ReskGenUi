@@ -34,7 +34,7 @@ export async function getAllTracking(data) {
       data?.auditSelAllocatedTo ? data?.auditSelAllocatedTo : ""
     }&sortfield=${
       data?.sort?.sortField ? data?.sort?.sortField : ""
-    }&sortdirection=${data?.sort?.sortDir ? data?.sort?.sortDir : ""}`,
+    }&sortdirection=${data?.sort?.sortDir ? data?.sort?.sortDir : ""}&priority=${data?.priority}`,
     options
   );
   return res;

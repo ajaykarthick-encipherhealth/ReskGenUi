@@ -51,7 +51,7 @@ export async function GetWorkListFilters({ data }) {
     `dbservice/auditor/patient/workqueue/filter?&page=${
       data?.pageNo || ""
     }&size=15&auditedStatus=${data?.selectedOption || ""}&batchId=${
-      data?.selectBatchList
+      data?.selectBatchList||""
     }&auditDueDateStart=${data?.auditDueDateStart || ""}&auditDueDateEnd=${
       data?.auditDueDateEnd || ""
     }&auditedDateStart=${data?.auditDateStart || ""}&auditedDateEnd=${
@@ -60,7 +60,7 @@ export async function GetWorkListFilters({ data }) {
       data?.sort?.sortField
     }&sortdirection=${data?.sort?.sortDir}&patientAllocated=${
       data?.selCreatedBy || ""
-    }`,
+    }&priority=${data?.priority||""}`,
     options
   );
   return res;

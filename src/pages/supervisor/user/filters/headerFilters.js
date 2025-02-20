@@ -10,6 +10,7 @@ import Selector from "../../../../components/selector";
 import {
   disableFutureDate,
   handleRnagePicker2,
+  priorityOptions,
   resetPageNumber,
 } from "../../../../components/headerFilters/functions";
 import { debounce, disallowedCharacters } from "../../../../components/input";
@@ -29,6 +30,7 @@ export const allFilters = [
   "Reviewed Status",
   "Due Date",
   "Completed Date",
+  "Priority",
 ];
 const HeaderFilters = ({
   setSearchVal,
@@ -133,6 +135,8 @@ const HeaderFilters = ({
   activeFilters,
   setActiveFilters,
   getRoutedData,
+  selectedPriority,
+  setSelectedPriority
 }) => {
   const router = useRouter();
   // const [activeFilters, setActiveFilters] = useState([]);
@@ -198,7 +202,28 @@ const HeaderFilters = ({
             />
           </div>
         );
-
+      case "Priority":
+        return (
+          <div className="default-filter-size">
+            <label className="responsiveLabel">Priority</label>
+            <div class="form-group has-search custom-react-select-audit">
+              <Select
+                onChange={(selectedOption) => {
+                  setSelectedPriority(selectedOption ? selectedOption : []);
+                  if (setPageNo) {
+                    resetPageNumber(setPageNo);
+                  }
+                }}
+                options={priorityOptions}
+                value={selectedPriority}
+                className="custom-react-select-audit w-100"
+                isSearchable={false}
+                placeholder={"Select Priority"}
+                allowClear={true}
+              />
+            </div>
+          </div>
+        );
       case "Audited AllocatedBy":
         return (
           <div className="default-filter-size">
