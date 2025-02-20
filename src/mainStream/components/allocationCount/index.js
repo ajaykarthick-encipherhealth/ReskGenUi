@@ -9,7 +9,7 @@ const AllocationCount = ({
 }) => {
   return (
     // title!=="Supervisor" &&
-    <div className={`col-xl-4 ${styles.flags}`}>
+    <div className={`col-6 ${styles.flags}`}>
       <div className={styles.cardHead}>
         <div>{title}</div>
         <div className={styles.contentOverFlow}>

@@ -562,12 +562,14 @@ const InitialCard = ({
                               />
                             ))}
                           </div>
-                          <div className="col-xl-12  d-flex mt-3">
+                          <div className=" col-12 d-flex mt-3">
                             <Flags
                               reportListAll={reportListAll}
                               styles={styles}
                               activeTab={activeTab}
                             />
+                          </div>
+                          <div className="col-xl-12   d-flex mt-3">
                             {activeTab === "Reviewer"
                               ? ""
                               : allocationCountData.map((item, index) => (

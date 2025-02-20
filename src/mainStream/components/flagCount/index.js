@@ -4,11 +4,7 @@ import { truncateString } from "../../../components/patientDetails/details/compo
 
 const Flags = ({ reportListAll, styles, activeTab }) => {
   return (
-    <div
-      className={`${activeTab === "Reviewer" ? "col-xl-6" : "col-xl-4"} ${
-        styles.flags
-      }`}
-    >
+    <div className={`col-12 ${styles.flags}`}>
       <div className={styles.cardHead}>Flags</div>
       <div className={styles.contentOverFlow}>
         {reportListAll?.flagIdCountDTOs?.length > 0 ? (
@@ -36,22 +32,22 @@ const Flags = ({ reportListAll, styles, activeTab }) => {
                   />
                 </svg>
                 <span
-                className="cr-pointer"
+                  className="cr-pointer"
                   style={{
                     fontSize: "12px",
                     paddingLeft: "10px",
-                    
                   }}
                 >
                   <Tooltip
                     title={flagItem?.flagDetail?.flagName.replaceAll("_", " ")}
                   >
-                  {flagItem?.flagDetail?.flagName
-                    ? truncateString(
-                        flagItem?.flagDetail?.flagName.replaceAll("_", " "), 13
-                      )
-                    : "---"}
-                    </Tooltip>
+                    {flagItem?.flagDetail?.flagName
+                      ? truncateString(
+                          flagItem?.flagDetail?.flagName.replaceAll("_", " "),
+                          30
+                        )
+                      : "---"}
+                  </Tooltip>
                 </span>
               </div>
               <Popover
