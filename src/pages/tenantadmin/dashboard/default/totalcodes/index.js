@@ -333,6 +333,7 @@ const index = ({
               customDate={customDate}
               selectedOrganization={selectedOrganization}
               selectDos={selectDos}
+              className="carecapRAF3"
             />
           </div>
         ) : (

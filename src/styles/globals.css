@@ -15632,9 +15632,9 @@ input::-webkit-inner-spin-button {
 .codesGraphStyle2 > div > div > canvas {
   position: absolute;
   left: 0px;
-  top: -30px !important;
+  top: 0px !important;
   width: 592px;
-  height: 360px !important;
+  height: 300px !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   padding: 0px;
@@ -15666,12 +15666,24 @@ input::-webkit-inner-spin-button {
   margin: 0px;
   border-width: 0px;
 }
+.carecapRAF3 > div > div > canvas {
+  position: absolute;
+  left: 0px;
+  top: -14px !important;
+  width: 592px;
+  height: 300px !important;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
+}
 .revenueCharts1 > div > div > canvas {
   position: absolute;
   left: 0px;
-  top: -24px !important;
+  top: -12px !important;
   width: 592px;
-  height: 330px !important;
+  height: 300px !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   padding: 0px;
