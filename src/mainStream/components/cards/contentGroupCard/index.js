@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Spin, Tooltip, notification } from "antd";
+import { Badge, Popover, Spin, Tooltip, notification } from "antd";
 import styles from "../../../../mainStream/reports/report.module.css";
 import TableStyle from "../../../../components/table/table.module.css";
 import dayjs from "dayjs";
@@ -39,7 +39,7 @@ const ContentGroupCard = ({
   page,
   loading,
   patientDetails,
-  getRoutedData
+  getRoutedData,
 }) => {
   const navigate = useRouter();
   const [copied, setCopied] = useState(false);
@@ -62,8 +62,8 @@ const ContentGroupCard = ({
 
       controller.abort();
       setStorage("patientId", data.patientId);
-      setStorage("routeBackTo",`/${modifiedRole}/report`)
-      getRoutedData(page)
+      setStorage("routeBackTo", `/${modifiedRole}/report`);
+      getRoutedData(page);
       navigate.push(`/${modifiedRole}/report/reportdetails`);
     } else {
       notification.warning({
@@ -87,7 +87,7 @@ const ContentGroupCard = ({
     <div className={styles.card}>
       <div
         className={`report-effect ${styles.contentGroup} my-2`}
-        style={{  display: "flex" }}
+        style={{ display: "flex" }}
       >
         <div style={{ width: "5%" }}>
           {loading ? (
@@ -97,8 +97,8 @@ const ContentGroupCard = ({
             />
           ) : (
             <input
-            id={selectedRows}
-            name={selectedRows}
+              id={selectedRows}
+              name={selectedRows}
               type="checkbox"
               onChange={() => handleRowCheckboxChange(item)}
               className={TableStyle.customChecked}
@@ -112,9 +112,9 @@ const ContentGroupCard = ({
           )}
         </div>
         <div
-        id={patientId}
-        name={patientId}
-        className="responsive_report"
+          id={patientId}
+          name={patientId}
+          className="responsive_report"
           style={{
             width: "95%",
             display: "flex",
@@ -193,49 +193,73 @@ const ContentGroupCard = ({
           </div>
 
           <div style={{ width: "33%" }}>
-            <div className=" d-flex justify-content-between mb-1 " style={{gap:"1px"}}>
+            <div
+              className=" d-flex justify-content-between mb-1 "
+              style={{ gap: "1px" }}
+            >
               <div className={styles.raf}>
-                <Tooltip id="rafScore" name="rafScore" title="Raf Score" placement="bottom">
+                <Tooltip
+                  id="rafScore"
+                  name="rafScore"
+                  title="Raf Score"
+                  placement="bottom"
+                >
                   {rafSum ? rafSum : "---"}
                 </Tooltip>
               </div>
-              <div className={styles.avatarAlign}>
-                <Tooltip 
-                  title={flag?.length > 0 && flag[0]?.flagDetails?.flagName}
-                >
-                  {/* <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="23"
-                    height="23"
-                    viewBox="0 0 800 800"
-                    fill={
-                      flag[0]?.flagDetails?.flagColour
-                        ? flag[0]?.flagDetails?.flagColour
-                        : "transparent"
-                    }
-                  >
-                    <path
-                      d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-                      stroke="#000"
-                      strokeWidth="10"
-                    />
-                  </svg> */}
 
+              <Popover
+                content={
+                  <ul
+                    style={{
+                      padding: 0,
+                      listStyle: "none",
+                      margin: 0,
+                      maxHeight: "150px",
+                      overflow: "scroll",
+                    }}
+                  >
+                    {flag.map((f, index) => (
+                      <li
+                        key={index}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faFlag}
+                          style={{
+                            color: f.flagDetails?.flagColour || "#C0C0C0",
+                          }}
+                        />
+                        {f.flagDetails?.flagName}
+                      </li>
+                    ))}
+                  </ul>
+                }
+                title="Flags"
+              >
+                <Badge
+                  count={flag.length > 1 ? flag.length - 1 : 0}
+                  offset={[5, 5]}
+                  style={{ backgroundColor: "#04306f", cursor: "pointer" }}
+                >
                   <FontAwesomeIcon
-                  id="flagName"
-                  name="flagName"
+                    id="flagName"
+                    name="flagName"
                     icon={faFlag}
                     style={{
-                      color:
-                        flag?.length > 0 && flag[0]?.flagDetails?.flagColour
-                          ? flag?.length > 0 && flag[0]?.flagDetails?.flagColour
-                          : "#C0C0C0",
+                      color: flag[0]?.flagDetails?.flagColour || "#C0C0C0",
                       fontSize: "20px",
                       marginTop: "5px",
+                      cursor: "pointer",
                     }}
                   />
-                </Tooltip>
-              </div>
+                </Badge>
+              </Popover>
+
               <div className={styles.avatarAlign}>
                 {auditstatusBodyTemplate || "--"}
               </div>
@@ -272,8 +296,8 @@ const ContentGroupCard = ({
   );
 };
 
-const connector=connect((state)=>({state}),{
-  getRoutedData:patientSyncActions.getRoutedData
-})
+const connector = connect((state) => ({ state }), {
+  getRoutedData: patientSyncActions.getRoutedData,
+});
 
 export default connector(ContentGroupCard);
