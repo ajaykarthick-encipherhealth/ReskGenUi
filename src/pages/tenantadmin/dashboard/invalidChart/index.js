@@ -6,7 +6,7 @@ import styles from "../styles.module.css";
 import { connect } from "react-redux";
 import { actions as invalidAction } from "../../../../stores/tenantAdmin/dashboard/invalid";
 import { useRouter } from "next/router";
-import {actions as allActions} from '../../../../stores/tenantAdmin/patientSync'
+import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";
 import { flagOptions } from "../../patients";
 
 const InvalidChart = ({
@@ -23,7 +23,7 @@ const InvalidChart = ({
   values,
   graphName,
   getRoutedData,
-  invalidChartData
+  invalidChartData,
 }) => {
   const router = useRouter();
   const graphOptions = {
@@ -78,21 +78,7 @@ const InvalidChart = ({
             </div>
           </div>
           <div className="d-flex flex-column justify-content-center">
-            <div
-            
-              className="cursor-pointer"
-              onClick={() => {
-                const selectedFlag = flagOptions.find(item => item.header === header);
-                const params = {
-                  flagList: selectedFlag ? selectedFlag.value : "",
-                  activeFilters: ["Flag"]
-                };
-                getRoutedData(params);
-                router.push("/tenantadmin/patients");
-              }}
-            >
-              {header}
-            </div>
+            <div className="cr-pointer">{header}</div>
 
             {hideContent ? (
               <span
@@ -114,7 +100,20 @@ const InvalidChart = ({
           </div>
         </div>
       </div>
-      <div className="invalidChart">
+      <div
+        className="invalidChart cursor-pointer"
+        onClick={() => {
+          const selectedFlag = flagOptions.find(
+            (item) => item.header === header
+          );
+          const params = {
+            flagList: selectedFlag ? selectedFlag.value : "",
+            activeFilters: ["Flag"],
+          };
+          getRoutedData(params);
+          router.push("/tenantadmin/patients");
+        }}
+      >
         <ReactECharts className="invalidChart" option={graphOptions} />
       </div>
     </>
