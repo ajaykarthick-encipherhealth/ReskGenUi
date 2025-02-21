@@ -441,7 +441,7 @@ const Reports = ({
               ? selectedOptions?.User
               : "",
           flagsList: selectAllFlags,
-          allPatientIds: false,
+          allPatientIds: selectAll,
         });
       } else if (activeTab === "Audit") {
         auditReport({
@@ -555,6 +555,7 @@ const Reports = ({
       setSelectedData(routeData?.selectedData);
       setSelectAll(routeData?.selectAll);
       getActiveTab(routeData?.activeTab || "admin")
+      setSelectedRows(routeData?.selectedRows||[])
     }
   }, []);
 

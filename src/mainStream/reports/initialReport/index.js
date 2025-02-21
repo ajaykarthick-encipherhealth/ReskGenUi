@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "../report.module.css";
-import { Empty, Spin, notification } from "antd";
+import { Empty, notification } from "antd";
 import Hold from "../../../../src/images/trackingImages/hold.webp";
 import Pending from "../../../../src/images/trackingImages/pending.webp";
 import Completed from "../../../../src/images/trackingImages/completed.webp";
@@ -11,7 +11,6 @@ import auditedIcon from "../../.../../../images/trackingImages/audited.webp";
 import TableStyle from "../../../components/table/table.module.css";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 import { connect } from "react-redux";
-import SpinnerDots from "../../../components/spinner";
 import ContentGroupCard from "../../../mainStream/components/cards/contentGroupCard";
 import AllocationCount from "../../../mainStream/components/allocationCount";
 import Flags from "../../../mainStream/components/flagCount";
@@ -26,7 +25,6 @@ import {
 import { actions as adminActions } from "../../../stores/admin/report";
 import { actions as patientsActions } from "../../../stores/admin/workqueue";
 import { getStorage, setStorage } from "../../../utils/storages";
-import TableSkeleton from "../../../components/skeleton/table";
 import CardSkeleton from "../../../components/skeleton/card";
 
 const InitialCard = ({
@@ -57,7 +55,8 @@ const InitialCard = ({
   const handleHeaderCheckboxChange = async (
     activeTab,
     selectAll,
-    setSelectAll
+    setSelectAll,
+    selectAllFlags
   ) => {
     const {
       filter,
@@ -69,13 +68,11 @@ const InitialCard = ({
       sort,
       userName,
       selectManager,
-      flagsList,
-      allPatientIds,
     } = apiCall.admin;
 
     // const updatedRows = selectAll ? [] : reportListAll?.response?.data;
     // setSelectedRows(updatedRows);
-    if (activeTab === "Reviewer" && selectAll) {
+    if (activeTab === "Reviewer" ) {
       // setIsLoading(true);
       // const {
       //   filter,
@@ -115,7 +112,7 @@ const InitialCard = ({
         getSelectedRow(res?.response?.patientIds);
       }
       // } catch (error) {}
-    } else if (activeTab === "Admin" && selectAll) {
+    } else if (activeTab === "Admin") {
       // setIsLoading(true);
 
       // try {
@@ -134,7 +131,6 @@ const InitialCard = ({
       // }&allPatientIds=${selectAll ? false : true}&allFlags=${selectAllFlags}`;
 
       const searchValue = filter === "ALL" ? "" : filter;
-
       const res = await getAdminChecKAll({
         pagenum: 0,
         startDate,
@@ -146,7 +142,7 @@ const InitialCard = ({
         selectAllFlags,
         selectManager,
         selectAll,
-        userName,
+        userName        
       }); // fetch(
       //   ENDPOINTS.apiEndoint + url,
       //   // `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
@@ -154,8 +150,8 @@ const InitialCard = ({
       //     headers: { Authorization: `Bearer ${await getStorage("token")}` },
       //   }
       // ).then((res) => res.json());
-      if (res.status === "SUCCESS") {
-        setSelectAll(true);
+      if (res?.status === "SUCCESS") {
+        // setSelectAll(true);
         getSelectedRow(res?.response?.patientIds);
         setSelectedRows(res?.response?.patientIds);
       }
@@ -166,27 +162,31 @@ const InitialCard = ({
     }
   };
 
- const handleRowCheckboxChange = (row) => {
-   const isSelected = selectedRows.some(
-     (selectedRow) => selectedRow === row.patientId
-   );
+  const handleRowCheckboxChange = (row) => {
+    const isSelected = selectedRows?.some(
+      (selectedRow) => selectedRow === row.patientId
+    );
 
-   let updatedRows;
-   if (isSelected) {
-     updatedRows = selectedRows.filter(
-       (selectedRow) => selectedRow !== row.patientId
-     );
-   } else {
-     updatedRows = [...selectedRows, row.patientId];
-   }
+    let updatedRows;
+    if (isSelected) {
+      updatedRows = selectedRows?.filter(
+        (selectedRow) => selectedRow !== row.patientId
+      );
+    } else {
+      updatedRows = selectedRows
+        ? [...selectedRows, row.patientId]
+        : [row.patientId];
+    }
 
-   setSelectedRows(updatedRows);
-   getSelectedRow(updatedRows);
-   const allRows =
-     reportListAll?.response?.data?.map((item) => item.patientId) || [];
-   setSelectAll(updatedRows.length === allRows.length);
- };
+    setSelectedRows(updatedRows);
+    getSelectedRow(updatedRows);
+    // const allRows =
+    //   reportListAll?.response?.data?.map((item) => item.patientId) || [];
 
+    setSelectAll(
+      reportListAll?.response?.totalElements === updatedRows?.length
+    );
+  };
 
   const card1Data = [
     {
@@ -351,6 +351,13 @@ const InitialCard = ({
     getSelectedRow(selectedRows);
   }, [selectedRows]);
 
+  useEffect(() => {
+    if ((selectAllFlags || selectAll) && (reportListAll?.response?.totalElements ===
+      selectedRows?.length)) {
+      handleHeaderCheckboxChange(activeTab, selectAll, setSelectAll,selectAllFlags);
+      // getAdminChecKAll({pagenum: 0,selectAll})
+    }
+  }, [selectAllFlags, selectAll]);
 
   return (
     <>
@@ -402,16 +409,30 @@ const InitialCard = ({
                     onChange={() => {
                       const updatedSelectAll = !selectAll;
                       setSelectAll(updatedSelectAll);
-                      handleHeaderCheckboxChange(
-                        activeTab,
-                        updatedSelectAll,
-                        setSelectAll
-                      );
+                     
+                      if (!updatedSelectAll) {
+                        setSelectedRows([]);
+                      } else {
+                        handleHeaderCheckboxChange(
+                          activeTab,
+                          updatedSelectAll,
+                          setSelectAll,
+                          selectAllFlags
+                        );
+                      }
                     }}
-                    checked={selectAll && selectedRows?.length > 0}
+                    checked={
+                      selectAll ||
+                      reportListAll?.response?.totalElements ===
+                        selectedRows?.length
+                    }
                     className={
                       styles.checkAlign +
-                      (selectAll ? " " + TableStyle.customChecked : "")
+                      (selectAll ||
+                      reportListAll?.response?.totalElements ===
+                        selectedRows?.length
+                        ? " " + TableStyle.customChecked
+                        : "")
                     }
                     // checked={
                     //   selectedRows.length > 0 &&
@@ -468,7 +489,7 @@ const InitialCard = ({
                                 ? item?.patientFlagResponseDTOs
                                 : []
                             }
-                            page={page}
+                            page={{ ...page, selectedRows }}
                             handleRowCheckboxChange={handleRowCheckboxChange}
                             selectedRows={selectedRows}
                             handleTableRowClick={handleTableRowClick}

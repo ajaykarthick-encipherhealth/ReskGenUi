@@ -104,10 +104,10 @@ const ContentGroupCard = ({
               onChange={() => handleRowCheckboxChange(item)}
               className={TableStyle.customChecked}
               checked={
-                selectedRows?.length > 0 &&
+                selectedRows?.length > 0 ?
                 selectedRows?.some(
                   (selectedRow) => selectedRow === item?.patientId
-                )
+                ):false
               }
             />
           )}

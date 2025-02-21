@@ -24,7 +24,7 @@ export async function adminApi({
       userName === "REVIEWER" ? selectManager : ""
     }&managerid=${
       userName === "SUPERVISOR" ? selectManager : ""
-    }&orgid=${orgId}&allFlags=${flagsList ? flagsList : ""}
+    }&orgid=${orgId}&allFlags=${flagsList.toString() ? flagsList : ""}
   `,
     options
   );
@@ -81,22 +81,24 @@ export async function checkAllApi({
   selectManager,
   selectAll,
   userName,
+  flagsList
 }) {
   const options = {
     method: "GET",
   };
   const orgId = getStorage("orgId");
   const role = getStorage("userRole");
+
   const data = await requestPortal(
     `dbservice/patient/adminreport?pageno=${pagenum}&size=${
       size ? size : 7
-    }&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${
+    }&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search||""}&sortfield=${
       sort?.sortField ? sort?.sortField : ""
     }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&username=${
       userName === "REVIEWER" ? selectManager : ""
     }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${
       role == "tenant_admin" ? "" : orgId
-    }&allPatientIds=${selectAll}&allFlags=${selectAllFlags}`,
+    }&allPatientIds=${selectAll}&allFlags=${selectAllFlags.toString() ? selectAllFlags : ""}`,
     options
   );
   return data;
