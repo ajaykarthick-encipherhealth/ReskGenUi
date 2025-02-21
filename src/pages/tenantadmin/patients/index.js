@@ -52,7 +52,7 @@ const statusOptions = [
 ];
 export const flagOptions = [
   { header: "DOS Count", label: "INVALID DOC", value: "IN_VALID_DOC", id: 1 },
-  { header: "Televist Count", label: "TELEVIST COUNT", value: "TELEVIST_COUNT", id: 2 },
+  { header: "Televist Count", label: "Audio Visit", value: "AUDIO_VISIT", id: 2 },
   { header: "Out of Scope", label: "OUT OF SCOPE", value: "OUT_OF_SCOPE", id: 3 },
   { header: "Invalid Credentails", label: "INVALID CREDENTIALS", value: "INVALID_CREDENTIALS", id: 4 },
   { header: "Improper Data", label: "IMPROPER DATA", value: "IMPROPER_DATA", id: 5 },
@@ -217,7 +217,6 @@ const Patient = ({
     try {
       setIsLoadingBtn(true);
       const response = await getPatientId({ obj: formData });
-
       if (response?.status === "SUCCESS") {
         getAllPatients(
           pageNo,
@@ -361,7 +360,6 @@ const Patient = ({
     formData.append("emrtype", emrType);
     const response = await uploadFiles({ obj: formData });
     if (response?.status === "SUCCESS") {
-      getResponePopup(response);
       form.resetFields();
       setEmrType("");
       setInputValue({});
