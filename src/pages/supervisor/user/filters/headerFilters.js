@@ -167,6 +167,8 @@ const HeaderFilters = ({
     setEndDate2([]);
     setSelectedDates4("");
     setSelectedDueDates("");
+    setSelAuditAllocatedByVal("")
+    audisetSelAllocatedBy("")
   };
 
   const renderFilter = (filter) => {
@@ -231,16 +233,18 @@ const HeaderFilters = ({
             <div class="form-group has-search custom-react-select-audit">
               <Select
                 onChange={(selectedOption) => {
-                  audisetSelAllocatedBy(selectedOption ? selectedOption : "");
+                  audisetSelAllocatedBy(selectedOption ? selectedOption : null);
                   setSelAuditAllocatedByVal(
-                    selectedOption ? selectedOption : []
+                    selectedOption ? selectedOption :null
                   );
                   if (setPageNo) {
                     resetPageNumber(setPageNo);
                   }
+                    setClear(false);
+                  getRoutedData(null);
                 }}
                 options={auditallocatedByOptions}
-                value={selAuditAllocatedByVal}
+                value={selAuditAllocatedByVal?selAuditAllocatedByVal:null}
                 className="custom-react-select-audit w-100"
                 isSearchable={false}
                 placeholder={audidefaultAllocatedBy}
