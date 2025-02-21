@@ -316,7 +316,13 @@ function TrackingTable({
             ? moment(data.auditedDate).format("MM-DD-YYYY")
             : "---"}
         </td>
-        <td className="text-center">
+        <td
+          className={TableStyle.childBorder}
+          onClick={handleTableRowClick}
+          style={{ textAlign: "center" }}
+          id={data.patientId}
+          name={data.patientId}
+        >
           {data?.priority ? priorityStatus(data?.priority) : "--"}
         </td>
         <td

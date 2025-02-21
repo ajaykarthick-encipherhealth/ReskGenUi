@@ -95,7 +95,7 @@ const HeaderFilters = ({
       case "Allocated Date":
       case "Audit Allocated Date":
         return (
-          <div className={defaultSize}>
+          <div className=" default-filter-size" >
             <label className={styles.label}>{filter}</label>
             <div className="dateRangeSize">
               <RangePicker
@@ -161,7 +161,7 @@ const HeaderFilters = ({
       case "Supervisor":
       case "Priority":
         return (
-          <div className={defaultSize}>
+          <div className=" default-filter-size" >
             <label className={styles.label}>{filter}</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -185,7 +185,7 @@ const HeaderFilters = ({
         );
       case "Search By Patient Name / ID":
         return (
-          <div className={defaultSize} onClick={() => setClear(false)}>
+          <div className=" default-filter-size"  onClick={() => setClear(false)}>
             <label style={{ marginLeft: "8px", color: "black" }}>
               {" "}
               Patient Name / ID
@@ -217,9 +217,9 @@ const HeaderFilters = ({
   }, [searchTextValue]);
 
   return (
-    <div style={{ display: "flex" }}>
-      <div className="row filter-contain" style={{ width: "95%" }}>
-        <div className={"col-2"}>
+    <div className="d-flex justify-content-center align-items-center">
+      <div className="row filter-contain"    style={{ width: "98%" }}>
+      <div className=" default-filter-size" >
           <label className={styles.label}>Reviewer</label>
           <div class="form-group has-search custom-react-select">
             <Select
@@ -240,7 +240,7 @@ const HeaderFilters = ({
             />
           </div>
         </div>
-        <div className={"col-2"}>
+        <div className=" default-filter-size" >
           <label className={styles.label}>Supervisor</label>
           <div class="form-group has-search custom-react-select">
             <Select
@@ -268,7 +268,7 @@ const HeaderFilters = ({
 
       <div
         className={`d-flex justify-content-end ${{ Tracking }}`}
-        style={{ width: "5%" }}
+        style={{ width: "2%" }}
       >
         <div>
           <MoreFilter

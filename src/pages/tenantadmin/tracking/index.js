@@ -522,7 +522,7 @@ const Patient = ({
                   <div className="table-responsive active-projects task-table">
                     <div className="tbl-caption row d-flex ">
                       <div
-                        className="tbl-caption2 col-xl-10 align-items-center"
+                        className="tbl-caption2 col-10 align-items-center"
                         style={{ padding: "20px 0px 20px 20px" }}
                       >
                         <HeaderFilters
@@ -564,7 +564,7 @@ const Patient = ({
                           searchTextValue={searchTextValue}
                         />
                       </div>
-                      <div className="col-xl-2 col-sm-3">
+                      <div className="col-xl-2 col-sm-3 d-flex align-items-center justify-content-center">
                         <DailyTask
                           trackChart={trackingList?.processStatusCount}
                         />
