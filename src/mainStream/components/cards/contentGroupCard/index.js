@@ -84,12 +84,13 @@ const ContentGroupCard = ({
   };
 
   return (
-    <div className={styles.card}>
+    <div id="badge" className={`cr-pointer ${styles.card}`}>
       <div
+        id="badge"
         className={`report-effect ${styles.contentGroup} my-2`}
         style={{ display: "flex" }}
       >
-        <div style={{ width: "5%" }}>
+        <div id="badge" style={{ width: "5%" }}>
           {loading ? (
             <Spin
               indicator={<LoadingOutlined />}
@@ -112,7 +113,7 @@ const ContentGroupCard = ({
           )}
         </div>
         <div
-          id={patientId}
+          id="badge"
           name={patientId}
           className="responsive_report"
           style={{
@@ -122,7 +123,7 @@ const ContentGroupCard = ({
           }}
           onClick={() => handleTableRowClick(patientId)}
         >
-          <div style={{ width: "67%" }}>
+          <div id="badge" style={{ width: "67%" }}>
             <div
               className={`${styles.pName} mb-2`}
               onClick={() =>
@@ -210,34 +211,40 @@ const ContentGroupCard = ({
 
               <Popover
                 content={
-                  <ul
-                    style={{
-                      padding: 0,
-                      listStyle: "none",
-                      margin: 0,
-                      maxHeight: "150px",
-                      overflow: "scroll",
-                    }}
-                  >
-                    {flag.map((f, index) => (
-                      <li
-                        key={index}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "5px",
-                        }}
-                      >
-                        <FontAwesomeIcon
-                          icon={faFlag}
+                  flag.length > 0 ? (
+                    <ul
+                      style={{
+                        padding: 0,
+                        listStyle: "none",
+                        margin: 0,
+                        maxHeight: "150px",
+                        overflow: "scroll",
+                      }}
+                    >
+                      {flag.map((f, index) => (
+                        <li
+                          key={index}
                           style={{
-                            color: f.flagDetails?.flagColour || "#C0C0C0",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "5px",
                           }}
-                        />
-                        {f.flagDetails?.flagName}
-                      </li>
-                    ))}
-                  </ul>
+                        >
+                          <FontAwesomeIcon
+                            icon={faFlag}
+                            style={{
+                              color: f.flagDetails?.flagColour || "#C0C0C0",
+                            }}
+                          />
+                          {f.flagDetails?.flagName}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p style={{ margin: 0, color: "#888" }}>
+                      No Flags Available
+                    </p>
+                  )
                 }
                 title="Flags"
               >
@@ -251,7 +258,10 @@ const ContentGroupCard = ({
                     name="flagName"
                     icon={faFlag}
                     style={{
-                      color: flag[0]?.flagDetails?.flagColour || "#C0C0C0",
+                      color:
+                        flag.length > 0
+                          ? flag[0]?.flagDetails?.flagColour
+                          : "#C0C0C0",
                       fontSize: "20px",
                       marginTop: "5px",
                       cursor: "pointer",

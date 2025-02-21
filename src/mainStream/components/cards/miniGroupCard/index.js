@@ -20,7 +20,7 @@ const CardComponent = ({
   const handleDateFormat = (date) => {
     return dayjs(date).format("MM-DD-YYYY");
   };
-  const MAX_VISIBLE_USERS = 2;
+  const MAX_VISIBLE_USERS = 1;
   return (
     <div>
       {data?.length > 0 ? (
@@ -37,6 +37,7 @@ const CardComponent = ({
           <div className={styles.contentGroup}>
             <div className="col-12">
               <div
+              id="badge" className="cr-pointer"
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -135,7 +136,7 @@ const CardComponent = ({
                                     className="d-flex align-items-center"
                                     key={index}
                                   >
-                                    <div style={{ marginRight: "10px" }}>
+                                    <div className="m-1">
                                       {renderUserPrfoileAvatar(
                                         firstName,
                                         lastName,
@@ -153,13 +154,18 @@ const CardComponent = ({
                         }
                       >
                         <div
+                          id="badge"
                           style={{
                             display: "inline-flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            fontSize: "16px",
+                            fontSize: "14px",
                             cursor: "pointer",
-                            paddingLeft: "10px",
+                            height: "28px",
+                            width: "28px",
+                            borderRadius: "50%",
+                            backgroundColor: "#04306f",
+                            color: "white",
                           }}
                         >
                           +{item.receivedUsers.length - MAX_VISIBLE_USERS}

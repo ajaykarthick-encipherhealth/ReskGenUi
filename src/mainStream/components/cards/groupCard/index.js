@@ -34,7 +34,8 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
           <div className={` ${styles.contentGroup}`}>
             <div className="col-12 responsive_report">
               <div
-                className=" report-effect"
+                id="badge"
+                className="cr-pointer"
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -72,8 +73,9 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
                         </div>
                       }
                     >
-                      <div id={data?.id}
-                      name={data?.id}
+                      <div
+                        id={data?.id}
+                        name={data?.id}
                         style={{
                           display: "inline-block",
                           marginRight: "5px",
