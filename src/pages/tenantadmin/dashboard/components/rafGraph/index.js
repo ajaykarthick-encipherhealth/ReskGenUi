@@ -26,7 +26,7 @@ const RafGraph = ({
   customDate,
   selectDos,
   isPotential,
-  className
+  className,
 }) => {
   const [dateRange, setDateRange] = useState({
     startDate:
@@ -39,9 +39,9 @@ const RafGraph = ({
       dateRange.startDate,
       dateRange.endDate,
       selectedOrganization,
-      selectDos,
+      selectDos
     );
-  }, [dateRange, selectedOrganization,selectDos]);
+  }, [dateRange, selectedOrganization, selectDos]);
 
   const dates =
     selectedValue === "custom"
@@ -50,14 +50,17 @@ const RafGraph = ({
       ? getLast7Days()
       : getLast30Days();
   const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc;
-  const rafScoreByDateForPotential=getAllRafScoreData?.rafScoreByDateForHcc
+  const rafScoreByDateForPotential =
+    getAllRafScoreData?.rafScoreByDateForPotential;
   const resultArrayHCC = formatValues(rafScoreByDateForHcc, dates);
   const resultArrayPotential = formatValues(rafScoreByDateForPotential, dates);
   const rafScoreByDateForSuggested =
     getAllRafScoreData?.rafScoreByDateForSuggested;
   const resultArrayCaregaps = formatValues(rafScoreByDateForSuggested, dates);
-  const totalCodes = resultArrayHCC.map((num, index) => num + resultArrayCaregaps[index]+ resultArrayPotential[index]);
-
+  const totalCodes = resultArrayHCC.map(
+    (num, index) =>
+      num + resultArrayCaregaps[index] + resultArrayPotential[index]
+  );
 
   const option = {
     tooltip: {
@@ -98,7 +101,9 @@ const RafGraph = ({
           ? "Care Gap  RAF"
           : isHcc
           ? "HCC  RAF"
-          : isPotential?"Potential Diagnosis RAF":"Total RAF",
+          : isPotential
+          ? "Potential Diagnosis RAF"
+          : "Total RAF",
         type: "line",
         itemStyle: {
           color: rafColor,
@@ -109,7 +114,13 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: isHcc ||isPotential? resultArrayHCC : isCargaps ? resultArrayCaregaps : totalCodes,
+        data: isHcc
+          ? resultArrayHCC
+          : isPotential
+          ? resultArrayPotential
+          : isCargaps
+          ? resultArrayCaregaps
+          : totalCodes,
       },
 
       {
@@ -138,7 +149,7 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: rafColor4 && resultArrayHCC,
+        data: rafColor4 && resultArrayPotential,
       },
       {
         name: "Care Gaps RAF",
@@ -157,7 +168,7 @@ const RafGraph = ({
     ],
   };
   return (
-    <div className={`${className?className:"carecapRAF"}`}>
+    <div className={`${className ? className : "carecapRAF"}`}>
       <ReactECharts option={option} />
     </div>
   );

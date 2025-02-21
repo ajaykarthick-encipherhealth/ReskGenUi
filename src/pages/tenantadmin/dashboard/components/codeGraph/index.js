@@ -39,9 +39,11 @@ const CodesGraph = ({
       ? getLast7Days()
       : getLast30Days();
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
+  const potentialDiagnosisCountValues = getAllHccCodes?.potentialHccDiseaseCountMap;
   const radiologyCountValues = getAllLabAndRadiologyChart?.radiologyCountMap;
   const labCountValues = getAllLabAndRadiologyChart?.labCountMap;
   const resultArrayHCC = formatValues(hccDiseaseCountValues, dates);
+  const resultArrayPotential = formatValues(potentialDiagnosisCountValues, dates);
   const resultArrayRadiology = formatValues(radiologyCountValues, dates);
   const resultArrayLab = formatValues(labCountValues, dates);
   const suggestedHccDiseaseCountMap =
@@ -89,9 +91,9 @@ const CodesGraph = ({
           : isRevenue
           ? "Revenue"
           : isPotential?"Potential Diagnosis Codes":"Radiology",
-        data: isHcc||isPotential
+        data: isHcc
           ? resultArrayHCC
-          : isCargaps
+          :isPotential?resultArrayPotential: isCargaps
           ? resultArrayCaregaps
           :isTwoWaves
           ?resultArrayRadiology

@@ -1,11 +1,11 @@
-import React, {useEffect } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import CodesGraph from "../../components/codeGraph";
 import styles from "../../styles.module.css";
 import * as echarts from "echarts";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
-import { Empty,Tooltip } from "antd";
+import { Empty, Tooltip } from "antd";
 import {
   HccCodes,
   RafCounts,
@@ -34,11 +34,10 @@ const index = ({
   rafScorechartLoader,
   customDate,
   selectDos,
-  getAllPotentialCodes,
-  getAllPotentialCodesData
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
-  const potentialDiseaseCountValues = getAllPotentialCodes?.hccDiseaseCountMap;
+  const potentialDiseaseCountValues =
+    getAllHccCodes?.potentialHccDiseaseCountMap;
 
   const dates =
     selectedValue === "custom"
@@ -66,7 +65,8 @@ const index = ({
       : [];
 
   const totalCodes = resultArrayHCC.map(
-    (num, index) => num + resultArrayCaregaps[index] + resultArrayPotential[index]
+    (num, index) =>
+      num + resultArrayCaregaps[index] + resultArrayPotential[index]
   );
 
   useEffect(() => {
@@ -159,7 +159,7 @@ const index = ({
       },
       {
         name: "Potential Diagnosis Codes",
-        data: resultArrayHCC,
+        data: resultArrayPotential,
         type: "line",
         lineStyle: { color: "#BEB531" },
         smooth: true,
@@ -216,7 +216,12 @@ const index = ({
 
   const totalHccRafScore = getAllRaf?.totalHccRafScore || 0;
   const totalSuggestedRafScore = getAllRaf?.totalSuggestedRafScore || 0;
-  const totalScore = (totalHccRafScore + totalSuggestedRafScore).toFixed(2);
+  const totalPotentialRafScore = getAllRaf?.totalPotentialRafScore || 0;
+  const totalScore = (
+    totalHccRafScore +
+    totalSuggestedRafScore +
+    totalPotentialRafScore
+  ).toFixed(2);
 
   // const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
@@ -390,8 +395,6 @@ const enhancer = connect(
   (state) => ({
     getAllHccCodes:
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
-    getAllPotentialCodes:
-      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     rafScorechartLoader: state?.tenantAdmin?.dashboard?.default?.rafScoreLoader,
@@ -403,7 +406,6 @@ const enhancer = connect(
   }),
   {
     getAllHccCodesData: HccCodes,
-    getAllPotentialCodesData: HccCodes,
     getAllRafData: RafCounts,
     getAllRafScore: getAllRafScore,
   }

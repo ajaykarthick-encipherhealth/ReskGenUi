@@ -19,7 +19,7 @@ const RevenueGraph = ({
   isMultiple,
   className,
   customDate,
-  isPotential
+  isPotential,
 }) => {
   const dates =
     selectedValue === "custom"
@@ -28,12 +28,15 @@ const RevenueGraph = ({
       ? getLast7Days()
       : getLast30Days();
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc;
-  const premiumByDateForPotential = getAllRaf?.premiumByDateForHcc;
+  const premiumByDateForPotential = getAllRaf?.premiumByDateForPotential;
   const resultArrayHCC = formatValues(premiumByDateForHcc, dates);
-  const resultArrayPotential=formatValues(premiumByDateForPotential, dates)
+  const resultArrayPotential = formatValues(premiumByDateForPotential, dates);
   const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested;
   const resultArrayCaregaps = formatValues(premiumByDateForSuggested, dates);
-  const totalCodes = resultArrayHCC.map((num, index) => num + resultArrayCaregaps[index]+resultArrayPotential[index]);
+  const totalCodes = resultArrayHCC.map(
+    (num, index) =>
+      num + resultArrayCaregaps[index] + resultArrayPotential[index]
+  );
 
   const option = {
     tooltip: {
@@ -73,10 +76,18 @@ const RevenueGraph = ({
           ? "Hcc  Revenue"
           : isCargaps
           ? "Care Gap  Revenue"
-          : isPotential?"Potential Diagnosis Revenue":"Total Revenue",
+          : isPotential
+          ? "Potential Diagnosis Revenue"
+          : "Total Revenue",
         type: "line",
         step: "start",
-        data: isHcc||isPotential ? resultArrayHCC : isCargaps ? resultArrayCaregaps : totalCodes,
+        data: isHcc
+          ? resultArrayHCC
+          : isPotential
+          ? resultArrayPotential
+          : isCargaps
+          ? resultArrayCaregaps
+          : totalCodes,
         itemStyle: {
           color: isHcc ? "#02BBDE" : isCargaps ? "#5A75F2" : "#0095C2",
         },

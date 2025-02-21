@@ -14,7 +14,7 @@ import { Skeleton } from "antd";
 import { formatNumber } from "../../../../../utils/reusable.js";
 import HederMinimization from "../../components/headerMinimization";
 const Index = ({
-  getAllHccCodes,
+  getAllPotentialCodes,
   getAllRafScoreData,
   getAllRaf,
   selectedOrganization,
@@ -26,19 +26,20 @@ const Index = ({
   selectDos,
 }) => {
   const [minimize, setMinimize] = useState(false);
-  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
-    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
+  const hccDiseaseCountValues = getAllPotentialCodes?.potentialHccDiseaseCountMap
+    ? Object.values(getAllPotentialCodes.potentialHccDiseaseCountMap)
     : [];
 
-  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
-    ? Object.values(getAllRaf.premiumByDateForHcc)
+  const premiumByDateForHcc = getAllRaf?.premiumByDateForPotential
+    ? Object.values(getAllRaf?.premiumByDateForPotential)
     : [];
 
-  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
-    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
+  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForPotential
+    ? Object.values(getAllRafScoreData.rafScoreByDateForPotential)
     : [];
 
-  const TotalHccRevenue = getAllRaf?.totalHccRafScore;
+  const TotalHccRevenue = getAllRaf?.totalPotentialRafScore;
+
   return (
     <>
       <HederMinimization
@@ -57,11 +58,11 @@ const Index = ({
                   <div className={styles.price}>
                     <Tooltip
                       title={
-                        getAllHccCodes?.hccCount && getAllHccCodes?.hccCount
+                        getAllPotentialCodes?.potentialCount && getAllPotentialCodes?.potentialCount
                       }
                     >
-                      {getAllHccCodes?.hccCount
-                        ? formatNumber(getAllHccCodes?.hccCount)
+                      {getAllPotentialCodes?.potentialCount
+                        ? formatNumber(getAllPotentialCodes?.potentialCount)
                         : 0}
                     </Tooltip>
                   </div>
@@ -111,12 +112,12 @@ const Index = ({
                   <div className={styles.price}>
                     <Tooltip
                       title={
-                        getAllRafScoreData?.totalHccRaf &&
-                        getAllRafScoreData?.totalHccRaf
+                        getAllRafScoreData?.totalPotentialRaf &&
+                        getAllRafScoreData?.totalPotentialRaf
                       }
                     >
-                      {getAllRafScoreData?.totalHccRaf
-                        ? formatNumber(getAllRafScoreData?.totalHccRaf)
+                      {getAllRafScoreData?.totalPotentialRaf
+                        ? formatNumber(getAllRafScoreData?.totalPotentialRaf)
                         : 0}
                     </Tooltip>
                     {/* {(getAllRafScoreData?.totalHccRaf || 0).toFixed(2)} */}
@@ -204,7 +205,7 @@ const Index = ({
 
 const enhancer = connect(
   (state) => ({
-    getAllHccCodes:
+    getAllPotentialCodes:
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
@@ -217,7 +218,7 @@ const enhancer = connect(
     rafScorechartLoader: state?.tenantAdmin?.dashboard?.default?.rafScoreLoader,
   }),
   {
-    getAllHccCodesData: HccCodes,
+    getAllPotentialCodesData: HccCodes,
     getAllRafScore: getAllRafScore,
     getAllRafData: RafCounts,
   }
