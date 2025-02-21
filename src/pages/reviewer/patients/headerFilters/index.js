@@ -67,6 +67,7 @@ const HeaderFiltersPatients = ({
     setClear(true);
     setSelectedDates([]);
     setSelectedDates2([]);
+    setSelectedOptionBatch(null)
   };
   const renderFilter = (filter) => {
     switch (filter) {

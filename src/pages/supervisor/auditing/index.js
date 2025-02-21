@@ -543,6 +543,7 @@ const Patient = ({
                         // priority
                         setSelectedPriority={setSelectedPriority}
                         selectedPriority={selectedPriority}
+                        setSelectedBatchList={setSelectedBatchList}
                       />
                     </div>
                     <div
@@ -581,7 +582,8 @@ const Patient = ({
                               sort,
                               selCreatedBy,
                               activeFilters,
-                              selectedPriority
+                              selectedPriority,
+                              selectBatchList
                             }}
                             getWorkListFilter={getWorkListFilter}
                             handlePriorityChange={handlePriorityChange}

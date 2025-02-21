@@ -721,6 +721,7 @@ const Patient = ({
                             setActiveFilters={setActiveFilters}
                             flagList={flagList}
                             setFlagList={setFlagList}
+                            setSelectedBatchList={setSelectedBatchList}
                           />
                         </div>
                       </div>

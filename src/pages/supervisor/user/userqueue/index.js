@@ -527,6 +527,7 @@ const Index = ({
                      <TableSkeleton/>
                        </div>
                     ) : (
+                      <div className="mt-2">
                       <UserQueueTable
                       bullets={  bullets}
                       badges={badges}
@@ -580,6 +581,7 @@ const Index = ({
                           selectedPriority
                         }}
                       />
+                      </div>
                     )}
                     <div>
                       <div className="pagination-container">

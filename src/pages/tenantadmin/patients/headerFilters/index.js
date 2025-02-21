@@ -112,7 +112,8 @@ const HeaderFilters = ({
   selectOptionsBatch,
   flagOptions,
   flagList,
-  setFlagList
+  setFlagList,
+  setSelectedBatchList
 }) => {
   const [trackInput, setTrackInput] = useState("");
   const [popoverVisible, setPopoverVisible] = useState(false);
@@ -132,7 +133,9 @@ const HeaderFilters = ({
     setStartDate2(null);
     setEndDate2(null);
     setFlagList(null)
+    setSelectedBatchList(null)
   };
+
   const renderFilter = (filter) => {
     switch (filter) {
       case "Processed Status":

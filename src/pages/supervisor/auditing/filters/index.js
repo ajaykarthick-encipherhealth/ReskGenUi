@@ -72,8 +72,8 @@ const Filters = ({
   batchValue,
   selectOptionsBatch,
   setSelectedPriority,
-  selectedPriority
-}) => {
+  selectedPriority,
+  }) => {
   const [selectAll, setSelectAll] = useState(false);
   const handleClearAllFilters = () => {
     setClear(true);
@@ -85,6 +85,7 @@ const Filters = ({
     setSelectedDates2([]);
     setSelectedOption();
     setSelCreatedBy("");
+    setSelectedOptionBatch(null)
   };
   let columnClass;
   if (addUser) {
