@@ -53,12 +53,12 @@ export const accuracy = async ({ btn,month,year,user }) => {
   btn === "DAILY"
     ? `daily?month=${month}&role=${
         role ? role.toUpperCase() : ""
-      }&year=${year}&userId=${user}`
+      }&year=${year}&userName=${user}`
     : btn === "WEEKLY"
     ? `weekly?month=${month}&role=${
         role ? role.toUpperCase() : ""
-      }&year=${year}&userId=${user}`
-    : `monthyly?role=${role ? role.toUpperCase() : ""}&year=${year}&userId=${user}`;
+      }&year=${year}&userName=${user}`
+    : `monthly?role=${role ? role.toUpperCase() : ""}&year=${year}&userName=${user}`;
 
   const options = {
     method: "POST",

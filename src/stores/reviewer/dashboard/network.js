@@ -30,17 +30,17 @@ export const accuracy = async ({ btn, month, year, isAdmin = false }) => {
       ? `daily?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
       : btn === "Weekly"
       ? `weekly?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
-      : `monthyly?year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
+      : `monthly?year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
     : btn === "Daily"
     ? `daily?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
     : btn === "Weekly"
     ? `weekly?month=${month}&year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`
-    : `monthyly?year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`;
+    : `monthly?year=${year}&role=${role ? role.toUpperCase() : ""}&isAdmin=${isAdmin}`;
   const options = {
     method: "POST",
   };
   const data = await requestPortal(
-    `dbservice/accuracyscore/${url}
+    `dbservice/accuracyscore/${url}&accuracyType=${"MACHINE"}
   `,
    options 
   );

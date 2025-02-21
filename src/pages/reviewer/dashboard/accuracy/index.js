@@ -179,26 +179,29 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
         min: 0,
         max: 100,
       },
-      {
-        // Secondary yAxis (right)
-        title: {
-          text: "Reviewer Changes Count",
-          style: {
-            color: "#0b59f1",
-          },
-        },
-        labels: {
-          format: "{value}",
-          style: {
-            color: "gray",
-            fontWeight: "500",
-          },
-        },
-        opposite: true,
-        min: 0, // Set the minimum value
-        max: 10, // Set the maximum value
-        tickInterval: 4, // Set the tick interval to 1
-      },
+
+      // this feature blocked my pravin
+
+      // {
+      //   // Secondary yAxis (right)
+      //   title: {
+      //     text: "Reviewer Changes Count",
+      //     style: {
+      //       color: "#0b59f1",
+      //     },
+      //   },
+      //   labels: {
+      //     format: "{value}",
+      //     style: {
+      //       color: "gray",
+      //       fontWeight: "500",
+      //     },
+      //   },
+      //   opposite: true,
+      //   min: 0, // Set the minimum value
+      //   max: 10, // Set the maximum value
+      //   tickInterval: 4, // Set the tick interval to 1
+      // },
     ],
     legend: {
       enabled: false,
@@ -240,13 +243,13 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
         if (finalData) {
           return (
             "Average Score: " +
-            finalData.averageScore +
-            "<br/>" +
-            "Total Correct: " +
-            finalData.newlyAddedCodesCount +
-            "<br/>" +
-            "Total Wrong: " +
-            finalData.incorrectCodesCount
+            finalData.averageScore 
+            // "<br/>" +
+            // "Total Correct: " +
+            // finalData.newlyAddedCodesCount +
+            // "<br/>" +
+            // "Total Wrong: " +
+            // finalData.incorrectCodesCount
           );
         } else {
           return "No data available";
@@ -266,33 +269,33 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
       },
     },
     series: [
-      {
-        name: "newlyAddedCodesCount",
-        data: getGraphData(
-          accuracyDatas?.data?.response,
-          "newlyAddedCodesCount",
-          selectedMonth,
-          selectedYear,
-          currentBtn,
-          currentDate
-        ),
-        color: "#0b59f1",
-        yAxis: 1,
-      },
-      {
-        name: "incorrectCodesCount",
-        data: getGraphData(
-          accuracyDatas?.data?.response,
-          "incorrectCodesCount",
-          selectedMonth,
-          selectedYear,
-          currentBtn,
-          currentDate
-        ),
+      // {
+      //   name: "newlyAddedCodesCount",
+      //   data: getGraphData(
+      //     accuracyDatas?.data?.response,
+      //     "newlyAddedCodesCount",
+      //     selectedMonth,
+      //     selectedYear,
+      //     currentBtn,
+      //     currentDate
+      //   ),
+      //   color: "#0b59f1",
+      //   yAxis: 1,
+      // },
+      // {
+      //   name: "incorrectCodesCount",
+      //   data: getGraphData(
+      //     accuracyDatas?.data?.response,
+      //     "incorrectCodesCount",
+      //     selectedMonth,
+      //     selectedYear,
+      //     currentBtn,
+      //     currentDate
+      //   ),
 
-        color: "red",
-        yAxis: 1,
-      },
+      //   color: "red",
+      //   yAxis: 1,
+      // },
       {
         name: "Temperature",
         type: "spline",

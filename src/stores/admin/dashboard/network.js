@@ -43,12 +43,12 @@ export const accuracy = async ({ btn, month, year, isAdmin = false }) => {
       ? `daily?month=${month}&year=${year}&isAdmin=${isAdmin}`
       : btn === "Weekly"
       ? `weekly?month=${month}&year=${year}&isAdmin=${isAdmin}`
-      : `monthyly?year=${year}&isAdmin=${isAdmin}`
+      : `monthly?year=${year}&isAdmin=${isAdmin}`
     : btn === "Daily"
     ? `daily?month=${month}&year=${year}&isAdmin=${isAdmin}`
     : btn === "Weekly"
     ? `weekly?month=${month}&year=${year}&isAdmin=${isAdmin}`
-    : `monthyly?year=${year}&isAdmin=${isAdmin}`;
+    : `monthly?year=${year}&isAdmin=${isAdmin}`;
   const options = {
     method: "GET",
   };
@@ -75,7 +75,7 @@ export const completedScore = async ({
       ? `daily?month=${month}&year=${year}&userName=${userName}&isManager=${isManage}`
       : btn === "WEEKLY"
       ? `weekly?month=${month}&year=${year}&userName=${userName}&isManager=${isManage}`
-      : `monthyly?year=${year}&userName=${userName}&isManager=${isManage}`;
+      : `monthly?year=${year}&userName=${userName}&isManager=${isManage}`;
 
   const data = await requestPortal(
     `dbservice/admindashboard/chartdeliverystatus/${url}`,
@@ -140,7 +140,7 @@ export const deliveryStatus = async ({month,year,btn}) => {
     ? `daily?month=${month}&year=${year}`
     : btn === "WEEKLY"
     ? `weekly?month=${month}&year=${year}`
-    : `monthyly?year=${year}`;
+    : `monthly?year=${year}`;
   const options = {
     method: "GET",
   };
