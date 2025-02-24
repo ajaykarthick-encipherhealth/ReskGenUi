@@ -778,7 +778,7 @@ const Patient = ({
                                   }
                                   rows={15}
                                   totalRecords={
-                                    allPatientList?.data?.response
+                                    allPatientList?.data?.response?.patientDtoList
                                       ?.totalElements
                                   }
                                   onPageChange={onPageChange}
@@ -786,7 +786,7 @@ const Patient = ({
                                 <div className="total-pages">
                                   Total count:{" "}
                                   {
-                                    allPatientList?.data?.response
+                                    allPatientList?.data?.response?.patientDtoList
                                       ?.totalElements
                                   }
                                 </div>
