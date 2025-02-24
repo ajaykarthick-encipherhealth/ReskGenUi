@@ -973,7 +973,7 @@ const Patient = ({
                                     <>
                                       <AllocatedAdminList
                                         patinetListAll={
-                                          reviewerResponse?.response?.content
+                                          reviewerResponse?.response?.patientDtoList?.content
                                         }
                                         selectAllChecked={selectAllChecked}
                                         setSelectAllChecked={

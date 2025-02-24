@@ -737,7 +737,7 @@ const Patient = ({
                             <AddPatientListTable
                               bullets={bullets}
                               patinetListAll={
-                                allPatientList?.data?.response?.content
+                                allPatientList?.data?.response?.patientDtoList?.content
                               }
                               actionBodyTemplate={actionBodyTemplate}
                               statusBodyTemplate={processstatusBodyTemplate}
