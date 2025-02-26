@@ -50,14 +50,14 @@ const bullets = [
         name: "Pending",
       },
       {
-        color: "red",
+        color: "#EB5252",
         name: "Declined",
       },
       {
-        color: "#3a9b94",
+        color: "#00BC13",
         name: "Completed",
       },
-      { color: "#AD94FA", name: "Hold" },
+      { color: "#3C0AD2", name: "Hold" },
     ],
   },
 ];
