@@ -119,9 +119,7 @@ export const getEncounterDateBackground = ({
           placement="bottom"
           overlayStyle={{ zIndex: 1000 }}
           content={
-            <div
-              style={{ width: "180px", height: "150px", overflowY: "scroll" }}
-            >
+            <div className="patientDetailsPopSTyle">
               {value?.map((item, i) =>
                 i > 1 ? (
                   <span
