@@ -34,6 +34,7 @@ import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
 import { disabledDate, getResponePopup } from "../../../utils/reusable";
 import TableSkeleton from "../../../components/skeleton/table";
+import { useRef } from "react";
 
 const { RangePicker } = DatePicker;
 const statusOption = [
@@ -62,6 +63,7 @@ const Patient = ({
   getAllCheckedListForSupervisor,
   supervisorCheckBoxLoader,
 }) => {
+  const pickerRef = useRef()
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
@@ -659,6 +661,7 @@ const Patient = ({
                                 <label>Computed Date</label>
                                 <div>
                                   <RangePicker
+                                  ref={pickerRef}
                                   id="computed-date"
                                   name="computed-date"
                                     format="MM-DD-YYYY"
@@ -666,6 +669,9 @@ const Patient = ({
                                       setDateRange(val);
                                     }}
                                     onChange={(dates, dateStrings) => {
+                                      if (!dates || dates.length === 0) {
+                                        setTimeout(() => pickerRef.current?.focus(), 100);
+                                      }
                                       resetPageNumber(setPageNo);
                                       setDateRange(dateStrings);
                                       handleReceivedDatePicker(

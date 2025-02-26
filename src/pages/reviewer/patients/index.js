@@ -32,6 +32,7 @@ import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import HeaderFiltersPatients, { allFilters } from "./headerFilters";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import TableSkeleton from "../../../components/skeleton/table";
+import { useRef } from "react";
 
 const { RangePicker } = DatePicker;
 
@@ -74,6 +75,8 @@ const Patient = ({
   batchList,
 }) => {
   const navigate = useRouter();
+  const pickerRef = useRef();
+  const pickerRef1 = useRef()
   const [isLoading, setIsLoading] = useState(true);
   const inputValue = {
     year: "",
@@ -224,6 +227,9 @@ const Patient = ({
   };
 
   const handleDatePickerChange = (dates, dateString) => {
+    if (!dates || dates.length === 0) {
+      setTimeout(() => pickerRef.current?.focus(), 100);
+    }
     setSelectedDates(dates);
     if (dateString[0] != "") {
       let convertStartDate =
@@ -241,6 +247,9 @@ const Patient = ({
   };
 
   const handleDatePickerChangeProcesseDate = (dates, dateString) => {
+    if (!dates || dates.length === 0) {
+      setTimeout(() => pickerRef1.current?.focus(), 100);
+    }
     setSelectedDates2(dates);
     if (dateString[0] !== "") {
       let convertStartDate =
@@ -434,6 +443,8 @@ const Patient = ({
                     <div className="row">
                       <div className="col-10">
                           <HeaderFiltersPatients
+                          pickerRef1={pickerRef1}
+                          pickerRef={pickerRef}
                             activeFilters={activeFilters}
                             setActiveFilters={setActiveFilters}
                             isAllocatedToSelector={true}
@@ -456,6 +467,8 @@ const Patient = ({
                             selectedDates={selectedDates}
                             setSelectedDates={setSelectedDates}
                             onchangeRangePicker={(dates, dateStrings) => {
+                              
+                              
                               handleDatePickerChange(dates, dateStrings);
                               resetPageNumber(setPageNo);
                               setClear(false);
@@ -463,6 +476,7 @@ const Patient = ({
                             selectedDates2={selectedDates2}
                             setSelectedDates2={setSelectedDates2}
                             onchangeRangePicker2={(dates, dateStrings) => {
+                           
                               handleDatePickerChangeProcesseDate(
                                 dates,
                                 dateStrings
@@ -480,6 +494,7 @@ const Patient = ({
                             selectlabelBatch="Select Batch"
                             isSelectBatch={true}
                             batchValue={selectBatchList}
+                            
                           />
                       </div>
                       <div className="col-2">

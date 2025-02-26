@@ -24,6 +24,7 @@ import { actions as patientSyncAction } from "../../../stores/tenantAdmin/patien
 import UploadModal from "./uploadfile/uploadModal";
 import { useRouter } from "next/router";
 import { disabledDate } from "../../../utils/reusable";
+import { useRef } from "react";
 
 const { RangePicker } = DatePicker;
 
@@ -312,6 +313,7 @@ const Index = ({
   routedData,
   webSocketData,
 }) => {
+    const pickerRef = useRef()
   const router = useRouter();
   const [filteredCOder, setFilteredCoder] = useState(null);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -543,6 +545,7 @@ const Index = ({
                               <label>Date</label>
                               <div class="form-group has-search">
                                 <RangePicker
+                                 ref={pickerRef}
                                   id="select-date"
                                   name="select-date"
                                   format="MM-DD-YYYY"
@@ -552,6 +555,9 @@ const Index = ({
                                       : undefined
                                   }
                                   onChange={(dates, dateStrings) => {
+                                    if (!dates || dates.length === 0) {
+                                      setTimeout(() => pickerRef.current?.focus(), 100);
+                                    }
                                     handleRangePicker(
                                       dates,
                                       dateStrings,

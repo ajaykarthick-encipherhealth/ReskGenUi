@@ -1,5 +1,5 @@
 import { DatePicker } from "antd";
-import React from "react";
+import React, { useRef } from "react";
 import dayjs from "dayjs";
 import {
   disableFutureDate,
@@ -35,7 +35,10 @@ const DateRangePicker = ({
   selectedDateRange,
   getRoutedData,
   isDueDate,
+  
 }) => {
+    const pickerRef = useRef();
+    const pickerRef1=useRef()
   return (
     <>
       <label style={{ marginLeft: "8px" }} className="responsiveLabel">
@@ -74,6 +77,7 @@ const DateRangePicker = ({
         /> */}
         {handleMultipleValues ? (
           <RangePicker
+          ref={pickerRef}
           id={pickerlabel}
           name={pickerlabel}
             value={selectedDates ? selectedDates[pickerName] : ""}
@@ -85,6 +89,9 @@ const DateRangePicker = ({
               }));
             }}
             onChange={(date, dateString) => {
+              if (!date || date.length === 0) {
+                setTimeout(() => pickerRef.current?.focus(), 100);
+              }
               const formattedDates = dateString?.map((date, index) => {
                 const formattedDate =
                   index === 1
@@ -125,18 +132,24 @@ const DateRangePicker = ({
           />
         ) : (
           <RangePicker
+          ref={pickerRef1}
           id={pickerlabel}
           name={pickerlabel}
             value={selectedDates ? selectedDates : []}
             format="MM-DD-YYYY"
             onCalendarChange={(val) => setSelectedDates(val)}
             onChange={(date, dateString) => {
+              if (!date || date.length === 0) {
+                setTimeout(() => pickerRef1.current?.focus(), 100);
+              }
               handleRnagePicker2({
                 date,
                 dateString,
                 setStartDate,
                 setEndDate,
+                pickerRef,
               });
+              
               if (setPageNo) {
                 resetPageNumber(setPageNo);
               }

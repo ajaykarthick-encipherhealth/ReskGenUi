@@ -520,11 +520,8 @@ const Patient = ({
               <div className="">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
-                    <div className="tbl-caption row d-flex ">
-                      <div
-                        className="tbl-caption2 col-10 align-items-center"
-                        style={{ padding: "20px 0px 20px 20px" }}
-                      >
+                  <div className="row">
+                  <div className="col-10">
                         <HeaderFilters
                           auditallocatedToOptoons={generateOptionsForNewStore(
                             auditAssignedFilters?.data?.response

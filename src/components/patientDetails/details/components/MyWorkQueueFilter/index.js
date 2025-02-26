@@ -10,6 +10,7 @@ import DateRangePicker from "../../../../rangepicker";
 import moment from "moment";
 import RegularButton from "../../../../button";
 import { disableFutureDate } from "../../../../headerFilters/functions";
+import { useRef } from "react";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -35,6 +36,8 @@ const MyWorkQueueFilter = ({
   filterModalOpen,
   setFilterModalOpen,
 }) => {
+  const pickerRef = useRef()
+  const pickerRef1 = useRef()
   const handleDatePickerChange = async (dates, dateString) => {
     if (dates) {
       setSelectComputedPicker(dates);
@@ -106,9 +109,13 @@ const MyWorkQueueFilter = ({
                     <div className="col-xl-12 mb-2">
                       <label>{datePicker1Lable}</label>
                       <RangePicker
+                        ref={pickerRef}
                         format="MM-DD-YYYY"
                         onChange={(dates, dateStrings) => {
                           handleChangeprocessedDate(dates, dateStrings);
+                          if (!dates || dates.length === 0) {
+                            setTimeout(() => pickerRef.current?.focus(), 100);
+                          }
                         }}
                         disabledDate={(current) => disableFutureDate(current)}
                         value={selectCompletedPicker}
@@ -118,9 +125,13 @@ const MyWorkQueueFilter = ({
                       <label>{datePicker2Lable}</label>
 
                       <RangePicker
+                      ref ={pickerRef1}
                         format="MM-DD-YYYY"
                         onChange={(dates, dateStrings) => {
                           handleDatePickerChange(dates, dateStrings);
+                          if (!dates || dates.length === 0) {
+                            setTimeout(() => pickerRef1.current?.focus(), 100);
+                          }
                         }}
                         disabledDate={(current) => disableFutureDate(current)}
                         value={selectComputedPicker}

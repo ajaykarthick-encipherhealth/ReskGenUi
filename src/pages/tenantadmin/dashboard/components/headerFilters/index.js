@@ -6,6 +6,7 @@ import { DatePicker, Select } from "antd";
 import moment from "moment";
 import { disabledDate as reusableDisabledDate } from "../../../../../utils/reusable"; // Import reusable function
 import dayjs from "dayjs";
+import { useRef } from "react";
 const { RangePicker } = DatePicker;
 
 const index = ({
@@ -20,6 +21,7 @@ const index = ({
 }) => {
   const [isCustom, setIsCustom] = useState(false);
   const [selectedDates, setSelectedDates] = useState([]);
+  const pickerRef = useRef()
 
   const handleDateChange = (value) => {
     if (value == "custom") {
@@ -54,6 +56,7 @@ const index = ({
         endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
       };
       setDateRange(range);
+      setTimeout(() => pickerRef.current?.focus(), 100);
     } else {
       const range = {
         startDate: moment(e[0]).format("YYYY-MM-DD") + "T00:00:00.000Z",
@@ -149,6 +152,7 @@ const index = ({
                   <div className={`${styles.flterContainer}`}>Custom Date</div>
                   <div className="tenantSelector">
                     <RangePicker
+                      ref={pickerRef}
                       id="select-customDate"
                       name="select-customDate"
                       size="large"

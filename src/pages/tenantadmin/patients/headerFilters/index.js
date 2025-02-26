@@ -12,6 +12,7 @@ import MoreFilter from "../../tracking/filters";
 import DateRangePicker from "../../../../components/rangepicker";
 import Search from "../../../../components/search";
 import { disabledDate } from "../../../../utils/reusable";
+import { useRef } from "react";
 
 const { RangePicker } = DatePicker;
 
@@ -115,6 +116,7 @@ const HeaderFilters = ({
   setFlagList,
   setSelectedBatchList
 }) => {
+  const pickerRef = useRef()
   const [trackInput, setTrackInput] = useState("");
   const [popoverVisible, setPopoverVisible] = useState(false);
   const handleClearAllFilters = () => {
@@ -188,10 +190,14 @@ const HeaderFilters = ({
             <label className={styles.label}>Created Date Range</label>
             <div className="dateRangeSize">
               <RangePicker
+              ref ={pickerRef}
                 value={clear ? ["", ""] : selectedDates2}
                 format="MM-DD-YYYY"
                 onCalendarChange={(val) => setSelectedDates2(val)}
                 onChange={(date, dateString) => {
+                  if (!date || date.length === 0) {
+                    setTimeout(() => pickerRef.current?.focus(), 100);
+                  }
                   handleRnagePicker2({
                     date,
                     dateString,

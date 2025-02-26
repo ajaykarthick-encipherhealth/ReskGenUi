@@ -39,7 +39,6 @@ const HeadTitle = ({
 
   const handleDatePickerChange = (date) => {
     if (!date || date.length === 0) {
-      // Focus on the "From" date field after clearing
       setTimeout(() => pickerRef.current?.focus(), 100);
     }
     if (date) {

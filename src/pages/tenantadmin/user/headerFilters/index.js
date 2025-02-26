@@ -15,6 +15,7 @@ import { InfoCircleFilled, PlusCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../tracking/filters";
 import { Button } from "react-bootstrap";
 import { disabledDate } from "../../../../utils/reusable";
+import { useRef } from "react";
 
 const { RangePicker } = DatePicker;
 
@@ -53,6 +54,7 @@ const HeaderFilters = ({
   addUserForm,
   selectedValue2,
 }) => {
+  const pickerRef = useRef()
   const [trackInput, setTrackInput] = useState("");
   const [activeFilters, setActiveFilters] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -100,6 +102,7 @@ const HeaderFilters = ({
             <label className={styles.label}>Created Date Range</label>
             <div className="dateRangeSize">
               <RangePicker
+               ref={pickerRef}
                 id="select-dateRange"
                 name="select-dateRange"
                 value={clear ? ["", ""] : selectedDates}
@@ -108,6 +111,9 @@ const HeaderFilters = ({
                   setSelectedDates(val);
                 }}
                 onChange={(date, dateString) => {
+                  if (!date || date.length === 0) {
+                    setTimeout(() => pickerRef.current?.focus(), 100);
+                  }
                   handleRnagePicker2({
                     date,
                     dateString,

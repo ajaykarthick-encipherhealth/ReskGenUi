@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Header from "../../jsx/layouts/nav/Header";
 import styles from "./report.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -76,6 +76,7 @@ const Reports = ({
   routeData,
 }) => {
   const router = useRouter();
+    const pickerRef = useRef();
   const rowsLength = selectedRow;
   const activeTab = activeTabName ? activeTabName : tab;
   const [userRole, setUserRole] = useState("");
@@ -142,6 +143,9 @@ const Reports = ({
   };
 
   const handleCoderPicker = (date, dateString, tabName) => {
+    if (!date || date.length === 0) {
+      setTimeout(() => pickerRef.current?.focus(), 100);
+    }
     const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
         index === 1
@@ -651,6 +655,7 @@ const Reports = ({
                       </label>
                       <div className="newReportPicker">
                         <RangePicker
+                          ref={pickerRef}
                         id ="report-dateRange"
                         name="report-dateRange"
                           style={{

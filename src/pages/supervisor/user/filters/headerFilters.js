@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 import { InfoCircleFilled } from "@ant-design/icons";
 import MoreFilter from "../../../tenantadmin/tracking/filters";
 import { disabledDate } from "../../../../utils/reusable";
+import { useRef } from "react";
 
 const { RangePicker } = DatePicker;
 
@@ -136,9 +137,11 @@ const HeaderFilters = ({
   setActiveFilters,
   getRoutedData,
   selectedPriority,
-  setSelectedPriority
+  setSelectedPriority,
+  
 }) => {
   const router = useRouter();
+  const pickerRef = useRef()
   // const [activeFilters, setActiveFilters] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
@@ -289,10 +292,14 @@ const HeaderFilters = ({
             <label className="responsiveLabel">{pickerlabe2}</label>
             <div>
               <RangePicker
+              ref={pickerRef}
                 format="MM-DD-YYYY"
                 value={selectedDates4}
                 onCalendarChange={(val) => setSelectedDates4(val)}
                 onChange={(date, dateString) => {
+                  if (!date || date.length === 0) {
+                    setTimeout(() => pickerRef.current?.focus(), 100);
+                  }
                   handleRnagePicker2({
                     date,
                     dateString,

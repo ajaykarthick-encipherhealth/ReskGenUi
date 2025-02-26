@@ -7,6 +7,7 @@ import InputField from "../../../../components/input";
 import MoreFilter from "../filters";
 import moment from "moment";
 import { disabledDate } from "../../../../utils/reusable";
+import { useRef } from "react";
 
 const { RangePicker } = DatePicker;
 
@@ -53,6 +54,11 @@ const HeaderFilters = ({
   setActiveFilters,
   searchTextValue,
 }) => {
+    const pickerRefs = useRef({});
+    const handleFocusPicker = (filter) => {
+      setTimeout(() => pickerRefs.current[filter]?.focus(), 100);
+    };
+  
   const [trackInput, setTrackInput] = useState("");
   const [selectAll, setSelectAll] = useState(false);
 
@@ -95,10 +101,13 @@ const HeaderFilters = ({
       case "Allocated Date":
       case "Audit Allocated Date":
         return (
-          <div className=" default-filter-size" >
+          <div className=" default-filter-size">
             <label className={styles.label}>{filter}</label>
             <div className="dateRangeSize">
               <RangePicker
+                  ref={(node) => {
+                    if (node) pickerRefs.current[filter] = node;
+                  }}
                 id={filter}
                 name={filter}
                 format="MM-DD-YYYY"
@@ -116,6 +125,9 @@ const HeaderFilters = ({
                   }));
                 }}
                 onChange={(date, dateString) => {
+                  if (!date || date.length === 0) {
+                    handleFocusPicker(filter); 
+                  }
                   const formattedDates = dateString?.map((date, index) => {
                     const formattedDate =
                       index === 1
@@ -161,7 +173,7 @@ const HeaderFilters = ({
       case "Supervisor":
       case "Priority":
         return (
-          <div className=" default-filter-size" >
+          <div className=" default-filter-size">
             <label className={styles.label}>{filter}</label>
             <div class="form-group has-search custom-react-select">
               <Select
@@ -218,8 +230,8 @@ const HeaderFilters = ({
 
   return (
     <div className="d-flex justify-content-center align-items-center">
-      <div className="row filter-contain"    style={{ width: "98%" }}>
-      <div className=" default-filter-size" >
+      <div className="row " style={{ width: "98%" }}>
+      <div className=" default-filter-size">
           <label className={styles.label}>Reviewer</label>
           <div class="form-group has-search custom-react-select">
             <Select
@@ -240,7 +252,7 @@ const HeaderFilters = ({
             />
           </div>
         </div>
-        <div className=" default-filter-size" >
+        <div className=" default-filter-size">
           <label className={styles.label}>Supervisor</label>
           <div class="form-group has-search custom-react-select">
             <Select

@@ -60,6 +60,8 @@ const HeaderFiltersPatients = ({
   setSelectedOptionBatch,
   batchValue,
   selectOptionsBatch,
+  pickerRef,
+  pickerRef1
 }) => {
   const [selectAll, setSelectAll] = useState(false);
 
@@ -77,6 +79,7 @@ const HeaderFiltersPatients = ({
             <label className={styles.label}>Due Date</label>
             <div className="dateRangeSize dateRangesHeight">
               <RangePicker
+                ref={pickerRef}
                 value={clear ? ["", ""] : selectedDates}
                 format="MM-DD-YYYY"
                 onChange={onchangeRangePicker}
@@ -95,6 +98,7 @@ const HeaderFiltersPatients = ({
             <label className={styles.label}>Completed Date</label>
             <div className="dateRangeSize dateRangesHeight">
               <RangePicker
+                ref={pickerRef1}
                 value={clear ? ["", ""] : selectedDates2}
                 format="MM-DD-YYYY"
                 onChange={onchangeRangePicker2}
