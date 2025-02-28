@@ -1,0 +1,22 @@
+.cardGrid {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+.commentsFormControl > textarea {
+  min-height: 120px !important;
+}
+.iconBorderFlex {
+  color: #04306f;
+  border-radius: 50%;
+  width: 100%;
+  font-size: 20px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+@media (min-width: 1024px) and (max-width: 1350px) {
+  .cardGrid {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
