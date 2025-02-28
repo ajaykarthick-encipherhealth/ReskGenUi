@@ -6,7 +6,7 @@ import Card from "../../../../components/card";
 const DailyTask = ({ trackChart }) => {
   const bullets = [
     {
-      color: "#0078D4",
+      color: "#5da9e4",
       name: "Pending",
     },
     {
@@ -60,7 +60,7 @@ const DailyTask = ({ trackChart }) => {
               value: hold || 0,
               name: "Hold",
               itemStyle: {
-                color: "#AD94FA",
+                color: "#3C0AD2",
               },
             },
             {
@@ -74,7 +74,7 @@ const DailyTask = ({ trackChart }) => {
               value: completed || 0,
               name: "Completed",
               itemStyle: {
-                color: "#B4EFBA",
+                color: "#00BC13",
               },
             },
           ],
