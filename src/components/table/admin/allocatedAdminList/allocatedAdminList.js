@@ -24,6 +24,7 @@ function AllocatedAdminList({
   sortCompleteOrder,
   setSortCompleteOrder,
   selectedRoWDetails,
+  reviewerResponse,
 }) {
   const [selectedRows, setSelectedRows] = useState([]);
   const handleRowCheckboxChange = (row) => {
@@ -86,24 +87,27 @@ function AllocatedAdminList({
                 type="checkbox"
                 id={data?.patientId}
                 name={data?.patientId}
-                onChange={() => {
+                onChange={(event) => {
                   handleRowCheckboxChange(data);
-                  setSelectedRowsId((prev) => {
-                    const currentIds = prev?.map((item) => item.id);
-                    if (!currentIds.includes(data?.patientId)) {
-                      return [
-                        ...prev,
-                        { id: data?.patientId, name: data?.patientName },
-                      ];
-                    } else {
-                      return prev.filter(
-                        (item) => item?.id !== data?.patientId
-                      );
-                    }
-                  });
+                  if (event.target.checked) {
+                    setSelectedRowsId((prev) => {
+                      const currentIds = prev?.map((item) => item);
+                      if (!currentIds.includes(data?.patientId)) {
+                        return [...prev, data?.patientId];
+                      } else {
+                        return prev.filter(
+                          (item) => item?.id !== data?.patientId
+                        );
+                      }
+                    });
+                  } else {
+                    setSelectedRowsId((prev) =>
+                      prev.filter((id) => id !== data?.patientId)
+                    );
+                  }
                 }}
                 checked={selectedRowsId?.some(
-                  (item) => item?.id === data?.patientId
+                  (item) => item === data?.patientId
                 )}
                 className={TableStyle.customChecked}
               />
@@ -129,8 +133,8 @@ function AllocatedAdminList({
             <th>PATIENT NAME</th>
 
             <th
-            id="computedDate"
-            name="computedDate"
+              id="computedDate"
+              name="computedDate"
               onClick={() => {
                 sortFunction(
                   sortCompleteOrder,
@@ -169,8 +173,8 @@ function AllocatedAdminList({
                   />
                 ) : (
                   <input
-                  id="checkall-header"
-                  name="checkall-header"
+                    id="checkall-header"
+                    name="checkall-header"
                     type="checkbox"
                     onClick={() => {
                       setSelectAllChecked(!selectAllChecked);
@@ -183,12 +187,12 @@ function AllocatedAdminList({
                       cursor: "pointer",
                     }}
                     checked={
-                      selectAllChecked &&
-                      selectedRowsId?.length === selectedChart?.length
+                      selectedRowsId?.length === reviewerResponse?.totalElements
                     }
                     className={
-                      selectAllChecked &&
-                      selectedRowsId?.length == selectedChart?.length
+                      // selectAllChecked &&
+                      // selectedRowsId?.length == selectedChart?.length
+                      selectedRowsId?.length === reviewerResponse?.totalElements
                         ? TableStyle.customChecked2
                         : ""
                     }
@@ -205,8 +209,15 @@ function AllocatedAdminList({
     </div>
   );
 }
-const connector = connect((state) => ({}), {
-  selectedRoWDetails: adminActions.selectedRoWDetails,
-  patientDetails: allActions.getPatientDetails,
-});
+const connector = connect(
+  (state) => ({
+    reviewerResponse:
+      state.admin.patientAllocate?.allocatedList?.data?.response
+        ?.patientDtoList,
+  }),
+  {
+    selectedRoWDetails: adminActions.selectedRoWDetails,
+    patientDetails: allActions.getPatientDetails,
+  }
+);
 export default connector(AllocatedAdminList);

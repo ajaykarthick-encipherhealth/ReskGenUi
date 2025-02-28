@@ -129,17 +129,18 @@ export const reviewerCheckedList = async ({
   searchString,
   selectedOption,
   fromTenant,
+  allPatientIds
 }) => {
   const orgId = getStorage("orgId");
   const uId = getStorage("userId");
   const url = fromTenant
     ? `dbservice/patient/admin/computation/filter?page=${0}&size=${
-        batchCount ? batchCount : totalElements
+       0
       }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
         sort?.sortDir
       }&sortfield=${sort?.sortField}&priority=${
         selectedOption ? selectedOption : ""
-      }&batchCount=${batchCount}`
+      }&batchCount=${batchCount}&allPatientIds=${allPatientIds}`
     : `dbservice/patient/admin/computation/filter?organizationId=${orgId}&page=${0}&size=${
         batchCount ? batchCount : totalElements
       }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${

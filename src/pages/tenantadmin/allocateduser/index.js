@@ -63,7 +63,7 @@ const Patient = ({
   getAllCheckedListForSupervisor,
   supervisorCheckBoxLoader,
 }) => {
-  const pickerRef = useRef()
+  const pickerRef = useRef();
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
@@ -142,17 +142,18 @@ const Patient = ({
         selectedOption,
         searchString,
         fromTenant: true,
+        allPatientIds: selectAllChecked ? true : false,
       });
       if (response?.status === "SUCCESS") {
         setIsLoading(false);
         setCheckedLoading(false);
-        let result = response?.response?.content;
-        const data = result.map((item) => ({
-          id: item.patientId,
-          name: item.patientName,
-        }));
-        setSelectedRowsId(data);
-        setHeaderCheckValidation(data);
+        let result = response?.response?.patientIds;
+        // const data = result.map((item) => ({
+        //   id: item,
+        //   name: item,
+        // }));
+        setSelectedRowsId(result);
+        setHeaderCheckValidation(result);
       }
     } catch (err) {
       getResponePopup(err);
@@ -312,76 +313,6 @@ const Patient = ({
     getSupervisorsList({ url: resoureUrl });
   };
 
-  useEffect(() => {
-    if (selectAllChecked) {
-      if (isPatientList && activeTab == 2) {
-        getAllCheckListL2(sort);
-      } else {
-        getAllCheckList(sort);
-      }
-    } else {
-      setSelectedRowsId([]);
-    }
-  }, [selectAllChecked, sort, isPatientList, activeTab]);
-
-  useEffect(() => {
-    if (typeof pageNo == "number" && activeTab == 1 && !isPatientList) {
-      getAllList({
-        pageNo: pageNo,
-        pageSize: pageSize,
-        startDate: startDate,
-        endDate: endDate,
-        allocate: true,
-        status: 2,
-        search: searchStr,
-        sort: sort,
-        selectedOption: selectedOption,
-        selectOrgList: selectOrgList,
-        batchCount: batchCount
-      });
-    }
-    if (activeTab == 2 && !isPatientList) {
-      getAuditL2List(pageNo, searchStr || searchString);
-    }
-    getFilters({ field: "patientAllocated" });
-  }, [
-    pageNo,
-    pageSize,
-    sort,
-    activeTab,
-    startDate,
-    endDate,
-    searchStr,
-    selectedOption,
-    selectOrgList,
-    isPatientList,
-    selectedSupervisorSearch,
-  ]);
-
-  useEffect(() => {
-    if (!organizationList?.response) {
-      getAllOrganizationList();
-    }
-  }, []);
-  useEffect(() => {
-    // var orgListArray = [];
-    const orgListArray =
-      organizationList?.response?.length > 0
-        ? [
-            ...organizationList?.response?.map((res) => ({
-              value: res.id,
-              label: res.name,
-            })),
-          ].filter(Boolean)
-        : [];
-    // organizationList?.response?.map((res) => {
-    //   orgListArray.push({
-    //     value: res.id,
-    //     label: res.name,
-    //   });
-    // });
-    setOrgAllList(orgListArray);
-  }, [organizationList]);
   const renderRows = () => {
     return supervisorResponse?.response?.content?.length > 0 ? (
       supervisorResponse?.response?.content?.map((data, index) => (
@@ -538,6 +469,77 @@ const Patient = ({
   };
 
   useEffect(() => {
+    if (selectAllChecked) {
+      if (isPatientList && activeTab == 2) {
+        getAllCheckListL2(sort);
+      } else {
+        getAllCheckList(sort);
+      }
+    } else {
+      setSelectedRowsId([]);
+    }
+  }, [selectAllChecked, sort, isPatientList, activeTab]);
+
+  useEffect(() => {
+    if (typeof pageNo == "number" && activeTab == 1 && !isPatientList) {
+      getAllList({
+        pageNo: pageNo,
+        pageSize: pageSize,
+        startDate: startDate,
+        endDate: endDate,
+        allocate: true,
+        status: 2,
+        search: searchStr,
+        sort: sort,
+        selectedOption: selectedOption,
+        selectOrgList: selectOrgList,
+        batchCount: batchCount,
+      });
+    }
+    if (activeTab == 2 && !isPatientList) {
+      getAuditL2List(pageNo, searchStr || searchString);
+    }
+    getFilters({ field: "patientAllocated" });
+  }, [
+    pageNo,
+    pageSize,
+    sort,
+    activeTab,
+    startDate,
+    endDate,
+    searchStr,
+    selectedOption,
+    selectOrgList,
+    isPatientList,
+    selectedSupervisorSearch,
+  ]);
+
+  useEffect(() => {
+    if (!organizationList?.response) {
+      getAllOrganizationList();
+    }
+  }, []);
+  useEffect(() => {
+    // var orgListArray = [];
+    const orgListArray =
+      organizationList?.response?.length > 0
+        ? [
+            ...organizationList?.response?.map((res) => ({
+              value: res.id,
+              label: res.name,
+            })),
+          ].filter(Boolean)
+        : [];
+    // organizationList?.response?.map((res) => {
+    //   orgListArray.push({
+    //     value: res.id,
+    //     label: res.name,
+    //   });
+    // });
+    setOrgAllList(orgListArray);
+  }, [organizationList]);
+
+  useEffect(() => {
     getFilters({ field: "patientAllocated" });
   }, []);
 
@@ -563,11 +565,11 @@ const Patient = ({
         selectedOptions: selectedOptions,
         allocatedOption: allocatedOption,
       });
-      setIsSupervisorAllocated(false)
-      setSelectAllChecked(false)
+      setIsSupervisorAllocated(false);
+      setSelectAllChecked(false);
     }
   }, [isSupervisorAllocated]);
-
+  
   return (
     <>
       <div className={`show `}>
@@ -608,8 +610,8 @@ const Patient = ({
                               </label>
                               <div style={{ height: "42px" }}>
                                 <Input
-                                id="search-name"
-                                name="search-name"
+                                  id="search-name"
+                                  name="search-name"
                                   type="text"
                                   onChange={(e) => {
                                     resetPageNumber(setPageNo);
@@ -655,8 +657,8 @@ const Patient = ({
                                 <label>Select Organization</label>
                                 <div class="form-group has-search custom-react-select-admin">
                                   <Select
-                                  id="select-organization"
-                                  name="select-organization"
+                                    id="select-organization"
+                                    name="select-organization"
                                     options={orgAllList}
                                     style={{ width: "100%", height: "42px" }}
                                     placeholder={"Select Organization"}
@@ -679,16 +681,19 @@ const Patient = ({
                                 <label>Computed Date</label>
                                 <div>
                                   <RangePicker
-                                  ref={pickerRef}
-                                  id="computed-date"
-                                  name="computed-date"
+                                    ref={pickerRef}
+                                    id="computed-date"
+                                    name="computed-date"
                                     format="MM-DD-YYYY"
                                     onCalendarChange={(val) => {
                                       setDateRange(val);
                                     }}
                                     onChange={(dates, dateStrings) => {
                                       if (!dates || dates.length === 0) {
-                                        setTimeout(() => pickerRef.current?.focus(), 100);
+                                        setTimeout(
+                                          () => pickerRef.current?.focus(),
+                                          100
+                                        );
                                       }
                                       resetPageNumber(setPageNo);
                                       setDateRange(dateStrings);
@@ -722,8 +727,8 @@ const Patient = ({
                                   <label>Select Priority</label>
                                   <div class="form-group has-search custom-react-select-admin">
                                     <Select
-                                    id="select-priority"
-                                    name="select-priority"
+                                      id="select-priority"
+                                      name="select-priority"
                                       options={statusOption}
                                       style={{ width: "100%", height: "42px" }}
                                       placeholder={"Select Priority"}
@@ -778,8 +783,8 @@ const Patient = ({
                                   </button> */}
                                   <Space.Compact style={{ width: "100%" }}>
                                     <Input
-                                    id="batchCount"
-                                    name="batchCount"
+                                      id="batchCount"
+                                      name="batchCount"
                                       type="number"
                                       onChange={(e) => {
                                         let inputValue = e.target.value.replace(
@@ -792,8 +797,8 @@ const Patient = ({
                                         setBatchCount(inputValue);
                                         if (inputValue.length <= 0) {
                                           setFilterBatchCount(true);
-                                          setSelectAllChecked(false)
-                                          setSelectedRowsId([])
+                                          setSelectAllChecked(false);
+                                          setSelectedRowsId([]);
                                           getAllList({
                                             batchCount: "",
                                             selectOrgList: selectOrgList,
@@ -813,13 +818,15 @@ const Patient = ({
                                       className="batch-form-control"
                                     />
                                     <button
-                                    id="select-btn"
-                                    name="select-btn"
+                                      id="select-btn"
+                                      name="select-btn"
                                       onClick={() => {
                                         setFilterBatchCount(true);
-                                        if (batchCount != selectedRowsId.length) {
-                                          setSelectAllChecked(false)
-                                          setSelectedRowsId([])
+                                        if (
+                                          batchCount != selectedRowsId.length
+                                        ) {
+                                          setSelectAllChecked(false);
+                                          setSelectedRowsId([]);
                                         }
                                         getAllList({
                                           batchCount: batchCount,
@@ -887,38 +894,36 @@ const Patient = ({
                             }
                           >
                             {isPatientList || activeTab === 1 ? (
-                              <>
-                                <Tooltip
-                                  title={
-                                    selectedRowsId?.length === 0
-                                      ? "Select patients to Allocate"
-                                      : ""
-                                  }
-                                >
-                                  {" "}
-                                  <button
+                              <Tooltip
+                                title={
+                                  selectedRowsId?.length === 0
+                                    ? "Select patients to Allocate"
+                                    : ""
+                                }
+                              >
+                                {" "}
+                                <button
                                   id="allocate-btn"
                                   name="allocate-btn"
-                                    onClick={handleOpneModal}
-                                    className={styles.export}
-                                    style={{
-                                      backgroundColor: "#133dd426",
-                                      cursor:
-                                        selectedRowsId?.length === 0
-                                          ? "not-allowed"
-                                          : "",
-                                    }}
-                                    disabled={
-                                      selectedRowsId?.length > 0 ||
-                                      selectedRowsId?.data?.length > 0
-                                        ? false
-                                        : true
-                                    }
-                                  >
-                                    Allocate
-                                  </button>
-                                </Tooltip>
-                              </>
+                                  onClick={handleOpneModal}
+                                  className={styles.export}
+                                  style={{
+                                    backgroundColor: "#133dd426",
+                                    cursor:
+                                      selectedRowsId?.length === 0
+                                        ? "not-allowed"
+                                        : "",
+                                  }}
+                                  disabled={
+                                    selectedRowsId?.length > 0 ||
+                                    selectedRowsId?.data?.length > 0
+                                      ? false
+                                      : true
+                                  }
+                                >
+                                  Allocate
+                                </button>
+                              </Tooltip>
                             ) : null}
                           </div>
                         </div>
@@ -992,12 +997,13 @@ const Patient = ({
                                   eventKey="validDiseases"
                                 >
                                   {loader && activeTab == 1 ? (
-                                      <TableSkeleton/>
+                                    <TableSkeleton />
                                   ) : (
                                     <>
                                       <AllocatedAdminList
                                         patinetListAll={
-                                          reviewerResponse?.response?.patientDtoList?.content
+                                          reviewerResponse?.response
+                                            ?.patientDtoList?.content
                                         }
                                         selectAllChecked={selectAllChecked}
                                         setSelectAllChecked={
@@ -1016,23 +1022,23 @@ const Patient = ({
                                       <div>
                                         <div className="pagination-container">
                                           <Paginator
-                                          id="allocation-paginator"
-                                          name="allocation-paginator"
+                                            id="allocation-paginator"
+                                            name="allocation-paginator"
                                             first={
                                               pageNo === 0 ? 0 : paginationFirst
                                             }
                                             rows={15}
                                             totalRecords={
-                                              reviewerResponse?.response?.patientDtoList
-                                                ?.totalElements
+                                              reviewerResponse?.response
+                                                ?.patientDtoList?.totalElements
                                             }
                                             onPageChange={onPageChange}
                                           />
                                           <div className="total-pages">
                                             Total count:{" "}
                                             {
-                                              reviewerResponse?.response?.patientDtoList
-                                                ?.totalElements
+                                              reviewerResponse?.response
+                                                ?.patientDtoList?.totalElements
                                             }
                                           </div>
                                         </div>
@@ -1043,174 +1049,164 @@ const Patient = ({
 
                                 <Tab.Pane id="my-posts" eventKey="team">
                                   {loader2 && activeTab == 2 ? (
-                                    <TableSkeleton/>
+                                    <TableSkeleton />
                                   ) : (
-                                    <>
-                                      <div
-                                        className={TableStyle.classContaineer}
-                                      >
-                                        {!isPatientList ? (
-                                          <>
-                                            <table
-                                              className={TableStyle.classTable}
+                                    <div className={TableStyle.classContaineer}>
+                                      {!isPatientList ? (
+                                        <>
+                                          <table
+                                            className={TableStyle.classTable}
+                                          >
+                                            <thead
+                                              className={TableStyle.classThead}
                                             >
-                                              <thead
-                                                className={
-                                                  TableStyle.classThead
+                                              <tr>
+                                                <th
+                                                  style={{
+                                                    paddingLeft:
+                                                      "46px !important",
+                                                  }}
+                                                >
+                                                  NAME
+                                                </th>
+
+                                                <th
+                                                  style={{
+                                                    textAlign: "center",
+                                                  }}
+                                                >
+                                                  AUDIT ALLOCATED
+                                                </th>
+                                                <th
+                                                  style={{
+                                                    textAlign: "center",
+                                                  }}
+                                                >
+                                                  AUDIT PROCESSED
+                                                </th>
+
+                                                <th
+                                                  style={{
+                                                    textAlign: "center",
+                                                  }}
+                                                >
+                                                  AUDIT PENDING
+                                                </th>
+                                                <th
+                                                  style={{
+                                                    textAlign: "center",
+                                                  }}
+                                                >
+                                                  AUDIT HOLD
+                                                </th>
+                                                <th
+                                                  style={{
+                                                    textAlign: "center",
+                                                  }}
+                                                >
+                                                  AUDIT INVALID
+                                                </th>
+                                              </tr>
+                                            </thead>
+
+                                            <tbody>{renderRows()}</tbody>
+                                          </table>
+                                          <div>
+                                            <div className="pagination-container">
+                                              <Paginator
+                                                first={paginationFirst}
+                                                rows={100}
+                                                totalRecords={
+                                                  supervisorResponse?.response
+                                                    ?.totalElements
                                                 }
-                                              >
-                                                <tr>
-                                                  <th
-                                                    style={{
-                                                      paddingLeft:
-                                                        "46px !important",
-                                                    }}
-                                                  >
-                                                    NAME
-                                                  </th>
-
-                                                  <th
-                                                    style={{
-                                                      textAlign: "center",
-                                                    }}
-                                                  >
-                                                    AUDIT ALLOCATED
-                                                  </th>
-                                                  <th
-                                                    style={{
-                                                      textAlign: "center",
-                                                    }}
-                                                  >
-                                                    AUDIT PROCESSED
-                                                  </th>
-
-                                                  <th
-                                                    style={{
-                                                      textAlign: "center",
-                                                    }}
-                                                  >
-                                                    AUDIT PENDING
-                                                  </th>
-                                                  <th
-                                                    style={{
-                                                      textAlign: "center",
-                                                    }}
-                                                  >
-                                                    AUDIT HOLD
-                                                  </th>
-                                                  <th
-                                                    style={{
-                                                      textAlign: "center",
-                                                    }}
-                                                  >
-                                                    AUDIT INVALID
-                                                  </th>
-                                                </tr>
-                                              </thead>
-
-                                              <tbody>{renderRows()}</tbody>
-                                            </table>
+                                                onPageChange={onPageChange}
+                                              />
+                                              <div className="total-pages">
+                                                Total count:{" "}
+                                                {
+                                                  supervisorResponse?.response
+                                                    ?.totalElements
+                                                }
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </>
+                                      ) : !loader2 &&
+                                        loader3 &&
+                                        activeTab == 2 ? (
+                                        <TableSkeleton />
+                                      ) : (
+                                        <>
+                                          <AllocatedL2AdminList
+                                            setBatchCount={setBatchCount}
+                                            patinetListAll={
+                                              selectedSupervisors?.response
+                                                ?.content
+                                            }
+                                            selectAllChecked={selectAllChecked}
+                                            setSelectAllChecked={
+                                              setSelectAllChecked
+                                            }
+                                            selectedRowsId={selectedRowsId}
+                                            setSelectedRowsId={
+                                              setSelectedRowsId
+                                            }
+                                            totalElements={
+                                              selectedSupervisors?.response
+                                                ?.totalElements
+                                            }
+                                            selectedChart={
+                                              headerCheckValidation
+                                            }
+                                            setSupervisorPageSize={
+                                              setSupervisorPageSize
+                                            }
+                                            setSort={setSort}
+                                            sort={sort}
+                                            loading={supervisorCheckBoxLoader}
+                                            sortDueOrder={sortDueOrder}
+                                            setSortDueOrder={setSortDueOrder}
+                                            sortCompleteOrder={
+                                              sortCompleteOrder
+                                            }
+                                            setSortCompleteOrder={
+                                              setSortCompleteOrder
+                                            }
+                                          />
+                                          <div>
                                             <div>
                                               <div className="pagination-container">
                                                 <Paginator
-                                                  first={paginationFirst}
-                                                  rows={100}
-                                                  totalRecords={
-                                                    supervisorResponse?.response
-                                                      ?.totalElements
+                                                  id="allocatedUser-paginator"
+                                                  name="allocatedUser-paginator"
+                                                  first={
+                                                    pageNoL2Patient === 0
+                                                      ? 0
+                                                      : paginationFirst
                                                   }
-                                                  onPageChange={onPageChange}
+                                                  rows={15}
+                                                  totalRecords={
+                                                    selectedSupervisors
+                                                      ?.response?.totalElements
+                                                  }
+                                                  onPageChange={
+                                                    onPageChangePatient
+                                                  }
                                                 />
                                                 <div className="total-pages">
                                                   Total count:{" "}
                                                   {
-                                                    supervisorResponse?.response
-                                                      ?.totalElements
+                                                    selectedSupervisors
+                                                      ?.response?.totalElements
                                                   }
                                                 </div>
                                               </div>
                                             </div>
-                                          </>
-                                        ) : !loader2 &&
-                                          loader3 &&
-                                          activeTab == 2 ? (
-                                         <TableSkeleton/>
-                                        ) : (
-                                          <>
-                                            <AllocatedL2AdminList
-                                              setBatchCount={setBatchCount}
-                                              patinetListAll={
-                                                selectedSupervisors?.response
-                                                  ?.content
-                                              }
-                                              selectAllChecked={
-                                                selectAllChecked
-                                              }
-                                              setSelectAllChecked={
-                                                setSelectAllChecked
-                                              }
-                                              selectedRowsId={selectedRowsId}
-                                              setSelectedRowsId={
-                                                setSelectedRowsId
-                                              }
-                                              totalElements={
-                                                selectedSupervisors?.response
-                                                  ?.totalElements
-                                              }
-                                              selectedChart={
-                                                headerCheckValidation
-                                              }
-                                              setSupervisorPageSize={
-                                                setSupervisorPageSize
-                                              }
-                                              setSort={setSort}
-                                              sort={sort}
-                                              loading={supervisorCheckBoxLoader}
-                                              sortDueOrder={sortDueOrder}
-                                              setSortDueOrder={setSortDueOrder}
-                                              sortCompleteOrder={
-                                                sortCompleteOrder
-                                              }
-                                              setSortCompleteOrder={
-                                                setSortCompleteOrder
-                                              }
-                                            />
-                                            <div>
-                                              <div>
-                                                <div className="pagination-container">
-                                                  <Paginator
-                                                  id="allocatedUser-paginator"
-                                                  name="allocatedUser-paginator"
-                                                    first={
-                                                      pageNoL2Patient === 0
-                                                        ? 0
-                                                        : paginationFirst
-                                                    }
-                                                    rows={15}
-                                                    totalRecords={
-                                                      selectedSupervisors
-                                                        ?.response
-                                                        ?.totalElements
-                                                    }
-                                                    onPageChange={
-                                                      onPageChangePatient
-                                                    }
-                                                  />
-                                                  <div className="total-pages">
-                                                    Total count:{" "}
-                                                    {
-                                                      selectedSupervisors
-                                                        ?.response
-                                                        ?.totalElements
-                                                    }
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </>
-                                        )}
-                                      </div>
-                                    </>
+                                          </div>
+                                        </>
+                                      )}
+                                    </div>
                                   )}
                                 </Tab.Pane>
                               </Tab.Content>
