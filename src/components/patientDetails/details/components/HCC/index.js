@@ -221,6 +221,7 @@ const HccCards = ({
   }, [selectedDos, labFile?.data?.response?.dosSummaries]);
 
   const unHideDisease = async (data, action) => {
+    patientDetailsLoad(true)
     const patientId = getStorage("patientId");
     const role = getStorage("userRole");
     const res = await diseaseEdit({
@@ -237,8 +238,10 @@ const HccCards = ({
       getPatientDetailsData(patientId, null, selectDosValue, "", role);
       setOpenContent(false);
       getResponePopup(res);
+      patientDetailsLoad(false)
     } else {
       getResponePopup(res);
+      patientDetailsLoad(false)
     }
   };
   return (
@@ -303,24 +306,29 @@ const HccCards = ({
                             placement="center"
                             trigger={["hover", "focus"]}
                             content={
-                              <div
-                                className="w-100 d-flex justify-content-center align-items-center cursor-pointer"
-                                onClick={() => unHideDisease(data)}
+                              <Popconfirm
+                                title="Are you sure want to unhide the disease?"
+                                onConfirm={() => unHideDisease(data, "hide")}
                               >
-                                <span
-                                  className="px-2"
-                                  style={{
-                                    width: "50px",
-                                    color: "#d9d9d9",
-                                  }}
+                                <div
+                                  className="w-100 d-flex justify-content-center align-items-center cursor-pointer"
+                                  // onClick={() => unHideDisease(data)}
                                 >
-                                  {"Show"}
-                                </span>
-                                <FontAwesomeIcon
-                                  icon={faEyeSlash}
-                                  style={{ color: "#d9d9d9" }}
-                                />
-                              </div>
+                                  <span
+                                    className="px-2"
+                                    style={{
+                                      width: "50px",
+                                      color: "#d9d9d9",
+                                    }}
+                                  >
+                                    {"Show"}
+                                  </span>
+                                  <FontAwesomeIcon
+                                    icon={faEyeSlash}
+                                    style={{ color: "#d9d9d9" }}
+                                  />
+                                </div>
+                              </Popconfirm>
                             }
                           >
                             <div
@@ -358,14 +366,15 @@ const HccCards = ({
 
                                   <Popover
                                     content={
-                                      <div className="patientDetailsDescPopSTyle">
-                                        {data?.isShow &&
-                                          (data.dbDescription
+                                      data?.isShow && (
+                                        <div className="patientDetailsDescPopSTyle">
+                                          {data.dbDescription
                                             ? data.dbDescription
-                                            : data.actualDescription)}
-                                      </div>
+                                            : data.actualDescription}
+                                        </div>
+                                      )
                                     }
-                                    title=""
+                                    // title=""
                                     trigger="hover"
                                     overlayStyle={{ zIndex: 1000 }}
                                     placement="topLeft"
@@ -393,32 +402,30 @@ const HccCards = ({
                                   </>
                                 )}
                                 {data?.children?.length > 0 && (
-                                  <>
-                                    <div
-                                      className={visitStyles.tree_icon}
-                                      style={{ background: "#c7f3c6" }}
-                                      onClick={() => {
-                                        if (data?.isShow) {
-                                          setOpens(true);
-                                          setCombiTree([
-                                            {
-                                              ...data,
-                                              expanded: true,
-                                              isDisabled: true,
-                                            },
-                                          ]);
-                                        }
+                                  <div
+                                    className={visitStyles.tree_icon}
+                                    style={{ background: "#c7f3c6" }}
+                                    onClick={() => {
+                                      if (data?.isShow) {
+                                        setOpens(true);
+                                        setCombiTree([
+                                          {
+                                            ...data,
+                                            expanded: true,
+                                            isDisabled: true,
+                                          },
+                                        ]);
+                                      }
+                                    }}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faSitemap}
+                                      style={{
+                                        size: 8,
+                                        color: "#088f39",
                                       }}
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={faSitemap}
-                                        style={{
-                                          size: 8,
-                                          color: "#088f39",
-                                        }}
-                                      />
-                                    </div>
-                                  </>
+                                    />
+                                  </div>
                                 )}
 
                                 {/* <div>
@@ -712,19 +719,26 @@ const HccCards = ({
                                           </div>
                                         )}
                                       {data?.isShow && isDosSelected && (
-                                        <div
-                                          className="cursor-pointer"
-                                          onClick={() =>
+                                        <Popconfirm
+                                          title="Are you sure want to hide disease?"
+                                          onConfirm={() =>
                                             unHideDisease(data, "hide")
                                           }
                                         >
-                                          <FontAwesomeIcon
-                                            icon={faEyeSlash}
-                                            style={{ color: "#d9d9d9" }}
-                                            className="px-1"
-                                          />
-                                          Hide Disease
-                                        </div>
+                                          <div
+                                            className="cursor-pointer"
+                                            // onClick={() =>
+                                            //   unHideDisease(data, "hide")
+                                            // }
+                                          >
+                                            <FontAwesomeIcon
+                                              icon={faEyeSlash}
+                                              style={{ color: "#d9d9d9" }}
+                                              className="px-1"
+                                            />
+                                            Hide Disease
+                                          </div>
+                                        </Popconfirm>
                                       )}
                                     </>
                                   )}
@@ -1310,6 +1324,7 @@ const enhancer = connect(
     storeFileDetails: detailsActions.storeFileIdAction,
     getPatientDetailsData: detailsActions.patientDetailsAction,
     diseaseEdit: detailsActions.diseaseEdit,
+    patientDetailsLoad:detailsActions.patientDetailsLoad
   }
 );
 export default enhancer(HccCards);

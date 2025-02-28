@@ -44,7 +44,8 @@ const ModelIndex = ({
   meatCriteriaList,
   setSelectCardTitle,
   dragItem,
-  year
+  year,
+  patientDetailsLoad
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -84,6 +85,7 @@ const ModelIndex = ({
           getLabDetails,
           getRadiologyDetails,
           handleCloseModal,
+          patientDetailsLoad
         });
       }
     } else {
@@ -98,6 +100,7 @@ const ModelIndex = ({
         getLabDetails,
         getRadiologyDetails,
         handleCloseModal,
+        patientDetailsLoad
       });
     }
   };
@@ -252,6 +255,7 @@ const enhancer = connect(
     getpatientDetailsData: detailsActions.patientDetailsAction,
     getRadiologyDetails: detailsActions.radiologyDetailsAction,
     getLabDetails: detailsActions.labDetailsAction,
+    patientDetailsLoad:detailsActions.patientDetailsLoad
   }
 );
 export default enhancer(ModelIndex);

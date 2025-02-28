@@ -56,7 +56,7 @@ const ManuallyAdd = ({
   suggestedToValidMove,
   selectDisDetails,
   selectCardTitle,
-  setOpens
+  setOpens,
 }) => {
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(true);
@@ -742,7 +742,7 @@ const ManuallyAdd = ({
           getResponePopup(res);
           resetForms({ reload: true });
           setIsBtnLoading(false);
-          setOpens(false)
+          setOpens(false);
         } else if (res?.status == "CUSTOM_EXCEPTION") {
           getResponePopup(res);
           setIsBtnLoading(false);
@@ -1114,297 +1114,293 @@ const ManuallyAdd = ({
         </div>
       </div>
       {!meatDisplay && !meatFormDisplay ? (
-        <>
-          <Form
-            form={form}
-            name="basic"
-            layout="vertical"
-            autoComplete="off"
-            // initialValues={formInitialValues}
-            onFinish={(form) => {
-              handledSave(form);
-            }}
-            onFinishFailed={() => {}}
-            onChange={(e) => {
-              console.log(e);
-            }}
-          >
-            <div className="row">
-              <div className="col-12">
-                <Form.Item
-                  label={
-                    <label>
-                      Code <span style={{ color: "red" }}>*</span>
-                    </label>
-                  }
+        <Form
+          form={form}
+          name="basic"
+          layout="vertical"
+          autoComplete="off"
+          // initialValues={formInitialValues}
+          onFinish={(form) => {
+            handledSave(form);
+          }}
+          onFinishFailed={() => {}}
+          onChange={(e) => {
+            console.log(e);
+          }}
+        >
+          <div className="row">
+            <div className="col-12">
+              <Form.Item
+                label={
+                  <label>
+                    Code <span style={{ color: "red" }}>*</span>
+                  </label>
+                }
+                name="diagnosisCode"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter diagnosis code",
+                  },
+                ]}
+              >
+                <Input
                   name="diagnosisCode"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter diagnosis code",
-                    },
-                  ]}
-                >
-                  <Input
-                    name="diagnosisCode"
-                    onChange={(e) => handleCodeVaildate(e)}
-                    value={code?.toUpperCase()}
-                    className="text-uppercase"
-                  />
-                </Form.Item>
-                {validCode.length > 0 &&
-                  (validCode == "Valid Code" ? (
-                    <label className="text-success">Valid Code</label>
-                  ) : (
-                    validCode != "" && (
-                      <label className="text-danger">{validCode}</label>
-                    )
-                  ))}
-              </div>
-              <div className="col-12">
-                <Form.Item
-                  label={
-                    <label>
-                      Description <span style={{ color: "red" }}>*</span>
-                    </label>
-                  }
+                  onChange={(e) => handleCodeVaildate(e)}
+                  value={code?.toUpperCase()}
+                  className="text-uppercase"
+                />
+              </Form.Item>
+              {validCode.length > 0 &&
+                (validCode == "Valid Code" ? (
+                  <label className="text-success">Valid Code</label>
+                ) : (
+                  validCode != "" && (
+                    <label className="text-danger">{validCode}</label>
+                  )
+                ))}
+            </div>
+            <div className="col-12">
+              <Form.Item
+                label={
+                  <label>
+                    Description <span style={{ color: "red" }}>*</span>
+                  </label>
+                }
+                name="description"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter description",
+                  },
+                ]}
+              >
+                <Input
                   name="description"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter description",
-                    },
-                  ]}
-                >
-                  <Input
-                    name="description"
-                    onChange={(e) => e.target.value}
-                    disabled
-                  />
-                </Form.Item>
-              </div>
-              <div className="col-12">
-                <Form.Item
-                  label={
-                    <label>
-                      DOS <span style={{ color: "red" }}>*</span>
-                    </label>
+                  onChange={(e) => e.target.value}
+                  // disabled
+                />
+              </Form.Item>
+            </div>
+            <div className="col-12">
+              <Form.Item
+                label={
+                  <label>
+                    DOS <span style={{ color: "red" }}>*</span>
+                  </label>
+                }
+                name="dos"
+                class="py-4"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter date of service",
+                  },
+                ]}
+              >
+                <Select
+                  mode="multiple"
+                  maxTagCount="responsive"
+                  className={`ant_select_form_dos hcc_form mb-2`}
+                  onChange={(selOption, val) => {
+                    handleSelectChange(selOption, "dos");
+                  }}
+                  options={
+                    getSelectedDos
+                      ? [{ label: getSelectedDos, value: getSelectedDos }]
+                      : dosList
                   }
-                  name="dos"class="py-4"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter date of service",
-                    },
-                  ]}
-                >
-                  <Select
-                    mode="multiple"
-                    maxTagCount="responsive"
-                    className={`ant_select_form_dos hcc_form mb-2`}
-                    onChange={(selOption, val) => {
-                      handleSelectChange(selOption, "dos");
-                    }}
-                    options={
-                      getSelectedDos
-                        ? [{ label: getSelectedDos, value: getSelectedDos }]
-                        : dosList
-                    }
-                    disabled
-                  />
-                </Form.Item>
-              </div>
+                  disabled
+                />
+              </Form.Item>
+            </div>
 
-              <div className="col-12">
-                {providerDetails.length > 0 && (
-                  <div>
-                    <div className={`${style.subHeader} border-bottom`}>
-                      Provider
+            <div className="col-12">
+              {providerDetails.length > 0 && (
+                <div>
+                  <div className={`${style.subHeader} border-bottom`}>
+                    Provider
+                  </div>
+                  <div className="">
+                    {getProviderNameManually({
+                      data: providerDetails,
+                      captureSectionMatching: [],
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="col-12">
+              {listOfSection?.length > 0 && (
+                <div className="py-4">
+                  <div className="d-flex border-bottom align-items-end justify-content-between">
+                    <div className={`${style.subHeader} mb-2`}>
+                      Section List
                     </div>
-                    <div className="">
-                      {getProviderNameManually({
-                        data: providerDetails,
-                        captureSectionMatching: [],
-                      })}
+                    <div className="mb-1">
+                      <RegularButton
+                        type=""
+                        method={"button"}
+                        name="Add"
+                        onClick={() => {
+                          setSection("");
+                          setShowSection(false);
+                          setIsEdit(false);
+                        }}
+                      />
                     </div>
                   </div>
-                )}
-              </div>
-              <div className="col-12">
-                {listOfSection?.length > 0 && (
-                  <div className="py-4">
-                    <div className="d-flex border-bottom align-items-end justify-content-between">
-                      <div className={`${style.subHeader} mb-2`}>
-                        Section List
-                      </div>
-                      <div className="mb-1">
-                        <RegularButton
-                          type=""
-                          method={"button"}
-                          name="Add"
-                          onClick={() => {
-                            setSection("");
-                            setShowSection(false);
-                            setIsEdit(false);
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className="mt-2">
-                      {getSectionNameManually({
-                        data: listOfSection,
-                        sectionDelete,
-                        sectionEdit,
-                      })}
-                    </div>
+                  <div className="mt-2">
+                    {getSectionNameManually({
+                      data: listOfSection,
+                      sectionDelete,
+                      sectionEdit,
+                    })}
                   </div>
-                )}
-              </div>
-              {(listOfSection.length <= 0 || !showSection) && (
-                <div className="col-12 mt-2">
-                  <Form.Item
-                    label={
-                      <label>
-                        Section <span style={{ color: "red" }}>*</span>
-                      </label>
-                    }
-                    name="section"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter section",
-                      },
-                    ]}
-                  >
-                    {/* <Select
-                      size="large"
-                      options={capturedSections}
-                      onChange={(val) => setSection(val)}
-                    /> */}
-                    <CustomSelect
-                      options={capturedSections}
-                      onChange={(val) => setSection(val)}
-                      setOptions={setCapturedSections}
-                      value={section}
-                      disabled={false}
-                    />
-                  </Form.Item>
                 </div>
               )}
             </div>
             {(listOfSection.length <= 0 || !showSection) && (
-              <div className="border rounded">
-                {sectionCount?.map((item, index) => (
-                  <div className="pt-2">
-                    <div className="d-flex justify-content-between px-3">
-                      <b>Section - {index + 1}</b>
-                      <label>
-                        {index == 0 && (
-                          <label
-                            className="cr-pointer px-2"
-                            onClick={() =>
-                              setSectionCount([
-                                ...sectionCount,
-                                ...[Math.max(...sectionCount) + 1],
-                              ])
-                            }
-                          >
-                            <FontAwesomeIcon icon={faPlus} color="#04306f" />
-                          </label>
-                        )}
-                        {sectionCount?.length > 1 && (
-                          <label
-                            className="cr-pointer"
-                            onClick={() => {
-                              const remove = sectionCount.filter(
-                                (val) => val != item
-                              );
-                              setSectionCount(remove);
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faTrashCan}
-                              color="#04306f"
-                            />
-                          </label>
-                        )}
-                      </label>
-                    </div>
-                    <AddSection
-                      key={item}
-                      id={item}
-                      section={section}
-                      date={
-                        getSelectedDos
-                          ? [{ label: getSelectedDos, value: getSelectedDos }]
-                          : getSelectedDos
-                      }
-                      isEditPage={isEditPage}
-                    />
-                  </div>
-                ))}
-                <Form.Item>
-                  <div className="d-flex justify-content-center mt-4">
-                    {!isEdit ? (
-                      <RegularButton
-                        type=""
-                        name="Save"
-                        width="100px"
-                        // onClick={handledSave}
-                      />
-                    ) : (
-                      <RegularButton
-                        type=""
-                        method={"button"}
-                        name="Edit"
-                        width="100px"
-                        onClick={handledEdit}
-                      />
-                    )}
-                    {listOfSection.length > 0 && (
-                      <RegularButton
-                        type="outline"
-                        name="Cancel"
-                        width="100px"
-                        method={"button"}
-                        onClick={() => {
-                          setShowSection(true);
-                          setSectionCount([1]);
-                          setSection("");
-                          form.setFieldValue("section", "");
-                        }}
-                      />
-                    )}
-                  </div>
+              <div className="col-12 mt-2">
+                <Form.Item
+                  label={
+                    <label>
+                      Section <span style={{ color: "red" }}>*</span>
+                    </label>
+                  }
+                  name="section"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter section",
+                    },
+                  ]}
+                >
+                  {/* <Select
+                      size="large"
+                      options={capturedSections}
+                      onChange={(val) => setSection(val)}
+                    /> */}
+                  <CustomSelect
+                    options={capturedSections}
+                    onChange={(val) => setSection(val)}
+                    setOptions={setCapturedSections}
+                    value={section}
+                    disabled={false}
+                  />
                 </Form.Item>
               </div>
             )}
-            {showSection && listOfSection.length > 0 && (
-              <Form.Item>
-                <div className="d-flex justify-content-center mt-5">
-                  <RegularButton
-                    type=""
-                    name={
-                      isEditPage && isEditValue.diagnosisCode == code
-                        ? "Save"
-                        : "Next"
+          </div>
+          {(listOfSection.length <= 0 || !showSection) && (
+            <div className="border rounded">
+              {sectionCount?.map((item, index) => (
+                <div className="pt-2">
+                  <div className="d-flex justify-content-between px-3">
+                    <b>Section - {index + 1}</b>
+                    <label>
+                      {index == 0 && (
+                        <label
+                          className="cr-pointer px-2"
+                          onClick={() =>
+                            setSectionCount([
+                              ...sectionCount,
+                              ...[Math.max(...sectionCount) + 1],
+                            ])
+                          }
+                        >
+                          <FontAwesomeIcon icon={faPlus} color="#04306f" />
+                        </label>
+                      )}
+                      {sectionCount?.length > 1 && (
+                        <label
+                          className="cr-pointer"
+                          onClick={() => {
+                            const remove = sectionCount.filter(
+                              (val) => val != item
+                            );
+                            setSectionCount(remove);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faTrashCan} color="#04306f" />
+                        </label>
+                      )}
+                    </label>
+                  </div>
+                  <AddSection
+                    key={item}
+                    id={item}
+                    section={section}
+                    date={
+                      getSelectedDos
+                        ? [{ label: getSelectedDos, value: getSelectedDos }]
+                        : getSelectedDos
                     }
-                    width="150px"
-                    method={"button"}
-                    disabled={!(validCode == "Valid Code")}
-                    onClick={() => {
-                      if (isEditPage && isEditValue.diagnosisCode == code) {
-                        handleMeatSubmit();
-                      } else {
-                        setMeatDisplay(true);
-                      }
-                    }}
+                    isEditPage={isEditPage}
                   />
                 </div>
+              ))}
+              <Form.Item>
+                <div className="d-flex justify-content-center mt-4">
+                  {!isEdit ? (
+                    <RegularButton
+                      type=""
+                      name="Save"
+                      width="100px"
+                      // onClick={handledSave}
+                    />
+                  ) : (
+                    <RegularButton
+                      type=""
+                      method={"button"}
+                      name="Edit"
+                      width="100px"
+                      onClick={handledEdit}
+                    />
+                  )}
+                  {listOfSection.length > 0 && (
+                    <RegularButton
+                      type="outline"
+                      name="Cancel"
+                      width="100px"
+                      method={"button"}
+                      onClick={() => {
+                        setShowSection(true);
+                        setSectionCount([1]);
+                        setSection("");
+                        form.setFieldValue("section", "");
+                      }}
+                    />
+                  )}
+                </div>
               </Form.Item>
-            )}
-          </Form>
-        </>
+            </div>
+          )}
+          {showSection && listOfSection.length > 0 && (
+            <Form.Item>
+              <div className="d-flex justify-content-center mt-5">
+                <RegularButton
+                  type=""
+                  name={
+                    isEditPage && isEditValue.diagnosisCode == code
+                      ? "Save"
+                      : "Next"
+                  }
+                  width="150px"
+                  method={"button"}
+                  disabled={!(validCode == "Valid Code")}
+                  onClick={() => {
+                    if (isEditPage && isEditValue.diagnosisCode == code) {
+                      handleMeatSubmit();
+                    } else {
+                      setMeatDisplay(true);
+                    }
+                  }}
+                />
+              </div>
+            </Form.Item>
+          )}
+        </Form>
       ) : (
         <>
           <div className={style.subHeader}>Meat</div>
