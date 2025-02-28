@@ -16,7 +16,7 @@ import {
 } from "../../../../components/headerFilters/functions";
 import { actions as allActions } from "../../../../stores/admin/patientAllocation";
 import { connect } from "react-redux";
-import { getResponePopup } from "../../../../utils/reusable";
+import { formatDateForIndex, getResponePopup } from "../../../../utils/reusable";
 
 const AllocateModal = ({
   open,
@@ -79,9 +79,9 @@ const AllocateModal = ({
     const response = await getAllocateUsers({
       data: {
         userId: activeEmail,
-        dueDate: `${allocateDate + "T00:00:00.000Z"}`,
+        dueDate: formatDateForIndex({ date: allocateDate, index: 0 }),
         patientIds: selectedRowsId.map((item) => item.id),
-        priority:priority,
+        priority: priority,
       },
     });
     if (response?.status == "SUCCESS") {

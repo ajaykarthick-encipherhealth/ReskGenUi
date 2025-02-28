@@ -11,6 +11,7 @@ import { Select as AntSelect, Empty, Spin } from "antd";
 import { priorityStatus, sortFunction } from "../../../headerFilters/functions";
 import { actions as adminActions } from "../../../../stores/admin/users";
 import { actions as allActions } from "../../../../stores/admin/workqueue";
+import { formatDateTime } from "../../../../utils/reusable";
 function AllocatedAdminList({
   patinetListAll,
   selectAllChecked,
@@ -65,7 +66,7 @@ function AllocatedAdminList({
 
           <td className={TableStyle.childBorder}>
             {data.computedDate
-              ? moment.utc(data.computedDate).format("MM-DD-YYYY")
+              ? formatDateTime({date: data.computedDate})
               : "---"}
           </td>
           <td className={TableStyle.lastBorder}>

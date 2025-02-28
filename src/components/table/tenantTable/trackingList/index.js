@@ -26,6 +26,7 @@ import { actions as allActions } from "../../../../stores/admin/users";
 import { actions as patientSyncActions } from "../../../../stores/tenantAdmin/patientSync";
 import Legends from "../../../legends";
 import styles from "../../../../pages/reviewer/report/report.module.css";
+import { formatDateTime } from "../../../../utils/reusable";
 
 function TrackingTable({
   patinetListAll,
@@ -152,7 +153,7 @@ function TrackingTable({
             }}
           >
             {data.allocatedOn
-              ? moment(data.allocatedOn).format("MM-DD-YYYY")
+              ? formatDateTime({date: data.allocatedOn})
               : "---"}
           </div>
         </td>
@@ -204,9 +205,7 @@ function TrackingTable({
             <div style={{ textAlign: "center" }}>---</div>
           )}
           <div className="text-center" style={{ width: "95%", margin: "auto" }}>
-            {data.processedDate
-              ? moment(data.processedDate).format("MM-DD-YYYY")
-              : "---"}
+            {data.processedDate ? formatDateTime({date: data.processedDate}) : "---"}
           </div>
         </td>
 
@@ -259,7 +258,7 @@ function TrackingTable({
           <div className="text-center" style={{ width: "68%", margin: "auto" }}>
             {" "}
             {data.auditAllocatedDate
-              ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
+              ? formatDateTime({date: data.auditAllocatedDate})
               : "---"}
           </div>
         </td>
@@ -312,9 +311,7 @@ function TrackingTable({
           id={data.patientId}
           name={data.patientId}
         >
-          {data.auditedDate
-            ? moment(data.auditedDate).format("MM-DD-YYYY")
-            : "---"}
+          {data.auditedDate ? formatDateTime({date: data.auditedDate}) : "---"}
         </td>
         <td
           className={TableStyle.childBorder}

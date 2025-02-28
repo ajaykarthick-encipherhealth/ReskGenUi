@@ -9,7 +9,7 @@ import {
 } from "../../../../components/headerFilters/functions";
 import { actions as patientSyncActions } from "../../../../stores/tenantAdmin/patientSync";
 import { useRouter } from "next/router";
-import { getMaskData } from "../../../../utils/reusable";
+import { formatDateTime, getMaskData } from "../../../../utils/reusable";
 import { handleCopyToClipboard } from "../../../../components/commonFunctions";
 import { LoadingOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -104,10 +104,11 @@ const ContentGroupCard = ({
               onChange={() => handleRowCheckboxChange(item)}
               className={TableStyle.customChecked}
               checked={
-                selectedRows?.length > 0 ?
-                selectedRows?.some(
-                  (selectedRow) => selectedRow === item?.patientId
-                ):false
+                selectedRows?.length > 0
+                  ? selectedRows?.some(
+                      (selectedRow) => selectedRow === item?.patientId
+                    )
+                  : false
               }
             />
           )}
@@ -156,7 +157,7 @@ const ContentGroupCard = ({
                 </Tooltip>
                 <Tooltip title="Processed Date" placement="bottom">
                   <div className={`${styles.initialText}`}>
-                    {dateFormate(dayjs, processedDate)}
+                    {processedDate ? formatDateTime({date: processedDate,formatType: "dateTime"}) : "---"}
                   </div>
                 </Tooltip>
               </div>

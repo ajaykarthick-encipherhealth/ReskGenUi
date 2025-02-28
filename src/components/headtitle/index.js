@@ -6,7 +6,7 @@ import { actions as allActions } from "../../stores/admin/dashboard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import styles from "./styles.module.css";
-import { disabledDate } from "../../utils/reusable";
+import { disabledDate, formatDateForIndex } from "../../utils/reusable";
 
 const { RangePicker } = DatePicker;
 
@@ -63,6 +63,19 @@ const HeadTitle = ({
     setBackupDates(tempDates);
     setOpenPicker(false);
   };
+// const handleOk = () => {
+//   if (clearFlag) {
+//     getDateRange(null);
+//   } else if (tempDates?.length) {
+//     const dates = {
+//       startDate: formatDateForIndex(tempDates[0], 0),
+//       endDate: formatDateForIndex(tempDates[1], 1),
+//     };
+//     getDateRange(dates);
+//   }
+//   setBackupDates(tempDates);
+//   setOpenPicker(false);
+// };
 
   const handleCancel = () => {
     setTempDates(backupDates);

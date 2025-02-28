@@ -21,6 +21,7 @@ import {
 import { extractLatestData } from "../../../../pages/supervisor/auditing";
 import { actions as adminActions } from "../../../../stores/admin/users";
 import { actions as allActions } from "../../../../stores/admin/workqueue";
+import { formatDateTime } from "../../../../utils/reusable";
 function AllocatedL2AdminList({
   patinetListAll,
   selectAllChecked,
@@ -38,7 +39,7 @@ function AllocatedL2AdminList({
   selectedRoWDetails,
   setSupervisorPageSize,
   totalElements,
-  setBatchCount
+  setBatchCount,
 }) {
   const [selectedRows, setSelectedRows] = useState([]);
   const handleRowCheckboxChange = (row) => {
@@ -177,12 +178,10 @@ function AllocatedL2AdminList({
           )}
         </td>{" "}
         <td className={TableStyle.childBorder}>
-          {data.dueDate ? moment.utc(data.dueDate).format("MM-DD-YYYY") : "---"}
+          {data.dueDate ? formatDateTime({date: data.dueDate}) : "---"}
         </td>
         <td className={TableStyle.childBorder}>
-          {data.processedDate
-            ? moment.utc(data.processedDate).format("MM-DD-YYYY")
-            : "---"}
+          {data.processedDate ? formatDateTime({date: data.processedDate}) : "---"}
         </td>
         <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
           {processstatusBodyTemplate(data)}
@@ -198,8 +197,8 @@ function AllocatedL2AdminList({
             />
           ) : (
             <input
-            id={data?.patientId}
-            name={data?.patientId}
+              id={data?.patientId}
+              name={data?.patientId}
               type="checkbox"
               onChange={() => {
                 handleRowCheckboxChange(data);
@@ -234,7 +233,9 @@ function AllocatedL2AdminList({
           <th>PATIENT ID</th>
           <th>PATIENT NAME</th>
           <th style={{ paddingLeft: "60px" }}>REVIEWER</th>
-          <th id="dueDate" name="dueDate"
+          <th
+            id="dueDate"
+            name="dueDate"
             style={{ paddingLeft: "20px" }}
             onClick={() => {
               sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
@@ -251,7 +252,9 @@ function AllocatedL2AdminList({
             </span>
           </th>
 
-          <th id="completedDate" name="completedDate"
+          <th
+            id="completedDate"
+            name="completedDate"
             onClick={() => {
               sortFunction(
                 sortCompleteOrder,
@@ -294,8 +297,8 @@ function AllocatedL2AdminList({
                   />
                 ) : (
                   <input
-                  id="selectAll"
-                  name="selectAll"
+                    id="selectAll"
+                    name="selectAll"
                     type="checkbox"
                     onClick={() => {
                       setSupervisorPageSize(totalElements);
@@ -315,9 +318,10 @@ function AllocatedL2AdminList({
                       patinetListAll?.length === selectedRowsId.length
                     }
                     className={
-                      selectAllChecked &&
-                      selectedRowsId.length == selectedChart.length &&
-                      patinetListAll?.length === selectedRowsId.length || totalElements ===selectedRowsId.length
+                      (selectAllChecked &&
+                        selectedRowsId.length == selectedChart.length &&
+                        patinetListAll?.length === selectedRowsId.length) ||
+                      totalElements === selectedRowsId.length
                         ? TableStyle.customChecked2
                         : ""
                     }

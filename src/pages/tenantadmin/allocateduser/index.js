@@ -32,7 +32,7 @@ import { actions as tenantAdminUsersAction } from "../../../stores/tenantAdmin/u
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
-import { disabledDate, getResponePopup } from "../../../utils/reusable";
+import { disabledDate, formatDateForIndex, getResponePopup } from "../../../utils/reusable";
 import TableSkeleton from "../../../components/skeleton/table";
 import { useRef } from "react";
 
@@ -167,28 +167,46 @@ const Patient = ({
     setTableLoading(true);
   };
 
+  // const handleReceivedDatePicker = (date, dateString) => {
+  //   if (date === null || (Array.isArray(date) && date.length === 0)) {
+  //     setStartDate("");
+  //     setEndDate("");
+  //   }
+
+  //   const formattedDates =
+  //     dateString?.length > 0 &&
+  //     dateString?.map((data, index) => {
+  //       const formattedDate =
+  //         index === 1
+  //           ? data &&
+  //             `${moment(data, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+  //           : data &&
+  //             `${moment(data, "MM-DD-YYYY").format(
+  //               "YYYY-MM-DD"
+  //             )}T00:00:00.000Z`;
+  //       return formattedDate;
+  //     });
+  //   setStartDate(formattedDates[0]);
+  //   setEndDate(formattedDates[1]);
+  // };
   const handleReceivedDatePicker = (date, dateString) => {
-    if (date === null || (Array.isArray(date) && date.length === 0)) {
+    if (!date || (Array.isArray(date) && date.length === 0)) {
       setStartDate("");
       setEndDate("");
+      return;
     }
 
     const formattedDates =
-      dateString?.length > 0 &&
-      dateString?.map((data, index) => {
-        const formattedDate =
-          index === 1
-            ? data &&
-              `${moment(data, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-            : data &&
-              `${moment(data, "MM-DD-YYYY").format(
-                "YYYY-MM-DD"
-              )}T00:00:00.000Z`;
-        return formattedDate;
-      });
-    setStartDate(formattedDates[0]);
-    setEndDate(formattedDates[1]);
+      dateString?.length > 0
+        ? dateString.map((data, index) =>
+            formatDateForIndex({ date: data, index })
+          )
+        : [];
+
+    setStartDate(formattedDates[0] || "");
+    setEndDate(formattedDates[1] || "");
   };
+
   const onPageChangePatient = (e) => {
     setIsLoading(false);
     setPaginationFirst(e.first);

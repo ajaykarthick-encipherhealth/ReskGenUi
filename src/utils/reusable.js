@@ -149,7 +149,6 @@ export function formatValues(values, dates) {
   return resultArray;
 }
 
-
 export const getAge = (dob) => {
   if (dob) {
     const diff = new Date() - new Date(dob);
@@ -163,7 +162,7 @@ export const validateFileName = (fileName) => {
   return !doubleExtensionPattern.test(fileName);
 };
 
-export const emrTypeOptions=[
+export const emrTypeOptions = [
   { label: "ADSC", value: "ADSC" },
   { label: "Advanced MD", value: "Advanced MD" },
   { label: "Amazing Charts", value: "Amazing Charts" },
@@ -195,7 +194,7 @@ export const emrTypeOptions=[
   { label: "Micro MD", value: "Micro MD" },
   { label: "IMS", value: "IMS" },
   { label: "Other", value: "Other" },
-]
+];
 
 export const disabledDate = (
   currentDate,
@@ -209,7 +208,6 @@ export const disabledDate = (
 
   const startDay = startDate ? dayjs(startDate) : null;
   const endDay = endDate ? dayjs(endDate) : null;
-
 
   if (!allowFuture && currentDate && currentDate.isAfter(today, "day")) {
     return true;
@@ -241,3 +239,23 @@ export const getSpacesWithUnderscoresAuditing = (value) => {
     }
   }
 };
+
+export const formatDateTime = ({date, formatType = "date"}) => {
+  if (!date) return "";
+
+  const formats = {
+    datetime: "MM-DD-YYYY, h:mm a",
+    date: "MM-DD-YYYY",
+  };
+
+  return moment(date).format(formats[formatType] || formats.datetime);
+};
+
+export const formatDateForIndex = ({date, index}) => {
+  if (!date) return "";
+  const formattedDate = moment(date).format("YYYY-MM-DD");
+  return index === 1
+    ? `${formattedDate}T23:59:59.999Z`
+    : `${formattedDate}T00:00:00.000Z`;
+};
+

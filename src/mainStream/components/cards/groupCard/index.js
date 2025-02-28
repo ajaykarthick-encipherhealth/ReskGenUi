@@ -2,6 +2,7 @@ import React from "react";
 import { Empty, Popover, Avatar } from "antd";
 import dayjs from "dayjs";
 import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
+import { formatDateTime } from "../../../../utils/reusable";
 
 const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
   const handleDateFormat = (date) => {
@@ -48,7 +49,8 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
                   <div className={`${styles.headText}`}>{item._id}</div>
                   <div className="d-flex">
                     <div className={`${styles.dateText}`}>
-                      {handleDateFormat(item.sendDate)}
+                      {/* {handleDateFormat(item.sendDate)} */}
+                      {item.sendDate ? formatDateTime({date: item.sendDate}) : "---"}
                     </div>
                   </div>
                 </div>

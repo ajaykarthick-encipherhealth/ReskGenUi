@@ -18,6 +18,7 @@ import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonD
 import { connect } from "react-redux";
 import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin/users";
 import { actions as adminAction } from "../../../../stores/admin/dashboard";
+import { formatDateTime } from "../../../../utils/reusable";
 const items = [
   // { value: "ADMIN", label: "Admin", role: "admin" },
   { value: "REVIEWER", label: "Reviewer", role: "REVIEWER" },
@@ -286,7 +287,9 @@ const UserList = ({
                   <span>
                     {item?.userName ? (
                       <Tooltip title={item?.userName}>
-                        <span id={item?.userName} name={item?.userName}>{truncateString(item?.userName, 40)}</span>  
+                        <span id={item?.userName} name={item?.userName}>
+                          {truncateString(item?.userName, 40)}
+                        </span>
                       </Tooltip>
                     ) : (
                       "---"
@@ -326,7 +329,8 @@ const UserList = ({
                         >
                           {item?.role
                             ?.map((data) => capitalizeFirstLetter(data))
-                            .join(",").replaceAll("_", " ")}
+                            .join(",")
+                            .replaceAll("_", " ")}
                         </span>
                       </>
                     ) : (
@@ -349,7 +353,7 @@ const UserList = ({
                       color: item.accountStatus === true ? "" : "gray",
                     }}
                   >
-                    {dateFormate(dayjs, item?.createdDate)}
+                    {item?.createdDate ? formatDateTime({date:item?.createdDate, formatType:"dateTime"}) : "---"}
                   </span>
                 </td>
                 <td

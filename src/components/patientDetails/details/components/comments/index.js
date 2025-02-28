@@ -13,7 +13,7 @@ import moment from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { connect } from "react-redux";
 import { getStorage } from "../../../../../utils/storages";
-import { getResponePopup } from "../../../../../utils/reusable";
+import { formatDateTime, getResponePopup } from "../../../../../utils/reusable";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getCommentList, getUserDetails } from "../../../../../stores/patient/details/network";
 import CardSkeleton from "../../../../skeleton/card";
@@ -297,7 +297,9 @@ const Comments = ({
                   </Tooltip>
                 </div>
                 <span className={visitStyles.commentsTime}>
-                  {moment(data.commentCreatedAt).format("MM-DD-YYYY hh:mm:A")}
+                  {data.createdDate
+                    ? formatDateTime({date: data.createdDate, formatType:"datetime"})
+                    : "---"}
                 </span>
               </div>
             ))

@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 import { getStorage } from "../../../../../utils/storages";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { isDeleteNotes } from "../../../../../stores/patient/details/actions";
-import { getResponePopup } from "../../../../../utils/reusable";
+import { formatDateTime, getResponePopup } from "../../../../../utils/reusable";
 import {
   getNotesLists,
   getUserDetails,
@@ -298,7 +298,9 @@ const Notes = ({
                 </Tooltip>
               </div>
               <span className={visitStyles.commentsTime}>
-                {moment(data?.createdDate).format("MM-DD-YYYY hh:mm:A")}
+                {data?.createdDate
+                  ? formatDateTime({date: data?.createdDate, formatType: "datetime"})
+                  : "---"}
               </span>
             </div>
           ))}

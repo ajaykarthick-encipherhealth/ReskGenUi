@@ -101,7 +101,7 @@ const DetailedFhirTable = ({
                       {row?.mrnNumber ? row?.mrnNumber : "---"}
                     </td>
                     <td className={TableStyle.childBorder}>
-                      <div
+                      <div id="badge"
                         className="text-capitalize mx-2"
                         style={{
                           fontSize: "16px",

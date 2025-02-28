@@ -3,6 +3,7 @@ import moment from "moment";
 import styles from "../style.module.css";
 import { renderUserPrfoileAvatar, renderUserPrfoileAvatarCustom } from "../../../../components/headerFilters/functions";
 import { Popover, Tooltip } from "antd";
+import { formatDateTime } from "../../../../utils/reusable";
 
 const SendList = ({ result }) => {
   return (
@@ -141,7 +142,7 @@ const SendList = ({ result }) => {
                 </div>
                 <div className={`col-xl-2  ${styles.timeContainer}`}>
                   <span className={styles.timeStatus}>
-                    {moment(data?.createdDate).format("MM/DD/YYYY hh:mm:A")}
+                    {formatDateTime({date: data?.createdDate, formatType: "dateTime"})}
                   </span>
                 </div>
               </div>

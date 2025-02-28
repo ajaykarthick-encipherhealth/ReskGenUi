@@ -28,6 +28,7 @@ import { truncateString } from "../../../../components/patientDetails/details/co
 import { connect } from "react-redux";
 import Legends from "../../../../components/legends";
 import styles from "../../../reviewer/report/report.module.css";
+import { formatDateTime } from "../../../../utils/reusable";
 
 const UserQueueTable = ({
   userList,
@@ -195,7 +196,7 @@ const UserQueueTable = ({
                     <span className={TableStyle.subTitle}> Allocated Date</span>
                     <div>
                       {data.allocatedOn
-                        ? moment(data.allocatedOn).format("MM-DD-YYYY")
+                        ? formatDateTime({date: data.allocatedOn})
                         : "---"}
                     </div>
                   </div>
@@ -203,9 +204,7 @@ const UserQueueTable = ({
                   <div>
                     <span className={TableStyle.subTitle}> Due Date</span>
                     <div>
-                      {data.dueDate
-                        ? moment(data.dueDate).format("MM-DD-YYYY")
-                        : "---"}
+                      {data.dueDate ? formatDateTime({date: data.dueDate}) : "---"}
                     </div>
                   </div>
                   <div>
@@ -235,9 +234,7 @@ const UserQueueTable = ({
                 </>
               }
             >
-              {data.processedDate
-                ? moment(data.processedDate).format("MM-DD-YYYY")
-                : "---"}
+              {data.processedDate ? formatDateTime({date: data.processedDate}) : "---"}
             </Popover>
           </td>
           <td
@@ -246,7 +243,7 @@ const UserQueueTable = ({
           >
             <div className={TableStyle.innerAlignments}>
               {data.auditAllocatedDate
-                ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
+                ? formatDateTime({date: data.auditAllocatedDate})
                 : "---"}
             </div>
           </td>
@@ -255,9 +252,7 @@ const UserQueueTable = ({
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             <div className={TableStyle.innerAlignments}>
-              {data.auditDueDate
-                ? moment(data.auditDueDate).format("MM-DD-YYYY")
-                : "---"}
+              {data.auditDueDate ? formatDateTime({date: data.auditDueDate}) : "---"}
             </div>
           </td>
 
@@ -323,9 +318,7 @@ const UserQueueTable = ({
                 )
               }
             >
-              {data?.auditedDate
-                ? moment(data?.auditedDate).format("MM-DD-YYYY")
-                : "---"}
+              {data?.auditedDate ? formatDateTime({date: data?.auditedDate}) : "---"}
             </Popover>
           </td>
           <td className={TableStyle.childBorder}>

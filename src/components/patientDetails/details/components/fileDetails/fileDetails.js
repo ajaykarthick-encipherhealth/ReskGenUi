@@ -17,6 +17,7 @@ import { SVGICON } from "../../../../../jsx/constant/theme";
 import { notification, Tooltip } from "antd";
 import { truncateString } from "../function/ReusableFunctions";
 import { handleCopyToClipboard } from "../../../../commonFunctions";
+import { formatDateTime } from "../../../../../utils/reusable";
 
 const Details = ({ fileResult, fromHcc }) => {
   const getMastData = (value) => {
@@ -110,9 +111,7 @@ const Details = ({ fileResult, fromHcc }) => {
               Date Of Birth
             </label>
             <h6 className="px-4">
-              {fileResult?.dob
-                ? dayjs(fileResult.dob).format("MM-DD-YYYY")
-                : "---"}
+              {fileResult?.dob ? formatDateTime({date: fileResult?.dob}) : "---"}
             </h6>
           </div>
           {/* <div className="col-3">

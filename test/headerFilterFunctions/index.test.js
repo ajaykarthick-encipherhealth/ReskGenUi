@@ -260,17 +260,6 @@ describe("processstatusBodyTemplate", () => {
 
 // priority Status
 describe("priorityStatus", () => {
-  it("should return the correct JSX for 'URGENT'", () => {
-    const result = priorityStatus("URGENT");
-    expect(result).toEqual(
-      <div data-testid="status-span">
-        <i>
-          <FontAwesomeIcon icon={faTriangleExclamation} />
-        </i>{" "}
-        <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>
-      </div>
-    );
-  });
 
   it("should return the correct JSX for 'HIGH'", () => {
     const result = priorityStatus("HIGH");

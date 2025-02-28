@@ -4,7 +4,7 @@ import { actions as dashboardActions } from "../../../../../stores/tenantAdmin/d
 import styles from "./styles.module.css";
 import { DatePicker, Select } from "antd";
 import moment from "moment";
-import { disabledDate as reusableDisabledDate } from "../../../../../utils/reusable"; // Import reusable function
+import { formatDateForIndex, disabledDate as reusableDisabledDate } from "../../../../../utils/reusable"; // Import reusable function
 import dayjs from "dayjs";
 import { useRef } from "react";
 const { RangePicker } = DatePicker;
@@ -23,48 +23,99 @@ const index = ({
   const [selectedDates, setSelectedDates] = useState([]);
   const pickerRef = useRef()
 
+  // const handleDateChange = (value) => {
+  //   if (value == "custom") {
+  //     setIsCustom(true);
+  //     setSelectedValue(value);
+  //   } else {
+  //     setIsCustom(false);
+  //     let startDate;
+  //     if (value === "last_1_week") {
+  //       startDate =
+  //         moment().subtract(6, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
+  //       setSelectedValue(value);
+  //     } else if (value === "last_1_month") {
+  //       startDate =
+  //         moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
+  //       setSelectedValue(value);
+  //     } else if (value == undefined) {
+  //       setDateRange({ startDate: "", endDate: "" });
+  //     }
+  //     if (value != undefined) {
+  //       const endDate = moment().format("YYYY-MM-DD") + "T23:59:59.000Z";
+  //       setDateRange({ startDate: startDate, endDate: endDate });
+  //     }
+  //   }
+  // };
+  // const handleRange = (e) => {
+  //   setSelectedDates(e);
+  //   if (!e || !e[0] || !e[1]) {
+  //     const range = {
+  //       startDate:
+  //         moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z",
+  //       endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
+  //     };
+  //     setDateRange(range);
+  //   } else {
+  //     const range = {
+  //       startDate: moment(e[0]).format("YYYY-MM-DD") + "T00:00:00.000Z",
+  //       endDate: moment(e[1]).format("YYYY-MM-DD") + "T23:59:59.000Z",
+  //     };
+  //     setDateRange(range);
+  //   }
+  // };
+
   const handleDateChange = (value) => {
-    if (value == "custom") {
+    if (value === "custom") {
       setIsCustom(true);
       setSelectedValue(value);
     } else {
       setIsCustom(false);
       let startDate;
+
       if (value === "last_1_week") {
-        startDate =
-          moment().subtract(6, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
+        startDate = formatDateForIndex({
+          date: moment().subtract(6, "days"),
+          index: 0,
+        });
         setSelectedValue(value);
       } else if (value === "last_1_month") {
-        startDate =
-          moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
+        startDate = formatDateForIndex({
+          date: moment().subtract(29, "days"),
+          index: 0,
+        });
         setSelectedValue(value);
-      } else if (value == undefined) {
+      } else if (value === undefined) {
         setDateRange({ startDate: "", endDate: "" });
       }
-      if (value != undefined) {
-        const endDate = moment().format("YYYY-MM-DD") + "T23:59:59.000Z";
-        setDateRange({ startDate: startDate, endDate: endDate });
+
+      if (value !== undefined) {
+        const endDate = formatDateForIndex({ date: moment(), index: 1 });
+        setDateRange({ startDate, endDate });
       }
     }
   };
+
   const handleRange = (e) => {
     setSelectedDates(e);
+
     if (!e || !e[0] || !e[1]) {
-      const range = {
-        startDate:
-          moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z",
-        endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
-      };
-      setDateRange(range);
-      setTimeout(() => pickerRef.current?.focus(), 100);
+      setDateRange({
+        startDate: formatDateForIndex({
+          date: moment().subtract(29, "days"),
+          index: 0,
+        }),
+        endDate: formatDateForIndex({ date: moment(), index: 1 }),
+      });
+       setTimeout(() => pickerRef.current?.focus(), 100);
     } else {
-      const range = {
-        startDate: moment(e[0]).format("YYYY-MM-DD") + "T00:00:00.000Z",
-        endDate: moment(e[1]).format("YYYY-MM-DD") + "T23:59:59.000Z",
-      };
-      setDateRange(range);
+      setDateRange({
+        startDate: formatDateForIndex({ date: e[0], index: 0 }),
+        endDate: formatDateForIndex({ date: e[1], index: 1 }),
+      });
     }
   };
+
   const disabled1YearDate = (current) => {
     const isDisabledByReusableFunction = reusableDisabledDate(
       current,

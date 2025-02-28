@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { ArrowUpOutlined, ArrowDownOutlined, InfoCircleFilled } from "@ant-design/icons";
+import {
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+  InfoCircleFilled,
+} from "@ant-design/icons";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
 import {
@@ -22,6 +26,7 @@ import { actions as allActions } from "../../../../stores/admin/workqueue";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
 import { connect } from "react-redux";
 import Legends from "../../../legends";
+import { formatDateTime } from "../../../../utils/reusable";
 function AddPatientListTable({
   patinetListAll,
   actionBodyTemplate,
@@ -267,7 +272,10 @@ function AddPatientListTable({
               name={data?.patientId}
             >
               {data.computedDate
-                ? moment(data.computedDate).format("MM-DD-YYYY, h:mm a")
+                ? formatDateTime({
+                    date: data.computedDate,
+                    formatType: "dateTime",
+                  })
                 : "---"}
             </td>
             <td
@@ -278,7 +286,10 @@ function AddPatientListTable({
               name={data?.patientId}
             >
               {data.createdDate
-                ? moment(data.createdDate).format("MM-DD-YYYY, h:mm a")
+                ? formatDateTime({
+                    date: data.createdDate,
+                    formatType: "dateTime",
+                  })
                 : "---"}
             </td>
             <td
@@ -367,7 +378,7 @@ function AddPatientListTable({
             </th>
             <th style={{ paddingLeft: "55px" }}>
               <span className="d-flex gap-2">
-              STATUS
+                STATUS
                 <span style={{ cursor: "pointer" }}>
                   <Popover
                     content={

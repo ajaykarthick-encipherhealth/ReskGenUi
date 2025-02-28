@@ -39,6 +39,7 @@ import { getStatusIcon, selectTab } from "../../../reuseableFunctions";
 import { getStorage } from "../../../../utils/storages";
 import { SwapOutlined } from "@ant-design/icons";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
+import { formatDateTime } from "../../../../utils/reusable";
 const { Option } = Select;
 
 const Hcc = ({
@@ -132,7 +133,8 @@ const Hcc = ({
                   </span>
 
                   <span id="dosSelect" className={styles.dosLable}>
-                    {moment(res.dateOfService).format("MM-DD-YYYY")}
+               
+                    {formatDateTime({date: res.dateOfService})}
                   </span>
                 </div>
                 {getStatusIcon(res.processedStatus)}
@@ -156,6 +158,7 @@ const Hcc = ({
             patientId,
             null,
             moment(isDosSelected).format("YYYY-MM-DD"),
+          //  formatDateTime({date: isDosSelected}),
             "",
             role
           );
@@ -281,7 +284,7 @@ const Hcc = ({
                 >
                   <div className="col-xl-6 ">
                     <span className={styles.selectHead}>
-                      {moment(data.dos).format("MM-DD-YYYY")}
+                      {data.dos? formatDateTime({date: data.dos}) : "---"}
                     </span>
                   </div>
 

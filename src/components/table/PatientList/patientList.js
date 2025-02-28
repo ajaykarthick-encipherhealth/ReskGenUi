@@ -22,6 +22,7 @@ import { actions as reviewerWorkQueueAction } from "../../../stores/reviewer/wor
 import { allFilters } from "../../../pages/reviewer/patients/headerFilters";
 import { actions as patientSyncActions } from "../../../stores/tenantAdmin/patientSync";
 import Legends from "../../legends";
+import { formatDateTime } from "../../../utils/reusable";
 
 function PatientTable({
   patinetListAll,
@@ -113,23 +114,19 @@ function PatientTable({
             className={`text-center ${TableStyle.childBorder}`}
             onClick={handleTableRowClick}
           >
-            {data?.allocatedOn
-              ? moment(data?.allocatedOn).format("MM-DD-YYYY")
-              : "---"}
+            {data?.allocatedOn ? formatDateTime({date: data?.allocatedOn}) : "---"}
           </td>
           <td
             className={`text-center ${TableStyle.childBorder}`}
             onClick={handleTableRowClick}
           >
-            {data?.dueDate ? moment(data?.dueDate).format("MM-DD-YYYY") : "---"}
+            {data?.dueDate ? formatDateTime({date: data?.dueDate}) : "---"}
           </td>
           <td
             className={`text-center ${TableStyle.childBorder}`}
             onClick={handleTableRowClick}
           >
-            {data?.processedDate
-              ? moment(data?.processedDate).format("MM-DD-YYYY")
-              : "---"}
+            {data?.processedDate ? formatDateTime({date: data?.processedDate}) : "---"}
           </td>
 
           <td

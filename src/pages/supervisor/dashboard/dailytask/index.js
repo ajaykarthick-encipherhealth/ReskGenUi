@@ -18,6 +18,7 @@ import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import CardSkeleton from "../../../../components/skeleton/card";
+import { formatDateForIndex } from "../../../../utils/reusable";
 
 const DailyTask = ({
   dailyStatusDatas,
@@ -30,7 +31,7 @@ const DailyTask = ({
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
   const [responseArray, setReponseArray] = useState([]);
-   const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const bullets = [
     {
       color: "#64B4BE",
@@ -246,8 +247,8 @@ const DailyTask = ({
       setSelectedDate(datas);
     }
     setTimeout(() => {
-      setLoading(false); 
-    }, 300); 
+      setLoading(false);
+    }, 300);
   };
   const uniqueData = currentDays?.filter((value, index, self) => {
     const firstIndex = self?.findIndex(
@@ -298,22 +299,35 @@ const DailyTask = ({
                                   dayjs(data?.date),
                                 ],
                               },
+                              // selectedDateRange: {
+                              //   AuditedDueDate: {
+                              //     startDate: data?.date
+                              //       ? `${moment(
+                              //           data?.date,
+                              //           "MM-DD-YYYY"
+                              //         ).format("YYYY-MM-DD")}T00:00:00.000Z`
+                              //       : "",
+                              //     endDate: data?.date
+                              //       ? `${moment(
+                              //           data?.date,
+                              //           "MM-DD-YYYY"
+                              //         ).format("YYYY-MM-DD")}T23:59:59.999Z`
+                              //       : "",
+                              //   },
+                              // },
                               selectedDateRange: {
                                 AuditedDueDate: {
-                                  startDate: data?.date
-                                    ? `${moment(
-                                        data?.date,
-                                        "MM-DD-YYYY"
-                                      ).format("YYYY-MM-DD")}T00:00:00.000Z`
-                                    : "",
-                                  endDate: data?.date
-                                    ? `${moment(
-                                        data?.date,
-                                        "MM-DD-YYYY"
-                                      ).format("YYYY-MM-DD")}T23:59:59.999Z`
-                                    : "",
+                                  startDate: formatDateForIndex({
+                                    date: data?.date,
+                                    index: 0,
+                                  }),
+                                  endDate: formatDateForIndex({
+                                    date: data?.date,
+                                    index: 1,
+                                  }),
                                 },
                               },
+
                               activeFilters: ["Audited Due Date"],
 
                               // })
@@ -383,27 +397,50 @@ const DailyTask = ({
                                               dayjs(data?.date),
                                             ],
                                           },
+                                          // selectedDateRange: {
+                                          //   AuditedDueDate: {
+                                          //     startDate: data?.date
+                                          //       ? `${moment(
+                                          //           data?.date,
+                                          //           "MM-DD-YYYY"
+                                          //         ).format(
+                                          //           "YYYY-MM-DD"
+                                          //         )}T00:00:00.000Z`
+                                          //       : "",
+
+                                          //     endDate: data?.date
+                                          //       ? `${moment(
+                                          //           data?.date,
+                                          //           "MM-DD-YYYY"
+                                          //         ).format(
+                                          //           "YYYY-MM-DD"
+                                          //         )}T23:59:59.999Z`
+                                          //       : "",
+                                          //   },
+                                          // },
                                           selectedDateRange: {
                                             AuditedDueDate: {
                                               startDate: data?.date
-                                                ? `${moment(
-                                                    data?.date,
-                                                    "MM-DD-YYYY"
-                                                  ).format(
-                                                    "YYYY-MM-DD"
-                                                  )}T00:00:00.000Z`
+                                                ? formatDateForIndex({
+                                                    date: moment(
+                                                      data?.date,
+                                                      "MM-DD-YYYY"
+                                                    ),
+                                                    index: 0,
+                                                  })
                                                 : "",
-
                                               endDate: data?.date
-                                                ? `${moment(
-                                                    data?.date,
-                                                    "MM-DD-YYYY"
-                                                  ).format(
-                                                    "YYYY-MM-DD"
-                                                  )}T23:59:59.999Z`
+                                                ? formatDateForIndex({
+                                                    date: moment(
+                                                      data?.date,
+                                                      "MM-DD-YYYY"
+                                                    ),
+                                                    index: 1,
+                                                  })
                                                 : "",
                                             },
                                           },
+
                                           activeFilters: [
                                             // "Reviewer Status",
                                             "Select Audited Status",

@@ -18,6 +18,7 @@ import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import CardSkeleton from "../../../../components/skeleton/card";
+import { formatDateForIndex } from "../../../../utils/reusable";
 
 const DailyTask = ({
   getAllDailyTask,
@@ -273,16 +274,31 @@ const DailyTask = ({
                           onClick={() => {
                             setStorage("filter", JSON.stringify(activeFilters));
                             const params = {
+                              // dueDateStart: data?.dateString
+                              //   ?
+                              //   `${moment(data?.dateString).format(
+                              //       "YYYY-MM-DD"
+                              //     )}T00:00:00.000Z`
+                              //   : "",
+                              // dueDateEnd: data?.dateString
+                              //   ?
+                              //   `${moment(data?.dateString).format(
+                              //       "YYYY-MM-DD"
+                              //     )}T23:59:59.999Z`
+                              //   : "",
                               dueDateStart: data?.dateString
-                                ? `${moment(data?.dateString).format(
-                                    "YYYY-MM-DD"
-                                  )}T00:00:00.000Z`
+                                ? formatDateForIndex({
+                                    date: data?.dateString,
+                                    index: 0,
+                                  })
                                 : "",
                               dueDateEnd: data?.dateString
-                                ? `${moment(data?.dateString).format(
-                                    "YYYY-MM-DD"
-                                  )}T23:59:59.999Z`
+                                ? formatDateForIndex({
+                                    date: data?.dateString,
+                                    index: 1,
+                                  })
                                 : "",
+
                               selectedDates: [
                                 dayjs(data?.date),
                                 dayjs(data?.date),
@@ -324,23 +340,43 @@ const DailyTask = ({
                                       style={{ display: "flex" }}
                                       onClick={() => {
                                         const params = {
+                                          // dueDateStart: data?.date
+                                          //   ? `${moment(
+                                          //       data?.date,
+                                          //       "MM-DD-YYYY"
+                                          //     ).format(
+                                          //       "YYYY-MM-DD"
+                                          //     )}T00:00:00.000Z`
+                                          //   : "",
+
+                                          // dueDateEnd: data?.date
+                                          //   ? `${moment(
+                                          //       data?.date,
+                                          //       "MM-DD-YYYY"
+                                          //     ).format(
+                                          //       "YYYY-MM-DD"
+                                          //     )}T23:59:59.999Z`
+                                          //   : "",
                                           dueDateStart: data?.date
-                                            ? `${moment(
-                                                data?.date,
-                                                "MM-DD-YYYY"
-                                              ).format(
-                                                "YYYY-MM-DD"
-                                              )}T00:00:00.000Z`
+                                            ? formatDateForIndex({
+                                                date: moment(
+                                                  data?.date,
+                                                  "MM-DD-YYYY"
+                                                ),
+                                                index: 0,
+                                              })
                                             : "",
 
                                           dueDateEnd: data?.date
-                                            ? `${moment(
-                                                data?.date,
-                                                "MM-DD-YYYY"
-                                              ).format(
-                                                "YYYY-MM-DD"
-                                              )}T23:59:59.999Z`
+                                            ? formatDateForIndex({
+                                                date: moment(
+                                                  data?.date,
+                                                  "MM-DD-YYYY"
+                                                ),
+                                                index: 1,
+                                              })
                                             : "",
+
                                           statusSelectedStatus: item?.name,
                                           selectedDates: [
                                             dayjs(data?.date),

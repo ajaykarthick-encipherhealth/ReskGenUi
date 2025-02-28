@@ -34,6 +34,7 @@ import {
   faCircleUser,
   faCircleDot,
 } from "@fortawesome/free-regular-svg-icons";
+import { formatDateTime } from "../../../../utils/reusable";
 export const statusOptions = [
   { label: "Computed", value: "COMPUTED" },
   { label: "Processing", value: "PROCESSING" },
@@ -320,7 +321,8 @@ const DetailedViewPdfTable = ({
         <FontAwesomeIcon icon={faCalendar} color="#241571" className="mx-2" />
       ),
       name: currentId?.createdDate
-        ? dayjs(currentId?.createdDate).format("MM/DD/YYYY")
+        ? 
+          formatDateTime(currentId?.createdDate)
         : "---",
     },
     {

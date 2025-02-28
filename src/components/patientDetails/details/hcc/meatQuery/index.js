@@ -8,6 +8,7 @@ import styles from "../styles.module.css";
 import AddMeatQuery from "../../components/addMeatQuery";
 import TableSkeleton from "../../../../skeleton/table";
 import CardSkeleton from "../../../../skeleton/card";
+import { formatDateTime } from "../../../../../utils/reusable";
 const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year, patientDetailsLoad }) => {
   const [isMeatQueryModal, setIsMeatQueryModal] = useState(false);
   const [meatQueriedDetailsModal, setMeatQueriedDetailsModal] = useState(false);
@@ -86,7 +87,7 @@ const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year, patientDetail
           </div>
         </div>
         {patientDetailsLoad ? (
-          <CardSkeleton height={100} count={6}/>
+          <CardSkeleton height={100} count={6} />
         ) : meatQueryDetails?.data?.response?.length != 0 ? (
           <div className={visitStyles.container}>
             <div className={visitStyles.hccStickey_head}>
@@ -143,9 +144,7 @@ const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year, patientDetail
                           </div>
                           <div className="col-2 d-grid">
                             <span className="meat-name-details">
-                              {moment(item.createdAt).format(
-                                "MM-DD-YYYY & HH:mm"
-                              )}
+                              {formatDateTime({date: item.createdAt, formatType:"dateTime"})}
                             </span>
                           </div>
                           <div className="col-2 d-grid">
@@ -217,8 +216,9 @@ const MeatQuery = ({ patientDetailsResult, meatQueryDetails, year, patientDetail
                                   </div>
                                   <div className="col-2 d-grid">
                                     <span className="meat-name-details">
-                                      {moment(item.createdAt).format(
-                                        "MM-DD-YYYY & HH:MM:SS"
+                                      {formatDateTime(
+                                        {date:item.createdAt,
+                                        formatType: "dateTime"}
                                       )}
                                     </span>
                                   </div>

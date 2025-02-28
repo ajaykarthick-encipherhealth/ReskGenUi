@@ -8,7 +8,7 @@ import moment from "moment";
 import styles from "../../hcc/styles.module.css";
 import RegularButton from "../../../../../components/button";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
-import { getResponePopup } from "../../../../../utils/reusable";
+import { formatDateTime, getResponePopup } from "../../../../../utils/reusable";
 import { getStorage } from "../../../../../utils/storages";
 import { findDiseaseByCode } from "../../../../../stores/patient/details/network";
 const { Option } = Select;
@@ -436,9 +436,10 @@ const AddMeatQuery = ({
                   </p>
                   <p className={styles.publisheddetails}>
                     Date & Time -{" "}
-                    {moment(meatQueryResult.createdAt).format(
+                    {/* {moment(meatQueryResult.createdAt).format(
                       "MM-DD-YYYY && HH:MM:SS"
-                    )}
+                    )} */}
+                    {formatDateTime({date: meatQueryResult.createdAt, formatType: "dateTime"})}
                   </p>
                   <p className={styles.publisheddetails}>
                     Reason - {meatQueryResult.reason}

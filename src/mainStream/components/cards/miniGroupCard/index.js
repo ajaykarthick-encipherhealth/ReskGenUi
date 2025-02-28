@@ -5,6 +5,7 @@ import EditButton from "../../../../images/adminUsers/EditButton";
 import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { formatDateTime } from "../../../../utils/reusable";
 
 const CardComponent = ({
   data,
@@ -39,7 +40,8 @@ const CardComponent = ({
           <div className={styles.contentGroup}>
             <div className="col-12">
               <div
-              id="badge" className="cr-pointer"
+                id="badge"
+                className="cr-pointer"
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -51,7 +53,7 @@ const CardComponent = ({
                   <div className={`${styles.headText}`}>{item._id}</div>
                   <div className="d-flex">
                     <div className={`${styles.dateText}`}>
-                      {handleDateFormat(item.sendDate)}
+                      {item.sendDate ? formatDateTime({date: item.sendDate}) : "---"}
                     </div>
                   </div>
                 </div>

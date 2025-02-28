@@ -33,7 +33,7 @@ import SupervisorIndividualReport from "../../pages/supervisor/report/individual
 import TenantAdminIndividualReport from "../../pages/tenantadmin/report/individualreport";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
-import { disabledDate } from "../../utils/reusable";
+import { disabledDate, formatDateForIndex } from "../../utils/reusable";
 
 const statusOptions = [
   { label: "Completed", value: "COMPLETED" },
@@ -143,18 +143,22 @@ const Reports = ({
   };
 
   const handleCoderPicker = (date, dateString, tabName) => {
-    if (!date || date.length === 0) {
+    // const formattedDates = dateString?.map((date, index) => {
+    //   const formattedDate =
+    //     index === 1
+    //       ? date &&
+    //         `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+    //       : date &&
+    //         `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
+    //   return formattedDate;
+    // });
+      if (!date || date.length === 0) {
       setTimeout(() => pickerRef.current?.focus(), 100);
     }
-    const formattedDates = dateString?.map((date, index) => {
-      const formattedDate =
-        index === 1
-          ? date &&
-            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-          : date &&
-            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
-      return formattedDate;
-    });
+    const formattedDates = dateString?.map((date, index) =>
+      formatDateForIndex({ date, index })
+    );
+
     setSelectedDates((prevDates) => ({
       ...prevDates,
       [tabName]: date,

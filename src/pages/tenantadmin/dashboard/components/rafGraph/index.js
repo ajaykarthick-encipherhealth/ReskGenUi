@@ -10,6 +10,7 @@ import {
   getLast30Days,
   getLast7Days,
   formatValues,
+  formatDateForIndex,
 } from "../../../../../utils/reusable.js";
 import moment from "moment";
 const RafGraph = ({
@@ -33,6 +34,15 @@ const RafGraph = ({
       moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z",
     endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
   });
+  
+  // const [dateRange, setDateRange] = useState({
+  //   startDate: formatDateForIndex(
+  //     moment().subtract(29, "days").toISOString(),
+  //     0
+  //   ),
+  //   endDate: formatDateForIndex(moment().toISOString(), 1),
+  // });
+
 
   useEffect(() => {
     getAllRafScoreAPI(

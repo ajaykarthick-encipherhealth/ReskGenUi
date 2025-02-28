@@ -24,6 +24,7 @@ import { removeStorage, setStorage } from "../../../../utils/storages";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 import styles from "../../../reviewer/report/report.module.css";
 import Legends from "../../../../components/legends";
+import { formatDateTime } from "../../../../utils/reusable";
 
 function PatientTable({
   patinetListAll,
@@ -105,7 +106,7 @@ function PatientTable({
             <div> {data.patientName ? data.patientName : ""}</div>
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            {data.batchName ? data.batchName  : "---" }
+            {data.batchName ? data.batchName : "---"}
           </td>
           <td
             className={`text-truncate ${TableStyle.childBorder}`}
@@ -160,7 +161,7 @@ function PatientTable({
             style={{ padding: "0px 50px" }}
           >
             {data.auditAllocatedDate
-              ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
+              ? formatDateTime({date: data.auditAllocatedDate})
               : "---"}
           </td>
           <td
@@ -168,15 +169,11 @@ function PatientTable({
             onClick={handleTableRowClick}
             style={{ padding: "0px 30px" }}
           >
-            {data.auditDueDate
-              ? moment(data.auditDueDate).format("MM-DD-YYYY")
-              : "---"}
+            {data.auditDueDate ? formatDateTime({date: data.auditDueDate}) : "---"}
           </td>
 
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            {data.auditedDate
-              ? moment(data.auditedDate).format("MM-DD-YYYY")
-              : "---"}
+            {data.auditedDate ? formatDateTime({date: data.auditedDate}) : "---"}
           </td>
           <td
             className={TableStyle.childBorder}
@@ -206,7 +203,7 @@ function PatientTable({
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td className={TableStyle.childBorder} style={{width:"200px"}} >
+          <td className={TableStyle.childBorder} style={{ width: "200px" }}>
             <AntSelect
               options={priorityOptions}
               placeholder="Set priority"

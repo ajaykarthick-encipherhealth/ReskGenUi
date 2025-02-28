@@ -24,6 +24,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/supervisor/dashboard";
+import { formatDateTime } from "../../../../utils/reusable";
+import moment from "moment";
 
 const WorkFlow = ({ worlFlowData, DateRanges }) => {
   const currentDate = dayjs();
@@ -157,12 +159,19 @@ const WorkFlow = ({ worlFlowData, DateRanges }) => {
   return (
     <div className={styles.card1}>
       <HeadTitle
+        // header={
+        //   !DateRanges || DateRanges?.clear
+        //     ? `Last 3 days work flow`
+        //     : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
+        //         .subtract(1, "day")
+        //         .format("MM-DD-YYYY")}`
+        // }
         header={
           !DateRanges || DateRanges?.clear
             ? `Last 3 days work flow`
-            : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
-                .subtract(1, "day")
-                .format("MM-DD-YYYY")}`
+            : `${formatDateTime({ date: startDate })} - ${formatDateTime({
+                date: moment(endDate).subtract(1, "day"),
+              })}`
         }
         icon={<FontAwesomeIcon icon={faCalendar} />}
         handleOpen={handleOpen}

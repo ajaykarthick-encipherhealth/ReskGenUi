@@ -15,6 +15,7 @@ import {
   getSectionHeadersBackground,
 } from "../components/function/SectionHeader";
 import CardSkeleton from "../../../skeleton/card";
+import { formatDateTime } from "../../../../utils/reusable";
 
 const Timeline = ({
   timelineData,
@@ -992,7 +993,7 @@ const Timeline = ({
             >{`DOS: ${item?.dos}`}</span>
           )}
           <span className={visitStyles.timelineDate}>
-            {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
+            {formatDateTime({date: item.createdDate})}
           </span>
         </div>
       </li>

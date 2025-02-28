@@ -13,6 +13,8 @@ import { getSelectedDaysCount } from "../../../../components/headerFilters/funct
 import declinedBg from "../../.../../../../images/dashboard/declinedbg.webp";
 import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
  import { faCalendar, faCircleCheck ,faClockRotateLeft,faUsers} from "@fortawesome/free-solid-svg-icons";
+import { formatDateTime } from "../../../../utils/reusable";
+import moment from "moment";
 
 const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
   const currentDate = dayjs();
@@ -103,12 +105,19 @@ const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
   return (
     <div className={styles.card1}>
       <HeadTitle
+        // header={
+        //   !DateRanges || DateRanges?.clear
+        //     ? `Last 3 days work flow`
+        //     : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
+        //         .subtract(1, "day")
+        //         .format("MM-DD-YYYY")}`
+        // }
         header={
           !DateRanges || DateRanges?.clear
             ? `Last 3 days work flow`
-            : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
-                .subtract(1, "day")
-                .format("MM-DD-YYYY")}`
+            : `${formatDateTime({ date: startDate })} - ${formatDateTime({
+                date: moment(endDate).subtract(1, "day"),
+              })}`
         }
         icon={<FontAwesomeIcon icon={faCalendar} />}
         handleOpen={handleOpen}
@@ -133,7 +142,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
                 className={styles.colData}
               >
                 <div className={styles.header}>
-                  <div className={styles.icon} >{data?.icon}</div>
+                  <div className={styles.icon}>{data?.icon}</div>
                   {/* <Image src={data?.icon} className={styles.Img} /> */}
                   <div className={styles.heading}>{data.title}</div>
                 </div>

@@ -10,8 +10,8 @@ import DateRangePicker from "../../../../rangepicker";
 import moment from "moment";
 import RegularButton from "../../../../button";
 import { disableFutureDate } from "../../../../headerFilters/functions";
+import { formatDateForIndex } from "../../../../../utils/reusable";
 import { useRef } from "react";
-
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
@@ -36,17 +36,54 @@ const MyWorkQueueFilter = ({
   filterModalOpen,
   setFilterModalOpen,
 }) => {
+
+  // const handleDatePickerChange = async (dates, dateString) => {
+  //   if (dates) {
+  //     setSelectComputedPicker(dates);
+  //     let convertStartDate =
+  //       moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
+  //     let convertEndDate =
+  //       moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
+  //     setComputedStartDate(convertStartDate);
+  //     setComputedEndDate(convertEndDate);
+  //     setFilterModalOpen(false);
+  //   } else {
+  //     setSelectComputedPicker("");
+  //     setComputedStartDate("");
+  //     setComputedEndDate("");
+  //     setFilterModalOpen(false);
+  //   }
+  // };
+
+  // const handleChangeprocessedDate = async (dates, dateString) => {
+  //   if (dates) {
+  //     setSelectCompletedPicker(dates);
+  //     let convertStartDate =
+  //       moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
+  //     let convertEndDate =
+  //       moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
+  //     setCompletedStartDate(convertStartDate);
+  //     setCompletedEndDate(convertEndDate);
+  //     setFilterModalOpen(false);
+  //   } else {
+  //     setCompletedStartDate("");
+  //     setCompletedEndDate("");
+  //     setSelectCompletedPicker("");
+  //     setFilterModalOpen(false);
+  //   }
+  // };
+
+
   const pickerRef = useRef()
   const pickerRef1 = useRef()
+
   const handleDatePickerChange = async (dates, dateString) => {
     if (dates) {
       setSelectComputedPicker(dates);
-      let convertStartDate =
-        moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-      let convertEndDate =
-        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-      setComputedStartDate(convertStartDate);
-      setComputedEndDate(convertEndDate);
+      setComputedStartDate(
+        formatDateForIndex({ date: dateString[0], index: 0 })
+      );
+      setComputedEndDate(formatDateForIndex({ date: dateString[1], index: 1 }));
       setFilterModalOpen(false);
     } else {
       setSelectComputedPicker("");
@@ -59,12 +96,12 @@ const MyWorkQueueFilter = ({
   const handleChangeprocessedDate = async (dates, dateString) => {
     if (dates) {
       setSelectCompletedPicker(dates);
-      let convertStartDate =
-        moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-      let convertEndDate =
-        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-      setCompletedStartDate(convertStartDate);
-      setCompletedEndDate(convertEndDate);
+      setCompletedStartDate(
+        formatDateForIndex({ date: dateString[0], index: 0 })
+      );
+      setCompletedEndDate(
+        formatDateForIndex({ date: dateString[1], index: 1 })
+      );
       setFilterModalOpen(false);
     } else {
       setCompletedStartDate("");

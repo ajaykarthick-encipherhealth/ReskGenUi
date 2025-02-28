@@ -19,7 +19,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { actions as allActions } from "../../../../stores/admin/report";
 import { actions as patientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
-import { getResponePopup } from "../../../../utils/reusable";
+import { formatDateTime, getResponePopup } from "../../../../utils/reusable";
 import { renderUserPrfoileAvatar } from "../../../headerFilters/functions";
 
 function PdfTable({
@@ -77,8 +77,8 @@ function PdfTable({
               placement="bottom"
             >
               <span
-              id="popover-year"
-              name="popover-year"
+                id="popover-year"
+                name="popover-year"
                 style={{ width: "22px", height: "22px" }}
                 className={`border border-success-subtle rounded-circle text-center mx-1`}
               >
@@ -243,7 +243,7 @@ function PdfTable({
                           >
                             <FontAwesomeIcon
                               id="totalCount"
-                             name="totalCount"
+                              name="totalCount"
                               icon={faCircleInfo}
                               style={{
                                 color:
@@ -292,10 +292,12 @@ function PdfTable({
                         // style={{ textAlign: "left", paddingLeft: "110px" }}
                       >
                         {row?.createdDate
-                          ? dayjs(row?.createdDate).format("MM-DD-YYYY:hh:mm A")
+                          ? formatDateTime({
+                              date: row?.createdDate,
+                              dateFormat: "dateTime",
+                            })
                           : "---"}
                       </td>
-                   
 
                       <td className={`${TableStyle.childBorder} text-center`}>
                         <div className="w-100 text-center d-flex justify-content-center align-items-center">
@@ -356,8 +358,8 @@ function PdfTable({
                             {!row?.batchUploadStatus && (
                               <div className="w-100 d-flex justify-content-center align-items-center">
                                 <button
-                                id="status-btn"
-                                name="status-btn"
+                                  id="status-btn"
+                                  name="status-btn"
                                   className={`w-100 px-4 py-1  ${
                                     row?.source === "CogentUpload"
                                       ? styles.uploadButton
@@ -463,6 +465,5 @@ const connector = connect(
     getAllBatches: patientSyncAction.getAllBatches,
   }
 );
-
 
 export default connector(PdfTable);
