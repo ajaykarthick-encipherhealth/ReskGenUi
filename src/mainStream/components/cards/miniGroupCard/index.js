@@ -16,6 +16,8 @@ const CardComponent = ({
   styles,
   item,
   index,
+  onEditClick,
+  prefillData
 }) => {
   const handleDateFormat = (date) => {
     return dayjs(date).format("MM-DD-YYYY");
@@ -181,6 +183,9 @@ const CardComponent = ({
                       setSelectedRows(item);
                       selectedReport(item);
                       setOpenEdit(true);
+                        if (onEditClick) {
+                        onEditClick(item?.reportName);
+                      } 
                     }}
                     id="edit-Btn"
                     name="edit-Btn"

@@ -46,7 +46,7 @@ const Flag = ({ patienIdDetails, patientDetails, flagsDetailsResult }) => {
                     count={sortedFlags.length}
                     offset={[5, -3]}
                     size="small"
-                    style={{ right: "3px", background: "#04306f" }}
+                    style={{ right: "3px", background: "#04306f"}}
                   >
                     <span>
                       <SvgFlag

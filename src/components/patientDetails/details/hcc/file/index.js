@@ -521,11 +521,11 @@ const File = ({
                       style={{ marginTop: "10px" }}
                     >
                       <div
-                        className={`valid-text d-flex justify-content-sm-between cr-pointer ${visitStyles.potential_title_card}`}
+                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.potential_title_card}`}
                         onClick={() => handleShowList("potential")}
                       >
                         <span
-                          className={`  ${visitStyles.potential_title_name} `}
+                          className={`  cr-pointer gap-1 ${visitStyles.potential_title_name} `}
                         >
                           <span className="mx-1">
                             <FontAwesomeIcon

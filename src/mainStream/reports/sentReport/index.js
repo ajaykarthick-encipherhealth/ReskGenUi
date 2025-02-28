@@ -47,6 +47,7 @@ const SentReport = ({
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
+  const [prefillData,setPrefillData]=useState("")
 
   const handleTabs = (tab) => {
     setReportActiveTab(tab);
@@ -160,7 +161,9 @@ const SentReport = ({
       setPaginationFirst(viewIndividualReport?.data?.limit || 0);
     }
   }, [viewIndividualReport]);
-
+  const handleEditClick = (id) => {
+    setPrefillData(id)
+  };
   return (
     <>
       <div>
@@ -195,6 +198,8 @@ const SentReport = ({
                                 styles={styles}
                                 item={item}
                                 index={index}
+                                onEditClick={handleEditClick} 
+                                prefillData={prefillData}
                               />
                             )
                           )
@@ -353,6 +358,8 @@ const SentReport = ({
           setSelectAll={setSelectAll}
           selectedRows={selectedRows}
           isSent={true}
+          prefillData={prefillData}
+          setPrefillData={setPrefillData}
         />
       )}
     </>

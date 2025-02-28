@@ -184,10 +184,8 @@ const Export = ({
   exportLoader,
   updateReportLoader,
   sentReport,
-  sort,
-  sentPageNo,
-  selectedDateRanges,
-  searchVal,
+  prefillData,
+  setPrefillData
 
 }) => {
   const [selectedUser, setSelectedUser] = useState([]);
@@ -203,7 +201,7 @@ const Export = ({
   const [activeButton, setActiveButton] = useState("excel");
   const [activeBtn, setActiveBtn] = useState("read");
   const [checkall, setCheckAll] = useState(checkBoxData);
-  const [inputStr, setInputStr] = useState("");
+  const [inputStr, setInputStr] = useState(prefillData);
   const [filteredOptions, setFilteredOptions] = useState([]);
 
   const handleSelectedOption = (value) => {
@@ -281,7 +279,6 @@ const Export = ({
           search: "",
           sort: "",
         });
-        console.log(res,"res")
         getResponePopup(res);
         form.resetFields();
         setSelectedUser([]);
@@ -316,10 +313,6 @@ const Export = ({
       );
     }
   };
-
-  // const filteredOptions = options?.filter((option) => {
-  //   return !userList?.some((data) => option?.value === data?.user);
-  // });
   useEffect(() => {
     setSelectedList([]);
     if (selectedRows?.receivedUsers?.length > 0) {
@@ -363,12 +356,18 @@ const Export = ({
   useEffect(() => {
     setInputStr("");
   }, [isModalVisible]);
-
+  useEffect(() => {
+    if (selectedReportInfo?.reportName) {
+      setPrefillData(selectedReportInfo.reportName); 
+    }
+  }, [selectedReportInfo]); 
   useEffect(() => {
     setCurrentUser(getStorage("userId"));
     // getUsersLists();
     getOptionsList();
+    setInputStr(prefillData)
   }, []);
+
   const isAnyChecked = checkall?.some((item) => item?.checked);
   return (
     <Modal
@@ -400,11 +399,12 @@ const Export = ({
                     ]}
                   >
                     <InputField
-                      ReportName={
-                        selectedReportInfo?.reportName
-                          ? selectedReportInfo?.reportName
-                          : inputStr
-                      }
+                      // ReportName={
+                      //   selectedReportInfo?.reportName
+                      //     ? selectedReportInfo?.reportName
+                      //     : inputStr
+                      // }
+                      ReportName={inputStr} 
                       setInputValue={setReportName}
                       delay={1000}
                       type="text"
