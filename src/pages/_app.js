@@ -53,45 +53,75 @@ function MyApp({ Component, pageProps }) {
   };
 
   const applyHoverEffect = (target, isEntering, pathname) => {
-      if (target.id === "badge") {
-        return; 
-      }
-      if (
-        target.classList.contains("ant-badge") 
-      ) {
+    if (target.id === "badge") {
+      return;
+    }
+    if (target.classList.contains("ant-badge")) {
+      return;
+    }
+    if (target.classList.contains("ant-badge-count")){
+      return
+    }
+      if (target.classList.contains("ant-steps-item-container")) {
         return;
       }
-    if (
-      (target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        target.classList.contains("cursor-pointer") ||
-        window.getComputedStyle(target).cursor === "pointer") &&
-      !isTableElement(target)
-    ) {
-      if (isEntering) {
-        target.style.transition = "all 0.5s ease-in-out";
-        if (target.id === "auditbtn") {
-          target.style.transform = "scale(1)";
-        } else if (target.id === "dosSelect") {
-          target.style.transform = "scale(1.01)";
-        } else {
-          target.style.transform = pathname.endsWith("/report")
-            ? "scale(1.01)"
-            : pathname.endsWith("/details")
-            ? "scale(1.05)"
-            : pathname.endsWith("/fileprocessing")
-            ? "scale(1)"
-            : "scale(1.02)";
-        }
-        target.classList.add("hover-effect");
-      } else {
-        target.classList.add("hover-effect-remove");
-        target.style.transform = "scale(1)";
-        setTimeout(() => {
-          target.classList.remove("hover-effect", "hover-effect-remove");
-        }, 300);
-      }
+
+    if (target.classList.contains("fileprocessingstepper")) {
+      return;
     }
+
+    if (target.classList.contains("fileprocessing")) {
+      return;
+    }
+
+ if (
+   target.classList.contains("ant-steps-item") &&
+   target.classList.contains("ant-steps-item-process") &&
+   target.classList.contains("ant-steps-item-active") &&
+   target.classList.contains("ant-progress-circle-path")
+ ) {
+   return;
+ }
+ if (target.classList.contains("ant-progress-inner")){
+  return;
+ }
+   if (
+     (target.tagName === "A" ||
+       target.tagName === "BUTTON" ||
+       target.classList.contains("cursor-pointer") ||
+       window.getComputedStyle(target).cursor === "pointer") &&
+     !isTableElement(target)
+   ) {
+     if (isEntering) {
+       target.style.transition = "all 0.5s ease-in-out";
+       if (pathname.endsWith("/fileprocessing")) {
+         // Completely remove the transform style for "/fileprocessing"
+         target.style.removeProperty("transform");
+         return;
+       }
+
+       if (target.id === "auditbtn") {
+         target.style.transform = "scale(1)";
+       } else if (target.id === "dosSelect") {
+         target.style.transform = "scale(1.01)";
+       } else {
+         target.style.transform = pathname.endsWith("/report")
+           ? "scale(1.01)"
+           : pathname.endsWith("/details")
+           ? "scale(1.05)"
+           : // : pathname.endsWith("/fileprocessing")
+             // ? "scale(1)"
+             "scale(1.02)";
+       }
+       target.classList.add("hover-effect");
+     } else {
+       target.classList.add("hover-effect-remove");
+       target.style.transform = "scale(1)";
+       setTimeout(() => {
+         target.classList.remove("hover-effect", "hover-effect-remove");
+       }, 300);
+     }
+   }
   };
 
   useEffect(() => {
@@ -134,7 +164,6 @@ function MyApp({ Component, pageProps }) {
       document.removeEventListener("mouseleave", handleMouseLeave, true);
     };
   }, [router.pathname]);
-
 
   useEffect(() => {
     if (serverControl === "production") {
@@ -213,7 +242,7 @@ function MyApp({ Component, pageProps }) {
             currentPath?.includes("/login") ||
             currentPath?.includes("/ehrlogin") ||
             currentPath?.includes("/twofactorauthentication/") ||
-            currentPath?.includes("search") 
+            currentPath?.includes("search")
             // currentPath?.includes("/reviewer/patients/details")
           ) {
             setShowTerminal(false);
