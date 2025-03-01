@@ -92,6 +92,7 @@ const HccCards = ({
   selectDosValue,
   patientDetailsLoad,
   isSpinnerLoading,
+  patientDetailsLoading
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -248,7 +249,7 @@ const HccCards = ({
     <>
       {provided && (
         <div ref={provided?.innerRef} {...provided?.droppableProps}>
-          {loading || patientDetailsLoad || isSpinnerLoading ? (
+          {loading || patientDetailsLoading || isSpinnerLoading ? (
             <div>
               {/* <Spinner /> */}
               <CardSkeleton count={6} height={100} />
@@ -1309,7 +1310,7 @@ const enhancer = connect(
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     loading: state?.patientDetails?.details?.loading,
-    patientDetailsLoad: state?.patientDetails?.details?.patientsLoading,
+    patientDetailsLoading: state?.patientDetails?.details?.patientsLoading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
     labFile: state?.patientDetails?.details?.labPDFDetails,
