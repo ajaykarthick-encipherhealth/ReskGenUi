@@ -52,9 +52,9 @@ const statusOptions = [
 ];
 export const flagOptions = [
   { header: "DOS Count", label: "INVALID DOC", value: "IN_VALID_DOC", id: 1 },
-  { header: "Televist Count", label: "Audio Visit", value: "AUDIO_VISIT", id: 2 },
+  { header: "Televist Count", label: "AUDIO VISIT", value: "AUDIO_VISIT", id: 2 },
   { header: "Out of Scope", label: "OUT OF SCOPE", value: "OUT_OF_SCOPE", id: 3 },
-  { header: "Invalid Credentails", label: "INVALID CREDENTIALS", value: "INVALID_CREDENTIALS", id: 4 },
+  { header: "Invalid Credentails", label: "INVALID CREDENTIALS", value: "PROVIDER_UNAUTHORIZED", id: 4 },
   { header: "Improper Data", label: "IMPROPER DATA", value: "IMPROPER_DATA", id: 5 },
   { header: "Multiple Patient Found", label: "MULTIPLE PATIENT FOUND", value: "MULTIPLE_PATIENT_FOUND", id: 6 },
   { header: "MRN ID Mismatch", label: "MRN ID MISMATCH", value: "MRN_ID_MISMATCH", id: 7 },
@@ -528,8 +528,6 @@ const Patient = ({
       );
     }
   }, []);
-
-  console.log(routedData);
   
   useEffect(() => {
     setParamsFilter("check");
@@ -540,21 +538,20 @@ const Patient = ({
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     if (paramsFilter) {
-      getAllPatients(
-        pageNo,
+      getAllPatients({ pageNo,
         computedStartDate,
         computedEndDate,
         selectedOption,
-        searchVal || "",
-        completedStartDate || "",
-        completedEndDate || "",
-        selAllocatedTo || "",
-        selAllocatedBy || "",
-        selCreatedBy || "",
+        searchVal:searchVal || "",
+        completedStartDate:completedStartDate || "",
+        completedEndDate:completedStartDate || "",
+        selAllocatedTo:selAllocatedTo || "",
+        selAllocatedBy:selAllocatedBy || "",
+        selCreatedBy:selCreatedBy || "",
         sort,
-        (orgId = selectOrgList),
+        selectOrgList: (orgId = selectOrgList),
         selectBatchList,
-        flagList
+        flagList}
       );
       getFilters({ field: "createdBy" });
     }
@@ -623,7 +620,7 @@ const Patient = ({
     }
   }, [webSocketData]);
   return (
-    <>
+
       <div className={`show `}>
         <Header />
         <div class="content-body">
@@ -827,7 +824,7 @@ const Patient = ({
           orgAllList={orgAllList}
         />
       </div>
-    </>
+   
   );
 };
 

@@ -5,11 +5,9 @@ import {
   ArrowDownOutlined,
   InfoCircleFilled,
 } from "@ant-design/icons";
-import moment from "moment";
 import TableStyle from "../../table.module.css";
 import {
   notification,
-  Select as AntSelect,
   Empty,
   Tooltip,
   Popover,
@@ -414,7 +412,7 @@ function AddPatientListTable({
         </thead>
 
         <tbody>
-          {detailsContent?.length <= 0 ? (
+          {detailsContent?.length <= 0 || !patinetListAll ? (
             <tr>
               <td colSpan="11">
                 <Empty />

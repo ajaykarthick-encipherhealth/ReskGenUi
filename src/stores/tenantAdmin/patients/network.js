@@ -18,7 +18,7 @@ export async function getAllBatch() {
   const data = await requestPortal(`dbservice/batch/getallbatch`, options);
   return data;
 }
-export async function getAllPatient(
+export async function getAllPatient({
   pageNo,
   computationStart = "",
   computationEnd = "",
@@ -32,8 +32,8 @@ export async function getAllPatient(
   sort,
   orgId,
   selectBatchList,
-  flagList
-) {
+  flagList,
+}) {
   const options = {
     method: "GET",
   };
@@ -44,57 +44,55 @@ export async function getAllPatient(
     selectBatchList === "ALL" || selectBatchList == undefined
       ? ""
       : selectBatchList;
-  const data = await requestPortal(
-    `dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&organizationId=${
-      selectOrgId || ""
-    }&batchId=${
-      selectBatchId || ""
-    }&flagName=${flagList || ""}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${
-      filteredStatus || ""
-    }&searchString=${search || ""}&createdStartDate=${
-      createdStartDate || ""
-    }&createdEndDate=${createdEndDate || ""}&patientCreatedBy=${
-      selAllocatedBy === "All" ? "" : selAllocatedBy
-    }&patientAllocatedTo=${
-      selAllocatedTo === "All" ? "" : selAllocatedTo
-    }&patientAllocatedBy=${
-      selCreatedBy === "All" ? "" : selCreatedBy
-    }&sortfield=${sort?.sortField ? sort?.sortField : ""}&sortdirection=${
-      sort?.sortDir ? sort?.sortDir : ""
-    }`,
-    options
-  );
-  return data;
+  try {
+    const data = await requestPortal(
+      `dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&organizationId=${
+        selectOrgId || ""
+      }&batchId=${selectBatchId || ""}&flagName=${
+        flagList || ""
+      }&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${
+        filteredStatus || ""
+      }&searchString=${search || ""}&createdStartDate=${
+        createdStartDate || ""
+      }&createdEndDate=${createdEndDate || ""}&patientCreatedBy=${
+        selAllocatedBy === "All" ? "" : selAllocatedBy
+      }&patientAllocatedTo=${
+        selAllocatedTo === "All" ? "" : selAllocatedTo
+      }&patientAllocatedBy=${
+        selCreatedBy === "All" ? "" : selCreatedBy
+      }&sortfield=${sort?.sortField ? sort?.sortField : ""}&sortdirection=${
+        sort?.sortDir ? sort?.sortDir : ""
+      }`,
+      options
+    );
+    return data;
+  } catch (err) {
+    return null;
+  }
 }
 
-export async function submitPatientId({obj}) {
+export async function submitPatientId({ obj }) {
   const options = {
     method: "POST",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(
-    `dbservice/patient`,
-    options
-  );
+  const data = await requestPortal(`dbservice/patient`, options);
   return data;
 }
 
-export async function uploadFiles({obj}) {
+export async function uploadFiles({ obj }) {
   const options = {
     method: "POST",
-    body: obj
+    body: obj,
   };
-  const data = await requestPortalFiles(
-    `aiservice/ai/upload`,
-    options
-  );
+  const data = await requestPortalFiles(`aiservice/ai/upload`, options);
   return data;
 }
 
-export async function uploadFilesRadiology({obj}) {
+export async function uploadFilesRadiology({ obj }) {
   const options = {
     method: "POST",
-    body: obj
+    body: obj,
   };
   const data = await requestPortalFiles(
     `aiservice/ai/upload/radiology`,
