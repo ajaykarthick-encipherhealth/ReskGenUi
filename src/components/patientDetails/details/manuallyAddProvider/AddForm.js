@@ -27,6 +27,7 @@ const AddForm = ({
   dosDeatilsAction,
   selectedDosValue,
   dosAndProvidersList,
+  dosYearDefalutSelect,
 }) => {
   const validateThreeDigitNumber = (_, value) => {
     if (!value || /^\d{1,3}$/.test(value)) {
@@ -57,9 +58,11 @@ const AddForm = ({
     };
 
     if (data?.dos) {
-      const result = providersList ? false : dosAndProvidersList?.some(
-        (item) => item?.dateOfService === data?.dos
-      );
+      const result = providersList
+        ? false
+        : dosAndProvidersList?.some(
+            (item) => item?.dateOfService === data?.dos
+          );
       if (!result) {
         const res = await getAddProviderAndDOS(data);
         if (res.status == "SUCCESS") {
@@ -73,7 +76,7 @@ const AddForm = ({
           );
           form.resetFields();
         } else {
-          getResponePopup(res)
+          getResponePopup(res);
         }
       } else {
         return notification.warning({
@@ -84,14 +87,9 @@ const AddForm = ({
     }
   };
   const customDisableDate = (current) => {
-    const selectedYear = parseInt(selectedDosValue, 10);
-
-    if (dayjs(current).year() === selectedYear) {
-      return false;
-    }
-    return true;
+    const year = dosYearDefalutSelect?.value || dosYearDefalutSelect;
+    return current.year() !== year;
   };
-
   return (
     <div>
       {/* {showAddForm ? (
@@ -207,6 +205,9 @@ const AddForm = ({
           >
             <DatePicker
               disabledDate={customDisableDate}
+              defaultPickerValue={dayjs(
+                `${dosYearDefalutSelect?.value || dosYearDefalutSelect}-01-01`
+              )}
               getPopupContainer={(triggerNode) => triggerNode.parentNode}
               disabled={providersList?.dateOfService ? true : false}
             />

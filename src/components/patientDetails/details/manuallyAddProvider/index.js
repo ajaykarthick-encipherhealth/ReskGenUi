@@ -28,6 +28,7 @@ const ManuallyAddProvider = ({
   dosAndProvidersList,
   selectedDosValue,
   loader,
+  dosYearDefalutSelect
 }) => {
   const [form] = Form.useForm();
   const [selectFileURL, setSelectFileURL] = useState([]);
@@ -76,6 +77,7 @@ const ManuallyAddProvider = ({
           providersList={providersList}
           dosYear={dosYear}
           selectedDosValue={selectedDosValue}
+          dosYearDefalutSelect={dosYearDefalutSelect}
         />
       </div>
       <div style={{ width: "20%" }}>

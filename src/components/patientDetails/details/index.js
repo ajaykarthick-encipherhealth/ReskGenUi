@@ -429,11 +429,17 @@ const Details = ({
     setDosYearDefalutSelect(e);
     setPatientResultReload(false);
     setIsLoading(true);
-    patientDetailsLoad(true)
+    patientDetailsLoad(true);
     getPatientDosList(localPatientId, e);
     getSelectedDos("");
-    await getpatientDetailsData(localPatientId, e, null, setIsLoading, userRole);
-    patientDetailsLoad(false)
+    await getpatientDetailsData(
+      localPatientId,
+      e,
+      null,
+      setIsLoading,
+      userRole
+    );
+    patientDetailsLoad(false);
   };
 
   const addComments = async (value) => {
@@ -520,11 +526,11 @@ const Details = ({
       } else {
         getResponePopup(res);
         setIsSpinnerLoading(false);
-        patientDetailsLoad(false)
+        patientDetailsLoad(false);
       }
     } catch (error) {
       setIsSpinnerLoading(false);
-      patientDetailsLoad(false)
+      patientDetailsLoad(false);
     }
   };
 
@@ -538,7 +544,7 @@ const Details = ({
 
   const backToPatientData = () => {
     const backRoute = getStorage("routeBackTo");
-    
+
     getRoutedData(routedData);
     navigate.push(backRoute);
     // if (user && user.toLowerCase() === "tenant_admin") {
@@ -549,7 +555,7 @@ const Details = ({
     getPatientID(null);
     getSelectedDos("");
     getCurrentDiseaseType(true);
-    patientDetailsLoad(true)
+    patientDetailsLoad(true);
   };
   const splitUserName = (name) => {
     if (name) {
@@ -639,6 +645,7 @@ const Details = ({
       getActiveLabels();
     }
   }, [isDosSelected, dosYearDefalutSelect]);
+ 
   return (
     <>
       <div className={`show `} style={{ height: "100vh", background: "#fff" }}>
@@ -855,43 +862,41 @@ const Details = ({
                       className={`${visitStyles.secondContainer}`}
                       style={{ height: "100%" }}
                     >
-                      <>
-                        {activeTab == 1 ? (
-                          <Hcc
-                            patientHccResult={patientDocumentResult}
-                            year={dosYearDefalutSelect}
-                            setIsLoading={setIsLoading}
-                            selectDosValue={selectDosValue}
-                            setSelectDosValue={setSelectDosValue}
-                            isSpinnerLoading={isSpinnerLoading}
-                          />
-                        ) : activeTab == 2 ? (
-                          <NonHcc
-                            patientNonHccResult={patientDocumentResult}
-                            setIsLoading={setIsLoading}
-                            selectDosValue={selectDosValue}
-                            setSelectDosValue={setSelectDosValue}
-                          />
-                        ) : activeTab == 3 ? (
-                          <Radiology
-                            year={
-                              dosYearDefalutSelect.value
-                                ? dosYearDefalutSelect.value
-                                : dosYearDefalutSelect
-                            }
-                            setDosYearDefalutSelect={setDosYearDefalutSelect}
-                          />
-                        ) : (
-                          <Lab
-                            year={
-                              dosYearDefalutSelect?.value
-                                ? dosYearDefalutSelect?.value
-                                : dosYearDefalutSelect
-                            }
-                            setDosYearDefalutSelect={setDosYearDefalutSelect}
-                          />
-                        )}
-                      </>
+                      {activeTab == 1 ? (
+                        <Hcc
+                          patientHccResult={patientDocumentResult}
+                          year={dosYearDefalutSelect}
+                          setIsLoading={setIsLoading}
+                          selectDosValue={selectDosValue}
+                          setSelectDosValue={setSelectDosValue}
+                          isSpinnerLoading={isSpinnerLoading}
+                        />
+                      ) : activeTab == 2 ? (
+                        <NonHcc
+                          patientNonHccResult={patientDocumentResult}
+                          setIsLoading={setIsLoading}
+                          selectDosValue={selectDosValue}
+                          setSelectDosValue={setSelectDosValue}
+                        />
+                      ) : activeTab == 3 ? (
+                        <Radiology
+                          year={
+                            dosYearDefalutSelect.value
+                              ? dosYearDefalutSelect.value
+                              : dosYearDefalutSelect
+                          }
+                          setDosYearDefalutSelect={setDosYearDefalutSelect}
+                        />
+                      ) : (
+                        <Lab
+                          year={
+                            dosYearDefalutSelect?.value
+                              ? dosYearDefalutSelect?.value
+                              : dosYearDefalutSelect
+                          }
+                          setDosYearDefalutSelect={setDosYearDefalutSelect}
+                        />
+                      )}
                     </div>
 
                     <div className={`${visitStyles.thirdContainer}`}>
@@ -908,7 +913,6 @@ const Details = ({
                                 key={data.name}
                               >
                                 <li
-                       
                                   className={
                                     flagContainerActive == data.name
                                       ? `${visitStyles.commentsTagActive}`
@@ -930,18 +934,17 @@ const Details = ({
                                 >
                                   {data.name === "Flag" ? (
                                     <Badge
-                         
                                       count={
                                         flagsDetailsResult?.response?.length
                                       }
                                       style={{
                                         background: "#04306f",
                                         margin: "-2px",
-                                        cursor:"default"
+                                        cursor: "default",
                                       }}
                                       size="large"
                                     >
-                                      <i >{data.icon}</i>
+                                      <i>{data.icon}</i>
                                     </Badge>
                                   ) : (
                                     <i>{data.icon}</i>
@@ -1020,6 +1023,7 @@ const Details = ({
                       selectDosValue={selectDosValue}
                       dosYear={dosYear}
                       selectedDosValue={selectedDosValue}
+                      dosYearDefalutSelect={dosYearDefalutSelect}
                     />
                   ) : null}
                 </Drawer>
