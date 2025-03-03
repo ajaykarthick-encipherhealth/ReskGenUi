@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { CloseOutlined } from "@ant-design/icons";
 import {
-  Button,
-  DatePicker,
   Form,
   Input,
   Select,
   Switch,
-  notification,
 } from "antd";
-import Provider from "./Provider";
 import AddSection from "./AddSection";
-import MeatSection from "./MeatSection";
 import SelectButton from "../../../../btnSelect";
 import style from "../../../../../components/button/style.module.css";
 import { connect } from "react-redux";
 import { actions as patientDetailsAction } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
 import {
-  getProviderNameList,
   getProviderNameManually,
   getSectionNameManually,
 } from "../function/ReusableFunctions";
@@ -28,10 +22,17 @@ import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import Meat, { checkMeatType } from "./Meat";
 import { getResponePopup } from "../../../../../utils/reusable";
-import { diseaseEditMeat } from "../../../../../stores/patient/details/network";
 import CustomSelect from "../../../../customSelect";
-const { Option } = Select;
 
+const defaultCapturedSections=[
+  {label:"Chief Complaint",value:"Chief Complaint"},
+  {label:"History of Present Illness",value:"History of Present Illness"},
+  {label:"Vitals",value:"Vitals"},
+  {label:"Medication",value:"Medication"},
+  {label:"PMH/Problem List",value:"PMH/Problem List"},
+  {label:"Assessment",value:"Assessment"},
+  {label:"Plan",value:"Plan"}
+]
 const ManuallyAdd = ({
   handleCloseModal,
   patientDosResult,
@@ -184,14 +185,14 @@ const ManuallyAdd = ({
           if (res.status == "SUCCESS") {
             setProviderDetails([...res?.response?.providerInfoList]);
             const section = res?.response?.capturedSections.map((item) => ({
-              lable: item,
+              label: item,
               value: item,
             }));
-            setCapturedSections(section);
-            setCapturedSectionsM(section);
-            setCapturedSectionsE(section);
-            setCapturedSectionsA(section);
-            setCapturedSectionsT(section);
+            setCapturedSections(res?.response?.capturedSections?section:defaultCapturedSections);
+            setCapturedSectionsM(res?.response?.capturedSections?section:defaultCapturedSections);
+            setCapturedSectionsE(res?.response?.capturedSections?section:defaultCapturedSections);
+            setCapturedSectionsA(res?.response?.capturedSections?section:defaultCapturedSections);
+            setCapturedSectionsT(res?.response?.capturedSections?section:defaultCapturedSections);
           }
         } catch (error) {}
       }
@@ -219,7 +220,7 @@ const ManuallyAdd = ({
     setValidCode("Valid Code");
     const isCodeCheck = await isCodeAlready({
       code: value,
-      patientId: await getStorage("patientId"),
+      patientId:  getStorage("patientId"),
       dos: year?.value || "",
       date: getSelectedDos,
     });
@@ -453,7 +454,7 @@ const ManuallyAdd = ({
   const disableOption = () => {
     const sec = capturedSections.map((item) => {
       return {
-        lable: item.lable,
+        label: item.label,
         value: item.value,
         disabled: listOfSection?.map((ls) => ls.section).includes(item.value),
       };
@@ -475,7 +476,7 @@ const ManuallyAdd = ({
   ) => {
     const sec = capturedSections.map((item) => {
       return {
-        lable: item.lable,
+        label: item.label,
         value: item.value,
         disabled: listOfSection?.map((ls) => ls.section).includes(item.value),
       };
@@ -613,13 +614,13 @@ const ManuallyAdd = ({
     const forms = form.getFieldsValue();
     if (isEditPage) {
       setIsBtnLoading(true);
-      const filterData =
-        patientDetailsResult?.data?.response?.meatCriteria?.find(
-          (item) => item.diagnosisCode == isEditValue.diagnosisCode
-        );
+      // const filterData =
+      //   patientDetailsResult?.data?.response?.meatCriteria?.find(
+      //     (item) => item.diagnosisCode == isEditValue.diagnosisCode
+      //   );
 
       data = {
-        patientId: await getStorage("patientId"),
+        patientId:  getStorage("patientId"),
         oldDiagnosisCode: isEditValue.diagnosisCode,
         diagnosisCode: selectDisDetails?.diagnosisCode,
         newDiagnosisCode: code,
@@ -667,7 +668,7 @@ const ManuallyAdd = ({
       };
     } else if (isEditMeat) {
       data = {
-        patientId: await getStorage("patientId"),
+        patientId:  getStorage("patientId"),
         diagnosisCode: isEditMeatValue.diagnosisCode,
         monitorHyperLink:
           listOfSectionM.length > 0
@@ -838,7 +839,7 @@ const ManuallyAdd = ({
       patientDetailsResult?.data?.response?.processedYear,
       patientDetailsResult?.data?.response?.dateOfService,
       "",
-      await getStorage("userRole")
+       getStorage("userRole")
     );
     // }
   };
@@ -1034,10 +1035,10 @@ const ManuallyAdd = ({
       setMeatDisplay(true);
       setCode(isEditMeatValue.diagnosisCode);
       setValidCode("Valid Code");
-      const dos = isEditMeatValue?.dateOfService?.map((item) => ({
-        lable: item,
-        value: item,
-      }));
+      // const dos = isEditMeatValue?.dateOfService?.map((item) => ({
+      //   lable: item,
+      //   value: item,
+      // }));
       const sectionList = isEditMeatValue?.monitorHyperLink?.map((item) => ({
         section: item.header,
         hyperlinks: item,

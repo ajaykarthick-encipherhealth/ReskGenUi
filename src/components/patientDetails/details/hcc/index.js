@@ -133,8 +133,7 @@ const Hcc = ({
                   </span>
 
                   <span id="dosSelect" className={styles.dosLable}>
-               
-                    {formatDateTime({date: res.dateOfService})}
+                    {formatDateTime({ date: res.dateOfService })}
                   </span>
                 </div>
                 {getStatusIcon(res.processedStatus)}
@@ -158,7 +157,7 @@ const Hcc = ({
             patientId,
             null,
             moment(isDosSelected).format("YYYY-MM-DD"),
-          //  formatDateTime({date: isDosSelected}),
+            //  formatDateTime({date: isDosSelected}),
             "",
             role
           );
@@ -213,7 +212,7 @@ const Hcc = ({
       );
       setTimeout(() => {
         patientDetailsLoad(false);
-      }, 500)
+      }, 500);
     } else {
       await getpatientDetailsData(
         patientId,
@@ -224,7 +223,7 @@ const Hcc = ({
       );
       setTimeout(() => {
         patientDetailsLoad(false);
-      }, 500)
+      }, 500);
     }
     // patientDetailsLoad(false)
   };
@@ -284,7 +283,7 @@ const Hcc = ({
                 >
                   <div className="col-xl-6 ">
                     <span className={styles.selectHead}>
-                      {data.dos? formatDateTime({date: data.dos}) : "---"}
+                      {data.dos ? formatDateTime({ date: data.dos }) : "---"}
                     </span>
                   </div>
 
@@ -564,50 +563,48 @@ const Hcc = ({
                             <div>
                               <Popover
                                 content={
-                                  <>
+                                  <div className={visitStyles.flags}>
                                     <div className={visitStyles.flags}>
-                                      <div className={visitStyles.flags}>
-                                        <span
-                                          className={visitStyles.hccFlag}
-                                        ></span>
-                                        <span className={visitStyles.flagCodes}>
-                                          HCC
-                                        </span>
-                                      </div>
-                                      <div className={visitStyles.flags}>
-                                        <span
-                                          className={visitStyles.suggestedFlag}
-                                        ></span>
-                                        <span className={visitStyles.flagCodes}>
-                                          SUGGESTED
-                                        </span>
-                                      </div>
-                                      <div className={visitStyles.flags}>
-                                        <span
-                                          className={visitStyles.deleteFlag}
-                                        ></span>
-                                        <span className={visitStyles.flagCodes}>
-                                          DELETED
-                                        </span>
-                                      </div>
-                                      <div className={visitStyles.flags}>
-                                        <span
-                                          className={visitStyles.nonhccFlag}
-                                        ></span>
-                                        <span className={visitStyles.flagCodes}>
-                                          NON HCC
-                                        </span>
-                                      </div>
-                                      <div className={visitStyles.flags}>
-                                        <span
-                                          className={visitStyles.potentialFlag}
-                                        ></span>
-                                        <span className={visitStyles.flagCodes}>
-                                          POTENTIAL / SUGGESTED DIAGNOSES
-                                        </span>
-                                      </div>
+                                      <span
+                                        className={visitStyles.hccFlag}
+                                      ></span>
+                                      <span className={visitStyles.flagCodes}>
+                                        HCC
+                                      </span>
                                     </div>
-                                  </>
+                                    <div className={visitStyles.flags}>
+                                      <span
+                                        className={visitStyles.suggestedFlag}
+                                      ></span>
+                                      <span className={visitStyles.flagCodes}>
+                                        SUGGESTED
+                                      </span>
+                                    </div>
+                                    <div className={visitStyles.flags}>
+                                      <span
+                                        className={visitStyles.deleteFlag}
+                                      ></span>
+                                      <span className={visitStyles.flagCodes}>
+                                        DELETED
+                                      </span>
+                                    </div>
+                                    <div className={visitStyles.flags}>
+                                      <span
+                                        className={visitStyles.nonhccFlag}
+                                      ></span>
+                                      <span className={visitStyles.flagCodes}>
+                                        NON HCC
+                                      </span>
+                                    </div>
+                                    <div className={visitStyles.flags}>
+                                      <span
+                                        className={visitStyles.potentialFlag}
+                                      ></span>
+                                      <span className={visitStyles.flagCodes}>
+                                        POTENTIAL / SUGGESTED DIAGNOSES
+                                      </span>
+                                    </div>
+                                  </div>
                                 }
                                 trigger={["click"]}
                                 placement="bottom"
