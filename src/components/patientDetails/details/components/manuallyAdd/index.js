@@ -188,11 +188,11 @@ const ManuallyAdd = ({
               label: item,
               value: item,
             }));
-            setCapturedSections(res?.response?.capturedSections?section:defaultCapturedSections);
-            setCapturedSectionsM(res?.response?.capturedSections?section:defaultCapturedSections);
-            setCapturedSectionsE(res?.response?.capturedSections?section:defaultCapturedSections);
-            setCapturedSectionsA(res?.response?.capturedSections?section:defaultCapturedSections);
-            setCapturedSectionsT(res?.response?.capturedSections?section:defaultCapturedSections);
+            setCapturedSections(res?.response?.capturedSections?.length>0?section:defaultCapturedSections);
+            setCapturedSectionsM(res?.response?.capturedSections?.length>0?section:defaultCapturedSections);
+            setCapturedSectionsE(res?.response?.capturedSections?.length>0?section:defaultCapturedSections);
+            setCapturedSectionsA(res?.response?.capturedSections?.length>0?section:defaultCapturedSections);
+            setCapturedSectionsT(res?.response?.capturedSections?.length>0?section:defaultCapturedSections);
           }
         } catch (error) {}
       }

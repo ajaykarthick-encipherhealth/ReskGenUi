@@ -23,7 +23,7 @@ export async function getAllPatient({
   computationStart = "",
   computationEnd = "",
   status,
-  searchVal = "",
+  searchVal,
   createdStartDate = "",
   createdEndDate = "",
   selAllocatedTo,
