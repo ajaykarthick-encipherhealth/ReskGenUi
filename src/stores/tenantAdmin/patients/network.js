@@ -23,7 +23,7 @@ export async function getAllPatient({
   computationStart = "",
   computationEnd = "",
   status,
-  search = "",
+  searchVal = "",
   createdStartDate = "",
   createdEndDate = "",
   selAllocatedTo,
@@ -52,7 +52,7 @@ export async function getAllPatient({
         flagList || ""
       }&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${
         filteredStatus || ""
-      }&searchString=${search || ""}&createdStartDate=${
+      }&searchString=${searchVal || ""}&createdStartDate=${
         createdStartDate || ""
       }&createdEndDate=${createdEndDate || ""}&patientCreatedBy=${
         selAllocatedBy === "All" ? "" : selAllocatedBy
