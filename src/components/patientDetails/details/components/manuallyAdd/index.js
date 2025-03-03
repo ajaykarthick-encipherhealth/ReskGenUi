@@ -175,8 +175,8 @@ const ManuallyAdd = ({
         try {
           const res = await getProviderSection({
             processedYear: year?.value,
-            patientId: await getStorage("patientId"),
-            dateOfService: val,
+            patientId: getStorage("patientId"),
+            dateOfService: [getSelectedDos],
             fileId: patientDetailsResult?.data?.response?.fileId
               ? patientDetailsResult.data.response.fileId
               : "",
@@ -699,7 +699,7 @@ const ManuallyAdd = ({
       };
     } else {
       data = {
-        patientId: await getStorage("patientId"),
+        patientId: getStorage("patientId"),
         diagnosisCode: code.trim(),
         description: diagnosisForm.description,
         dbDescription: diagnosisForm.description,
@@ -1086,7 +1086,6 @@ const ManuallyAdd = ({
       setMeatDisplay(true);
     }
   }, [meatFormDisplay]);
-
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
