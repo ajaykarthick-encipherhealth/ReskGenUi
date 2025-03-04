@@ -1,16 +1,14 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Popconfirm, Popover, Tooltip } from "antd";
 import styles from "./styles.module.css";
-import { Spinner } from "react-bootstrap";
 import {
   faArrowsAlt,
   faSitemap,
   faPen,
   faEllipsisVertical,
   faBook,
-  faCircle,
   faEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { SVGICON } from "../../../../../jsx/constant/theme";
@@ -19,10 +17,8 @@ import {
   getCaptureSectionBackgroundFile,
   getEncounterDateBackground,
   getMeatFound,
-  getProviderNameList,
   getSuspectTypes,
   moveToAnotherAction,
-  truncateString,
 } from "../function/ReusableFunctions";
 import { connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
@@ -36,11 +32,9 @@ import { getStorage } from "../../../../../utils/storages";
 import { isLocalEdit } from "../../../../../utils/config";
 import { getResponePopup } from "../../../../../utils/reusable";
 import CardSkeleton from "../../../../skeleton/card";
-import { debounce } from "../../../../input";
 
 const HccCards = ({
   list,
-  hccVersionDetails,
   captureSectionMatching,
   encounterDateMatching,
   meatCriteriaList,
@@ -70,7 +64,6 @@ const HccCards = ({
   setIsValidAction,
   provided,
   isVisitData,
-  fileDosPageNumberList,
   popup,
   getSelectedDosPageNumber,
   getRadiologyPDFFile,
@@ -79,7 +72,6 @@ const HccCards = ({
   loading,
   isDosSelected,
   labFile,
-  labDetailsResult,
   radiologyFile,
   radiologyDetailsResult,
   patientDetailsResult,
@@ -92,7 +84,7 @@ const HccCards = ({
   selectDosValue,
   patientDetailsLoad,
   isSpinnerLoading,
-  patientDetailsLoading
+  patientDetailsLoading,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -109,8 +101,6 @@ const HccCards = ({
   const [labData, setLabData] = useState("");
   const [selectedDos, setSelectedDos] = useState("");
   const [hoveredItem, setHoveredIem] = useState(null);
-  const patientId = getStorage("patientId");
-
   // const [truncateLimit, setTruncateLimit] = useState(30);
 
   // const updateTruncateLimit = useCallback(
@@ -222,7 +212,7 @@ const HccCards = ({
   }, [selectedDos, labFile?.data?.response?.dosSummaries]);
 
   const unHideDisease = async (data, action) => {
-    patientDetailsLoad(true)
+    patientDetailsLoad(true);
     const patientId = getStorage("patientId");
     const role = getStorage("userRole");
     const res = await diseaseEdit({
@@ -239,10 +229,10 @@ const HccCards = ({
       getPatientDetailsData(patientId, null, selectDosValue, "", role);
       setOpenContent(false);
       getResponePopup(res);
-      patientDetailsLoad(false)
+      patientDetailsLoad(false);
     } else {
       getResponePopup(res);
-      patientDetailsLoad(false)
+      patientDetailsLoad(false);
     }
   };
   return (
@@ -271,15 +261,15 @@ const HccCards = ({
                     }
                   >
                     {(provided, snapshot) => {
-                      const cmsList = data?.riskAdjustmentDtoList
-                        ?.map((item) => item?.cmsHcc)
-                        .filter((cmsHcc) => cmsHcc?.length > 0);
-                      const rxList = data?.riskAdjustmentDtoList
-                        ?.map((item) => item?.rxHcc)
-                        .filter((rxHcc) => rxHcc?.length > 0);
-                      const esrdList = data?.riskAdjustmentDtoList
-                        ?.map((item) => item?.esrd)
-                        .filter((esrd) => esrd?.length > 0);
+                      // const cmsList = data?.riskAdjustmentDtoList
+                      //   ?.map((item) => item?.cmsHcc)
+                      //   .filter((cmsHcc) => cmsHcc?.length > 0);
+                      // const rxList = data?.riskAdjustmentDtoList
+                      //   ?.map((item) => item?.rxHcc)
+                      //   .filter((rxHcc) => rxHcc?.length > 0);
+                      // const esrdList = data?.riskAdjustmentDtoList
+                      //   ?.map((item) => item?.esrd)
+                      //   .filter((esrd) => esrd?.length > 0);
 
                       return (
                         <div
@@ -309,7 +299,7 @@ const HccCards = ({
                             content={
                               <Popconfirm
                                 title="Are you sure want to unhide the disease?"
-                                onConfirm={() => unHideDisease(data, "hide")}
+                                onConfirm={() => unHideDisease(data, "show")}
                               >
                                 <div
                                   className="w-100 d-flex justify-content-center align-items-center cursor-pointer"
@@ -906,95 +896,90 @@ const HccCards = ({
                                       </div>
                                     )}
                                 </div>
-                                {data.isLab != true &&
-                                  data.isRadiology != true && (
+                                {!data.isLab && !data.isRadiology && (
+                                  <div
+                                    className={`${styles.meatFoundContainer}`}
+                                  >
                                     <div
-                                      className={`${styles.meatFoundContainer}`}
+                                      className="cr-pointer "
+                                      onClick={() => {
+                                        if (data?.isShow) {
+                                          setActiveTabHead(4);
+                                          setActiveMeatTitle({
+                                            header: "M",
+                                            diagnosisCode: data?.diagnosisCode,
+                                          });
+                                        }
+                                      }}
                                     >
-                                      <div
-                                        className="cr-pointer "
-                                        onClick={() => {
-                                          if (data?.isShow) {
-                                            setActiveTabHead(4);
-                                            setActiveMeatTitle({
-                                              header: "M",
-                                              diagnosisCode:
-                                                data?.diagnosisCode,
-                                            });
-                                          }
-                                        }}
-                                      >
-                                        {getMeatFound(
-                                          data?.diagnosisCode,
-                                          meatCriteriaList,
-                                          "M"
-                                        )}
-                                      </div>
-                                      <div
-                                        className="cr-pointer "
-                                        onClick={() => {
-                                          if (data?.isShow) {
-                                            setActiveTabHead(4);
-                                            setActiveMeatTitle({
-                                              header: "E",
-                                              diagnosisCode:
-                                                data?.diagnosisCode,
-                                            });
-                                          }
-                                        }}
-                                      >
-                                        {getMeatFound(
-                                          data?.diagnosisCode,
-                                          meatCriteriaList,
-                                          "E"
-                                        )}
-                                      </div>
-                                      <div
-                                        className="cr-pointer "
-                                        onClick={() => {
-                                          if (data?.isShow) {
-                                            setActiveTabHead(4);
-                                            setActiveMeatTitle({
-                                              header: "A",
-                                              diagnosisCode:
-                                                data?.diagnosisCode,
-                                            });
-                                          }
-                                        }}
-                                      >
-                                        {getMeatFound(
-                                          data?.diagnosisCode,
-                                          meatCriteriaList,
-                                          "A"
-                                        )}
-                                      </div>
-                                      <div
-                                        className="cr-pointer "
-                                        onClick={() => {
-                                          if (data?.isShow) {
-                                            setActiveTabHead(4);
-                                            setActiveMeatTitle({
-                                              header: "T",
-                                              diagnosisCode:
-                                                data?.diagnosisCode,
-                                            });
-                                          }
-                                        }}
-                                      >
-                                        {getMeatFound(
-                                          data?.diagnosisCode,
-                                          meatCriteriaList,
-                                          "T"
-                                        )}
-                                      </div>
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "M"
+                                      )}
                                     </div>
-                                  )}
+                                    <div
+                                      className="cr-pointer "
+                                      onClick={() => {
+                                        if (data?.isShow) {
+                                          setActiveTabHead(4);
+                                          setActiveMeatTitle({
+                                            header: "E",
+                                            diagnosisCode: data?.diagnosisCode,
+                                          });
+                                        }
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "E"
+                                      )}
+                                    </div>
+                                    <div
+                                      className="cr-pointer "
+                                      onClick={() => {
+                                        if (data?.isShow) {
+                                          setActiveTabHead(4);
+                                          setActiveMeatTitle({
+                                            header: "A",
+                                            diagnosisCode: data?.diagnosisCode,
+                                          });
+                                        }
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "A"
+                                      )}
+                                    </div>
+                                    <div
+                                      className="cr-pointer "
+                                      onClick={() => {
+                                        if (data?.isShow) {
+                                          setActiveTabHead(4);
+                                          setActiveMeatTitle({
+                                            header: "T",
+                                            diagnosisCode: data?.diagnosisCode,
+                                          });
+                                        }
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "T"
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
                                 {data.providerName.length == 0 && (
                                   <>
                                     <div
                                       className={`${visitStyles.encounterAndSectionHeader}`}
                                     >
-                                      {data.isManuallyAdded == true ? (
+                                      {data.isManuallyAdded ? (
                                         <Badge
                                           className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
                                         >
@@ -1003,7 +988,7 @@ const HccCards = ({
                                       ) : null}
                                     </div>
 
-                                    {data.isComboCode == true ? (
+                                    {data.isComboCode ? (
                                       <Badge
                                         className={`mt-2 text-start  ${visitStyles.isComboCode}`}
                                         onClick={() => {
@@ -1025,7 +1010,7 @@ const HccCards = ({
                                 {data.getPlace == "Insulin" ? (
                                   <span
                                     className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                    bg={`  mt-2 bg-bg-eight `}
+                                    bg={`mt-2 bg-bg-eight `}
                                   >
                                     Insulin
                                   </span>
@@ -1105,7 +1090,7 @@ const HccCards = ({
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                  {data.isManuallyAdded == true ? (
+                                  {data.isManuallyAdded ? (
                                     <Badge
                                       className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
                                     >
@@ -1113,7 +1098,7 @@ const HccCards = ({
                                     </Badge>
                                   ) : null}
 
-                                  {data.isComboCode == true ? (
+                                  {data.isComboCode ? (
                                     <Badge
                                       className={`mt-2 text-start  ${visitStyles.isComboCode}`}
                                       onClick={() => {
@@ -1134,7 +1119,7 @@ const HccCards = ({
                                       Most Specified
                                     </Badge>
                                   ) : null}
-                                  {data.isRadiology == true && (
+                                  {data.isRadiology && (
                                     <Tooltip title="RADIOLOGY">
                                       <span
                                         className={` mt-2 ${visitStyles.radiologyStatus}`}
@@ -1168,7 +1153,7 @@ const HccCards = ({
                                       </span>
                                     </Tooltip>
                                   )}
-                                  {data.isLab == true && (
+                                  {data.isLab && (
                                     <Tooltip title="LAB">
                                       <span
                                         className={` mt-2 ${visitStyles.labStatus}`}
@@ -1190,7 +1175,7 @@ const HccCards = ({
                                 </div>
                               </div>
                             )}
-                            {data.isLab != true && data.isRadiology != true && (
+                            {!data.isLab && !data.isRadiology && (
                               <div className={`${styles.meatContainer}`}>
                                 <div
                                   className="cr-pointer "
@@ -1325,7 +1310,7 @@ const enhancer = connect(
     storeFileDetails: detailsActions.storeFileIdAction,
     getPatientDetailsData: detailsActions.patientDetailsAction,
     diseaseEdit: detailsActions.diseaseEdit,
-    patientDetailsLoad:detailsActions.patientDetailsLoad
+    patientDetailsLoad: detailsActions.patientDetailsLoad,
   }
 );
 export default enhancer(HccCards);
