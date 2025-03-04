@@ -35,8 +35,27 @@ const UploadFile = ({
       if (fileArray?.length > maxFilesAllowed) {
         alert(`This batch can allow only ${maxFilesAllowed} files.`);
         if (fileInputRef.current) fileInputRef.current.value = "";
+        event.target.value = "";
         return;
       }
+
+      if (uploadAction === "uploadFolder") {
+        // Check if all files are PDFs
+        const invalidFiles = fileArray?.filter(
+          (file) => !file.name.endsWith(".pdf")
+        );
+
+        if (invalidFiles.length > 0) {
+          alert(
+            `Only .pdf files are allowed. Invalid files detected:\n${invalidFiles
+              .map((f) => f.name)
+              .join("\n")}`
+          );
+          event.target.value = ""; // Reset file input
+          return;
+        }
+      }
+
       const validFiles = [];
       fileArray.forEach((file) => {
         validFiles.push(file);
@@ -80,6 +99,15 @@ const UploadFile = ({
     if (openUpload?.status) {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
+        const handleFileChange = (event) => {
+          console.log(event.target.files); // Logs the selected files
+        };
+
+        fileInputRef.current.addEventListener("change", handleFileChange);
+
+        return () => {
+          fileInputRef.current?.removeEventListener("change", handleFileChange);
+        };
       }
     }
   }, [openUpload]);
@@ -99,6 +127,7 @@ const UploadFile = ({
           ref={fileInputRef}
           onChange={fileHandleChange}
           disabled={filesList?.length > 0 ? true : false}
+          accept={uploadAction !== "uploadFolder" && ".pdf"}
         />
         <div
           className={`ant-badge ${styles.videoflex}`}
