@@ -518,11 +518,11 @@ const File = ({
                       style={{ marginTop: "10px" }}
                     >
                       <div
-                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.potential_title_card}`}
+                        className={`valid-text d-flex justify-content-sm-between cr-pointer ${visitStyles.potential_title_card}`}
                         onClick={() => handleShowList("potential")}
                       >
                         <span
-                          className={`  cr-pointer gap-1 ${visitStyles.potential_title_name} `}
+                          className={` gap-1 ant-badge ${visitStyles.potential_title_name} `}
                         >
                           <span className="mx-1">
                             <FontAwesomeIcon
@@ -533,7 +533,9 @@ const File = ({
                               }
                             />
                           </span>
-                          <span>POTENTIAL / SUGGESTED DIAGNOSES</span>
+                          <span className="ant-badge">
+                            POTENTIAL / SUGGESTED DIAGNOSES
+                          </span>
                           {/* <Tooltip title="POTENTIAL / SUGGESTED DIAGNOSIS">
                             {truncateString(
                               "POTENTIAL / SUGGESTED DIAGNOSIS",

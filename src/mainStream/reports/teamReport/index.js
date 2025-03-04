@@ -410,13 +410,19 @@ const TeamReport = ({
               <div>
                 <div className=" col-12 d-flex" style={{ height: "100%" }}>
                   {reportListAll?.response?.response?.data?.length === 0 ? (
-                    <div className={`col-xl-6 ${styles.card1}`}>
+                    <div
+                      className={`col-xl-6 ${styles.card1}`}
+                      style={{ height: "842px" }}
+                    >
                       <div className={` ${styles.emptyCard}`}>
                         <Empty />
                       </div>
                     </div>
                   ) : (
-                    <div className={`col-6 ${styles.cardDiv}`}>
+                    <div
+                      className={`col-6 ${styles.cardDiv}`}
+                      style={{ height: "842px" }}
+                    >
                       {loader ? (
                         <div className="mt-4">
                           <CardSkeleton count={6} width={900} height={100} />
@@ -476,14 +482,17 @@ const TeamReport = ({
                       )}
                     </div>
                   )}
-                  <div className={`col-6 ${styles.cardSeperation}`}>
+
+                  <div className={`col-6 ${styles.cardSeperation2}`}>
                     {loader ? (
                       <div className="mt-4">
                         <CardSkeleton count={6} width={900} height={100} />
                       </div>
                     ) : (
                       <div className={styles.cardContainer}>
-                        <div className={styles.card1}>
+
+                        <div className={styles.card1} style={{height:"842px"}}>
+
                           <div className={styles.summaryText}>Summary</div>
                           <div className="col-12 d-flex mt-4">
                             {subCardData.map((card, index) => (

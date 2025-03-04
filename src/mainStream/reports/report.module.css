@@ -49,7 +49,7 @@
   gap: 10px;
   height: 100%;
   overflow-y: scroll;
-  height: 822px;
+  max-height: 888px;
 }
 .title {
   font-size: 18px;
@@ -100,11 +100,10 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height:880px;
-  overflow-y: scroll;
+ 
 }
 .cardDiv{
-  height:880px;
+  max-height:847px;
   overflow-y: scroll;
 }
 .card1 h2 {
@@ -359,6 +358,13 @@
 }
 .cardSeperation {
   margin-left: 10px;
+   height: 847px;
+  overflow-y: scroll;
+}
+.cardSeperation2 {
+  margin-left: 10px;
+   height: 888px;
+  overflow-y: scroll;
 }
 
 .moreStyle {
@@ -570,7 +576,7 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 822px;
+  height: 847px;
 }
 
 .reportDiv{

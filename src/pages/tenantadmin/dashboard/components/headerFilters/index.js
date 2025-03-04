@@ -173,7 +173,7 @@ const index = ({
           </div>
           <section className="d-flex justify-between" style={{ width: "78%" }}>
             <section
-              className={`d-flex justify-between gap-2 ${
+              className={`d-flex justify-between gap-2 customDateSize ${
                 !isCustom ? styles.customFilter3 : styles.customFilter1
               }`}
             >

@@ -420,7 +420,9 @@ const VisitData = ({
                         className={`valid-text d-flex justify-content-sm-between cr-pointer ${visitStyles.potential_title_card}`}
                         onClick={() => handleShowList("potential")}
                       >
-                        <span className={` ${visitStyles.potential_title_name}`}>
+                        <span
+                          className={`ant-badge ${visitStyles.potential_title_name}`}
+                        >
                           <span className="mx-1">
                             <FontAwesomeIcon
                               icon={
@@ -430,7 +432,9 @@ const VisitData = ({
                               }
                             />
                           </span>
-                          POTENTIAL / SUGGESTED DIAGNOSES
+                          <span className="ant-badge">
+                            POTENTIAL / SUGGESTED DIAGNOSES
+                          </span>
                         </span>
                         <div className="d-flex justify-content-center">
                           <span
@@ -824,9 +828,11 @@ const VisitData = ({
                           className={`valid-text d-flex justify-content-sm-between ${visitStyles.potential_title_card}`}
                         >
                           <span
-                            className={ ` ${visitStyles.potential_title_name}`}
+                            className={`ant-badge ${visitStyles.potential_title_name}`}
                           >
-                            POTENTIAL / SUGGESTED DIAGNOSES
+                            <span className="ant-badge">
+                              POTENTIAL / SUGGESTED DIAGNOSES
+                            </span>
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
