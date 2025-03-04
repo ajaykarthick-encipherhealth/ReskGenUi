@@ -419,7 +419,7 @@ function AddPatientListTable({
         </thead>
 
         <tbody>
-          {detailsContent?.length <= 0 || !patinetListAll ? (
+          {patinetListAll?.length==0 ? (
             <tr>
               <td colSpan="11">
                 <Empty />

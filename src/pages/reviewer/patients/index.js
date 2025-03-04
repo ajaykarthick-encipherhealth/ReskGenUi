@@ -148,6 +148,8 @@ const Patient = ({
   const [totalElements, setTotalElements] = useState(10);
   const [clear, setClear] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
+  const [batchAllList, setBatchAllList] = useState([]);
+  const [selectBatchList, setSelectedBatchList] = useState(null);
 
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
@@ -317,7 +319,7 @@ const Patient = ({
       setSort(sort);
     }
   }, [routedData]);
-console.log(routedData,"paginationFirst")
+
   const getReviewerApi = async () => {
     const res = await getFilteApi({
       pageNo,

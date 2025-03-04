@@ -180,7 +180,7 @@ const HeaderFilters = ({
           )}
 
           {isAnotherPicker && (
-            <>
+          
               <div className={defaultSize}>
                 <DateRangePicker
                   selectedDates={selectedDates2}
@@ -194,7 +194,7 @@ const HeaderFilters = ({
                   setPageNo={setPageNo}
                 />
               </div>
-            </>
+          
           )}
 
           {isNextRow && (

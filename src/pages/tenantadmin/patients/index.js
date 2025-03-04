@@ -241,6 +241,7 @@ const Patient = ({
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
+  const [statusUpdateWebSocket, setStatusUpdateWebSocket] = useState();
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -545,7 +546,7 @@ const Patient = ({
     setPageNumber(e.page);
   };
 
-  const statusUpdateWebSockt = (result) => {
+  const statusUpdateWebSocketFunc = (result) => {
     var resultMap = [];
     result?.map((res) => {
       resultMap?.push({
@@ -644,8 +645,9 @@ const Patient = ({
   }, []);
   useEffect(() => {
     if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
-      const patientData = allPatientList?.data?.response?.content;
-      var foundItem = patientData?.find(
+      const patientData =
+        allPatientList?.data?.response?.patientDtoList?.content;
+      let foundItem = patientData?.find(
         (x) => x.patientId == webSocketData.patientId
       );
       if (foundItem) {
@@ -654,14 +656,16 @@ const Patient = ({
           foundItem.computedDate = webSocketData?.computedDate;
         }
       }
-      statusUpdateWebSockt(patientData);
+      setStatusUpdateWebSocket(patientData);
+    }else{
+      setStatusUpdateWebSocket(allPatientList?.data?.response?.patientDtoList?.content)
     }
-  }, [webSocketData]);
+  }, [webSocketData,allPatientList]);
 
   return (
     <div className={`show `}>
       <Header />
-      <div class="content-body">
+      <div className="content-body">
         <div className="container-fluid">
           <div className="row">
             <div className="col-12">
@@ -704,10 +708,7 @@ const Patient = ({
                           <AddPatientListTable
                            getRetregger={getRetregger}
                             bullets={bullets}
-                            patinetListAll={
-                              allPatientList?.data?.response?.patientDtoList
-                                ?.content
-                            }
+                            patinetListAll={statusUpdateWebSocket}
                             actionBodyTemplate={actionBodyTemplate}
                             statusBodyTemplate={processstatusBodyTemplate}
                             gotoPatientDetails={gotoPatientDetails}
