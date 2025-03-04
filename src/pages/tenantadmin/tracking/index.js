@@ -26,8 +26,6 @@ import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/tracking";
 import { actions as tenantUserAdminAction } from "../../../stores/tenantAdmin/users";
-import { renderSkeleton } from "../../../components/reuseableFunctions";
-import { getStorage, setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { actions as workFlowActions } from "../../../stores/admin/workqueue";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
@@ -54,6 +52,8 @@ const bullets = [
       },
     ],
   },
+];
+const badges = [
   {
     title: "Audited Status",
     option: [
@@ -84,7 +84,6 @@ const bullets = [
     ],
   },
 ];
-
 const statusOptions = [
   { label: "COMPLETED", value: "COMPLETED", status: 2 },
   { label: "PENDING", value: "PENDING", status: 0 },
@@ -609,6 +608,8 @@ const Patient = ({
                             setSortDueOrder={setSortDueOrder}
                             sortAuditDueOrder={sortAuditDueOrder}
                             setSortAuditDueOrder={setSortAuditDueOrder}
+                            bullets={bullets}
+                            badges={badges}
                           />
                           <div>
                             <div className="pagination-container">
