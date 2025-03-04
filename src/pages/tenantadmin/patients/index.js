@@ -514,7 +514,7 @@ const Patient = ({
   };
   const getRetregger = async (data) => {
     try {
-      const res = await getRetreggerPatient({ patinetId: data.patientId });
+      const res = await getRetreggerPatient({ patientId: data.patientId });
       if (res.status == "SUCCESS") {
         getResponePopup(res);
         getAllPatients({

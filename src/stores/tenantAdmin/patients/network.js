@@ -97,12 +97,12 @@ export async function uploadFilesRadiology({ obj }) {
   );
   return data;
 }
-export async function getRetreggerPatient({ obj }) {
+export async function getRetreggerPatient(obj) {
   const options = {
     method: "POST",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortalFiles(
+  const data = await requestPortal(
     `management/temporal/retry`,
     options
   );

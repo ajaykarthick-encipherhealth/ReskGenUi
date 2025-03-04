@@ -313,7 +313,7 @@ function AddPatientListTable({
               style={{ textAlign: "center" }}
             >
               {data?.isRequestForRetry && (
-                <div onClick={() => getRetregger(data)}>
+                <div onClick={() => getRetregger(data)} className="d-flex align-items-center">
                   <FontAwesomeIcon
                     icon={faArrowsRotate}
                     style={{ fontSize: "large", color: "#df3a3a" }}
