@@ -62,15 +62,15 @@ const AdminWorkList = ({
   const getWorkList = async (data) => {
     const info = await getPatients({ data: data });
     if (info) {
-      setPatientList(info?.response?.content);
-      setTotalElements(info?.response?.totalElements);
+      setPatientList(info?.response?.patientDtoList?.content);
+      setTotalElements(info?.response?.patientDtoList?.totalElements);
       setFilterDataLoading(false);
     }
   };
 
-  const filterChangePatientId = async (e) => {
-    setSearch(e.target.value);
-  };
+  // const filterChangePatientId = async (e) => {
+  //   setSearch(e.target.value);
+  // };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -235,7 +235,7 @@ const AdminWorkList = ({
         </div> */}
 
         {!filterDataLoading ? (
-          <>
+       
             <div id="dosSelect" className={visitStyles.patientListHead}>
               <ul
                 id="dosSelect"
@@ -265,7 +265,7 @@ const AdminWorkList = ({
                 ) : null}
               </ul>
             </div>
-          </>
+          
         ) : (
           <div className="mt-2">
          

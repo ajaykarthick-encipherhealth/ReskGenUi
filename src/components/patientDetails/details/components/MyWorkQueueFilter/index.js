@@ -36,7 +36,6 @@ const MyWorkQueueFilter = ({
   filterModalOpen,
   setFilterModalOpen,
 }) => {
-
   // const handleDatePickerChange = async (dates, dateString) => {
   //   if (dates) {
   //     setSelectComputedPicker(dates);
@@ -73,9 +72,8 @@ const MyWorkQueueFilter = ({
   //   }
   // };
 
-
-  const pickerRef = useRef()
-  const pickerRef1 = useRef()
+  const pickerRef = useRef();
+  const pickerRef1 = useRef();
 
   const handleDatePickerChange = async (dates, dateString) => {
     if (dates) {
@@ -116,73 +114,69 @@ const MyWorkQueueFilter = ({
   };
 
   return (
-    <>
-      <div className={styles.container}>
-        <div onClick={filterIconClick}>
-          <span className={visitStyles.circleCard}>{SVGICON.filter}</span>
-        </div>
-        {filterModalOpen && (
-          <div className={styles.popover}>
-            <div className={styles.popover_inner}>
-              {/* <h6 className={styles.popover_title}>Filter</h6> */}
-              <div className={styles.popover_content}>
-                <div
-                  className={`myworkqueue_filter ${styles.detailsContainer}`}
-                >
-                  <div className="row">
-                    <div className="col-xl-12 mb-2">
-                      <label>Status</label>
-                      <Select
-                        placeholder="Select Status"
-                        options={statusOptions}
-                        style={{ height: "42px", width: "100%" }}
-                        className="myworkqueue_filter"
-                        onChange={(e) => {
-                          setSelectedOption(e), setFilterModalOpen(false);
-                        }}
-                        defaultValue={selectedOption}
-                      />
-                    </div>
-                    <div className="col-xl-12 mb-2">
-                      <label>{datePicker1Lable}</label>
-                      <RangePicker
-                        ref={pickerRef}
-                        format="MM-DD-YYYY"
-                        onChange={(dates, dateStrings) => {
-                          handleChangeprocessedDate(dates, dateStrings);
-                          if (!dates || dates.length === 0) {
-                            setTimeout(() => pickerRef.current?.focus(), 100);
-                          }
-                        }}
-                        disabledDate={(current) => disableFutureDate(current)}
-                        value={selectCompletedPicker}
-                      />
-                    </div>
-                    <div className="col-xl-12 mb-4">
-                      <label>{datePicker2Lable}</label>
-
-                      <RangePicker
-                      ref ={pickerRef1}
-                        format="MM-DD-YYYY"
-                        onChange={(dates, dateStrings) => {
-                          handleDatePickerChange(dates, dateStrings);
-                          if (!dates || dates.length === 0) {
-                            setTimeout(() => pickerRef1.current?.focus(), 100);
-                          }
-                        }}
-                        disabledDate={(current) => disableFutureDate(current)}
-                        value={selectComputedPicker}
-                      />
-                    </div>
-                    <div></div>
+    <div className={styles.container}>
+      <div onClick={filterIconClick}>
+        <span className={visitStyles.circleCard}>{SVGICON.filter}</span>
+      </div>
+      {filterModalOpen && (
+        <div className={styles.popover}>
+          <div className={styles.popover_inner}>
+            {/* <h6 className={styles.popover_title}>Filter</h6> */}
+            <div className={styles.popover_content}>
+              <div className={`myworkqueue_filter ${styles.detailsContainer}`}>
+                <div className="row">
+                  <div className="col-xl-12 mb-2">
+                    <label>Status</label>
+                    <Select
+                      placeholder="Select Status"
+                      options={statusOptions}
+                      style={{ height: "42px", width: "100%" }}
+                      className="myworkqueue_filter"
+                      onChange={(e) => {
+                        setSelectedOption(e), setFilterModalOpen(false);
+                      }}
+                      defaultValue={selectedOption}
+                    />
                   </div>
+                  <div className="col-xl-12 mb-2">
+                    <label>{datePicker1Lable}</label>
+                    <RangePicker
+                      ref={pickerRef}
+                      format="MM-DD-YYYY"
+                      onChange={(dates, dateStrings) => {
+                        handleChangeprocessedDate(dates, dateStrings);
+                        if (!dates || dates.length === 0) {
+                          setTimeout(() => pickerRef.current?.focus(), 100);
+                        }
+                      }}
+                      disabledDate={(current) => disableFutureDate(current)}
+                      value={selectCompletedPicker}
+                    />
+                  </div>
+                  <div className="col-xl-12 mb-4">
+                    <label>{datePicker2Lable}</label>
+
+                    <RangePicker
+                      ref={pickerRef1}
+                      format="MM-DD-YYYY"
+                      onChange={(dates, dateStrings) => {
+                        handleDatePickerChange(dates, dateStrings);
+                        if (!dates || dates.length === 0) {
+                          setTimeout(() => pickerRef1.current?.focus(), 100);
+                        }
+                      }}
+                      disabledDate={(current) => disableFutureDate(current)}
+                      value={selectComputedPicker}
+                    />
+                  </div>
+                  <div></div>
                 </div>
               </div>
             </div>
           </div>
-        )}
-      </div>
-    </>
+        </div>
+      )}
+    </div>
   );
 };
 
