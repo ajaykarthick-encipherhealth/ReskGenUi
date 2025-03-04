@@ -9,7 +9,7 @@ import {
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import { Empty, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import { Skeleton } from "antd";
 import { formatNumber } from "../../../../../utils/reusable.js";
 import HederMinimization from "../../components/headerMinimization";
@@ -26,17 +26,17 @@ const Index = ({
   selectDos,
 }) => {
   const [minimize, setMinimize] = useState(false);
-  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
-    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
-    : [];
+  // const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
+  //   ? Object.values(getAllHccCodes.hccDiseaseCountMap)
+  //   : [];
 
-  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
-    ? Object.values(getAllRaf.premiumByDateForHcc)
-    : [];
+  // const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
+  //   ? Object.values(getAllRaf.premiumByDateForHcc)
+  //   : [];
 
-  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
-    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
-    : [];
+  // const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
+  //   ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
+  //   : [];
 
   const TotalHccRevenue = getAllRaf?.totalHccRafScore;
 
@@ -78,7 +78,7 @@ const Index = ({
                   active
                 />
               </div>
-            ) : hccDiseaseCountValues?.length > 0 ? (
+            ) : (
               <div className="totalCodesPies">
                 <CodesGraph
                   gradientColor1={"#04B700"}
@@ -91,8 +91,6 @@ const Index = ({
                   customDate={customDate}
                 />
               </div>
-            ) : (
-              <Empty className="mt-3" />
             )}
           </div>
           <div
@@ -134,7 +132,7 @@ const Index = ({
                   active
                 />
               </div>
-            ) : rafScoreByDateForHcc?.length > 0 ? (
+            ) : (
               <div className="totalCodesPies2">
                 <RafGraph
                   rafColor={"#8E68F7"}
@@ -145,8 +143,6 @@ const Index = ({
                   className={"carecapRAF2"}
                 />
               </div>
-            ) : (
-              <Empty className="mt-3" />
             )}
           </div>
           <div
@@ -179,7 +175,7 @@ const Index = ({
                   active
                 />
               </div>
-            ) : premiumByDateForHcc?.length > 0 ? (
+            ) : (
               <div className="totalCodesPies">
                 <div className="totalCodesPies2">
                   <RevenueGraph
@@ -191,8 +187,6 @@ const Index = ({
                   />
                 </div>
               </div>
-            ) : (
-              <Empty className="mt-3" />
             )}
           </div>
         </div>

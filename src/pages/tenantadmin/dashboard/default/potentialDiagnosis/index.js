@@ -9,7 +9,7 @@ import {
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import { Empty, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import { Skeleton } from "antd";
 import { formatNumber } from "../../../../../utils/reusable.js";
 import HederMinimization from "../../components/headerMinimization";
@@ -26,17 +26,18 @@ const Index = ({
   selectDos,
 }) => {
   const [minimize, setMinimize] = useState(false);
-  const hccDiseaseCountValues = getAllPotentialCodes?.potentialHccDiseaseCountMap
-    ? Object.values(getAllPotentialCodes.potentialHccDiseaseCountMap)
-    : [];
+  // const hccDiseaseCountValues =
+  //   getAllPotentialCodes?.potentialHccDiseaseCountMap
+  //     ? Object.values(getAllPotentialCodes.potentialHccDiseaseCountMap)
+  //     : [];
 
-  const premiumByDateForHcc = getAllRaf?.premiumByDateForPotential
-    ? Object.values(getAllRaf?.premiumByDateForPotential)
-    : [];
+  // const premiumByDateForHcc = getAllRaf?.premiumByDateForPotential
+  //   ? Object.values(getAllRaf?.premiumByDateForPotential)
+  //   : [];
 
-  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForPotential
-    ? Object.values(getAllRafScoreData.rafScoreByDateForPotential)
-    : [];
+  // const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForPotential
+  //   ? Object.values(getAllRafScoreData.rafScoreByDateForPotential)
+  //   : [];
 
   const TotalHccRevenue = getAllRaf?.totalPotentialRafScore;
 
@@ -58,7 +59,8 @@ const Index = ({
                   <div className={styles.price}>
                     <Tooltip
                       title={
-                        getAllPotentialCodes?.potentialCount && getAllPotentialCodes?.potentialCount
+                        getAllPotentialCodes?.potentialCount &&
+                        getAllPotentialCodes?.potentialCount
                       }
                     >
                       {getAllPotentialCodes?.potentialCount
@@ -78,7 +80,7 @@ const Index = ({
                   active
                 />
               </div>
-            ) : hccDiseaseCountValues?.length > 0 ? (
+            ) : (
               <div className="totalCodesPies">
                 <CodesGraph
                   gradientColor1={"#BEB531"}
@@ -91,8 +93,6 @@ const Index = ({
                   customDate={customDate}
                 />
               </div>
-            ) : (
-              <Empty className="mt-3" />
             )}
           </div>
           <div
@@ -134,7 +134,7 @@ const Index = ({
                   active
                 />
               </div>
-            ) : rafScoreByDateForHcc?.length > 0 ? (
+            ) : (
               <div className="totalCodesPies2">
                 <RafGraph
                   rafColor={"#544DC9"}
@@ -145,8 +145,6 @@ const Index = ({
                   className={"carecapRAF2"}
                 />
               </div>
-            ) : (
-              <Empty className="mt-3" />
             )}
           </div>
           <div
@@ -181,7 +179,7 @@ const Index = ({
                   active
                 />
               </div>
-            ) : premiumByDateForHcc?.length > 0 ? (
+            ) : (
               <div className="totalCodesPies">
                 <div className="totalCodesPies2">
                   <RevenueGraph
@@ -193,8 +191,6 @@ const Index = ({
                   />
                 </div>
               </div>
-            ) : (
-              <Empty className="mt-3" />
             )}
           </div>
         </div>

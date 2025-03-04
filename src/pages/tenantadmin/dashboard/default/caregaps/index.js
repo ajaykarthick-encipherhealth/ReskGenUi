@@ -4,7 +4,7 @@ import styles from "../../styles.module.css";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
 import { connect } from "react-redux";
-import { Empty, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import { Skeleton } from "antd";
 import {
   HccCodes,
@@ -26,19 +26,19 @@ const Index = ({
   selectDos,
 }) => {
   const [minimize, setMinimize] = useState(false);
-  const suggestedHccDiseaseCountMap =
-    getAllHccCodes?.suggestedHccDiseaseCountMap
-      ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
-      : [];
+  // const suggestedHccDiseaseCountMap =
+  //   getAllHccCodes?.suggestedHccDiseaseCountMap
+  //     ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
+  //     : [];
 
-  const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested
-    ? Object.values(getAllRaf.premiumByDateForSuggested)
-    : [];
+  // const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested
+  //   ? Object.values(getAllRaf.premiumByDateForSuggested)
+  //   : [];
 
-  const rafScoreByDateForSuggested =
-    getAllRafScoreData?.rafScoreByDateForSuggested
-      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
-      : [];
+  // const rafScoreByDateForSuggested =
+  //   getAllRafScoreData?.rafScoreByDateForSuggested
+  //     ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
+  //     : [];
 
   const TotalCareGapsRevenue = getAllRaf?.totalSuggestedRafScore;
 
@@ -81,7 +81,7 @@ const Index = ({
                   active
                 />
               </div>
-            ) : suggestedHccDiseaseCountMap?.length > 0 ? (
+            ) : (
               <div className="totalCodesPies">
                 <CodesGraph
                   gradientColor1={"#FF9209"}
@@ -93,8 +93,6 @@ const Index = ({
                   customDate={customDate}
                 />
               </div>
-            ) : (
-              <Empty className="mt-3" />
             )}
           </div>
           <div
@@ -134,7 +132,7 @@ const Index = ({
                   active
                 />
               </div>
-            ) : rafScoreByDateForSuggested?.length > 0 ? (
+            ) : (
               <div>
                 <RafGraph
                   rafColor={"#4AA1AB"}
@@ -145,8 +143,6 @@ const Index = ({
                   className={"carecapRAF2"}
                 />
               </div>
-            ) : (
-              <Empty className="mt-3" />
             )}
           </div>
           <div
@@ -181,7 +177,7 @@ const Index = ({
                   active
                 />
               </div>
-            ) : premiumByDateForSuggested?.length > 0 ? (
+            ) : (
               <div className="totalCodesPies">
                 <div className="totalCodesPies2">
                   <RevenueGraph
@@ -193,8 +189,6 @@ const Index = ({
                   />
                 </div>
               </div>
-            ) : (
-              <Empty className="mt-3" />
             )}
           </div>
         </div>

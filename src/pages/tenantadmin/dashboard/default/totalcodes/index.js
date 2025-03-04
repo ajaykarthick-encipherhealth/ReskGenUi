@@ -5,7 +5,7 @@ import styles from "../../styles.module.css";
 import * as echarts from "echarts";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
-import { Empty, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import {
   HccCodes,
   RafCounts,
@@ -51,18 +51,18 @@ const index = ({
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap;
   const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
-  const hccDiseaseCountValue = getAllHccCodes?.hccDiseaseCountMap
-    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
-    : [];
+  // const hccDiseaseCountValue = getAllHccCodes?.hccDiseaseCountMap
+  //   ? Object.values(getAllHccCodes.hccDiseaseCountMap)
+  //   : [];
 
-  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
-    ? Object.values(getAllRaf.premiumByDateForHcc)
-    : [];
+  // const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
+  //   ? Object.values(getAllRaf.premiumByDateForHcc)
+  //   : [];
 
-  const rafScoreByDateForSuggested =
-    getAllRafScoreData?.rafScoreByDateForSuggested
-      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
-      : [];
+  // const rafScoreByDateForSuggested =
+  //   getAllRafScoreData?.rafScoreByDateForSuggested
+  //     ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
+  //     : [];
 
   const totalCodes = resultArrayHCC.map(
     (num, index) =>
@@ -278,7 +278,7 @@ const index = ({
               active
             />
           </div>
-        ) : hccDiseaseCountValue?.length > 0 ? (
+        ) : (
           <div className="totalCodesPies">
             <CodesGraph
               options={options}
@@ -288,8 +288,6 @@ const index = ({
               selectedValue={selectedValue}
             />
           </div>
-        ) : (
-          <Empty className="mt-3" />
         )}
       </div>
       <div
@@ -325,7 +323,7 @@ const index = ({
               active
             />
           </div>
-        ) : rafScoreByDateForSuggested?.length > 0 ? (
+        ) : (
           <div className="totalCodesPies2">
             <RafGraph
               overallData={true}
@@ -341,8 +339,6 @@ const index = ({
               className="carecapRAF3"
             />
           </div>
-        ) : (
-          <Empty className="mt-3" />
         )}
       </div>
       <div
@@ -373,7 +369,7 @@ const index = ({
               active
             />
           </div>
-        ) : premiumByDateForHcc?.length > 0 ? (
+        ) : (
           <div className="totalCodesPies2">
             <RevenueGraph
               selectedOrganization={selectedOrganization}
@@ -383,8 +379,6 @@ const index = ({
               customDate={customDate}
             />
           </div>
-        ) : (
-          <Empty className="mt-3" />
         )}
       </div>
     </div>
