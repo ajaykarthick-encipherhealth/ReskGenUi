@@ -59,12 +59,12 @@ function MyApp({ Component, pageProps }) {
     if (target.classList.contains("ant-badge")) {
       return;
     }
-    if (target.classList.contains("ant-badge-count")){
-      return
+    if (target.classList.contains("ant-badge-count")) {
+      return;
     }
-      if (target.classList.contains("ant-steps-item-container")) {
-        return;
-      }
+    if (target.classList.contains("ant-steps-item-container")) {
+      return;
+    }
 
     if (target.classList.contains("fileprocessingstepper")) {
       return;
@@ -99,28 +99,28 @@ function MyApp({ Component, pageProps }) {
          return;
        }
 
-       if (target.id === "auditbtn") {
-         target.style.transform = "scale(1)";
-       } else if (target.id === "dosSelect") {
-         target.style.transform = "scale(1.01)";
-       } else {
-         target.style.transform = pathname.endsWith("/report")
-           ? "scale(1.01)"
-           : pathname.endsWith("/details")
-           ? "scale(1.05)"
-           : // : pathname.endsWith("/fileprocessing")
-             // ? "scale(1)"
-             "scale(1.02)";
-       }
-       target.classList.add("hover-effect");
-     } else {
-       target.classList.add("hover-effect-remove");
-       target.style.transform = "scale(1)";
-       setTimeout(() => {
-         target.classList.remove("hover-effect", "hover-effect-remove");
-       }, 300);
-     }
-   }
+        if (target.id === "auditbtn") {
+          target.style.transform = "scale(1)";
+        } else if (target.id === "dosSelect") {
+          target.style.transform = "scale(1.01)";
+        } else {
+          target.style.transform = pathname.endsWith("/report")
+            ? "scale(1.01)"
+            : pathname.endsWith("/details")
+            ? "scale(1.05)"
+            : // : pathname.endsWith("/fileprocessing")
+              // ? "scale(1)"
+              "scale(1.02)";
+        }
+        target.classList.add("hover-effect");
+      } else {
+        target.classList.add("hover-effect-remove");
+        target.style.transform = "scale(1)";
+        setTimeout(() => {
+          target.classList.remove("hover-effect", "hover-effect-remove");
+        }, 300);
+      }
+    }
   };
 
   useEffect(() => {
@@ -315,7 +315,6 @@ function MyApp({ Component, pageProps }) {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [showTerminal]);
-  const currentRole = getStorage("userName");
   const hideFooterPaths = [
     "/admin/patients/details",
     "/reviewer/patients/details",
@@ -324,7 +323,9 @@ function MyApp({ Component, pageProps }) {
     "/supervisor/user/details",
     "/tenantadmin/patientsync/batchfilesview",
     "/tenantadmin/settings",
-    `/${currentRole}/report/reportdetails`,
+    "/reviewer/report/reportdetails",
+    "/supervisor/report/reportdetails",
+    "/tenantadmin/report/reportdetails",
   ];
   const showFooter = !hideFooterPaths.includes(router.pathname);
   useEffect(() => {

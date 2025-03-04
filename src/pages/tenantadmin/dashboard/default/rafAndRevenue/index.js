@@ -109,7 +109,7 @@ const index = ({
         style={{ width: "33%", height: "auto" }}
       >
         <div className={styles.headers}>
-          <div className={styles.header}>Raf Score Count</div>
+          <div className={styles.header}> Total HCC Raf Score </div>
         </div>
         {rafLoader ? (
           <div className="skeletonantd d-flex justify-content-center align-items-center">

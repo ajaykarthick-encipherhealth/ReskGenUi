@@ -36,7 +36,7 @@ const index = ({
             margin: "0 0 0 10px",
           }}
         >
-          {/* {top0ijHccCodes?.response?.totalCount} */}
+          {top0ijHccCodes?.response?.topDiseaseTotalCount}
         </span>
       </div>
       {top0ijCodesLoader ? (
