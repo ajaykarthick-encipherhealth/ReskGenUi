@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import visitStyles from "../../../../styles/visitdata.module.css";
-import { Card, Popover, Tooltip } from "antd";
-import { CalendarOutlined } from "@ant-design/icons";
-import moment from "moment";
+import { Popover, Tooltip } from "antd";
 import styles from "./styles.module.css";
-import { stringToColour } from "../components/function/ReusableFunctions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { getProviderNameTagList } from "../components/function/ProviderHyperlinks";
 import { getDateOfServiceBackground } from "../components/function/DateOfServices";
@@ -72,13 +67,14 @@ const Timeline = ({
   };
 
   const getEditDeatils = (viewValue) => {
-    var sectionMapArr = (
+    let sectionMapArr = (
       <>
         <div className="d-flex justify-content-end">
           <CloseCircleFilled
             className={styles.deleteIcon}
             onClick={() => {
-              setIsPopupOpen(false), setPopClickDisCode(null);
+              setIsPopupOpen(false);
+              setPopClickDisCode(null);
             }}
           />
         </div>
@@ -92,7 +88,7 @@ const Timeline = ({
                   {viewValue?.previousDiseaseFormat?.diagnosisCode}
                 </span>
                 <span className={styles.discription}>
-                  {viewValue?.previousDiseaseFormat?.dbDescription}
+                  {viewValue?.previousDiseaseFormat?.dbDescription||viewValue?.previousDiseaseFormat?.actualDescription}
                 </span>
               </div>
 
@@ -141,7 +137,7 @@ const Timeline = ({
                   {viewValue?.changedDiseaseFormat?.diagnosisCode}
                 </span>
                 <span className={styles.discription}>
-                  {viewValue?.changedDiseaseFormat?.dbDescription}
+                  {viewValue?.changedDiseaseFormat?.dbDescription||viewValue?.previousDiseaseFormat?.actualDescription}
                 </span>
               </div>
 
@@ -188,13 +184,14 @@ const Timeline = ({
   };
 
   const getMeatEditDeatils = (viewValue) => {
-    var sectionMapArr = (
+    let sectionMapArr = (
       <>
         <div className="d-flex justify-content-end">
           <CloseCircleFilled
             className={styles.deleteIcon}
             onClick={() => {
-              setIsPopupOpen(false), setPopClickDisCode(null);
+              setIsPopupOpen(false);
+              setPopClickDisCode(null);
             }}
           />
         </div>
@@ -358,347 +355,136 @@ const Timeline = ({
     setPopClickDisCode(disCode);
     setIsPopupOpen(isPopupOpen ? false : true);
   };
-  function renderTimelineItem(item, index) {
-    const getBadgeClassName = () => {
-      switch (item.action) {
-        case "MOVED":
-          if (item?.fromState == "VALID" && item?.toState == "DELETED") {
-            return "timeline-badge MOVED_VALID_TO_DELETED";
-          }
-          if (item?.fromState == "VALID" && item?.toState == "SUGGESTED") {
-            return "timeline-badge MOVED_VALID_TO_SUGGESTED";
-          }
-          if (item?.fromState == "SUGGESTED" && item?.toState == "VALID") {
-            return "timeline-badge MOVED_SUGGESTED_TO_VALID";
-          }
-          if (item?.fromState == "SUGGESTED" && item?.toState == "DELETED") {
-            return "timeline-badge MOVED_SUGGESTED_TO_DELETED";
-          }
-          if (item?.fromState == "DELETED" && item?.toState == "VALID") {
-            return "timeline-badge MOVED_DELETED_TO_VALID";
-          }
-          if (item?.fromState == "DELETED" && item?.toState == "SUGGESTED") {
-            return "timeline-badge MOVED_VALID_TO_DELETED";
-          }
-        case "MOVED_INVALID_TO_VALID":
-          return "timeline-badge MOVED_INVALID_TO_VALID";
-        case "MOVED_SUGGESTED_TO_VALID":
-          return "timeline-badge MOVED_SUGGESTED_TO_VALID";
-        case "MOVED_VALID_TO_SUGGESTED":
-          return "timeline-badge MOVED_VALID_TO_SUGGESTED";
-        case "VALID_DISEASE_ADDED":
-          return "timeline-badge VALID_DISEASE_ADDED";
-        case "MOVED_VALID_TO_DELETED":
+  const getHtmlContent = (item) => {
+    return <div dangerouslySetInnerHTML={{ __html: item }} />;
+  };
+  const getBadgeClassName = (item, index) => {
+    switch (item.action) {
+      case "MOVED":
+        if (item?.fromState == "VALID" && item?.toState == "DELETED") {
           return "timeline-badge MOVED_VALID_TO_DELETED";
-        case "COMPLETED":
-          return "timeline-badge COMPLETED";
-        case "MOVED_DELETED_TO_VALID":
-          return "timeline-badge MOVED_DELETED_TO_VALID";
-        case "MOVED_DELETED_TO_SUGGESTED":
-          return "timeline-badge MOVED_DELETED_TO_SUGGESTED";
-        case "MOVED_SUGGESTED_TO_DELETED":
+        }
+        if (item?.fromState == "VALID" && item?.toState == "SUGGESTED") {
+          return "timeline-badge MOVED_VALID_TO_SUGGESTED";
+        }
+        if (item?.fromState == "SUGGESTED" && item?.toState == "VALID") {
+          return "timeline-badge MOVED_SUGGESTED_TO_VALID";
+        }
+        if (item?.fromState == "SUGGESTED" && item?.toState == "DELETED") {
           return "timeline-badge MOVED_SUGGESTED_TO_DELETED";
-        case "ENCOUNTER_FILE_UPDATED":
-          return "timeline-badge ENCOUNTER_FILE_UPDATED";
-        case "ENCOUNTER_FILE_ADDED":
-          return "timeline-badge ENCOUNTER_FILE_ADDED";
-        case "HOLD":
-          return "timeline-badge HOLD";
-        case "DECLINED":
-          return "timeline-badge DECLINED";
-        case "PENDING":
-          return "timeline-badge DECLINED";
-        default:
-          return "timeline-badge DECLINED";
-      }
-    };
-
-    const getHtmlContent = (item) => {
-      return <div dangerouslySetInnerHTML={{ __html: item }} />;
-    };
-    const getTimelineHeading = () => {
-      switch (item.action) {
-        case "MOVED_INVALID_TO_VALID":
+        }
+        if (item?.fromState == "DELETED" && item?.toState == "VALID") {
+          return "timeline-badge MOVED_DELETED_TO_VALID";
+        }
+        if (item?.fromState == "DELETED" && item?.toState == "SUGGESTED") {
+          return "timeline-badge MOVED_VALID_TO_DELETED";
+        }
+      case "MOVED_INVALID_TO_VALID":
+        return "timeline-badge MOVED_INVALID_TO_VALID";
+      case "MOVED_SUGGESTED_TO_VALID":
+        return "timeline-badge MOVED_SUGGESTED_TO_VALID";
+      case "MOVED_VALID_TO_SUGGESTED":
+        return "timeline-badge MOVED_VALID_TO_SUGGESTED";
+      case "VALID_DISEASE_ADDED":
+        return "timeline-badge VALID_DISEASE_ADDED";
+      case "MOVED_VALID_TO_DELETED":
+        return "timeline-badge MOVED_VALID_TO_DELETED";
+      case "COMPLETED":
+        return "timeline-badge COMPLETED";
+      case "MOVED_DELETED_TO_VALID":
+        return "timeline-badge MOVED_DELETED_TO_VALID";
+      case "MOVED_DELETED_TO_SUGGESTED":
+        return "timeline-badge MOVED_DELETED_TO_SUGGESTED";
+      case "MOVED_SUGGESTED_TO_DELETED":
+        return "timeline-badge MOVED_SUGGESTED_TO_DELETED";
+      case "ENCOUNTER_FILE_UPDATED":
+        return "timeline-badge ENCOUNTER_FILE_UPDATED";
+      case "ENCOUNTER_FILE_ADDED":
+        return "timeline-badge ENCOUNTER_FILE_ADDED";
+      case "HOLD":
+        return "timeline-badge HOLD";
+      case "DECLINED":
+        return "timeline-badge DECLINED";
+      case "PENDING":
+        return "timeline-badge DECLINED";
+      default:
+        return "timeline-badge DECLINED";
+    }
+  };
+  const getTimelineHeading = (item, index) => {
+    switch (item.action) {
+      case "MOVED_INVALID_TO_VALID":
+        return (
+          <div className="d-flex">
+            {item.diagnosisCode} - Moved from{" "}
+            <span className={visitStyles.invalidColor}>INVALID</span> to{" "}
+            <span className={visitStyles.validColor}> VALID</span>
+          </div>
+        );
+      case "MOVED_SUGGESTED_TO_VALID":
+        return (
+          <div className="d-flex">
+            {item.diagnosisCode} - Moved from{" "}
+            <span className={visitStyles.suggestedColor}>
+              {/* SUGGESTED */}
+              CAREGAP
+            </span>{" "}
+            to <span className={visitStyles.validColor}> VALID</span>
+          </div>
+        );
+      case "MOVED":
+        if (item?.fromState == "VALID" && item?.toState == "SUGGESTED") {
           return (
             <div className="d-flex">
               {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.invalidColor}>INVALID</span> to{" "}
-              <span className={visitStyles.validColor}> VALID</span>
-            </div>
-          );
-        case "MOVED_SUGGESTED_TO_VALID":
-          return (
-            <div className="d-flex">
-              {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.suggestedColor}>
-                {/* SUGGESTED */}
-                CAREGAP
-              </span>{" "}
-              to <span className={visitStyles.validColor}> VALID</span>
-            </div>
-          );
-        case "MOVED":
-          if (item?.fromState == "VALID" && item?.toState == "SUGGESTED") {
-            return (
-              <div className="d-flex">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.validColor}>HCC</span> to{" "}
-                <span className={visitStyles.suggestedColor}>
-                  {/* SUGGESTED */}
-                  CAREGAP
-                </span>
-              </div>
-            );
-          }
-          if (item?.fromState == "VALID" && item?.toState == "DELETED") {
-            return (
-              <div className="d-flex">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.validColor}>HCC</span> to{" "}
-                <span className={visitStyles.deletedColor}>DELETED</span>
-              </div>
-            );
-          }
-          if (item?.fromState == "VALID" && item?.toState == "POTENTIAL") {
-            return (
-              <div className="d-flex">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.validColor}>HCC</span> to{" "}
-                <span className={visitStyles.potentialColor}>POTENTIAL</span>
-              </div>
-            );
-          }
-          if (item?.fromState == "SUGGESTED" && item?.toState == "VALID") {
-            return (
-              <div className="d-flex">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.suggestedColor}>
-                  {/* SUGGESTED */}
-                  CAREGAP
-                </span>{" "}
-                to <span className={visitStyles.validColor}> HCC</span>
-              </div>
-            );
-          }
-          if (item?.fromState == "INVALID" && item?.toState == "DELETED") {
-            return (
-              <div className="d-flex">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.nonHcc}>NON HCC</span> to
-                <span className={visitStyles.deletedColor}> DELETED</span>
-              </div>
-            );
-          }
-          if (item?.fromState == "SUGGESTED" && item?.toState == "DELETED") {
-            return (
-              <div className="d-flex w-100">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.suggestedColor}>
-                  {/* SUGGESTED */}
-                  CAREGAP
-                </span>{" "}
-                to <span className={visitStyles.deletedColor}> DELETED</span>
-              </div>
-            );
-          }
-          if (item?.fromState == "SUGGESTED" && item?.toState == "POTENTIAL") {
-            return (
-              <div className="d-flex w-100">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.suggestedColor}>CAREGAP</span>
-                to <span className={visitStyles.potentialColor}>POTENTIAL</span>
-              </div>
-            );
-          }
-          if (item?.fromState == "DELETED" && item?.toState == "VALID") {
-            return (
-              <div className="d-flex">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
-                <span className={visitStyles.validColor}> HCC</span>
-              </div>
-            );
-          }
-          if (item?.fromState == "DELETED" && item?.toState == "SUGGESTED") {
-            return (
-              <div className="d-flex">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
-                <span className={visitStyles.suggestedColor}>
-                  {/* SUGGESTED */}
-                  CAREGAP
-                </span>
-              </div>
-            );
-          }
-          if (item?.fromState == "DELETED" && item?.toState == "POTENTIAL") {
-            return (
-              <div className="d-flex">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
-                <span className={visitStyles.potentialColor}>POTENTIAL</span>
-              </div>
-            );
-          }
-          if (item?.fromState == "POTENTIAL" && item?.toState == "VALID") {
-            return (
-              <div className="d-flex">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.potentialColor}>POTENTIAL</span> to{" "}
-                <span className={visitStyles.validColor}> HCC</span>
-              </div>
-            );
-          }
-          if (item?.fromState == "POTENTIAL" && item?.toState == "SUGGESTED") {
-            return (
-              <div className="d-flex">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.potentialColor}>POTENTIAL</span> to{" "}
-                <span className={visitStyles.suggestedColor}>CAREGAP</span>
-              </div>
-            );
-          }
-          if (item?.fromState == "POTENTIAL" && item?.toState == "DELETED") {
-            return (
-              <div className="d-flex">
-                {item.diagnosisCode} - Moved from{" "}
-                <span className={visitStyles.potentialColor}>POTENTIAL</span> to{" "}
-                <span className={visitStyles.deletedColor}>DELETED</span>
-              </div>
-            );
-          }
-        case "VALID_DISEASE_ADDED":
-          return `${item.diagnosisCode} - Disease added`;
-        case "MANUALLY_ADDED_DISEASE":
-          return `${item.diagnosisCode} - Disease added manually`;
-        case "MOVED_VALID_TO_DELETED":
-          return (
-            <div className="d-flex">
-              {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.validColor}>VALID</span> to{" "}
-              <span className={visitStyles.deletedColor}>DELETED</span>
-            </div>
-          );
-        case "AUDITED":
-          return (
-            <div className="d-flex">
-              Changed from{" "}
-              <span
-                style={{
-                  color: getStatusColors(item?.previousProcessedState),
-                  fontSize: "12px",
-                  padding: "0 5px",
-                }}
-              >
-                {item?.previousProcessedState}
-              </span>{" "}
-              to <span className={visitStyles.audited}>AUDITED</span>
-            </div>
-          );
-        case "REAUDIT":
-          return (
-            <div className="d-flex">
-              Changed from{" "}
-              <span
-                style={{
-                  color: getStatusColors(item?.previousProcessedState),
-                  fontSize: "12px",
-                  padding: "0 5px",
-                }}
-              >
-                {item?.previousProcessedState}
-              </span>{" "}
-              to <span className={visitStyles.reaudit}>REAUDIT</span>
-            </div>
-          );
-        case "AUDITHOLD":
-          return (
-            <div className="d-flex">
-              Changed from{" "}
-              <span
-                style={{
-                  color: getStatusColors(item?.previousProcessedState),
-                  fontSize: "12px",
-                  padding: "0 5px",
-                }}
-              >
-                {item?.previousProcessedState}
-              </span>{" "}
-              to <span className={visitStyles?.audithold}>AUDITHOLD</span>
-            </div>
-          );
-        case "AUDIT_PENDING":
-          return (
-            <div className="d-flex">
-              Changed from{" "}
-              <span
-                style={{
-                  color: getStatusColors(item?.previousProcessedState),
-                  fontSize: "12px",
-                  padding: "0 5px",
-                }}
-              >
-                {item?.previousProcessedState}
-              </span>{" "}
-              to{" "}
-              <span className={visitStyles?.auditpending}>AUDIT_PENDING</span>
-            </div>
-          );
-        case "AUDIT_DECLINED":
-          return (
-            <div className="d-flex">
-              Changed from{" "}
-              <span
-                style={{
-                  color: getStatusColors(item?.previousProcessedState),
-                  fontSize: "12px",
-                  padding: "0 5px",
-                }}
-              >
-                {item?.previousProcessedState}
-              </span>{" "}
-              to{" "}
-              <span className={visitStyles?.auditdeclined}>AUDIT_DECLINED</span>
-            </div>
-          );
-        case "MEAT_QUERY_STORED":
-          return `Changed from ${item.previousProcessedState} to Meat Query Stored`;
-        case "COMPLETED":
-          return (
-            <div className="d-flex">
-              Changed from{" "}
-              <span
-                style={{
-                  color: getStatusColors(item?.previousProcessedState),
-                  fontSize: "12px",
-                  padding: "0 5px",
-                }}
-              >
-                {item?.previousProcessedState}
-              </span>{" "}
-              to <span className={visitStyles.completedColor}> COMPLETED</span>
-            </div>
-          );
-        case "MOVED_DELETED_TO_VALID":
-          return (
-            <div className="d-flex">
-              {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
-              <span className={visitStyles.validColor}> VALID</span>
-            </div>
-          );
-        case "MOVED_DELETED_TO_SUGGESTED":
-          return (
-            <div className="d-flex">
-              {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
+              <span className={visitStyles.validColor}>HCC</span> to{" "}
               <span className={visitStyles.suggestedColor}>
                 {/* SUGGESTED */}
                 CAREGAP
               </span>
             </div>
           );
-        case "MOVED_SUGGESTED_TO_DELETED":
+        }
+        if (item?.fromState == "VALID" && item?.toState == "DELETED") {
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.validColor}>HCC</span> to{" "}
+              <span className={visitStyles.deletedColor}>DELETED</span>
+            </div>
+          );
+        }
+        if (item?.fromState == "VALID" && item?.toState == "POTENTIAL") {
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.validColor}>HCC</span> to{" "}
+              <span className={visitStyles.potentialColor}>POTENTIAL</span>
+            </div>
+          );
+        }
+        if (item?.fromState == "SUGGESTED" && item?.toState == "VALID") {
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.suggestedColor}>
+                {/* SUGGESTED */}
+                CAREGAP
+              </span>{" "}
+              to <span className={visitStyles.validColor}> HCC</span>
+            </div>
+          );
+        }
+        if (item?.fromState == "INVALID" && item?.toState == "DELETED") {
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.nonHcc}>NON HCC</span> to
+              <span className={visitStyles.deletedColor}> DELETED</span>
+            </div>
+          );
+        }
+        if (item?.fromState == "SUGGESTED" && item?.toState == "DELETED") {
           return (
             <div className="d-flex w-100">
               {item.diagnosisCode} - Moved from{" "}
@@ -709,266 +495,465 @@ const Timeline = ({
               to <span className={visitStyles.deletedColor}> DELETED</span>
             </div>
           );
-        case "ENCOUNTER_FILE_UPDATED":
-          return `${item.diagnosisCode} - Encounter file updated`;
-        case "ENCOUNTER_FILE_ADDED":
-          return `${item.diagnosisCode} - Encounter file added`;
-        case "MEAT_ADDED":
-          return `${item.diagnosisCode} - Meat added`;
-        case "DISEASE_EDITED":
+        }
+        if (item?.fromState == "SUGGESTED" && item?.toState == "POTENTIAL") {
           return (
-            <div className="d-flex w-100 justify-content-between">
-              {item.diagnosisCode} - DISEASE EDITED
-              <Popover
-                open={popClickDisCode === index ? true : false}
-                trigger={["hover"]}
-                placement="bottom"
-                overlayStyle={{ zIndex: 9999 }}
-                content={<>{getEditDeatils(item)}</>}
-              >
-                <span
-                  className={styles.viewTag}
-                  onClick={() => onClickPopup(index)}
-                >
-                  View
-                </span>{" "}
-              </Popover>
+            <div className="d-flex w-100">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.suggestedColor}>CAREGAP</span>
+              to <span className={visitStyles.potentialColor}>POTENTIAL</span>
             </div>
           );
-        case "MEAT_EDITED":
-          return (
-            <div className="d-flex w-100 justify-content-between">
-              {item?.previousMeatDetail?.diagnosisCode} - MEAT EDITED
-              <Popover
-                open={popClickDisCode === index ? true : false}
-                trigger={["hover"]}
-                placement="bottom"
-                overlayStyle={{ zIndex: 9999 }}
-                content={<>{getMeatEditDeatils(item)}</>}
-              >
-                <span
-                  className={styles.viewTag}
-                  onClick={() => onClickPopup(index)}
-                >
-                  View
-                </span>{" "}
-              </Popover>
-            </div>
-          );
-        case "PROVIDER_EDITED":
-          return (
-            <div className="d-flex w-100 justify-content-between">
-              {getHtmlContent(item?.htmlContent)}
-              <Popover
-                open={popClickDisCode === index ? true : false}
-                trigger={["hover"]}
-                placement="bottom"
-                overlayStyle={{ zIndex: 9999 }}
-                content={<>{getEditDeatils(item)}</>}
-              >
-                <span
-                  className={styles.viewTag}
-                  onClick={() => onClickPopup(index)}
-                >
-                  View
-                </span>{" "}
-              </Popover>
-            </div>
-          );
-        case "HOLD":
+        }
+        if (item?.fromState == "DELETED" && item?.toState == "VALID") {
           return (
             <div className="d-flex">
-              Changed from{" "}
-              <span
-                style={{
-                  color: getStatusColors(item?.previousProcessedState),
-                  fontSize: "12px",
-                  padding: "0 5px",
-                }}
-              >
-                {item?.previousProcessedState}
-              </span>{" "}
-              to <span className={visitStyles.holdColor}>HOLD</span>
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
+              <span className={visitStyles.validColor}> HCC</span>
             </div>
           );
-        case "DECLINED":
+        }
+        if (item?.fromState == "DELETED" && item?.toState == "SUGGESTED") {
           return (
             <div className="d-flex">
-              Changed from{" "}
-              <span
-                style={{
-                  color: getStatusColors(item?.previousProcessedState),
-                  fontSize: "12px",
-                  padding: "0 5px",
-                }}
-              >
-                {item?.previousProcessedState}
-              </span>{" "}
-              to <span className={visitStyles.declinedColor}> DECLINED</span>
-            </div>
-          );
-        case "PENDING":
-          return (
-            <div className="d-flex">
-              Changed from{" "}
-              <span
-                style={{
-                  color: getStatusColors(item?.previousProcessedState),
-                  fontSize: "12px",
-                  padding: "0 5px",
-                }}
-              >
-                {item?.previousProcessedState}
-              </span>{" "}
-              to <span className={visitStyles.pendingColor}> PENDING</span>{" "}
-            </div>
-          );
-        case "FLAG_ADDED":
-          return (
-            <div className="d-flex">
-              <>
-                Flag Added -{" "}
-                {item?.flagDetails?.flagName
-                  ? item?.flagDetails?.flagName.replaceAll("_", " ")
-                  : ""}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="23"
-                  height="23"
-                  viewBox="0 0 800 800"
-                  fill={item?.flagDetails?.flagColour}
-                >
-                  <path
-                    d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-                    stroke="#000"
-                    stroke-width="10"
-                  />
-                </svg>
-              </>
-            </div>
-          );
-        case "FLAG_REMOVED":
-          return (
-            <div className="d-flex">
-              <>
-                Flag Removed -{" "}
-                {item?.flagDetails?.flagName
-                  ? item?.flagDetails?.flagName.replaceAll("_", " ")
-                  : ""}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="23"
-                  height="23"
-                  viewBox="0 0 800 800"
-                  fill={item?.flagDetails?.flagColour}
-                >
-                  <path
-                    d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-                    stroke="#000"
-                    stroke-width="10"
-                  />
-                </svg>
-              </>
-            </div>
-          );
-        case "COMMENT_ADDED":
-          return (
-            <div className="d-flex w-100 justify-content-between">
-              <>
-                <strong>Comment Added </strong>
-                <Popover
-                  open={popClickDisCode === index}
-                  trigger={["hover"]}
-                  placement="bottom"
-                  overlayStyle={{ zIndex: 9999 }}
-                  content={
-                    <div className="d-flex justify-content-between">
-                      <span className={`${styles.textContent}`}>
-                        {item?.actionNotes}
-                      </span>
-                      <CloseCircleFilled
-                        onClick={() => onClickPopup(null)}
-                        className={`${styles.closeIcon}`}
-                      />
-                    </div>
-                  }
-                >
-                  <span
-                    className={styles.viewTag}
-                    onClick={() => onClickPopup(index)}
-                  >
-                    View
-                  </span>
-                </Popover>
-              </>
-            </div>
-          );
-        case "COMMENT_REMOVED":
-          return (
-            <div className="d-flex w-100 justify-content-between">
-              <>
-                <strong>Comment Removed </strong>
-              </>
-            </div>
-          );
-        case "NOTES_ADDED":
-          return (
-            <div className="d-flex w-100 justify-content-between">
-              <>
-                <strong>Notes Added </strong>
-                <Popover
-                  open={popClickDisCode === index}
-                  trigger={["hover"]}
-                  placement="bottom"
-                  overlayStyle={{ zIndex: 9999 }}
-                  content={
-                    <div className="d-flex justify-content-between">
-                      <span className={`${styles.textContent}`}>
-                        {item?.actionNotes}
-                      </span>
-                      <CloseCircleFilled
-                        onClick={() => onClickPopup(null)}
-                        className={`${styles.closeIcon}`}
-                      />
-                    </div>
-                  }
-                >
-                  <span
-                    className={styles.viewTag}
-                    onClick={() => onClickPopup(index)}
-                  >
-                    View
-                  </span>
-                </Popover>
-              </>
-            </div>
-          );
-        case "NOTES_REMOVED":
-          return (
-            <div className="d-flex w-100 justify-content-between">
-              <>
-                <strong>Notes Removed </strong>
-              </>
-            </div>
-          );
-        default:
-          return (
-            <div className="d-flex">
-              Changed from
-              <span
-                style={{
-                  color: getStatusColors(item?.previousProcessedState),
-                  fontSize: "12px",
-                  padding: "0 5px",
-                }}
-              >
-                {item?.previousProcessedState}
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
+              <span className={visitStyles.suggestedColor}>
+                {/* SUGGESTED */}
+                CAREGAP
               </span>
-              to {underScoreRemove(item.action)}
             </div>
           );
-      }
-    };
+        }
+        if (item?.fromState == "DELETED" && item?.toState == "POTENTIAL") {
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
+              <span className={visitStyles.potentialColor}>POTENTIAL</span>
+            </div>
+          );
+        }
+        if (item?.fromState == "POTENTIAL" && item?.toState == "VALID") {
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.potentialColor}>POTENTIAL</span> to{" "}
+              <span className={visitStyles.validColor}> HCC</span>
+            </div>
+          );
+        }
+        if (item?.fromState == "POTENTIAL" && item?.toState == "SUGGESTED") {
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.potentialColor}>POTENTIAL</span> to{" "}
+              <span className={visitStyles.suggestedColor}>CAREGAP</span>
+            </div>
+          );
+        }
+        if (item?.fromState == "POTENTIAL" && item?.toState == "DELETED") {
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.potentialColor}>POTENTIAL</span> to{" "}
+              <span className={visitStyles.deletedColor}>DELETED</span>
+            </div>
+          );
+        }
+      case "VALID_DISEASE_ADDED":
+        return `${item.diagnosisCode} - Disease added`;
+      case "MANUALLY_ADDED_DISEASE":
+        return `${item.diagnosisCode} - Disease added manually`;
+      case "MOVED_VALID_TO_DELETED":
+        return (
+          <div className="d-flex">
+            {item.diagnosisCode} - Moved from{" "}
+            <span className={visitStyles.validColor}>VALID</span> to{" "}
+            <span className={visitStyles.deletedColor}>DELETED</span>
+          </div>
+        );
+      case "AUDITED":
+        return (
+          <div className="d-flex">
+            Changed from{" "}
+            <span
+              style={{
+                color: getStatusColors(item?.previousProcessedState),
+                fontSize: "12px",
+                padding: "0 5px",
+              }}
+            >
+              {item?.previousProcessedState}
+            </span>{" "}
+            to <span className={visitStyles.audited}>AUDITED</span>
+          </div>
+        );
+      case "REAUDIT":
+        return (
+          <div className="d-flex">
+            Changed from{" "}
+            <span
+              style={{
+                color: getStatusColors(item?.previousProcessedState),
+                fontSize: "12px",
+                padding: "0 5px",
+              }}
+            >
+              {item?.previousProcessedState}
+            </span>{" "}
+            to <span className={visitStyles.reaudit}>REAUDIT</span>
+          </div>
+        );
+      case "AUDITHOLD":
+        return (
+          <div className="d-flex">
+            Changed from{" "}
+            <span
+              style={{
+                color: getStatusColors(item?.previousProcessedState),
+                fontSize: "12px",
+                padding: "0 5px",
+              }}
+            >
+              {item?.previousProcessedState}
+            </span>{" "}
+            to <span className={visitStyles?.audithold}>AUDITHOLD</span>
+          </div>
+        );
+      case "AUDIT_PENDING":
+        return (
+          <div className="d-flex">
+            Changed from{" "}
+            <span
+              style={{
+                color: getStatusColors(item?.previousProcessedState),
+                fontSize: "12px",
+                padding: "0 5px",
+              }}
+            >
+              {item?.previousProcessedState}
+            </span>{" "}
+            to <span className={visitStyles?.auditpending}>AUDIT_PENDING</span>
+          </div>
+        );
+      case "AUDIT_DECLINED":
+        return (
+          <div className="d-flex">
+            Changed from{" "}
+            <span
+              style={{
+                color: getStatusColors(item?.previousProcessedState),
+                fontSize: "12px",
+                padding: "0 5px",
+              }}
+            >
+              {item?.previousProcessedState}
+            </span>{" "}
+            to{" "}
+            <span className={visitStyles?.auditdeclined}>AUDIT_DECLINED</span>
+          </div>
+        );
+      case "MEAT_QUERY_STORED":
+        return `Changed from ${item.previousProcessedState} to Meat Query Stored`;
+      case "COMPLETED":
+        return (
+          <div className="d-flex">
+            Changed from{" "}
+            <span
+              style={{
+                color: getStatusColors(item?.previousProcessedState),
+                fontSize: "12px",
+                padding: "0 5px",
+              }}
+            >
+              {item?.previousProcessedState}
+            </span>{" "}
+            to <span className={visitStyles.completedColor}> COMPLETED</span>
+          </div>
+        );
+      case "MOVED_DELETED_TO_VALID":
+        return (
+          <div className="d-flex">
+            {item.diagnosisCode} - Moved from{" "}
+            <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
+            <span className={visitStyles.validColor}> VALID</span>
+          </div>
+        );
+      case "MOVED_DELETED_TO_SUGGESTED":
+        return (
+          <div className="d-flex">
+            {item.diagnosisCode} - Moved from{" "}
+            <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
+            <span className={visitStyles.suggestedColor}>
+              {/* SUGGESTED */}
+              CAREGAP
+            </span>
+          </div>
+        );
+      case "MOVED_SUGGESTED_TO_DELETED":
+        return (
+          <div className="d-flex w-100">
+            {item.diagnosisCode} - Moved from{" "}
+            <span className={visitStyles.suggestedColor}>
+              {/* SUGGESTED */}
+              CAREGAP
+            </span>{" "}
+            to <span className={visitStyles.deletedColor}> DELETED</span>
+          </div>
+        );
+      case "ENCOUNTER_FILE_UPDATED":
+        return `${item.diagnosisCode} - Encounter file updated`;
+      case "ENCOUNTER_FILE_ADDED":
+        return `${item.diagnosisCode} - Encounter file added`;
+      case "MEAT_ADDED":
+        return `${item.diagnosisCode} - Meat added`;
+      case "DISEASE_EDITED":
+        return (
+          <div className="d-flex w-100 justify-content-between">
+            {item.diagnosisCode} - DISEASE EDITED
+            <Popover
+              open={popClickDisCode === index ? true : false}
+              trigger={["hover"]}
+              placement="bottom"
+              overlayStyle={{ zIndex: 9999 }}
+              content={<>{getEditDeatils(item)}</>}
+            >
+              <span
+                className={styles.viewTag}
+                onClick={() => onClickPopup(index)}
+              >
+                View
+              </span>{" "}
+            </Popover>
+          </div>
+        );
+      case "MEAT_EDITED":
+        return (
+          <div className="d-flex w-100 justify-content-between">
+            {item?.previousMeatDetail?.diagnosisCode} - MEAT EDITED
+            <Popover
+              open={popClickDisCode === index ? true : false}
+              trigger={["hover"]}
+              placement="bottom"
+              overlayStyle={{ zIndex: 9999 }}
+              content={<>{getMeatEditDeatils(item)}</>}
+            >
+              <span
+                className={styles.viewTag}
+                onClick={() => onClickPopup(index)}
+              >
+                View
+              </span>{" "}
+            </Popover>
+          </div>
+        );
+      case "PROVIDER_EDITED":
+        return (
+          <div className="d-flex w-100 justify-content-between">
+            {getHtmlContent(item?.htmlContent)}
+            <Popover
+              open={popClickDisCode === index ? true : false}
+              trigger={["hover"]}
+              placement="bottom"
+              overlayStyle={{ zIndex: 9999 }}
+              content={<>{getEditDeatils(item)}</>}
+            >
+              <span
+                className={styles.viewTag}
+                onClick={() => onClickPopup(index)}
+              >
+                View
+              </span>{" "}
+            </Popover>
+          </div>
+        );
+      case "HOLD":
+        return (
+          <div className="d-flex">
+            Changed from{" "}
+            <span
+              style={{
+                color: getStatusColors(item?.previousProcessedState),
+                fontSize: "12px",
+                padding: "0 5px",
+              }}
+            >
+              {item?.previousProcessedState}
+            </span>{" "}
+            to <span className={visitStyles.holdColor}>HOLD</span>
+          </div>
+        );
+      case "DECLINED":
+        return (
+          <div className="d-flex">
+            Changed from{" "}
+            <span
+              style={{
+                color: getStatusColors(item?.previousProcessedState),
+                fontSize: "12px",
+                padding: "0 5px",
+              }}
+            >
+              {item?.previousProcessedState}
+            </span>{" "}
+            to <span className={visitStyles.declinedColor}> DECLINED</span>
+          </div>
+        );
+      case "PENDING":
+        return (
+          <div className="d-flex">
+            Changed from{" "}
+            <span
+              style={{
+                color: getStatusColors(item?.previousProcessedState),
+                fontSize: "12px",
+                padding: "0 5px",
+              }}
+            >
+              {item?.previousProcessedState}
+            </span>{" "}
+            to <span className={visitStyles.pendingColor}> PENDING</span>{" "}
+          </div>
+        );
+      case "FLAG_ADDED":
+        return (
+          <div className="d-flex">
+            Flag Added -{" "}
+            {item?.flagDetails?.flagName
+              ? item?.flagDetails?.flagName.replaceAll("_", " ")
+              : ""}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="23"
+              height="23"
+              viewBox="0 0 800 800"
+              fill={item?.flagDetails?.flagColour}
+            >
+              <path
+                d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                stroke="#000"
+                stroke-width="10"
+              />
+            </svg>
+          </div>
+        );
+      case "FLAG_REMOVED":
+        return (
+          <div className="d-flex">
+            Flag Removed -{" "}
+            {item?.flagDetails?.flagName
+              ? item?.flagDetails?.flagName.replaceAll("_", " ")
+              : ""}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="23"
+              height="23"
+              viewBox="0 0 800 800"
+              fill={item?.flagDetails?.flagColour}
+            >
+              <path
+                d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                stroke="#000"
+                stroke-width="10"
+              />
+            </svg>
+          </div>
+        );
+      case "COMMENT_ADDED":
+        return (
+          <div className="d-flex w-100 justify-content-between">
+            <strong>Comment Added </strong>
+            <Popover
+              open={popClickDisCode === index}
+              trigger={["hover"]}
+              placement="bottom"
+              overlayStyle={{ zIndex: 9999 }}
+              content={
+                <div className="d-flex justify-content-between">
+                  <span className={`${styles.textContent}`}>
+                    {item?.actionNotes}
+                  </span>
+                  <CloseCircleFilled
+                    onClick={() => onClickPopup(null)}
+                    className={`${styles.closeIcon}`}
+                  />
+                </div>
+              }
+            >
+              <span
+                className={styles.viewTag}
+                onClick={() => onClickPopup(index)}
+              >
+                View
+              </span>
+            </Popover>
+          </div>
+        );
+      case "COMMENT_REMOVED":
+        return (
+          <div className="d-flex w-100 justify-content-between">
+            <strong>Comment Removed </strong>
+          </div>
+        );
+      case "NOTES_ADDED":
+        return (
+          <div className="d-flex w-100 justify-content-between">
+            <strong>Notes Added </strong>
+            <Popover
+              open={popClickDisCode === index}
+              trigger={["hover"]}
+              placement="bottom"
+              overlayStyle={{ zIndex: 9999 }}
+              content={
+                <div className="d-flex justify-content-between">
+                  <span className={`${styles.textContent}`}>
+                    {item?.actionNotes}
+                  </span>
+                  <CloseCircleFilled
+                    onClick={() => onClickPopup(null)}
+                    className={`${styles.closeIcon}`}
+                  />
+                </div>
+              }
+            >
+              <span
+                className={styles.viewTag}
+                onClick={() => onClickPopup(index)}
+              >
+                View
+              </span>
+            </Popover>
+          </div>
+        );
+      case "NOTES_REMOVED":
+        return (
+          <div className="d-flex w-100 justify-content-between">
+            <strong>Notes Removed </strong>
+          </div>
+        );
+      default:
+        return (
+          <div className="d-flex">
+            Changed from
+            <span
+              style={{
+                color: getStatusColors(item?.previousProcessedState),
+                fontSize: "12px",
+                padding: "0 5px",
+              }}
+            >
+              {item?.previousProcessedState}
+            </span>
+            to {underScoreRemove(item.action)}
+          </div>
+        );
+    }
+  };
+  function renderTimelineItem(item, index) {
+    getBadgeClassName(item, index);
+    getTimelineHeading(item, index);
 
     return (
       <li key={item?.id}>
@@ -978,14 +963,16 @@ const Timeline = ({
             content={userDetails}
             onOpenChange={() => renderUserDetails(item.userName)}
           >
-            <div className={getBadgeClassName()}>
+            <div className={getBadgeClassName(item, index)}>
               {splitUserName(item.userName)}
             </div>
           </Popover>
         </Tooltip>
         <div className="timeline-panel text-muted">
           <span className={`${visitStyles.timelineheading} d-flex`}>
-            {getTimelineHeading()}
+            {item?.htmlContent
+              ? getHtmlContent(item?.htmlContent)
+              : getTimelineHeading(item, index)}
           </span>
           {item?.dos && (
             <span
@@ -993,7 +980,7 @@ const Timeline = ({
             >{`DOS: ${item?.dos}`}</span>
           )}
           <span className={visitStyles.timelineDate}>
-            {formatDateTime({date: item.createdDate})}
+            {formatDateTime({ date: item.createdDate })}
           </span>
         </div>
       </li>
@@ -1018,7 +1005,7 @@ const Timeline = ({
       ) : (
         <div className="m-3">
           <div className="d-flex flex-column gap-2">
-          <CardSkeleton  count={6} height={100} />
+            <CardSkeleton count={6} height={100} />
           </div>
         </div>
       )}
@@ -1027,4 +1014,3 @@ const Timeline = ({
 };
 
 export default Timeline;
-
