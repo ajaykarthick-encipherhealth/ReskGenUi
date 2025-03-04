@@ -77,7 +77,7 @@
 
 .classContaineer {
   overflow: hidden;
-  padding: 10px;
+  /* padding: 10px; */
 }
 @media (min-width: 1024px) and (max-width: 1600px){
   .classContaineer{

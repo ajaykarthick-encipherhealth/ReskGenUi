@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import { connect } from "react-redux";
-import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
@@ -552,7 +551,7 @@ const Patient = ({
         paginationFirst,
         sort,
       } = routedData;
-      setPageNo(pageNo?pageNo:0);
+      setPageNo(pageNo ? pageNo : 0);
       setSearchText(searchText);
       setSelectedDateRanges(selectedDateRanges);
       setSelectedOption(selectedOption);
@@ -566,7 +565,7 @@ const Patient = ({
 
   useEffect(() => {
     setParamsFilter("check");
-    if (paramsFilter==="check") {
+    if (paramsFilter === "check") {
       getAllTrackingList({
         pageNo,
         pageNumber,
@@ -595,103 +594,88 @@ const Patient = ({
   return (
     <div className={`show `}>
       <Header />
-      <div class="content-body">
+      <div className="content-body">
         <div className="container-fluid">
-          <div className="row">
-            <div className="col-12">
-              <div className="">
-                <div className="card-body p-0">
-                  <div className="table-responsive active-projects task-table">
-                    <div className="row ">
-                      <div className="col-10 d-flex align-items-center justify-content-center">
-                        <ReusableFilters
-                          showFilter={true}
-                          setActiveFilters={setActiveFilters}
-                          setSearchText={setSearchText}
-                          searchText={searchText}
-                          setSelectedOption={setSelectedOption}
-                          selectedOption={selectedOption}
-                          setSelectedDateRanges={setSelectedDateRanges}
-                          selectedDateRanges={selectedDateRanges}
-                          setPageNumber={setPageNumber}
-                          FilterItems={commonFilterItems}
-                          selectedDates={selectedDates}
-                          setSelectedDates={setSelectedDates}
-                          activeFilters={activeFilters}
-                          setClear={setClear}
-                          clear={clear}
-                          setPageNo={setPageNo}
-                        />
-                      </div>
-                      <div className="col-2 d-flex align-items-center justify-content-center">
-                        <div className="row">
-                          <DailyTask
-                            trackChart={trackingList?.processStatusCount}
-                          />
-                        </div>
-                      </div>
-                    </div>
+          <div className="table-responsive active-projects task-table">
+            <div className="row ">
+              <div className="col-10 ">
+                <ReusableFilters
+                  showFilter={true}
+                  setActiveFilters={setActiveFilters}
+                  setSearchText={setSearchText}
+                  searchText={searchText}
+                  setSelectedOption={setSelectedOption}
+                  selectedOption={selectedOption}
+                  setSelectedDateRanges={setSelectedDateRanges}
+                  selectedDateRanges={selectedDateRanges}
+                  setPageNumber={setPageNumber}
+                  FilterItems={commonFilterItems}
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  activeFilters={activeFilters}
+                  setClear={setClear}
+                  clear={clear}
+                  setPageNo={setPageNo}
+                />
+              </div>
+              <div className="col-2 d-flex align-items-center justify-content-center">
+                <div className="row">
+                  <DailyTask trackChart={trackingList?.processStatusCount} />
+                </div>
+              </div>
+            </div>
 
-                    <div
-                      id="task-tbl_wrapper"
-                      className="dataTables_wrapper no-footer"
-                    >
-                      {loader ? (
-                        <div>
-                          {" "}
-                          <TableSkeleton />
-                        </div>
-                      ) : (
-                        <>
-                          <TrackingTable
-                            patinetListAll={
-                              trackingList?.patientDTOList?.content
-                            }
-                            actionBodyTemplate={actionBodyTemplate}
-                            statusBodyTemplate={processstatusBodyTemplate}
-                            auditBodyTemplate={auditstatusBodyTemplate}
-                            patientDetails={patientDetails}
-                            setSort={setSort}
-                            page={{
-                              pageNo,
-                              paginationFirst,
-                              selectedDates,
-                              selectedDateRanges,
-                              selectedOption,
-                              searchText,
-                              sort,
-                              clear,
-                              activeFilters,
-                            }}
-                            loader={loader}
-                            bullets={bullets}
-                            badges={badges}
-                            sort={sort}
-                          />
-                          <div>
-                            <div className="pagination-container">
-                              <Paginator
-                                id="tracking-paginator"
-                                name="tracking-paginator"
-                                first={pageNo === 0 ? 0 : paginationFirst}
-                                rows={15}
-                                totalRecords={
-                                  trackingList?.patientDTOList?.totalElements
-                                }
-                                onPageChange={onPageChange}
-                              />
-                              <div className="total-pages">
-                                Total count:{" "}
-                                {trackingList?.patientDTOList?.totalElements}
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      )}
+            <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
+              {loader ? (
+                <div>
+                  {" "}
+                  <TableSkeleton />
+                </div>
+              ) : (
+                <div div className="mt-2">
+                  <TrackingTable
+                    patinetListAll={trackingList?.patientDTOList?.content}
+                    actionBodyTemplate={actionBodyTemplate}
+                    statusBodyTemplate={processstatusBodyTemplate}
+                    auditBodyTemplate={auditstatusBodyTemplate}
+                    patientDetails={patientDetails}
+                    setSort={setSort}
+                    page={{
+                      pageNo,
+                      paginationFirst,
+                      selectedDates,
+                      selectedDateRanges,
+                      selectedOption,
+                      searchText,
+                      sort,
+                      clear,
+                      activeFilters,
+                    }}
+                    loader={loader}
+                    bullets={bullets}
+                    badges={badges}
+                    sort={sort}
+                  />
+                  <div>
+                    <div className="pagination-container">
+                      <Paginator
+                        id="tracking-paginator"
+                        name="tracking-paginator"
+                        first={pageNo === 0 ? 0 : paginationFirst}
+                        rows={15}
+                        totalRecords={
+                          trackingList?.patientDTOList?.totalElements
+                        }
+                        onPageChange={onPageChange}
+                      />
+                      <div className="total-pages">
+                        Total count:{" "}
+                        {trackingList?.patientDTOList?.totalElements}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

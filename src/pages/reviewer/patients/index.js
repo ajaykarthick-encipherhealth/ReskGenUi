@@ -63,7 +63,7 @@ const Patient = ({
       type: "search",
       value: null,
       placeholder: "Search",
-      header:"Patient Name / ID"
+      header: "Patient Name / ID",
     },
     {
       id: "02",
@@ -108,7 +108,7 @@ const Patient = ({
       type: "select",
       value: null,
       placeholder: "Batch",
-      showSearch:true,
+      showSearch: true,
       options: batchList?.map((item) => ({
         value: item?.id,
         label: `${item?.name}`,
@@ -308,7 +308,7 @@ const Patient = ({
         paginationFirst,
         sort,
       } = routedData;
-      setPageNo(pageNo?pageNo:0);
+      setPageNo(pageNo ? pageNo : 0);
       setSearchText(searchText);
       setSelectedDateRanges(selectedDateRanges);
       setSelectedOption(selectedOption);
@@ -357,87 +357,70 @@ const Patient = ({
   return (
     <div className={`show `}>
       <Header />
-      <div class="content-body">
-        <div className="container-fluid">
+      <div className="content-body">
+        <div className="container-fluid table-responsive active-projects task-table">
           <div className="row">
-            <div className="col-12">
-              <div className="">
-                <div className="card-body p-0">
-                  <div className="table-responsive active-projects task-table">
-                    <div className="row">
-                      <div className="col-10 ">
-                        <ReusableFilters
-                        showFilter={true}
-                          setActiveFilters={setActiveFilters}
-                          setSearchText={setSearchText}
-                          searchText={searchText}
-                          setSelectedOption={setSelectedOption}
-                          selectedOption={selectedOption}
-                          setSelectedDateRanges={setSelectedDateRanges}
-                          selectedDateRanges={selectedDateRanges}
-                          setPageNumber={setPageNumber}
-                          FilterItems={commonFilterItems}
-                          selectedDates={selectedDates}
-                          setSelectedDates={setSelectedDates}
-                          activeFilters={activeFilters}
-                          setClear={setClear}
-                          clear={clear}
-                          setPageNo={setPageNo}
-                        />
-                      </div>
-                      <div className="col-2">
-                        <div className="row">
-                          <div className=" mt-1 mb-1">
-                            <DailyTask trackChart={trackChart} />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+            <div className="col-10">
+              <ReusableFilters
+                showFilter={true}
+                setActiveFilters={setActiveFilters}
+                setSearchText={setSearchText}
+                searchText={searchText}
+                setSelectedOption={setSelectedOption}
+                selectedOption={selectedOption}
+                setSelectedDateRanges={setSelectedDateRanges}
+                selectedDateRanges={selectedDateRanges}
+                setPageNumber={setPageNumber}
+                FilterItems={commonFilterItems}
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+                activeFilters={activeFilters}
+                setClear={setClear}
+                clear={clear}
+                setPageNo={setPageNo}
+              />
+            </div>
+            <div className="col-2 mt-1 mb-1">
+              <DailyTask trackChart={trackChart} />
+            </div>
+          </div>
 
-                    <div
-                      id="task-tbl_wrapper"
-                      className="dataTables_wrapper no-footer"
-                    >
-                      {loading ? (
-                        <TableSkeleton />
-                      ) : (
-                        <div className="mt-3">
-                          <PatientTable
-                            handleTableRowClick={handleTableRowClick}
-                            pageNumber={pageNumber}
-                            patinetListAll={patinetListAll}
-                            activeFilters={activeFilters}
-                            actionBodyTemplate={actionBodyTemplate}
-                            statusBodyTemplate={processstatusBodyTemplate}
-                            gotoPatientDetails={gotoPatientDetails}
-                            patientDetails={patientDetails}
-                            sort={sort}
-                            setSort={setSort}
-                            getFilteApi={getFilteApi}
-                            page={{ pageNo, paginationFirst }}
-                            getRoutedData={getRoutedData}
-                            bullets={bullets}
-                          />
-                          <div>
-                            <div className="pagination-container">
-                              <Paginator
-                                first={pageNo === 0 ? 0 : paginationFirst}
-                                rows={15}
-                                totalRecords={totalElements}
-                                onPageChange={onPageChange}
-                              />
-                              <div className="total-pages">
-                                Total count: {totalElements}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
+          <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
+            {loading ? (
+              <TableSkeleton />
+            ) : (
+              <div className="mt-3">
+                <PatientTable
+                  handleTableRowClick={handleTableRowClick}
+                  pageNumber={pageNumber}
+                  patinetListAll={patinetListAll}
+                  activeFilters={activeFilters}
+                  actionBodyTemplate={actionBodyTemplate}
+                  statusBodyTemplate={processstatusBodyTemplate}
+                  gotoPatientDetails={gotoPatientDetails}
+                  patientDetails={patientDetails}
+                  sort={sort}
+                  setSort={setSort}
+                  getFilteApi={getFilteApi}
+                  page={{ pageNo, paginationFirst }}
+                  getRoutedData={getRoutedData}
+                  bullets={bullets}
+                />
+                <div>
+                  <div className="pagination-container">
+                    <Paginator
+                      first={pageNo === 0 ? 0 : paginationFirst}
+                      rows={15}
+                      totalRecords={totalElements}
+                      onPageChange={onPageChange}
+                    />
+                    <div className="total-pages">
+                      Total count: {totalElements}
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

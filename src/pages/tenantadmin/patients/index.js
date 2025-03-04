@@ -4,12 +4,12 @@ import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { Form, Spin, notification } from "antd";
+import { Button, Form, Spin, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import visitStyles from "../../../styles/visitdata.module.css";
 import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
-import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, PlusCircleFilled } from "@ant-design/icons";
 import {
   generateOptionsForNewStore,
   validateYear,
@@ -546,48 +546,6 @@ const Patient = ({
     setPageNumber(e.page);
   };
 
-  const statusUpdateWebSocketFunc = (result) => {
-    var resultMap = [];
-    result?.map((res) => {
-      resultMap?.push({
-        ...res,
-        patientId: res.patientId,
-        patientAllocated: res.patientAllocated,
-        computing: res.computing,
-        processStageChart: res.processStageChart,
-        processStageRadiology: res.processStageRadiology,
-        processStageLab: res.processStageLab,
-        processStageId: res.processStageId,
-        processStageIdRadiology: res.processStageIdRadiology,
-        processStageIdLab: res.processStageIdLab,
-        allocatedUserId: res.allocatedUserId,
-        allocatedOn: res.allocatedOn,
-        allocatedBy: res.allocatedBy,
-        patientName: res.patientName,
-        dueDate: res.dueDate,
-        processedStatus: res.processedStatus,
-        auditedStatus: res.auditedStatus,
-        auditedBy: res.auditedBy,
-        auditedDate: res.auditedDate,
-        priority: res.priority,
-        computedDate: res.computedDate,
-        lastModifiedDate: res.lastModifiedDate,
-        createdDate: res.createdDate,
-        createdBy: res.createdBy,
-        allocatedByFirstName: res.allocatedByFirstName,
-        allocatedByLastName: res.allocatedByLastName,
-        allocatedByProfileImage: res.allocatedByProfileImage,
-        createdByFirstName: res.createdByFirstName,
-        createdByLastName: res.createdByLastName,
-        createdByProfileImage: res.createdByProfileImage,
-        totalPages: res.totalPages,
-      });
-    });
-    var newArray = [];
-    newArray = [...patinetListAll, ...resultMap];
-    setPatinetListAll(resultMap);
-  };
-
   useEffect(() => {
     if (routedData) {
       const {
@@ -615,9 +573,9 @@ const Patient = ({
 
   useEffect(() => {
     setParamsFilter("check");
-    var tenId = getStorage("tenantId");
-    var uId = getStorage("userId");
-    var orgId = getStorage("orgId");
+    let tenId = getStorage("tenantId");
+    let uId = getStorage("userId");
+    let orgId = getStorage("orgId");
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
@@ -657,106 +615,119 @@ const Patient = ({
         }
       }
       setStatusUpdateWebSocket(patientData);
-    }else{
-      setStatusUpdateWebSocket(allPatientList?.data?.response?.patientDtoList?.content)
+    } else {
+      setStatusUpdateWebSocket(
+        allPatientList?.data?.response?.patientDtoList?.content
+      );
     }
-  }, [webSocketData,allPatientList]);
+  }, [webSocketData, allPatientList]);
 
   return (
     <div className={`show `}>
       <Header />
       <div className="content-body">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-12">
-              <div className="">
-                <div className="card-body p-0">
-                  <div className="table-responsive active-projects task-table">
-                    <div className="row">
-                      <div style={{ width: "99%" }}>
-                        <ReusableFilters
-                          showFilter={true}
-                          setActiveFilters={setActiveFilters}
-                          setSearchText={setSearchText}
-                          searchText={searchText}
-                          setSelectedOption={setSelectedOption}
-                          selectedOption={selectedOption}
-                          setSelectedDateRanges={setSelectedDateRanges}
-                          selectedDateRanges={selectedDateRanges}
-                          FilterItems={commonFilterItems}
-                          selectedDates={selectedDates}
-                          setSelectedDates={setSelectedDates}
-                          activeFilters={activeFilters}
-                          setClear={setClear}
-                          clear={clear}
-                          addUserForm={addPatientFormId}
-                          addUser={true}
-                          btnTitle={"Add Patient"}
-                          form={form}
-                          setPageNo={setPageNo}
-                        />
-                      </div>
-                    </div>
-                    <div
-                      id="task-tbl_wrapper"
-                      className="dataTables_wrapper no-footer"
-                    >
-                      {loading ? (
-                        <TableSkeleton />
-                      ) : (
-                        <div className="mt-2">
-                          <AddPatientListTable
-                           getRetregger={getRetregger}
-                            bullets={bullets}
-                            patinetListAll={statusUpdateWebSocket}
-                            actionBodyTemplate={actionBodyTemplate}
-                            statusBodyTemplate={processstatusBodyTemplate}
-                            gotoPatientDetails={gotoPatientDetails}
-                            patientDetails={patientDetails}
-                            setSort={setSort}
-                            sort={sort}
-                            page={{
-                              pageNo,
-                              selectedDates,
-                              paginationFirst,
-                              sort,
-                              selectedDates,
-                              activeFilters,
-                              searchText,
-                              selectedOption,
-                              selectedDateRanges,
-                              pageNumber,
-                            }}
-                          />
-                          <div>
-                            <div className="pagination-container">
-                              <Paginator
-                                id="patients-paginator"
-                                name="patients-paginator"
-                                first={pageNo === 0 ? 0 : paginationFirst}
-                                rows={15}
-                                totalRecords={
-                                  allPatientList?.data?.response?.patientDtoList
-                                    ?.totalElements
-                                }
-                                onPageChange={onPageChange}
-                              />
-                              <div className="total-pages">
-                                Total count:{" "}
-                                {
-                                  allPatientList?.data?.response?.patientDtoList
-                                    ?.totalElements
-                                }
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
+        <div className="container-fluid table-responsive active-projects task-table">
+          <section className="d-flex">
+            <div style={{ width: "90%" }}>
+              <ReusableFilters
+                showFilter={true}
+                setActiveFilters={setActiveFilters}
+                setSearchText={setSearchText}
+                searchText={searchText}
+                setSelectedOption={setSelectedOption}
+                selectedOption={selectedOption}
+                setSelectedDateRanges={setSelectedDateRanges}
+                selectedDateRanges={selectedDateRanges}
+                FilterItems={commonFilterItems}
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+                activeFilters={activeFilters}
+                setClear={setClear}
+                clear={clear}
+                addUserForm={addPatientFormId}
+                addUser={false}
+                btnTitle={"Add Patient"}
+                form={form}
+                setPageNo={setPageNo}
+              />
+            </div>
+            <div
+              className="d-flex justify-content-center align-items-center mt-3"
+              style={{ width: "10%" }}
+            >
+              <Button
+                id={"Add Patient"}
+                name={"Add Patient"}
+                onClick={() => {
+                  if (form) {
+                    form.resetFields();
+                  }
+                  addPatientFormId();
+                }}
+                style={{
+                  background: "#04306f",
+                  color: "#fff",
+                  width: "100%",
+                  fontSize: "12px",
+                }}
+                className="btn btn-sm w-full text-ellipsis"
+              >
+                <PlusCircleFilled /> Add Patient
+              </Button>
+            </div>
+          </section>
+          <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
+            {loading ? (
+              <TableSkeleton />
+            ) : (
+              <div className="mt-2">
+                <AddPatientListTable
+                  getRetregger={getRetregger}
+                  bullets={bullets}
+                  patinetListAll={statusUpdateWebSocket}
+                  actionBodyTemplate={actionBodyTemplate}
+                  statusBodyTemplate={processstatusBodyTemplate}
+                  gotoPatientDetails={gotoPatientDetails}
+                  patientDetails={patientDetails}
+                  setSort={setSort}
+                  sort={sort}
+                  page={{
+                    pageNo,
+                    selectedDates,
+                    paginationFirst,
+                    sort,
+                    selectedDates,
+                    activeFilters,
+                    searchText,
+                    selectedOption,
+                    selectedDateRanges,
+                    pageNumber,
+                  }}
+                />
+                <div>
+                  <div className="pagination-container">
+                    <Paginator
+                      id="patients-paginator"
+                      name="patients-paginator"
+                      first={pageNo === 0 ? 0 : paginationFirst}
+                      rows={15}
+                      totalRecords={
+                        allPatientList?.data?.response?.patientDtoList
+                          ?.totalElements
+                      }
+                      onPageChange={onPageChange}
+                    />
+                    <div className="total-pages">
+                      Total count:{" "}
+                      {
+                        allPatientList?.data?.response?.patientDtoList
+                          ?.totalElements
+                      }
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

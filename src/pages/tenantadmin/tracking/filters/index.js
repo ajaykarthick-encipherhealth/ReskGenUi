@@ -1,23 +1,17 @@
 import React, { useState } from "react";
 import styles from "../../../../mainStream/components/moreFilters/report.module.css";
-import { Button, Divider, Popover, Tooltip } from "antd";
+import { Divider, Popover, Tooltip } from "antd";
 import Tracking from "../tracking.module.css";
 import { connect } from "react-redux";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
-import {  PlusCircleFilled } from "@ant-design/icons";
 const MoreFilter = ({
-  selectAll,
   setSelectAll,
   allFilters,
   setActiveFilters,
   activeFilters,
   handleClearFilters,
   handleClearAllFilters,
-  getRoutedData,
   byDefault,
-  addUser,
-  addUserForm,
-  btnTitle,form
 }) => {
   const [popoverVisible, setPopoverVisible] = useState(false);
 
@@ -121,7 +115,7 @@ const MoreFilter = ({
           </div>
         </Tooltip>
       </Popover>
-      {addUser && (
+      {/* {addUser && (
         <div className="align-self-center mt-4">
           <Button
           id={btnTitle}
@@ -138,7 +132,7 @@ const MoreFilter = ({
             <PlusCircleFilled /> {btnTitle}
           </Button>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

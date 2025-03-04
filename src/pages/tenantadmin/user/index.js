@@ -8,13 +8,11 @@ import { Paginator } from "primereact/paginator";
 import { encyptingPass } from "../../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
 import UsersList from "../../../components/table/tenantTable/usersList/usersList";
-import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
-import HeaderFilters from "./headerFilters";
 import TableSkeleton from "../../../components/skeleton/table";
 import ReusableFilters from "../../../components/reusableFilters";
-
+import { PlusCircleFilled } from "@ant-design/icons";
 const options3 = [
   { value: "true", label: "Enabled" },
   { value: "false", label: "Disabled" },
@@ -51,7 +49,7 @@ const UserList = ({
       type: "search",
       value: null,
       placeholder: "Search",
-      header:"Search by UserName"
+      header: "Search by UserName",
     },
 
     {
@@ -121,7 +119,7 @@ const UserList = ({
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
+  // const [pageNumber, setPageNumber] = useState(0);
   const [mobileNumber, setMobileNumber] = useState("");
   const [orgAllList, setOrgAllList] = useState("");
 
@@ -164,7 +162,7 @@ const UserList = ({
     const response = await getAddUser(userFormData, setFormData);
     if (response?.status == "SUCCESS") {
       getAllUsersList({
-        pageNo:0,
+        pageNo: 0,
         searchText,
         selectedDateRanges,
         selectedOption,
@@ -180,12 +178,12 @@ const UserList = ({
         mobileNumber: "",
         confirmPassword: "",
       });
-      setPaginationFirst(0)
+      setPaginationFirst(0);
       setMobileNumber("");
       form.resetFields();
       setUseAdd(true);
       setIsLoadingBtn(false);
-      getResponePopup(response);  
+      getResponePopup(response);
       setRoleValue([]);
       setValidated(true);
       setAddUser(false);
@@ -272,7 +270,7 @@ const UserList = ({
       selectedOption,
       sort: sort?.sort,
     });
-  }, [pageNo, searchText, sort ,selectedDateRanges, selectedOption]);
+  }, [pageNo, searchText, sort, selectedDateRanges, selectedOption]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -289,511 +287,523 @@ const UserList = ({
   };
 
   return (
-    <>
-      <div className={`show `}>
-        <Header />
-        <div class="content-body">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-12">
-                <div className="card-body p-0">
-                  <div className="table-responsive active-projects task-table">
-                    <div className="tbl-caption  align-items-center">
-                    <div style={{width:"99%"}}>
-                      <ReusableFilters
-                      showFilter={true}
-                        setActiveFilters={setActiveFilters}
-                        setSearchText={setSearchText}
-                        searchText={searchText}
-                        setSelectedOption={setSelectedOption}
-                        selectedOption={selectedOption}
-                        setSelectedDateRanges={setSelectedDateRanges}
-                        selectedDateRanges={selectedDateRanges}
-                        setPageNo={setPageNo}
-                        FilterItems={commonFilterItems}
-                        selectedDates={selectedDates}
-                        setSelectedDates={setSelectedDates}
-                        activeFilters={activeFilters}
-                        setClear={setClear}
-                        clear={clear}
-                        addUserForm={addUserForm}
-                        addUser={true}
-                        btnTitle={"Add User"}
-                        form={form}
-                      />
-                    </div>
-                    </div>
-                    <div
-                      id="task-tbl_wrapper"
-                      className="dataTables_wrapper no-footer"
-                    >
-                      {loading ? (
-                        <TableSkeleton />
-                      ) : (
-                        <>
-                          <UsersList
-                            switchHandler={switchHandler}
-                            setPageNo={setPageNo}
-                            sortOrder={sortOrder}
-                            setSortOrder={setSortOrder}
-                            setSort={setSort}
-                            sort={sort}
-                          />
+    <div className={`show `}>
+      <Header />
+      <div className="content-body">
+        <div className="container-fluid">
+          <div className="table-responsive active-projects task-table">
+            <div className="d-flex tbl-caption  align-items-center">
+              <div style={{ width: "90%" }}>
+                <ReusableFilters
+                  showFilter={true}
+                  setActiveFilters={setActiveFilters}
+                  setSearchText={setSearchText}
+                  searchText={searchText}
+                  setSelectedOption={setSelectedOption}
+                  selectedOption={selectedOption}
+                  setSelectedDateRanges={setSelectedDateRanges}
+                  selectedDateRanges={selectedDateRanges}
+                  setPageNo={setPageNo}
+                  FilterItems={commonFilterItems}
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  activeFilters={activeFilters}
+                  setClear={setClear}
+                  clear={clear}
+                  addUserForm={addUserForm}
+                  addUser={false}
+                  btnTitle={"Add User"}
+                  form={form}
+                />
+              </div>
+              <div
+                className="d-flex justify-content-center align-items-center mt-3"
+                style={{ width: "10%" }}
+              >
+                <Button
+                  id={"Add User"}
+                  name={"Add User"}
+                  onClick={() => {
+                    if (form) {
+                      form.resetFields();
+                    }
+                    addUserForm();
+                  }}
+                  style={{
+                    background: "#04306f",
+                    color: "#fff",
+                    width: "100%",
+                    fontSize: "12px",
+                  }}
+                  className="btn btn-sm w-full text-ellipsis"
+                >
+                  <PlusCircleFilled /> Add User
+                </Button>
+              </div>
+            </div>
+            <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
+              {loading ? (
+                <TableSkeleton />
+              ) : (
+                <>
+                  <UsersList
+                    switchHandler={switchHandler}
+                    setPageNo={setPageNo}
+                    sortOrder={sortOrder}
+                    setSortOrder={setSortOrder}
+                    setSort={setSort}
+                    sort={sort}
+                  />
 
-                          <div>
-                            <div className="pagination-container">
-                              <Paginator
-                                id="user-paginator"
-                                name="user-paginator"
-                                first={pageNo === 0 ? 0 : paginationFirst}
-                                rows={15}
-                                totalRecords={totalElements}
-                                onPageChange={onPageChange}
-                              />
-                              <div className="total-pages">
-                                Total count: {totalElements}
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      )}
+                  <div>
+                    <div className="pagination-container">
+                      <Paginator
+                        id="user-paginator"
+                        name="user-paginator"
+                        first={pageNo === 0 ? 0 : paginationFirst}
+                        rows={15}
+                        totalRecords={totalElements}
+                        onPageChange={onPageChange}
+                      />
+                      <div className="total-pages">
+                        Total count: {totalElements}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                </>
+              )}
             </div>
           </div>
         </div>
+      </div>
 
-        <Offcanvas
-          onHide={setAddPatientId}
-          show={addPatientId}
-          className="offcanvas-end"
-          placement="end"
-          id="patient-details"
-          name="patient-details"
-        >
-          <div className="offcanvas-header">
-            <h5 className="modal-title" id="#gridSystemModal">
-              Add Patient Details
-            </h5>
-            <button
-              id="add-btn"
-              name="add-btn"
-              type="button"
-              className="btn-close"
-              onClick={() => {
-                setAddPatientId(false);
-              }}
+      <Offcanvas
+        onHide={setAddPatientId}
+        show={addPatientId}
+        className="offcanvas-end"
+        placement="end"
+        id="patient-details"
+        name="patient-details"
+      >
+        <div className="offcanvas-header">
+          <h5 className="modal-title" id="#gridSystemModal">
+            Add Patient Details
+          </h5>
+          <button
+            id="add-btn"
+            name="add-btn"
+            type="button"
+            className="btn-close"
+            onClick={() => {
+              setAddPatientId(false);
+            }}
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div className="offcanvas-body">
+          <div className={`container-fluid ${styles.formAnimation}`}>
+            <Form
+              noValidate
+              validated={validated}
+              onSubmit={handleSubmitPatientId}
+              autoComplete="off"
             >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div className="offcanvas-body">
-            <div className={`container-fluid ${styles.formAnimation}`}>
-              <Form
-                noValidate
-                validated={validated}
-                onSubmit={handleSubmitPatientId}
-                autoComplete="off"
-              >
-                <div className="row">
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient ID <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientId"
-                      id="patientId"
-                      required
-                      type="text"
-                      onChange={handleChangePatientId}
-                    />
-                  </div>
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientName"
-                      id="patientName"
-                      required
-                      type="text"
-                      onChange={handleChangePatientId}
-                    />
-                  </div>
+              <div className="row">
+                <div className="col-xl-12 mb-3">
+                  <Form.Label>
+                    Patient ID <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <Form.Control
+                    name="patientId"
+                    id="patientId"
+                    required
+                    type="text"
+                    onChange={handleChangePatientId}
+                  />
                 </div>
+                <div className="col-xl-12 mb-3">
+                  <Form.Label>
+                    Patient Name <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <Form.Control
+                    name="patientName"
+                    id="patientName"
+                    required
+                    type="text"
+                    onChange={handleChangePatientId}
+                  />
+                </div>
+              </div>
 
-                <div>
+              <div>
+                <Button
+                  id="submit-btn"
+                  name="submit-btn"
+                  type="submit"
+                  className="btn btn-primary btn-sm me-1"
+                >
+                  {isLoadingBtn ? "Loading..." : "Submit"}
+                </Button>
+                <Button
+                  id="cancel-btn"
+                  name="cancel-btn"
+                  onClick={() => setAddPatientId(false)}
+                  className="btn btn-danger btn-sm light ms-1"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </Form>
+          </div>
+        </div>
+      </Offcanvas>
+      <Offcanvas
+        id="add-user"
+        name="add-user"
+        show={addUser}
+        onHide={() => {
+          setAddUser(false);
+          setRoleValue([]);
+          setRole("");
+          form.resetFields();
+        }}
+        className="offcanvas-end offcanvas-md-size"
+        placement="end"
+      >
+        <div className="offcanvas-header">
+          <h5 className="modal-title" id="#gridSystemModal">
+            Add User
+          </h5>
+          <button
+            id="user-btn"
+            name="user-btn"
+            type="button"
+            className="btn-close"
+            onClick={() => {
+              setAddUser(false);
+              form.resetFields();
+            }}
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div className="offcanvas-body">
+          <div className={`container-fluid ${styles.formAnimation}`}>
+            <Form
+              form={form}
+              name="control-hooks"
+              onFinish={onFinish}
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              autoComplete="off"
+            >
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item
+                    label="First Name"
+                    name="firstName"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your first name!",
+                      },
+                    ]}
+                  >
+                    <div>
+                      <Input
+                        id="firstName"
+                        name="firstName"
+                        placeholder="Enter first name"
+                        autoComplete="off"
+                      />
+                    </div>
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Last Name"
+                    name="lastName"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your last name!",
+                      },
+                    ]}
+                  >
+                    <div>
+                      <Input
+                        id="lastName"
+                        name="lastName"
+                        placeholder="Enter last name"
+                        autoComplete="off"
+                      />
+                    </div>
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item
+                    label="Email"
+                    name="emailId"
+                    rules={[
+                      { required: true, message: "Please enter your email!" },
+                      {
+                        pattern:
+                          "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(?:.[a-zA-Z]{2,})?$",
+                        required: true,
+                        message: "Enter the Valid Email ",
+                      },
+                    ]}
+                  >
+                    <div>
+                      <Input
+                        id="emailId"
+                        name="emailId"
+                        placeholder="Enter email"
+                        autoComplete="off"
+                      />
+                    </div>
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="User Name"
+                    name="userName"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your username!",
+                      },
+                      {
+                        validator: (_, value) => {
+                          if (value && value.includes("@")) {
+                            return Promise.reject(
+                              "Username should not contain @ symbol"
+                            );
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                    ]}
+                  >
+                    <div>
+                      <Input
+                        id="userName"
+                        name="userName"
+                        placeholder="Enter user name"
+                        autoComplete="off"
+                      />
+                    </div>
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item
+                    name="role"
+                    label="Role"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <Select
+                      id="role"
+                      name="role"
+                      placeholder="Select role"
+                      allowClear
+                      style={{ height: "42px" }}
+                    >
+                      <Select.Option value="REVIEWER">REVIEWER</Select.Option>
+                      <Select.Option value="SUPERVISOR">
+                        SUPERVISOR
+                      </Select.Option>
+                      <Select.Option value="TENANT_ADMIN">
+                        TENANT ADMIN
+                      </Select.Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Select Organization"
+                    name="orgId"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select Organization!",
+                      },
+                    ]}
+                  >
+                    <Select
+                      id="orgId"
+                      name="orgId"
+                      placeholder="Select"
+                      options={orgAllList}
+                      style={{ height: "42px" }}
+                      allowClear
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <input type="password" style={{ display: "none" }} />
+
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item
+                    label="Password"
+                    name="password"
+                    dependencies={["password"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your password!",
+                      },
+                      {
+                        validator: (_, value) =>
+                          value &&
+                          value.length >= 8 &&
+                          /[a-z]/.test(value) &&
+                          /[A-Z]/.test(value) &&
+                          /\d/.test(value) &&
+                          /[!@#$%^&*(),.?":{}|<>]/.test(value)
+                            ? Promise.resolve()
+                            : Promise.reject(
+                                "Password must be at least 8 characters, with at least one lowercase, one uppercase, one number, and one special character!"
+                              ),
+                      },
+                    ]}
+                  >
+                    <div className="confirmPass">
+                      <input type="password" style={{ display: "none" }} />
+                      <Input.Password
+                        name="password"
+                        id="password"
+                        placeholder="Enter password"
+                        autoComplete="new-password"
+                      />
+                    </div>
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Confirm Password"
+                    name="confirmPassword"
+                    dependencies={["password"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please confirm your password!",
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (!value || getFieldValue("password") === value) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            "Passwords do not match. Please verify and re-enter."
+                          );
+                        },
+                      }),
+                    ]}
+                  >
+                    <div className="confirmPass">
+                      <input type="password" style={{ display: "none" }} />
+                      <Input.Password
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Re-enter the password"
+                        autoComplete="new-password"
+                      />
+                    </div>
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Mobile Number"
+                    name="mobileNumber"
+                    rules={[
+                      {
+                        required: true,
+                        max: 10,
+                        message: "Please enter your mobile number!",
+                      },
+                      {
+                        pattern: /^[0-9]{10}$/,
+                        message: "Please enter a valid 10-digit mobile number!",
+                      },
+                    ]}
+                  >
+                    <div>
+                      <Input
+                        id="mobileNumber"
+                        name="mobileNumber"
+                        type="text"
+                        placeholder="Enter mobile number"
+                        autoComplete="off"
+                        value={getDisplayValue(mobileNumber)}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </Form.Item>
+                </Col>
+              </Row>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <input
+                  type="text"
+                  name="fakeusernameremembered"
+                  id="fakeusernameremembered"
+                  value=""
+                  style={{ display: "none" }}
+                />
+                <input
+                  type="password"
+                  name="fakepasswordremembered"
+                  id="fakepasswordremembered"
+                  value=""
+                  style={{ display: "none" }}
+                />
+                <Form.Item>
                   <Button
+                    type="primary"
+                    className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
+                    htmlType="submit"
                     id="submit-btn"
                     name="submit-btn"
-                    type="submit"
-                    className="btn btn-primary btn-sm me-1"
                   >
-                    {isLoadingBtn ? "Loading..." : "Submit"}
+                    Submit
                   </Button>
+                </Form.Item>
+                <Form.Item>
                   <Button
-                    id="cancel-btn"
+                    id="cancle-btn"
                     name="cancel-btn"
-                    onClick={() => setAddPatientId(false)}
-                    className="btn btn-danger btn-sm light ms-1"
+                    style={{
+                      backgroundColor: "#ffdede",
+                      color: "#ff5e5e",
+                      borderColor: "#ffdede",
+                    }}
+                    onClick={() => {
+                      setAddUser(false);
+                      setRoleValue([]);
+                      setRole("");
+                      form.resetFields();
+                      setMobileNumber("");
+                    }}
                   >
                     Cancel
                   </Button>
-                </div>
-              </Form>
-            </div>
+                </Form.Item>
+              </div>
+            </Form>
           </div>
-        </Offcanvas>
-        <Offcanvas
-          id="add-user"
-          name="add-user"
-          show={addUser}
-          onHide={() => {
-            setAddUser(false);
-            setRoleValue([]);
-            setRole("");
-            form.resetFields();
-          }}
-          className="offcanvas-end offcanvas-md-size"
-          placement="end"
-        >
-          <div className="offcanvas-header">
-            <h5 className="modal-title" id="#gridSystemModal">
-              Add User
-            </h5>
-            <button
-              id="user-btn"
-              name="user-btn"
-              type="button"
-              className="btn-close"
-              onClick={() => {
-                setAddUser(false);
-                form.resetFields();
-              }}
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div className="offcanvas-body">
-            <div className={`container-fluid ${styles.formAnimation}`}>
-              <Form
-                form={form}
-                name="control-hooks"
-                onFinish={onFinish}
-                labelCol={{ span: 24 }}
-                wrapperCol={{ span: 24 }}
-                autoComplete="off"
-              >
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <Form.Item
-                      label="First Name"
-                      name="firstName"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your first name!",
-                        },
-                      ]}
-                    >
-                      <div>
-                        <Input
-                          id="firstName"
-                          name="firstName"
-                          placeholder="Enter first name"
-                          autoComplete="off"
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Last Name"
-                      name="lastName"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your last name!",
-                        },
-                      ]}
-                    >
-                      <div>
-                        <Input
-                          id="lastName"
-                          name="lastName"
-                          placeholder="Enter last name"
-                          autoComplete="off"
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Email"
-                      name="emailId"
-                      rules={[
-                        { required: true, message: "Please enter your email!" },
-                        {
-                          pattern:
-                            "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(?:.[a-zA-Z]{2,})?$",
-                          required: true,
-                          message: "Enter the Valid Email ",
-                        },
-                      ]}
-                    >
-                      <div>
-                        <Input
-                          id="emailId"
-                          name="emailId"
-                          placeholder="Enter email"
-                          autoComplete="off"
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="User Name"
-                      name="userName"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your username!",
-                        },
-                        {
-                          validator: (_, value) => {
-                            if (value && value.includes("@")) {
-                              return Promise.reject(
-                                "Username should not contain @ symbol"
-                              );
-                            }
-                            return Promise.resolve();
-                          },
-                        },
-                      ]}
-                    >
-                      <div>
-                        <Input
-                          id="userName"
-                          name="userName"
-                          placeholder="Enter user name"
-                          autoComplete="off"
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <Form.Item
-                      name="role"
-                      label="Role"
-                      rules={[
-                        {
-                          required: true,
-                        },
-                      ]}
-                    >
-                      <Select
-                        id="role"
-                        name="role"
-                        placeholder="Select role"
-                        allowClear
-                        style={{ height: "42px" }}
-                      >
-                        <Select.Option value="REVIEWER">REVIEWER</Select.Option>
-                        <Select.Option value="SUPERVISOR">
-                          SUPERVISOR
-                        </Select.Option>
-                        <Select.Option value="TENANT_ADMIN">
-                          TENANT ADMIN
-                        </Select.Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Select Organization"
-                      name="orgId"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select Organization!",
-                        },
-                      ]}
-                    >
-                      <Select
-                        id="orgId"
-                        name="orgId"
-                        placeholder="Select"
-                        options={orgAllList}
-                        style={{ height: "42px" }}
-                        allowClear
-                      />
-                    </Form.Item>
-                  </Col>
-                </Row>
-
-                <input type="password" style={{ display: "none" }} />
-
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Password"
-                      name="password"
-                      dependencies={["password"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your password!",
-                        },
-                        {
-                          validator: (_, value) =>
-                            value &&
-                            value.length >= 8 &&
-                            /[a-z]/.test(value) &&
-                            /[A-Z]/.test(value) &&
-                            /\d/.test(value) &&
-                            /[!@#$%^&*(),.?":{}|<>]/.test(value)
-                              ? Promise.resolve()
-                              : Promise.reject(
-                                  "Password must be at least 8 characters, with at least one lowercase, one uppercase, one number, and one special character!"
-                                ),
-                        },
-                      ]}
-                    >
-                      <div className="confirmPass">
-                        <input type="password" style={{ display: "none" }} />
-                        <Input.Password
-                          name="password"
-                          id="password"
-                          placeholder="Enter password"
-                          autoComplete="new-password"
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Confirm Password"
-                      name="confirmPassword"
-                      dependencies={["password"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please confirm your password!",
-                        },
-                        ({ getFieldValue }) => ({
-                          validator(_, value) {
-                            if (!value || getFieldValue("password") === value) {
-                              return Promise.resolve();
-                            }
-                            return Promise.reject(
-                              "Passwords do not match. Please verify and re-enter."
-                            );
-                          },
-                        }),
-                      ]}
-                    >
-                      <div className="confirmPass">
-                        <input type="password" style={{ display: "none" }} />
-                        <Input.Password
-                          id="confirmPassword"
-                          name="confirmPassword"
-                          placeholder="Re-enter the password"
-                          autoComplete="new-password"
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Mobile Number"
-                      name="mobileNumber"
-                      rules={[
-                        {
-                          required: true,
-                          max: 10,
-                          message: "Please enter your mobile number!",
-                        },
-                        {
-                          pattern: /^[0-9]{10}$/,
-                          message:
-                            "Please enter a valid 10-digit mobile number!",
-                        },
-                      ]}
-                    >
-                      <div>
-                        <Input
-                          id="mobileNumber"
-                          name="mobileNumber"
-                          type="text"
-                          placeholder="Enter mobile number"
-                          autoComplete="off"
-                          value={getDisplayValue(mobileNumber)}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <div style={{ display: "flex", gap: "8px" }}>
-                  <input
-                    type="text"
-                    name="fakeusernameremembered"
-                    id="fakeusernameremembered"
-                    value=""
-                    style={{ display: "none" }}
-                  />
-                  <input
-                    type="password"
-                    name="fakepasswordremembered"
-                    id="fakepasswordremembered"
-                    value=""
-                    style={{ display: "none" }}
-                  />
-                  <Form.Item>
-                    <Button
-                      type="primary"
-                      className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
-                      htmlType="submit"
-                      id="submit-btn"
-                      name="submit-btn"
-                    >
-                      Submit
-                    </Button>
-                  </Form.Item>
-                  <Form.Item>
-                    <Button
-                      id="cancle-btn"
-                      name="cancel-btn"
-                      style={{
-                        backgroundColor: "#ffdede",
-                        color: "#ff5e5e",
-                        borderColor: "#ffdede",
-                      }}
-                      onClick={() => {
-                        setAddUser(false);
-                        setRoleValue([]);
-                        setRole("");
-                        form.resetFields();
-                        setMobileNumber("");
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  </Form.Item>
-                </div>
-              </Form>
-            </div>
-          </div>
-        </Offcanvas>
-      </div>
-    </>
+        </div>
+      </Offcanvas>
+    </div>
   );
 };
 

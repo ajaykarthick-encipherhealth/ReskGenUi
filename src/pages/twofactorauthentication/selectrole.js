@@ -13,8 +13,8 @@ const SelectRole = ({ getLogin }) => {
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
-  const [role, setRole] = useState();
-  const [decodedParams, setDecodedParams] = useState();
+  // const [role, setRole] = useState();
+  // const [decodedParams, setDecodedParams] = useState();
   const [confirmModal, setConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
@@ -36,7 +36,7 @@ const SelectRole = ({ getLogin }) => {
           duration: 1,
         });
       } else {
-         loginSuccessCallBack();
+        loginSuccessCallBack();
       }
     }
   };
@@ -87,22 +87,12 @@ const SelectRole = ({ getLogin }) => {
     setPassword(sessionPassword);
     removeStorage("password");
     if (password) {
-      const encodeParams = btoa(
-        JSON.stringify({
-          mfa: mfa,
-          skipEntry: skipEntry,
-          username: username,
-          password: password,
-        })
-      );
-      setDecodedParams(encodeParams);
+      // let rolesArray = JSON.parse(getStorage("roles"));
+      // let getUserId = getStorage("userId");
+      // if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
+      //   rolesArray = ["TENANT ADMIN"];
+      // }
 
-      let rolesArray = JSON.parse(getStorage("roles"));
-      let getUserId = getStorage("userId");
-      if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
-        rolesArray = ["TENANT ADMIN"];
-      }
-      setRole(rolesArray);
       getLogin({
         email: username,
         router: router,
@@ -143,8 +133,8 @@ const SelectRole = ({ getLogin }) => {
           </div>
           <div className="col-lg-6 col-md-7 col-sm-12 mx-auto align-self-center">
             <div className="login-form">
-            <div className=" d-flex align-items-center justify-content-center">
-            <h2 className="title fontWeight2 " >Login to Your Account</h2>
+              <div className=" d-flex align-items-center justify-content-center">
+                <h2 className="title fontWeight2 ">Login to Your Account</h2>
               </div>
               <h6 className="login-title">
                 <span>Login</span>
@@ -155,13 +145,13 @@ const SelectRole = ({ getLogin }) => {
                   <label className="mb-1 text-dark">Select Role</label>
                   <div
                     style={{
-                      // height: "100px",
+                      height: "100px",
                       marginTop: "5px",
                     }}
                   >
                     <Select
-                     id="select-role"
-                     name="select-role"
+                      id="select-role"
+                      name="select-role"
                       style={{ width: "100%", height: "2.75rem" }}
                       placeholder="Select Role"
                       onChange={(value) => {
@@ -170,12 +160,12 @@ const SelectRole = ({ getLogin }) => {
                       }}
                       options={items}
                     />
+                    {roleError && (
+                      <span className="text-danger fs-12">
+                        Please Select Role
+                      </span>
+                    )}
                   </div>
-                  {roleError && (
-                    <span className="text-danger fs-12">
-                      Please Select Role
-                    </span>
-                  )}
                 </div>
                 <div className="d-flex justify-content-between">
                   <RegularButton

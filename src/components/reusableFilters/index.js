@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, DatePicker, Select } from "antd";
+import {  DatePicker, Select } from "antd";
 import moment from "moment";
 import ReusableInput from "./reusableInput";
 import MoreFilter from "../../pages/tenantadmin/tracking/filters";
@@ -80,15 +80,15 @@ const ReusableFilters = ({
     setPageNo && setPageNo(0);
   };
   return (
-    <div className="d-flex " style={{ width: "100%" }}>
-      <div className=" d-flex flex-wrap gap-3 p-4" style={{ width: "95%" }}>
+    <div className="d-flex">
+      <div className="row" style={{ width: "97%" }}>
         {FilterItems?.filter((item) =>
           activeFilters?.includes(item?.placeholder)
         ).map((item) => {
           switch (item?.type) {
             case "search":
               return (
-                <div key={item?.title} className="default-filter-size">
+                <div key={item?.title} className="default-filter-size mb-2">
                   <label className="responsiveLabel">{item?.header}</label>
                   <ReusableInput
                     testId={`${item?.title}-${item?.type}`}
@@ -104,7 +104,7 @@ const ReusableFilters = ({
               );
             case "select":
               return (
-                <div key={item?.title} className="default-filter-size">
+                <div key={item?.title} className="default-filter-size mb-2">
                   <label className="responsiveLabel">{item?.placeholder}</label>
                   <div>
                     <div
@@ -140,7 +140,7 @@ const ReusableFilters = ({
               );
             case "rangePicker":
               return (
-                <div key={item?.title} className="default-filter-size">
+                <div key={item?.title} className="default-filter-size mb-2">
                   <label className="responsiveLabel">{item?.placeholder}</label>
                   <div
                     id={`${item?.title}-${item?.type}`}
@@ -185,7 +185,10 @@ const ReusableFilters = ({
           }
         })}
       </div>
-      <div className="align-self-center">
+      <div
+        className="d-flex justify-content-center align-items-center mt-3"
+        style={{ width: "3%" }}
+      >
         {showFilter && (
           <MoreFilter
             selectAll={selectAll}
