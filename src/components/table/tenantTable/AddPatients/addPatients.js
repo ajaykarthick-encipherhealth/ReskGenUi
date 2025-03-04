@@ -9,7 +9,6 @@ import TableStyle from "../../table.module.css";
 import { notification, Empty, Tooltip, Popover, Badge } from "antd";
 import {
   renderUserPrfoileAvatar,
-  sortFunction,
 } from "../../../headerFilters/functions";
 import { getStorage, setStorage } from "../../../../utils/storages";
 import SvgFlag from "../../../patientDetails/details/components/svg/svg";
@@ -27,12 +26,9 @@ function AddPatientListTable({
   actionBodyTemplate,
   statusBodyTemplate,
   patientDetails,
-  sortOrder,
-  setSortOrder,
+  sort,
   setSort,
   page,
-  sortCompleteOrder,
-  setSortCompleteOrder,
   selectedRoWDetails,
   getRoutedData,
   bullets,
@@ -81,9 +77,18 @@ function AddPatientListTable({
       gotoPatientDetails(clickedData);
     }
   };
-
+  const handleSort = (field) => {
+    setSort((prev) => {
+      const newSortDir = prev[field]?.sortDir === "DESC" ? "ASC" : "DESC";
+      return {
+        ...prev,
+        [field]: { sortDir: newSortDir, sortField: field },
+        sort: { sortDir: newSortDir, sortField: field },
+      };
+    });
+  };
   const renderRows = () => {
-    return patinetListAll?.length === 0 ? (
+    return patinetListAll?.length === 0 || !patinetListAll? (
       <tr>
         <td colSpan="11">
           <Empty />
@@ -338,32 +343,22 @@ function AddPatientListTable({
             <th
               style={{
                 cursor: "pointer",
-                // paddingLeft: "15px",
                 textAlign: "center",
               }}
               id="computed-date"
               name="computed-date"
-              onClick={() => {
-                sortFunction(sortOrder, setSortOrder, setSort, "computedDate");
-              }}
+              onClick={() => handleSort("computedDate")}
               className="text-truncate"
             >
-              COMPUTED DATE{" "}
-              {sortOrder === "ASC" ? (
+              COMPUTED DATE
+              {sort?.computedDate?.sortDir === "ASC" ? (
                 <ArrowUpOutlined />
               ) : (
                 <ArrowDownOutlined />
               )}
             </th>
             <th
-              onClick={() => {
-                sortFunction(
-                  sortCompleteOrder,
-                  setSortCompleteOrder,
-                  setSort,
-                  "createdDate"
-                );
-              }}
+              onClick={() => handleSort("createdDate")}
               id="created-date"
               name="created-date"
               style={{ textAlign: "center" }}
@@ -378,7 +373,7 @@ function AddPatientListTable({
                   paddingLeft: "15px",
                 }}
               >
-                {sortCompleteOrder === "ASC" ? (
+                {sort?.createdDate?.sortDir === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />

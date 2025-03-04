@@ -11,7 +11,6 @@ import {
 } from "@ant-design/icons";
 import {
   priorityOptions,
-  sortFunction,
   renderUserPrfoileAvatar,
 } from "../../headerFilters/functions";
 import { truncateString } from "../../patientDetails/details/components/function/ReusableFunctions";
@@ -19,7 +18,6 @@ import { actions as supervisorActions } from "../../../stores/supervisor/audited
 import { connect } from "react-redux";
 import { setStorage } from "../../../utils/storages";
 import { actions as reviewerWorkQueueAction } from "../../../stores/reviewer/workqueue";
-import { allFilters } from "../../../pages/reviewer/patients/headerFilters";
 import { actions as patientSyncActions } from "../../../stores/tenantAdmin/patientSync";
 import Legends from "../../legends";
 import { formatDateTime } from "../../../utils/reusable";
@@ -27,26 +25,18 @@ import { formatDateTime } from "../../../utils/reusable";
 function PatientTable({
   patinetListAll,
   statusBodyTemplate,
-  patientDetails,
   setSort,
   getFilteApi,
   page,
-  setSelectedPriority,
-  sortDueOrder,
-  setSortDueOrder,
-  sortCompleteOrder,
-  setSortCompleteOrder,
-  sortAllocateOrder,
-  setSortAllocateOrder,
   userId,
   params,
   gotoPatientDetails,
   supervisorActions,
-  activeFilters,
-  getFilteredList,
   getRoutedData,
   bullets,
   badges,
+  sort,
+  handleTableRowClick
 }) {
   const router = useRouter();
   const handlePriorityChange = async (
@@ -64,19 +54,15 @@ function PatientTable({
     }
   };
 
-  const handleTableRowClick = (e) => {
-    const targetTd = e.target.closest("td");
-    if (targetTd) {
-      getFilteredList(allFilters),
-        setStorage("routeBackTo", "/reviewer/patients");
-      getRoutedData(params);
-      router?.push(
-        "/reviewer/patients/details"
-      );
-      const dataIndex = targetTd.parentElement.rowIndex - 1;
-      const clickedData = patinetListAll[dataIndex];
-      gotoPatientDetails(clickedData);
-    }
+  const handleSort = (field) => {
+    setSort((prev) => {
+      const newSortDir = prev[field]?.sortDir === "DESC" ? "ASC" : "DESC";
+      return {
+        ...prev,
+        [field]: { sortDir: newSortDir, sortField: field },
+        sort: { sortDir: newSortDir, sortField: field },
+      };
+    });
   };
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
@@ -184,7 +170,7 @@ function PatientTable({
       ))
     );
   };
-
+console.log(sort,"sort")
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -198,18 +184,11 @@ function PatientTable({
             )}
             <th
               className="text-truncate text-center"
-              onClick={() => {
-                sortFunction(
-                  sortAllocateOrder,
-                  setSortAllocateOrder,
-                  setSort,
-                  "allocatedOn"
-                );
-              }}
+              onClick={() => handleSort("allocatedOn")}
             >
               ALLOCATED DATE
               <span style={{ cursor: "pointer" }}>
-                {sortAllocateOrder === "ASC" ? (
+                {sort?.allocatedOn?.sortDir === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
@@ -218,13 +197,12 @@ function PatientTable({
             </th>
             <th
               className="text-truncate text-center"
-              onClick={() => {
-                sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
-              }}
+              onClick={() => handleSort("dueDate")}
+              
             >
               DUE DATE
               <span style={{ cursor: "pointer" }}>
-                {sortDueOrder === "ASC" ? (
+              {sort?.dueDate?.sortDir === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
@@ -233,18 +211,11 @@ function PatientTable({
             </th>
             <th
               className="text-truncate text-center"
-              onClick={() => {
-                sortFunction(
-                  sortCompleteOrder,
-                  setSortCompleteOrder,
-                  setSort,
-                  "processedDate"
-                );
-              }}
+              onClick={() => handleSort("processedDate")}
             >
               COMPLETED DATE
               <span style={{ cursor: "pointer" }}>
-                {sortCompleteOrder === "ASC" ? (
+              {sort?.processedDate?.sortDir === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />

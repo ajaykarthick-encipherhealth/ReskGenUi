@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { useRouter } from "next/router";
 import Image from "next/image";
 import { Paginator } from "primereact/paginator";
 import { Popover } from "antd";
-import styles from "../../../reviewer/report/report.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
 import Completed from "../../../../../src/images/trackingImages/completed.webp";
 import Declined from "../../../../../src/images/trackingImages/declined.webp";
 import { extractLatestData } from "../../auditing";
 import {
-  generateOptionsList,
   generateOptionsListSupervisor,
-  renderUserPrfoile,
+  priorityOptions,
   renderUserPrfoileAvatar,
 } from "../../../../components/headerFilters/functions";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
@@ -21,14 +18,12 @@ import userStyles from "./styles.module.css";
 import UserQueueTable from "../../table/userqueue";
 import { actions as allActions } from "../../../../stores/supervisor/users";
 import { actions as allActions2 } from "../../../../stores/supervisor/auditedQueue";
-import { renderSkeleton } from "../../../../components/reuseableFunctions";
-import UserFilters from "../filters/usersFilters";
-import HeaderFilters, { allFilters } from "../filters/headerFilters";
-import { getStorage } from "../../../../utils/storages";
+import { getStorage, setStorage } from "../../../../utils/storages";
 import { actions as supervisorActions } from "../../../../stores/supervisor/auditedQueue";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
-import { getResponePopup } from "../../../../utils/reusable";
 import TableSkeleton from "../../../../components/skeleton/table";
+import ReusableFilters from "../../../../components/reusableFilters";
+import { useRouter } from "next/router";
 
 const bullets = [
   {
@@ -67,18 +62,6 @@ const badges = [
   },
 ];
 
-const statusOptions = [
-  { label: "COMPLETED", value: "COMPLETED" },
-  { label: "DECLINED", value: "DECLINED" },
-];
-const AuditOptions = [
-  { label: "AUDITED", value: "AUDITED" },
-  { label: "AUDIT HOLD", value: "AUDITHOLD" },
-  { label: "REAUDIT", value: "REAUDIT" },
-  { label: "AUDIT PENDING", value: "AUDIT_PENDING" },
-  { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
-  { label: "NOT AUDIT", value: "NOT_AUDIT" },
-];
 const Index = ({
   getCurrentUserDetails,
   getIndividualUser,
@@ -89,121 +72,124 @@ const Index = ({
   getFilters,
   routedData,
   getRoutedData,
-  supervisorPriority
+  supervisorPriority,
+  setViewUsers,
+  userParams,
+  viewUsers,
+  getUserQueueList,
 }) => {
+  const commonFilterItems = [
+    {
+      id: "001",
+      title: "Search",
+      type: "search",
+      value: null,
+      placeholder: "Search",
+      header: "Patient Name / ID",
+    },
+    {
+      id: "002",
+      title: "auditDueDate",
+      type: "rangePicker",
+      value: null,
+      placeholder: "Audit Due Date",
+      pickerType: "year",
+    },
+    {
+      id: "003",
+      title: "auditCompletedDate",
+      type: "rangePicker",
+      value: null,
+      placeholder: "Audit Completed Date",
+      pickerType: "year",
+    },
+    {
+      id: "004",
+      title: "auditAlloactedBy",
+      type: "select",
+      value: null,
+      placeholder: "Audit Allocated By",
+      options: generateOptionsListSupervisor(filteredList),
+    },
+
+    {
+      id: "005",
+      title: "Status",
+      type: "select",
+      value: null,
+      placeholder: "Reviewed Status",
+      options: [
+        { label: "COMPLETED", value: "COMPLETED" },
+        { label: "DECLINED", value: "DECLINED" },
+      ],
+    },
+    {
+      id: "006",
+      title: "dueDate",
+      type: "rangePicker",
+      value: null,
+      placeholder: "Due Date",
+      pickerType: "year",
+    },
+    {
+      id: "007",
+      title: "completedDate",
+      type: "rangePicker",
+      value: null,
+      placeholder: "Completed  Date",
+      pickerType: "year",
+    },
+    {
+      id: "008",
+      title: "Priority",
+      type: "select",
+      value: null,
+      placeholder: "Select Priority",
+      options: priorityOptions,
+    },
+  ];
   const router = useRouter();
-  const [processSort, setProcessSort] = useState("DESC");
-  const [auditAllocatedSort, setAuditAllocatedSort] = useState("DESC");
-  const [audirDateSort, setAuditDateSort] = useState("DESC");
-  const [auditDueSort, setAuditDueSort] = useState("DESC");
+  const [sort, setSort] = useState({
+    processedDate: {
+      sortDir: "DESC",
+      sortField: "processedDate",
+    },
+    auditAllocatedDate: {
+      sortDir: "DESC",
+      sortField: "auditAllocatedDate",
+    },
+    auditDueDate: {
+      sortDir: "DESC",
+      sortField: "auditDueDate",
+    },
+    auditedDate: {
+      sortDir: "DESC",
+      sortField: "auditedDate",
+    },
+    sort: { sortDir: "DESC", sortField: "" },
+  });
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [userListAll, setUserListAll] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [completedStartDate, setCompletedStartDate] = useState("");
-  const [completedEndDate, setCompletedEndDate] = useState("");
-  const [dueStartDate, setDueStartDate] = useState("");
-  const [dueEndDate, setDueEndDate] = useState("");
-  const [allocatedStartDate, setAllocatedStartDate] = useState("");
-  const [allocatedEndDate, setAllocatedEndDate] = useState("");
-  const [selAllocatedBy, setSelAllocatedBy] = useState("");
-  const [auditedStartDate, setAuditedStartDate] = useState("");
-  const [auditedEndDate, setAuditedEnsDate] = useState("");
-  const [totalElements, setTotalElements] = useState(10);
-  const [search, setSearch] = useState("");
-  const [searchTextValue, setSearchTextValue] = useState("");
-  const [userName, setUserName] = useState();
-  const [selectedAuditOption, setSelectedAuditOption] = useState("");
-  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
-  const [selAuditAllocatedByVal, setSelAuditAllocatedByVal] = useState([]);
-  const [aduitCompletedStartDate, setAduitCompletedStartDate] = useState("");
-  const [aduitCompletedEndDate, setAduitCompletedEndDate] = useState("");
-  const [aduitDueStartDate, setAduitDueStartDate] = useState("");
-  const [aduitDueEndDate, setAduitDueEndDate] = useState("");
+  const [pageSize, setPageSize] = useState(15);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [searchText, setSearchText] = useState(null);
+  const [selectedOption, setSelectedOption] = useState({});
+  const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
-  const [selectedDates2, setSelectedDates2] = useState([]);
-  const [selectedDates3, setSelectedDates3] = useState([]);
-  const [selectedDates4, setSelectedDates4] = useState([]);
-  const [priority,setPriority]=useState(null)
- const[selectedPriority,setSelectedPriority]=useState(null)
-  const [sort, setSort] = useState({
-    sortDir: "DESC",
-    sortField: "auditDueDate",
-  });
+  const [userListAll, setUserListAll] = useState([]);
   const [clear, setClear] = useState(false);
-  const [activeFilters, setActiveFilters] = useState([[]]);
+  const [activeFilters, setActiveFilters] = useState(["Search"]);
   const [paramsFilter, setParamsFilter] = useState(null);
+  const [userName, setUserName] = useState();
+  const [totalElements, setTotalElements] = useState(10);
+  // const [priority, setPriority] = useState(null);
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
+    setPageSize(e.rows);
   };
 
-  useEffect(() => {
-    if (usersData) {
-      setUserListAll(usersData?.data?.response);
-      setTotalElements(usersData?.data?.response?.totalElements);
-    }
-  }, [usersData]);
-
-  useEffect(() => {
-    const uId = getStorage("user");
-    setParamsFilter("check");
-    setUserName(uId);
-    if (uId) {
-      const data = {
-        uId,
-        pageNo,
-        search: search,
-        selectedOption,
-        selAllocatedBy,   
-        dueStartDate: clear ? "" : dueStartDate,
-        dueEndDate: clear ? "" : dueEndDate,
-        completedStartDate: clear ? "" : completedStartDate,
-        completedEndDate: clear ? "" : completedEndDate,
-        auditedStartDate,
-        auditedEndDate,
-        allocatedStartDate,
-        allocatedEndDate,
-        selectedAuditOption,
-        selAuditAllocatedBy,
-        aduitCompletedStartDate: clear ? "" : aduitCompletedStartDate,
-        aduitCompletedEndDate: clear ? "" : aduitCompletedEndDate,
-        aduitDueStartDate: clear ? "" : aduitDueStartDate,
-        aduitDueEndDate: clear ? "" : aduitDueEndDate,
-        sort,
-        priority:selectedPriority||""
-      };
-      if (window !== "undefined" && paramsFilter) {
-        getIndividualUser({ data: data });
-        getCurrentUserDetails({ userId: uId });
-      }
-    }
-  }, [
-    pageNo,
-    searchTextValue,
-    selectedOption,
-    selAllocatedBy,
-    dueStartDate,
-    dueEndDate,
-    search,
-    completedStartDate,
-    completedEndDate,
-    auditedStartDate,
-    auditedEndDate,
-    allocatedStartDate,
-    allocatedEndDate,
-    selectedAuditOption,
-    selAuditAllocatedBy,
-    aduitCompletedStartDate,
-    aduitCompletedEndDate,
-    aduitDueStartDate,
-    aduitDueEndDate,
-    sort,
-    paramsFilter,
-    paginationFirst,
-    selectedPriority
-  ]);
   const auditstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes
@@ -291,105 +277,125 @@ const Index = ({
     }
   };
 
-  useEffect(() => {
-    getFilters({ field: "auditAllocatedBy", username: userName });
-  }, [userName]);
-  useEffect(() => {
-    if (routedData) {
-      setParamsFilter("check");
-      setSelectedDates(routedData?.selectedDates || []);
-      setSelectedDates2(routedData?.selectedDates2 || []);
-      setSelectedDates3(routedData?.selectedDates3 || []);
-      setSelectedDates4(routedData?.selectedDates4 || []);
-      setSelAuditAllocatedByVal(routedData?.selAuditAllocatedBy || []);
-      setAduitDueStartDate(routedData?.aduitDueStartDate || "");
-      setAduitDueEndDate(routedData?.aduitDueEndDate || "");
-      setAduitCompletedStartDate(routedData?.aduitCompletedStartDate || "");
-      setAduitCompletedEndDate(routedData?.aduitCompletedEndDate || "");
-      setDueStartDate(routedData?.dueStartDate || "");
-      setDueEndDate(routedData?.dueEndDate || "");
-      setCompletedStartDate(routedData?.processedStart || "");
-      setCompletedEndDate(routedData?.processedEnd || "");
-      setSearch(routedData?.searchTextValue ? routedData?.searchTextValue : "");
-      setPageNo(routedData?.pageNo ? routedData?.pageNo : 0);
-      setPaginationFirst(
-        routedData?.paginationFirst ? routedData?.paginationFirst : ""
-      );
-      setSelectedOption(
-        routedData?.selectedOption ? routedData?.selectedOption : ""
-      );
-      setActiveFilters(
-        routedData?.activeFilters ? routedData?.activeFilters : []
-      );
-      setSelectedPriority(routedData?.selectedPriority||null)
-    }
-  }, []);
-
-  
   const handlePriorityChange = async (
     patientId,
     selectedValue,
     lastModifiedDate
   ) => {
-    const res = await supervisorPriority({
+    await supervisorPriority({
       patientId: patientId,
       year: dayjs(lastModifiedDate).format("YYYY"),
       priority: selectedValue,
     });
-    setPriority({selectedValue:selectedValue,patientId:patientId});
-    if (res.status === "SUCCESS") {
-      const uId = getStorage("user");
-      setParamsFilter("check");
-      setUserName(uId);
-      if (uId) {
-        const data = {
-          uId,
-          pageNo,
-          search: search,
-          selectedOption,
-          selAllocatedBy,
-          dueStartDate: clear ? "" : dueStartDate,
-          dueEndDate: clear ? "" : dueEndDate,
-          completedStartDate: clear ? "" : completedStartDate,
-          completedEndDate: clear ? "" : completedEndDate,
-          auditedStartDate,
-          auditedEndDate,
-          allocatedStartDate,
-          allocatedEndDate,
-          selectedAuditOption,
-          selAuditAllocatedBy,
-          aduitCompletedStartDate: clear ? "" : aduitCompletedStartDate,
-          aduitCompletedEndDate: clear ? "" : aduitCompletedEndDate,
-          aduitDueStartDate: clear ? "" : aduitDueStartDate,
-          aduitDueEndDate: clear ? "" : aduitDueEndDate,
-          sort,
-          priority:clear?"":selectedPriority
-        };
-        if (window !== "undefined" && paramsFilter) {
-          getIndividualUser({ data: data });
-        }
-      }
+    // setPriority({ selectedValue: selectedValue, patientId: patientId });
+    getuserQueueApi();
+  };
+  const getuserQueueApi = async () => {
+    const uId = getStorage("user");
+    setUserName(uId);
+    await getUserQueueList({
+      uId,
+      pageNo,
+      pageNumber,
+      pageSize,
+      selectedOption,
+      sort: sort?.sort,
+      selectedDateRanges,
+      searchText: searchText,
+    });
+  };
+  const params = {
+    pageNo,
+    selectedDates,
+    paginationFirst,
+    sort,
+    activeFilters,
+    searchText,
+    selectedOption,
+    selectedDateRanges,
+    pageNumber,
+  };
+  const handleTableRowClick = (e, id) => {
+    const targetTd = e.target.closest("td");
+    if (targetTd) {
+      setStorage("patientId", id);
+      setStorage("routeBackTo", "/supervisor/user");
+      getRoutedData({ params: params, userData: userParams, viewUsers });
+      router?.push("/supervisor/user/details");
     }
   };
+  useEffect(() => {
+    const uId = getStorage("user");
+    setParamsFilter("check");
+    setUserName(uId);
+    if (window !== "undefined" && paramsFilter) {
+      getuserQueueApi();
+    }
+  }, [
+    selectedOption,
+    selectedDateRanges,
+    searchText,
+    pageSize,
+    pageNo,
+    paramsFilter,
+    sort,
+    pageNumber,
+    paginationFirst,
+  ]);
 
+  useEffect(() => {
+    getFilters({ field: "auditAllocatedBy", username: userName });
+  }, [userName]);
+  useEffect(() => {
+    if (usersData) {
+      setUserListAll(usersData?.data?.response);
+      setTotalElements(usersData?.data?.response?.totalElements);
+    }
+  }, [usersData]);
+  useEffect(() => {
+    const uId = getStorage("user");
+    getCurrentUserDetails({ userId: uId });
+  }, []);
+  useEffect(() => {
+    if (routedData?.params) {
+      const {
+        pageNo,
+        selectedDates,
+        selectedDateRanges,
+        selectedOption,
+        searchText,
+        activeFilters,
+        pageNumber,
+        paginationFirst,
+        sort,
+      } = routedData?.params;
+      setPageNo(pageNo ? pageNo : 0);
+      setSearchText(searchText);
+      setSelectedDateRanges(selectedDateRanges);
+      setSelectedOption(selectedOption);
+      setSelectedDates(selectedDates);
+      setActiveFilters(activeFilters);
+      setPageNumber(pageNumber);
+      setPaginationFirst(paginationFirst);
+      setSort(sort);
+    }
+  }, [routedData]);
   return (
     <div className={`show `}>
       <Header />
-      <div class="content-body">
+      <div className="content-body">
         <div className="container-fluid">
-          <div >
-            <div
-              className={ " mx-3 col-12 d-flex"}
-              // style={{
-              //   position: "relative",
-              //   // left: "40px",
-              //   bottom: "10px",
-              // }}
-            >
+          <div>
+            <div className={" mx-3 col-12 d-flex"}>
               <button
                 className={userStyles.filterBtn}
                 onClick={() => {
-                  router.push("/supervisor/user");
+                  setViewUsers(null);
+                  getRoutedData({
+                    params: null,
+                    userData: routedData?.userData || params,
+                  });
+                  // router.push("/supervisor/user");
                 }}
               >
                 <Image src={leftArrow} />
@@ -411,111 +417,23 @@ const Index = ({
               <div className="card-body p-0">
                 <div className="table-responsive active-projects task-table">
                   <div className="mt-2">
-                    <HeaderFilters
-                      setSearchTextValue={setSearchTextValue}
-                      searchlabel="Search By Patient ID / Name"
-                      searchVal={search}
-                      setSearchVal={setSearch}
-                      // auditedStatus
-                      selectlabel2="Audit Status"
-                      setSelectedOption2={setSelectedAuditOption}
-                      selectOptions2={AuditOptions}
-                      selectDefaultValue={
-                        selectedAuditOption
-                          ? selectedAuditOption
-                          : "Select Status"
-                      }
-                      //audit due date
-                      audipickerlabel1="Audit Due Date"
-                      audidefaultStartDate={""}
-                      audidefaultEndDate={""}
-                      audisetStartDate={setAduitDueStartDate}
-                      audisetEndDate={setAduitDueEndDate}
-                      // isAduitDueDate={true}
-                      setSelectedDates={setSelectedDates}
-                      selectedDates={selectedDates}
-                      // audited completed date
-                      audipickerlabe2="Audit Completed Date"
-                      audidefaultStartDate2={""}
-                      audidefaultEndDate2={""}
-                      audisetStartDate2={setAduitCompletedStartDate}
-                      audisetEndDate2={setAduitCompletedEndDate}
-                      // isAuditCompleteDate={true}
-                      setSelectedDates2={setSelectedDates2}
-                      selectedDates2={selectedDates2}
-                      // allocated by
-                      // isAuditAllocatedBy={true}
-                      audiallocatedBylabel="Audit Allocated By"
-                      auditallocatedByOptions={generateOptionsListSupervisor(
-                        filteredList
-                      )}
-                      audisetSelAllocatedBy={setSelAuditAllocatedBy}
-                      selAuditAllocatedBy={selAuditAllocatedBy}
-                      audidefaultAllocatedBy="Select Audit AllocatedBy"
-                      // select status
-                      selectlabel="Reviewed Status"
-                      // isSelector={true}
-                      setSelectedOption={setSelectedOption}
-                      selectOptions={statusOptions}
-                      defaultSelectValue1={"Select Status"}
-                      selectedOption={selectedOption}
-                      // due date
-                      pickerlabel="Due Date"
-                      defaultStartDate={""}
-                      defaultEndDate={""}
-                      setStartDate={setDueStartDate}
-                      setEndDate={setDueEndDate}
-                      // isRangePicker={true}
-                      selectedDueDates={selectedDates3}
-                      setSelectedDueDates={setSelectedDates3}
-                      // completed date
-                      pickerlabe2="Completed Date"
-                      defaultStartDate2={""}
-                      defaultEndDate2={""}
-                      setStartDate2={setCompletedStartDate}
-                      setEndDate2={setCompletedEndDate}
-                      // isAnotherPicker={true}
-                      selectedDates4={selectedDates4}
-                      setSelectedDates4={setSelectedDates4}
-                      defaultAllocateTo={""}
-                      // allocated by
-                      // isAllocatedBySelector={true}
-                      allocatedBylabel="AllocatedBy"
-                      allocatedByOptoons={generateOptionsList(filteredList)}
-                      setSelAllocatedBy={setSelAllocatedBy}
-                      defaultAllocatedBy={"All"}
-                      // allocated date
-                      pickerlabe3="Allocated Date"
-                      defaultStartDate3={""}
-                      defaultEndDate3={""}
-                      setStartDate3={setAllocatedStartDate}
-                      setEndDate3={setAllocatedEndDate}
-                      // isAllocatedDate={true}
-                      // Auditeddate
-                      pickerlabe4="Audited Date"
-                      defaultStartDate4={""}
-                      defaultEndDate4={""}
-                      setStartDate4={setAuditedStartDate}
-                      setEndDate4={setAuditedEnsDate}
-                      isAnotherPicker3={true}
-                      addUser={false}
-                      bullets={bullets}
-                      isNextRow={true}
-                      badges={badges}
-                      getFilters={getFilters}
-                      username={userName}
-                      setPageNo={setPageNo}
-                      bulletsTitle="Reviewed Status"
-                      badgesTitle="Audited Status"
-                      selAuditAllocatedByVal={selAuditAllocatedByVal}
-                      setSelAuditAllocatedByVal={setSelAuditAllocatedByVal}
-                      clear={clear}
-                      activeFilters={activeFilters}
+                    <ReusableFilters
+                      showFilter={true}
                       setActiveFilters={setActiveFilters}
+                      setSearchText={setSearchText}
+                      searchText={searchText}
+                      setSelectedOption={setSelectedOption}
+                      selectedOption={selectedOption}
+                      setSelectedDateRanges={setSelectedDateRanges}
+                      selectedDateRanges={selectedDateRanges}
+                      setPageNumber={setPageNumber}
+                      FilterItems={commonFilterItems}
+                      selectedDates={selectedDates}
+                      setSelectedDates={setSelectedDates}
+                      activeFilters={activeFilters}
                       setClear={setClear}
-                      getRoutedData={getRoutedData}
-                      selectedPriority={selectedPriority}
-                      setSelectedPriority={setSelectedPriority}
+                      clear={clear}
+                      setPageNo={setPageNo}
                     />
                   </div>
                   <div
@@ -524,63 +442,27 @@ const Index = ({
                   >
                     {loader ? (
                       <div className="mt-1">
-                     <TableSkeleton/>
-                       </div>
+                        <TableSkeleton />
+                      </div>
                     ) : (
                       <div className="mt-2">
-                      <UserQueueTable
-                      bullets={  bullets}
-                      badges={badges}
-                      bulletsTitle="Reviewed Status"
-                      badgesTitle="Audited Status"
-                        userList={userListAll?.content}
-                        userName={userName}
-                        sort={sort}
-                        setSort={setSort}
-                        auditBodyTemplate={auditstatusBodyTemplate}
-                        auditDueSort={auditDueSort}
-                        setAuditDueSort={setAuditDueSort}
-                        processSort={processSort}
-                        setProcessSort={setProcessSort}
-                        auditAllocatedSort={auditAllocatedSort}
-                        setAuditAllocatedSort={setAuditAllocatedSort}
-                        audirDateSort={audirDateSort}
-                        setAuditDateSort={setAuditDateSort}
-                        activeFilters={activeFilters}
-                        setActiveFilters={setActiveFilters}
-                        getRoutedData={getRoutedData}
-                        getIndividualUser={getIndividualUser}
-                        handlePriorityChange={handlePriorityChange}
-                        priority={priority}
-                        params={{
-                          pageNo,
-                          searchTextValue,
-                          selectedOption,
-                          selAllocatedBy,
-                          dueStartDate,
-                          dueEndDate,
-                          search,
-                          completedStartDate,
-                          completedEndDate,
-                          auditedStartDate,
-                          auditedEndDate,
-                          allocatedStartDate,
-                          allocatedEndDate,
-                          selectedAuditOption,
-                          selAuditAllocatedBy,
-                          aduitCompletedStartDate,
-                          aduitCompletedEndDate,
-                          aduitDueStartDate,
-                          aduitDueEndDate,
-                          selectedDates3,
-                          selectedDates,
-                          selectedDates2,
-                          selectedDates4,
-                          paginationFirst,
-                          activeFilters,
-                          selectedPriority
-                        }}
-                      />
+                        <UserQueueTable
+                          bullets={bullets}
+                          badges={badges}
+                          bulletsTitle="Reviewed Status"
+                          badgesTitle="Audited Status"
+                          userList={userListAll?.content}
+                          userName={userName}
+                          sort={sort}
+                          setSort={setSort}
+                          auditBodyTemplate={auditstatusBodyTemplate}
+                          activeFilters={activeFilters}
+                          setActiveFilters={setActiveFilters}
+                          getRoutedData={getRoutedData}
+                          getIndividualUser={getIndividualUser}
+                          handlePriorityChange={handlePriorityChange}
+                          handleTableRowClick={handleTableRowClick}
+                        />
                       </div>
                     )}
                     <div>
@@ -609,7 +491,7 @@ const Index = ({
 const connector = connect(
   (state) => ({
     currentUser: state.supervisor.users?.user,
-    usersData: state.supervisor.users?.getIndividualUsersList,
+    usersData: state.supervisor.users?.workQueueList,
     loader: state.supervisor.users?.individualUserLoading,
     filteredList: state.supervisor?.audited?.filterUsers,
     routedData: state.tenantAdmin?.patientSync?.routedData,
@@ -620,6 +502,7 @@ const connector = connect(
     getFilters: allActions2.getFilterUsers,
     getRoutedData: allPatientSyncAction.getRoutedData,
     supervisorPriority: supervisorActions.getPriorityChange,
+    getUserQueueList: allActions.getWorkQueueList,
   }
 );
 export default connector(Index);

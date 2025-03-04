@@ -114,6 +114,7 @@ const Index = ({
       itemStyle: { color: "#AF47D2" },
     },
   ];
+  console.log(dateRange,"dateRange")
   const reviewerData = [
     {
       value: reviewerStatusData?.response?.processedStatus?.COMPLETED,
@@ -590,6 +591,7 @@ const Index = ({
                       </div>
                     ) : (
                       <InvalidChart
+                      dateRange={dateRange}
                         selectedValue={selectedValue}
                         header={data.header}
                         count={data.count}

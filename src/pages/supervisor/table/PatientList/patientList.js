@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
-import dayjs from "dayjs";
 import {
   notification,
   Select as AntSelect,
@@ -20,67 +19,23 @@ import {
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../../components/headerFilters/functions";
-import { removeStorage, setStorage } from "../../../../utils/storages";
+import { setStorage } from "../../../../utils/storages";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
-import styles from "../../../reviewer/report/report.module.css";
 import Legends from "../../../../components/legends";
 import { formatDateTime } from "../../../../utils/reusable";
 
 function PatientTable({
   patinetListAll,
   statusBodyTemplate,
-  patientDetails,
   setSort,
-  page,
-  sortDueOrder,
-  setSortDueOrder,
-  sortCompleteOrder,
-  setSortCompleteOrder,
-  sortAuditOrder,
-  setSortAuditOrder,
-  params,
-  getRoutedData,
-  activeFilters,
-  setActiveFilters,
+  handleTableRowClick,
   handlePriorityChange,
   priority,
   bullets,
   badges,
+  sort,
 }) {
-  const navigate = useRouter();
 
-  const gotoPatientDetails = (data) => {
-    if (data.computing === 2) {
-      const controller = new AbortController();
-      const { signal } = controller;
-      controller.abort();
-      setStorage("patientId", data.patientId);
-      removeStorage("SuperVisorfilter");
-      setStorage("routeBackTo", "/supervisor/auditing");
-
-      getRoutedData(params);
-      navigate.push(
-        {
-          pathname: "/supervisor/patients/details",
-          // query: params,
-        }
-        // "/supervisor/patients/details"
-      );
-    } else {
-      notification.warning({
-        message: data.patientId + " file not processed. Please wait.",
-      });
-    }
-  };
-
-  const handleTableRowClick = (e) => {
-    const targetTd = e.target.closest("td");
-    if (targetTd) {
-      const dataIndex = targetTd.parentElement.rowIndex - 1;
-      const clickedData = patinetListAll[dataIndex];
-      gotoPatientDetails(clickedData);
-    }
-  };
 
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
@@ -233,6 +188,17 @@ function PatientTable({
       ))
     );
   };
+  const handleSort = (field) => {
+    setSort((prev) => {
+      const newSortDir = prev[field].sortDir === "DESC" ? "ASC" : "DESC";
+      return {
+        ...prev,
+        [field]: { sortDir: newSortDir, sortField: field },
+        sort: { sortDir: newSortDir, sortField: field },
+      };
+    });
+  };
+
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -254,18 +220,11 @@ function PatientTable({
 
             <th
               className="text-truncate"
-              onClick={() => {
-                sortFunction(
-                  sortAuditOrder,
-                  setSortAuditOrder,
-                  setSort,
-                  "auditAllocatedDate"
-                );
-              }}
+              onClick={() => handleSort("auditAllocatedDate")}
             >
               AUDIT ALLOCATED DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortAuditOrder === "ASC" ? (
+                {sort?.auditAllocatedDate?.sortDir === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
@@ -274,18 +233,11 @@ function PatientTable({
             </th>
             <th
               className="text-truncate"
-              onClick={() => {
-                sortFunction(
-                  sortDueOrder,
-                  setSortDueOrder,
-                  setSort,
-                  "auditDueDate"
-                );
-              }}
+              onClick={() => handleSort("auditDueDate")}
             >
               AUDITED DUE DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortDueOrder === "ASC" ? (
+                {sort?.auditDueDate?.sortDir === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
@@ -294,18 +246,11 @@ function PatientTable({
             </th>
             <th
               className="text-truncate"
-              onClick={() => {
-                sortFunction(
-                  sortCompleteOrder,
-                  setSortCompleteOrder,
-                  setSort,
-                  "auditedDate"
-                );
-              }}
+              onClick={() => handleSort("auditedDate")}
             >
               AUDITED DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortCompleteOrder === "ASC" ? (
+                {sort?.auditedDate?.sortDir === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
@@ -316,7 +261,7 @@ function PatientTable({
             <th className="text-truncate">AUDIT ALLOCATED BY</th>
             <th className="text-truncate">PRIORITY</th>
             <th className="text-truncate" style={{ textAlign: "center" }}>
-              <div className="d-flex align-items-center justify-content-center gap-2 text-truncate" >
+              <div className="d-flex align-items-center justify-content-center gap-2 text-truncate">
                 AUDITED STATUS
                 <span style={{ cursor: "pointer" }}>
                   <Popover

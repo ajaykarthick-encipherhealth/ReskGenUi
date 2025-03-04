@@ -14,29 +14,27 @@ export async function getAllOrganization() {
 }
 
 export async function getallUsers({
-  pageCount = 0,
-  search = "",
-  startDate = "",
-  endDate = "",
-  status = "",
-  role = "",
+  pageNo,
+  searchText,
+  selectedDateRanges,
+  selectedOption,
   sort,
-  orgId = "",
+  role,
 }) {
   const options = {
     method: "GET",
   };
-  const selectedStatus = status === "ALL" ? "" : status;
-  const selectOrgId = orgId === "ALL" ? "" : orgId;
 
   const data = await requestPortal(
-    `dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${
-      search ? search : ""
-    }&organizationId=${selectOrgId ? selectOrgId : ""}&createdDateStart=${
-      startDate ? startDate : ""
-    }&createdDateEnd=${endDate ? endDate : ""}&isEnabled=${
-      selectedStatus ? selectedStatus : ""
-    }&role=${role ? role : ""}&sortdirection=${
+    `dbservice/user/admin/filter?page=${pageNo || 0}&size=15&searchString=${
+      searchText ? searchText : ""
+    }&organizationId=${
+      selectedOption?.organization ? selectedOption?.organization : ""
+    }&createdDateStart=${
+      selectedDateRanges?.createdDateRange?.startDate || ""
+    }&createdDateEnd=${selectedDateRanges?.createdDateRange?.endDate || ""}&isEnabled=${
+      selectedOption?.status || ""
+    }&role=${selectedOption?.role || ""}&sortdirection=${
       sort?.sortDir ? sort?.sortDir : ""
     }&sortfield=${sort?.sortField ? sort?.sortField : ""}`,
     options
@@ -50,11 +48,11 @@ export const AddUser = async (data, setFormData) => {
     body: JSON.stringify(data),
   };
 
-    const response = await requestPortal(
-      `securityservice/admin/getusers/createuser`,
-      options
-    );  
-      return response;
+  const response = await requestPortal(
+    `securityservice/admin/getusers/createuser`,
+    options
+  );
+  return response;
 };
 
 export async function addPatient({ data }) {
@@ -72,7 +70,7 @@ export const enableUser = async ({
   role,
   setPopoverVisible,
   selectedManager,
-  field
+  field,
 }) => {
   var tenId = getStorage("tenantId");
   var orgId = getStorage("orgId");
@@ -103,12 +101,12 @@ export const enableUser = async ({
         `management/admin/updateuser`,
         options
       );
-      if (response?.status==='SUCCESS') {
+      if (response?.status === "SUCCESS") {
         notification.success({
           description: `${response?.response?.message} `,
         });
       }
-      return response
+      return response;
     } catch (err) {
       console.log(err);
     }

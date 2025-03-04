@@ -49,6 +49,7 @@ function TrackingTable({
   badgesTitle,
   bullets,
   badges,
+  sort,
 }) {
   const navigate = useRouter();
 
@@ -59,22 +60,17 @@ function TrackingTable({
       const { signal } = controller;
       controller.abort();
       setStorage("patientId", data?.patientId);
-      //       setStorage("fromPatientSync", false);
       var role = getStorage("userRole");
-      // setStorage("fromPatientSync", false);
       if (role == "tenant_admin") {
         setStorage("patientId", data.patientId);
         setStorage("routeBackTo", "/tenantadmin/tracking");
         getRoutedData(page);
-        // setStorage("isTenantAdminTracking", true);
-        // setStorage("tenantAdminTrackingEncodedValue", JSON.stringify(page));
         navigate.push("/tenantadmin/tracking/details");
       } else {
         setStorage("isAdminTracking", true);
         setStorage("adminTrackingEncodedValue", JSON.stringify(page));
         navigate.push({
           pathname: "/admin/patients/details",
-          // query: { ...page, isAdminTracking: true },
         });
       }
     } else {
@@ -262,17 +258,6 @@ function TrackingTable({
               : "---"}
           </div>
         </td>
-        {/* <td
-          className={TableStyle.childBorder}
-          onClick={handleTableRowClick}
-          style={{ textAlign: "center" }}
-          id={data.patientId}
-          name={data.patientId}
-        >
-          {data.auditAllocatedDate
-            ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
-            : "---"}
-        </td> */}
 
         <td
           className={`text-truncate ${TableStyle.childBorder}`}
@@ -343,7 +328,16 @@ function TrackingTable({
       </tr>
     ));
   };
-
+  const handleSort = (field) => {
+    setSort((prev) => {
+      const newSortDir = prev[field]?.sortDir === "DESC" ? "ASC" : "DESC";
+      return {
+        ...prev,
+        [field]: { sortDir: newSortDir, sortField: field },
+        sort: { sortDir: newSortDir, sortField: field },
+      };
+    });
+  };
   return (
     <div className={TableStyle.classContaineer}>
       {loader ? (
@@ -356,146 +350,45 @@ function TrackingTable({
               <th
                 style={{ textAlign: "left", paddingLeft: "20px" }}
                 className="text-truncate"
-                onClick={() => {
-                  sortFunction(sortOrder, setSortOrder, setSort, "allocatedOn");
-                }}
+                onClick={() => handleSort("allocatedOn")}
               >
                 ALLOCATED BY | DATE
-                {sortOrder === "ASC" ? (
-                  <ArrowUpOutlined />
-                ) : (
-                  <ArrowDownOutlined />
-                )}
-              </th>
-              {/* <th
-                id="allocated-Date"
-                name="allocated-Date"
-                style={{
-                  cursor: "pointer",
-                  paddingLeft: "15px",
-                  textAlign: "center",
-                }}
-                onClick={() => {
-                  sortFunction(sortOrder, setSortOrder, setSort, "allocatedOn");
-                }}
-                className="text-truncate"
-              >
-                ALLOCATED DATE{" "}
-                {sortOrder === "ASC" ? (
-                  <ArrowUpOutlined />
-                ) : (
-                  <ArrowDownOutlined />
-                )}
-              </th> */}
-              <th
-                onClick={() => {
-                  sortFunction(
-                    sortDueOrder,
-                    setSortDueOrder,
-                    setSort,
-                    "dueDate"
-                  );
-                }}
-              >
-                REVIEWER | DATE
-                {sortDueOrder === "ASC" ? (
+                {sort?.allocatedOn?.sortDir === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
                 )}
               </th>
 
-              {/* <th
-                id="reviewer-date"
-                name="reviewer-date"
-                onClick={() => {
-                  sortFunction(
-                    sortDueOrder,
-                    setSortDueOrder,
-                    setSort,
-                    "dueDate"
-                  );
-                }}
-                style={{ textAlign: "center" }}
-                className="text-truncate"
-              >
-                REVIEWED DATE
-                <span
-                  style={{
-                    cursor: "pointer",
-                    paddingLeft: "3px",
-                    textAlign: "center",
-                  }}
-                >
-                  {sortDueOrder === "ASC" ? (
-                    <ArrowUpOutlined />
-                  ) : (
-                    <ArrowDownOutlined />
-                  )}
-                </span>
-              </th> */}
-              <th
-                style={{ textAlign: "center" }}
-                className="text-truncate"
-                onClick={() => {
-                  sortFunction(
-                    sortAuditOrder,
-                    setSortAuditOrder,
-                    setSort,
-                    "auditAllocatedDate"
-                  );
-                }}
-              >
-                AUDIT ALLOCATED BY | DATE
-                {sortAuditOrder === "ASC" ? (
+              <th onClick={() => handleSort("dueDate")}>
+                REVIEWER | DATE
+                {sort?.dueDate?.sortDir === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
                 )}
               </th>
-              {/* <th
-                id="audit-allocated"
-                name="audit-allocated"
-                onClick={() => {
-                  sortFunction(
-                    sortAuditOrder,
-                    setSortAuditOrder,
-                    setSort,
-                    "auditAllocatedDate"
-                  );
-                }}
+
+              <th
+                onClick={() => handleSort("auditAllocatedDate")}
                 style={{ textAlign: "center" }}
                 className="text-truncate"
               >
-                AUDIT ALLOCATED DATE
-                <span
-                  style={{
-                    cursor: "pointer",
-                    paddingLeft: "3px",
-                    textAlign: "center",
-                  }}
-                >
-                  {sortAuditOrder === "ASC" ? (
-                    <ArrowUpOutlined />
-                  ) : (
-                    <ArrowDownOutlined />
-                  )}
-                </span>
-              </th> */}
+                AUDIT ALLOCATED BY | DATE
+                {sort?.auditAllocatedDate?.sortDir === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </th>
+
               <th style={{ textAlign: "center" }} className="text-truncate">
                 SUPERVISOR
               </th>
               <th
                 id="audited-date"
                 name="audited-date"
-                onClick={() => {
-                  sortFunction(
-                    sortAuditDueOrder,
-                    setSortAuditDueOrder,
-                    setSort,
-                    "auditDueDate"
-                  );
-                }}
+                onClick={() => handleSort("auditDueDate")}
                 style={{ textAlign: "center" }}
                 className="text-truncate"
               >
@@ -507,7 +400,7 @@ function TrackingTable({
                     textAlign: "center",
                   }}
                 >
-                  {sortAuditDueOrder === "ASC" ? (
+                  {sort?.auditDueDate?.sortDir === "ASC" ? (
                     <ArrowUpOutlined />
                   ) : (
                     <ArrowDownOutlined />

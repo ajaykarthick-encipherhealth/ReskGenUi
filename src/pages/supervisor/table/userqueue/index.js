@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { Empty, Select as AntSelect, Popover, Tooltip } from "antd";
-import moment from "moment";
-import dayjs from "dayjs";
 import {
   ArrowUpOutlined,
   ArrowDownOutlined,
@@ -20,12 +18,10 @@ import {
   priorityOptions,
   renderUserPrfoile,
   renderUserPrfoileAvatar,
-  sortFunction,
 } from "../../../../components/headerFilters/functions";
 import { extractLatestData } from "../../auditing";
-import { getStorage, setStorage } from "../../../../utils/storages";
+import {  setStorage } from "../../../../utils/storages";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
-import { connect } from "react-redux";
 import Legends from "../../../../components/legends";
 import styles from "../../../reviewer/report/report.module.css";
 import { formatDateTime } from "../../../../utils/reusable";
@@ -34,30 +30,19 @@ const UserQueueTable = ({
   userList,
   badges,
   bullets,
-  setSort,
   auditBodyTemplate,
-  page,
-  auditDueSort,
-  setAuditDueSort,
-  processSort,
-  setProcessSort,
-  auditAllocatedSort,
-  setAuditAllocatedSort,
-  audirDateSort,
-  setAuditDateSort,
   params,
-  setActiveFilters,
-  activeFilters,
   getRoutedData,
-  supervisorPriority,
-  getIndividualUser,
-  currentUser,
+  userParams,
+  handleTableRowClick,
   handlePriorityChange,
   priority,
   badgesTitle,
   bulletsTitle,
+  viewUsers,
+  sort,
 }) => {
-  const router = useRouter();
+  const router=useRouter()
   const auditstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes
@@ -153,15 +138,17 @@ const UserQueueTable = ({
     }
   };
 
-  const handleTableRowClick = (e, id) => {
-    const targetTd = e.target.closest("td");
-    if (targetTd) {
-      setStorage("patientId", id);
-      setStorage("routeBackTo", "/supervisor/user/userqueue");
-      getRoutedData(params);
-      router?.push("/supervisor/user/details");
-    }
+  const handleSort = (field) => {
+    setSort((prev) => {
+      const newSortDir = prev[field].sortDir === "DESC" ? "ASC" : "DESC";
+      return {
+        ...prev,
+        [field]: { sortDir: newSortDir, sortField: field },
+        sort: { sortDir: newSortDir, sortField: field },
+      };
+    });
   };
+
 
   const renderRows = () => {
     return userList?.length === 0 ? (
@@ -262,8 +249,8 @@ const UserQueueTable = ({
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             {data.auditAllocatedByFirstName ||
-            data.auditAllocatedByLastName ||
-            data?.auditAllocatedByProfileImage ? (
+              data.auditAllocatedByLastName ||
+              data?.auditAllocatedByProfileImage ? (
               <div
                 style={{ display: "flex", alignItems: "center" }}
                 onClick={(e) => handleTableRowClick(e, data?.patientId)}
@@ -323,6 +310,7 @@ const UserQueueTable = ({
           </td>
           <td className={TableStyle.childBorder}>
             <AntSelect
+              style={{ width: "100px" }}
               options={priorityOptions}
               placeholder="Set priority"
               className={`custom-ant-select ${TableStyle.customAntSelect}`}
@@ -331,8 +319,8 @@ const UserQueueTable = ({
                 data?.priority
                   ? data?.priority
                   : priority?.patientId === data?.patientId
-                  ? priority?.selectedValue
-                  : "Set Priority"
+                    ? priority?.selectedValue
+                    : "Set Priority"
               }
               onChange={(value) => {
                 handlePriorityChange(
@@ -371,38 +359,24 @@ const UserQueueTable = ({
             <th>PATIENT NAME</th>
             <th
               className="text-truncate"
-              onClick={() => {
-                sortFunction(
-                  processSort,
-                  setProcessSort,
-                  setSort,
-                  "processedDate"
-                );
-              }}
+              onClick={() => handleSort("processedDate")}
             >
               COMPLETED DATE
               <span style={{ cursor: "pointer", padding: "5px" }}>
-                {processSort === "DESC" ? (
-                  <ArrowDownOutlined />
-                ) : (
+                {sort?.processedDate?.sortDir === "ASC" ? (
                   <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
                 )}
               </span>
             </th>
             <th
               className="text-truncate"
-              onClick={() => {
-                sortFunction(
-                  auditAllocatedSort,
-                  setAuditAllocatedSort,
-                  setSort,
-                  "auditAllocatedDate"
-                );
-              }}
+              onClick={() => handleSort("auditAllocatedDate")}
             >
               AUDIT ALLOCATED DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
-                {auditAllocatedSort === "DESC" ? (
+                {sort?.auditAllocatedDate?.sortDir === "ASC" ? (
                   <ArrowDownOutlined />
                 ) : (
                   <ArrowUpOutlined />
@@ -411,18 +385,11 @@ const UserQueueTable = ({
             </th>
             <th
               className="text-truncate"
-              onClick={() => {
-                sortFunction(
-                  auditDueSort,
-                  setAuditDueSort,
-                  setSort,
-                  "auditDueDate"
-                );
-              }}
+              onClick={() => handleSort("auditDueDate")}
             >
               AUDIT DUE DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
-                {auditDueSort === "ASC" ? (
+                {sort?.auditDueDate?.sortDir === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
@@ -432,27 +399,20 @@ const UserQueueTable = ({
             <th className="text-truncate">AUDIT ALLOCATED BY</th>
             <th
               className="text-truncate"
-              onClick={() => {
-                sortFunction(
-                  audirDateSort,
-                  setAuditDateSort,
-                  setSort,
-                  "auditedDate"
-                );
-              }}
+              onClick={() => handleSort("auditedDate")}
             >
               AUDITED DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
-                {audirDateSort === "DESC" ? (
-                  <ArrowDownOutlined />
-                ) : (
+                {sort?.auditedDate?.sortDir === "ASC" ? (
                   <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
                 )}
               </span>
             </th>
             <th>PRIORITY</th>
             <th style={{ textAlign: "center" }}>
-              <div className="d-flex align-items-center justify-content-center gap-2 text-truncate" >
+              <div className="d-flex align-items-center justify-content-center gap-2 text-truncate">
                 REVIEWED STATUS
                 <span style={{ cursor: "pointer" }}>
                   <Popover

@@ -547,9 +547,6 @@ const Details = ({
 
     getRoutedData(routedData);
     navigate.push(backRoute);
-    // if (user && user.toLowerCase() === "tenant_admin") {
-    //   getActiveTab("PDF");
-    // }
     setSelectDosValue("");
     getSelectedDosPageNumber(1);
     getPatientID(null);
@@ -557,6 +554,7 @@ const Details = ({
     getCurrentDiseaseType(true);
     patientDetailsLoad(true);
   };
+  console.log(routedData,"routedDatadata")
   const splitUserName = (name) => {
     if (name) {
       return name[0];

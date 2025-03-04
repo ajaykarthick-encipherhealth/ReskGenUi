@@ -27,9 +27,9 @@ const items = [
 ];
 
 const UserList = ({
-  sortOrder,
-  setSortOrder,
+  setPageNo,
   setSort,
+  sort,
   usersList,
   getEnableUser,
   getAllUsersList,
@@ -60,7 +60,16 @@ const UserList = ({
       getAllUsersList({ pageCount: 0 });
     }
   };
-
+  const handleSort = (field) => {
+    setSort((prev) => {
+      const newSortDir = prev[field]?.sortDir === "DESC" ? "ASC" : "DESC";
+      return {
+        ...prev,
+        [field]: { sortDir: newSortDir, sortField: field },
+        sort: { sortDir: newSortDir, sortField: field },
+      };
+    });
+  };
   const handleRows = (value) => {
     const updatedValue = Array.isArray(value) ? value : [value];
     setSelectedRoles(updatedValue);
@@ -83,8 +92,8 @@ const UserList = ({
         <div style={{ height: "200px", width: "100%" }}>
           <div className="my-2">Change Role</div>
           <Select
-          id="change-role"
-          name="change-role"
+            id="change-role"
+            name="change-role"
             style={{ width: "300px" }}
             mode={"multiple"}
             onChange={(e) => handleRows(e, data?.role)}
@@ -98,8 +107,8 @@ const UserList = ({
             <>
               <div className="mt-4 my-2">Change Manager</div>
               <Select
-              id="change-manager"
-              name="change-manager"
+                id="change-manager"
+                name="change-manager"
                 style={{ width: "300px" }}
                 onChange={handleManager}
                 options={optionsUser?.length > 0 ? optionsUser : []}
@@ -120,8 +129,8 @@ const UserList = ({
           }}
         >
           <button
-          id="save-btn"
-          name="save-btn"
+            id="save-btn"
+            name="save-btn"
             className={styles.sendBtn}
             onClick={() => {
               handleSave();
@@ -149,7 +158,7 @@ const UserList = ({
       if (res?.status === "SUCCESS") {
         getAllUsersList({ pageCount: 0 });
         setPopoverVisible(null);
-        setPageCount(0);
+        setPageNo(0);
         setRoleChangeLoader(false);
       }
     }
@@ -192,15 +201,13 @@ const UserList = ({
             </th>
             <th
               style={{ cursor: "pointer", textAlign: "center" }}
-              onClick={() => {
-                sortFunction(sortOrder, setSortOrder, setSort, "createdDate");
-              }}
+              onClick={() => handleSort("createdDate")}
               id="date-created"
               name="date-created"
               className="text-truncate"
             >
               DATE CREATED{" "}
-              {sortOrder === "ASC" ? (
+              {sort?.createdDate?.sortDir === "ASC" ? (
                 <ArrowUpOutlined />
               ) : (
                 <ArrowDownOutlined />
@@ -451,7 +458,6 @@ const UserList = ({
                     onChange={(checked) => {
                       onChange(item, checked);
                       setPopoverVisible(true);
-                      setPageCount(0);
                     }}
                   />
                 </td>

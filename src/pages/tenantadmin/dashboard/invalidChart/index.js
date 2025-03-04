@@ -8,6 +8,7 @@ import { actions as invalidAction } from "../../../../stores/tenantAdmin/dashboa
 import { useRouter } from "next/router";
 import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";
 import { flagOptions } from "../../patients";
+import dayjs from "dayjs";
 
 const InvalidChart = ({
   selectedValue,
@@ -23,7 +24,7 @@ const InvalidChart = ({
   values,
   graphName,
   getRoutedData,
-  invalidChartData,
+  dateRange,
 }) => {
   const router = useRouter();
   const graphOptions = {
@@ -65,6 +66,7 @@ const InvalidChart = ({
       },
     ],
   };
+  console.log(customDate, "customDate");
   return (
     <>
       <div className="d-flex justify-content-between">
@@ -107,9 +109,25 @@ const InvalidChart = ({
             (item) => item.header === header
           );
           const params = {
-            flagList: selectedFlag ? selectedFlag.value : "",
-            activeFilters: ["Flag"],
+            selectedOption: {
+              flag: selectedFlag ? selectedFlag.value : "",
+            },
+            activeFilters: ["Flag", "Search", "Computed  Date"],
+            paginationFirst: 0,
+            selectedDates: {
+              computedDate: [
+                dayjs(dateRange?.startDate),
+                dayjs(dateRange?.endDate),
+              ],
+            },
+            selectedDateRanges: {
+              computedDate: {
+                startDate: dateRange?.startDate ? dateRange?.startDate : "",
+                endDate: dateRange?.endDate ? dateRange?.endDate : "",
+              },
+            },
           };
+          console.log(params, "params");
           getRoutedData(params);
           router.push("/tenantadmin/patients");
         }}

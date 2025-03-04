@@ -33,6 +33,7 @@ export const handleSelector = (option, setSelectedOption) => {
   setSelectedOption(option ? option : "");
 };
 
+
 export const processstatusBodyTemplate = (rowData) => {
   switch (rowData.processedStatus) {
     case "COMPLETED":

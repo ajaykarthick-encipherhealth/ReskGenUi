@@ -22,7 +22,7 @@ import { formatDateForIndex } from "../../../../utils/reusable";
 
 const DailyTask = ({
   getAllDailyTask,
-  getFilteredList,
+  routedData,
   dailyStatusDatas,
   getRoutedData,
   dailyTaskLoader,
@@ -30,7 +30,7 @@ const DailyTask = ({
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
   const [responseArray, setReponseArray] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const activeFilters = [
     "Select Status",
     "Select Priority",
@@ -230,8 +230,8 @@ const DailyTask = ({
       setSelectedDate(datas);
     }
     setTimeout(() => {
-      setLoading(false); 
-    }, 300); 
+      setLoading(false);
+    }, 300);
   };
 
   const uniqueData = currentDays?.filter((value, index, self) => {
@@ -246,9 +246,9 @@ const DailyTask = ({
       <HeadTitle header="Daily Task" />
       <div className={styles.card2}>
         <Card borderRadius="28px" style={{ display: "flex" }}>
-          {dailyTaskLoader  || loading  ? (
+          {dailyTaskLoader || loading ? (
             <div className="mt-4">
-              <CardSkeleton count={1}  height={270} />
+              <CardSkeleton count={1} height={270} />
             </div>
           ) : (
             <Row>
@@ -272,38 +272,27 @@ const DailyTask = ({
                           className={styles.headerTitle}
                           style={{ fontSize: "16px" }}
                           onClick={() => {
-                            setStorage("filter", JSON.stringify(activeFilters));
                             const params = {
-                              // dueDateStart: data?.dateString
-                              //   ?
-                              //   `${moment(data?.dateString).format(
-                              //       "YYYY-MM-DD"
-                              //     )}T00:00:00.000Z`
-                              //   : "",
-                              // dueDateEnd: data?.dateString
-                              //   ?
-                              //   `${moment(data?.dateString).format(
-                              //       "YYYY-MM-DD"
-                              //     )}T23:59:59.999Z`
-                              //   : "",
-                              dueDateStart: data?.dateString
-                                ? formatDateForIndex({
-                                    date: data?.dateString,
-                                    index: 0,
-                                  })
-                                : "",
-                              dueDateEnd: data?.dateString
-                                ? formatDateForIndex({
-                                    date: data?.dateString,
-                                    index: 1,
-                                  })
-                                : "",
-
-                              selectedDates: [
-                                dayjs(data?.date),
-                                dayjs(data?.date),
-                              ],
-                              activeFilters: ["Due Date"],
+                              selectedDates: {
+                                dueDate: [dayjs(data?.date), dayjs(data?.date)],
+                              },
+                              selectedDateRanges: {
+                                dueDate: {
+                                  startDate: data?.date
+                                    ? `${moment(
+                                        data?.date,
+                                        "MM-DD-YYYY"
+                                      ).format("YYYY-MM-DD")}T00:00:00.000Z`
+                                    : "",
+                                  endDate: data?.date
+                                    ? `${moment(
+                                        data?.date,
+                                        "MM-DD-YYYY"
+                                      ).format("YYYY-MM-DD")}T23:59:59.999Z`
+                                    : "",
+                                },
+                              },
+                              activeFilters: ["Due Date", "Search"],
                             };
                             getRoutedData(params);
                             router?.push("/reviewer/patients");
@@ -340,61 +329,42 @@ const DailyTask = ({
                                       style={{ display: "flex" }}
                                       onClick={() => {
                                         const params = {
-                                          // dueDateStart: data?.date
-                                          //   ? `${moment(
-                                          //       data?.date,
-                                          //       "MM-DD-YYYY"
-                                          //     ).format(
-                                          //       "YYYY-MM-DD"
-                                          //     )}T00:00:00.000Z`
-                                          //   : "",
-
-                                          // dueDateEnd: data?.date
-                                          //   ? `${moment(
-                                          //       data?.date,
-                                          //       "MM-DD-YYYY"
-                                          //     ).format(
-                                          //       "YYYY-MM-DD"
-                                          //     )}T23:59:59.999Z`
-                                          //   : "",
-                                          dueDateStart: data?.date
-                                            ? formatDateForIndex({
-                                                date: moment(
-                                                  data?.date,
-                                                  "MM-DD-YYYY"
-                                                ),
-                                                index: 0,
-                                              })
-                                            : "",
-
-                                          dueDateEnd: data?.date
-                                            ? formatDateForIndex({
-                                                date: moment(
-                                                  data?.date,
-                                                  "MM-DD-YYYY"
-                                                ),
-                                                index: 1,
-                                              })
-                                            : "",
-
-                                          statusSelectedStatus: item?.name,
-                                          selectedDates: [
-                                            dayjs(data?.date),
-                                            dayjs(data?.date),
-                                          ],
+                                          selectedDates: {
+                                            dueDate: [
+                                              dayjs(data?.date),
+                                              dayjs(data?.date),
+                                            ],
+                                          },
+                                          selectedOption: {
+                                            Status: item?.name.toUpperCase(),
+                                          },
+                                          selectedDateRanges: {
+                                            dueDate: {
+                                              startDate: data?.date
+                                                ? `${moment(
+                                                    data?.date,
+                                                    "MM-DD-YYYY"
+                                                  ).format(
+                                                    "YYYY-MM-DD"
+                                                  )}T00:00:00.000Z`
+                                                : "",
+                                              endDate: data?.date
+                                                ? `${moment(
+                                                    data?.date,
+                                                    "MM-DD-YYYY"
+                                                  ).format(
+                                                    "YYYY-MM-DD"
+                                                  )}T23:59:59.999Z`
+                                                : "",
+                                            },
+                                          },
                                           activeFilters: [
-                                            "Select Status",
                                             "Due Date",
+                                            "Status",
+                                            "Search",
                                           ],
                                         };
-
-                                        setStorage(
-                                          "filter",
-                                          JSON.stringify(activeFilters)
-                                        );
-
                                         getRoutedData(params);
-                                        getFilteredList(allFilters);
                                         router?.push("/reviewer/patients");
                                       }}
                                     >
@@ -450,6 +420,7 @@ const connector = connect(
     dailyStatusDatas: state?.reviewer?.dashboard?.dailyTask,
     loader: state.admin?.workqueue?.patientsLoading,
     dailyTaskLoader: state?.reviewer?.dashboard?.dailyTaskLoader,
+    routedData: state.tenantAdmin?.patientSync?.routedData,
   }),
   {
     getAllDailyTask: ReviewerAction.dailyTaskAction,

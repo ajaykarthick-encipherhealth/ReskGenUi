@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { DatePicker, Popover, notification } from "antd";
-import moment from "moment";
-import dayjs from "dayjs";
+import { Popover, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import Header from "../../../jsx/layouts/nav/Header";
 import PatientTable from "../../../components/table/PatientList/patientList";
@@ -17,31 +15,16 @@ import Declined from "../../../../src/images/trackingImages/declined.webp";
 import Abort from "../../../../src/images/trackingImages/abort.webp";
 import { actions as workqueueActions } from "../../../stores/reviewer/workqueue";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
-
-import {
-  priorityOptions,
-  resetPageNumber,
-} from "../../../components/headerFilters/functions";
+import { priorityOptions } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
-import InputField, { debounce } from "../../../components/input";
-import { renderSkeleton } from "../../../components/reuseableFunctions";
-import { getStorage, removeStorage, setStorage } from "../../../utils/storages";
+import { setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
-import HeaderFiltersPatients, { allFilters } from "./headerFilters";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import TableSkeleton from "../../../components/skeleton/table";
-import { useRef } from "react";
+import ReusableFilters from "../../../components/reusableFilters";
 
-const { RangePicker } = DatePicker;
-
-const statusOptions = [
-  { label: "COMPLETED", value: "COMPLETED" },
-  { label: "PENDING", value: "PENDING" },
-  { label: "DECLINED", value: "DECLINED" },
-  { label: "HOLD", value: "HOLD" },
-];
 const bullets = [
   {
     title: "Processed Status",
@@ -64,130 +47,122 @@ const bullets = [
 ];
 
 const Patient = ({
-  patientsListFilter,
-  getpatientsListFilter,
+  getFilteApi,
   loading,
+  patinetListAll,
   patientDetails,
-  filtersData,
   routedData,
   getRoutedData,
   getAllBatchList,
   batchList,
 }) => {
-  const navigate = useRouter();
-  const pickerRef = useRef();
-  const pickerRef1 = useRef()
-  const [isLoading, setIsLoading] = useState(true);
-  const inputValue = {
-    year: "",
-    name: "",
-    patientId: "",
-  };
-  const [patinetListAll, setPatinetListAll] = useState([]);
-  const [localUserId, setLocalUserId] = useState("");
-  const [searchVal, setSearchVal] = useState("");
-  const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
-  const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
-  const [clear, setClear] = useState(false);
-  const [activeFilters, setActiveFilters] = useState([]);
+  const commonFilterItems = [
+    {
+      id: "01",
+      title: "Search",
+      type: "search",
+      value: null,
+      placeholder: "Search",
+      header:"Patient Name / ID"
+    },
+    {
+      id: "02",
+      title: "Status",
+      type: "select",
+      value: null,
+      placeholder: "Status",
+      options: [
+        { label: "COMPLETED", value: "COMPLETED" },
+        { label: "PENDING", value: "PENDING" },
+        { label: "DECLINED", value: "DECLINED" },
+        { label: "HOLD", value: "HOLD" },
+      ],
+    },
+    {
+      id: "03",
+      title: "dueDate",
+      type: "rangePicker",
+      value: null,
+      placeholder: "Due Date",
+      pickerType: "year",
+    },
+    {
+      id: "04",
+      title: "completedDate",
+      type: "rangePicker",
+      value: null,
+      placeholder: "Completed  Date",
+      pickerType: "year",
+    },
+    {
+      id: "05",
+      title: "Priority",
+      type: "select",
+      value: null,
+      placeholder: "Priority",
+      options: priorityOptions,
+    },
+    {
+      id: "06",
+      title: "batch",
+      type: "select",
+      value: null,
+      placeholder: "Batch",
+      showSearch:true,
+      options: batchList?.map((item) => ({
+        value: item?.id,
+        label: `${item?.name}`,
+      })),
+    },
+  ];
+  const router = useRouter();
+  const [activeFilters, setActiveFilters] = useState(["Search"]);
+  const [sort, setSort] = useState({
+    allocatedOn: {
+      sortDir: "DESC",
+      sortField: "allocatedOn",
+    },
+    dueDate: {
+      sortDir: "DESC",
+      sortField: "dueDate",
+    },
+    processedDate: {
+      sortDir: "DESC",
+      sortField: "processedDate",
+    },
+  });
+  const [searchText, setSearchText] = useState(null);
+  const [selectedOption, setSelectedOption] = useState({});
+  const [selectedDateRanges, setSelectedDateRanges] = useState({});
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
   const [trackChart, setTrackChart] = useState({
     COMPLETED: 0,
     PENDING: 0,
     DECLINED: 0,
     HOLD: 0,
   });
-  const [selectedPriority, setSelectedPriority] = useState(null);
-  const [dueDateStart, setDueDateStart] = useState(null);
-  const [dueDateEnd, setDueDateEnd] = useState(null);
-  const [processedStart, setProcessedStart] = useState(null);
-  const [processedEnd, setProcessedEnd] = useState(null);
-  const [statusSelectedStatus, setStatusSelectedStatus] = useState(null);
-  const [searchTextValue, setSearchTextValue] = useState("");
-  const [sort, setSort] = useState({
-    sortDir: "",
-    sortField: "",
-  });
-  const [sortDueOrder, setSortDueOrder] = useState("DESC");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-  const [sortAllocateOrder, setSortAllocateOrder] = useState("DESC");
-  const [selectedDates, setSelectedDates] = useState([]);
-  const [selectedDates2, setSelectedDates2] = useState([]);
+  const [pageNo, setPageNo] = useState(0);
+  const [pageSize, setPageSize] = useState(15);
+  const [paginationFirst, setPaginationFirst] = useState(0);
+  const [totalElements, setTotalElements] = useState(10);
+  const [clear, setClear] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
-  const [batchAllList, setBatchAllList] = useState([]);
-  const [selectBatchList, setSelectedBatchList] = useState(null);
-
-  
-
-  const getFilteApi = async ({
-    pageNo,
-    pageSize,
-    statusValue,
-    dStart,
-    dEnd,
-    pStart,
-    pEnd,
-    sort,
-    selectedPriority,
-    searchTextValue,
-    selectBatchList,
-  }) => {
-    const selectBatchId =
-      selectBatchList === "ALL" || selectBatchList == undefined
-        ? ""
-        : selectBatchList;
-    const uId = getStorage("userId");
-    const resoureUrl = `patientAllocated=${uId}&page=${
-      pageNo ? pageNo : 0
-    }&size=${pageSize ? pageSize : 15}&processedStatus=${
-      statusValue ? statusValue.toUpperCase() : ""
-    }&dueDateStart=${dStart ? dStart : ""}&dueDateEnd=${
-      dEnd ? dEnd : ""
-    }&processedStart=${pStart ? pStart : ""}&processedEnd=${
-      pEnd ? pEnd : ""
-    }&batchId=${selectBatchId || ""}&searchString=${
-      searchTextValue ? searchTextValue : ""
-    }&sortfield=${sort?.sortField ? sort?.sortField : ""}&sortdirection=${
-      sort?.sortDir ? sort?.sortDir : ""
-    }&priority=${selectedPriority ? selectedPriority : ""}`;
-    const res = await getpatientsListFilter({ url: resoureUrl });
-    if (res?.status == "SUCCESS") {
-      setTotalElements(res.response?.patientDTOList?.totalElements);
-      setTrackChart(res?.response?.processStatusCount);
-      setPatinetListAll(res?.response?.patientDTOList?.content);
-    }
-  };
-
-  const debounceText = useCallback(
-    debounce((val) => {
-      return setSearchTextValue(val);
-    }, 700),
-    []
-  );
-  const getNameSearch = async (e) => {
-    setIsLoading(true);
-    setSearchVal(e.target.value);
-    debounceText(e.target.value);
-    resetPageNumber(setPageNo);
-  };
 
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
     inputValue.name = data.patientName;
     setAddPatient(true);
-    setIsLoadingBtn(false);
   };
 
   const gotoPatientDetails = (data) => {
-    // getpatientsListFilter(data);
     patientDetails(data);
     setStorage("patientId", data.patientId);
     if (data.computing == 2) {
       const controller = new AbortController();
       controller.abort();
       setStorage("patientId", data.patientId);
-      navigate.push("/reviewer/patients/details");
+      router.push("/reviewer/patients/details");
     } else {
       notification.warning({
         message: data.patientId + " file not processed Please wait",
@@ -209,61 +184,11 @@ const Patient = ({
   };
 
   const onPageChange = (e) => {
-    setIsLoading(true);
     setPaginationFirst(e.first);
     setPageNo(e.page);
+    setPageNumber(e.page);
     setPageSize(e.rows);
   };
-
-  const onChangeStatus = (selectedOption) => {
-    let value = selectedOption;
-    setStatusSelectedStatus(value);
-    removeStorage("reviewerDueDate");
-    removeStorage("reviewerDate");
-  };
-  const onChangePriority = (selectedOption) => {
-    let value = selectedOption;
-    setSelectedPriority(value);
-  };
-
-  const handleDatePickerChange = (dates, dateString) => {
-    if (!dates || dates.length === 0) {
-      setTimeout(() => pickerRef.current?.focus(), 100);
-    }
-    setSelectedDates(dates);
-    if (dateString[0] != "") {
-      let convertStartDate =
-        moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-      let convertEndDate =
-        moment(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-      setDueDateStart(convertStartDate);
-      setDueDateEnd(convertEndDate);
-    } else {
-      setDueDateStart("");
-      setDueDateEnd("");
-      removeStorage("reviewerDueDate");
-      removeStorage("reviewerDate");
-    }
-  };
-
-  const handleDatePickerChangeProcesseDate = (dates, dateString) => {
-    if (!dates || dates.length === 0) {
-      setTimeout(() => pickerRef1.current?.focus(), 100);
-    }
-    setSelectedDates2(dates);
-    if (dateString[0] !== "") {
-      let convertStartDate =
-        moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-      let convertEndDate =
-        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-      setProcessedStart(convertStartDate);
-      setProcessedEnd(convertEndDate);
-    } else {
-      setProcessedStart("");
-      setProcessedEnd("");
-    }
-  };
-
   const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
 
@@ -345,90 +270,87 @@ const Patient = ({
         );
     }
   };
-
-  const options = [...priorityOptions];
-  useEffect(() => {
-    if (filtersData) {
-      setActiveFilters(filtersData);
+  const params = {
+    pageNo,
+    selectedDates,
+    paginationFirst,
+    sort,
+    selectedDates,
+    activeFilters,
+    searchText,
+    selectedOption,
+    selectedDateRanges,
+    pageNumber,
+  };
+  const handleTableRowClick = (e) => {
+    const targetTd = e.target.closest("td");
+    if (targetTd) {
+      setStorage("routeBackTo", "/reviewer/patients");
+      getRoutedData(params);
+      router?.push("/reviewer/patients/details");
+      const dataIndex = targetTd.parentElement.rowIndex - 1;
+      const clickedData = patinetListAll[dataIndex];
+      gotoPatientDetails(clickedData);
     }
-  }, []);
-
+  };
   useEffect(() => {
     if (routedData) {
-      setParamsFilter("check");
-      setPageNo(routedData?.pageNo ? routedData?.pageNo : 0);
-      setPaginationFirst(routedData?.paginationFirst);
-      setSearchTextValue(routedData?.searchTextValue);
-      setSelectedDates(routedData?.selectedDates || []);
-      setSort(routedData?.sort);
-      setClear(routedData?.clear);
-      setSelectedPriority(routedData?.selectedPriority);
-      setActiveFilters(
-        routedData?.activeFilters ? routedData?.activeFilters : []
-      );
-      setDueDateStart(routedData?.dueDateStart || null);
-      setDueDateEnd(routedData?.dueDateEnd || null);
-      setProcessedStart(routedData?.processedStart || null);
-      setProcessedEnd(routedData?.processedEnd || null);
-      setStatusSelectedStatus(routedData?.statusSelectedStatus?.toUpperCase());
-      setSearchVal(
-        routedData?.searchTextValue ? routedData?.searchTextValue : ""
-      );
-      setSort(routedData?.sort);
-      setSortDueOrder(routedData?.sortDueOrder);
-      setSortCompleteOrder(routedData?.sortCompleteOrder);
-      setSortAllocateOrder(routedData?.sortAllocateOrder);
-      setSelectedDates2(routedData?.selectedDates2 || []);
-       setSelectedBatchList(routedData?.selectBatchList || "");
-
+      const {
+        pageNo,
+        selectedDates,
+        selectedDateRanges,
+        selectedOption,
+        searchText,
+        activeFilters,
+        pageNumber,
+        paginationFirst,
+        sort,
+      } = routedData;
+      setPageNo(pageNo?pageNo:0);
+      setSearchText(searchText);
+      setSelectedDateRanges(selectedDateRanges);
+      setSelectedOption(selectedOption);
+      setSelectedDates(selectedDates);
+      setActiveFilters(activeFilters);
+      setPageNumber(pageNumber);
+      setPaginationFirst(paginationFirst);
+      setSort(sort);
     }
-  }, []);
+  }, [routedData]);
+console.log(routedData,"paginationFirst")
+  const getReviewerApi = async () => {
+    const res = await getFilteApi({
+      pageNo,
+      pageNumber,
+      pageSize,
+      selectedOption,
+      sort: sort?.sort,
+      selectedDateRanges,
+      searchText: searchText,
+    });
+    if (res?.status == "SUCCESS") {
+      setTotalElements(res.response?.patientDTOList?.totalElements);
+      setTrackChart(res?.response?.processStatusCount);
+    }
+  };
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
-      getFilteApi({
-        pageNo,
-        pageSize,
-        statusValue: clear ? "" : statusSelectedStatus,
-        dStart: clear ? "" : dueDateStart,
-        dEnd: clear ? "" : dueDateEnd,
-        pStart: clear ? "" : processedStart,
-        pEnd: clear ? "" : processedEnd,
-        sort,
-        selectedPriority: clear ? "" : selectedPriority,
-        searchTextValue: clear ? "" : searchTextValue,
-        selectBatchList: clear ? "" : selectBatchList,
-      });
+      getReviewerApi();
     }
   }, [
+    selectedOption,
+    selectedDateRanges,
+    searchText,
+    pageSize,
     pageNo,
-    sort,
-    selectedPriority,
-    searchTextValue,
-    dueDateStart,
-    dueDateEnd,
-    processedStart,
-    processedEnd,
-    statusSelectedStatus,
-    navigate.query,
-    clear,
     paramsFilter,
-    selectBatchList,
+    sort,
+    pageNumber,
   ]);
-    useEffect(() => {
-      var batchListArray = [];
-      batchList?.response?.map((res) => {
-        batchListArray.push({
-          value: res.id,
-          label: res.name,
-        });
-      });
-      setBatchAllList(batchListArray);
-    }, [batchList]);
+
   useEffect(() => {
-    if (!batchList?.response) {
-      getAllBatchList();
-    }
+    getAllBatchList();
   }, []);
   return (
     <div className={`show `}>
@@ -436,66 +358,30 @@ const Patient = ({
       <div class="content-body">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-xl-12">
+            <div className="col-12">
               <div className="">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
                     <div className="row">
-                      <div className="col-10">
-                          <HeaderFiltersPatients
-                          pickerRef1={pickerRef1}
-                          pickerRef={pickerRef}
-                            activeFilters={activeFilters}
-                            setActiveFilters={setActiveFilters}
-                            isAllocatedToSelector={true}
-                            value={searchVal}
-                            onChange={(e) => getNameSearch(e)}
-                            orgAllList={statusOptions}
-                            onChangeStatus={(selectedOption) => {
-                              onChangeStatus(selectedOption);
-                              resetPageNumber(setPageNo);
-                              setClear(false);
-                            }}
-                            statusSelectedStatus={statusSelectedStatus}
-                            statusSelectedStatus1={selectedPriority}
-                            onChangeStatus1={(selectedOption) => {
-                              onChangePriority(selectedOption);
-                              resetPageNumber(setPageNo);
-                              setClear(false);
-                            }}
-                            orgAllList1={options}
-                            selectedDates={selectedDates}
-                            setSelectedDates={setSelectedDates}
-                            onchangeRangePicker={(dates, dateStrings) => {
-                              
-                              
-                              handleDatePickerChange(dates, dateStrings);
-                              resetPageNumber(setPageNo);
-                              setClear(false);
-                            }}
-                            selectedDates2={selectedDates2}
-                            setSelectedDates2={setSelectedDates2}
-                            onchangeRangePicker2={(dates, dateStrings) => {
-                           
-                              handleDatePickerChangeProcesseDate(
-                                dates,
-                                dateStrings
-                              );
-                              resetPageNumber(setPageNo);
-                              setClear(false);
-                            }}
-                            setClear={setClear}
-                            clear={clear}
-                            getRoutedData={getRoutedData}
-                            setSelectedOptionBatch={setSelectedBatchList}
-                            selectOptionsBatch={batchAllList}
-                            defaultSelectValueBatch={""}
-                            selectedValueBatch={selectBatchList}
-                            selectlabelBatch="Select Batch"
-                            isSelectBatch={true}
-                            batchValue={selectBatchList}
-                            
-                          />
+                      <div className="col-10 ">
+                        <ReusableFilters
+                        showFilter={true}
+                          setActiveFilters={setActiveFilters}
+                          setSearchText={setSearchText}
+                          searchText={searchText}
+                          setSelectedOption={setSelectedOption}
+                          selectedOption={selectedOption}
+                          setSelectedDateRanges={setSelectedDateRanges}
+                          selectedDateRanges={selectedDateRanges}
+                          setPageNumber={setPageNumber}
+                          FilterItems={commonFilterItems}
+                          selectedDates={selectedDates}
+                          setSelectedDates={setSelectedDates}
+                          activeFilters={activeFilters}
+                          setClear={setClear}
+                          clear={clear}
+                          setPageNo={setPageNo}
+                        />
                       </div>
                       <div className="col-2">
                         <div className="row">
@@ -515,47 +401,19 @@ const Patient = ({
                       ) : (
                         <div className="mt-3">
                           <PatientTable
-                            activeFilters={activeFilters}
-                            setActiveFilters={setActiveFilters}
+                            handleTableRowClick={handleTableRowClick}
+                            pageNumber={pageNumber}
                             patinetListAll={patinetListAll}
+                            activeFilters={activeFilters}
                             actionBodyTemplate={actionBodyTemplate}
                             statusBodyTemplate={processstatusBodyTemplate}
                             gotoPatientDetails={gotoPatientDetails}
                             patientDetails={patientDetails}
-                            setSelectedPriority={setSelectedPriority}
                             sort={sort}
                             setSort={setSort}
                             getFilteApi={getFilteApi}
                             page={{ pageNo, paginationFirst }}
-                            sortDueOrder={sortDueOrder}
-                            setSortDueOrder={setSortDueOrder}
-                            sortCompleteOrder={sortCompleteOrder}
-                            setSortCompleteOrder={setSortCompleteOrder}
-                            sortAllocateOrder={sortAllocateOrder}
-                            setSortAllocateOrder={setSortAllocateOrder}
-                            userId={localUserId}
-                            params={{
-                              statusSelectedStatus,
-                              dueDateStart,
-                              dueDateEnd,
-                              processedStart,
-                              processedEnd,
-                              sort,
-                              selectedPriority,
-                              searchTextValue,
-                              pageNo,
-                              selectedDates,
-                              paginationFirst,
-                              sortDueOrder,
-                              sortCompleteOrder,
-                              sortAllocateOrder,
-                              sortDir: sort?.sortDir,
-                              sortField: sort?.sortField,
-                              selectedDates2,
-                              selectedDates,
-                              activeFilters,
-                              selectBatchList
-                            }}
+                            getRoutedData={getRoutedData}
                             bullets={bullets}
                           />
                           <div>
@@ -590,13 +448,17 @@ const enhancer = connect(
     loading: state?.reviewer?.workQueue?.patientsLoading,
     filtersData: state.reviewer?.workQueue?.reviewerPatientFilterList,
     routedData: state.tenantAdmin?.patientSync?.routedData,
-    batchList: state?.tenantAdmin?.patients?.allBatch?.data,
+    batchList: state?.tenantAdmin?.patients?.allBatch?.data?.response,
+    patinetListAll:
+      state?.reviewer?.workQueue?.getReviewerPatients?.data?.response
+        ?.patientDTOList?.content,
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,
     patientDetails: allActions.getPatientDetails,
     getRoutedData: allPatientSyncAction.getRoutedData,
     getAllBatchList: tenantAdminAction.getAllBatchAction,
+    getFilteApi: allActions.getReviewerPatients,
   }
 );
 export default enhancer(Patient);

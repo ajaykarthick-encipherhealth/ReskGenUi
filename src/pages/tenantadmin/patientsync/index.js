@@ -363,19 +363,6 @@ const Index = ({
   const debouncedSearch = useCallback(
     debounce((text, setSearchVal, field) => {
       setSearchVal(text);
-      // setSearchVal((prev) => {
-      //   const existingIndex = prev.findIndex((item) => item.field === field);
-      //   if (existingIndex !== -1) {
-      //     return prev.map((item, index) => {
-      //       if (index === existingIndex) {
-      //         return { ...item, search: text };
-      //       }
-      //       return item;
-      //     });
-      //   } else {
-      //     return [...prev, { search: text, field: field }];
-      //   }
-      // });
     }, 1000),
     []
   );

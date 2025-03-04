@@ -290,64 +290,33 @@ const DailyTask = ({
                           className={styles.headerTitle}
                           style={{ fontSize: "16px" }}
                           onClick={() => {
-                            // setStorage(
-                            //   "SuperVisorfilter",
-                            //   JSON.stringify(allFilters)
-                            // );
-
                             const params = {
-                              // AuditedDueDate: JSON.stringify({
                               selectedDates: {
-                                AuditedDueDate: [
+                                auditedDueDate: [
                                   dayjs(data?.date),
                                   dayjs(data?.date),
                                 ],
                               },
-                              // selectedDateRange: {
-                              //   AuditedDueDate: {
-                              //     startDate: data?.date
-                              //       ? `${moment(
-                              //           data?.date,
-                              //           "MM-DD-YYYY"
-                              //         ).format("YYYY-MM-DD")}T00:00:00.000Z`
-                              //       : "",
-                              //     endDate: data?.date
-                              //       ? `${moment(
-                              //           data?.date,
-                              //           "MM-DD-YYYY"
-                              //         ).format("YYYY-MM-DD")}T23:59:59.999Z`
-                              //       : "",
-                              //   },
-                              // },
-                              selectedDateRange: {
-                                AuditedDueDate: {
-                                  startDate: formatDateForIndex({
-                                    date: data?.date,
-                                    index: 0,
-                                  }),
-                                  endDate: formatDateForIndex({
-                                    date: data?.date,
-                                    index: 1,
-                                  }),
+                              selectedDateRanges: {
+                                auditedDueDate: {
+                                  startDate: data?.date
+                                    ? `${moment(
+                                        data?.date,
+                                        "MM-DD-YYYY"
+                                      ).format("YYYY-MM-DD")}T00:00:00.000Z`
+                                    : "",
+                                  endDate: data?.date
+                                    ? `${moment(
+                                        data?.date,
+                                        "MM-DD-YYYY"
+                                      ).format("YYYY-MM-DD")}T23:59:59.999Z`
+                                    : "",
                                 },
                               },
-
-                              activeFilters: ["Audited Due Date"],
-
-                              // })
+                              activeFilters: ["Audited Due Date", "Search"],
                             };
-
-                            // setStorage("supervisorDate", JSON.stringify(params));
-                            // router?.push(
-                            //   {
-                            //     pathname: "/supervisor/auditing",
-                            //     query: params,
-                            //   },
-                            //   "/supervisor/auditing"
-                            // );
                             getRoutedData(params);
-                            // getFilteredList(allFilters);
-                            router.push(`/supervisor/auditing`);
+                            router?.push("/supervisor/auditing");
                           }}
                         >
                           <div className={styles.headerDisplay}>
@@ -379,51 +348,34 @@ const DailyTask = ({
                               {bullets?.map((item) => {
                                 return (
                                   <div className={styles.container}>
+                                    {console.log(item?.name, "name")}
                                     <div
                                       style={{ display: "flex" }}
                                       onClick={() => {
                                         const params = {
-                                          selectedOption: item?.name
-                                            ? item?.name === "AuditPending" ||
-                                              item?.name === "AuditDeclined"
-                                              ? item?.name
-                                                  .replace(
-                                                    /([a-z])([A-Z])/g,
-                                                    "$1_$2"
-                                                  )
-                                                  .toUpperCase()
-                                              : item?.name.toUpperCase()
-                                            : "",
-
+                                          selectedOption: {
+                                            Status: item?.name
+                                              ? item.name === "Audit Pending" ||
+                                                item.name === "Audit Declined"
+                                                ? item.name
+                                                    .replace(" ", "_")
+                                                    .toUpperCase()
+                                                : item.name === "Audit Hold" ||
+                                                  item.name === "Re Audit"
+                                                ? item.name
+                                                    .replace(" ", "")
+                                                    .toUpperCase()
+                                                : item.name.toUpperCase()
+                                              : "",
+                                          },
                                           selectedDates: {
-                                            AuditedDueDate: [
+                                            auditedDueDate: [
                                               dayjs(data?.date),
                                               dayjs(data?.date),
                                             ],
                                           },
-                                          // selectedDateRange: {
-                                          //   AuditedDueDate: {
-                                          //     startDate: data?.date
-                                          //       ? `${moment(
-                                          //           data?.date,
-                                          //           "MM-DD-YYYY"
-                                          //         ).format(
-                                          //           "YYYY-MM-DD"
-                                          //         )}T00:00:00.000Z`
-                                          //       : "",
-
-                                          //     endDate: data?.date
-                                          //       ? `${moment(
-                                          //           data?.date,
-                                          //           "MM-DD-YYYY"
-                                          //         ).format(
-                                          //           "YYYY-MM-DD"
-                                          //         )}T23:59:59.999Z`
-                                          //       : "",
-                                          //   },
-                                          // },
-                                          selectedDateRange: {
-                                            AuditedDueDate: {
+                                          selectedDateRanges: {
+                                            auditedDueDate: {
                                               startDate: data?.date
                                                 ? formatDateForIndex({
                                                     date: moment(
@@ -446,10 +398,9 @@ const DailyTask = ({
                                           },
 
                                           activeFilters: [
-                                            // "Reviewer Status",
-                                            "Select Audited Status",
-                                            // "Audited Date",
                                             "Audited Due Date",
+                                            "Search",
+                                            "Audited Status",
                                           ],
                                         };
                                         getRoutedData(params);

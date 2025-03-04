@@ -16448,7 +16448,7 @@ input::-webkit-inner-spin-button {
 }
 .default-filter-size {
   width: 250px;
-  margin-top: 30px;
+  /* margin-top: 10px; */
 }
 
 @media (min-width: 1024px) and (max-width: 1350px) {
@@ -16530,14 +16530,10 @@ input::-webkit-inner-spin-button {
   height: 42px !important;
 }
  .default-filter{
-    width: 250px;
+    width: 220px;
     margin-top: 10px;
   }
 
-.default-filter-size {
-  width: 250px;
-  margin-top: 10px;
-}
 .patientDetailsPopSTyle {
   max-width: 180px;
   max-height: 150px;
@@ -16547,6 +16543,9 @@ input::-webkit-inner-spin-button {
   max-width: 400px;
   max-height: 80px;
   overflow-y: scroll;
+}
+.reusableInput.ant-input-affix-wrapper > input.ant-input {
+  margin-top: -5px;
 }
 .notificationPicker{
   border-radius: 0px 10px 10px 0px !important

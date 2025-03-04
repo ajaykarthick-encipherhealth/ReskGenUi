@@ -17,3 +17,8 @@ export const getCurrentUserAction = createActionThunk(
   "GET_CURRENT_USER",
   network.CurrentUserInfo
 );
+
+export const getWorkQueueList = createActionThunk(
+  "GET_WORK_QUEUE_LIST",
+  network.getWorkQueue
+);

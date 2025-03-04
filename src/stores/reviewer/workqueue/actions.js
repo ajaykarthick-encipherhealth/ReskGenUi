@@ -14,3 +14,7 @@ export const getPatientDetails = createAction(
 );
 
 export const reviewerFilterList = createAction("GET_REVIEWER_FILTERED_LIST");
+export const getReviewerPatients = createActionThunk(
+  "GET_REVIEWER_PATIENTS",
+  network.getAllReviewerPatients
+);

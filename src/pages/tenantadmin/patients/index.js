@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import dayjs from "dayjs";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,8 +21,8 @@ import { getStorage, setStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
 import { actions as allocationAction } from "../../../stores/admin/patientAllocation";
 import { actions as allActions } from "../../../stores/admin/workqueue";
-import HeaderFilters from "./headerFilters";
 import TableSkeleton from "../../../components/skeleton/table";
+import ReusableFilters from "../../../components/reusableFilters";
 
 const bullets = [
   {
@@ -112,15 +111,99 @@ const Patient = ({
   getPatientId,
   uploadFiles,
   uploadFilesRadiology,
-  response,
+  getRetreggerPatient,
   patientDetails,
   getFilters,
   filteredList,
   routedData,
   getAllBatchList,
   batchList,
-  getRetreggerPatient,
 }) => {
+  const commonFilterItems = [
+    {
+      id: "00001",
+      title: "Search",
+      type: "search",
+      value: null,
+      placeholder: "Search",
+      header: "Patient ID / Name",
+    },
+    {
+      id: "00002",
+      title: "status",
+      type: "select",
+      value: null,
+      placeholder: "Status",
+      options: statusOptions,
+    },
+    {
+      id: "00003",
+      title: "organization",
+      type: "select",
+      value: null,
+      placeholder: "Organization",
+      options: organizationList?.response?.map((item) => ({
+        value: item?.id,
+        label: `${item?.name}`,
+      })),
+    },
+    {
+      id: "00004",
+      title: "createdDateRange",
+      type: "rangePicker",
+      value: null,
+      placeholder: "Created Date Range",
+      pickerType: "year",
+    },
+    {
+      id: "00005",
+      title: "createdBy",
+      type: "select",
+      value: null,
+      placeholder: "Created By",
+      options: generateOptionsForNewStore(filteredList?.data?.response),
+    },
+    {
+      id: "00006",
+      title: "computedDate",
+      type: "rangePicker",
+      value: null,
+      placeholder: "Computed  Date",
+      pickerType: "year",
+    },
+    {
+      id: "00007",
+      title: "Batch",
+      type: "select",
+      value: null,
+      showSearch: true,
+      placeholder: "Batch",
+      options: batchList?.response?.map((item) => ({
+        value: item?.id,
+        label: `${item?.name}`,
+      })),
+    },
+    {
+      id: "00008",
+      title: "flag",
+      type: "select",
+      value: null,
+      showSearch: true,
+      placeholder: "Flag",
+      options: flagOptions,
+    },
+  ];
+  const [sort, setSort] = useState({
+    computedDate: {
+      sortDir: "DESC",
+      sortField: "computedDate",
+    },
+    createdDate: {
+      sortDir: "DESC",
+      sortField: "createdDate",
+    },
+    sort: { sortDir: "DESC", sortField: "" },
+  });
   const [form] = Form.useForm();
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
@@ -130,11 +213,6 @@ const Patient = ({
   const [addPatientId, setAddPatientId] = useState(false);
   const [selectFile, setSelectFile] = useState(null);
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
-  const [completedStartDate, setCompletedStartDate] = useState("");
-  const [completedEndDate, setCompletedEndDate] = useState("");
-  const [computedStartDate, setComputedStartDate] = useState("");
-  const [computedEndDate, setComputedEndDate] = useState("");
-  const [selectedOption, SetSelectedOption] = useState("");
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -146,38 +224,23 @@ const Patient = ({
     patientId: "",
     patientName: "",
   });
-
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
-  const [tableLoading, setTableLoading] = useState(true);
   const [parsedData, setParsedData] = useState([]);
-  const [search, setSearch] = useState("");
-  const [selAllocatedTo, setSelAllocatedTo] = useState(null);
-  const [selAllocatedBy, setSelAllocatedBy] = useState(null);
-  const [selCreatedBy, setSelCreatedBy] = useState(null);
-  const [computedSortOrder, setComputedSortOrder] = useState("DESC");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-  const [selecteddates, setSelectedDates] = useState([]);
-  const [selecteddates2, setSelectedDate2s] = useState([]);
   const [emrType, setEmrType] = useState("");
-  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [errors, setErrors] = useState({ year: "", emr: "" });
-  const [selectOrgList, setSelectedOrgList] = useState(null);
-  const [selectBatchList, setSelectedBatchList] = useState(null);
-  const [orgAllList, setOrgAllList] = useState([]);
-  const [batchAllList, setBatchAllList] = useState([]);
-  const [searchVal, setSearchVal] = useState("");
   const [paramsFilter, setParamsFilter] = useState(null);
   const [clear, setClear] = useState(false);
-  const [selectAll, setSelectAll] = useState(false);
-  const [activeFilters, setActiveFilters] = useState([]);
-  const [flagList, setFlagList] = useState(null);
+  const [activeFilters, setActiveFilters] = useState(["Search"]);
+  const [searchText, setSearchText] = useState(null);
+  const [selectedOption, setSelectedOption] = useState({});
+  const [selectedDateRanges, setSelectedDateRanges] = useState({});
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -220,7 +283,10 @@ const Patient = ({
       setInputValue({ ...inputValue, [key]: value });
     }
   };
-
+  const orgAllList = organizationList?.response?.map((item) => ({
+    value: item?.id,
+    label: `${item?.name}`,
+  }));
   const handleChangePatientId = async (e) => {
     const key = e.target.name;
     const value = e.target.value;
@@ -251,7 +317,6 @@ const Patient = ({
   };
 
   const handleSubmitPatientId = async (formData, form) => {
-    var orgId = selectOrgList;
     formData.allocatedBy = localUserId;
     formData.computing = 0;
     formData.patientId = formData.patientId.trim();
@@ -259,38 +324,14 @@ const Patient = ({
       setIsLoadingBtn(true);
       const response = await getPatientId({ obj: formData });
       if (response?.status === "SUCCESS") {
-        // getAllPatients(
-        //   pageNo,
-        //   computedStartDate,
-        //   computedEndDate,
-        //   selectedOption,
-        //   search,
-        //   completedStartDate || "",
-        //   completedEndDate || "",
-        //   selAllocatedTo || "",
-        //   selAllocatedBy || "",
-        //   selCreatedBy || "",
-        //   sort,
-        //   orgId,
-        //   selectBatchList,
-        //   flagList
-        // );
         getAllPatients({
           pageNo,
-          computationStart: computedStartDate,
-          computationEnd: computedEndDate,
-          selectedOption: selectedOption,
-          searchVal: searchVal || "",
-          createdStartDate: completedStartDate || "",
-          createdEndDate: completedStartDate || "",
-          selAllocatedTo: selAllocatedTo || "",
-          selAllocatedBy: selAllocatedBy || "",
-          selCreatedBy: selCreatedBy || "",
-          sort,
-          selectOrgList: (orgId = selectOrgList),
-          selectBatchList,
-          flagList,
+          selectedOption,
+          searchText,
+          selectedDateRanges,
+          sort: sort?.sort,
         });
+        setPageNo(0);
         setAddPatientId(false);
         setIsLoadingBtn(false);
         getResponePopup(response);
@@ -320,6 +361,7 @@ const Patient = ({
       });
     }
   };
+
   const processstatusBodyTemplate = (rowData) => {
     const isFinished =
       parsedData?.length > 0 &&
@@ -405,31 +447,6 @@ const Patient = ({
     );
   };
 
-  const getRetregger = async (data) => {
-    try {
-      const res = await getRetreggerPatient({ patinetId: data.patientId });
-      if (res.status == "SUCCESS") {
-        getResponePopup(res);
-        getAllPatients({
-          pageNo,
-          computationStart: computedStartDate,
-          computationEnd: computedEndDate,
-          selectedOption: selectedOption,
-          searchVal: searchVal || "",
-          createdStartDate: completedStartDate || "",
-          createdEndDate: completedStartDate || "",
-          selAllocatedTo: selAllocatedTo || "",
-          selAllocatedBy: selAllocatedBy || "",
-          selCreatedBy: selCreatedBy || "",
-          sort,
-          selectOrgList: (orgId = selectOrgList),
-          selectBatchList,
-          flagList,
-        });
-      }
-    } catch (error) {}
-  };
-
   const submitPatientFile = async () => {
     const formData = new FormData();
     formData.append("file", selectFile);
@@ -445,73 +462,25 @@ const Patient = ({
       form.resetFields();
       setEmrType("");
       setInputValue({});
-      // getAllPatients(
-      //   pageNo,
-      //   computedStartDate,
-      //   computedEndDate,
-      //   selectedOption,
-      //   search,
-      //   completedStartDate || "",
-      //   completedEndDate || "",
-      //   selAllocatedTo || "",
-      //   selAllocatedBy || "",
-      //   selCreatedBy || "",
-      //   sort,
-      //   orgId,
-      //   selectBatchList,
-      //   flagList
-      // );
       getAllPatients({
         pageNo,
-        computationStart: computedStartDate,
-        computationEnd: computedEndDate,
-        selectedOption: selectedOption,
-        searchVal: searchVal || "",
-        createdStartDate: completedStartDate || "",
-        createdEndDate: completedStartDate || "",
-        selAllocatedTo: selAllocatedTo || "",
-        selAllocatedBy: selAllocatedBy || "",
-        selCreatedBy: selCreatedBy || "",
-        sort,
-        selectOrgList: (orgId = selectOrgList),
-        selectBatchList,
-        flagList,
+        selectedOption,
+        searchText,
+        selectedDateRanges,
+        sort: sort?.sort,
       });
     }
-    var orgId = selectOrgList;
     if (response?.result == "SUCCESS") {
       setAddPatient(false);
       setSelectFile(formData);
-      // getAllPatients(
-      //   pageNo,
-      //   computedStartDate,
-      //   computedEndDate,
-      //   selectedOption,
-      //   search || "",
-      //   completedStartDate || "",
-      //   completedEndDate || "",
-      //   selAllocatedTo || "",
-      //   selAllocatedBy || "",
-      //   selCreatedBy || "",
-      //   sort,
-      //   orgId
-      // );
       getAllPatients({
         pageNo,
-        computationStart: computedStartDate,
-        computationEnd: computedEndDate,
-        selectedOption: selectedOption,
-        searchVal: searchVal || "",
-        createdStartDate: completedStartDate || "",
-        createdEndDate: completedStartDate || "",
-        selAllocatedTo: selAllocatedTo || "",
-        selAllocatedBy: selAllocatedBy || "",
-        selCreatedBy: selCreatedBy || "",
-        sort,
-        selectOrgList: (orgId = selectOrgList),
-        selectBatchList,
-        flagList,
+        selectedOption,
+        searchText,
+        selectedDateRanges,
+        sort: sort?.sort,
       });
+      setPageNo(0);
       handleClose();
       setIsLoadingBtn(false);
       getResponePopup(response);
@@ -542,7 +511,21 @@ const Patient = ({
     setAddPatient(false);
     setSelectFileRadiology(null);
   };
-
+  const getRetregger = async (data) => {
+    try {
+      const res = await getRetreggerPatient({ patinetId: data.patientId });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+        getAllPatients({
+          pageNo,
+          selectedOption,
+          searchText,
+          selectedDateRanges,
+          sort: sort?.sort,
+        });
+      }
+    } catch (error) {}
+  };
   const handleClose = () => {
     setAddPatient(false);
     setErrors({ year: "", emr: "" });
@@ -557,11 +540,9 @@ const Patient = ({
   };
 
   const onPageChange = (e) => {
-    setIsLoading(true);
     setPaginationFirst(e.first);
     setPageNo(e.page);
-    setPageSize(e.rows);
-    setTableLoading(true);
+    setPageNumber(e.page);
   };
 
   const statusUpdateWebSockt = (result) => {
@@ -608,40 +589,28 @@ const Patient = ({
 
   useEffect(() => {
     if (routedData) {
-      setParamsFilter("check");
-      setPageNo(routedData?.pageNo || 0);
-      setPaginationFirst(routedData?.paginationFirst || 0);
-      setCompletedStartDate(routedData?.completedStartDate);
-      setCompletedEndDate(routedData?.completedEndDate || "");
-      SetSelectedOption(routedData?.selectedOption || "");
-      setSearch(routedData?.search || null);
-      setSearchVal(routedData?.search || null);
-      setComputedStartDate(routedData?.computedStartDate || "");
-      setComputedEndDate(routedData?.computedEndDate || "");
-      setSelAllocatedBy(routedData?.selAllocatedBy || null);
-      setSelAllocatedTo(routedData?.setSelAllocatedTo || "");
-      setSelCreatedBy(routedData?.createdBy || null);
-      setSelectedDate2s(
-        routedData?.completedStartDate && [
-          dayjs(routedData?.completedStartDate),
-          dayjs(routedData?.completedEndDate),
-        ]
-      );
-      setSelectedDates(
-        (routedData?.computedStartDate && [
-          dayjs(routedData?.computedStartDate),
-          dayjs(routedData?.computedEndDate),
-        ]) ||
-          []
-      );
-      setSelectedOrgList(routedData?.selectOrgList || "");
-      setSelectedBatchList(routedData?.selectBatchList || "");
-      setFlagList(routedData?.flagList || "");
-      setActiveFilters(
-        routedData?.activeFilters ? routedData?.activeFilters : []
-      );
+      const {
+        pageNo,
+        selectedDates,
+        selectedDateRanges,
+        selectedOption,
+        searchText,
+        activeFilters,
+        pageNumber,
+        paginationFirst,
+        sort,
+      } = routedData;
+      setPageNo(pageNo ? pageNo : 0);
+      setSearchText(searchText);
+      setSelectedDateRanges(selectedDateRanges);
+      setSelectedOption(selectedOption);
+      setSelectedDates(selectedDates);
+      setActiveFilters(activeFilters);
+      setPageNumber(pageNumber);
+      setPaginationFirst(paginationFirst);
+      setSort(sort);
     }
-  }, []);
+  }, [routedData]);
 
   useEffect(() => {
     setParamsFilter("check");
@@ -651,73 +620,27 @@ const Patient = ({
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    if (paramsFilter) {
+    if (paramsFilter === "check") {
       getAllPatients({
         pageNo,
-        computationStart: computedStartDate,
-        computationEnd: computedEndDate,
-        selectedOption: selectedOption,
-        searchVal: searchVal || "",
-        createdStartDate: completedStartDate || "",
-        createdEndDate: completedStartDate || "",
-        selAllocatedTo: selAllocatedTo || "",
-        selAllocatedBy: selAllocatedBy || "",
-        selCreatedBy: selCreatedBy || "",
-        sort,
-        selectOrgList: (orgId = selectOrgList),
-        selectBatchList,
-        flagList,
+        selectedOption,
+        searchText,
+        selectedDateRanges,
+        sort: sort?.sort,
       });
-      getFilters({ field: "createdBy" });
     }
   }, [
     pageNo,
-    computedStartDate,
-    computedEndDate,
     selectedOption,
-    searchVal,
-    completedStartDate,
-    completedEndDate,
-    selAllocatedTo,
-    selAllocatedBy,
-    selCreatedBy,
+    searchText,
+    selectedDateRanges,
     sort,
-    selectOrgList,
-    selectBatchList,
-    flagList,
     paramsFilter,
   ]);
-
   useEffect(() => {
-    if (!organizationList?.response) {
-      getAllOrganizationList();
-    }
-  }, []);
-
-  useEffect(() => {
-    var orgListArray = [];
-    organizationList?.response?.map((res) => {
-      orgListArray.push({
-        value: res.id,
-        label: res.name,
-      });
-    });
-    setOrgAllList(orgListArray);
-  }, [organizationList]);
-  useEffect(() => {
-    var batchListArray = [];
-    batchList?.response?.map((res) => {
-      batchListArray.push({
-        value: res.id,
-        label: res.name,
-      });
-    });
-    setBatchAllList(batchListArray);
-  }, [batchList]);
-  useEffect(() => {
-    if (!batchList?.response) {
-      getAllBatchList();
-    }
+    getAllBatchList();
+    getAllOrganizationList();
+    getFilters({ field: "createdBy" });
   }, []);
   useEffect(() => {
     if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
@@ -734,6 +657,7 @@ const Patient = ({
       statusUpdateWebSockt(patientData);
     }
   }, [webSocketData]);
+
   return (
     <div className={`show `}>
       <Header />
@@ -744,99 +668,31 @@ const Patient = ({
               <div className="">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
-                    <div className="tbl-caption  align-items-center">
-                      <div className="tbl-caption2  align-items-center">
-                        <HeaderFilters
-                          setSearch={setSearch}
-                          isSearch={true}
-                          searchlabel=" Patient ID / Name"
-                          search={search}
-                          searchVal={searchVal}
-                          setSearchVal={setSearchVal}
-                          activeTab={"pateints"}
-                          // select status
-                          selectlabel="Select Status"
-                          isSelector={true}
-                          setSelectedOption={SetSelectedOption}
-                          selectOptions={statusOptions}
-                          defaultSelectValue1={"Select Status"}
-                          selectDefaultValue={
-                            statusOptions?.find(
-                              (item) => item?.value === selectedOption
-                            )?.label
-                          }
-                          // computation date
-                          pickerlabel="Computed Date"
-                          defaultStartDate={""}
-                          defaultEndDate={""}
-                          setStartDate={setComputedStartDate}
-                          setEndDate={setComputedEndDate}
-                          isRangePicker={true}
-                          disable="Yes"
-                          selectedDates={selecteddates}
+                    <div className="row">
+                      <div style={{ width: "99%" }}>
+                        <ReusableFilters
+                          showFilter={true}
+                          setActiveFilters={setActiveFilters}
+                          setSearchText={setSearchText}
+                          searchText={searchText}
+                          setSelectedOption={setSelectedOption}
+                          selectedOption={selectedOption}
+                          setSelectedDateRanges={setSelectedDateRanges}
+                          selectedDateRanges={selectedDateRanges}
+                          FilterItems={commonFilterItems}
+                          selectedDates={selectedDates}
                           setSelectedDates={setSelectedDates}
-                          // created date
-                          pickerlabe2="Created Date"
-                          defaultStartDate2={""}
-                          defaultEndDate2={""}
-                          setStartDate2={setCompletedStartDate}
-                          setEndDate2={setCompletedEndDate}
-                          isAnotherPicker={true}
-                          selectedDates2={selecteddates2}
-                          setSelectedDates2={setSelectedDate2s}
-                          // defaultAllocateTo={"All"}
-                          // allocated by
-                          isAllocatedBySelector={true}
-                          allocatedBylabel="Created By"
-                          allocatedByOptoons={generateOptionsForNewStore(
-                            filteredList?.data?.response
-                          )}
-                          defaultAllocatedBy={"Select Created By"}
-                          setSelAllocatedBy={setSelAllocatedBy}
-                          selectorField="CreatedBy"
-                          fromTenantPatients={true}
-                          // defaultAllocatedBy={"All"}
-                          setSelCreatedBy={setSelCreatedBy}
-                          addUser={true}
-                          addUserForm={addPatientFormId}
-                          bullets={bullets}
-                          isNextRow={true}
-                          btnTitle="Add Patient"
-                          atCorner={true}
-                          selAllocatedBy={selAllocatedBy}
-                          // selectOrg
-                          selectlabelOrg="Select Organization"
-                          isSelectOrg={true}
-                          setSelectedOptionOrg={setSelectedOrgList}
-                          selectOptionsOrg={orgAllList}
-                          defaultSelectValueOrg={""}
-                          selectedValueOrg={selectOrgList}
-                          orgValue={selectOrgList}
-                          // selectBatch
-                          setSelectedOptionBatch={setSelectedBatchList}
-                          selectOptionsBatch={batchAllList}
-                          defaultSelectValueBatch={""}
-                          selectedValueBatch={selectBatchList}
-                          selectlabelBatch="Select Batch"
-                          // selectFlag
-                          selectLabelFlag="Select Flag"
-                          flagOptions={flagOptions}
-                          isSelectBatch={true}
-                          batchValue={selectBatchList}
-                          setPageNo={setPageNo}
+                          activeFilters={activeFilters}
                           setClear={setClear}
                           clear={clear}
-                          selectAll={selectAll}
-                          setSelectAll={setSelectAll}
-                          activeFilters={activeFilters}
-                          setActiveFilters={setActiveFilters}
-                          flagList={flagList}
-                          setFlagList={setFlagList}
-                          setSelectedBatchList={setSelectedBatchList}
+                          addUserForm={addPatientFormId}
+                          addUser={true}
+                          btnTitle={"Add Patient"}
+                          form={form}
+                          setPageNo={setPageNo}
                         />
                       </div>
                     </div>
-
                     <div
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
@@ -846,6 +702,7 @@ const Patient = ({
                       ) : (
                         <div className="mt-2">
                           <AddPatientListTable
+                           getRetregger={getRetregger}
                             bullets={bullets}
                             patinetListAll={
                               allPatientList?.data?.response?.patientDtoList
@@ -855,40 +712,27 @@ const Patient = ({
                             statusBodyTemplate={processstatusBodyTemplate}
                             gotoPatientDetails={gotoPatientDetails}
                             patientDetails={patientDetails}
-                            setSortOrder={setComputedSortOrder}
-                            sortOrder={computedSortOrder}
                             setSort={setSort}
+                            sort={sort}
                             page={{
                               pageNo,
+                              selectedDates,
                               paginationFirst,
-                              computedStartDate,
-                              computedEndDate,
-                              selectedOption,
-                              search,
-                              completedStartDate,
-                              completedEndDate,
-                              selAllocatedTo,
-                              selAllocatedBy,
-                              selCreatedBy,
-                              selectOrgList,
-                              selectBatchList,
+                              sort,
+                              selectedDates,
                               activeFilters,
-                              flagList,
+                              searchText,
+                              selectedOption,
+                              selectedDateRanges,
+                              pageNumber,
                             }}
-                            getRetregger={getRetregger}
-                            sortCompleteOrder={sortCompleteOrder}
-                            setSortCompleteOrder={setSortCompleteOrder}
                           />
                           <div>
                             <div className="pagination-container">
                               <Paginator
                                 id="patients-paginator"
                                 name="patients-paginator"
-                                first={
-                                  paginationFirst == 0
-                                    ? pageNo
-                                    : paginationFirst
-                                }
+                                first={pageNo === 0 ? 0 : paginationFirst}
                                 rows={15}
                                 totalRecords={
                                   allPatientList?.data?.response?.patientDtoList

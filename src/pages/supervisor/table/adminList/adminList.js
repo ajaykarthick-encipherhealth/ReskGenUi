@@ -1,17 +1,16 @@
 import React from "react";
-import { useRouter } from "next/router";
 import { Empty, Tooltip } from "antd";
 import { CircularProgressbar } from "react-circular-progressbar";
 import TableStyle from "../../../../components/table/table.module.css";
 import { renderUserPrfoile } from "../../../../components/headerFilters/functions";
 import { setStorage } from "../../../../utils/storages";
-
-const AdminList = ({ userList }) => {
-  const router = useRouter();
-
+import { connect } from "react-redux";
+import {actions as allActions} from '../../../../stores/tenantAdmin/patientSync'
+const AdminList = ({ userList,setViewUsers }) => {
   const gotoUserQueue = (item) => {
-    setStorage("user",item?.userName)
-      router.push(`/supervisor/user/userqueue`);
+    setStorage("user", item?.userName);
+    setViewUsers(item)
+    // router.push(`/supervisor/user/userqueue`);
   };
   return (
     <div className={TableStyle.classContaineer}>
@@ -129,4 +128,8 @@ const AdminList = ({ userList }) => {
   );
 };
 
-export default AdminList;
+const connector=connect((state)=>({}),{
+  getRoutedData:allActions.getRoutedData
+})
+
+export default connector(AdminList);

@@ -20,56 +20,52 @@ export async function getAllBatch() {
 }
 export async function getAllPatient({
   pageNo,
-  computationStart = "",
-  computationEnd = "",
   selectedOption,
-  searchVal,
-  createdStartDate = "",
-  createdEndDate = "",
-  selAllocatedTo,
-  selAllocatedBy,
-  selCreatedBy,
+  searchText,
+  selectedDateRanges,
   sort,
-  selectOrgList,
-  selectBatchList,
-  flagList,
 }) {
   const options = {
     method: "GET",
   };
 
   const uId = getStorage("userId");
-  const filteredStatus = selectedOption === undefined ? "" : selectedOption;
-  const selectOrgId = selectOrgList === "ALL" || selectOrgList == undefined ? "" : selectOrgList;
-  const selectBatchId =
-    selectBatchList === "ALL" || selectBatchList == undefined
-      ? ""
-      : selectBatchList;
   try {
     const data = await requestPortal(
-      `dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&organizationId=${
-        selectOrgId || ""
-      }&batchId=${selectBatchId || ""}&flagName=${
-        flagList || ""
-      }&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${
-        filteredStatus || ""
-      }&searchString=${searchVal || ""}&createdStartDate=${
-        createdStartDate || ""
-      }&createdEndDate=${createdEndDate || ""}&patientCreatedBy=${
-        selAllocatedBy === "All" ? "" : selAllocatedBy
-      }&patientAllocatedTo=${
-        selAllocatedTo === "All" ? "" : selAllocatedTo
-      }&patientAllocatedBy=${
-        selCreatedBy === "All" ? "" : selCreatedBy
-      }&sortfield=${sort?.sortField ? sort?.sortField : ""}&sortdirection=${
-        sort?.sortDir ? sort?.sortDir : ""
-      }`,
+      `dbservice/patient/admin/computation/filter?page=${
+        pageNo || 0
+      }&size=15&userId=${uId}&organizationId=${
+        selectedOption?.organization ? selectedOption?.organization : ""
+      }&batchId=${selectedOption?.Batch ? selectedOption?.Batch : ""}&flagName=${
+        selectedOption?.flag || ""
+      }&isAllocation=false&computationStart=${
+        selectedDateRanges?.computedDate?.startDate || ""
+      }&computationEnd=${
+        selectedDateRanges?.computedDate?.endDate || ""
+      }&status=${
+        selectedOption?.status ? selectedOption?.status : ""
+      }&searchString=${searchText ? searchText : ""}&createdStartDate=${
+        selectedDateRanges?.createdDateRange?.startDate
+          ? selectedDateRanges?.createdDateRange?.startDate
+          : ""
+      }&createdEndDate=${
+        selectedDateRanges?.createdDateRange?.endDate
+          ? selectedDateRanges?.createdDateRange?.endDate
+          : ""
+      }&patientCreatedBy=${
+        selectedOption?.createdBy || ""
+      }&patientAllocatedTo=${""}&patientAllocatedBy=${""}&sortfield=${
+        sort?.sortField ? sort?.sortField : ""
+      }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}`,
       options
     );
     return data;
-  } catch (err) {
-    return null;
   }
+
+  catch (err) {
+    return null
+
+}
 }
 
 export async function submitPatientId({ obj }) {

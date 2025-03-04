@@ -13,13 +13,13 @@ import { getStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
 import HeaderFilters from "./headerFilters";
 import TableSkeleton from "../../../components/skeleton/table";
-import ReusableFilters from "../../../components/reusableFilters";
 
 const options3 = [
   { value: "true", label: "Enabled" },
   { value: "false", label: "Disabled" },
 ];
 const RoleList = [
+  // { value: "ADMIN", label: "ADMIN" },
   { value: "REVIEWER", label: "REVIEWER" },
   { value: "SUPERVISOR", label: "SUPERVISOR" },
   { value: "TENANT_ADMIN", label: "TENANT ADMIN" },
@@ -44,91 +44,44 @@ const UserList = ({
   getAddUser,
   addPatients,
 }) => {
-  const commonFilterItems = [
-    {
-      id: 1,
-      title: "Search",
-      type: "search",
-      value: null,
-      placeholder: "Search",
-      header:"Search by UserName"
-    },
-
-    {
-      id: 2,
-      title: "role",
-      type: "select",
-      value: null,
-      placeholder: " Role",
-      options: RoleList,
-    },
-    {
-      id: 3,
-      title: "status",
-      type: "select",
-      value: null,
-      placeholder: "Status",
-      options: options3,
-    },
-    {
-      id: 4,
-      title: "organization",
-      type: "select",
-      value: null,
-      placeholder: "Organization",
-      options: organizationList?.response?.map((item) => ({
-        value: item?.id,
-        label: `${item?.name}`,
-      })),
-    },
-    {
-      id: 5,
-      title: "createdDateRange",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Created Date Range",
-      pickerType: "year",
-    },
-  ];
-  const [sort, setSort] = useState({
-    createdDate: {
-      sortDir: "DESC",
-      sortField: "createdDate",
-    },
-  });
   const [localUserId, setLocalUserId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localTenantId, setLocalTenantId] = useState("");
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [validated, setValidated] = useState(false);
+  const [userListAll, setUserListAll] = useState([]);
   const [addUser, setAddUser] = useState(false);
   const [isStatus, setStatus] = useState(false);
   const [roleValue, setRoleValue] = useState([]);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [totalElements, setTotalElements] = useState(10);
   const [sortOrder, setSortOrder] = useState("DESC");
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [useAdd, setUseAdd] = useState(false);
   const [formData, setFormData] = useState(intialValues);
-  const [pageNo, setPageNo] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
   const [addPatientId, setAddPatientId] = useState(false);
+  const [search, setSearch] = useState("");
   const [role, setRole] = useState(null);
+  const [status, setSelectedStatus] = useState(null);
+  const [selectedDates, setSelectedDates] = useState();
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [inputValuePatientId, setInputValuePatientId] = useState({
     patientId: "",
     patientName: "",
   });
-  const [activeFilters, setActiveFilters] = useState(["Search"]);
-  const [searchText, setSearchText] = useState(null);
-  const [selectedOption, setSelectedOption] = useState({});
-  const [selectedDateRanges, setSelectedDateRanges] = useState({});
-  const [selectedDates, setSelectedDates] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [mobileNumber, setMobileNumber] = useState("");
+  const [selectOrgList, setSelectedOrgList] = useState(null);
+  const [roleList, setSelectedRoleLsit] = useState(null);
   const [orgAllList, setOrgAllList] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
 
   const handleChange = (e) => {
     let value = e.target.value;
+    // if (value?.length===10) {
     const val = getDisplayValue(value);
     setMobileNumber(val);
+    // }
   };
   const getDisplayValue = (number) => {
     if (number.length === 10) {
@@ -140,16 +93,6 @@ const UserList = ({
     setValidated(false);
     setAddUser(true);
   };
-  useEffect(() => {
-    var orgListArray = [];
-    organizationList?.response?.map((res) => {
-      orgListArray.push({
-        value: res.id,
-        label: res.name,
-      });
-    });
-    setOrgAllList(orgListArray);
-  }, [organizationList]);
   const [clear, setClear] = useState(false);
 
   const [form] = Form.useForm();
@@ -163,13 +106,6 @@ const UserList = ({
     userFormData.passwordIv = encryptedData.iv;
     const response = await getAddUser(userFormData, setFormData);
     if (response?.status == "SUCCESS") {
-      getAllUsersList({
-        pageNo:0,
-        searchText,
-        selectedDateRanges,
-        selectedOption,
-        sort: sort,
-      });
       setFormData({
         firstName: "",
         lastName: "",
@@ -180,12 +116,11 @@ const UserList = ({
         mobileNumber: "",
         confirmPassword: "",
       });
-      setPaginationFirst(0)
       setMobileNumber("");
       form.resetFields();
       setUseAdd(true);
       setIsLoadingBtn(false);
-      getResponePopup(response);  
+      getResponePopup(response);
       setRoleValue([]);
       setValidated(true);
       setAddUser(false);
@@ -217,6 +152,10 @@ const UserList = ({
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
       const response = await addPatients({ data: inputValuePatientId });
+      // axios.post(
+      //   ENDPOINTS.apiEndoint + `dbservice/patient`,
+      //   inputValuePatientId
+      // );
       if (response?.status == 200) {
         if (response.data.message == "patient Already Present") {
           setIsLoadingBtn(false);
@@ -235,6 +174,7 @@ const UserList = ({
       } else {
         setIsLoadingBtn(false);
       }
+      // setAddPatientId(false);
       getAllList(localUserId, pageNo, pageSize);
     }
 
@@ -248,11 +188,12 @@ const UserList = ({
   };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
-    setPageNo(e.page);
+    setPageCount(e.page);
   };
 
   useEffect(() => {
     if (usersListData?.data?.response) {
+      setUserListAll(usersListData?.data);
       setTotalElements(usersListData?.data?.response?.totalElements);
     }
   }, [usersListData]);
@@ -266,13 +207,27 @@ const UserList = ({
     setLocalOrgId(orgId);
     setUseAdd(false);
     getAllUsersList({
-      pageNo,
-      searchText,
-      selectedDateRanges,
-      selectedOption,
-      sort: sort?.sort,
+      pageCount,
+      search,
+      startDate,
+      endDate,
+      status,
+      role,
+      orgId: selectOrgList || "",
+      sort: sort,
     });
-  }, [pageNo, searchText, sort ,selectedDateRanges, selectedOption]);
+  }, [
+    pageCount,
+    search,
+    startDate,
+    endDate,
+    status,
+    role,
+    sort,
+    useAdd,
+    clear,
+    selectOrgList,
+  ]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -283,6 +238,17 @@ const UserList = ({
   useEffect(() => {
     getAllOrganizationList();
   }, []);
+
+  useEffect(() => {
+    var orgListArray = [];
+    organizationList?.response?.map((res) => {
+      orgListArray.push({
+        value: res.id,
+        label: res.name,
+      });
+    });
+    setOrgAllList(orgListArray);
+  }, [organizationList]);
 
   const onFinish = (values) => {
     handleSubmit(values);
@@ -299,53 +265,77 @@ const UserList = ({
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
                     <div className="tbl-caption  align-items-center">
-                    <div style={{width:"99%"}}>
-                      <ReusableFilters
-                      showFilter={true}
-                        setActiveFilters={setActiveFilters}
-                        setSearchText={setSearchText}
-                        searchText={searchText}
-                        setSelectedOption={setSelectedOption}
-                        selectedOption={selectedOption}
-                        setSelectedDateRanges={setSelectedDateRanges}
-                        selectedDateRanges={selectedDateRanges}
-                        setPageNo={setPageNo}
-                        FilterItems={commonFilterItems}
+                      <HeaderFilters
+                        setSearch={setSearch}
+                        isSearch={true}
+                        searchlabel="Search By Username"
+                        search={search}
+                        // select status
+                        selectlabel="Status"
+                        isSelector={true}
+                        setSelectedOption={setSelectedStatus}
+                        selectOptions={options3}
+                        defaultSelectValue1={""}
+                        selectedValue={status}
+                        //  selecte Role
+                        selectlabel2="Role"
+                        selectOptions2={RoleList}
+                        defaultSelectValue2={""}
+                        setSelectedOption2={setRole}
+                        selectedValue2={role}
+                        // selectOrg
+                        selectlabelOrg="Organization"
+                        isSelectOrg={true}
+                        setSelectedOptionOrg={setSelectedOrgList}
+                        selectOptionsOrg={orgAllList}
+                        defaultSelectValueOrg={""}
+                        selectedValueOrg={selectOrgList}
+                        orgValue={selectOrgList}
+                        // computation date
+                        pickerlabel="Created date Range"
                         selectedDates={selectedDates}
                         setSelectedDates={setSelectedDates}
-                        activeFilters={activeFilters}
+                        defaultStartDate={""}
+                        defaultEndDate={""}
+                        setStartDate={setStartDate}
+                        setEndDate={setEndDate}
+                        pickerStartValue={startDate}
+                        pickerEndValue={endDate}
+                        isRangePickerUsers={true}
+                        addUser={true}
+                        addUserForm={addUserForm}
+                        btnTitle="Add User"
                         setClear={setClear}
                         clear={clear}
-                        addUserForm={addUserForm}
-                        addUser={true}
-                        btnTitle={"Add User"}
+                        addBtn={true}
+                        disable="Yes"
                         form={form}
+                        setMobileNumber={setMobileNumber}
+                        setPageNo={setPageCount}
                       />
-                    </div>
                     </div>
                     <div
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
                       {loading ? (
-                        <TableSkeleton />
+                        <TableSkeleton/>
                       ) : (
                         <>
                           <UsersList
                             switchHandler={switchHandler}
-                            setPageNo={setPageNo}
+                            setPageCount={setPageCount}
                             sortOrder={sortOrder}
                             setSortOrder={setSortOrder}
                             setSort={setSort}
-                            sort={sort}
                           />
 
                           <div>
                             <div className="pagination-container">
                               <Paginator
-                                id="user-paginator"
-                                name="user-paginator"
-                                first={pageNo === 0 ? 0 : paginationFirst}
+                              id="user-paginator"
+                              name="user-paginator"
+                                first={pageCount === 0 ? 0 : paginationFirst}
                                 rows={15}
                                 totalRecords={totalElements}
                                 onPageChange={onPageChange}
@@ -378,8 +368,8 @@ const UserList = ({
               Add Patient Details
             </h5>
             <button
-              id="add-btn"
-              name="add-btn"
+            id="add-btn"
+            name="add-btn"
               type="button"
               className="btn-close"
               onClick={() => {
@@ -425,17 +415,12 @@ const UserList = ({
                 </div>
 
                 <div>
-                  <Button
-                    id="submit-btn"
-                    name="submit-btn"
-                    type="submit"
-                    className="btn btn-primary btn-sm me-1"
-                  >
+                  <Button id="submit-btn" name="submit-btn" type="submit" className="btn btn-primary btn-sm me-1">
                     {isLoadingBtn ? "Loading..." : "Submit"}
                   </Button>
                   <Button
-                    id="cancel-btn"
-                    name="cancel-btn"
+                  id="cancel-btn"
+                  name="cancel-btn"
                     onClick={() => setAddPatientId(false)}
                     className="btn btn-danger btn-sm light ms-1"
                   >
@@ -447,8 +432,8 @@ const UserList = ({
           </div>
         </Offcanvas>
         <Offcanvas
-          id="add-user"
-          name="add-user"
+        id="add-user"
+        name="add-user"
           show={addUser}
           onHide={() => {
             setAddUser(false);
@@ -464,8 +449,8 @@ const UserList = ({
               Add User
             </h5>
             <button
-              id="user-btn"
-              name="user-btn"
+            id="user-btn"
+            name="user-btn"
               type="button"
               className="btn-close"
               onClick={() => {
@@ -500,8 +485,8 @@ const UserList = ({
                     >
                       <div>
                         <Input
-                          id="firstName"
-                          name="firstName"
+                        id="firstName"
+                        name="firstName"
                           placeholder="Enter first name"
                           autoComplete="off"
                         />
@@ -521,8 +506,8 @@ const UserList = ({
                     >
                       <div>
                         <Input
-                          id="lastName"
-                          name="lastName"
+                        id="lastName"
+                        name="lastName"
                           placeholder="Enter last name"
                           autoComplete="off"
                         />
@@ -546,12 +531,7 @@ const UserList = ({
                       ]}
                     >
                       <div>
-                        <Input
-                          id="emailId"
-                          name="emailId"
-                          placeholder="Enter email"
-                          autoComplete="off"
-                        />
+                        <Input id="emailId" name="emailId" placeholder="Enter email" autoComplete="off" />
                       </div>
                     </Form.Item>
                   </Col>
@@ -578,8 +558,8 @@ const UserList = ({
                     >
                       <div>
                         <Input
-                          id="userName"
-                          name="userName"
+                        id="userName"
+                        name="userName"
                           placeholder="Enter user name"
                           autoComplete="off"
                         />
@@ -599,8 +579,8 @@ const UserList = ({
                       ]}
                     >
                       <Select
-                        id="role"
-                        name="role"
+                      id="role"
+                      name="role"
                         placeholder="Select role"
                         allowClear
                         style={{ height: "42px" }}
@@ -627,8 +607,8 @@ const UserList = ({
                       ]}
                     >
                       <Select
-                        id="orgId"
-                        name="orgId"
+                      id="orgId"
+                      name="orgId"
                         placeholder="Select"
                         options={orgAllList}
                         style={{ height: "42px" }}
@@ -669,8 +649,8 @@ const UserList = ({
                       <div className="confirmPass">
                         <input type="password" style={{ display: "none" }} />
                         <Input.Password
-                          name="password"
-                          id="password"
+                        name="password"
+                        id="password"
                           placeholder="Enter password"
                           autoComplete="new-password"
                         />
@@ -702,8 +682,8 @@ const UserList = ({
                       <div className="confirmPass">
                         <input type="password" style={{ display: "none" }} />
                         <Input.Password
-                          id="confirmPassword"
-                          name="confirmPassword"
+                         id="confirmPassword"
+                         name="confirmPassword"
                           placeholder="Re-enter the password"
                           autoComplete="new-password"
                         />
@@ -729,8 +709,8 @@ const UserList = ({
                     >
                       <div>
                         <Input
-                          id="mobileNumber"
-                          name="mobileNumber"
+                        id="mobileNumber"
+                        name="mobileNumber"
                           type="text"
                           placeholder="Enter mobile number"
                           autoComplete="off"
@@ -769,8 +749,8 @@ const UserList = ({
                   </Form.Item>
                   <Form.Item>
                     <Button
-                      id="cancle-btn"
-                      name="cancel-btn"
+                    id="cancle-btn"
+                    name="cancel-btn"
                       style={{
                         backgroundColor: "#ffdede",
                         color: "#ff5e5e",

@@ -66,6 +66,45 @@ export async function GetWorkListFilters({ data }) {
   return res;
 }
 
+export async function getAuditQueue({
+  pageNo,
+  selectedOption,
+  sort,
+  selectedDateRanges,
+  searchText,
+}) {
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(
+    `dbservice/auditor/patient/workqueue/filter?&page=${
+      pageNo ? pageNo : 0
+    }&size=15&batchId=${
+     selectedOption?.batch ? selectedOption?.batch : ""
+    }&auditedStatus=${
+      selectedOption?.Status ? selectedOption?.Status : ""
+    }&auditedDateStart=${ selectedDateRanges?.auditedDate?.startDate
+      ? selectedDateRanges?.auditedDate?.startDate
+      : ""}&auditedDateEnd=${ selectedDateRanges?.auditedDate?.endDate
+      ? selectedDateRanges?.auditedDate?.endDate
+      : ""}&auditDueDateStart=${
+      selectedDateRanges?.auditedDueDate?.startDate
+        ? selectedDateRanges?.auditedDueDate?.startDate
+        : ""
+    }&auditDueDateEnd=${
+      selectedDateRanges?.auditedDueDate?.endDate
+        ? selectedDateRanges?.auditedDueDate?.endDate
+        : ""
+    }&searchString=${searchText ? searchText : ""}&sortField=${
+      sort?.sortField ? sort?.sortField : ""
+    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&patientAllocated=${
+      selectedOption?.Reviewer ? selectedOption?.Reviewer : ""
+    }&priority=${selectedOption?.Priority ? selectedOption?.Priority : ""}`,
+    options
+  );
+  return res;
+}
+
 export async function filterUsers({field, username, pageQueue}) {
   const options = {
     method: "GET",

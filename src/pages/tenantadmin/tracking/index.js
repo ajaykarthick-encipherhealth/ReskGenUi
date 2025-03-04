@@ -5,11 +5,13 @@ import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { Popover, notification } from "antd";
+import { Popover } from "antd";
 import { Paginator } from "primereact/paginator";
-import HeaderFilters from "./headerFilters";
 import TrackingTable from "../../../components/table/tenantTable/trackingList";
-import { generateOptionsForNewStore } from "../../../components/headerFilters/functions";
+import {
+  generateOptionsForNewStore,
+  priorityOptions,
+} from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
 import AuditedTrack from "../../../../src/images/trackingImages/audited.webp";
 import NotAudited from "../../../../src/images/trackingImages/notaudited.webp";
@@ -30,6 +32,7 @@ import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { actions as workFlowActions } from "../../../stores/admin/workqueue";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import TableSkeleton from "../../../components/skeleton/table";
+import ReusableFilters from "../../../components/reusableFilters";
 const bullets = [
   {
     title: "Processed Status",
@@ -119,32 +122,151 @@ const Patient = ({
   getRoutedData,
   routedData,
 }) => {
-  const navigate = useRouter();
-  const [searchTextValue, setSearchTextValue] = useState("");
-  const inputValue = {
-    year: "",
-    name: "",
-    patientId: "",
-    processStageId: "",
-    patientId: "",
-  };
+  const commonFilterItems = [
+    {
+      id: 1,
+      title: "Reviewer",
+      type: "select",
+      value: null,
+      placeholder: "Reviewer",
+      options: generateOptionsForNewStore(
+        patientAllocatedFilters?.data?.response
+      ),
+    },
+    {
+      id: 2,
+      title: "supervisor",
+      type: "select",
+      value: null,
+      placeholder: "Supervisor",
+      options: generateOptionsForNewStore(auditAssignedFilters?.data?.response),
+    },
+    {
+      id: 3,
+      title: "allocatedDate",
+      type: "rangePicker",
+      value: null,
+      placeholder: "Allocated  Date",
+      pickerType: "year",
+    },
+    {
+      id: 4,
+      title: "auditAllocatedDate",
+      type: "rangePicker",
+      value: null,
+      placeholder: "Audit Allocated  Date",
+      pickerType: "year",
+    },
+    {
+      id: 5,
+      title: "processedStatus",
+      type: "select",
+      value: null,
+      placeholder: " Processed Status",
+      options: statusOptions,
+    },
+    {
+      id: 6,
+      title: "auditStatus",
+      type: "select",
+      value: null,
+      placeholder: " Audit Status",
+      options: auditStatusOptions,
+    },
+    {
+      id: 7,
+      title: "reviewedDate",
+      type: "rangePicker",
+      value: null,
+      placeholder: "Reviewed Date",
+      pickerType: "year",
+    },
+    {
+      id: 8,
+      title: "auditedDate",
+      type: "rangePicker",
+      value: null,
+      placeholder: "Audited Date",
+      pickerType: "year",
+    },
+    {
+      id: 9,
+      title: "allocatedBy",
+      type: "select",
+      value: null,
+      placeholder: "Allocated By",
+      options: generateOptionsForNewStore(allocatedByFilters?.data?.response),
+    },
+    {
+      id: 10,
+      title: "auditAllocatedBy",
+      type: "select",
+      value: null,
+      placeholder: "Audit Allocated By",
+      options: generateOptionsForNewStore(filteredList?.data?.response),
+    },
+    {
+      id: 11,
+      title: "organization",
+      type: "select",
+      value: null,
+      placeholder: "Organization",
+      options: organizationList?.response?.map((item) => ({
+        value: item?.id,
+        label: `${item?.name}`,
+      })),
+    },
+    {
+      id: 12,
+      title: "search",
+      type: "search",
+      value: null,
+      placeholder: "Patient Name / ID",
+      pickerType: "search",
+      header: "Patient Name / ID",
+    },
+    {
+      id: 13,
+      title: "priority",
+      type: "select",
+      value: null,
+      placeholder: "Priority",
+      options: priorityOptions,
+    },
+  ];
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
-  const [sortDueOrder, setSortDueOrder] = useState("DESC");
-  const [sortAuditDueOrder, setSortAuditDueOrder] = useState("DESC");
-  const [allocatedSortOrder, setAllocatedSortOrder] = useState("DESC");
-  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-  const [clear, setClear] = useState(false);
-  const [selectedDates, setSelectedDates] = useState();
-  const [selectedDateRange, setSelectedDateRange] = useState({});
-  const [selectedOptions, setSelectedOptions] = useState({
-    Supervisor: null,
-    Reviewer: null,
+  const [sort, setSort] = useState({
+    allocatedOn: {
+      sortDir: "DESC",
+      sortField: "allocatedOn",
+    },
+    dueDate: {
+      sortDir: "DESC",
+      sortField: "dueDate",
+    },
+    auditAllocatedDate: {
+      sortDir: "DESC",
+      sortField: "auditAllocatedDate",
+    },
+    auditDueDate: {
+      sortDir: "DESC",
+      sortField: "auditDueDate",
+    },
+    sort: { sortDir: "DESC", sortField: "" },
   });
+  const [clear, setClear] = useState(false);
   const [orgAllList, setOrgAllList] = useState([]);
-  const [activeFilters, setActiveFilters] = useState([]);
+  const [activeFilters, setActiveFilters] = useState([
+    "Reviewer",
+    "Supervisor",
+  ]);
   const [paramsFilter, setParamsFilter] = useState(null);
+  const [searchText, setSearchText] = useState(null);
+  const [selectedOption, setSelectedOption] = useState({});
+  const [selectedDateRanges, setSelectedDateRanges] = useState({});
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
 
   const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
@@ -398,16 +520,9 @@ const Patient = ({
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
-    // getAllList(response?.response);
   };
 
   useEffect(() => {
-    if (!organizationList?.response) {
-      getAllOrganizationList();
-    }
-  }, []);
-
-  useEffect(() => {
     var orgListArray = [];
     organizationList?.response?.map((res) => {
       orgListArray.push({
@@ -424,90 +539,58 @@ const Patient = ({
     }
   }, []);
 
-  useEffect(() => {
-    var orgListArray = [];
-    organizationList?.response?.map((res) => {
-      orgListArray.push({
-        value: res.id,
-        label: res.name,
-      });
-    });
-    setOrgAllList(orgListArray);
-  }, [organizationList]);
   useEffect(() => {
     if (routedData) {
-      setParamsFilter("check");
-      setPageNo(routedData?.pageNo);
-      setPaginationFirst(routedData?.paginationFirst);
-      setSearchTextValue(routedData?.searchTextValue);
-      setSelectedDateRange(routedData?.selectedDateRange);
-      setSelectedDates(routedData?.selectedDates);
-      setSelectedOptions(routedData?.selectedOptions);
-      setSort(routedData?.sort);
-      setClear(routedData?.clear);
-      setActiveFilters(
-        routedData?.activeFilters ? routedData?.activeFilters : activeFilters
-      );
+      const {
+        pageNo,
+        selectedDates,
+        selectedDateRanges,
+        selectedOption,
+        searchText,
+        activeFilters,
+        pageNumber,
+        paginationFirst,
+        sort,
+      } = routedData;
+      setPageNo(pageNo?pageNo:0);
+      setSearchText(searchText);
+      setSelectedDateRanges(selectedDateRanges);
+      setSelectedOption(selectedOption);
+      setSelectedDates(selectedDates);
+      setActiveFilters(activeFilters);
+      setPageNumber(pageNumber);
+      setPaginationFirst(paginationFirst);
+      setSort(sort);
     }
-  }, []);
+  }, [routedData]);
+
   useEffect(() => {
     setParamsFilter("check");
-    if (window !== "undefined" && paramsFilter) {
-      const data = {
+    if (paramsFilter==="check") {
+      getAllTrackingList({
         pageNo,
-        dueDateStart: clear
-          ? ""
-          : selectedDateRange?.ReviewedDate?.startDate || "",
-        dueDateEnd: clear ? "" : selectedDateRange?.ReviewedDate?.endDate || "",
-        searchTextValue: clear ? "" : searchTextValue || "",
-        selectedOption: clear ? "" : selectedOptions?.ProcessedStatus || "",
-        // processedStart: clear ? "" : "",
-        // processedEnd: clear ? "" : "",
-        selAllocatedTo: clear ? "" : selectedOptions?.Reviewer || "",
-        auditedStartDate: clear
-          ? ""
-          : selectedDateRange?.AuditAllocatedDate?.startDate || "",
-        auditedEndDate: clear
-          ? ""
-          : selectedDateRange?.AuditAllocatedDate?.endDate || "",
-        allocatedStartDate: clear
-          ? ""
-          : selectedDateRange?.AllocatedDate?.startDate || "",
-        allocatedEndDate: clear
-          ? ""
-          : selectedDateRange?.AllocatedDate?.endDate || "",
-        selAllocatedBy: clear ? "" : selectedOptions?.AllocatedBy || "",
-        auditedDueStartDate: clear
-          ? ""
-          : selectedDateRange?.AuditedDate?.startDate || "",
-        auditedDueEndDate: clear
-          ? ""
-          : selectedDateRange?.AuditedDate?.endDate || "",
-        auditSelectedOption: clear ? "" : selectedOptions?.AuditStatus || "",
-        selAuditAllocatedBy: clear
-          ? ""
-          : selectedOptions?.AuditAllocatedBy || "",
-        auditSelAllocatedTo: clear ? "" : selectedOptions?.Supervisor || "",
-        sort,
-        selectOrgId: clear ? "" : selectedOptions?.Organization || "",
-        priority:clear?"":selectedOptions?.Priority||""
-      };
-      getAllTrackingList(data);
-      getFilters({ field: "auditAllocatedBy" });
-      getPatientAllocatedList({ field: "patientAllocated" });
-      getAuditAssignedList({ field: "auditedAssigned" });
-      getAllocatedByList({ field: "allocatedBy" });
+        pageNumber,
+        selectedOption,
+        sort: sort?.sort,
+        selectedDateRanges,
+        searchText: searchText,
+      });
     }
-    // setIsLoading(false);
   }, [
     pageNo,
-    searchTextValue,
+    searchText,
     sort,
-    clear,
-    selectedDateRange,
-    selectedOptions,
+    selectedDateRanges,
+    selectedOption,
     paramsFilter,
   ]);
+
+  useEffect(() => {
+    getFilters({ field: "auditAllocatedBy" });
+    getPatientAllocatedList({ field: "patientAllocated" });
+    getAuditAssignedList({ field: "auditedAssigned" });
+    getAllocatedByList({ field: "allocatedBy" });
+  }, []);
 
   return (
     <div className={`show `}>
@@ -519,51 +602,33 @@ const Patient = ({
               <div className="">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
-                  <div className="row">
-                  <div className="col-10">
-                        <HeaderFilters
-                          auditallocatedToOptoons={generateOptionsForNewStore(
-                            auditAssignedFilters?.data?.response
-                          )}
-                          setSearch={setSearchTextValue}
-                          isSearch={true}
-                          search={searchTextValue}
-                          selectOptions={statusOptions}
-                          allocatedToOptoons={generateOptionsForNewStore(
-                            patientAllocatedFilters?.data?.response
-                          )}
-                          allocatedByOptoons={generateOptionsForNewStore(
-                            allocatedByFilters?.data?.response
-                          )}
-                          // defaultAllocatedBy={"All"}
-                          bullets={bullets}
-                          isNextRow={true}
-                          defaultShow={true}
-                          defaultSize={"col-2"}
-                          auditAllocatedByOptoons={generateOptionsForNewStore(
-                            filteredList?.data?.response
-                          )}
-                          orgAllList={orgAllList}
+                    <div className="row ">
+                      <div className="col-10 d-flex align-items-center justify-content-center">
+                        <ReusableFilters
+                          showFilter={true}
+                          setActiveFilters={setActiveFilters}
+                          setSearchText={setSearchText}
+                          searchText={searchText}
+                          setSelectedOption={setSelectedOption}
+                          selectedOption={selectedOption}
+                          setSelectedDateRanges={setSelectedDateRanges}
+                          selectedDateRanges={selectedDateRanges}
+                          setPageNumber={setPageNumber}
+                          FilterItems={commonFilterItems}
+                          selectedDates={selectedDates}
+                          setSelectedDates={setSelectedDates}
+                          activeFilters={activeFilters}
                           setClear={setClear}
                           clear={clear}
-                          selectedDates={selectedDates}
-                          selectedDateRange={selectedDateRange}
-                          setSelectedDateRange={setSelectedDateRange}
-                          setSelectedDates={setSelectedDates}
-                          selectedOptions={selectedOptions}
-                          setSelectedOptions={setSelectedOptions}
                           setPageNo={setPageNo}
-                          getRoutedData={getRoutedData}
-                          auditStatusOptions={auditStatusOptions}
-                          activeFilters={activeFilters}
-                          setActiveFilters={setActiveFilters}
-                          searchTextValue={searchTextValue}
                         />
                       </div>
-                      <div className="col-xl-2 col-sm-3 d-flex align-items-center justify-content-center">
-                        <DailyTask
-                          trackChart={trackingList?.processStatusCount}
-                        />
+                      <div className="col-2 d-flex align-items-center justify-content-center">
+                        <div className="row">
+                          <DailyTask
+                            trackChart={trackingList?.processStatusCount}
+                          />
+                        </div>
                       </div>
                     </div>
 
@@ -585,31 +650,23 @@ const Patient = ({
                             actionBodyTemplate={actionBodyTemplate}
                             statusBodyTemplate={processstatusBodyTemplate}
                             auditBodyTemplate={auditstatusBodyTemplate}
-                            // gotoPatientDetails={gotoPatientDetails}
                             patientDetails={patientDetails}
-                            setSortOrder={setAllocatedSortOrder}
-                            sortOrder={allocatedSortOrder}
                             setSort={setSort}
                             page={{
                               pageNo,
                               paginationFirst,
                               selectedDates,
-                              selectedDateRange,
-                              selectedOptions,
-                              searchTextValue,
+                              selectedDateRanges,
+                              selectedOption,
+                              searchText,
                               sort,
                               clear,
                               activeFilters,
                             }}
                             loader={loader}
-                            sortAuditOrder={sortAuditOrder}
-                            setSortAuditOrder={setSortAuditOrder}
-                            sortDueOrder={sortDueOrder}
-                            setSortDueOrder={setSortDueOrder}
-                            sortAuditDueOrder={sortAuditDueOrder}
-                            setSortAuditDueOrder={setSortAuditDueOrder}
                             bullets={bullets}
                             badges={badges}
+                            sort={sort}
                           />
                           <div>
                             <div className="pagination-container">

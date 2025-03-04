@@ -1,42 +1,51 @@
 import { requestPortal } from "../../../utils/network";
 import { getStorage } from "../../../utils/storages";
 
-export async function getAllTracking(data) {
+export async function getAllTracking({
+  pageNo,
+  searchText,
+  selectedOption,
+  selectedDateRanges,
+  sort,
+}) {
   const uId = getStorage("userId");
   const options = {
     method: "GET",
   };
-  // const filteredStatus =
-  //   data?.selectedOption === undefined ? "" : data?.selectedOption;
-  // const filteredDStart =
-  //   data?.dueDateStart === undefined ? "" : data?.dueDateStart;
 
   const res = await requestPortal(
     `dbservice/patient/admin/filter?userId=${uId}&organizationId=${
-      data?.selectOrgId
-    }&page=${
-      data?.pageNo
-    }&size=15&processedStatus=${data?.selectedOption}&processedStart=${ data?.dueDateStart}&processedEnd=${
-      data?.dueDateEnd
-    }&searchString=${data?.searchTextValue}&patientAllocated=${
-      data?.selAllocatedTo
-    }&auditAllocatedStart=${data?.auditedStartDate}&auditAllocatedEnd=${
-      data?.auditedEndDate
-    }&allocatedOnStart=${data?.allocatedStartDate}&allocatedOnEnd=${
-      data?.allocatedEndDate
-    }&allocatedBy=${data?.selAllocatedBy}&auditedStartDate=${
-      data?.auditedDueStartDate
-    }&auditedEndDate=${data?.auditedDueEndDate}&auditedStatus=${
-      data?.auditSelectedOption ? data?.auditSelectedOption : ""
-    }&auditAllocatedBy=${
-      data?.selAuditAllocatedBy ? data?.selAuditAllocatedBy : ""
-    }&auditedAssigned=${
-      data?.auditSelAllocatedTo ? data?.auditSelAllocatedTo : ""
-    }&sortfield=${
-      data?.sort?.sortField ? data?.sort?.sortField : ""
-    }&sortdirection=${data?.sort?.sortDir ? data?.sort?.sortDir : ""}&priority=${data?.priority}`,
+      selectedOption?.organization || ""
+    }&page=${pageNo || 0}&size=15&processedStatus=${
+      selectedOption?.processedStatus || ""
+    }&processedStart=${
+      selectedDateRanges?.reviewedDate?.startDate || ""
+    }&processedEnd=${
+      selectedDateRanges?.reviewedDate?.endDate || ""
+    }&searchString=${searchText || ""}&patientAllocated=${
+      selectedOption?.Reviewer || ""
+    }&auditAllocatedStart=${
+      selectedDateRanges?.auditAllocatedDate?.startDate || ""
+    }&auditAllocatedEnd=${
+      selectedDateRanges?.auditAllocatedDate?.endDate || ""
+    }&allocatedOnStart=${
+      selectedDateRanges?.allocatedDate?.startDate || ""
+    }&allocatedOnEnd=${
+      selectedDateRanges?.allocatedDate?.endDate || ""
+    }&allocatedBy=${selectedOption?.allocatedBy || ""}&auditedStartDate=${
+      selectedDateRanges?.auditedDate?.startDate || ""
+    }&auditedEndDate=${
+      selectedDateRanges?.auditedDate?.endDate || ""
+    }&auditedStatus=${selectedOption?.auditStatus || ""}&auditAllocatedBy=${
+      selectedOption?.auditAllocatedBy || ""
+    }&auditedAssigned=${selectedOption?.supervisor || ""}&sortfield=${
+      sort?.sortField ? sort?.sortField : ""
+    }&sortdirection=${
+      sort?.sortDir ? sort?.sortDir : ""
+    }&priority=${selectedOption?.priority || ""}`,
     options
   );
+  console.log(res,"res")
   return res;
 }
 export async function getCustomAllUsers() {

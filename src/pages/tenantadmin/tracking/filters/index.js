@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import styles from "../../../../mainStream/components/moreFilters/report.module.css";
-import { Divider, Popover, Tooltip } from "antd";
+import { Button, Divider, Popover, Tooltip } from "antd";
 import Tracking from "../tracking.module.css";
 import { connect } from "react-redux";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
-
+import {  PlusCircleFilled } from "@ant-design/icons";
 const MoreFilter = ({
   selectAll,
   setSelectAll,
   allFilters,
   setActiveFilters,
   activeFilters,
-  setClear,
+  handleClearFilters,
   handleClearAllFilters,
   getRoutedData,
   byDefault,
+  addUser,
+  addUserForm,
+  btnTitle,form
 }) => {
   const [popoverVisible, setPopoverVisible] = useState(false);
 
@@ -25,7 +28,7 @@ const MoreFilter = ({
         ? allFilters
         : byDefault
         ? allFilters.slice(3, byDefault)
-        : []
+        : ['Search','Reviewer','Supervisor']
     );
   };
 
@@ -36,20 +39,12 @@ const MoreFilter = ({
       : [...activeFilters, filter];
     setActiveFilters(updatedFilters);
   };
-
-  const handleClearFilters = () => {
-    setSelectAll(false);
-    setActiveFilters(byDefault ? allFilters.slice(3, byDefault) : []);
-    setClear(true);
-    getRoutedData("");
-  };
-
   const PopContent = (
     <>
       <div className="d-flex my-2">
         <input
-        id="selectAll"
-        name="selectAll"
+          id="selectAll"
+          name="selectAll"
           type="checkbox"
           onChange={handleHeaderCheckboxChange}
           className={`${styles.customChecked}`}
@@ -58,19 +53,20 @@ const MoreFilter = ({
         <span style={{ margin: "0 5px" }}>Select All</span>
       </div>
       <Divider className="m-0 p-0" />
-      {allFilters?.map((filter, index) => (
+      {allFilters?.slice(1).map((filter, index) => (
         <div key={filter} style={{ margin: "10px 0px" }}>
           <input
-          id={activeFilters}
-          name={activeFilters}
+            id={filter}
+            name={filter}
             type="checkbox"
             onChange={() => handleRowCheckboxChange(filter)}
             className={`${styles.customChecked}`}
             checked={activeFilters?.includes(filter)}
-          />{" "}
+          />
           <span style={{ margin: "0 5px" }}>{filter}</span>
         </div>
       ))}
+
       <div className="d-flex justify-content-between">
         <div
           style={{ marginTop: "10px", cursor: "pointer", color: "blue" }}
@@ -83,7 +79,7 @@ const MoreFilter = ({
         <div
           style={{ marginTop: "10px", cursor: "pointer", color: "blue" }}
           onClick={handleClearFilters}
-           id="reset-filters"
+          id="reset-filters"
           name="reset-filters"
         >
           Reset
@@ -102,8 +98,11 @@ const MoreFilter = ({
         onVisibleChange={setPopoverVisible}
       >
         <Tooltip title={"More Filters"}>
-          <div  id="filter-img"
-            name="filter-img" className={Tracking.iconBorderFlex}>
+          <div
+            id="filter-img"
+            name="filter-img"
+            className={Tracking.iconBorderFlex}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="#03316f"
@@ -122,6 +121,24 @@ const MoreFilter = ({
           </div>
         </Tooltip>
       </Popover>
+      {addUser && (
+        <div className="align-self-center mt-4">
+          <Button
+          id={btnTitle}
+          name={btnTitle}
+            onClick={() => {
+              if (form) {
+                form.resetFields();
+              }
+              addUserForm();
+            }}
+            style={{ background: "#04306f" ,color:"#fff"}}
+            className="btn btn-sm ms-2 flr width-max-content"
+          >
+            <PlusCircleFilled /> {btnTitle}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

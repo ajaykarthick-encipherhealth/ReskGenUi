@@ -33,3 +33,8 @@ export const getFilterUsers = createActionThunk(
   "FILTER_USER",
   network.filterUsers
 );
+
+export const getAuditQueueList = createActionThunk(
+  "GET_AUDIT_QUEUE_LIST",
+  network.getAuditQueue
+);
