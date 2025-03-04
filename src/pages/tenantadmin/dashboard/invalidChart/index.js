@@ -127,7 +127,7 @@ const InvalidChart = ({
               },
             },
           };
-          console.log(params, "params");
+
           getRoutedData(params);
           router.push("/tenantadmin/patients");
         }}

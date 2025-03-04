@@ -380,6 +380,7 @@ const Index = ({
       setSort(sort);
     }
   }, [routedData]);
+
   return (
     <div className={`show `}>
       <Header />
@@ -393,7 +394,7 @@ const Index = ({
                   setViewUsers(null);
                   getRoutedData({
                     params: null,
-                    userData: routedData?.userData || params,
+                    userData: userParams,
                   });
                   // router.push("/supervisor/user");
                 }}

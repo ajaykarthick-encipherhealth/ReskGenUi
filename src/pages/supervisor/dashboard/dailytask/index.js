@@ -348,7 +348,6 @@ const DailyTask = ({
                               {bullets?.map((item) => {
                                 return (
                                   <div className={styles.container}>
-                                    {console.log(item?.name, "name")}
                                     <div
                                       style={{ display: "flex" }}
                                       onClick={() => {

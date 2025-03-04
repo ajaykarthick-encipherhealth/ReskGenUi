@@ -87,11 +87,11 @@ const UserList = ({ getUsers, loader, usersData, routedData }) => {
                       </div>
                     ) : (
                       <div className="mt-2">
-                      <AdminList
-                        userList={userListAll?.content}
-                        setPageCount={setPageCount}
-                        setViewUsers={setViewUsers}
-                      />
+                        <AdminList
+                          userList={userListAll?.content}
+                          setPageCount={setPageCount}
+                          setViewUsers={setViewUsers}
+                        />
                       </div>
                     )}
                     <div>
