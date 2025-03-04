@@ -1049,6 +1049,7 @@ const VisitData = ({
               handleCloseModal={handleCloseModal}
               setIsFileFormShow={setIsModalOpenValid}
               year={year}
+              open={isModalOpenValid}
               reset={isModalOpenValid}
             />
           </div>
@@ -1107,6 +1108,7 @@ const VisitData = ({
                 isEditPage={true}
                 isEditValue={formValues}
                 reset={isModalOpenValid}
+                open={isEditHccForm}
               />
             </div>
           </div>
@@ -1153,6 +1155,7 @@ const VisitData = ({
                 setSuggestedMeatForm={setSuggestedMeatForm}
                 selectDisDetails={selectDisDetails}
                 selectCardTitle={selectCardTitle}
+                open={suggestedMeatForm}
               />
             </div>
           </div>

@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
-import moment from "moment";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faClose,
   faArrowLeft,
   faPlus,
   faAngleDown,
   faAngleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Drawer, Modal, Popover, Tooltip, notification } from "antd";
-import { Button, Offcanvas, Spinner } from "react-bootstrap";
-import styles from "../styles.module.css";
+import { Drawer, Modal,  notification } from "antd";
+import { Button, Spinner } from "react-bootstrap";
 import PdfViewer from "../../PdfViewerComponent";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import HccCards from "../../components/HCC";
@@ -21,10 +18,8 @@ import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import {
   onDragEnd,
-  truncateString,
 } from "../../components/function/ReusableFunctions";
 import ManuallyAdd from "../../components/manuallyAdd";
-import LogoLoader from "../../../../logoLoader";
 import { getStorage } from "../../../../../utils/storages";
 import { getValidHccDetailsApi } from "../../../../../stores/patient/details/network";
 import CardSkeleton from "../../../../skeleton/card";
@@ -141,6 +136,7 @@ const File = ({
     // setFileLoading(false);
     setIsEditHccForm(false);
     setOpens(false);
+    
   };
 
   const getValidHccDetails = async (value, code) => {
@@ -411,6 +407,7 @@ const File = ({
                 handleCloseModal={handleCloseModal}
                 setIsFileFormShow={setIsFileFormShow}
                 year={year}
+                open={isFileFormShow}
               />
             </div>
           ) : null}
@@ -792,6 +789,7 @@ const File = ({
                 year={year}
                 isEditPage={true}
                 isEditValue={formValues}
+                open={isEditHccForm}
               />
             </div>
           </div>
@@ -839,6 +837,7 @@ const File = ({
                 setSuggestedMeatForm={setSuggestedMeatForm}
                 selectDisDetails={selectDisDetails}
                 selectCardTitle={selectCardTitle}
+                open={suggestedMeatForm}
               />
             </div>
           </div>

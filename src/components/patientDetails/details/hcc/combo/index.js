@@ -14,7 +14,6 @@ import { getStorage } from "../../../../../utils/storages";
 import ManuallyAdd from "../../components/manuallyAdd";
 import { onDragEnd } from "../../components/function/ReusableFunctions";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import LogoLoader from "../../../../logoLoader";
 
 const Combo = ({
   activeComboTree,
@@ -657,6 +656,7 @@ const Combo = ({
                 setSuggestedMeatForm={setSuggestedMeatForm}
                 selectDisDetails={selectDisDetails}
                 selectCardTitle={selectCardTitle}
+                open={suggestedMeatForm}
               />
             </div>
           </div>

@@ -476,6 +476,7 @@ const CamboTree = ({
                 isEditPage={true}
                 isEditValue={data}
                 setOpens={setOpens}
+                open={isEditHccForm}
               />
             </div>
           </div>

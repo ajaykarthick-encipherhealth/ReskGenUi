@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CloseOutlined } from "@ant-design/icons";
-import {
-  Form,
-  Input,
-  Select,
-  Switch,
-} from "antd";
+import { Form, Input, Select, Switch } from "antd";
 import AddSection from "./AddSection";
 import SelectButton from "../../../../btnSelect";
 import style from "../../../../../components/button/style.module.css";
@@ -18,21 +13,21 @@ import {
 } from "../function/ReusableFunctions";
 import RegularButton from "../../../../button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faK, faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import Meat, { checkMeatType } from "./Meat";
 import { getResponePopup } from "../../../../../utils/reusable";
 import CustomSelect from "../../../../customSelect";
 
-const defaultCapturedSections=[
-  {label:"Chief Complaint",value:"Chief Complaint"},
-  {label:"History of Present Illness",value:"History of Present Illness"},
-  {label:"Vitals",value:"Vitals"},
-  {label:"Medication",value:"Medication"},
-  {label:"PMH/Problem List",value:"PMH/Problem List"},
-  {label:"Assessment",value:"Assessment"},
-  {label:"Plan",value:"Plan"}
-]
+const defaultCapturedSections = [
+  { label: "Chief Complaint", value: "Chief Complaint" },
+  { label: "History of Present Illness", value: "History of Present Illness" },
+  { label: "Vitals", value: "Vitals" },
+  { label: "Medication", value: "Medication" },
+  { label: "PMH/Problem List", value: "PMH/Problem List" },
+  { label: "Assessment", value: "Assessment" },
+  { label: "Plan", value: "Plan" },
+];
 const ManuallyAdd = ({
   handleCloseModal,
   patientDosResult,
@@ -58,6 +53,7 @@ const ManuallyAdd = ({
   selectDisDetails,
   selectCardTitle,
   setOpens,
+  open,
 }) => {
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(true);
@@ -188,11 +184,31 @@ const ManuallyAdd = ({
               label: item,
               value: item,
             }));
-            setCapturedSections(res?.response?.capturedSections?.length>0?section:defaultCapturedSections);
-            setCapturedSectionsM(res?.response?.capturedSections?.length>0?section:defaultCapturedSections);
-            setCapturedSectionsE(res?.response?.capturedSections?.length>0?section:defaultCapturedSections);
-            setCapturedSectionsA(res?.response?.capturedSections?.length>0?section:defaultCapturedSections);
-            setCapturedSectionsT(res?.response?.capturedSections?.length>0?section:defaultCapturedSections);
+            setCapturedSections(
+              res?.response?.capturedSections?.length > 0
+                ? section
+                : defaultCapturedSections
+            );
+            setCapturedSectionsM(
+              res?.response?.capturedSections?.length > 0
+                ? section
+                : defaultCapturedSections
+            );
+            setCapturedSectionsE(
+              res?.response?.capturedSections?.length > 0
+                ? section
+                : defaultCapturedSections
+            );
+            setCapturedSectionsA(
+              res?.response?.capturedSections?.length > 0
+                ? section
+                : defaultCapturedSections
+            );
+            setCapturedSectionsT(
+              res?.response?.capturedSections?.length > 0
+                ? section
+                : defaultCapturedSections
+            );
           }
         } catch (error) {}
       }
@@ -220,7 +236,7 @@ const ManuallyAdd = ({
     setValidCode("Valid Code");
     const isCodeCheck = await isCodeAlready({
       code: value,
-      patientId:  getStorage("patientId"),
+      patientId: getStorage("patientId"),
       dos: year?.value || "",
       date: getSelectedDos,
     });
@@ -620,7 +636,7 @@ const ManuallyAdd = ({
       //   );
 
       data = {
-        patientId:  getStorage("patientId"),
+        patientId: getStorage("patientId"),
         oldDiagnosisCode: isEditValue.diagnosisCode,
         diagnosisCode: selectDisDetails?.diagnosisCode,
         newDiagnosisCode: code,
@@ -668,7 +684,7 @@ const ManuallyAdd = ({
       };
     } else if (isEditMeat) {
       data = {
-        patientId:  getStorage("patientId"),
+        patientId: getStorage("patientId"),
         diagnosisCode: isEditMeatValue.diagnosisCode,
         monitorHyperLink:
           listOfSectionM.length > 0
@@ -725,6 +741,7 @@ const ManuallyAdd = ({
       };
     }
     if (validCode.toLowerCase() == "valid code") {
+      setIsBtnLoading(true);
       try {
         let res = {};
         if (isEditPage) {
@@ -744,18 +761,26 @@ const ManuallyAdd = ({
           resetForms({ reload: true });
           setIsBtnLoading(false);
           setOpens(false);
-        } else if (res?.status == "CUSTOM_EXCEPTION") {
-          getResponePopup(res);
-          setIsBtnLoading(false);
-        } else if (res?.status == "USER_DEFINED_ERROR") {
+        } else if (
+          res?.status == "CUSTOM_EXCEPTION" ||
+          res?.status === "FAILED" ||
+          res?.status == "USER_DEFINED_ERROR"
+        ) {
           getResponePopup(res);
           setIsBtnLoading(false);
         }
-      } catch (error) {}
+        // else if (res?.status == "USER_DEFINED_ERROR") {
+        //   getResponePopup(res);
+        //   setIsBtnLoading(false);
+        // }
+      } catch (error) {
+        setIsBtnLoading(false);
+      }
     } else {
       if (meatFormDisplay) {
+        setIsBtnLoading(true);
         var movemetData = {};
-        (movemetData.patientId = await getStorage("patientId")),
+        (movemetData.patientId = getStorage("patientId")),
           (movemetData.diagnosisCode = selectDisDetails.diagnosisCode),
           (movemetData.processedYear = year?.value),
           (movemetData.chartProcessType = getSelectedDos
@@ -770,17 +795,26 @@ const ManuallyAdd = ({
           (movemetData.assessmentHyperLink = data.assessmentHyperLink),
           (movemetData.treatmentAspect = data.treatmentAspect),
           (movemetData.treatmentHyperLink = data.treatmentHyperLink);
-        const res = await suggestedToValidMove(movemetData, selectCardTitle);
-        if (res?.status == "SUCCESS") {
-          handleCloseModal(false);
-          getResponePopup(res);
-          resetForms({ reload: true });
-          setIsBtnLoading(false);
-        } else if (res?.status == "CUSTOM_EXCEPTION") {
-          getResponePopup(res);
-          setIsBtnLoading(false);
-        } else if (res?.status == "USER_DEFINED_ERROR") {
-          getResponePopup(res);
+        try {
+          const res = await suggestedToValidMove(movemetData, selectCardTitle);
+          if (res?.status == "SUCCESS") {
+            handleCloseModal(false);
+            getResponePopup(res);
+            resetForms({ reload: true });
+            setIsBtnLoading(false);
+          } else if (
+            res?.status == "CUSTOM_EXCEPTION" ||
+            res?.status === "FAILED" ||
+            res?.status == "USER_DEFINED_ERROR"
+          ) {
+            getResponePopup(res);
+            setIsBtnLoading(false);
+          }
+          // else if (res?.status == "USER_DEFINED_ERROR") {
+          //   getResponePopup(res);
+          //   setIsBtnLoading(false);
+          // }
+        } catch (err) {
           setIsBtnLoading(false);
         }
       }
@@ -839,7 +873,7 @@ const ManuallyAdd = ({
       patientDetailsResult?.data?.response?.processedYear,
       patientDetailsResult?.data?.response?.dateOfService,
       "",
-       getStorage("userRole")
+      getStorage("userRole")
     );
     // }
   };
@@ -1087,6 +1121,13 @@ const ManuallyAdd = ({
       setMeatDisplay(true);
     }
   }, [meatFormDisplay]);
+  useEffect(() => {
+    if (!open) {
+      setIsBtnLoading(false);
+      resetForms({ reload: false });
+    }
+  }, [open]);
+
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
@@ -1345,17 +1386,19 @@ const ManuallyAdd = ({
                   {!isEdit ? (
                     <RegularButton
                       type=""
-                      name="Save"
+                      name={isBtnLoading ? "Loading..." : "Save"}
                       width="100px"
+                      disabled={isBtnLoading}
                       // onClick={handledSave}
                     />
                   ) : (
                     <RegularButton
                       type=""
                       method={"button"}
-                      name="Edit"
+                      name={isBtnLoading ? "Loading..." : "Edit"}
                       width="100px"
                       onClick={handledEdit}
+                      disabled={isBtnLoading}
                     />
                   )}
                   {listOfSection.length > 0 && (

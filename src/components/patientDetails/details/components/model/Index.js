@@ -115,7 +115,7 @@ const ModelIndex = ({
     <>
       {dragItem?.source?.droppableId !== "HCC" &&
         (dragMovemntAction ? (
-          <>
+          
             <Modal
               title="Are you sure to want move?"
               open={openState}
@@ -123,7 +123,7 @@ const ModelIndex = ({
               onOk={() => onConfirmValidMove(openState)}
               onCancel={() => handleCloseModal()}
             ></Modal>
-          </>
+          
         ) : (
           <Modal
             title={title}

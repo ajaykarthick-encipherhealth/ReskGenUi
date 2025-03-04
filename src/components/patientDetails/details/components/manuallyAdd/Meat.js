@@ -54,7 +54,7 @@ const Meat = ({
   form,
   disabled,
   meatFormDisplay,
-  isBtnLoading
+  isBtnLoading,
 }) => {
   return (
     <div>
@@ -94,7 +94,8 @@ const Meat = ({
             </div>
           </>
         )} */}
-        {!disabled && isEditMeat && <>
+        {!disabled && isEditMeat && (
+          <>
             <div className="col-12">
               <Form.Item label={<label>Code</label>}>
                 <Input value={isEditMeatValue.diagnosisCode} disabled />
@@ -102,81 +103,83 @@ const Meat = ({
             </div>
             <div className="col-12">
               <Form.Item label={<label>Description</label>}>
-                <Input value={isEditMeatValue.diseaseName} disabled />
+                <Input value={isEditMeatValue.diseaseName} />
               </Form.Item>
             </div>
-          </>}
-          {meatFormDisplay &&
-        <div className="col-12">
-        <Form.Item
-          label={
-            <label>
-              {checkMeatType(selectMeat)} Aspect{" "}
-              <span style={{ color: "red" }}>*</span>
-            </label>
-          }
-          name={`${checkMeatType(selectMeat)}Aspect`}
-          rules={[
-            {
-              required: true,
-              message: "Please enter aspect",
-            },
-          ]}
-        >
-          <Input name={`${checkMeatType(selectMeat)}Aspect`} />
-        </Form.Item>
-      </div>
-            }
-        {!meatFormDisplay &&
-        <>
-           <div className="col-12">
-          <Form.Item
-            label={
-              <label>
-                DOS <span style={{ color: "red" }}>*</span>
-              </label>
-            }
-            name="dos"
-            rules={[
-              {
-                required: true,
-                message: "Please enter date of service",
-              },
-            ]}
-          >
-            <Select
-              // disabled={!isEditMeat}
-              mode="multiple"
-              maxTagCount="responsive"
-              className={`ant_select_form hcc_form mb-2`}
-              placeholder="DOS"
-              //   onChange={(selOption, val) => {
-              //     handleSelectChange(selOption, "dos");
-              //   }}
-              options={
-                getSelectedDos
-                  ? [{ label: getSelectedDos, value: getSelectedDos }]
-                  : dosList
+          </>
+        )}
+        {meatFormDisplay && (
+          <div className="col-12">
+            <Form.Item
+              label={
+                <label>
+                  {checkMeatType(selectMeat)} Aspect{" "}
+                  <span style={{ color: "red" }}>*</span>
+                </label>
               }
-              disabled
-            />
-          </Form.Item>
-        </div>
-        <div className="col-12">
-          {providerDetails?.length > 0 && (
-            <div>
-              <div className={`${style.subHeader} border-bottom`}>Provider</div>
-              <div className="">
-                {getProviderNameManually({
-                  data: providerDetails,
-                })}
-              </div>
+              name={`${checkMeatType(selectMeat)}Aspect`}
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter aspect",
+                },
+              ]}
+            >
+              <Input name={`${checkMeatType(selectMeat)}Aspect`} />
+            </Form.Item>
+          </div>
+        )}
+        {!meatFormDisplay && (
+          <>
+            <div className="col-12">
+              <Form.Item
+                label={
+                  <label>
+                    DOS <span style={{ color: "red" }}>*</span>
+                  </label>
+                }
+                name="dos"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter date of service",
+                  },
+                ]}
+              >
+                <Select
+                  // disabled={!isEditMeat}
+                  mode="multiple"
+                  maxTagCount="responsive"
+                  className={`ant_select_form hcc_form mb-2`}
+                  placeholder="DOS"
+                  //   onChange={(selOption, val) => {
+                  //     handleSelectChange(selOption, "dos");
+                  //   }}
+                  options={
+                    getSelectedDos
+                      ? [{ label: getSelectedDos, value: getSelectedDos }]
+                      : dosList
+                  }
+                  disabled
+                />
+              </Form.Item>
             </div>
-          )}
-        </div>
-        </>
-     
-        }
+            <div className="col-12">
+              {providerDetails?.length > 0 && (
+                <div>
+                  <div className={`${style.subHeader} border-bottom`}>
+                    Provider
+                  </div>
+                  <div className="">
+                    {getProviderNameManually({
+                      data: providerDetails,
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          </>
+        )}
         <div className="col-12">
           {listOfSection?.length > 0 && (
             <div className="py-4">
@@ -273,7 +276,7 @@ const Meat = ({
                 id={item}
                 section={section}
                 selectMeat={selectMeat}
-                date={date} 
+                date={date}
                 isEditPage={disabled}
               />
             </div>
@@ -305,7 +308,10 @@ const Meat = ({
                   onClick={() => {
                     setShowSection(true);
                     setSection("");
-                    form.setFieldValue(`${checkMeatType(selectMeat)}section`, "");
+                    form.setFieldValue(
+                      `${checkMeatType(selectMeat)}section`,
+                      ""
+                    );
                   }}
                 />
               )}
@@ -327,15 +333,15 @@ const Meat = ({
             )}
             <RegularButton
               type=""
-              name="Submit"
+              name={isBtnLoading ? "Loading..." : "Submit"}
               width="140px"
               method={"button"}
               onClick={handleMeatSubmit}
               disabled={isMeat ? !(isMeat && isActive) : isMeat}
-              loading={isBtnLoading}
+              // loading={isBtnLoading}
             />
 
-{/* {isEditMeat && showSection &&  <RegularButton
+            {/* {isEditMeat && showSection &&  <RegularButton
               type=""
               name="Submit"
               width="100px"
@@ -343,7 +349,6 @@ const Meat = ({
               onClick={handleMeatSubmit}
               disabled={isMeat ? !(isMeat && isActive) : isMeat}
             />} */}
-           
           </div>
         </Form.Item>
       )}

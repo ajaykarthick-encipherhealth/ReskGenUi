@@ -918,6 +918,7 @@ const Meat = ({
                 year={year}
                 isEditMeat={true}
                 isEditMeatValue={editData}
+                open={meatEdit}
               />
             </div>
           </div>
@@ -983,6 +984,7 @@ const Meat = ({
                 meatFormDisplay={true}
                 setSuggestedMeatForm={setSuggestedMeatForm}
                 selectDisDetails={selectDisDetails}
+                open={suggestedMeatForm}
                 selectCardTitle={selectCardTitle}
               />
             </div>

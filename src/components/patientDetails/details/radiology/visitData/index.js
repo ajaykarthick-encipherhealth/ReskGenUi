@@ -8,19 +8,15 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import Spinner from "../../../../../components/loadingSpinner";
 import styles from "../../hcc/styles.module.css";
 import AddMeatQuery from "../../components/addMeatQuery";
-import AddHccForm from "../../components/addHccForm";
 import PdfViewer from "../../PdfViewerComponent";
 import EditHccForm from "../../components/editHccForm";
 import HccCards from "../../components/RADIOLOGY";
 import ModelIndex from "../../components/model/Index";
-import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import {
-  moveToAnotherAction,
   onDragEnd,
 } from "../../components/function/ReusableFunctions";
 import ManuallyAdd from "../../components/manuallyAdd";
-import LogoLoader from "../../../../logoLoader";
 import { getPatientRadiologyDetailsNew } from "../../components/function/GetDataRadiology";
 import { getStorage } from "../../../../../utils/storages";
 import { getValidHccDetailsApi } from "../../../../../stores/patient/details/network";
@@ -775,6 +771,7 @@ const VisitData = ({
             handleCloseModal={handleCloseModal}
             setIsFileFormShow={setIsModalOpenValid}
             year={year}
+            open={isModalOpenValid}
           />
         </div>
       </Offcanvas>

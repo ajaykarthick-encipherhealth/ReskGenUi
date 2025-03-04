@@ -635,6 +635,7 @@ const VisitData = ({
             handleCloseModal={handleCloseModal}
             setIsFileFormShow={setIsModalOpenValid}
             year={year}
+            open={isModalOpenValid}
           />
         </div>
       </Offcanvas>

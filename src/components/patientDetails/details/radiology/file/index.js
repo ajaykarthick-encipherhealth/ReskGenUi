@@ -346,6 +346,7 @@ const File = ({
                 handleCloseModal={handleCloseModal}
                 setIsFileFormShow={setIsFileFormShow}
                 year={year}
+                open={isFileFormShow}
               />
               {/* </div> */}
             </div>
@@ -590,6 +591,7 @@ const File = ({
                 year={year}
                 isEditPage={true}
                 isEditValue={formValues}
+                open={isEditHccForm}
               />
             </div>
           </div>

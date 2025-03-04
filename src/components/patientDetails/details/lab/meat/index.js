@@ -734,6 +734,7 @@ const Meat = ({
                 year={year}
                 isEditMeat={true}
                 isEditMeatValue={editData}
+                open={meatEdit}
               />
             </div>
           </div>
