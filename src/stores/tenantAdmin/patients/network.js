@@ -22,7 +22,7 @@ export async function getAllPatient({
   pageNo,
   computationStart = "",
   computationEnd = "",
-  status,
+  selectedOption,
   searchVal,
   createdStartDate = "",
   createdEndDate = "",
@@ -38,7 +38,7 @@ export async function getAllPatient({
     method: "GET",
   };
   const uId = getStorage("userId");
-  const filteredStatus = status === undefined ? "" : status;
+  const filteredStatus = selectedOption === undefined ? "" : selectedOption;
   const selectOrgId = orgId === "ALL" || orgId == undefined ? "" : orgId;
   const selectBatchId =
     selectBatchList === "ALL" || selectBatchList == undefined

@@ -538,21 +538,22 @@ const Patient = ({
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     if (paramsFilter) {
-      getAllPatients({ pageNo,
-        computedStartDate,
-        computedEndDate,
-        selectedOption,
-        searchVal:searchVal || "",
-        completedStartDate:completedStartDate || "",
-        completedEndDate:completedStartDate || "",
-        selAllocatedTo:selAllocatedTo || "",
-        selAllocatedBy:selAllocatedBy || "",
-        selCreatedBy:selCreatedBy || "",
+      getAllPatients({
+        pageNo,
+        computationStart: computedStartDate,
+        computationEnd : computedEndDate,
+        selectedOption: selectedOption,
+        searchVal: searchVal || "",
+        createdStartDate: completedStartDate || "",
+        createdEndDate: completedStartDate || "",
+        selAllocatedTo: selAllocatedTo || "",
+        selAllocatedBy: selAllocatedBy || "",
+        selCreatedBy: selCreatedBy || "",
         sort,
         selectOrgList: (orgId = selectOrgList),
         selectBatchList,
-        flagList}
-      );
+        flagList,
+      });
       getFilters({ field: "createdBy" });
     }
   }, [
