@@ -49,7 +49,6 @@ const codeGraphRevenue = ({
 
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc;
   const resultArrayHCC = formatValues(premiumByDateForHcc, dates);
-  
 
   const graphOptions = {
     xAxis: {
@@ -90,7 +89,7 @@ const codeGraphRevenue = ({
           ? hccDiseaseCountValues
           : isCargaps
           ? suggestedHccDiseaseCountMap
-          : resultArrayHCC,
+          : resultArrayHCC || [],
         type: "line",
         lineStyle: { color: borderColor },
         smooth: true,
@@ -120,21 +119,18 @@ const codeGraphRevenue = ({
   return (
     <div>
       {revenueChartLoader ? (
-          <div>
-            <Skeleton.Input
-              className="w-100"
-              style={{ height: "200px" }}
-              active
-            />
-          </div>
-        ) : hccDiseaseCountValues?.length > 0 ? (
-          <div className="revenueDollar">
-           <ReactECharts option={options ? options : graphOptions} />
-          </div>
-        ) : (
-          <Empty className="mt-3" />
-        )}
-    
+        <div>
+          <Skeleton.Input
+            className="w-100"
+            style={{ height: "200px" }}
+            active
+          />
+        </div>
+      ) : (
+        <div className="revenueDollar">
+          <ReactECharts option={options ? options : graphOptions} />
+        </div>
+      )}
     </div>
   );
 };
@@ -147,7 +143,7 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
-          revenueChartLoader:
+    revenueChartLoader:
       state?.tenantAdmin?.dashboard?.default?.revenueChartLoader,
   }),
   {

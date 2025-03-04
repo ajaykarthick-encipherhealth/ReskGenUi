@@ -178,7 +178,7 @@ const Files = ({
       dateRange?.startDate,
       dateRange?.endDate,
       selectedOrganization,
-      selectDos,
+      selectDos
     );
     getAllComputing(
       dateRange?.startDate,
@@ -186,7 +186,7 @@ const Files = ({
       selectedOrganization,
       selectDos
     );
-  }, [dateRange, selectedOrganization,selectDos]);
+  }, [dateRange, selectedOrganization, selectDos]);
 
   return (
     <div className="mt-3">
@@ -197,10 +197,8 @@ const Files = ({
               // className="rounded-lg "
               style={{
                 backgroundColor: item?.color,
-               
               }}
-              className= {` rounded-lg d-flex align-items-center  ${styles.fileCard}`}
-
+              className={` rounded-lg d-flex align-items-center  ${styles.fileCard}`}
             >
               {getFilesWorkflowLoader ? (
                 <div>
@@ -228,12 +226,8 @@ const Files = ({
                     <Image src={item?.icon} />
                   </div>
                   <div>
-                    <div className={styles.title} >
-                      {item?.title}
-                    </div>
-                    <div  className={styles.title} >
-                      {item?.count}
-                    </div>
+                    <div className={styles.title}>{item?.title}</div>
+                    <div className={styles.title}>{item?.count}</div>
                   </div>
                 </div>
               )}
@@ -250,13 +244,9 @@ const Files = ({
             active
           />
         </div>
-      ) : getAllComputingStatus?.COMPUTED?.length > 0 ? (
+      ) : (
         <div>
           <CodesGraph options={options} className={`${classNames}`} />
-        </div>
-      ) : (
-        <div className={styles.centered_container}>
-          <Empty />
         </div>
       )}
     </div>
