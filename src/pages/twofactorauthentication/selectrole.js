@@ -155,7 +155,7 @@ const SelectRole = ({ getLogin }) => {
                   <label className="mb-1 text-dark">Select Role</label>
                   <div
                     style={{
-                      height: "100px",
+                      // height: "100px",
                       marginTop: "5px",
                     }}
                   >
