@@ -588,7 +588,10 @@ const Reports = ({
                       <label className="labelStyle d-flex m-auto p-3">
                         Search
                       </label>
-                      <div className="custom-reportInput" style={{ height: "43px" }}>
+                      <div
+                        className="custom-reportInput"
+                        style={{ height: "43px" }}
+                      >
                         <Input
                           name="report-search"
                           id="report-search"
@@ -631,8 +634,8 @@ const Reports = ({
                         </label>
                         <div className="form-group has-search w-100 custom-react-report-select custom-react-report-status">
                           <Select
-                          id ="report-status"
-                          name="report-status"
+                            id="report-status"
+                            name="report-status"
                             onChange={(selectedOption) => {
                               dosOnChange(selectedOption, "Status", activeTab);
                               resetPageNumber(resetPageState);
@@ -660,8 +663,8 @@ const Reports = ({
                       <div className="newReportPicker">
                         <RangePicker
                           ref={pickerRef}
-                        id ="report-dateRange"
-                        name="report-dateRange"
+                          id="report-dateRange"
+                          name="report-dateRange"
                           style={{
                             borderRadius: "0 5px 5px 0",
                             width: "100%",
@@ -708,8 +711,8 @@ const Reports = ({
                               )}
                               {info?.isSelect && (
                                 <Select
-                                id="select-userRole"
-                                name="select-userRole"
+                                  id="select-userRole"
+                                  name="select-userRole"
                                   onChange={(selectedOption) => {
                                     dosOnChange(selectedOption, info?.name);
                                     resetPageNumber(resetPageState);
@@ -736,8 +739,8 @@ const Reports = ({
                               {info?.isRangePikcer && (
                                 <div className="dateRangeSize">
                                   <RangePicker
-                                  name="select-rangePicker"
-                                  id="select-rangePicker"
+                                    name="select-rangePicker"
+                                    id="select-rangePicker"
                                     style={{
                                       borderRadius: "0 5px 5px 0",
                                       width: "100%",
@@ -767,7 +770,7 @@ const Reports = ({
 
                               {info?.isSearch && (
                                 <InputText
-                                id="report-input"
+                                  id="report-input"
                                   name={info?.name}
                                   type="text"
                                   onChange={(e) => {
@@ -823,8 +826,8 @@ const Reports = ({
                         }
                       >
                         <button
-                        id="export-button"
-                        name="export-button"
+                          id="export-button"
+                          name="export-button"
                           onClick={() => {
                             setIsModalVisible(true);
                             selectedReport(null);
@@ -987,6 +990,7 @@ const Reports = ({
                         activeTab,
                         selectAll,
                         getActiveTab,
+                     
                       }}
                       loader={
                         activeTab === "Team"
@@ -1106,7 +1110,6 @@ const Reports = ({
                   selectedDateRanges={selectedDateRanges}
                   searchVal={searchVal}
                   sort={sort}
-                  
                 />
               </div>
             </div>

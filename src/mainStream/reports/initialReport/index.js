@@ -72,7 +72,7 @@ const InitialCard = ({
 
     // const updatedRows = selectAll ? [] : reportListAll?.response?.data;
     // setSelectedRows(updatedRows);
-    if (activeTab === "Reviewer" ) {
+    if (activeTab === "Reviewer") {
       // setIsLoading(true);
       // const {
       //   filter,
@@ -112,7 +112,7 @@ const InitialCard = ({
         getSelectedRow(res?.response?.patientIds);
       }
       // } catch (error) {}
-    } else if (activeTab === "Admin") {
+    } else if (activeTab === "Admin" ) {
       // setIsLoading(true);
 
       // try {
@@ -142,7 +142,7 @@ const InitialCard = ({
         selectAllFlags,
         selectManager,
         selectAll,
-        userName        
+        userName,
       }); // fetch(
       //   ENDPOINTS.apiEndoint + url,
       //   // `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
@@ -155,11 +155,7 @@ const InitialCard = ({
         getSelectedRow(res?.response?.patientIds);
         setSelectedRows(res?.response?.patientIds);
       }
-    } else {
-      setSelectAll(false);
-      setSelectedRows([]);
-      getSelectedRow([]);
-    }
+    } 
   };
 
   const handleRowCheckboxChange = (row) => {
@@ -351,119 +347,102 @@ const InitialCard = ({
     getSelectedRow(selectedRows);
   }, [selectedRows]);
 
-  useEffect(() => {
-    if ((selectAllFlags || selectAll) && (reportListAll?.response?.totalElements ===
-      selectedRows?.length)) {
-      handleHeaderCheckboxChange(activeTab, selectAll, setSelectAll,selectAllFlags);
-      // getAdminChecKAll({pagenum: 0,selectAll})
-    }
-  }, [selectAllFlags, selectAll]);
+  // useEffect(() => {
+  //   if (
+  //     (selectAllFlags || selectAll) &&
+  //     reportListAll?.response?.totalElements === selectedRows?.length
+  //   ) {
+  //     handleHeaderCheckboxChange(
+  //       activeTab,
+  //       selectAll,
+  //       setSelectAll,
+  //       selectAllFlags
+  //     );
+  //     // getAdminChecKAll({pagenum: 0,selectAll})
+  //   }
+  // }, [selectAllFlags, selectAll]);
 
   return (
     <>
       <div>
         <div className="content-body">
           <div className={`container-fluid py-4 px-2`}>
-            <div
-              style={{
-                display: "flex",
-                marginLeft: "10px",
-                paddingBottom: "10px",
-              }}
-            >
-              {/* {reportListAll?.response?.data?.length > 0 && (
-                  <> */}
-              <div className="d-flex me-3">
-                <div>
-                  {/* <input
-                    id="check-all"
-                    name="check-all"
-                    type="checkbox"
-                    onChange={() => {
-                      setSelectAll((prevState) => {
-                        const updatedSelectAll = !prevState;
-                        handleHeaderCheckboxChange(
-                          activeTab,
-                          updatedSelectAll,
-                          setSelectAll
-                        );
-                        return updatedSelectAll;
-                      });
-                    }}
-                    className={
-                      styles.checkAlign +
-                      (selectAll ? " " + TableStyle.customChecked : "")
-                    }
-                    // checked={selectAll && selectedRows?.length > 0}
-                    checked={
-                      selectedRows.length > 0 &&
-                      selectedRows.length ===
-                        reportListAll?.response?.data?.length 
-                    }
-                  /> */}
+            {reportListAll?.response?.data?.length > 0 && (
+              <div
+                style={{
+                  display: "flex",
+                  marginLeft: "10px",
+                  paddingBottom: "10px",
+                }}
+              >
 
-                  <input
-                    id="check-all"
-                    name="check-all"
-                    type="checkbox"
-                    onChange={() => {
-                      const updatedSelectAll = !selectAll;
-                      setSelectAll(updatedSelectAll);
-                     
-                      if (!updatedSelectAll) {
-                        setSelectedRows([]);
-                      } else {
-                        handleHeaderCheckboxChange(
-                          activeTab,
-                          updatedSelectAll,
-                          setSelectAll,
-                          selectAllFlags
-                        );
+                <div className="d-flex me-3">
+                  <div>
+                    <input
+                      id="check-all"
+                      name="check-all"
+                      type="checkbox"
+                      onChange={() => {
+                        const updatedSelectAll = !selectAll;
+                        setSelectAll(updatedSelectAll);
+
+                        if (!updatedSelectAll) {
+                          setSelectedRows([]);
+                        } else {
+                          handleHeaderCheckboxChange(
+                            activeTab,
+                            updatedSelectAll,
+                            setSelectAll,
+                            selectAllFlags
+                          );
+                        }
+                      }}
+                      checked={
+                        selectAll ||
+                        reportListAll?.response?.totalElements ===
+                          selectedRows?.length
                       }
-                    }}
-                    checked={
-                      selectAll ||
-                      reportListAll?.response?.totalElements ===
-                        selectedRows?.length
-                    }
-                    className={
-                      styles.checkAlign +
-                      (selectAll ||
-                      reportListAll?.response?.totalElements ===
-                        selectedRows?.length
-                        ? " " + TableStyle.customChecked
-                        : "")
-                    }
-                    // checked={
-                    //   selectedRows.length > 0 &&
-                    //   selectedRows.length ===
-                    //     reportListAll?.response?.data?.length
-                    // }
-                  />
+                      className={
+                        styles.checkAlign +
+                        (selectAll ||
+                        reportListAll?.response?.totalElements ===
+                          selectedRows?.length
+                          ? " " + TableStyle.customChecked
+                          : "")
+                      }
+                      // checked={
+                      //   selectedRows.length > 0 &&
+                      //   selectedRows.length ===
+                      //     reportListAll?.response?.data?.length
+                      // }
+                    />
+                  </div>
+                  <span className={`pl-0 text-start ${styles.pName}`}>All</span>
                 </div>
-                <span className={`pl-0 text-start ${styles.pName}`}>All</span>
-              </div>
-              <div className="col-4 d-flex">
-                <div>
-                  <input
-                    id="check-allFlags"
-                    name="check-allFlags"
-                    type="checkbox"
-                    onChange={handleHeaderCheckbox}
-                    className={
-                      styles.checkAlign +
-                      (selectAllFlags ? " " + TableStyle.customChecked : "")
-                    }
-                    checked={selectAllFlags}
-                  />
+
+                <div className="col-4 d-flex">
+                  <div>
+                    <input
+                      id="check-allFlags"
+                      name="check-allFlags"
+                      type="checkbox"
+                      onChange={handleHeaderCheckbox}
+                      className={
+                        styles.checkAlign +
+                        (selectAllFlags ? " " + TableStyle.customChecked : "")
+                      }
+                      checked={selectAllFlags}
+                    />
+                  </div>
+                  <span className={`pl-4 text-start ${styles.pName}`}>
+                    All Flags
+                  </span>
                 </div>
-                <span className={`pl-4 text-start ${styles.pName}`}>
-                  All Flags
-                </span>
-              </div>
-              {/* </>
+
+                {/* </>
                 // )} */}
-            </div>
+              </div>
+            )}
             {/* {loader ? (
               <div className="mt-4">
             <TableSkeleton/>

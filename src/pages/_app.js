@@ -95,7 +95,6 @@ function MyApp({ Component, pageProps }) {
      if (isEntering) {
        target.style.transition = "all 0.5s ease-in-out";
        if (pathname.endsWith("/fileprocessing")) {
-         // Completely remove the transform style for "/fileprocessing"
          target.style.removeProperty("transform");
          return;
        }
@@ -125,22 +124,27 @@ function MyApp({ Component, pageProps }) {
   };
 
   useEffect(() => {
-    const handleClick = (event) => {
-      let target = event.target;
-      while (target && target !== document.body) {
-        if (
-          (target.tagName === "A" ||
-            target.tagName === "BUTTON" ||
-            target.classList.contains("cursor-pointer") ||
-            window.getComputedStyle(target).cursor === "pointer") &&
-          !isTableElement(target)
-        ) {
-          target.classList.add("smooth-transition");
-          break;
-        }
-        target = target.parentElement;
+  const handleClick = (event) => {
+    if (router.pathname.endsWith("/report")) {
+      return;
+    }
+
+    let target = event.target;
+    while (target && target !== document.body) {
+      if (
+        (target.tagName === "A" ||
+          target.tagName === "BUTTON" ||
+          target.classList.contains("cursor-pointer") ||
+          window.getComputedStyle(target).cursor === "pointer") &&
+        !isTableElement(target)
+      ) {
+        target.classList.add("smooth-transition");
+        break;
       }
-    };
+      target = target.parentElement;
+    }
+  };
+
 
     const handleMouseEnter = (event) => {
       if (event.target instanceof Element) {

@@ -326,206 +326,219 @@ const TeamReport = ({
       <div>
         <div className="content-body">
           <div className={`container-fluid py-4 px-2`}>
-            <div
-              style={{
-                display: "flex",
-                marginLeft: "10px",
-                paddingBottom: "10px",
-              }}
-            >
-              {" "}
-              {/* { */}
-              {/* reportListAll?.response?.response?.data?.length > 0 && (
-                    // (isLoading ? (
-                    //   <Spin />
-                    // ) : (
-                    <> */}
-              <div className="d-flex me-3">
-                <div>
-                  <input
-                    type="checkbox"
-                    onChange={() => {
-                      setSelectAll((prevState) => {
-                        const updatedSelectAll = !prevState;
-                        handleHeaderCheckboxChange(
-                          activeTab,
-                          updatedSelectAll,
-                          setSelectAll
-                        );
-                        return updatedSelectAll;
-                      });
-                    }}
-                    className={
-                      styles.checkAlign +
-                      (selectAll ? " " + TableStyle.customChecked : "")
-                    }
-                    checked={selectAll && selectedRows?.length > 0}
-                  />
+            {reportListAll?.response?.response?.data?.length > 0 && (
+              <div
+                style={{
+                  display: "flex",
+                  marginLeft: "10px",
+                  paddingBottom: "10px",
+                }}
+              >
+                <div className="d-flex me-3">
+                  <div>
+                    <input
+                      id="check-all"
+                      name="check-all"
+                      type="checkbox"
+                      onChange={() => {
+                        const updatedSelectAll = !selectAll;
+                        setSelectAll(updatedSelectAll);
+
+                        if (!updatedSelectAll) {
+                          setSelectedRows([]);
+                        } else {
+                          handleHeaderCheckboxChange(
+                            activeTab,
+                            updatedSelectAll,
+                            setSelectAll,
+                            selectAllFlags
+                          );
+                        }
+                      }}
+                      checked={
+                        selectAll ||
+                        reportListAll?.response?.response?.totalElements ===
+                          selectedRows?.length
+                      }
+                      className={
+                        styles.checkAlign +
+                        (selectAll ||
+                        reportListAll?.response?.response?.totalElements ===
+                          selectedRows?.length
+                          ? " " + TableStyle.customChecked
+                          : "")
+                      }
+                      // checked={
+                      //   selectedRows.length > 0 &&
+                      //   selectedRows.length ===
+                      //     reportListAll?.response?.data?.length
+                      // }
+                    />
+                  </div>
+                  <span className={`pl-0 text-start ${styles.pName}`}>All</span>
                 </div>
-                <span className={`pl-0 text-start ${styles.pName}`}>All</span>
-              </div>
-              <div className="col-2 d-flex pt-0">
-                <div>
-                  <input
-                    type="checkbox"
-                    onChange={handleHeaderCheckbox}
-                    className={
-                      styles.checkAlign +
-                      (selectAllFlags ? " " + TableStyle.customChecked : "")
-                    }
-                    checked={selectAllFlags}
-                  />
+
+                <div className="col-4 d-flex">
+                  <div>
+                    <input
+                      id="check-allFlags"
+                      name="check-allFlags"
+                      type="checkbox"
+                      onChange={handleHeaderCheckbox}
+                      className={
+                        styles.checkAlign +
+                        (selectAllFlags ? " " + TableStyle.customChecked : "")
+                      }
+                      checked={selectAllFlags}
+                    />
+                  </div>
+                  <span className={`pl-4 text-start ${styles.pName}`}>
+                    All Flags
+                  </span>
                 </div>
-                <span className={`pl-4 text-start ${styles.pName}`}>
-                  All Flags
-                </span>
+
+                {/* </>
+                // )} */}
               </div>
-              {/* </>
-                  )
-                  // ))
-                } */}
-            </div>
+            )}
             {/* {loader ? (
               <div className="mt-4">
                 <TableSkeleton />
               </div>
             ) : ( */}
-              <div className="row">
-                <div>
-                  <div className=" col-12 d-flex" style={{ height: "100%" }}>
-                    {reportListAll?.response?.response?.data?.length === 0 ? (
-                      <div className={`col-xl-6 ${styles.card1}`}>
-                        <div className={` ${styles.emptyCard}`}>
-                          <Empty />
-                        </div>
+            <div className="row">
+              <div>
+                <div className=" col-12 d-flex" style={{ height: "100%" }}>
+                  {reportListAll?.response?.response?.data?.length === 0 ? (
+                    <div className={`col-xl-6 ${styles.card1}`}>
+                      <div className={` ${styles.emptyCard}`}>
+                        <Empty />
                       </div>
-                    ) : (
-                      <div className={`col-6 ${styles.cardDiv}`}>
-                        {loader ? (
-                          <div className="mt-4">
-                            <CardSkeleton count={6} width={900} height={100} />
-                          </div>
-                        ) : (
-                          <div className={styles.cardContainer}>
-                            {reportListAll?.response?.response?.data?.map(
-                              (item, id) => (
-                                <ContentGroupCard
-                                  content={
-                                    reportListAll?.response?.response?.data
-                                  }
-                                  key={id}
-                                  item={item}
-                                  flag={item?.patientFlagResponseDTOs}
-                                  page={page}
-                                  handleRowCheckboxChange={
-                                    handleRowCheckboxChange
-                                  }
-                                  selectedRows={selectedRows}
-                                  // handleTableRowClick={handleTableRowClick}
-                                  auditstatusBodyTemplate={auditstatusBodyTemplate(
-                                    item
-                                  )}
-                                  processstatusBodyTemplate={processstatusBodyTemplate(
-                                    item
-                                  )}
-                                  rafSum={item.rafSum}
-                                  patientName={item.patientName}
-                                  processedDate={item?.processedDate}
-                                  patientId={item?.patientId}
-                                  validDiseaseCount={item?.validDiseaseCount}
-                                  auditedByFirstName={item?.auditedByFirstName}
-                                  auditedByLastName={item?.auditedByLastName}
-                                  auditedByProfileImage={
-                                    item?.auditedByProfileImage
-                                  }
-                                  patientAllocatedFirstName={
-                                    item?.patientAllocatedFirstName
-                                  }
-                                  patientAllocatedLastName={
-                                    item?.patientAllocatedLastName
-                                  }
-                                  patientAllocatedProfileImage={
-                                    item?.patientAllocatedProfileImage
-                                  }
-                                  loading={
-                                    activeTab === "Audit"
-                                      ? auditCheckedLoader
-                                      : teamCheckedLoader
-                                  }
-                                  patientDetails={patientDetails}
-                                />
-                              )
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    <div className={`col-6 ${styles.cardSeperation}`}>
+                    </div>
+                  ) : (
+                    <div className={`col-6 ${styles.cardDiv}`}>
                       {loader ? (
                         <div className="mt-4">
                           <CardSkeleton count={6} width={900} height={100} />
                         </div>
                       ) : (
                         <div className={styles.cardContainer}>
-                          <div className={styles.card1}>
-                            <div className={styles.summaryText}>Summary</div>
-                            <div className="col-12 d-flex mt-4">
-                              {subCardData.map((card, index) => (
-                                <SubCard
-                                  key={index}
-                                  title={card.title}
-                                  value={card.value}
-                                />
-                              ))}
-                            </div>
-                            <div className={` pt-2 ${styles.summaryText}`}>
-                              Overall Status
-                            </div>
-                            <div className="col-12 d-flex mt-2">
-                              <div
-                                className="row g-2"
-                                style={{ width: "100%" }}
-                              >
-                                {card1Data?.map((data) => (
-                                  <MiniCards
-                                    key={data?.id}
-                                    backgroundColor={data.bg}
-                                    icon={data?.icon}
-                                    title={data.title}
-                                    charts={data.charts}
-                                    styles={styles}
-                                  />
-                                ))}
-                              </div>
-                            </div>
-                            <div className="col-12  d-flex mt-4">
-                              <Flags
-                                reportListAll={reportListAll?.response}
-                                styles={styles}
+                          {reportListAll?.response?.response?.data?.map(
+                            (item, id) => (
+                              <ContentGroupCard
+                                content={
+                                  reportListAll?.response?.response?.data
+                                }
+                                key={id}
+                                item={item}
+                                flag={item?.patientFlagResponseDTOs}
+                                page={{ ...page, selectedRows }}
+                                handleRowCheckboxChange={
+                                  handleRowCheckboxChange
+                                }
+                                selectedRows={selectedRows}
+                                // handleTableRowClick={handleTableRowClick}
+                                auditstatusBodyTemplate={auditstatusBodyTemplate(
+                                  item
+                                )}
+                                processstatusBodyTemplate={processstatusBodyTemplate(
+                                  item
+                                )}
+                                rafSum={item.rafSum}
+                                patientName={item.patientName}
+                                processedDate={item?.processedDate}
+                                patientId={item?.patientId}
+                                validDiseaseCount={item?.validDiseaseCount}
+                                auditedByFirstName={item?.auditedByFirstName}
+                                auditedByLastName={item?.auditedByLastName}
+                                auditedByProfileImage={
+                                  item?.auditedByProfileImage
+                                }
+                                patientAllocatedFirstName={
+                                  item?.patientAllocatedFirstName
+                                }
+                                patientAllocatedLastName={
+                                  item?.patientAllocatedLastName
+                                }
+                                patientAllocatedProfileImage={
+                                  item?.patientAllocatedProfileImage
+                                }
+                                loading={
+                                  activeTab === "Audit"
+                                    ? auditCheckedLoader
+                                    : teamCheckedLoader
+                                }
+                                patientDetails={patientDetails}
                               />
-                              {allocationCountData.map((item, index) =>
-                                userRole === "supervisor" ? (
-                                  ""
-                                ) : (
-                                  <AllocationCount
-                                    key={index}
-                                    title={item.title}
-                                    allocationCount={item.allocationCount}
-                                    renderUserPrfoileAvatar={
-                                      renderUserPrfoileAvatar
-                                    }
-                                    styles={styles}
-                                  />
-                                )
-                              )}
-                            </div>
-                          </div>
+                            )
+                          )}
                         </div>
                       )}
                     </div>
+                  )}
+                  <div className={`col-6 ${styles.cardSeperation}`}>
+                    {loader ? (
+                      <div className="mt-4">
+                        <CardSkeleton count={6} width={900} height={100} />
+                      </div>
+                    ) : (
+                      <div className={styles.cardContainer}>
+                        <div className={styles.card1}>
+                          <div className={styles.summaryText}>Summary</div>
+                          <div className="col-12 d-flex mt-4">
+                            {subCardData.map((card, index) => (
+                              <SubCard
+                                key={index}
+                                title={card.title}
+                                value={card.value}
+                              />
+                            ))}
+                          </div>
+                          <div className={` pt-2 ${styles.summaryText}`}>
+                            Overall Status
+                          </div>
+                          <div className="col-12 d-flex mt-2">
+                            <div className="row g-2" style={{ width: "100%" }}>
+                              {card1Data?.map((data) => (
+                                <MiniCards
+                                  key={data?.id}
+                                  backgroundColor={data.bg}
+                                  icon={data?.icon}
+                                  title={data.title}
+                                  charts={data.charts}
+                                  styles={styles}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          <div className="col-12  d-flex mt-4">
+                            <Flags
+                              reportListAll={reportListAll?.response}
+                              styles={styles}
+                            />
+                            {allocationCountData.map((item, index) =>
+                              userRole === "supervisor" ? (
+                                ""
+                              ) : (
+                                <AllocationCount
+                                  key={index}
+                                  title={item.title}
+                                  allocationCount={item.allocationCount}
+                                  renderUserPrfoileAvatar={
+                                    renderUserPrfoileAvatar
+                                  }
+                                  styles={styles}
+                                />
+                              )
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
+            </div>
             {/* )} */}
           </div>
         </div>
