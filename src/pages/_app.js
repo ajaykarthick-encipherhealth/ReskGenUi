@@ -52,76 +52,66 @@ function MyApp({ Component, pageProps }) {
     return ["TABLE", "TR", "TD", "TH"].includes(element.tagName);
   };
 
-  const applyHoverEffect = (target, isEntering, pathname) => {
-    if (target.id === "badge") {
-      return;
-    }
-    if (target.classList.contains("ant-badge")) {
-      return;
-    }
-    if (target.classList.contains("ant-badge-count")) {
-      return;
-    }
-    if (target.classList.contains("ant-steps-item-container")) {
-      return;
-    }
+const applyHoverEffect = (target, isEntering, pathname) => {
+  if (
+    target.id === "badge" ||
+    target.classList.contains("ant-badge") ||
+    target.classList.contains("ant-badge-count") ||
+    target.classList.contains("ant-steps-item-container") ||
+    target.classList.contains("fileprocessingstepper") ||
+    target.classList.contains("fileprocessing") ||
+    target.classList.contains("ant-progress-inner") ||
+    target.closest(".ant-select-dropdown") || 
+    target.closest(".ant-select-selector") 
+  ) {
+    return;
+  }
 
-    if (target.classList.contains("fileprocessingstepper")) {
-      return;
-    }
+  if (
+    target.classList.contains("ant-steps-item") &&
+    target.classList.contains("ant-steps-item-process") &&
+    target.classList.contains("ant-steps-item-active") &&
+    target.classList.contains("ant-progress-circle-path")
+  ) {
+    return;
+  }
 
-    if (target.classList.contains("fileprocessing")) {
-      return;
-    }
-
- if (
-   target.classList.contains("ant-steps-item") &&
-   target.classList.contains("ant-steps-item-process") &&
-   target.classList.contains("ant-steps-item-active") &&
-   target.classList.contains("ant-progress-circle-path")
- ) {
-   return;
- }
- if (target.classList.contains("ant-progress-inner")){
-  return;
- }
-   if (
-     (target.tagName === "A" ||
-       target.tagName === "BUTTON" ||
-       target.classList.contains("cursor-pointer") ||
-       window.getComputedStyle(target).cursor === "pointer") &&
-     !isTableElement(target)
-   ) {
-     if (isEntering) {
-       target.style.transition = "all 0.5s ease-in-out";
-       if (pathname.endsWith("/fileprocessing")) {
-         target.style.removeProperty("transform");
-         return;
-       }
-
-        if (target.id === "auditbtn") {
-          target.style.transform = "scale(1)";
-        } else if (target.id === "dosSelect") {
-          target.style.transform = "scale(1.01)";
-        } else {
-          target.style.transform = pathname.endsWith("/report")
-            ? "scale(1.01)"
-            : pathname.endsWith("/details")
-            ? "scale(1.05)"
-            : // : pathname.endsWith("/fileprocessing")
-              // ? "scale(1)"
-              "scale(1.02)";
-        }
-        target.classList.add("hover-effect");
-      } else {
-        target.classList.add("hover-effect-remove");
-        target.style.transform = "scale(1)";
-        setTimeout(() => {
-          target.classList.remove("hover-effect", "hover-effect-remove");
-        }, 300);
+  if (
+    (target.tagName === "A" ||
+      target.tagName === "BUTTON" ||
+      target.classList.contains("cursor-pointer") ||
+      window.getComputedStyle(target).cursor === "pointer") &&
+    !isTableElement(target)
+  ) {
+    if (isEntering) {
+      target.style.transition = "all 0.5s ease-in-out";
+      if (pathname.endsWith("/fileprocessing")) {
+        target.style.removeProperty("transform");
+        return;
       }
+
+      if (target.id === "auditbtn") {
+        target.style.transform = "scale(1)";
+      } else if (target.id === "dosSelect") {
+        target.style.transform = "scale(1.01)";
+      } else {
+        target.style.transform = pathname.endsWith("/report")
+          ? "scale(1.01)"
+          : pathname.endsWith("/details")
+          ? "scale(1.05)"
+          : "scale(1.02)";
+      }
+      target.classList.add("hover-effect");
+    } else {
+      target.classList.add("hover-effect-remove");
+      target.style.transform = "scale(1)";
+      setTimeout(() => {
+        target.classList.remove("hover-effect", "hover-effect-remove");
+      }, 300);
     }
-  };
+  }
+};
+
 
   useEffect(() => {
   const handleClick = (event) => {

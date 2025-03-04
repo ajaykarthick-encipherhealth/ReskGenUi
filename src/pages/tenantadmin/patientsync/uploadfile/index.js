@@ -85,8 +85,8 @@ const UploadFile = ({
   }, [openUpload]);
 
   return uploadAction || singleUpload ? (
-    <div className={`${styles.cover} `}>
-      <label className="cr-pointer">
+    <div className={` ant-badge ${styles.cover} `}>
+      <label className="ant-badge cr-pointer">
         <input
           id="upload"
           name="upload"
@@ -98,10 +98,10 @@ const UploadFile = ({
           multiple={uploadAction === "uploadMultipleFiles" ? true : false}
           ref={fileInputRef}
           onChange={fileHandleChange}
-          disabled={filesList?.length>0?true:false}
+          disabled={filesList?.length > 0 ? true : false}
         />
         <div
-          className={styles.videoflex}
+          className={`ant-badge ${styles.videoflex}`}
           style={{ overflowY: "scroll", height: "110px", padding: "15px" }}
         >
           {uploaderImg ? (
@@ -130,7 +130,7 @@ const UploadFile = ({
                 <Progress
                   percent={uploadProgress}
                   strokeColor={
-                    uploadProgress !==100
+                    uploadProgress !== 100
                       ? getColors("PENDING")?.strokeColor
                       : getColors("COMPLETED")?.strokeColor
                   }
@@ -149,8 +149,7 @@ const UploadFile = ({
         style={{ backgroundColor: "#04306f" }}
         className="border-0 px-4 py-2 text-white rounded-1"
         onClick={() => {
-          !singleUpload &&
-          setUploadAction("uploadFolder");
+          !singleUpload && setUploadAction("uploadFolder");
         }}
       >
         Upload Folder
@@ -160,7 +159,7 @@ const UploadFile = ({
         style={{ backgroundColor: "#04306f" }}
         className="border-0 px-4 py-2 text-white rounded-1 mx-2"
         onClick={() => {
-          !singleUpload &&setUploadAction("uploadMultipleFiles");
+          !singleUpload && setUploadAction("uploadMultipleFiles");
         }}
       >
         Upload Multiple Files

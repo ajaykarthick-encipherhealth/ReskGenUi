@@ -157,7 +157,12 @@ const ContentGroupCard = ({
                 </Tooltip>
                 <Tooltip title="Processed Date" placement="bottom">
                   <div className={`${styles.initialText}`}>
-                    {processedDate ? formatDateTime({date: processedDate,formatType: "dateTime"}) : "---"}
+                    {processedDate
+                      ? formatDateTime({
+                          date: processedDate,
+                          formatType: "dateTime",
+                        })
+                      : "---"}
                   </div>
                 </Tooltip>
               </div>
@@ -250,7 +255,7 @@ const ContentGroupCard = ({
                 title="Flags"
               >
                 <Badge
-                  count={flag.length > 1 ? flag.length - 1 : 0}
+                  count={flag.length > 1 ? `+${flag.length - 1}` : 0}
                   offset={[5, 5]}
                   style={{ backgroundColor: "#04306f", cursor: "pointer" }}
                 >
