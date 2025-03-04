@@ -6,13 +6,7 @@ import {
   InfoCircleFilled,
 } from "@ant-design/icons";
 import TableStyle from "../../table.module.css";
-import {
-  notification,
-  Empty,
-  Tooltip,
-  Popover,
-  Badge,
-} from "antd";
+import { notification, Empty, Tooltip, Popover, Badge } from "antd";
 import {
   renderUserPrfoileAvatar,
   sortFunction,
@@ -25,6 +19,9 @@ import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/
 import { connect } from "react-redux";
 import Legends from "../../../legends";
 import { formatDateTime } from "../../../../utils/reusable";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
+
 function AddPatientListTable({
   patinetListAll,
   actionBodyTemplate,
@@ -40,6 +37,7 @@ function AddPatientListTable({
   getRoutedData,
   bullets,
   badges,
+  getRetregger
 }) {
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
   const navigate = useRouter();
@@ -305,6 +303,19 @@ function AddPatientListTable({
             >
               {actionBodyTemplate(data)}
             </td>
+            <td
+              className={TableStyle.lastBorder}
+              style={{ textAlign: "center" }}
+            >
+              {data?.isRequestForRetry && (
+                <div onClick={() => getRetregger(data)}>
+                  <FontAwesomeIcon
+                    icon={faArrowsRotate}
+                    style={{ fontSize: "large", color: "#df3a3a" }}
+                  />{" "}
+                </div>
+              )}
+            </td>
           </tr>
         ))}
       </>
@@ -408,6 +419,7 @@ function AddPatientListTable({
               </span>
             </th>
             <th>UPLOAD</th>
+            <th></th>
           </tr>
         </thead>
 

@@ -4,6 +4,7 @@ import {
   getAllBatchAction,
   getAllOrganizationAction,
   getAllPatientAction,
+  getRetreggerPatient,
   submitPatientId
 } from "./actions";
 
@@ -52,9 +53,11 @@ const adminPatientsReducer = combineReducers({
   allBatch: createReducer(getAllBatchAction),
   allPatients: createReducer(getAllPatientAction),
   submitPatientId: createReducer(submitPatientId),
+  getRetreggerPatient: createReducer(getRetreggerPatient),
   // loaders
   allOrganizationLoader: getReportLoading(getAllOrganizationAction),
   allPatientsLoading: getReportLoading(getAllPatientAction),
+  getRetreggerPatientLoading: getReportLoading(getRetreggerPatient),
 });
 
 export default adminPatientsReducer;

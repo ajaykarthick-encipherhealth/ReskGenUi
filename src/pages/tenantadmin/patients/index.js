@@ -52,14 +52,54 @@ const statusOptions = [
 ];
 export const flagOptions = [
   { header: "DOS Count", label: "INVALID DOC", value: "IN_VALID_DOC", id: 1 },
-  { header: "Televist Count", label: "AUDIO VISIT", value: "AUDIO_VISIT", id: 2 },
-  { header: "Out of Scope", label: "OUT OF SCOPE", value: "OUT_OF_SCOPE", id: 3 },
-  { header: "Invalid Credentails", label: "INVALID CREDENTIALS", value: "PROVIDER_UNAUTHORIZED", id: 4 },
-  { header: "Improper Data", label: "IMPROPER DATA", value: "IMPROPER_DATA", id: 5 },
-  { header: "Multiple Patient Found", label: "MULTIPLE PATIENT FOUND", value: "MULTIPLE_PATIENT_FOUND", id: 6 },
-  { header: "MRN ID Mismatch", label: "MRN ID MISMATCH", value: "MRN_ID_MISMATCH", id: 7 },
-  { header: "Patient DOB Mismatch", label: "PATIENT DOB MISMATCH", value: "PATIENT_DOB_MISMATCH", id: 8 },
-  { header: "Illegial Format", label: "ILLEGAL FORMAT", value: "ILLEGAL_FORMAT", id: 9 },
+  {
+    header: "Televist Count",
+    label: "AUDIO VISIT",
+    value: "AUDIO_VISIT",
+    id: 2,
+  },
+  {
+    header: "Out of Scope",
+    label: "OUT OF SCOPE",
+    value: "OUT_OF_SCOPE",
+    id: 3,
+  },
+  {
+    header: "Invalid Credentails",
+    label: "INVALID CREDENTIALS",
+    value: "PROVIDER_UNAUTHORIZED",
+    id: 4,
+  },
+  {
+    header: "Improper Data",
+    label: "IMPROPER DATA",
+    value: "IMPROPER_DATA",
+    id: 5,
+  },
+  {
+    header: "Multiple Patient Found",
+    label: "MULTIPLE PATIENT FOUND",
+    value: "MULTIPLE_PATIENT_FOUND",
+    id: 6,
+  },
+  {
+    header: "MRN ID Mismatch",
+    label: "MRN ID MISMATCH",
+    value: "MRN_ID_MISMATCH",
+    id: 7,
+  },
+  {
+    header: "Patient DOB Mismatch",
+    label: "PATIENT DOB MISMATCH",
+    value: "PATIENT_DOB_MISMATCH",
+    id: 8,
+  },
+  {
+    header: "Illegial Format",
+    label: "ILLEGAL FORMAT",
+    value: "ILLEGAL_FORMAT",
+    id: 9,
+  },
 ];
 
 const Patient = ({
@@ -79,6 +119,7 @@ const Patient = ({
   routedData,
   getAllBatchList,
   batchList,
+  getRetreggerPatient,
 }) => {
   const [form] = Form.useForm();
   const navigate = useRouter();
@@ -364,6 +405,31 @@ const Patient = ({
     );
   };
 
+  const getRetregger = async (data) => {
+    try {
+      const res = await getRetreggerPatient({ patinetId: data.patientId });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+        getAllPatients({
+          pageNo,
+          computationStart: computedStartDate,
+          computationEnd: computedEndDate,
+          selectedOption: selectedOption,
+          searchVal: searchVal || "",
+          createdStartDate: completedStartDate || "",
+          createdEndDate: completedStartDate || "",
+          selAllocatedTo: selAllocatedTo || "",
+          selAllocatedBy: selAllocatedBy || "",
+          selCreatedBy: selCreatedBy || "",
+          sort,
+          selectOrgList: (orgId = selectOrgList),
+          selectBatchList,
+          flagList,
+        });
+      }
+    } catch (error) {}
+  };
+
   const submitPatientFile = async () => {
     const formData = new FormData();
     formData.append("file", selectFile);
@@ -576,7 +642,7 @@ const Patient = ({
       );
     }
   }, []);
-  
+
   useEffect(() => {
     setParamsFilter("check");
     var tenId = getStorage("tenantId");
@@ -589,7 +655,7 @@ const Patient = ({
       getAllPatients({
         pageNo,
         computationStart: computedStartDate,
-        computationEnd : computedEndDate,
+        computationEnd: computedEndDate,
         selectedOption: selectedOption,
         searchVal: searchVal || "",
         createdStartDate: completedStartDate || "",
@@ -669,178 +735,178 @@ const Patient = ({
     }
   }, [webSocketData]);
   return (
-
-      <div className={`show `}>
-        <Header />
-        <div class="content-body">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-12">
-                <div className="">
-                  <div className="card-body p-0">
-                    <div className="table-responsive active-projects task-table">
-                      <div className="tbl-caption  align-items-center">
-                        <div className="tbl-caption2  align-items-center">
-                          <HeaderFilters
-                            setSearch={setSearch}
-                            isSearch={true}
-                            searchlabel=" Patient ID / Name"
-                            search={search}
-                            searchVal={searchVal}
-                            setSearchVal={setSearchVal}
-                            activeTab={"pateints"}
-                            // select status
-                            selectlabel="Select Status"
-                            isSelector={true}
-                            setSelectedOption={SetSelectedOption}
-                            selectOptions={statusOptions}
-                            defaultSelectValue1={"Select Status"}
-                            selectDefaultValue={
-                              statusOptions?.find(
-                                (item) => item?.value === selectedOption
-                              )?.label
-                            }
-                            // computation date
-                            pickerlabel="Computed Date"
-                            defaultStartDate={""}
-                            defaultEndDate={""}
-                            setStartDate={setComputedStartDate}
-                            setEndDate={setComputedEndDate}
-                            isRangePicker={true}
-                            disable="Yes"
-                            selectedDates={selecteddates}
-                            setSelectedDates={setSelectedDates}
-                            // created date
-                            pickerlabe2="Created Date"
-                            defaultStartDate2={""}
-                            defaultEndDate2={""}
-                            setStartDate2={setCompletedStartDate}
-                            setEndDate2={setCompletedEndDate}
-                            isAnotherPicker={true}
-                            selectedDates2={selecteddates2}
-                            setSelectedDates2={setSelectedDate2s}
-                            // defaultAllocateTo={"All"}
-                            // allocated by
-                            isAllocatedBySelector={true}
-                            allocatedBylabel="Created By"
-                            allocatedByOptoons={generateOptionsForNewStore(
-                              filteredList?.data?.response
-                            )}
-                            defaultAllocatedBy={"Select Created By"}
-                            setSelAllocatedBy={setSelAllocatedBy}
-                            selectorField="CreatedBy"
-                            fromTenantPatients={true}
-                            // defaultAllocatedBy={"All"}
-                            setSelCreatedBy={setSelCreatedBy}
-                            addUser={true}
-                            addUserForm={addPatientFormId}
-                            bullets={bullets}
-                            isNextRow={true}
-                            btnTitle="Add Patient"
-                            atCorner={true}
-                            selAllocatedBy={selAllocatedBy}
-                            // selectOrg
-                            selectlabelOrg="Select Organization"
-                            isSelectOrg={true}
-                            setSelectedOptionOrg={setSelectedOrgList}
-                            selectOptionsOrg={orgAllList}
-                            defaultSelectValueOrg={""}
-                            selectedValueOrg={selectOrgList}
-                            orgValue={selectOrgList}
-                            // selectBatch
-                            setSelectedOptionBatch={setSelectedBatchList}
-                            selectOptionsBatch={batchAllList}
-                            defaultSelectValueBatch={""}
-                            selectedValueBatch={selectBatchList}
-                            selectlabelBatch="Select Batch"
-                            // selectFlag
-                            selectLabelFlag="Select Flag"
-                            flagOptions={flagOptions}
-                            isSelectBatch={true}
-                            batchValue={selectBatchList}
-                            setPageNo={setPageNo}
-                            setClear={setClear}
-                            clear={clear}
-                            selectAll={selectAll}
-                            setSelectAll={setSelectAll}
-                            activeFilters={activeFilters}
-                            setActiveFilters={setActiveFilters}
-                            flagList={flagList}
-                            setFlagList={setFlagList}
-                            setSelectedBatchList={setSelectedBatchList}
-                          />
-                        </div>
+    <div className={`show `}>
+      <Header />
+      <div class="content-body">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-12">
+              <div className="">
+                <div className="card-body p-0">
+                  <div className="table-responsive active-projects task-table">
+                    <div className="tbl-caption  align-items-center">
+                      <div className="tbl-caption2  align-items-center">
+                        <HeaderFilters
+                          setSearch={setSearch}
+                          isSearch={true}
+                          searchlabel=" Patient ID / Name"
+                          search={search}
+                          searchVal={searchVal}
+                          setSearchVal={setSearchVal}
+                          activeTab={"pateints"}
+                          // select status
+                          selectlabel="Select Status"
+                          isSelector={true}
+                          setSelectedOption={SetSelectedOption}
+                          selectOptions={statusOptions}
+                          defaultSelectValue1={"Select Status"}
+                          selectDefaultValue={
+                            statusOptions?.find(
+                              (item) => item?.value === selectedOption
+                            )?.label
+                          }
+                          // computation date
+                          pickerlabel="Computed Date"
+                          defaultStartDate={""}
+                          defaultEndDate={""}
+                          setStartDate={setComputedStartDate}
+                          setEndDate={setComputedEndDate}
+                          isRangePicker={true}
+                          disable="Yes"
+                          selectedDates={selecteddates}
+                          setSelectedDates={setSelectedDates}
+                          // created date
+                          pickerlabe2="Created Date"
+                          defaultStartDate2={""}
+                          defaultEndDate2={""}
+                          setStartDate2={setCompletedStartDate}
+                          setEndDate2={setCompletedEndDate}
+                          isAnotherPicker={true}
+                          selectedDates2={selecteddates2}
+                          setSelectedDates2={setSelectedDate2s}
+                          // defaultAllocateTo={"All"}
+                          // allocated by
+                          isAllocatedBySelector={true}
+                          allocatedBylabel="Created By"
+                          allocatedByOptoons={generateOptionsForNewStore(
+                            filteredList?.data?.response
+                          )}
+                          defaultAllocatedBy={"Select Created By"}
+                          setSelAllocatedBy={setSelAllocatedBy}
+                          selectorField="CreatedBy"
+                          fromTenantPatients={true}
+                          // defaultAllocatedBy={"All"}
+                          setSelCreatedBy={setSelCreatedBy}
+                          addUser={true}
+                          addUserForm={addPatientFormId}
+                          bullets={bullets}
+                          isNextRow={true}
+                          btnTitle="Add Patient"
+                          atCorner={true}
+                          selAllocatedBy={selAllocatedBy}
+                          // selectOrg
+                          selectlabelOrg="Select Organization"
+                          isSelectOrg={true}
+                          setSelectedOptionOrg={setSelectedOrgList}
+                          selectOptionsOrg={orgAllList}
+                          defaultSelectValueOrg={""}
+                          selectedValueOrg={selectOrgList}
+                          orgValue={selectOrgList}
+                          // selectBatch
+                          setSelectedOptionBatch={setSelectedBatchList}
+                          selectOptionsBatch={batchAllList}
+                          defaultSelectValueBatch={""}
+                          selectedValueBatch={selectBatchList}
+                          selectlabelBatch="Select Batch"
+                          // selectFlag
+                          selectLabelFlag="Select Flag"
+                          flagOptions={flagOptions}
+                          isSelectBatch={true}
+                          batchValue={selectBatchList}
+                          setPageNo={setPageNo}
+                          setClear={setClear}
+                          clear={clear}
+                          selectAll={selectAll}
+                          setSelectAll={setSelectAll}
+                          activeFilters={activeFilters}
+                          setActiveFilters={setActiveFilters}
+                          flagList={flagList}
+                          setFlagList={setFlagList}
+                          setSelectedBatchList={setSelectedBatchList}
+                        />
                       </div>
+                    </div>
 
-                      <div
-                        id="task-tbl_wrapper"
-                        className="dataTables_wrapper no-footer"
-                      >
-                        {loading ? (
-                          <TableSkeleton />
-                        ) : (
-                          <div className="mt-2">
-                            <AddPatientListTable
-                              bullets={bullets}
-                              patinetListAll={
-                                allPatientList?.data?.response?.patientDtoList?.content
-                              }
-                              actionBodyTemplate={actionBodyTemplate}
-                              statusBodyTemplate={processstatusBodyTemplate}
-                              gotoPatientDetails={gotoPatientDetails}
-                              patientDetails={patientDetails}
-                              setSortOrder={setComputedSortOrder}
-                              sortOrder={computedSortOrder}
-                              setSort={setSort}
-                              page={{
-                                pageNo,
-                                paginationFirst,
-                                computedStartDate,
-                                computedEndDate,
-                                selectedOption,
-                                search,
-                                completedStartDate,
-                                completedEndDate,
-                                selAllocatedTo,
-                                selAllocatedBy,
-                                selCreatedBy,
-                                selectOrgList,
-                                selectBatchList,
-                                activeFilters,
-                                flagList,
-                              }}
-                              sortCompleteOrder={sortCompleteOrder}
-                              setSortCompleteOrder={setSortCompleteOrder}
-                            />
-                            <div>
-                              <div className="pagination-container">
-                                <Paginator
-                                  id="patients-paginator"
-                                  name="patients-paginator"
-                                  first={
-                                    paginationFirst == 0
-                                      ? pageNo
-                                      : paginationFirst
-                                  }
-                                  rows={15}
-                                  totalRecords={
-                                    allPatientList?.data?.response?.patientDtoList
-                                      ?.totalElements
-                                  }
-                                  onPageChange={onPageChange}
-                                />
-                                <div className="total-pages">
-                                  Total count:{" "}
-                                  {
-                                    allPatientList?.data?.response?.patientDtoList
-                                      ?.totalElements
-                                  }
-                                </div>
+                    <div
+                      id="task-tbl_wrapper"
+                      className="dataTables_wrapper no-footer"
+                    >
+                      {loading ? (
+                        <TableSkeleton />
+                      ) : (
+                        <div className="mt-2">
+                          <AddPatientListTable
+                            bullets={bullets}
+                            patinetListAll={
+                              allPatientList?.data?.response?.patientDtoList
+                                ?.content
+                            }
+                            actionBodyTemplate={actionBodyTemplate}
+                            statusBodyTemplate={processstatusBodyTemplate}
+                            gotoPatientDetails={gotoPatientDetails}
+                            patientDetails={patientDetails}
+                            setSortOrder={setComputedSortOrder}
+                            sortOrder={computedSortOrder}
+                            setSort={setSort}
+                            page={{
+                              pageNo,
+                              paginationFirst,
+                              computedStartDate,
+                              computedEndDate,
+                              selectedOption,
+                              search,
+                              completedStartDate,
+                              completedEndDate,
+                              selAllocatedTo,
+                              selAllocatedBy,
+                              selCreatedBy,
+                              selectOrgList,
+                              selectBatchList,
+                              activeFilters,
+                              flagList,
+                            }}
+                            getRetregger={getRetregger}
+                            sortCompleteOrder={sortCompleteOrder}
+                            setSortCompleteOrder={setSortCompleteOrder}
+                          />
+                          <div>
+                            <div className="pagination-container">
+                              <Paginator
+                                id="patients-paginator"
+                                name="patients-paginator"
+                                first={
+                                  paginationFirst == 0
+                                    ? pageNo
+                                    : paginationFirst
+                                }
+                                rows={15}
+                                totalRecords={
+                                  allPatientList?.data?.response?.patientDtoList
+                                    ?.totalElements
+                                }
+                                onPageChange={onPageChange}
+                              />
+                              <div className="total-pages">
+                                Total count:{" "}
+                                {
+                                  allPatientList?.data?.response?.patientDtoList
+                                    ?.totalElements
+                                }
                               </div>
                             </div>
                           </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -848,32 +914,32 @@ const Patient = ({
             </div>
           </div>
         </div>
-        <FileUploading
-          addPatient={addPatient}
-          setAddPatient={setAddPatient}
-          validated={validated}
-          handleSubmit={handleSubmit}
-          inputValue={inputValue}
-          handleChange={handleChange}
-          isLoadingBtn={isLoadingBtn}
-          onChangeFile={onChangeFile}
-          errors={errors}
-          setEmrType={setEmrType}
-          emrType={emrType}
-          handleClose={handleClose}
-          isUpload={true}
-        />
-        <Addpatients
-          addPatientId={addPatientId}
-          setAddPatientId={setAddPatientId}
-          validated={validated}
-          handleSubmitPatientId={handleSubmitPatientId}
-          handleChangePatientId={handleChangePatientId}
-          isLoadingBtn={isLoadingBtn}
-          orgAllList={orgAllList}
-        />
       </div>
-   
+      <FileUploading
+        addPatient={addPatient}
+        setAddPatient={setAddPatient}
+        validated={validated}
+        handleSubmit={handleSubmit}
+        inputValue={inputValue}
+        handleChange={handleChange}
+        isLoadingBtn={isLoadingBtn}
+        onChangeFile={onChangeFile}
+        errors={errors}
+        setEmrType={setEmrType}
+        emrType={emrType}
+        handleClose={handleClose}
+        isUpload={true}
+      />
+      <Addpatients
+        addPatientId={addPatientId}
+        setAddPatientId={setAddPatientId}
+        validated={validated}
+        handleSubmitPatientId={handleSubmitPatientId}
+        handleChangePatientId={handleChangePatientId}
+        isLoadingBtn={isLoadingBtn}
+        orgAllList={orgAllList}
+      />
+    </div>
   );
 };
 
@@ -897,6 +963,7 @@ const enhancer = connect(
     getFilters: allocationAction.getFiltersList,
     patientDetails: allActions.getPatientDetails,
     uploadFilesRadiology: tenantAdminAction.uploadFilesRadiology,
+    getRetreggerPatient: tenantAdminAction.getRetreggerPatient,
   }
 );
 export default enhancer(Patient);

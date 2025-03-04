@@ -27,3 +27,8 @@ export const uploadFilesRadiology = createActionThunk(
   "UPLOAD_FILES_RADIOLOGY",
   network.uploadFilesRadiology
 );
+
+export const getRetreggerPatient = createActionThunk(
+  "GET_RETREGGER_PATINET",
+  network.getRetreggerPatient
+);

@@ -101,3 +101,14 @@ export async function uploadFilesRadiology({ obj }) {
   );
   return data;
 }
+export async function getRetreggerPatient({ obj }) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortalFiles(
+    `management/temporal/retry`,
+    options
+  );
+  return data;
+}
