@@ -91,14 +91,15 @@ const ReusableFilters = ({
                 <div key={item?.title} className="default-filter-size mb-2">
                   <label className="responsiveLabel">{item?.header}</label>
                   <ReusableInput
-                    testId={`${item?.title}-${item?.type}`}
-                    name={`${item?.title}-${item?.type}`}
+                    testId={item?.title}
+                    name={`patientId-${item?.title}`}
                     placeholder={"Search"}
                     value={searchText}
                     isSearch={true}
                     setSearchText={setSearchText}
                     autoComplete="off"
                     setPageNumber={setPageNo}
+                    id={`${item?.title}-${item?.type}`}
                   />
                 </div>
               );

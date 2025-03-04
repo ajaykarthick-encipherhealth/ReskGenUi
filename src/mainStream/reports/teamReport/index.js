@@ -161,9 +161,11 @@ const TeamReport = ({
 
     setSelectedRows(updatedRows);
     getSelectedRow(updatedRows);
-    const allRows =
-      reportListAll?.response?.data?.map((item) => item.patientId) || [];
-    setSelectAll(updatedRows.length === allRows.length);
+    // const allRows =
+    //   reportListAll?.response?.data?.map((item) => item.patientId) || [];
+    setSelectAll(
+      reportListAll?.response?.response?.totalElements === updatedRows?.length
+    );
   };
 
   const card1Data = [
@@ -410,19 +412,13 @@ const TeamReport = ({
               <div>
                 <div className=" col-12 d-flex" style={{ height: "100%" }}>
                   {reportListAll?.response?.response?.data?.length === 0 ? (
-                    <div
-                      className={`col-xl-6 ${styles.card1}`}
-                      style={{ height: "842px" }}
-                    >
+                    <div className={`col-xl-6 ${styles.card1}`}>
                       <div className={` ${styles.emptyCard}`}>
                         <Empty />
                       </div>
                     </div>
                   ) : (
-                    <div
-                      className={`col-6 ${styles.cardDiv}`}
-                      style={{ height: "842px" }}
-                    >
+                    <div className={`col-6 ${styles.cardDiv}`}>
                       {loader ? (
                         <div className="mt-4">
                           <CardSkeleton count={6} width={900} height={100} />
@@ -482,17 +478,14 @@ const TeamReport = ({
                       )}
                     </div>
                   )}
-
-                  <div className={`col-6 ${styles.cardSeperation2}`}>
+                  <div className={`col-6 ${styles.cardSeperation}`}>
                     {loader ? (
                       <div className="mt-4">
                         <CardSkeleton count={6} width={900} height={100} />
                       </div>
                     ) : (
                       <div className={styles.cardContainer}>
-
-                        <div className={styles.card1} style={{height:"842px"}}>
-
+                        <div className={styles.card1} style={{height:"847px"}}>
                           <div className={styles.summaryText}>Summary</div>
                           <div className="col-12 d-flex mt-4">
                             {subCardData.map((card, index) => (

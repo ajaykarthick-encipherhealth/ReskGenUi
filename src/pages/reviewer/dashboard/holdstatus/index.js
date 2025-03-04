@@ -86,8 +86,8 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData ,getPatientID}) => {
       <HeadTitle
         header="Hold Status"
         // icon={calender}
-        anchorTag="anchor"
-        handleOpen={ holdStatusData?.data?.response?.length>0 && handleOpen}
+        anchorTag={holdStatusData?.data?.response?.length > 0 ? "anchor" : null}
+        handleOpen={holdStatusData?.data?.response?.length > 0 && handleOpen}
       />
       <div className={styles.card6}>
         <Card borderRadius="28px" padding="10px">

@@ -66,7 +66,12 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
     <>
       <HeadTitle
         header="Notifications"
-        anchorTag="anchor"
+        anchorTag={
+          notificationResponse?.data?.response?.notificationList
+            ?.content?.length > 0
+            ? "anchor"
+            : null
+        }
         handleOpen={handleOpen}
       />
 
@@ -101,48 +106,49 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
         ) : (
           <div className={styles.container} style={{ height: "500px" }}>
             {/* {notificationData} */}
-            {notificationResult?.length > 0 ? ( notificationResult?.map((info) =>
-            (
-            <div className={styles.msgDiv} key={info?.id}>
-              <div style={{ marginTop: "10px" }}>
-                <FontAwesomeIcon
-                  icon={faBell}
-                  className={`${styles.notifyIconColor}`}
-                />
-              </div>
-              <div className={`${styles.msgCOntainer} m-2`}>
-                <span className="send_details">{info.content}</span>
-                <div className={styles.time}>
-                  {moment(info?.createdDate).format("MM-DD-YYYY")}&nbsp;{" "}
-                  {moment(info?.createdDate).format("hh:mm:A")} &nbsp;{" "}
-                  {`${
-                    info?.fromUserDetails?.firstName
-                      ? info?.fromUserDetails?.firstName
-                      : ""
-                  } (${
-                    info?.fromUserDetails?.role
-                      ? info?.fromUserDetails?.role
-                      : ""
-                  })`}
-                </div>
-              </div>
-            </div>
-            )) ) : (
-            <div className={styles.no_notificarion_container}>
-              {!notificationResponse?.loading &&
-                (!notificationResponse?.data?.response?.notificationList
-                  ?.content ||
-                  notificationResponse?.data?.response?.notificationList
-                    ?.content?.length === 0) && (
-                  <div className="my-2 d-flex align-items-center justify-content-center">
-                    <Image
-                      className={styles.img}
-                      src={NoNotification}
-                      alt="no-notification"
+            {notificationResult?.length > 0 ? (
+              notificationResult?.map((info) => (
+                <div className={styles.msgDiv} key={info?.id}>
+                  <div style={{ marginTop: "10px" }}>
+                    <FontAwesomeIcon
+                      icon={faBell}
+                      className={`${styles.notifyIconColor}`}
                     />
                   </div>
-                )}
-            </div>
+                  <div className={`${styles.msgCOntainer} m-2`}>
+                    <span className="send_details">{info.content}</span>
+                    <div className={styles.time}>
+                      {moment(info?.createdDate).format("MM-DD-YYYY")}&nbsp;{" "}
+                      {moment(info?.createdDate).format("hh:mm:A")} &nbsp;{" "}
+                      {`${
+                        info?.fromUserDetails?.firstName
+                          ? info?.fromUserDetails?.firstName
+                          : ""
+                      } (${
+                        info?.fromUserDetails?.role
+                          ? info?.fromUserDetails?.role
+                          : ""
+                      })`}
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className={styles.no_notificarion_container}>
+                {!notificationResponse?.loading &&
+                  (!notificationResponse?.data?.response?.notificationList
+                    ?.content ||
+                    notificationResponse?.data?.response?.notificationList
+                      ?.content?.length === 0) && (
+                    <div className="my-2 d-flex align-items-center justify-content-center">
+                      <Image
+                        className={styles.img}
+                        src={NoNotification}
+                        alt="no-notification"
+                      />
+                    </div>
+                  )}
+              </div>
             )}
           </div>
         )}

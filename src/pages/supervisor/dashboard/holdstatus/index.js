@@ -83,8 +83,9 @@ const HoldStatus = ({ holdStatusData, getHoldStatusData }) => {
     <>
       <HeadTitle
         header="Hold Status"
-        anchorTag="anchor"
+        anchorTag={holdStatusData?.data?.response?.length > 0 ? "anchor" : null}
         handleOpen={handleOpen}
+        holdStatusData={holdStatusData}
       />
       <div className={styles.card6}>
         <Card borderRadius="28px" padding="10px">

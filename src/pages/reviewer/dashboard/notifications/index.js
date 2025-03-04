@@ -74,7 +74,12 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
     <>
       <HeadTitle
         header="Notifications"
-        anchorTag="anchor"
+        anchorTag={
+          notificationResponse?.data?.response?.notificationList?.content
+            ?.length > 0
+            ? "anchor"
+            : null
+        }
         handleOpen={handleOpen}
       />
 

@@ -13,7 +13,8 @@ const ReusableInput = ({
   name,
   setSearchText,
   props,
-  testId
+  testId,
+  id
 }) => {
   const [localStr, setLocalStr] = useState("");
   const debounceFunc = useCallback(
@@ -41,7 +42,7 @@ const ReusableInput = ({
   }, [value]);
 
   return (
-    <div id="reusableInput" name="reusableInput" className="reusableInput">
+    <div id={id} name={name} className="reusableInput">
       <Input
         data-testid={testId}
         {...props}
