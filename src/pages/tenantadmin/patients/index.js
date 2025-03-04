@@ -218,22 +218,38 @@ const Patient = ({
       setIsLoadingBtn(true);
       const response = await getPatientId({ obj: formData });
       if (response?.status === "SUCCESS") {
-        getAllPatients(
+        // getAllPatients(
+        //   pageNo,
+        //   computedStartDate,
+        //   computedEndDate,
+        //   selectedOption,
+        //   search,
+        //   completedStartDate || "",
+        //   completedEndDate || "",
+        //   selAllocatedTo || "",
+        //   selAllocatedBy || "",
+        //   selCreatedBy || "",
+        //   sort,
+        //   orgId,
+        //   selectBatchList,
+        //   flagList
+        // );
+        getAllPatients({
           pageNo,
-          computedStartDate,
-          computedEndDate,
-          selectedOption,
-          search,
-          completedStartDate || "",
-          completedEndDate || "",
-          selAllocatedTo || "",
-          selAllocatedBy || "",
-          selCreatedBy || "",
+          computationStart: computedStartDate,
+          computationEnd: computedEndDate,
+          selectedOption: selectedOption,
+          searchVal: searchVal || "",
+          createdStartDate: completedStartDate || "",
+          createdEndDate: completedStartDate || "",
+          selAllocatedTo: selAllocatedTo || "",
+          selAllocatedBy: selAllocatedBy || "",
+          selCreatedBy: selCreatedBy || "",
           sort,
-          orgId,
+          selectOrgList: (orgId = selectOrgList),
           selectBatchList,
-          flagList
-        );
+          flagList,
+        });
         setAddPatientId(false);
         setIsLoadingBtn(false);
         getResponePopup(response);
@@ -363,41 +379,73 @@ const Patient = ({
       form.resetFields();
       setEmrType("");
       setInputValue({});
-      getAllPatients(
+      // getAllPatients(
+      //   pageNo,
+      //   computedStartDate,
+      //   computedEndDate,
+      //   selectedOption,
+      //   search,
+      //   completedStartDate || "",
+      //   completedEndDate || "",
+      //   selAllocatedTo || "",
+      //   selAllocatedBy || "",
+      //   selCreatedBy || "",
+      //   sort,
+      //   orgId,
+      //   selectBatchList,
+      //   flagList
+      // );
+      getAllPatients({
         pageNo,
-        computedStartDate,
-        computedEndDate,
-        selectedOption,
-        search,
-        completedStartDate || "",
-        completedEndDate || "",
-        selAllocatedTo || "",
-        selAllocatedBy || "",
-        selCreatedBy || "",
+        computationStart: computedStartDate,
+        computationEnd: computedEndDate,
+        selectedOption: selectedOption,
+        searchVal: searchVal || "",
+        createdStartDate: completedStartDate || "",
+        createdEndDate: completedStartDate || "",
+        selAllocatedTo: selAllocatedTo || "",
+        selAllocatedBy: selAllocatedBy || "",
+        selCreatedBy: selCreatedBy || "",
         sort,
-        orgId,
+        selectOrgList: (orgId = selectOrgList),
         selectBatchList,
-        flagList
-      );
+        flagList,
+      });
     }
     var orgId = selectOrgList;
     if (response?.result == "SUCCESS") {
       setAddPatient(false);
       setSelectFile(formData);
-      getAllPatients(
+      // getAllPatients(
+      //   pageNo,
+      //   computedStartDate,
+      //   computedEndDate,
+      //   selectedOption,
+      //   search || "",
+      //   completedStartDate || "",
+      //   completedEndDate || "",
+      //   selAllocatedTo || "",
+      //   selAllocatedBy || "",
+      //   selCreatedBy || "",
+      //   sort,
+      //   orgId
+      // );
+      getAllPatients({
         pageNo,
-        computedStartDate,
-        computedEndDate,
-        selectedOption,
-        search || "",
-        completedStartDate || "",
-        completedEndDate || "",
-        selAllocatedTo || "",
-        selAllocatedBy || "",
-        selCreatedBy || "",
+        computationStart: computedStartDate,
+        computationEnd: computedEndDate,
+        selectedOption: selectedOption,
+        searchVal: searchVal || "",
+        createdStartDate: completedStartDate || "",
+        createdEndDate: completedStartDate || "",
+        selAllocatedTo: selAllocatedTo || "",
+        selAllocatedBy: selAllocatedBy || "",
+        selCreatedBy: selCreatedBy || "",
         sort,
-        orgId
-      );
+        selectOrgList: (orgId = selectOrgList),
+        selectBatchList,
+        flagList,
+      });
       handleClose();
       setIsLoadingBtn(false);
       getResponePopup(response);

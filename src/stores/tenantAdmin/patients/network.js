@@ -30,16 +30,17 @@ export async function getAllPatient({
   selAllocatedBy,
   selCreatedBy,
   sort,
-  orgId,
+  selectOrgList,
   selectBatchList,
   flagList,
 }) {
   const options = {
     method: "GET",
   };
+
   const uId = getStorage("userId");
   const filteredStatus = selectedOption === undefined ? "" : selectedOption;
-  const selectOrgId = orgId === "ALL" || orgId == undefined ? "" : orgId;
+  const selectOrgId = selectOrgList === "ALL" || selectOrgList == undefined ? "" : selectOrgList;
   const selectBatchId =
     selectBatchList === "ALL" || selectBatchList == undefined
       ? ""
