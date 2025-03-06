@@ -16356,13 +16356,13 @@ input::-webkit-inner-spin-button {
 }
 
 .custom-btn-style:disabled {
-  background-color: #043069 !important;
+  background-color: gray !important;
   color: #fff !important;
   cursor: no-drop !important;
 }
 
 .custom-btn-style:hover {
-  background-color: #6c9ddd !important;
+  background-color: #04306f !important;
   color: #fff !important;
 }
 
