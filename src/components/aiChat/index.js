@@ -21,7 +21,7 @@ const AICHAT = ({ openMsg, getChatReply }) => {
   const [loading, setLoading] = useState(false);
   const [chatResponse, setChatResponse] = useState([]);
   const messagesEndRef = useRef(null);
-
+  const chatContainerRef = useRef(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -37,14 +37,12 @@ const AICHAT = ({ openMsg, getChatReply }) => {
     event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity() === true) {
-     setValidated(false);
-     const userMessage = {
-       question: inputValue.question,
-       details: (
-           <Skeleton.Input style={{ width: 10 }} active />
-       ),
-       loading: true,
-     };
+      setValidated(false);
+      const userMessage = {
+        question: inputValue.question,
+        details: <Skeleton.Input style={{ width: 10 }} active />,
+        loading: true,
+      };
       setChatResponse((prev) => [...prev, userMessage]);
       setInputValue({ question: "" });
       getChatReply(inputValue?.question).then((res) => {
@@ -79,12 +77,18 @@ const AICHAT = ({ openMsg, getChatReply }) => {
     }
     setStartChat(false);
   };
+
+  const disableScroll = () => {
+    document.body.style.overflow = "hidden";
+  };
+
+  const enableScroll = () => {
+    document.body.style.overflow = "auto";
+  };
+
   return (
     <>
-      <button
-        className={styles.clickBtn}
-        onClick={handleChat}
-      >
+      <button className={styles.clickBtn} onClick={handleChat}>
         {activeChat ? (
           <FontAwesomeIcon icon={faTimesCircle} color="white" />
         ) : (
@@ -93,7 +97,12 @@ const AICHAT = ({ openMsg, getChatReply }) => {
       </button>
       {activeChat && (
         <>
-          <div className={`${styles.main}`}>
+          <div
+            className={`${styles.main}`}
+            ref={chatContainerRef}
+            onMouseEnter={disableScroll}
+            onMouseLeave={enableScroll}
+          >
             <div
               className={`card chatbox chat dlab-chat-history-box chat-history-card ${
                 openMsg ? "" : "d-none"
@@ -106,7 +115,6 @@ const AICHAT = ({ openMsg, getChatReply }) => {
                   >
                     <div className="text-white">Hello user</div>
                     <div className={`${styles.chatHead} align-items-center`}>
-                     
                       {getLogo()}
                       <h4 className={`${styles.chatTitle} text-white`}>
                         Chat with CogentAI

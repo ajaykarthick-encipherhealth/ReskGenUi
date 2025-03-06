@@ -112,7 +112,7 @@ export const getLogo = () => {
           src={cogentChat}
           alt="Cogentai Chat Logo"
           width={40}
-          height={50}
+          style={{ aspectRatio: "2 / 1" }}
         />
       );
     case "c360":
@@ -122,7 +122,7 @@ export const getLogo = () => {
             src={neChatImage}
             alt="C360 Chat Logo"
             width={30}
-            height={40}
+            style={{ aspectRatio: "2 / 1" }}
           />
         </div>
       );
@@ -133,7 +133,7 @@ export const getLogo = () => {
           src={cogentChat}
           alt="Default Chat Logo"
           width={30}
-          height={40}
+          style={{ aspectRatio: "2 / 1" }}
         />
       );
   }
