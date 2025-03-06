@@ -27,6 +27,7 @@ import moment from "moment";
 import dayjs from "dayjs";
 import DetailedPdfTable from "../../../../components/table/tenantTable/pdfTable/detailPdfTable";
 import { actions as allReportActions } from "../../../../stores/admin/report";
+import { actions as patientAction } from "../../../../stores/tenantAdmin/patients";
 import { getStorage, removeStorage } from "../../../../utils/storages";
 import {
   faUser,
@@ -34,7 +35,7 @@ import {
   faCircleUser,
   faCircleDot,
 } from "@fortawesome/free-regular-svg-icons";
-import { formatDateTime } from "../../../../utils/reusable";
+import { formatDateTime, getResponePopup } from "../../../../utils/reusable";
 export const statusOptions = [
   { label: "Computed", value: "COMPUTED" },
   { label: "Processing", value: "PROCESSING" },
@@ -73,6 +74,7 @@ const DetailedViewPdfTable = ({
   setListPageNo,
   setListSearchVal,
   initialTableData,
+  getRetreggerPatient
 }) => {
   const router = useRouter();
   const [socketData, setSocketData] = useState();
@@ -108,6 +110,21 @@ const DetailedViewPdfTable = ({
     }, 1000),
     []
   );
+
+  const getRetregger = async (data) => {
+    try {
+      const res = await getRetreggerPatient({ patientId: data.patientId });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+        getBatchInfo({
+          batchId: batchId,
+          page: pageNo,
+          search: searchVal || "",
+        });
+      }
+    } catch (error) {}
+  };
+
   const getNameSearch = (event) => {
     const value = event.target.value;
     const field = event.target.name;
@@ -197,7 +214,7 @@ const DetailedViewPdfTable = ({
     if (batchId && paramsFilter) {
       getBatchInfo({
         batchId: batchId,
-        page:pageNo,
+        page: pageNo,
         search: searchVal || "",
       });
     }
@@ -321,8 +338,7 @@ const DetailedViewPdfTable = ({
         <FontAwesomeIcon icon={faCalendar} color="#241571" className="mx-2" />
       ),
       name: currentId?.createdDate
-        ? 
-          formatDateTime(currentId?.createdDate)
+        ? formatDateTime(currentId?.createdDate)
         : "---",
     },
     {
@@ -375,7 +391,9 @@ const DetailedViewPdfTable = ({
                                   {item?.title}
                                 </div>
                               </div>
-                              <div className="px-2 text-center">{item?.name}</div>
+                              <div className="px-2 text-center">
+                                {item?.name}
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -433,6 +451,7 @@ const DetailedViewPdfTable = ({
                             currentId={currentId}
                             socketData={socketData}
                             setSocketData={setSocketData}
+                            getRetregger={getRetregger}
                           />
                         </div>
                       </div>
@@ -462,6 +481,7 @@ const connector = connect(
     getAllBatches: allActions.getAllBatches,
     getActiveTab: allReportActions.activeTab,
     getRoutedData: allActions.getRoutedData,
+    getRetreggerPatient: patientAction.getRetreggerPatient,
   }
 );
 export default connector(DetailedViewPdfTable);

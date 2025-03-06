@@ -16,7 +16,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import { useRouter } from "next/router";
 import { setStorage } from "../../../../utils/storages";
-import { faRotate } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate, faRotate } from "@fortawesome/free-solid-svg-icons";
 import UploadModal from "../../../../pages/tenantadmin/patientsync/uploadfile/uploadModal";
 import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";
 
@@ -70,6 +70,7 @@ const DetailedPdfTable = ({
   loader,
   socketData,
   setSocketData,
+  getRetregger,
 }) => {
   const navigate = useRouter();
   // const [socketData, setSocketData] = useState(tableData);
@@ -97,16 +98,6 @@ const DetailedPdfTable = ({
       });
     }
   };
-
-  // useEffect(() => {
-  //   if (tableData?.content) {
-  //     const interval = setInterval(() => {
-  //       setProgressMap((prevCount) => (prevCount + 5) % 100);
-  //     }, 500);
-
-  //     return () => clearInterval(interval);
-  //   }
-  // }, [tableData?.content]);
 
   useEffect(() => {
     if (
@@ -152,6 +143,7 @@ const DetailedPdfTable = ({
                 <th className="text-center">PATIENT NAME</th>
                 <th className="text-center"> COMPUTED DATE TIME</th>
                 <th className="text-center">STATUS </th>
+                <th className="text-center"></th>
               </tr>
             </thead>
 
@@ -280,6 +272,25 @@ const DetailedPdfTable = ({
                             showInfo={true}
                           />
                         </div>
+                      </td>
+                      <td
+                        className={TableStyle.lastBorder}
+                        style={{ textAlign: "center" }}
+                      >
+                        {row?.isRequestForRetry && (
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              getRetregger(row);
+                            }}
+                            className="d-flex align-items-center"
+                          >
+                            <FontAwesomeIcon
+                              icon={faArrowsRotate}
+                              style={{ fontSize: "large", color: "#df3a3a" }}
+                            />{" "}
+                          </div>
+                        )}
                       </td>
                     </tr>
                   );
