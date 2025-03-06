@@ -903,6 +903,9 @@ const Details = ({
                           {flagList?.map((data) => {
                             const isFlagDisabled =
                               data.name === "Flag" && !isDosSelected;
+                            const isDosDisabled =
+                              data.name === "Add DOS & Provider" &&
+                              isDosSelected;
 
                             return (
                               <Tooltip
@@ -917,12 +920,12 @@ const Details = ({
                                       : `${visitStyles.commentsTag}`
                                   }
                                   onClick={() => {
-                                    if (!isFlagDisabled) {
+                                    if (!isFlagDisabled && !isDosDisabled) {
                                       addComments(data.name);
                                     }
                                   }}
                                   style={
-                                    isFlagDisabled
+                                    isFlagDisabled || isDosDisabled
                                       ? {
                                           cursor: "not-allowed",
                                           opacity: 0.5,
