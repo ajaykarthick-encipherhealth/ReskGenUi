@@ -151,6 +151,7 @@ const ReusableFilters = ({
                       ref={(node) => {
                         if (node) pickerRefs.current[item?.title] = node;
                       }}
+                      className="custom-range-picker"
                       data-testid={`${item?.title}-${item?.type}`}
                       name={`${item?.title}-${item?.type}`}
                       format="MM-DD-YYYY"

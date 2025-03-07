@@ -16554,4 +16554,6 @@ input::-webkit-inner-spin-button {
 .customDateSize .ant-picker-input > input {
   font-size: 11px !important;
 }
-
+ .custom-range-picker .ant-picker-input > input {
+  font-size: 13px !important;
+}
