@@ -178,15 +178,13 @@ const Files = ({
       dateRange?.startDate,
       dateRange?.endDate,
       selectedOrganization,
-      selectDos
     );
     getAllComputing(
       dateRange?.startDate,
       dateRange?.endDate,
       selectedOrganization,
-      selectDos
     );
-  }, [dateRange, selectedOrganization, selectDos]);
+  }, [dateRange, selectedOrganization]);
 
   return (
     <div className="mt-3">

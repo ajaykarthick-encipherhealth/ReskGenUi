@@ -46,9 +46,8 @@ const index = ({
       dateRange.startDate,
       dateRange.endDate,
       selectedOrganization,
-      selectDos
     );
-  }, [dateRange, selectedOrganization,selectDos]);
+  }, [dateRange, selectedOrganization]);
   return (
     <div
       className="d-flex justify-content-between w-100 gap-2"

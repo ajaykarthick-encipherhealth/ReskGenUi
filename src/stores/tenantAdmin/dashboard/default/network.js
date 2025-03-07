@@ -1,6 +1,6 @@
 import { requestPortal } from "../../../../utils/network";
 
-export async function getAllFilesCount(startDate, endDate, organizationId,DOSWISE) {
+export async function getAllFilesCount(startDate, endDate, organizationId) {
   const options = {
     method: "GET",
   };
@@ -8,7 +8,7 @@ export async function getAllFilesCount(startDate, endDate, organizationId,DOSWIS
   const data = await requestPortal(
     `dbservice/tenantadmin/dashboard/getFilePageAndDosCount?&startDate=${startDate}&endDate=${endDate}&organizationId=${
       organizationId ? organizationId : ""
-    }&filterType=${DOSWISE}`,
+    }`,
     options
   );
   return data;
@@ -41,7 +41,7 @@ export async function getAllLabAndRadiologyCount({startDate, endDate, organizati
   );
   return data;
 }
-export async function getAllLabAndRadiologyChart(startDate, endDate, organizationId,DOSWISE) {
+export async function getAllLabAndRadiologyChart(startDate, endDate, organizationId) {
   const options = {
     method: "GET",
   };
@@ -49,7 +49,7 @@ export async function getAllLabAndRadiologyChart(startDate, endDate, organizatio
   const data = await requestPortal(
     `dbservice/tenantadmin/dashboard/diagnosticdata/statistics/chart?startDate=${startDate}&endDate=${endDate}&organizationId=${
       organizationId ? organizationId : ""
-    }&filterType=${DOSWISE}`,
+    }`,
     options
   );
   return data;
@@ -85,14 +85,14 @@ export async function getAllRaf(startDate, endDate, organizationId,DOSWISE) {
   return data;
 }
 
-export async function getAllComputing(startDate, endDate, organizationId,DOSWISE) {
+export async function getAllComputing(startDate, endDate, organizationId) {
   const options = {
     method: "GET",
   };
 
   const url = `dbservice/tenantadmin/dashboard/computingstatus/chart?startDate=${startDate}&endDate=${endDate}&organizationId=${
     organizationId ? organizationId : ""
-  }&filterType=${DOSWISE}`;
+  }`;
   const data = await requestPortal(url, options);
   return data;
 }
@@ -124,7 +124,7 @@ export async function getTopOigCodes(startDate, endDate, organizationId,DOSWISE)
   return data;
 }
 
-export async function getComputingStatus(startDate, endDate, organizationId,DOSWISE) {
+export async function getComputingStatus(startDate, endDate, organizationId) {
   const options = {
     method: "GET",
   };
@@ -132,7 +132,7 @@ export async function getComputingStatus(startDate, endDate, organizationId,DOSW
   const data = await requestPortal(
     `dbservice/tenantadmin/dashboard/computingstatus/tile/chart?startDate=${startDate}&endDate=${endDate}&organizationId=${
       organizationId ? organizationId : ""
-    }&filterType=${DOSWISE}`,
+    }`,
     options
   );
   return data;

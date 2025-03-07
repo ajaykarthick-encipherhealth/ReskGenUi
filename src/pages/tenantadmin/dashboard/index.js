@@ -415,9 +415,8 @@ const Index = ({
       dateRange.startDate,
       dateRange.endDate,
       selectedOrganization,
-      selectDos
     );
-  }, [selectDos, dateRange, selectedOrganization]);
+  }, [ dateRange, selectedOrganization]);
   useEffect(() => {
     if (activeBtn === "workflow") {
       getOrganizationStatusData();
