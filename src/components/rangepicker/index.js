@@ -9,7 +9,7 @@ import {
 import moment from "moment";
 import { connect } from "react-redux";
 import {actions as allPatientsSyncActions} from '../../stores/tenantAdmin/patientSync'
-import { disabledDate } from "../../utils/reusable";
+import { disabledDate, formatDateForIndex } from "../../utils/reusable";
 
 const { RangePicker } = DatePicker;
 const DateRangePicker = ({
@@ -92,19 +92,23 @@ const DateRangePicker = ({
               if (!date || date.length === 0) {
                 setTimeout(() => pickerRef.current?.focus(), 100);
               }
-              const formattedDates = dateString?.map((date, index) => {
-                const formattedDate =
-                  index === 1
-                    ? date &&
-                      `${moment(date, "MM-DD-YYYY").format(
-                        "YYYY-MM-DD"
-                      )}T23:59:59.999Z`
-                    : date &&
-                      `${moment(date, "MM-DD-YYYY").format(
-                        "YYYY-MM-DD"
-                      )}T00:00:00.000Z`;
-                return formattedDate;
-              });
+              // const formattedDates = dateString?.map((date, index) => {
+              //   const formattedDate =
+              //     index === 1
+              //       ? date &&
+              //         `${moment(date, "MM-DD-YYYY").format(
+              //           "YYYY-MM-DD"
+              //         )}T23:59:59.999Z`
+              //       : date &&
+              //         `${moment(date, "MM-DD-YYYY").format(
+              //           "YYYY-MM-DD"
+              //         )}T00:00:00.000Z`;
+              //   return formattedDate;
+              // });
+              const formattedDates = dateString?.map((date, index) =>
+                formatDateForIndex({ date: date, index: index })
+              );
+
 
               setSelectedDateRange((prevOptions) => ({
                 ...prevOptions,

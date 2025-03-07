@@ -297,22 +297,35 @@ const DailyTask = ({
                                   dayjs(data?.date),
                                 ],
                               },
+                              // selectedDateRanges: {
+                              //   auditedDueDate: {
+                              //     startDate: data?.date
+                              //       ? `${moment(
+                              //           data?.date,
+                              //           "MM-DD-YYYY"
+                              //         ).format("YYYY-MM-DD")}T00:00:00.000Z`
+                              //       : "",
+                              //     endDate: data?.date
+                              //       ? `${moment(
+                              //           data?.date,
+                              //           "MM-DD-YYYY"
+                              //         ).format("YYYY-MM-DD")}T23:59:59.999Z`
+                              //       : "",
+                              //   },
+                              // },
                               selectedDateRanges: {
                                 auditedDueDate: {
-                                  startDate: data?.date
-                                    ? `${moment(
-                                        data?.date,
-                                        "MM-DD-YYYY"
-                                      ).format("YYYY-MM-DD")}T00:00:00.000Z`
-                                    : "",
-                                  endDate: data?.date
-                                    ? `${moment(
-                                        data?.date,
-                                        "MM-DD-YYYY"
-                                      ).format("YYYY-MM-DD")}T23:59:59.999Z`
-                                    : "",
+                                  startDate: formatDateForIndex({
+                                    date: data?.date,
+                                    index: 0,
+                                  }),
+                                  endDate: formatDateForIndex({
+                                    date: data?.date,
+                                    index: 1,
+                                  }),
                                 },
                               },
+
                               activeFilters: ["Audited Due Date", "Search"],
                             };
                             getRoutedData(params);

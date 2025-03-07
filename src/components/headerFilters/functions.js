@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { salt } from "../../utils/config";
 import { removeStorage } from "../../utils/storages";
+import { formatDateForIndex } from "../../utils/reusable";
 
 // for search
 export const searchFunction = (
@@ -158,15 +159,18 @@ export const handleRnagePicker2 = ({
   setStartDate6,
   setEndDate6,
 }) => {
-  const formattedDates = dateString?.map((date, index) => {
-    const formattedDate =
-      index === 1
-        ? date &&
-          `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-        : date &&
-          `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
-    return formattedDate;
-  });
+  // const formattedDates = dateString?.map((date, index) => {
+  //   const formattedDate =
+  //     index === 1
+  //       ? date &&
+  //         `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+  //       : date &&
+  //         `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
+  //   return formattedDate;
+  // });
+const formattedDates = dateString?.map((date, index) =>
+  formatDateForIndex({ date, index })
+);
 
   if (setStartDate && setEndDate) {
     setStartDate(formattedDates[0]);

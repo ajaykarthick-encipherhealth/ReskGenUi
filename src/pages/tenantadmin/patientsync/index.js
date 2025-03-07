@@ -23,7 +23,7 @@ import { connect } from "react-redux";
 import { actions as patientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import UploadModal from "./uploadfile/uploadModal";
 import { useRouter } from "next/router";
-import { disabledDate } from "../../../utils/reusable";
+import { disabledDate, formatDateForIndex } from "../../../utils/reusable";
 import { useRef } from "react";
 
 const { RangePicker } = DatePicker;
@@ -378,15 +378,19 @@ const Index = ({
     debouncedSearch(value, setSearchVal, field);
   };
   const handleRangePicker = (date, dateString, tabName) => {
-    const formattedDates = dateString?.map((date, index) => {
-      const formattedDate =
-        index === 1
-          ? date &&
-            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-          : date &&
-            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
-      return formattedDate;
-    });
+    // const formattedDates = dateString?.map((date, index) => {
+    //   const formattedDate =
+    //     index === 1
+    //       ? date &&
+    //         `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+    //       : date &&
+    //         `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
+    //   return formattedDate;
+    // });
+    const formattedDates = dateString?.map((date, index) =>
+      formatDateForIndex({ date:date, index:index })
+    );
+
     setSelectedDates((prevOptions) => ({
       ...prevOptions,
       [tabName]: date,

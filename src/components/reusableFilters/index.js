@@ -4,7 +4,7 @@ import moment from "moment";
 import ReusableInput from "./reusableInput";
 import MoreFilter from "../../pages/tenantadmin/tracking/filters";
 import { useRef } from "react";
-import { disabledDate } from "../../utils/reusable";
+import { disabledDate, formatDateForIndex } from "../../utils/reusable";
 const { RangePicker } = DatePicker;
 
 const ReusableFilters = ({
@@ -59,15 +59,19 @@ const ReusableFilters = ({
     setSelectedOption({});
   };
   const handleRangePicker = (dates, dateString, tabName) => {
-    const formattedDates = dateString?.map((date, index) => {
-      const formattedDate =
-        index === 1
-          ? date &&
-            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-          : date &&
-            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
-      return formattedDate;
-    });
+    // const formattedDates = dateString?.map((date, index) => {
+    //   const formattedDate =
+    //     index === 1
+    //       ? date &&
+    //         `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+    //       : date &&
+    //         `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
+    //   return formattedDate;
+    // });
+    const formattedDates = dateString?.map((date, index) =>
+      formatDateForIndex({ date: date, index: index })
+    );
+
 
     setSelectedDates((prevOptions) => ({
       ...prevOptions,

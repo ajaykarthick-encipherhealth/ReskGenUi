@@ -276,22 +276,35 @@ const DailyTask = ({
                               selectedDates: {
                                 dueDate: [dayjs(data?.date), dayjs(data?.date)],
                               },
+                              // selectedDateRanges: {
+                              //   dueDate: {
+                              //     startDate: data?.date
+                              //       ? `${moment(
+                              //           data?.date,
+                              //           "MM-DD-YYYY"
+                              //         ).format("YYYY-MM-DD")}T00:00:00.000Z`
+                              //       : "",
+                              //     endDate: data?.date
+                              //       ? `${moment(
+                              //           data?.date,
+                              //           "MM-DD-YYYY"
+                              //         ).format("YYYY-MM-DD")}T23:59:59.999Z`
+                              //       : "",
+                              //   },
+                              // },
                               selectedDateRanges: {
                                 dueDate: {
-                                  startDate: data?.date
-                                    ? `${moment(
-                                        data?.date,
-                                        "MM-DD-YYYY"
-                                      ).format("YYYY-MM-DD")}T00:00:00.000Z`
-                                    : "",
-                                  endDate: data?.date
-                                    ? `${moment(
-                                        data?.date,
-                                        "MM-DD-YYYY"
-                                      ).format("YYYY-MM-DD")}T23:59:59.999Z`
-                                    : "",
+                                  startDate: formatDateForIndex({
+                                    date: data?.date,
+                                    index: 0,
+                                  }),
+                                  endDate: formatDateForIndex({
+                                    date: data?.date,
+                                    index: 1,
+                                  }),
                                 },
                               },
+
                               activeFilters: ["Due Date", "Search"],
                             };
                             getRoutedData(params);
@@ -338,26 +351,39 @@ const DailyTask = ({
                                           selectedOption: {
                                             Status: item?.name.toUpperCase(),
                                           },
+                                          // selectedDateRanges: {
+                                          //   dueDate: {
+                                          //     startDate: data?.date
+                                          //       ? `${moment(
+                                          //           data?.date,
+                                          //           "MM-DD-YYYY"
+                                          //         ).format(
+                                          //           "YYYY-MM-DD"
+                                          //         )}T00:00:00.000Z`
+                                          //       : "",
+                                          //     endDate: data?.date
+                                          //       ? `${moment(
+                                          //           data?.date,
+                                          //           "MM-DD-YYYY"
+                                          //         ).format(
+                                          //           "YYYY-MM-DD"
+                                          //         )}T23:59:59.999Z`
+                                          //       : "",
+                                          //   },
+                                          // },
                                           selectedDateRanges: {
                                             dueDate: {
-                                              startDate: data?.date
-                                                ? `${moment(
-                                                    data?.date,
-                                                    "MM-DD-YYYY"
-                                                  ).format(
-                                                    "YYYY-MM-DD"
-                                                  )}T00:00:00.000Z`
-                                                : "",
-                                              endDate: data?.date
-                                                ? `${moment(
-                                                    data?.date,
-                                                    "MM-DD-YYYY"
-                                                  ).format(
-                                                    "YYYY-MM-DD"
-                                                  )}T23:59:59.999Z`
-                                                : "",
+                                              startDate: formatDateForIndex({
+                                                date: data?.date,
+                                                index: 0,
+                                              }),
+                                              endDate: formatDateForIndex({
+                                                date: data?.date,
+                                                index: 1,
+                                              }),
                                             },
                                           },
+
                                           activeFilters: [
                                             "Due Date",
                                             "Status",
