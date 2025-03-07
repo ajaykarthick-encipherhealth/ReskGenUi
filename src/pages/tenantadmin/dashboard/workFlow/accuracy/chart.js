@@ -32,58 +32,13 @@ const AccuracyChart = ({
         }
       })(),
       labels: {
-        rotation: 0,
-        step: (() => {
-          const categories = (() => {
-            if (selectedValue === "custom") {
-              return customDate;
-            } else if (selectedValue === "last_1_week") {
-              return getLast7Days();
-            } else {
-              const last30Days = getLast30Days();
-              last30Days.push("");
-              return last30Days;
-            }
-          })();
-
-          if (selectedValue === "last_1_week") {
-            return 1;
-          } else if (selectedValue === "custom") {
-            return categories.length > 50
-              ? Math.ceil(categories.length / 25)
-              : 2;
-          } else if (selectedValue === "last_1_month") {
-            return 2;
-          }
-
-          return 1;
-        })(),
+        rotation: -45, 
+        step: 1, 
+        overflow: "justify", 
         formatter: function () {
-          const categories = this.axis.categories;
-          const index = categories.indexOf(this.value);
-          const totalCategories = categories.length;
-
-          if (selectedValue === "last_1_week") {
-            return this.value.length > 10
-              ? this.value.slice(0, 10) + "..."
-              : this.value;
-          } else {
-            if (
-              index === 0 ||
-              index === totalCategories - 1 ||
-              index === Math.floor(totalCategories / 2)
-            ) {
-              return this.value.length > 10
-                ? this.value.slice(0, 10) + "..."
-                : this.value;
-            }
-            if (index % 2 === 0) {
-              return this.value.length > 10
-                ? this.value.slice(0, 10) + "..."
-                : this.value;
-            }
-            return "";
-          }
+          return this.value.length > 10
+            ? this.value.slice(0, 10) + "..."
+            : this.value;
         },
         style: {
           color: "gray",
@@ -92,8 +47,11 @@ const AccuracyChart = ({
           whiteSpace: "nowrap",
         },
       },
+      minPadding: 0.2, 
+      maxPadding: 0.2,
       lineColor: "#d9d9d9",
     },
+
     yAxis: [
       {
         tickPositions: [0, 25, 50, 75, 100],
