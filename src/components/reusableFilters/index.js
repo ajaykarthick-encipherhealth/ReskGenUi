@@ -51,7 +51,7 @@ const ReusableFilters = ({
   };
   const handleClearFilters = () => {
     setSelectAll(false);
-    setActiveFilters(["Search", "Reviewer", "Supervisor"]);
+    setActiveFilters(["Search"]);
     setClear(true);
     setSearchText(null);
     setSelectedDateRanges({});

@@ -124,6 +124,15 @@ const Patient = ({
   const commonFilterItems = [
     {
       id: 1,
+      title: "Search",
+      type: "search",
+      value: null,
+      placeholder: "Search",
+      pickerType: "search",
+      header: "Patient Name / ID",
+    },
+    {
+      id: 2,
       title: "Reviewer",
       type: "select",
       value: null,
@@ -133,7 +142,7 @@ const Patient = ({
       ),
     },
     {
-      id: 2,
+      id: 3,
       title: "supervisor",
       type: "select",
       value: null,
@@ -141,7 +150,7 @@ const Patient = ({
       options: generateOptionsForNewStore(auditAssignedFilters?.data?.response),
     },
     {
-      id: 3,
+      id: 4,
       title: "allocatedDate",
       type: "rangePicker",
       value: null,
@@ -149,7 +158,7 @@ const Patient = ({
       pickerType: "year",
     },
     {
-      id: 4,
+      id: 5,
       title: "auditAllocatedDate",
       type: "rangePicker",
       value: null,
@@ -157,7 +166,7 @@ const Patient = ({
       pickerType: "year",
     },
     {
-      id: 5,
+      id: 6,
       title: "processedStatus",
       type: "select",
       value: null,
@@ -165,7 +174,7 @@ const Patient = ({
       options: statusOptions,
     },
     {
-      id: 6,
+      id: 7,
       title: "auditStatus",
       type: "select",
       value: null,
@@ -173,7 +182,7 @@ const Patient = ({
       options: auditStatusOptions,
     },
     {
-      id: 7,
+      id: 8,
       title: "reviewedDate",
       type: "rangePicker",
       value: null,
@@ -181,7 +190,7 @@ const Patient = ({
       pickerType: "year",
     },
     {
-      id: 8,
+      id: 9,
       title: "auditedDate",
       type: "rangePicker",
       value: null,
@@ -189,7 +198,7 @@ const Patient = ({
       pickerType: "year",
     },
     {
-      id: 9,
+      id: 10,
       title: "allocatedBy",
       type: "select",
       value: null,
@@ -197,7 +206,7 @@ const Patient = ({
       options: generateOptionsForNewStore(allocatedByFilters?.data?.response),
     },
     {
-      id: 10,
+      id: 11,
       title: "auditAllocatedBy",
       type: "select",
       value: null,
@@ -205,7 +214,7 @@ const Patient = ({
       options: generateOptionsForNewStore(filteredList?.data?.response),
     },
     {
-      id: 11,
+      id: 12,
       title: "organization",
       type: "select",
       value: null,
@@ -214,15 +223,6 @@ const Patient = ({
         value: item?.id,
         label: `${item?.name}`,
       })),
-    },
-    {
-      id: 12,
-      title: "search",
-      type: "search",
-      value: null,
-      placeholder: "Patient Name / ID",
-      pickerType: "search",
-      header: "Patient Name / ID",
     },
     {
       id: 13,
@@ -257,8 +257,7 @@ const Patient = ({
   const [clear, setClear] = useState(false);
   const [orgAllList, setOrgAllList] = useState([]);
   const [activeFilters, setActiveFilters] = useState([
-    "Reviewer",
-    "Supervisor",
+    "Search"
   ]);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [searchText, setSearchText] = useState(null);
@@ -632,7 +631,7 @@ const Patient = ({
                   <TableSkeleton />
                 </div>
               ) : (
-                <div div className="mt-2">
+                <div div className="mt-3">
                   <TrackingTable
                     patinetListAll={trackingList?.patientDTOList?.content}
                     actionBodyTemplate={actionBodyTemplate}

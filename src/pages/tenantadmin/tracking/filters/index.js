@@ -22,7 +22,7 @@ const MoreFilter = ({
         ? allFilters
         : byDefault
         ? allFilters.slice(3, byDefault)
-        : ['Search','Reviewer','Supervisor']
+        : ['Search']
     );
   };
 
