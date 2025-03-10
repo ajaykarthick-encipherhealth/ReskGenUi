@@ -115,7 +115,7 @@ const Patient = ({
     sort,
     selectedOption,
     selectOrgList = "",
-    batchCount,
+    batchCount = "",
   }) => {
     const uId = getStorage("userId");
     let resoureUrl = `page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${
@@ -134,7 +134,7 @@ const Patient = ({
   const getAllCheckList = async (sort) => {
     try {
       const response = await getAllCheckedListForReviewer({
-        batchCount,
+        batchCount: "",
         totalElements: batchCount
           ? batchCount
           : reviewerResponse?.response?.totalElements,

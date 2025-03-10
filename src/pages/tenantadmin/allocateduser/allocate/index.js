@@ -80,7 +80,7 @@ const AllocateModal = ({
       data: {
         userId: activeEmail,
         dueDate: formatDateForIndex({ date: allocateDate, index: 0 }),
-        patientIds: selectedRowsId.map((item) => item.id),
+        patientIds: selectedRowsId,
         priority: priority,
       },
     });
