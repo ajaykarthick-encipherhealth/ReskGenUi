@@ -15,16 +15,11 @@
 }
 .listContent {
   height: 65px !important;
-  cursor: pointer;
-  transform: none!important;
-  transition : none!important
+
 }
 
 .listContentLarge {
   height: 450px !important;
-  cursor: pointer;
-  transform: none!important;
-  transition : none!important;
 }
 
 .listName {
