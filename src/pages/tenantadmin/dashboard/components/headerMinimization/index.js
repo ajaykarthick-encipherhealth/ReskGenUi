@@ -11,7 +11,7 @@ const Index = ({ title, minimize, setMinimize }) => {
         style={{ width: "97%", margin: "auto" }}
       >
         <div className={`${styles.header}`}>{title}</div>
-        <div
+        <div id={title} name={title}
           className={`cursor-pointer ${styles.toggleButton}`}
           onClick={() => {
             setMinimize(!minimize);

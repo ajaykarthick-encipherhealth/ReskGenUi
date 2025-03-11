@@ -83,7 +83,7 @@ const MoreFilter = ({
   );
 
   return (
-    <div className="d-flex" style={{ cursor: "pointer" }}>
+    <div id="filter-icon" name="filter-icon" className="d-flex" style={{ cursor: "pointer" }}>
       <Popover
         content={PopContent}
         trigger="click"

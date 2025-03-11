@@ -143,7 +143,7 @@ const SelectRole = ({ getLogin }) => {
               <form onSubmit={onSubmitRole}>
                 <div className="mb-4">
                   <label className="mb-1 text-dark">Select Role</label>
-                  <div
+                  <div id="role" name="role"
                     style={{
                       height: "100px",
                       marginTop: "5px",
@@ -167,7 +167,7 @@ const SelectRole = ({ getLogin }) => {
                     )}
                   </div>
                 </div>
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-between " id="next-btn" name="next-btn">
                   <RegularButton
                     onClick={() => {
                       setSelectedRole(null);

@@ -152,9 +152,9 @@ const index = ({
           <div style={{ width: "20%" }}>
             <div className="d-flex">
               <div className={styles.flterContainer}>Organization</div>
-              <div className="tenantSelector" style={{ width: "100%" }}>
+              <div id="tenantOrganization" name="tenantOrganization" className="tenantSelector" style={{ width: "100%" }}>
                 <Select
-                  id="select-organization"
+                  data-testid="select-organization"
                   name="select-organization"
                   placeholder="Organization"
                   options={organizationOptions}
@@ -182,9 +182,9 @@ const index = ({
                 style={{ width: !isCustom ? "95%" : "48%" }}
               >
                 <div className={styles.flterContainer}>Date</div>
-                <div className="tenantSelector" style={{ width: "100%" }}>
+                <div  id ="days-selector" name="days-selector" className="tenantSelector" style={{ width: "100%" }}>
                   <Select
-                    id="select-days"
+                    data-testid="select-days"
                     name="select-days"
                     placeholder="Date"
                     defaultValue="Last 30 days"
@@ -201,10 +201,10 @@ const index = ({
               {isCustom && (
                 <div className={`d-flex ${styles.customFilter2}`}>
                   <div className={`${styles.flterContainer}`}>Custom Date</div>
-                  <div className="tenantSelector">
+                  <div  id="custom-dateRange" name="custom-dateRange"className="tenantSelector">
                     <RangePicker
                       ref={pickerRef}
-                      id="select-customDate"
+                      data-testid="select-customDate"
                       name="select-customDate"
                       size="large"
                       disabledDate={disabled1YearDate}
@@ -222,7 +222,7 @@ const index = ({
                 <div style={{ width: "250px" }}>
                   <div className="d-flex">
                     <div className={styles.flterContainer}>DOS/YEAR</div>
-                    <div className="tenantSelector" style={{ width: "100%" }}>
+                    <div id="dosYear-select" name="dosYear-select"className="tenantSelector" style={{ width: "100%" }}>
                       <Select
                         id="dos-year"
                         name="dos-year"
@@ -232,7 +232,6 @@ const index = ({
                           { value: "YEARWISE", label: "Year" },
                         ]}
                         onChange={handleChange}
-                        showSearch
                         defaultValue="DOSWISE"
                       />
                     </div>
@@ -246,7 +245,7 @@ const index = ({
         </div>
       </div>
       <div>
-        <div className={styles.btnContainer}>
+        <div id="all-btn" name="all-btn" className={styles.btnContainer}>
           <button
             className={
               activeBtn === "default" ? styles.activeBtn : styles.headerBtn

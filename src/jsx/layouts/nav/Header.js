@@ -388,7 +388,7 @@ const Header = ({
       }
 
       return (
-        <li
+        <li id={data.title} name={data.title}
           className={`header-transition ${
             stateActive === data.to ||
             ((currentRole === "Admin" || currentRole === "Tenant Admin") &&
@@ -589,7 +589,7 @@ const Header = ({
             </div>
             {stateActive != "/reviewer/home" ? (
               <div header-transition>
-                <ul className={`metismenu header-menu d-flex`} id="menu">
+                <ul className={`metismenu header-menu d-flex`} id="menuList" name="menuList">
                   {nextMenuList && screenSize?.width <= 1527 && (
                     <div className="d-flex justify-content-center align-items-center">
                       <div
@@ -724,6 +724,8 @@ const Header = ({
                             onClick={handleSettingsClick}
                           >
                             <SettingOutlined
+                             data-testid="settings-icon"
+                             name="settings-icon"
                               style={{
                                 width:
                                   stateActive === "/tenantadmin/settings"
@@ -765,8 +767,8 @@ const Header = ({
                             name="chatIcon"
                             onClick={() => gotoChat()}
                           >
-                            <div style={{ color: "#04306F" }}>
-                              <div style={{ color: "#04306F" }}>
+                            {/* <div style={{ color: "#04306F" }}> */}
+                              <div  id="chat-icon" name="chat-icon" style={{ color: "#04306F" }}>
                                 <FontAwesomeIcon
                                   icon={faMessage}
                                   className={styles.bellIcon}
@@ -779,7 +781,7 @@ const Header = ({
                                     color: "#04306F",
                                   }}
                                 />
-                              </div>
+                              {/* </div> */}
                             </div>
                           </div>
                         )}
@@ -789,10 +791,10 @@ const Header = ({
                           }`}
                           onClick={() => notificationDrawer()}
                           id="notificationIcon"
-                          nae="notificationIcon"
+                          name="notificationIcon"
                         >
-                          <Badge count={notificationCount} color="#04306F">
-                            <div style={{ color: "#04306F" }}>
+                          <Badge id="notification-badge" name="notification-badge" count={notificationCount} color="#04306F">
+                            <div id="notification-icon" name="notification-icon" style={{ color: "#04306F" }}>
                               <FontAwesomeIcon
                                 icon={faBell}
                                 className={`fa-regular ${styles.bellIcon}`}

@@ -268,8 +268,10 @@ const DailyTask = ({
           ) : (
             <Row>
               <Col span={1}>
-                <div onClick={showPrevious} className={styles.ImgDIv}>
+                <div  id ="prev-arrow" name ="prev-arrow" onClick={showPrevious} className={styles.ImgDIv}>
                   <FontAwesomeIcon
+                  id ="previous-arrow"
+                  name="previous-arrow"
                     className="font4 mt-5"
                     icon={faChevronLeft}
                   />
@@ -287,7 +289,7 @@ const DailyTask = ({
                         className={` ${styles.sliderdiv}`}
                       >
                         <h4
-                          className={styles.headerTitle}
+                          className={` cursor-pointer ${styles.headerTitle}`}
                           style={{ fontSize: "16px" }}
                           onClick={() => {
                             const params = {
@@ -459,8 +461,8 @@ const DailyTask = ({
                 </div>
               </Col>
               <Col span={1}>
-                <div onClick={showNext} className={styles.ImgDIv}>
-                  <FontAwesomeIcon className="lead mt-5" icon={faAngleRight} />
+                <div id="next-arrow" name="next-arrow" onClick={showNext} className={styles.ImgDIv}>
+                  <FontAwesomeIcon id="next-arrowIcon" name="next-arrowIcon" className="lead mt-5" icon={faAngleRight} />
                 </div>
               </Col>
             </Row>

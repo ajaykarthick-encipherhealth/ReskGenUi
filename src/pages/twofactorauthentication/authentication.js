@@ -178,7 +178,7 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
         <div className={styles.lastContainer}>
           {enableMFA ? (
             <>
-              <div className={styles.enableMfaBtn}>
+              <div id="validate-btn" name="validate-btn" className={styles.enableMfaBtn}>
                 <RegularButton
                   type="submit"
                   onClick={() => {
@@ -195,6 +195,7 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
                   width="100%"
                 />
               </div>
+              <div id="back-btn" name="back-btn">
               <RegularButton
                 type="outline"
                 name="BACK"
@@ -204,10 +205,11 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
                 }}
                 width="100%"
               />
+              </div>
             </>
           ) : (
             <>
-              <div className={styles.enableMfaBtn}>
+              <div id="enable-mfa" name="enable-mfa" className={styles.enableMfaBtn}>
                 <RegularButton
                   type="submit"
                   onClick={() => {
@@ -226,11 +228,12 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
                     { shallow: true }
                     );
                   }}
-                  name="ENABLE MFA"
+                  name="ENABLE-MFA"
                   width="100%"
                 />
               </div>
               {skip && (
+                <div id="setup-later" name="setup-later">
                 <RegularButton
                   type="submit"
                   onClick={() => {
@@ -243,11 +246,12 @@ const Index = ({ getValidateCode, getLogin, loginLoader }) => {
                       skip: skip,
                     });
                   }}
-                  name="SETUP LATER"
+                  name="SETUP-LATER"
                   width="100%"
                   loading={loginLoader}
                   disabled={loginLoader}
                 />
+                </div>
               )}
             </>
           )}

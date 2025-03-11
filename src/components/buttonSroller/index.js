@@ -10,10 +10,12 @@ const Buttonscroller = ({
   activeBg,
   inActiveBg,
   containerBg,
-  width
+  width,
 }) => {
   return (
     <div
+      id={activeButton}
+      name={activeButton}
       className={styles.btnContainer}
       style={{
         backgroundColor: containerBg,
@@ -22,8 +24,8 @@ const Buttonscroller = ({
       {Buttons?.map((btn, index) => {
         return (
           <label
-          id={btn?.title}
-          name={btn?.title}
+            id={btn?.title}
+            name={btn?.title}
             key={index}
             className={`${
               activeButton === index ? styles.btnActive : styles.btnInactive
@@ -32,7 +34,7 @@ const Buttonscroller = ({
               backgroundColor: activeButton === index ? activeBg : inActiveBg,
               color: activeButton === index ? activeColor : inActiveColor,
               borderRadius: activeButton === index && "16px",
-              width:width &&"150px"
+              width: width && "150px",
             }}
             onClick={() => handleButtonClick(index, btn?.title)}
           >

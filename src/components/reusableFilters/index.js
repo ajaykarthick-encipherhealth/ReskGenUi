@@ -128,7 +128,7 @@ const ReusableFilters = ({
                         showSearch={item?.showSearch || false}
                         className="custom-react-select-audit w-100"
                         options={item?.options}
-                        placeholder={item?.placeholder}
+                        placeholder={`Select ${item?.placeholder}`}
                         value={selectedOption?.[item?.title] || null}
                         onChange={(value) => {
                           setSelectedOption((prevOptions) => ({
@@ -191,7 +191,7 @@ const ReusableFilters = ({
           }
         })}
       </div>
-      <div
+      <div id="more-filters" name="more-filters"
         className="d-flex justify-content-center align-items-center mt-3"
         style={{ width: "3%" }}
       >

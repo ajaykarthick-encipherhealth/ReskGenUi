@@ -253,10 +253,12 @@ const DailyTask = ({
           ) : (
             <Row>
               <Col span={1}>
-                <div onClick={showPrevious} className={styles.ImgDIv}>
+                <div id="previous-arrow" name="previous-arrow" onClick={showPrevious} className={styles.ImgDIv}>
                   <FontAwesomeIcon
                     className="font5 mt-5"
                     icon={faChevronLeft}
+                    id="prev-arrow"
+                    name="prev-arrow"
                   />
                 </div>
               </Col>
@@ -429,8 +431,8 @@ const DailyTask = ({
               </Col>
 
               <Col span={1}>
-                <div onClick={showNext} className={styles.ImgDIv}>
-                  <FontAwesomeIcon className="font5 mt-5" icon={faAngleRight} />
+                <div id="next-arrow" name="next-arrow" onClick={showNext} className={styles.ImgDIv}>
+                  <FontAwesomeIcon  id="next-arrowIcon" name="next-arrowIcon" className="font5 mt-5" icon={faAngleRight} />
                 </div>
               </Col>
             </Row>

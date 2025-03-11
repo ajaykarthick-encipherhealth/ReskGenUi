@@ -316,13 +316,13 @@ const UserList = ({
                   form={form}
                 />
               </div>
-              <div
+              <div id="user-btn" name="user-btn"
                 className="d-flex justify-content-center align-items-center mt-3"
                 style={{ width: "10%" }}
               >
                 <Button
-                  id={"Add User"}
-                  name={"Add User"}
+                  data-testid="add-user"
+                  name="add-user"
                   onClick={() => {
                     if (form) {
                       form.resetFields();

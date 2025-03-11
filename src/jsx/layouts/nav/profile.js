@@ -27,8 +27,10 @@ const Profile = ({
           open={openContent}
           content={
             <div className={styles.popDIv}>
-              <div className={styles.closeContainer2}>
+              <div id="profile-close" name="profile-close" className={styles.closeContainer2}>
                 <CloseCircleOutlined
+                id ="close-profileTab"
+                name="close-profileTab"
                   onClick={() => setOpenContent(false)}
                   className={styles.close_icon}
                 />
@@ -65,7 +67,7 @@ const Profile = ({
                     name="editIcon"
                     className={styles.edit}
                   >
-                    <span>
+                    <span id="profile-edit" name="profile-edit">
                       <FontAwesomeIcon
                         icon={faPen}
                         style={{ marginTop: "7px" }}
@@ -102,7 +104,7 @@ const Profile = ({
               </div>
 
               <Divider className={styles.divider} />
-              <div className={styles.footerDiv} onClick={logoutFunction}>
+              <div  id="logout-btn" name="logout-btn" className={styles.footerDiv} onClick={logoutFunction}>
                 {/* <Image src={logout} /> */}
                 <span id="logout" name="logout" className={styles.footerCont}> Log out</span>
               </div>

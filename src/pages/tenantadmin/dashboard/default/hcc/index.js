@@ -25,19 +25,7 @@ const Index = ({
   customDate,
   selectDos,
 }) => {
-  const [minimize, setMinimize] = useState(false);
-  // const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
-  //   ? Object.values(getAllHccCodes.hccDiseaseCountMap)
-  //   : [];
-
-  // const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
-  //   ? Object.values(getAllRaf.premiumByDateForHcc)
-  //   : [];
-
-  // const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
-  //   ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
-  //   : [];
-
+  const [minimize, setMinimize] = useState(false)
   const TotalHccRevenue = getAllRaf?.totalHccRafScore;
 
   return (

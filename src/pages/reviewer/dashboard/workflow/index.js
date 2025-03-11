@@ -105,13 +105,6 @@ const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
   return (
     <div className={styles.card1}>
       <HeadTitle
-        // header={
-        //   !DateRanges || DateRanges?.clear
-        //     ? `Last 3 days work flow`
-        //     : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
-        //         .subtract(1, "day")
-        //         .format("MM-DD-YYYY")}`
-        // }
         header={
           !DateRanges || DateRanges?.clear
             ? `Last 3 days work flow`

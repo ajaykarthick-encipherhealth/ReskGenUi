@@ -89,6 +89,7 @@ const Login = ({ getMFAValidation, loginResponse }) => {
               <form onSubmit={onLogin} autoComplete="off">
                 <div className="mb-4">
                   <label className="mb-1 text-dark">Email</label>
+                  <div id="select-email" name="select-email">
                   <input
                    id="email"
                    name="email"
@@ -100,6 +101,7 @@ const Login = ({ getMFAValidation, loginResponse }) => {
                     }}
                     placeholder="Enter Email"
                   />
+                  </div>
                   {emailErro?.email && (
                     <div className="text-danger fs-12 mt-3">
                       {emailErro?.email}
@@ -108,7 +110,7 @@ const Login = ({ getMFAValidation, loginResponse }) => {
                 </div>
                 <div className="mb-4">
                   <label className="mb-1 text-dark">Password</label>
-                  <div>
+                  <div  id="select-passoword" name="select-password" >
                     <input
                       id="password"
                       name="password"
@@ -138,7 +140,7 @@ const Login = ({ getMFAValidation, loginResponse }) => {
                     <div className="text-danger fs-12">{errors?.password}</div>
                   )}
                 </div>
-                <div className="text-center mb-4">
+                <div id="login-submit" name="login-submit" className="text-center mb-4">
                   <RegularButton
                     type="submit"
                     name="LOGIN"

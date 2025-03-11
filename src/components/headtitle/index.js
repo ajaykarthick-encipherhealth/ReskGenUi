@@ -103,15 +103,15 @@ const HeadTitle = ({
           {header}
         </div>
         {icon && (
-          <div className={`cursor-pointer ${styles.imgContainer}`}>
-            <FontAwesomeIcon onClick={handleOpenPicker} icon={faCalendar} />
+          <div id="calendar-icon" name="calendar-icon" className={`cursor-pointer ${styles.imgContainer}`}>
+            <FontAwesomeIcon id="calendar-dashboard" name="calendar-dashboard" onClick={handleOpenPicker} icon={faCalendar} />
           </div>
         )}
       </div>
       {anchorTag && (
         <span
-          id="click-viewAll"
-          name="click-viewAll"
+          id={header}
+          name={header}
           className={styles.anchor}
           onClick={typeof handleOpen === "function" ? handleOpen : undefined}
         >
@@ -125,6 +125,7 @@ const HeadTitle = ({
         onCancel={handleCancel}
         footer={
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <div id="cancel-Button" name="cancel-Button">
             <Button
               name="cancel-btn"
               id="cancel-btn"
@@ -133,14 +134,17 @@ const HeadTitle = ({
             >
               Cancel
             </Button>
+            </div>
+            <div id="ok-button" name="ok-button">
             <Button name="ok-btn" id="ok-btn" onClick={handleOk} type="primary">
               Ok
             </Button>
+            </div>
           </div>
         }
         className={styles.customModal}
       >
-        <div
+        <div id="dashboard-picker" name="dashboard-picker"
           className={`${styles.modalDetails} d-flex justify-content-between`}
         >
           <RangePicker

@@ -651,13 +651,13 @@ const Patient = ({
                 setPageNo={setPageNo}
               />
             </div>
-            <div
+            <div id="addPatient-btn" name="addPatient-btn"
               className="d-flex justify-content-center align-items-center mt-3"
               style={{ width: "10%" }}
             >
               <Button
-                id={"Add Patient"}
-                name={"Add Patient"}
+               data-testid="add-patient"
+               name="add-patient"
                 onClick={() => {
                   if (form) {
                     form.resetFields();
