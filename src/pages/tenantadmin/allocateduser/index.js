@@ -84,7 +84,7 @@ const Patient = ({
   const [isSupervisorAllocated, setIsSupervisorAllocated] = useState(false);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [tableLoading, setTableLoading] = useState(true);
-
+  const [selectedRows, setSelectedRows] = useState([]);
   const [activeTab, setActiveTab] = useState(1);
   const [isPatientList, setIsPatientList] = useState(false);
   const [l2selectUser, setL2selectUser] = useState(null);
@@ -1018,6 +1018,8 @@ const Patient = ({
                                         setSortCompleteOrder={
                                           setSortCompleteOrder
                                         }
+                                        selectedRows={selectedRows}
+                                        setSelectedRows={setSelectedRows}
                                       />
                                       <div>
                                         <div className="pagination-container">
@@ -1233,6 +1235,8 @@ const Patient = ({
         selectedChart={selectedChart}
         getAllList={getAllList}
         setBatchCount={setBatchCount}
+        selectedRows={selectedRows}
+        setSelectedRows={setSelectedRows}
       />
       <L2AllocateModal
         open={allocateModalL2}

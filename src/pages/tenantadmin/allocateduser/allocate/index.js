@@ -30,6 +30,8 @@ const AllocateModal = ({
   getL1UsersList,
   getAllocateUsers,
   setBatchCount,
+  selectedRows,
+  setSelectedRows
 }) => {
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
@@ -101,6 +103,7 @@ const AllocateModal = ({
       setSearch("");
       setPriority([])
       setSelectedRowsId([]);
+      setSelectedRows([])
     } else {
       getResponePopup(response);
     }
@@ -113,7 +116,6 @@ const AllocateModal = ({
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
-
   return (
     <Modal
       open={open}
@@ -125,6 +127,7 @@ const AllocateModal = ({
         setSearch("");
         setAllocateDate("");
         setPriority([])
+        setSelectedRows([])
       }}
       title="Select User"
       footer={false}
@@ -344,20 +347,20 @@ const AllocateModal = ({
                         </span>
                         <div className="mb-3">Selected Charts</div>
                         <ul className={`${modalStyle.selectChart}`}>
-                          {selectedChart.map((item) => (
+                          {selectedRows.map((item) => (
                             <li
                               className={`${modalStyle.listing} ${modalStyle.listings}`}
                               key={item.id}
                               name={item.id}
                               id={item.id}
                               onClick={() => {
-                                let remove = selectedChart.filter(
+                                let remove = selectedRows.filter(
                                   (chart) => chart.id != item.id
                                 );
-                                setSelectedRowsId(remove);
+                                setSelectedRows(remove);
                               }}
                             >
-                              <span>{item.name}</span>
+                              <span>{item.patientName}</span>
                               <button className="btn p-1">
                                 <Avatar
                                   size={21}

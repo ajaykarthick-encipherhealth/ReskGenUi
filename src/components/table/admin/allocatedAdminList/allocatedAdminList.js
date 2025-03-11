@@ -25,8 +25,9 @@ function AllocatedAdminList({
   setSortCompleteOrder,
   selectedRoWDetails,
   reviewerResponse,
+  setSelectedRows,
+  selectedRows
 }) {
-  const [selectedRows, setSelectedRows] = useState([]);
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows.some(
       (selectedRow) => selectedRow.patientId === row.patientId
