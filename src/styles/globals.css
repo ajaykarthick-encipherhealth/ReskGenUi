@@ -16550,10 +16550,12 @@ input::-webkit-inner-spin-button {
 .notificationPicker{
   border-radius: 0px 10px 10px 0px !important
 }
-
-.customDateSize .ant-picker-input > input {
-  font-size: 11px !important;
+@media (min-width: 1024px) and (max-width: 1550px) {
+  .customDateSize .ant-picker-input > input {
+    font-size: 11px !important;
+  }
 }
  .custom-range-picker .ant-picker-input > input {
   font-size: 13px !important;
 }
+

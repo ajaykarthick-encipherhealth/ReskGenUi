@@ -171,7 +171,7 @@ const index = ({
               </div>
             </div>
           </div>
-          <section className="d-flex justify-between" style={{ width: "78%" }}>
+          <section className="d-flex justify-between" style={{ width: "72%" }}>
             <section
               className={`d-flex justify-between gap-2 customDateSize ${
                 !isCustom ? styles.customFilter3 : styles.customFilter1
@@ -179,7 +179,7 @@ const index = ({
             >
               <div
                 className="d-flex"
-                style={{ width: !isCustom ? "95%" : "48%" }}
+                style={{ width: !isCustom ? "95%" : "40%" }}
               >
                 <div className={styles.flterContainer}>Date</div>
                 <div  id ="days-selector" name="days-selector" className="tenantSelector" style={{ width: "100%" }}>

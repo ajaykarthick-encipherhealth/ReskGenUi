@@ -85,7 +85,7 @@ const ReusableFilters = ({
   };
   return (
     <div className="d-flex">
-      <div className="row" style={{ width: "97%" }}>
+      <div className="row" style={{ width: "98%" }}>
         {FilterItems?.filter((item) =>
           activeFilters?.includes(item?.placeholder)
         ).map((item) => {
@@ -193,7 +193,7 @@ const ReusableFilters = ({
       </div>
       <div id="more-filters" name="more-filters"
         className="d-flex justify-content-center align-items-center mt-3"
-        style={{ width: "3%" }}
+        style={{ width: "2%" }}
       >
         {showFilter && (
           <MoreFilter
