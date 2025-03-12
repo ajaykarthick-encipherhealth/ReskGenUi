@@ -49,6 +49,7 @@ const UserList = ({
       type: "search",
       value: null,
       placeholder: "Search",
+      active:true,
       header: "Search by UserName",
     },
 
@@ -59,6 +60,7 @@ const UserList = ({
       value: null,
       placeholder: " Role",
       options: RoleList,
+      active:false,
     },
     {
       id: 3,
@@ -67,6 +69,7 @@ const UserList = ({
       value: null,
       placeholder: "Status",
       options: options3,
+      active:false,
     },
     {
       id: 4,
@@ -78,6 +81,7 @@ const UserList = ({
         value: item?.id,
         label: `${item?.name}`,
       })),
+      active:false,
     },
     {
       id: 5,
@@ -86,6 +90,7 @@ const UserList = ({
       value: null,
       placeholder: "Created Date Range",
       pickerType: "year",
+      active:false
     },
   ];
   const [sort, setSort] = useState({
@@ -114,7 +119,7 @@ const UserList = ({
     patientId: "",
     patientName: "",
   });
-  const [activeFilters, setActiveFilters] = useState(["Search"]);
+  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
@@ -304,7 +309,7 @@ const UserList = ({
                   setSelectedDateRanges={setSelectedDateRanges}
                   selectedDateRanges={selectedDateRanges}
                   setPageNo={setPageNo}
-                  FilterItems={commonFilterItems}
+                  FilterItems={activeFilters}
                   selectedDates={selectedDates}
                   setSelectedDates={setSelectedDates}
                   activeFilters={activeFilters}

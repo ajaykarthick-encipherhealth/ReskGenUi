@@ -127,6 +127,7 @@ const Patient = ({
       value: null,
       placeholder: "Search",
       header: "Patient ID / Name",
+      active:true,
     },
     {
       id: "00002",
@@ -135,6 +136,7 @@ const Patient = ({
       value: null,
       placeholder: "Status",
       options: statusOptions,
+      active:false,
     },
     {
       id: "00003",
@@ -146,6 +148,7 @@ const Patient = ({
         value: item?.id,
         label: `${item?.name}`,
       })),
+      active:false,
     },
     {
       id: "00004",
@@ -154,6 +157,7 @@ const Patient = ({
       value: null,
       placeholder: "Created Date Range",
       pickerType: "year",
+      active:false,
     },
     {
       id: "00005",
@@ -162,6 +166,7 @@ const Patient = ({
       value: null,
       placeholder: "Created By",
       options: generateOptionsForNewStore(filteredList?.data?.response),
+      active:false,
     },
     {
       id: "00006",
@@ -170,6 +175,7 @@ const Patient = ({
       value: null,
       placeholder: "Computed  Date",
       pickerType: "year",
+      active:false,
     },
     {
       id: "00007",
@@ -182,6 +188,7 @@ const Patient = ({
         value: item?.id,
         label: `${item?.name}`,
       })),
+      active:false,
     },
     {
       id: "00008",
@@ -191,6 +198,7 @@ const Patient = ({
       showSearch: true,
       placeholder: "Flag",
       options: flagOptions,
+      active:false,
     },
   ];
   const [sort, setSort] = useState({
@@ -235,7 +243,7 @@ const Patient = ({
   const [errors, setErrors] = useState({ year: "", emr: "" });
   const [paramsFilter, setParamsFilter] = useState(null);
   const [clear, setClear] = useState(false);
-  const [activeFilters, setActiveFilters] = useState(["Search"]);
+  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
@@ -638,7 +646,7 @@ const Patient = ({
                 selectedOption={selectedOption}
                 setSelectedDateRanges={setSelectedDateRanges}
                 selectedDateRanges={selectedDateRanges}
-                FilterItems={commonFilterItems}
+                FilterItems={activeFilters}
                 selectedDates={selectedDates}
                 setSelectedDates={setSelectedDates}
                 activeFilters={activeFilters}

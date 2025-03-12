@@ -130,6 +130,7 @@ const Patient = ({
       placeholder: "Search",
       pickerType: "search",
       header: "Patient Name / ID",
+      active:true,
     },
     {
       id: 2,
@@ -140,6 +141,7 @@ const Patient = ({
       options: generateOptionsForNewStore(
         patientAllocatedFilters?.data?.response
       ),
+      active:false
     },
     {
       id: 3,
@@ -148,6 +150,7 @@ const Patient = ({
       value: null,
       placeholder: "Supervisor",
       options: generateOptionsForNewStore(auditAssignedFilters?.data?.response),
+      active:false
     },
     {
       id: 4,
@@ -156,6 +159,7 @@ const Patient = ({
       value: null,
       placeholder: "Allocated  Date",
       pickerType: "year",
+      active:false
     },
     {
       id: 5,
@@ -164,6 +168,7 @@ const Patient = ({
       value: null,
       placeholder: "Audit Allocated  Date",
       pickerType: "year",
+      active:false
     },
     {
       id: 6,
@@ -172,6 +177,7 @@ const Patient = ({
       value: null,
       placeholder: " Processed Status",
       options: statusOptions,
+      active:false
     },
     {
       id: 7,
@@ -180,6 +186,7 @@ const Patient = ({
       value: null,
       placeholder: " Audit Status",
       options: auditStatusOptions,
+      active:false
     },
     {
       id: 8,
@@ -188,6 +195,7 @@ const Patient = ({
       value: null,
       placeholder: "Reviewed Date",
       pickerType: "year",
+      active:false
     },
     {
       id: 9,
@@ -196,6 +204,7 @@ const Patient = ({
       value: null,
       placeholder: "Audited Date",
       pickerType: "year",
+      active:false
     },
     {
       id: 10,
@@ -204,6 +213,7 @@ const Patient = ({
       value: null,
       placeholder: "Allocated By",
       options: generateOptionsForNewStore(allocatedByFilters?.data?.response),
+      active:false
     },
     {
       id: 11,
@@ -212,6 +222,7 @@ const Patient = ({
       value: null,
       placeholder: "Audit Allocated By",
       options: generateOptionsForNewStore(filteredList?.data?.response),
+      active:false
     },
     {
       id: 12,
@@ -223,6 +234,7 @@ const Patient = ({
         value: item?.id,
         label: `${item?.name}`,
       })),
+      active:false
     },
     {
       id: 13,
@@ -231,6 +243,7 @@ const Patient = ({
       value: null,
       placeholder: "Priority",
       options: priorityOptions,
+      active:false
     },
   ];
   const [pageNo, setPageNo] = useState(0);
@@ -256,9 +269,7 @@ const Patient = ({
   });
   const [clear, setClear] = useState(false);
   const [orgAllList, setOrgAllList] = useState([]);
-  const [activeFilters, setActiveFilters] = useState([
-    "Search"
-  ]);
+  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
@@ -608,7 +619,7 @@ const Patient = ({
                   setSelectedDateRanges={setSelectedDateRanges}
                   selectedDateRanges={selectedDateRanges}
                   setPageNumber={setPageNumber}
-                  FilterItems={commonFilterItems}
+                  FilterItems={activeFilters}
                   selectedDates={selectedDates}
                   setSelectedDates={setSelectedDates}
                   activeFilters={activeFilters}

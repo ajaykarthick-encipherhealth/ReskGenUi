@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
@@ -64,6 +65,7 @@ const Patient = ({
       value: null,
       placeholder: "Search",
       header: "Patient Name / ID",
+      active:true
     },
     {
       id: "02",
@@ -77,6 +79,7 @@ const Patient = ({
         { label: "DECLINED", value: "DECLINED" },
         { label: "HOLD", value: "HOLD" },
       ],
+      active:false
     },
     {
       id: "03",
@@ -85,6 +88,7 @@ const Patient = ({
       value: null,
       placeholder: "Due Date",
       pickerType: "year",
+      active:false
     },
     {
       id: "04",
@@ -93,6 +97,7 @@ const Patient = ({
       value: null,
       placeholder: "Completed  Date",
       pickerType: "year",
+      active:false
     },
     {
       id: "05",
@@ -101,6 +106,7 @@ const Patient = ({
       value: null,
       placeholder: "Priority",
       options: priorityOptions,
+      active:false
     },
     {
       id: "06",
@@ -113,10 +119,11 @@ const Patient = ({
         value: item?.id,
         label: `${item?.name}`,
       })),
+      active:false
     },
   ];
   const router = useRouter();
-  const [activeFilters, setActiveFilters] = useState(["Search"]);
+  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [sort, setSort] = useState({
     allocatedOn: {
       sortDir: "DESC",
@@ -148,8 +155,7 @@ const Patient = ({
   const [totalElements, setTotalElements] = useState(10);
   const [clear, setClear] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
-  const [batchAllList, setBatchAllList] = useState([]);
-  const [selectBatchList, setSelectedBatchList] = useState(null);
+
 
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
@@ -371,7 +377,7 @@ const Patient = ({
                 setSelectedDateRanges={setSelectedDateRanges}
                 selectedDateRanges={selectedDateRanges}
                 setPageNumber={setPageNumber}
-                FilterItems={commonFilterItems}
+                FilterItems={activeFilters}
                 selectedDates={selectedDates}
                 setSelectedDates={setSelectedDates}
                 activeFilters={activeFilters}

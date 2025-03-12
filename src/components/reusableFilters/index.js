@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {  DatePicker, Select } from "antd";
+import { DatePicker, Select } from "antd";
 import moment from "moment";
 import ReusableInput from "./reusableInput";
 import MoreFilter from "../../pages/tenantadmin/tracking/filters";
@@ -72,7 +72,6 @@ const ReusableFilters = ({
       formatDateForIndex({ date: date, index: index })
     );
 
-
     setSelectedDates((prevOptions) => ({
       ...prevOptions,
       [tabName]: dates,
@@ -86,9 +85,7 @@ const ReusableFilters = ({
   return (
     <div className="d-flex">
       <div className="row" style={{ width: "98%" }}>
-        {FilterItems?.filter((item) =>
-          activeFilters?.includes(item?.placeholder)
-        ).map((item) => {
+        {FilterItems.filter((item) => item.active).map((item) => {
           switch (item?.type) {
             case "search":
               return (
@@ -191,7 +188,9 @@ const ReusableFilters = ({
           }
         })}
       </div>
-      <div id="more-filters" name="more-filters"
+      <div
+        id="more-filters"
+        name="more-filters"
         className="d-flex justify-content-center align-items-center mt-3"
         style={{ width: "2%" }}
       >
@@ -200,7 +199,7 @@ const ReusableFilters = ({
             selectAll={selectAll}
             setSelectAll={setSelectAll}
             activeFilters={activeFilters}
-            allFilters={FilterItems?.map((x) => x.placeholder)}
+            allFilters={FilterItems}
             setActiveFilters={setActiveFilters}
             setClear={setClear}
             handleClearAllFilters={handleClearAllFilters}

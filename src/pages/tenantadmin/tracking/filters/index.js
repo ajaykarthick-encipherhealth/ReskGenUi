@@ -17,21 +17,21 @@ const MoreFilter = ({
 
   const handleHeaderCheckboxChange = (val) => {
     setSelectAll(val.target.checked);
-    setActiveFilters(
-      val.target.checked
-        ? allFilters
-        : byDefault
-        ? allFilters.slice(3, byDefault)
-        : ['Search']
-    );
+    setActiveFilters((prev) => [
+      prev[0],
+      ...prev.slice(1).map((x) => ({
+        ...x,
+        active: val.target.checked,
+      })),
+    ]);
   };
 
-  const handleRowCheckboxChange = (filter) => {
-    const isSelected = activeFilters?.includes(filter);
-    const updatedFilters = isSelected
-      ? activeFilters.filter((f) => f !== filter)
-      : [...activeFilters, filter];
-    setActiveFilters(updatedFilters);
+  const handleRowCheckboxChange = (filter, e) => {
+    setActiveFilters((prev) =>
+      prev.map((x) =>
+        x.title === filter.title ? { ...x, active: !x.active } : x
+      )
+    );
   };
   const PopContent = (
     <>
@@ -42,22 +42,22 @@ const MoreFilter = ({
           type="checkbox"
           onChange={handleHeaderCheckboxChange}
           className={`${styles.customChecked}`}
-          checked={allFilters?.length === activeFilters?.length}
+          checked={activeFilters?.every((item) => item.active)}
         />{" "}
         <span style={{ margin: "0 5px" }}>Select All</span>
       </div>
       <Divider className="m-0 p-0" />
-      {allFilters?.slice(1).map((filter, index) => (
+      {activeFilters?.slice(1).map((filter, index) => (
         <div key={filter} style={{ margin: "10px 0px" }}>
           <input
             id={filter}
             name={filter}
             type="checkbox"
-            onChange={() => handleRowCheckboxChange(filter)}
+            onChange={(e) => handleRowCheckboxChange(filter, e)}
             className={`${styles.customChecked}`}
-            checked={activeFilters?.includes(filter)}
+            checked={filter.active}
           />
-          <span style={{ margin: "0 5px" }}>{filter}</span>
+          <span style={{ margin: "0 5px" }}>{filter.placeholder}</span>
         </div>
       ))}
 
@@ -83,7 +83,12 @@ const MoreFilter = ({
   );
 
   return (
-    <div id="filter-icon" name="filter-icon" className="d-flex" style={{ cursor: "pointer" }}>
+    <div
+      id="filter-icon"
+      name="filter-icon"
+      className="d-flex"
+      style={{ cursor: "pointer" }}
+    >
       <Popover
         content={PopContent}
         trigger="click"
@@ -115,24 +120,6 @@ const MoreFilter = ({
           </div>
         </Tooltip>
       </Popover>
-      {/* {addUser && (
-        <div className="align-self-center mt-4">
-          <Button
-          id={btnTitle}
-          name={btnTitle}
-            onClick={() => {
-              if (form) {
-                form.resetFields();
-              }
-              addUserForm();
-            }}
-            style={{ background: "#04306f" ,color:"#fff"}}
-            className="btn btn-sm ms-2 flr width-max-content"
-          >
-            <PlusCircleFilled /> {btnTitle}
-          </Button>
-        </div>
-      )} */}
     </div>
   );
 };

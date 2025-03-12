@@ -104,7 +104,8 @@ const Patient = ({
       type: "search",
       value: null,
       placeholder: "Search",
-      header:"Patient Name / ID"
+      header:"Patient Name / ID",
+      active:true
     },
     {
       id: "0002",
@@ -113,6 +114,7 @@ const Patient = ({
       value: null,
       placeholder: "Reviewer",
       options: generateOptionsListSupervisor(filteredList),
+      active:false
     },
     {
       id: "0003",
@@ -121,6 +123,7 @@ const Patient = ({
       value: null,
       placeholder: "Audited Status",
       options: statusOptions,
+      active:false
     },
     {
       id: "0004",
@@ -129,6 +132,7 @@ const Patient = ({
       value: null,
       placeholder: "Audited Date",
       pickerType: "year",
+      active:false
     },
     {
       id: "0005",
@@ -137,6 +141,7 @@ const Patient = ({
       value: null,
       placeholder: "Audited Due Date",
       pickerType: "year",
+      active:false
     },
     {
       id: "006",
@@ -149,6 +154,7 @@ const Patient = ({
         value: item?.id,
         label: `${item?.name}`,
       })),
+      active:false
     },
     {
       id: "0007",
@@ -157,6 +163,7 @@ const Patient = ({
       value: null,
       placeholder: "Priority",
       options: priorityOptions,
+      active:false
     },
   ];
 
@@ -180,7 +187,7 @@ const Patient = ({
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
   const [clear, setClear] = useState(false);
-  const [activeFilters, setActiveFilters] = useState(["Search"]);
+  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [priority, setPriority] = useState(null);
   const [searchText, setSearchText] = useState(null);
@@ -446,7 +453,7 @@ const Patient = ({
                         setSelectedDateRanges={setSelectedDateRanges}
                         selectedDateRanges={selectedDateRanges}
                         setPageNumber={setPageNumber}
-                        FilterItems={commonFilterItems}
+                        FilterItems={activeFilters}
                         selectedDates={selectedDates}
                         setSelectedDates={setSelectedDates}
                         activeFilters={activeFilters}

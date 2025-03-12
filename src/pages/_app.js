@@ -62,7 +62,8 @@ const applyHoverEffect = (target, isEntering, pathname) => {
     target.classList.contains("fileprocessing") ||
     target.classList.contains("ant-progress-inner") ||
     target.closest(".ant-select-dropdown") || 
-    target.closest(".ant-select-selector") 
+    target.closest(".ant-select-selector") ||
+    target.closest(".ant-spin")
   ) {
     return;
   }

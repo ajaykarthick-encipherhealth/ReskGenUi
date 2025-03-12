@@ -86,6 +86,7 @@ const Index = ({
       value: null,
       placeholder: "Search",
       header: "Patient Name / ID",
+      active:true
     },
     {
       id: "002",
@@ -94,6 +95,7 @@ const Index = ({
       value: null,
       placeholder: "Audit Due Date",
       pickerType: "year",
+      active:false
     },
     {
       id: "003",
@@ -102,6 +104,7 @@ const Index = ({
       value: null,
       placeholder: "Audit Completed Date",
       pickerType: "year",
+      active:false
     },
     {
       id: "004",
@@ -110,6 +113,7 @@ const Index = ({
       value: null,
       placeholder: "Audit Allocated By",
       options: generateOptionsListSupervisor(filteredList),
+      active:false
     },
 
     {
@@ -122,6 +126,7 @@ const Index = ({
         { label: "COMPLETED", value: "COMPLETED" },
         { label: "DECLINED", value: "DECLINED" },
       ],
+      active:false
     },
     {
       id: "006",
@@ -130,6 +135,7 @@ const Index = ({
       value: null,
       placeholder: "Due Date",
       pickerType: "year",
+      active:false
     },
     {
       id: "007",
@@ -138,6 +144,7 @@ const Index = ({
       value: null,
       placeholder: "Completed  Date",
       pickerType: "year",
+      active:false
     },
     {
       id: "008",
@@ -146,6 +153,7 @@ const Index = ({
       value: null,
       placeholder: "Select Priority",
       options: priorityOptions,
+      active:false
     },
   ];
   const router = useRouter();
@@ -178,7 +186,7 @@ const Index = ({
   const [selectedDates, setSelectedDates] = useState([]);
   const [userListAll, setUserListAll] = useState([]);
   const [clear, setClear] = useState(false);
-  const [activeFilters, setActiveFilters] = useState(["Search"]);
+  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [userName, setUserName] = useState();
   const [totalElements, setTotalElements] = useState(10);
@@ -428,7 +436,7 @@ const Index = ({
                       setSelectedDateRanges={setSelectedDateRanges}
                       selectedDateRanges={selectedDateRanges}
                       setPageNumber={setPageNumber}
-                      FilterItems={commonFilterItems}
+                      FilterItems={activeFilters}
                       selectedDates={selectedDates}
                       setSelectedDates={setSelectedDates}
                       activeFilters={activeFilters}
