@@ -11,6 +11,8 @@ const Selector = ({
   setPageNo,
   onChanges,
   defaultSelectValue1,
+  parentId,
+  parentName
 }) => {
   const labelId = `select-label-${selectlabel}`;
   return (
@@ -22,7 +24,7 @@ const Selector = ({
       >
         {selectlabel}
       </label>
-      <div class="form-group has-search custom-react-select">
+      <div id={parentId} name={parentName} class="form-group has-search custom-react-select">
         <Select
         name={selectlabel}
         id={selectlabel}

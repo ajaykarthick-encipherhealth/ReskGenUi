@@ -6,7 +6,7 @@ import { emrTypeOptions, getYears } from "../../../utils/reusable";
 
 const FileUploading = ({
   addPatient,
-  setAddPatient,
+  setAddPatient, 
   validated,
   handleSubmit,
   inputValue,
@@ -43,7 +43,7 @@ const FileUploading = ({
       placement="end"
     >
       <div className="offcanvas-header">
-        <h5 className="modal-title" id="#gridSystemModal">
+        <h5 className="modal-title"  id="#gridSystemModal">
           {isUpload ? "Upload Patient Details" : "Add Patient Details"}
         </h5>
         <button type="button" className="btn-close" onClick={handleClose}>
@@ -51,8 +51,9 @@ const FileUploading = ({
         </button>
       </div>
       <div className="offcanvas-body">
-        <div className="container-fluid">
+        <div    data-testid= {isUpload ? "upload-form" : "Add-patient-form"}   className="container-fluid">
           <Form
+            data-testid= {isUpload ? "upload" : "Add-patient"}  
             noValidate
             validated={validated}
             onSubmit={handleSubmit}
@@ -65,6 +66,7 @@ const FileUploading = ({
                 </Form.Label>
                 <Form.Control
                   name="patientId"
+                  data-testid="patientId"
                   required
                   type="text"
                   value={inputValue?.patientId}
@@ -78,6 +80,7 @@ const FileUploading = ({
                 </Form.Label>
                 <Form.Control
                   name="name"
+                   data-testid="patient-name"
                   required
                   type="text"
                   value={inputValue?.name}
@@ -90,7 +93,7 @@ const FileUploading = ({
                   File <span className="text-danger">*</span>{" "}
                 </Form.Label>
                 <Form.Control
-                  id="fileInput"
+                  data-testid="fileInput"
                   required
                   type="file"
                   accept=".pdf"
@@ -105,6 +108,7 @@ const FileUploading = ({
                 <Select
                   placeholder="Select Year"
                   name="year"
+                  data-testid="select-year"
                   maxTagCount="responsive"
                   className={`ant_select_form hcc_form mb-2`}
                   onChange={(selOption, val) => {
@@ -128,6 +132,7 @@ const FileUploading = ({
                 // mode="multiple"
                 placeholder="Select EMR Type"
                 name="emrType"
+                data-testid="emr-select"
                 maxTagCount="responsive"
                 className={`ant_select_form hcc_form mb-2`}
                 onChange={(selOption, val) => {
@@ -145,7 +150,7 @@ const FileUploading = ({
             </div>
             <div>
               {!isLoadingBtn ? (
-                <Button type="submit" className="btn btn-primary btn-sm me-1">
+                <Button type="submit" id="submit-Button" name="submit-Button" className="btn btn-primary btn-sm me-1">
                   {"Submit"}
                 </Button>
               ) : (
@@ -153,7 +158,7 @@ const FileUploading = ({
                   Loading...
                 </button>
               )}
-              <Button
+              <Button id="cancel-Button" name="cancel-Button" 
                 className="btn btn-danger btn-sm light ms-1"
                 onClick={() => setAddPatient(false)}
               >

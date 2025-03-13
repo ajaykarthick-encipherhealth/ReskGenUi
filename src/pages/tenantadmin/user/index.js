@@ -407,8 +407,9 @@ const UserList = ({
           </button>
         </div>
         <div className="offcanvas-body">
-          <div className={`container-fluid ${styles.formAnimation}`}>
+          <div  id="addUser-form" name="addUser-form" className={`container-fluid ${styles.formAnimation}`}>
             <Form
+            data-testid="add-user-details"
               noValidate
               validated={validated}
               onSubmit={handleSubmitPatientId}
@@ -421,7 +422,7 @@ const UserList = ({
                   </Form.Label>
                   <Form.Control
                     name="patientId"
-                    id="patientId"
+                    data-testid="patientId"
                     required
                     type="text"
                     onChange={handleChangePatientId}
@@ -433,7 +434,7 @@ const UserList = ({
                   </Form.Label>
                   <Form.Control
                     name="patientName"
-                    id="patientName"
+                    data-testid="patientName"
                     required
                     type="text"
                     onChange={handleChangePatientId}
@@ -441,7 +442,7 @@ const UserList = ({
                 </div>
               </div>
 
-              <div>
+              <div id="">
                 <Button
                   id="submit-btn"
                   name="submit-btn"
@@ -494,8 +495,9 @@ const UserList = ({
           </button>
         </div>
         <div className="offcanvas-body">
-          <div className={`container-fluid ${styles.formAnimation}`}>
+          <div id="user-form" name="user-form" className={`container-fluid ${styles.formAnimation}`}>
             <Form
+             data-testid="control-hooks"
               form={form}
               name="control-hooks"
               onFinish={onFinish}
@@ -515,9 +517,9 @@ const UserList = ({
                       },
                     ]}
                   >
-                    <div>
+                    <div id="input-first" name="input-first">
                       <Input
-                        id="firstName"
+                        data-testid="firstName"
                         name="firstName"
                         placeholder="Enter first name"
                         autoComplete="off"
@@ -536,9 +538,9 @@ const UserList = ({
                       },
                     ]}
                   >
-                    <div>
+                   <div id="input-last" name="input-last">
                       <Input
-                        id="lastName"
+                        data-testid="lastName"
                         name="lastName"
                         placeholder="Enter last name"
                         autoComplete="off"
@@ -562,9 +564,9 @@ const UserList = ({
                       },
                     ]}
                   >
-                    <div>
+                   <div id="input-email" name="input-email">
                       <Input
-                        id="emailId"
+                        data-testid="emailId"
                         name="emailId"
                         placeholder="Enter email"
                         autoComplete="off"
@@ -593,9 +595,9 @@ const UserList = ({
                       },
                     ]}
                   >
-                    <div>
+                    <div id="input-username" name="input-username">
                       <Input
-                        id="userName"
+                        data-testid="userName"
                         name="userName"
                         placeholder="Enter user name"
                         autoComplete="off"
@@ -616,7 +618,7 @@ const UserList = ({
                     ]}
                   >
                     <Select
-                      id="role"
+                      data-testid="role"
                       name="role"
                       placeholder="Select role"
                       allowClear
@@ -644,7 +646,7 @@ const UserList = ({
                     ]}
                   >
                     <Select
-                      id="orgId"
+                      data-testid="orgId"
                       name="orgId"
                       placeholder="Select"
                       options={orgAllList}
@@ -683,11 +685,11 @@ const UserList = ({
                       },
                     ]}
                   >
-                    <div className="confirmPass">
+                    <div id="input-password" name="input-password" className="confirmPass">
                       <input type="password" style={{ display: "none" }} />
                       <Input.Password
                         name="password"
-                        id="password"
+                        data-testid="password"
                         placeholder="Enter password"
                         autoComplete="new-password"
                       />
@@ -716,7 +718,7 @@ const UserList = ({
                       }),
                     ]}
                   >
-                    <div className="confirmPass">
+                    <div id="input-confirmpassword" name="input-confirmpassword" className="confirmPass">
                       <input type="password" style={{ display: "none" }} />
                       <Input.Password
                         id="confirmPassword"
@@ -743,7 +745,7 @@ const UserList = ({
                       },
                     ]}
                   >
-                    <div>
+                    <div id="input-number" name="input-number">
                       <Input
                         id="mobileNumber"
                         name="mobileNumber"
@@ -757,7 +759,7 @@ const UserList = ({
                   </Form.Item>
                 </Col>
               </Row>
-              <div style={{ display: "flex", gap: "8px" }}>
+              <div id="fake-user" name="fake-user" style={{ display: "flex", gap: "8px" }}>
                 <input
                   type="text"
                   name="fakeusernameremembered"
@@ -777,7 +779,7 @@ const UserList = ({
                     type="primary"
                     className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
                     htmlType="submit"
-                    id="submit-btn"
+                    data-id="submit-btn"
                     name="submit-btn"
                   >
                     Submit
@@ -785,7 +787,7 @@ const UserList = ({
                 </Form.Item>
                 <Form.Item>
                   <Button
-                    id="cancle-btn"
+                    data-testid="cancle-btn"
                     name="cancel-btn"
                     style={{
                       backgroundColor: "#ffdede",

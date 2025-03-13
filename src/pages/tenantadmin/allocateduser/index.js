@@ -585,7 +585,7 @@ const Patient = ({
                         <div className="row filter-contain">
                           <div className={`${isPatientList && "d-flex"} col-2`}>
                             {isPatientList && activeTab !== 1 && (
-                              <div className={reportStyles.backDiv}>
+                              <div id="back-btn" name="back-btn" className={reportStyles.backDiv}>
                                 <button
                                   style={{ width: "40px", height: "40px" }}
                                   id="backButton"
@@ -608,9 +608,9 @@ const Patient = ({
                                   ? "Search by Name"
                                   : "Search by Name or ID"}
                               </label>
-                              <div style={{ height: "42px" }}>
+                              <div id="patient-search" name="patient-search" style={{ height: "42px" }}>
                                 <Input
-                                  id="search-name"
+                                  data-testid="search-name"
                                   name="search-name"
                                   type="text"
                                   onChange={(e) => {
@@ -655,9 +655,9 @@ const Patient = ({
                             <div className="col-2">
                               <div>
                                 <label>Select Organization</label>
-                                <div class="form-group has-search custom-react-select-admin">
+                                <div id="select-org" name="select-org" class="form-group has-search custom-react-select-admin">
                                   <Select
-                                    id="select-organization"
+                                    datat-testid="select-organization"
                                     name="select-organization"
                                     options={orgAllList}
                                     style={{ width: "100%", height: "42px" }}
@@ -679,10 +679,10 @@ const Patient = ({
                             <>
                               <div className="col-2">
                                 <label>Computed Date</label>
-                                <div>
+                                <div id="computed-picker" name="computed-picker">
                                   <RangePicker
                                     ref={pickerRef}
-                                    id="computed-date"
+                                    data-testid="computed-date"
                                     name="computed-date"
                                     format="MM-DD-YYYY"
                                     onCalendarChange={(val) => {
@@ -725,9 +725,9 @@ const Patient = ({
                                     selectDefaultValue={selectedOption}
                                   /> */}
                                   <label>Select Priority</label>
-                                  <div class="form-group has-search custom-react-select-admin">
+                                  <div id="priority-select" name="priority-select" class="form-group has-search custom-react-select-admin">
                                     <Select
-                                      id="select-priority"
+                                      data-testid="select-priority"
                                       name="select-priority"
                                       options={statusOption}
                                       style={{ width: "100%", height: "42px" }}
@@ -781,9 +781,9 @@ const Patient = ({
                                   >
                                     Select
                                   </button> */}
-                                  <Space.Compact style={{ width: "100%" }}>
+                                  <Space.Compact id="batch-count" name="batch-count" style={{ width: "100%" }}>
                                     <Input
-                                      id="batchCount"
+                                      data-testid="batchCount"
                                       name="batchCount"
                                       type="number"
                                       onChange={(e) => {
@@ -851,6 +851,8 @@ const Patient = ({
                               <div className="col-2">
                                 <div>
                                   <Selector
+                                  parentName={"reviewer-select"}
+                                  parentId={"reviewer-select"}
                                     selectlabel={"Reviewer"}
                                     setSelectedOption={setAllocatedOption}
                                     selectOptions={generateOptionsForNewStore(
@@ -870,6 +872,8 @@ const Patient = ({
                               <div className="col-6">
                                 <div className="col-4">
                                   <Selector
+                                   parentName={"status-select"}
+                                   parentId={"status-select"}
                                     selectlabel={"Status"}
                                     setSelectedOption={setSelectedOptions}
                                     selectOptions={statusOptions}
@@ -941,6 +945,8 @@ const Patient = ({
                             <Tab.Container defaultActiveKey="validDiseases">
                               <Nav as="ul" className="nav nav-tabs">
                                 <Nav.Item
+                                id="reviewer-allocate"
+                                name="reviewer-allocate"
                                   as="li"
                                   className="nav-item"
                                   onClick={() => {
@@ -964,6 +970,8 @@ const Patient = ({
                                   </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item
+                                id="supervisor-allocate"
+                                name="supervisor-allocate"
                                   as="li"
                                   className="nav-item"
                                   onClick={() => {

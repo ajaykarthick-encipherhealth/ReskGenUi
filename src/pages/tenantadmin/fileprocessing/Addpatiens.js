@@ -17,6 +17,7 @@ const Addpatients = ({
   };
   return (
     <Offcanvas
+     data-testid="add-patient-details"
       onHide={() => {
         setAddPatientId(false);
         form.resetFields();
@@ -43,6 +44,7 @@ const Addpatients = ({
       <div className="offcanvas-body">
         <div className="container-fluid">
           <Form
+            data-testid="add-patient-form"
             form={form}
             onFinish={(values) => {
               handleSubmitPatientId(values, form);

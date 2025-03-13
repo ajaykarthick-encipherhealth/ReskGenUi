@@ -10,10 +10,11 @@ const RegularButton = ({
   loading,
   disabled,
   htmlType,
+  id,
 }) => {
   return (
     <button
-    id={name}
+    id={id}
       className={`btn mx-1 ${
         type === "outline" ? Style.outer : Style.btnColor
       }`}

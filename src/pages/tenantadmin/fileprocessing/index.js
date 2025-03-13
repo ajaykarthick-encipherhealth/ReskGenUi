@@ -356,7 +356,7 @@ const Patient = ({
                           selectedValueOrg={selectOrgList}
                         />
                       </div>
-                      <div id="task-tbl_wrapper">
+                      <div  className="mt-2" id="task-tbl_wrapper">
                         <FileProcessingTable
                           patinetListAll={patinetListAll}
                           actionBodyTemplate={actionBodyTemplate}

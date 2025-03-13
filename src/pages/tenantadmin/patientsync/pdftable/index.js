@@ -401,7 +401,8 @@ const DetailedViewPdfTable = ({
                       <div className={styles.topHeader}>
                         <div className="col-lg-2 mx-2">
                           <label htmlFor="search">Search by Name or ID</label>
-                          <div style={{ height: "45px" }}>
+                          <div  id="search-id" name="search-id"
+                          style={{ height: "45px" }}>
                             <Input
                               type="text"
                               name="initialSearch"

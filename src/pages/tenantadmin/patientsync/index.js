@@ -503,11 +503,11 @@ const Index = ({
                           <div className="d-flex flex-wrap col-10 ">
                             <div className="default-filter-size col-2 col-xl-2 col-md-4 mx-1">
                               <label>Search by Name or ID</label>
-                              <div style={{ height: "45px" }}>
+                              <div id="searc-name" name="search-name" style={{ height: "45px" }}>
                                 <Input
                                   type="text"
                                   name="initialSearch"
-                                  id="initialSearch"
+                                  data-testid="initialSearch"
                                   onChange={(e) => getNameSearch(e)}
                                   value={search?.searchVal || ""}
                                   className={
@@ -534,10 +534,10 @@ const Index = ({
                             </div>
                             <div className="default-filter-size col-2 col-xl-2 col-md-3 mx-1">
                               <label>Date</label>
-                              <div class="form-group has-search">
+                              <div id="picker-date" name="picker-date" class="form-group has-search">
                                 <RangePicker
                                  ref={pickerRef}
-                                  id="select-date"
+                                  data-testid="select-date"
                                   name="select-date"
                                   format="MM-DD-YYYY"
                                   value={
@@ -575,9 +575,9 @@ const Index = ({
                             </div>
                             <div className="default-filter-size col-2 col-xl-2 col-md-3 mx-1">
                               <label>Status</label>
-                              <div className={`custom-react-select`}>
+                              <div  id="status-select" name="status-select" className={`custom-react-select`}>
                                 <Select
-                                  id="select-status"
+                                  data-testid="select-status"
                                   name="select-status"
                                   placeholder={"Select"}
                                   options={
@@ -600,9 +600,9 @@ const Index = ({
                               (reportActiveTab === "FHIR" && (
                                 <div className=" default-filter-size col-xl-2 col-md-4 mx-1">
                                   <label>Initiated By</label>
-                                  <div className={`custom-react-select`}>
+                                  <div ID="initiated" name="initiated" className={`custom-react-select`}>
                                     <Select
-                                      id="initiated-by"
+                                      data-testid="initiated-by"
                                       name="initiated-by"
                                       placeholder={"Select"}
                                       options={statusOptions}
@@ -622,13 +622,15 @@ const Index = ({
                             {!reportActiveTab || reportActiveTab === "FHIR" ? (
                               <div
                                 className={styles.btnContainer}
-                                name="upload"
+                                name="upload-btn"
                                 onClick={handleFhirUpload}
+                                id="upload-btn" 
                               >
                                 <RegularButton
                                   name={"Upload"}
                                   width={"150px"}
                                   type="outlined"
+                                  id="upload"
                                 />
                               </div>
                             ) : (

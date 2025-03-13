@@ -267,7 +267,7 @@ const Notification = ({
                 justifyContent: "space-between",
               }}
             >
-              <div style={{ paddingTop: "8px", width: "600px" }}>
+              <div id="radio-btn" name="radio-btn" style={{ paddingTop: "8px", width: "600px" }}>
                 <Radio.Group
                   options={radioOptions}
                   onChange={onChange}
@@ -282,9 +282,9 @@ const Notification = ({
                 <div>
                   {selectCheckBox == "CUSTOM" ? (
                     <>
-                      <div className="d-flex" style={{ width: "600px" }}>
+                      <div id="notification-select" name="notification-select" className="d-flex" style={{ width: "600px" }}>
                         <Select
-                        id="select-custom"
+                        data-testid="select-custom"
                         name="select-custom"
                           className={`ant_select_form ${styles.ant_select_form}`}
                           mode="multiple"
@@ -323,9 +323,9 @@ const Notification = ({
                     </>
                   ) : null}
                   {selectCheckBox == "TEAM" ? (
-                    <div style={{ width: "600px" }}>
+                    <div  id="team-select" name="team-select" style={{ width: "600px" }}>
                       <Select
-                      id="select-team"
+                      data-testid="select-team"
                       name="select-team"
                         className={`ant_select_form ${styles.ant_select_form}`}
                         placeholder="Please select"
@@ -374,6 +374,7 @@ const Notification = ({
 
             <div className={styles.textareaContainer}>
               <TextArea
+               id="content"
                 showCount
                 className={styles.commentsFormControl}
                 value={inputValue?.content}
