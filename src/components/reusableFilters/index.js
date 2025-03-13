@@ -50,24 +50,16 @@ const ReusableFilters = ({
     setSelectedOption({});
   };
   const handleClearFilters = () => {
-    setSelectAll(false);
-    setActiveFilters(["Search"]);
-    setClear(true);
-    setSearchText(null);
-    setSelectedDateRanges({});
-    setSelectedDates([]);
-    setSelectedOption({});
+    setSelectAll(false);    
+    setActiveFilters((prevFilters) =>
+      prevFilters.map((filter) =>
+        filter.type === "search" ? { ...filter, active: true } : { ...filter, active: false }
+      )
+    )
   };
+  
+  
   const handleRangePicker = (dates, dateString, tabName) => {
-    // const formattedDates = dateString?.map((date, index) => {
-    //   const formattedDate =
-    //     index === 1
-    //       ? date &&
-    //         `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-    //       : date &&
-    //         `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
-    //   return formattedDate;
-    // });
     const formattedDates = dateString?.map((date, index) =>
       formatDateForIndex({ date: date, index: index })
     );
@@ -82,10 +74,11 @@ const ReusableFilters = ({
     }));
     setPageNo && setPageNo(0);
   };
+
   return (
     <div className="d-flex">
       <div className="row" style={{ width: "98%" }}>
-        {FilterItems.filter((item) => item.active).map((item) => {
+        {FilterItems.filter((item) => item?.active).map((item) => {
           switch (item?.type) {
             case "search":
               return (
