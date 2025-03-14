@@ -27,9 +27,7 @@ import Image from "next/image";
 import { patientDetails } from "../../../stores/authflow/actions";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage, setStorage } from "../../../utils/storages";
-import {
-  getResponePopup,
-} from "../../../utils/reusable";
+import { getResponePopup } from "../../../utils/reusable";
 import ReusableFilters from "../../../components/reusableFilters";
 
 export function extractLatestData(notes) {
@@ -104,8 +102,8 @@ const Patient = ({
       type: "search",
       value: null,
       placeholder: "Search",
-      header:"Patient Name / ID",
-      active:true
+      header: "Patient Name / ID",
+      active: true,
     },
     {
       id: "0002",
@@ -114,7 +112,7 @@ const Patient = ({
       value: null,
       placeholder: "Reviewer",
       options: generateOptionsListSupervisor(filteredList),
-      active:false
+      active: false,
     },
     {
       id: "0003",
@@ -123,7 +121,7 @@ const Patient = ({
       value: null,
       placeholder: "Audited Status",
       options: statusOptions,
-      active:false
+      active: false,
     },
     {
       id: "0004",
@@ -132,7 +130,7 @@ const Patient = ({
       value: null,
       placeholder: "Audited Date",
       pickerType: "year",
-      active:false
+      active: false,
     },
     {
       id: "0005",
@@ -141,20 +139,20 @@ const Patient = ({
       value: null,
       placeholder: "Audited Due Date",
       pickerType: "year",
-      active:false
+      active: false,
     },
     {
       id: "006",
       title: "batch",
       type: "select",
       value: null,
-      showSearch:true,
+      showSearch: true,
       placeholder: "Batch",
       options: batchList?.response?.map((item) => ({
         value: item?.id,
         label: `${item?.name}`,
       })),
-      active:false
+      active: false,
     },
     {
       id: "0007",
@@ -163,7 +161,7 @@ const Patient = ({
       value: null,
       placeholder: "Priority",
       options: priorityOptions,
-      active:false
+      active: false,
     },
   ];
 
@@ -324,15 +322,13 @@ const Patient = ({
       });
     }
   };
-  
+
   const handleTableRowClick = (e) => {
     const targetTd = e.target.closest("td");
     if (targetTd) {
-     setStorage("routeBackTo", "/supervisor/auditing");
+      setStorage("routeBackTo", "/supervisor/auditing");
       getRoutedData(params);
-      router?.push(
-        "/supervisor/patients/details"
-      );
+      router?.push("/supervisor/patients/details");
       const dataIndex = targetTd.parentElement.rowIndex - 1;
       const clickedData = patinetListAll[dataIndex];
       gotoPatientDetails(clickedData);
@@ -420,7 +416,7 @@ const Patient = ({
         paginationFirst,
         sort,
       } = routedData;
-      setPageNo(pageNo?pageNo:0);
+      setPageNo(pageNo ? pageNo : 0);
       setSearchText(searchText);
       setSelectedDateRanges(selectedDateRanges);
       setSelectedOption(selectedOption);
@@ -431,7 +427,15 @@ const Patient = ({
       setSort(sort);
     }
   }, [routedData]);
-
+  const opt = {
+    Status: statusOptions,
+    Priority: priorityOptions,
+    Reviewer: generateOptionsListSupervisor(filteredList),
+    batch: batchList?.response?.map((item) => ({
+      value: item?.id,
+      label: `${item?.name}`,
+    })),
+  };
   return (
     <div className={`show `}>
       <Header />
@@ -444,7 +448,7 @@ const Patient = ({
                   <div className="table-responsive active-projects task-table">
                     <div>
                       <ReusableFilters
-                      showFilter ={true}
+                        showFilter={true}
                         setActiveFilters={setActiveFilters}
                         setSearchText={setSearchText}
                         searchText={searchText}
@@ -460,6 +464,7 @@ const Patient = ({
                         setClear={setClear}
                         clear={clear}
                         setPageNo={setPageNo}
+                        opt={opt}
                       />
                     </div>
                     <div

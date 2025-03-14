@@ -35,6 +35,10 @@ const bullets = [
     name: "Completed",
   },
 ];
+export const statusOptions = [
+  { label: "COMPLETED", value: "COMPLETED" },
+  { label: "DECLINED", value: "DECLINED" },
+];
 const badges = [
   {
     color: "#4AA1AB",
@@ -86,7 +90,7 @@ const Index = ({
       value: null,
       placeholder: "Search",
       header: "Patient Name / ID",
-      active:true
+      active: true,
     },
     {
       id: "002",
@@ -95,7 +99,7 @@ const Index = ({
       value: null,
       placeholder: "Audit Due Date",
       pickerType: "year",
-      active:false
+      active: false,
     },
     {
       id: "003",
@@ -104,7 +108,7 @@ const Index = ({
       value: null,
       placeholder: "Audit Completed Date",
       pickerType: "year",
-      active:false
+      active: false,
     },
     {
       id: "004",
@@ -113,7 +117,7 @@ const Index = ({
       value: null,
       placeholder: "Audit Allocated By",
       options: generateOptionsListSupervisor(filteredList),
-      active:false
+      active: false,
     },
 
     {
@@ -122,11 +126,8 @@ const Index = ({
       type: "select",
       value: null,
       placeholder: "Reviewed Status",
-      options: [
-        { label: "COMPLETED", value: "COMPLETED" },
-        { label: "DECLINED", value: "DECLINED" },
-      ],
-      active:false
+      options: statusOptions,
+      active: false,
     },
     {
       id: "006",
@@ -135,7 +136,7 @@ const Index = ({
       value: null,
       placeholder: "Due Date",
       pickerType: "year",
-      active:false
+      active: false,
     },
     {
       id: "007",
@@ -144,7 +145,7 @@ const Index = ({
       value: null,
       placeholder: "Completed  Date",
       pickerType: "year",
-      active:false
+      active: false,
     },
     {
       id: "008",
@@ -153,7 +154,7 @@ const Index = ({
       value: null,
       placeholder: "Select Priority",
       options: priorityOptions,
-      active:false
+      active: false,
     },
   ];
   const router = useRouter();
@@ -388,7 +389,11 @@ const Index = ({
       setSort(sort);
     }
   }, [routedData]);
-
+  const opt = {
+    Status: statusOptions,
+    Priority: priorityOptions,
+    auditAlloactedBy: generateOptionsListSupervisor(filteredList),
+  };
   return (
     <div className={`show `}>
       <Header />
@@ -443,6 +448,7 @@ const Index = ({
                       setClear={setClear}
                       clear={clear}
                       setPageNo={setPageNo}
+                      opt={opt}
                     />
                   </div>
                   <div

@@ -130,7 +130,7 @@ const Patient = ({
       placeholder: "Search",
       pickerType: "search",
       header: "Patient Name / ID",
-      active:true,
+      active: true,
     },
     {
       id: 2,
@@ -141,7 +141,7 @@ const Patient = ({
       options: generateOptionsForNewStore(
         patientAllocatedFilters?.data?.response
       ),
-      active:false
+      active: false,
     },
     {
       id: 3,
@@ -150,7 +150,7 @@ const Patient = ({
       value: null,
       placeholder: "Supervisor",
       options: generateOptionsForNewStore(auditAssignedFilters?.data?.response),
-      active:false
+      active: false,
     },
     {
       id: 4,
@@ -159,7 +159,7 @@ const Patient = ({
       value: null,
       placeholder: "Allocated  Date",
       pickerType: "year",
-      active:false
+      active: false,
     },
     {
       id: 5,
@@ -168,7 +168,7 @@ const Patient = ({
       value: null,
       placeholder: "Audit Allocated  Date",
       pickerType: "year",
-      active:false
+      active: false,
     },
     {
       id: 6,
@@ -177,7 +177,7 @@ const Patient = ({
       value: null,
       placeholder: " Processed Status",
       options: statusOptions,
-      active:false
+      active: false,
     },
     {
       id: 7,
@@ -186,7 +186,7 @@ const Patient = ({
       value: null,
       placeholder: " Audit Status",
       options: auditStatusOptions,
-      active:false
+      active: false,
     },
     {
       id: 8,
@@ -195,7 +195,7 @@ const Patient = ({
       value: null,
       placeholder: "Reviewed Date",
       pickerType: "year",
-      active:false
+      active: false,
     },
     {
       id: 9,
@@ -204,7 +204,7 @@ const Patient = ({
       value: null,
       placeholder: "Audited Date",
       pickerType: "year",
-      active:false
+      active: false,
     },
     {
       id: 10,
@@ -213,7 +213,7 @@ const Patient = ({
       value: null,
       placeholder: "Allocated By",
       options: generateOptionsForNewStore(allocatedByFilters?.data?.response),
-      active:false
+      active: false,
     },
     {
       id: 11,
@@ -222,7 +222,7 @@ const Patient = ({
       value: null,
       placeholder: "Audit Allocated By",
       options: generateOptionsForNewStore(filteredList?.data?.response),
-      active:false
+      active: false,
     },
     {
       id: 12,
@@ -234,7 +234,7 @@ const Patient = ({
         value: item?.id,
         label: `${item?.name}`,
       })),
-      active:false
+      active: false,
     },
     {
       id: 13,
@@ -243,7 +243,7 @@ const Patient = ({
       value: null,
       placeholder: "Priority",
       options: priorityOptions,
-      active:false
+      active: false,
     },
   ];
   const [pageNo, setPageNo] = useState(0);
@@ -601,6 +601,23 @@ const Patient = ({
     getAllocatedByList({ field: "allocatedBy" });
   }, []);
 
+  const opt = {
+    Reviewer: generateOptionsForNewStore(
+      patientAllocatedFilters?.data?.response
+    ),
+    supervisor: generateOptionsForNewStore(
+      auditAssignedFilters?.data?.response
+    ),
+    processedStatus: statusOptions,
+    auditStatus: auditStatusOptions,
+    allocatedBy: generateOptionsForNewStore(allocatedByFilters?.data?.response),
+    auditAllocatedBy: generateOptionsForNewStore(filteredList?.data?.response),
+    organization: organizationList?.response?.map((item) => ({
+      value: item?.id,
+      label: `${item?.name}`,
+    })),
+    priority: generateOptionsForNewStore(priorityOptions),
+  };
   return (
     <div className={`show `}>
       <Header />
@@ -626,6 +643,7 @@ const Patient = ({
                   setClear={setClear}
                   clear={clear}
                   setPageNo={setPageNo}
+                  opt={opt}
                 />
               </div>
               <div className="col-2 d-flex align-items-center justify-content-center">

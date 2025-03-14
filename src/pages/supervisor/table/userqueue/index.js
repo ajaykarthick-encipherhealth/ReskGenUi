@@ -41,6 +41,7 @@ const UserQueueTable = ({
   bulletsTitle,
   viewUsers,
   sort,
+  setSort
 }) => {
   const router=useRouter()
   const auditstatusBodyTemplate = (rowData) => {

@@ -46,7 +46,12 @@ const bullets = [
     ],
   },
 ];
-
+export const statusOptions = [
+  { label: "COMPLETED", value: "COMPLETED" },
+  { label: "PENDING", value: "PENDING" },
+  { label: "DECLINED", value: "DECLINED" },
+  { label: "HOLD", value: "HOLD" },
+]
 const Patient = ({
   getFilteApi,
   loading,
@@ -73,12 +78,7 @@ const Patient = ({
       type: "select",
       value: null,
       placeholder: "Status",
-      options: [
-        { label: "COMPLETED", value: "COMPLETED" },
-        { label: "PENDING", value: "PENDING" },
-        { label: "DECLINED", value: "DECLINED" },
-        { label: "HOLD", value: "HOLD" },
-      ],
+      options: statusOptions,
       active:false
     },
     {
@@ -360,6 +360,14 @@ const Patient = ({
   useEffect(() => {
     getAllBatchList();
   }, []);
+  const opt = {
+    batch: batchList?.map((item) => ({
+      value: item?.id,
+      label: `${item?.name}`,
+    })),
+    Status: statusOptions,
+    Priority: priorityOptions,
+  };
   return (
     <div className={`show `}>
       <Header />
@@ -384,6 +392,7 @@ const Patient = ({
                 setClear={setClear}
                 clear={clear}
                 setPageNo={setPageNo}
+                opt={opt}
               />
             </div>
             <div className="col-2 mt-1 mb-1">

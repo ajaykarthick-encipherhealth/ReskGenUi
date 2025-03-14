@@ -49,7 +49,7 @@ const UserList = ({
       type: "search",
       value: null,
       placeholder: "Search",
-      active:true,
+      active: true,
       header: "Search by UserName",
     },
 
@@ -60,7 +60,7 @@ const UserList = ({
       value: null,
       placeholder: " Role",
       options: RoleList,
-      active:false,
+      active: false,
     },
     {
       id: 3,
@@ -69,7 +69,7 @@ const UserList = ({
       value: null,
       placeholder: "Status",
       options: options3,
-      active:false,
+      active: false,
     },
     {
       id: 4,
@@ -81,7 +81,7 @@ const UserList = ({
         value: item?.id,
         label: `${item?.name}`,
       })),
-      active:false,
+      active: false,
     },
     {
       id: 5,
@@ -90,7 +90,7 @@ const UserList = ({
       value: null,
       placeholder: "Created Date Range",
       pickerType: "year",
-      active:false
+      active: false,
     },
   ];
   const [sort, setSort] = useState({
@@ -290,7 +290,14 @@ const UserList = ({
   const onFinish = (values) => {
     handleSubmit(values);
   };
-
+  const opt = {
+    organization: organizationList?.response?.map((item) => ({
+      value: item?.id,
+      label: `${item?.name}`,
+    })),
+    role: RoleList,
+    status: options3,
+  };
   return (
     <div className={`show `}>
       <Header />
@@ -300,6 +307,7 @@ const UserList = ({
             <div className="d-flex tbl-caption  align-items-center">
               <div style={{ width: "90%" }}>
                 <ReusableFilters
+                  opt={opt}
                   showFilter={true}
                   setActiveFilters={setActiveFilters}
                   setSearchText={setSearchText}
@@ -321,7 +329,9 @@ const UserList = ({
                   form={form}
                 />
               </div>
-              <div id="user-btn" name="user-btn"
+              <div
+                id="user-btn"
+                name="user-btn"
                 className="d-flex justify-content-center align-items-center mt-3"
                 style={{ width: "10%" }}
               >
@@ -407,9 +417,13 @@ const UserList = ({
           </button>
         </div>
         <div className="offcanvas-body">
-          <div  id="addUser-form" name="addUser-form" className={`container-fluid ${styles.formAnimation}`}>
+          <div
+            id="addUser-form"
+            name="addUser-form"
+            className={`container-fluid ${styles.formAnimation}`}
+          >
             <Form
-            data-testid="add-user-details"
+              data-testid="add-user-details"
               noValidate
               validated={validated}
               onSubmit={handleSubmitPatientId}
@@ -495,9 +509,13 @@ const UserList = ({
           </button>
         </div>
         <div className="offcanvas-body">
-          <div id="user-form" name="user-form" className={`container-fluid ${styles.formAnimation}`}>
+          <div
+            id="user-form"
+            name="user-form"
+            className={`container-fluid ${styles.formAnimation}`}
+          >
             <Form
-             data-testid="control-hooks"
+              data-testid="control-hooks"
               form={form}
               name="control-hooks"
               onFinish={onFinish}
@@ -538,7 +556,7 @@ const UserList = ({
                       },
                     ]}
                   >
-                   <div id="input-last" name="input-last">
+                    <div id="input-last" name="input-last">
                       <Input
                         data-testid="lastName"
                         name="lastName"
@@ -564,7 +582,7 @@ const UserList = ({
                       },
                     ]}
                   >
-                   <div id="input-email" name="input-email">
+                    <div id="input-email" name="input-email">
                       <Input
                         data-testid="emailId"
                         name="emailId"
@@ -685,7 +703,11 @@ const UserList = ({
                       },
                     ]}
                   >
-                    <div id="input-password" name="input-password" className="confirmPass">
+                    <div
+                      id="input-password"
+                      name="input-password"
+                      className="confirmPass"
+                    >
                       <input type="password" style={{ display: "none" }} />
                       <Input.Password
                         name="password"
@@ -718,7 +740,11 @@ const UserList = ({
                       }),
                     ]}
                   >
-                    <div id="input-confirmpassword" name="input-confirmpassword" className="confirmPass">
+                    <div
+                      id="input-confirmpassword"
+                      name="input-confirmpassword"
+                      className="confirmPass"
+                    >
                       <input type="password" style={{ display: "none" }} />
                       <Input.Password
                         id="confirmPassword"
@@ -759,7 +785,11 @@ const UserList = ({
                   </Form.Item>
                 </Col>
               </Row>
-              <div id="fake-user" name="fake-user" style={{ display: "flex", gap: "8px" }}>
+              <div
+                id="fake-user"
+                name="fake-user"
+                style={{ display: "flex", gap: "8px" }}
+              >
                 <input
                   type="text"
                   name="fakeusernameremembered"

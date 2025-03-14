@@ -127,7 +127,7 @@ const Patient = ({
       value: null,
       placeholder: "Search",
       header: "Patient ID / Name",
-      active:true,
+      active: true,
     },
     {
       id: "00002",
@@ -136,7 +136,7 @@ const Patient = ({
       value: null,
       placeholder: "Status",
       options: statusOptions,
-      active:false,
+      active: false,
     },
     {
       id: "00003",
@@ -148,7 +148,7 @@ const Patient = ({
         value: item?.id,
         label: `${item?.name}`,
       })),
-      active:false,
+      active: false,
     },
     {
       id: "00004",
@@ -157,7 +157,7 @@ const Patient = ({
       value: null,
       placeholder: "Created Date Range",
       pickerType: "year",
-      active:false,
+      active: false,
     },
     {
       id: "00005",
@@ -166,7 +166,7 @@ const Patient = ({
       value: null,
       placeholder: "Created By",
       options: generateOptionsForNewStore(filteredList?.data?.response),
-      active:false,
+      active: false,
     },
     {
       id: "00006",
@@ -175,7 +175,7 @@ const Patient = ({
       value: null,
       placeholder: "Computed  Date",
       pickerType: "year",
-      active:false,
+      active: false,
     },
     {
       id: "00007",
@@ -188,7 +188,7 @@ const Patient = ({
         value: item?.id,
         label: `${item?.name}`,
       })),
-      active:false,
+      active: false,
     },
     {
       id: "00008",
@@ -198,7 +198,7 @@ const Patient = ({
       showSearch: true,
       placeholder: "Flag",
       options: flagOptions,
-      active:false,
+      active: false,
     },
   ];
   const [sort, setSort] = useState({
@@ -609,6 +609,20 @@ const Patient = ({
     getAllOrganizationList();
     getFilters({ field: "createdBy" });
   }, []);
+  const opt = {
+    createdBy: generateOptionsForNewStore(filteredList?.data?.response),
+    auditAllocatedBy: generateOptionsForNewStore(filteredList?.data?.response),
+    organization: organizationList?.response?.map((item) => ({
+      value: item?.id,
+      label: `${item?.name}`,
+    })),
+    Batch: batchList?.response?.map((item) => ({
+      value: item?.id,
+      label: `${item?.name}`,
+    })),
+    status: statusOptions,
+    flag: flagOptions,
+  };
   useEffect(() => {
     if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
       const patientData =
@@ -657,15 +671,18 @@ const Patient = ({
                 btnTitle={"Add Patient"}
                 form={form}
                 setPageNo={setPageNo}
+                opt={opt}
               />
             </div>
-            <div id="addPatient-btn" name="addPatient-btn"
+            <div
+              id="addPatient-btn"
+              name="addPatient-btn"
               className="d-flex justify-content-center align-items-center mt-3"
               style={{ width: "10%" }}
             >
               <Button
-               data-testid="add-patient"
-               name="add-patient"
+                data-testid="add-patient"
+                name="add-patient"
                 onClick={() => {
                   if (form) {
                     form.resetFields();

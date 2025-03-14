@@ -34,6 +34,7 @@ const ReusableFilters = ({
 
   //filters
   showFilter,
+  opt,
 }) => {
   const pickerRefs = useRef({});
 
@@ -117,7 +118,7 @@ const ReusableFilters = ({
                         }
                         showSearch={item?.showSearch || false}
                         className="custom-react-select-audit w-100"
-                        options={item?.options}
+                        options={ opt[item?.title] || []}
                         placeholder={`Select ${item?.placeholder}`}
                         value={selectedOption?.[item?.title] || null}
                         onChange={(value) => {
