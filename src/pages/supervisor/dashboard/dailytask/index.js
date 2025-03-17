@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import CardSkeleton from "../../../../components/skeleton/card";
 import { formatDateForIndex } from "../../../../utils/reusable";
+import { commonFilterItems } from "../../auditing";
 
 const DailyTask = ({
   dailyStatusDatas,
@@ -268,10 +269,15 @@ const DailyTask = ({
           ) : (
             <Row>
               <Col span={1}>
-                <div  id ="prev-arrow" name ="prev-arrow" onClick={showPrevious} className={styles.ImgDIv}>
+                <div
+                  id="prev-arrow"
+                  name="prev-arrow"
+                  onClick={showPrevious}
+                  className={styles.ImgDIv}
+                >
                   <FontAwesomeIcon
-                  id ="previous-arrow"
-                  name="previous-arrow"
+                    id="previous-arrow"
+                    name="previous-arrow"
                     className="font4 mt-5"
                     icon={faChevronLeft}
                   />
@@ -299,22 +305,6 @@ const DailyTask = ({
                                   dayjs(data?.date),
                                 ],
                               },
-                              // selectedDateRanges: {
-                              //   auditedDueDate: {
-                              //     startDate: data?.date
-                              //       ? `${moment(
-                              //           data?.date,
-                              //           "MM-DD-YYYY"
-                              //         ).format("YYYY-MM-DD")}T00:00:00.000Z`
-                              //       : "",
-                              //     endDate: data?.date
-                              //       ? `${moment(
-                              //           data?.date,
-                              //           "MM-DD-YYYY"
-                              //         ).format("YYYY-MM-DD")}T23:59:59.999Z`
-                              //       : "",
-                              //   },
-                              // },
                               selectedDateRanges: {
                                 auditedDueDate: {
                                   startDate: formatDateForIndex({
@@ -327,8 +317,12 @@ const DailyTask = ({
                                   }),
                                 },
                               },
-
-                              activeFilters: ["Audited Due Date", "Search"],
+                              activeFilters: commonFilterItems.map((item) =>
+                                item.title === "auditedDueDate" ||
+                                item?.title === "Search"
+                                  ? { ...item, active: true }
+                                  : item
+                              ),
                             };
                             getRoutedData(params);
                             router?.push("/supervisor/auditing");
@@ -410,12 +404,14 @@ const DailyTask = ({
                                                 : "",
                                             },
                                           },
-
-                                          activeFilters: [
-                                            "Audited Due Date",
-                                            "Search",
-                                            "Audited Status",
-                                          ],
+                                          activeFilters: commonFilterItems.map(
+                                            (item) =>
+                                              item.title === "auditedDueDate" ||
+                                              item?.title === "Search" ||
+                                              item?.title === "Status"
+                                                ? { ...item, active: true }
+                                                : item
+                                          ),
                                         };
                                         getRoutedData(params);
                                         router.push("/supervisor/auditing");
@@ -461,8 +457,18 @@ const DailyTask = ({
                 </div>
               </Col>
               <Col span={1}>
-                <div id="next-arrow" name="next-arrow" onClick={showNext} className={styles.ImgDIv}>
-                  <FontAwesomeIcon id="next-arrowIcon" name="next-arrowIcon" className="lead mt-5" icon={faAngleRight} />
+                <div
+                  id="next-arrow"
+                  name="next-arrow"
+                  onClick={showNext}
+                  className={styles.ImgDIv}
+                >
+                  <FontAwesomeIcon
+                    id="next-arrowIcon"
+                    name="next-arrowIcon"
+                    className="lead mt-5"
+                    icon={faAngleRight}
+                  />
                 </div>
               </Col>
             </Row>

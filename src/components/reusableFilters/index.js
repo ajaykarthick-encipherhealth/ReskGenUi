@@ -75,7 +75,6 @@ const ReusableFilters = ({
     }));
     setPageNo && setPageNo(0);
   };
-
   return (
     <div className="d-flex">
       <div className="row" style={{ width: "98%" }}>

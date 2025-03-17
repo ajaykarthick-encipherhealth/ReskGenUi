@@ -100,7 +100,82 @@ export const flagOptions = [
     id: 9,
   },
 ];
-
+export const commonFilterItems = [
+  {
+    id: "00001",
+    title: "Search",
+    type: "search",
+    value: null,
+    placeholder: "Search",
+    header: "Patient ID / Name",
+    active: true,
+  },
+  {
+    id: "00002",
+    title: "status",
+    type: "select",
+    value: null,
+    placeholder: "Status",
+    options: statusOptions,
+    active: false,
+  },
+  {
+    id: "00003",
+    title: "organization",
+    type: "select",
+    value: null,
+    placeholder: "Organization",
+    options: [],
+    active: false,
+  },
+  {
+    id: "00004",
+    title: "createdDateRange",
+    type: "rangePicker",
+    value: null,
+    placeholder: "Created Date Range",
+    pickerType: "year",
+    active: false,
+  },
+  {
+    id: "00005",
+    title: "createdBy",
+    type: "select",
+    value: null,
+    placeholder: "Created By",
+    options:[],
+    active: false,
+  },
+  {
+    id: "00006",
+    title: "computedDate",
+    type: "rangePicker",
+    value: null,
+    placeholder: "Computed  Date",
+    pickerType: "year",
+    active: false,
+  },
+  {
+    id: "00007",
+    title: "Batch",
+    type: "select",
+    value: null,
+    showSearch: true,
+    placeholder: "Batch",
+    options:[],
+    active: false,
+  },
+  {
+    id: "00008",
+    title: "flag",
+    type: "select",
+    value: null,
+    showSearch: true,
+    placeholder: "Flag",
+    options: [],
+    active: false,
+  },
+];
 const Patient = ({
   getAllOrganizationList,
   organizationList,
@@ -119,88 +194,7 @@ const Patient = ({
   getAllBatchList,
   batchList,
 }) => {
-  const commonFilterItems = [
-    {
-      id: "00001",
-      title: "Search",
-      type: "search",
-      value: null,
-      placeholder: "Search",
-      header: "Patient ID / Name",
-      active: true,
-    },
-    {
-      id: "00002",
-      title: "status",
-      type: "select",
-      value: null,
-      placeholder: "Status",
-      options: statusOptions,
-      active: false,
-    },
-    {
-      id: "00003",
-      title: "organization",
-      type: "select",
-      value: null,
-      placeholder: "Organization",
-      options: organizationList?.response?.map((item) => ({
-        value: item?.id,
-        label: `${item?.name}`,
-      })),
-      active: false,
-    },
-    {
-      id: "00004",
-      title: "createdDateRange",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Created Date Range",
-      pickerType: "year",
-      active: false,
-    },
-    {
-      id: "00005",
-      title: "createdBy",
-      type: "select",
-      value: null,
-      placeholder: "Created By",
-      options: generateOptionsForNewStore(filteredList?.data?.response),
-      active: false,
-    },
-    {
-      id: "00006",
-      title: "computedDate",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Computed  Date",
-      pickerType: "year",
-      active: false,
-    },
-    {
-      id: "00007",
-      title: "Batch",
-      type: "select",
-      value: null,
-      showSearch: true,
-      placeholder: "Batch",
-      options: batchList?.response?.map((item) => ({
-        value: item?.id,
-        label: `${item?.name}`,
-      })),
-      active: false,
-    },
-    {
-      id: "00008",
-      title: "flag",
-      type: "select",
-      value: null,
-      showSearch: true,
-      placeholder: "Flag",
-      options: flagOptions,
-      active: false,
-    },
-  ];
+ 
   const [sort, setSort] = useState({
     computedDate: {
       sortDir: "DESC",
@@ -643,7 +637,6 @@ const Patient = ({
       );
     }
   }, [webSocketData, allPatientList]);
-
   return (
     <div className={`show `}>
       <Header />

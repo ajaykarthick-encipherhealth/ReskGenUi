@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import CardSkeleton from "../../../../components/skeleton/card";
 import { formatDateForIndex } from "../../../../utils/reusable";
+import { commonFilterItems } from "../../patients";
 
 const DailyTask = ({
   getAllDailyTask,
@@ -253,7 +254,12 @@ const DailyTask = ({
           ) : (
             <Row>
               <Col span={1}>
-                <div id="previous-arrow" name="previous-arrow" onClick={showPrevious} className={styles.ImgDIv}>
+                <div
+                  id="previous-arrow"
+                  name="previous-arrow"
+                  onClick={showPrevious}
+                  className={styles.ImgDIv}
+                >
                   <FontAwesomeIcon
                     className="font5 mt-5"
                     icon={faChevronLeft}
@@ -278,22 +284,6 @@ const DailyTask = ({
                               selectedDates: {
                                 dueDate: [dayjs(data?.date), dayjs(data?.date)],
                               },
-                              // selectedDateRanges: {
-                              //   dueDate: {
-                              //     startDate: data?.date
-                              //       ? `${moment(
-                              //           data?.date,
-                              //           "MM-DD-YYYY"
-                              //         ).format("YYYY-MM-DD")}T00:00:00.000Z`
-                              //       : "",
-                              //     endDate: data?.date
-                              //       ? `${moment(
-                              //           data?.date,
-                              //           "MM-DD-YYYY"
-                              //         ).format("YYYY-MM-DD")}T23:59:59.999Z`
-                              //       : "",
-                              //   },
-                              // },
                               selectedDateRanges: {
                                 dueDate: {
                                   startDate: formatDateForIndex({
@@ -306,8 +296,13 @@ const DailyTask = ({
                                   }),
                                 },
                               },
-
-                              activeFilters: ["Due Date", "Search"],
+                              activeFilters: commonFilterItems.map((item) =>
+                                item.title === "dueDate" ||
+                                item?.title === "Search"
+                                  ? { ...item, active: true }
+                                  : item
+                              ),
+                              // activeFilters: ["Due Date", "Search"],
                             };
                             getRoutedData(params);
                             router?.push("/reviewer/patients");
@@ -353,26 +348,6 @@ const DailyTask = ({
                                           selectedOption: {
                                             Status: item?.name.toUpperCase(),
                                           },
-                                          // selectedDateRanges: {
-                                          //   dueDate: {
-                                          //     startDate: data?.date
-                                          //       ? `${moment(
-                                          //           data?.date,
-                                          //           "MM-DD-YYYY"
-                                          //         ).format(
-                                          //           "YYYY-MM-DD"
-                                          //         )}T00:00:00.000Z`
-                                          //       : "",
-                                          //     endDate: data?.date
-                                          //       ? `${moment(
-                                          //           data?.date,
-                                          //           "MM-DD-YYYY"
-                                          //         ).format(
-                                          //           "YYYY-MM-DD"
-                                          //         )}T23:59:59.999Z`
-                                          //       : "",
-                                          //   },
-                                          // },
                                           selectedDateRanges: {
                                             dueDate: {
                                               startDate: formatDateForIndex({
@@ -385,12 +360,19 @@ const DailyTask = ({
                                               }),
                                             },
                                           },
-
-                                          activeFilters: [
-                                            "Due Date",
-                                            "Status",
-                                            "Search",
-                                          ],
+                                          activeFilters: commonFilterItems.map(
+                                            (item) =>
+                                              item.title === "dueDate" ||
+                                              item.title === "Status" ||
+                                              item?.title === "Search"
+                                                ? { ...item, active: true }
+                                                : item
+                                          ),
+                                          // activeFilters: [
+                                          //   "Due Date",
+                                          //   "Status",
+                                          //   "Search",
+                                          // ],
                                         };
                                         getRoutedData(params);
                                         router?.push("/reviewer/patients");
@@ -431,8 +413,18 @@ const DailyTask = ({
               </Col>
 
               <Col span={1}>
-                <div id="next-arrow" name="next-arrow" onClick={showNext} className={styles.ImgDIv}>
-                  <FontAwesomeIcon  id="next-arrowIcon" name="next-arrowIcon" className="font5 mt-5" icon={faAngleRight} />
+                <div
+                  id="next-arrow"
+                  name="next-arrow"
+                  onClick={showNext}
+                  className={styles.ImgDIv}
+                >
+                  <FontAwesomeIcon
+                    id="next-arrowIcon"
+                    name="next-arrowIcon"
+                    className="font5 mt-5"
+                    icon={faAngleRight}
+                  />
                 </div>
               </Col>
             </Row>

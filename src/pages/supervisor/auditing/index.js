@@ -78,6 +78,72 @@ const statusOptions = [
   { label: "AUDIT HOLD", value: "AUDITHOLD" },
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
 ];
+export const commonFilterItems = [
+  {
+    id: "0001",
+    title: "Search",
+    type: "search",
+    value: null,
+    placeholder: "Search",
+    header: "Patient Name / ID",
+    active: true,
+  },
+  {
+    id: "0002",
+    title: "Reviewer",
+    type: "select",
+    value: null,
+    placeholder: "Reviewer",
+    options: null,
+    active: false,
+  },
+  {
+    id: "0003",
+    title: "Status",
+    type: "select",
+    value: null,
+    placeholder: "Audited Status",
+    options: statusOptions,
+    active: false,
+  },
+  {
+    id: "0004",
+    title: "auditedDate",
+    type: "rangePicker",
+    value: null,
+    placeholder: "Audited Date",
+    pickerType: "year",
+    active: false,
+  },
+  {
+    id: "0005",
+    title: "auditedDueDate",
+    type: "rangePicker",
+    value: null,
+    placeholder: "Audited Due Date",
+    pickerType: "year",
+    active: false,
+  },
+  {
+    id: "006",
+    title: "batch",
+    type: "select",
+    value: null,
+    showSearch: true,
+    placeholder: "Batch",
+    options: null,
+    active: false,
+  },
+  {
+    id: "0007",
+    title: "Priority",
+    type: "select",
+    value: null,
+    placeholder: "Priority",
+    options: null,
+    active: false,
+  },
+];
 
 const Patient = ({
   getWorkListFilter,
@@ -95,76 +161,7 @@ const Patient = ({
   patinetListAll,
 }) => {
   const router = useRouter();
-  const commonFilterItems = [
-    {
-      id: "0001",
-      title: "Search",
-      type: "search",
-      value: null,
-      placeholder: "Search",
-      header: "Patient Name / ID",
-      active: true,
-    },
-    {
-      id: "0002",
-      title: "Reviewer",
-      type: "select",
-      value: null,
-      placeholder: "Reviewer",
-      options: generateOptionsListSupervisor(filteredList),
-      active: false,
-    },
-    {
-      id: "0003",
-      title: "Status",
-      type: "select",
-      value: null,
-      placeholder: "Audited Status",
-      options: statusOptions,
-      active: false,
-    },
-    {
-      id: "0004",
-      title: "auditedDate",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Audited Date",
-      pickerType: "year",
-      active: false,
-    },
-    {
-      id: "0005",
-      title: "auditedDueDate",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Audited Due Date",
-      pickerType: "year",
-      active: false,
-    },
-    {
-      id: "006",
-      title: "batch",
-      type: "select",
-      value: null,
-      showSearch: true,
-      placeholder: "Batch",
-      options: batchList?.response?.map((item) => ({
-        value: item?.id,
-        label: `${item?.name}`,
-      })),
-      active: false,
-    },
-    {
-      id: "0007",
-      title: "Priority",
-      type: "select",
-      value: null,
-      placeholder: "Priority",
-      options: priorityOptions,
-      active: false,
-    },
-  ];
-
+ 
   const [sort, setSort] = useState({
     auditAllocatedDate: {
       sortDir: "DESC",

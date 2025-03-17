@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { actions as invalidAction } from "../../../../stores/tenantAdmin/dashboard/invalid";
 import { useRouter } from "next/router";
 import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";
-import { flagOptions } from "../../patients";
+import { commonFilterItems, flagOptions } from "../../patients";
 import dayjs from "dayjs";
 
 const InvalidChart = ({
@@ -112,7 +112,13 @@ const InvalidChart = ({
             selectedOption: {
               flag: selectedFlag ? selectedFlag.value : "",
             },
-            activeFilters: ["Flag", "Search", "Computed  Date"],
+            activeFilters: commonFilterItems.map((item) =>
+              item.title === "computedDate" ||
+              item?.title === "flag" ||
+              item?.title === "Search"
+                ? { ...item, active: true }
+                : item
+            ),
             paginationFirst: 0,
             selectedDates: {
               computedDate: [

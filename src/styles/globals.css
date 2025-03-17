@@ -16555,7 +16555,4 @@ input::-webkit-inner-spin-button {
     font-size: 11px !important;
   }
 }
- .custom-range-picker .ant-picker-input > input {
-  font-size: 13px !important;
-}
 

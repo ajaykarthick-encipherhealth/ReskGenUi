@@ -52,6 +52,63 @@ export const statusOptions = [
   { label: "DECLINED", value: "DECLINED" },
   { label: "HOLD", value: "HOLD" },
 ]
+export const commonFilterItems = [
+  {
+    id: "01",
+    title: "Search",
+    type: "search",
+    value: null,
+    placeholder: "Search",
+    header: "Patient Name / ID",
+    active:true
+  },
+  {
+    id: "02",
+    title: "Status",
+    type: "select",
+    value: null,
+    placeholder: "Status",
+    options: null,
+    active:false
+  },
+  {
+    id: "03",
+    title: "dueDate",
+    type: "rangePicker",
+    value: null,
+    placeholder: "Due Date",
+    pickerType: "year",
+    active:false
+  },
+  {
+    id: "04",
+    title: "completedDate",
+    type: "rangePicker",
+    value: null,
+    placeholder: "Completed  Date",
+    pickerType: "year",
+    active:false
+  },
+  {
+    id: "05",
+    title: "Priority",
+    type: "select",
+    value: null,
+    placeholder: "Priority",
+    options: null,
+    active:false
+  },
+  {
+    id: "06",
+    title: "batch",
+    type: "select",
+    value: null,
+    placeholder: "Batch",
+    showSearch: true,
+    options: null,
+    active:false
+  },
+];
 const Patient = ({
   getFilteApi,
   loading,
@@ -62,66 +119,7 @@ const Patient = ({
   getAllBatchList,
   batchList,
 }) => {
-  const commonFilterItems = [
-    {
-      id: "01",
-      title: "Search",
-      type: "search",
-      value: null,
-      placeholder: "Search",
-      header: "Patient Name / ID",
-      active:true
-    },
-    {
-      id: "02",
-      title: "Status",
-      type: "select",
-      value: null,
-      placeholder: "Status",
-      options: statusOptions,
-      active:false
-    },
-    {
-      id: "03",
-      title: "dueDate",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Due Date",
-      pickerType: "year",
-      active:false
-    },
-    {
-      id: "04",
-      title: "completedDate",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Completed  Date",
-      pickerType: "year",
-      active:false
-    },
-    {
-      id: "05",
-      title: "Priority",
-      type: "select",
-      value: null,
-      placeholder: "Priority",
-      options: priorityOptions,
-      active:false
-    },
-    {
-      id: "06",
-      title: "batch",
-      type: "select",
-      value: null,
-      placeholder: "Batch",
-      showSearch: true,
-      options: batchList?.map((item) => ({
-        value: item?.id,
-        label: `${item?.name}`,
-      })),
-      active:false
-    },
-  ];
+
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [sort, setSort] = useState({
