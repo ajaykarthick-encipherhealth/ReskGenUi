@@ -114,7 +114,6 @@ const Index = ({
       itemStyle: { color: "#AF47D2" },
     },
   ];
-  console.log(dateRange,"dateRange")
   const reviewerData = [
     {
       value: reviewerStatusData?.response?.processedStatus?.COMPLETED,

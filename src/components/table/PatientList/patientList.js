@@ -170,7 +170,6 @@ function PatientTable({
       ))
     );
   };
-console.log(sort,"sort")
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>

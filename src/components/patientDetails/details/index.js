@@ -554,7 +554,6 @@ const Details = ({
     getCurrentDiseaseType(true);
     patientDetailsLoad(true);
   };
-  console.log(routedData,"routedDatadata")
   const splitUserName = (name) => {
     if (name) {
       return name[0];

@@ -535,14 +535,12 @@ const UserList = ({
                       },
                     ]}
                   >
-                    <div id="input-first" name="input-first">
                       <Input
                         data-testid="firstName"
                         name="firstName"
                         placeholder="Enter first name"
                         autoComplete="off"
                       />
-                    </div>
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -556,14 +554,12 @@ const UserList = ({
                       },
                     ]}
                   >
-                    <div id="input-last" name="input-last">
                       <Input
                         data-testid="lastName"
                         name="lastName"
                         placeholder="Enter last name"
                         autoComplete="off"
                       />
-                    </div>
                   </Form.Item>
                 </Col>
               </Row>
@@ -582,14 +578,12 @@ const UserList = ({
                       },
                     ]}
                   >
-                    <div id="input-email" name="input-email">
                       <Input
                         data-testid="emailId"
                         name="emailId"
                         placeholder="Enter email"
                         autoComplete="off"
                       />
-                    </div>
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -613,14 +607,12 @@ const UserList = ({
                       },
                     ]}
                   >
-                    <div id="input-username" name="input-username">
                       <Input
                         data-testid="userName"
                         name="userName"
                         placeholder="Enter user name"
                         autoComplete="off"
                       />
-                    </div>
                   </Form.Item>
                 </Col>
               </Row>
@@ -771,7 +763,6 @@ const UserList = ({
                       },
                     ]}
                   >
-                    <div id="input-number" name="input-number">
                       <Input
                         id="mobileNumber"
                         name="mobileNumber"
@@ -781,7 +772,6 @@ const UserList = ({
                         value={getDisplayValue(mobileNumber)}
                         onChange={handleChange}
                       />
-                    </div>
                   </Form.Item>
                 </Col>
               </Row>

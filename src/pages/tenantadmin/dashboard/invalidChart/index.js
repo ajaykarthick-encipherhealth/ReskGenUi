@@ -66,7 +66,6 @@ const InvalidChart = ({
       },
     ],
   };
-  console.log(customDate, "customDate");
   return (
     <>
       <div className="d-flex justify-content-between">
