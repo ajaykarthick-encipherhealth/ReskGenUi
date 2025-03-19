@@ -10,7 +10,7 @@ import {
 import moment from "moment";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/tenantAdmin/patientAllocation";
-import { getResponePopup } from "../../../../utils/reusable";
+import { formatDateForIndex, getResponePopup } from "../../../../utils/reusable";
 
 const L2AllocateModal = ({
   open,
@@ -51,7 +51,8 @@ const L2AllocateModal = ({
     const response = await getAllocateUsers({
       data: {
         userId: selectedUser?.userName,
-        dueDate: `${allocateDate + "T23:00:00.999Z"}`,
+       
+        dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
         patientIds: selectedRowsId.map((item) => item.id),
         priority: priority,
       },

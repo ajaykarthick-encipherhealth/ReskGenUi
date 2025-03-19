@@ -1,6 +1,8 @@
 import { notification } from "antd";
+import momentTimezone from "moment-timezone";
 import moment from "moment";
 import dayjs from "dayjs";
+
 export const getResponePopup = (res) => {
   switch (res?.data?.status ? res?.data?.status : res?.status) {
     case "USER_DEFINED_ERROR":
@@ -240,22 +242,52 @@ export const getSpacesWithUnderscoresAuditing = (value) => {
   }
 };
 
-export const formatDateTime = ({date, formatType = "date"}) => {
+// export const formatDateTime = ({ date, formatType = "date" }) => {
+//   if (!date) return "";
+
+//   const formats = {
+//     datetime: "MM-DD-YYYY, h:mm a",
+//     date: "MM-DD-YYYY",
+//   };
+
+//   return moment(date).format(formats[formatType] || formats.datetime);
+// };
+
+// export const formatDateForIndex = ({ date, index }) => {
+//   if (!date) return "";
+//   const formattedDate = moment(date).format("YYYY-MM-DD");
+//   return index === 1
+//     ? `${formattedDate}T23:59:59.999Z`
+//     : `${formattedDate}T00:00:00.000Z`;
+// };
+
+export const formatDateTime = ({ date, formatType = "date" }) => {
   if (!date) return "";
-
-  const formats = {
-    datetime: "MM-DD-YYYY, h:mm a",
-    date: "MM-DD-YYYY",
-  };
-
-  return moment(date).format(formats[formatType] || formats.datetime);
+  const dateType = formatType == "date" ? "MM-DD-YYYY" : "MM-DD-YYYY, h:mm a";
+  if (!date) return date;
+  const time = momentTimezone(date);
+  const offset = momentTimezone.tz
+    .zone(momentTimezone.tz.guess())
+    .utcOffset(time);
+  let adjustedTime = time.clone().subtract(offset, "minutes").toISOString();
+  return momentTimezone.utc(adjustedTime).format(dateType);
 };
 
-export const formatDateForIndex = ({date, index}) => {
+export const formatDateForIndex = ({ date, index }) => {
   if (!date) return "";
+
   const formattedDate = moment(date).format("YYYY-MM-DD");
-  return index === 1
-    ? `${formattedDate}T23:59:59.999Z`
-    : `${formattedDate}T00:00:00.000Z`;
-};
+  const dateFormat =
+    index === 1
+      ? `${formattedDate}T23:59:59.999Z`
+      : `${formattedDate}T00:00:00.000Z`;
 
+  if (!dateFormat) return dateFormat;
+  const time = momentTimezone(dateFormat);
+  const offset = momentTimezone.tz
+    .zone(momentTimezone.tz.guess())
+    .utcOffset(time);
+  const adjustedTime = time.clone().add(offset, "minutes");
+
+  return adjustedTime.toISOString();
+};
