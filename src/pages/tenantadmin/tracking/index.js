@@ -616,7 +616,7 @@ const Patient = ({
       value: item?.id,
       label: `${item?.name}`,
     })),
-    priority: generateOptionsForNewStore(priorityOptions),
+    priority: priorityOptions,
   };
   return (
     <div className={`show `}>

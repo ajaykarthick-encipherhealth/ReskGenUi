@@ -24,6 +24,7 @@ const Index = ({
   customDate,
   getRafScoreLoader,
   selectDos,
+  dateRange,
 }) => {
   const [minimize, setMinimize] = useState(false);
   // const suggestedHccDiseaseCountMap =
@@ -141,6 +142,7 @@ const Index = ({
                   customDate={customDate}
                   selectDos={selectDos}
                   className={"carecapRAF2"}
+                  dateRange={dateRange}
                 />
               </div>
             )}

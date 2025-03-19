@@ -24,6 +24,7 @@ const Index = ({
   rafScorechartLoader,
   customDate,
   selectDos,
+  dateRange,
 }) => {
   const [minimize, setMinimize] = useState(false)
   const TotalHccRevenue = getAllRaf?.totalHccRafScore;
@@ -125,6 +126,7 @@ const Index = ({
                 <RafGraph
                   rafColor={"#8E68F7"}
                   isHcc={true}
+                  dateRange={dateRange}
                   selectedValue={selectedValue}
                   customDate={customDate}
                   selectDos={selectDos}

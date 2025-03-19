@@ -34,6 +34,7 @@ const index = ({
   rafScorechartLoader,
   customDate,
   selectDos,
+  
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap;
   const potentialDiseaseCountValues =
@@ -51,18 +52,6 @@ const index = ({
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap;
   const resultArrayCaregaps = formatValues(suggestedHccDiseaseCountMap, dates);
-  // const hccDiseaseCountValue = getAllHccCodes?.hccDiseaseCountMap
-  //   ? Object.values(getAllHccCodes.hccDiseaseCountMap)
-  //   : [];
-
-  // const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
-  //   ? Object.values(getAllRaf.premiumByDateForHcc)
-  //   : [];
-
-  // const rafScoreByDateForSuggested =
-  //   getAllRafScoreData?.rafScoreByDateForSuggested
-  //     ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
-  //     : [];
 
   const totalCodes = resultArrayHCC.map(
     (num, index) =>
@@ -76,12 +65,12 @@ const index = ({
       selectedOrganization,
       selectDos
     );
-    getAllRafScore(
-      dateRange.startDate,
-      dateRange.endDate,
-      selectedOrganization,
-      selectDos
-    );
+    // getAllRafScore(
+    //   dateRange.startDate,
+    //   dateRange.endDate,
+    //   selectedOrganization,
+    //   selectDos
+    // );
   }, [dateRange, selectedOrganization, selectDos]);
 
   useEffect(() => {

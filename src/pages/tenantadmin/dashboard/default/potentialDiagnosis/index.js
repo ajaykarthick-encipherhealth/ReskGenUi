@@ -24,21 +24,9 @@ const Index = ({
   rafScorechartLoader,
   customDate,
   selectDos,
+  dateRange,
 }) => {
   const [minimize, setMinimize] = useState(false);
-  // const hccDiseaseCountValues =
-  //   getAllPotentialCodes?.potentialHccDiseaseCountMap
-  //     ? Object.values(getAllPotentialCodes.potentialHccDiseaseCountMap)
-  //     : [];
-
-  // const premiumByDateForHcc = getAllRaf?.premiumByDateForPotential
-  //   ? Object.values(getAllRaf?.premiumByDateForPotential)
-  //   : [];
-
-  // const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForPotential
-  //   ? Object.values(getAllRafScoreData.rafScoreByDateForPotential)
-  //   : [];
-
   const TotalHccRevenue = getAllRaf?.totalPotentialRafScore;
 
   return (
@@ -143,6 +131,7 @@ const Index = ({
                   customDate={customDate}
                   selectDos={selectDos}
                   className={"carecapRAF2"}
+                  dateRange={dateRange}
                 />
               </div>
             )}

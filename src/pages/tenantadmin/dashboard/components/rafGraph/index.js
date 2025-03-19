@@ -28,31 +28,16 @@ const RafGraph = ({
   selectDos,
   isPotential,
   className,
+  dateRange,
 }) => {
-  const [dateRange, setDateRange] = useState({
-    startDate:
-      moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z",
-    endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
-  });
-  
-  // const [dateRange, setDateRange] = useState({
-  //   startDate: formatDateForIndex(
-  //     moment().subtract(29, "days").toISOString(),
-  //     0
-  //   ),
-  //   endDate: formatDateForIndex(moment().toISOString(), 1),
-  // });
-
-
   useEffect(() => {
     getAllRafScoreAPI(
-      dateRange.startDate,
-      dateRange.endDate,
+      dateRange?.startDate,
+      dateRange?.endDate,
       selectedOrganization,
       selectDos
     );
   }, [dateRange, selectedOrganization, selectDos]);
-
   const dates =
     selectedValue === "custom"
       ? customDate
