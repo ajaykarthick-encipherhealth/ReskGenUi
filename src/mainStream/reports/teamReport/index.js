@@ -328,86 +328,71 @@ const TeamReport = ({
       <div>
         <div className="content-body">
           <div className={`container-fluid py-4 px-2`}>
-            {reportListAll?.response?.response?.data?.length > 0 && (
-              <div
-                style={{
-                  display: "flex",
-                  marginLeft: "10px",
-                  paddingBottom: "10px",
-                }}
-              >
-                <div className="d-flex me-3">
-                  <div>
-                    <input
-                      id="check-all"
-                      name="check-all"
-                      type="checkbox"
-                      onChange={() => {
-                        const updatedSelectAll = !selectAll;
-                        setSelectAll(updatedSelectAll);
+            <div className="d-flex mx-2 mb-2"
+            >
+              <div className="d-flex me-3">           
+                  <input
+                    id="check-all"
+                    name="check-all"
+                    type="checkbox"
+                    onChange={() => {
+                      const updatedSelectAll = !selectAll;
+                      setSelectAll(updatedSelectAll);
 
-                        if (!updatedSelectAll) {
-                          setSelectedRows([]);
-                        } else {
-                          handleHeaderCheckboxChange(
-                            activeTab,
-                            updatedSelectAll,
-                            setSelectAll,
-                            selectAllFlags
-                          );
-                        }
-                      }}
-                      checked={
-                        selectAll ||
+                      if (!updatedSelectAll) {
+                        setSelectedRows([]);
+                      } else {
+                        handleHeaderCheckboxChange(
+                          activeTab,
+                          updatedSelectAll,
+                          setSelectAll,
+                          selectAllFlags
+                        );
+                      }
+                    }}
+                    checked={
+                      (selectAll ||
                         reportListAll?.response?.response?.totalElements ===
-                          selectedRows?.length
-                      }
-                      className={
-                        styles.checkAlign +
-                        (selectAll ||
+                          selectedRows?.length) &&
+                      reportListAll?.response?.response?.totalElements !== 0
+                    }
+                    disabled={
+                      reportListAll?.response?.response?.totalElements === 0
+                    }
+                    className={
+                      styles.checkAlign +
+                      ((selectAll ||
                         reportListAll?.response?.response?.totalElements ===
-                          selectedRows?.length
-                          ? " " + TableStyle.customChecked
-                          : "")
-                      }
-                      // checked={
-                      //   selectedRows.length > 0 &&
-                      //   selectedRows.length ===
-                      //     reportListAll?.response?.data?.length
-                      // }
-                    />
-                  </div>
-                  <span className={`pl-0 text-start ${styles.pName}`}>All</span>
-                </div>
-
-                <div className="col-4 d-flex">
-                  <div>
-                    <input
-                      id="check-allFlags"
-                      name="check-allFlags"
-                      type="checkbox"
-                      onChange={handleHeaderCheckbox}
-                      className={
-                        styles.checkAlign +
-                        (selectAllFlags ? " " + TableStyle.customChecked : "")
-                      }
-                      checked={selectAllFlags}
-                    />
-                  </div>
-                  <span className={`pl-4 text-start ${styles.pName}`}>
-                    All Flags
-                  </span>
-                </div>
-
-                {/* </>
-                // )} */}
+                          selectedRows?.length) &&
+                      reportListAll?.response?.response?.totalElements !== 0
+                        ? " " + TableStyle.customChecked
+                        : "")
+                    }
+                  />
+                <span className={`pl-0 text-start ${styles.pName}`}>All</span>
               </div>
-            )}
-            {/* {loader ? (
-              <div className="mt-4">
-                <TableSkeleton />
+
+              <div className="col-4 d-flex">
+                  <input
+                    id="check-allFlags"
+                    name="check-allFlags"
+                    type="checkbox"
+                    onChange={handleHeaderCheckbox}
+                    className={
+                      styles.checkAlign +
+                      (selectAllFlags ? " " + TableStyle.customChecked : "")
+                    }
+                    checked={selectAllFlags}
+                    disabled={
+                      reportListAll?.response?.response?.totalElements === 0
+                    }
+                  />
+                <span className={`pl-4 text-start ${styles.pName}`}>
+                  All Flags
+                </span>
               </div>
-            ) : ( */}
+
+            </div>
             <div className="row">
               <div>
                 <div className=" col-12 d-flex" style={{ height: "100%" }}>
@@ -485,7 +470,10 @@ const TeamReport = ({
                       </div>
                     ) : (
                       <div className={styles.cardContainer}>
-                        <div className={styles.card1} style={{height:"847px"}}>
+                        <div
+                          className={styles.card1}
+                          style={{ height: "847px" }}
+                        >
                           <div className={styles.summaryText}>Summary</div>
                           <div className="col-12 d-flex mt-4">
                             {subCardData.map((card, index) => (
