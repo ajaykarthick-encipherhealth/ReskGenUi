@@ -278,57 +278,56 @@ function AllocatedL2AdminList({
           <th style={{ textAlign: "center" }}>STATUS</th>
           {/* <th>Upload</th> */}
           <th>
-            {patinetListAll && patinetListAll.length > 0 && (
-              <div
-                style={{
-                  width: "40px",
-                  display: "flex",
-                  justifyContent: "space-around",
-                }}
-              >
-                {loading ? (
-                  <Spin
-                    indicator={<LoadingOutlined />}
-                    style={{
-                      fontSize: 18,
-                      color: "#ffff",
-                      marginTop: "-15px",
-                    }}
-                  />
-                ) : (
-                  <input
-                    id="selectAll"
-                    name="selectAll"
-                    type="checkbox"
-                    onClick={() => {
-                      setSupervisorPageSize(totalElements);
-                      // setBatchCount(totalElements)
-                      setSelectAllChecked(!selectAllChecked);
-                    }}
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      flexhrink: "0",
-                      borderRadius: "4px",
-                      cursor: "pointer",
-                    }}
-                    checked={
-                      selectAllChecked &&
+            <div
+              style={{
+                width: "40px",
+                display: "flex",
+                justifyContent: "space-around",
+              }}
+            >
+              {loading ? (
+                <Spin
+                  indicator={<LoadingOutlined />}
+                  style={{
+                    fontSize: 18,
+                    color: "#ffff",
+                    marginTop: "-15px",
+                  }}
+                />
+              ) : (
+                <input
+                  id="selectAll"
+                  name="selectAll"
+                  type="checkbox"
+                  onClick={() => {
+                    setSupervisorPageSize(totalElements);
+                    // setBatchCount(totalElements)
+                    setSelectAllChecked(!selectAllChecked);
+                  }}
+                  checked={
+                    selectAllChecked &&
+                    selectedRowsId.length == selectedChart.length &&
+                    patinetListAll?.length === selectedRowsId.length
+                  }
+                  // checked={
+                  //   selectAllChecked &&
+                  //   selectedRowsId.length === selectedChart.length &&
+                  //   patinetListAll?.length === selectedRowsId.length &&
+                  //   selectedRowsId.length !== 0
+                  // }
+                  disabled={totalElements === 0}
+                  className={`${
+                    (selectAllChecked &&
                       selectedRowsId.length == selectedChart.length &&
-                      patinetListAll?.length === selectedRowsId.length
-                    }
-                    className={
-                      (selectAllChecked &&
-                        selectedRowsId.length == selectedChart.length &&
-                        patinetListAll?.length === selectedRowsId.length) ||
-                      totalElements === selectedRowsId.length
-                        ? TableStyle.customChecked2
-                        : ""
-                    }
-                  />
-                )}
-              </div>
-            )}
+                      patinetListAll?.length === selectedRowsId.length) ||
+                    (totalElements === selectedRowsId.length &&
+                      totalElements !== 0)
+                      ? TableStyle.customChecked2
+                      : ""
+                  }  ${TableStyle.checkInput}`}
+                />
+              )}
+            </div>
           </th>
         </tr>
       </thead>

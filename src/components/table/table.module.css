@@ -73,11 +73,11 @@
   overflow: hidden;
   /* padding: 10px; */
 }
-@media (min-width: 1024px) and (max-width: 1470px){
-  .classContaineer{
-    overflow: scroll !important;;
+@media (min-width: 1024px) and (max-width: 1470px) {
+  .classContaineer {
+    overflow: scroll !important;
   }
-  }
+}
 .firstTdBorder {
   border-top: 0.2px solid #e1e1e1;
   border-left: 0.2px solid #e1e1e1;
@@ -115,7 +115,7 @@
   fill: #cf940a;
 }
 .urgentFlag path {
-  fill: #D40B0B;
+  fill: #d40b0b;
 }
 .lowFlag path {
   fill: #87909e;
@@ -340,4 +340,12 @@
   display: flex;
   justify-content: end;
   align-items: end;
+}
+
+.checkInput {
+  width: 20px;
+  height: 20px;
+  flexhrink: 0;
+  borderradius: 4px;
+  cursor: pointer;
 }

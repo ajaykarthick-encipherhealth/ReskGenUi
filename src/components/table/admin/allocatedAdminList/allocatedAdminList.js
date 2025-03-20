@@ -155,6 +155,7 @@ function AllocatedAdminList({
               </span>
             </th>
             <th style={{ paddingLeft: "0px" }}>PRIORITY</th>
+
             <th>
               <div
                 style={{
@@ -180,23 +181,24 @@ function AllocatedAdminList({
                     onClick={() => {
                       setSelectAllChecked(!selectAllChecked);
                     }}
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      flexhrink: "0",
-                      borderRadius: "4px",
-                      cursor: "pointer",
-                    }}
+                  
+                    // checked={
+                    //   selectedRowsId?.length ===
+                    //   reviewerResponse?.totalElements
+                    // }
                     checked={
-                      selectedRowsId?.length === reviewerResponse?.totalElements
+                      selectedRowsId?.length ===
+                        reviewerResponse?.totalElements &&
+                      reviewerResponse?.totalElements !== 0
                     }
-                    className={
-                      // selectAllChecked &&
-                      // selectedRowsId?.length == selectedChart?.length
-                      selectedRowsId?.length === reviewerResponse?.totalElements
+                    disabled={reviewerResponse?.totalElements === 0}
+                    className={`${
+                      selectedRowsId?.length ===
+                        reviewerResponse?.totalElements &&
+                      reviewerResponse?.totalElements !== 0
                         ? TableStyle.customChecked2
                         : ""
-                    }
+                    } ${TableStyle.checkInput} `}
                   />
                 )}
               </div>
