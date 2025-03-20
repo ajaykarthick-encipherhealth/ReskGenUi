@@ -75,7 +75,7 @@ export async function getWorkQueue({
   };
   const userId = getStorage("user")
   const res = await requestPortal(
-    `dbservice/auditor/patient/workqueue/filter?&page=${
+    `dbservice/auditor/patient/filter?&page=${
       pageNo ? pageNo : 0
     }&userId=${
       userId
@@ -117,7 +117,7 @@ export async function getWorkQueue({
         : ""
     }&searchString=${searchText ? searchText : ""}&sortField=${
       sort?.sortField ? sort?.sortField : ""
-    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&patientAllocated=${
+    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&auditAllocatedBy=${
       selectedOption?.auditAlloactedBy ? selectedOption?.auditAlloactedBy : ""
     }&priority=${selectedOption?.Priority ? selectedOption?.Priority : ""}`,
     options

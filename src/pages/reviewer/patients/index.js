@@ -91,6 +91,15 @@ export const commonFilterItems = [
   },
   {
     id: "05",
+    title: "allocatedDate",
+    type: "rangePicker",
+    value: null,
+    placeholder: "Allocated  Date",
+    pickerType: "year",
+    active:false
+  },
+  {
+    id: "06",
     title: "Priority",
     type: "select",
     value: null,
@@ -99,7 +108,7 @@ export const commonFilterItems = [
     active:false
   },
   {
-    id: "06",
+    id: "07",
     title: "batch",
     type: "select",
     value: null,

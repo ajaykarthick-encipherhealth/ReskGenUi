@@ -45,6 +45,10 @@ export async function getAllReviewerPatients(
       selectedDateRanges?.dueDate?.endDate ? selectedDateRanges?.dueDate?.endDate : ""
     }&processedStart=${selectedDateRanges?.completedDate?.startDate ? selectedDateRanges?.completedDate?.startDate : ""}&processedEnd=${
       selectedDateRanges?.completedDate?.endDate ? selectedDateRanges?.completedDate?.endDate : "" 
+    }&allocatedOnStart=${
+      selectedDateRanges?.allocatedDate?.startDate || ""
+    }&allocatedOnEnd=${
+      selectedDateRanges?.allocatedDate?.endDate || ""
     }&batchId=${selectedOption?.batch || ""}&searchString=${
       searchText ? searchText : ""
     }&sortfield=${sort?.sortField ? sort?.sortField : ""}&sortdirection=${

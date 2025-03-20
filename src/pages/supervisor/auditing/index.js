@@ -375,8 +375,6 @@ const Patient = ({
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
       auditQueue();
-      getFilters({ field: "patientAllocated" });
-      getAllBatchList();
     }
   }, [
     selectedOption,
@@ -433,6 +431,11 @@ const Patient = ({
       label: `${item?.name}`,
     })),
   };
+
+  useEffect(()=>{
+    getFilters({ field: "patientAllocated" });
+    getAllBatchList();
+  },[])
   return (
     <div className={`show `}>
       <Header />
