@@ -204,6 +204,8 @@ const Notes = ({
 
   return (
     <Offcanvas
+      id="offcanvasRightNotes"
+      name="offcanvasRightNotes"
       onHide={setOpen}
       show={open}
       placement="end"
@@ -212,11 +214,21 @@ const Notes = ({
         width: "370px",
       }}
     >
-      <div className="offcanvas-header">
-        <h5 className="modal-title" id="#gridSystemModal">
+      <div
+        className="offcanvas-header"
+        id="gridSystemModal"
+        name="gridSystemModal"
+      >
+        <h5
+          className="modal-title"
+          id="gridSystemModalNotes"
+          name="gridSystemModalNotes"
+        >
           Notes
         </h5>
         <button
+          id="closeNotes"
+          name="closeNotes"
           type="button"
           className="btn-close"
           onClick={() => setOpen(false)}
@@ -224,16 +236,34 @@ const Notes = ({
           <i className="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <div className="offcanvas-body">
-        <div className="container-fluid">
-          <Form noValidate validated={validated} onSubmit={handleSubmitNotes}>
+      <div
+        className="offcanvas-body"
+        id="gridSystemModalBodyNotes"
+        name="gridSystemModalBodyNotes"
+      >
+        <div
+          className="container-fluid"
+          id="gridSystemModalContainerNotes"
+          name="gridSystemModalContainerNotes"
+        >
+          <Form
+            noValidate
+            validated={validated}
+            onSubmit={handleSubmitNotes}
+            id="notesForm"
+            name="notesForm"
+          >
             <div className="row">
-              <div className={`col-xl-12 ${visitStyles.textareaContainer}`}>
+              <div
+                className={`col-xl-12 ${visitStyles.textareaContainer}`}
+                id="notesContainer"
+                name="notesContainer"
+              >
                 <textarea
                   className={visitStyles.commentsFormControl}
                   rows="5"
                   required
-                  id="comments"
+                  id="add-notes"
                   name="comments"
                   placeholder="Add Notes"
                   onChange={handleChange}
@@ -242,6 +272,8 @@ const Notes = ({
                   value={inputValue.comments}
                 ></textarea>
                 <Button
+                  id="submitNotes"
+                  name="submitNotes"
                   type="submit"
                   disabled={commentsTrigger}
                   className={visitStyles.commentSendIcon}
@@ -253,14 +285,20 @@ const Notes = ({
           </Form>
           {notesList?.map((data, index) => (
             <div
+              id={`notesCard-${index}`}
+              name={`notesCard-${index}`}
               className={`${visitStyles.comments_card} position-relative`}
               key={index}
             >
               <div
+                id={`deleteNotes-${index}`}
+                name={`deleteNotes-${index}`}
                 className="position-absolute top-0 end-0 mt-2 me-2 p-9"
                 style={{ cursor: "pointer" }}
               >
                 <FontAwesomeIcon
+                  id="deleteNotesIcon"
+                  name="deleteNotesIcon"
                   icon={faXmarkCircle}
                   onClick={() => handleDelete(data.noteId)}
                   style={{ color: "#be3144" }}
@@ -268,14 +306,23 @@ const Notes = ({
               </div>
 
               <div
+                id={`commentNameHead-${index}`}
+                name={`commentNameHead-${index}`}
                 className={`${visitStyles.commentNameHead}`}
                 style={{ paddingTop: "20px" }}
               >
                 <span className={` send_details ${visitStyles.commentsName}`}>
                   {data?.note}
                 </span>
-                <Tooltip placement="bottom" title={data?.createdBy}>
+                <Tooltip
+                  placement="bottom"
+                  title={data?.createdBy}
+                  id="notesCreatedBy"
+                  name="notesCreatedBy"
+                >
                   <Popover
+                    id={`notesCreatedByPopover-${index}`}
+                    name={`notesCreatedByPopover-${index}`}
                     placement="bottom"
                     content={userDetails}
                     onOpenChange={() => renderUserDetails(createdBy)}
@@ -297,9 +344,16 @@ const Notes = ({
                   </Popover>
                 </Tooltip>
               </div>
-              <span className={visitStyles.commentsTime}>
+              <span
+                className={visitStyles.commentsTime}
+                id={`notesTime-${index}`}
+                name={`notesTime-${index}`}
+              >
                 {data?.createdDate
-                  ? formatDateTime({date: data?.createdDate, formatType: "datetime"})
+                  ? formatDateTime({
+                      date: data?.createdDate,
+                      formatType: "datetime",
+                    })
                   : "---"}
               </span>
             </div>

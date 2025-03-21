@@ -260,28 +260,39 @@ const RafScore = ({ patientDetailsResult, patientDetailsLoad }) => {
                         </div>
                       ) : (
                         rafScoreDetails?.map((item, i) => (
-                          <div className={style.detailsHead}>
+                          <div
+                            id={`raf-container-${i}`}
+                            name={`raf-container-${i}`}
+                            className={style.detailsHead}
+                          >
                             <div
+                              id={`raf-content-${i}`}
+                              name={`raf-content-${i}`}
                               className={
                                 rafScoreDetails?.length != i + 1
                                   ? `row ${style.rafchildBorder}`
                                   : `row`
                               }
                             >
-                              <div className="col-4"> 
-                              {item.dx_code && item.dx_code.length > 6 ? (
-                                      <Tooltip
-                                        placement="top"
-                                        title={item.dx_code}
-                                      >
-                                        {truncateString(item.dx_code, 6)}
-                                      </Tooltip>
-                                    ) : (
-                                      <> {item.dx_code}</>
-                                    )}
-                                    {/* {item.dx_code} */}
-                                    </div>
-                              <div className={`col-7 ${style.rafDescription}`}>
+                              <div
+                                id={`dx-code-${i}`}
+                                name={`dx-code-${i}`}
+                                className="col-4"
+                              >
+                                {item.dx_code && item.dx_code.length > 6 ? (
+                                  <Tooltip placement="top" title={item.dx_code}>
+                                    {truncateString(item.dx_code, 6)}
+                                  </Tooltip>
+                                ) : (
+                                  <> {item.dx_code}</>
+                                )}
+                                {/* {item.dx_code} */}
+                              </div>
+                              <div
+                                id={`dx-desc-${i}`}
+                                name={`dx-desc-${i}`}
+                                className={`col-7 ${style.rafDescription}`}
+                              >
                                 <Popover title={item.dx_desc}>
                                   {item.dx_desc}{" "}
                                 </Popover>
@@ -350,9 +361,12 @@ const RafScore = ({ patientDetailsResult, patientDetailsLoad }) => {
                                     {item.v24_hcc && item.v24_hcc.length > 6 ? (
                                       <Tooltip
                                         placement="top"
-                                        title={item.v24_hcc?item.v24_hcc:""}
+                                        title={item.v24_hcc ? item.v24_hcc : ""}
                                       >
-                                        {truncateString(item.v24_hcc?item.v24_hcc:"", 6)}
+                                        {truncateString(
+                                          item.v24_hcc ? item.v24_hcc : "",
+                                          6
+                                        )}
                                       </Tooltip>
                                     ) : (
                                       <> {item.v28_hcc ? item.v24_hcc : ""}</>
@@ -435,9 +449,12 @@ const RafScore = ({ patientDetailsResult, patientDetailsLoad }) => {
                                     {item.v28_hcc && item.v28_hcc.length > 6 ? (
                                       <Tooltip
                                         placement="top"
-                                        title={item.v28_hcc?item.v28_hcc:""}
+                                        title={item.v28_hcc ? item.v28_hcc : ""}
                                       >
-                                        {truncateString(item.v28_hcc?item.v28_hcc:'', 6)}
+                                        {truncateString(
+                                          item.v28_hcc ? item.v28_hcc : "",
+                                          6
+                                        )}
                                       </Tooltip>
                                     ) : (
                                       <> {item.v28_hcc ? item.v28_hcc : ""}</>

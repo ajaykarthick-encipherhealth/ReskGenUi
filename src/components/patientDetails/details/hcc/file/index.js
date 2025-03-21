@@ -253,20 +253,24 @@ const File = ({
         }
       >
         <div
+        id="hcc-container"
+        name="hcc-container"
           className="my-post-content row pt-3 px-2"
           style={{ height: "100%" }}
         >
           {!isFileFormShow ? (
-            <div className="col-3">
+            <div className="col-3" id="hcc-card" name="hcc-card">
               <Droppable droppableId={"HCC"} key={"HCC"}>
                 {(provided) => {
                   return (
                     <div
+                    id="hcc-content"
+                    name="hcc-content"
                       className="timeline"
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                     >
-                      <div
+                      <div id="hcc-title" name="hcc-title"
                         className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
                       >
                         <span className={`${visitStyles.hcc_title_name}`}>
@@ -284,8 +288,8 @@ const File = ({
                           </span>
                         </div>
                       </div>
-                      <div className={visitStyles.HccContainer}>
-                        <div className={visitStyles.hccStickey_head}>
+                      <div className={visitStyles.HccContainer} id="hcc-content-container" name="hcc-content-container">
+                        <div className={visitStyles.hccStickey_head} id="hcc-sticky" name="hcc-sticky">
                           {isSpinnerLoading ? (
                             <CardSkeleton count={6} />
                           ) : (
@@ -322,6 +326,7 @@ const File = ({
                               year={year}
                               actions={actions}
                               selectDosValue={selectDosValue}
+                              id="hcc-card"
                             />
                           )}
                         </div>
@@ -499,6 +504,7 @@ const File = ({
                                 year={year}
                                 actions={actions}
                                 selectDosValue={selectDosValue}
+                                id="care-gap-card"
                               />
                             )}
                           </div>
@@ -603,6 +609,7 @@ const File = ({
                               year={year}
                               actions={actions}
                               selectDosValue={selectDosValue}
+                              id="potential-card"
                             />
                           </div>
                         </div>
@@ -695,6 +702,7 @@ const File = ({
                               year={year}
                               actions={actions}
                               selectDosValue={selectDosValue}
+                              id="Deleted-card"
                             />
                           </div>
                         </div>

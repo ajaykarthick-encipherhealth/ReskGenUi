@@ -15,7 +15,10 @@ import { connect } from "react-redux";
 import { getStorage } from "../../../../../utils/storages";
 import { formatDateTime, getResponePopup } from "../../../../../utils/reusable";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
-import { getCommentList, getUserDetails } from "../../../../../stores/patient/details/network";
+import {
+  getCommentList,
+  getUserDetails,
+} from "../../../../../stores/patient/details/network";
 import CardSkeleton from "../../../../skeleton/card";
 
 const Comments = ({
@@ -194,6 +197,8 @@ const Comments = ({
 
   return (
     <Offcanvas
+      id="gridSystemModal-comments"
+      name="gridSystemModal-comments"
       onHide={setOpen}
       show={open}
       placement="end"
@@ -202,11 +207,17 @@ const Comments = ({
         width: "370px",
       }}
     >
-      <div className="offcanvas-header">
+      <div
+        className="offcanvas-header"
+        id="gridSystemModal-comments-header"
+        name="gridSystemModal-comments-header"
+      >
         <h5 className="modal-title" id="#gridSystemModal">
           Comments
         </h5>
         <button
+          id="gridSystemModal-comments-close"
+          name="gridSystemModal-comments-close"
           type="button"
           className="btn-close"
           onClick={() => setOpen(false)}
@@ -214,20 +225,37 @@ const Comments = ({
           <i className="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <div className="offcanvas-body">
-        <div className="container-fluid">
+      <div
+        className="offcanvas-body"
+        id="gridSystemModal-comments-body"
+        name="gridSystemModal-comments-body"
+      >
+        <div
+          className="container-fluid"
+          id="gridSystemModal-comments-container"
+        >
           <Form
+            id="gridSystemModal-comments-form"
+            name="gridSystemModal-comments-form"
             noValidate
             validated={validated}
             onSubmit={handleSubmitCommnets}
           >
-            <div className="row">
-              <div className="col-xl-12">
+            <div
+              className="row"
+              id="gridSystemModal-comments-row"
+              name="gridSystemModal-comments-row"
+            >
+              <div
+                className="col-xl-12"
+                id="gridSystemModal-comments-col"
+                name="gridSystemModal-comments-col"
+              >
                 <textarea
                   className={visitStyles.commentsFormControl}
                   rows="5"
                   required
-                  id="comments"
+                  id="add-comments"
                   name="comments"
                   placeholder="Add Comments"
                   value={inputValue.comments}
@@ -236,6 +264,8 @@ const Comments = ({
                   type="submit"
                 ></textarea>
                 <Button
+                  id="gridSystemModal-comments-button"
+                  name="gridSystemModal-comments-button"
                   type="submit"
                   disabled={commentsTrigger}
                   className={visitStyles.commentSendIcon}
@@ -251,10 +281,14 @@ const Comments = ({
           ) : (
             commentList?.map((data, index) => (
               <div
+                id={`gridSystemModal-comments-card-${index}`}
+                name={`gridSystemModal-comments-card-${index}`}
                 className={` ${visitStyles.comments_card} position-relative`}
                 key={index}
               >
                 <div
+                  id={`gridSystemModal-comments-delete-${index}`}
+                  name={`gridSystemModal-comments-delete-${index}`}
                   className="position-absolute top-0 end-0 mt-2 me-2 p-9"
                   style={{ cursor: "pointer" }}
                 >
@@ -266,14 +300,27 @@ const Comments = ({
                 </div>
 
                 <div
+                  id={`gridSystemModal-comments-name-${index}`}
+                  name={`gridSystemModal-comments-name-${index}`}
                   className={`${visitStyles.commentNameHead}`}
                   style={{ paddingTop: "20px" }}
                 >
-                  <span className={`send_details ${visitStyles.commentsName}`}>
+                  <span
+                    id={`gridSystemModal-userComment-name-${index}`}
+                    name={`gridSystemModal-userComment-name-${index}`}
+                    className={`send_details ${visitStyles.commentsName}`}
+                  >
                     {data.userComment}
                   </span>
-                  <Tooltip placement="bottom" title={data.commentCreatedBy}>
+                  <Tooltip
+                    id={`gridSystemModal-userComment-tooltip-${index}`}
+                    name={`gridSystemModal-userComment-tooltip-${index}`}
+                    placement="bottom"
+                    title={data.commentCreatedBy}
+                  >
                     <Popover
+                      id={`gridSystemModal-userComment-popover-${index}`}
+                      name={`gridSystemModal-userComment-popover-${index}`}
                       placement="bottom"
                       content={userDetails}
                       onOpenChange={() =>
@@ -298,7 +345,10 @@ const Comments = ({
                 </div>
                 <span className={visitStyles.commentsTime}>
                   {data.createdDate
-                    ? formatDateTime({date: data.createdDate, formatType:"datetime"})
+                    ? formatDateTime({
+                        date: data.createdDate,
+                        formatType: "datetime",
+                      })
                     : "---"}
                 </span>
               </div>

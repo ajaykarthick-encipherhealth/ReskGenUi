@@ -184,8 +184,14 @@ const AddForm = ({
           Add
         </Button>
       )} */}
-      <div className={style.formContainer}>
+      <div
+        className={style.formContainer}
+        id="manuallyAdd-container"
+        name="manuallyAdd-container"
+      >
         <Form
+          id="manuallyAddForm"
+          name="manuallyAddForm"
           form={form}
           onFinish={AddProvider}
           layout="vertical"
@@ -193,6 +199,7 @@ const AddForm = ({
         >
           {/* dos */}
           <Form.Item
+            id="manuallyAddDos"
             label={<label className={style.dateField}>Date Of Service</label>}
             name="dos"
             rules={[
@@ -204,6 +211,7 @@ const AddForm = ({
             className="manuallyAddPicker"
           >
             <DatePicker
+              data-testid="providersList-dateOfService"
               disabledDate={customDisableDate}
               defaultPickerValue={dayjs(
                 `${dosYearDefalutSelect?.value || dosYearDefalutSelect}-01-01`
@@ -213,6 +221,7 @@ const AddForm = ({
             />
           </Form.Item>
           <Form.Item
+            id="dosSubstring-manually-add"
             label={<label className={style.dateField}>DOS Substring</label>}
             name="dosSubstring"
             rules={[
@@ -223,11 +232,13 @@ const AddForm = ({
             ]}
           >
             <Input
+              data-testid="providersList-dosSubstring"
               placeholder="DOS Substring"
               disabled={providersList?.dosSubstring ? true : false}
             />
           </Form.Item>
           <Form.Item
+            id="dosStartPageNumber-manually-add"
             label={
               <label className={style.dateField}>DOS Start Page Number</label>
             }
@@ -238,12 +249,14 @@ const AddForm = ({
             ]}
           >
             <Input
+              data-testid="providersList-dosStartPageNumber"
               maxLength={3}
               placeholder="DOS Start Page Number"
               disabled={providersList?.dosStartPageNumber ? true : false}
             />
           </Form.Item>
           <Form.Item
+            id="dosEndPageNumber-manually-add"
             label={
               <label className={style.dateField}>DOS End Page Number</label>
             }
@@ -254,6 +267,7 @@ const AddForm = ({
             ]}
           >
             <Input
+              data-testid="providersList-dosEndPageNumber"
               maxLength={3}
               placeholder="DOS End Page Number"
               disabled={providersList?.dosEndPageNumber ? true : false}
@@ -261,13 +275,18 @@ const AddForm = ({
           </Form.Item>
           {/* provider */}
           <Form.Item
+            id="manuallyAddProviderName"
             label={<label className={style.dateField}>Provider Name</label>}
             name="providerName"
             rules={[{ required: true, message: "Please Enter Provider" }]}
           >
-            <Input placeholder="Provider Name" />
+            <Input
+              data-testid="providersList-providerName"
+              placeholder="Provider Name"
+            />
           </Form.Item>
           <Form.Item
+            id="manuallyAddProviderPageNumber"
             label={
               <label className={style.dateField}>Provider Page Number</label>
             }
@@ -277,9 +296,14 @@ const AddForm = ({
               { validator: validateThreeDigitNumber },
             ]}
           >
-            <Input maxLength={3} placeholder="Provider Page Number" />
+            <Input
+              data-testid="providersList-providerName-page-number"
+              maxLength={3}
+              placeholder="Provider Page Number"
+            />
           </Form.Item>
           <Form.Item
+            id="mauallyAddProviderCredentials"
             label={
               <label className={style.dateField}>Provider Credentials</label>
             }
@@ -288,9 +312,13 @@ const AddForm = ({
               { required: true, message: "Please Enter Provider Credentials" },
             ]}
           >
-            <Input placeholder="Provider Credentials" />
+            <Input
+              data-testid="providerList-providerCredentials"
+              placeholder="Provider Credentials"
+            />
           </Form.Item>
           <Form.Item
+            id="manuallyAddProviderReference"
             label={
               <label className={style.dateField}>Provider Reference</label>
             }
@@ -299,9 +327,13 @@ const AddForm = ({
               { required: true, message: "Please enter Provider Reference" },
             ]}
           >
-            <Input placeholder="Provider Reference" />
+            <Input
+              data-testid="providerList-providerReference"
+              placeholder="Provider Reference"
+            />
           </Form.Item>
           <Form.Item
+            id="manuallyAddProviderSignStatus"
             label={
               <label className={style.dateField}>Provider Sign Status</label>
             }
@@ -310,15 +342,17 @@ const AddForm = ({
               { required: true, message: "Please Switch Provider Sign Status" },
             ]}
           >
-            <Switch />
+            <Switch data-testid="providerList-isProviderSigned" />
           </Form.Item>
           <Form.Item
+            id="manuallyAddFiletype"
             label={<label className={style.dateField}>File Type</label>}
             name="fileType"
             rules={[{ required: true, message: "Please Select File Type" }]}
           >
             <Radio.Group>
               <Radio
+                data-testid="providerList-Lab"
                 value={"LAB"}
                 disabled={
                   patientDetailsResult?.fileInfos?.length > 0 &&
@@ -330,6 +364,7 @@ const AddForm = ({
                 Lab
               </Radio>
               <Radio
+                data-testid="providerList-Radiology"
                 value={"RADIOLOGY"}
                 disabled={
                   patientDetailsResult?.fileInfos?.length > 0 &&
@@ -340,11 +375,15 @@ const AddForm = ({
               >
                 Radiology
               </Radio>
-              <Radio value={"CHART"}>Chart</Radio>
+              <Radio data-testid="providerList-Chart" value={"CHART"}>Chart</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item className="d-flex justify-content-center">
+          <Form.Item
+            className="d-flex justify-content-center"
+            id="manuallyAddProvider-submit"
+          >
             <Button
+              data-testid="providerList-submit"
               htmlType="submit"
               type="primary"
               className="btn btn-sm ms-2 flr width-max-content custom-btn-style"

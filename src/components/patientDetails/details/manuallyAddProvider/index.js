@@ -94,22 +94,49 @@ const ManuallyAddProvider = ({
             </Button>
           </div>
         )}
-        <div className="w-100 h-100 overflow-scroll">
+        <div
+          className="w-100 h-100 overflow-scroll"
+          id="dosAndProvidersList"
+          name="dosAndProvidersList"
+        >
           {loader ? (
-           <TableSkeleton/>
+            <TableSkeleton />
           ) : Array.isArray(dosAndProvidersList) ? (
-            dosAndProvidersList?.map((item) => (
-              <button className={`${style.providerButton} my-2`} key={item?.id}>
+            dosAndProvidersList?.map((item, index) => (
+              <button
+                id={`dosAndProvidersList${index}`}
+                name={`dosAndProvidersList${index}`}
+                className={`ant-badge ${style.providerButton} my-2`}
+                key={item?.id}
+              >
                 <span className={style.dateField}>{item?.dateOfService}</span>
-                <span className={style.providerText}>Provider</span>
-                <Popover content={viewProvidersList({ list: item })}>
-                  <span className={style.count}>
+                <span
+                  id="dosAndProvider-name"
+                  name="dosAndProvider-name"
+                  className={style.providerText}
+                >
+                  Provider
+                </span>
+                <Popover
+                  id={`dosAndProvider-name-pop-${index}`}
+                  name={`dosAndProvider-name-pop-${index}`}
+                  content={viewProvidersList({ list: item })}
+                >
+                  <span
+                    id={`dosAndProvider-name-pop-content-${index}`}
+                    name={`dosAndProvider-name-pop-content-${index}`}
+                    className={style.count}
+                  >
                     {item?.hyperlinks?.length < 10
                       ? `0${item?.hyperlinks?.length}`
                       : item?.hyperlinks?.length}
                   </span>
                 </Popover>
-                <span onClick={(e) => handleEdit(e, item)}>
+                <span
+                  onClick={(e) => handleEdit(e, item)}
+                  id={`dosAndProvidersEdit-${index}`}
+                  name={`dosAndProvidersEdit-${index}`}
+                >
                   <EditOutlined
                     style={{ color: "#06439D", fontSize: "16px" }}
                   />

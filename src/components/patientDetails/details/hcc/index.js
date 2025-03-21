@@ -85,16 +85,12 @@ const Hcc = ({
         if (res) {
           var dosLable = (
             <>
-              <div
-                id="dosSelect"
-                className="d-flex justify-content-between gap-1 align-items-center "
-              >
-                <div id="dosSelect" className="d-flex gap-1">
-                  <span id="dosSelect">
+              <div className="d-flex ant-badge justify-content-between gap-1 align-items-center ">
+                <div className="ant-badge d-flex gap-1">
+                  <span>
                     {res?.stateIndicators?.includes("CHART") && (
                       <span
-                        id="dosSelect"
-                        className="p-1 rounded-1"
+                        className="p-1 rounded-1 ant-badge"
                         style={{
                           background: "#87d068",
                           color: "#fff",
@@ -106,7 +102,6 @@ const Hcc = ({
                     )}
                     {res?.stateIndicators?.includes("LAB") && (
                       <span
-                        id="dosSelect"
                         className="p-1 rounded-2 mx-1 me-2"
                         style={{
                           background: "#108ee9",
@@ -119,7 +114,6 @@ const Hcc = ({
                     )}
                     {res?.stateIndicators?.includes("RADIOLOGY") && (
                       <span
-                        id="dosSelect"
                         className="p-1 rounded-2 mx-1"
                         style={{
                           background: "#f50",
@@ -132,7 +126,7 @@ const Hcc = ({
                     )}
                   </span>
 
-                  <span id="dosSelect" className={styles.dosLable}>
+                  <span className={styles.dosLable}>
                     {formatDateTime({ date: res.dateOfService })}
                   </span>
                 </div>
@@ -236,8 +230,10 @@ const Hcc = ({
   };
 
   const PopContent = (
-    <div className={styles.innerPop}>
+    <div className={styles.innerPop} id="innerPop" name="innerPop">
       <div
+        id="closeIconPop"
+        name="closeIconPop"
         style={{
           marginBottom: "25px",
           position: "relative",
@@ -256,6 +252,8 @@ const Hcc = ({
       </div>
 
       <div
+        id="innerPopHead"
+        name="innerPopHead"
         style={{
           display: "flex",
           justifyContent: "space-around",
@@ -266,14 +264,23 @@ const Hcc = ({
           alignItems: "center",
         }}
       >
-        <div>Date</div>
-        <div style={{ paddingLeft: "60px" }}>Page Number</div>
+        <div id="innerPopDate" name="innerPopDate">Date</div>
+        <div id="innerPopPage"  name="innerPopPage" style={{ paddingLeft: "60px" }}>
+          Page Number
+        </div>
       </div>
-      <div className={styles.displayDiv}>
+      <div className={styles.displayDiv} id="innerPopBody" name="innerPopBody">
         {pageNumberOptions
           ? pageNumberOptions?.map((data) => (
-              <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
+              <div
+                className={styles.hoverDiv}
+                style={{ marginBottom: "5px" }}
+                id="innerPopDiv"
+                name="innerPopDiv"
+              >
                 <div
+                  id="innerPopDateDiv"
+                  name="innerPopDateDiv"
                   className={` ${styles.selectDetailsContainer}`}
                   style={{
                     alignItems: "center",
@@ -281,14 +288,20 @@ const Hcc = ({
                     margin: "0",
                   }}
                 >
-                  <div className="col-xl-6 ">
-                    <span className={styles.selectHead}>
+                  <div className="col-xl-6" id="innerPopDateSelect" name="innerPopDateSelect">
+                    <span className={styles.selectHead} id="innerPopDateSpan" name="innerPopDateSpan">
                       {data.dos ? formatDateTime({ date: data.dos }) : "---"}
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center" }}>
+                  <div
+                    id="innerPopPageDiv"
+                    name="innerPopPageDiv"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
                     <div
+                      id="innerPopPageSelect"
+                      name="innerPopPageSelect"
                       className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
                       style={{
                         textAlign: "center",
@@ -301,6 +314,8 @@ const Hcc = ({
                       <span>{data?.startPageNumber}</span>
                     </div>
                     <div
+                      id="innerPopPageSwap"
+                      name="innerPopPageSwap"
                       className="col-xl-1 text-center"
                       style={{ padding: "10px" }}
                     >
@@ -308,6 +323,8 @@ const Hcc = ({
                     </div>
 
                     <div
+                      id="innerPopEndPagNumber"
+                      name="innerPopEndPagNumber"
                       className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
                       style={{
                         textAlign: "center",
@@ -328,9 +345,13 @@ const Hcc = ({
 
   const hideDiseasePopContent = (
     <>
-      <div className="row">
-        <div className="col-xl-6 my-2">Re-Evaluate</div>
+      <div className="row" id="hideDisease" name="hideDisease">
+        <div className="col-xl-6 my-2" id="reEvaluate" name="reEvaluate">
+          Re-Evaluate
+        </div>
         <div
+          id="reEvaluateIcon"
+          name="reEvaluateIcon"
           className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer"
           onClick={() =>
             setActions({
@@ -345,6 +366,8 @@ const Hcc = ({
         <Divider className="p-0 m-0" />
         <div className="col-xl-6 my-2">Disease</div>
         <div
+          id={!actions?.showDisease ? "hideDiseaseIcon" : "showDiseaseIcon"}
+          name={!actions?.showDisease ? "hideDiseaseIcon" : "showDiseaseIcon"}
           className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer"
           onClick={() => {
             // selectDosValue &&
@@ -395,12 +418,21 @@ const Hcc = ({
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
         <div className="custom-tab-1 ">
           <Tab.Container activeKey={activeTabHead}>
-            <div className="row">
-              <div className="col-12">
-                <Nav as="ul" className="nav nav-tabs">
-                  <div className={`d-flex flex-wrap `}>
+            <div className="row" id="myTabs" name="myTabs">
+              <div className="col-12" id="myTabContent" name="myTabContent">
+                <Nav as="ul" className="nav nav-tabs" id="myNav" name="myNav">
+                  <div
+                    className={`d-flex flex-wrap `}
+                    id="myNavcontent"
+                    name="myNavcontent"
+                  >
                     {/* <div className="d-flex"> */}
-                    <Nav.Item as="li" className="nav-item ">
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      id="myNavFileItem"
+                      name="myNavFileItem"
+                    >
                       <Nav.Link
                         to="#my-posts"
                         eventKey={1}
@@ -419,7 +451,12 @@ const Hcc = ({
                         File
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      id="myNavVisitItem"
+                      name="myNavVisitItem"
+                    >
                       <Nav.Link
                         to="#my-posts"
                         eventKey={2}
@@ -438,7 +475,12 @@ const Hcc = ({
                         Visit Data
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      id="myNavCombinationItem"
+                      name="myNavCombinationItem"
+                    >
                       <Nav.Link
                         to="#my-posts"
                         eventKey={3}
@@ -456,7 +498,12 @@ const Hcc = ({
                         Combination Codes
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      id="myNavMeatItem"
+                      name="myNavMeatItem"
+                    >
                       <Nav.Link
                         to="#my-posts"
                         eventKey={4}
@@ -474,7 +521,12 @@ const Hcc = ({
                         MEAT Criteria
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      id="myNavRafItem"
+                      name="myNavRafItem"
+                    >
                       <Nav.Link
                         to="#my-posts"
                         eventKey={5}
@@ -493,7 +545,12 @@ const Hcc = ({
                         RAF Score
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      id="myNavQueryItem"
+                      name="myNavQueryItem"
+                    >
                       <Nav.Link
                         to="#my-posts"
                         eventKey={6}
@@ -511,10 +568,19 @@ const Hcc = ({
                         Query
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
-                      <div id="dosSelect" className="d-flex gap-3 mx-2 ">
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      id="myNavDOSItem"
+                      name="myNavDOSItem"
+                    >
+                      <div
+                        className="d-flex gap-3 mx-2 "
+                        id="myNavDOS"
+                        name="myNavDOS"
+                      >
                         <Select
-                          id="dosSelect"
+                          data-testid="select-dos"
                           placeholder="Select DOS"
                           onChange={handleOptions}
                           className="dosSelect mb-1"
@@ -523,7 +589,8 @@ const Hcc = ({
                         >
                           {dosSummariesList?.map((data, index) => (
                             <Option
-                              id={`dosSelect`}
+                             id={`select-dos-${index}`}
+                              className="ant-badge"
                               key={data?.value}
                               value={data?.value}
                             >
@@ -540,6 +607,8 @@ const Hcc = ({
                           )}
                         {activeTabHead == 1 && (
                           <Popover
+                            id="popover-basic"
+                            name="popover-basic"
                             open={popoverVisible}
                             content={PopContent}
                             placement="bottom"
@@ -548,6 +617,8 @@ const Hcc = ({
                             onOpenChange={() => setPopoverVisible(false)}
                           >
                             <div
+                              id="popover-basic-trigger"
+                              name="popover-basic-trigger"
                               className={`${styles.actionDosPageBtn} d-flex align-items-center mb-1 px-3 rounded-md`}
                               onClick={() => {
                                 setPopoverVisible(true);
@@ -639,8 +710,15 @@ const Hcc = ({
                         ) : null}
                       </div>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      id="myNavAction"
+                      name="myNavAction"
+                    >
                       <Popover
+                        id="dosActionPopover"
+                        name="dosActionPopover"
                         open={actions.showActionsPop}
                         trigger={["click"]}
                         placement="bottom"
@@ -654,6 +732,8 @@ const Hcc = ({
                         }
                       >
                         <button
+                          id="dosActionPopoverTrigger"
+                          name="dosActionPopoverTrigger"
                           className={`${visitStyles.actionBtn} px-3   py-1 rounded-md`}
                           onClick={() =>
                             setActions({
@@ -672,7 +752,7 @@ const Hcc = ({
               </div>
             </div>
             <Tab.Content>
-              <Tab.Pane id="my-posts" eventKey={1}>
+              <Tab.Pane id="my-file" name="my-file" eventKey={1}>
                 <File
                   popoverVisible={popoverVisible}
                   setPopoverVisible={setPopoverVisible}
@@ -689,7 +769,7 @@ const Hcc = ({
                   isSpinnerLoading={isSpinnerLoading}
                 />
               </Tab.Pane>
-              <Tab.Pane id="my-posts" eventKey={2}>
+              <Tab.Pane id="my-visitData" name="my-visitData" eventKey={2}>
                 <VisitData
                   setActiveTabHead={setActiveTabHead}
                   setActiveMeatTitle={setActiveMeatTitle}
@@ -699,7 +779,7 @@ const Hcc = ({
                   selectDosValue={selectDosValue}
                 />
               </Tab.Pane>
-              <Tab.Pane id="my-posts" eventKey={3}>
+              <Tab.Pane id="my-combo" name="my-combo" eventKey={3}>
                 <Combo
                   setActiveTabHead={setActiveTabHead}
                   setActiveMeatTitle={setActiveMeatTitle}
@@ -708,17 +788,17 @@ const Hcc = ({
                   actions={actions}
                 />
               </Tab.Pane>
-              <Tab.Pane id="my-posts" eventKey={4}>
+              <Tab.Pane id="my-meat" name="my-meat" eventKey={4}>
                 <Meat
                   activeMeatTitle={activeMeatTitle}
                   year={year}
                   actions={actions}
                 />
               </Tab.Pane>
-              <Tab.Pane id="my-posts" eventKey={5}>
+              <Tab.Pane id="my-rafscore" name="my-rafscore" eventKey={5}>
                 <RafScore />
               </Tab.Pane>
-              <Tab.Pane id="my-posts" eventKey={6}>
+              <Tab.Pane id="my-meatQuery" name="my-meatQuery" eventKey={6}>
                 <MeatQuery year={year} actions={actions} />
               </Tab.Pane>
             </Tab.Content>
@@ -742,8 +822,14 @@ const Hcc = ({
         <Divider className="p-0 my-2" />
         <div className="row">
           <div className="col-xl-10">Combination</div>
-          <div className="col-xl-2 p-0 d-flex">
+          <div
+            className="col-xl-2 p-0 d-flex"
+            id="Combination"
+            name="Combination"
+          >
             <input
+              id="CombinationCheck"
+              name="CombinationCheck"
               type="checkbox"
               onChange={(val) => {
                 val?.target.checked
@@ -771,8 +857,14 @@ const Hcc = ({
             />
           </div>
           <div className="col-xl-10 mt-4">Lab & Radiology</div>
-          <div className="col-xl-2 p-0 d-flex mt-4">
+          <div
+            className="col-xl-2 p-0 d-flex mt-4"
+            id="Lab-&-Radiology"
+            name="Lab-&-Radiology"
+          >
             <input
+              id="Lab-&-RadiologyCheck"
+              name="Lab-&-RadiologyCheck"
               type="checkbox"
               onChange={(val) => {
                 val?.target.checked

@@ -659,6 +659,8 @@ const Details = ({
                   {activeTab == "2" || activeTab == "1" ? (
                     <div className="row">
                       <div
+                      id="backArrowBtn"
+                      name="backArrowBtn"
                         className="col-1 d-flex align-items-center justify-content-start "
                         // style={{ zIndex: "1", marginTop: "20px" }}
                       >
@@ -738,24 +740,38 @@ const Details = ({
                         : ` mt-3 ${visitStyles.visitDataMainClose}`
                     }
                   >
-                    <div className={`${visitStyles.firstContainer}`}>
+                    <div
+                      id="mySidenav"
+                      name="mySidenav"
+                      className={`${visitStyles.firstContainer}`}
+                    >
                       <div
+                        id={isSideNavShow ? "sideTabOpen" : "sideTabClose"}
+                        name={isSideNavShow ? "sideTabOpen" : "sideTabClose"}
                         className={
                           isSideNavShow
                             ? `${visitStyles.sideTab}`
                             : `${visitStyles.sideTabClose}`
                         }
                       >
-                        <div className={`${visitStyles.sideNav}`}>
-                          <div className="sideNavscroll">
+                        <div
+                          id="mySidenavContent"
+                          name="mySidenavContent"
+                          className={`${visitStyles.sideNav}`}
+                        >
+                          <div className="sideNavscroll" id="sideNavscroll" name="sideNavscroll">
                             <div
                               className="nav-control"
                               onClick={() => {
                                 handleToogleCloseNav();
                               }}
                             >
-                              <div className={`${visitStyles.sideNavArrow}`}>
-                                <span className="line">
+                              <div
+                                id="nav-control"
+                                name="nav-control"
+                                className={`${visitStyles.sideNavArrow}`}
+                              >
+                                <span id="nav-control-faAngle" name="nav-control-faAngle" className="line">
                                   <FontAwesomeIcon
                                     className="fa fa-search form-control-feedback"
                                     icon={
@@ -770,7 +786,7 @@ const Details = ({
                                 </span>
                               </div>
                             </div>
-                            <ul id="badge">
+                            <ul className="ant-badge" id="sideNavList" name="sideNavList">
                               {tabList.map((data, index) => (
                                 <Tooltip
                                   key={index}
@@ -778,6 +794,8 @@ const Details = ({
                                   placement="right"
                                 >
                                   <li
+                                    id={`sideNavItem-${index}`}
+                                    name={`sideNavItem-${index}`}
                                     className={`${visitStyles.sideNavLabel}`}
                                     onClick={() => handleNavigation(data)}
                                   >
@@ -791,12 +809,12 @@ const Details = ({
                                       {isActives?.response[
                                         data.defaultComplete
                                       ] ? (
-                                        <div className="menu-icon" id="badge">
+                                        <div className="menu-icon ant-badge">
                                           <Badge
-                                            id="badge"
+                                            className="ant-badge"
                                             count={
                                               <svg
-                                                id="badge"
+                                                className="ant-badge"
                                                 width="20"
                                                 height="20"
                                                 viewBox="0 0 20 20"
@@ -897,9 +915,9 @@ const Details = ({
                     </div>
 
                     <div className={`${visitStyles.thirdContainer}`}>
-                      <div className={`${visitStyles.flag_container}`}>
-                        <ul className="">
-                          {flagList?.map((data) => {
+                      <div  id="flagContainer" name="flagContainer" className={`${visitStyles.flag_container}`}>
+                        <ul className="" id="flagList" name="flagList">
+                          {flagList?.map((data, index) => {
                             const isFlagDisabled =
                               data.name === "Flag" && !isDosSelected;
                             const isDosDisabled =
@@ -913,6 +931,8 @@ const Details = ({
                                 key={data.name}
                               >
                                 <li
+                                  id={`flagListItem-${index}`}
+                                  name={`flagListItem-${index}`}
                                   className={
                                     flagContainerActive == data.name
                                       ? `${visitStyles.commentsTagActive}`
@@ -962,6 +982,8 @@ const Details = ({
                 {/* Modals */}
 
                 <Drawer
+                id="myworkqueueDrawer"
+                name="myworkqueueDrawer"
                   onClose={handleCloseModal}
                   open={isModalComments}
                   width={

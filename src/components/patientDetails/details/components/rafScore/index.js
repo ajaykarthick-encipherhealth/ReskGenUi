@@ -53,6 +53,8 @@ const RafScore = ({ rafScoreList }) => {
                     {rafScoreData?.map((item, i) => (
                       <div className={style.detailsHead}>
                         <div
+                          id={`raf-content-${i}`}
+                          name={`raf-content-${i}`}
                           className={
                             rafScoreData?.length != i + 1
                               ? `row  ${style.rafchildBorder}`
@@ -60,7 +62,10 @@ const RafScore = ({ rafScoreList }) => {
                           }
                         >
                           <div className="col-3 "> {item.dx_name}</div>
-                          <div className={`col-9 ${style.rafDescription}`}>
+                          <div
+                            id={`raf-desc-${i}`}
+                            className={`col-9 ${style.rafDescription}`}
+                          >
                             <Popover title={item.dx_desc}>
                               {item.dx_desc}{" "}
                             </Popover>

@@ -60,6 +60,7 @@ const ComboCard = ({
   loading,
   provided,
   patientDetailsLoad,
+  id
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -80,9 +81,22 @@ const ComboCard = ({
   return (
     <>
       {provided && (
-        <div ref={provided?.innerRef} {...provided?.droppableProps}>
-          <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
-            <div className={` ${visitStyles.combo_head_card}`}>
+        <div
+          ref={provided?.innerRef}
+          {...provided?.droppableProps}
+          id="combo-tab-card"
+          name="combo-tab-card"
+        >
+          <div
+            id="my-combo-content"
+            name="my-combo-content"
+            className={`my-post-content  ${visitStyles.comboContainer3}`}
+          >
+            <div
+              id="combo-head-card"
+              name="combo-head-card"
+              className={` ${visitStyles.combo_head_card}`}
+            >
               <div className="row p-0">
                 <div className="col-4 d-flex align-items-center justify-content-center ">
                   <label htmlFor="combo">Combo Codes</label>
@@ -116,8 +130,16 @@ const ComboCard = ({
             {loading || patientDetailsLoad ? (
               <CardSkeleton count={6} />
             ) : list?.length != 0 ? (
-              <div className={visitStyles.container}>
-                <div className={visitStyles.hccStickey_head}>
+              <div
+                className={visitStyles.container}
+                id="combo-cotent-card"
+                name="combo-cotent-card"
+              >
+                <div
+                  className={visitStyles.hccStickey_head}
+                  id="combo-cotent-card-head"
+                  name="combo-cotent-card-head"
+                >
                   {list?.map((item, ind) => {
                     return (
                       item.isShow && (
@@ -125,12 +147,15 @@ const ComboCard = ({
                           key={item?.diagnosisCode}
                           draggableId={item?.diagnosisCode}
                           index={ind}
+                          combo-cotent-card-head
                           draggableData={item?.list}
                           isDragDisabled={isDosSelected ? false : true}
                         >
                           {(provided, snapshot) => {
                             return (
                               <div
+                                id={`${id}-combo-cotent-card-${ind}`}
+                                name={`combo-cotent-card-${ind}`}
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
@@ -140,13 +165,29 @@ const ComboCard = ({
                                 }`}
                                 key={item?.id}
                               >
-                                <div className="row">
-                                  <div className="col-4 d-grid">
-                                    <span className="font-bold ms-3">
+                                <div
+                                  className="row"
+                                  id={`${id}-combo-code-row-${ind}`}
+                                  name={`combo-code-row-${ind}`}
+                                >
+                                  <div
+                                    className="col-4 d-grid"
+                                    id={`${id}-combo-code-${ind}`}
+                                    name={`combo-code-${ind}`}
+                                  >
+                                    <span
+                                      className="font-bold ms-3"
+                                      id={`${id}-combo-diagnosisCode-${ind}`}
+                                      name={`combo-diagnosisCode-${ind}`}
+                                    >
                                       {item.diagnosisCode}
                                     </span>
                                   </div>
-                                  <div className="col-2">
+                                  <div
+                                    className="col-2"
+                                    id={`${id}-addOnCode-${ind}`}
+                                    name={`addOnCode-${ind}`}
+                                  >
                                     {item.addOnCodes?.map(
                                       (addCombo, index) =>
                                         addCombo && (
@@ -164,14 +205,25 @@ const ComboCard = ({
                                         )
                                     )}
                                   </div>
-                                  <div className="col-5 d-flex align-items-center justify-content-center ">
-                                    <div className="cursor-pointer"
+                                  <div
+                                    id={`${id}-actualDescription-content-${ind}`}
+                                    name={`actualDescription-content${ind}`}
+                                    className="col-5 d-flex align-items-center justify-content-center "
+                                  >
+                                    <div
+                                      id={`${id}-actualDescription-${ind}`}
+                                      name={`actualDescription-${ind}`}
+                                      className="cursor-pointer"
                                       style={{
                                         marginLeft: "15px",
                                       }}
                                     >
                                       {/* {item.actualDescription} */}
-                                      <Tooltip title={item.actualDescription}>
+                                      <Tooltip
+                                        id={`${id}-actualDescription-value-${ind}`}
+                                        name={`actualDescription-value-${ind}`}
+                                        title={item.actualDescription}
+                                      >
                                         {truncateString(
                                           item.actualDescription,
                                           25
@@ -302,9 +354,17 @@ const ComboCard = ({
                                       </div>
                                     )}
                                   </div>
-                                  <div className={styles.comboDetailsHeaders}>
-                                    <div>
+                                  <div
+                                    id={`${id}-comboDetailsHeaders-${ind}`}
+                                    name={`comboDetailsHeaders-${ind}`}
+                                    className={styles.comboDetailsHeaders}
+                                  >
+                                    <div
+                                      id={`${id}-combo-encounterAndSection-${ind}`}
+                                    >
                                       <div
+                                        id={`${id}-combo-encounterAndSectionHeader-${ind}`}
+                                        name={`combo-encounterAndSectionHeader-${ind}`}
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
                                         {getProviderNameTag({
@@ -347,6 +407,8 @@ const ComboCard = ({
                             )} */}
                                       </div>
                                       <div
+                                        id={`${id}-combo-encounterDate-${ind}`}
+                                        name={`combo-encounterDate-${ind}`}
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
                                         {getEncounterDateBackground({
@@ -368,6 +430,7 @@ const ComboCard = ({
                                         })}
                                       </div>
                                       <div
+                                        id={`${id}-combo-captured-section-${ind}`}
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
                                         {getCaptureSectionBackgroundFile({
@@ -410,9 +473,13 @@ const ComboCard = ({
                                       </div>
                                     </div>
                                     <div
+                                      id={`${id}-combo-meatFoundContainer-${ind}`}
+                                      name={`combo-meatFoundContainer-${ind}`}
                                       className={` ${styles.meatFoundContainer}`}
                                     >
                                       <div
+                                        id={`${id}-combo-meatFound-M-${ind}`}
+                                        name={`combo-meatFound-M-${ind}`}
                                         className="cr-pointer"
                                         onClick={() => {
                                           setActiveTabHead(4);
@@ -429,6 +496,8 @@ const ComboCard = ({
                                         )}
                                       </div>
                                       <div
+                                        id={`${id}-combo-meatFound-E-${ind}`}
+                                        name={`combo-meatFound-E-${ind}`}
                                         className="cr-pointer"
                                         onClick={() => {
                                           setActiveTabHead(4);
@@ -445,6 +514,8 @@ const ComboCard = ({
                                         )}
                                       </div>
                                       <div
+                                        id={`${id}-combo-meatFound-A-${ind}`}
+                                        name={`combo-meatFound-A-${ind}`}
                                         className="cr-pointer"
                                         onClick={() => {
                                           setActiveTabHead(4);
@@ -461,6 +532,8 @@ const ComboCard = ({
                                         )}
                                       </div>
                                       <div
+                                        id={`${id}-combo-meatFound-T-${ind}`}
+                                        name={`combo-meatFound-T-${ind}`}
                                         className="cr-pointer"
                                         onClick={() => {
                                           setActiveTabHead(4);

@@ -379,136 +379,173 @@ export const getStatusIcon = (status) => {
   switch (status) {
     case "COMPLETED":
       return (
-        <Tooltip placement="bottom" title="COMPLETED">
-          <Image
+        <Tooltip  placement="bottom" title="COMPLETED">
+          <div>
+              <Image
           alt="completed"
             src={Completed}
             style={{ height: "20px", width: "20px",marginTop: "1px"}}
           />
+          </div>
+        
         </Tooltip>
       );
 
     case "PENDING":
       return (
         <Tooltip placement="bottom" title="PENDING">
-          <Image
+          <div>
+             <Image
           alt ="pending"
             src={Pending}
             style={{ height: "20px", width: "20px", marginTop: "1px" }}
           />
+          </div>
+         
         </Tooltip>
       );
 
     case "DECLINED":
       return (
         <Tooltip placement="bottom" title="DECLINED">
-          <Image
+          <div>
+             <Image
           alt ="declined"
             src={Declined}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
-          />
+          /> 
+          </div>
+        
         </Tooltip>
       );
 
     case "NOTCOMPUTED":
       return (
         <Tooltip placement="bottom" title="NOT COMPUTED">
-          <Image
+          <div>
+              <Image
           alt="notComputed"
             src={Pending}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
+          </div>
+        
         </Tooltip>
       );
     case "COMPUTED":
       return (
         <Tooltip placement="bottom" title="PENDING">
-          <Image
+          <div>
+            <Image
           alt="computed"
             src={Pending}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
+          </div>
+          
         </Tooltip>
       );
     case "HOLD":
       return (
         <Tooltip placement="bottom" title="HOLD">
-          <Image
-          alt = "hold"
-            src={Hold}
-            style={{ height: "20px", width: "20px", marginTop: "1px"}}
-          />
+          <div>
+            <Image
+              alt="hold"
+              src={Hold}
+              style={{ height: "20px", width: "20px", marginTop: "1px" }}
+            />
+          </div>
         </Tooltip>
       );
     case "ABORTED_BY_CRON":
       return (
         <Tooltip placement="bottom" title="ABORTED BY CRON">
-          <Image
-          alt ="abort"
-            src={Abort}
-            style={{ height: "20px", width: "20px", marginTop: "1px"}}
-          />
+          <div>
+            <Image
+              alt="abort"
+              src={Abort}
+              style={{ height: "20px", width: "20px", marginTop: "1px" }}
+            />
+          </div>
         </Tooltip>
       );
     case "AUDIT_PENDING":
       return (
         <Tooltip placement="bottom" title="AUDIT PENDING">
-          <Image
+          <div>
+            <Image
           alt ="auditPending"
             src={AuditPending}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
+          </div>
+          
         </Tooltip>
       );
 
     case "AUDITHOLD":
       return (
         <Tooltip placement="bottom" title=" AUDIT HOLD">
-          <Image
+          <div>
+              <Image
           alt ="auditHold"
             src={AuditHold}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
+          </div>
+        
         </Tooltip>
       );
     case "REAUDIT":
       return (
         <Tooltip placement="bottom" title=" REAUDIT">
-          <Image
+          <div>
+             <Image
           alt="reAudit"
             src={ReAudit}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
+          </div>
+         
         </Tooltip>
       );
     case "AUDITED":
       return (
         <Tooltip placement="bottom" title=" AUDITED">
-          <Image
+          <div>
+            <Image
           alt ="audited"
             src={AuditedTrack}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
+          </div>
+          
         </Tooltip>
       );
     case "NOT_AUDIT":
       return (
         <Tooltip placement="bottom" title=" NOT AUDIT">
-          <Image
+          <div>
+              <Image
           alt="notAudit"
             src={NotAudited}
             style={{ height: "20px", width: "20px", marginTop: "1px"}}
           />
+          </div>
+        
         </Tooltip>
       );
     case "AUDIT_DECLINED":
       return (
         <Tooltip placement="bottom" title=" AUDIT DECLINED">
-          <Image
+          <div>
+             <Image
           alt ="auditDeclined"
             src={AuditedDeclineTrack}
             style={{ height: "20px", width: "20px", marginTop: "1px" }}
           />
+          </div>
+         
         </Tooltip>
       );
     case null:

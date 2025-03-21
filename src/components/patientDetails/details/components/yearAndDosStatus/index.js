@@ -15,7 +15,7 @@ const YearAndDosStatus = ({
   getpatientDetailsData,
   setIsLoading,
   getPatientDosList,
-  isDosStatus
+  isDosStatus,
 }) => {
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
@@ -123,44 +123,56 @@ const YearAndDosStatus = ({
 
   const getPatientIdDetails = async (result) => {
     const menu = (
-      <Menu>
+      <Menu className="ant-badge" id="menu-container" name="menu-container">
         {result?.processedStatus != "HOLD" ? (
           <Menu.Item
+            id="hold-menu-item"
+            name="hold-menu-item"
+            className="ant-badge"
             key="1"
             onClick={() => {
               handleActionClick("HOLD");
               setMenuIsOpen(false);
             }}
           >
-            <div className="patient-status">
-              <span className={`badge hold-text`}>HOLD</span>
+            <div className="ant-badge patient-status">
+              <span className={`ant-badge badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
         ) : null}
         {result?.processedStatus != "PENDING" &&
         result?.processedStatus != "COMPUTED" ? (
           <Menu.Item
+            id="pending-menu-item"
+            name="pending-menu-item"
+            className="ant-badge"
             key="2"
             onClick={() => {
               handleActionClick("PENDING");
               setMenuIsOpen(false);
             }}
           >
-            <div className="patient-status">
-              <span className={`badge processing-text`}>PENDING</span>
+            <div className="ant-badge patient-status">
+              <span className={`badge ant-badge processing-text`}>PENDING</span>
             </div>
           </Menu.Item>
         ) : null}
         {result?.processedStatus != "DECLINED" ? (
           <Menu.Item
+            id="decline-menu-item"
+            name="decline-menu-item"
+            className="ant-badge"
             key="3"
             onClick={() => {
               handleActionClick("DECLINE");
               setMenuIsOpen(false);
             }}
           >
-            <div className="patient-status">
-              <span className={`badge failed-text`} style={{ color: "red" }}>
+            <div className="ant-badge patient-status">
+              <span
+                className={`badge ant-badge failed-text`}
+                style={{ color: "red" }}
+              >
                 DECLINE
               </span>
             </div>
@@ -169,23 +181,30 @@ const YearAndDosStatus = ({
 
         {result?.processedStatus != "COMPLETED" ? (
           <Menu.Item
+            id="complete-menu-item"
+            name="complete-menu-item"
+            className="ant-badge"
             key="4"
             onClick={() => {
               handleActionClick("COMPLETE");
               setMenuIsOpen(false);
             }}
           >
-            <div className="patient-status">
-              <span className={`badge processed-text`}>COMPLETED</span>
+            <div className="ant-badge patient-status">
+              <span className={`badge ant-badge processed-text`}>
+                COMPLETED
+              </span>
             </div>
           </Menu.Item>
         ) : null}
       </Menu>
     );
     const menu2 = (
-      <Menu>
+      <Menu id="menu-container2" name="menu-container2">
         {result?.processedStatus != "HOLD" ? (
           <Menu.Item
+            id="hold-menu-item2"
+            name="hold-menu-item2"
             key="1"
             onClick={() => {
               handleActionClick("HOLD");
@@ -199,6 +218,8 @@ const YearAndDosStatus = ({
         ) : null}
         {result?.processedStatus != "PENDING" ? (
           <Menu.Item
+            id="pending-menu-item2"
+            name="pending-menu-item2"
             key="2"
             onClick={() => {
               handleActionClick("PENDING");
@@ -212,6 +233,8 @@ const YearAndDosStatus = ({
         ) : null}
         {result?.processedStatus != "DECLINE" ? (
           <Menu.Item
+            id="decline-menu-item2"
+            name="decline-menu-item2"
             key="3"
             onClick={() => {
               handleActionClick("DECLINE");
@@ -228,6 +251,8 @@ const YearAndDosStatus = ({
 
         {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item
+          id="complete-menu-item2"
+            name="complete-menu-item2"
             key="4"
             onClick={() => {
               handleActionClick("COMPLETE");
@@ -240,6 +265,8 @@ const YearAndDosStatus = ({
           </Menu.Item>
         ) : null}
         <Menu.Item
+        id="add-radiology-menu-item"
+        name="add-radiology-menu-item"
           key="5"
           onClick={() => {
             handleActionClick("ADD RADIOLOGY");
@@ -255,9 +282,11 @@ const YearAndDosStatus = ({
       </Menu>
     );
     const menu3 = (
-      <Menu>
+      <Menu id="menu-container3" name="menu-container3">
         {result?.processedStatus != "HOLD" ? (
           <Menu.Item
+          id="hold-menu-item3"
+            name="hold-menu-item3"
             key="1"
             onClick={() => {
               handleActionClick("HOLD");
@@ -271,6 +300,8 @@ const YearAndDosStatus = ({
         ) : null}
         {result?.processedStatus != "PENDING" ? (
           <Menu.Item
+          id="pending-menu-item3"
+            name="pending-menu-item3"
             key="2"
             onClick={() => {
               handleActionClick("PENDING");
@@ -284,6 +315,8 @@ const YearAndDosStatus = ({
         ) : null}
         {result?.processedStatus != "DECLINE" ? (
           <Menu.Item
+          id="decline-menu-item3"
+            name="decline-menu-item3"
             key="3"
             onClick={() => {
               handleActionClick("DECLINE");
@@ -308,6 +341,8 @@ const YearAndDosStatus = ({
 
         {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item
+          id="complete-menu-item3"
+            name="complete-menu-item3"
             key="4"
             onClick={() => {
               handleActionClick("COMPLETE");
@@ -320,6 +355,8 @@ const YearAndDosStatus = ({
           </Menu.Item>
         ) : null}
         <Menu.Item
+        id="add-lab-menu-item"
+        name="add-lab-menu-item"
           key="5"
           onClick={() => {
             handleActionClick("ADD LAB");
@@ -370,7 +407,6 @@ const YearAndDosStatus = ({
       setInputValue({ notes: "" });
       setValidated(true);
     }
-   
   };
 
   const handleSubmitHccComplete = async () => {
@@ -421,7 +457,7 @@ const YearAndDosStatus = ({
       apiURL = "dbservice/patient/status/audit";
     }
     try {
-      const response = await overallYearStatus(postData,apiURL)
+      const response = await overallYearStatus(postData, apiURL);
       if (response?.status == "SUCCESS") {
         notification.success({
           message: response?.message,
@@ -490,16 +526,28 @@ const YearAndDosStatus = ({
                   type="primary"
                   className={
                     patienIdDetails?.processedStatus == "AUDITHOLD"
-                      ? `${isDosStatus && `${visitStyles.statusBtn}`} auditHoldBtnHcc`
+                      ? `${
+                          isDosStatus && `${visitStyles.statusBtn}`
+                        } auditHoldBtnHcc`
                       : patienIdDetails?.processedStatus == "AUDIT_PENDING"
-                           ? `${isDosStatus && `${visitStyles.statusAuditBtn}`} auditPendingBtnHcc`
+                      ? `${
+                          isDosStatus && `${visitStyles.statusAuditBtn}`
+                        } auditPendingBtnHcc`
                       : patienIdDetails?.processedStatus == "AUDITED"
-                           ? `${isDosStatus && `${visitStyles.statusBtn}`} auditBtnHcc`
+                      ? `${
+                          isDosStatus && `${visitStyles.statusBtn}`
+                        } auditBtnHcc`
                       : patienIdDetails?.processedStatus == "REAUDIT"
-                           ? `${isDosStatus && `${visitStyles.statusAuditBtn}`} reauditBtnHcc`
+                      ? `${
+                          isDosStatus && `${visitStyles.statusAuditBtn}`
+                        } reauditBtnHcc`
                       : patienIdDetails?.processedStatus == "AUDIT_DECLINED"
-                           ? `${isDosStatus && `${visitStyles.statusAuditBtn}`} declineBtnHcc`
-                           : `${isDosStatus && `${visitStyles.statusBtn}`} auditHoldBtnHcc`
+                      ? `${
+                          isDosStatus && `${visitStyles.statusAuditBtn}`
+                        } declineBtnHcc`
+                      : `${
+                          isDosStatus && `${visitStyles.statusBtn}`
+                        } auditHoldBtnHcc`
                   }
                 >
                   <span>
@@ -514,7 +562,7 @@ const YearAndDosStatus = ({
               </Dropdown>
             </div>
           ) : userRole == "reviewer" || userRole == "admin" ? (
-            <div className={`${visitStyles.yearactionbtnContainer}`}>
+            <div className={`${visitStyles.yearactionbtnContainer} ant-badge`}>
               {patienIdDetails?.processedStatus == "COMPLETED" ? (
                 <Dropdown
                   overlay={
@@ -526,14 +574,15 @@ const YearAndDosStatus = ({
                   }
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
-                  className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
+                  className={` ant-badge completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
                 >
                   <Button
                     type="primary"
-                    className={`${visitStyles.completedBtnHcc} ${isDosStatus && `${visitStyles.statusBtn}`} completedBtnHcc`}
-
+                    className={` ant-badge ${visitStyles.completedBtnHcc} ${
+                      isDosStatus && `${visitStyles.statusBtn}`
+                    } completedBtnHcc`}
                   >
-                    <span>COMPLETED</span>
+                    <span className="ant-badge">COMPLETED</span>
                     <span style={{ marginLeft: "10px" }}>
                       <DownOutlined />
                     </span>
@@ -550,12 +599,13 @@ const YearAndDosStatus = ({
                   }
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
-                  className={`declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
+                  className={`ant-badge declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
                 >
                   <Button
                     type="primary"
-                    className={`${visitStyles.declinedBtnHcc} ${isDosStatus && `${visitStyles.statusBtn}`} declinedBtnHcc`}
-
+                    className={`ant-badge ${visitStyles.declinedBtnHcc} ${
+                      isDosStatus && `${visitStyles.statusBtn}`
+                    } declinedBtnHcc ant-badge`}
                   >
                     <span>DECLINED</span>
                     <span style={{ marginLeft: "10px" }}>
@@ -574,21 +624,23 @@ const YearAndDosStatus = ({
                   }
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
-                  className={`holdBtnHcc ${visitStyles.holdBtnHccs}`}
+                  className={`ant-badge holdBtnHcc ${visitStyles.holdBtnHccs}`}
                 >
                   <Button
                     type="primary"
-                    className={`${visitStyles.holdBtnHccs} ${isDosStatus && `${visitStyles.statusBtn}`} holdBtnHcc`}
-
+                    className={`ant-badge ${visitStyles.holdBtnHccs} ${
+                      isDosStatus && `${visitStyles.statusBtn}`
+                    } holdBtnHcc`}
                   >
-                    <span>HOLD</span>
+                    <span className="ant-badge">HOLD</span>
                     <span style={{ marginLeft: "10px" }}>
                       <DownOutlined />
                     </span>
                   </Button>
                 </Dropdown>
               ) : patienIdDetails?.processedStatus == "PENDING" ||
-                patienIdDetails?.processedStatus == "COMPUTED" ||  patienIdDetails?.processedStatus == null ? (
+                patienIdDetails?.processedStatus == "COMPUTED" ||
+                patienIdDetails?.processedStatus == null ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -599,11 +651,13 @@ const YearAndDosStatus = ({
                   }
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
-                  className={`pendingBtn${visitStyles.pendingBtn}` }
+                  className={`ant-badge pendingBtn${visitStyles.pendingBtn}`}
                 >
                   <Button
                     type="primary"
-                    className={`${visitStyles.pendingBtn} ${isDosStatus && `${visitStyles.statusBtn}`} pendingBtn`}
+                    className={`ant-badge ${visitStyles.pendingBtn} ${
+                      isDosStatus && `${visitStyles.statusBtn}`
+                    } pendingBtn`}
                   >
                     <span>PENDING</span>
                     <span style={{ marginLeft: "10px" }}>

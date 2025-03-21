@@ -956,14 +956,27 @@ const Timeline = ({
     getTimelineHeading(item, index);
 
     return (
-      <li key={item?.id}>
-        <Tooltip title={item.userName} placement="bottom">
+      <li
+        key={item?.id}
+        id={`tooltip-username-${index}`}
+        name={`tooltip-username-${index}`}
+      >
+        <Tooltip
+          id="tooltip-username"
+          name="tooltip-username"
+          title={item.userName}
+          placement="bottom"
+        >
           <Popover
             placement="bottom"
             content={userDetails}
             onOpenChange={() => renderUserDetails(item.userName)}
           >
-            <div className={getBadgeClassName(item, index)}>
+            <div
+              className={getBadgeClassName(item, index)}
+              id={`user-timeline${index}`}
+              name={`user-timeline${index}`}
+            >
               {splitUserName(item.userName)}
             </div>
           </Popover>

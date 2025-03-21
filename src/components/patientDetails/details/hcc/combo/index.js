@@ -264,14 +264,14 @@ const Combo = ({
           )
         }
       >
-        <div className={`${visitStyles.comboContainer}`}>
-          <div className={`row ${visitStyles.comboContainer2}`}>
-            <div className="col-4">
+        <div id="combo-container" name="combo-container" className={`${visitStyles.comboContainer}`}>
+          <div id="combo-container2" name="combo-container2" className={`row ${visitStyles.comboContainer2}`}>
+            <div className="col-4" id="combo-drag" name="combo-drag">
               <Droppable droppableId={"HCC"} key={"HCC"}>
                 {(provided) => {
                   return (
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
-                      <div className={`${visitStyles.comboTitle}`}>
+                    <div id="combo-drag-container" name="combo-drag-container" {...provided.droppableProps} ref={provided.innerRef}>
+                      <div id="combo-valid-code" name="combo-valid-code" className={`${visitStyles.comboTitle}`}>
                         <span>VALID CODES </span>
                       </div>
                       <ComboCard
@@ -305,6 +305,7 @@ const Combo = ({
                         cardTitle="HCC"
                         provided={provided}
                         actions={actions}
+                        id = "combo-drag-container"
                       />
                     </div>
                   );
@@ -352,6 +353,7 @@ const Combo = ({
                         setSelectCardTitle={setSelectCardTitle}
                         provided={provided}
                         actions={actions}
+                        id="CARE-GAP-drag-container"
                       />
                     </div>
                   );
@@ -404,6 +406,7 @@ const Combo = ({
                         setSelectCardTitle={setSelectCardTitle}
                         provided={provided}
                         actions={actions}
+                        id="DELETED-COMBO-drag-container"
                       />
                     </div>
                   );

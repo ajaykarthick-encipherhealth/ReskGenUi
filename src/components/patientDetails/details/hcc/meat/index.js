@@ -59,7 +59,8 @@ const Meat = ({
   getLabPDFFile,
   storeFileDetails,
   isSpinnerLoading,
-  patientDetailsLoad
+  patientDetailsLoad,
+
 }) => {
   const [meatEdit, setMeatEdit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -320,7 +321,11 @@ const Meat = ({
   const onFinishFailed = (form) => {};
 
   return (
-    <div className={visitStyles?.meatContainer}>
+    <div
+      className={visitStyles?.meatContainer}
+      id="meat-container"
+      name="meat-container"
+    >
       {/* {fileLoading ? <LogoLoader /> : null} */}
       <DragDropContext
         onDragEnd={(result) =>
@@ -335,50 +340,56 @@ const Meat = ({
           )
         }
       >
-        <div className={visitStyles.meatcontainer}>
+        <div className={visitStyles.meatcontainer} id="meat-criteria-content">
           <Droppable droppableId={"HCC"} key={"HCC"}>
             {(provided) => {
               return (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {patientDetailsLoad ? 
-                  <CardSkeleton count={6}/>
-                  :
-                  <MeatCard
-                    list={
-                      userId == "reviewer@3gencogentai.onmicrosoft.com"
-                        ? isBlockRxHcc
-                        : meatCriteriaList
-                    }
-                    captureSectionMatching={captureSectionMatching}
-                    encounterDateMatching={encounterDateMatching}
-                    okText="OK"
-                    cancelText="Cancel"
-                    popConfirmTitle="Do you want to move to Delete?"
-                    setSearch={setSearch}
-                    setFileLoading={setFileLoading}
-                    setFileModalHeader={setFileModalHeader}
-                    onchangeMeat={onchangeMeat}
-                    setIsModalOpen={setIsModalOpen}
-                    isAddComboCode={false}
-                    setConfirmNotesModalValid={setConfirmNotesModalValid}
-                    setIsValidAction={setIsValidAction}
-                    patientDocumentResult={patientDocumentResult}
-                    setSelectMeatResult={setSelectMeatResult}
-                    activeMeatTitle={activeMeatTitle}
-                    setIsModalOpenLab={setIsModalOpenLab}
-                    setIsModalOpenRadiology={setIsModalOpenRadiology}
-                    setSelectHyperlink={setSelectHyperlink}
-                    setEditData={setEditData}
-                    setMeatEdit={setMeatEdit}
-                    addMeatQuery={addMeatQuery}
-                    getDisTitlePopover={getDisTitlePopover}
-                    cardTitle="VALID_MEAT"
-                    setLabData={setLabData}
-                    labData={labData}
-                    setSuggestedMeatForm={setSuggestedMeatForm}
-                    setSelectCardTitle={setSelectCardTitle}
-                    provided={provided}
-                  />}
+                <div
+                  id="meat-card-container"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {patientDetailsLoad ? (
+                    <CardSkeleton count={6} />
+                  ) : (
+                    <MeatCard
+                      list={
+                        userId == "reviewer@3gencogentai.onmicrosoft.com"
+                          ? isBlockRxHcc
+                          : meatCriteriaList
+                      }
+                      captureSectionMatching={captureSectionMatching}
+                      encounterDateMatching={encounterDateMatching}
+                      okText="OK"
+                      cancelText="Cancel"
+                      popConfirmTitle="Do you want to move to Delete?"
+                      setSearch={setSearch}
+                      setFileLoading={setFileLoading}
+                      setFileModalHeader={setFileModalHeader}
+                      onchangeMeat={onchangeMeat}
+                      setIsModalOpen={setIsModalOpen}
+                      isAddComboCode={false}
+                      setConfirmNotesModalValid={setConfirmNotesModalValid}
+                      setIsValidAction={setIsValidAction}
+                      patientDocumentResult={patientDocumentResult}
+                      setSelectMeatResult={setSelectMeatResult}
+                      activeMeatTitle={activeMeatTitle}
+                      setIsModalOpenLab={setIsModalOpenLab}
+                      setIsModalOpenRadiology={setIsModalOpenRadiology}
+                      setSelectHyperlink={setSelectHyperlink}
+                      setEditData={setEditData}
+                      setMeatEdit={setMeatEdit}
+                      addMeatQuery={addMeatQuery}
+                      getDisTitlePopover={getDisTitlePopover}
+                      cardTitle="VALID_MEAT"
+                      setLabData={setLabData}
+                      labData={labData}
+                      setSuggestedMeatForm={setSuggestedMeatForm}
+                      setSelectCardTitle={setSelectCardTitle}
+                      provided={provided}
+                      id="MeatCriteria-content"
+                    />
+                  )}
                 </div>
               );
             }}
@@ -428,6 +439,7 @@ const Meat = ({
                         setSuggestedMeatForm={setSuggestedMeatForm}
                         setSelectCardTitle={setSelectCardTitle}
                         provided={provided}
+                        id="Deleted-MeatCriteria-content"
                       />
                     </>
                   )}
@@ -489,7 +501,13 @@ const Meat = ({
           <div className="section-container">
             <div className="row">
               <div className="col-4">
-                <div style={{ height: "98%", overflowY: "scroll",paddingRight:"5px" }}>
+                <div
+                  style={{
+                    height: "98%",
+                    overflowY: "scroll",
+                    paddingRight: "5px",
+                  }}
+                >
                   <div
                     className={
                       selectMeatResult?.isMeatCriteriaPresent === true
@@ -568,7 +586,7 @@ const Meat = ({
                           getLabPDF: getLabPDF,
                           getCurrentDiseaseType: getCurrentDiseaseType,
                           storeFileDetails: storeFileDetails,
-                          isShow: selectMeatResult.isShow
+                          isShow: selectMeatResult.isShow,
                         })}
                       </div>
                       <div
@@ -588,7 +606,7 @@ const Meat = ({
                           patientDocumentResult: patientDocumentResult,
                           getCurrentDiseaseType: getCurrentDiseaseType,
                           storeFileDetails: storeFileDetails,
-                          isShow: selectMeatResult.isShow
+                          isShow: selectMeatResult.isShow,
                         })}
                       </div>
                     </div>
@@ -636,7 +654,7 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                      <div  className="col-2">
+                      <div className="col-2">
                         <div className={`${visitStyles.meat_box}`}>
                           <span
                             className={`text-center ${

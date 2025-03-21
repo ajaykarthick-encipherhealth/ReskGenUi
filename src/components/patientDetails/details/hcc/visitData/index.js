@@ -280,6 +280,7 @@ const VisitData = ({
                             provided={provided}
                             popup={zIndex}
                             actions={actions}
+                            id="visit-data-hcc"
                           />
                         </div>
                       </div>
@@ -322,22 +323,23 @@ const VisitData = ({
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                       >
-                        <div  onClick={() => handleShowList("care")}
+                        <div
+                          onClick={() => handleShowList("care")}
                           className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
                         >
                           <span
                             className={`${visitStyles.suggested_title_name}`}
                           >
-                             <span className="mx-1">
-                            <FontAwesomeIcon
-                              icon={
-                                showList.includes("care")
-                                  ? faAngleDown
-                                  : faAngleRight
-                              }
-                            />
-                          </span>
-                            CARE GAP 
+                            <span className="mx-1">
+                              <FontAwesomeIcon
+                                icon={
+                                  showList.includes("care")
+                                    ? faAngleDown
+                                    : faAngleRight
+                                }
+                              />
+                            </span>
+                            CARE GAP
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
@@ -348,59 +350,62 @@ const VisitData = ({
                           </div>
                         </div>
                         {showList.includes("care") && (
-                        <div
-                          className={visitStyles.suggestedcontainer2}
-                          style={{
-                            height:
-                              showList.length == 1
-                                ? "58vh"
-                                : showList.length == 2
-                                ? "27vh"
-                                : "18vh",
-                          }}
-                        >
-                          <div className={visitStyles.hccStickey_head}>
-                            <HccCards
-                              list={suggestedHccList}
-                              hccVersionDetails={hccVersionDetails}
-                              captureSectionMatching={captureSectionMatching}
-                              encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={allMeatList}
-                              onchangeValid={onchangeValid}
-                              getValidHccDetails={getValidHccDetails}
-                              setFormValues={setFormValues}
-                              setIsEditHccForm={setIsEditHccForm}
-                              setFormEditPlace={setFormEditPlace}
-                              okText={"Move to Deleted"}
-                              editFormPlace={"SUGGESTED_DISEASE"}
-                              setOpens={setOpens}
-                              setCombiTree={setCombiTree}
-                              setActiveTabHead={setActiveTabHead}
-                              setActiveMeatTitle={setActiveMeatTitle}
-                              setActiveComboTree={setActiveComboTree}
-                              setSearch={setSearch}
-                              setFileLoading={setFileLoading}
-                              setIsModalOpenLab={setIsModalOpenLab}
-                              setIsModalOpenRadiology={setIsModalOpenRadiology}
-                              setIsModalOpenValidCodes={
-                                setIsModalOpenValidCodes
-                              }
-                              setFileModalHeader={setFileModalHeader}
-                              patientDocumentResult={patientDocumentResult}
-                              setConfirmNotesModalValid={
-                                setConfirmNotesModalValid
-                              }
-                              setIsValidAction={setIsValidAction}
-                              cardTitle="SUGGESTED"
-                              isVisitData={true}
-                              provided={provided}
-                              popup={zIndex}
-                              setSuggestedMeatForm={setSuggestedMeatForm}
-                              setSelectCardTitle={setSelectCardTitle}
-                              actions={actions}
-                            />
+                          <div
+                            className={visitStyles.suggestedcontainer2}
+                            style={{
+                              height:
+                                showList.length == 1
+                                  ? "58vh"
+                                  : showList.length == 2
+                                  ? "27vh"
+                                  : "18vh",
+                            }}
+                          >
+                            <div className={visitStyles.hccStickey_head}>
+                              <HccCards
+                                list={suggestedHccList}
+                                hccVersionDetails={hccVersionDetails}
+                                captureSectionMatching={captureSectionMatching}
+                                encounterDateMatching={encounterDateMatching}
+                                meatCriteriaList={allMeatList}
+                                onchangeValid={onchangeValid}
+                                getValidHccDetails={getValidHccDetails}
+                                setFormValues={setFormValues}
+                                setIsEditHccForm={setIsEditHccForm}
+                                setFormEditPlace={setFormEditPlace}
+                                okText={"Move to Deleted"}
+                                editFormPlace={"SUGGESTED_DISEASE"}
+                                setOpens={setOpens}
+                                setCombiTree={setCombiTree}
+                                setActiveTabHead={setActiveTabHead}
+                                setActiveMeatTitle={setActiveMeatTitle}
+                                setActiveComboTree={setActiveComboTree}
+                                setSearch={setSearch}
+                                setFileLoading={setFileLoading}
+                                setIsModalOpenLab={setIsModalOpenLab}
+                                setIsModalOpenRadiology={
+                                  setIsModalOpenRadiology
+                                }
+                                setIsModalOpenValidCodes={
+                                  setIsModalOpenValidCodes
+                                }
+                                setFileModalHeader={setFileModalHeader}
+                                patientDocumentResult={patientDocumentResult}
+                                setConfirmNotesModalValid={
+                                  setConfirmNotesModalValid
+                                }
+                                setIsValidAction={setIsValidAction}
+                                cardTitle="SUGGESTED"
+                                isVisitData={true}
+                                provided={provided}
+                                popup={zIndex}
+                                setSuggestedMeatForm={setSuggestedMeatForm}
+                                setSelectCardTitle={setSelectCardTitle}
+                                actions={actions}
+                                id="visit-data-care-gap"
+                              />
+                            </div>
                           </div>
-                        </div>
                         )}
                       </div>
                     );
@@ -493,6 +498,7 @@ const VisitData = ({
                               setSelectCardTitle={setSelectCardTitle}
                               remove
                               actions={actions}
+                              id="visit-data-potential"
                             />
                           </div>
                         </div>
@@ -515,15 +521,15 @@ const VisitData = ({
                           onClick={() => handleShowList("deleted")}
                         >
                           <span className={`${visitStyles.deleted_title_name}`}>
-                          <span className="mx-1">
-                            <FontAwesomeIcon
-                              icon={
-                                showList.includes("deleted")
-                                  ? faAngleDown
-                                  : faAngleRight
-                              }
-                            />
-                          </span>
+                            <span className="mx-1">
+                              <FontAwesomeIcon
+                                icon={
+                                  showList.includes("deleted")
+                                    ? faAngleDown
+                                    : faAngleRight
+                                }
+                              />
+                            </span>
                             DELETED CODES
                           </span>
                           <div className="d-flex justify-content-center">
@@ -535,61 +541,64 @@ const VisitData = ({
                           </div>
                         </div>
                         {showList.includes("deleted") && (
-                        <div
-                          className={visitStyles.deletedContainers}
-                          style={{
-                            height:
-                              showList.length == 1
-                                ? "55vh"
-                                : showList.length == 2
-                                ? "27vh"
-                                : "18vh",
-                            overflow: "scroll",
-                          }}
-                        >
-                          <div className={visitStyles.hccStickey_head}>
-                            <HccCards
-                              list={deletedHccList}
-                              hccVersionDetails={hccVersionDetails}
-                              captureSectionMatching={captureSectionMatching}
-                              encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={deletedMeatList}
-                              onchangeValid={onchangeValid}
-                              getValidHccDetails={getValidHccDetails}
-                              setFormValues={setFormValues}
-                              setIsEditHccForm={setIsEditHccForm}
-                              setFormEditPlace={setFormEditPlace}
-                              okText="Move to Suggested"
-                              cancelText="Move to HCC"
-                              isDeletedCodes={true}
-                              setOpens={setOpens}
-                              setCombiTree={setCombiTree}
-                              setActiveTabHead={setActiveTabHead}
-                              setActiveMeatTitle={setActiveMeatTitle}
-                              setActiveComboTree={setActiveComboTree}
-                              setSearch={setSearch}
-                              setFileLoading={setFileLoading}
-                              setIsModalOpenLab={setIsModalOpenLab}
-                              setIsModalOpenRadiology={setIsModalOpenRadiology}
-                              setIsModalOpenValidCodes={
-                                setIsModalOpenValidCodes
-                              }
-                              setFileModalHeader={setFileModalHeader}
-                              patientDocumentResult={patientDocumentResult}
-                              setConfirmNotesModalValid={
-                                setConfirmNotesModalValid
-                              }
-                              setIsValidAction={setIsValidAction}
-                              cardTitle="DELETED"
-                              isVisitData={true}
-                              provided={provided}
-                              popup={zIndex}
-                              setSuggestedMeatForm={setSuggestedMeatForm}
-                              setSelectCardTitle={setSelectCardTitle}
-                              actions={actions}
-                            />
+                          <div
+                            className={visitStyles.deletedContainers}
+                            style={{
+                              height:
+                                showList.length == 1
+                                  ? "55vh"
+                                  : showList.length == 2
+                                  ? "27vh"
+                                  : "18vh",
+                              overflow: "scroll",
+                            }}
+                          >
+                            <div className={visitStyles.hccStickey_head}>
+                              <HccCards
+                                list={deletedHccList}
+                                hccVersionDetails={hccVersionDetails}
+                                captureSectionMatching={captureSectionMatching}
+                                encounterDateMatching={encounterDateMatching}
+                                meatCriteriaList={deletedMeatList}
+                                onchangeValid={onchangeValid}
+                                getValidHccDetails={getValidHccDetails}
+                                setFormValues={setFormValues}
+                                setIsEditHccForm={setIsEditHccForm}
+                                setFormEditPlace={setFormEditPlace}
+                                okText="Move to Suggested"
+                                cancelText="Move to HCC"
+                                isDeletedCodes={true}
+                                setOpens={setOpens}
+                                setCombiTree={setCombiTree}
+                                setActiveTabHead={setActiveTabHead}
+                                setActiveMeatTitle={setActiveMeatTitle}
+                                setActiveComboTree={setActiveComboTree}
+                                setSearch={setSearch}
+                                setFileLoading={setFileLoading}
+                                setIsModalOpenLab={setIsModalOpenLab}
+                                setIsModalOpenRadiology={
+                                  setIsModalOpenRadiology
+                                }
+                                setIsModalOpenValidCodes={
+                                  setIsModalOpenValidCodes
+                                }
+                                setFileModalHeader={setFileModalHeader}
+                                patientDocumentResult={patientDocumentResult}
+                                setConfirmNotesModalValid={
+                                  setConfirmNotesModalValid
+                                }
+                                setIsValidAction={setIsValidAction}
+                                cardTitle="DELETED"
+                                isVisitData={true}
+                                provided={provided}
+                                popup={zIndex}
+                                setSuggestedMeatForm={setSuggestedMeatForm}
+                                setSelectCardTitle={setSelectCardTitle}
+                                actions={actions}
+                                id="visit-data-delete"
+                              />
+                            </div>
                           </div>
-                        </div>
                         )}
                       </div>
                     );
@@ -732,6 +741,7 @@ const VisitData = ({
                               isVisitData={true}
                               actions={actions}
                               selectDosValue={selectDosValue}
+                              id="visit-data-valid"
                             />
                           </div>
                         </div>
@@ -807,6 +817,7 @@ const VisitData = ({
                               setSelectCardTitle={setSelectCardTitle}
                               actions={actions}
                               selectDosValue={selectDosValue}
+                              id="visit-data-care-gap"
                             />
                           </div>
                         </div>
@@ -883,6 +894,7 @@ const VisitData = ({
                               setSelectCardTitle={setSelectCardTitle}
                               actions={actions}
                               selectDosValue={selectDosValue}
+                              id="visit-data-potential"
                             />
                           </div>
                         </div>
@@ -955,6 +967,7 @@ const VisitData = ({
                               setSelectCardTitle={setSelectCardTitle}
                               actions={actions}
                               selectDosValue={selectDosValue}
+                              id="visit-data-deleted"
                             />
                           </div>
                         </div>

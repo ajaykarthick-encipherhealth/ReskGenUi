@@ -114,20 +114,53 @@ const MyWorkQueueFilter = ({
   };
 
   return (
-    <div className={styles.container}>
-      <div onClick={filterIconClick}>
+    <div
+      className={styles.container}
+      id="myworkqueue-container"
+      name="myworkqueue-container"
+    >
+      <div
+        onClick={filterIconClick}
+        id="myworkqueue-filter-icon"
+        name="myworkqueue-filter-icon"
+      >
         <span className={visitStyles.circleCard}>{SVGICON.filter}</span>
       </div>
       {filterModalOpen && (
-        <div className={styles.popover}>
-          <div className={styles.popover_inner}>
+        <div
+          className={styles.popover}
+          id="myworkqueue-popover"
+          name="myworkqueue-popover"
+        >
+          <div
+            className={styles.popover_inner}
+            id="myworkqueue-popover-inner"
+            name="myworkqueue-popover-inner"
+          >
             {/* <h6 className={styles.popover_title}>Filter</h6> */}
-            <div className={styles.popover_content}>
-              <div className={`myworkqueue_filter ${styles.detailsContainer}`}>
-                <div className="row">
-                  <div className="col-xl-12 mb-2">
+            <div
+              className={styles.popover_content}
+              id="myworkqueue-popover-content"
+              name="myworkqueue-popover-content"
+            >
+              <div
+                className={`myworkqueue_filter ${styles.detailsContainer}`}
+                id="myworkqueue-details-filter"
+                name="myworkqueue-details-filter"
+              >
+                <div
+                  className="row"
+                  id="myworkqueue-filter-row"
+                  name="myworkqueue-filter-row"
+                >
+                  <div
+                    className="col-xl-12 mb-2"
+                    id="myworkqueue-status"
+                    name="myworkqueue-status"
+                  >
                     <label>Status</label>
                     <Select
+                      data-testid="myworkqueue-status-status"
                       placeholder="Select Status"
                       options={statusOptions}
                       style={{ height: "42px", width: "100%" }}
@@ -138,36 +171,49 @@ const MyWorkQueueFilter = ({
                       defaultValue={selectedOption}
                     />
                   </div>
-                  <div className="col-xl-12 mb-2">
+                  <div
+                    className="col-xl-12 mb-2"
+                    id={datePicker1Lable}
+                    name={datePicker1Lable}
+                  >
                     <label>{datePicker1Lable}</label>
-                    <RangePicker
-                      ref={pickerRef}
-                      format="MM-DD-YYYY"
-                      onChange={(dates, dateStrings) => {
-                        handleChangeprocessedDate(dates, dateStrings);
-                        if (!dates || dates.length === 0) {
-                          setTimeout(() => pickerRef.current?.focus(), 100);
-                        }
-                      }}
-                      disabledDate={(current) => disableFutureDate(current)}
-                      value={selectCompletedPicker}
-                    />
+                    <div id="myworkqueue-selectCompletedPicker">
+                      <RangePicker
+                        data-testid="myworkqueue-selectCompletedPicker"
+                        ref={pickerRef}
+                        format="MM-DD-YYYY"
+                        onChange={(dates, dateStrings) => {
+                          handleChangeprocessedDate(dates, dateStrings);
+                          if (!dates || dates.length === 0) {
+                            setTimeout(() => pickerRef.current?.focus(), 100);
+                          }
+                        }}
+                        disabledDate={(current) => disableFutureDate(current)}
+                        value={selectCompletedPicker}
+                      />
+                    </div>
                   </div>
-                  <div className="col-xl-12 mb-4">
+                  <div
+                    className="col-xl-12 mb-4"
+                    id={datePicker2Lable}
+                    name={datePicker2Lable}
+                  >
                     <label>{datePicker2Lable}</label>
-
-                    <RangePicker
-                      ref={pickerRef1}
-                      format="MM-DD-YYYY"
-                      onChange={(dates, dateStrings) => {
-                        handleDatePickerChange(dates, dateStrings);
-                        if (!dates || dates.length === 0) {
-                          setTimeout(() => pickerRef1.current?.focus(), 100);
-                        }
-                      }}
-                      disabledDate={(current) => disableFutureDate(current)}
-                      value={selectComputedPicker}
-                    />
+                    <div id="myworkqueue-selectComputedPicker">
+                      <RangePicker
+                        data-testid="myworkqueue-selectComputedPicker"
+                        ref={pickerRef1}
+                        format="MM-DD-YYYY"
+                        onChange={(dates, dateStrings) => {
+                          handleDatePickerChange(dates, dateStrings);
+                          if (!dates || dates.length === 0) {
+                            setTimeout(() => pickerRef1.current?.focus(), 100);
+                          }
+                        }}
+                        disabledDate={(current) => disableFutureDate(current)}
+                        value={selectComputedPicker}
+                      />
+                    </div>
                   </div>
                   <div></div>
                 </div>

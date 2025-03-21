@@ -639,7 +639,11 @@ const StatusAction = ({
         <>
           {(userRole && userRole?.toLowerCase() == "admin") ||
           (userRole && userRole?.toLowerCase() === "tenant_admin") ? (
-            <div className={`${visitStyles.actionbtnContainer} text-truncate`}>
+            <div
+              id="allocate-action"
+              name="allocate-action"
+              className={`${visitStyles.actionbtnContainer} text-truncate`}
+            >
               {/* <Dropdown
                 overlay={adminActionItems}
                 onVisibleChange={(v) => setMenuIsOpen(v)}
@@ -668,7 +672,10 @@ const StatusAction = ({
               </Button>
             </div>
           ) : userRole && userRole?.toLowerCase() == "supervisor" ? (
-            <div className={`${visitStyles.actionbtnContainer} text-truncate`}>
+            <div
+              className={`ant-badge ${visitStyles.actionbtnContainer} text-truncate`}
+              id="auditbtnContainer"
+            >
               <Dropdown
                 id="auditbtn"
                 overlay={renderAuditMenu()}
@@ -717,7 +724,11 @@ const StatusAction = ({
               </Dropdown>
             </div>
           ) : (
-            <div className={`${visitStyles.actionbtnContainer} text-truncate`}>
+            <div
+              className={`${visitStyles.actionbtnContainer} ant-badge text-truncate`}
+              id="auditbtnContainer"
+              name="auditbtnContainer"
+            >
               {patienIdDetails?.processedStatus == "COMPLETED" ? (
                 <Dropdown
                   id="auditbtn"
@@ -730,12 +741,12 @@ const StatusAction = ({
                   }
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
-                  className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
+                  className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
                 >
                   <Button
                     id="auditbtn"
                     type="primary"
-                    className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
+                    className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
                   >
                     <span>COMPLETED</span>
                     <span style={{ marginLeft: "10px" }}>
@@ -806,6 +817,7 @@ const StatusAction = ({
                   className={`pendingBtn ${visitStyles.pendingBtn}`}
                 >
                   <Button
+                    id="auditbtnPending"
                     type="primary"
                     className={`pendingBtn ${visitStyles.pendingBtn}`}
                   >

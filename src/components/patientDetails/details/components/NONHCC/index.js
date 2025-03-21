@@ -64,6 +64,7 @@ const NonHccCards = ({
   storeFileDetails,
   patientDetailsResult,
   patientDetailsLoad,
+  id,
   isDosSelected,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
@@ -86,14 +87,32 @@ const NonHccCards = ({
       ) : (
         list?.map((data, i) => (
           <>
-            <li key={data?.id}>
-              <div className={`hccActiveCard ${visitStyles.hcc_card}`}>
+            <li
+              id={`${id}-Active-card-${i}`}
+              name={`${id}-Active-card-${i}`}
+              key={data?.id}
+            >
+              <div
+                id={`${id}-active-card-list-${i}`}
+                name={`${id}-active-card-list-${i}`}
+                className={`hccActiveCard ${visitStyles.hcc_card}`}
+              >
                 <div
+                  id={`${id}-name-head-${i}`}
+                  name={`${id}-name-head-${i}`}
                   className={` justify-content-between ${visitStyles.hcc_card_nameHead}`}
                 >
-                  <div>
-                    <span className="disease-name d-flex mb-1">
-                      <span className="valid-dis-name">
+                  <div id={`${id}-disease-name`} name={`${id}-disease-name`}>
+                    <span
+                      id={`${id}-valid-dis-${i}`}
+                      name={`${id}-disease-name`}
+                      className="disease-name d-flex mb-1"
+                    >
+                      <span
+                        id={`${id}-diagnosisCode-${i}`}
+                        name={`${id}-diagnosisCode-${i}`}
+                        className="valid-dis-name"
+                      >
                         {data.diagnosisCode}
                       </span>
 
@@ -117,7 +136,11 @@ const NonHccCards = ({
                       </Popover>
                     </span>
                   </div>
-                  <div className="d-flex">
+                  <div
+                    id={`${id}-Action-${i}`}
+                    name={`${id}-Action-${i}`}
+                    className="d-flex"
+                  >
                     <Popconfirm
                       title="Choose an action"
                       icon={
@@ -151,8 +174,16 @@ const NonHccCards = ({
                       }
                     >
                       {isDosSelected && (
-                        <div className="cr-pointer d-flex">
-                          <div className={visitStyles.close_icon}>
+                        <div
+                          id={`${id}-close-icon-${i}`}
+                          name={`${id}-close-icon-${i}`}
+                          className="cr-pointer d-flex"
+                        >
+                          <div
+                            id={`${id}-close-icon-action${i}`}
+                            name={`${id}-close-icon-action${i}`}
+                            className={visitStyles.close_icon}
+                          >
                             <FontAwesomeIcon
                               icon={faArrowsAlt}
                               style={{
@@ -166,9 +197,21 @@ const NonHccCards = ({
                     </Popconfirm>
                   </div>
                 </div>
-                <div className="d-flex justify-content-between">
-                  <div className={`${visitStyles.hoverActiveHcc}`}>
-                    <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                <div
+                  id={`${id}-hoverActiveHcc-${i}`}
+                  name={`${id}-hoverActiveHcc-${i}`}
+                  className="d-flex justify-content-between"
+                >
+                  <div
+                    id={`${id}-hoverActiveHcc-content-${i}`}
+                    name={`${id}-hoverActiveHcc-content-${i}`}
+                    className={`${visitStyles.hoverActiveHcc}`}
+                  >
+                    <div
+                      id={`${id}-encounterAndSectionHeader-${i}`}
+                      name={`${id}-encounterAndSectionHeader-${i}`}
+                      className={`${visitStyles.encounterAndSectionHeader}`}
+                    >
                       {getProviderNameTag({
                         providerNames: data?.providerName,
                         hyperlinks: data?.providerHyperlinks,
@@ -187,7 +230,11 @@ const NonHccCards = ({
                         storeFileDetails: storeFileDetails,
                       })}
                     </div>
-                    <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                    <div
+                      id={`${id}-encounter-dos-${i}`}
+                      name={`${id}-encounter-dos-${i}`}
+                      className={`${visitStyles.encounterAndSectionHeader}`}
+                    >
                       {getEncounterDateBackground({
                         value: data?.encounterDateSplit,
                         encounterDateMatching: encounterDateMatching,
@@ -203,7 +250,11 @@ const NonHccCards = ({
                         storeFileDetails: storeFileDetails,
                       })}
                     </div>
-                    <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                    <div
+                      id={`${id}-capture-file-${i}`}
+                      name={`${id}-capture-file-${i}`}
+                      className={`${visitStyles.encounterAndSectionHeader}`}
+                    >
                       {getCaptureSectionBackgroundFile({
                         value: data?.capturedSections,
                         encounterDate: data?.encounterDate,
@@ -234,15 +285,33 @@ const NonHccCards = ({
                       })}
                     </div>
                   </div>
-                  <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                    <div className="d-flex justify-content-end mt-2">
+                  <div
+                    id={`${id}-cmx-rx-container-${i}`}
+                    name={`${id}-cmx-rx-container-${i}`}
+                    className={`${visitStyles.encounterAndSectionHeader}`}
+                  >
+                    <div
+                      id={`${id}-cmx-rx-content-${i}`}
+                      name={`${id}-cmx-rx-content-${i}`}
+                      className="d-flex justify-content-end mt-2"
+                    >
                       {data.isCmsHcc && (
-                        <div className={`${visitStyles.cmsStatus} mx-1`}>
+                        <div
+                          id={`${id}-cmx-content-${i}`}
+                          name={`${id}-cmx-content-${i}`}
+                          className={`${visitStyles.cmsStatus} mx-1`}
+                        >
                           CMS
                         </div>
                       )}
                       {data.isRxHcc && (
-                        <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>
+                        <div
+                          id={`${id}-rx-content-${i}`}
+                          name={`${id}-cmx-content-${i}`}
+                          className={`${visitStyles.rxStatus} mx-1`}
+                        >
+                          RX
+                        </div>
                       )}
                     </div>
                   </div>

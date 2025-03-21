@@ -183,6 +183,7 @@ const VisitData = ({
                   setIsValidAction={setIsValidAction}
                   cardTitle="NONHCC"
                   isVisitData={true}
+                  id="non-hcc-visit-data"
                 />
               </div>
             </div>
@@ -208,7 +209,7 @@ const VisitData = ({
                 className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
               >
                 <span className={`${visitStyles.suggested_title_name}`}>
-                CARE GAP
+                  CARE GAP
                 </span>
                 <div className="d-flex justify-content-center">
                   <span className={`${visitStyles.suggested_title_badge}`}>
@@ -247,6 +248,7 @@ const VisitData = ({
                     setIsValidAction={setIsValidAction}
                     cardTitle="SUGGESTED"
                     isVisitData={true}
+                    id="non-hcc-care-gap"
                   />
                 </div>
               </div>
@@ -317,6 +319,7 @@ const VisitData = ({
                       setIsValidAction={setIsValidAction}
                       cardTitle="NONHCC"
                       isVisitData={true}
+                      id="non-hcc-visit-drag"
                     />
                   </div>
                 </div>
@@ -328,7 +331,7 @@ const VisitData = ({
                   className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
                 >
                   <span className={`${visitStyles.suggested_title_name}`}>
-                  CARE GAP
+                    CARE GAP
                   </span>
                   <div className="d-flex justify-content-center">
                     <span className={`${visitStyles.suggested_title_badge}`}>
@@ -368,6 +371,7 @@ const VisitData = ({
                       setIsValidAction={setIsValidAction}
                       cardTitle="SUGGESTED"
                       isVisitData={true}
+                      id="non-hcc-visit-care-gap-drag"
                     />
                   </div>
                 </div>

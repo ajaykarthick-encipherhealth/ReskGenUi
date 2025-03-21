@@ -202,6 +202,7 @@ const File = ({
                   setConfirmNotesModalValid={setConfirmNotesModalValid}
                   setIsValidAction={setIsValidAction}
                   cardTitle="NONHCC"
+                  id="non-hcc"
                 />
               </div>
             </div>
@@ -270,6 +271,7 @@ const File = ({
                   setConfirmNotesModalValid={setConfirmNotesModalValid}
                   setIsValidAction={setIsValidAction}
                   cardTitle="SUGGESTED"
+                  id="non-hcc-deleted-codes"
                 />
               </div>
             </div>

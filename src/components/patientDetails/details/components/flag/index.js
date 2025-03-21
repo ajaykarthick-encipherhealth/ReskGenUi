@@ -201,6 +201,8 @@ const Flag = ({
 
   return (
     <Offcanvas
+      id="flag-drawer"
+      name="flag-drawer"
       onHide={setOpen}
       show={open}
       placement="end"
@@ -209,11 +211,22 @@ const Flag = ({
         width: "370px",
       }}
     >
-      <div className="offcanvas-header">
-        <h5 className="modal-title" id="#gridSystemModal">
+      <div
+        id="flag-head-container"
+        name="flag-head-container"
+        className="offcanvas-header"
+      >
+        <h5
+          id="flag-name-container"
+          name="flag-name-container"
+          className="modal-title"
+          // id="#gridSystemModal"
+        >
           Flag The File
         </h5>
         <button
+          id="flag-close"
+          name="flag-close"
           type="button"
           className="btn-close"
           onClick={() => setOpen(false)}
@@ -221,12 +234,35 @@ const Flag = ({
           <i className="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <div className="offcanvas-body">
-        <div className="border rounded p-2 py-3 mb-3">
-          <Form noValidate validated={validated} onSubmit={handleSubmitFlag}>
-            <div className="row">
-              <div className="col-xl-12 mb-3">
+      <div
+        id="Flag-drawer-body"
+        name="Flag-drawer-body"
+        className="offcanvas-body"
+      >
+        <div
+          id="flag-form-container"
+          name="flag-form-container"
+          className="border rounded p-2 py-3 mb-3"
+        >
+          <Form
+            id="flag-form-body"
+            name="flag-form-body"
+            noValidate
+            validated={validated}
+            onSubmit={handleSubmitFlag}
+          >
+            <div
+              id="flag-container-row"
+              name="flag-container-row"
+              className="row"
+            >
+              <div
+                id="flag-container-select"
+                name="flag-container-select"
+                className="col-xl-12 mb-3"
+              >
                 <Select
+                  data-testid="flag-container-select"
                   options={flagPostList}
                   className="customize-react-select"
                   showSearch={true}
@@ -255,14 +291,22 @@ const Flag = ({
                 />
               </div>
             </div>
-            <div className="row">
-              <div className="col-xl-12">
+            <div
+              id="flag-text-area-container"
+              name="flag-text-area-container"
+              className="row"
+            >
+              <div
+                id="flag-text-area-content"
+                name="flag-text-area-conten"
+                className="col-xl-12"
+              >
                 <textarea
                   style={{ cursor: "default !important" }}
                   className={visitStyles.commentsFormControl}
                   rows="5"
                   required
-                  id="comments"
+                  id="Add-flag"
                   name="comments"
                   value={inputValue.comments}
                   placeholder="Add Comments"
@@ -272,9 +316,10 @@ const Flag = ({
                 ></textarea>
               </div>
             </div>
-            <div className="row">
-              <div className="d-flex justify-content-center">
+            <div id="flag-btn-row" className="row">
+              <div id="flag-btn-save" className="d-flex justify-content-center">
                 <Button
+                  id="flag-btn-value"
                   className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
                   type="submit"
                   disabled={commentsTrigger}
@@ -289,14 +334,20 @@ const Flag = ({
         <div>
           {flagsDetailsResult?.response?.map((data, index) => (
             <div
+              id={`flag-list-${index}`}
+              name={`flag-list-${index}`}
               className={`${visitStyles.comments_card} position-relative`}
               key={index}
             >
               <div
+                id={`flag-list-close-${index}`}
+                name={`flag-list-close-${index}`}
                 className="position-absolute top-0 end-0 mt-2 me-2"
                 style={{ cursor: "pointer" }}
               >
                 <FontAwesomeIcon
+                  id={`flag-list-close-icon-${index}`}
+                  name={`flag-list-close-icon-${index}`}
                   icon={faXmarkCircle}
                   onClick={() => handleDelete(data?.patientFlagDTO?.flagId)}
                   style={{ color: "#be3144" }}
@@ -304,10 +355,12 @@ const Flag = ({
               </div>
 
               <div
+                id={`flag-comment-container-${index}`}
+                name={`flag-comment-container-${index}`}
                 className={`${visitStyles.commentNameHead}`}
                 style={{ paddingTop: "20px" }}
               >
-                <span className={visitStyles.commentsName}>
+                <span id={`flag-value-${index}`} className={visitStyles.commentsName}>
                   {data?.flagDetails?.flagName && (
                     <>
                       {data?.flagDetails?.flagName
@@ -317,7 +370,7 @@ const Flag = ({
                     </>
                   )}
                 </span>
-                <div>
+                <div id={`flag-value-tootip-${index}`}>
                   <Tooltip
                     placement="bottom"
                     title={data?.patientFlagDTO?.createdBy}

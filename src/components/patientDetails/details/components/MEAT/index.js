@@ -60,7 +60,8 @@ const MeatCard = ({
   setSelectCardTitle,
   provided,
   loading,
-  patientDetailsLoad
+  patientDetailsLoad,
+  id
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
@@ -76,11 +77,13 @@ const MeatCard = ({
     labFile?.data?.response && labData == labFile?.data?.response?.fileId
       ? getPdfEmptyFunction
       : getLabPDFFile;
+
   return (
+
     <>
       {provided && (
-        <div ref={provided?.innerRef} {...provided?.droppableProps}>
-          <div className={`my-post-content pt-3  `} style={{paddingRight:"12px"}}>
+        <div id={`${id}-provided-content`} ref={provided?.innerRef} {...provided?.droppableProps}>
+          <div id={`my-provider-meat`} className={`my-post-content pt-3  `} style={{paddingRight:"12px"}}>
             <div className={visitStyles.meat_head_card}>
               <div className="row">
                 <div className="col-3 text-center text-uppercase">
@@ -122,23 +125,41 @@ const MeatCard = ({
                     {(provided,snapshot) => {
                       return (
                         <div
+                          id={`${id}-meat-drag-${i}`}
+                          name={`${id}-meat-drag-${i}`}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className={
-                            `${item.isMeatCriteriaPresent === true
+                          className={`${
+                            item.isMeatCriteriaPresent === true
                               ? `${visitStyles.meat_details_card_table}`
-                              : `${visitStyles.meat_details_card_false_table}`}
-                              ${snapshot?.isDragging && visitStyles.drag_and_drop_movement_bg}`
+                              : `${visitStyles.meat_details_card_false_table}`
                           }
+                              ${
+                                snapshot?.isDragging &&
+                                visitStyles.drag_and_drop_movement_bg
+                              }`}
                         >
-                          <div className="row">
-                            <div className="col-3 pe-0">
+                          <div
+                            className="row"
+                            id={`${id}-meat-isMeatCriteriaPresent-${i}`}
+                            name={`${id}-meat-isMeatCriteriaPresent-${i}`}
+                          >
+                            <div
+                              className="col-3 pe-0"
+                              id={`${id}-isMeatCriteriaPresent-content-${i}`}
+                              name={`${id}-isMeatCriteriaPresent-content-${i}`}
+                            >
                               <div
                                 className="rounded-start-2"
                                 style={{ padding: "10px" }}
+                                id={`${id}-meat-criteria-grid-${i}`}
+                                name={`${id}-meat-criteria-grid-${i}`}
                               >
-                                <div className="row">
+                                <div
+                                  className="row"
+                                  id={`${id}-meat-criteria-pop-content-${i}`}
+                                >
                                   {/* <div className="col-xl-4 d-grid">
                             <span className="meat-name-details font-bold">
                               {item.diagnosisCode}
@@ -159,15 +180,25 @@ const MeatCard = ({
                               </Badge>
                             )}
                           </div> */}
-                                  <div className="col-12  d-grid">
+                                  <div
+                                    className="col-12  d-grid"
+                                    id={`${id}-meat-pop-grid-${i}`}
+                                    name={`${id}-meat-pop-grid-${i}`}
+                                  >
                                     <Popover
                                       placement="topLeft"
                                       title="Description"
                                       content={item.diseaseName}
                                       overlayStyle={{ zIndex: 1000 }}
                                     >
-                                      <div className="d-flex">
+                                      <div
+                                        id={`${id}-diagnosis-code-name${i}`}
+                                        name={`${id}-diagnosis-code-name${i}`}
+                                        className="d-flex"
+                                      >
                                         <span
+                                          id={`${id}-diagnosis-code-${i}`}
+                                          name={`${id}-diagnosis-code-${i}`}
                                           style={{
                                             fontWeight: "700",
                                             fontSize: "small",
@@ -176,6 +207,8 @@ const MeatCard = ({
                                           {item.diagnosisCode}&nbsp;
                                         </span>
                                         <span
+                                          id={`${id}-meat-diseaseName-${i}`}
+                                          name={`${id}-meat-diseaseName-${i}`}
                                           className="meat-name-details_meat"
                                           style={{ fontSize: "small" }}
                                         >
@@ -185,8 +218,14 @@ const MeatCard = ({
                                     </Popover>
                                   </div>
                                 </div>
-                                <div style={{ marginTop: "5px" }}>
+                                <div
+                                  id={`${id}-MC-encounterAndSectionHeader-${i}`}
+                                  name={`${id}-MC-encounterAndSectionHeader-${i}`}
+                                  style={{ marginTop: "5px" }}
+                                >
                                   <div
+                                    id={`${id}-MC-encounterAndSectionHeader-Value-${i}`}
+                                    name={`${id}-MC-encounterAndSectionHeader-Value-${i}`}
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
                                     {getProviderNameTag({
@@ -267,6 +306,7 @@ const MeatCard = ({
                         
                       > */}
                             <div
+                              id={`${id}-meatHyperlink-${i}`}
                               className={
                                 activeMeatTitle?.header === "M" &&
                                 activeMeatTitle?.diagnosisCode?.replace(
@@ -319,6 +359,8 @@ const MeatCard = ({
                             </div>
 
                             <div
+                              id={`${id}-meat-evaluate-${i}`}
+                              name={`${id}-meat-evaluate-${i}`}
                               className={
                                 activeMeatTitle?.header === "E" &&
                                 activeMeatTitle?.diagnosisCode?.replace(
@@ -341,7 +383,7 @@ const MeatCard = ({
                                 item.evaluateHyperLink,
                                 item
                               )}
-                              <div>
+                              <div id={`${id}-meat-link-${i}`}>
                                 {getCaptureSectionBackgroundMeatNew(
                                   item.evaluateHyperLink,
                                   captureSectionMatching,
@@ -369,6 +411,7 @@ const MeatCard = ({
                               </div>
                             </div>
                             <div
+                              id={`${id}-meat-hyperlink-${i}`}
                               className={
                                 activeMeatTitle?.header === "A" &&
                                 activeMeatTitle?.diagnosisCode?.replace(
@@ -392,7 +435,7 @@ const MeatCard = ({
                                 item.assessmentHyperLink,
                                 item
                               )}
-                              <div>
+                              <div id={`${id}-meat-capture-${i}`}>
                                 {getCaptureSectionBackgroundMeatNew(
                                   item.assessmentHyperLink,
                                   captureSectionMatching,
@@ -420,6 +463,8 @@ const MeatCard = ({
                               </div>
                             </div>
                             <div
+                              id={`${id}-meat-treatment-${i}`}
+                              name={`${id}-meat-treatment-${i}`}
                               className={
                                 activeMeatTitle?.header === "T" &&
                                 activeMeatTitle?.diagnosisCode?.replace(
@@ -443,7 +488,10 @@ const MeatCard = ({
                                 item.treatmentHyperLink,
                                 item
                               )}
-                              <div>
+                              <div
+                                id={`${id}-meat-capture-meat-${i}`}
+                                name={`${id}-meat-capture-meat-${i}`}
+                              >
                                 {getCaptureSectionBackgroundMeatNew(
                                   item.treatmentHyperLink,
                                   captureSectionMatching,
@@ -471,9 +519,15 @@ const MeatCard = ({
                               </div>
                             </div>
                             {isDosSelected && (
-                              <div className="col-1 meatclose">
+                              <div
+                                id={`${id}-meat-action-${i}`}
+                                name={`${id}-meat-action-${i}`}
+                                className="col-1 meatclose ant-badge"
+                              >
                                 <div
-                                  className="d-flex align-items-center justify-content-center"
+                                  name={`${id}-meat-action-content-${i}`}
+                                  id={`${id}-meat-action-content-${i}`}
+                                  className="ant-badge d-flex align-items-center justify-content-center"
                                   style={{
                                     background: "#edf5ff",
                                     height: "100%",
@@ -481,7 +535,10 @@ const MeatCard = ({
                                     borderRadius: "14px",
                                   }}
                                 >
-                                  <div className="d-flex">
+                                  <div
+                                    id={`ant-badge ${id}-meat-action-flex-${i}`}
+                                    className="d-flex"
+                                  >
                                     {/* <Popconfirm
                           title={popConfirmTitle}
                           onConfirm={() =>
@@ -507,7 +564,11 @@ const MeatCard = ({
                           </div>
                         </Popconfirm> */}
 
-                                    <div className={styles.meatActionIcon}>
+                                    <div
+                                      id={`${id}-delete-meat-${i}`}
+                                      name={`${id}-delete-meat-${i}`}
+                                      className={`ant-badge ${styles.meatActionIcon}`}
+                                    >
                                       <MovementAction
                                         validAction={
                                           cardTitle == "DELETED_MEAT"
@@ -542,6 +603,8 @@ const MeatCard = ({
 
                                     <Tooltip title="Edit">
                                       <div
+                                        id={`${id}-meat-edit-${i}`}
+                                        name={`${id}-meat-edit-${i}`}
                                         className={visitStyles.edit_icon}
                                         onClick={() => {
                                           setMeatEdit(true);
@@ -562,6 +625,8 @@ const MeatCard = ({
                                         title={"Already Suggested"}
                                       >
                                         <div
+                                          id={`${id}-meat-Q-${i}`}
+                                          name={`${id}-meat-Q-${i}`}
                                           className={visitStyles.add_meat_query}
                                           style={{ background: "#edbe4e" }}
                                         >
@@ -578,6 +643,8 @@ const MeatCard = ({
                                       </Tooltip>
                                     ) : item.isMeatCriteriaPresent === false ? (
                                       <div
+                                        id={`${id}-addMeatQuery-${i}`}
+                                        name={`${id}-addMeatQuery-${i}`}
                                         onClick={() =>
                                           addMeatQuery(item, "Add")
                                         }

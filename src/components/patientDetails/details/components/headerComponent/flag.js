@@ -18,15 +18,23 @@ const Flag = ({ patienIdDetails, patientDetails, flagsDetailsResult }) => {
   const highestPriorityFlag = sortedFlags[0];
   return (
     <>
-      <div className="w-100 d-flex justify-content-between">
+      <div id="flag-container" name="flag-container" className="w-100 d-flex justify-content-between">
         <div
+          id="flagHcc"
+          name="flagHcc"
           className={`${styles.flagHccCard1} ${styles.rafscoreheader} p-2 mx-2`}
         >
           <h5 className={`font-weight-bold`}>Flag</h5>
-          <div className="mt-3">
+          <div className="mt-3" id="flag-name-container" name="flag-name-container">
             {sortedFlags.length > 0 ? (
-              <div className="d-flex align-items-center justify-content-center cr-pointer">
+              <div
+                id="flag-name"
+                name="flag-name"
+                className="d-flex align-items-center justify-content-center cr-pointer"
+              >
                 <Popover
+                id="flag-popover"
+                name="flag-popover"
                   content={
                     <div style={{ height: "auto", overflowY: "scroll" }}>
                       <strong>Flag details</strong>
@@ -46,7 +54,7 @@ const Flag = ({ patienIdDetails, patientDetails, flagsDetailsResult }) => {
                     count={sortedFlags.length}
                     offset={[5, -3]}
                     size="small"
-                    style={{ right: "3px", background: "#04306f"}}
+                    style={{ right: "3px", background: "#04306f" }}
                   >
                     <span>
                       <SvgFlag

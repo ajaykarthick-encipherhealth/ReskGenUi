@@ -110,13 +110,23 @@ const ReviwerWorkList = ({
             <span className={visitStyles.flagCodes}>Declined</span>
           </div>
         </div>
-        <div className="col-9">
-          <div class="form-group has-search">
+        <div
+          className="col-9"
+          id="my-work-queue-filter"
+          name="my-work-queue-filter"
+        >
+          <div
+            class="form-group has-search"
+            id="my-work-queue-filter-search"
+            name="my-work-queue-filter-search"
+          >
             <FontAwesomeIcon
               className="fa fa-search form-control-feedback"
               icon={faSearch}
             />
             <InputText
+              id="my-work-queue-filter-search-text"
+              name="my-work-queue-filter-search-text"
               type="text"
               onChange={(e) => filterChangePatientId(e)}
               className="form-control input-form-control"
@@ -159,31 +169,39 @@ const ReviwerWorkList = ({
         </div>
         {!filterDataLoading ? (
           <>
-            <div id="dosSelect" className={visitStyles.patientListHead}>
+            <div
+              id="my-work-queue-list"
+              name="my-work-queue-list"
+              className={`ant-badge ${visitStyles.patientListHead}`}
+            >
               <ul
-                id="dosSelect"
-                className={`${visitStyles.patientDetailsHead}`}
+                id="queue-patient-list-ul"
+                className={`ant-badge ${visitStyles.patientDetailsHead}`}
               >
                 {patientList?.map((data, index) => (
                   <li
-                    id="dosSelect"
-                    className={`${visitStyles.nameList} ${visitStyles.patientList}`}
+                    id={`queue-patient-list${index}`}
+                    name={`queue-patient-list${index}`}
+                    className={`ant-badge ${visitStyles.nameList} ${visitStyles.patientList}`}
                     key={index}
                     onClick={() =>
                       getPatientListToDetails(data.patientId, true)
                     }
                   >
-                    <span>
-                      <span id="dosSelect">
-                        {truncateString(data.patientId, 35)}
+                    <span className="ant-badge">
+                      <span id="queue-patient-id" className="ant-badge">
+                        {truncateString(data.patientId, 20)}
                       </span>{" "}
                       <span>-</span>
-                      <span id="dosSelect">{data.patientName}</span>
+                      <span
+                        id="queue-patient-name"
+                        name="queue-patient-name"
+                      >{`ant-badge ${data.patientName}`}</span>
                     </span>
                     {data.processedStatus == "COMPLETED" ? (
                       <span
-                        id="dosSelect"
-                        className={visitStyles.completed}
+                        id="queue-patient-completed"
+                        className={`ant-badge ${visitStyles.completed}`}
                         style={{
                           background: "#3a9b94 !important",
                         }}
@@ -191,16 +209,12 @@ const ReviwerWorkList = ({
                     ) : data.processedStatus == "PENDING" ||
                       data.processedStatus == "COMPUTED" ? (
                       <span
-                        id="dosSelect"
-                        className={visitStyles.pending}
+                        className={`ant-badge ${visitStyles.pending}`}
                       ></span>
                     ) : data.processedStatus == "HOLD" ? (
-                      <span id="dosSelect" className={visitStyles.hold}></span>
+                      <span className={visitStyles.hold}></span>
                     ) : data.processedStatus == "DECLINED" ? (
-                      <span
-                        id="dosSelect"
-                        className={visitStyles.declined}
-                      ></span>
+                      <span className={visitStyles.declined}></span>
                     ) : null}
                   </li>
                 ))}
@@ -212,14 +226,14 @@ const ReviwerWorkList = ({
           </>
         ) : (
           <div className="mt-2">
-             <TableSkeleton/>
+            <TableSkeleton />
           </div>
         )}
       </div>
       <div className={visitStyles.paginationContiner}>
         <div className="patient-filte-page">
           <Paginator
-             className="paginator-workqueue"
+            className="paginator-workqueue"
             first={paginationFirst}
             rows={15}
             totalRecords={totalElements}

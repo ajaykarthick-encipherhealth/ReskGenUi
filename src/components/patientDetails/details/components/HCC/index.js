@@ -85,6 +85,7 @@ const HccCards = ({
   patientDetailsLoad,
   isSpinnerLoading,
   patientDetailsLoading,
+  id
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -235,10 +236,11 @@ const HccCards = ({
       patientDetailsLoad(false);
     }
   };
+
   return (
     <>
       {provided && (
-        <div ref={provided?.innerRef} {...provided?.droppableProps}>
+        <div id="hcc-list" name="hcc-list" ref={provided?.innerRef} {...provided?.droppableProps}>
           {loading || patientDetailsLoading || isSpinnerLoading ? (
             <div>
               {/* <Spinner /> */}
@@ -250,7 +252,7 @@ const HccCards = ({
                 data,
                 i // this condation we added for vignesh suggest to remove isCombo pracent
               ) => (
-                <li key={data?.id} style={{ margin: i !== 0 && "10px 0 0 0" }}>
+                <li id={`${id}-hcc-visit-data-card-${i}`} key={data?.id} style={{ margin: i !== 0 && "10px 0 0 0" }}>
                   <Draggable
                     key={data.diagnosisCode}
                     draggableId={data.diagnosisCode}
@@ -273,6 +275,8 @@ const HccCards = ({
 
                       return (
                         <div
+                          id={`${id}-hcc-file-card-${i}`}
+                          name={`hcc-file-card-${i}`}
                           className={`hccActiveCard ${visitStyles.hcc_card} ${
                             snapshot?.isDragging &&
                             visitStyles.drag_and_drop_movement_bg
@@ -323,9 +327,15 @@ const HccCards = ({
                             }
                           >
                             <div
+                              id={`${id}-hcc-name-Card-${i}`}
+                              name={`hcc-name-Card-${i}`}
                               className={` justify-content-between mt-2 ${visitStyles.hcc_card_nameHead}`}
                             >
-                              <div className="d-flex">
+                              <div
+                                className="d-flex"
+                                id={`${id}-hcc-disease-name-${i}`}
+                                name={`hcc-disease-name-${i}`}
+                              >
                                 <span className=" d-flex disease-name mb-1">
                                   <span className="valid-dis-name">
                                     {data.diagnosisCode}
@@ -381,7 +391,11 @@ const HccCards = ({
                                 </span>
                               </div>
                               {/* {data.defaultPosition} */}
-                              <div className="d-flex">
+                              <div
+                                className="d-flex"
+                                id={`${id}-hcc-info-${i}`}
+                                name={`hcc-info-${i}`}
+                              >
                                 {data.suspectType.length != 0 && (
                                   <>
                                     {" "}
@@ -394,6 +408,8 @@ const HccCards = ({
                                 )}
                                 {data?.children?.length > 0 && (
                                   <div
+                                    id="hcc-tree-icon"
+                                    name="hcc-tree-icon"
                                     className={visitStyles.tree_icon}
                                     style={{ background: "#c7f3c6" }}
                                     onClick={() => {
@@ -514,7 +530,11 @@ const HccCards = ({
                                         />
                                       </div>
 
-                                      <div className="px-1 patientDetailsPop">
+                                      <div
+                                        className="px-1 patientDetailsPop"
+                                        id="hcc-info-popover"
+                                        name="hcc-info-popover"
+                                      >
                                         <Popover
                                           onClick={() => {
                                             if (data?.isShow) {
@@ -753,9 +773,19 @@ const HccCards = ({
                                 </Popover>
                               </div>
                             </div>
-                            <div className="d-flex justify-content-between">
-                              <div className={`${visitStyles.hoverActiveHcc}`}>
+                            <div
+                              id={`${id}-hcc-hoverActiveHcc-${i}`}
+                              name={`hcc-hoverActiveHcc-${i}`}
+                              className="d-flex justify-content-between"
+                            >
+                              <div
+                                id={`${id}-hcc-hoverActiveHcc-content-${i}`}
+                                name={`hcc-hoverActiveHcc-content-${i}`}
+                                className={`${visitStyles.hoverActiveHcc}`}
+                              >
                                 <div
+                                  id={`${id}-hcc-encounterAndSectionHeader-${i}`}
+                                  name={`hcc-encounterAndSectionHeader-${i}`}
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
                                   {getProviderNameTag({
@@ -782,9 +812,11 @@ const HccCards = ({
                                     setLabData,
                                     storeFileDetails: storeFileDetails,
                                     isShow: data?.isShow,
+                                   
                                   })}
                                 </div>
                                 <div
+                                  id={`${id}-encounterAndSectionHeader-data-${i}`}
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
                                   {getEncounterDateBackground({
@@ -817,6 +849,7 @@ const HccCards = ({
                                 </div>
                                 {data.providerName.length == 0 && (
                                   <div
+                                    id={`${id}-hcc-captureSection-${i}`}
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
                                     {getCaptureSectionBackgroundFile({
@@ -869,13 +902,21 @@ const HccCards = ({
                                 )}
                               </div>
                               <div
+                                id={`${id}-hcc-right-${i}`}
+                                name={`hcc-right-${i}`}
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
-                                <div className="d-flex justify-content-end mt-2 me-1 gap-1 text-center flex-wrap">
+                                <div
+                                  id={`${id}-hcc-cmx-rx-container-${i}`}
+                                  name={`hcc-cmx-rx-container-${i}`}
+                                  className="d-flex justify-content-end mt-2 me-1 gap-1 text-center flex-wrap"
+                                >
                                   {data?.riskAdjustmentDtoList?.some((item) =>
                                     item?.cmsHcc?.some((hcc) => hcc.value > 1)
                                   ) && (
                                     <div
+                                      id={`${id}-hcc-cmx-${i}`}
+                                      name={`hcc-cmx-${i}`}
                                       className={`${visitStyles.cmsStatus} `}
                                     >
                                       CMS
@@ -890,6 +931,8 @@ const HccCards = ({
                                     userId !=
                                       "reviewer@3gencogentai.onmicrosoft.com" && (
                                       <div
+                                        id={`${id}-hcc-rx-${i}`}
+                                        name={`hcc-rx-${i}`}
                                         className={`${visitStyles.rxStatus}`}
                                       >
                                         RX
@@ -898,10 +941,13 @@ const HccCards = ({
                                 </div>
                                 {!data.isLab && !data.isRadiology && (
                                   <div
+                                    id={`${id}-meatFoundContainer-${i}`}
+                                    name={`meatFoundContainer-${i}`}
                                     className={`${styles.meatFoundContainer}`}
                                   >
                                     <div
                                       className="cr-pointer "
+                                      id={`${id}-meatFound-M-${i}`}
                                       onClick={() => {
                                         if (data?.isShow) {
                                           setActiveTabHead(4);
@@ -919,6 +965,7 @@ const HccCards = ({
                                       )}
                                     </div>
                                     <div
+                                      id={`${id}-meatFound-E-${i}`}
                                       className="cr-pointer "
                                       onClick={() => {
                                         if (data?.isShow) {
@@ -937,6 +984,7 @@ const HccCards = ({
                                       )}
                                     </div>
                                     <div
+                                      id={`${id}-meatFound-A-${i}`}
                                       className="cr-pointer "
                                       onClick={() => {
                                         if (data?.isShow) {
@@ -955,6 +1003,7 @@ const HccCards = ({
                                       )}
                                     </div>
                                     <div
+                                      id={`${id}-meatFound-T-${i}`}
                                       className="cr-pointer "
                                       onClick={() => {
                                         if (data?.isShow) {

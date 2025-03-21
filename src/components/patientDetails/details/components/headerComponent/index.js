@@ -23,12 +23,12 @@ const HeaderComponent = ({
   setCopied,
 }) => {
   return (
-    <div className={`row mt-3 ${styles.HccContainer}`}>
-      <div className="col-5" style={{ padding: "0px" }}>
+    <div id="hcc-header-container" name="hcc-header-container" className={`row mt-3 ${styles.HccContainer}`}>
+      <div id="hcc-header" name="hcc-header" className="col-5" style={{ padding: "0px" }}>
         <Details fileResult={patienIdDetails} fromHcc={true} setCopied = {setCopied}/>
       </div>
-      <div className="col-3" style={{ padding: "0px" }}>
-        <Flag
+      <div className="col-3" style={{ padding: "0px" }} id="flag-details" name="flag-details">
+        <Flag 
           patienIdDetails={patienIdDetails}
           patientDetails={patientDetails}
           flagsDetailsResult={flagsDetailsResult}
@@ -42,13 +42,15 @@ const HeaderComponent = ({
         />
       </div>
       <div className="col-1 d-grid " style={{ padding: "0px" }}>
-        <div>
+        <div id="status-action-container" name="status-action-container">
           <StatusAction />
         </div>
-        <div className="mt-1">
+        <div className="mt-1" id="year-select" name="year-select">
           {!isLoadingDos ? (
             <>
               <Select
+              data-testid="year-select-test"
+              name="year-select-test"
                 placeholder="Year"
                 value={dosYearDefalutSelect}
                 onChange={(e) => {

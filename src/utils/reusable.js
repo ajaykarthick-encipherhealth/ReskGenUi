@@ -412,7 +412,6 @@ export const formatDateForIndex = ({ date, index }) => {
     index === 1
       ? `${formattedDate}T23:59:59.999Z`
       : `${formattedDate}T00:00:00.000Z`;
-
   if (!dateFormat) return dateFormat;
   const time = momentTimezone(dateFormat);
   const offset = momentTimezone.tz
@@ -422,6 +421,7 @@ export const formatDateForIndex = ({ date, index }) => {
 
   return adjustedTime.toISOString();
 };
+
 
 
 export const renderUserProfile = (data, columnItem) => {
@@ -592,10 +592,13 @@ export const auditStatusTemplate = (rowData) => {
   }
 };
 
+
 export const createIdGen = (key) => {
   if (key) {
     return key.trim().toLowerCase().replaceAll(" ", "-");
   } else {
     return key;
   }
+
 };
+
