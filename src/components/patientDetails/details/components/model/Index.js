@@ -185,6 +185,7 @@ const ModelIndex = ({
                             getLabDetails,
                             getRadiologyDetails,
                             handleCloseModal,
+                            patientDetailsLoad,
                           });
                           form.resetFields();
                         }}

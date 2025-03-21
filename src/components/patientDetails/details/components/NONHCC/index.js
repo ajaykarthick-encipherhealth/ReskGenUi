@@ -64,6 +64,7 @@ const NonHccCards = ({
   storeFileDetails,
   patientDetailsResult,
   patientDetailsLoad,
+  isDosSelected,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -149,7 +150,7 @@ const NonHccCards = ({
                         onchangeValid(data.diagnosisCode, data)
                       }
                     >
-                      {
+                      {isDosSelected && (
                         <div className="cr-pointer d-flex">
                           <div className={visitStyles.close_icon}>
                             <FontAwesomeIcon
@@ -161,7 +162,7 @@ const NonHccCards = ({
                             />
                           </div>
                         </div>
-                      }
+                      )}
                     </Popconfirm>
                   </div>
                 </div>
@@ -260,6 +261,7 @@ const enhancer = connect(
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     patientDetailsLoad: state?.patientDetails?.details?.patientsLoading,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,

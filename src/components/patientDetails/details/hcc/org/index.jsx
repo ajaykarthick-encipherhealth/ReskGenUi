@@ -70,6 +70,7 @@ const CamboTree = ({
   setIsFileFormShow,
   editFormPlace,
   formValues,
+  patientDetailsLoad,
 }) => {
   const [trees, setTrees] = useState(Tree);
   const [isLoading, setLoading] = useState(tree);
@@ -143,6 +144,7 @@ const CamboTree = ({
       getpatientDetailsData,
       patientDetailsResult,
       handleCloseModal,
+      patientDetailsLoad,
     });
   };
   const onchangeCombo = (data, code, diseaseSource) => {
@@ -168,7 +170,7 @@ const CamboTree = ({
 
   const handleCloseModalAdd = () => {
     setIsEditHccForm(false);
-    setData("")
+    setData("");
   };
 
   const getEncounterDateBackground = (value) => {
@@ -499,6 +501,7 @@ const enhancer = connect(
     getpatientDetailsData: detailsActions.patientDetailsAction,
     getRadiologyDetails: detailsActions.radiologyDetailsAction,
     getLabDetails: detailsActions.labDetailsAction,
+    patientDetailsLoad: detailsActions.patientDetailsLoad,
   }
 );
 export default enhancer(CamboTree);
