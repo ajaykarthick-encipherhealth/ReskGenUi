@@ -1,7 +1,20 @@
-import { notification } from "antd";
-import momentTimezone from "moment-timezone";
+import { notification, Popover, Skeleton, Tooltip } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
+import Pending from "../../src/images/trackingImages/pending.webp";
+import Hold from "../../src/images/trackingImages/hold.webp";
+import Completed from "../../src/images/trackingImages/completed.webp";
+import Declined from "../../src/images/trackingImages/declined.webp";
+import Abort from "../../src/images/trackingImages/abort.webp";
+import Image from "next/image";
+import AuditedTrack from "../../src/images/trackingImages/audited.webp";
+import NotAudited from "../../src/images/trackingImages/notaudited.webp";
+import AuditHold from "../../src/images/trackingImages/audithold.webp";
+import ReAudit from "../../src/images/trackingImages/reaudited.webp";
+import AuditPending from "../../src/images/trackingImages/auditpending.webp";
+import AuditeDeclineTrack from "../../src/images/trackingImages/auditdeclined.webp";
+import { renderUserPrfoileAvatar, renderUserPrfoileAvatarDisabled } from "../components/headerFilters/functions";
+import momentTimezone from "moment-timezone";
 
 export const getResponePopup = (res) => {
   switch (res?.data?.status ? res?.data?.status : res?.status) {
@@ -241,7 +254,125 @@ export const getSpacesWithUnderscoresAuditing = (value) => {
     }
   }
 };
+export const reusableEllipses = ({ str, count }) => {
+  if (str?.length > count) {
+    return (
+      <Tooltip placement="top" title={str}>
+        {`${str?.substring(0, count)}...`}
+      </Tooltip>
+    );
+  } else {
+    return str;
+  }
+};
+export const tableSkeleton = ({ rows = 1, columns = 1 }) => (
+  <div>
+    {Array.from({ length: rows }).map((_, rowIndex) => (
+      <div key={rowIndex} id="badge">
+        {Array.from({ length: columns }).map((_, colIndex) => (
+          <Skeleton.Input key={colIndex} block={true}  active />
+        ))}
+      </div>
+    ))}
+  </div>
+);
 
+
+export function extractLatestData(notes) {
+  let declinedData;
+
+  if (notes && typeof notes === "object") {
+    const entries = Object.entries(notes);
+
+    const latestKey = Math.max(...entries.map(([key, value]) => parseInt(key)));
+
+    entries.forEach(([key, value]) => {
+      if (parseInt(key) === latestKey) {
+        declinedData = value;
+      }
+    });
+  }
+
+  return declinedData;
+}
+export const processstatusBodyTemplate = (rowData) => {
+  const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+
+  switch (rowData) {
+    case "COMPLETED":
+      return (
+        <Popover placement="bottom" title="Status: COMPLETED">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Completed} style={{ height: "30px", width: "30px" }} />
+          </div>
+        </Popover>
+      );
+
+    case "PENDING":
+      return (
+        <Popover placement="bottom" title="Status: PENDING">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+          </div>
+        </Popover>
+      );
+
+    case "DECLINED":
+      return (
+        <Popover
+          placement="bottom"
+          title="Status: DECLINED"
+          content={`Reason: ${
+            declinedDataFromDeclined ? declinedDataFromDeclined : "---"
+          }`}
+        >
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Declined} style={{ height: "30px", width: "30px" }} />
+          </div>
+        </Popover>
+      );
+    case "NOTCOMPUTED":
+      return (
+        <Popover placement="bottom" title="Status: NOT COMPUTED">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+          </div>
+        </Popover>
+      );
+    case "COMPUTED":
+      return (
+        <Popover placement="bottom" title="Status: PENDING">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+          </div>
+        </Popover>
+      );
+    case "HOLD":
+      return (
+        <Popover placement="bottom" title="Status: HOLD">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Hold} style={{ height: "30px", width: "30px" }} />
+          </div>
+        </Popover>
+      );
+    case "ABORTED_BY_CRON":
+      return (
+        <Popover placement="bottom" title="Status: ABORTED BY CRON">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Abort} style={{ height: "30px", width: "30px" }} />
+          </div>
+        </Popover>
+      );
+    case null:
+      return (
+        <Popover placement="bottom" title="Status: PENDING">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Pending} style={{ height: "15%", width: "15%" }} />
+          </div>
+        </Popover>
+      );
+  }
+};
 // export const formatDateTime = ({ date, formatType = "date" }) => {
 //   if (!date) return "";
 
@@ -290,4 +421,181 @@ export const formatDateForIndex = ({ date, index }) => {
   const adjustedTime = time.clone().add(offset, "minutes");
 
   return adjustedTime.toISOString();
+};
+
+
+export const renderUserProfile = (data, columnItem) => {
+  const compareObj = columnItem?.fromObject
+    ? data[columnItem?.fromObject] || data
+    : data;
+
+  if (
+    compareObj[columnItem?.value?.first] ||
+    compareObj[columnItem?.value?.last] ||
+    compareObj[columnItem?.value?.img] || compareObj[columnItem?.value1?.first] ||
+    compareObj[columnItem?.value1?.last] ||
+    compareObj[columnItem?.value1?.img]
+  ) {
+    return (
+      <div
+        className="d-flex align-items-center text-truncate"
+        style={{ width: "95%", margin: "auto" }}
+      >
+        <span style={{ marginRight: "10px" }}>
+          {renderUserPrfoileAvatar(
+            compareObj[columnItem?.value?.first] || compareObj[columnItem?.value1?.first] ,
+            compareObj[columnItem?.value?.last] || compareObj[columnItem?.value1?.last] ,
+            compareObj[columnItem?.value?.img] || compareObj[columnItem?.value1?.img] ,
+            "header"
+          )}
+        </span>
+        <span>
+          {compareObj[columnItem?.value?.first]|| compareObj[columnItem?.value1?.first]}{" "}
+          {compareObj[columnItem?.value?.last] || compareObj[columnItem?.value1?.last]}
+        </span>
+      </div>
+    );
+  }
+  return <div style={{ textAlign: "center" }}>---</div>;
+};
+
+export const renderUserProfileDisable = (data, columnItem) => {
+  const compareObj = columnItem?.fromObject
+    ? data[columnItem?.fromObject] || data
+    : data;
+
+  if (
+    compareObj[columnItem?.value?.first] ||
+    compareObj[columnItem?.value?.last] ||
+    compareObj[columnItem?.value?.img] ||
+    compareObj[columnItem?.value1?.first] ||
+    compareObj[columnItem?.value1?.last] ||
+    compareObj[columnItem?.value1?.img]
+  ) {
+    return (
+      <div
+        className="d-flex align-items-center text-truncate"
+        style={{ width: "95%", margin: "auto" }}
+      >
+        <span style={{ marginRight: "10px" }}>
+          {renderUserPrfoileAvatarDisabled(
+            compareObj[columnItem?.value?.first] ||
+              compareObj[columnItem?.value1?.first],
+            compareObj[columnItem?.value?.last] ||
+              compareObj[columnItem?.value1?.last],
+            compareObj[columnItem?.value?.img] ||
+              compareObj[columnItem?.value1?.img],
+            "header"
+          )}
+        </span>
+        <span>
+          {compareObj[columnItem?.value?.first] ||
+            compareObj[columnItem?.value1?.first]}{" "}
+          {compareObj[columnItem?.value?.last] ||
+            compareObj[columnItem?.value1?.last]}
+        </span>
+      </div>
+    );
+  }
+  return <div style={{ textAlign: "center" }}>---</div>;
+};
+export const auditStatusTemplate = (rowData) => {
+  const declinedDataFromAudit = extractLatestData(
+    rowData?.auditDeclinedNotes
+  );
+  const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+  const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+  switch (rowData) {
+    case "AUDIT_PENDING":
+      return (
+        <Popover placement="bottom" title="Status: AUDIT PENDING">
+          <span className="patient-status" style={{ textAlign: "center" }}>
+            <Image
+              src={AuditPending}
+              style={{ height: "30px", width: "30px" }}
+            />
+          </span>
+        </Popover>
+      );
+
+    case "AUDITHOLD":
+      return (
+        <Popover placement="bottom" title="Status: AUDIT HOLD">
+          <span className="patient-status" style={{ textAlign: "center" }}>
+            <Image
+              src={AuditHold}
+              style={{ height: "30px", width: "30px" }}
+            />
+          </span>
+        </Popover>
+      );
+    case "REAUDIT":
+      return (
+        <Popover placement="bottom" title="Status: REAUDIT">
+          <span className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
+          </span>
+        </Popover>
+      );
+    case "AUDITED":
+      return (
+        <Popover placement="bottom" title="Status: AUDITED">
+          <span className="patient-status" style={{ textAlign: "center" }}>
+            <Image
+              src={AuditedTrack}
+              style={{ height: "30px", width: "30px" }}
+            />
+          </span>
+        </Popover>
+      );
+    case "AUDIT_DECLINED":
+      return (
+        <Popover
+          placement="bottom"
+          title="Status: AUDIT DECLINED"
+          content={`Reason: ${declinedData ? declinedData : "---"}`}
+        >
+          <span className="patient-status" style={{ textAlign: "center" }}>
+            <Image
+              src={AuditeDeclineTrack}
+              style={{ height: "30px", width: "30px" }}
+            />
+          </span>
+        </Popover>
+      );
+    case "AUDITED":
+      return (
+        <span className="patient-status" style={{ textAlign: "center" }}>
+          <Image
+            src={AuditedTrack}
+            style={{ height: "30px", width: "30px" }}
+          />
+        </span>
+      );
+    case "NOT_AUDIT":
+      return (
+        <Popover placement="bottom" title=" Status: NOT AUDIT">
+          <span className="patient-status" style={{ textAlign: "center" }}>
+            <Image
+              src={NotAudited}
+              style={{ height: "30px", width: "30px" }}
+            />
+          </span>
+        </Popover>
+      );
+    case null:
+      return (
+        <span className="patient-status" style={{ textAlign: "center" }}>
+          ---
+        </span>
+      );
+  }
+};
+
+export const createIdGen = (key) => {
+  if (key) {
+    return key.trim().toLowerCase().replaceAll(" ", "-");
+  } else {
+    return key;
+  }
 };

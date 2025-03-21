@@ -1,13 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { Paginator } from "primereact/paginator";
-import AdminList from "../table/adminList/adminList";
 import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
 import { actions as allActions } from "../../../stores/supervisor/users";
-import TableSkeleton from "../../../components/skeleton/table";
 import Userqueue from "./userqueue";
+import AppTable from "../../../components/tables";
+import { setStorage } from "../../../utils/storages";
 const UserList = ({ getUsers, loader, usersData, routedData }) => {
+  const columns = [
+    {
+      name: "USERNAME",
+      isImage: true,
+      value: {
+        first: "firstName",
+        last: "lastName",
+        img: "profileImageUrl",
+      },
+    },
+    {
+      name: "ALLOCATED",
+      value: "totalFileAllocated",
+    },
+    {
+      name: "COMPLETED",
+      value: "totalFileProcessed",
+    },
+    {
+      name: "PENDING",
+      value: "totalFilePending",
+    },
+    {
+      name: "HOLD",
+      value: "batchName",
+    },
+    {
+      name: "INVALID",
+      value: "totalFileHold",
+    },
+    {
+      name: "QUALITY",
+      value: "accuracy",
+      progressBar:true
+    },
+  ];
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
   const [totalElements, setTotalElements] = useState(15);
@@ -39,7 +74,10 @@ const UserList = ({ getUsers, loader, usersData, routedData }) => {
       setViewUsers(routedData?.viewUsers);
     }
   }, [routedData]);
-
+  const gotoUserQueue = (item) => {
+    setStorage("user", item?.userName);
+    setViewUsers(item);
+  };
   useEffect(() => {
     if (paramsCheck) {
       getUsers({ page: pageCount || 0, search: search || "" });
@@ -81,31 +119,17 @@ const UserList = ({ getUsers, loader, usersData, routedData }) => {
                     id="task-tbl_wrapper"
                     className="dataTables_wrapper no-footer"
                   >
-                    {loader ? (
-                      <div className="mt-2">
-                        <TableSkeleton />
-                      </div>
-                    ) : (
-                      <div className="mt-2">
-                        <AdminList
-                          userList={userListAll?.content}
-                          setPageCount={setPageCount}
-                          setViewUsers={setViewUsers}
-                        />
-                      </div>
-                    )}
-                    <div>
-                      <div className="pagination-container">
-                        <Paginator
-                          first={pageCount === 0 ? 0 : paginationFirst}
-                          rows={15}
-                          totalRecords={totalElements}
-                          onPageChange={onPageChange}
-                        />
-                        <div className="total-pages">
-                          Total count: {totalElements ? totalElements : 0}
-                        </div>
-                      </div>
+                    <div className="mt-2">
+                      <AppTable
+                        data={userListAll?.content}
+                        column={columns}
+                        loader={loader}
+                        onRowClick={gotoUserQueue}
+                        first={pageCount === 0 ? 0 : paginationFirst}
+                        totalRecords={totalElements}
+                        row={15}
+                        onPageChange={onPageChange}
+                      />
                     </div>
                   </div>
                 </div>

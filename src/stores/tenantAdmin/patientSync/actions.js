@@ -27,3 +27,5 @@ export const getTriggerBatch=createActionThunk(
   network.triggerBatch
 )
 export const getRoutedData = createAction("GET_ROUTED_DATA");
+
+export const getSupervisorName =createAction("SELECTED_SUPERVISOR_USER");

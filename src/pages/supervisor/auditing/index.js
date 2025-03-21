@@ -1,53 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Paginator } from "primereact/paginator";
-import { Popover, notification } from "antd";
+import {  notification } from "antd";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../jsx/layouts/nav/Header";
-import dayjs from "dayjs";
-import PatientTable from "../table/PatientList/patientList";
-import {
+import dayjs from "dayjs";import {
   generateOptionsListSupervisor,
   priorityOptions,
 } from "../../../components/headerFilters/functions";
-import AuditedTrack from "../../../../src/images/trackingImages/audited.webp";
-import NotAudited from "../../../../src/images/trackingImages/notaudited.webp";
-import AuditHold from "../../../../src/images/trackingImages/audithold.webp";
-import ReAudit from "../../../../src/images/trackingImages/reaudited.webp";
-import AuditPending from "../../../../src/images/trackingImages/auditpending.webp";
-import AuditeDeclineTrack from "../../../../src/images/trackingImages/auditdeclined.webp";
 import { actions as allActions } from "../../../stores/supervisor/auditedQueue";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import { actions as supervisorActions } from "../../../stores/supervisor/auditedQueue";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
-import Image from "next/image";
-import { patientDetails } from "../../../stores/authflow/actions";
-import { renderSkeleton } from "../../../components/reuseableFunctions";
-import { getStorage, setStorage } from "../../../utils/storages";
+import { setStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
 import ReusableFilters from "../../../components/reusableFilters";
+import AppTable from "../../../components/tables";
 
-export function extractLatestData(notes) {
-  let declinedData;
-
-  if (notes && typeof notes === "object") {
-    const entries = Object.entries(notes);
-
-    const latestKey = Math.max(...entries.map(([key, value]) => parseInt(key)));
-
-    entries.forEach(([key, value]) => {
-      if (parseInt(key) === latestKey) {
-        declinedData = value;
-      }
-    });
-  }
-
-  return declinedData;
-}
-const bullets = [
+export const auditBullets = [
   {
     color: "#377880",
     name: "AUDITED",
@@ -145,9 +115,8 @@ export const commonFilterItems = [
   },
 ];
 
+
 const Patient = ({
-  getWorkListFilter,
-  response,
   loader,
   filteredList,
   getFilters,
@@ -157,11 +126,70 @@ const Patient = ({
   getAllBatchList,
   batchList,
   getAuditQueue,
-  auditiQueueList,
   patinetListAll,
 }) => {
   const router = useRouter();
- 
+  const columns = [
+    {
+      name: "Patients",
+      value: "patientId",
+    },
+    {
+      name: "Batch Name",
+      value: "batchName",
+    },
+    {
+      name: "Reviewer",
+      isImage: true,
+      value: {
+        first: "patientAllocatedFirstName",
+        last: "patientAllocatedLastName",
+        img: "patientAllocatedProfileImage",
+      },
+    },
+    {
+      name: "RC",
+      value: "accuracyScore?.correctCount",
+    },
+    {
+      name: "RCR",
+      value: "accuracyScore?.wrongCount",
+    },
+    {
+      name: "Audit Allocated Date",
+      value: "auditAllocatedDate",
+      sortable: true,
+      isDate: true,
+      
+    },
+    {
+      name: "Audit Due Date",
+      value: "auditDueDate",
+      sortable: true,
+      isDate: true,
+    },
+    {
+      name: "Audited Date",
+      value: "auditedDate",
+      sortable: true,
+      isDate: true,
+    },
+
+    {
+      name: "Audit Allocated By",
+      isImage: true,
+      value: {
+        first: "auditAllocatedByFirstName",
+        last: "auditAllocatedByLastName",
+        img: "auditAllocatedByProfileImage",
+      },
+    },
+    {
+      name: "priority",
+      value: "priority",
+    },
+    { name: "Audited STATUS", value: "auditedStatus", auditedStatus: true,   infoIcon:true },
+  ];
   const [sort, setSort] = useState({
     auditAllocatedDate: {
       sortDir: "DESC",
@@ -180,7 +208,7 @@ const Patient = ({
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
+  const [totalElements, setTotalElements] = useState("");
   const [clear, setClear] = useState(false);
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [paramsFilter, setParamsFilter] = useState(null);
@@ -191,127 +219,14 @@ const Patient = ({
   const [selectedDates, setSelectedDates] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
 
-  const addPatientFile = (data) => {
-    inputValue.patientId = data.patientId;
-    inputValue.name = data.patientName;
-    inputValue.processStageId = data.processStageId;
-    inputValue.patientId = data.patientId;
-    setValidated(false);
-    setAddPatient(true);
-    setIsLoadingBtn(false);
-  };
-
-  const processstatusBodyTemplate = (rowData) => {
-    const declinedDataFromAudit = extractLatestData(
-      rowData?.auditDeclinedNotes
-    );
-    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
-    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-    switch (rowData.auditedStatus) {
-      case "AUDIT_PENDING":
-        return (
-          <Popover placement="bottom" title="Status: AUDIT PENDING">
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image
-                src={AuditPending}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </span>
-          </Popover>
-        );
-
-      case "AUDITHOLD":
-        return (
-          <Popover placement="bottom" title="Status: AUDIT HOLD">
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image
-                src={AuditHold}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </span>
-          </Popover>
-        );
-      case "REAUDIT":
-        return (
-          <Popover placement="bottom" title="Status: REAUDIT">
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-      case "AUDITED":
-        return (
-          <Popover placement="bottom" title="Status: AUDITED">
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image
-                src={AuditedTrack}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </span>
-          </Popover>
-        );
-      case "AUDIT_DECLINED":
-        return (
-          <Popover
-            placement="bottom"
-            title="Status: AUDIT DECLINED"
-            content={`Reason: ${declinedData ? declinedData : "---"}`}
-          >
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image
-                src={AuditeDeclineTrack}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </span>
-          </Popover>
-        );
-      case "AUDITED":
-        return (
-          <span className="patient-status" style={{ textAlign: "center" }}>
-            <Image
-              src={AuditedTrack}
-              style={{ height: "30px", width: "30px" }}
-            />
-          </span>
-        );
-      case "NOT_AUDIT":
-        return (
-          <Popover placement="bottom" title=" Status: NOT AUDIT">
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image
-                src={NotAudited}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </span>
-          </Popover>
-        );
-      case null:
-        return (
-          <span className="patient-status" style={{ textAlign: "center" }}>
-            ---
-          </span>
-        );
-    }
-  };
-
-  const actionBodyTemplate = (rowData) => {
-    return (
-      <div className="d-flex ">
-        <button
-          onClick={() => addPatientFile(rowData)}
-          className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
-        >
-          <FontAwesomeIcon icon={faUpload} fontSize={11} />
-        </button>
-      </div>
-    );
-  };
   const gotoPatientDetails = (data) => {
     if (data.computing == 2) {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
       setStorage("patientId", data.patientId);
+      setStorage("routeBackTo", "/supervisor/auditing");
+      getRoutedData(params);
       router.push("/supervisor/patients/details");
     } else {
       notification.warning({
@@ -332,6 +247,7 @@ const Patient = ({
     }
   };
 
+ 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -362,7 +278,7 @@ const Patient = ({
       pageNumber,
       pageSize,
       selectedOption,
-      sort: sort?.sort,
+      sort: sort  ,
       selectedDateRanges,
       searchText: searchText,
     });
@@ -431,11 +347,12 @@ const Patient = ({
       label: `${item?.name}`,
     })),
   };
-
+  
   useEffect(()=>{
     getFilters({ field: "patientAllocated" });
     getAllBatchList();
   },[])
+
   return (
     <div className={`show `}>
       <Header />
@@ -471,54 +388,23 @@ const Patient = ({
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      {loader ? (
-                        renderSkeleton()
-                      ) : (
                         <div className="mt-3">
-                          <PatientTable
-                            auditiQueueList={auditiQueueList}
-                            bullets={bullets}
-                            patinetListAll={patinetListAll}
-                            actionBodyTemplate={actionBodyTemplate}
-                            statusBodyTemplate={processstatusBodyTemplate}
-                            handleTableRowClick={handleTableRowClick}
-                            patientDetails={patientDetails}
-                            sort={sort}
+                          <AppTable
+                            data={patinetListAll}
+                            column={columns}
+                            loader={loader}
+                            onRowClick={gotoPatientDetails}
+                            pagination={false}
                             setSort={setSort}
-                            page={{ pageNo, paginationFirst }}
-                            setActiveFilters={setActiveFilters}
-                            activeFilters={activeFilters}
-                            getRoutedData={getRoutedData}
-                            params={{
-                              pageNo,
-                              paginationFirst,
-                              selectedDates,
-                              selectedOption,
-                              searchText,
-                              selectedDateRanges,
-                              sort,
-                              activeFilters,
-                              pageNumber,
-                            }}
-                            getWorkListFilter={getWorkListFilter}
+                            sort={sort}
                             handlePriorityChange={handlePriorityChange}
-                            priority={priority}
+                            tableId="supervisor_audit_queue_table"
+                            first={pageNo === 0 ? 0 : paginationFirst}
+                            totalRecords={totalElements}
+                            row={15}
+                            onPageChange={onPageChange}
                           />
-                          <div>
-                            <div className="pagination-container">
-                              <Paginator
-                                first={pageNo === 0 ? 0 : paginationFirst}
-                                rows={15}
-                                totalRecords={totalElements}
-                                onPageChange={onPageChange}
-                              />
-                              <div className="total-pages">
-                                Total count: {totalElements}
-                              </div>
-                            </div>
-                          </div>
                         </div>
-                      )}
                     </div>
                   </div>
                 </div>

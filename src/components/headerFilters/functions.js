@@ -367,7 +367,7 @@ export const getBackgroundColor = (randomNumber) => {
     case 3:
       return "#E6A4B4";
     case 4:
-      return "#607274";
+      return "#558e95";
     case 5:
       return "#DED0B6";
     case 6:

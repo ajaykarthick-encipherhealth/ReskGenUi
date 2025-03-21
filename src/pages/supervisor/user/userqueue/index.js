@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import Image from "next/image";
-import { Paginator } from "primereact/paginator";
-import { Popover } from "antd";
 import Header from "../../../../jsx/layouts/nav/Header";
-import Completed from "../../../../../src/images/trackingImages/completed.webp";
-import Declined from "../../../../../src/images/trackingImages/declined.webp";
-import { extractLatestData } from "../../auditing";
 import {
   generateOptionsListSupervisor,
   priorityOptions,
@@ -15,15 +10,15 @@ import {
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import dayjs from "dayjs";
 import userStyles from "./styles.module.css";
-import UserQueueTable from "../../table/userqueue";
 import { actions as allActions } from "../../../../stores/supervisor/users";
 import { actions as allActions2 } from "../../../../stores/supervisor/auditedQueue";
 import { getStorage, setStorage } from "../../../../utils/storages";
 import { actions as supervisorActions } from "../../../../stores/supervisor/auditedQueue";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
-import TableSkeleton from "../../../../components/skeleton/table";
 import ReusableFilters from "../../../../components/reusableFilters";
 import { useRouter } from "next/router";
+import AppTable from "../../../../components/tables";
+
 
 const bullets = [
   {
@@ -68,7 +63,6 @@ const badges = [
 
 const Index = ({
   getCurrentUserDetails,
-  getIndividualUser,
   currentUser,
   usersData,
   loader,
@@ -128,6 +122,7 @@ const Index = ({
       placeholder: "Reviewed Status",
       options: statusOptions,
       active: false,
+   
     },
     {
       id: "006",
@@ -156,6 +151,58 @@ const Index = ({
       options: priorityOptions,
       active: false,
     },
+  ];
+  const columns = [
+    {
+      name: "Patient ID",
+      value: "patientId",
+    },
+    {
+      name: "Patient Name",
+      value: "patientName",
+    },
+    {
+      name: " Compeleted Date",
+      value: "auditAllocatedDate",
+      sortable: true,
+      isDate: true,
+      
+    },
+    {
+      name: "Audit Allocated Date",
+      value: "auditAllocatedDate",
+      sortable: true,
+      isDate: true,
+      
+    },
+    {
+      name: "Audit Due Date",
+      value: "auditDueDate",
+      sortable: true,
+      isDate: true,
+    },
+    {
+      name: "Audit Allocated By",
+      isImage: true,
+      value: {
+        first: "auditAllocatedByFirstName",
+        last: "auditAllocatedByLastName",
+        img: "auditAllocatedByProfileImage",
+      },
+    },
+    {
+      name: "Audited Date",
+      value: "auditedDate",
+      sortable: true,
+      isDate: true,
+    },
+
+    {
+      name: "priority",
+      value: "priority",
+    },
+    { name: "REVIEWED STATUS", value: "processedStatus", status: true,   infoIcon:true },
+    { name: "Audited STATUS", value: "auditedStatus", auditedStatus: true ,   infoIcon:true},
   ];
   const router = useRouter();
   const [sort, setSort] = useState({
@@ -190,101 +237,20 @@ const Index = ({
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [userName, setUserName] = useState();
-  const [totalElements, setTotalElements] = useState(10);
-  // const [priority, setPriority] = useState(null);
+  const [totalElements, setTotalElements] = useState("");
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageSize(e.rows);
   };
+  const handleTableRowClick = (id) => {
+    setStorage("patientId", id?.patientId);
+    setStorage("routeBackTo", "/supervisor/user");
+    getRoutedData({ params: params, userData: userParams, viewUsers });
+    router?.push("/supervisor/user/details");
+};
 
-  const auditstatusBodyTemplate = (rowData) => {
-    const declinedDataFromAudit = extractLatestData(
-      rowData?.auditDeclinedNotes
-    );
-
-    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
-
-    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-
-    switch (rowData.processedStatus) {
-      case "COMPLETED":
-        return (
-          <Popover placement="bottom" title="Status: COMPLETED">
-            <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image
-                src={Completed}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </div>
-          </Popover>
-        );
-
-      case "PENDING":
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-
-      case "DECLINED":
-        return (
-          <Popover
-            placement="bottom"
-            title="Status: DECLINED"
-            content={`Reason: ${declinedData ? declinedData : "---"}`}
-          >
-            <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Declined} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-
-      case "NOTCOMPUTED":
-        return (
-          <Popover placement="bottom" title="Status: NOT COMPUTED">
-            <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-      case "COMPUTED":
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-      case "HOLD":
-        return (
-          <Popover placement="bottom" title="Status: HOLD">
-            <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Hold} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-      case "ABORTED_BY_CRON":
-        return (
-          <Popover placement="bottom" title="Status: ABORTED BY CRON">
-            <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Abort} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-      case null:
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-    }
-  };
 
   const handlePriorityChange = async (
     patientId,
@@ -296,23 +262,9 @@ const Index = ({
       year: dayjs(lastModifiedDate).format("YYYY"),
       priority: selectedValue,
     });
-    // setPriority({ selectedValue: selectedValue, patientId: patientId });
     getuserQueueApi();
   };
-  const getuserQueueApi = async () => {
-    const uId = getStorage("user");
-    setUserName(uId);
-    await getUserQueueList({
-      uId,
-      pageNo,
-      pageNumber,
-      pageSize,
-      selectedOption,
-      sort: sort?.sort,
-      selectedDateRanges,
-      searchText: searchText,
-    });
-  };
+
   const params = {
     pageNo,
     selectedDates,
@@ -324,47 +276,6 @@ const Index = ({
     selectedDateRanges,
     pageNumber,
   };
-  const handleTableRowClick = (e, id) => {
-    const targetTd = e.target.closest("td");
-    if (targetTd) {
-      setStorage("patientId", id);
-      setStorage("routeBackTo", "/supervisor/user");
-      getRoutedData({ params: params, userData: userParams, viewUsers });
-      router?.push("/supervisor/user/details");
-    }
-  };
-  useEffect(() => {
-    const uId = getStorage("user");
-    setParamsFilter("check");
-    setUserName(uId);
-    if (window !== "undefined" && paramsFilter) {
-      getuserQueueApi();
-    }
-  }, [
-    selectedOption,
-    selectedDateRanges,
-    searchText,
-    pageSize,
-    pageNo,
-    paramsFilter,
-    sort,
-    pageNumber,
-    paginationFirst,
-  ]);
-
-  useEffect(() => {
-    getFilters({ field: "auditAllocatedBy", username: userName });
-  }, [userName]);
-  useEffect(() => {
-    if (usersData) {
-      setUserListAll(usersData?.data?.response);
-      setTotalElements(usersData?.data?.response?.totalElements);
-    }
-  }, [usersData]);
-  useEffect(() => {
-    const uId = getStorage("user");
-    getCurrentUserDetails({ userId: uId });
-  }, []);
   useEffect(() => {
     if (routedData?.params) {
       const {
@@ -389,6 +300,52 @@ const Index = ({
       setSort(sort);
     }
   }, [routedData]);
+ 
+  useEffect(() => {
+    getFilters({ field: "auditAllocatedBy", username: userName });
+  }, [userName]);
+  useEffect(() => {
+    if (usersData) {
+      setUserListAll(usersData?.data?.response);
+      setTotalElements(usersData?.data?.response?.totalElements);
+    }
+  }, [usersData]);
+  useEffect(() => {
+    const uId = getStorage("user");
+    getCurrentUserDetails({ userId: uId });
+  }, []);
+  const getuserQueueApi = async () => {
+    const uId = getStorage("user");
+    setUserName(uId);
+    await getUserQueueList({
+      uId,
+      pageNo,
+      pageNumber,
+      pageSize,
+      selectedOption,
+      sort: sort,
+      selectedDateRanges,
+      searchText: searchText,
+    });
+  };
+  useEffect(() => {
+    const uId = getStorage("user");
+    setParamsFilter("check");
+    setUserName(uId);
+    if (window !== "undefined" && paramsFilter) {
+      getuserQueueApi();
+    }
+  }, [
+    selectedOption,
+    selectedDateRanges,
+    searchText,
+    pageSize,
+    pageNo,
+    paramsFilter,
+    sort,
+    pageNumber,
+    paginationFirst,
+  ]);
   const opt = {
     Status: statusOptions,
     Priority: priorityOptions,
@@ -409,7 +366,6 @@ const Index = ({
                     params: null,
                     userData: userParams,
                   });
-                  // router.push("/supervisor/user");
                 }}
               >
                 <Image src={leftArrow} />
@@ -455,43 +411,24 @@ const Index = ({
                     id="task-tbl_wrapper"
                     className="dataTables_wrapper no-footer"
                   >
-                    {loader ? (
-                      <div className="mt-1">
-                        <TableSkeleton />
-                      </div>
-                    ) : (
-                      <div className="mt-2">
-                        <UserQueueTable
-                          bullets={bullets}
-                          badges={badges}
-                          bulletsTitle="Reviewed Status"
-                          badgesTitle="Audited Status"
-                          userList={userListAll?.content}
-                          userName={userName}
-                          sort={sort}
-                          setSort={setSort}
-                          auditBodyTemplate={auditstatusBodyTemplate}
-                          activeFilters={activeFilters}
-                          setActiveFilters={setActiveFilters}
-                          getRoutedData={getRoutedData}
-                          getIndividualUser={getIndividualUser}
-                          handlePriorityChange={handlePriorityChange}
-                          handleTableRowClick={handleTableRowClick}
-                        />
-                      </div>
-                    )}
+                    <div className="mt-2">
+                      <AppTable
+                        data={userListAll?.content}
+                        column={columns}
+                        loader={loader}
+                        onRowClick={handleTableRowClick}
+                        pagination={false}
+                        setSort={setSort}
+                        sort={sort}
+                        handlePriorityChange={handlePriorityChange}
+                        tableId="Supervisor-userqueue-table"
+                        first={pageNo === 0 ? 0 : paginationFirst}
+                        totalRecords={totalElements}
+                        row={15}
+                        onPageChange={onPageChange}
+                      />
+                    </div>
                     <div>
-                      <div className="pagination-container">
-                        <Paginator
-                          first={pageNo === 0 ? 0 : paginationFirst}
-                          rows={15}
-                          totalRecords={totalElements}
-                          onPageChange={onPageChange}
-                        />
-                        <div className="total-pages">
-                          Total count: {totalElements ? totalElements : 0}
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>

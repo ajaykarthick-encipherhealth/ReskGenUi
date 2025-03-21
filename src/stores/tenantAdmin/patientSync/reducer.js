@@ -7,7 +7,8 @@ import {
   activeTab,
   upoloadFiles,
   getCreateBatch,
-  getRoutedData
+  getRoutedData,
+  getSupervisorName
   
 } from "./actions";
 
@@ -55,11 +56,18 @@ const getStateDetails = handleActions(
   },
   ""
 );
+const getSupervisorDetails = handleActions(
+  {
+    [getSupervisorName.toString()]: (state, { payload }) => payload,
+  },
+  ""
+);
 const patientSyncReducer = combineReducers({
   allBatches: createReducer(getAllBatches),
   getBatch:createReducer(getBatchInfo),
   batchUpload: createReducer(batchUpload),
   routedData:getStateDetails,
+  supervisorUserName:getSupervisorDetails,
  
 
   // loaders

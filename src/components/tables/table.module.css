@@ -96,7 +96,7 @@
 .classTable tbody tr:hover {
   cursor: pointer;
   border-radius: 10px 10px 10px 10px !important;
-  background-color: #ffff !important;
+  background-color:#ffff !important;
 }
 .classTable > thead > tr > th {
   font-size: 12px;
@@ -222,7 +222,7 @@
   justify-content: center;
   color: #fff;
   font-weight: 800;
-  font-size: 18px;
+  font-size: 16px;
   margin-top: -2px;
 }
 .customChecked2[type="checkbox"] {
@@ -249,7 +249,7 @@
   justify-content: center;
   color: #04306f;
   font-weight: 800;
-  font-size: 18px;
+  font-size: 16px;
   margin-top: -2px;
 }
 @media screen and (max-width: 1024px) {
@@ -257,3 +257,21 @@
    overflow:scroll !important;
   }
 }
+.customAntSelect > div {
+  border: none !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+}
+.infoIcon{
+  color:#fff;
+  padding-left: 10px;
+
+}
+.customAntSelect > div {
+  border: none !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+}
+
+
+

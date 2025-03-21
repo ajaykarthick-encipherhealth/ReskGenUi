@@ -296,7 +296,7 @@ const DailyTask = ({
                                   }),
                                 },
                               },
-                              activeFilters: commonFilterItems.map((item) =>
+                              activeFilters: commonFilterItems?.map((item) =>
                                 item.title === "dueDate" ||
                                 item?.title === "Search"
                                   ? { ...item, active: true }
@@ -360,7 +360,7 @@ const DailyTask = ({
                                               }),
                                             },
                                           },
-                                          activeFilters: commonFilterItems.map(
+                                          activeFilters: commonFilterItems?.map(
                                             (item) =>
                                               item.title === "dueDate" ||
                                               item.title === "Status" ||

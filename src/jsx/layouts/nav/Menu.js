@@ -284,7 +284,8 @@ export const ProviderMenuList = [
     title: "Patient Allocation",
     iconStyle: <ContactsOutlined />,
     activeIcon: <ContactsFilled />,
-    to: "/tenantadmin/allocateduser",
+    to: "/tenantadmin/allocatedusers",
+    childRoute: "/tenantadmin/allocatedusers/supervisorlist",
   },
   {
     title: "Report",

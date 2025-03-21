@@ -1,49 +1,43 @@
-
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { Popover, notification } from "antd";
+import { notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import Header from "../../../jsx/layouts/nav/Header";
-import PatientTable from "../../../components/table/PatientList/patientList";
-import Pending from "../../../../src/images/trackingImages/pending.webp";
-import Hold from "../../../../src/images/trackingImages/hold.webp";
-import Completed from "../../../../src/images/trackingImages/completed.webp";
-import Declined from "../../../../src/images/trackingImages/declined.webp";
-import Abort from "../../../../src/images/trackingImages/abort.webp";
 import { actions as workqueueActions } from "../../../stores/reviewer/workqueue";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 import { priorityOptions } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
-import Image from "next/image";
-import { extractLatestData } from "../../supervisor/auditing";
 import { setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
-import TableSkeleton from "../../../components/skeleton/table";
 import ReusableFilters from "../../../components/reusableFilters";
+import AppTable from "../../../components/tables";
 
-const bullets = [
+export const bullets = [
   {
-    title: "Processed Status",
-    option: [
-      {
-        color: "#5da9e4",
-        name: "Pending",
-      },
-      {
-        color: "#EB5252",
-        name: "Declined",
-      },
-      {
-        color: "#00BC13",
-        name: "Completed",
-      },
-      { color: "#3C0AD2", name: "Hold" },
-    ],
+    color: "#5da9e4",
+    name: "PENDING",
+  },
+  {
+    color: "#EB5252",
+    name: "DECLINED",
+  },
+  {
+    color: "#00BC13",
+    name: "COMPLETED",
+  },
+  { color: "#3C0AD2", name: "HOLD" },
+];
+export const reviewedBullets = [
+  {
+    color: "#EB5252",
+    name: "DECLINED",
+  },
+  {
+    color: "#00BC13",
+    name: "COMPLETED",
   },
 ];
 export const statusOptions = [
@@ -51,7 +45,7 @@ export const statusOptions = [
   { label: "PENDING", value: "PENDING" },
   { label: "DECLINED", value: "DECLINED" },
   { label: "HOLD", value: "HOLD" },
-]
+];
 export const commonFilterItems = [
   {
     id: "01",
@@ -60,7 +54,7 @@ export const commonFilterItems = [
     value: null,
     placeholder: "Search",
     header: "Patient Name / ID",
-    active:true
+    active: true,
   },
   {
     id: "02",
@@ -69,7 +63,7 @@ export const commonFilterItems = [
     value: null,
     placeholder: "Status",
     options: null,
-    active:false
+    active: false,
   },
   {
     id: "03",
@@ -78,7 +72,7 @@ export const commonFilterItems = [
     value: null,
     placeholder: "Due Date",
     pickerType: "year",
-    active:false
+    active: false,
   },
   {
     id: "04",
@@ -87,7 +81,7 @@ export const commonFilterItems = [
     value: null,
     placeholder: "Completed  Date",
     pickerType: "year",
-    active:false
+    active: false,
   },
   {
     id: "05",
@@ -105,7 +99,7 @@ export const commonFilterItems = [
     value: null,
     placeholder: "Priority",
     options: null,
-    active:false
+    active: false,
   },
   {
     id: "07",
@@ -115,7 +109,7 @@ export const commonFilterItems = [
     placeholder: "Batch",
     showSearch: true,
     options: null,
-    active:false
+    active: false,
   },
 ];
 const Patient = ({
@@ -128,7 +122,58 @@ const Patient = ({
   getAllBatchList,
   batchList,
 }) => {
+  const columns = [
+    {
+      name: "Patient Id",
+      value: "patientId",
+    },
+    {
+      name: "Batch Name",
+      value: "batchName",
+    },
+    {
+      name: "File Name",
+      value: "fileName",
+    },
+    {
+      name: "HCC Count",
+      value: "validDiseaseCount",
+    },
+    {
+      name: "Allocated Date",
+      value: "allocatedOn",
+      sortable: true,
+      isDate: true,
+    },
+    {
+      name: "Due Date",
+      value: "dueDate",
+      sortable: true,
+      isDate: true,
+    },
+    {
+      name: "Completed Date",
+      value: "processedDate",
+      sortable: true,
+      isDate: true,
+    },
 
+    {
+      name: "Allocated By",
+      sortable: true,
+      isImage: true,
+      value: {
+        first: "allocatedByFirstName",
+        last: "allocatedBylastName",
+        img: "allocatedByProfileImage",
+      },
+    },
+    {
+      name: "Priority",
+      value: "priority",
+    },
+    { name: "STATUS", value: "processedStatus", status: true, infoIcon: true },
+  ];
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [sort, setSort] = useState({
@@ -159,16 +204,9 @@ const Patient = ({
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
+  const [totalElements, setTotalElements] = useState("");
   const [clear, setClear] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
-
-
-  const addPatientFile = (data) => {
-    inputValue.patientId = data.patientId;
-    inputValue.name = data.patientName;
-    setAddPatient(true);
-  };
 
   const gotoPatientDetails = (data) => {
     patientDetails(data);
@@ -177,6 +215,8 @@ const Patient = ({
       const controller = new AbortController();
       controller.abort();
       setStorage("patientId", data.patientId);
+      setStorage("routeBackTo", "/reviewer/patients");
+      getRoutedData(params);
       router.push("/reviewer/patients/details");
     } else {
       notification.warning({
@@ -185,106 +225,13 @@ const Patient = ({
     }
   };
 
-  const actionBodyTemplate = (rowData) => {
-    return (
-      <div className="d-flex justify-content-center">
-        <button
-          onClick={() => addPatientFile(rowData)}
-          className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
-        >
-          <FontAwesomeIcon icon={faUpload} fontSize={11} />
-        </button>
-      </div>
-    );
-  };
-
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageNumber(e.page);
     setPageSize(e.rows);
   };
-  const processstatusBodyTemplate = (rowData) => {
-    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
 
-    switch (rowData.processedStatus) {
-      case "COMPLETED":
-        return (
-          <Popover placement="bottom" title="Status: COMPLETED">
-            <span className="patient-status text-center">
-              <Image
-                src={Completed}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </span>
-          </Popover>
-        );
-
-      case "PENDING":
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <span className="patient-status text-center">
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-
-      case "DECLINED":
-        return (
-          <Popover
-            placement="bottom"
-            title="Status: DECLINED"
-            content={`Reason: ${
-              declinedDataFromDeclined ? declinedDataFromDeclined : "---"
-            }`}
-          >
-            <span className="patient-status text-center">
-              <Image src={Declined} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-      case "NOTCOMPUTED":
-        return (
-          <Popover placement="bottom" title="Status: NOT COMPUTED">
-            <span className="patient-status text-center">
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-      case "COMPUTED":
-        return (
-          <Popover placement="bottom" title="Status: COMPUTED">
-            <span className="patient-status text-center">
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-      case "HOLD":
-        return (
-          <Popover placement="bottom" title="Status: HOLD">
-            <span className="patient-status text-center">
-              <Image src={Hold} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-      case "ABORTED_BY_CRON":
-        return (
-          <Popover placement="bottom" title="Status: ABORTED BY CRON">
-            <span className="patient-status text-center">
-              <Image src={Abort} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-      case null:
-        return (
-          <Popover placement="bottom" title="">
-            <span className="patient-status text-center">
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-    }
-  };
   const params = {
     pageNo,
     selectedDates,
@@ -296,17 +243,6 @@ const Patient = ({
     selectedOption,
     selectedDateRanges,
     pageNumber,
-  };
-  const handleTableRowClick = (e) => {
-    const targetTd = e.target.closest("td");
-    if (targetTd) {
-      setStorage("routeBackTo", "/reviewer/patients");
-      getRoutedData(params);
-      router?.push("/reviewer/patients/details");
-      const dataIndex = targetTd.parentElement.rowIndex - 1;
-      const clickedData = patinetListAll[dataIndex];
-      gotoPatientDetails(clickedData);
-    }
   };
   useEffect(() => {
     if (routedData) {
@@ -339,7 +275,7 @@ const Patient = ({
       pageNumber,
       pageSize,
       selectedOption,
-      sort: sort?.sort,
+      sort: sort,
       selectedDateRanges,
       searchText: searchText,
     });
@@ -406,43 +342,22 @@ const Patient = ({
               <DailyTask trackChart={trackChart} />
             </div>
           </div>
-
-          <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-            {loading ? (
-              <TableSkeleton />
-            ) : (
-              <div className="mt-3">
-                <PatientTable
-                  handleTableRowClick={handleTableRowClick}
-                  pageNumber={pageNumber}
-                  patinetListAll={patinetListAll}
-                  activeFilters={activeFilters}
-                  actionBodyTemplate={actionBodyTemplate}
-                  statusBodyTemplate={processstatusBodyTemplate}
-                  gotoPatientDetails={gotoPatientDetails}
-                  patientDetails={patientDetails}
-                  sort={sort}
-                  setSort={setSort}
-                  getFilteApi={getFilteApi}
-                  page={{ pageNo, paginationFirst }}
-                  getRoutedData={getRoutedData}
-                  bullets={bullets}
-                />
-                <div>
-                  <div className="pagination-container">
-                    <Paginator
-                      first={pageNo === 0 ? 0 : paginationFirst}
-                      rows={15}
-                      totalRecords={totalElements}
-                      onPageChange={onPageChange}
-                    />
-                    <div className="total-pages">
-                      Total count: {totalElements}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+          <div className="mt-3">
+            <AppTable
+              data={patinetListAll?.content}
+              column={columns}
+              loader={loading}
+              onRowClick={gotoPatientDetails}
+              pagination={false}
+              setSort={setSort}
+              sort={sort}
+              first={pageNo === 0 ? 0 : paginationFirst}
+              totalRecords={totalElements}
+              row={15}
+              onPageChange={onPageChange}
+            />
+            <div>
+            </div>
           </div>
         </div>
       </div>
@@ -458,7 +373,7 @@ const enhancer = connect(
     batchList: state?.tenantAdmin?.patients?.allBatch?.data?.response,
     patinetListAll:
       state?.reviewer?.workQueue?.getReviewerPatients?.data?.response
-        ?.patientDTOList?.content,
+        ?.patientDTOList,
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,

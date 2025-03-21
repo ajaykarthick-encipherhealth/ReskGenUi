@@ -1,0 +1,25 @@
+.btn {
+  width: 90px;
+  height: 34px;
+  width:34px;
+  /* box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; */
+  border-radius: 5px;
+  border: 1px solid var(--patientsLegendsColor);
+}
+.arrow {
+  font-size: 12px;
+  color: black;
+}
+.button {
+  width: 34px;
+  height: 34px;
+  padding: 2px;
+  background-color: #fff;
+  border-radius: 10px;
+  margin: 0px 5px 0px 0px;
+  border: 1px solid var(--patientsLegendsColor);
+  /* box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; */
+}
+.totalElementsColor{
+  color:var(--grayColor)
+}

@@ -1,0 +1,465 @@
+import React, { useEffect, useState } from "react";
+import { Tab, Nav } from "react-bootstrap";
+import ReviewerAllocation from "./reviewerAllocation";
+import SupervisorAllocation from "./supervisorAllocation";
+import Header from "../../../jsx/layouts/nav/Header";
+import { Button, Input, Tooltip, Space } from "antd";
+import styles from "../allocatedusers/styles.module.css";
+import ReviewerAllocationModal from "./reviewerAllocation/reviewerAllocationModal";
+import { connect } from "react-redux";
+import { actions as allActions } from "../../../stores/tenantAdmin/patientAllocations";
+import ReusableFilters from "../../../components/reusableFilters";
+import { priorityOptions } from "../../../components/headerFilters/functions";
+import { actions as tenantAdminUsersAction } from "../../../stores/tenantAdmin/users";
+import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
+import Supervisorlist from "./supervisorlist";
+
+const PatientAllocation = ({
+  getAllReviewerList,
+  organizationList,
+  getAllOrganizationList,
+  getAllSupervisorList,
+  getReviewerList,
+  routedData,
+}) => {
+  const commonFilterItems = [
+    {
+      id: 1,
+      title: "Search",
+      type: "search",
+      value: null,
+      placeholder: "Search",
+      header: "Patient Name / ID",
+      active: true,
+    },
+    {
+      id: 2,
+      title: "organization",
+      type: "select",
+      value: null,
+      placeholder: "Organization",
+      options: organizationList?.response?.map((item) => ({
+        value: item?.id,
+        label: `${item?.name}`,
+      })),
+      active: true,
+    },
+    {
+      id: "03",
+      title: "computedDate",
+      type: "rangePicker",
+      value: null,
+      placeholder: "Computed  Date",
+      pickerType: "year",
+      active: true,
+    },
+    {
+      id: "04",
+      title: "priority",
+      type: "select",
+      value: null,
+      placeholder: "Priority",
+      options: priorityOptions,
+      active: true,
+    },
+  ];
+  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
+  const [sort, setSort] = useState({
+    computedDate: {
+      sortDir: "DESC",
+      sortField: "computedDate",
+    },
+  });
+  const [activeTab, setActiveTab] = useState();
+  const [selectedSupervisor, setSelectedSupervisor] = useState(null);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [allocateModal, setAllocateModal] = useState(false);
+  const [allocateModalL2, setAllocateModalL2] = useState(false);
+  const [selectedChart, setSelectedChart] = useState([]);
+  const [selectedRowsId, setSelectedRowsId] = useState([]);
+  const [searchText, setSearchText] = useState(null);
+  const [selectedOption, setSelectedOption] = useState({});
+  const [selectedDateRanges, setSelectedDateRanges] = useState({});
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [batchCount, setBatchCount] = useState("");
+  const [pageNo, setPageNo] = useState(0);
+  const [paginationFirst, setPaginationFirst] = useState(0);
+  const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [paramsFilter, setParamsFilter] = useState(null);
+  const [selectedUserName, setSelectedUserName] = useState([]);
+  const [filterBatchCount, setFilterBatchCount] = useState(false);
+
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+    setSelectedSupervisor(null);
+    setSelectedRows([]);
+    setSearchText("");
+    setSelectedDateRanges([]);
+    setSelectedOption({});
+  };
+
+  const handleOpenModal = () => {
+    if (activeTab === "2") {
+      setAllocateModalL2(true);
+    } else {
+      setAllocateModal(true);
+    }
+  };
+
+  useEffect(() => {
+    setSelectedRowsId(selectedRows);
+  }, [selectedRows, setSelectedRowsId]);
+
+  useEffect(() => {}, [allocateModalL2]);
+  useEffect(() => {
+    if (!organizationList?.response) {
+      getAllOrganizationList();
+    }
+  }, []);
+  const opt = {
+    organization: organizationList?.response?.map((item) => ({
+      value: item?.id,
+      label: `${item?.name}`,
+    })),
+    priority: priorityOptions,
+  };
+
+  const getAllReviewerALlocation = async () => {
+    const res = await getAllReviewerList({
+      pageNo,
+      pageNumber,
+      selectedOption,
+      sort,
+      selectedDateRanges,
+      search: searchText,
+      batchCount: batchCount,
+    });
+  };
+
+  const getAllSupervisorAllocation = async () => {
+    const res = await getAllSupervisorList({
+      pageNo,
+      pageNumber,
+      selectedOption,
+      sort,
+      selectedDateRanges,
+      searchText,
+    });
+  };
+
+  useEffect(() => {
+    setParamsFilter("check");
+    if (window !== "undefined" && paramsFilter) {
+      if (activeTab == "1") {
+        getAllReviewerALlocation();
+      } else {
+        getAllSupervisorAllocation();
+      }
+    }
+  }, [
+    selectedOption,
+    selectedDateRanges,
+    searchText,
+    pageNo,
+    paramsFilter,
+    sort,
+    paginationFirst,
+    selectedSupervisor,
+  ]);
+  const getFilterOption = () => {
+    let filteredItems;
+
+    switch (activeTab) {
+      case "1":
+        filteredItems = commonFilterItems.filter(
+          (filter) => filter.title !== "reviewer" && filter.title !== "status"
+        );
+        break;
+
+      case "2":
+        filteredItems = commonFilterItems
+          .filter((filter) => filter.id == 1 || filter.id == 2)
+          .map((filter) =>
+            filter.id == 1 ? { ...filter, header: "Search by Name" } : filter
+          );
+        break;
+
+      default:
+        filteredItems = commonFilterItems;
+    }
+
+    return filteredItems;
+  };
+
+  useEffect(() => {
+    const filteredFilters = getFilterOption();
+    setActiveFilters(filteredFilters);
+  }, [activeTab, selectedSupervisor]);
+
+  useEffect(() => {
+    if (activeTab == "2") {
+      getReviewerList({ field: "patientAllocated" });
+    }
+  }, []);
+  const params = {
+    pageNo,
+    paginationFirst,
+    sort,
+    activeFilters,
+    searchText,
+    selectedOption,
+    activeTab,
+  };
+
+  useEffect(() => {
+    if (routedData) {
+      setActiveTab(routedData?.activeTab);
+    } else {
+      setActiveTab("1");
+    }
+  }, [routedData]);
+  return (
+    <div>
+      <Header />
+      <div className="content-body">
+        <div className="container-fluid">
+          <div className="table-responsive active-projects task-table">
+            <div className="d-flex">
+              <div style={{ width: "90%" }} className="d-flex gap-3">
+                <div className={styles.filters}>
+                  <ReusableFilters
+                    showFilter={false}
+                    setActiveFilters={setActiveFilters}
+                    setSearchText={setSearchText}
+                    searchText={searchText}
+                    setSelectedOption={setSelectedOption}
+                    selectedOption={selectedOption}
+                    setSelectedDateRanges={setSelectedDateRanges}
+                    selectedDateRanges={selectedDateRanges}
+                    setPageNumber={setPageNumber}
+                    FilterItems={activeFilters}
+                    selectedDates={selectedDates}
+                    setSelectedDates={setSelectedDates}
+                    activeFilters={activeFilters}
+                    setPageNo={setPageNo}
+                    opt={opt}
+                  />
+                </div>
+                {activeTab === "1" && (
+                  <section>
+                    <label>Batch Count</label>
+                    <div class="form-group d-flex">
+                      <Space.Compact id="batch-count" name="batch-count">
+                        <Input
+                          data-testid="batchCount"
+                          name="batchCount"
+                          type="number"
+                          onChange={(e) => {
+                            let inputValue = e.target.value.replace(
+                              /[^\d]/g,
+                              ""
+                            );
+                            if (inputValue.length > 5) {
+                              inputValue = inputValue.slice(0, 5);
+                            }
+                            setBatchCount(inputValue);
+                            if (inputValue.length <= 0) {
+                              setFilterBatchCount(true);
+                              setSelectAllChecked(false);
+                              setSelectedRowsId([]);
+                              getAllReviewerList({
+                                batchCount: "",
+                              });
+                              setSelectedRows([]);
+                              setBatchCount("");
+                            } else if (inputValue.length > 0) {
+                              setFilterBatchCount(true);
+                            }
+                          }}
+                          value={batchCount}
+                          placeholder="Batch Count"
+                          onKeyDown={(e) => {
+                            if (e.key === "\\") {
+                              e.preventDefault();
+                            }
+                          }}
+                          className="batch-form-control"
+                        />
+                        <button
+                          id="select-btn"
+                          name="select-btn"
+                          onClick={() => {
+                            setFilterBatchCount(true);
+                            if (batchCount != selectedRowsId.length) {
+                              setSelectAllChecked(false);
+                              setSelectedRowsId([]);
+                              setSelectedRows([]);
+                            }
+                            getAllReviewerList({
+                              batchCount: batchCount,
+                            });
+                          }}
+                          style={{
+                            borderRadius: "0px 10px 10px 0px",
+                          }}
+                          className="btn btn-outline-secondary py-0 px-2 select-count"
+                        >
+                          Select
+                        </button>
+                      </Space.Compact>
+                    </div>
+                  </section>
+                )}
+              </div>
+
+              {activeTab === "1" ? (
+                <div
+                  className="d-flex align-items-center justify-content-end"
+                  style={{ width: "20%" }}
+                >
+                  <Tooltip
+                    title={
+                      selectedRowsId?.length === 0
+                        ? "Select patients to Allocate"
+                        : ""
+                    }
+                  >
+                    <Button
+                      data-testid="allocate-btn"
+                      name="allocate-btn"
+                      onClick={handleOpenModal}
+                      type="primary"
+                      className={`mb-3 ${styles.allocate}`}
+                      disabled={selectedRowsId?.length === 0}
+                    >
+                      Allocate
+                    </Button>
+                  </Tooltip>
+                </div>
+              ) : null}
+            </div>
+            <div className="row">
+              <div className="col-xl-12">
+                <div className="profile-tab" style={{ marginTop: "20px" }}>
+                  <div className="custom-tab-1">
+                    <Tab.Container
+                      className="profile-tab"
+                      activeKey={activeTab}
+                      onSelect={handleTabChange}
+                    >
+                      <Nav variant="tabs" className="nav nav-tabs profile-tab">
+                        <Nav.Item className="nav-item profile-tab">
+                          <Nav.Link eventKey="1">Reviewer Allocation</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item className="nav-item profile-tab">
+                          <Nav.Link eventKey="2">
+                            Supervisor Allocation
+                          </Nav.Link>
+                        </Nav.Item>
+                      </Nav>
+
+                      <Tab.Content>
+                        <Tab.Pane eventKey="1">
+                          <ReviewerAllocation
+                            selectedRowsId={selectedRowsId}
+                            setSelectedRows={setSelectedRows}
+                            selectedRows={selectedRows}
+                            setSelectedRowsId={setSelectedRowsId}
+                            setBatchCount={setBatchCount}
+                            pageNo={pageNo}
+                            setPageNo={setPageNo}
+                            paginationFirst={paginationFirst}
+                            setPaginationFirst={setPaginationFirst}
+                            selectedUserName={selectedUserName}
+                            setSelectedUserName={setSelectedUserName}
+                            setSort={setSort}
+                            sort={sort}
+                            batchCount={batchCount}
+                          />
+                        </Tab.Pane>
+
+                        <Tab.Pane eventKey="2">
+                          <SupervisorAllocation
+                            selectedSupervisor={selectedSupervisor}
+                            setSelectedSupervisor={setSelectedSupervisor}
+                            selectedRows={selectedRows}
+                            setSelectedRows={setSelectedRows}
+                            setSelectedRowsId={setSelectedRowsId}
+                            pageNo={pageNo}
+                            setPageNo={setPageNo}
+                            paginationFirst={paginationFirst}
+                            setPaginationFirst={setPaginationFirst}
+                            params={params}
+                            setSearchText={setSearchText}
+                            setSelectedOption={setSelectedOption}
+                            searchText={searchText}
+                            setActiveTab={setActiveTab}
+                            activeTab={activeTab}
+                            handleOpenModal={handleOpenModal}
+                            setSelectedUserName={setSelectedUserName}
+                          />
+                        </Tab.Pane>
+                      </Tab.Content>
+                    </Tab.Container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {selectedSupervisor && (
+        <Supervisorlist
+          setAllocateModalL2={setAllocateModalL2}
+          selectedRows={selectedRows}
+          setSelectedRowsId={setSelectedRowsId}
+          setSelectedRows={setSelectedRows}
+          setSelectedSupervisor={setSelectedSupervisor}
+          handleOpenModal={handleOpenModal}
+          selectedSupervisor={selectedSupervisor}
+          setAllocateModal={setAllocateModal}
+          selectedUserName={selectedUserName}
+        />
+      )}
+      <ReviewerAllocationModal
+        getAllReviewerList={getAllReviewerList}
+        open={allocateModal}
+        setOpen={setAllocateModal}
+        setSelectedChart={setSelectedChart}
+        selectedChart={selectedChart}
+        selectedRowsId={selectedRowsId}
+        setSelectedRowsId={setSelectedRowsId}
+        setSelectedRows={setSelectedRows}
+        selectedRows={selectedRows}
+        activeTab={activeTab}
+        selectedUserName={selectedUserName}
+        setSelectedUserName={setSelectedUserName}
+      />
+    </div>
+  );
+};
+
+const connector = connect(
+  (state) => ({
+    organizationList: state?.tenantAdmin?.users?.allOrganization?.data,
+    reviewersData:
+      state.tenantAdmin?.patientsAllocation?.reviewersList?.data?.response
+        ?.patientDtoList,
+    loader: state.tenantAdmin?.patientsAllocation?.loader,
+    reviewerList:
+      state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
+    routedData: state.tenantAdmin?.patientSync?.routedData,
+  }),
+  {
+    getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
+    getAllReviewerList: allActions.getAllReviewerList,
+    getAllCheckedReviewers: allActions.getAllCheckedListForReviewer,
+    getAllSupervisorList: allActions.getAllSupervisorList,
+    allocationList: allActions.getAllAllocationList,
+    getReviewerList: allActions.getFilterOptions,
+    getRoutedData: allPatientSyncAction.getRoutedData,
+  }
+);
+
+export default connector(PatientAllocation);

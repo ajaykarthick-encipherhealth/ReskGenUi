@@ -19,12 +19,11 @@ import {
   renderUserPrfoile,
   renderUserPrfoileAvatar,
 } from "../../../../components/headerFilters/functions";
-import { extractLatestData } from "../../auditing";
 import {  setStorage } from "../../../../utils/storages";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 import Legends from "../../../../components/legends";
 import styles from "../../../reviewer/report/report.module.css";
-import { formatDateTime } from "../../../../utils/reusable";
+import { extractLatestData, formatDateTime } from "../../../../utils/reusable";
 
 const UserQueueTable = ({
   userList,

@@ -18,7 +18,7 @@ const RegularButton = ({
       className={`btn mx-1 ${
         type === "outline" ? Style.outer : Style.btnColor
       }`}
-      name={name?.toLowerCase()}
+      name={name}
       onClick={!htmlType && onClick}
       style={{ width: width}}
       type={

@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
 import { Form, Input, Button, Select, Row, Col, notification } from "antd";
+import { CloseCircleOutlined } from "@ant-design/icons";
 import styles from "../../../styles/auth.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
-import { Paginator } from "primereact/paginator";
 import { encyptingPass } from "../../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
-import UsersList from "../../../components/table/tenantTable/usersList/usersList";
+import { actions as adminAction } from "../../../stores/admin/dashboard";
 import { getStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
-import TableSkeleton from "../../../components/skeleton/table";
 import ReusableFilters from "../../../components/reusableFilters";
 import { PlusCircleFilled } from "@ant-design/icons";
+import AppTable from "../../../components/tables";
 const options3 = [
   { value: "true", label: "Enabled" },
   { value: "false", label: "Disabled" },
@@ -41,6 +41,9 @@ const UserList = ({
   loading,
   getAddUser,
   addPatients,
+  getEnableUser,
+  getTenantAdminSelectUserList,
+  selectUserList,
 }) => {
   const commonFilterItems = [
     {
@@ -93,6 +96,50 @@ const UserList = ({
       active: false,
     },
   ];
+
+  const columns = [
+    {
+      name: "Name",
+      value: {
+        first: "firstName",
+        last: "lastName",
+        img: "profileImageUrl",
+      },
+      isImage: true,
+    },
+    {
+      name: "user name",
+      value: "userName",
+    },
+
+    {
+      name: "ORGANIZATION",
+      value: { firstValue: "organizationDTO", secondValue: "name" },
+      objValue: true,
+    },
+    { name: "ROLE", value: "role", isComma: true },
+
+    {
+      name: "DATE CREATED ",
+      value: "createdDate",
+      isDateAndTime: "true",
+      sortable: true,
+    },
+    {
+      name: "MFA Status",
+      value: "mfaEnabled",
+      isBoolean: true,
+      truthValue: "Enabled",
+      falseValue: "Disabled",
+    },
+    {
+      name: "Action",
+      value: "action",
+      isAction: true,
+    },
+    { name: "status", value: "status", isSwitchStatus: true },
+  ];
+
   const [sort, setSort] = useState({
     createdDate: {
       sortDir: "DESC",
@@ -108,10 +155,10 @@ const UserList = ({
   const [isStatus, setStatus] = useState(false);
   const [roleValue, setRoleValue] = useState([]);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
-  const [totalElements, setTotalElements] = useState(10);
-  const [sortOrder, setSortOrder] = useState("DESC");
+  const [totalElements, setTotalElements] = useState(0);
   const [useAdd, setUseAdd] = useState(false);
   const [formData, setFormData] = useState(intialValues);
+  const [switchStates, setSwitchStates] = useState({});
   const [pageNo, setPageNo] = useState(0);
   const [addPatientId, setAddPatientId] = useState(false);
   const [role, setRole] = useState(null);
@@ -124,9 +171,16 @@ const UserList = ({
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
-  // const [pageNumber, setPageNumber] = useState(0);
   const [mobileNumber, setMobileNumber] = useState("");
   const [orgAllList, setOrgAllList] = useState("");
+  const [rowData, setRowData] = useState();
+  const [popoverVisible, setPopoverVisible] = useState(null);
+  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [selectedManager, setSelectedManager] = useState();
+  const [isMultiple, setIsMultiple] = useState(false);
+  const [roleChangeLoader, setRoleChangeLoader] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [openManager, setOpenManager] = useState(false);
 
   const handleChange = (e) => {
     let value = e.target.value;
@@ -210,6 +264,28 @@ const UserList = ({
       },
     }));
   };
+  const handleSwitchToggle = async (item, checked) => {
+    setSwitchStates((prevStates) => ({
+      ...prevStates,
+      [item.email]: checked,
+    }));
+    const res = await getEnableUser({
+      checked: checked ? "yes" : "no",
+      user: item,
+    });
+    if (res?.status === "SUCCESS") {
+      getAllUsersList({ pageCount: 0 });
+    }
+  };
+  useEffect(() => {
+    if (usersListData?.data?.response?.content) {
+      const initialSwitchStates = {};
+      usersListData.data.response.content.forEach((user) => {
+        initialSwitchStates[user.email] = user.accountStatus;
+      });
+      setSwitchStates(initialSwitchStates);
+    }
+  }, [usersListData]);
 
   const handleSubmitPatientId = async (event) => {
     const form = event.currentTarget;
@@ -253,12 +329,111 @@ const UserList = ({
     setPaginationFirst(e.first);
     setPageNo(e.page);
   };
+  const handleRows = (value) => {
+    const updatedValue = Array.isArray(value) ? value : [value];
+    setSelectedRoles(updatedValue);
+    setOpen(false);
+  };
+  const items = [
+    { value: "REVIEWER", label: "Reviewer", role: "REVIEWER" },
+    { value: "SUPERVISOR", label: "Supervisor", role: "SUPERVISOR" },
+    { value: "TENANT_ADMIN", label: "Tenant Admin", role: "TENANT_ADMIN" },
+  ];
+  const getContent = (data) => {
+    return (
+      <div>
+        <div className="d-flex justify-content-end cr-pointer">
+          <CloseCircleOutlined onClick={() => setPopoverVisible(null)} />
+        </div>
+        <div style={{ height: "200px", width: "100%" }}>
+          <div className="my-2">Change Role</div>
+          <Select
+            id="change-role"
+            name="change-role"
+            style={{ width: "300px" }}
+            mode={"multiple"}
+            onChange={(e) => handleRows(e, data?.role)}
+            options={items || []} // Ensure it doesn't break if items is undefined
+            placeholder={"Select Role"}
+            defaultValue={isMultiple ? data.role : data?.role}
+            onDropdownVisibleChange={(visible) => setOpen(visible)}
+          />
+          {selectedRoles?.length === 1 && selectedRoles[0] === "REVIEWER" && (
+            <>
+              <div className="mt-4 my-2">Change Manager</div>
+              <Select
+                id="change-manager"
+                name="change-manager"
+                style={{ width: "300px" }}
+                onChange={handleManager}
+                options={optionsUser?.length > 0 ? optionsUser : []}
+                placeholder={"Change Manager"}
+                open={openManager}
+                value={selectedManager}
+                allowClear
+                onDropdownVisibleChange={(visible) => setOpenManager(visible)}
+              />
+            </>
+          )}
+        </div>
 
+        <div
+          style={{
+            display: "flex",
+            alignItems: "end",
+          }}
+        >
+          <button
+            id="save-btn"
+            name="save-btn"
+            className={styles.sendBtn}
+            onClick={() => {
+              handleSave();
+            }}
+            disabled={selectedRoles?.length === 0}
+          >
+            {roleChangeLoader ? "Loading...." : "Save"}
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const handleSave = async () => {
+    if (selectedRoles?.length > 0) {
+      setRoleChangeLoader(true);
+      const res = await getEnableUser({
+        checked: null,
+        user: rowData,
+        role: selectedRoles,
+        setPopoverVisible: setPopoverVisible,
+        selectedManager: selectedManager,
+        field: "addRole",
+      });
+      if (res?.status === "SUCCESS") {
+        getAllUsersList({ pageCount: 0 });
+        setPopoverVisible(null);
+        setPageNo(0);
+        setRoleChangeLoader(false);
+      }
+    }
+  };
+  const handleManager = (value) => {
+    setSelectedManager(value);
+    setOpenManager(false);
+  };
+  const optionsUser = selectUserList?.data?.response?.map((res) => ({
+    value: res.userName,
+    label: res.firstName + " " + res.lastName,
+  }));
   useEffect(() => {
     if (usersListData?.data?.response) {
       setTotalElements(usersListData?.data?.response?.totalElements);
     }
   }, [usersListData]);
+  useEffect(() => {
+    getTenantAdminSelectUserList({ role: "SUPERVISOR" });
+  }, []);
   useEffect(() => {
     var tenId = getStorage("tenantId");
     var uId = getStorage("userId");
@@ -273,7 +448,7 @@ const UserList = ({
       searchText,
       selectedDateRanges,
       selectedOption,
-      sort: sort?.sort,
+      sort: sort,
     });
   }, [pageNo, searchText, sort, selectedDateRanges, selectedOption]);
 
@@ -357,36 +532,36 @@ const UserList = ({
               </div>
             </div>
             <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-              {loading ? (
-                <TableSkeleton />
-              ) : (
-                <>
-                  <UsersList
-                    switchHandler={switchHandler}
-                    setPageNo={setPageNo}
-                    sortOrder={sortOrder}
-                    setSortOrder={setSortOrder}
-                    setSort={setSort}
-                    sort={sort}
-                  />
-
-                  <div>
-                    <div className="pagination-container">
-                      <Paginator
-                        id="user-paginator"
-                        name="user-paginator"
-                        first={pageNo === 0 ? 0 : paginationFirst}
-                        rows={15}
-                        totalRecords={totalElements}
-                        onPageChange={onPageChange}
-                      />
-                      <div className="total-pages">
-                        Total count: {totalElements}
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
+              <>
+                <AppTable
+                  data={usersListData?.data?.response?.content}
+                  column={columns}
+                  loader={loading}
+                  switchStates={switchStates}
+                  onSwitchToggle={handleSwitchToggle}
+                  totalLength={usersListData?.data?.response?.totalElements}
+                  pageNumber={pageNo}
+                  pagination={false}
+                  disableUser={true}
+                  rowBackground={true}
+                  totalPages={usersListData?.data?.response?.totalPages}
+                  setRowData={setRowData}
+                  setPopoverVisible={setPopoverVisible}
+                  setSelectedRoles={setSelectedRoles}
+                  optionsUser={optionsUser}
+                  setSelectedManager={setSelectedManager}
+                  getContent={getContent}
+                  popoverVisible={popoverVisible}
+                  isMultiple={isMultiple}
+                  sort={sort}
+                  setSort={setSort}
+                  name="user-paginator"
+                  first={pageNo === 0 ? 0 : paginationFirst}
+                  rows={15}
+                  totalRecords={totalElements}
+                  onPageChange={onPageChange}
+                />
+              </>
             </div>
           </div>
         </div>
@@ -535,12 +710,12 @@ const UserList = ({
                       },
                     ]}
                   >
-                      <Input
-                        data-testid="firstName"
-                        name="firstName"
-                        placeholder="Enter first name"
-                        autoComplete="off"
-                      />
+                    <Input
+                      data-testid="firstName"
+                      name="firstName"
+                      placeholder="Enter first name"
+                      autoComplete="off"
+                    />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -554,12 +729,12 @@ const UserList = ({
                       },
                     ]}
                   >
-                      <Input
-                        data-testid="lastName"
-                        name="lastName"
-                        placeholder="Enter last name"
-                        autoComplete="off"
-                      />
+                    <Input
+                      data-testid="lastName"
+                      name="lastName"
+                      placeholder="Enter last name"
+                      autoComplete="off"
+                    />
                   </Form.Item>
                 </Col>
               </Row>
@@ -578,12 +753,12 @@ const UserList = ({
                       },
                     ]}
                   >
-                      <Input
-                        data-testid="emailId"
-                        name="emailId"
-                        placeholder="Enter email"
-                        autoComplete="off"
-                      />
+                    <Input
+                      data-testid="emailId"
+                      name="emailId"
+                      placeholder="Enter email"
+                      autoComplete="off"
+                    />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -607,12 +782,12 @@ const UserList = ({
                       },
                     ]}
                   >
-                      <Input
-                        data-testid="userName"
-                        name="userName"
-                        placeholder="Enter user name"
-                        autoComplete="off"
-                      />
+                    <Input
+                      data-testid="userName"
+                      name="userName"
+                      placeholder="Enter user name"
+                      autoComplete="off"
+                    />
                   </Form.Item>
                 </Col>
               </Row>
@@ -763,15 +938,15 @@ const UserList = ({
                       },
                     ]}
                   >
-                      <Input
-                        id="mobileNumber"
-                        name="mobileNumber"
-                        type="text"
-                        placeholder="Enter mobile number"
-                        autoComplete="off"
-                        value={getDisplayValue(mobileNumber)}
-                        onChange={handleChange}
-                      />
+                    <Input
+                      id="mobileNumber"
+                      name="mobileNumber"
+                      type="text"
+                      placeholder="Enter mobile number"
+                      autoComplete="off"
+                      value={getDisplayValue(mobileNumber)}
+                      onChange={handleChange}
+                    />
                   </Form.Item>
                 </Col>
               </Row>
@@ -839,12 +1014,15 @@ const enhancer = connect(
     organizationList: state?.tenantAdmin?.users?.allOrganization?.data,
     usersListData: state?.tenantAdmin?.users?.allUsers,
     loading: state?.tenantAdmin?.users?.allUsersLoading,
+    selectUserList: state?.admin.dashboard?.managersList,
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     getAllUsersList: tenantAdminAction.getAllUsersAction,
     getAddUser: tenantAdminAction.getAddUser,
     addPatients: tenantAdminAction.addPatient,
+    getEnableUser: tenantAdminAction.getEnableUser,
+    getTenantAdminSelectUserList: adminAction.getSelectUserList,
   }
 );
 export default enhancer(UserList);

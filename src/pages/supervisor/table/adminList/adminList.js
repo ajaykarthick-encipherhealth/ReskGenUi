@@ -7,11 +7,7 @@ import { setStorage } from "../../../../utils/storages";
 import { connect } from "react-redux";
 import {actions as allActions} from '../../../../stores/tenantAdmin/patientSync'
 const AdminList = ({ userList,setViewUsers }) => {
-  const gotoUserQueue = (item) => {
-    setStorage("user", item?.userName);
-    setViewUsers(item)
-    // router.push(`/supervisor/user/userqueue`);
-  };
+  
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>

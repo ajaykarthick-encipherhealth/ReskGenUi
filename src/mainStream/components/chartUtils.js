@@ -1,4 +1,4 @@
-import { extractLatestData } from "../../pages/supervisor/auditing";
+// import { extractLatestData } from "../../pages/supervisor/auditing";
 import AuditedTrack from "../../../src/images/trackingImages/audited.webp";
 import NotAudited from "../../../src/images/trackingImages/notaudited.webp";
 import AuditHold from "../../../src/images/trackingImages/audithold.webp";
@@ -13,6 +13,7 @@ import Abort from "../../../src/images/trackingImages/abort.webp";
 import Image from "next/image";
 import { Popover } from "antd";
 import styles from "../reports/report.module.css"
+import { extractLatestData } from "../../utils/reusable";
 
 export const colors = {
   A: "#8A2BE2",

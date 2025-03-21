@@ -12020,7 +12020,7 @@ img.login-logo {
 
 .ant-modal-body {
   min-height: 10px !important;
-  height: auto !important;
+  height: 100% !important;
   width: 100% !important;
   /* max-height: 400px !important; */
   overflow: scroll !important;
@@ -14323,7 +14323,7 @@ overflow: scroll;
 
 .allocate_modal_container .ant-modal-content {
   height: 730px !important;
-  overflow-y: scroll !important;
+  /* overflow-y: scroll !important; */
 }
 .ant_select_form {
   width: 100% !important;
@@ -16247,7 +16247,7 @@ input::-webkit-inner-spin-button {
 }
 @media screen and (min-width: 1024px) and (max-width: 1300px) {
   .responsiveLabel {
-    font-size: 13px !important;
+    font-size: 10px !important;
     font-weight: 400;
   }
 }
@@ -16543,6 +16543,25 @@ input::-webkit-inner-spin-button {
   max-width: 400px;
   max-height: 80px;
   overflow-y: scroll;
+}
+.checkbox {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.customChecked[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #fff;
+  transition: background-color 0.3s, border-color 0.3s;
+  appearance: none !important;
+  position: relative;
 }
 .reusableInput.ant-input-affix-wrapper > input.ant-input {
   margin-top: -5px;

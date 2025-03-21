@@ -1,0 +1,127 @@
+.header{
+    font-weight: 600;
+    font-size: 17px;
+}
+
+.customModel .ant-modal-body{
+    padding: 0 !important;
+}
+
+.emptyUserSlot{
+    font-size: 22px;
+    font-weight: 300;
+    position: absolute;
+    top: 45%;
+    left: 40%;
+}
+
+.headContainer{
+    display: flex;
+    gap: 10px;
+    justify-content: end;
+    align-items: center;
+}
+
+.userHead{
+    font-size: 24px;
+}
+
+.statusBadge{
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.dataContainer{
+    margin-top: 20px;
+    width: 180px;
+}
+
+.recordSet{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px;
+    margin-block: 20px;
+}
+
+.recordItem{
+    border-right: 1px solid black;
+}
+
+.chartItem{
+    padding: 5px;
+    background: #DCE7EF;
+    border-radius: 3px;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 5px;
+}
+
+.chartCloseIcon{
+    padding: 2px;
+    background: #FAD1D1;
+    border-radius: 2px;
+}
+.total{
+    border:1px solid #8405a8;
+    width:23%;
+    height:30px;
+    color:#8405a8;
+    background-color: #F6EBF9;
+    border-radius: 3px;
+}
+.allocated{
+    border:1px solid #4CAF50;
+    width:23%;
+    height:30px;
+    color:#4CAF50;
+    background-color: #ECFEE6;
+    border-radius: 3px;
+
+}
+.pending{
+    border:1px solid #0078D4;
+    width:23%;
+    height:30px;
+    color:#0078D4;
+    background-color: #E6F4FE;
+    border-radius: 3px; 
+}
+.card {
+    height: 500px;
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+  .allocateBtn{
+    background-color: rgb(38, 62, 80);;
+    color:#fff
+  }
+  .notAllocateBtn{
+    background-color: #F8EDDD;
+    color:#82691C;
+    border: 1px solid  #F8EDDD !important;
+  }
+  .allocate{
+    background-color: #DDF3FB;
+    color:#126889;
+    border: 1px solid  #DDF3FB !important;
+  }
+  .allocateTab{
+    background-color: #2CAFFE;
+    color:#fff
+  }
+  .head{
+    border:1px solid   rgb(38, 62, 80);
+    background-color:  rgb(38, 62, 80);
+    color: #fff;
+
+  }
+ .body{
+    border:1px solid #D6DCE0 ;
+    background-color:  #D6DCE0;
+ }
+ .content{
+    border:1px solid #D6DCE0 ;
+    background-color:  #fff;
+    color: black;
+ }

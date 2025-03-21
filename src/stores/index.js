@@ -42,6 +42,7 @@ import { reducer as AuditedReducer } from "./supervisor/auditedQueue";
 import { reducer as tenantUsersReducer } from "./tenantAdmin/users";
 import { reducer as tenantFileProcessing } from "./tenantAdmin/fileProcessing";
 import { reducer as tenantAminPatientsReducer } from "./tenantAdmin/patients";
+import {reducer as patientsAllocationReducer} from  "./tenantAdmin/patientAllocations"
 import { reducer as patientSyncReducer } from "./tenantAdmin/patientSync";
 import { reducer as tenantAdminTrackingReducer } from "./tenantAdmin/tracking";
 import { reducer as tenantAminNotificationReducer } from "./tenantAdmin/notification";
@@ -126,6 +127,7 @@ const reducers = combineReducers({
     webSocket: webSocketReducer,
     users: tenantUsersReducer,
     patients: tenantAminPatientsReducer,
+    patientsAllocation: patientsAllocationReducer,
     patientSync: patientSyncReducer,
     tracking: tenantAdminTrackingReducer,
     notification: tenantAminNotificationReducer,

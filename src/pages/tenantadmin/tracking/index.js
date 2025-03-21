@@ -1,97 +1,27 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import { connect } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { Popover } from "antd";
-import { Paginator } from "primereact/paginator";
-import TrackingTable from "../../../components/table/tenantTable/trackingList";
+import { notification } from "antd";
 import {
   generateOptionsForNewStore,
   priorityOptions,
 } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
-import AuditedTrack from "../../../../src/images/trackingImages/audited.webp";
-import NotAudited from "../../../../src/images/trackingImages/notaudited.webp";
-import AuditHold from "../../../../src/images/trackingImages/audithold.webp";
-import ReAudit from "../../../../src/images/trackingImages/reaudited.webp";
-import AuditPending from "../../../../src/images/trackingImages/auditpending.webp";
-import Pending from "../../../../src/images/trackingImages/pending.webp";
-import Hold from "../../../../src/images/trackingImages/hold.webp";
-import Completed from "../../../../src/images/trackingImages/completed.webp";
-import Declined from "../../../../src/images/trackingImages/declined.webp";
-import AuditedDeclineTrack from "../../../../src/images/trackingImages/auditdeclined.webp";
-import Abort from "../../../../src/images/trackingImages/abort.webp";
-import Image from "next/image";
-import { extractLatestData } from "../../supervisor/auditing";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/tracking";
 import { actions as tenantUserAdminAction } from "../../../stores/tenantAdmin/users";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { actions as workFlowActions } from "../../../stores/admin/workqueue";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
-import TableSkeleton from "../../../components/skeleton/table";
 import ReusableFilters from "../../../components/reusableFilters";
-const bullets = [
-  {
-    title: "Processed Status",
-    option: [
-      {
-        color: "#0078D4",
-        name: "PENDING",
-      },
-      {
-        color: "#3C0AD2",
-        name: "HOLD",
-      },
-      {
-        color: "#EB5252",
-        name: "DECLINED",
-      },
-      {
-        color: "#00BC13",
-        name: "COMPLETED",
-      },
-    ],
-  },
-];
-const badges = [
-  {
-    title: "Audited Status",
-    option: [
-      {
-        color: "#4AA1AB",
-        name: "AUDITED",
-      },
-      {
-        color: "#BD3A79",
-        name: "AUDIT PENDING",
-      },
-      {
-        color: "#964B00",
-        name: "RE AUDIT",
-      },
-      {
-        color: "#FFEBAD",
-        name: "AUDIT HOLD",
-      },
-      {
-        color: "#C21807",
-        name: "AUDIT DECLINED",
-      },
-      {
-        color: "#E69021",
-        name: "NOT AUDIT",
-      },
-    ],
-  },
-];
+import AppTable from "../../../components/tables";
+import { getStorage, setStorage } from "../../../utils/storages";
+import { useRouter } from "next/router";
 const statusOptions = [
   { label: "COMPLETED", value: "COMPLETED", status: 2 },
   { label: "PENDING", value: "PENDING", status: 0 },
   { label: "DECLINED", value: "DECLINED", status: 0 },
   { label: "HOLD", value: "HOLD", status: 0 },
-  // { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
 ];
 
 const auditStatusOptions = [
@@ -267,6 +197,78 @@ const Patient = ({
     },
     sort: { sortDir: "DESC", sortField: "" },
   });
+  console.log(sort, "sort");
+  const columns = [
+    {
+      name: "Patients",
+      value: "patientId",
+    },
+    {
+      name: "Allocated By | Date",
+      value1: {
+        first: "allocatedByFirstName",
+        last: "allocatedByLastName",
+        img: "allocatedByProfileImage",
+      },
+      value: "allocatedOn",
+      clumpseTwoFields: true,
+      sortable: true,
+    },
+    {
+      name: "Reviewer | Date",
+      value1: {
+        first: "patientAllocatedFirstName",
+        last: "patientAllocatedLastName",
+        img: "patientAllocatedProfileImage",
+      },
+      clumpseTwoFields: true,
+      value: "processedDate",
+      sortable: true,
+    },
+    {
+      name: "Audit Allocated By | Date",
+      value1: {
+        first: "auditAllocatedByFirstName",
+        last: "auditAllocatedByLastName",
+        img: "auditAllocatedByProfileImage",
+      },
+      value: "auditAllocatedDate",
+      clumpseTwoFields: true,
+      sortable: true,
+    },
+    {
+      name: "Supervisor",
+      value: {
+        first: "auditedAssignedFirstName",
+        last: "auditedAssignedLastName",
+        img: "auditedAssignedProfileImage",
+      },
+      isImage: true,
+    },
+    {
+      name: "Audited Date",
+      value: "auditedDate",
+      sortable: true,
+      isDate: true,
+    },
+    {
+      name: "Priority",
+      value: "priority",
+    },
+    {
+      name: " PROCESSED STATUS",
+      value: "processedStatus",
+      status: true,
+      infoIcon: true,
+    },
+    {
+      name: "Audited STATUS",
+      value: "auditedStatus",
+      auditedStatus: true,
+      infoIcon: true,
+    },
+  ];
+  const navigate = useRouter();
   const [clear, setClear] = useState(false);
   const [orgAllList, setOrgAllList] = useState([]);
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);
@@ -276,255 +278,6 @@ const Patient = ({
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
-
-  const processstatusBodyTemplate = (rowData) => {
-    const declinedDataFromAudit = extractLatestData(
-      rowData?.auditDeclinedNotes
-    );
-
-    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
-
-    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-
-    switch (rowData.processedStatus) {
-      case "COMPLETED":
-        return (
-          <Popover placement="bottom" title="Status: COMPLETED">
-            <div
-              className="patient-status"
-              id="tracking-completed"
-              name="tracking-completed"
-              style={{ textAlign: "center" }}
-            >
-              <Image
-                src={Completed}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </div>
-          </Popover>
-        );
-
-      case "PENDING":
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <div
-              className="patient-status"
-              id="tracking-pending"
-              name="tracking-pending"
-              style={{ textAlign: "center" }}
-            >
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-
-      case "DECLINED":
-        return (
-          <Popover
-            placement="bottom"
-            title="Status: DECLINED"
-            content={`Reason: ${declinedData ? declinedData : "---"}`}
-          >
-            <div
-              className="patient-status"
-              id="tracking-declined"
-              name="tracking-declined"
-              style={{ textAlign: "center" }}
-            >
-              <Image src={Declined} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-
-      case "NOTCOMPUTED":
-        return (
-          <Popover placement="bottom" title="Status: NOT COMPUTED">
-            <div
-              className="patient-status"
-              id="tracking-notComputed"
-              name="tracking-notComputed"
-              style={{ textAlign: "center" }}
-            >
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-      case "COMPUTED":
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <div
-              className="patient-status"
-              id="tracking-computed"
-              name="tracking-computed"
-              style={{ textAlign: "center" }}
-            >
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-      case "HOLD":
-        return (
-          <Popover placement="bottom" title="Status: HOLD">
-            <div
-              className="patient-status"
-              id="tracking-hold"
-              name="tracking-hold"
-              style={{ textAlign: "center" }}
-            >
-              <Image src={Hold} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-      case "ABORTED_BY_CRON":
-        return (
-          <Popover placement="bottom" title="Status: ABORTED BY CRON">
-            <div
-              className="patient-status"
-              id="tracking-abort"
-              name="tracking-abort"
-              style={{ textAlign: "center" }}
-            >
-              <Image src={Abort} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-      case null:
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <div
-              className="patient-status"
-              id="tracking-null"
-              name="tracking-null"
-              style={{ textAlign: "center" }}
-            >
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-    }
-  };
-
-  const auditstatusBodyTemplate = (rowData) => {
-    const declinedDataFromAudit = extractLatestData(
-      rowData?.auditDeclinedNotes
-    );
-
-    const declinedDataFromDeclined = extractLatestData(
-      rowData?.auditDeclinedNotes
-    );
-
-    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-    switch (rowData.auditedStatus) {
-      case "AUDIT_PENDING":
-        return (
-          <Popover placement="bottom" title="Status: AUDIT PENDING">
-            <div
-              id="tracking-auditPending"
-              name="tracking-auditPending"
-              className="patient-status"
-            >
-              <Image
-                src={AuditPending}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </div>
-          </Popover>
-        );
-
-      case "AUDITHOLD":
-        return (
-          <Popover placement="bottom" title=" Status: AUDIT HOLD">
-            <div
-              id="tracking-auditHold"
-              name="tracking-auditHold"
-              className="patient-status"
-            >
-              <Image
-                src={AuditHold}
-                // className={styles.ImgTrck}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </div>
-          </Popover>
-        );
-      case "REAUDIT":
-        return (
-          <Popover placement="bottom" title=" Status: REAUDIT">
-            <div
-              id="tracking-reAudit"
-              name="tracking-reAudit"
-              className="patient-status"
-            >
-              <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
-      case "AUDITED":
-        return (
-          <Popover placement="bottom" title=" Status: AUDITED">
-            <div
-              id="tracking-audited"
-              name="tracking-audited"
-              className="patient-status"
-            >
-              <Image
-                src={AuditedTrack}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </div>
-          </Popover>
-        );
-      case "NOT_AUDIT":
-        return (
-          <Popover placement="bottom" title=" Status: NOT AUDIT">
-            <div
-              id="tracking-notAudit"
-              name="tracking-notAudit"
-              className="patient-status"
-            >
-              <Image
-                src={NotAudited}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </div>
-          </Popover>
-        );
-      case "AUDIT_DECLINED":
-        return (
-          <Popover
-            placement="bottom"
-            title=" Status: AUDIT DECLINED"
-            content={`Reason: ${declinedData ? declinedData : "---"}`}
-          >
-            <div
-              id="tracking-auditDeclined"
-              name="tracking-auditDeclined"
-              className="patient-status"
-            >
-              <Image
-                src={AuditedDeclineTrack}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </div>
-          </Popover>
-        );
-      case null:
-        return <div className="patient-status">---</div>;
-    }
-  };
-
-  const actionBodyTemplate = (rowData) => {
-    return (
-      <div className="d-flex ">
-        <button
-          onClick={() => addPatientFile(rowData)}
-          className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
-        >
-          <FontAwesomeIcon icon={faUpload} fontSize={11} />
-        </button>
-      </div>
-    );
-  };
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -547,7 +300,41 @@ const Patient = ({
       getAllOrganizationList();
     }
   }, []);
-
+  const page = {
+    pageNo,
+    paginationFirst,
+    selectedDates,
+    selectedDateRanges,
+    selectedOption,
+    searchText,
+    sort,
+    clear,
+    activeFilters,
+  };
+  const gotoPatientDetails = (data) => {
+    patientDetails(data);
+    if (data.computing === 2) {
+      const controller = new AbortController();
+      const { signal } = controller;
+      controller.abort();
+      setStorage("patientId", data?.patientId);
+      var role = getStorage("userRole");
+      if (role == "tenant_admin") {
+        setStorage("patientId", data.patientId);
+        setStorage("routeBackTo", "/tenantadmin/tracking");
+        getRoutedData(page);
+        navigate.push("/tenantadmin/tracking/details");
+      } else {
+        navigate.push({
+          pathname: "/admin/patients/details",
+        });
+      }
+    } else {
+      notification.warning({
+        message: data.patientId + " file not processed. Please wait.",
+      });
+    }
+  };
   useEffect(() => {
     if (routedData) {
       const {
@@ -580,7 +367,7 @@ const Patient = ({
         pageNo,
         pageNumber,
         selectedOption,
-        sort: sort?.sort,
+        sort: sort,
         selectedDateRanges,
         searchText: searchText,
       });
@@ -654,56 +441,22 @@ const Patient = ({
             </div>
 
             <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-              {loader ? (
-                <div>
-                  {" "}
-                  <TableSkeleton />
-                </div>
-              ) : (
-                <div div className="mt-3">
-                  <TrackingTable
-                    patinetListAll={trackingList?.patientDTOList?.content}
-                    actionBodyTemplate={actionBodyTemplate}
-                    statusBodyTemplate={processstatusBodyTemplate}
-                    auditBodyTemplate={auditstatusBodyTemplate}
-                    patientDetails={patientDetails}
-                    setSort={setSort}
-                    page={{
-                      pageNo,
-                      paginationFirst,
-                      selectedDates,
-                      selectedDateRanges,
-                      selectedOption,
-                      searchText,
-                      sort,
-                      clear,
-                      activeFilters,
-                    }}
-                    loader={loader}
-                    bullets={bullets}
-                    badges={badges}
-                    sort={sort}
-                  />
-                  <div>
-                    <div className="pagination-container">
-                      <Paginator
-                        id="tracking-paginator"
-                        name="tracking-paginator"
-                        first={pageNo === 0 ? 0 : paginationFirst}
-                        rows={15}
-                        totalRecords={
-                          trackingList?.patientDTOList?.totalElements
-                        }
-                        onPageChange={onPageChange}
-                      />
-                      <div className="total-pages">
-                        Total count:{" "}
-                        {trackingList?.patientDTOList?.totalElements}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+              <div className="mt-3">
+                <AppTable
+                  data={trackingList?.patientDTOList?.content}
+                  column={columns}
+                  loader={loader}
+                  onRowClick={gotoPatientDetails}
+                  pagination={false}
+                  setSort={setSort}
+                  sort={sort}
+                  tableId="tracking_table"
+                  first={pageNo === 0 ? 0 : paginationFirst}
+                  totalRecords={trackingList?.patientDTOList?.totalElements}
+                  row={15}
+                  onPageChange={onPageChange}
+                />
+              </div>
             </div>
           </div>
         </div>

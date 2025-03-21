@@ -4,8 +4,15 @@ import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { Button, Form, Spin, notification } from "antd";
-import { Paginator } from "primereact/paginator";
+import {
+  Badge,
+  Button,
+  Form,
+  Popover,
+  Spin,
+  Tooltip,
+  notification,
+} from "antd";
 import visitStyles from "../../../styles/visitdata.module.css";
 import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
@@ -16,15 +23,34 @@ import {
 } from "../../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 import { connect } from "react-redux";
-import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
 import { actions as allocationAction } from "../../../stores/admin/patientAllocation";
 import { actions as allActions } from "../../../stores/admin/workqueue";
-import TableSkeleton from "../../../components/skeleton/table";
 import ReusableFilters from "../../../components/reusableFilters";
+import AppTable from "../../../components/tables";
+import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
+import SvgFlag from "../../../components/patientDetails/details/components/svg/svg";
 
-const bullets = [
+export const batchBullets = [
+  {
+    color: "#34ace8",
+    name: "Computed",
+  },
+  {
+    color: "#452b90",
+    name: "Processing",
+  },
+  {
+    color: "#be3144",
+    name: "Failed",
+  },
+  {
+    color: "#e88d8d",
+    name: "Not Computed",
+  },
+];
+export const bullets = [
   {
     color: "#34ace8",
     name: "Computed",
@@ -143,7 +169,7 @@ export const commonFilterItems = [
     type: "select",
     value: null,
     placeholder: "Created By",
-    options:[],
+    options: [],
     active: false,
   },
   {
@@ -162,7 +188,7 @@ export const commonFilterItems = [
     value: null,
     showSearch: true,
     placeholder: "Batch",
-    options:[],
+    options: [],
     active: false,
   },
   {
@@ -193,8 +219,52 @@ const Patient = ({
   routedData,
   getAllBatchList,
   batchList,
+  getRoutedData,
 }) => {
- 
+  const columns = [
+    {
+      name: "Flag",
+      value: "",
+      isFlag: "true",
+    },
+    { name: "Patient Id", value: "patientId" },
+    { name: "Batch Name", value: "batchName" },
+    { name: "File Name", value: "fileName" },
+    { name: "Emr Type", value: "emr" },
+    { name: "Total pages", value: "totalPages" },
+    {
+      name: "Created By",
+      value: {
+        first: "createdByFirstName",
+        last: "createdByLastName",
+        img: "createdByProfileImage",
+      },
+      isImage: true,
+    },
+    {
+      name: "Computed Date",
+      value: "computedDate",
+      isDateAndTime: true,
+      sortable: true,
+    },
+    {
+      name: "Created Date",
+      value: "createdDate",
+      isDateAndTime: true,
+      sortable: true,
+    },
+    {
+      name: "Status",
+      value: "processedStatus",
+      batchStatus: true,
+    },
+    { name: "Upload", value: "", statusButton: true },
+    {
+      name: "",
+      value: "",
+      isTrigger: true,
+    },
+  ];
   const [sort, setSort] = useState({
     computedDate: {
       sortDir: "DESC",
@@ -332,7 +402,7 @@ const Patient = ({
           selectedOption,
           searchText,
           selectedDateRanges,
-          sort: sort?.sort,
+          sort: sort,
         });
         setPageNo(0);
         setAddPatientId(false);
@@ -349,22 +419,49 @@ const Patient = ({
       getResponePopup(Err?.response);
     }
   };
+  const page = {
+    pageNo,
+    selectedDates,
+    paginationFirst,
+    sort,
+    selectedDates,
+    activeFilters,
+    searchText,
+    selectedOption,
+    selectedDateRanges,
+    pageNumber,
+  };
 
   const gotoPatientDetails = (data) => {
     patientDetails(data);
-    if (data.computing == 2) {
+    if (data?.computing === 2) {
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      setStorage("patientId", data.patientId);
-      navigate.push("/admin/patients/details");
+      setStorage("patientId", data?.patientId);
+      var role = getStorage("userRole");
+      if (role == "tenant_admin") {
+        setStorage("routeBackTo", "/tenantadmin/patients");
+        getRoutedData(page);
+        navigate.push({
+          pathname: "/tenantadmin/patients/details",
+        });
+      } else {
+        const encodedValue = btoa(JSON.stringify(page))
+          .replace(/\+/g, "-")
+          .replace(/\//g, "_")
+          .replace(/=+$/, ""); // Remove padding '='
+        setStorage("AdminPatientsEncodedValue", encodedValue);
+        navigate.push({
+          pathname: "/admin/patients/details",
+        });
+      }
     } else {
       notification.warning({
-        message: data.patientId + " file not processed Please wait",
+        message: data?.patientId + " file not processed. Please wait.",
       });
     }
   };
-
   const processstatusBodyTemplate = (rowData) => {
     const isFinished =
       parsedData?.length > 0 &&
@@ -470,7 +567,7 @@ const Patient = ({
         selectedOption,
         searchText,
         selectedDateRanges,
-        sort: sort?.sort,
+        sort: sort,
       });
     }
     if (response?.result == "SUCCESS") {
@@ -481,7 +578,7 @@ const Patient = ({
         selectedOption,
         searchText,
         selectedDateRanges,
-        sort: sort?.sort,
+        sort: sort,
       });
       setPageNo(0);
       handleClose();
@@ -524,7 +621,7 @@ const Patient = ({
           selectedOption,
           searchText,
           selectedDateRanges,
-          sort: sort?.sort,
+          sort: sort,
         });
       }
     } catch (error) {}
@@ -540,6 +637,57 @@ const Patient = ({
       processStageId: "",
       patientId: "",
     });
+  };
+  const renderFlagCell = (data) => {
+    if (!data?.flagList || data.flagList.length === 0) {
+      return (
+        <Tooltip title="No flag found">
+          <span>
+            <SvgFlag fillColor={"transparent"} />
+          </span>
+        </Tooltip>
+      );
+    }
+
+    const sortedFlags = [...data.flagList].sort((a, b) => {
+      if (a.priority === null) return 1;
+      if (b.priority === null) return -1;
+      return a.priority - b.priority;
+    });
+
+    const priorityFlag = sortedFlags[0];
+
+    return (
+      <Popover
+        content={
+          <div style={{ height: "auto", overflow: "scroll" }}>
+            <strong>Flag details</strong>
+            {data.flagList.map((flag, flagIndex) => (
+              <div key={flagIndex}>
+                <span className="p-1">
+                  <SvgFlag fillColor={flag?.flagColour} />
+                </span>
+                {flag?.flagName.replaceAll("_", " ")}
+              </div>
+            ))}
+          </div>
+        }
+        placement="right"
+      >
+        <Badge
+          count={data.flagList.length}
+          offset={[5, 5]}
+          size="small"
+          style={{
+            right: "2px",
+            marginTop: "2px",
+            background: "#04306f",
+          }}
+        >
+          <SvgFlag fillColor={priorityFlag?.flagColour || "transparent"} />
+        </Badge>
+      </Popover>
+    );
   };
 
   const onPageChange = (e) => {
@@ -587,7 +735,7 @@ const Patient = ({
         selectedOption,
         searchText,
         selectedDateRanges,
-        sort: sort?.sort,
+        sort: sort,
       });
     }
   }, [
@@ -695,57 +843,32 @@ const Patient = ({
             </div>
           </section>
           <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-            {loading ? (
-              <TableSkeleton />
-            ) : (
-              <div className="mt-2">
-                <AddPatientListTable
-                  getRetregger={getRetregger}
-                  bullets={bullets}
-                  patinetListAll={statusUpdateWebSocket}
-                  actionBodyTemplate={actionBodyTemplate}
-                  statusBodyTemplate={processstatusBodyTemplate}
-                  gotoPatientDetails={gotoPatientDetails}
-                  patientDetails={patientDetails}
-                  setSort={setSort}
-                  sort={sort}
-                  page={{
-                    pageNo,
-                    selectedDates,
-                    paginationFirst,
-                    sort,
-                    selectedDates,
-                    activeFilters,
-                    searchText,
-                    selectedOption,
-                    selectedDateRanges,
-                    pageNumber,
-                  }}
-                />
-                <div>
-                  <div className="pagination-container">
-                    <Paginator
-                      id="patients-paginator"
-                      name="patients-paginator"
-                      first={pageNo === 0 ? 0 : paginationFirst}
-                      rows={15}
-                      totalRecords={
-                        allPatientList?.data?.response?.patientDtoList
-                          ?.totalElements
-                      }
-                      onPageChange={onPageChange}
-                    />
-                    <div className="total-pages">
-                      Total count:{" "}
-                      {
-                        allPatientList?.data?.response?.patientDtoList
-                          ?.totalElements
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+            <div className="mt-2">
+              <AppTable
+                data={
+                  statusUpdateWebSocket
+                    ? statusUpdateWebSocket
+                    : allPatientList?.data?.response?.patientDtoList?.content
+                }
+                getRetregger={getRetregger}
+                column={columns}
+                onRowClick={gotoPatientDetails}
+                loader={loading}
+                actionBodyTemplate={actionBodyTemplate}
+                statusBodyTemplate={processstatusBodyTemplate}
+                pagination={false}
+                sort={sort}
+                setSort={setSort}
+                first={pageNo === 0 ? 0 : paginationFirst}
+                totalRecords={
+                  allPatientList?.data?.response?.patientDtoList?.totalElements
+                }
+                row={15}
+                onPageChange={onPageChange}
+                renderFlagCell={renderFlagCell}
+              />
+              <div></div>
+            </div>
           </div>
         </div>
       </div>
@@ -798,6 +921,7 @@ const enhancer = connect(
     patientDetails: allActions.getPatientDetails,
     uploadFilesRadiology: tenantAdminAction.uploadFilesRadiology,
     getRetreggerPatient: tenantAdminAction.getRetreggerPatient,
+    getRoutedData: allPatientSyncAction.getRoutedData,
   }
 );
 export default enhancer(Patient);

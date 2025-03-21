@@ -51,15 +51,16 @@ const ReusableFilters = ({
     setSelectedOption({});
   };
   const handleClearFilters = () => {
-    setSelectAll(false);    
+    setSelectAll(false);
     setActiveFilters((prevFilters) =>
       prevFilters.map((filter) =>
-        filter.type === "search" ? { ...filter, active: true } : { ...filter, active: false }
+        filter.type === "search"
+          ? { ...filter, active: true }
+          : { ...filter, active: false }
       )
-    )
+    );
   };
-  
-  
+
   const handleRangePicker = (dates, dateString, tabName) => {
     const formattedDates = dateString?.map((date, index) =>
       formatDateForIndex({ date: date, index: index })
@@ -77,8 +78,8 @@ const ReusableFilters = ({
   };
   return (
     <div className="d-flex">
-      <div className="row" style={{ width: "98%" }}>
-        {FilterItems.filter((item) => item?.active).map((item) => {
+      <div className="row" style={{ width: showFilter ? "98%" : "auto" }}>
+        {FilterItems?.filter((item) => item?.active).map((item) => {
           switch (item?.type) {
             case "search":
               return (
@@ -117,7 +118,7 @@ const ReusableFilters = ({
                         }
                         showSearch={item?.showSearch || false}
                         className="custom-react-select-audit w-100"
-                        options={ opt[item?.title] || []}
+                        options={opt[item?.title] || []}
                         placeholder={`Select ${item?.placeholder}`}
                         value={selectedOption?.[item?.title] || null}
                         onChange={(value) => {
@@ -181,13 +182,14 @@ const ReusableFilters = ({
           }
         })}
       </div>
-      <div
-        id="more-filters"
-        name="more-filters"
-        className="d-flex justify-content-center align-items-center mt-3"
-        style={{ width: "2%" }}
-      >
-        {showFilter && (
+
+      {showFilter && (
+        <div
+          id="more-filters"
+          name="more-filters"
+          className="d-flex justify-content-center align-items-center mt-3"
+          style={{ width: "2%" }}
+        >
           <MoreFilter
             selectAll={selectAll}
             setSelectAll={setSelectAll}
@@ -203,8 +205,8 @@ const ReusableFilters = ({
             btnTitle={btnTitle}
             form={form}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
