@@ -647,13 +647,13 @@ const ManuallyAdd = ({
           .map((item) => item.hyperlinks)
           .flat(capturedSections.length + 1),
         monitorAspect:
-          listOfSectionM.length > 0 ? listOfSectionM[0].monitorAspect : null,
+          listOfSectionM.length > 0 ? listOfSectionM[0].aspect : null,
         evaluateAspect:
-          listOfSectionE.length > 0 ? listOfSectionE[0].evaluateAspect : null,
+          listOfSectionE.length > 0 ? listOfSectionE[0].aspect : null,
         assessmentAspect:
-          listOfSectionA.length > 0 ? listOfSectionA[0].assessmentAspect : null,
+          listOfSectionA.length > 0 ? listOfSectionA[0].aspect : null,
         treatmentAspect:
-          listOfSectionT.length > 0 ? listOfSectionT[0].treatmentAspect : null,
+          listOfSectionT.length > 0 ? listOfSectionT[0].aspect : null,
         monitorHyperLink:
           listOfSectionM.length > 0
             ? listOfSectionM
@@ -1004,6 +1004,7 @@ const ManuallyAdd = ({
           section,
           hyperlinks: [],
           count: [],
+          aspect:item?.aspect
         });
       }
 
@@ -1041,18 +1042,22 @@ const ManuallyAdd = ({
       const sectionListM = filterData?.monitorHyperLink?.map((item) => ({
         section: item.header,
         hyperlinks: item,
+        aspect:filterData?.monitorAspect
       }));
       const sectionListE = filterData?.evaluateHyperLink?.map((item) => ({
         section: item.header,
         hyperlinks: item,
+        aspect:filterData?.evaluateAspect
       }));
       const sectionListA = filterData?.assessmentHyperLink?.map((item) => ({
         section: item.header,
         hyperlinks: item,
+        aspect:filterData?.assessmentAspect
       }));
       const sectionListT = filterData?.treatmentHyperLink?.map((item) => ({
         section: item.header,
         hyperlinks: item,
+        aspect:filterData?.treatmentAspect
       }));
       handleSelectChange(isEditValue?.dateOfServices || year, "dos");
       setListOfSection(transformData(sectionList));
@@ -1061,7 +1066,7 @@ const ManuallyAdd = ({
       setListOfSectionA(transformData(sectionListA));
       setListOfSectionT(transformData(sectionListT));
     }
-    handleSelectChange(isEditValue?.dateOfServices, "dos");
+    handleSelectChange(isEditValue?.dateOfServices, "dos");    
   }, [isEditPage, isEditValue, reset, meatFormDisplay]);
 
   useEffect(() => {
