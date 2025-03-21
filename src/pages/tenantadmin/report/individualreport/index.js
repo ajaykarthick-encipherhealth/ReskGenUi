@@ -24,6 +24,7 @@ import { getFileDetailsReport } from "../../../../stores/supervisor/report/netwo
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { actions as allReportActions } from "../../../.././stores/admin/report";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { createIdGen } from "../../../../utils/reusable";
 
 const IndividualReceiverReport = ({
   getReceivedDetails,
@@ -35,6 +36,7 @@ const IndividualReceiverReport = ({
   getActiveTab,
   setViewIndividualReport,
   viewIndividualReport,
+  id,
 }) => {
   const router = useRouter();
   const [tableData, setTableData] = useState([]);
@@ -112,14 +114,26 @@ const IndividualReceiverReport = ({
     setLoadingList(true);
     if (reportConfirm) {
       setIsSentReport(true);
-      getSentDetails(viewIndividualReport?.data?.page||0, "", "", searchValue, sort);
+      getSentDetails(
+        viewIndividualReport?.data?.page || 0,
+        "",
+        "",
+        searchValue,
+        sort
+      );
       const res = await getSelectedReportDetails(id);
       if (res?.status === "SUCCESS") {
         setReportPath(res?.response);
         setLoadingList(false);
       }
     } else {
-      getReceivedDetails(viewIndividualReport?.data?.page||0, "", "", searchValue || "", sort);
+      getReceivedDetails(
+        viewIndividualReport?.data?.page || 0,
+        "",
+        "",
+        searchValue || "",
+        sort
+      );
       const res = await getSelectedReportDetails(id);
       if (res?.status === "SUCCESS") {
         setReportPath(res?.response);
@@ -204,8 +218,14 @@ const IndividualReceiverReport = ({
       >
         <div className={`${styles.cont1} text-truncate`}>
           <div className={styles.sideContainer}>
-            <div className={`${styles.divContainer} individualReportSearch`}>
+            <div
+              id="arrow-btn"
+              name="arrow-btn"
+              className={`${styles.divContainer} individualReportSearch`}
+            >
               <button
+                id="left-arrow"
+                name="left-arrow"
                 className="border-0 bg-white text-white"
                 onClick={() => {
                   // router.push(`/tenantadmin/report`);
@@ -214,38 +234,50 @@ const IndividualReceiverReport = ({
                     data: viewIndividualReport,
                   });
                   setIsSentReport(false);
-                  getActiveTab(viewIndividualReport?.data?.sentreport ? "Sent" : "Received");
+                  getActiveTab(
+                    viewIndividualReport?.data?.sentreport ? "Sent" : "Received"
+                  );
                   setReportInfo({ data: null, id: null });
                 }}
                 allowClear
               >
                 <Image src={leftArrow} />
               </button>
-              <Input
-              id="report-input"
-              name="report-input"
-                type="text"
-                onChange={(e) => filterChange(e)}
-                placeholder="Search"
-                className={`${styles.search}`}
-                maxLength={25}
-                onKeyDown={(e) => {
-                  // Prevent input of backslash ("\")
-                  if (e.key === "\\") {
-                    e.preventDefault();
+              <div id="individual-search" name="individual-search">
+                <Input
+                  id="report-input"
+                  name="report-input"
+                  type="text"
+                  onChange={(e) => filterChange(e)}
+                  placeholder="Search"
+                  className={`${styles.search}`}
+                  maxLength={25}
+                  onKeyDown={(e) => {
+                    // Prevent input of backslash ("\")
+                    if (e.key === "\\") {
+                      e.preventDefault();
+                    }
+                  }}
+                  style={{ height: "100%" }}
+                  suffix={
+                    <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
                   }
-                }}
-                style={{ height: "100%" }}
-                suffix={
-                  <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
-                }
-                allowClear={true}
-              />
+                  allowClear={true}
+                />
+              </div>
+
               {/* <Image src={search} alt="noimg" style={{ marginTop: "5px" }} /> */}
             </div>
 
-            <div className={styles.sort} onClick={sortTableByDate}>
+            <div
+              id="report-sort"
+              name="report-sort"
+              className={styles.sort}
+              onClick={sortTableByDate}
+            >
               <Image
+                data-testid="sort-img"
+                name="sort-img"
                 src={sortImg}
                 alt="noimg"
                 style={{ marginTop: "5px", marginLeft: "8px" }}
@@ -253,17 +285,30 @@ const IndividualReceiverReport = ({
             </div>
           </div>
           {/* users */}
-          <div className={styles.list}>
+          <div
+            className={styles.list}
+            id={
+              id
+                ? createIdGen("tenantadmin-list" + id)
+                : createIdGen("tenantadmin-list " +router.pathname.replaceAll("/", " "))
+            }
+          >
             {loadingList ? (
               <div className={styles.sideContainer}>Loading...</div>
-              
             ) : detailsContent?.length > 0 ? (
-              detailsContent?.map((item) => {
+              detailsContent?.map((item, index) => {
                 const id = item?._id ? item?._id : item?.reportId;
                 return (
                   <div
-                  id={detailsContent?.reportName}
-                  name={detailsContent?.reportName}
+                    id={
+                      id
+                        ? createIdGen("tenantdmin-details" + index)
+                        : createIdGen(
+                            "tenantadmin-details " +
+                              index +
+                             router.pathname.replaceAll("/", " ")
+                          )
+                    }
                     key={id}
                     onClick={() => {
                       setReportInfo({ data: item, id: id });
@@ -273,7 +318,7 @@ const IndividualReceiverReport = ({
                       });
                     }}
                   >
-                    <div className="d-flex mb-2"  style={{ cursor: "pointer" }}>
+                    <div className="d-flex mb-2" style={{ cursor: "pointer" }}>
                       <div className={`${styles.user}`}>
                         <div
                           className="text-truncate"
@@ -358,27 +403,40 @@ const IndividualReceiverReport = ({
             </div>
             <div>
               {reportInfo?.data?.role === "DOWNLOAD" ? (
-                <Button
-                  onClick={() => {
-                    window.open(fileResult?.path);
-                  }}
-                  className={styles.download}
-                  disabled={
-                    csvTableData?.length === 0 || tableData?.length === 0
-                      ? true
-                      : false
-                  }
-                >
-                  <Image
-                    src={download}
-                    alt="noimg"
-                    style={{ marginRight: "5px" }}
-                  />
-                  Download
-                </Button>
+                <div id="download-report" name="download-report">
+                  <Button
+                    data-testid="report-downloadBtn"
+                    name="report-downloadBtn"
+                    onClick={() => {
+                      window.open(fileResult?.path);
+                    }}
+                    className={styles.download}
+                    disabled={
+                      csvTableData?.length === 0 || tableData?.length === 0
+                        ? true
+                        : false
+                    }
+                  >
+                    <Image
+                      src={download}
+                      alt="noimg"
+                      style={{ marginRight: "5px" }}
+                    />
+                    Download
+                  </Button>
+                </div>
               ) : (
                 reportInfo?.data?.role === "read" && (
-                  <Button className={styles.readOption}>Read</Button>
+                  <div id="read-report" name="read-report">
+                    {" "}
+                    <Button
+                      data-testid="report-readBtn"
+                      name="report-readBtn"
+                      className={styles.readOption}
+                    >
+                      Read
+                    </Button>
+                  </div>
                 )
               )}
             </div>

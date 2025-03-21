@@ -622,3 +622,8 @@
     font-size: 13px !important;
   }
 }
+.popoverStyle{
+  height :28px;
+  width:28px;
+  background-color: #04306f;
+}

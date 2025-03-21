@@ -13,8 +13,12 @@ import Legends from "../../../../components/legends";
 import { monthNames, getDays } from "../accuracy";
 import YearPicker from "../../../../components/yearpicker";
 import spinSTYles from "../../../../styles/auth.module.css";
-import { actions as dashboardAction } from '../../../../stores/supervisor/dashboard'
-const CompletedStatus = ({completedDatas,getCOmpletedScore,completedChartLoading}) => {
+import { actions as dashboardAction } from "../../../../stores/supervisor/dashboard";
+const CompletedStatus = ({
+  completedDatas,
+  getCOmpletedScore,
+  completedChartLoading,
+}) => {
   const router = useRouter();
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
@@ -168,10 +172,16 @@ const CompletedStatus = ({completedDatas,getCOmpletedScore,completedChartLoading
                 bgColor="#F3F3FF"
                 val={month}
                 val1={year}
+                id="productivity-picker1"
+                name="productivity-picker1"
+                testid="productivity-picker2"
+                testName="productivity-picker2"
               />
             </div>
             <div className={styles.btnScroller}>
               <Buttonscroller
+                id="productivity-btncontainer"
+                name="productivity-btncontainer"
                 Buttons={Buttons}
                 handleButtonClick={handleButtonClick}
                 activeButton={activeButton}
@@ -186,7 +196,7 @@ const CompletedStatus = ({completedDatas,getCOmpletedScore,completedChartLoading
 
           {completedChartLoading ? (
             <div className={spinSTYles.spinStyle}>
-                <Skeleton
+              <Skeleton
                 active
                 paragraph={{ rows: 4 }}
                 style={{ padding: "40px" }}

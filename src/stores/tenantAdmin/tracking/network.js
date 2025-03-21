@@ -45,7 +45,6 @@ export async function getAllTracking({
     }&priority=${selectedOption?.priority || ""}`,
     options
   );
-  console.log(res,"res")
   return res;
 }
 export async function getCustomAllUsers() {

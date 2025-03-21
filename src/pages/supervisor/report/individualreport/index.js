@@ -24,6 +24,7 @@ import { getFileDetailsReport } from "../../../../stores/supervisor/report/netwo
 import { actions as allReportActions } from "../../../.././stores/admin/report";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { createIdGen } from "../../../../utils/reusable";
 
 const IndividualReceiverReport = ({
   getReceivedDetails,
@@ -35,6 +36,7 @@ const IndividualReceiverReport = ({
   getActiveTab,
   setViewIndividualReport,
   viewIndividualReport,
+  id,
 }) => {
   const router = useRouter();
   const [tableData, setTableData] = useState([]);
@@ -87,6 +89,18 @@ const IndividualReceiverReport = ({
       sortField: "receiveDate",
     });
   };
+  const handleReportClick = () => {
+    setViewIndividualReport({
+      status: false,
+      data: viewIndividualReport,
+    });
+    setLoading(true);
+    setIsSentReport(false);
+    getActiveTab(viewIndividualReport?.data?.sentreport ? "Sent" : "Received");
+    setReportInfo({ data: null, id: null });
+  };
+
+  <button onClick={handleReportClick}>View Report</button>;
 
   const performanceSearch = (value) => {
     setSearchValue(value);
@@ -108,14 +122,26 @@ const IndividualReceiverReport = ({
     setLoadingList(true);
     if (reportConfirm) {
       setIsSentReport(true);
-      getSentDetails(viewIndividualReport?.data?.page||0, "", "", searchValue, sort);
+      getSentDetails(
+        viewIndividualReport?.data?.page || 0,
+        "",
+        "",
+        searchValue,
+        sort
+      );
       const res = await getSelectedReportDetails(id);
       if (res?.status === "SUCCESS") {
         setReportPath(res?.response);
         setLoadingList(false);
       }
     } else {
-      getReceivedDetails(viewIndividualReport?.data?.page||0, "", "", searchValue || "", sort);
+      getReceivedDetails(
+        viewIndividualReport?.data?.page || 0,
+        "",
+        "",
+        searchValue || "",
+        sort
+      );
       const res = await getSelectedReportDetails(id);
       if (res?.status === "SUCCESS") {
         setReportPath(res?.response);
@@ -166,24 +192,24 @@ const IndividualReceiverReport = ({
 
   useEffect(() => {
     // if (window.location.search) {
-      setLoadingList(true);
-      const id = viewIndividualReport?.data?.reportId;
-      // new URLSearchParams(window.location.search).get("reportId");
-      const reportConfirm = viewIndividualReport?.data?.sentreport;
-      // new URLSearchParams(window.location.search).get(
-      //   "sentreport"
-      // );
-      setIsSentReport(reportConfirm);
-      const isAdminPage = viewIndividualReport?.data?.isAdminPage;
-      // new URLSearchParams(window.location.search).get(
-      //   "isAdminPage"
-      // );
-      setIsAdminPage(isAdminPage);
-      callGetFileApi({
-        reportConfirm: reportConfirm,
-        searchValue: searchValue,
-        id: id,
-      });
+    setLoadingList(true);
+    const id = viewIndividualReport?.data?.reportId;
+    // new URLSearchParams(window.location.search).get("reportId");
+    const reportConfirm = viewIndividualReport?.data?.sentreport;
+    // new URLSearchParams(window.location.search).get(
+    //   "sentreport"
+    // );
+    setIsSentReport(reportConfirm);
+    const isAdminPage = viewIndividualReport?.data?.isAdminPage;
+    // new URLSearchParams(window.location.search).get(
+    //   "isAdminPage"
+    // );
+    setIsAdminPage(isAdminPage);
+    callGetFileApi({
+      reportConfirm: reportConfirm,
+      searchValue: searchValue,
+      id: id,
+    });
     // }
   }, [searchValue, sort, viewIndividualReport?.data]);
 
@@ -202,59 +228,87 @@ const IndividualReceiverReport = ({
       >
         <div className={`${styles.cont1} text-truncate`}>
           <div className={styles.sideContainer}>
-            <div className={`${styles.divContainer} individualReportSearch`}>
+            <div
+              id="arrow-btn"
+              name="arrow-btn"
+              className={`${styles.divContainer} individualReportSearch`}
+            >
               <button
+                id="left-arrow"
+                name="left-arrow"
                 className="border-0 bg-white text-white"
-                onClick={() => {
-                  // router.push(`/supervisor/report`);
-                  setViewIndividualReport({
-                    status: false,
-                    data: viewIndividualReport,
-                  });
-                  setLoading(true);
-                  setIsSentReport(false);
-                  getActiveTab(viewIndividualReport?.data?.sentreport ? "Sent" : "Received");
-                  setReportInfo({ data: null, id: null });
-                }}
+                onClick={handleReportClick}
                 allowClear
               >
                 <Image src={leftArrow} />
               </button>
-              <Input
-                type="text"
-                onChange={(e) => filterChange(e)}
-                placeholder="Search"
-                className={`${styles.search}`}
-                maxLength={25}
-                onKeyDown={(e) => {
-                  // Prevent input of backslash ("\")
-                  if (e.key === "\\") {
-                    e.preventDefault();
+              <div id="individual-search" name="individual-search">
+                <Input
+                  data-testid="report-input"
+                  name="report-input"
+                  type="text"
+                  onChange={(e) => filterChange(e)}
+                  placeholder="Search"
+                  className={`${styles.search}`}
+                  maxLength={25}
+                  onKeyDown={(e) => {
+                    // Prevent input of backslash ("\")
+                    if (e.key === "\\") {
+                      e.preventDefault();
+                    }
+                  }}
+                  style={{ height: "100%" }}
+                  suffix={
+                    <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
                   }
-                }}
-                style={{ height: "100%" }}
-                suffix={
-                  <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
-                }
-                allowClear={true}
-              />
+                  allowClear={true}
+                />
+              </div>
               {/* <Image src={search} alt="noimg" style={{ marginTop: "5px" }} /> */}
             </div>
 
-            <div className={styles.sort} onClick={sortTableByDate}>
-              <Image src={sortImg} alt="noimg" style={{ marginTop: "5px" }} />
+            <div
+              id="report-sort"
+              name="report-sort"
+              className={styles.sort}
+              onClick={sortTableByDate}
+            >
+              <Image
+                data-testid="sort-img"
+                name="sort-img"
+                src={sortImg}
+                alt="noimg"
+                style={{ marginTop: "5px" }}
+              />
             </div>
           </div>
           {/* users */}
-          <div className={styles.list}>
+          <div
+            id={
+              id
+                ? createIdGen("supervisor-list" + id)
+                : createIdGen(
+                    "supevisor-list " +router.pathname.replaceAll("/", " ")
+                  )
+            }
+            className={styles.list}
+          >
             {loadingList ? (
               <div className={styles.sideContainer}>Loading...</div>
             ) : detailsContent?.length > 0 ? (
-              detailsContent?.map((item) => {
+              detailsContent?.map((item, index) => {
                 const id = item?._id ? item?._id : item?.reportId;
-
                 return (
                   <div
+                    id={
+                      id
+                        ? createIdGen("supervisordetails" + index)
+                        : createIdGen(
+                            "supervisordetails " +
+                              index +
+                             router.pathname.replaceAll("/", " ")
+                          )
+                    }
                     key={id}
                     onClick={() => {
                       setReportInfo({ data: item, id: id });
@@ -347,27 +401,35 @@ const IndividualReceiverReport = ({
             </div>
             <div>
               {reportInfo?.data?.role === "DOWNLOAD" ? (
-                <Button
-                  onClick={() => {
-                    window.open(fileResult?.path);
-                  }}
-                  className={styles.download}
-                  disabled={
-                    csvTableData?.length === 0 || tableData?.length === 0
-                      ? true
-                      : false
-                  }
-                >
-                  <Image
-                    src={download}
-                    alt="noimg"
-                    style={{ marginRight: "5px" }}
-                  />
-                  Download
-                </Button>
+                <div id="download-report" name="download-report">
+                  <Button
+                    data-testid="report-downloadBtn"
+                    name="report-downloadBtn"
+                    onClick={() => {
+                      window.open(fileResult?.path);
+                    }}
+                    className={styles.download}
+                    disabled={
+                      csvTableData?.length === 0 || tableData?.length === 0
+                        ? true
+                        : false
+                    }
+                  >
+                    <Image src={download} alt="noimg" className="m-2" />
+                    Download
+                  </Button>
+                </div>
               ) : (
                 reportInfo?.data?.role === "read" && (
-                  <Button className={styles.readOption}>Read</Button>
+                  <div id="read-report" name="read-report">
+                    <Button
+                      data-testid="report-readBtn"
+                      name="report-readBtn"
+                      className={styles.readOption}
+                    >
+                      Read
+                    </Button>
+                  </div>
                 )
               )}
             </div>
@@ -388,7 +450,7 @@ const IndividualReceiverReport = ({
               style={{
                 width: "100%",
                 overflowX: "scroll",
-                height: '70vh'
+                height: "70vh",
               }}
             >
               {fileResult?.extention === "csv" && (

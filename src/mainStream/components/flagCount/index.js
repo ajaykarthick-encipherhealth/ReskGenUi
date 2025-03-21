@@ -1,14 +1,17 @@
 import { Empty, Popover, Tooltip } from "antd";
 import React from "react";
 import { truncateString } from "../../../components/patientDetails/details/components/function/ReusableFunctions";
+import { createIdGen } from "../../../utils/reusable";
+import { useRouter } from "next/router";
 
-const Flags = ({ reportListAll, styles, activeTab }) => {
+const Flags = ({ reportListAll, styles, id }) => {
+  const router = useRouter()
   return (
     <div className={`col-12 ${styles.flags}`}>
       <div className={styles.cardHead}>Flags</div>
       <div className={styles.contentOverFlow}>
         {reportListAll?.flagIdCountDTOs?.length > 0 ? (
-          reportListAll?.flagIdCountDTOs?.map((flagItem) => (
+          reportListAll?.flagIdCountDTOs?.map((flagItem,index) => (
             <div
               className={styles.contentGroups}
               key={flagItem?.flagDetail?.id}
@@ -68,7 +71,18 @@ const Flags = ({ reportListAll, styles, activeTab }) => {
                 )}
                 trigger="hover"
               >
-                <div className={`cr-pointer ${styles.count}`}>
+                <div
+                  id={
+                    id
+                      ? createIdGen("flagcounts" + index)
+                      : createIdGen(
+                          "flagcounts " +
+                            index +
+                           router.pathname.replaceAll("/", " ")
+                        )
+                  }
+                  className={`cr-pointer ${styles.count}`}
+                >
                   {flagItem.count
                     ? flagItem.count < 99
                       ? flagItem.count

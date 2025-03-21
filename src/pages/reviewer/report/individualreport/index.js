@@ -25,13 +25,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { getFileDetailsReport } from "../../../../stores/supervisor/report/network";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
+import { createIdGen } from "../../../../utils/reusable";
 
 const IndividualReceiverReport = ({
   getReceivedDetails,
   getSentDetails,
   sentReportDatas,
   reportDatas,
-  uploadFile,
+  id,
   getSelectedReportDetails,
   getActiveTab,
   setViewIndividualReport,
@@ -196,7 +197,7 @@ const IndividualReceiverReport = ({
         }
       }
     }
-  }, [reportDatas, sentReportDatas, isSentReport,viewIndividualReport?.data]);
+  }, [reportDatas, sentReportDatas, isSentReport, viewIndividualReport?.data]);
   useEffect(() => {
     if (reportPath) {
       getFetchPathUrl(reportPath?.reportPath);
@@ -212,8 +213,14 @@ const IndividualReceiverReport = ({
       >
         <div className={`${styles.cont1} text-truncate`}>
           <div className={styles.sideContainer}>
-            <div className={`${styles.divContainer} individualReportSearch`}>
+            <div
+              id="arrow-btn"
+              name="arrow-btn"
+              className={`${styles.divContainer} individualReportSearch`}
+            >
               <button
+                id="left-arrow"
+                name="left-arrow"
                 className="border-0 bg-white text-white"
                 onClick={() => {
                   // router.push(
@@ -232,42 +239,73 @@ const IndividualReceiverReport = ({
               >
                 <Image src={leftArrow} />
               </button>
-              <Input
-                type="text"
-                onChange={(e) => filterChange(e)}
-                placeholder="Search"
-                className={`${styles.search}`}
-                maxLength={25}
-                onKeyDown={(e) => {
-                  // Prevent input of backslash ("\")
-                  if (e.key === "\\") {
-                    e.preventDefault();
+              <div id="individual-search" name="individual-search">
+                <Input
+                  data-testid="report-input"
+                  name="report-input"
+                  type="text"
+                  onChange={(e) => filterChange(e)}
+                  placeholder="Search"
+                  className={`${styles.search}`}
+                  maxLength={25}
+                  onKeyDown={(e) => {
+                    // Prevent input of backslash ("\")
+                    if (e.key === "\\") {
+                      e.preventDefault();
+                    }
+                  }}
+                  style={{ height: "100%" }}
+                  suffix={
+                    <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
                   }
-                }}
-                style={{ height: "100%" }}
-                suffix={
-                  <FontAwesomeIcon className="searchPrefix" icon={faSearch} />
-                }
-                allowClear={true}
-              />
+                  allowClear={true}
+                />
+              </div>
               {/* <Image src={search} alt="noimg" style={{ marginTop: "5px" }} /> */}
             </div>
 
-            <div className={styles.sort} onClick={sortTableByDate}>
-              <Image src={sortImg} alt="noimg" style={{ marginTop: "5px" }} />
+            <div
+              id="report-sort"
+              name="report-sort"
+              className={styles.sort}
+              onClick={sortTableByDate}
+            >
+              <Image
+                data-testid="sort-img"
+                name="sort-img"
+                src={sortImg}
+                alt="noimg"
+                style={{ marginTop: "5px" }}
+              />
             </div>
           </div>
           {/* users */}
-          <div className={styles.list}>
+          <div
+            id={
+              id
+                ? createIdGen("reviewerList" + id)
+                : createIdGen("reviewerList " +router.pathname.replaceAll("/", " "))
+            }
+            className={styles.list}
+          >
             {loadingList ? (
               <div className={styles.sideContainer}>Loading...</div>
             ) : detailsContent?.length > 0 ? (
-              detailsContent?.map((item) => {
+              detailsContent?.map((item, index) => {
                 const id = item?._id ? item?._id : item?.reportId;
 
                 return (
                   <div
                     key={id}
+                    id={
+                      id
+                        ? createIdGen("reviewerDetails" + index)
+                        : createIdGen(
+                            "reviewerDetails " +
+                              index +
+                             router.pathname.replaceAll("/", " ")
+                          )
+                    }
                     onClick={() => {
                       setReportInfo({ data: item, id: id });
                       callGetFileApi({
@@ -276,7 +314,7 @@ const IndividualReceiverReport = ({
                       });
                     }}
                   >
-                    <div className="d-flex mb-2" style={{ cursor: "pointer" }}>
+                    <div className="d-flex mb-2 cursor-pointer">
                       <div className={`${styles.user}`}>
                         <div
                           className="text-truncate"
@@ -341,7 +379,8 @@ const IndividualReceiverReport = ({
               <Image src={id} alt="noimg" />
               Id:
               <Tooltip placement="top" title={reportInfo?.id}>
-                  {truncateString(reportInfo?.id, 20)}</Tooltip>
+                {truncateString(reportInfo?.id, 20)}
+              </Tooltip>
               {reportInfo?.id || "---"}
             </div>
             <div className="d-flex">
@@ -357,7 +396,7 @@ const IndividualReceiverReport = ({
               :&nbsp;
               {reportInfo?.data?.sender}
             </div>
-            <div className="d-flex align-items-center justify-content-center gap-1" >
+            <div className="d-flex align-items-center justify-content-center gap-1">
               <Image src={calender} alt="noimg" />
               Date:
               {viewIndividualReport?.data?.sentreport
@@ -366,27 +405,39 @@ const IndividualReceiverReport = ({
             </div>
             <div>
               {reportInfo?.data?.role === "DOWNLOAD" ? (
-                <Button
-                  onClick={() => {
-                    window.open(fileResult?.path);
-                  }}
-                  className={styles.download}
-                  disabled={
-                    csvTableData?.length === 0 || tableData?.length === 0
-                      ? true
-                      : false
-                  }
-                >
-                  <Image
-                    src={download}
-                    alt="noimg"
-                    style={{ marginRight: "5px" }}
-                  />
-                  Download
-                </Button>
+                <div id="download-report" name="download-report">
+                  <Button
+                    data-testid="report-downloadBtn"
+                    name="report-downloadBtn"
+                    onClick={() => {
+                      window.open(fileResult?.path);
+                    }}
+                    className={styles.download}
+                    disabled={
+                      csvTableData?.length === 0 || tableData?.length === 0
+                        ? true
+                        : false
+                    }
+                  >
+                    <Image
+                      src={download}
+                      alt="noimg"
+                      style={{ marginRight: "5px" }}
+                    />
+                    Download
+                  </Button>
+                </div>
               ) : (
                 reportInfo?.data?.role === "read" && (
-                  <Button className={styles.readOption}>Read</Button>
+                  <div>
+                    <Button
+                      data-testid="report-readBtn"
+                      name="report-readBtn"
+                      className={styles.readOption}
+                    >
+                      Read
+                    </Button>
+                  </div>
                 )
               )}
             </div>

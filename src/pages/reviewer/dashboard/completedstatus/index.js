@@ -177,6 +177,8 @@ const CompletedStatus = ({
                 bgColor="#F3F3FF"
                 val={month}
                 val1={year}
+                selectid="productivity-select"
+                id="productivity-picker1"
               />
             </div>
             <div className={styles.btnScroller}>
@@ -189,13 +191,14 @@ const CompletedStatus = ({
                 activeBg="#1E1B39"
                 // inActiveBg="#F3F3FF"
                 containerBg="#F3F3FF"
+                id="productivity-btncontainer"
               />
             </div>
           </div>
 
           {completedScoreLoading && (
             <div className={spinSTYles.spinStyle}>
-       <Skeleton active paragraph={{ rows: 4 }} />
+              <Skeleton active paragraph={{ rows: 4 }} />
             </div>
           )}
 

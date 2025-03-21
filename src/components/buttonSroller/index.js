@@ -11,11 +11,13 @@ const Buttonscroller = ({
   inActiveBg,
   containerBg,
   width,
+  id = "default-btn",
+  name = "default-btn",
 }) => {
   return (
     <div
-      id={activeButton}
-      name={activeButton}
+      id={id}
+      name={name}
       className={styles.btnContainer}
       style={{
         backgroundColor: containerBg,

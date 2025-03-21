@@ -5,7 +5,8 @@ import EditButton from "../../../../images/adminUsers/EditButton";
 import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { formatDateTime } from "../../../../utils/reusable";
+import { createIdGen, formatDateTime } from "../../../../utils/reusable";
+import { useRouter } from "next/router";
 
 const CardComponent = ({
   data,
@@ -18,18 +19,35 @@ const CardComponent = ({
   item,
   index,
   onEditClick,
-  prefillData
+  id,
+  activeTab,
 }) => {
-  const handleDateFormat = (date) => {
-    return dayjs(date).format("MM-DD-YYYY");
+  const router = useRouter();
+  const handleEditClick = (e, item) => {
+    e.stopPropagation();
+    setSelectedRows(item);
+    selectedReport(item);
+    setOpenEdit(true);
+    if (onEditClick) {
+      onEditClick(item?.reportName);
+    }
   };
+
   const MAX_VISIBLE_USERS = 1;
   return (
     <div>
       {data?.length > 0 ? (
         <div
-          id={data?.reportName}
-          name={data?.reportName}
+          id={
+            id
+              ? createIdGen("card" + activeTab + index)
+              : createIdGen(
+                  "card " +
+                    activeTab +
+                    index +
+                   router.pathname.replaceAll("/", " ")
+                )
+          }
           key={index}
           style={{ marginBottom: "0px" }}
           className={`${styles.card} ${
@@ -41,23 +59,31 @@ const CardComponent = ({
             <div className="col-12">
               <div
                 id="badge"
-                className="cr-pointer"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
+                className="cr-pointer d-flex align-items-center justify-content-between"
               >
                 <div className={`${styles.pName}`}>
                   {item.reportName}
                   <div className={`${styles.headText}`}>{item._id}</div>
                   <div className="d-flex">
                     <div className={`${styles.dateText}`}>
-                      {item.sendDate ? formatDateTime({date: item.sendDate}) : "---"}
+                      {item?.sendDate
+                        ? formatDateTime({ date: item.sendDate })
+                        : "---"}
                     </div>
                   </div>
                 </div>
-                <div className={`${styles.text}`}>
+                <div
+                  id={
+                    id
+                      ? createIdGen("avatargroup" + index)
+                      : createIdGen(
+                          "avatargroup " +
+                            index +
+                           router.pathname.replaceAll("/", " ")
+                        )
+                  }
+                  className={`${styles.text}`}
+                >
                   <Avatar.Group>
                     {item?.receivedUsers
                       ?.slice(0, MAX_VISIBLE_USERS)
@@ -67,80 +93,26 @@ const CardComponent = ({
                         if (!firstName && !lastName) return null;
 
                         return (
-                          <Popover
-                            key={index}
-                            content={
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                  flexDirection: "column",
-                                }}
-                              >
-                                <div
-                                  className="d-flex align-items-center"
-                                  key={index}
-                                >
-                                  <div style={{ marginRight: "10px" }}>
-                                    {renderUserPrfoileAvatar(
-                                      firstName,
-                                      lastName,
-                                      profileImageUrl,
-                                      "header"
-                                    )}
-                                  </div>
-                                  <div>
-                                    {firstName} {lastName}
-                                  </div>
-                                </div>
-                                {profileImageUrl && (
-                                  <img
-                                    src={profileImageUrl}
-                                    alt="Profile"
-                                    style={{
-                                      maxWidth: "100px",
-                                      maxHeight: "100px",
-                                    }}
-                                  />
-                                )}
-                              </div>
+                          <div
+                            id={
+                              id
+                                ? createIdGen("avatar" + index)
+                                : createIdGen(
+                                    "avatar " +
+                                      index +
+                                     router.pathname.replaceAll("/", " ")
+                                  )
                             }
                           >
-                            <div
-                              id={data?.user}
-                              name={data?.user}
-                              style={{
-                                display: "inline-block",
-                                marginRight: "5px",
-                              }}
-                            >
-                              {renderUserPrfoileAvatar(
-                                firstName,
-                                lastName,
-                                profileImageUrl,
-                                "header"
-                              )}
-                            </div>
-                          </Popover>
-                        );
-                      })}
-
-                    {item?.receivedUsers?.length > MAX_VISIBLE_USERS && (
-                      <Popover
-                        content={
-                          <div style={{ padding: "10px" }}>
-                            {item.receivedUsers
-                              .slice(MAX_VISIBLE_USERS)
-                              .map((data, index) => {
-                                const { firstName, lastName, profileImageUrl } =
-                                  data?.userDetails || {};
-                                return (
+                            <Popover
+                              key={index}
+                              content={
+                                <div className="d-flex align-items-center justify-content-center flex-column ">
                                   <div
                                     className="d-flex align-items-center"
                                     key={index}
                                   >
-                                    <div className="m-1">
+                                    <div className="m-2">
                                       {renderUserPrfoileAvatar(
                                         firstName,
                                         lastName,
@@ -152,52 +124,134 @@ const CardComponent = ({
                                       {firstName} {lastName}
                                     </div>
                                   </div>
-                                );
-                              })}
+                                  {profileImageUrl && (
+                                    <img
+                                      src={profileImageUrl}
+                                      alt="Profile"
+                                      style={{
+                                        maxWidth: "100px",
+                                        maxHeight: "100px",
+                                      }}
+                                    />
+                                  )}
+                                </div>
+                              }
+                            >
+                              <div
+                                style={{
+                                  display: "inline-block",
+                                  marginRight: "5px",
+                                }}
+                              >
+                                {renderUserPrfoileAvatar(
+                                  firstName,
+                                  lastName,
+                                  profileImageUrl,
+                                  "header"
+                                )}
+                              </div>
+                            </Popover>
                           </div>
+                        );
+                      })}
+
+                    {item?.receivedUsers?.length > MAX_VISIBLE_USERS && (
+                      <div
+                        id={
+                          id
+                            ? createIdGen("profile" + index)
+                            : createIdGen(
+                                "profile " +
+                                  index +
+                                 router.pathname.replaceAll("/", " ")
+                              )
                         }
                       >
-                        <div
-                          id="badge"
-                          style={{
-                            display: "inline-flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            fontSize: "14px",
-                            cursor: "pointer",
-                            height: "28px",
-                            width: "28px",
-                            borderRadius: "50%",
-                            backgroundColor: "#04306f",
-                            color: "white",
-                          }}
+                        <Popover
+                          content={
+                            <div style={{ padding: "10px" }}>
+                              {item.receivedUsers
+                                .slice(MAX_VISIBLE_USERS)
+                                .map((data, index) => {
+                                  const {
+                                    firstName,
+                                    lastName,
+                                    profileImageUrl,
+                                  } = data?.userDetails || {};
+                                  return (
+                                    <div
+                                      className="d-flex align-items-center"
+                                      key={index}
+                                    >
+                                      <div
+                                        id={data?.user}
+                                        name={data?.user}
+                                        className="m-1"
+                                      >
+                                        {renderUserPrfoileAvatar(
+                                          firstName,
+                                          lastName,
+                                          profileImageUrl,
+                                          "header"
+                                        )}
+                                      </div>
+                                      <div>
+                                        {firstName} {lastName}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                            </div>
+                          }
                         >
-                          +{item.receivedUsers.length - MAX_VISIBLE_USERS}
-                        </div>
-                      </Popover>
+                          <div
+                            id="badge"
+                            style={{
+                              display: "inline-flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              fontSize: "14px",
+                              cursor: "pointer",
+                              height: "28px",
+                              width: "28px",
+                              borderRadius: "50%",
+                              backgroundColor: "#04306f",
+                              color: "white",
+                            }}
+                          >
+                            +{item.receivedUsers.length - MAX_VISIBLE_USERS}
+                          </div>
+                        </Popover>
+                      </div>
                     )}
                   </Avatar.Group>
                 </div>
-                <div className={`${styles.dataContainer}`}>
+                <div
+                  id={
+                    id
+                      ? createIdGen("editIcon" + index)
+                      : createIdGen(
+                          "editIcon " +
+                            index +
+                           router.pathname.replaceAll("/", " ")
+                        )
+                  }
+                  className={`${styles.dataContainer}`}
+                >
                   <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedRows(item);
-                      selectedReport(item);
-                      setOpenEdit(true);
-                        if (onEditClick) {
-                        onEditClick(item?.reportName);
-                      } 
-                    }}
-                    id="edit-Btn"
-                    name="edit-Btn"
+                    onClick={(e) => handleEditClick(e, item)}
+                    id={
+                      id
+                        ? createIdGen("edit" + index)
+                        : createIdGen(
+                            "edit " +
+                              index +
+                             router.pathname.replaceAll("/", " ")
+                          )
+                    }
                   >
                     {/* <EditButton /> */}
-                    <FontAwesomeIcon
-                      id="editIcon"
-                      name="editIcon"
-                      icon={faPenToSquare}
-                    />
+                    <FontAwesomeIcon icon={faPenToSquare} />
                   </div>
                 </div>
               </div>

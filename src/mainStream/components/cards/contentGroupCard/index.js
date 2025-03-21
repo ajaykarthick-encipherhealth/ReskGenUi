@@ -9,7 +9,11 @@ import {
 } from "../../../../components/headerFilters/functions";
 import { actions as patientSyncActions } from "../../../../stores/tenantAdmin/patientSync";
 import { useRouter } from "next/router";
-import { formatDateTime, getMaskData } from "../../../../utils/reusable";
+import {
+  createIdGen,
+  formatDateTime,
+  getMaskData,
+} from "../../../../utils/reusable";
 import { handleCopyToClipboard } from "../../../../components/commonFunctions";
 import { LoadingOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -40,6 +44,8 @@ const ContentGroupCard = ({
   loading,
   patientDetails,
   getRoutedData,
+  activeTab,
+  id,
 }) => {
   const navigate = useRouter();
   const [copied, setCopied] = useState(false);
@@ -84,13 +90,26 @@ const ContentGroupCard = ({
   };
 
   return (
-    <div id="badge" className={`cr-pointer ${styles.card}`}>
+    <div
+      id={
+        id
+          ? createIdGen("REPORT" + activeTab + id)
+          : createIdGen("REPORT " + id + navigate.pathname.replaceAll("/", " "))
+      }
+      className={` ant-badge cr-pointer ${styles.card}`}
+    >
       <div
-        id="badge"
-        className={`report-effect ${styles.contentGroup} my-2`}
+        id={
+          id
+            ? createIdGen("report" + activeTab + id)
+            : createIdGen(
+                "report " + id + navigate.pathname.replaceAll("/", " ")
+              )
+        }
+        className={`ant-badge report-effect ${styles.contentGroup} my-2`}
         style={{ display: "flex" }}
       >
-        <div id="badge" style={{ width: "5%" }}>
+        <div className="ant-badge" style={{ width: "5%" }}>
           {loading ? (
             <Spin
               indicator={<LoadingOutlined />}
@@ -98,8 +117,15 @@ const ContentGroupCard = ({
             />
           ) : (
             <input
-              id={selectedRows}
-              name={selectedRows}
+              id={
+                id
+                  ? createIdGen("childcheckbox" + activeTab + id)
+                  : createIdGen(
+                      "childcheckbox " +
+                        id +
+                        navigate.pathname.replaceAll("/", " ")
+                    )
+              }
               type="checkbox"
               onChange={() => handleRowCheckboxChange(item)}
               className={TableStyle.customChecked}
@@ -114,9 +140,17 @@ const ContentGroupCard = ({
           )}
         </div>
         <div
-          id="badge"
-          name={patientId}
-          className="responsive_report"
+          id={
+            id
+              ? createIdGen("card" + activeTab + id)
+              : createIdGen(
+                  "card " +
+                    activeTab +
+                    id +
+                    navigate.pathname.replaceAll("/", " ")
+                )
+          }
+          className="responsive_report ant-badge "
           style={{
             width: "95%",
             display: "flex",
@@ -124,7 +158,7 @@ const ContentGroupCard = ({
           }}
           onClick={() => handleTableRowClick(patientId)}
         >
-          <div id="badge" style={{ width: "67%" }}>
+          <div style={{ width: "67%" }}>
             <div
               className={`${styles.pName} mb-2`}
               onClick={() =>
@@ -204,7 +238,19 @@ const ContentGroupCard = ({
               className=" d-flex justify-content-between mb-1 "
               style={{ gap: "1px" }}
             >
-              <div className={styles.raf}>
+              <div
+                id={
+                  id
+                    ? createIdGen("rafscore" + activeTab + id)
+                    : createIdGen(
+                        "rafscore " +
+                          activeTab +
+                          id +
+                          navigate.pathname.replaceAll("/", " ")
+                      )
+                }
+                className={styles.raf}
+              >
                 <Tooltip
                   id="rafScore"
                   name="rafScore"
@@ -214,72 +260,119 @@ const ContentGroupCard = ({
                   {rafSum ? rafSum : "---"}
                 </Tooltip>
               </div>
-
-              <Popover
-                content={
-                  flag.length > 0 ? (
-                    <ul
-                      style={{
-                        padding: 0,
-                        listStyle: "none",
-                        margin: 0,
-                        maxHeight: "150px",
-                        overflow: "scroll",
-                      }}
-                    >
-                      {flag.map((f, index) => (
-                        <li
-                          key={index}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "5px",
-                          }}
-                        >
-                          <FontAwesomeIcon
-                            icon={faFlag}
-                            style={{
-                              color: f.flagDetails?.flagColour || "#C0C0C0",
-                            }}
-                          />
-                          {f.flagDetails?.flagName}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p style={{ margin: 0, color: "#888" }}>
-                      No Flags Available
-                    </p>
-                  )
+              <div
+                id={
+                  id
+                    ? createIdGen("flag" + activeTab + id)
+                    : createIdGen(
+                        "flag " +
+                          activeTab +
+                          id +
+                          navigate.pathname.replaceAll("/", " ")
+                      )
                 }
-                title="Flags"
               >
-                <Badge
-                  count={flag.length > 1 ? `+${flag.length - 1}` : 0}
-                  offset={[5, 5]}
-                  style={{ backgroundColor: "#04306f", cursor: "pointer" }}
+                <Popover
+                  content={
+                    flag.length > 0 ? (
+                      <ul
+                        style={{
+                          padding: 0,
+                          listStyle: "none",
+                          margin: 0,
+                          maxHeight: "150px",
+                          overflow: "scroll",
+                        }}
+                      >
+                        {flag.map((f, index) => (
+                          <li
+                            id={
+                              id
+                                ? createIdGen("flagname" + activeTab + id)
+                                : createIdGen(
+                                    "flagname " +
+                                      activeTab +
+                                      id +
+                                      navigate.pathname.replaceAll("/", " ")
+                                  )
+                            }
+                            key={index}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "5px",
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faFlag}
+                              style={{
+                                color: f.flagDetails?.flagColour || "#C0C0C0",
+                              }}
+                            />
+                            {f.flagDetails?.flagName}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p style={{ margin: 0, color: "#888" }}>
+                        No Flags Available
+                      </p>
+                    )
+                  }
+                  title="Flags"
                 >
-                  <FontAwesomeIcon
-                    id="flagName"
-                    name="flagName"
-                    icon={faFlag}
-                    style={{
-                      color:
-                        flag.length > 0
-                          ? flag[0]?.flagDetails?.flagColour
-                          : "#C0C0C0",
-                      fontSize: "20px",
-                      marginTop: "5px",
-                      cursor: "pointer",
-                    }}
-                  />
-                </Badge>
-              </Popover>
+                  <Badge
+                    count={flag.length > 1 ? `+${flag.length - 1}` : 0}
+                    offset={[5, 5]}
+                    style={{ backgroundColor: "#04306f", cursor: "pointer" }}
+                  >
+                    <FontAwesomeIcon
+                      id="flagName"
+                      name="flagName"
+                      icon={faFlag}
+                      style={{
+                        color:
+                          flag.length > 0
+                            ? flag[0]?.flagDetails?.flagColour
+                            : "#C0C0C0",
+                        fontSize: "20px",
+                        marginTop: "5px",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </Badge>
+                </Popover>
+              </div>
 
-              <div className={styles.avatarAlign}>
+              <div
+                id={
+                  id
+                    ? createIdGen("auditedStatus" + activeTab + id)
+                    : createIdGen(
+                        "auditedStatus " +
+                          activeTab +
+                          id +
+                          navigate.pathname.replaceAll("/", " ")
+                      )
+                }
+                className={styles.avatarAlign}
+              >
                 {auditstatusBodyTemplate || "--"}
               </div>
-              <div>{processstatusBodyTemplate || "--"}</div>
+              <div
+                id={
+                  id
+                    ? createIdGen("processStatus" + activeTab + id)
+                    : createIdGen(
+                        "processStatus " +
+                          activeTab +
+                          id +
+                          navigate.pathname.replaceAll("/", " ")
+                      )
+                }
+              >
+                {processstatusBodyTemplate || "--"}
+              </div>
             </div>
             <div className={`${styles.headText}`}>
               REVIEWER

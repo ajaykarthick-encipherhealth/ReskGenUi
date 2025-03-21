@@ -252,11 +252,7 @@
   font-size: 16px;
   margin-top: -2px;
 }
-@media screen and (max-width: 1024px) {
-  .classContaineer {
-   overflow:scroll !important;
-  }
-}
+
 .customAntSelect > div {
   border: none !important;
   background-color: transparent !important;
@@ -272,6 +268,11 @@
   background-color: transparent !important;
   padding: 0 !important;
 }
+@media (min-width: 1024px) and (max-width: 1450px){
+  .customTable{
+    overflow: scroll !important;;
+  }
+  }
 
 
 

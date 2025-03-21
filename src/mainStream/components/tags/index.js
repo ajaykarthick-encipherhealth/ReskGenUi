@@ -4,7 +4,11 @@ import styles from "../../reports/report.module.css";
 const Tab = ({ activeTab, handleTabs, tabs }) => {
   return (
     <div className={styles.buttonContainer}>
-      <div className={styles.group}>
+      <div
+        id={`reportTab-${activeTab}`}
+        name={`reportTab-${activeTab}`}
+        className={styles.group}
+      >
         {tabs?.map((tab) => (
           <button
             id={activeTab}

@@ -242,8 +242,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
 
         if (finalData) {
           return (
-            "Average Score: " +
-            finalData.averageScore 
+            "Average Score: " + finalData.averageScore
             // "<br/>" +
             // "Total Correct: " +
             // finalData.newlyAddedCodesCount +
@@ -327,8 +326,11 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
     currentBtn,
     currentDate
   );
-  const numericalData = allAverageScore?.length>0 && allAverageScore?.filter((value) => value !== false); // Filter out false values
-  const sum = numericalData&& numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
+  const numericalData =
+    allAverageScore?.length > 0 &&
+    allAverageScore?.filter((value) => value !== false); // Filter out false values
+  const sum =
+    numericalData && numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
   const average = sum / numericalData?.length; // Calculate the average
 
   return (
@@ -345,10 +347,13 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                 bgColor="#E6EEFF"
                 val={month}
                 val1={year}
+                id="accuracy-picker1"
+                selectid="accuracy-select"
               />
             </div>
             <div className={styles.btnScroller}>
               <Buttonscroller
+                id="accuracy-btncontainer"
                 Buttons={Buttons}
                 handleButtonClick={handleButtonClick}
                 activeButton={activeButton}
@@ -398,27 +403,29 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                 <div className={spinSTYles.spinStyle}>{<Empty />}</div>
               )}
             </div>
-          
-              <div className={styles.accuracy}>
-                <div className="mt-5">
+
+            <div className={styles.accuracy}>
+              <div className="mt-5">
                 <div className={styles.header}>
-                <FontAwesomeIcon className= {`mt-1 ${ styles.Img}`} icon={faGaugeHigh}   />
+                  <FontAwesomeIcon
+                    className={`mt-1 ${styles.Img}`}
+                    icon={faGaugeHigh}
+                  />
                   <div className={styles.heading}>Average Quality</div>
                 </div>
                 <div className={styles.percentage}>
-                <div className={styles.insideTitle}>
-                  {accuracyLoading ? (
-                    <>
-                      <CardSkeleton height={40} />
-                    </>
-                  ) : (
-                    <> {average ? `${average?.toFixed(2)}%` : `0%`}</>
-                  )}
-                </div>
-                </div>
+                  <div className={styles.insideTitle}>
+                    {accuracyLoading ? (
+                      <>
+                        <CardSkeleton height={40} />
+                      </>
+                    ) : (
+                      <> {average ? `${average?.toFixed(2)}%` : `0%`}</>
+                    )}
+                  </div>
                 </div>
               </div>
-       
+            </div>
           </div>
         </Card>
       </div>

@@ -38,10 +38,10 @@ const ReceivedReport = ({
   setViewIndividualReport,
   searchVal,
   selectedDates,
+  activeTab,
 }) => {
   const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
 
-  const router = useRouter();
   const handleTabs = (tab) => {
     setReportActiveTab(tab);
   };
@@ -152,7 +152,7 @@ const ReceivedReport = ({
                         <CardSkeleton count={6} width={900} height={100} />
                       </div>
                     ) : (
-                      <div className={styles.cardContainer}>
+                      <div id="received-report" name="received-report" className={styles.cardContainer}>
                         {details?.reportStatusDTOList.content.length > 0 ? (
                           details?.reportStatusDTOList.content.map(
                             (item, index) => (
@@ -164,6 +164,7 @@ const ReceivedReport = ({
                                 styles={styles}
                                 item={item}
                                 index={index}
+                                activeTab={activeTab}
                               />
                             )
                           )

@@ -69,32 +69,7 @@ const InitialCard = ({
       userName,
       selectManager,
     } = apiCall.admin;
-
-    // const updatedRows = selectAll ? [] : reportListAll?.response?.data;
-    // setSelectedRows(updatedRows);
     if (activeTab === "Reviewer") {
-      // setIsLoading(true);
-      // const {
-      //   filter,
-      //   pagenum,
-      //   size,
-      //   startDate,
-      //   endDate,
-      //   search,
-      //   sort,
-      //   flagsList,
-      //   allPatientIds,
-      // } = apiCall.admin;
-      // try {
-      // const url = `dbservice/patient/coderreport?pageno=${pagenum}&size=${
-      //   size ? size : 7
-      // }&startdate=${startDate}&enddate=${endDate}&status=${
-      //   filter ? filter : ""
-      // }&searchstring=${search ? search : ""}&sortfield=${
-      //   sort?.sortField ? sort?.sortField : ""
-      // }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&allPatientIds=${
-      //   selectAll ? false : true
-      // }&allFlags=${selectAllFlags}`;
       const res = await checkAllApi({
         pagenum,
         startDate,
@@ -111,25 +86,7 @@ const InitialCard = ({
         setSelectedRows(res?.response?.patientIds);
         getSelectedRow(res?.response?.patientIds);
       }
-      // } catch (error) {}
     } else if (activeTab === "Admin" ) {
-      // setIsLoading(true);
-
-      // try {
-      // setIsLoading(true);
-      // const orgId = getStorage("orgId");
-      // const role = getStorage("userRole");
-      // const searchValue = filter === "ALL" ? "" : filter;
-      // const url = `dbservice/patient/adminreport?pageno=${0}&size=${
-      //   size ? size : 7
-      // }&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${
-      //   sort?.sortField ? sort?.sortField : ""
-      // }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&username=${
-      //   userName === "REVIEWER" ? selectManager : ""
-      // }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${
-      //   role == "tenant_admin" ? "" : orgId
-      // }&allPatientIds=${selectAll ? false : true}&allFlags=${selectAllFlags}`;
-
       const searchValue = filter === "ALL" ? "" : filter;
       const res = await getAdminChecKAll({
         pagenum: 0,
@@ -143,15 +100,8 @@ const InitialCard = ({
         selectManager,
         selectAll,
         userName,
-      }); // fetch(
-      //   ENDPOINTS.apiEndoint + url,
-      //   // `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
-      //   {
-      //     headers: { Authorization: `Bearer ${await getStorage("token")}` },
-      //   }
-      // ).then((res) => res.json());
+      });
       if (res?.status === "SUCCESS") {
-        // setSelectAll(true);
         getSelectedRow(res?.response?.patientIds);
         setSelectedRows(res?.response?.patientIds);
       }
@@ -176,9 +126,6 @@ const InitialCard = ({
 
     setSelectedRows(updatedRows);
     getSelectedRow(updatedRows);
-    // const allRows =
-    //   reportListAll?.response?.data?.map((item) => item.patientId) || [];
-
     setSelectAll(
       reportListAll?.response?.totalElements === updatedRows?.length
     );
@@ -223,48 +170,6 @@ const InitialCard = ({
         : "0",
       bg: "#FAD1D1",
     },
-
-    // {
-    //   id: 6,
-    //   icon: notAudited,
-    //   title: "Sample Not Audited",
-    //   charts: reportListAll?.processedStatusCount?.auditedStatus
-    //     ? reportListAll?.processedStatusCount?.auditedStatus.NOT_AUDIT
-    //     : "0",
-
-    //   bg: "#FBE7D0",
-    // },
-    // {
-    //   id: 7,
-    //   icon: reeAuditIcon,
-    //   title: "Sample Re Audit",
-    //   charts: reportListAll?.processedStatusCount?.auditedStatus
-    //     ? reportListAll?.processedStatusCount?.auditedStatus.REAUDIT
-    //     : "0",
-
-    //   bg: "#FFDBB8",
-    // },
-
-    // {
-    //   id: 9,
-    //   icon: auditHoldIcon,
-    //   title: "Sample Audit hold",
-    //   charts: reportListAll?.processedStatusCount?.auditedStatus
-    //     ? reportListAll?.processedStatusCount?.auditedStatus.AUDITHOLD
-    //     : "0",
-
-    //   bg: "#FFF2CC",
-    // },
-    // {
-    //   id: 10,
-    //   icon: auditDeclined,
-    //   title: "Sample Audit decline",
-    //   charts: reportListAll?.processedStatusCount?.auditedStatus
-    //     ? reportListAll?.processedStatusCount?.auditedStatus.DECLINED
-    //     : "0",
-
-    //   bg: "#FDD2CE",
-    // },
   ];
 
   const accuracyStatus = [
@@ -361,20 +266,6 @@ const handleSelectAllChange = () => {
     getSelectedRow(selectedRows);
   }, [selectedRows]);
 
-  // useEffect(() => {
-  //   if (
-  //     (selectAllFlags || selectAll) &&
-  //     reportListAll?.response?.totalElements === selectedRows?.length
-  //   ) {
-  //     handleHeaderCheckboxChange(
-  //       activeTab,
-  //       selectAll,
-  //       setSelectAll,
-  //       selectAllFlags
-  //     );
-  //     // getAdminChecKAll({pagenum: 0,selectAll})
-  //   }
-  // }, [selectAllFlags, selectAll]);
 
   return (
     <>
@@ -451,9 +342,11 @@ const handleSelectAllChange = () => {
                         <CardSkeleton count={6} width={900} height={100} />
                       </div>
                     ) : reportListAll?.response?.data?.length > 0 ? (
-                      <div className={styles.cardContainer}>
-                        {reportListAll?.response?.data?.map((item, id) => (
+                      <div id="initial-report" name="initial-report" className={styles.cardContainer}>
+                        {reportListAll?.response?.data?.map((item, index) => (
                           <ContentGroupCard
+                          id={index}
+                           activeTab={activeTab}
                             content={reportListAll?.response?.data}
                             key={item?.id}
                             item={item}
@@ -511,7 +404,7 @@ const handleSelectAllChange = () => {
                         <CardSkeleton count={6} width={900} height={100} />
                       </div>
                     ) : (
-                      <div className={styles.cardContainer}>
+                      <div className={styles.cardContainer} id="admin-card" >
                         <div className={styles.card1}>
                           <div className={styles.summaryText}>Summary</div>
                           <div className="col-xl-12 d-flex mt-0">

@@ -3,14 +3,17 @@ import filter from "../../../images/svg/newReport/filter.svg";
 import Image from "next/image";
 import styles from "./report.module.css";
 import { Divider, Popover, Tooltip } from "antd";
+import { createIdGen } from "../../../utils/reusable";
+import { useRouter } from "next/router";
 
 const MoreFilter = ({
   checkedList,
   selectedData,
   setSelectedData,
-  selectAll,
+  id,
   setSelectAll,
 }) => {
+  const router = useRouter()
   const handleHeaderCheckboxChange = (e) => {
     setSelectAll(e.target.checked);
     setSelectedData(e.target.checked ? checkedList : []);
@@ -34,7 +37,7 @@ const MoreFilter = ({
 
   const PopContent = (
     <>
-      <div className="d-flex my-2">
+      <div id="select-checkbox" name="select-checkbox" className="d-flex my-2">
         <input
           id="select-all"
           name="select-all"
@@ -49,10 +52,27 @@ const MoreFilter = ({
       </div>
       <Divider className="p-0 m-0" />
       {checkedList?.map((item, index) => (
-        <div key={item?.id} style={{ margin: "10px 0px" }}>
+        <div
+          id={
+            id
+              ? createIdGen("check" + index)
+              : createIdGen(
+                  "check " + index +router.pathname.replaceAll("/", " ")
+                )
+          }
+          key={item?.id}
+          style={{ margin: "10px 0px" }}
+        >
           <input
-            name={item.name}
-            id={item.name}
+            id={
+              id
+                ? createIdGen("filtercheckbox" + index)
+                : createIdGen(
+                    "filtercheckbox " +
+                      index +
+                     router.pathname.replaceAll("/", " ")
+                  )
+            }
             type="checkbox"
             onChange={() => {
               handleRowCheckboxChange(item);
@@ -69,11 +89,15 @@ const MoreFilter = ({
   );
 
   return (
-    <div className="d-flex" style={{ cursor: "pointer" }}>
+    <div
+      id="more-filters"
+      name="more-filters"
+      className="d-flex"
+      style={{ cursor: "pointer" }}
+    >
       <Tooltip title="More Filters">
         <Popover content={PopContent} trigger="click" placement="bottom">
-          <div  id="filter-img"
-            name="filter-img">
+          <div id="filter-img" name="filter-img">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="#03316f"

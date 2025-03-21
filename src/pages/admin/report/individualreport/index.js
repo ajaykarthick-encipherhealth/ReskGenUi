@@ -35,6 +35,7 @@ const IndividualReceiverReport = ({
   getActiveTab,
   setViewIndividualReport,
   viewIndividualReport,
+  id,
 }) => {
   const router = useRouter();
   const [tableData, setTableData] = useState([]);

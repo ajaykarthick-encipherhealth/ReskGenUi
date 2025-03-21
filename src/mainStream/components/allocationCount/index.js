@@ -1,20 +1,23 @@
 import { Empty, Tooltip } from "antd";
 import React from "react";
+import { createIdGen } from "../../../utils/reusable";
+import { useRouter } from "next/router";
 
 const AllocationCount = ({
   title,
   allocationCount,
   renderUserPrfoileAvatar,
   styles,
+  id,
 }) => {
+  const router = useRouter();
   return (
-    // title!=="Supervisor" &&
     <div className={`col-6 ${styles.flags}`}>
       <div className={styles.cardHead}>
         <div>{title}</div>
         <div className={styles.contentOverFlow}>
           {allocationCount?.length > 0 ? (
-            allocationCount?.map((item) => (
+            allocationCount?.map((item, index) => (
               <div className={styles.contentAuditor} key={item.id}>
                 <div className={styles.avatar}>
                   <span className={styles.avatarAlign}>
@@ -38,7 +41,18 @@ const AllocationCount = ({
                     )}
                   </span>
                 </div>
-                <div className={`cr-pointer ${styles.count}`}>
+                <div
+                  id={
+                    id
+                      ? createIdGen("flagcount" + index)
+                      : createIdGen(
+                          "flagcount " +
+                            index +
+                           router.pathname.replaceAll("/", " ")
+                        )
+                  }
+                  className={`cr-pointer ${styles.count}`}
+                >
                   {item?.count ? (
                     item.count < 99 ? (
                       item.count

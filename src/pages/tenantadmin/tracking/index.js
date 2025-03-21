@@ -197,7 +197,6 @@ const Patient = ({
     },
     sort: { sortDir: "DESC", sortField: "" },
   });
-  console.log(sort, "sort");
   const columns = [
     {
       name: "Patients",

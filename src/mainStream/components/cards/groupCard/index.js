@@ -2,32 +2,58 @@ import React from "react";
 import { Empty, Popover, Avatar } from "antd";
 import dayjs from "dayjs";
 import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
-import { formatDateTime } from "../../../../utils/reusable";
+import { createIdGen, formatDateTime } from "../../../../utils/reusable";
+import { useRouter } from "next/router";
 
-const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
-  const handleDateFormat = (date) => {
-    return dayjs(date).format("MM-DD-YYYY");
-  };
+const GroupCard = ({
+  data,
+  handleReceiverReport,
+  styles,
+  item,
+  index,
+  id,
+  activeTab,
+}) => {
+  const router = useRouter();
 
   const accessTemplate = (item) => {
     switch (item?.role) {
       case "READ":
-        return <span id="read-btn" name="read-btn" className={styles.readStyle}>Read</span>;
+        return (
+          <span id="read-btn" name="read-btn" className={styles.readStyle}>
+            Read
+          </span>
+        );
 
       case "DOWNLOAD":
-        return <span id="download-btn" name="download-btn" className={styles.downloadStyle}>Download</span>;
+        return (
+          <span
+            id="download-btn"
+            name="download-btn"
+            className={styles.downloadStyle}
+          >
+            Download
+          </span>
+        );
 
       default:
         return null;
     }
   };
-
   return (
     <div>
       {data?.length > 0 ? (
         <div
-          id={data?.reportId}
-          name={data?.reportId}
+          id={
+            id
+              ? createIdGen("card" + activeTab + index)
+              : createIdGen(
+                  "card " +
+                    activeTab +
+                    index +
+                   router.pathname.replaceAll("/", " ")
+                )
+          }
           style={{ marginBottom: "0px" }}
           className={`${styles.card} ${styles.selectedCard} py-3`}
           onClick={() => handleReceiverReport(item)}
@@ -50,45 +76,30 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
                   <div className="d-flex">
                     <div className={`${styles.dateText}`}>
                       {/* {handleDateFormat(item.sendDate)} */}
-                      {item.sendDate ? formatDateTime({date: item.sendDate}) : "---"}
+                      {item.sendDate
+                        ? formatDateTime({ date: item.sendDate })
+                        : "---"}
                     </div>
                   </div>
                 </div>
                 <div className={`${styles.text}`}>
                   <Avatar.Group maxCount={2}>
-                    <Popover
-                      key={index}
-                      content={
-                        <div className="d-flex justify-content-center align-items-center gap-2">
-                          {item?.senderDetails?.firstName ||
-                          item?.senderDetails?.lastName ||
-                          item?.senderDetails?.profileImageUrl
-                            ? renderUserPrfoileAvatar(
-                                item?.senderDetails?.firstName,
-                                item?.senderDetails?.lastName,
-                                item?.senderDetails?.profileImageUrl,
-                                "header"
-                              )
-                            : "---"}
-                          {item?.senderDetails?.firstName}{" "}
-                          {item?.senderDetails?.lastName}
-                        </div>
+                    <div
+                      id={
+                        id
+                          ? createIdGen("avatar" + activeTab + index)
+                          : createIdGen(
+                              "avatar " +
+                                activeTab +
+                                index +
+                               router.pathname.replaceAll("/", " ")
+                            )
                       }
                     >
-                      <div
-                        id={data?.id}
-                        name={data?.id}
-                        style={{
-                          display: "inline-block",
-                          marginRight: "5px",
-                        }}
-                      >
-                        <div className="d-flex justify-content-center align-items-center">
-                          <div
-                            style={{
-                              marginRight: "10px",
-                            }}
-                          >
+                      <Popover
+                        key={index}
+                        content={
+                          <div className="d-flex justify-content-center align-items-center gap-2">
                             {item?.senderDetails?.firstName ||
                             item?.senderDetails?.lastName ||
                             item?.senderDetails?.profileImageUrl
@@ -99,18 +110,58 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
                                   "header"
                                 )
                               : "---"}
-                          </div>
-
-                          <div>
                             {item?.senderDetails?.firstName}{" "}
                             {item?.senderDetails?.lastName}
                           </div>
+                        }
+                      >
+                        <div
+                          style={{
+                            display: "inline-block",
+                            marginRight: "5px",
+                          }}
+                        >
+                          <div className="d-flex justify-content-center align-items-center">
+                            <div
+                              style={{
+                                marginRight: "10px",
+                              }}
+                            >
+                              {item?.senderDetails?.firstName ||
+                              item?.senderDetails?.lastName ||
+                              item?.senderDetails?.profileImageUrl
+                                ? renderUserPrfoileAvatar(
+                                    item?.senderDetails?.firstName,
+                                    item?.senderDetails?.lastName,
+                                    item?.senderDetails?.profileImageUrl,
+                                    "header"
+                                  )
+                                : "---"}
+                            </div>
+
+                            <div>
+                              {item?.senderDetails?.firstName}{" "}
+                              {item?.senderDetails?.lastName}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </Popover>
+                      </Popover>
+                    </div>
                   </Avatar.Group>
                 </div>
-                <div className={`${styles.dataContainer}`}>
+                <div
+                  id={
+                    id
+                      ? createIdGen("access" + activeTab + index)
+                      : createIdGen(
+                          "access " +
+                            activeTab +
+                            index +
+                           router.pathname.replaceAll("/", " ")
+                        )
+                  }
+                  className={`${styles.dataContainer}`}
+                >
                   <div>{accessTemplate(item)}</div>
                 </div>
               </div>

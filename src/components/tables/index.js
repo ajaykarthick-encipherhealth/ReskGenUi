@@ -93,12 +93,14 @@ const AppTable = ({
   const router = useRouter();
   const columnsArr = Array.from({ length: column?.length || 5 });
   return (
-    <div>
+    <div className="customTable">
       <div
         id={
           tableId
             ? createIdGen("table " + tableId)
-            : createIdGen("table " + router.pathname.replaceAll(" "))
+            :createIdGen(
+              "row " + router.pathname.replaceAll("/", " ")
+            )
         }
         className={`${
           tableHeight ? Style.pageContainer1 : Style.pageContainer
@@ -212,7 +214,7 @@ const AppTable = ({
 const TableHeadItem = ({ item, sort, setSort }) => {
   if (item.sortable) {
     return (
-      <th className="text-start font2">
+      <th className="text-start text-truncate font2">
         {item.name.toUpperCase()}{" "}
         {sort?.[item.value]?.sortDir === "ASC" ? (
           <ArrowUpOutlined
@@ -252,7 +254,7 @@ const TableHeadItem = ({ item, sort, setSort }) => {
   }
   if (item.status || item?.auditedStatus || item?.batchStatus) {
     return (
-      <th className="text-center ">
+      <th className="text-center text-truncate  ">
         {item.name.toUpperCase()}
         <>
           {item?.infoIcon ? (
@@ -286,7 +288,7 @@ const TableHeadItem = ({ item, sort, setSort }) => {
   }
 
   return (
-    <th className="text-start  font2">
+    <th className="text-start text-truncate   font2">
       {typeof item?.name === "string" ? item?.name?.toUpperCase() : item?.name}
     </th>
   );

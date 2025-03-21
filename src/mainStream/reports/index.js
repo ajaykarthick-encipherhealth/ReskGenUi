@@ -76,7 +76,7 @@ const Reports = ({
   routeData,
 }) => {
   const router = useRouter();
-    const pickerRef = useRef();
+  const pickerRef = useRef();
   const rowsLength = selectedRow;
   const activeTab = activeTabName ? activeTabName : tab;
   const [userRole, setUserRole] = useState("");
@@ -152,7 +152,7 @@ const Reports = ({
     //         `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
     //   return formattedDate;
     // });
-      if (!date || date.length === 0) {
+    if (!date || date.length === 0) {
       setTimeout(() => pickerRef.current?.focus(), 100);
     }
     const formattedDates = dateString?.map((date, index) =>
@@ -562,8 +562,8 @@ const Reports = ({
       setSelectedOptions(routeData?.selectedOptions || null);
       setSelectedData(routeData?.selectedData);
       setSelectAll(routeData?.selectAll);
-      getActiveTab(routeData?.activeTab || "admin")
-      setSelectedRows(routeData?.selectedRows||[])
+      getActiveTab(routeData?.activeTab || "admin");
+      setSelectedRows(routeData?.selectedRows || []);
     }
   }, []);
 
@@ -589,12 +589,14 @@ const Reports = ({
                         Search
                       </label>
                       <div
+                        name="Search-report"
+                        id="Search-report"
                         className="custom-reportInput"
                         style={{ height: "43px" }}
                       >
                         <Input
                           name="report-search"
-                          id="report-search"
+                          data-testid="report-search"
                           type="text"
                           onChange={(e) => {
                             filterChangePatientId(e);
@@ -632,9 +634,13 @@ const Reports = ({
                           {" "}
                           Status
                         </label>
-                        <div className="form-group has-search w-100 custom-react-report-select custom-react-report-status">
+                        <div
+                          name="Status-report"
+                          id="Status-report"
+                          className="form-group has-search w-100 custom-react-report-select custom-react-report-status"
+                        >
                           <Select
-                            id="report-status"
+                            data-testid="report-status"
                             name="report-status"
                             onChange={(selectedOption) => {
                               dosOnChange(selectedOption, "Status", activeTab);
@@ -660,10 +666,14 @@ const Reports = ({
                       <label className="labelStyle labelStyleDate d-flex m-0 p-2">
                         Date
                       </label>
-                      <div className="newReportPicker">
+                      <div
+                        id="report-picker"
+                        name="report-picker"
+                        className="newReportPicker"
+                      >
                         <RangePicker
                           ref={pickerRef}
-                          id="report-dateRange"
+                          data-testid="report-dateRange"
                           name="report-dateRange"
                           style={{
                             borderRadius: "0 5px 5px 0",
@@ -710,37 +720,44 @@ const Reports = ({
                                 />
                               )}
                               {info?.isSelect && (
-                                <Select
-                                  id="select-userRole"
-                                  name="select-userRole"
-                                  onChange={(selectedOption) => {
-                                    dosOnChange(selectedOption, info?.name);
-                                    resetPageNumber(resetPageState);
-                                  }}
-                                  placeholder={`Select ${info.name}`}
-                                  options={
-                                    info?.name === "User"
-                                      ? optionsUser
-                                      : info?.options
-                                  }
-                                  // className={`custom-react-report-select`}
-                                  isSearchable={false}
-                                  value={
-                                    selectedOptions
-                                      ? selectedOptions[
-                                          info?.name.replace(" ", "")
-                                        ]
-                                      : null
-                                  }
-                                  allowClear={true}
-                                  style={{ width: "150px" }}
-                                />
+                                <div id="role-select" name="role-select">
+                                  <Select
+                                    data-testid="select-userRole"
+                                    name="select-userRole"
+                                    onChange={(selectedOption) => {
+                                      dosOnChange(selectedOption, info?.name);
+                                      resetPageNumber(resetPageState);
+                                    }}
+                                    placeholder={`Select ${info.name}`}
+                                    options={
+                                      info?.name === "User"
+                                        ? optionsUser
+                                        : info?.options
+                                    }
+                                    // className={`custom-react-report-select`}
+                                    isSearchable={false}
+                                    value={
+                                      selectedOptions
+                                        ? selectedOptions[
+                                            info?.name.replace(" ", "")
+                                          ]
+                                        : null
+                                    }
+                                    allowClear={true}
+                                    style={{ width: "150px" }}
+                                  />
+                                </div>
                               )}
+
                               {info?.isRangePikcer && (
-                                <div className="dateRangeSize">
+                                <div
+                                  id="custom-datePicker"
+                                  name="custom-datePicker"
+                                  className="dateRangeSize"
+                                >
                                   <RangePicker
                                     name="select-rangePicker"
-                                    id="select-rangePicker"
+                                    data-testid="select-rangePicker"
                                     style={{
                                       borderRadius: "0 5px 5px 0",
                                       width: "100%",
@@ -769,25 +786,30 @@ const Reports = ({
                               )}
 
                               {info?.isSearch && (
-                                <InputText
-                                  id="report-input"
-                                  name={info?.name}
-                                  type="text"
-                                  onChange={(e) => {
-                                    filterChangePatientId(e);
-                                    resetPageNumber(resetPageState);
-                                  }}
-                                  className="form-control new-form-control reportInput"
-                                  placeholder="Search"
-                                  maxLength={25}
-                                  value={search?.searchVal}
-                                  onKeyDown={(e) => {
-                                    // Prevent input of backslash ("\")
-                                    if (e.key === "\\") {
-                                      e.preventDefault();
-                                    }
-                                  }}
-                                />
+                                <div
+                                  id="report-isSearch"
+                                  name="report-isSearch"
+                                >
+                                  <InputText
+                                    data-testid="report-input"
+                                    name={info?.name}
+                                    type="text"
+                                    onChange={(e) => {
+                                      filterChangePatientId(e);
+                                      resetPageNumber(resetPageState);
+                                    }}
+                                    className="form-control new-form-control reportInput"
+                                    placeholder="Search"
+                                    maxLength={25}
+                                    value={search?.searchVal}
+                                    onKeyDown={(e) => {
+                                      // Prevent input of backslash ("\")
+                                      if (e.key === "\\") {
+                                        e.preventDefault();
+                                      }
+                                    }}
+                                  />
+                                </div>
                               )}
                               {/* )} */}
                             </div>
@@ -801,7 +823,11 @@ const Reports = ({
                   <div className="d-flex">
                     <div>
                       {activeTab === "Admin" && (
-                        <div className={`py-2`}>
+                        <div
+                          id="report-filters"
+                          name="report-filters"
+                          className={`py-2`}
+                        >
                           <MoreFilter
                             checkedList={checkedList}
                             selectAll={selectAllCheckBoxes}
@@ -990,7 +1016,6 @@ const Reports = ({
                         activeTab,
                         selectAll,
                         getActiveTab,
-                     
                       }}
                       loader={
                         activeTab === "Team"
@@ -1025,6 +1050,7 @@ const Reports = ({
                         viewIndividualReport={viewIndividualReport}
                         searchVal={searchVal}
                         selectedDates={selectedDates}
+                        activeTab={activeTab}
                       />
                     </div>
                   )}
@@ -1049,6 +1075,7 @@ const Reports = ({
                         viewIndividualReport={viewIndividualReport}
                         searchVal={searchVal}
                         selectedDates={selectedDates}
+                        activeTab={activeTab}
                       />
                     </div>
                   )}

@@ -420,8 +420,7 @@ export const formatDateForIndex = ({ date, index }) => {
   const adjustedTime = time.clone().add(offset, "minutes");
 
   return adjustedTime.toISOString();
-};
-
+};  
 
 
 export const renderUserProfile = (data, columnItem) => {

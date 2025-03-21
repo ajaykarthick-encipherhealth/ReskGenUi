@@ -6,8 +6,9 @@ import InputField, { debounce } from "../../components/input";
 import { SVGICON } from "../../jsx/constant/theme";
 import { getStorage } from "../../utils/storages";
 import { actions as allActions } from "../../stores/admin/report";
-import { getResponePopup } from "../../utils/reusable";
+import { createIdGen, getResponePopup } from "../../utils/reusable";
 import { actions as reviewerAction } from "../../stores/reviewer/report";
+import { useRouter } from "next/router";
 export const checkBoxData = [
   {
     id: 1,
@@ -185,9 +186,10 @@ const Export = ({
   updateReportLoader,
   sentReport,
   prefillData,
-  setPrefillData
-
+  setPrefillData,
+  id,
 }) => {
+  const router = useRouter();
   const [selectedUser, setSelectedUser] = useState([]);
   const [search, setSearch] = useState("");
   const [display, setDisplay] = useState(false);
@@ -271,7 +273,7 @@ const Export = ({
       } else {
         res = await updateSentReport(updatedData);
       }
-      if (res?.status === 'SUCCESS' ) {
+      if (res?.status === "SUCCESS") {
         sentReport({
           pagenum: "",
           startDate: "",
@@ -358,14 +360,14 @@ const Export = ({
   }, [isModalVisible]);
   useEffect(() => {
     if (selectedReportInfo?.reportName) {
-      setPrefillData(selectedReportInfo.reportName); 
+      setPrefillData(selectedReportInfo.reportName);
     }
-  }, [selectedReportInfo]); 
+  }, [selectedReportInfo]);
   useEffect(() => {
     setCurrentUser(getStorage("userId"));
     // getUsersLists();
     getOptionsList();
-    setInputStr(prefillData)
+    setInputStr(prefillData);
   }, []);
 
   const isAnyChecked = checkall?.some((item) => item?.checked);
@@ -387,7 +389,11 @@ const Export = ({
           <div className="col-12">
             <div className="d-flex text-center">
               <div className="col-10" style={{ marginRight: "10px" }}>
-                <div className="form-group">
+                <div
+                  id="export-Input"
+                  name="export-Input"
+                  className="form-group"
+                >
                   <Form.Item
                     label={<div className={styles.fields}>Report Name</div>}
                     name="ReportName"
@@ -404,7 +410,7 @@ const Export = ({
                       //     ? selectedReportInfo?.reportName
                       //     : inputStr
                       // }
-                      ReportName={inputStr} 
+                      ReportName={inputStr}
                       setInputValue={setReportName}
                       delay={1000}
                       type="text"
@@ -421,35 +427,39 @@ const Export = ({
               </div>
               <div className="col-2">
                 <div className={`text-right ${styles.btncontainer}`}>
-                  <Button
-                    className="excelBtn"
-                    id="excel-btn"
-                    name="excel-btn"
-                    style={{
-                      // marginRight: "10px",
-                      backgroundColor:
-                        activeButton === "excel" ? "white" : "transparent",
-                      border: "none",
-                      color: "black",
-                    }}
-                    onClick={() => handleButtonClick("excel")}
-                  >
-                    Excel
-                  </Button>
-                  <Button
-                    className="excelBtn"
-                    id="csv-btn"
-                    name="csv-btn"
-                    style={{
-                      backgroundColor:
-                        activeButton === "csv" ? "white" : "transparent",
-                      border: "none",
-                      color: "black",
-                    }}
-                    onClick={() => handleButtonClick("csv")}
-                  >
-                    CSV
-                  </Button>
+                  <div id="report-Excelbtn" name="report-Excelbtn">
+                    <Button
+                      className="excelBtn"
+                      data-testid="excel-btn"
+                      name="excel-btn"
+                      style={{
+                        // marginRight: "10px",
+                        backgroundColor:
+                          activeButton === "excel" ? "white" : "transparent",
+                        border: "none",
+                        color: "black",
+                      }}
+                      onClick={() => handleButtonClick("excel")}
+                    >
+                      Excel
+                    </Button>
+                  </div>
+                  <div className="csv-btn" name="csv-btn">
+                    <Button
+                      className="excelBtn"
+                      data-testid="csv-btn"
+                      name="csv-btn"
+                      style={{
+                        backgroundColor:
+                          activeButton === "csv" ? "white" : "transparent",
+                        border: "none",
+                        color: "black",
+                      }}
+                      onClick={() => handleButtonClick("csv")}
+                    >
+                      CSV
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -460,9 +470,9 @@ const Export = ({
                 <div>
                   <div className="d-flex p-2">
                     <div style={{ marginRight: "10px" }}>Report Fields</div>
-                    <div>
+                    <div className="all-checked" name="all-checked">
                       <Checkbox
-                        id="select-all"
+                        data-testid="select-all"
                         name="select-all"
                         key={0}
                         value={"all"}
@@ -496,11 +506,30 @@ const Export = ({
                     }}
                   >
                     <ul>
-                      {checkall?.map((data) => (
-                        <li key={data?.id} style={{ padding: "5px" }}>
+                      {checkall?.map((data, index) => (
+                        <li
+                          id={
+                            id
+                              ? createIdGen("checkAll" + index)
+                              : createIdGen(
+                                  "checkAll " +
+                                    index +
+                                   router.pathname.replaceAll("/", " ")
+                                )
+                          }
+                          key={data?.id}
+                          style={{ padding: "5px" }}
+                        >
                           <Checkbox
-                            id={data?.title}
-                            name={data?.title}
+                            id={
+                              id
+                                ? createIdGen("checked" + index)
+                                : createIdGen(
+                                    "checked " +
+                                      index +
+                                     router.pathname.replaceAll("/", " ")
+                                  )
+                            }
                             value={data?.title}
                             checked={data?.checked}
                             onChange={(e) => {
@@ -534,6 +563,8 @@ const Export = ({
                 <div className="d-flex">
                   <div className="col-md-8 col-xl-9 col-lg-8">
                     <div
+                      id="select-username"
+                      name="select-username"
                       style={{
                         width: "100%",
                         display: "flex",
@@ -541,7 +572,7 @@ const Export = ({
                       }}
                     >
                       <Select
-                        id="export-select"
+                        data-testid="export-select"
                         name="export-select"
                         style={{
                           width: "100%",
@@ -574,46 +605,52 @@ const Export = ({
                   </div>
                   <div className="col-md-4 col-xl-3 col-lg-4">
                     <div className={`text-right ${styles.btncontainers}`}>
-                      <Button
-                        id="readButton"
-                        name="readButton"
-                        className="excelBtn"
-                        style={{
-                          // marginRight: "10px",
-                          backgroundColor:
-                            activeBtn === "read" ? "white" : "transparent",
-                          border: "none",
-                          color: "black",
-                        }}
-                        onClick={() => {
-                          handleActiveBtn("read");
-                          handleSelectedRole("READ");
-                        }}
-                      >
-                        Read
-                      </Button>
-                      <Button
-                        className="excelBtn"
-                        id="downloadButton"
-                        name="downloadButton"
-                        style={{
-                          backgroundColor:
-                            activeBtn === "download" ? "white" : "transparent",
-                          border: "none",
-                          color: "black",
-                        }}
-                        onClick={() => {
-                          handleActiveBtn("download");
-                          handleSelectedRole("DOWNLOAD");
-                        }}
-                      >
-                        Download
-                      </Button>
+                      <div className="read-btn" name="read-btn">
+                        <Button
+                          data-testid="readButton"
+                          name="readButton"
+                          className="excelBtn"
+                          style={{
+                            // marginRight: "10px",
+                            backgroundColor:
+                              activeBtn === "read" ? "white" : "transparent",
+                            border: "none",
+                            color: "black",
+                          }}
+                          onClick={() => {
+                            handleActiveBtn("read");
+                            handleSelectedRole("READ");
+                          }}
+                        >
+                          Read
+                        </Button>
+                      </div>
+                      <div name="download-btn" id="download-btn">
+                        <Button
+                          className="excelBtn"
+                          data-testid="downloadButton"
+                          name="downloadButton"
+                          style={{
+                            backgroundColor:
+                              activeBtn === "download"
+                                ? "white"
+                                : "transparent",
+                            border: "none",
+                            color: "black",
+                          }}
+                          onClick={() => {
+                            handleActiveBtn("download");
+                            handleSelectedRole("DOWNLOAD");
+                          }}
+                        >
+                          Download
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div>
+                <div id="add-Btn" name="add-btn">
                   <Button
                     id="addButton"
                     name="addButton"
@@ -663,8 +700,15 @@ const Export = ({
                             </div>
 
                             <div
-                              id={item?.user}
-                              name={item?.user}
+                              id={
+                                id
+                                  ? createIdGen("delete" + index)
+                                  : createIdGen(
+                                      "delete " +
+                                        index +
+                                       router.pathname.replaceAll("/", " ")
+                                    )
+                              }
                               style={{ cursor: "pointer" }}
                               onClick={() => deleteUser(item.user)}
                             >
@@ -683,36 +727,35 @@ const Export = ({
           </div>
         </div>
         <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          className="mt-2"
+          id="generate-Btn"
+          name="generate-Btn"
+          className="mt-2 d-flex align-items-center justify-content-center"
         >
           <Form.Item
             disabled={userList?.length > 0 && isAnyChecked ? false : true}
           >
-            <Button
-              id="generateBtn"
-              name="generateBtn"
-              type="primary"
-              htmlType="submit"
-              style={{
-                backgroundColor: "#04306f",
-                color: "#fff",
-                width: "100px",
-                height: "40px",
-              }}
-              disabled={
-                userList?.length > 0 && isAnyChecked
-                  ? false
-                  : true || exportLoader || updateReportLoader
-              }
-              loading={exportLoader || updateReportLoader}
-            >
-              Generate
-            </Button>
+            <div id="generate-Button" name="generate-Button">
+              <Button
+                id="generateBtn"
+                name="generateBtn"
+                type="primary"
+                htmlType="submit"
+                style={{
+                  backgroundColor: "#04306f",
+                  color: "#fff",
+                  width: "100px",
+                  height: "40px",
+                }}
+                disabled={
+                  userList?.length > 0 && isAnyChecked
+                    ? false
+                    : true || exportLoader || updateReportLoader
+                }
+                loading={exportLoader || updateReportLoader}
+              >
+                Generate
+              </Button>
+            </div>
           </Form.Item>
         </div>
       </Form>
@@ -724,14 +767,14 @@ const connector = connect(
     selectedReportInfo: state?.admin?.report.selectedReportInfo,
     usersList: state?.admin?.report?.usersLists,
     exportLoader: state?.admin?.report?.exportLoader,
-    updateReportLoader:state?.tenantAdmin?.tenantAdmin?.updateReportLoader,
+    updateReportLoader: state?.tenantAdmin?.tenantAdmin?.updateReportLoader,
   }),
   {
     getActiveTab: allActions.activeTab,
     updateSentReport: allActions.updateSentReport,
     getUsersLists: allActions.getUsersLists,
     getExportDetails: allActions.getExportDetails,
-     sentReport: reviewerAction.sentReport,
+    sentReport: reviewerAction.sentReport,
   }
 );
 export default connector(Export);

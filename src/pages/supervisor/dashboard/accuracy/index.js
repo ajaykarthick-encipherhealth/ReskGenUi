@@ -355,8 +355,10 @@ const Accuracy = ({
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
             <div className={`d-flex ${styles.selectContainer}`}>
-              <div className={styles.select}>
+              <div id="member-select" name="member-select" className={styles.select}>
                 <Select
+                 data-testid="select-member"
+                 name="select-member"
                   value={selectMemberType}
                   onChange={(e) => memberTypeChanges(e)}
                   className={`custom_select_type ${styles.custom_select_type}`}
@@ -365,8 +367,10 @@ const Accuracy = ({
                 />
               </div>
               {isindividual ? (
-                <div className={styles.select}>
+                <div  id="users-select" name="users-select" className={styles.select}>
                   <Select
+                   id="select-users"
+                   name="select-users"
                     showSearch
                     allowClear
                     placeholder="Select User"
@@ -386,10 +390,16 @@ const Accuracy = ({
                   bgColor="#E6EEFF"
                   val={month}
                   val1={year}
+                  id="accuracy-picker1"
+                  name="accuracy-picker1"
+                  testid="accuracy-picker2"
+                  testName="accuracy-picker2"
                 />
               </div>
               <div className={styles.btnScroller}>
                 <Buttonscroller
+                  id="accuracy-btncontainer"
+                  name="accuracy-btncontainer"
                   Buttons={Buttons}
                   handleButtonClick={handleButtonClick}
                   activeButton={activeButton}
@@ -397,8 +407,8 @@ const Accuracy = ({
                   inActiveColor="
                 #000000"
                   activeBg="#04306f"
-                //   inActiveBg="
-                // #E6EEFF"
+                  //   inActiveBg="
+                  // #E6EEFF"
                   containerBg="
                 #E6EEFF"
                 />

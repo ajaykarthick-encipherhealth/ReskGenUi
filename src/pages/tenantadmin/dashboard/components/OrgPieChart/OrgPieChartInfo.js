@@ -100,7 +100,6 @@ const OrgPieChartInfo = ({ data, orgLoader }) => {
                 type="link"
                 onClick={() => {
                   showModal();
-                  console.log("click");
                 }}
               >
                 view all

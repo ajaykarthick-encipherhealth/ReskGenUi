@@ -40,6 +40,7 @@ const SentReport = ({
   viewIndividualReport,
   searchVal,
   selectedDates,
+  activeTab,
 }) => {
   const router = useRouter();
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
@@ -171,11 +172,6 @@ const SentReport = ({
           <div className="container-fluid py-4 px-2">
             <div className="row">
               <div>
-                {/* {loader ? (
-                  <div className="mt-4">
-                  <TableSkeleton/>
-                  </div>
-                ) : ( */}
                 <div className=" co-12 d-flex">
                   <div className={`col-6 ${styles.cardDiv}`}>
                     {loader ? (
@@ -200,6 +196,7 @@ const SentReport = ({
                                 index={index}
                                 onEditClick={handleEditClick} 
                                 prefillData={prefillData}
+                                activeTab={activeTab}
                               />
                             )
                           )
