@@ -420,7 +420,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                         <CardSkeleton height={40} />
                       </>
                     ) : (
-                      <> {average ? `${average?.toFixed(2)}%` : `0%`}</>
+                      <> {average ? `${Math.floor(average)}%` : `0%`}</>
                     )}
                   </div>
                 </div>

@@ -456,7 +456,7 @@ const Accuracy = ({
                       <CardSkeleton height={40} />
                     </>
                   ) : (
-                    <> {average ? `${average?.toFixed(2)}%` : `0%`}</>
+                    <> {average ? `${Math.floor(average)}%` : `0%`}</>
                   )}
                 </span>
               </div>
