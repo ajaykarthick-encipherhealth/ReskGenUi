@@ -63,6 +63,10 @@ const ReusableFilters = ({
           : { ...filter, active: false }
       )
     );
+    setSelectedDateRanges({});
+    setSelectedDates([]);
+    setSelectedOption({});
+    setSearchText(null)
   };
 
   const handleRangePicker = (dates, dateString, tabName) => {

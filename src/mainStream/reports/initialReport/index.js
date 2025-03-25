@@ -229,7 +229,7 @@ const InitialCard = ({
     {
       title: "Total RAF score",
       value: reportListAll?.totalRafScore
-        ? reportListAll?.totalRafScore?.toFixed(4)
+        ? reportListAll?.totalRafScore?.toFixed(2)
         : 0,
     },
     {
