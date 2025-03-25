@@ -84,7 +84,7 @@ const AllocateModal = ({
     const response = await getAllocateUsers({
       data: {
         userId: activeEmail,
-        dueDate: formatDateForIndex({ date: allocateDate, index: 0 }),
+        dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
         patientIds: selectedRowsId,
         priority: priority,
       },

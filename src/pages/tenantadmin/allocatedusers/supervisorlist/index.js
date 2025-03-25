@@ -193,7 +193,7 @@ const SupervisorList = ({
     {
       name: (
         <div>
-          {allocationListData?.content.length > 0 && (
+          {allocationListData?.content?.length > 0 && (
             <div className="w-full d-flex justify-content-center">
               {checkedLoader ? (
                 <Spin

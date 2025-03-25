@@ -12,7 +12,7 @@ import {
   disablePastDate,
   priorityOptions,
 } from "../../../../../components/headerFilters/functions";
-import { getResponePopup } from "../../../../../utils/reusable";
+import { formatDateForIndex, getResponePopup } from "../../../../../utils/reusable";
 
 const L2AllocateModal = ({
   open,
@@ -66,7 +66,7 @@ const L2AllocateModal = ({
     const response = await getAllocateUsers({
       data: {
         userId: supervisorUserName?.userName,
-        dueDate: `${allocateDate + "T23:00:00.999Z"}`,
+        dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
         patientIds: selectedRowsId,
         priority: priority,
       },
