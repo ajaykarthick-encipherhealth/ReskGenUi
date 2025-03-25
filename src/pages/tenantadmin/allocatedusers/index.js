@@ -34,6 +34,24 @@ const PatientAllocation = ({
     },
     {
       id: 2,
+      title: "Search by Code",
+      type: "search1",
+      value: null,
+      placeholder: "Search",
+      header: "Search by Code",
+      active: true,
+    },
+    {
+      id: 3,
+      title: "Search by Description",
+      type: "search1",
+      value: null,
+      placeholder: "Search",
+      header: "Search by Description",
+      active: true,
+    },
+    {
+      id: 4,
       title: "organization",
       type: "select",
       value: null,
@@ -45,7 +63,7 @@ const PatientAllocation = ({
       active: true,
     },
     {
-      id: "03",
+      id: 5,
       title: "computedDate",
       type: "rangePicker",
       value: null,
@@ -54,7 +72,7 @@ const PatientAllocation = ({
       active: true,
     },
     {
-      id: "04",
+      id: 6,
       title: "priority",
       type: "select",
       value: null,
@@ -89,6 +107,7 @@ const PatientAllocation = ({
   const [paramsFilter, setParamsFilter] = useState(null);
   const [selectedUserName, setSelectedUserName] = useState([]);
   const [filterBatchCount, setFilterBatchCount] = useState(false);
+  const [search, setSearch] = useState({})
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -97,6 +116,7 @@ const PatientAllocation = ({
     setSearchText("");
     setSelectedDateRanges([]);
     setSelectedOption({});
+    setSearch({});
   };
 
   const handleOpenModal = () => {
@@ -134,6 +154,7 @@ const PatientAllocation = ({
       selectedDateRanges,
       search: searchText,
       batchCount: batchCount,
+      searchList: search
     });
   };
 
@@ -145,6 +166,7 @@ const PatientAllocation = ({
       sort,
       selectedDateRanges,
       searchText,
+      search
     });
   };
 
@@ -166,6 +188,7 @@ const PatientAllocation = ({
     sort,
     paginationFirst,
     selectedSupervisor,
+    search
   ]);
   const getFilterOption = () => {
     let filteredItems;
@@ -179,7 +202,7 @@ const PatientAllocation = ({
 
       case "2":
         filteredItems = commonFilterItems
-          .filter((filter) => filter.id == 1 || filter.id == 2)
+          .filter((filter) => filter.id == 4 || filter.id == 1)
           .map((filter) =>
             filter.id == 1 ? { ...filter, header: "Search by Name" } : filter
           );
@@ -202,6 +225,7 @@ const PatientAllocation = ({
       getReviewerList({ field: "patientAllocated" });
     }
   }, []);
+
   const params = {
     pageNo,
     paginationFirst,
@@ -210,6 +234,7 @@ const PatientAllocation = ({
     searchText,
     selectedOption,
     activeTab,
+    search
   };
 
   useEffect(() => {
@@ -219,6 +244,10 @@ const PatientAllocation = ({
       setActiveTab("1");
     }
   }, [routedData]);
+
+
+  console.log(search, "testings");
+  
   return (
     <div>
       <Header />
@@ -244,6 +273,8 @@ const PatientAllocation = ({
                     activeFilters={activeFilters}
                     setPageNo={setPageNo}
                     opt={opt}
+                    setSearch={setSearch}
+                    search={search}
                   />
                 </div>
                 {activeTab === "1" && (

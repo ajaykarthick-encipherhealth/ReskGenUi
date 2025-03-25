@@ -44,6 +44,24 @@ const SupervisorList = ({
       active: true,
     },
     {
+      id: 2,
+      title: "Search by Code",
+      type: "search1",
+      value: null,
+      placeholder: "Search",
+      header: "Search by Code",
+      active: true,
+    },
+    {
+      id: 3,
+      title: "Search by Description",
+      type: "search1",
+      value: null,
+      placeholder: "Search",
+      header: "Search by Description",
+      active: true,
+    },
+    {
       id: 5,
       title: "reviewer",
       type: "select",
@@ -75,6 +93,7 @@ const SupervisorList = ({
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [allocateModalL2, setAllocateModalL2] = useState(false);
   const [selectedChart, setSelectedChart] = useState([]);
+  const [search, setSearch] = useState({})
   const [sort, setSort] = useState({
     dueDate: {
       sortDir: "DESC",
@@ -239,6 +258,7 @@ const SupervisorList = ({
       selectedOption,
       searchText,
       sort,
+      search
     });
   };
   useEffect(() => {
@@ -247,7 +267,7 @@ const SupervisorList = ({
 
   useEffect(() => {
     getAllAllocationList();
-  }, [searchText, selectedOption, sort]);
+  }, [searchText, selectedOption, sort, search]);
   const opt = {
     status: [
       { label: "COMPLETED", value: "COMPLETED", status: 2 },
@@ -259,7 +279,6 @@ const SupervisorList = ({
   const handleTabChange = (key) => {
     backToData("1");
   };
-
 
   return (
     <div>
@@ -289,6 +308,8 @@ const SupervisorList = ({
                   activeFilters={activeFilters}
                   setPageNo={setPageNo}
                   opt={opt}
+                  setSearch={setSearch}
+                  search={search}
                 />
               </div>
               <Tooltip
@@ -385,7 +406,6 @@ const connector = connect(
     reviewerList:
       state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     supervisorUserName: state.tenantAdmin?.patientSync?.supervisorUserName,
-    
   }),
   {
     getAllSupervisorList: allActions.getAllSupervisorList,

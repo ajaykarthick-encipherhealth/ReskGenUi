@@ -5,6 +5,7 @@ import ReusableInput from "./reusableInput";
 import MoreFilter from "../../pages/tenantadmin/tracking/filters";
 import { useRef } from "react";
 import { disabledDate, formatDateForIndex } from "../../utils/reusable";
+import ReusableMultiInput from "./reusableInput/multiple";
 const { RangePicker } = DatePicker;
 
 const ReusableFilters = ({
@@ -35,6 +36,9 @@ const ReusableFilters = ({
   //filters
   showFilter,
   opt,
+
+  search,
+  setSearch,
 }) => {
   const pickerRefs = useRef({});
 
@@ -175,6 +179,23 @@ const ReusableFilters = ({
                       }
                     />
                   </div>
+                </div>
+              );
+            case "search1":
+              return (
+                <div key={item?.title} className="default-filter-size mb-2">
+                  <label className="responsiveLabel">{item?.header}</label>
+                  <ReusableMultiInput
+                    testId={item?.title}
+                    name={`${item?.title.toLowerCase().replaceAll(" ", "")}`}
+                    placeholder={"Search"}
+                    value={search}
+                    isSearch={true}
+                    setSearchText={setSearch}
+                    autoComplete="off"
+                    setPageNumber={setPageNo}
+                    id={`${item?.title}-${item?.type}`}
+                  />
                 </div>
               );
             default:

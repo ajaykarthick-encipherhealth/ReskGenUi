@@ -10,14 +10,18 @@ export async function reviewerAllocation({
   selectedDateRanges,
   batchCount,
   pageNo,
+  searchList,
 }) {
+  const { searchbycode = "", searchbydescription = "" } = searchList;
   const options = {
     method: "GET",
   };
   const uId = getStorage("userId");
 
   const res = await requestPortal(
-    `dbservice/patient/admin/computation/filter?page=${pageNo?pageNo:0}&size=${15}&userId=${uId}&computationStart=${
+    `dbservice/patient/admin/computation/filter?page=${
+      pageNo ? pageNo : 0
+    }&size=${15}&userId=${uId}&diagnosisCode=${searchbycode}&description=${searchbydescription}&computationStart=${
       selectedDateRanges?.computedDate?.startDate
         ? selectedDateRanges?.computedDate?.startDate
         : ""
@@ -57,15 +61,17 @@ export async function checkedReviewersList({
     method: "GET",
   };
   const res = await requestPortal(
-    `dbservice/patient/admin/computation/filter?page=${pageNumber?pageNumber:0}&size=${15}&userId=${uId}&organizationId=${orgId}&computationStart=${
+    `dbservice/patient/admin/computation/filter?page=${
+      pageNumber ? pageNumber : 0
+    }&size=${15}&userId=${uId}&organizationId=${orgId}&computationStart=${
       computationStartDate || ""
-    }&computationEnd=${
-      computationEndDate || ""
-    }&isAllocation=${true}&status=${selectedStatus?selectedStatus:2}&searchString=${
-      searchString || ""
-    }&sortdirection=${sort?.sortDir || ""}&sortfield=${
-      sort?.sortField || ""
-    }&priority=${selectedPriority || ""}&batchCount=${batchCount || ""}`,
+    }&computationEnd=${computationEndDate || ""}&isAllocation=${true}&status=${
+      selectedStatus ? selectedStatus : 2
+    }&searchString=${searchString || ""}&sortdirection=${
+      sort?.sortDir || ""
+    }&sortfield=${sort?.sortField || ""}&priority=${
+      selectedPriority || ""
+    }&batchCount=${batchCount || ""}`,
     options
   );
   return res;
@@ -117,8 +123,10 @@ export const supervisorsList = async ({
   const options = {
     method: "GET",
   };
-  let resoureUrl = `dbservice/l2audit?tenantid=${tenantid}&page=${pageNo?pageNo:0}&size=${15}&searchstring=${searchText?searchText:''}&orgId=${
-   selectedOption?.organization ? selectedOption?.organization : ""
+  let resoureUrl = `dbservice/l2audit?tenantid=${tenantid}&page=${
+    pageNo ? pageNo : 0
+  }&size=${15}&searchstring=${searchText ? searchText : ""}&orgId=${
+    selectedOption?.organization ? selectedOption?.organization : ""
   }`;
   const res = await requestPortal(resoureUrl, options);
   return res;
@@ -137,7 +145,9 @@ export const selectedList = async ({
   };
 
   const res = await requestPortal(
-    `dbservice/l2audit/patients?username=${userName}&organizationId=${orgId}&page=${pageNum?pageNum:0}&size=13&sortdirection=${
+    `dbservice/l2audit/patients?username=${userName}&organizationId=${orgId}&page=${
+      pageNum ? pageNum : 0
+    }&size=13&sortdirection=${
       sort?.sortDir ? sort?.sortDir : "DESC"
     }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
       searchString || ""
@@ -180,7 +190,9 @@ export async function supervisorCheckedList({
     method: "GET",
   };
   const res = await requestPortal(
-    `dbservice/l2audit/patients?organizationId=${orgId}&username=${userName}&page=${pageNum?pageNum:0}&size=${size}&sortdirection=${
+    `dbservice/l2audit/patients?organizationId=${orgId}&username=${userName}&page=${
+      pageNum ? pageNum : 0
+    }&size=${size}&sortdirection=${
       sort?.sortDir ? sort?.sortDir : "DESC"
     }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
       searchString || ""
@@ -209,20 +221,22 @@ export async function getAllocationList({
   sort,
   searchText,
   selectedOption,
+  search
 }) {
+  const { searchbycode = "", searchbydescription = "" } = search;
   const options = {
     method: "GET",
   };
   let resoureUrl = `dbservice/l2audit/patients?username=${
     data?.userName
-  }&page=${pageNo?pageNo:0}&size=${15}&sortdirection=${
+  }&page=${pageNo ? pageNo : 0}&size=${15}&diagnosisCode=${searchbycode}&description=${searchbydescription}&sortdirection=${
     sort?.sortDir ? sort?.sortDir : "DESC"
   }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
-   searchText ?searchText:""
+    searchText ? searchText : ""
   }&processedStatus=${
-    selectedOption ?.status? selectedOption?.status:""
+    selectedOption?.status ? selectedOption?.status : ""
   }&patientAllocated=${
-    selectedOption?.reviewer?selectedOption?.reviewer:""
+    selectedOption?.reviewer ? selectedOption?.reviewer : ""
   }`;
   const res = await requestPortal(resoureUrl, options);
   return res;
