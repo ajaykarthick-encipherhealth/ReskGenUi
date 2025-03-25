@@ -25,6 +25,8 @@ const InvalidChart = ({
   graphName,
   getRoutedData,
   dateRange,
+  activeBtn,
+  getActiveBtn
 }) => {
   const router = useRouter();
   const graphOptions = {
@@ -131,6 +133,7 @@ const InvalidChart = ({
                 endDate: dateRange?.endDate ? dateRange?.endDate : "",
               },
             },
+            backActiveBtn:activeBtn
           };
 
           getRoutedData(params);

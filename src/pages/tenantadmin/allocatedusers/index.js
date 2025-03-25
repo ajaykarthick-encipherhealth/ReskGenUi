@@ -255,7 +255,7 @@ const PatientAllocation = ({
         <div className="container-fluid">
           <div className="table-responsive active-projects task-table">
             <div className="d-flex">
-              <div style={{ width: "90%" }} className="d-flex gap-3">
+              <div  className={` d-flex gap-3 ${styles.filtersWidth}`}>
                 <div className={styles.filters}>
                   <ReusableFilters
                     showFilter={false}
@@ -278,9 +278,9 @@ const PatientAllocation = ({
                   />
                 </div>
                 {activeTab === "1" && (
-                  <section>
-                    <label>Batch Count</label>
-                    <div class="form-group d-flex">
+                  <div>
+                    <label className="responsiveLabel">Batch Count</label>
+                    <div  className="default-filter-size form-group d-flex">
                       <Space.Compact id="batch-count" name="batch-count">
                         <Input
                           data-testid="batchCount"
@@ -340,7 +340,7 @@ const PatientAllocation = ({
                         </button>
                       </Space.Compact>
                     </div>
-                  </section>
+                  </div>
                 )}
               </div>
 

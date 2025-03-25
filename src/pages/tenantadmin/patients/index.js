@@ -785,6 +785,17 @@ const Patient = ({
       );
     }
   }, [webSocketData, allPatientList]);
+
+  useEffect(() => {
+    const handleBackButton = (event) => {
+      getRoutedData(routedData)
+    }
+    window.addEventListener('popstate', handleBackButton)
+    return () => {
+      window.removeEventListener('popstate', handleBackButton)
+    }
+  }, [navigate,routedData])
+
   return (
     <div className={`show `}>
       <Header />
@@ -910,6 +921,7 @@ const enhancer = connect(
     loading: state?.tenantAdmin?.patients?.allPatientsLoading,
     filteredList: state.admin?.patientAllocate?.filtersList,
     routedData: state.tenantAdmin?.patientSync?.routedData,
+
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

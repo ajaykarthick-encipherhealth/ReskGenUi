@@ -5,12 +5,13 @@ import { connect } from "react-redux";
 import { actions as dashboardWorkflowActions } from "../../../stores/tenantAdmin/dashboard/workFlow";
 import { actions as defaultActions } from ".././../../stores/tenantAdmin/dashboard/default";
 import { actions as invalidAction } from ".././../../stores/tenantAdmin/dashboard/invalid";
+import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import Card from "../../../components/card";
 import HeaderFilters from "./components/headerFilters";
 import TotalCounts from "./default/totalcounts";
 import RafAndRevenue from "./default/rafAndRevenue";
 import HccCodes from "./default/hcc";
-import PotentialDiagnosis from './default/potentialDiagnosis'
+import PotentialDiagnosis from "./default/potentialDiagnosis";
 import CaregapCodes from "./default/caregaps";
 import TotalCodes from "./default/totalcodes";
 import RadiolodyAndLab from "./default/radiologyAndLab";
@@ -23,7 +24,7 @@ import Notifications from "./workFlow/notifications";
 import HeadTitle from "../../../components/headtitle";
 import PieChartInfo from "./components/pieChart/PieChartInfo";
 import OrgPieChartInfo from "./components/OrgPieChart/OrgPieChartInfo";
-import {  Skeleton } from "antd";
+import { Skeleton } from "antd";
 import moment from "moment";
 import teleVisit from "../../../../src/images/invalid/televisit.webp";
 import scope from "../../../../src/images/invalid/scope.webp";
@@ -66,6 +67,8 @@ const Index = ({
   invalidData,
   invalidLoader,
   graphName,
+  routedData,
+  routedBtn,
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
   const [selectedValue, setSelectedValue] = useState(null);
@@ -177,7 +180,7 @@ const Index = ({
     },
     {
       value: userStatusData?.response?.TENANT_ADMIN,
-      name: "Tenant Admin", 
+      name: "Tenant Admin",
       itemStyle: { color: "#3C0AD2" },
     },
   ];
@@ -346,16 +349,16 @@ const Index = ({
     initialValue
   );
   const flagNameList = [
-    { flagName: "IN_VALID_DOC", label: "dosCount" ,id :1},
-    { flagName: "AUDIO_VISIT", label: "teleVisit",id:2 },
-    { flagName: "VIDEO_VISIT", label: "videoVisit" ,id:3},
-    { flagName: "OUT_OF_SCOPE", label: "outOfscope",id:4 },
-    { flagName: "PROVIDER_UNAUTHORIZED", label: "provider" ,id:5},
-    { flagName: "IMPROPER_DATA", label: "imProper" ,id:6},
-    { flagName: "MULTIPLE_PATIENT_FOUND", label: "mutiple",id:7 },
-    { flagName: "MRN_ID_MISMATCH", label: "mrnMismatch",id:8 },
-    { flagName: "PATIENT_DOB_MISMATCH", label: "patientDobMismatch",id:9 },
-    { flagName: "IN_VALID_DOC", label: "inValidDoc" ,id:10},
+    { flagName: "IN_VALID_DOC", label: "dosCount", id: 1 },
+    { flagName: "AUDIO_VISIT", label: "teleVisit", id: 2 },
+    { flagName: "VIDEO_VISIT", label: "videoVisit", id: 3 },
+    { flagName: "OUT_OF_SCOPE", label: "outOfscope", id: 4 },
+    { flagName: "PROVIDER_UNAUTHORIZED", label: "provider", id: 5 },
+    { flagName: "IMPROPER_DATA", label: "imProper", id: 6 },
+    { flagName: "MULTIPLE_PATIENT_FOUND", label: "mutiple", id: 7 },
+    { flagName: "MRN_ID_MISMATCH", label: "mrnMismatch", id: 8 },
+    { flagName: "PATIENT_DOB_MISMATCH", label: "patientDobMismatch", id: 9 },
+    { flagName: "IN_VALID_DOC", label: "inValidDoc", id: 10 },
   ];
   const chartData = async (item) => {
     try {
@@ -413,9 +416,9 @@ const Index = ({
     getAllLabAndRadiologyChart(
       dateRange.startDate,
       dateRange.endDate,
-      selectedOrganization,
+      selectedOrganization
     );
-  }, [ dateRange, selectedOrganization]);
+  }, [dateRange, selectedOrganization]);
   useEffect(() => {
     if (activeBtn === "workflow") {
       getOrganizationStatusData();
@@ -429,7 +432,11 @@ const Index = ({
       });
     }
   }, [selectedOrganization, dateRange, activeBtn]);
-
+  useEffect(() => {
+    if (routedData) {
+      setActiveBtn("Invalid");
+    }
+  }, [routedData]);
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
@@ -589,7 +596,7 @@ const Index = ({
                       </div>
                     ) : (
                       <InvalidChart
-                      dateRange={dateRange}
+                        dateRange={dateRange}
                         selectedValue={selectedValue}
                         header={data.header}
                         count={data.count}
@@ -605,6 +612,7 @@ const Index = ({
                         id={data.id}
                         graphName={data?.header}
                         flagNameList={flagNameList}
+                        activeBtn={activeBtn}
                       />
                     )}
                   </Card>
@@ -768,6 +776,8 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data?.response,
     invalidData: state?.tenantAdmin?.dashboard?.invalid?.InvalidCounts,
     invalidLoader: state?.tenantAdmin?.dashboard?.invalid?.InvalidCountsLoader,
+    routedBtn: state.tenantAdmin?.patientSync?.backarrowData,
+    routedData: state.tenantAdmin?.patientSync?.routedData,
   }),
   {
     getUserStatusData: dashboardWorkflowActions?.userStatusAction,
@@ -780,6 +790,7 @@ const enhancer = connect(
     getAccuracyScore: dashboardWorkflowActions.getAccuracyWorkflow,
     getAllLabAndRadiologyChart: defaultActions.getAllLabAndRadiologyChart,
     getInvalidDashboard: invalidAction?.InvalidCounts,
+    getActiveBtn: allPatientSyncAction.getActiveBtn,
   }
 );
 export default enhancer(Index);
