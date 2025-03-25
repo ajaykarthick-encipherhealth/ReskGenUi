@@ -42,7 +42,6 @@ const Codify = ({
   const [parentCode, setParentCode] = useState([]);
   const [hideButton, setHideButton] = useState(false);
   const [indexData, setIndexData] = useState([]);
-
   const getPanelValue = (searchText) =>
     !searchText ? [] : [mockVal(searchText)];
 
@@ -59,6 +58,7 @@ const Codify = ({
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
     setParentCode(null);
+    setExpandedKeys([])
   };
   const onSelect = (value) => {
     setSearchInput(value);
