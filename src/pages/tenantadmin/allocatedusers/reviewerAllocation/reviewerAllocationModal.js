@@ -3,7 +3,7 @@ import { Avatar, DatePicker, Modal, Select } from "antd";
 import modalStyle from "../../allocateduser/allocate/style.module.css";
 import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import {
   faSearch,
   faXmark,
@@ -17,9 +17,11 @@ import {
 import { actions as allActions } from "../../../../stores/admin/patientAllocation";
 import { connect } from "react-redux";
 import {
+  createIdGen,
   formatDateForIndex,
   getResponePopup,
 } from "../../../../utils/reusable";
+import TableSkeleton from "../../../../components/skeleton/table";
 
 const AllocateModal = ({
   open,
@@ -34,7 +36,10 @@ const AllocateModal = ({
   getAllReviewerList,
   selectedUserName,
   setSelectedUserName,
+  usersLoader,
+  id,
 }) => {
+  const router = useRouter();
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
   const [userDetails, setUserDetails] = useState([]);
@@ -113,8 +118,6 @@ const AllocateModal = ({
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
 
-  console.log(selectedUserName, "selectedUserName");
-
   return (
     <Modal
       open={open}
@@ -126,8 +129,6 @@ const AllocateModal = ({
         setSearch("");
         setAllocateDate("");
         setPriority([]);
-        setSelectedRows([]);
-        setSelectedUserName([]);
       }}
       title="Select User"
       footer={false}
@@ -141,6 +142,7 @@ const AllocateModal = ({
           icon={faSearch}
         />
         <InputText
+          autoComplete="off"
           id="search-input"
           name="search-input"
           type="text"
@@ -150,14 +152,16 @@ const AllocateModal = ({
           placeholder="Search"
           maxLength={25}
           onKeyDown={(e) => {
-            // Prevent input of backslash ("\")
             if (e.key === "\\") {
               e.preventDefault();
             }
           }}
         />
       </div>
-      {userDetails.length > 0 ? (
+
+      {usersLoader ? (
+        <TableSkeleton />
+      ) : userDetails.length > 0 ? (
         <div className={modalStyle.scroll}>
           {userDetails?.map((item) => (
             <div className="mt-4 ">
@@ -169,8 +173,6 @@ const AllocateModal = ({
                 }`}
               >
                 <div
-                  id={item?.id}
-                  name={item?.id}
                   className="d-flex justify-content-between"
                   onClick={() => {
                     if (activeCard == item.id) {
@@ -352,22 +354,30 @@ const AllocateModal = ({
                         </span>
                         <div className="mb-3">Selected Charts</div>
                         <ul className={`${modalStyle.selectChart}`}>
-                          {selectedUserName?.map((item) => (
+                          {selectedUserName?.map((item, index) => (
                             <li
                               className={`${modalStyle.listing} ${modalStyle.listings}`}
                               key={item.id}
-                              name={item.id}
-                              id={item.id}
                               onClick={() => {
                                 let remove = selectedUserName.filter(
-                                  (chart) => chart.id != item.id
+                                  (chart) => chart.patientId != item.patientId
                                 );
                                 setSelectedUserName(remove);
                               }}
                             >
-                              {console.log(item)}
                               <span>{item.patientName}</span>
-                              <button className="btn p-1">
+                              <button
+                                id={
+                                  id
+                                    ? createIdGen("delete " + tableId + index)
+                                    : createIdGen(
+                                        "delete " +
+                                          router.pathname.replaceAll("/", " ") +
+                                          index
+                                      )
+                                }
+                                className="btn p-1"
+                              >
                                 <Avatar
                                   size={21}
                                   shape="square"
@@ -429,8 +439,13 @@ const AllocateModal = ({
   );
 };
 
-const connector = connect((state) => ({}), {
-  getL1UsersList: allActions.getL1UsersList,
-  getAllocateUsers: allActions.getAllocateUsers,
-});
+const connector = connect(
+  (state) => ({
+    usersLoader: state?.admin?.patientAllocate?.getUsersLoading,
+  }),
+  {
+    getL1UsersList: allActions.getL1UsersList,
+    getAllocateUsers: allActions.getAllocateUsers,
+  }
+);
 export default connector(AllocateModal);

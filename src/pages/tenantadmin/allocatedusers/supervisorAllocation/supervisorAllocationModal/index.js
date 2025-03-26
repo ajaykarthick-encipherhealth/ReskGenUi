@@ -12,7 +12,12 @@ import {
   disablePastDate,
   priorityOptions,
 } from "../../../../../components/headerFilters/functions";
-import { formatDateForIndex, getResponePopup } from "../../../../../utils/reusable";
+import {
+  createIdGen,
+  formatDateForIndex,
+  getResponePopup,
+} from "../../../../../utils/reusable";
+import { useRouter } from "next/router";
 
 const L2AllocateModal = ({
   open,
@@ -28,15 +33,15 @@ const L2AllocateModal = ({
   pageNo,
   selectedOption,
   searchText,
-  selectedUserName,
   setSelectedUserName,
   setSelectedRows,
+  id,
 }) => {
+  const router = useRouter();
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
   const [allocateDate, setAllocateDate] = useState("");
   const [activeEmail, setActiveEmail] = useState("");
-  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [chart, setChart] = useState({
     date: null,
     completed: null,
@@ -67,7 +72,7 @@ const L2AllocateModal = ({
       data: {
         userId: supervisorUserName?.userName,
         dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
-        patientIds: selectedRowsId,
+        patientIds: selectedRowsId.map((item) => item.patientId),
         priority: priority,
       },
     });
@@ -84,8 +89,8 @@ const L2AllocateModal = ({
       setActiveEmail("");
       setSearch("");
       setPriority([]);
-      setSelectedUserName([])
-      setSelectedRows([])
+      setSelectedUserName([]);
+      setSelectedRows([]);
       setOpen(false);
     }
   };
@@ -109,6 +114,8 @@ const L2AllocateModal = ({
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
+
+  console.log(selectedChart, "selectedChart");
   return (
     <Modal
       open={open}
@@ -120,9 +127,7 @@ const L2AllocateModal = ({
         setSearch("");
         setAllocateDate("");
         setPriority([]);
-        setSelectedUserName([])
-        setSelectedRowsId([]);
-        setSelectedRows([])
+        setSelectedUserName([]);
       }}
       title="Select User"
       footer={false}
@@ -163,7 +168,7 @@ const L2AllocateModal = ({
             <div className={`col-5 ${modalStyle.activeRow1}`}>
               <span>
                 Charts Selected:{" "}
-                {selectedUserName?.length > 0 ? selectedUserName?.length : 0}
+                {selectedChart?.length > 0 ? selectedChart?.length : 0}
               </span>
               <div className="d-flex py-2 gap-3 align-items-center">
                 <span className={`${modalStyle.title} py-3`}>Due Date</span>
@@ -273,27 +278,36 @@ const L2AllocateModal = ({
             </div>
             <div className={`col-7 ${modalStyle.activeRow1}`}>
               <span className={`${modalStyle.title} text-danger`}>
-                {selectedUserName?.length + chart.hold + chart.pending > 19 &&
+                {selectedChart?.length + chart.hold + chart.pending > 19 &&
                   "Maximum upto 20 charts to pending"}
               </span>
               <div className="mb-3">Selected Charts</div>
               <ul className={`${modalStyle.selectChart}`}>
-                {selectedUserName?.map((item) => (
+                {selectedChart?.map((item, index) => (
                   <li
                     className={`${modalStyle.listing} ${modalStyle.listings} `}
                     key={item.id}
-                    id={item.id}
-                    name={item.id}
                     onClick={() => {
-                      let remove = selectedUserName?.filter(
-                        (chart) => chart.id != item.id
+                      let remove = selectedChart?.filter(
+                        (chart) => chart.patientId != item.patientId
                       );
-                      setSelectedUserName(remove);
+                      setSelectedChart(remove);
                       setSelectedRowsId(remove);
                     }}
                   >
                     <span>{item.patientName}</span>
-                    <button className="btn p-1">
+                    <button
+                      id={
+                        id
+                          ? createIdGen("deleteicon " + tableId + index)
+                          : createIdGen(
+                              "deleteicon " +
+                                router.pathname.replaceAll("/", " ") +
+                                index
+                            )
+                      }
+                      className="btn p-1"
+                    >
                       <Avatar
                         size={21}
                         shape="square"

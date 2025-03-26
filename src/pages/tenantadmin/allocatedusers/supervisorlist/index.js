@@ -25,6 +25,7 @@ const SupervisorList = ({
   supervisorUserName,
   allocationList,
   getReviewerList,
+  getAllSupervisorChecked
 }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRowsId, setSelectedRowsId] = useState([]);
@@ -112,21 +113,20 @@ const SupervisorList = ({
     if (!singleCheck) {
       if (checked) {
         setCheckedLoader(true);
-        // const response = await getSupervisorChecked({
-        //   fromTenant: true,
-        //   // allPatientIds: checked,
-        //   userName: supervisorUserName?.userName,
-        // });
-
-        // if (response?.status === "SUCCESS") {
-        //   let result = response?.response;
-        //   const data = result?.content?.map((item) => ({
-        //     id: item.patientId,
-        //     name: item.patientName,
-        //   }));
-        //   setSelectedRowsId(data);
-        //   setSelectedRows(data);
-        // }
+        const response = await getAllSupervisorChecked({
+          fromTenant: true,
+          allPatientIds: checked,
+          userName:supervisorUserName?.userName,
+        });
+  
+        if (response?.status === "SUCCESS") {
+          const result = response?.response?.patientIds?.map((patient) => ({
+            patientId: patient.patientId,
+            patientName: patient.patientName,
+          }))
+          setSelectedRows(result?.map((patient) => patient.patientId)); 
+          setSelectedRowsId(result); 
+        }
         setCheckedLoader(false);
       } else {
         setSelectedRows([]);
@@ -137,19 +137,15 @@ const SupervisorList = ({
       setSelectedUserName((prev) => {
         let updatedSelection;
         if (e.target.checked) {
-          updatedSelection = prev.some(
-            (user) => user.patientId === row.patientId
-          )
+          updatedSelection = prev.some((user) => user.patientId === row.patientId)
             ? prev
-            : [...prev, row];
+            : [...prev, { patientId: row.patientId, patientName: row.patientName }];
         } else {
-          updatedSelection = prev.filter(
-            (user) => user.patientId !== row.patientId
-          );
+          updatedSelection = prev.filter((user) => user.patientId !== row.patientId);
         }
         return updatedSelection;
       });
-
+  
       setSelectedRows((prev) => {
         let updatedSelection;
         if (e.target.checked) {
@@ -159,8 +155,12 @@ const SupervisorList = ({
         } else {
           updatedSelection = prev.filter((id) => id !== row.patientId);
         }
-
-        setSelectedRowsId(updatedSelection);
+        setSelectedRowsId(
+          updatedSelection.map((id) => ({
+            patientId: id,
+            patientName: row.patientName,
+          }))
+        );
         return updatedSelection;
       });
     }
@@ -193,7 +193,7 @@ const SupervisorList = ({
     {
       name: (
         <div>
-          {allocationListData?.content?.length > 0 && (
+          {allocationListData?.patientDtoList?.content?.length > 0 && (
             <div className="w-full d-flex justify-content-center">
               {checkedLoader ? (
                 <Spin
@@ -207,7 +207,7 @@ const SupervisorList = ({
                     let checked = !selectAllChecked;
                     setSelectAllChecked(checked);
                     if (
-                      selectedRows?.length < allocationListData?.totalElements
+                      selectedRows?.length < allocationListData?.patientDtoList?.totalElements
                     ) {
                       checked = true;
                       setSelectAllChecked(true);
@@ -227,10 +227,10 @@ const SupervisorList = ({
                     cursor: "pointer",
                   }}
                   checked={
-                    selectedRows?.length === allocationListData?.totalElements
+                    selectedRows?.length === allocationListData?.patientDtoList?.totalElements
                   }
                   className={`mx-4 ${styles.checkBox} ${
-                    selectedRows?.length === allocationListData?.totalElements
+                    selectedRows?.length === allocationListData?.patientDtoList?.totalElements
                       ? styles.customChecked2
                       : ""
                   }`}
@@ -279,7 +279,6 @@ const SupervisorList = ({
   const handleTabChange = (key) => {
     backToData("1");
   };
-
   return (
     <div>
       <Header />
@@ -358,7 +357,7 @@ const SupervisorList = ({
             </div>
             <div className="mt-4">
               <AppTable
-                data={allocationListData?.content}
+                data={allocationListData?.patientDtoList?.content}
                 column={allocationColumns}
                 loader={supervisorListLoader}
                 handleRowCheckboxChange={handleRowCheckboxChange}
@@ -369,7 +368,7 @@ const SupervisorList = ({
                 setSort={setSort}
                 tableId={"supervisor-list-table"}
                 first={pageNo === 0 ? 0 : paginationFirst}
-                totalRecords={allocationListData?.totalElements}
+                totalRecords={allocationListData?.patientDtoList?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
               />
@@ -414,6 +413,7 @@ const connector = connect(
     getRoutedData: allPatientSyncAction.getRoutedData,
     getSupervisorChecked: allActions.getSelectedSupervisorList,
     getReviewerList: allActions.getFilterOptions,
+    getAllSupervisorChecked: allActions.getAllCheckListForSupervisor,
   }
 );
 

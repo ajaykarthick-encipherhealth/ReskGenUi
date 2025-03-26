@@ -116,6 +116,7 @@ const PatientAllocation = ({
     setSearchText("");
     setSelectedDateRanges([]);
     setSelectedOption({});
+    setPageNo(0)
     setSearch({});
   };
 
@@ -322,6 +323,7 @@ const PatientAllocation = ({
                           name="select-btn"
                           onClick={() => {
                             setFilterBatchCount(true);
+                            setPageNo(0)
                             if (batchCount != selectedRowsId.length) {
                               setSelectAllChecked(false);
                               setSelectedRowsId([]);

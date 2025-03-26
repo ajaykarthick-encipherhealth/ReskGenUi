@@ -39,21 +39,21 @@ export const processstatusBodyTemplate = (rowData) => {
   switch (rowData.processedStatus) {
     case "COMPLETED":
       return (
-        <div className="patient-status" data-testid="status-span">
+        <div className="patient-status" data-testid="completed">
           <span className={`badge processed-text`}>Completed</span>
         </div>
       );
 
     case "PENDING":
       return (
-        <div className="patient-status" data-testid="status-span">
+        <div className="patient-status" data-testid="pending">
           <span className={`badge processing-text`}>Pending</span>
         </div>
       );
 
     case "DECLINED":
       return (
-        <div className="patient-status" data-testid="status-span">
+        <div className="patient-status" data-testid="declined">
           <span className={`badge failed-text`} style={{ color: "red" }}>
             Declined
           </span>
@@ -62,20 +62,20 @@ export const processstatusBodyTemplate = (rowData) => {
 
     case "NOTCOMPUTED":
       return (
-        <div className="patient-status" data-testid="status-span">
+        <div className="patient-status" data-testid="not-computed">
           <span className={`badge processing-text`}>Not Computed</span>
         </div>
       );
 
     case "COMPUTED":
       return (
-        <div className="patient-status" data-testid="status-span">
+        <div className="patient-status" data-testid="computed">
           <span className={`badge processing-text`}>Computed</span>
         </div>
       );
     case "HOLD":
       return (
-        <div className="patient-status" data-testid="status-span">
+        <div className="patient-status" data-testid="hold">
           <span className={`badge hold-text`}>Hold</span>
         </div>
       );

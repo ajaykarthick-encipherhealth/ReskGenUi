@@ -20,7 +20,6 @@ const ReviewerAllocation = ({
   setSelectedUserName,
   sort,
   setSort,
-  selectedUserName,
   batchCount,
 }) => {
   const [selectAllChecked, setSelectAllChecked] = useState(false);
@@ -41,44 +40,43 @@ const ReviewerAllocation = ({
         });
   
         if (response?.status === "SUCCESS") {
-          const result = response?.response?.patientIds;
-          setSelectedRows(result);
+          const result = response?.response?.patientIds?.map((patient) => ({
+            patientId: patient.patientId,
+            patientName: patient.patientName,
+          }));
+          setSelectedRows(result.map((patient) => patient.patientId));
           setSelectedRowsId(result);
+          setSelectedUserName(result);
         }
         setCheckedLoader(false);
       } else {
         setSelectedRows([]);
         setSelectedRowsId([]);
+        setSelectedUserName([]);
         setCheckedLoader(false);
       }
     } else {
       setSelectedUserName((prev) => {
-        let updatedSelection;
-        if (e.target.checked) {
-          updatedSelection = prev.some((user) => user.patientId === row.patientId)
-            ? prev
-            : [...prev, row];
-        } else {
-          updatedSelection = prev.filter((user) => user.patientId !== row.patientId);
-        }
+        let updatedSelection = e.target.checked
+          ? [...prev, { patientId: row.patientId, patientName: row.patientName }]
+          : prev.filter((user) => user.patientId !== row.patientId);
         return updatedSelection;
       });
-  
       setSelectedRows((prev) => {
-        let updatedSelection;
-        if (e.target.checked) {
-          updatedSelection = prev.includes(row.patientId)
-            ? prev
-            : [...prev, row.patientId];
-        } else {
-          updatedSelection = prev.filter((id) => id !== row.patientId);
-        }
-        setSelectedRowsId(updatedSelection);
+        let updatedSelection = e.target.checked
+          ? [...prev, row.patientId]
+          : prev.filter((id) => id !== row.patientId);
+        setSelectedRowsId(
+          updatedSelection.map((id) => ({
+            patientId: id,
+            patientName: row.patientName,
+          }))
+        );
         return updatedSelection;
       });
     }
   };
- 
+  
   const columns = [
     { name: "PATIENT Id", value: "patientId" },
     { name: "PATIENT NAME", value: "patientName" },
@@ -139,7 +137,7 @@ const ReviewerAllocation = ({
           )}
         </div>
       ),
-      value: "id",
+      value: "patientId",
       isCheckbox: true,
     },
   ];
@@ -174,6 +172,7 @@ const connector = connect(
   {
     getAllCheckedReviewers: allActions.getAllCheckedListForReviewer,
     getSupervisorName: allPatientSyncAction.getSupervisorName,
+    getAllReviewerList: allActions.getAllReviewerList,
   }
 );
 

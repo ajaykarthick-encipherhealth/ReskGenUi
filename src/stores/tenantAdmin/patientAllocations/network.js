@@ -183,22 +183,24 @@ export async function supervisorCheckedList({
   searchString,
   selectedOption,
   allocatedOption,
-  size,
+  allPatientIds,
 }) {
   let orgId = getStorage("orgId");
   const options = {
     method: "GET",
   };
+
   const res = await requestPortal(
     `dbservice/l2audit/patients?organizationId=${orgId}&username=${userName}&page=${
       pageNum ? pageNum : 0
-    }&size=${size}&sortdirection=${
+    }&size=$13&sortdirection=${
       sort?.sortDir ? sort?.sortDir : "DESC"
     }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
       searchString || ""
-    }&processedStatus=${
-      selectedOption === "ALL" || !selectedOption ? "" : selectedOption
-    }&patientAllocated=${allocatedOption || ""}`,
+    }&processedStatus=${selectedOption || ""}&patientAllocated=${
+      allocatedOption || ""
+    }&isAllPatients=${allPatientIds}
+  `,
     options
   );
   return res;
