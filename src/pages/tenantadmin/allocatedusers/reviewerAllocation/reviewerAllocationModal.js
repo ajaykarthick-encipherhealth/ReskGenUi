@@ -33,7 +33,7 @@ const AllocateModal = ({
   getL1UsersList,
   getAllocateUsers,
   setSelectedRows,
-  getAllReviewerList,
+  getAllReviewerALlocation,
   selectedUserName,
   setSelectedUserName,
   usersLoader,
@@ -96,7 +96,7 @@ const AllocateModal = ({
     });
     if (response?.status == "SUCCESS") {
       getResponePopup(response);
-      getAllReviewerList({ pageNo: 0, pageSize: 15, searchString: "" });
+      getAllReviewerALlocation();
       setOpen(false);
       setAllocateDate("");
       setActiveCard("");

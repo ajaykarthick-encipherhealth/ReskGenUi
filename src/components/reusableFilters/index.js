@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DatePicker, Select } from "antd";
+import { DatePicker, Input, Select, Space } from "antd";
 import moment from "moment";
 import ReusableInput from "./reusableInput";
 import MoreFilter from "../../pages/tenantadmin/tracking/filters";
@@ -32,7 +32,16 @@ const ReusableFilters = ({
   addUserForm,
   btnTitle,
   form,
-
+  //batchCount
+  batchCount,
+  setBatchCount,
+  setFilterBatchCount,
+  setSelectAllChecked,
+  setSelectedRowsId,
+  getAllReviewerList,
+  setSelectedRows,
+  showBatchCount,
+  selectedRowsId,
   //filters
   showFilter,
   opt,
@@ -83,6 +92,35 @@ const ReusableFilters = ({
       [tabName]: { startDate: formattedDates[0], endDate: formattedDates[1] },
     }));
     setPageNo && setPageNo(0);
+  };
+
+  const handleInputChange = (e) => {
+    let inputValue = e.target.value.replace(/[^\d]/g, "");
+    if (inputValue.length > 5) {
+      inputValue = inputValue.slice(0, 5);
+    }
+    setBatchCount(inputValue);
+    if (inputValue.length <= 0) {
+      setFilterBatchCount(true);
+      setSelectAllChecked(false);
+      setSelectedRowsId([]);
+      getAllReviewerList({ batchCount: "" });
+      setSelectedRows([]);
+      setBatchCount("");
+    } else {
+      setFilterBatchCount(true);
+    }
+  };
+
+  const handleSelectClick = () => {
+    setFilterBatchCount(true);
+    setPageNo(0);
+    if (batchCount != selectedRowsId.length) {
+      setSelectAllChecked(false);
+      setSelectedRowsId([]);
+      setSelectedRows([]);
+    }
+    getAllReviewerList({ batchCount: batchCount });
   };
   return (
     <div className="d-flex">
@@ -206,8 +244,40 @@ const ReusableFilters = ({
               return null;
           }
         })}
-      </div>
+        {showBatchCount && (
+          <div className="default-filter-size mb-2">
+            <label className="responsiveLabel">Batch Count</label>
+            <Space.Compact id="batch-count" name="batch-count">
+              <div style={{width:"250px"}} className="batchInput">
+                <Input
+                  data-testid="batchCount"
+                  name="batchCount"
+                  type="number"
+                  onChange={handleInputChange}
+                  value={batchCount}
+                  placeholder="Batch Count"
+                  onKeyDown={(e) => {
+                    if (e.key === "\\") {
+                      e.preventDefault();
+                    }
+                  }}
+                  className="batch-form-control"
+                />
 
+                <button
+                  id="select-btn"
+                  name="select-btn"
+                  onClick={handleSelectClick}
+                  style={{ borderRadius: "0px 10px 10px 0px" }}
+                  className="btn btn-outline-secondary py-0 px-2 select-count"
+                >
+                  Select
+                </button>
+              </div>
+            </Space.Compact>
+          </div>
+        )}
+      </div>
       {showFilter && (
         <div
           id="more-filters"

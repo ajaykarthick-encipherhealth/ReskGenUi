@@ -278,6 +278,8 @@ const SupervisorList = ({
 
   const handleTabChange = (key) => {
     backToData("1");
+    setSearchText("")
+    setSelectedOption({})
   };
   return (
     <div>

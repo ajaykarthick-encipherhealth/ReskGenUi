@@ -193,7 +193,7 @@ export async function supervisorCheckedList({
   const res = await requestPortal(
     `dbservice/l2audit/patients?organizationId=${orgId}&username=${userName}&page=${
       pageNum ? pageNum : 0
-    }&size=$13&sortdirection=${
+    }&size=13&sortdirection=${
       sort?.sortDir ? sort?.sortDir : "DESC"
     }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
       searchString || ""

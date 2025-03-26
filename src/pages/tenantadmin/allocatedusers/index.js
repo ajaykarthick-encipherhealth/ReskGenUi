@@ -116,6 +116,7 @@ const PatientAllocation = ({
     setSearchText("");
     setSelectedDateRanges([]);
     setSelectedOption({});
+    setBatchCount("")
     setPageNo(0)
     setSearch({});
   };
@@ -243,12 +244,10 @@ const PatientAllocation = ({
       setActiveTab(routedData?.activeTab);
     } else {
       setActiveTab("1");
+      setSearchText("")
+      setSelectedOption({})
     }
   }, [routedData]);
-
-
-  console.log(search, "testings");
-  
   return (
     <div>
       <Header />
@@ -256,100 +255,41 @@ const PatientAllocation = ({
         <div className="container-fluid">
           <div className="table-responsive active-projects task-table">
             <div className="d-flex">
-              <div  className={` d-flex gap-3 ${styles.filtersWidth}`}>
-                <div className={styles.filters}>
-                  <ReusableFilters
-                    showFilter={false}
-                    setActiveFilters={setActiveFilters}
-                    setSearchText={setSearchText}
-                    searchText={searchText}
-                    setSelectedOption={setSelectedOption}
-                    selectedOption={selectedOption}
-                    setSelectedDateRanges={setSelectedDateRanges}
-                    selectedDateRanges={selectedDateRanges}
-                    setPageNumber={setPageNumber}
-                    FilterItems={activeFilters}
-                    selectedDates={selectedDates}
-                    setSelectedDates={setSelectedDates}
-                    activeFilters={activeFilters}
-                    setPageNo={setPageNo}
-                    opt={opt}
-                    setSearch={setSearch}
-                    search={search}
-                  />
-                </div>
-                {activeTab === "1" && (
-                  <div>
-                    <label className="responsiveLabel">Batch Count</label>
-                    <div  className="default-filter-size form-group d-flex">
-                      <Space.Compact id="batch-count" name="batch-count">
-                        <Input
-                          data-testid="batchCount"
-                          name="batchCount"
-                          type="number"
-                          onChange={(e) => {
-                            let inputValue = e.target.value.replace(
-                              /[^\d]/g,
-                              ""
-                            );
-                            if (inputValue.length > 5) {
-                              inputValue = inputValue.slice(0, 5);
-                            }
-                            setBatchCount(inputValue);
-                            if (inputValue.length <= 0) {
-                              setFilterBatchCount(true);
-                              setSelectAllChecked(false);
-                              setSelectedRowsId([]);
-                              getAllReviewerList({
-                                batchCount: "",
-                              });
-                              setSelectedRows([]);
-                              setBatchCount("");
-                            } else if (inputValue.length > 0) {
-                              setFilterBatchCount(true);
-                            }
-                          }}
-                          value={batchCount}
-                          placeholder="Batch Count"
-                          onKeyDown={(e) => {
-                            if (e.key === "\\") {
-                              e.preventDefault();
-                            }
-                          }}
-                          className="batch-form-control"
-                        />
-                        <button
-                          id="select-btn"
-                          name="select-btn"
-                          onClick={() => {
-                            setFilterBatchCount(true);
-                            setPageNo(0)
-                            if (batchCount != selectedRowsId.length) {
-                              setSelectAllChecked(false);
-                              setSelectedRowsId([]);
-                              setSelectedRows([]);
-                            }
-                            getAllReviewerList({
-                              batchCount: batchCount,
-                            });
-                          }}
-                          style={{
-                            borderRadius: "0px 10px 10px 0px",
-                          }}
-                          className="btn btn-outline-secondary py-0 px-2 select-count"
-                        >
-                          Select
-                        </button>
-                      </Space.Compact>
-                    </div>
-                  </div>
-                )}
+              <div className={` d-flex gap-3`} style={{ width: "90%" }}>
+                <ReusableFilters
+                  showFilter={false}
+                  setActiveFilters={setActiveFilters}
+                  setSearchText={setSearchText}
+                  searchText={searchText}
+                  setSelectedOption={setSelectedOption}
+                  selectedOption={selectedOption}
+                  setSelectedDateRanges={setSelectedDateRanges}
+                  selectedDateRanges={selectedDateRanges}
+                  setPageNumber={setPageNumber}
+                  FilterItems={activeFilters}
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  activeFilters={activeFilters}
+                  setPageNo={setPageNo}
+                  opt={opt}
+                  batchCount={batchCount}
+                  setBatchCount={setBatchCount}
+                  setFilterBatchCount={setFilterBatchCount}
+                  setSelectAllChecked={setSelectAllChecked}
+                  setSelectedRowsId={setSelectedRowsId}
+                  getAllReviewerList={getAllReviewerList}
+                  setSelectedRows={setSelectedRows}
+                  showBatchCount={ activeTab === "1" ?true :false}
+                  selectedRowsId={selectedRowsId}
+                  setSearch={setSearch}
+                  search={search}
+                />
               </div>
 
               {activeTab === "1" ? (
                 <div
                   className="d-flex align-items-center justify-content-end"
-                  style={{ width: "20%" }}
+                  style={{ width: "10%" }}
                 >
                   <Tooltip
                     title={
@@ -468,6 +408,7 @@ const PatientAllocation = ({
         activeTab={activeTab}
         selectedUserName={selectedUserName}
         setSelectedUserName={setSelectedUserName}
+        getAllReviewerALlocation={getAllReviewerALlocation}
       />
     </div>
   );

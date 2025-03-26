@@ -12831,7 +12831,7 @@ tbody > tr {
   margin-right: 10px;
 }
 .select-count {
-  height: 41.5px !important;
+  height: 40.5px !important;
   background-color: #04306f !important;
   color: #fff !important;
   box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.08) !important;
@@ -16452,6 +16452,12 @@ input::-webkit-inner-spin-button {
 }
 
 @media (min-width: 1024px) and (max-width: 1350px) {
+  .batchInput .ant-input{
+    height: 35px !important;
+  }
+  .select-count{
+    height: 35px !important;
+  }
   .custom-react-selects .ant-select .ant-select-selector,
   .custom-react-selects .ant-select .ant-select-selector:hover,
   .custom-react-selects .ant-select .ant-select-selector:focus {

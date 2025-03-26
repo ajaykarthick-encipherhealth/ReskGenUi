@@ -49,11 +49,3 @@
   margin-top: 25px;
   border-radius: 8px;
 }
-.filtersWidth{
-  width:90%
-}
-@media (min-width: 1024px) and (max-width: 1600px){
-  .filtersWidth{
-    width:68% !important;;
-  }
-  }
