@@ -1,7 +1,6 @@
 import { Button } from "react-bootstrap";
 import Header from "../../../jsx/layouts/nav/Header";
 import NotificationCard from "./noficationCard";
-import style from "./style.module.css";
 import { PlusCircleFilled } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import NotificationModal from "./addNotification";
@@ -10,96 +9,104 @@ import { actions as notificationAction } from "../../../stores/admin/notificatio
 import { connect } from "react-redux";
 import { actions as AdminAction } from "../../../stores/admin/users";
 import CardSkeleton from "../../../components/skeleton/card";
-import { priorityOptions } from "../../../components/headerFilters/functions";
-import ReusableFilters from "../../../components/updatedFilters";
+import ReusableFilters from "../../../components/reusableFilters";
+import { actions as tenantAdminActions } from "../../../stores/tenantAdmin/notification";
+import Card from "../../../components/card";
+import { Empty } from "antd";
+import style from "./style.module.css";
+const commonFilterItems = [
+  {
+    id: "01",
+    title: "Search",
+    type: "search",
+    header: "Patient Name / ID",
+    placeholder: "Search",
+    active: true,
+  },
+  {
+    id: "02",
+    title: "users",
+    type: "select",
+    value: null,
+    placeholder: "Users",
+    active: false,
+    options: null,
+  },
+  {
+    id: "03",
+    title: "dueDate",
+    type: "rangePicker",
+    value: null,
+    placeholder: "Due Date",
+    pickerType: "year",
+    active: false,
+  },
 
+  {
+    id: "04",
+    title: "Priority",
+    type: "select",
+    value: null,
+    placeholder: "Select Priority",
+    options: null,
+  },
+];
 const NotificationList = ({
   allCustomUsers,
   getUsers,
   getNotificationList,
   loader,
+  postNotification,
+  getAllCustomUsers,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notificationList, setNotificationList] = useState([]);
   const [pageNum, setPageNum] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [activeFilters, setActiveFilters] = useState(["Search"]);
+  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
-    const [clear, setClear] = useState(false);
-    const priorityOptions = [
-        {
-            label: "High",
-            value: "HIGH",
-
-        },
-        {
-            label: "Medium",
-            value: "MEDIUM",
-        },
-        {
-            label: "General",
-            value: "LOW",
-        },
-
-    ]
+  const [clear, setClear] = useState(false);
+  const priorityOptions = [
+    {
+      label: "High",
+      value: "HIGH",
+    },
+    {
+      label: "Medium",
+      value: "MEDIUM",
+    },
+    {
+      label: "General",
+      value: "GENERAL",
+    },
+  ];
   const getNotificationResult = async () => {
-    let result = await getNotificationList();
+    let result = await getNotificationList({
+      searchText: searchText,
+      selectedOption,
+      selectedDateRanges,
+    });
     if (result) {
       setNotificationList(result);
     }
   };
-    const commonFilterItems = [
-      {
-        id: 1,
-        title: "Search",
-        type: "search",
-        value: null,
-        placeholder: "Search",
-      },
-      {
-        id: 2,
-        title: "Status",
-        type: "select",
-        value: null,
-        placeholder: "Select Status",
-        options: [
-          { label: "COMPLETED", value: "COMPLETED" },
-          { label: "PENDING", value: "PENDING" },
-          { label: "DECLINED", value: "DECLINED" },
-          { label: "HOLD", value: "HOLD" },
-        ],
-      },
-      {
-        id: 3,
-        title: "dueDate",
-        type: "rangePicker",
-        value: null,
-        placeholder: "Due Date",
-        pickerType: "year",
-      },
-     
-      {
-        id: 5,
-        title: "Priority",
-        type: "select",
-        value: null,
-        placeholder: "Select Priority",
-        options: priorityOptions,
-      },
- 
-    ];
+
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNum(e.page);
   };
+
+  const usersOptions = allCustomUsers?.data?.response?.map((data) => ({
+    label: `${data?.firstName} ${data?.lastName}`,
+    value: data?.userName,
+  }));
+
   useEffect(() => {
-    getNotificationResult();
-  }, []);
-  useEffect(() => {
+    getAllCustomUsers();
     getUsers({
       pageCount: 0,
       search: "",
@@ -109,42 +116,52 @@ const NotificationList = ({
       role: "",
       sort: "",
     });
-  }, []);
+    getNotificationResult();
+  }, [searchText, selectedOption, selectedDateRanges]);
+
+  const opt = {
+    Priority: priorityOptions,
+    users: usersOptions,
+  };
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
       <div className="content-body">
         <div className="container-fluid">
-          <div className="d-flex  justify-content-between align-items-center">
-            <ReusableFilters
-              setActiveFilters={setActiveFilters}
-              setSearchText={setSearchText}
-              searchText={searchText}
-              setSelectedOption={setSelectedOption}
-              selectedOption={selectedOption}
-              setSelectedDateRanges={setSelectedDateRanges}
-              selectedDateRanges={selectedDateRanges}
-              setPageNumber={setPageNumber}
-              FilterItems={commonFilterItems}
-              selectedDates={selectedDates}
-              setSelectedDates={setSelectedDates}
-              activeFilters={activeFilters}
-              setClear={setClear}
-              clear={clear}
-            />
-            <div >
+          <section className="d-flex">
+            <div style={{ width: "90%" }}>
+              <ReusableFilters
+                showFilter={true}
+                setActiveFilters={setActiveFilters}
+                setSearchText={setSearchText}
+                searchText={searchText}
+                setSelectedOption={setSelectedOption}
+                selectedOption={selectedOption}
+                setSelectedDateRanges={setSelectedDateRanges}
+                selectedDateRanges={selectedDateRanges}
+                setPageNumber={setPageNumber}
+                FilterItems={activeFilters}
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+                activeFilters={activeFilters}
+                setClear={setClear}
+                clear={clear}
+                // setPageNo={setPageNo}
+                opt={opt}
+              />
+            </div>
+            <div className="d-flex justify-content-center align-items-center mt-3 w-10">
               <Button
                 id="addNotification"
                 name="addNotification"
-                style={{ background: "#04306f", color: "#fff" }}
-                className="btn btn-sm ms-2 flr width-max-content"
+                className={`${style.notificationBtn} btn btn-sm ms-2 flr width-max-content`}
                 onClick={() => setIsModalOpen(true)}
               >
                 <PlusCircleFilled /> Add Notification
               </Button>
             </div>
-          </div>
+          </section>
           {loader ? (
             <div className="d-flex gap-2 m-2">
               <div className="col-6">
@@ -157,16 +174,26 @@ const NotificationList = ({
           ) : (
             <>
               <div>
-                <NotificationCard notificationList={notificationList} />
+                {notificationList.length <= 0 ? (
+                  <Card padding="20px" borderRadius="5px">
+                    <div
+                      className={` ${style.emptyCard} d-flex align-items-center justify-content-center`}
+                    >
+                      <Empty />
+                    </div>
+                  </Card>
+                ) : (
+                  <NotificationCard notificationList={notificationList} />
+                )}
               </div>
-              <div className="p-1">
-                {/* <Pagination
-      first={pageNum === 0 ? 0 : paginationFirst}
-      totalRecords={details?.reportStatusDTOList?.totalElements}
-      onPageChange={onPageChange}
-      row={8}
-    /> */}
-              </div>
+              {/* <div className="p-1">
+                <Pagination
+                  first={pageNum === 0 ? 0 : paginationFirst}
+                  totalRecords={notificationList?.totalElements}
+                  onPageChange={onPageChange}
+                  row={8}
+                />
+              </div> */}
             </>
           )}
         </div>
@@ -175,6 +202,10 @@ const NotificationList = ({
         <NotificationModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
+          postNotification={postNotification}
+          getNotificationList={getNotificationResult}
+          allCustomUsers={allCustomUsers}
+          getAllCustomUsers={getAllCustomUsers}
         />
       )}
     </div>
@@ -187,11 +218,10 @@ const enhancer = connect(
     loader: state?.admin?.notification?.loader,
   }),
   {
-    // getAllCustomUsers: tenantAdminActions.getCustomUsersAction,
     getUsers: AdminAction.getAllUsersAction,
     getNotificationList: notificationAction.getNotificationList,
     postNotification: notificationAction.getPostNotificationList,
-    // SelectUserList: allActions.getSelectUserList,
+    getAllCustomUsers: tenantAdminActions.getCustomUsersAction,
   }
 );
 export default enhancer(NotificationList);

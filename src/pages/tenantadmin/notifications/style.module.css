@@ -15,6 +15,54 @@
   align-items: center;
   display: flex;
 }
+.cardContainer {
+  margin-right: 20px;
+}
+.cardList {
+  padding: 20px;
+  border-radius: 5px;
+}
+.cardContent {
+  max-width: 348px;
+}
+.profileImage {
+  max-width: 100px;
+  max-height: 100px;
+}
+.high {
+  color: #e43232;
+  background-color: #fadbdb;
+  border-radius: 2px;
+}
+.medium {
+  color: #126889;
+  background-color: #dff3fb;
+  border-radius: 2px;
+}
+.general {
+  color: #82691c;
+  background-color: #f8eddd;
+  border-radius: 2px;
+}
+.avatarBadge {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  background-color: #04306f;
+  color: white;
+}
+.emptyCard{
+  height: 700px;
+}
+.notificationBtn{
+  background: #04306f;
+  color: #fff;
+}
 @media (min-width: 1024px) and (max-width: 1350px) {
   .cardGrid {
     grid-template-columns: repeat(1, 1fr) !important;

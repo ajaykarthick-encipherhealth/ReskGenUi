@@ -1,39 +1,92 @@
-
-import { Modal, Input, Form, Button, Select, Checkbox, Tag } from "antd";
+import {
+  Modal,
+  Input,
+  Form,
+  Button,
+  Select,
+  Checkbox,
+  Tag,
+  notification,
+  
+} from "antd";
 import style from "../style.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createIdGen } from "../../../../utils/reusable";
+import { useRouter } from "next/router";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-const NotificationModal = ({ isModalOpen, setIsModalOpen }) => {
+const NotificationModal = ({
+  isModalOpen,
+  setIsModalOpen,
+  postNotification,
+  getNotificationList,
+  allCustomUsers,
+  getAllCustomUsers,
+  id,
+}) => {
   const [form] = Form.useForm();
-  const [users, setUsers] = useState([]);
-  const [inputValue, setInputValue] = useState("");
+  const [notifyAll, setNotifyAll] = useState(false);
+  const [selectedList, setSelectedList] = useState([]);
+  const [openDropdown, setOpenDropdown] = useState(false);
+const router = useRouter()
+  useEffect(() => {
+    getAllCustomUsers();
+  }, []);
 
-const handleAddUser = () => {
-  if (inputValue.trim() && !users.includes(inputValue)) {
-    const newUsers = [...users, inputValue];
+  const options = allCustomUsers?.data?.response?.map((data) => ({
+    label: `${data?.firstName} ${data?.lastName}`,
+    value: data?.userName,
+  }));
 
-    setUsers(newUsers);
-    form.setFieldsValue({ users: newUsers }); 
-    setInputValue("");
-  }
-};
+  const handleSelectedOption = (value) => {
+    setSelectedList(value);
+  };
 
-const handleRemoveUser = (user) => {
-  const filteredUsers = users.filter((u) => u !== user);
+  const clearSelectAll = () => {
+    setSelectedList([]);
+  };
 
-  setUsers(filteredUsers);
-  form.setFieldsValue({ users: filteredUsers }); 
-};
+  const handleSubmit = async (values) => {
+    if (!notifyAll && selectedList.length === 0) {
+      notification.error({
+        message: "Please select at least one user or check 'Notify All Users'",
+      });
+      return;
+    }
 
-const handleSubmit = (values) => {
-  setIsModalOpen(false);
-  form.resetFields();
-  setUsers([]); 
-};
+    const data = {
+      managerId: "",
+      isAdmin: false,
+      isSupervisor: false,
+      isReviewer: false,
+      notificationType: "INFO",
+      content: values.message,
+      title: values.title,
+      notificationCategories: values.category.toUpperCase(),
+      all: notifyAll,
+      usersIds: notifyAll ? [] : selectedList,
+    };
 
+    const result = await postNotification(data);
+
+    if (result.status === "SUCCESS") {
+      form.resetFields();
+      setSelectedList([]);
+      setIsModalOpen(false);
+      getNotificationList();
+      notification.success({
+        message: result.message,
+        placement: "top",
+        duration: 1,
+      });
+    } else {
+      notification.error({
+        message: result.message || "Something went wrong",
+      });
+    }
+  };
 
   return (
     <div>
@@ -44,108 +97,113 @@ const handleSubmit = (values) => {
         footer={null}
         width={736}
       >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleSubmit}
-          labelCol={{ style: { fontWeight: "bold" } }}
+        <div
+          id={
+            id
+              ? createIdGen("notification-form ")
+              : createIdGen(
+                  "notification-form"+ router.pathname.replaceAll(" ")
+                )
+          }
         >
-          <Form.Item
-            label="Title"
-            name="title"
-            rules={[{ required: true, message: "Please enter a title" }]}
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleSubmit}
+            labelCol={{ style: { fontWeight: "bold" } }}
           >
-            <Input placeholder="Enter notification title" />
-          </Form.Item>
+            <Form.Item
+              label="Title"
+              name="title"
+              rules={[{ required: true, message: "Please enter a title" }]}
+            >
+              <Input placeholder="Enter notification title" />
+            </Form.Item>
 
-          <Form.Item
-            label="Message"
-            name="message"
-            rules={[{ required: true, message: "Please enter a message" }]}
-          >
-            <div>
+            <Form.Item
+              label="Message"
+              name="message"
+              rules={[{ required: true, message: "Please enter a message" }]}
+            >
               <TextArea
                 className={style.commentsFormControl}
                 style={{ minHeight: "102px", resize: "none" }}
                 placeholder="Enter notification message"
               />
+            </Form.Item>
+
+            <Form.Item
+              label="Category"
+              name="category"
+              rules={[{ required: true, message: "Please select a category" }]}
+            >
+              <Select placeholder="Select category" allowClear>
+                <Option value="general">General</Option>
+                <Option value="medium">Medium</Option>
+                <Option value="high">High</Option>
+              </Select>
+            </Form.Item>
+
+            <div className="d-flex gap-2 align-items-center mb-2">
+              <div className="fw-bold">Users</div>
+              <Checkbox
+                checked={notifyAll}
+                onChange={(e) => setNotifyAll(e.target.checked)}
+              >
+                Notify All Users
+              </Checkbox>
             </div>
-          </Form.Item>
 
-          <Form.Item
-            label="Category"
-            name="category"
-            rules={[{ required: true, message: "Please select a category" }]}
-          >
-            <Select placeholder="Select category" allowClear>
-              <Option value="general">General</Option>
-              <Option value="medium">Medium</Option>
-              <Option value="alert">High</Option>
-            </Select>
-          </Form.Item>
-          <div className="d-flex gap-2 align-items-center">
-            <div className=" py-2 fw-bold">Users</div>
+            {!notifyAll && (
+              <Form.Item label="Select Users">
+                <div className="d-flex" style={{ width: "100%" }}>
+                  <Select
+                    data-testid="select-users"
+                    mode="multiple"
+                    placeholder="Please select users"
+                    onChange={handleSelectedOption}
+                    value={selectedList}
+                    open={openDropdown}
+                    onDropdownVisibleChange={setOpenDropdown}
+                    maxTagCount={3}
+                    style={{ flex: 1 }}
+                    allowClear
+                  >
+                    {options?.map((data) => (
+                      <Option key={data.value} value={data.value}>
+                        {data.label}
+                      </Option>
+                    ))}
+                  </Select>
+                  {selectedList.length > 1 && (
+                    <Button
+                      className={style.selectClearBtn}
+                      onClick={clearSelectAll}
+                      style={{ marginLeft: 8 }}
+                    >
+                      Clear
+                    </Button>
+                  )}
+                </div>
+              </Form.Item>
+            )}
 
-            <Checkbox>Notify All Users</Checkbox>
-          </div>
-          <Form.Item
-            name="users"
-            rules={[{ required: true, message: "Please enter a user" }]}
-          >
-            <Input
-              placeholder="Enter user"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onPressEnter={handleAddUser}
-              suffix={
+            <Form.Item>
+              <div
+                id="notification-submit"
+                className="d-flex align-items-center justify-content-center mt-3"
+              >
                 <Button
                   type="primary"
-                  onClick={handleAddUser}
+                  htmlType="submit"
                   style={{ backgroundColor: "#04306f" }}
                 >
-                  {" "}
-                  Add{" "}
+                  Submit
                 </Button>
-              }
-            />
-          </Form.Item>
-
-          <div className="mt-2">
-            <div
-              style={{
-                height: "200px",
-                overflow: "auto",
-                border: "1px solid #d9d9d9",
-                borderRadius: "6px",
-              }}
-            >
-              {users.map((user) => (
-    
-                  <Tag
-                    className="m-2 p-1"
-                    key={user}
-                    closable
-                    onClose={() => handleRemoveUser(user)}
-                    style={{ marginBottom: "5px" , height:"30px", testAlign:"center"}}
-                  >
-                    {user}
-                  </Tag>
-
-              ))}
-            </div>
-          </div>
-          <Form.Item>
-            <div className="d-flex align-items-center justify-content-center mt-3">
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ backgroundColor: "#04306f" }}
-              >
-                Submit
-              </Button>
-            </div>
-          </Form.Item>
-        </Form>
+              </div>
+            </Form.Item>
+          </Form>
+        </div>
       </Modal>
     </div>
   );
