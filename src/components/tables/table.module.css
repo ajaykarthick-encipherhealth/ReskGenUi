@@ -273,6 +273,32 @@
     overflow: scroll !important;;
   }
   }
+  .allocate {
+    width: 100px;
+    height: 40px;
+    color: #241571 !important;
+    background: rgba(19, 61, 212, 0.15);
+    border: 1px solid #241571;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    margin-right: 10px;
+    margin-top: 25px;
+    border-radius: 8px;
+  }
+.filterBtn {
+  background-color: rgba(255, 255, 255, 1);
+  height: 42px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+}
+.checkbox {
+  width: 22px;
+  height: 22px;
+}
+
+
 
 
 

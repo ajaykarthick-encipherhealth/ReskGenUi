@@ -36,16 +36,4 @@
   width: 22px;
   height: 22px;
 }
-.allocate {
-  width: 100px;
-  height: 40px;
-  color: #241571 !important;
-  background: rgba(19, 61, 212, 0.15);
-  border: 1px solid #241571;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  margin-right: 10px;
-  margin-top: 25px;
-  border-radius: 8px;
-}
+

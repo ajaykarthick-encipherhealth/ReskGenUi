@@ -197,9 +197,9 @@ export async function supervisorCheckedList({
       sort?.sortDir ? sort?.sortDir : "DESC"
     }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
       searchString || ""
-    }&processedStatus=${selectedOption || ""}&patientAllocated=${
-      allocatedOption || ""
-    }&isAllPatients=${allPatientIds}
+    }&processedStatus=${selectedOption?.status || ""}&patientAllocated=${
+      selectedOption?.reviewer || ""
+    }&isAllPatients=${allPatientIds?allPatientIds:false}
   `,
     options
   );
@@ -232,8 +232,8 @@ export async function getAllocationList({
   let resoureUrl = `dbservice/l2audit/patients?username=${
     data?.userName
   }&page=${pageNo ? pageNo : 0}&size=${15}&diagnosisCode=${searchbycode}&description=${searchbydescription}&sortdirection=${
-    sort?.sortDir ? sort?.sortDir : "DESC"
-  }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
+    sort?.sortDir ? sort?.sortDir : ""
+  }&sortfield=${sort?.sortField ? sort?.sortField : ""}&searchstring=${
     searchText ? searchText : ""
   }&processedStatus=${
     selectedOption?.status ? selectedOption?.status : ""

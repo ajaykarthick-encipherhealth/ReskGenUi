@@ -38,7 +38,7 @@ const ReusableFilters = ({
   setFilterBatchCount,
   setSelectAllChecked,
   setSelectedRowsId,
-  getAllReviewerList,
+  getAllReviewerALlocation,
   setSelectedRows,
   showBatchCount,
   selectedRowsId,
@@ -104,7 +104,7 @@ const ReusableFilters = ({
       setFilterBatchCount(true);
       setSelectAllChecked(false);
       setSelectedRowsId([]);
-      getAllReviewerList({ batchCount: "" });
+      getAllReviewerALlocation();
       setSelectedRows([]);
       setBatchCount("");
     } else {
@@ -120,7 +120,7 @@ const ReusableFilters = ({
       setSelectedRowsId([]);
       setSelectedRows([]);
     }
-    getAllReviewerList({ batchCount: batchCount });
+    getAllReviewerALlocation();
   };
   return (
     <div className="d-flex">

@@ -18,6 +18,7 @@ import {
   getResponePopup,
 } from "../../../../../utils/reusable";
 import { useRouter } from "next/router";
+import { getStorage } from "../../../../../utils/storages";
 
 const L2AllocateModal = ({
   open,
@@ -28,14 +29,12 @@ const L2AllocateModal = ({
   setSelectedChart,
   getAllocateUsers,
   getL2UsersList,
-  allocationList,
+  getAllAllocationList,
   supervisorUserName,
-  pageNo,
-  selectedOption,
-  searchText,
   setSelectedUserName,
   setSelectedRows,
   id,
+  viewDetailSuperisor,
 }) => {
   const router = useRouter();
   const [activeCard, setActiveCard] = useState("");
@@ -59,18 +58,10 @@ const L2AllocateModal = ({
   const handleChange = (value) => {
     setPriority(value);
   };
-  const getUserList = async (search) => {
-    const response = await getL2UsersList({
-      search: search || "",
-    });
-    if (response?.status === "SUCCESS") {
-      let result = response?.response;
-    }
-  };
   const setAllocate = async () => {
     const response = await getAllocateUsers({
       data: {
-        userId: supervisorUserName?.userName,
+        userId: viewDetailSuperisor?.userName,
         dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
         patientIds: selectedRowsId.map((item) => item.patientId),
         priority: priority,
@@ -78,12 +69,7 @@ const L2AllocateModal = ({
     });
     if (response?.status == "SUCCESS") {
       getResponePopup(response);
-      allocationList({
-        data: { userName: supervisorUserName?.userName },
-        pageNo,
-        selectedOption,
-        searchText,
-      });
+      getAllAllocationList()
       setAllocateDate("");
       setActiveCard("");
       setActiveEmail("");
@@ -96,26 +82,22 @@ const L2AllocateModal = ({
   };
   const getAllCheckList = async () => {
     const response = await getL2UsersList({
-      userName: supervisorUserName?.userName,
+      userName: viewDetailSuperisor?.userName,
     });
     if (response?.status == "SUCCESS") {
       let result = response?.response;
       setChart(result);
     }
   };
-  useEffect(() => {
-    getUserList(search);
-  }, [search]);
+
 
   useEffect(() => {
     getAllCheckList();
-  }, [supervisorUserName?.userName]);
+  }, [viewDetailSuperisor]);
 
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
-
-  console.log(selectedChart, "selectedChart");
   return (
     <Modal
       open={open}

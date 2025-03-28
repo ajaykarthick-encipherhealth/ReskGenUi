@@ -4,11 +4,10 @@ import AppTable from "../../../../components/tables";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/tenantAdmin/patientAllocations";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
-import styles from "../styles.module.css";
+import styles from "../../../../components/tables/table.module.css";
 import { Button, Spin, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
-import { useRouter } from "next/router";
 import { getStorage } from "../../../../utils/storages";
 import Header from "../../../../jsx/layouts/nav/Header";
 import ReusableFilters from "../../../../components/reusableFilters";
@@ -22,10 +21,11 @@ const SupervisorList = ({
   getRoutedData,
   routedData,
   reviewerList,
-  supervisorUserName,
   allocationList,
   getReviewerList,
-  getAllSupervisorChecked
+  getAllSupervisorChecked,
+  setViewDetailSupervisor,
+  viewDetailSuperisor
 }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRowsId, setSelectedRowsId] = useState([]);
@@ -84,7 +84,6 @@ const SupervisorList = ({
       active: true,
     },
   ];
-  const router = useRouter();
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
@@ -116,7 +115,7 @@ const SupervisorList = ({
         const response = await getAllSupervisorChecked({
           fromTenant: true,
           allPatientIds: checked,
-          userName:supervisorUserName?.userName,
+          userName:viewDetailSuperisor?.userName,
         });
   
         if (response?.status === "SUCCESS") {
@@ -247,13 +246,12 @@ const SupervisorList = ({
   const backToData = (action) => {
     const revampData = { ...routedData, activeTab: action };
     getRoutedData(revampData);
-    const backRoute = getStorage("routeBackTo");
-    router.push(backRoute);
+    setViewDetailSupervisor(null)
   };
-  const supervisorName = getStorage("supervisorUser");
+
   const getAllAllocationList = async () => {
     const res = await allocationList({
-      data: { userName: supervisorName },
+      data: { userName: viewDetailSuperisor?.userName },
       pageNo,
       selectedOption,
       searchText,
@@ -267,7 +265,8 @@ const SupervisorList = ({
 
   useEffect(() => {
     getAllAllocationList();
-  }, [searchText, selectedOption, sort, search]);
+  }, [searchText, selectedOption, sort, search,viewDetailSuperisor]);
+  
   const opt = {
     status: [
       { label: "COMPLETED", value: "COMPLETED", status: 2 },
@@ -392,6 +391,8 @@ const SupervisorList = ({
         selectedOption={selectedOption}
         selectedUserName={selectedUserName}
         setSelectedUserName={setSelectedUserName}
+        getAllAllocationList={getAllAllocationList}
+        viewDetailSuperisor={viewDetailSuperisor}
       />
     </div>
   );

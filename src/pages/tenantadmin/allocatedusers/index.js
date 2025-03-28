@@ -4,7 +4,6 @@ import ReviewerAllocation from "./reviewerAllocation";
 import SupervisorAllocation from "./supervisorAllocation";
 import Header from "../../../jsx/layouts/nav/Header";
 import { Button, Input, Tooltip, Space } from "antd";
-import styles from "../allocatedusers/styles.module.css";
 import ReviewerAllocationModal from "./reviewerAllocation/reviewerAllocationModal";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../stores/tenantAdmin/patientAllocations";
@@ -13,6 +12,8 @@ import { priorityOptions } from "../../../components/headerFilters/functions";
 import { actions as tenantAdminUsersAction } from "../../../stores/tenantAdmin/users";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import Supervisorlist from "./supervisorlist";
+import styles from '../../../components/tables/table.module.css'
+
 
 const PatientAllocation = ({
   getAllReviewerList,
@@ -107,7 +108,8 @@ const PatientAllocation = ({
   const [paramsFilter, setParamsFilter] = useState(null);
   const [selectedUserName, setSelectedUserName] = useState([]);
   const [filterBatchCount, setFilterBatchCount] = useState(false);
-  const [search, setSearch] = useState({})
+  const [search, setSearch] = useState({});
+  const [viewDetailSuperisor, setViewDetailSupervisor] = useState(null);
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -116,8 +118,8 @@ const PatientAllocation = ({
     setSearchText("");
     setSelectedDateRanges([]);
     setSelectedOption({});
-    setBatchCount("")
-    setPageNo(0)
+    setBatchCount("");
+    setPageNo(0);
     setSearch({});
   };
 
@@ -156,7 +158,7 @@ const PatientAllocation = ({
       selectedDateRanges,
       search: searchText,
       batchCount: batchCount,
-      searchList: search
+      searchList: search,
     });
   };
 
@@ -168,7 +170,7 @@ const PatientAllocation = ({
       sort,
       selectedDateRanges,
       searchText,
-      search
+      search,
     });
   };
 
@@ -190,7 +192,7 @@ const PatientAllocation = ({
     sort,
     paginationFirst,
     selectedSupervisor,
-    search
+    search,
   ]);
   const getFilterOption = () => {
     let filteredItems;
@@ -222,12 +224,6 @@ const PatientAllocation = ({
     setActiveFilters(filteredFilters);
   }, [activeTab, selectedSupervisor]);
 
-  useEffect(() => {
-    if (activeTab == "2") {
-      getReviewerList({ field: "patientAllocated" });
-    }
-  }, []);
-
   const params = {
     pageNo,
     paginationFirst,
@@ -236,7 +232,7 @@ const PatientAllocation = ({
     searchText,
     selectedOption,
     activeTab,
-    search
+    search,
   };
 
   useEffect(() => {
@@ -244,11 +240,26 @@ const PatientAllocation = ({
       setActiveTab(routedData?.activeTab);
     } else {
       setActiveTab("1");
-      setSearchText("")
-      setSelectedOption({})
+      setSearchText("");
+      setSelectedOption({});
     }
   }, [routedData]);
-  return (
+
+  return viewDetailSuperisor ? (
+    <Supervisorlist
+      setAllocateModalL2={setAllocateModalL2}
+      selectedRows={selectedRows}
+      setSelectedRowsId={setSelectedRowsId}
+      setSelectedRows={setSelectedRows}
+      setSelectedSupervisor={setSelectedSupervisor}
+      handleOpenModal={handleOpenModal}
+      selectedSupervisor={selectedSupervisor}
+      setAllocateModal={setAllocateModal}
+      selectedUserName={selectedUserName}
+      setViewDetailSupervisor={setViewDetailSupervisor}
+      viewDetailSuperisor={viewDetailSuperisor}
+    />
+  ) : (
     <div>
       <Header />
       <div className="content-body">
@@ -277,9 +288,9 @@ const PatientAllocation = ({
                   setFilterBatchCount={setFilterBatchCount}
                   setSelectAllChecked={setSelectAllChecked}
                   setSelectedRowsId={setSelectedRowsId}
-                  getAllReviewerList={getAllReviewerList}
+                  getAllReviewerALlocation={getAllReviewerALlocation}
                   setSelectedRows={setSelectedRows}
-                  showBatchCount={ activeTab === "1" ?true :false}
+                  showBatchCount={activeTab === "1" ? true : false}
                   selectedRowsId={selectedRowsId}
                   setSearch={setSearch}
                   search={search}
@@ -371,6 +382,7 @@ const PatientAllocation = ({
                             activeTab={activeTab}
                             handleOpenModal={handleOpenModal}
                             setSelectedUserName={setSelectedUserName}
+                            setViewDetailSupervisor={setViewDetailSupervisor}
                           />
                         </Tab.Pane>
                       </Tab.Content>
@@ -382,19 +394,7 @@ const PatientAllocation = ({
           </div>
         </div>
       </div>
-      {selectedSupervisor && (
-        <Supervisorlist
-          setAllocateModalL2={setAllocateModalL2}
-          selectedRows={selectedRows}
-          setSelectedRowsId={setSelectedRowsId}
-          setSelectedRows={setSelectedRows}
-          setSelectedSupervisor={setSelectedSupervisor}
-          handleOpenModal={handleOpenModal}
-          selectedSupervisor={selectedSupervisor}
-          setAllocateModal={setAllocateModal}
-          selectedUserName={selectedUserName}
-        />
-      )}
+
       <ReviewerAllocationModal
         getAllReviewerList={getAllReviewerList}
         open={allocateModal}

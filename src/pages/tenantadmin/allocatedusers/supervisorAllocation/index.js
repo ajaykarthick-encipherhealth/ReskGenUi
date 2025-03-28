@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/tenantAdmin/patientAllocations";
 import AppTable from "../../../../components/tables";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
-import { setStorage } from "../../../../utils/storages";
 import { useRouter } from "next/router";
 
 const SupervisorAllocation = ({
@@ -20,6 +19,7 @@ const SupervisorAllocation = ({
   loading,
   routedData,
   getSupervisorName,
+  setViewDetailSupervisor,
 }) => {
   const router = useRouter();
 
@@ -28,10 +28,8 @@ const SupervisorAllocation = ({
     setPageNo(e.page);
   };
   const handleSupervisorRowClick = (row) => {
-    setStorage("routeBackTo", "/tenantadmin/allocatedusers");
-    setStorage("supervisorUser", row?.userName);
+    setViewDetailSupervisor(row)
     getRoutedData(params);
-    router?.push("/tenantadmin/allocatedusers/supervisorlist");
     getSupervisorName(row);
     setSelectedSupervisor(row);
   };
