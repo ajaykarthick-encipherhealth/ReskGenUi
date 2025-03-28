@@ -14,33 +14,30 @@ const ReusableInput = ({
   setSearchText,
   props,
   testId,
-  id
+  id,
 }) => {
-  const [localStr, setLocalStr] = useState("");
+  const [localStr, setLocalStr] = useState(null);
   const debounceFunc = useCallback(
     debounce((text) => {
-      setSearchText && setSearchText(text);
+      setSearchText && setSearchText(text?text.trim():null);
       setPageNumber && setPageNumber(0);
     }, 700),
     []
   );
 
   const handleChange = (text) => {
-    setLocalStr(text);
-    if (!text) {
-      setSearchText && setSearchText(null);
-    }
-    if (isSearch && !handleInputStr) {
+    setLocalStr(text.trimStart());
+    if (isSearch && !handleInputStr ) {
       debounceFunc(text);
-    } else {
+    }
+    if (handleInputStr) {
       handleInputStr(text);
     }
   };
 
   useEffect(() => {
-    setLocalStr(value || "");
+    setLocalStr(value?.trimStart() || "");
   }, [value]);
-
   return (
     <div id={id} name={name} className="reusableInput">
       <Input

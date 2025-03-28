@@ -58,6 +58,13 @@ const index = ({
       num + resultArrayCaregaps[index] + resultArrayPotential[index]
   );
 
+  const scores = [
+    getAllRaf?.totalHccRafScore || 0,
+    getAllRaf?.totalSuggestedRafScore || 0,
+    getAllRaf?.totalPotentialRafScore || 0
+  ];
+
+  const totalScore = scores.reduce((acc, score) => acc + score, 0).toFixed(2);
   useEffect(() => {
     getAllHccCodesData(
       dateRange?.startDate,
@@ -65,12 +72,6 @@ const index = ({
       selectedOrganization,
       selectDos
     );
-    // getAllRafScore(
-    //   dateRange.startDate,
-    //   dateRange.endDate,
-    //   selectedOrganization,
-    //   selectDos
-    // );
   }, [dateRange, selectedOrganization, selectDos]);
 
   useEffect(() => {
@@ -203,21 +204,6 @@ const index = ({
     },
   ];
 
-  const totalHccRafScore = getAllRaf?.totalHccRafScore || 0;
-  const totalSuggestedRafScore = getAllRaf?.totalSuggestedRafScore || 0;
-  const totalPotentialRafScore = getAllRaf?.totalPotentialRafScore || 0;
-  const totalScore = (
-    totalHccRafScore +
-    totalSuggestedRafScore +
-    totalPotentialRafScore
-  ).toFixed(2);
-
-  // const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf || 0;
-  const suggestedCount = getAllRafScoreData?.totalSuggestedRaf || 0;
-  // const totalScoreTwo = (hccDiseaseCountMap + suggestedCount).toFixed(2);
-
-  const OverAllRevenue = totalScore;
-
   return (
     <div className="d-flex justify-content-between">
       <div style={{ width: "33%" }}>
@@ -295,10 +281,9 @@ const index = ({
 
               <div className={styles.price}>
                 {
-                  <Tooltip title={suggestedCount && suggestedCount}>
-                    {suggestedCount ? formatNumber(suggestedCount) : 0}
+                  <Tooltip title={totalScore && totalScore}>
+                    {totalScore ? formatNumber(totalScore) : 0}
                   </Tooltip>
-                  // totalScoreTwo
                 }
               </div>
             </div>
@@ -344,7 +329,7 @@ const index = ({
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
               <div className={styles.price}>{`$ ${
-                formatNumber(OverAllRevenue) || 0
+                formatNumber(totalScore) || 0
               }`}</div>
             </div>
           </div>

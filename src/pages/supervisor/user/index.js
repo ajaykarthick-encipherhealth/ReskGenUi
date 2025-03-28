@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import Header from "../../../jsx/layouts/nav/Header";
-import HeaderFilters from "../../../components/headerFilters";
 import { actions as allActions } from "../../../stores/supervisor/users";
 import Userqueue from "./userqueue";
 import AppTable from "../../../components/tables";
 import { setStorage } from "../../../utils/storages";
+import ReusableFilters from "../../../components/reusableFilters";
 const UserList = ({ getUsers, loader, usersData, routedData }) => {
+
+   const commonFilterItems = [
+    {
+      id: "01",
+      title: "Search",
+      type: "search",
+      value: null,
+      placeholder: "Search",
+      header: "Patient Name / ID",
+      active: true,
+    },
+  ];
+  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const columns = [
     {
       name: "USERNAME",
@@ -40,7 +53,7 @@ const UserList = ({ getUsers, loader, usersData, routedData }) => {
     {
       name: "QUALITY",
       value: "accuracy",
-      progressBar:true
+      progressBar: true,
     },
   ];
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -104,15 +117,12 @@ const UserList = ({ getUsers, loader, usersData, routedData }) => {
               <div className="card-body p-0">
                 <div className="table-responsive active-projects task-table">
                   <div className="tbl-caption  align-items-center">
-                    <HeaderFilters
-                      setSearch={setSearch}
-                      search={search}
-                      isSearch={true}
-                      searchlabel="Search By Username"
-                      setPageNo={setPageCount}
-                      searchVal={searchVal}
-                      setSearchVal={setSearchVal}
-                      activeTab="user"
+                    <ReusableFilters
+                      setSearchText={setSearch}
+                      searchText={search}
+                      FilterItems={activeFilters}
+                      activeFilters={activeFilters}
+                      setActiveFilters={setActiveFilters}
                     />
                   </div>
                   <div
