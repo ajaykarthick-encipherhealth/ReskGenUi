@@ -129,7 +129,7 @@ const AppTable = ({
                 [...Array.from({ length: 15 })]?.map((_, rowIndex) => (
                   <tr key={rowIndex}>
                     {columnsArr?.map((_, colIndex) => (
-                      <td style={{ padding: "5px 2px" }} key={colIndex}>
+                      <td  className="mx-1"  key={colIndex}>
                         {tableSkeleton({ rows: 1, columns: 1 })}
                       </td>
                     ))}

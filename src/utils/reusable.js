@@ -270,7 +270,7 @@ export const tableSkeleton = ({ rows = 1, columns = 1 }) => (
     {Array.from({ length: rows }).map((_, rowIndex) => (
       <div key={rowIndex} id="badge">
         {Array.from({ length: columns }).map((_, colIndex) => (
-          <Skeleton.Input key={colIndex} block={true}  active />
+          <Skeleton.Input key={colIndex}   active />
         ))}
       </div>
     ))}
