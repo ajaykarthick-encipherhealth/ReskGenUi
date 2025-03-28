@@ -16355,11 +16355,7 @@ input::-webkit-inner-spin-button {
   color: white !important;
 }
 
-.custom-btn-style:disabled {
-  background-color: gray !important;
-  color: #fff !important;
-  cursor: no-drop !important;
-}
+
 
 .custom-btn-style:hover {
   background-color: #04306f !important;

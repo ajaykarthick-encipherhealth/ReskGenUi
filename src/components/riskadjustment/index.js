@@ -118,7 +118,10 @@ const RiskAdjustment = ({
           )}
         </div>
       </div>
-      <div className="d-flex align-items-center justify-content-center mt-4 ">
+      <div
+        style={{ cursor: !year || !code ? "not-allowed" : "cursor-pointer" }}
+        className="d-flex align-items-center justify-content-center mt-4 cursor-pointer"
+      >
         <Button
           className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
           onClick={handleSearchClick}

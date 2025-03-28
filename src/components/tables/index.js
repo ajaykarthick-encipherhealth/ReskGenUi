@@ -826,7 +826,7 @@ const TableRow = ({
               ) : (
                 renderUserProfile(item, columnItem)
               )}
-              <div className="d-flex align-items-center justify-content-center">
+              <div className="d-flex align-items-start justify-content-start mx-5">
                 {columnItem?.value && item[columnItem.value]
                   ? moment(item[columnItem.value]).format("MM-DD-YYYY")
                   : "---"}
