@@ -4,8 +4,13 @@ import moment from "moment";
 import ReusableInput from "./reusableInput";
 import MoreFilter from "../../pages/tenantadmin/tracking/filters";
 import { useRef } from "react";
-import { disabledDate, formatDateForIndex } from "../../utils/reusable";
+import {
+  createIdGen,
+  disabledDate,
+  formatDateForIndex,
+} from "../../utils/reusable";
 import ReusableMultiInput from "./reusableInput/multiple";
+import { useRouter } from "next/router";
 const { RangePicker } = DatePicker;
 
 const ReusableFilters = ({
@@ -45,11 +50,12 @@ const ReusableFilters = ({
   //filters
   showFilter,
   opt,
-
+  id,
   search,
   setSearch,
 }) => {
   const pickerRefs = useRef({});
+  const router = useRouter();
 
   const handleFocusPicker = (title) => {
     setTimeout(() => pickerRefs.current[title]?.focus(), 100);
@@ -75,7 +81,7 @@ const ReusableFilters = ({
     setSelectedDateRanges({});
     setSelectedDates([]);
     setSelectedOption({});
-    setSearchText(null)
+    setSearchText(null);
   };
 
   const handleRangePicker = (dates, dateString, tabName) => {
@@ -132,15 +138,30 @@ const ReusableFilters = ({
                 <div key={item?.title} className="default-filter-size mb-2">
                   <label className="responsiveLabel">{item?.header}</label>
                   <ReusableInput
-                    testId={item?.title}
-                    name={`patientId-${item?.title}`}
+                    id={
+                      id
+                        ? createIdGen("parent " + id)
+                        : createIdGen(
+                            "parent" +
+                              item?.title +
+                              router.pathname.replaceAll("/", " ")
+                          )
+                    }
+                    testId={
+                      id
+                        ? createIdGen("input " + id)
+                        : createIdGen(
+                            "input" +
+                              item?.title +
+                              router.pathname.replaceAll("/", " ")
+                          )
+                    }
                     placeholder={"Search"}
                     value={searchText}
                     isSearch={true}
                     setSearchText={setSearchText}
                     autoComplete="off"
                     setPageNumber={setPageNo}
-                    id={`${item?.title}-${item?.type}`}
                   />
                 </div>
               );
@@ -150,13 +171,27 @@ const ReusableFilters = ({
                   <label className="responsiveLabel">{item?.placeholder}</label>
                   <div>
                     <div
-                      id={`${item?.title}-${item?.type}`}
-                      name={`${item?.title}-${item?.type}`}
+                      id={
+                        id
+                          ? createIdGen("parentSelect " + id)
+                          : createIdGen(
+                              "parentSelect" +
+                                item?.title +
+                                router.pathname.replaceAll("/", " ")
+                            )
+                      }
                       className="form-group has-search custom-react-select-audit customClear"
                     >
                       <Select
-                        data-testid={item?.title}
-                        name={item?.title}
+                        data-testid={
+                          id
+                            ? createIdGen("select " + id)
+                            : createIdGen(
+                                "select " +
+                                  item?.title +
+                                  router.pathname.replaceAll("/", " ")
+                              )
+                        }
                         filterOption={(input, option) =>
                           (option?.label ?? "")
                             .toLowerCase()
@@ -185,16 +220,30 @@ const ReusableFilters = ({
                 <div key={item?.title} className="default-filter-size mb-2">
                   <label className="responsiveLabel">{item?.placeholder}</label>
                   <div
-                    id={`${item?.title}-${item?.type}`}
-                    name={`${item?.title}-${item?.type}`}
+                    id={
+                      id
+                        ? createIdGen("parentPicker " + id)
+                        : createIdGen(
+                            "parentPicker" +
+                              item?.title +
+                              router.pathname.replaceAll("/", " ")
+                          )
+                    }
                   >
                     <RangePicker
                       ref={(node) => {
                         if (node) pickerRefs.current[item?.title] = node;
                       }}
                       className="custom-range-picker"
-                      data-testid={`${item?.title}-${item?.type}`}
-                      name={`${item?.title}-${item?.type}`}
+                      data-testid={
+                        id
+                          ? createIdGen("picker " + id)
+                          : createIdGen(
+                              "picker" +
+                                item?.title +
+                                router.pathname.replaceAll("/", " ")
+                            )
+                      }
                       format="MM-DD-YYYY"
                       value={selectedDates?.[item?.title]}
                       onCalendarChange={(val) => {
@@ -228,15 +277,30 @@ const ReusableFilters = ({
                 <div key={item?.title} className="default-filter-size mb-2">
                   <label className="responsiveLabel">{item?.header}</label>
                   <ReusableMultiInput
-                    testId={item?.title}
-                    name={`${item?.title.toLowerCase().replaceAll(" ", "")}`}
+                    id={
+                      id
+                        ? createIdGen("multipleInputParent " + id)
+                        : createIdGen(
+                            "multipleInputParent" +
+                              item?.title +
+                              router.pathname.replaceAll("/", " ")
+                          )
+                    }
+                    testId={
+                      id
+                        ? createIdGen("multipleinput " + id)
+                        : createIdGen(
+                            "multipleinput" +
+                              item?.title +
+                              router.pathname.replaceAll("/", " ")
+                          )
+                    }
                     placeholder={"Search"}
                     value={search}
                     isSearch={true}
                     setSearchText={setSearch}
                     autoComplete="off"
                     setPageNumber={setPageNo}
-                    id={`${item?.title}-${item?.type}`}
                   />
                 </div>
               );
@@ -248,7 +312,7 @@ const ReusableFilters = ({
           <div className="default-filter-size mb-2">
             <label className="responsiveLabel">Batch Count</label>
             <Space.Compact id="batch-count" name="batch-count">
-              <div style={{width:"250px"}} className="batchInput">
+              <div style={{ width: "250px" }} className="batchInput">
                 <Input
                   data-testid="batchCount"
                   name="batchCount"

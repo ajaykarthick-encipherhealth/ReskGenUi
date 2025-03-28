@@ -87,7 +87,11 @@ const InvalidChart = ({
               <span
                 id="maximize-btn"
                 name="maximize-btn"
-                onClick={() => onClick(values)}
+                onClick={(e) =>{
+                  e.stopPropagation()
+                  onClick(values)
+
+                } }
                 className="font1 text-decoration-underline cursor-pointer "
                 style={{ color: "#3B82F6" }}
               >
@@ -140,7 +144,7 @@ const InvalidChart = ({
           router.push("/tenantadmin/patients");
         }}
       >
-        <ReactECharts className="invalidChart" option={graphOptions} />
+        <ReactECharts className="invalidChart cursor-pointer" option={graphOptions} />
       </div>
     </>
   );

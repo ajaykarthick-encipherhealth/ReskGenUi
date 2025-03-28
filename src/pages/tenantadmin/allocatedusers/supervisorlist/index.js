@@ -363,6 +363,7 @@ const SupervisorList = ({
                 loader={supervisorListLoader}
                 handleRowCheckboxChange={handleRowCheckboxChange}
                 selectedRows={selectedRows}
+                checkBoxLoader={checkedLoader}
                 setSelectedRows={setSelectedRows}
                 pagination={false}
                 sort={sort}

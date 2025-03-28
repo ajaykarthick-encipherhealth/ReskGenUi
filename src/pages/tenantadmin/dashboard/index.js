@@ -36,6 +36,7 @@ import illegal from "../../../../src/images/invalid/illelegal.webp";
 import dos from "../../../../src/images/invalid/calender.svg";
 import InvalidChart from "./invalidChart";
 import {
+  formatDateForIndex,
   formatValues,
   getLast30Days,
   getLast7Days,
@@ -73,10 +74,21 @@ const Index = ({
   const [activeBtn, setActiveBtn] = useState("default");
   const [selectedValue, setSelectedValue] = useState(null);
   const [flagData, setFlagData] = useState(null);
+  // const [dateRange, setDateRange] = useState({
+  //   startDate:
+  //     moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z",
+  //   endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
+  // });
   const [dateRange, setDateRange] = useState({
-    startDate:
-      moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z",
-    endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
+    startDate: formatDateForIndex({
+      date: moment().subtract(29, "days").format("YYYY-MM-DD"),
+      index: 0,
+    }),
+
+    endDate: formatDateForIndex({
+      date: moment().format("YYYY-MM-DD"),
+      index: 1,
+    }),
   });
   const [selectedOrganization, setSelectedOrganization] = useState("");
   const [customDate, setCustomDate] = useState("");

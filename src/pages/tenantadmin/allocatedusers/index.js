@@ -193,6 +193,7 @@ const PatientAllocation = ({
     paginationFirst,
     selectedSupervisor,
     search,
+    batchCount
   ]);
   const getFilterOption = () => {
     let filteredItems;
@@ -409,6 +410,7 @@ const PatientAllocation = ({
         selectedUserName={selectedUserName}
         setSelectedUserName={setSelectedUserName}
         getAllReviewerALlocation={getAllReviewerALlocation}
+        setBatchCount={setBatchCount}
       />
     </div>
   );

@@ -10,7 +10,6 @@ const ReusableInput = ({
   value,
   isSearch,
   handleInputStr,
-  name,
   setSearchText,
   props,
   testId,
@@ -39,7 +38,7 @@ const ReusableInput = ({
     setLocalStr(value?.trimStart() || "");
   }, [value]);
   return (
-    <div id={id} name={name} className="reusableInput">
+    <div id={id}  className="reusableInput">
       <Input
         data-testid={testId}
         {...props}
@@ -49,7 +48,6 @@ const ReusableInput = ({
           handleChange(e.target.value);
         }}
         prefix={<FontAwesomeIcon className="searchPrefix" icon={faSearch} />}
-        name={name}
         allowClear={true}
         disabled={disabled}
         autoComplete="off"

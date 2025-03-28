@@ -37,6 +37,7 @@ const AllocateModal = ({
   selectedUserName,
   setSelectedUserName,
   usersLoader,
+  setBatchCount,
   id,
 }) => {
   const router = useRouter();
@@ -106,6 +107,7 @@ const AllocateModal = ({
       setSelectedRowsId([]);
       setSelectedRows([]);
       setSelectedUserName([]);
+      setBatchCount("")
     } else {
       getResponePopup(response);
     }
