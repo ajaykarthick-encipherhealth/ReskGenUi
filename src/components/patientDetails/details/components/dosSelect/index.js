@@ -17,13 +17,13 @@ const DosSelect = ({
   const [open, setOpen] = useState(false);
   const dosData = options?.map((item, i) => ({
     ...item,
-    page: item.fileDetailDTO?.dosSummaries.find(
-      (it) => it.dos == item.dateOfService
+    page: item?.fileDetailDTO?.dosSummaries?.find(
+      (it) => it?.dos == item?.dateOfService
     ),
-    flags: item.flagsWithColor,
+    flags: item?.flagsWithColor,
   }));
   const selectedRow = dosData?.find(
-    (row) => row.dateOfService === selectedDate
+    (row) => row?.dateOfService === selectedDate
   );
 
   const getDos = (item) => (
@@ -78,7 +78,7 @@ const DosSelect = ({
 
         <span className="">
           {item?.dateOfService
-            ? moment(item.dateOfService).format("MM-DD-YYYY")
+            ? moment(item?.dateOfService).format("MM-DD-YYYY")
             : "---"}
         </span>
         <span>{getStatusIcon(item?.processedStatus)}</span>
@@ -94,17 +94,17 @@ const DosSelect = ({
         <span>{getDos(row)}</span> |
         <span>
           {" "}
-          Pages:  {row.page?.startPageNumber && row.page?.endPagNumber ? row.page?.startPageNumber + " - " + row.page?.endPagNumber : "---"}
+          Pages:  {row?.page?.startPageNumber && row?.page?.endPagNumber ? row?.page?.startPageNumber + " - " + row?.page?.endPagNumber : "---"}
         </span>{" "}
         |{" "}
         <div className="flag-elipse">
           Flags:{" "}
-          {row.flags.length <= 0
+          {row?.flags?.length <= 0
             ? "---"
-            : row.flags.map((flag, index) => (
+            : row?.flags?.map((flag, index) => (
                 <FlagFilled
                   key={index}
-                  style={{ color: flag.flagDetails.flagColour, marginRight: 6 }}
+                  style={{ color: flag?.flagDetails?.flagColour, marginRight: 6 }}
                 />
               ))}
         </div>
@@ -148,7 +148,7 @@ const DosSelect = ({
           {/* Data rows */}
           {dosData?.map((item) => (
             <div
-              key={item.dateOfService}
+              key={item?.dateOfService}
               style={{
                 display: "flex",
                 padding: "8px 12px",
@@ -156,14 +156,14 @@ const DosSelect = ({
                 borderBottom: "1px solid #f0f0f0",
                 alignItems: "center",
                 backgroundColor:
-                  selectedDate === item.dateOfService ? "#e6f7ff" : "white",
+                  selectedDate === item?.dateOfService ? "#e6f7ff" : "white",
               }}
             >
               <div
                 style={{ width: "40%" }}
                 onClick={() => {
-                  setSelectedDate(item.dateOfService);
-                  handleOptions(item.dateOfService);
+                  setSelectedDate(item?.dateOfService);
+                  handleOptions(item?.dateOfService);
                   setOpen(false);
                 }}
               >
@@ -197,11 +197,11 @@ const DosSelect = ({
                   "---"
                 ) : item?.flags?.length <= 3 ? (
                   item?.flags.map((flag, i) => (
-                    <Tooltip title={flag.flagDetails.flagName || ""}>
+                    <Tooltip title={flag?.flagDetails?.flagName || ""}>
                       <FlagFilled
                         key={i}
                         style={{
-                          color: flag.flagDetails.flagColour,
+                          color: flag?.flagDetails?.flagColour,
                           marginRight: 6,
                         }}
                         onClick={() => {
@@ -233,7 +233,7 @@ const DosSelect = ({
                             <FlagFilled
                               key={i}
                               style={{
-                                color: flag.flagDetails.flagColour,
+                                color: flag?.flagDetails?.flagColour,
                                 marginRight: 6,
                               }}
                             />

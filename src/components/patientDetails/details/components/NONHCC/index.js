@@ -248,6 +248,7 @@ const NonHccCards = ({
                         setFileModalHeader: setFileModalHeader,
                         patientDocumentResult: patientDocumentResult,
                         storeFileDetails: storeFileDetails,
+                        getSelectedDosPageNumber: getSelectedDosPageNumber,
                       })}
                     </div>
                     <div
@@ -280,7 +281,7 @@ const NonHccCards = ({
                         isMulitpleHeaderCode: isMulitpleHeaderCode,
                         diseaseName: data.dbDescription,
                         popup: "",
-                        getSelectedDosPageNumber,
+                        getSelectedDosPageNumber: getSelectedDosPageNumber,
                         storeFileDetails: storeFileDetails,
                       })}
                     </div>
