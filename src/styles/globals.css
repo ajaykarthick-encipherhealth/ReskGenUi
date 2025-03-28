@@ -148,7 +148,12 @@
   transform: none !important;
   cursor: default !important;
 }
-
+.flag-elipse {
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .smooth-transition .nav-item {
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   transform: scale(1.05);

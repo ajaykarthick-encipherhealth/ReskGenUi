@@ -38,7 +38,7 @@ const Radiology = ({
   const [selectDosValue, setSelectDosValue] = useState("");
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [dosYear, setDosYear] = useState([]);
-  const [selectedYearValue, setSelectedYearValue] = useState();
+  const [selectedYearValue, setSelectedYearValue] = useState("");
   const [search, setSearch] = useState();
   const [radiologyForm, setRadiologyForm] = useState(false);
 
@@ -153,7 +153,7 @@ const Radiology = ({
       if (dosList?.length != 0) {
         setSelectDosValue(dosList[0]?.value);
         const patientId = getStorage("patientId");
-        getRadiologyDetails(
+        selectedYearValue && getRadiologyDetails(
           patientId,
           selectedYearValue,
           moment(patientDosResult?.data?.response[0].dateOfService).format(

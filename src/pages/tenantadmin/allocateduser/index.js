@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
@@ -32,7 +32,7 @@ import { actions as tenantAdminUsersAction } from "../../../stores/tenantAdmin/u
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 import { getStorage } from "../../../utils/storages";
-import { disabledDate, formatDateForIndex, getResponePopup } from "../../../utils/reusable";
+import { disabledDate, getResponePopup } from "../../../utils/reusable";
 import TableSkeleton from "../../../components/skeleton/table";
 import { useRef } from "react";
 
@@ -84,7 +84,7 @@ const Patient = ({
   const [isSupervisorAllocated, setIsSupervisorAllocated] = useState(false);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [tableLoading, setTableLoading] = useState(true);
-  const [selectedRows, setSelectedRows] = useState([]);
+
   const [activeTab, setActiveTab] = useState(1);
   const [isPatientList, setIsPatientList] = useState(false);
   const [l2selectUser, setL2selectUser] = useState(null);
@@ -104,6 +104,11 @@ const Patient = ({
   const [searchStr, setSearchStr] = useState("");
   const [selectOrgList, setSelectedOrgList] = useState([]);
   const [orgAllList, setOrgAllList] = useState([]);
+  const [codestr, setCodestr] = useState("");
+  const [descriptionstr, setDescriptionstr] = useState("");
+  const [code, setCode] = useState("");
+  const [description, setDescription] = useState("");
+
   const getAllList = async ({
     pageNo = 0,
     pageSize = 15,
@@ -115,10 +120,12 @@ const Patient = ({
     sort,
     selectedOption,
     selectOrgList = "",
-    batchCount = "",
+    batchCount,
+    code = "",
+    description = "",
   }) => {
     const uId = getStorage("userId");
-    let resoureUrl = `page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${
+    let resoureUrl = `page=${pageNo}&size=${pageSize}&diagnosisCode=${code}&description=${description}&userId=${uId}&computationStart=${
       startDate ? startDate : ""
     }&computationEnd=${endDate ? endDate : ""}&isAllocation=${
       allocate ? allocate : ""
@@ -134,7 +141,7 @@ const Patient = ({
   const getAllCheckList = async (sort) => {
     try {
       const response = await getAllCheckedListForReviewer({
-        batchCount: "",
+        batchCount,
         totalElements: batchCount
           ? batchCount
           : reviewerResponse?.response?.totalElements,
@@ -142,18 +149,17 @@ const Patient = ({
         selectedOption,
         searchString,
         fromTenant: true,
-        allPatientIds: selectAllChecked ? true : false,
       });
       if (response?.status === "SUCCESS") {
         setIsLoading(false);
         setCheckedLoading(false);
-        let result = response?.response?.patientIds;
-        // const data = result.map((item) => ({
-        //   id: item,
-        //   name: item,
-        // }));
-        setSelectedRowsId(result);
-        setHeaderCheckValidation(result);
+        let result = response?.response?.content;
+        const data = result.map((item) => ({
+          id: item.patientId,
+          name: item.patientName,
+        }));
+        setSelectedRowsId(data);
+        setHeaderCheckValidation(data);
       }
     } catch (err) {
       getResponePopup(err);
@@ -168,46 +174,28 @@ const Patient = ({
     setTableLoading(true);
   };
 
-  // const handleReceivedDatePicker = (date, dateString) => {
-  //   if (date === null || (Array.isArray(date) && date.length === 0)) {
-  //     setStartDate("");
-  //     setEndDate("");
-  //   }
-
-  //   const formattedDates =
-  //     dateString?.length > 0 &&
-  //     dateString?.map((data, index) => {
-  //       const formattedDate =
-  //         index === 1
-  //           ? data &&
-  //             `${moment(data, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-  //           : data &&
-  //             `${moment(data, "MM-DD-YYYY").format(
-  //               "YYYY-MM-DD"
-  //             )}T00:00:00.000Z`;
-  //       return formattedDate;
-  //     });
-  //   setStartDate(formattedDates[0]);
-  //   setEndDate(formattedDates[1]);
-  // };
   const handleReceivedDatePicker = (date, dateString) => {
-    if (!date || (Array.isArray(date) && date.length === 0)) {
+    if (date === null || (Array.isArray(date) && date.length === 0)) {
       setStartDate("");
       setEndDate("");
-      return;
     }
 
     const formattedDates =
-      dateString?.length > 0
-        ? dateString.map((data, index) =>
-            formatDateForIndex({ date: data, index })
-          )
-        : [];
-
-    setStartDate(formattedDates[0] || "");
-    setEndDate(formattedDates[1] || "");
+      dateString?.length > 0 &&
+      dateString?.map((data, index) => {
+        const formattedDate =
+          index === 1
+            ? data &&
+              `${moment(data, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+            : data &&
+              `${moment(data, "MM-DD-YYYY").format(
+                "YYYY-MM-DD"
+              )}T00:00:00.000Z`;
+        return formattedDate;
+      });
+    setStartDate(formattedDates[0]);
+    setEndDate(formattedDates[1]);
   };
-
   const onPageChangePatient = (e) => {
     setIsLoading(false);
     setPaginationFirst(e.first);
@@ -230,9 +218,21 @@ const Patient = ({
       // searchString: selectedSupervisorSearch,
       // selectedOptions: selectedOptions,
       // allocatedOption: allocatedOption,
+      code: code,
+      description: description,
     });
     setTableLoading(true);
   };
+
+  const debouncedSearch = useMemo(() => {
+    return debounce((value, name) => {
+      if (name == "code") {
+        setCode(value);
+      } else {
+        setDescription(value);
+      }
+    }, 900);
+  }, []);
 
   const selectTabClick = (number) => {
     setSearchString("");
@@ -271,6 +271,8 @@ const Patient = ({
           searchString: search,
           selectedOptions: selectedOptions,
           allocatedOption: allocatedOption,
+          code: code,
+          description: description,
         });
       }
     }
@@ -313,6 +315,80 @@ const Patient = ({
     getSupervisorsList({ url: resoureUrl });
   };
 
+  useEffect(() => {
+    if (selectAllChecked) {
+      if (isPatientList && activeTab == 2) {
+        getAllCheckListL2(sort);
+      } else {
+        getAllCheckList(sort);
+      }
+    } else {
+      setSelectedRowsId([]);
+    }
+  }, [selectAllChecked, sort, isPatientList, activeTab]);
+
+  useEffect(() => {
+    if (typeof pageNo == "number" && activeTab == 1 && !isPatientList) {
+      getAllList({
+        pageNo: pageNo,
+        pageSize: pageSize,
+        startDate: startDate,
+        endDate: endDate,
+        allocate: true,
+        status: 2,
+        search: searchStr,
+        sort: sort,
+        selectedOption: selectedOption,
+        selectOrgList: selectOrgList,
+        batchCount: batchCount,
+        code: code,
+        description: description,
+      });
+    }
+    if (activeTab == 2 && !isPatientList) {
+      getAuditL2List(pageNo, searchStr || searchString);
+    }
+    getFilters({ field: "patientAllocated" });
+  }, [
+    pageNo,
+    pageSize,
+    sort,
+    activeTab,
+    startDate,
+    endDate,
+    searchStr,
+    selectedOption,
+    selectOrgList,
+    isPatientList,
+    selectedSupervisorSearch,
+    description,
+    code,
+  ]);
+
+  useEffect(() => {
+    if (!organizationList?.response) {
+      getAllOrganizationList();
+    }
+  }, []);
+  useEffect(() => {
+    // var orgListArray = [];
+    const orgListArray =
+      organizationList?.response?.length > 0
+        ? [
+            ...organizationList?.response?.map((res) => ({
+              value: res.id,
+              label: res.name,
+            })),
+          ].filter(Boolean)
+        : [];
+    // organizationList?.response?.map((res) => {
+    //   orgListArray.push({
+    //     value: res.id,
+    //     label: res.name,
+    //   });
+    // });
+    setOrgAllList(orgListArray);
+  }, [organizationList]);
   const renderRows = () => {
     return supervisorResponse?.response?.content?.length > 0 ? (
       supervisorResponse?.response?.content?.map((data, index) => (
@@ -328,6 +404,8 @@ const Patient = ({
               sort: sort,
               selectedOptions: selectedOptions,
               allocatedOption: allocatedOption,
+              code: code,
+              description: description,
             });
             setIsPatientList(true);
             setL2selectUser(data);
@@ -415,6 +493,8 @@ const Patient = ({
     searchString,
     selectedOptions,
     allocatedOption,
+    code = "",
+    description = "",
   }) => {
     setTableLoading(true);
     // setIsLoading(true);
@@ -426,7 +506,7 @@ const Patient = ({
     setL2selectUser(dataMap);
     let resoureUrl = `dbservice/l2audit/patients?username=${
       data?.userName
-    }&page=${pageNoL2Patient}&size=${15}&sortdirection=${
+    }&page=${pageNoL2Patient}&size=${15}&diagnosisCode=${code}&description=${description}&sortdirection=${
       sort?.sortDir ? sort?.sortDir : "DESC"
     }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}&searchstring=${
       searchString ? searchString : ""
@@ -469,77 +549,6 @@ const Patient = ({
   };
 
   useEffect(() => {
-    if (selectAllChecked) {
-      if (isPatientList && activeTab == 2) {
-        getAllCheckListL2(sort);
-      } else {
-        getAllCheckList(sort);
-      }
-    } else {
-      setSelectedRowsId([]);
-    }
-  }, [selectAllChecked, sort, isPatientList, activeTab]);
-
-  useEffect(() => {
-    if (typeof pageNo == "number" && activeTab == 1 && !isPatientList) {
-      getAllList({
-        pageNo: pageNo,
-        pageSize: pageSize,
-        startDate: startDate,
-        endDate: endDate,
-        allocate: true,
-        status: 2,
-        search: searchStr,
-        sort: sort,
-        selectedOption: selectedOption,
-        selectOrgList: selectOrgList,
-        batchCount: batchCount,
-      });
-    }
-    if (activeTab == 2 && !isPatientList) {
-      getAuditL2List(pageNo, searchStr || searchString);
-    }
-    getFilters({ field: "patientAllocated" });
-  }, [
-    pageNo,
-    pageSize,
-    sort,
-    activeTab,
-    startDate,
-    endDate,
-    searchStr,
-    selectedOption,
-    selectOrgList,
-    isPatientList,
-    selectedSupervisorSearch,
-  ]);
-
-  useEffect(() => {
-    if (!organizationList?.response) {
-      getAllOrganizationList();
-    }
-  }, []);
-  useEffect(() => {
-    // var orgListArray = [];
-    const orgListArray =
-      organizationList?.response?.length > 0
-        ? [
-            ...organizationList?.response?.map((res) => ({
-              value: res.id,
-              label: res.name,
-            })),
-          ].filter(Boolean)
-        : [];
-    // organizationList?.response?.map((res) => {
-    //   orgListArray.push({
-    //     value: res.id,
-    //     label: res.name,
-    //   });
-    // });
-    setOrgAllList(orgListArray);
-  }, [organizationList]);
-
-  useEffect(() => {
     getFilters({ field: "patientAllocated" });
   }, []);
 
@@ -552,9 +561,18 @@ const Patient = ({
         pageNoL2Patient: pageNoL2Patient,
         selectedOptions: selectedOptions,
         allocatedOption: allocatedOption,
+        code: code,
+        description: description,
       });
     }
-  }, [selectedOptions, allocatedOption, isPatientList, supervisorPageSize]);
+  }, [
+    selectedOptions,
+    allocatedOption,
+    isPatientList,
+    supervisorPageSize,
+    code,
+    description,
+  ]);
 
   useEffect(() => {
     if (isSupervisorAllocated) {
@@ -569,7 +587,7 @@ const Patient = ({
       setSelectAllChecked(false);
     }
   }, [isSupervisorAllocated]);
-  
+
   return (
     <>
       <div className={`show `}>
@@ -585,7 +603,7 @@ const Patient = ({
                         <div className="row filter-contain">
                           <div className={`${isPatientList && "d-flex"} col-2`}>
                             {isPatientList && activeTab !== 1 && (
-                              <div id="back-btn" name="back-btn" className={reportStyles.backDiv}>
+                              <div className={reportStyles.backDiv}>
                                 <button
                                   style={{ width: "40px", height: "40px" }}
                                   id="backButton"
@@ -608,9 +626,9 @@ const Patient = ({
                                   ? "Search by Name"
                                   : "Search by Name or ID"}
                               </label>
-                              <div id="patient-search" name="patient-search" style={{ height: "42px" }}>
+                              <div style={{ height: "42px" }}>
                                 <Input
-                                  data-testid="search-name"
+                                  id="search-name"
                                   name="search-name"
                                   type="text"
                                   onChange={(e) => {
@@ -650,14 +668,99 @@ const Patient = ({
                               </div>
                             </div>
                           </div>
+                          {((isPatientList && activeTab == 2) ||
+                            activeTab == 1) && (
+                            <div className={`col-2`}>
+                              <div>
+                                <label className="responsiveLabel">
+                                  Search By Code
+                                </label>
+                                <div style={{ height: "42px" }}>
+                                  <Input
+                                    id="search-name"
+                                    name="search-name"
+                                    type="text"
+                                    onChange={(e) => {
+                                      resetPageNumber(setPageNo);
+                                      setCodestr(e.target.value);
+                                      // setInputValue(value);
+                                      debouncedSearch(e.target.value, "code");
+                                      setPageNoL2Patient(0);
+                                    }}
+                                    value={codestr || ""}
+                                    className={
+                                      "w-100 new-search-control border-none"
+                                    }
+                                    placeholder="Search"
+                                    maxLength={25}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "\\") {
+                                        e.preventDefault();
+                                      }
+                                    }}
+                                    prefix={
+                                      <FontAwesomeIcon
+                                        className="searchPrefix"
+                                        icon={faSearch}
+                                      />
+                                    }
+                                    allowClear={true}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                          {((isPatientList && activeTab == 2) ||
+                            activeTab == 1) && (
+                            <div className={`col-2`}>
+                              <div>
+                                <label className="responsiveLabel">
+                                  Search by Description
+                                </label>
+                                <div style={{ height: "42px" }}>
+                                  <Input
+                                    id="search-name"
+                                    name="search-name"
+                                    type="text"
+                                    onChange={(e) => {
+                                      resetPageNumber(setPageNo);
+                                      setDescriptionstr(e.target.value);
+                                      debouncedSearch(e.target.value);
+                                      setPageNoL2Patient(0);
+                                    }}
+                                    value={descriptionstr || ""}
+                                    className={
+                                      "w-100 new-search-control border-none"
+                                    }
+                                    placeholder="Search"
+                                    maxLength={25}
+                                    onKeyDown={(e) => {
+                                      // Prevent input of backslash ("\")
+                                      if (e.key === "\\") {
+                                        e.preventDefault();
+                                      }
+                                    }}
+                                    prefix={
+                                      <FontAwesomeIcon
+                                        className="searchPrefix"
+                                        icon={faSearch}
+                                      />
+                                    }
+                                    allowClear={true}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
                           {(activeTab == 1 ||
                             (!isPatientList && activeTab == 2)) && (
                             <div className="col-2">
                               <div>
                                 <label>Select Organization</label>
-                                <div id="select-org" name="select-org" class="form-group has-search custom-react-select-admin">
+                                <div class="form-group has-search custom-react-select-admin">
                                   <Select
-                                    datat-testid="select-organization"
+                                    id="select-organization"
                                     name="select-organization"
                                     options={orgAllList}
                                     style={{ width: "100%", height: "42px" }}
@@ -679,10 +782,10 @@ const Patient = ({
                             <>
                               <div className="col-2">
                                 <label>Computed Date</label>
-                                <div id="computed-picker" name="computed-picker">
+                                <div>
                                   <RangePicker
                                     ref={pickerRef}
-                                    data-testid="computed-date"
+                                    id="computed-date"
                                     name="computed-date"
                                     format="MM-DD-YYYY"
                                     onCalendarChange={(val) => {
@@ -725,9 +828,9 @@ const Patient = ({
                                     selectDefaultValue={selectedOption}
                                   /> */}
                                   <label>Select Priority</label>
-                                  <div id="priority-select" name="priority-select" class="form-group has-search custom-react-select-admin">
+                                  <div class="form-group has-search custom-react-select-admin">
                                     <Select
-                                      data-testid="select-priority"
+                                      id="select-priority"
                                       name="select-priority"
                                       options={statusOption}
                                       style={{ width: "100%", height: "42px" }}
@@ -744,103 +847,74 @@ const Patient = ({
                                 </div>
                               </div>
 
-                              <div className="col-2">
-                                <label>Batch Count</label>
-                                <div class="form-group d-flex">
-                                  {/* <InputText
-                                    type="text"
-                                    onChange={(e) => {
-                                      setBatchCount(e.target.value);
-                                      if (e.target.value.length <= 0) {
-                                        setFilterBatchCount(true);
-                                      }
-                                      const inputValue = e.target.value.replace(
-                                        /[^\d]/g,
-                                        ""
-                                      );
-                                      setBatchCount(inputValue);
-                                      if (inputValue.length <= 0) {
-                                        setFilterBatchCount(true);
-                                      }
-                                    }}
-                                    value={batchCount}
-                                    className="form-control new-form-controls"
-                                    placeholder="Batch Count"
-                                    style={{ width: "60%" }}
-                                    maxLength={3}
-                                    onKeyDown={(e) => {
-                                      // Prevent input of backslash ("\")
-                                      if (e.key === "\\") {
-                                        e.preventDefault();
-                                      }
-                                    }}
-                                  />
-                                  <button
-                                    onClick={() => setFilterBatchCount(true)}
-                                    className="btn btn-outline-secondary py-0 px-2 select-count"
-                                  >
-                                    Select
-                                  </button> */}
-                                  <Space.Compact id="batch-count" name="batch-count" style={{ width: "100%" }}>
-                                    <Input
-                                      data-testid="batchCount"
-                                      name="batchCount"
-                                      type="number"
-                                      onChange={(e) => {
-                                        let inputValue = e.target.value.replace(
-                                          /[^\d]/g,
-                                          ""
-                                        );
-                                        if (inputValue.length > 5) {
-                                          inputValue = inputValue.slice(0, 5);
-                                        }
-                                        setBatchCount(inputValue);
-                                        if (inputValue.length <= 0) {
+                              <div
+                                className={activeTab == 1 ? "col-10" : "col-2"}
+                              >
+                                <div className="col-3">
+                                  <label>Batch Count</label>
+                                  <div class="form-group d-flex">
+                                    <Space.Compact style={{ width: "100%" }}>
+                                      <Input
+                                        id="batchCount"
+                                        name="batchCount"
+                                        type="number"
+                                        onChange={(e) => {
+                                          let inputValue =
+                                            e.target.value.replace(
+                                              /[^\d]/g,
+                                              ""
+                                            );
+                                          if (inputValue.length > 5) {
+                                            inputValue = inputValue.slice(0, 5);
+                                          }
+                                          setBatchCount(inputValue);
+                                          if (inputValue.length <= 0) {
+                                            setFilterBatchCount(true);
+                                            setSelectAllChecked(false);
+                                            setSelectedRowsId([]);
+                                            getAllList({
+                                              batchCount: "",
+                                              selectOrgList: selectOrgList,
+                                            });
+                                            setBatchCount("");
+                                          } else if (inputValue.length > 0) {
+                                            setFilterBatchCount(true);
+                                          }
+                                        }}
+                                        value={batchCount}
+                                        placeholder="Batch Count"
+                                        onKeyDown={(e) => {
+                                          if (e.key === "\\") {
+                                            e.preventDefault();
+                                          }
+                                        }}
+                                        className="batch-form-control"
+                                      />
+                                      <button
+                                        id="select-btn"
+                                        name="select-btn"
+                                        onClick={() => {
                                           setFilterBatchCount(true);
-                                          setSelectAllChecked(false);
-                                          setSelectedRowsId([]);
+                                          if (
+                                            batchCount != selectedRowsId.length
+                                          ) {
+                                            setSelectAllChecked(false);
+                                            setSelectedRowsId([]);
+                                          }
                                           getAllList({
-                                            batchCount: "",
+                                            batchCount: batchCount,
                                             selectOrgList: selectOrgList,
                                           });
-                                          setBatchCount("");
-                                        } else if (inputValue.length > 0) {
-                                          setFilterBatchCount(true);
-                                        }
-                                      }}
-                                      value={batchCount}
-                                      placeholder="Batch Count"
-                                      onKeyDown={(e) => {
-                                        if (e.key === "\\") {
-                                          e.preventDefault();
-                                        }
-                                      }}
-                                      className="batch-form-control"
-                                    />
-                                    <button
-                                      id="select-btn"
-                                      name="select-btn"
-                                      onClick={() => {
-                                        setFilterBatchCount(true);
-                                        if (
-                                          batchCount != selectedRowsId.length
-                                        ) {
-                                          setSelectAllChecked(false);
-                                          setSelectedRowsId([]);
-                                        }
-                                        getAllList({
-                                          batchCount: batchCount,
-                                          selectOrgList: selectOrgList,
-                                        });
-                                      }}
-                                      style={{
-                                        borderRadius: "0px 10px 10px 0px",
-                                      }}
-                                      className="btn btn-outline-secondary py-0 px-2 select-count"
-                                    >
-                                      Select
-                                    </button>
-                                  </Space.Compact>
+                                        }}
+                                        style={{
+                                          borderRadius: "0px 10px 10px 0px",
+                                        }}
+                                        className="btn btn-outline-secondary py-0 px-2 select-count"
+                                      >
+                                        Select
+                                      </button>
+                                    </Space.Compact>
+                                  </div>
                                 </div>
                               </div>
                             </>
@@ -851,8 +925,6 @@ const Patient = ({
                               <div className="col-2">
                                 <div>
                                   <Selector
-                                  parentName={"reviewer-select"}
-                                  parentId={"reviewer-select"}
                                     selectlabel={"Reviewer"}
                                     setSelectedOption={setAllocatedOption}
                                     selectOptions={generateOptionsForNewStore(
@@ -869,25 +941,23 @@ const Patient = ({
                                   />
                                 </div>
                               </div>
-                              <div className="col-6">
-                                <div className="col-4">
-                                  <Selector
-                                   parentName={"status-select"}
-                                   parentId={"status-select"}
-                                    selectlabel={"Status"}
-                                    setSelectedOption={setSelectedOptions}
-                                    selectOptions={statusOptions}
-                                    defaultSelectValue1={""}
-                                    selectDefaultValue={selectedOptions}
-                                    setPageNo={setPageNo}
-                                    // isClose={true}
-                                    onChanges={() => {
-                                      setPageNoL2Patient(0);
-                                      setSupervisorPageSize(15);
-                                    }}
-                                  />
-                                </div>
+                              {/* <div className="col-6"> */}
+                              <div className="col-2">
+                                <Selector
+                                  selectlabel={"Status"}
+                                  setSelectedOption={setSelectedOptions}
+                                  selectOptions={statusOptions}
+                                  defaultSelectValue1={""}
+                                  selectDefaultValue={selectedOptions}
+                                  setPageNo={setPageNo}
+                                  // isClose={true}
+                                  onChanges={() => {
+                                    setPageNoL2Patient(0);
+                                    setSupervisorPageSize(15);
+                                  }}
+                                />
                               </div>
+                              {/* </div> */}
                             </>
                           )}
                           <div
@@ -898,36 +968,38 @@ const Patient = ({
                             }
                           >
                             {isPatientList || activeTab === 1 ? (
-                              <Tooltip
-                                title={
-                                  selectedRowsId?.length === 0
-                                    ? "Select patients to Allocate"
-                                    : ""
-                                }
-                              >
-                                {" "}
-                                <button
-                                  id="allocate-btn"
-                                  name="allocate-btn"
-                                  onClick={handleOpneModal}
-                                  className={styles.export}
-                                  style={{
-                                    backgroundColor: "#133dd426",
-                                    cursor:
-                                      selectedRowsId?.length === 0
-                                        ? "not-allowed"
-                                        : "",
-                                  }}
-                                  disabled={
-                                    selectedRowsId?.length > 0 ||
-                                    selectedRowsId?.data?.length > 0
-                                      ? false
-                                      : true
+                              <>
+                                <Tooltip
+                                  title={
+                                    selectedRowsId?.length === 0
+                                      ? "Select patients to Allocate"
+                                      : ""
                                   }
                                 >
-                                  Allocate
-                                </button>
-                              </Tooltip>
+                                  {" "}
+                                  <button
+                                    id="allocate-btn"
+                                    name="allocate-btn"
+                                    onClick={handleOpneModal}
+                                    className={styles.export}
+                                    style={{
+                                      backgroundColor: "#133dd426",
+                                      cursor:
+                                        selectedRowsId?.length === 0
+                                          ? "not-allowed"
+                                          : "",
+                                    }}
+                                    disabled={
+                                      selectedRowsId?.length > 0 ||
+                                      selectedRowsId?.data?.length > 0
+                                        ? false
+                                        : true
+                                    }
+                                  >
+                                    Allocate
+                                  </button>
+                                </Tooltip>
+                              </>
                             ) : null}
                           </div>
                         </div>
@@ -945,8 +1017,6 @@ const Patient = ({
                             <Tab.Container defaultActiveKey="validDiseases">
                               <Nav as="ul" className="nav nav-tabs">
                                 <Nav.Item
-                                id="reviewer-allocate"
-                                name="reviewer-allocate"
                                   as="li"
                                   className="nav-item"
                                   onClick={() => {
@@ -958,6 +1028,10 @@ const Patient = ({
                                     setSelectedOrgList([]);
                                     setSearchString("");
                                     setSearchStr("");
+                                    setCodestr("");
+                                    setCode("");
+                                    setDescription("");
+                                    setDescriptionstr("");
                                   }}
                                 >
                                   <Nav.Link
@@ -970,8 +1044,6 @@ const Patient = ({
                                   </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item
-                                id="supervisor-allocate"
-                                name="supervisor-allocate"
                                   as="li"
                                   className="nav-item"
                                   onClick={() => {
@@ -983,6 +1055,10 @@ const Patient = ({
                                     setSelectedOrgList([]);
                                     setSearchString("");
                                     setSearchStr("");
+                                    setCodestr("");
+                                    setCode("");
+                                    setDescription("");
+                                    setDescriptionstr("");
                                   }}
                                 >
                                   <Nav.Link
@@ -1026,8 +1102,6 @@ const Patient = ({
                                         setSortCompleteOrder={
                                           setSortCompleteOrder
                                         }
-                                        selectedRows={selectedRows}
-                                        setSelectedRows={setSelectedRows}
                                       />
                                       <div>
                                         <div className="pagination-container">
@@ -1061,162 +1135,172 @@ const Patient = ({
                                   {loader2 && activeTab == 2 ? (
                                     <TableSkeleton />
                                   ) : (
-                                    <div className={TableStyle.classContaineer}>
-                                      {!isPatientList ? (
-                                        <>
-                                          <table
-                                            className={TableStyle.classTable}
-                                          >
-                                            <thead
-                                              className={TableStyle.classThead}
+                                    <>
+                                      <div
+                                        className={TableStyle.classContaineer}
+                                      >
+                                        {!isPatientList ? (
+                                          <>
+                                            <table
+                                              className={TableStyle.classTable}
                                             >
-                                              <tr>
-                                                <th
-                                                  style={{
-                                                    paddingLeft:
-                                                      "46px !important",
-                                                  }}
-                                                >
-                                                  NAME
-                                                </th>
-
-                                                <th
-                                                  style={{
-                                                    textAlign: "center",
-                                                  }}
-                                                >
-                                                  AUDIT ALLOCATED
-                                                </th>
-                                                <th
-                                                  style={{
-                                                    textAlign: "center",
-                                                  }}
-                                                >
-                                                  AUDIT PROCESSED
-                                                </th>
-
-                                                <th
-                                                  style={{
-                                                    textAlign: "center",
-                                                  }}
-                                                >
-                                                  AUDIT PENDING
-                                                </th>
-                                                <th
-                                                  style={{
-                                                    textAlign: "center",
-                                                  }}
-                                                >
-                                                  AUDIT HOLD
-                                                </th>
-                                                <th
-                                                  style={{
-                                                    textAlign: "center",
-                                                  }}
-                                                >
-                                                  AUDIT INVALID
-                                                </th>
-                                              </tr>
-                                            </thead>
-
-                                            <tbody>{renderRows()}</tbody>
-                                          </table>
-                                          <div>
-                                            <div className="pagination-container">
-                                              <Paginator
-                                                first={paginationFirst}
-                                                rows={100}
-                                                totalRecords={
-                                                  supervisorResponse?.response
-                                                    ?.totalElements
+                                              <thead
+                                                className={
+                                                  TableStyle.classThead
                                                 }
-                                                onPageChange={onPageChange}
-                                              />
-                                              <div className="total-pages">
-                                                Total count:{" "}
-                                                {
-                                                  supervisorResponse?.response
-                                                    ?.totalElements
-                                                }
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </>
-                                      ) : !loader2 &&
-                                        loader3 &&
-                                        activeTab == 2 ? (
-                                        <TableSkeleton />
-                                      ) : (
-                                        <>
-                                          <AllocatedL2AdminList
-                                            setBatchCount={setBatchCount}
-                                            patinetListAll={
-                                              selectedSupervisors?.response
-                                                ?.content
-                                            }
-                                            selectAllChecked={selectAllChecked}
-                                            setSelectAllChecked={
-                                              setSelectAllChecked
-                                            }
-                                            selectedRowsId={selectedRowsId}
-                                            setSelectedRowsId={
-                                              setSelectedRowsId
-                                            }
-                                            totalElements={
-                                              selectedSupervisors?.response
-                                                ?.totalElements
-                                            }
-                                            selectedChart={
-                                              headerCheckValidation
-                                            }
-                                            setSupervisorPageSize={
-                                              setSupervisorPageSize
-                                            }
-                                            setSort={setSort}
-                                            sort={sort}
-                                            loading={supervisorCheckBoxLoader}
-                                            sortDueOrder={sortDueOrder}
-                                            setSortDueOrder={setSortDueOrder}
-                                            sortCompleteOrder={
-                                              sortCompleteOrder
-                                            }
-                                            setSortCompleteOrder={
-                                              setSortCompleteOrder
-                                            }
-                                          />
-                                          <div>
+                                              >
+                                                <tr>
+                                                  <th
+                                                    style={{
+                                                      paddingLeft:
+                                                        "46px !important",
+                                                    }}
+                                                  >
+                                                    NAME
+                                                  </th>
+
+                                                  <th
+                                                    style={{
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    AUDIT ALLOCATED
+                                                  </th>
+                                                  <th
+                                                    style={{
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    AUDIT PROCESSED
+                                                  </th>
+
+                                                  <th
+                                                    style={{
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    AUDIT PENDING
+                                                  </th>
+                                                  <th
+                                                    style={{
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    AUDIT HOLD
+                                                  </th>
+                                                  <th
+                                                    style={{
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    AUDIT INVALID
+                                                  </th>
+                                                </tr>
+                                              </thead>
+
+                                              <tbody>{renderRows()}</tbody>
+                                            </table>
                                             <div>
                                               <div className="pagination-container">
                                                 <Paginator
-                                                  id="allocatedUser-paginator"
-                                                  name="allocatedUser-paginator"
-                                                  first={
-                                                    pageNoL2Patient === 0
-                                                      ? 0
-                                                      : paginationFirst
-                                                  }
-                                                  rows={15}
+                                                  first={paginationFirst}
+                                                  rows={100}
                                                   totalRecords={
-                                                    selectedSupervisors
-                                                      ?.response?.totalElements
+                                                    supervisorResponse?.response
+                                                      ?.totalElements
                                                   }
-                                                  onPageChange={
-                                                    onPageChangePatient
-                                                  }
+                                                  onPageChange={onPageChange}
                                                 />
                                                 <div className="total-pages">
                                                   Total count:{" "}
                                                   {
-                                                    selectedSupervisors
-                                                      ?.response?.totalElements
+                                                    supervisorResponse?.response
+                                                      ?.totalElements
                                                   }
                                                 </div>
                                               </div>
                                             </div>
-                                          </div>
-                                        </>
-                                      )}
-                                    </div>
+                                          </>
+                                        ) : !loader2 &&
+                                          loader3 &&
+                                          activeTab == 2 ? (
+                                          <TableSkeleton />
+                                        ) : (
+                                          <>
+                                            <AllocatedL2AdminList
+                                              setBatchCount={setBatchCount}
+                                              patinetListAll={
+                                                selectedSupervisors?.response
+                                                  ?.content
+                                              }
+                                              selectAllChecked={
+                                                selectAllChecked
+                                              }
+                                              setSelectAllChecked={
+                                                setSelectAllChecked
+                                              }
+                                              selectedRowsId={selectedRowsId}
+                                              setSelectedRowsId={
+                                                setSelectedRowsId
+                                              }
+                                              totalElements={
+                                                selectedSupervisors?.response
+                                                  ?.totalElements
+                                              }
+                                              selectedChart={
+                                                headerCheckValidation
+                                              }
+                                              setSupervisorPageSize={
+                                                setSupervisorPageSize
+                                              }
+                                              setSort={setSort}
+                                              sort={sort}
+                                              loading={supervisorCheckBoxLoader}
+                                              sortDueOrder={sortDueOrder}
+                                              setSortDueOrder={setSortDueOrder}
+                                              sortCompleteOrder={
+                                                sortCompleteOrder
+                                              }
+                                              setSortCompleteOrder={
+                                                setSortCompleteOrder
+                                              }
+                                            />
+                                            <div>
+                                              <div>
+                                                <div className="pagination-container">
+                                                  <Paginator
+                                                    id="allocatedUser-paginator"
+                                                    name="allocatedUser-paginator"
+                                                    first={
+                                                      pageNoL2Patient === 0
+                                                        ? 0
+                                                        : paginationFirst
+                                                    }
+                                                    rows={15}
+                                                    totalRecords={
+                                                      selectedSupervisors
+                                                        ?.response
+                                                        ?.totalElements
+                                                    }
+                                                    onPageChange={
+                                                      onPageChangePatient
+                                                    }
+                                                  />
+                                                  <div className="total-pages">
+                                                    Total count:{" "}
+                                                    {
+                                                      selectedSupervisors
+                                                        ?.response
+                                                        ?.totalElements
+                                                    }
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </>
+                                        )}
+                                      </div>
+                                    </>
                                   )}
                                 </Tab.Pane>
                               </Tab.Content>
@@ -1243,8 +1327,6 @@ const Patient = ({
         selectedChart={selectedChart}
         getAllList={getAllList}
         setBatchCount={setBatchCount}
-        selectedRows={selectedRows}
-        setSelectedRows={setSelectedRows}
       />
       <L2AllocateModal
         open={allocateModalL2}

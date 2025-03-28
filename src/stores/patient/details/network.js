@@ -121,7 +121,7 @@ export async function patientHccFile(fileId) {
     `dbservice/fileDetail/findbyid?fileId=${fileId}`,
     options
   );
-  setStorage("fileId", result?.response?.azureBlobPath);
+  setStorage("fileId", result?.response?.azureBlobPath || null);
   // const data = await requestPortal(
   //   // `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`,
   //   `management/patient/report/getfile/validator?blobName=${result?.response?.azureBlobPath}`,
@@ -617,3 +617,15 @@ export const manuallyAddComboCode = async (data) => {
 
   return response;
 };
+
+export async function getFlagCharts({dos}) {
+  const patientId = getStorage("patientId")
+  const options = {
+    method: "GET"
+  };
+  const data = await requestPortal(
+    `dbservice/flagdetails/getcount?patientId=${patientId}&dos=${dos}`,
+    options
+  );
+  return data;
+}

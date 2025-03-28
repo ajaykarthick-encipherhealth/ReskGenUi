@@ -316,6 +316,7 @@ const File = ({
                               setFileLoading={setFileLoading}
                               setIsModalOpenLab={setIsModalOpenLab}
                               setIsModalOpenRadiology={setIsModalOpenRadiology}
+                              patientDocumentResult={patientDocumentResult}
                               setFileModalHeader={setFileModalHeader}
                               setConfirmNotesModalValid={
                                 setConfirmNotesModalValid
@@ -539,9 +540,7 @@ const File = ({
                               }
                             />
                           </span>
-                          <span className="ant-badge">
-                            POTENTIAL / SUGGESTED DIAGNOSES
-                          </span>
+                          POTENTIAL / SUGGESTED DIAGNOSES
                           {/* <Tooltip title="POTENTIAL / SUGGESTED DIAGNOSIS">
                             {truncateString(
                               "POTENTIAL / SUGGESTED DIAGNOSIS",

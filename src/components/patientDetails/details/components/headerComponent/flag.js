@@ -6,8 +6,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import SvgFlag from "../svg/svg";
 import { SVGICON } from "../../../../../jsx/constant/theme";
+import PieChart from "./chart";
 
-const Flag = ({ patienIdDetails, patientDetails, flagsDetailsResult }) => {
+const Flag = ({
+  patienIdDetails,
+  patientDetails,
+  flagsDetailsResult,
+  getFlagCounts,
+}) => {
   const sortedFlags =
     flagsDetailsResult?.response?.length > 0
       ? [...flagsDetailsResult.response].sort(
@@ -18,23 +24,13 @@ const Flag = ({ patienIdDetails, patientDetails, flagsDetailsResult }) => {
   const highestPriorityFlag = sortedFlags[0];
   return (
     <>
-      <div id="flag-container" name="flag-container" className="w-100 d-flex justify-content-between">
-        <div
-          id="flagHcc"
-          name="flagHcc"
-          className={`${styles.flagHccCard1} ${styles.rafscoreheader} p-2 mx-2`}
-        >
-          <h5 className={`font-weight-bold`}>Flag</h5>
-          <div className="mt-3" id="flag-name-container" name="flag-name-container">
+      <div className="w-100 d-flex justify-content-between">
+        <div className={` mx-2`}>
+          {/* <h5 className={`font-weight-bold`}>Flag</h5> */}
+          {/* <div className="mt-3">
             {sortedFlags.length > 0 ? (
-              <div
-                id="flag-name"
-                name="flag-name"
-                className="d-flex align-items-center justify-content-center cr-pointer"
-              >
+              <div className="d-flex align-items-center justify-content-center cr-pointer">
                 <Popover
-                id="flag-popover"
-                name="flag-popover"
                   content={
                     <div style={{ height: "auto", overflowY: "scroll" }}>
                       <strong>Flag details</strong>
@@ -69,7 +65,8 @@ const Flag = ({ patienIdDetails, patientDetails, flagsDetailsResult }) => {
             ) : (
               "---"
             )}
-          </div>
+          </div> */}
+          <PieChart getFlagCounts={getFlagCounts} />
         </div>
         <div
           className={`${styles.flagHccCard2}  ${styles.rafscoreheader} p-2 mx-2`}

@@ -37,6 +37,7 @@ import {
   getPatientID,
   patientDetailsLoad,
   getCommentListAction,
+  getFlagCharts,
 } from "./actions";
 
 
@@ -147,13 +148,14 @@ const patientDetailsReducer = combineReducers({
   labPDFDetails: createReducer(labPDFDetails),
   dosAndProvidersList: createReducer(getAddProviderAndDOSList),
   dosAndProvidersListLoader: getPatientsLoading(getAddProviderAndDOSList),
-
   getStoreFileIdDetails: getStoreFileIdDetails,
   getStoreFileIdDetailsPre: getStoreFileIdDetailsPre,
   fileLoading: getPatientsLoading(patientHccFileAction),
   selectPatientId: createReducer(getPatientID),
   getCommentList: createReducer(getCommentListAction),
   CommentListLoader: getPatientsLoading(getCommentListAction),
+  getFlagChartsList: createReducer(getFlagCharts),
+  getFlagChartsLoader: getPatientsLoading(getFlagCharts),
 });
 
 export default patientDetailsReducer;

@@ -333,7 +333,7 @@ function AllocatedL2AdminList({
       </thead>
 
       <tbody>
-        {patinetListAll?.length <= 0 ? (
+        {!patinetListAll || patinetListAll?.length <= 0 ? (
           <tr>
             <td colSpan="9">
               <Empty />

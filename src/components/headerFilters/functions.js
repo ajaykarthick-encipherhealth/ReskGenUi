@@ -268,9 +268,14 @@ export const priorityStatus = (value) => {
       return (
         <div data-testid="status-span">
           <i>
-            <FontAwesomeIcon icon={faTriangleExclamation} style={{color:"red"}} />
+            <FontAwesomeIcon
+              icon={faTriangleExclamation}
+              style={{ color: "red" }}
+            />
           </i>{" "}
-          <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>
+          <span className="mx-1" style={{ fontSize: "13px", color: "red" }}>
+            Urgent
+          </span>
         </div>
       );
     case "HIGH":
@@ -279,7 +284,9 @@ export const priorityStatus = (value) => {
           <i className={TableStyle.highFlag}>
             <FontAwesomeIcon icon={faTriangleExclamation} />
           </i>
-          <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
+          <span className="mx-1" style={{ fontSize: "13px", color: "#cf940a" }}>
+            High
+          </span>{" "}
         </div>
       );
     case "NORMAL":
@@ -288,7 +295,7 @@ export const priorityStatus = (value) => {
           <i className={TableStyle.normalFlag}>
             <FontAwesomeIcon icon={faTriangleExclamation} />
           </i>
-          <span style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>
+          <span className="mx-1" style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>
         </div>
       );
     case "LOW":
@@ -297,7 +304,9 @@ export const priorityStatus = (value) => {
           <i className={TableStyle.lowFlag}>
             <FontAwesomeIcon icon={faTriangleExclamation} />
           </i>
-          <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>
+          <span className="mx-1" style={{ fontSize: "13px", color: "#87909e" }}>
+            Low
+          </span>
         </div>
       );
     default:

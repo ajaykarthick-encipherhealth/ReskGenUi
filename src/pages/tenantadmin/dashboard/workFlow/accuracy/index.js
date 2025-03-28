@@ -383,9 +383,11 @@ const Accuracy = ({
           <div className={styles.percentage}>
             <span className={styles.insideTitle}>
               {currentTabBtn === "CogentAI Accuracy" ? (
-                <>{`${averageEngineScore.toFixed(2)}%`}</>
+                // <>{`${averageEngineScore.toFixed(2)}%`}</>
+                <> {averageEngineScore ? `${Math.floor(averageEngineScore)}%` : `0%`}</>
               ) : (
-                <>{`${averageReviewerScore.toFixed(2)}%`}</>
+                // <>{`${averageReviewerScore.toFixed(2)}%`}</>
+                <> {averageReviewerScore ? `${Math.floor(averageReviewerScore)}%` : `0%`}</>
               )}
             </span>
           </div>

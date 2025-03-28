@@ -190,4 +190,8 @@ export const getCommentListAction = createActionThunk(
   "GET_COMMENT_LIST",
   network.getCommentList
 );
+export const getFlagCharts = createActionThunk(
+  "GET_FLAG_CHARTS",
+  network.getFlagCharts
+);
 export const patientDetailsLoad = createAction("PATIENT_DETAILS_LOAD");

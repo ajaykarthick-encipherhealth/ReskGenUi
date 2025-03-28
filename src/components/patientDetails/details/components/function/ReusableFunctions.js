@@ -37,6 +37,7 @@ export const getEncounterDateBackground = ({
   setLabData,
   storeFileDetails,
   isShow,
+  getSelectedDosPageNumber,
 }) => {
   return value?.map((res, index) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -45,6 +46,7 @@ export const getEncounterDateBackground = ({
       var sectionMapArr = res ? (
         <span
           onClick={() => {
+            getSelectedDosPageNumber(null);
             const patientId = getStorage("patientId");
             const selectedMeatData = hyperlinks?.find(
               (ite) =>
@@ -77,6 +79,7 @@ export const getEncounterDateBackground = ({
             // } else {
             //   getCurrentDiseaseType && getCurrentDiseaseType(true);
             // }
+
             isShow &&
               getEncounterDetails({
                 date: res,
@@ -263,6 +266,7 @@ export const getEncounterDateBackgroundLab = ({
               datas,
               patientDocumentResult
             );
+             
           }}
           style={{
             borderColor: stringToColour(res) + 33,
@@ -398,6 +402,7 @@ const getEncounterDetails = async ({
   datas,
   storeFileDetails,
 }) => {
+  
   selectMeatResult ? selectMeatResult(datas) : "";
   const findPageNumber = !fileDosPageNumberList
     ? []
@@ -406,6 +411,7 @@ const getEncounterDetails = async ({
           moment(i.dos).format("MM-DD-YYYY") ===
           moment(date).format("MM-DD-YYYY")
       );
+   
   if (findPageNumber?.length != 0) {
     storeFileDetails && storeFileDetails(findPageNumber[0]?.fileId);
     if (setIsModalOpenValidCodes) {
@@ -420,7 +426,9 @@ const getEncounterDetails = async ({
       setFileModalHeader(headerName);
     }
     setSearch({
-      value: moment(findPageNumber[0]?.dos).format("MM/DD/YYYY"),
+      value:
+        findPageNumber[0]?.substring ||
+        moment(findPageNumber[0]?.dos).format("MM/DD/YYYY"),
       page: findPageNumber[0]?.startPageNumber,
     });
   }
@@ -1283,7 +1291,7 @@ export const handleSubmitValidNotes = async ({
   getpatientDetailsData,
   patientDetailsResult,
   handleCloseModal,
-  patientDetailsLoad
+  patientDetailsLoad,
 }) => {
   setFileLoading(true);
   setConfirmNotesModalValid(false);

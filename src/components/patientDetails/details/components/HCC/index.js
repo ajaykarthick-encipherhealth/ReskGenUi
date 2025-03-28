@@ -845,6 +845,8 @@ const HccCards = ({
                                     setLabData,
                                     storeFileDetails: storeFileDetails,
                                     isShow: data?.isShow,
+                                    getEncounterDateBackground:
+                                      getEncounterDateBackground,
                                   })}
                                 </div>
                                 {data.providerName.length == 0 && (

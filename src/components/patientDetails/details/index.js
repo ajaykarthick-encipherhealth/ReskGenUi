@@ -140,6 +140,7 @@ const Details = ({
   getSelectedDosPageNumber,
   loading,
   patientDetailsLoad,
+  getFlagCharts,
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -178,6 +179,7 @@ const Details = ({
   const [showTerminal, setShowTerminal] = useState(false);
   const [copied, setCopied] = useState(false);
   const [selectDosValue, setSelectDosValue] = useState("");
+  const [search, setSearch] = useState();
   const tabList = [
     {
       title: "HCC",
@@ -243,7 +245,7 @@ const Details = ({
     if (activeTab == 3) {
       getPatientRadiologyDosList(
         selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
-        dosYearArr?.[0]?.value
+        dosYearArr?.[0]?.value || ""
       );
     }
     if (activeTab == 4) {
@@ -349,6 +351,7 @@ const Details = ({
     setIsLoadingDos(false);
     if (result?.data?.response?.length > 0) {
       if (activeTab == 1) {
+        getFlagCharts({ dos: dosYearArr[0]?.value });
         getpatientDetailsData(
           selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
           dosYearArr[0]?.value,
@@ -410,6 +413,7 @@ const Details = ({
           result.processedYear,
           result.dateOfService
         );
+        getFlagCharts({ dos: result.processedYear });
         setIsLoading(false);
         setPatientResultReload(true);
       } else {
@@ -440,6 +444,7 @@ const Details = ({
       userRole
     );
     patientDetailsLoad(false);
+    getFlagCharts({ dos: e });
   };
 
   const addComments = async (value) => {
@@ -499,6 +504,8 @@ const Details = ({
     const year =
       getYear.response.length > 0 ? getYear.response[0] : selectedDosValue;
     try {
+      getFlagCharts({ dos: year });
+
       const res = await getpatientDetailsData(
         userId,
         year,
@@ -877,41 +884,48 @@ const Details = ({
                       className={`${visitStyles.secondContainer}`}
                       style={{ height: "100%" }}
                     >
-                      {activeTab == 1 ? (
-                        <Hcc
-                          patientHccResult={patientDocumentResult}
-                          year={dosYearDefalutSelect}
-                          setIsLoading={setIsLoading}
-                          selectDosValue={selectDosValue}
-                          setSelectDosValue={setSelectDosValue}
-                          isSpinnerLoading={isSpinnerLoading}
-                        />
-                      ) : activeTab == 2 ? (
-                        <NonHcc
-                          patientNonHccResult={patientDocumentResult}
-                          setIsLoading={setIsLoading}
-                          selectDosValue={selectDosValue}
-                          setSelectDosValue={setSelectDosValue}
-                        />
-                      ) : activeTab == 3 ? (
-                        <Radiology
-                          year={
-                            dosYearDefalutSelect.value
-                              ? dosYearDefalutSelect.value
-                              : dosYearDefalutSelect
-                          }
-                          setDosYearDefalutSelect={setDosYearDefalutSelect}
-                        />
-                      ) : (
-                        <Lab
-                          year={
-                            dosYearDefalutSelect?.value
-                              ? dosYearDefalutSelect?.value
-                              : dosYearDefalutSelect
-                          }
-                          setDosYearDefalutSelect={setDosYearDefalutSelect}
-                        />
-                      )}
+
+                      <>
+                        {activeTab == 1 ? (
+                          <Hcc
+                            patientHccResult={patientDocumentResult}
+                            year={dosYearDefalutSelect}
+                            setIsLoading={setIsLoading}
+                            selectDosValue={selectDosValue}
+                            setSelectDosValue={setSelectDosValue}
+                            isSpinnerLoading={isSpinnerLoading}
+                            search={search}
+                            setSearch={setSearch}
+                            setFlagContainerActive={setFlagContainerActive}
+                          />
+                        ) : activeTab == 2 ? (
+                          <NonHcc
+                            patientNonHccResult={patientDocumentResult}
+                            setIsLoading={setIsLoading}
+                            selectDosValue={selectDosValue}
+                            setSelectDosValue={setSelectDosValue}
+                          />
+                        ) : activeTab == 3 ? (
+                          <Radiology
+                            year={
+                              dosYearDefalutSelect.value
+                                ? dosYearDefalutSelect.value
+                                : dosYearDefalutSelect
+                            }
+                            setDosYearDefalutSelect={setDosYearDefalutSelect}
+                          />
+                        ) : (
+                          <Lab
+                            year={
+                              dosYearDefalutSelect?.value
+                                ? dosYearDefalutSelect?.value
+                                : dosYearDefalutSelect
+                            }
+                            setDosYearDefalutSelect={setDosYearDefalutSelect}
+                          />
+                        )}
+                      </>
+
                     </div>
 
                     <div className={`${visitStyles.thirdContainer}`}>
@@ -1074,6 +1088,8 @@ const Details = ({
         <Flag
           setOpen={setFlagContainerActive}
           open={flagContainerActive == "Flag" && true}
+          search={search}
+          setSearch={setSearch}
         />
       )}
     </>
@@ -1102,6 +1118,7 @@ const enhancer = connect(
   {
     workFgetFlagsowData: workflowActions.flagsAction,
     getpatientDetailsData: detailsActions.patientDetailsAction,
+    getFlagCharts: detailsActions.getFlagCharts,
     getPatientHccFile: detailsActions.patientHccFileAction,
     getPatientDosList: detailsActions.dosDeatilsAction,
     getDosPageNumber: detailsActions.dosPageNumberAction,

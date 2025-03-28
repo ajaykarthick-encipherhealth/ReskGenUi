@@ -176,7 +176,7 @@ const SentReport = ({
                   <div className={`col-6 ${styles.cardDiv}`}>
                     {loader ? (
                       <div className="mt-4">
-                        <CardSkeleton count={6}  height={100} />
+                        <CardSkeleton count={6} height={100} />
                       </div>
                     ) : (
                       <div className={styles.cardContainer}>
@@ -211,7 +211,7 @@ const SentReport = ({
                   <div className="col-6" style={{ marginLeft: "10px" }}>
                     {loader ? (
                       <div className="mt-4">
-                        <CardSkeleton count={6}  height={100} />
+                        <CardSkeleton count={6} height={100} />
                       </div>
                     ) : (
                       <div className={styles.cardContainer}>
@@ -255,7 +255,7 @@ const SentReport = ({
                                 >
                                   Report Type
                                 </div>
-                                <div className="row">
+                                <div className="row align-items-center ">
                                   <div className="col-md-6">
                                     <ReactECharts
                                       option={options}

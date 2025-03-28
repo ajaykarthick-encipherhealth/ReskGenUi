@@ -294,7 +294,13 @@ const UserList = ({
                   <span>
                     {item?.userName ? (
                       <Tooltip title={item?.userName}>
-                        <span id={item?.userName} name={item?.userName}>
+                        <span
+                          style={{
+                            color: item.accountStatus === true ? "" : "gray",
+                          }}
+                          id={item?.userName}
+                          name={item?.userName}
+                        >
                           {truncateString(item?.userName, 40)}
                         </span>
                       </Tooltip>
@@ -311,7 +317,11 @@ const UserList = ({
                     textAlign: "center",
                   }}
                 >
-                  <span>
+                  <span
+                    style={{
+                      color: item.accountStatus === true ? "" : "gray",
+                    }}
+                  >
                     {item?.organizationDTO?.name
                       ? item?.organizationDTO?.name
                       : "---"}
@@ -329,6 +339,15 @@ const UserList = ({
                   <div className={TableStyle.rowStyle2}>
                     {item?.role?.length > 0 ? (
                       <>
+                        {/* <span
+                          style={{
+                            color: item.accountStatus === true ? "" : "gray",
+                          }}
+                        >
+                          {item?.role
+                            ?.map((data) => capitalizeFirstLetter(data))
+                            .join(",").replaceAll("_", "")}
+                        </span> */}
                         <span
                           style={{
                             color: item.accountStatus === true ? "" : "gray",
@@ -336,8 +355,8 @@ const UserList = ({
                         >
                           {item?.role
                             ?.map((data) => capitalizeFirstLetter(data))
-                            .join(",")
-                            .replaceAll("_", " ")}
+                            .join(", ")
+                            .replaceAll("_", "")}
                         </span>
                       </>
                     ) : (

@@ -141,8 +141,8 @@ const AllocateModal = ({
           icon={faSearch}
         />
         <InputText
-        id="search-input"
-        name="search-input"
+          id="search-input"
+          name="search-input"
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -160,16 +160,18 @@ const AllocateModal = ({
       {userDetails.length > 0 ? (
         <div className={modalStyle.scroll}>
           {userDetails?.map((item) => (
-            <div className="mt-4 ">
+            <div className="mt-4 " style={{ cursor: "default" }}>
               <div
-                className={`form-control new-item-control my-2 p-0 ${
+                className={`ant-badge form-control new-item-control my-2 p-0 ${
                   item.id == activeCard
-                    ? modalStyle.listContentLarge
-                    : modalStyle.listContent
+                    ? `${modalStyle.listContentLarge} ant-badge`
+                    : `${modalStyle.listContent} ant-badge`
                 }`}
               >
-                <div id={item?.id} name={item?.id}
-                  className="d-flex justify-content-between"
+                <div
+                  id={item?.id}
+                  name={item?.id}
+                  className="d-flex justify-content-between ant-badge"
                   onClick={() => {
                     if (activeCard == item.id) {
                       setActiveCard("");
@@ -178,11 +180,11 @@ const AllocateModal = ({
                       setActiveCard(item.id);
                       setActiveEmail(item.email);
                       setAllocateDate("");
-                      setPriority([])
+                      setPriority([]);
                     }
                   }}
                 >
-                  <div className="d-flex">
+                  <div className="d-flex ant-badge">
                     <Avatar
                       size={65}
                       shape="square"
@@ -213,20 +215,24 @@ const AllocateModal = ({
                 </div>
                 {activeCard == item.id && (
                   <>
-                    <div className="row px-3">
-                      <div className={`col-5 ${modalStyle.activeRow1}`}>
+                    <div className="row px-3 ant-badge">
+                      <div
+                        className={`col-5 ant-badge ${modalStyle.activeRow1}`}
+                      >
                         <span>
                           Charts Selected:{" "}
                           {selectedChart.length > 0 ? selectedChart.length : 0}
                         </span>
-                        <div className="d-flex gap-3 py-2 align-items-center">
-                          <span className={`${modalStyle.title} py-3`}>
+                        <div className="d-flex ant-badge  gap-3 py-2 align-items-center">
+                          <span
+                            className={`ant-badge ${modalStyle.title} py-3`}
+                          >
                             Due Date
                           </span>
                           <DatePicker
-                          id="select-dueDate"
-                          name="select-dueDate"
-                            style={{ width: "150px"}}
+                            id="select-dueDate"
+                            name="select-dueDate"
+                            style={{ width: "150px" }}
                             onChange={(date, dateS) => {
                               if (dateS) {
                                 setAllocateDate(dateS);
@@ -236,28 +242,27 @@ const AllocateModal = ({
                             }}
                             disabledDate={(current) => disablePastDate(current)}
                           />
-                      
                         </div>
-                        <div className="d-flex py-1 gap-1 align-items-center">
-                       <span>Set Priority</span> 
-                       <div className="antdCustomSelect">
-                        <Select
-                        id="select-priority"
-                        name="select-priority"
-                           className={modalStyle.prioritySelect}
-                            options={priorityOptions}
-                            placeholder="Set priority"
-                            showSearch={false}
-                            onChange={handleChange}
-                            value={priority}
-                          />
-                        </div>
+                        <div className="ant-badge d-flex py-1 gap-1 align-items-center">
+                          <span>Set Priority</span>
+                          <div className="antdCustomSelect">
+                            <Select
+                              id="select-priority"
+                              name="select-priority"
+                              className={modalStyle.prioritySelect}
+                              options={priorityOptions}
+                              placeholder="Set priority"
+                              showSearch={false}
+                              onChange={handleChange}
+                              value={priority}
+                            />
+                          </div>
                         </div>
                         {statusCount
                           ?.filter((status) => status.id === item.id)
                           ?.map((status) => (
-                            <div key={status.id}>
-                              <div className="d-flex my-3">
+                            <div className="ant-badge" key={status.id}>
+                              <div className="ant-badge d-flex my-3">
                                 <div>
                                   <FontAwesomeIcon
                                     icon={faCircle}
@@ -274,7 +279,7 @@ const AllocateModal = ({
                                 </span>
                               </div>
 
-                              <div className="d-flex my-3">
+                              <div className="ant-badge d-flex my-3">
                                 <div>
                                   <FontAwesomeIcon
                                     icon={faCircle}
@@ -290,7 +295,7 @@ const AllocateModal = ({
                                 </span>
                               </div>
 
-                              <div className="d-flex my-3">
+                              <div className="ant-badge d-flex my-3">
                                 <div>
                                   <FontAwesomeIcon
                                     icon={faCircle}
@@ -306,7 +311,7 @@ const AllocateModal = ({
                                 </span>
                               </div>
 
-                              <div className="d-flex my-3">
+                              <div className="ant-badge d-flex my-3">
                                 <div>
                                   <FontAwesomeIcon
                                     icon={faCircle}
@@ -322,7 +327,7 @@ const AllocateModal = ({
                                 </span>
                               </div>
 
-                              <div className="d-flex my-3">
+                              <div className="ant-badge d-flex my-3">
                                 <div>
                                   <FontAwesomeIcon
                                     icon={faCircle}
@@ -340,16 +345,20 @@ const AllocateModal = ({
                             </div>
                           ))}
                       </div>
-                      <div className={`col-7 ${modalStyle.activeRow1}`}>
-                        <span className={`${modalStyle.title} text-danger`}>
+                      <div
+                        className={`col-7 ant-badge ${modalStyle.activeRow1}`}
+                      >
+                        <span
+                          className={`ant-badge ${modalStyle.title} text-danger`}
+                        >
                           {selectedChart.length + chart.hold + chart.pending >
                             100 && "Maximum upto 100 charts to pending"}
                         </span>
-                        <div className="mb-3">Selected Charts</div>
-                        <ul className={`${modalStyle.selectChart}`}>
-                          {selectedRows.map((item) => (
+                        <div className="mb-3 ant-badge">Selected Charts</div>
+                        <ul className={`ant-badge ${modalStyle.selectChart}`}>
+                          {selectedChart.map((item) => (
                             <li
-                              className={`${modalStyle.listing} ${modalStyle.listings}`}
+                              className={`ant-badge ${modalStyle.listing} ${modalStyle.listings}`}
                               key={item.id}
                               name={item.id}
                               id={item.id}
@@ -384,12 +393,13 @@ const AllocateModal = ({
                     </div>
                     <div className={`d-flex justify-content-center`}>
                       <button
-                      id="allocate-btn"
-                      name="allocate-btn"
+                        id="allocate-btn"
+                        name="allocate-btn"
                         className={`btn btn-primary px-5 p-1 ${modalStyle.modalBtn}`}
                         disabled={
                           !selectedChart.length > 0 ||
-                          allocateDate == "" || priority == "" ||
+                          allocateDate == "" ||
+                          priority == "" ||
                           selectedChart.length + chart.hold + chart.pending >
                             100
                         }
@@ -407,8 +417,8 @@ const AllocateModal = ({
       ) : (
         <div className="m-4">
           <button
-          id="addUser-btn"
-          name="addUser-btn"
+            id="addUser-btn"
+            name="addUser-btn"
             onClick={() => {
               Router.push("/admin/user");
             }}

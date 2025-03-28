@@ -18,9 +18,14 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import { getStorage } from "../../../../../utils/storages";
 import { DeleteOutlined } from "@ant-design/icons";
 import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
-import { deleteflag, flagDetailsPost, getUserDetails } from "../../../../../stores/patient/details/network";
+import {
+  deleteflag,
+  flagDetailsPost,
+  getUserDetails,
+} from "../../../../../stores/patient/details/network";
 import SvgFlag from "../svg/svg";
 import { getResponePopup } from "../../../../../utils/reusable";
+import RegularButton from "../../../../button";
 
 const Flag = ({
   setOpen,
@@ -30,6 +35,8 @@ const Flag = ({
   getFlagDetailsData,
   flagsDetailsResult,
   isdeleteFlag,
+  search,
+  setSearch,
 }) => {
   const [inputValue, setInputValue] = useState({
     flagId: "",
@@ -85,7 +92,7 @@ const Flag = ({
           message: "Please select a flag",
         },
       });
-      return; 
+      return;
     }
     if (inputValue.comments.trim() === "") {
       getResponePopup({
@@ -94,7 +101,7 @@ const Flag = ({
           message: "Comment cannot be empty",
         },
       });
-      return; 
+      return;
     }
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
@@ -108,7 +115,7 @@ const Flag = ({
       };
       try {
         const response = await flagDetailsPost(dataFormatSuggested);
-        
+
         getResponePopup(response);
         getFlagDetailsData(
           patientDetailsResult?.data?.response?.patientId,
@@ -186,7 +193,7 @@ const Flag = ({
     }));
   };
 
-  const handleChangeFlag = (selectedOption, e) => {    
+  const handleChangeFlag = (selectedOption, e) => {
     setInputValue((prevState) => ({
       ...prevState,
       flagId: e?.value,
@@ -370,6 +377,7 @@ const Flag = ({
                     </>
                   )}
                 </span>
+
                 <div id={`flag-value-tootip-${index}`}>
                   <Tooltip
                     placement="bottom"
@@ -389,9 +397,34 @@ const Flag = ({
                   </Tooltip>
                 </div>
               </div>
-              <span className={visitStyles.commentsDesc}>
+              {/* <span className={visitStyles.commentsDesc}>
                 {data?.patientFlagDTO?.comment}
-              </span>
+              </span> */}
+              <div className={"mb-1"}>
+                {data?.patientFlagDTO?.reason}
+                {data?.patientFlagDTO?.hyperlinks &&
+                  data?.patientFlagDTO?.hyperlinks[0] && (
+                    <span
+                      className="text-decoration-underline cr-pointer ms-1"
+                      style={{ color: "#6c9ddd" }}
+                      onClick={() => {
+                        if (
+                          data?.patientFlagDTO?.hyperlinks &&
+                          data?.patientFlagDTO?.hyperlinks[0]
+                        ) {
+                          const link = data?.patientFlagDTO?.hyperlinks[0];
+                          setSearch({
+                            value: link.substring,
+                            page: link.pageNumber,
+                          });
+                          setOpen(false);
+                        }
+                      }}
+                    >
+                      Go to file
+                    </span>
+                  )}
+              </div>
               <span className={visitStyles.commentsTime}>
                 {moment(data?.patientFlagDTO?.createdDate).format(
                   "MM-DD-YYYY hh:mm:A"

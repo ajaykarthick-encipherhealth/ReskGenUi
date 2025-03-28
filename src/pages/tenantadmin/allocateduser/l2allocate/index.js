@@ -111,11 +111,12 @@ const L2AllocateModal = ({
       <div className="pe-auto" style={{ marginTop: "30px" }}>
         <div
           style={{ height: "475 !important" }}
-          className={`form-control new-item-control2 my-2 p-0 ${modalStyle.listContentLargeL2}`}
+          className={`ant-badge form-control new-item-control2 my-2 p-0 ${modalStyle.listContentLargeL2}`}
         >
-          <div className="d-flex justify-content-between">
-            <div className="d-flex">
+          <div className="ant-badge d-flex justify-content-between">
+            <div className="d-flex ant-badge">
               <Avatar
+                className="ant-badge"
                 size={65}
                 shape="square"
                 style={{ backgroundColor: "#04306F" }}
@@ -126,7 +127,7 @@ const L2AllocateModal = ({
                   <FontAwesomeIcon className="fa fa-search" icon={faUser} />
                 )}
               </Avatar>
-              <div className="p-3">
+              <div className="p-3 ant-badge">
                 <p className={`${modalStyle.listName} mb-1`}>
                   {selectedUser?.firstName} {selectedUser?.lastName}
                 </p>
@@ -134,18 +135,20 @@ const L2AllocateModal = ({
             </div>
           </div>
           <>
-            <div className="row px-3" style={{ paddingTop: "50px" }}>
-              <div className={`col-5 ${modalStyle.activeRow1}`}>
-                <span>
+            <div className="row px-3 ant-badge" style={{ paddingTop: "50px" }}>
+              <div className={`col-5 ant-badge ${modalStyle.activeRow1}`}>
+                <span className="ant-badge">
                   Charts Selected:{" "}
                   {selectedChart?.length > 0 ? selectedChart?.length : 0}
                 </span>
-                <div className="d-flex py-2 gap-3 align-items-center">
-                  <span className={`${modalStyle.title} py-3`}>Due Date</span>
+                <div className="ant-badge d-flex py-2 gap-3 align-items-center">
+                  <span className={`ant-badge ${modalStyle.title} py-3`}>
+                    Due Date
+                  </span>
                   <DatePicker
                     style={{ width: "150px" }}
-                  id="select-date"
-                  name="select-date"
+                    id="select-date"
+                    name="select-date"
                     onChange={(date, dateS) => {
                       if (dateS) {
                         setAllocateDate(dateS);
@@ -159,9 +162,9 @@ const L2AllocateModal = ({
                     }
                   />
                 </div>
-                <div className="d-flex py-1 gap-1 align-items-center">
-                  <span>Set Priority</span>
-                  <div className="antdCustomSelect">
+                <div className="ant-badge d-flex py-1 gap-1 align-items-center">
+                  <span className="ant-badge">Set Priority</span>
+                  <div className="ant-badge antdCustomSelect">
                     <Select
                       className={modalStyle.prioritySelect}
                       options={priorityOptions}
@@ -172,7 +175,7 @@ const L2AllocateModal = ({
                     />
                   </div>
                 </div>
-                <div className="d-flex my-3">
+                <div className="ant-badge d-flex my-3">
                   <div>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -187,7 +190,7 @@ const L2AllocateModal = ({
                   </div>
                   <span>{chart.audited ? chart.audited : 0}</span>
                 </div>
-                <div className="d-flex my-3">
+                <div className="d-flex my-3 ant-badge">
                   <div>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -202,7 +205,7 @@ const L2AllocateModal = ({
                   </div>
                   <span>{chart.auditPending ? chart.auditPending : 0}</span>
                 </div>
-                <div className="d-flex my-3">
+                <div className="d-flex my-3 ant-badge">
                   <div>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +220,7 @@ const L2AllocateModal = ({
                   </div>
                   <span>{chart.auditHold ? chart.auditHold : 0}</span>
                 </div>
-                <div className="d-flex my-3">
+                <div className="d-flex my-3 ant-badge">
                   <div>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -232,7 +235,7 @@ const L2AllocateModal = ({
                   </div>
                   <span>{chart.reAudited ? chart.reAudited : 0}</span>
                 </div>
-                <div className="d-flex my-3">
+                <div className="d-flex my-3 ant-badge">
                   <div>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -248,16 +251,16 @@ const L2AllocateModal = ({
                   <span>{chart.declined ? chart.declined : 0}</span>
                 </div>
               </div>
-              <div className={`col-7 ${modalStyle.activeRow1}`}>
+              <div className={`ant-badge col-7 ${modalStyle.activeRow1}`}>
                 <span className={`${modalStyle.title} text-danger`}>
                   {selectedChart?.length + chart.hold + chart.pending > 19 &&
                     "Maximum upto 20 charts to pending"}
                 </span>
-                <div className="mb-3">Selected Charts</div>
-                <ul className={`${modalStyle.selectChart}`}>
+                <div className="ant-badge mb-3">Selected Charts</div>
+                <ul className={`ant-badge ${modalStyle.selectChart}`}>
                   {selectedChart?.map((item) => (
                     <li
-                      className={`${modalStyle.listing} ${modalStyle.listings} `}
+                      className={`ant-badge ${modalStyle.listing} ${modalStyle.listings} `}
                       key={item.id}
                       id={item.id}
                       name={item.id}
@@ -292,7 +295,9 @@ const L2AllocateModal = ({
               </div>
             </div>
             <div className={`d-flex justify-content-center`}>
-              <button id="allocate-btn" name="allocate-btn"
+              <button
+                id="allocate-btn"
+                name="allocate-btn"
                 className={`btn btn-primary px-5 p-1 ${modalStyle.modalBtn}`}
                 disabled={
                   !selectedChart?.length > 0 ||

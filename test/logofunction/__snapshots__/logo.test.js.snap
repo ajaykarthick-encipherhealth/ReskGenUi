@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReusableFunction getHeaderLoge renders the Cogentai header logo when companyDeatils is 'cogentai' 1`] = `
+<div>
+  <div
+    class="mx-3"
+    style="display: flex; align-items: center; width: 120px;"
+  >
+    <img
+      alt="Cogentai Header Logo"
+      data-nimg="1"
+      decoding="async"
+      height="40"
+      loading="lazy"
+      src="/_next/image?url=%2Fimg.jpg&w=96&q=75"
+      srcset="/_next/image?url=%2Fimg.jpg&w=48&q=75 1x, /_next/image?url=%2Fimg.jpg&w=96&q=75 2x"
+      style="color: transparent; width: 100%; height: auto;"
+      width="40"
+    />
+  </div>
+</div>
+`;
+
+exports[`ReusableFunction getLogo renders the Cogentai chat logo when companyDeatils is 'cogentai' 1`] = `
+<div>
+  <img
+    alt="Cogentai Chat Logo"
+    data-nimg="1"
+    decoding="async"
+    height="40"
+    loading="lazy"
+    src="/_next/image?url=%2Fimg.jpg&w=96&q=75"
+    srcset="/_next/image?url=%2Fimg.jpg&w=48&q=75 1x, /_next/image?url=%2Fimg.jpg&w=96&q=75 2x"
+    style="color: transparent;"
+    width="40"
+  />
+</div>
+`;
