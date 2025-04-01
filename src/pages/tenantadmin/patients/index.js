@@ -511,6 +511,7 @@ const Patient = ({
                     fontSize: 16,
                   }}
                   spin
+                  className="ant-badge"
                 />
               }
               style={{ color: "#452b90", margin: "0 10px 0 0" }}
@@ -659,11 +660,14 @@ const Patient = ({
     return (
       <Popover
         content={
-          <div style={{ height: "auto", overflow: "scroll" }}>
+          <div
+            className="ant-badge"
+            style={{ height: "auto", overflow: "scroll" }}
+          >
             <strong>Flag details</strong>
             {data.flagList.map((flag, flagIndex) => (
               <div key={flagIndex}>
-                <span className="p-1">
+                <span className="p-1 ant-badge">
                   <SvgFlag fillColor={flag?.flagColour} />
                 </span>
                 {flag?.flagName.replaceAll("_", " ")}
@@ -674,6 +678,7 @@ const Patient = ({
         placement="right"
       >
         <Badge
+          className="ant-badge"
           count={data.flagList.length}
           offset={[5, 5]}
           size="small"
@@ -681,9 +686,15 @@ const Patient = ({
             right: "2px",
             marginTop: "2px",
             background: "#04306f",
+            cursor: "default",
           }}
         >
-          <SvgFlag fillColor={priorityFlag?.flagColour || "transparent"} />
+          <span className="ant-badge">
+            <SvgFlag
+              className="ant-badge"
+              fillColor={priorityFlag?.flagColour || "transparent"}
+            />
+          </span>
         </Badge>
       </Popover>
     );

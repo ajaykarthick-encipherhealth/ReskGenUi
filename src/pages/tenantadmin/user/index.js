@@ -949,15 +949,17 @@ const UserList = ({
                       },
                     ]}
                   >
-                    <Input
-                      id="mobileNumber"
-                      name="mobileNumber"
-                      type="text"
-                      placeholder="Enter mobile number"
-                      autoComplete="off"
-                      value={getDisplayValue(mobileNumber)}
-                      onChange={handleChange}
-                    />
+                    <div>
+                      <Input
+                        id="mobileNumber"
+                        name="mobileNumber"
+                        type="text"
+                        placeholder="Enter mobile number"
+                        autoComplete="off"
+                        value={getDisplayValue(mobileNumber)}
+                        onChange={handleChange}
+                      />
+                    </div>
                   </Form.Item>
                 </Col>
               </Row>

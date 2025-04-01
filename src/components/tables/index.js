@@ -460,34 +460,36 @@ const TableRow = ({
           );
         }
 
-        if (columnItem.isComma) {
-          return (
-            <td
+      if (columnItem.isComma) {
+        return (
+          <td
+            style={{
+              backgroundColor: item.accountStatus === false ? "#0000001a" : "",
+            }}
+            className={
+              index === 0
+                ? Style.firstTdBorder
+                : column.length - 1 === index
+                ? Style.lastBorder
+                : Style.childBorder
+            }
+            key={index}
+          >
+            <span
               style={{
-                backgroundColor:
-                  item.accountStatus === false ? "#0000001a" : "",
+                color: item.accountStatus === false ? "gray" : "",
               }}
-              className={
-                index === 0
-                  ? Style.firstTdBorder
-                  : column.length - 1 === index
-                  ? Style.lastBorder
-                  : Style.childBorder
-              }
-              key={index}
             >
-              <span
-                style={{
-                  color: item.accountStatus === false ? "gray" : "",
-                }}
-              >
-                {item[columnItem.value]
-                  ? item[columnItem.value].join(", ")
-                  : "---"}
-              </span>
-            </td>
-          );
-        }
+              {item[columnItem.value]
+                ? item[columnItem.value]
+                    .map((val) => val.replace(/_/g, " "))
+                    .join(", ")
+                : "---"}
+            </span>
+          </td>
+        );
+      }
+
         if (columnItem.isBoolean) {
           return (
             <td
@@ -826,11 +828,16 @@ const TableRow = ({
               ) : (
                 renderUserProfile(item, columnItem)
               )}
-              <div className="d-flex align-items-start justify-content-start mx-5">
+              {/* <div className="d-flex align-items-center justify-content-center mx-5">
                 {columnItem?.value && item[columnItem.value]
                   ? moment(item[columnItem.value]).format("MM-DD-YYYY")
                   : "---"}
-              </div>
+              </div> */}
+               {columnItem?.value && item[columnItem.value] ? (
+                 <div className="d-flex align-items-start justify-content-start mx-5">
+                  {moment(item[columnItem.value]).format("MM-DD-YYYY")}
+                 </div>
+               ) : <div className="d-flex align-items-center justify-content-center mx-5">---</div>}
             </td>
           );
         }
@@ -909,7 +916,9 @@ const TableRow = ({
         }
         if (columnItem?.isFlag) {
           return (
-            <td className={Style.firstTdBorder}>{renderFlagCell(item)}</td>
+            <td className={`ant-badge-count ${Style.firstTdBorder}`}>
+              {renderFlagCell(item)}
+            </td>
           );
         }
 

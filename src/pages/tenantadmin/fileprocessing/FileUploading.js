@@ -43,7 +43,7 @@ const FileUploading = ({
       placement="end"
     >
       <div className="offcanvas-header">
-        <h5 className="modal-title"  id="#gridSystemModal">
+        <h5 className="modal-title" id="#gridSystemModal">
           {isUpload ? "Upload Patient Details" : "Add Patient Details"}
         </h5>
         <button type="button" className="btn-close" onClick={handleClose}>
@@ -51,9 +51,12 @@ const FileUploading = ({
         </button>
       </div>
       <div className="offcanvas-body">
-        <div    data-testid= {isUpload ? "upload-form" : "Add-patient-form"}   className="container-fluid">
+        <div
+          data-testid={isUpload ? "upload-form" : "Add-patient-form"}
+          className="container-fluid"
+        >
           <Form
-            data-testid= {isUpload ? "upload" : "Add-patient"}  
+            data-testid={isUpload ? "upload" : "Add-patient"}
             noValidate
             validated={validated}
             onSubmit={handleSubmit}
@@ -80,7 +83,7 @@ const FileUploading = ({
                 </Form.Label>
                 <Form.Control
                   name="name"
-                   data-testid="patient-name"
+                  data-testid="patient-name"
                   required
                   type="text"
                   value={inputValue?.name}
@@ -110,7 +113,8 @@ const FileUploading = ({
                   name="year"
                   data-testid="select-year"
                   maxTagCount="responsive"
-                  className={`ant_select_form hcc_form mb-2`}
+                  className={`ant_select_form mb-2`}
+                  style={{ height: "42px" }}
                   onChange={(selOption, val) => {
                     handleChange(selOption, "year");
                   }}
@@ -134,7 +138,8 @@ const FileUploading = ({
                 name="emrType"
                 data-testid="emr-select"
                 maxTagCount="responsive"
-                className={`ant_select_form hcc_form mb-2`}
+                className={`ant_select_form  mb-2`}
+                style={{ height: "42px" }}
                 onChange={(selOption, val) => {
                   handleChange(selOption, "dos");
                   setEmrType(selOption === "Other" ? "-" : selOption);
@@ -150,7 +155,13 @@ const FileUploading = ({
             </div>
             <div>
               {!isLoadingBtn ? (
-                <Button type="submit" id="submit-Button" name="submit-Button" className="btn btn-primary btn-sm me-1">
+                <Button
+                  type="submit"
+                  id="submit-Button"
+                  name="submit-Button"
+                  className="btn-sm me-1"
+                  style={{ backgroundColor: "#04306f" }}
+                >
                   {"Submit"}
                 </Button>
               ) : (
@@ -158,7 +169,9 @@ const FileUploading = ({
                   Loading...
                 </button>
               )}
-              <Button id="cancel-Button" name="cancel-Button" 
+              <Button
+                id="cancel-Button"
+                name="cancel-Button"
                 className="btn btn-danger btn-sm light ms-1"
                 onClick={() => setAddPatient(false)}
               >

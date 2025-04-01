@@ -321,13 +321,14 @@ function PdfTable({
                                   <Spin
                                     indicator={
                                       <LoadingOutlined
+                                        className="ant-badge"
                                         style={{
                                           fontSize: 14,
                                         }}
                                         spin
                                       />
                                     }
-                                    className="mx-2"
+                                    className="ant-badge mx-2"
                                     style={{
                                       color: "#FF7D2A",
                                     }}

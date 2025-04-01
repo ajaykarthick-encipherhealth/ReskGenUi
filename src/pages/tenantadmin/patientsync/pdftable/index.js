@@ -338,7 +338,7 @@ const DetailedViewPdfTable = ({
         <FontAwesomeIcon icon={faCalendar} color="#241571" className="mx-2" />
       ),
       name: currentId?.createdDate
-        ? formatDateTime(currentId?.createdDate)
+        ? formatDateTime({date: currentId?.createdDate, formatType : "time"})
         : "---",
     },
     {
