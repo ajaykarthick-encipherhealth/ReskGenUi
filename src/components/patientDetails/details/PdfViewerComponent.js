@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
 import Style from "./style.module.css";
-import { portalPdfUrl } from "../../../utils/config";
+import { pdfControl, portalPdfUrl } from "../../../utils/config";
 import { pdfEncrypt } from "../../headerFilters/functions";
 import { getStorage } from "../../../utils/storages";
 import { serverControl } from "../../..//utils/config";
@@ -23,6 +23,7 @@ const PdfViewer = ({
   const [fileId, setFileId] = useState("");
   const [url, setUrl] = useState("");
   const [ids, setIds] = useState();
+
   useEffect(() => {
     const page = selectedPageNumber ? selectedPageNumber : pageNumber;
     if (!Array.isArray(src)) {
@@ -35,7 +36,7 @@ const PdfViewer = ({
         setIds(getData.iv);
         searchUrl = `${portalPdfUrl}?file=${pdfUrl}&salt=${
           getData.iv
-        }&token=${getStorage("token")}&baseEnv=${serverControl}`;
+        }&token=${getStorage("token")}&baseEnv=${serverControl}&pdfEnv=${pdfControl}`;
         // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
         if (searchQuery || page || headerContent) {
           const queryParams = [];

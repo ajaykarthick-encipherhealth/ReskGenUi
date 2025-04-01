@@ -5,6 +5,7 @@ export const webSocketUrl = process.env.NEXT_PUBLIC_WEB_SOCKET_URL;
 export const isEncrypted = process.env.NEXT_PUBLIC_IS_ENCRYPT;
 export const tokenKey = "token";
 export const serverControl = process.env.NEXT_PUBLIC_NODE_ENV;
+export const pdfControl =process.env.NEXT_PUBLIC_PORTAL_BASE_URL + "management/patient/report/getfile/bytes";
 export const salt = process.env.NEXT_PUBLIC_SALT;
 export const companyDeatils = process.env.NEXT_PUBLIC_COMPANY_LOGO || "cogentai";
 export const isLocalEdit = true;
