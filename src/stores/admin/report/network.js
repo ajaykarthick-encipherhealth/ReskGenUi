@@ -11,6 +11,7 @@ export async function adminApi({
   sort = "",
   selectManager = "",
   flagsList,
+  auditStatus,
 }) {
   const options = {
     method: "GET",
@@ -18,7 +19,7 @@ export async function adminApi({
   const orgId = getStorage("orgId");
   const searchValue = filter === "ALL" ? "" : filter;
   const data = await requestPortal(
-    `dbservice/patient/adminreport?pageno=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${
+    `dbservice/patient/adminreport?pageno=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&auditedstatus=${auditStatus}&searchstring=${search}&sortfield=${
       sort?.sortField
     }&sortdirection=${sort?.sortDir}&username=${
       userName === "REVIEWER" ? selectManager : ""

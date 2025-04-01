@@ -36,10 +36,18 @@ import dayjs from "dayjs";
 import { disabledDate, formatDateForIndex } from "../../utils/reusable";
 
 const statusOptions = [
-  { label: "Completed", value: "COMPLETED" },
-  { label: "Pending", value: "PENDING" },
-  { label: "Declined", value: "DECLINED" },
-  { label: "Hold", value: "HOLD" },
+  { label: "COMPLETED", value: "COMPLETED" },
+  { label: "PENDING", value: "PENDING" },
+  { label: "DECLINED", value: "DECLINED" },
+  { label: "HOLD", value: "HOLD" },
+];
+const auditStatusOptions = [
+  { label: "AUDITED", value: "AUDITED" },
+  { label: "AUDIT PENDING", value: "AUDIT_PENDING" },
+  { label: "RE AUDIT", value: "REAUDIT" },
+  { label: "AUDIT HOLD", value: "AUDITHOLD" },
+  { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
+  { label: "NOT AUDIT", value: "NOT_AUDIT" },
 ];
 const options = [
   { value: "REVIEWER", label: "REVIEWER" },
@@ -209,6 +217,11 @@ const Reports = ({
   };
   const dosOnChange = (selectedOption, name, tabName) => {
     const nameString = name?.replace(/\s+/g, "");
+    setSelectedOptions((prevOptions) => ({
+      ...prevOptions,
+      [`${tabName}${nameString}`]: selectedOption,
+    }));
+
     if (nameString == "UserRole" && selectedOption) {
       setSelectedOptions((prevOptions) => ({
         ...prevOptions,
@@ -441,7 +454,8 @@ const Reports = ({
           startDate: selectedDateRanges?.Admin?.from,
           endDate: selectedDateRanges?.Admin?.to,
           search: searchVal ? searchVal : "",
-          filter: selectedOptions?.Admin || "",
+          filter: selectedOptions?.AdminStatus || "",
+          auditStatus: selectedOptions?.AdminAuditStatus|| "",
           userName: selectedOptions?.UserRole ? selectedOptions?.UserRole : "",
           sort: sort,
           selectManager:
@@ -457,7 +471,8 @@ const Reports = ({
           startDate: selectedDateRanges?.Audit?.from,
           endDate: selectedDateRanges?.Audit?.to,
           search: searchVal ? searchVal : "",
-          filter: selectedOptions?.Audit ? selectedOptions?.Audit : "",
+          filter: selectedOptions?.AuditStatus || "",
+          auditStatus: selectedOptions?.AuditAuditStatus|| "",
           sort: sort,
           flagsList: selectAllFlags,
         });
@@ -467,7 +482,9 @@ const Reports = ({
           startDate: selectedDateRanges?.Team?.from,
           endDate: selectedDateRanges?.Team?.to,
           search: searchVal ? searchVal : "",
-          filter: selectedOptions?.Team ? selectedOptions?.Team : "",
+          // filter: selectedOptions?.Team ? selectedOptions?.Team : "",
+          filter: selectedOptions?.TeamStatus || "",
+          auditStatus: selectedOptions?.TeamAuditStatus|| "",
           sort: sort,
           flagsList: selectAllFlags,
         });
@@ -500,7 +517,6 @@ const Reports = ({
     selectAllFlags,
     paramsFilter,
   ]);
-
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
   }, [ReportPatientDetails]);
@@ -566,7 +582,6 @@ const Reports = ({
       setSelectedRows(routeData?.selectedRows || []);
     }
   }, []);
-
   return viewIndividualReport?.status ? (
     renderIndividualReport()
   ) : (
@@ -583,7 +598,7 @@ const Reports = ({
                   tabs={tabs}
                 />
                 <div className="d-flex justify-content-between align-items-center mt-3">
-                  <div className="d-flex gap-2">
+                  <div className="d-flex gap-4">
                     <div className="d-flex w-100">
                       <label className="labelStyle d-flex m-auto p-3">
                         Search
@@ -629,38 +644,80 @@ const Reports = ({
                       </div>
                     </div>
                     {!(activeTab === "Sent" || activeTab === "Received") && (
-                      <div className="d-flex w-100">
-                        <label className="labelStyle d-flex m-auto  p-2">
-                          {" "}
-                          Status
-                        </label>
-                        <div
-                          name="Status-report"
-                          id="Status-report"
-                          className="form-group has-search w-100 custom-react-report-select custom-react-report-status"
-                        >
-                          <Select
-                            data-testid="report-status"
-                            name="report-status"
-                            onChange={(selectedOption) => {
-                              dosOnChange(selectedOption, "Status", activeTab);
-                              resetPageNumber(resetPageState);
-                            }}
-                            placeholder="Select Status"
-                            options={statusOptions}
-                            // className={`custom-react-report-select`}
-                            isSearchable={false}
-                            allowClear={true}
-                            value={
-                              selectedOptions
-                                ? selectedOptions[activeTab]
-                                : null
-                            }
-                            // style={{ width: "150px" }}
-                          />
+                      <>
+                        <div className="d-flex w-100">
+                          <label className="labelStyle d-flex m-auto  p-2">
+                            {" "}
+                            Status
+                          </label>
+                          <div
+                            name="Status-report"
+                            id="Status-report"
+                            className="form-group has-search w-100 custom-react-report-select custom-react-report-status"
+                          >
+                            <Select
+                              data-testid="report-status"
+                              name="report-status"
+                              onChange={(selectedOption) => {
+                                dosOnChange(
+                                  selectedOption,
+                                  "Status",
+                                  activeTab
+                                );
+                                resetPageNumber(resetPageState);
+                              }}
+                              placeholder="Select Status"
+                              options={statusOptions}
+                              // className={`custom-react-report-select`}
+                              isSearchable={false}
+                              allowClear={true}
+                              value={
+                                selectedOptions
+                                  ? selectedOptions[`${activeTab}-Status`]
+                                  : null
+                              }
+
+                              // style={{ width: "150px" }}
+                            />
+                          </div>
+                          {/* </div> */}
                         </div>
-                        {/* </div> */}
-                      </div>
+                        <div className="d-flex w-100">
+                          <label className="labelStyle d-flex m-auto  p-2">
+                            Audit Status
+                          </label>
+                          <div
+                            name="Status-report"
+                            id="Status-report"
+                            className="form-group has-search w-100 custom-react-report-select custom-react-report-status"
+                          >
+                            <Select
+                              data-testid="report-status"
+                              name="report-status"
+                              onChange={(selectedOption) => {
+                                dosOnChange(
+                                  selectedOption,
+                                  "AuditStatus",
+                                  activeTab
+                                );
+                                resetPageNumber(resetPageState);
+                              }}
+                              placeholder="Select Audit Status"
+                              options={auditStatusOptions}
+                              isSearchable={false}
+                              allowClear={true}
+                              value={
+                                selectedOptions
+                                  ? selectedOptions[`${activeTab}-AuditStatus`]
+                                  : null
+                              }
+
+                              // style={{ width: "150px" }}
+                            />
+                          </div>
+                          {/* </div> */}
+                        </div>
+                      </>
                     )}
                     <div className="d-flex w-100">
                       <label className="labelStyle labelStyleDate d-flex m-0 p-2">

@@ -10,6 +10,7 @@ export async function auditApi({
   sort,
   size,
   flagsList,
+  auditStatus,
 }) {
   const options = {
     method: "GET",
@@ -23,7 +24,7 @@ export async function auditApi({
       size ? size : 7
     }&startdate=${startDate}&enddate=${endDate}&status=${
       searchValue ? searchValue : ""
-    }&searchstring=${
+    }&auditedstatus=${auditStatus || ""}&searchstring=${
       search ? search : ""
     }&orgid=${orgId}&sortfield=${sortField}&sortdirection=${sortDirection}&allFlags=${flagsList}
   `,
@@ -41,6 +42,7 @@ export async function teamApi({
   sort,
   size,
   flagsList,
+  auditStatus,
 }) {
   const options = {
     method: "GET",
@@ -52,7 +54,7 @@ export async function teamApi({
       size ? size : 7
     }&startdate=${startDate}&enddate=${endDate}&status=${
       searchValue ? searchValue : ""
-    }&searchstring=${search ? search : ""}&orgid=${orgId}&sortfield=${
+    }&auditedstatus=${auditStatus || ""}&searchstring=${search ? search : ""}&orgid=${orgId}&sortfield=${
       sort?.sortField ? sort?.sortField : ""
     }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&allFlags=${flagsList}
   `,
