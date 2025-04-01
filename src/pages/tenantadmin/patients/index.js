@@ -51,24 +51,7 @@ export const batchBullets = [
     name: "Not Computed",
   },
 ];
-export const bullets = [
-  {
-    color: "#34ace8",
-    name: "Computed",
-  },
-  {
-    color: "#452b90",
-    name: "Processing",
-  },
-  {
-    color: "#be3144",
-    name: "Failed",
-  },
-  {
-    color: "#e88d8d",
-    name: "Not Computed",
-  },
-];
+
 
 const statusOptions = [
   { label: "PROCESSING", value: "1", status: 1 },
@@ -272,6 +255,7 @@ const Patient = ({
       name: "Status",
       value: "processedStatus",
       batchStatus: true,
+      infoIcon:true
     },
     { name: "Upload", value: "", statusButton: true },
     {

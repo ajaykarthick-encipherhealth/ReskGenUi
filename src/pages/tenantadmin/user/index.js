@@ -181,6 +181,7 @@ const UserList = ({
   const [roleChangeLoader, setRoleChangeLoader] = useState(false);
   const [open, setOpen] = useState(false);
   const [openManager, setOpenManager] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     let value = e.target.value;
@@ -264,19 +265,29 @@ const UserList = ({
       },
     }));
   };
+ 
   const handleSwitchToggle = async (item, checked) => {
+    if (isLoading) return;
+    setIsLoading(true);
     setSwitchStates((prevStates) => ({
       ...prevStates,
       [item.email]: checked,
     }));
-    const res = await getEnableUser({
-      checked: checked ? "yes" : "no",
-      user: item,
-    });
-    if (res?.status === "SUCCESS") {
-      getAllUsersList({ pageCount: 0 });
+
+    try {
+      const res = await getEnableUser({
+        checked: checked ? "yes" : "no",
+        user: item,
+      });
+      if (res?.status === "SUCCESS") {
+        getAllUsersList({ pageCount: 0 });
+      }
+    } catch (error) {
+      console.error("Error toggling switch:", error);
     }
+    setIsLoading(false);
   };
+
   useEffect(() => {
     if (usersListData?.data?.response?.content) {
       const initialSwitchStates = {};
