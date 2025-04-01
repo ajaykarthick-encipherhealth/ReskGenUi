@@ -246,22 +246,28 @@ const Index = ({
       ? getLast7Days()
       : getLast30Days();
   const dosCountValue = flagData?.dosCount?.response?.invalidDosCountMapByDate;
-  const teleVisitCountValue =
-    flagData?.teleVisit?.response?.invalidDosCountMapByDate;
-  const outOfScopeValue =
-    flagData?.outOfscope?.response?.invalidDosCountMapByDate;
-  const inValidCountValue =
-    flagData?.provider?.response?.invalidDosCountMapByDate;
-  const improperDateCountValue =
-    flagData?.imProper?.response?.invalidDosCountMapByDate;
-  const multiplePatientCountValue =
-    flagData?.mutiple?.response?.invalidDosCountMapByDate;
-  const mrnIdMismatchCountValue =
-    flagData?.mrnMismatch?.response?.invalidDosCountMapByDate;
-  const patientDobMismatchCountValue =
+  const inValidDocumentValue =
+    flagData?.invaliddocument?.response?.invalidDosCountMapByDate;
+  const teleVisitValue =
+    flagData?.televisit?.response?.invalidDosCountMapByDate;
+  const invalidcredentailsValue =
+    flagData?.invalidcredentails?.response?.invalidDosCountMapByDate;
+  const patientDobValue =
     flagData?.patientDobMismatch?.response?.invalidDosCountMapByDate;
-  const illegalFormatCountValue =
-    flagData?.inValidDoc?.response?.invalidDosCountMapByDate;
+  const patientNameCountValue =
+    flagData?.patientNameMismatch?.response?.invalidDosCountMapByDate;
+  const scopeYearValue =
+    flagData?.scopeyearmismatch?.response?.invalidDosCountMapByDate;
+  const patientDeceasedValue =
+    flagData?.patientdeceasded?.response?.invalidDosCountMapByDate;
+  const mrnIdValue =
+    flagData?.mrnIdMismatch?.response?.invalidDosCountMapByDate;
+  const multiplePatientCount =
+    flagData?.multiplePatientFound?.response?.invalidDosCountMapByDate;
+  const patientInActiveValue =
+    flagData?.patientInactive?.response?.invalidDosCountMapByDate;
+
+
   const invalidChartData = [
     {
       id: 1,
@@ -274,75 +280,93 @@ const Index = ({
     },
     {
       id: 2,
-      header: "Televist Count",
-      count: flagData?.teleVisit?.response?.currentFilterCOunt || 0,
-      images: teleVisit,
-      bg: "#ADF6FF",
-      data: formatValues(teleVisitCountValue, dates),
-      overAll: flagData?.teleVisit?.response?.totalCount || 0,
+      header: "IN Valid Document",
+      count: flagData?.invaliddocument?.response?.currentFilterCOunt || 0,
+      images: imProper,
+      bg: "#FFDCDC",
+      data: formatValues(inValidDocumentValue, dates),
+      overAll: flagData?.invaliddocument?.response?.totalCount || 0,
     },
     {
       id: 3,
-      header: "Out of Scope",
-      count: flagData?.outOfscope?.response?.currentFilterCOunt || 0,
-      images: scope,
-      bg: "#FFADDA",
-      data: formatValues(outOfScopeValue, dates),
-      overAll: flagData?.outOfscope?.response?.totalCount || 0,
+      header: "Televisit (Audio visit) count",
+      count: flagData?.televisit?.response?.currentFilterCOunt || 0,
+      images: teleVisit,
+      bg: "#ADF6FF",
+      data: formatValues(teleVisitValue, dates),
+      overAll: flagData?.televisit?.response?.totalCount || 0,
     },
     {
       id: 4,
       header: "Invalid Credentails",
-      count: flagData?.provider?.response?.currentFilterCOunt || 0,
+      count: flagData?.invalidcredentails?.response?.currentFilterCOunt || 0,
       images: inValid,
       bg: "#FFECA8",
-      data: formatValues(inValidCountValue, dates),
-      overAll: flagData?.provider?.response?.totalCount || 0,
+      data: formatValues(invalidcredentailsValue, dates),
+      overAll: flagData?.invalidcredentails?.response?.totalCount || 0,
     },
     {
       id: 5,
-      header: "Improper Data",
-      count: flagData?.imProper?.response?.currentFilterCOunt || 0,
-      images: imProper,
-      bg: "#FFDCDC",
-      data: formatValues(improperDateCountValue, dates),
-      overAll: flagData?.imProper?.response?.totalCount || 0,
-    },
-    {
-      id: 6,
-      header: "Multiple Patient Found",
-      count: flagData?.mutiple?.response?.currentFilterCOunt || 0,
-      images: multiple,
-      bg: "#E2F1F3",
-      data: formatValues(multiplePatientCountValue, dates),
-      overAll: flagData?.mutiple?.response?.totalCount || 0,
-    },
-    {
-      id: 7,
-      header: "MRN ID Mismatch",
-      count: flagData?.mrnMismatch?.response?.currentFilterCOunt || 0,
-      images: mrn,
-      bg: "#FFCC9E",
-      data: formatValues(mrnIdMismatchCountValue, dates),
-      overAll: flagData?.mrnMismatch?.response?.totalCount || 0,
-    },
-    {
-      id: 8,
       header: "Patient DOB Mismatch",
       count: flagData?.patientDobMismatch?.response?.currentFilterCOunt || 0,
       images: dos,
       bg: "#B8CCFF",
-      data: formatValues(patientDobMismatchCountValue, dates),
+      data: formatValues(patientDobValue, dates),
       overAll: flagData?.patientDobMismatch?.response?.totalCount || 0,
     },
     {
+      id: 6,
+      header: "Patient Name Mismatch",
+      count: flagData?.patientNameMismatch?.response?.currentFilterCOunt || 0,
+      images: multiple,
+      bg: "#E2F1F3",
+      data: formatValues(patientNameCountValue, dates),
+      overAll: flagData?.patientNameMismatch?.response?.totalCount || 0,
+    },
+    {
+      id: 7,
+      header: "Scope Year Mis-match",
+      count: flagData?.scopeyearmismatch?.response?.currentFilterCOunt || 0,
+      images: scope,
+      bg: "#FFADDA",
+      data: formatValues(scopeYearValue, dates),
+      overAll: flagData?.scopeyearmismatch?.response?.totalCount || 0,
+    },
+    {
+      id: 8,
+      header: "Patient Deceased",
+      count: flagData?.patientdeceasded?.response?.currentFilterCOunt || 0,
+      images: dos,
+      bg: "#B8CCFF",
+      data: formatValues(patientDeceasedValue, dates),
+      overAll: flagData?.patientdeceasded?.response?.totalCount || 0,
+    },
+    {
       id: 9,
-      header: "Illegial Format",
-      count: flagData?.inValidDoc?.response?.currentFilterCOunt || 0,
+      header: "MRN ID Mismatch",
+      count: flagData?.mrnIdMismatch?.response?.currentFilterCOunt || 0,
+      images: mrn,
+      bg: "#E3B982",
+      data: formatValues(mrnIdValue, dates),
+      overAll: flagData?.mrnIdMismatch?.response?.totalCount || 0,
+    },
+    {
+      id: 10,
+      header: "Multiple Patient Found",
+      count: flagData?.multiplePatientFound?.response?.currentFilterCOunt || 0,
+      images: multiple,
+      bg: "#E2F1F3",
+      data: formatValues(multiplePatientCount, dates),
+      overAll: flagData?.multiplePatientFound?.response?.totalCount || 0,
+    },
+    {
+      id: 11,
+      header: "Patient In-active",
+      count: flagData?.patientInactive?.response?.currentFilterCOunt || 0,
       images: illegal,
       bg: "#C8A8FF",
-      data: formatValues(illegalFormatCountValue, dates),
-      overAll: flagData?.inValidDoc?.response?.totalCount || 0,
+      data: formatValues(patientInActiveValue, dates),
+      overAll: flagData?.patientInactive?.response?.totalCount || 0,
     },
   ];
   const totalCount = invalidChartData
@@ -361,16 +385,21 @@ const Index = ({
     initialValue
   );
   const flagNameList = [
-    { flagName: "IN_VALID_DOC", label: "dosCount", id: 1 },
-    { flagName: "AUDIO_VISIT", label: "teleVisit", id: 2 },
-    { flagName: "VIDEO_VISIT", label: "videoVisit", id: 3 },
-    { flagName: "OUT_OF_SCOPE", label: "outOfscope", id: 4 },
-    { flagName: "PROVIDER_UNAUTHORIZED", label: "provider", id: 5 },
-    { flagName: "IMPROPER_DATA", label: "imProper", id: 6 },
-    { flagName: "MULTIPLE_PATIENT_FOUND", label: "mutiple", id: 7 },
-    { flagName: "MRN_ID_MISMATCH", label: "mrnMismatch", id: 8 },
-    { flagName: "PATIENT_DOB_MISMATCH", label: "patientDobMismatch", id: 9 },
-    { flagName: "IN_VALID_DOC", label: "inValidDoc", id: 10 },
+    { flagName: "UNAPPROVED_DOC", label: "dosCount", id: 1 },
+    { flagName: "IN_VALID_DOC", label: "invaliddocument", id: 2 },
+    { flagName: "AUDIO_VISIT", label: "televisit", id: 3 },
+    { flagName: "PROVIDER_UNAUTHORIZED", label: "invalidcredentails", id: 4 },
+    { flagName: "PATIENT_DOB_MISMATCH", label: "patientDobMismatch", id: 5 },
+    { flagName: "PATIENT_NAME_MISMATCH", label: "patientNameMismatch", id: 6 },
+    { flagName: "SCOPE_YEAR_MISMATCH", label: "scopeyearmismatch", id: 7 },
+    { flagName: "PATIENT_DECEASED", label: "patientdeceasded", id: 8 },
+    { flagName: "MRN_ID_MISMATCH", label: "mrnIdMismatch", id: 9 },
+    {
+      flagName: "MULTIPLE_PATIENT_FOUND",
+      label: "multiplePatientFound",
+      id: 10,
+    },
+    { flagName: "PATIENT_INACTIVE", label: "patientInactive", id: 11 },
   ];
   const chartData = async (item) => {
     try {
@@ -449,6 +478,7 @@ const Index = ({
       setActiveBtn("Invalid");
     }
   }, [routedData]);
+
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />

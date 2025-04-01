@@ -31,6 +31,7 @@ import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import SvgFlag from "../../../components/patientDetails/details/components/svg/svg";
+import { actions as workflowActions } from "../../../stores/reviewer/workqueue"
 
 export const batchBullets = [
   {
@@ -76,17 +77,17 @@ const statusOptions = [
   { label: "NOT COMPUTED", value: "0", status: 0 },
 ];
 export const flagOptions = [
-  { header: "DOS Count", label: "INVALID DOC", value: "IN_VALID_DOC", id: 1 },
+  { header: "DOS Count", label: "INVALID DOC", value: "UNAPPROVED_DOC", id: 1 },
   {
-    header: "Televist Count",
+    header: "IN Valid Document",
     label: "AUDIO VISIT",
-    value: "AUDIO_VISIT",
+    value: "IN_VALID_DOC",
     id: 2,
   },
   {
-    header: "Out of Scope",
+    header: "Televisit (Audio visit) count",
     label: "OUT OF SCOPE",
-    value: "OUT_OF_SCOPE",
+    value: "AUDIO_VISIT",
     id: 3,
   },
   {
@@ -96,34 +97,46 @@ export const flagOptions = [
     id: 4,
   },
   {
-    header: "Improper Data",
+    header: "Patient DOB Mismatch",
     label: "IMPROPER DATA",
-    value: "IMPROPER_DATA",
+    value: "PATIENT_DOB_MISMATCH",
     id: 5,
+  },
+  {
+    header: "Patient Name Mismatch",
+    label: "MULTIPLE PATIENT FOUND",
+    value: "PATIENT_NAME_MISMATCH",
+    id: 6,
+  },
+  {
+    header: "Scope Year Mis-match",
+    label: "MRN ID MISMATCH",
+    value: "SCOPE_YEAR_MISMATC",
+    id: 7,
+  },
+  {
+    header: "Patient Deceased",
+    label: "PATIENT DOB MISMATCH",
+    value: "PATIENT_DECEASED",
+    id: 8,
+  },
+  {
+    header: "MRN ID Mismatch",
+    label: "ILLEGAL FORMAT",
+    value: "MRN_ID_MISMATCH",
+    id: 9,
   },
   {
     header: "Multiple Patient Found",
     label: "MULTIPLE PATIENT FOUND",
     value: "MULTIPLE_PATIENT_FOUND",
-    id: 6,
+    id: 10,
   },
   {
-    header: "MRN ID Mismatch",
-    label: "MRN ID MISMATCH",
-    value: "MRN_ID_MISMATCH",
-    id: 7,
-  },
-  {
-    header: "Patient DOB Mismatch",
-    label: "PATIENT DOB MISMATCH",
-    value: "PATIENT_DOB_MISMATCH",
-    id: 8,
-  },
-  {
-    header: "Illegial Format",
-    label: "ILLEGAL FORMAT",
-    value: "ILLEGAL_FORMAT",
-    id: 9,
+    header: "Patient In-active",
+    label: "PATIENT INACTIVE",
+    value: "PATIENT_INACTIVE",
+    id: 11,
   },
 ];
 export const commonFilterItems = [
@@ -196,7 +209,6 @@ export const commonFilterItems = [
     title: "flag",
     type: "select",
     value: null,
-    showSearch: true,
     placeholder: "Flag",
     options: [],
     active: false,
@@ -220,6 +232,9 @@ const Patient = ({
   getAllBatchList,
   batchList,
   getRoutedData,
+  getAllFlags,
+  getFlagsData,
+
 }) => {
   const columns = [
     {
@@ -751,6 +766,17 @@ const Patient = ({
     getAllOrganizationList();
     getFilters({ field: "createdBy" });
   }, []);
+  const flagPostList = getFlagsData?.response?.map((item) => ({
+    value: item?.flagName,
+    label: (
+      <>
+        {item?.flagName ? item?.flagName.replaceAll("_", " ") : ""}
+        <SvgFlag fillColor={item?.flagColour} />
+      </>
+    ),
+    name: item?.flagName,
+  }));
+
   const opt = {
     createdBy: generateOptionsForNewStore(filteredList?.data?.response),
     auditAllocatedBy: generateOptionsForNewStore(filteredList?.data?.response),
@@ -763,7 +789,7 @@ const Patient = ({
       label: `${item?.name}`,
     })),
     status: statusOptions,
-    flag: flagOptions,
+    flag: flagPostList,
   };
   useEffect(() => {
     if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
@@ -795,7 +821,9 @@ const Patient = ({
       window.removeEventListener('popstate', handleBackButton)
     }
   }, [navigate,routedData])
-
+useEffect(()=>{
+  getAllFlags()
+},[])
   return (
     <div className={`show `}>
       <Header />
@@ -854,7 +882,7 @@ const Patient = ({
             </div>
           </section>
           <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-            <div className="mt-2">
+            <div className="mt-4">
               <AppTable
                 data={
                   statusUpdateWebSocket
@@ -921,6 +949,7 @@ const enhancer = connect(
     loading: state?.tenantAdmin?.patients?.allPatientsLoading,
     filteredList: state.admin?.patientAllocate?.filtersList,
     routedData: state.tenantAdmin?.patientSync?.routedData,
+    getFlagsData: state?.reviewer?.workQueue?.flags?.data,
 
   }),
   {
@@ -934,6 +963,7 @@ const enhancer = connect(
     uploadFilesRadiology: tenantAdminAction.uploadFilesRadiology,
     getRetreggerPatient: tenantAdminAction.getRetreggerPatient,
     getRoutedData: allPatientSyncAction.getRoutedData,
+        getAllFlags: workflowActions.flagsAction,
   }
 );
 export default enhancer(Patient);
