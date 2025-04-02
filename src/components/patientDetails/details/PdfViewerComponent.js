@@ -23,7 +23,6 @@ const PdfViewer = ({
   const [fileId, setFileId] = useState("");
   const [url, setUrl] = useState("");
   const [ids, setIds] = useState();
-
   useEffect(() => {
     const page = selectedPageNumber ? selectedPageNumber : pageNumber;
     if (!Array.isArray(src)) {
@@ -57,7 +56,7 @@ const PdfViewer = ({
       } else {
         searchUrl = `${portalPdfUrl}?file=${url}&salt=${ids}&token=${getStorage(
           "token"
-        )}&baseEnv=${serverControl}`;
+        )}&baseEnv=${serverControl}&pdfEnv=${pdfControl}`;
         // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
         if (searchQuery || page || headerContent) {
           const queryParams = [];
