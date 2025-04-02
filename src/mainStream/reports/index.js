@@ -673,7 +673,7 @@ const Reports = ({
                               allowClear={true}
                               value={
                                 selectedOptions
-                                  ? selectedOptions[`${activeTab}-Status`]
+                                  ? selectedOptions[`${activeTab}Status`]
                                   : null
                               }
 
@@ -708,7 +708,7 @@ const Reports = ({
                               allowClear={true}
                               value={
                                 selectedOptions
-                                  ? selectedOptions[`${activeTab}-AuditStatus`]
+                                  ? selectedOptions[`${activeTab}AuditStatus`]
                                   : null
                               }
 
