@@ -7,12 +7,11 @@ import {
   Checkbox,
   Tag,
   notification,
-  
 } from "antd";
 import style from "../style.module.css";
 import { useEffect, useState } from "react";
-import { createIdGen } from "../../../../utils/reusable";
 import { useRouter } from "next/router";
+import { createIdGen } from "../../../../utils/reusable";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -30,7 +29,20 @@ const NotificationModal = ({
   const [notifyAll, setNotifyAll] = useState(false);
   const [selectedList, setSelectedList] = useState([]);
   const [openDropdown, setOpenDropdown] = useState(false);
-const router = useRouter()
+  const [roles, setRoles] = useState({
+    isAdmin: false,
+    isReviewer: false,
+    isSupervisor: false,
+    isCustom: false,
+  });
+  const router = useRouter();
+  const rolesList = [
+    { userRole: "notifyAll", label: "Notify All Users", allUser: true },
+    { userRole: "isAdmin", label: "Tenant Admin" },
+    { userRole: "isReviewer", label: "Reviewer" },
+    { userRole: "isSupervisor", label: "Supervisor" },
+    { userRole: "isCustom", label: "Custom" },
+  ];
   useEffect(() => {
     getAllCustomUsers();
   }, []);
@@ -49,7 +61,11 @@ const router = useRouter()
   };
 
   const handleSubmit = async (values) => {
-    if (!notifyAll && selectedList.length === 0) {
+    if (
+      !notifyAll &&
+      selectedList.length === 0 &&
+      !Object.values(roles).some((role) => role)
+    ) {
       notification.error({
         message: "Please select at least one user or check 'Notify All Users'",
       });
@@ -58,9 +74,7 @@ const router = useRouter()
 
     const data = {
       managerId: "",
-      isAdmin: false,
-      isSupervisor: false,
-      isReviewer: false,
+      ...roles,
       notificationType: "INFO",
       content: values.message,
       title: values.title,
@@ -88,6 +102,42 @@ const router = useRouter()
     }
   };
 
+const handleCheckboxChange = (userRole, checked) => {
+  if (userRole === "notifyAll") {
+    setNotifyAll(checked);
+    setRoles({
+      isAdmin: checked,
+      isReviewer: checked,
+      isSupervisor: checked,
+      isCustom: false,
+    });
+  } else {
+    setRoles((prevRoles) => {
+      const updatedRoles = { ...prevRoles, [userRole]: checked };
+      if (prevRoles.notifyAll && userRole !== "isCustom") {
+        setNotifyAll(false);
+      }
+
+      return updatedRoles;
+    });
+  }
+};
+
+const isCheckboxDisabled = (userRole) => {
+  const roleSelected =
+    ["isAdmin", "isReviewer", "isSupervisor"].some((role) => roles[role]) ||
+    notifyAll;
+
+  if (userRole === "isCustom") {
+     return roleSelected ;
+  }
+  if (userRole === "notifyAll") {
+    return roles.isCustom;
+  }
+  return roles.isCustom;
+};
+
+
   return (
     <div>
       <Modal
@@ -100,9 +150,9 @@ const router = useRouter()
         <div
           id={
             id
-              ? createIdGen("notification-form ")
+              ? createIdGen("Add_Notification " + id)
               : createIdGen(
-                  "notification-form"+ router.pathname.replaceAll(" ")
+                  "Add_Notification" + router.pathname.replaceAll(" ")
                 )
           }
         >
@@ -119,42 +169,53 @@ const router = useRouter()
             >
               <Input placeholder="Enter notification title" />
             </Form.Item>
-
             <Form.Item
               label="Message"
               name="message"
               rules={[{ required: true, message: "Please enter a message" }]}
             >
               <TextArea
-                className={style.commentsFormControl}
                 style={{ minHeight: "102px", resize: "none" }}
                 placeholder="Enter notification message"
               />
             </Form.Item>
-
             <Form.Item
               label="Category"
               name="category"
               rules={[{ required: true, message: "Please select a category" }]}
             >
-              <Select placeholder="Select category" allowClear>
+              <Select
+                data-testid="select-category"
+                placeholder="Select category"
+                allowClear
+              >
                 <Option value="general">General</Option>
                 <Option value="medium">Medium</Option>
                 <Option value="high">High</Option>
               </Select>
             </Form.Item>
-
             <div className="d-flex gap-2 align-items-center mb-2">
               <div className="fw-bold">Users</div>
-              <Checkbox
-                checked={notifyAll}
-                onChange={(e) => setNotifyAll(e.target.checked)}
-              >
-                Notify All Users
-              </Checkbox>
+
+              {rolesList.map(({ userRole, label, allUser }) => (
+                <Checkbox
+                  key={userRole}
+                  checked={
+                    allUser
+                      ? roles.isAdmin && roles.isReviewer && roles.isSupervisor
+                      : roles[userRole]
+                  }
+                  onChange={(e) =>
+                    handleCheckboxChange(userRole, e.target.checked)
+                  }
+                  disabled={isCheckboxDisabled(userRole)}
+                >
+                  {label}
+                </Checkbox>
+              ))}
             </div>
 
-            {!notifyAll && (
+            {roles.isCustom && (
               <Form.Item label="Select Users">
                 <div className="d-flex" style={{ width: "100%" }}>
                   <Select
@@ -187,7 +248,6 @@ const router = useRouter()
                 </div>
               </Form.Item>
             )}
-
             <Form.Item>
               <div
                 id="notification-submit"
