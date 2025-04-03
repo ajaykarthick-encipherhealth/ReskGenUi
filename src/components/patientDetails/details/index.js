@@ -467,7 +467,10 @@ const Details = ({
     }
     if (value == "Timeline") {
       setFlagContainerActiveTitle("Timeline");
-      const response = await getTimelineList(localPatientId);
+      const response = await getTimelineList({
+        patientId:localPatientId,
+        dos: isDosSelected,
+      })
       var result = response?.response?.content;
       setTimeLineData(result);
       setFilterDataLoading(false);

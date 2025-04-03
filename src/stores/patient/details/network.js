@@ -394,12 +394,12 @@ export async function getValidHccDetailsApi(year, code) {
   return res;
 }
 
-export async function getTimelineList(patientId) {
+export async function getTimelineList({patientId,dos}) {
   const options = {
     method: "GET",
   };
   const res = await requestPortal(
-    `dbservice/actioneventaudit?patientid=${patientId}&pageno=${0}&pagesize=${100}`,
+    `dbservice/actioneventaudit?patientid=${patientId}&dos=${dos?dos:""}&pageno=${0}&pagesize=${100}`,
     options
   );
   return res;
