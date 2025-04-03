@@ -130,7 +130,7 @@ const applyHoverEffect = (target, isEntering, pathname) => {
           window.getComputedStyle(target).cursor === "pointer") &&
         !isTableElement(target)
       ) {
-        target.classList.add("smooth-transition");
+        // target.classList.add("smooth-transition");
         break;
       }
       target = target.parentElement;

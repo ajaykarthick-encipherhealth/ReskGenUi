@@ -286,7 +286,24 @@ const TableHeadItem = ({ item, sort, setSort }) => {
       </th>
     );
   }
+  if (item.isTooltip ) {
+    return (
+      <th className="text-center text-truncate cr-pointer">
+        <Tooltip
+          title={
+            item.name == "RC"
+              ? "REVIEWER CHANGES"
+              : "REVIEWER CHANGES REJECTION"
+          }
+          placement="bottom"
+        >
+          {item.name.toUpperCase()}
+        </Tooltip>
 
+        <></>
+      </th>
+    );
+  }
   return (
     <th className="text-start text-truncate   font2">
       {typeof item?.name === "string" ? item?.name?.toUpperCase() : item?.name}

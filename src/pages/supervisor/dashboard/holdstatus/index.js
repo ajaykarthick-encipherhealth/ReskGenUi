@@ -43,8 +43,8 @@ const HoldStatus = ({ holdStatusData, getHoldStatusData }) => {
     <table className={styles.classTable}>
       <thead className={styles.tableHead}>
         <tr>
-          <th>Patient ID</th>
-          <th>Reason</th>
+          <th className="font2 bold text-start p-2 text-white">Patient ID</th>
+          <th className="font2 bold text-start p-2 text-white">Reason</th>
         </tr>
       </thead>
       <tbody className={styles.body}>
@@ -53,7 +53,7 @@ const HoldStatus = ({ holdStatusData, getHoldStatusData }) => {
             <tr
               key={index}
               className={styles.tabelCell}
-              onClick={() => {                
+              onClick={() => {
                 router.push("/reviewer/patients/details");
               }}
             >

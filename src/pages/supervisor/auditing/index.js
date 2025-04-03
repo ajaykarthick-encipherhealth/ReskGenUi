@@ -149,18 +149,21 @@ const Patient = ({
     },
     {
       name: "RC",
-      value: "accuracyScore?.correctCount",
+      value: { firstValue: "accuracyScore", secondValue: "correctCount" },
+      objValue: true,
+      isTooltip: true,
     },
     {
       name: "RCR",
-      value: "accuracyScore?.wrongCount",
+      value: { firstValue: "accuracyScore", secondValue: "wrongCount" },
+      objValue: true,
+      isTooltip: true,
     },
     {
       name: "Audit Allocated Date",
       value: "auditAllocatedDate",
       sortable: true,
       isDate: true,
-      
     },
     {
       name: "Audit Due Date",
@@ -188,7 +191,12 @@ const Patient = ({
       name: "priority",
       value: "priority",
     },
-    { name: "Audited STATUS", value: "auditedStatus", auditedStatus: true,   infoIcon:true },
+    {
+      name: "Audited STATUS",
+      value: "auditedStatus",
+      auditedStatus: true,
+      infoIcon: true,
+    },
   ];
   const [sort, setSort] = useState({
     auditAllocatedDate: {

@@ -40,8 +40,8 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData ,getPatientID}) => {
     <table className={styles.classTable}>
       <thead className={styles.tableHead}>
         <tr>
-          <th>Patient ID</th>
-          <th>Reason</th>
+          <th className="font2 bold text-start p-2 text-white">Patient ID</th>
+          <th className="font2 bold text-start p-2 text-white">Reason</th>
         </tr>
       </thead>
       <tbody className={styles.body}>
@@ -49,7 +49,7 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData ,getPatientID}) => {
           processedData?.map((item) => (
             <tr
               key={item?.id}
-              className={styles.tabelCell}  
+              className={styles.tabelCell}
               onClick={() => {
                 setStorage("patientId", item?.patientId);
                 router.push("/reviewer/patients/details");

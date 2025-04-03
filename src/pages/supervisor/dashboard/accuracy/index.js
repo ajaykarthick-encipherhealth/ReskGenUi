@@ -382,7 +382,7 @@ const Accuracy = ({
               ) : null}
             </div>
             <div className="d-flex">
-              <div className={styles.picker}>
+              <div className={`mx-3 ${styles.picker}`}>
                 <YearPicker
                   onChangeYear={handleYearChange}
                   onChangeMonth={handleMonthChange}

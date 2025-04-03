@@ -29,7 +29,7 @@ const DosSelect = ({
   const getDos = (item) => (
     <div className="d-flex ant-badge gap-1 align-items-center ">
       <div
-        className="ant-badge d-flex align-items-end gap-1"
+        className="ant-badge d-flex gap-1"
         onClick={() => {
           setSearch({
             value: item?.page?.substring || null,
