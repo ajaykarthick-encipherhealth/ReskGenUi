@@ -624,7 +624,7 @@ export async function getFlagCharts({dos}) {
     method: "GET"
   };
   const data = await requestPortal(
-    `dbservice/flagdetails/getcount?patientId=${patientId}&dos=${dos}`,
+    `dbservice/flagdetails/getcount?patientId=${patientId}&yearOfService=${dos}`,
     options
   );
   return data;
