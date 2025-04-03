@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Chat from "../chat/index";
 import { Tooltip } from "antd";
+import style from "./styles.module.css";
 import moment from "moment";
 import { connect } from "react-redux";
 import { actions as webSocketActions } from "../../stores/websocket";
 import { actions as dashbaordActions } from "../../stores/reviewer/dashboard";
 import { getStorage } from "../../utils/storages";
+import { getPriorityStyle } from "../../pages/tenantadmin/notifications/noficationCard";
 
 const Notification = ({
   open,
@@ -69,14 +71,12 @@ const Notification = ({
                     </Tooltip>
                     <div className="user_info">
                       <div className="d-flex">
-                        <span
-                          className="send_details"
-                         
-                        >
-                          {data?.content}
-                        </span>
+                        <span className="send_details">{data?.content}</span>
                       </div>
                       <p>{moment(data?.createdDate).fromNow()}</p>
+                    </div>
+                    <div className=" text-center ms-auto">
+                      {getPriorityStyle(data?.notificationCategories)}
                     </div>
                   </div>
                 </li>

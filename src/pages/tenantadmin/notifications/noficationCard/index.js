@@ -5,25 +5,26 @@ import style from "../style.module.css";
 import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
 import { createIdGen, formatDateTime } from "../../../../utils/reusable";
 import { useRouter } from "next/router";
+export const getPriorityStyle = (priority) => {
+  switch (priority) {
+    case "HIGH":
+      return <div className={`${style.high} px-3 py-1`}>High</div>;
+
+    case "MEDIUM":
+      return <div className={`${style.medium} px-3 py-1`}>Medium</div>;
+
+    case "GENERAL":
+      return <div className={`${style.general} px-3 py-1`}>General</div>;
+
+    default:
+      return <div className={`${style.general} px-3 py-1`}>General</div>;
+  }
+};
+
 const NotificationCard = ({ notificationList, id }) => {
 
   const router = useRouter();
-  const getPriorityStyle = (priority) => {
-    switch (priority) {
-      case "HIGH":
-        return <div className={`${style.high} px-3 py-1`}>High</div>;
-
-      case "MEDIUM":
-        return <div className={`${style.medium} px-3 py-1`}>Medium</div>;
-
-      case "GENERAL":
-        return <div className={`${style.general} px-3 py-1`}>General</div>;
-
-      default:
-        return <div className={`${style.general} px-3 py-1`}>General</div>;
-    }
-  };
-
+ 
   const MAX_VISIBLE_USERS = 3;
   return (
     <div className={`d-grid pt-4 gap-3 align-items-center ${style.cardGrid}`}>
