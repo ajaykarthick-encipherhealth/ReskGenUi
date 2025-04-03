@@ -3,7 +3,7 @@ import NavBar from "../../../jsx/layouts/nav/Header";
 import visitStyles from "../../../styles/visitdata.module.css";
 import TableStyle from "../../../components/table/table.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FilterOutlined } from "@ant-design/icons";
+import { FilterOutlined, UndoOutlined } from "@ant-design/icons";
 import {
   faFlag,
   faComment,
@@ -20,6 +20,7 @@ import {
   faAngleDoubleLeft,
   faFile,
   faTimeline,
+  faClockRotateLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -69,6 +70,7 @@ import { actions as reviewerWorkQueueAction } from "../../../stores/reviewer/wor
 import { allFilters } from "../../../pages/reviewer/patients/headerFilters";
 import { actions as allActions } from "../../../stores/tenantAdmin/patientSync";
 import CardSkeleton from "../../skeleton/card";
+import VersionHistory from "./versionHistory";
 export const navigetPageDetails = async (
   pageTitle,
   setSideNavLabelActiveKey,
@@ -141,6 +143,10 @@ const Details = ({
   loading,
   patientDetailsLoad,
   getFlagCharts,
+  getAllRevertDetails,
+  getRevertDetails,
+  revertLoading,
+  confirmRevert
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -445,6 +451,7 @@ const Details = ({
     );
     patientDetailsLoad(false);
     getFlagCharts({ dos: e });
+    getAllRevertDetails({ dos: e })
   };
 
   const addComments = async (value) => {
@@ -467,6 +474,10 @@ const Details = ({
     }
     if (value == "Add DOS & Provider") {
       setFlagContainerActiveTitle("Add DOS & Provider");
+    }
+    if (value == "Version History") {
+      setFlagContainerActiveTitle("Version History");
+      getAllRevertDetails({dos:isDosSelected})
     }
   };
 
@@ -495,7 +506,12 @@ const Details = ({
       name: "Add DOS & Provider",
       icon: <PlusCircleOutlined className="text-dark" />,
     },
+    {
+      name: "Version History",
+      icon: <FontAwesomeIcon icon={faClockRotateLeft} />
+    },
   ];
+  
 
   const getPatientListToDetails = async (userId, isClear) => {
     setIsLoading(true);
@@ -607,7 +623,6 @@ const Details = ({
 
     setUserDetails(data);
   };
-
   useEffect(() => {
     if (flagFirstData?.flag) {
       getPatientIdData(localPatientId, flagFirstData);
@@ -649,7 +664,6 @@ const Details = ({
       getActiveLabels();
     }
   }, [isDosSelected, dosYearDefalutSelect]);
- 
   return (
     <>
       <div className={`show `} style={{ height: "100vh", background: "#fff" }}>
@@ -937,6 +951,7 @@ const Details = ({
                             const isDosDisabled =
                               data.name === "Add DOS & Provider" &&
                               isDosSelected;
+                              const isVersionDisabled = data.name === "Version History" && !isDosSelected
 
                             return (
                               <Tooltip
@@ -953,12 +968,12 @@ const Details = ({
                                       : `${visitStyles.commentsTag}`
                                   }
                                   onClick={() => {
-                                    if (!isFlagDisabled && !isDosDisabled) {
+                                    if (!isFlagDisabled && !isDosDisabled && !isVersionDisabled) {
                                       addComments(data.name);
                                     }
                                   }}
                                   style={
-                                    isFlagDisabled || isDosDisabled
+                                    isFlagDisabled || isDosDisabled || isVersionDisabled
                                       ? {
                                           cursor: "not-allowed",
                                           opacity: 0.5,
@@ -1061,6 +1076,21 @@ const Details = ({
                       selectedDosValue={selectedDosValue}
                       dosYearDefalutSelect={dosYearDefalutSelect}
                     />
+                  ) :
+                   flagContainerActive === "Version History" ? (
+                    <VersionHistory
+                    getRevertDetails={getRevertDetails}
+                    revertLoading={revertLoading}
+                    splitUserName={splitUserName}
+                    userDetails={userDetails}
+                    renderUserDetails={renderUserDetails}
+                    confirmRevert={confirmRevert}
+                    isDosSelected={isDosSelected}
+                    dosYearDefalutSelect={dosYearDefalutSelect}
+                    getPatientListToDetails={getPatientListToDetails}
+                    setIsModalComments={setIsModalComments}
+                    getpatientDetailsData={getpatientDetailsData}
+                  />
                   ) : null}
                 </Drawer>
               </div>
@@ -1094,6 +1124,7 @@ const Details = ({
       )}
     </>
   );
+ 
 };
 
 const enhancer = connect(
@@ -1114,6 +1145,8 @@ const enhancer = connect(
     hccFileDetails: state?.patientDetails?.details?.hccFileResult,
     routedData: state.tenantAdmin?.patientSync?.routedData,
     loading: state?.patientDetails?.details?.loading,
+    getRevertDetails:state?.patientDetails?.details?.getRevertDetails?.data?.response,
+    revertLoading:state?.patientDetails?.details?.revertLoading
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -1146,6 +1179,8 @@ const enhancer = connect(
     getRoutedData: allActions.getRoutedData,
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
     patientDetailsLoad: detailsActions.patientDetailsLoad,
+    getAllRevertDetails:detailsActions.revertDetails,
+    confirmRevert:detailsActions.confirmRevertDetails
   }
 );
 export default enhancer(Details);

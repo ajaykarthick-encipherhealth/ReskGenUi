@@ -195,3 +195,12 @@ export const getFlagCharts = createActionThunk(
   network.getFlagCharts
 );
 export const patientDetailsLoad = createAction("PATIENT_DETAILS_LOAD");
+
+export const revertDetails = createActionThunk(
+  "GET_REVERT_DETAILS",
+  network.getRevertDetails
+);
+export const confirmRevertDetails = createActionThunk(
+  "GET_CONFIRM_REVERT_DETAILS",
+  network.confirmRevert
+);

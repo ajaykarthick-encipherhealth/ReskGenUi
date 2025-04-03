@@ -62,7 +62,7 @@ const statusOptions = [
 export const flagOptions = [
   { header: "DOS Count", label: "INVALID DOC", value: "UNAPPROVED_DOC", id: 1 },
   {
-    header: "IN Valid Document",
+    header: "Invalid Document",
     label: "AUDIO VISIT",
     value: "IN_VALID_DOC",
     id: 2,

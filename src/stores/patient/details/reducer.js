@@ -38,6 +38,8 @@ import {
   patientDetailsLoad,
   getCommentListAction,
   getFlagCharts,
+  revertDetails,
+  confirmRevertDetails
 } from "./actions";
 
 
@@ -156,6 +158,9 @@ const patientDetailsReducer = combineReducers({
   CommentListLoader: getPatientsLoading(getCommentListAction),
   getFlagChartsList: createReducer(getFlagCharts),
   getFlagChartsLoader: getPatientsLoading(getFlagCharts),
+  getRevertDetails:createReducer(revertDetails),
+  revertLoading:getPatientsLoading(revertDetails),
+  confirmRevertDetails:createReducer(confirmRevertDetails)
 });
 
 export default patientDetailsReducer;

@@ -56,6 +56,7 @@ const applyHoverEffect = (target, isEntering, pathname) => {
   if (
     target.id === "badge" ||
     target.classList.contains("ant-badge") ||
+    target.classList.contains("timeline-panel") ||
     target.classList.contains("ant-badge-count") ||
     target.classList.contains("ant-steps-item-container") ||
     target.classList.contains("fileprocessingstepper") ||

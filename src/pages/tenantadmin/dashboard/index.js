@@ -280,7 +280,7 @@ const Index = ({
     },
     {
       id: 2,
-      header: "IN Valid Document",
+      header: "Invalid Document",
       count: flagData?.invaliddocument?.response?.currentFilterCOunt || 0,
       images: imProper,
       bg: "#FFDCDC",

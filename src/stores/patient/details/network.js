@@ -629,3 +629,27 @@ export async function getFlagCharts({dos}) {
   );
   return data;
 }
+export async function getRevertDetails({dos}) {
+  const patientId = getStorage("patientId")
+  const options = {
+    method: "GET"
+  };
+  const data = await requestPortal(
+    `dbservice/actioneventaudit/revert-history?patientid=${patientId}&dateOfService=${dos?dos:""}`,
+    options
+  );
+  return data;
+}
+
+export const confirmRevert = async ({dos,year,versionHistory}) => {
+  const patientId = getStorage("patientId")
+  const options = {
+    method: "PUT",
+  };
+  const response = await requestPortal(
+    `/management/disease/revert?patientId=${patientId}&dateOfService=${dos}&processedYear=${year}&versionHistory=${versionHistory}`,
+    options
+  );
+
+  return response;
+};
