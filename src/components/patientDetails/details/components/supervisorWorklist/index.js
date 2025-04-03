@@ -52,10 +52,10 @@ const SupervisorWorkList = ({
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [selCreatedBy, setSelCreatedBy] = useState("");
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
-  const [completedStartDate, setCompletedStartDate] = useState("");
-  const [completedEndDate, setCompletedEndDate] = useState("");
-  const [computedStartDate, setComputedStartDate] = useState("");
-  const [computedEndDate, setComputedEndDate] = useState("");
+  const [auditDueDateStart, setAuditDueStartDate] = useState("");
+  const [auditDueDateEnd, setAuditDueEndDate] = useState("");
+  const [auditDateStart, setAuditStartDate] = useState("");
+  const [auditDateEnd, setAuditEndDate] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [search, setSearch] = useState("");
   const [closeSlider, setCloseSlider] = useState(true);
@@ -229,27 +229,26 @@ const SupervisorWorkList = ({
     setFilterDataLoading(true);
     const data = {
       pageNo,
-      computedStartDate,
-      computedEndDate,
+      auditDateStart,
+      auditDateEnd,
       selectedOption,
       search,
-      completedStartDate,
-      completedEndDate,
+      auditDueDateStart,
+      auditDueDateEnd,
       patientSortOrder,
       selAllocatedBy,
       sort,
       selCreatedBy,
     };
-
     getWorkListFilter({ data: data });
   }, [
     pageNo,
-    computedStartDate,
-    computedEndDate,
+    auditDateStart,
+    auditDateEnd,
     selectedOption,
     search,
-    completedStartDate,
-    completedEndDate,
+    auditDueDateStart,
+    auditDueDateEnd,
     patientSortOrder,
     selAllocatedBy,
     sort,
@@ -291,14 +290,14 @@ const SupervisorWorkList = ({
         <div className="col-3">
           <div className={visitStyles.content}>
             <MyWorkQueueFilter
-              setComputedStartDate={setCompletedStartDate}
-              setComputedEndDate={setCompletedEndDate}
-              setCompletedStartDate={setComputedStartDate}
-              setCompletedEndDate={setComputedEndDate}
-              completedStartDate={computedStartDate}
-              completedEndDate={computedEndDate}
-              computedStartDate={completedStartDate}
-              computedEndDate={completedEndDate}
+              setComputedStartDate={setAuditStartDate}
+              setComputedEndDate={setAuditEndDate}
+              setCompletedStartDate={setAuditDueStartDate}
+              setCompletedEndDate={setAuditDueEndDate}
+              completedStartDate={auditDueDateStart}
+              completedEndDate={auditDueDateEnd}
+              computedStartDate={auditDateStart}
+              computedEndDate={auditDateEnd}
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
               statusOptions={statusOptions}
@@ -347,23 +346,22 @@ const SupervisorWorkList = ({
           </>
         ) : (
           <div className="mt-2">
-              <TableSkeleton/>
+            <TableSkeleton />
           </div>
         )}
       </div>
       <div className={visitStyles.paginationContiner}>
         <div>
-        <div className="patient-filte-page">
-          <Paginator
-           className="paginator-workqueue"
-            first={paginationFirst}
-            rows={15}
-            totalRecords={totalElements}
-            onPageChange={onPageChange}
-          />
+          <div className="patient-filte-page">
+            <Paginator
+              className="paginator-workqueue"
+              first={paginationFirst}
+              rows={15}
+              totalRecords={totalElements}
+              onPageChange={onPageChange}
+            />
+          </div>
         </div>
-        </div>
-       
       </div>
     </>
   );
