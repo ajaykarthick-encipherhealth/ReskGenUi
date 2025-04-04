@@ -186,6 +186,7 @@ const Details = ({
   const [copied, setCopied] = useState(false);
   const [selectDosValue, setSelectDosValue] = useState("");
   const [search, setSearch] = useState();
+  const [selectedDate, setSelectedDate] = useState(null);
   const tabList = [
     {
       title: "HCC",
@@ -683,8 +684,8 @@ const Details = ({
                   {activeTab == "2" || activeTab == "1" ? (
                     <div className="row">
                       <div
-                      id="backArrowBtn"
-                      name="backArrowBtn"
+                        id="backArrowBtn"
+                        name="backArrowBtn"
                         className="col-1 d-flex align-items-center justify-content-start "
                         // style={{ zIndex: "1", marginTop: "20px" }}
                       >
@@ -722,6 +723,8 @@ const Details = ({
                             isLoadingDos={isLoadingDos}
                             dosYear={dosYear}
                             setCopied={setCopied}
+                            selectedDate={selectedDate}
+                            setSelectedDate={setSelectedDate}
                           />
                         )}
                       </div>
@@ -783,7 +786,11 @@ const Details = ({
                           name="mySidenavContent"
                           className={`${visitStyles.sideNav}`}
                         >
-                          <div className="sideNavscroll" id="sideNavscroll" name="sideNavscroll">
+                          <div
+                            className="sideNavscroll"
+                            id="sideNavscroll"
+                            name="sideNavscroll"
+                          >
                             <div
                               className="nav-control"
                               onClick={() => {
@@ -795,7 +802,11 @@ const Details = ({
                                 name="nav-control"
                                 className={`${visitStyles.sideNavArrow}`}
                               >
-                                <span id="nav-control-faAngle" name="nav-control-faAngle" className="line">
+                                <span
+                                  id="nav-control-faAngle"
+                                  name="nav-control-faAngle"
+                                  className="line"
+                                >
                                   <FontAwesomeIcon
                                     className="fa fa-search form-control-feedback"
                                     icon={
@@ -810,7 +821,11 @@ const Details = ({
                                 </span>
                               </div>
                             </div>
-                            <ul className="ant-badge" id="sideNavList" name="sideNavList">
+                            <ul
+                              className="ant-badge"
+                              id="sideNavList"
+                              name="sideNavList"
+                            >
                               {tabList.map((data, index) => (
                                 <Tooltip
                                   key={index}
@@ -901,7 +916,6 @@ const Details = ({
                       className={`${visitStyles.secondContainer}`}
                       style={{ height: "100%" }}
                     >
-
                       <>
                         {activeTab == 1 ? (
                           <Hcc
@@ -914,6 +928,8 @@ const Details = ({
                             search={search}
                             setSearch={setSearch}
                             setFlagContainerActive={setFlagContainerActive}
+                            selectedDate={selectedDate}
+                            setSelectedDate={setSelectedDate}
                           />
                         ) : activeTab == 2 ? (
                           <NonHcc
@@ -942,11 +958,14 @@ const Details = ({
                           />
                         )}
                       </>
-
                     </div>
 
                     <div className={`${visitStyles.thirdContainer}`}>
-                      <div  id="flagContainer" name="flagContainer" className={`${visitStyles.flag_container}`}>
+                      <div
+                        id="flagContainer"
+                        name="flagContainer"
+                        className={`${visitStyles.flag_container}`}
+                      >
                         <ul className="" id="flagList" name="flagList">
                           {flagList?.map((data, index) => {
                             const isFlagDisabled =
@@ -954,7 +973,8 @@ const Details = ({
                             const isDosDisabled =
                               data.name === "Add DOS & Provider" &&
                               isDosSelected;
-                              const isVersionDisabled = data.name === "Version History" && !isDosSelected
+                            const isVersionDisabled =
+                              data.name === "Version History" && !isDosSelected;
 
                             return (
                               <Tooltip
@@ -971,12 +991,18 @@ const Details = ({
                                       : `${visitStyles.commentsTag}`
                                   }
                                   onClick={() => {
-                                    if (!isFlagDisabled && !isDosDisabled && !isVersionDisabled) {
+                                    if (
+                                      !isFlagDisabled &&
+                                      !isDosDisabled &&
+                                      !isVersionDisabled
+                                    ) {
                                       addComments(data.name);
                                     }
                                   }}
                                   style={
-                                    isFlagDisabled || isDosDisabled || isVersionDisabled
+                                    isFlagDisabled ||
+                                    isDosDisabled ||
+                                    isVersionDisabled
                                       ? {
                                           cursor: "not-allowed",
                                           opacity: 0.5,
@@ -1014,8 +1040,8 @@ const Details = ({
                 {/* Modals */}
 
                 <Drawer
-                id="myworkqueueDrawer"
-                name="myworkqueueDrawer"
+                  id="myworkqueueDrawer"
+                  name="myworkqueueDrawer"
                   onClose={handleCloseModal}
                   open={isModalComments}
                   width={
@@ -1079,21 +1105,20 @@ const Details = ({
                       selectedDosValue={selectedDosValue}
                       dosYearDefalutSelect={dosYearDefalutSelect}
                     />
-                  ) :
-                   flagContainerActive === "Version History" ? (
+                  ) : flagContainerActive === "Version History" ? (
                     <VersionHistory
-                    getRevertDetails={getRevertDetails}
-                    revertLoading={revertLoading}
-                    splitUserName={splitUserName}
-                    userDetails={userDetails}
-                    renderUserDetails={renderUserDetails}
-                    confirmRevert={confirmRevert}
-                    isDosSelected={isDosSelected}
-                    dosYearDefalutSelect={dosYearDefalutSelect}
-                    getPatientListToDetails={getPatientListToDetails}
-                    setIsModalComments={setIsModalComments}
-                    getpatientDetailsData={getpatientDetailsData}
-                  />
+                      getRevertDetails={getRevertDetails}
+                      revertLoading={revertLoading}
+                      splitUserName={splitUserName}
+                      userDetails={userDetails}
+                      renderUserDetails={renderUserDetails}
+                      confirmRevert={confirmRevert}
+                      isDosSelected={isDosSelected}
+                      dosYearDefalutSelect={dosYearDefalutSelect}
+                      getPatientListToDetails={getPatientListToDetails}
+                      setIsModalComments={setIsModalComments}
+                      getpatientDetailsData={getpatientDetailsData}
+                    />
                   ) : null}
                 </Drawer>
               </div>

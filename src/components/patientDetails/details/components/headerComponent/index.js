@@ -24,6 +24,7 @@ const HeaderComponent = ({
   dosYear,
   setCopied,
   getFlagCounts,
+  setSelectedDate,
 }) => {
   return (
     <div className={`row mt-3 ${styles.HccContainer}`}>
@@ -64,6 +65,7 @@ const HeaderComponent = ({
                   dosOnChange(e);
                   setSelectDosValue("");
                   getSelectedDos("");
+                  setSelectedDate(null)
                 }}
                 className={`w-100 custom_select_type ${visitStyles.custom_select_type}`}
                 options={dosYear}

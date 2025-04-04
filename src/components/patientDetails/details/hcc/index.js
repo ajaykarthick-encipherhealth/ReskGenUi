@@ -62,6 +62,8 @@ const Hcc = ({
   search,
   setSearch,
   setFlagContainerActive,
+  selectedDate,
+  setSelectedDate
 }) => {
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
@@ -537,6 +539,8 @@ const Hcc = ({
                           handleOptions={handleOptions}
                           setSearch={setSearch}
                           setFlagContainerActive={setFlagContainerActive}
+                          selectedDate={selectedDate}
+                          setSelectedDate={setSelectedDate}
                         />
                         {getStorage("userRole") != "admin" &&
                           selectDosValue && (

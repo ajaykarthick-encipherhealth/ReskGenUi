@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { message, Popover, Select, Tooltip } from "antd";
+import { Empty, message, Popover, Select, Tooltip } from "antd";
 import { FlagFilled } from "@ant-design/icons";
 import { formatDateTime, getResponePopup } from "../../../../../utils/reusable";
 import { getStatusIcon } from "../../../../reuseableFunctions";
@@ -12,8 +12,9 @@ const DosSelect = ({
   handleOptions,
   setSearch,
   setFlagContainerActive,
+  selectedDate,
+  setSelectedDate,
 }) => {
-  const [selectedDate, setSelectedDate] = useState(null);
   const [open, setOpen] = useState(false);
   const dosData = options?.map((item, i) => ({
     ...item,
@@ -94,7 +95,10 @@ const DosSelect = ({
         <span>{getDos(row)}</span> |
         <span>
           {" "}
-          Pages:  {row?.page?.startPageNumber && row?.page?.endPagNumber ? row?.page?.startPageNumber + " - " + row?.page?.endPagNumber : "---"}
+          Pages:{" "}
+          {row?.page?.startPageNumber && row?.page?.endPagNumber
+            ? row?.page?.startPageNumber + " - " + row?.page?.endPagNumber
+            : "---"}
         </span>{" "}
         |{" "}
         <div className="flag-elipse">
@@ -104,7 +108,10 @@ const DosSelect = ({
             : row?.flags?.map((flag, index) => (
                 <FlagFilled
                   key={index}
-                  style={{ color: flag?.flagDetails?.flagColour, marginRight: 6 }}
+                  style={{
+                    color: flag?.flagDetails?.flagColour,
+                    marginRight: 6,
+                  }}
                 />
               ))}
         </div>
@@ -146,6 +153,11 @@ const DosSelect = ({
           </div>
 
           {/* Data rows */}
+          {dosData?.length <= 0 && (
+            <div className="text-center">
+              <Empty/>
+            </div>
+          )}
           {dosData?.map((item) => (
             <div
               key={item?.dateOfService}
@@ -243,7 +255,7 @@ const DosSelect = ({
                     <span>
                       {/* {item?.flags?.length - 4 == 0 ? (
                         "" */}
-                      {item?.flags ?
+                      {item?.flags ? (
                         <span
                           className="px-2 py-1 border rounded"
                           style={{ background: "#002b5b", color: "#fff" }}
@@ -271,7 +283,9 @@ const DosSelect = ({
                           +{item?.flags?.length - 4}
                           {/* </Popover> */}
                         </span>
-                      :"---"}
+                      ) : (
+                        "---"
+                      )}
                     </span>
                   </>
                 )}
