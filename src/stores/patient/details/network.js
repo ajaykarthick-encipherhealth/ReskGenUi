@@ -236,7 +236,9 @@ export async function isValideCode(code) {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/icddisease/finddiseasebycode?diseasecode=${code}`,
+    // `dbservice/icddisease/finddiseasebycode?diseasecode=${code}`,
+    `dbservice/icddisease/disease-autocomplete?diseasecode=${code}`,
+
     options
   );
   return data;
