@@ -146,7 +146,7 @@ const Details = ({
   getAllRevertDetails,
   getRevertDetails,
   revertLoading,
-  confirmRevert
+  confirmRevert,
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -452,7 +452,7 @@ const Details = ({
     );
     patientDetailsLoad(false);
     getFlagCharts({ dos: e });
-    getAllRevertDetails({ dos: e })
+    getAllRevertDetails({ dos: e });
   };
 
   const addComments = async (value) => {
@@ -469,9 +469,9 @@ const Details = ({
     if (value == "Timeline") {
       setFlagContainerActiveTitle("Timeline");
       const response = await getTimelineList({
-        patientId:localPatientId,
+        patientId: localPatientId,
         dos: isDosSelected,
-      })
+      });
       var result = response?.response?.content;
       setTimeLineData(result);
       setFilterDataLoading(false);
@@ -481,7 +481,7 @@ const Details = ({
     }
     if (value == "Version History") {
       setFlagContainerActiveTitle("Version History");
-      getAllRevertDetails({dos:isDosSelected})
+      getAllRevertDetails({ dos: isDosSelected });
     }
   };
 
@@ -512,10 +512,9 @@ const Details = ({
     },
     {
       name: "Version History",
-      icon: <FontAwesomeIcon icon={faClockRotateLeft} />
+      icon: <FontAwesomeIcon icon={faClockRotateLeft} />,
     },
   ];
-  
 
   const getPatientListToDetails = async (userId, isClear) => {
     setIsLoading(true);
@@ -668,6 +667,7 @@ const Details = ({
       getActiveLabels();
     }
   }, [isDosSelected, dosYearDefalutSelect]);
+
   return (
     <>
       <div className={`show `} style={{ height: "100vh", background: "#fff" }}>
@@ -968,6 +968,13 @@ const Details = ({
                       >
                         <ul className="" id="flagList" name="flagList">
                           {flagList?.map((data, index) => {
+                            if (
+                              data.name === "Version History" &&
+                              userRole !== "reviewer"
+                            ) {
+                              return null;
+                            }
+
                             const isFlagDisabled =
                               data.name === "Flag" && !isDosSelected;
                             const isDosDisabled =
@@ -975,6 +982,11 @@ const Details = ({
                               isDosSelected;
                             const isVersionDisabled =
                               data.name === "Version History" && !isDosSelected;
+
+                            const isDisabled =
+                              isFlagDisabled ||
+                              isDosDisabled ||
+                              isVersionDisabled;
 
                             return (
                               <Tooltip
@@ -986,23 +998,17 @@ const Details = ({
                                   id={`flagListItem-${index}`}
                                   name={`flagListItem-${index}`}
                                   className={
-                                    flagContainerActive == data.name
+                                    flagContainerActive === data.name
                                       ? `${visitStyles.commentsTagActive}`
                                       : `${visitStyles.commentsTag}`
                                   }
                                   onClick={() => {
-                                    if (
-                                      !isFlagDisabled &&
-                                      !isDosDisabled &&
-                                      !isVersionDisabled
-                                    ) {
+                                    if (!isDisabled) {
                                       addComments(data.name);
                                     }
                                   }}
                                   style={
-                                    isFlagDisabled ||
-                                    isDosDisabled ||
-                                    isVersionDisabled
+                                    isDisabled
                                       ? {
                                           cursor: "not-allowed",
                                           opacity: 0.5,
@@ -1105,7 +1111,8 @@ const Details = ({
                       selectedDosValue={selectedDosValue}
                       dosYearDefalutSelect={dosYearDefalutSelect}
                     />
-                  ) : flagContainerActive === "Version History" ? (
+                  ) : flagContainerActive === "Version History"
+                    ? (
                     <VersionHistory
                       getRevertDetails={getRevertDetails}
                       revertLoading={revertLoading}
@@ -1152,7 +1159,6 @@ const Details = ({
       )}
     </>
   );
- 
 };
 
 const enhancer = connect(
@@ -1173,8 +1179,9 @@ const enhancer = connect(
     hccFileDetails: state?.patientDetails?.details?.hccFileResult,
     routedData: state.tenantAdmin?.patientSync?.routedData,
     loading: state?.patientDetails?.details?.loading,
-    getRevertDetails:state?.patientDetails?.details?.getRevertDetails?.data?.response,
-    revertLoading:state?.patientDetails?.details?.revertLoading
+    getRevertDetails:
+      state?.patientDetails?.details?.getRevertDetails?.data?.response,
+    revertLoading: state?.patientDetails?.details?.revertLoading,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -1207,8 +1214,8 @@ const enhancer = connect(
     getRoutedData: allActions.getRoutedData,
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
     patientDetailsLoad: detailsActions.patientDetailsLoad,
-    getAllRevertDetails:detailsActions.revertDetails,
-    confirmRevert:detailsActions.confirmRevertDetails
+    getAllRevertDetails: detailsActions.revertDetails,
+    confirmRevert: detailsActions.confirmRevertDetails,
   }
 );
 export default enhancer(Details);
