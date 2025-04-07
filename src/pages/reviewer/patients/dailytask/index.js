@@ -141,10 +141,11 @@ const DailyTask = ({ trackChart }) => {
                     </div>
                   </Col>
                   <Col span={12} className={styles.headerTitle}>
-                    <div  className={styles.list}>
+                    <div  className={` mt-1 ${styles.list}`}>
+                    <span className="px-2 mt-1 font3 fontWeight3 ">Coder 1</span>
                       {bullets?.map((item) => {
                         return (
-                          <div className={styles.container}>
+                          <div className={`mt-1 ${styles.container}`}>
                             <div className="d-flex">
                               <div
                                 className={`reusableFont ${styles.bgColor}`}

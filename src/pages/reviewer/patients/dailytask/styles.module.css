@@ -16,7 +16,7 @@
 .container {
   width: 100%;
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 7px;
   justify-content: space-between;
   cursor: pointer;
 }

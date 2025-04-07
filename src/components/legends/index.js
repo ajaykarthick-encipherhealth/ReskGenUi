@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 
 const Legends = ({ bullets, display, padding }) => {
   return (
-    <div className={`${styles.container}`} style={{ display: display }}>
+    <div className={`${styles.container} gap-3`} style={{ display: display }}>
       {bullets?.map((item) => (
         <>
           {item.title && <span className={styles.header}>{item?.title}</span>}

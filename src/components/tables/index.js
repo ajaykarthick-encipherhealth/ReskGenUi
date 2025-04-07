@@ -25,6 +25,7 @@ import {
   reusableEllipses,
   tableSkeleton,
   createIdGen,
+  proxyStatusBodyTemplate,
 } from "../../utils/reusable";
 import { priorityOptions, priorityStatus } from "../headerFilters/functions";
 import Legends from "../legends";
@@ -728,7 +729,7 @@ const TableRow = ({
                 }
                 className="d-flex justify-content-center"
               >
-                {processstatusBodyTemplate(
+                {proxyStatusBodyTemplate(
                   item[`${columnItem.value}`],
                   columnItem.isIcon
                 )}

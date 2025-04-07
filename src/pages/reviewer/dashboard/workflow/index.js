@@ -37,7 +37,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
     {
       id: 1,
       icon:<FontAwesomeIcon icon={faUsers} /> ,
-      title: "Allocated",
+      title: "Coder 1 Allocated",
       charts: worlFlowData?.data?.response?.allocated,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
@@ -47,7 +47,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
     {
       id: 2,
       icon:<FontAwesomeIcon icon={faCircleCheck} />,
-      title: "Completed",
+      title: "Coder 1 Completed",
       charts: worlFlowData?.data?.response?.completed,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
@@ -57,7 +57,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
     {
       id: 3,
       icon:  <FontAwesomeIcon icon={faClockRotateLeft} />,
-      title: "Pending",
+      title: "Coder 1 Pending",
       charts: worlFlowData?.data?.response?.pending,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
@@ -67,7 +67,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
     {
       id: 4,
       icon:  <FontAwesomeIcon icon={faClockRotateLeft} />,
-      title: "Declined",
+      title: "Coder 1 Declined",
       charts: worlFlowData?.data?.response?.declined,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3

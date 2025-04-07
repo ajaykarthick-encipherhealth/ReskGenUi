@@ -135,7 +135,7 @@ const InitialCard = ({
     {
       id: 1,
       icon: Completed,
-      title: "Completed",
+      title: "Coder 1 Completed",
       charts: reportListAll?.processedStatusCount?.processedStatus
         ? reportListAll?.processedStatusCount?.processedStatus.COMPLETED
         : "0",
@@ -144,7 +144,7 @@ const InitialCard = ({
     {
       id: 2,
       icon: Pending,
-      title: "Pending",
+      title: "Coder 1 Pending",
       charts: reportListAll?.processedStatusCount?.processedStatus
         ? reportListAll?.processedStatusCount?.processedStatus.PENDING
         : "0",
@@ -154,7 +154,7 @@ const InitialCard = ({
     {
       id: 3,
       icon: Hold,
-      title: "Hold",
+      title: "Coder 1 Hold",
       charts: reportListAll?.processedStatusCount?.processedStatus
         ? reportListAll?.processedStatusCount?.processedStatus.HOLD
         : "0",
@@ -164,7 +164,7 @@ const InitialCard = ({
     {
       id: 4,
       icon: declineIcon,
-      title: "Declined",
+      title: "Coder 1 Declined",
       charts: reportListAll?.processedStatusCount?.processedStatus
         ? reportListAll?.processedStatusCount?.processedStatus.DECLINED
         : "0",

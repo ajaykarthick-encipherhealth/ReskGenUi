@@ -244,7 +244,7 @@ const DailyTask = ({
 
   return (
     <>
-      <HeadTitle header="Daily Task" />
+      <HeadTitle header="Coder 1 Daily Task" />
       <div className={styles.card2}>
         <Card borderRadius="28px" style={{ display: "flex" }}>
           {dailyTaskLoader || loading ? (

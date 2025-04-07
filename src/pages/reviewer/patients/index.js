@@ -17,18 +17,18 @@ import AppTable from "../../../components/tables";
 
 export const bullets = [
   {
+    color: "#00BC13",
+    name: "CODER 1 COMPLETED",
+  },
+  {
     color: "#5da9e4",
-    name: "PENDING",
+    name: "CODER 1 PENDING",
   },
   {
     color: "#EB5252",
-    name: "DECLINED",
+    name: "CODER 1 DECLINED",
   },
-  {
-    color: "#00BC13",
-    name: "COMPLETED",
-  },
-  { color: "#3C0AD2", name: "HOLD" },
+  { color: "#3C0AD2", name: "CODER 1 HOLD" },
 ];
 export const reviewedBullets = [
   {
@@ -41,10 +41,10 @@ export const reviewedBullets = [
   },
 ];
 export const statusOptions = [
-  { label: "COMPLETED", value: "COMPLETED" },
-  { label: "PENDING", value: "PENDING" },
-  { label: "DECLINED", value: "DECLINED" },
-  { label: "HOLD", value: "HOLD" },
+  { label: "CODER 1 COMPLETED", value: "COMPLETED" },
+  { label: "CODER 1 PENDING", value: "PENDING" },
+  { label: "CODER 1 DECLINED", value: "DECLINED" },
+  { label: "CODER 1 HOLD", value: "HOLD" },
 ];
 export const commonFilterItems = [
   {
@@ -172,7 +172,7 @@ const Patient = ({
       name: "Priority",
       value: "priority",
     },
-    { name: "STATUS", value: "processedStatus", status: true, infoIcon: true },
+    { name: "STATUS", value: "statusProxy", status: true, infoIcon: true },
   ];
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);

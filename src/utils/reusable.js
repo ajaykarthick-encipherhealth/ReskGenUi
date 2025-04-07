@@ -373,24 +373,65 @@ export const processstatusBodyTemplate = (rowData) => {
       );
   }
 };
-// export const formatDateTime = ({ date, formatType = "date" }) => {
-//   if (!date) return "";
 
-//   const formats = {
-//     datetime: "MM-DD-YYYY, h:mm a",
-//     date: "MM-DD-YYYY",
-//   };
 
-//   return moment(date).format(formats[formatType] || formats.datetime);
-// };
+export const proxyStatusBodyTemplate = (rowData) => {
+  const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
 
-// export const formatDateForIndex = ({ date, index }) => {
-//   if (!date) return "";
-//   const formattedDate = moment(date).format("YYYY-MM-DD");
-//   return index === 1
-//     ? `${formattedDate}T23:59:59.999Z`
-//     : `${formattedDate}T00:00:00.000Z`;
-// };
+  switch (rowData) {
+    case "CODER_1_COMPLETED":
+      return (
+        <Popover placement="bottom" title="Status: CODER 1 COMPLETED">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Completed} style={{ height: "30px", width: "30px" }} />
+          </div>
+        </Popover>
+      );
+        case "CODER_1_PENDING":
+          return (
+            <Popover placement="bottom" title="Status: CODER 1 PENDING">
+              <div className="patient-status" style={{ textAlign: "center" }}>
+                <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+              </div>
+            </Popover>
+          );
+    case "CODER_1_DECLINED":
+      return (
+        <Popover
+          placement="bottom"
+          title="Status: CODER 1 DECLINED"
+        >
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Declined} style={{ height: "30px", width: "30px" }} />
+          </div>
+        </Popover>
+      );
+      case "CODER_1_HOLD":
+      return (
+        <Popover placement="bottom" title="Status: CODER 1 HOLD">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Hold} style={{ height: "30px", width: "30px" }} />
+          </div>
+        </Popover>
+      );
+      case "COMPUTED":
+        return (
+          <Popover placement="bottom" title="Status: CODER 1 PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+    case null:
+      return (
+        <Popover placement="bottom" title="Status: PENDING">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Pending} style={{ height: "15%", width: "15%" }} />
+          </div>
+        </Popover>
+      );
+  }
+};
 
 export const formatDateTime = ({ date, formatType = "date" }) => {
   if (!date) return "";
@@ -600,4 +641,5 @@ export const createIdGen = (key) => {
   }
 
 };
+
 
