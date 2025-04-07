@@ -8,12 +8,12 @@ import Header from "../../../jsx/layouts/nav/Header";
 import { actions as workqueueActions } from "../../../stores/reviewer/workqueue";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 import { priorityOptions } from "../../../components/headerFilters/functions";
-import DailyTask from "./dailytask";
 import { setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
+import DailyTask from "../patients/dailytask";
 
 export const bullets = [
   {
