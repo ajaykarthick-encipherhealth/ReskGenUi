@@ -112,6 +112,26 @@ const ManuallyAdd = ({
         value: item?.dateOfService,
       } || [])
   );
+  // console.log(patientDosResult, "getSelectedDos");
+
+  const getPageNumbers = () => {
+    const getFilter = patientDosResult?.data?.response
+      ?.find((item) => item.dateOfService == getSelectedDos)
+      .fileDetailDTO.dosSummaries.find((item) => item.dos == getSelectedDos);
+
+    let pageNumber = [];
+    for (
+      let index = getFilter.startPageNumber;
+      index <= getFilter.endPagNumber;
+      index++
+    ) {
+      pageNumber.push({
+        label: index,
+        value: index,
+      });
+    }
+    return pageNumber;
+  };
 
   const checkMeat = (e) => {
     switch (e) {
@@ -222,7 +242,7 @@ const ManuallyAdd = ({
   };
   const handleCodeVaildate = async (e) => {
     const value = e.toUpperCase();
-    setCode(value)
+    setCode(value);
     setDescription("");
     form.setFieldsValue({ description: "" });
     if (value.length > 2) {
@@ -906,23 +926,75 @@ const ManuallyAdd = ({
   };
 
   const sectionDelete = (item) => {
+    const getFormData = form.getFieldsValue();
     const res = listOfSection.filter((list) => item.section != list.section);
     setListOfSection(res);
+    const sec = capturedSections.map((item) => {
+      return {
+        label: item.label,
+        value: item.value,
+        disabled: res?.map((ls) => ls.section).includes(item.value),
+      };
+    });
+    form.resetFields();
+    setCapturedSections(sec);
+    form.setFieldsValue(getFormData);
   };
 
   const sectionDeleteMeat = (item) => {
+    const getFormData = form.getFieldsValue();
     if (selectMeat == "M") {
       const res = listOfSectionM.filter((list) => item.section != list.section);
       setListOfSectionM(res);
+      const sec = capturedSectionsM.map((item) => {
+        return {
+          label: item.label,
+          value: item.value,
+          disabled: res?.map((ls) => ls.section).includes(item.value),
+        };
+      });
+      form.resetFields();
+      setCapturedSectionsM(sec);
+      form.setFieldsValue(getFormData);
     } else if (selectMeat == "E") {
       const res = listOfSectionE.filter((list) => item.section != list.section);
       setListOfSectionE(res);
+      const sec = capturedSectionsE.map((item) => {
+        return {
+          label: item.label,
+          value: item.value,
+          disabled: res?.map((ls) => ls.section).includes(item.value),
+        };
+      });
+      form.resetFields();
+      setCapturedSectionsE(sec);
+      form.setFieldsValue(getFormData);
     } else if (selectMeat == "A") {
       const res = listOfSectionA.filter((list) => item.section != list.section);
       setListOfSectionA(res);
+      const sec = capturedSectionsA.map((item) => {
+        return {
+          label: item.label,
+          value: item.value,
+          disabled: res?.map((ls) => ls.section).includes(item.value),
+        };
+      });
+      form.resetFields();
+      setCapturedSectionsA(sec);
+      form.setFieldsValue(getFormData);
     } else if (selectMeat == "T") {
       const res = listOfSectionT.filter((list) => item.section != list.section);
       setListOfSectionT(res);
+      const sec = capturedSectionsT.map((item) => {
+        return {
+          label: item.label,
+          value: item.value,
+          disabled: res?.map((ls) => ls.section).includes(item.value),
+        };
+      });
+      form.resetFields();
+      setCapturedSectionsT(sec);
+      form.setFieldsValue(getFormData);
     }
   };
 
@@ -1289,7 +1361,7 @@ const ManuallyAdd = ({
                 ]}
               >
                 <Select
-                  mode="multiple"
+                  // mode="multiple"
                   maxTagCount="responsive"
                   className={`ant_select_form_dos hcc_form mb-2`}
                   onChange={(selOption, val) => {
@@ -1350,8 +1422,10 @@ const ManuallyAdd = ({
                 </div>
               )}
             </div>
-            {(listOfSection.length <= 0 || !showSection) && (
-              <div className="col-12 mt-2">
+          </div>
+          {(listOfSection.length <= 0 || !showSection) && (
+            <div className="border rounded">
+              <div className="mt-2 mx-2">
                 <Form.Item
                   label={
                     <label>
@@ -1366,11 +1440,6 @@ const ManuallyAdd = ({
                     },
                   ]}
                 >
-                  {/* <Select
-                      size="large"
-                      options={capturedSections}
-                      onChange={(val) => setSection(val)}
-                    /> */}
                   <CustomSelect
                     options={capturedSections}
                     onChange={(val) => setSection(val)}
@@ -1380,10 +1449,7 @@ const ManuallyAdd = ({
                   />
                 </Form.Item>
               </div>
-            )}
-          </div>
-          {(listOfSection.length <= 0 || !showSection) && (
-            <div className="border rounded">
+
               {sectionCount?.map((item, index) => (
                 <div className="pt-2">
                   <div className="d-flex justify-content-between px-3">
@@ -1427,6 +1493,7 @@ const ManuallyAdd = ({
                         : getSelectedDos
                     }
                     isEditPage={isEditPage}
+                    pageNumbers={getPageNumbers()}
                   />
                 </div>
               ))}
@@ -1444,7 +1511,7 @@ const ManuallyAdd = ({
                     <RegularButton
                       type=""
                       method={"button"}
-                      name={isBtnLoading ? "Loading..." : "Edit"}
+                      name={isBtnLoading ? "Loading..." : "Save"}
                       width="100px"
                       onClick={handledEdit}
                       disabled={isBtnLoading}
@@ -1504,14 +1571,17 @@ const ManuallyAdd = ({
               </div>
             </div>
           )}
-          <div className="d-flex justify-content-center mb-2">
-            {" "}
-            <SelectButton
-              select={selectMeat}
-              setSelect={setSelectMeat}
-              completed={isFilled}
-            />
-          </div>
+          {isMeat && (
+            <div className="d-flex justify-content-center mb-2">
+              {" "}
+              <SelectButton
+                select={selectMeat}
+                setSelect={setSelectMeat}
+                completed={isFilled}
+              />
+            </div>
+          )}
+
           <Form
             form={form}
             name="basic"
@@ -1559,6 +1629,7 @@ const ManuallyAdd = ({
               disabled={false}
               meatFormDisplay={meatFormDisplay}
               isBtnLoading={isBtnLoading}
+              pageNumbers={getPageNumbers()}
             />
           </Form>
         </>
