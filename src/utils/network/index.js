@@ -1,10 +1,23 @@
 import { checkStatus } from "./helper";
 import { getStorage } from "../storages";
-import { portalUrl, tokenKey } from "../config";
+import { portalMockoon, portalUrl, tokenKey } from "../config";
 
 export async function requestPortal(url, options) {
   const token = getStorage(tokenKey);
   const actualUrl = `${portalUrl}${url}`;
+  const actualOptions = {
+    ...options,
+    headers: {
+      Authorization: `${"Bearer" + " " + token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return fetch(actualUrl, actualOptions).then(checkStatus);
+}
+
+export async function requestPortalMockoon(url, options) {
+  const token = getStorage(tokenKey);
+  const actualUrl = `${portalMockoon}${url}`;
   const actualOptions = {
     ...options,
     headers: {

@@ -1,5 +1,5 @@
 import { notification } from "antd";
-import { authRequestPortal, requestPortal } from "../../utils/network";
+import { authRequestPortal, requestPortal, requestPortalMockoon } from "../../utils/network";
 import { getStorage, setStorage } from "../../utils/storages";
 import { getResponePopup } from "../../utils/reusable";
 
@@ -319,5 +319,16 @@ export async function refreshToken() {
     setStorage("token", newToken);
     setStorage("loginTime", Date.now());
   }
+  return data;
+}
+
+export async function getProxyRole() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/roleproxy/get`,
+    options
+  );
   return data;
 }

@@ -9,3 +9,4 @@ export const pdfControl =process.env.NEXT_PUBLIC_PORTAL_BASE_URL + "management/p
 export const salt = process.env.NEXT_PUBLIC_SALT;
 export const companyDeatils = process.env.NEXT_PUBLIC_COMPANY_LOGO || "cogentai";
 export const isLocalEdit = true;
+export const portalMockoon = process.env.NEXT_PUBLIC_PORTAL_BASE_URL_MOCKKON;

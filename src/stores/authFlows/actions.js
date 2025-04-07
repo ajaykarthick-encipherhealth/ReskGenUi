@@ -68,3 +68,9 @@ export const deleteProfileImg=createActionThunk(
   network.deleteImage
 )
 
+export const proxyRoles=createActionThunk(
+  "GET_PROXY_ROLES",
+  network.getProxyRole
+)
+
+

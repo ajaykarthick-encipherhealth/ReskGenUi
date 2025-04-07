@@ -655,3 +655,16 @@ export const confirmRevert = async ({dos,year,versionHistory}) => {
 
   return response;
 };
+
+
+export async function getStatus() {
+  const options = {
+    method: "GET"
+  };
+  const data = await requestPortal(
+    `/dbservice/proxy/status/get`,
+    options
+  );
+  return data;
+}
+

@@ -39,7 +39,8 @@ import {
   getCommentListAction,
   getFlagCharts,
   revertDetails,
-  confirmRevertDetails
+  confirmRevertDetails,
+  getProxyStatus
 } from "./actions";
 
 
@@ -160,7 +161,8 @@ const patientDetailsReducer = combineReducers({
   getFlagChartsLoader: getPatientsLoading(getFlagCharts),
   getRevertDetails:createReducer(revertDetails),
   revertLoading:getPatientsLoading(revertDetails),
-  confirmRevertDetails:createReducer(confirmRevertDetails)
+  confirmRevertDetails:createReducer(confirmRevertDetails),
+  getStatusAction:createReducer(getProxyStatus),
 });
 
 export default patientDetailsReducer;

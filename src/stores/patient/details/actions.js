@@ -204,3 +204,8 @@ export const confirmRevertDetails = createActionThunk(
   "GET_CONFIRM_REVERT_DETAILS",
   network.confirmRevert
 );
+
+export const getProxyStatus = createActionThunk(
+  "GET_CONFIRM_REVERT_DETAILS",
+  network.getStatus
+);

@@ -17,6 +17,8 @@ const StatusAction = ({
   patientDetailsResult,
   patientIdDetailsData,
   getPatientIdData,
+  proxcyStatusAction,
+  proxyStatusBtn,
 }) => {
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
@@ -46,6 +48,13 @@ const StatusAction = ({
     notes: "",
   });
 
+  const statusLabel = proxyStatusBtn?.find(
+    (item) => item.processedStatus === patienIdDetails?.processedStatus
+  )?.statusProxy || patienIdDetails?.processedStatus;
+
+useEffect(()=>{
+  proxcyStatusAction()
+},[])
   const renderAuditMenu = (value) => {
     var value = (
       <Menu id="auditbtn">
@@ -632,7 +641,7 @@ const StatusAction = ({
     getPatientIdDetails(patientIdDetailsData?.data?.response);
     setPatienIdDetails(patientIdDetailsData?.data?.response);
   }, [patientIdDetailsData?.data?.response]);
-
+ 
   return (
     <>
       {patientIdDetailsData?.data?.response && (
@@ -748,7 +757,9 @@ const StatusAction = ({
                     type="primary"
                     className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
                   >
-                    <span>COMPLETED</span>
+                    {/* <span>COMPLETED</span> */}
+                    <span>{statusLabel.split("_").join(" ")}</span>
+
                     <span style={{ marginLeft: "10px" }}>
                       <DownOutlined />
                     </span>
@@ -919,9 +930,11 @@ const enhancer = connect(
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
+    proxyStatusBtn:state?.patientDetails?.details?.getStatusAction?.data?.response,
   }),
   {
     getPatientIdData: detailsActions.patientIdDetailsAction,
+    proxcyStatusAction:detailsActions.getProxyStatus,
   }
 );
 export default enhancer(StatusAction);

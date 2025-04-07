@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
-import { getLogin, getMFAValidation, getQrCode, getValidateCode, getTenant, getOrganization, getTotalElements ,getUserDetails, getUpdateImage, getCoderDetails, getAccuracy,getRefreshToken,deleteProfileImg} from './actions';
+import { getLogin, getMFAValidation, getQrCode, getValidateCode, getTenant, getOrganization, getTotalElements ,getUserDetails, getUpdateImage, getCoderDetails, getAccuracy,getRefreshToken,deleteProfileImg,proxyRoles} from './actions';
 
 const initialState = {
     loading: true,
@@ -63,6 +63,7 @@ const authReducer = combineReducers({
     getAccuracy:createReducer(getAccuracy),
     getRefreshToken:createReducer(getRefreshToken),
     deleteProfileImg:createReducer(deleteProfileImg),
+    getAllProxyRoles:createReducer(proxyRoles),
 
     // loaders
     mfaLoader: getUsersDetailsLoading(getMFAValidation),
@@ -73,6 +74,7 @@ const authReducer = combineReducers({
     getUpdateImageLoading:getUsersDetailsLoading(getUpdateImage),
     getCoderDetailsLoading:getUsersDetailsLoading(getCoderDetails),
     getAccuracyLoading:getUsersDetailsLoading(getAccuracy),
+  
 
 
 

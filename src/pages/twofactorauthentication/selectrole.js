@@ -9,22 +9,24 @@ import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/authFlows";
 import { getLogoImage } from "./reusableFun";
 
-const SelectRole = ({ getLogin }) => {
+const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
-  // const [role, setRole] = useState();
-  // const [decodedParams, setDecodedParams] = useState();
   const [confirmModal, setConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
-  const rolesList = JSON.parse(getStorage("roles"));
-  const optionsList = rolesList?.map((info) => ({
-    value: info,
-    label: info?.split("_").join(" "),
-  }));
-  const items = [...(rolesList?.length > 0 ? optionsList : [])];
 
+  
+  const rolesList = JSON.parse(getStorage("roles"));
+  const optionsList = rolesList?.map((role) => {
+    const proxyObj = proxyRoles?.find((item) => item.role === role);
+    return {
+      value: role,
+      label: proxyObj?.proxyRole?.split("_").join(" ") || role?.split("_").join(" "), 
+    };
+  });
+  const items = [...(rolesList?.length > 0 ? optionsList : [])];
   const onSubmitRole = async (e) => {
     e.preventDefault();
     if (!selectedRole) {
@@ -35,7 +37,8 @@ const SelectRole = ({ getLogin }) => {
           message: "Unprivileged access!",
           duration: 1,
         });
-      } else {
+      } 
+      else {
         loginSuccessCallBack();
       }
     }
@@ -116,6 +119,9 @@ const SelectRole = ({ getLogin }) => {
       router.beforePopState(() => true);
     };
   }, [router]);
+  useEffect(()=>{
+    getProxyRoles()
+  },[])
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -205,9 +211,11 @@ const SelectRole = ({ getLogin }) => {
 const connector = connect(
   (state) => ({
     loginData: state.authReducer?.loginData?.data?.response,
+    proxyRoles:state.authReducer?.getAllProxyRoles?.data?.response,
   }),
   {
     getLogin: allActions.getLogin,
+    getProxyRoles:allActions.proxyRoles,
   }
 );
 export default connector(SelectRole);
