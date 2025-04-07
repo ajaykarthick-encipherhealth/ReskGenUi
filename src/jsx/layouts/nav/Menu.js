@@ -66,6 +66,13 @@ export const PhysicanMenuList = [
     childRoute: "/reviewer/patients/details",
   },
   {
+    title: "Reassign",
+    iconStyle: <ProfileOutlined />,
+    activeIcon: <ProfileFilled />,
+    to: "/reviewer/reassign",
+    childRoute: "/reviewer/reassign/details",
+  },
+  {
     title: "Report",
     iconStyle: <FileOutlined />,
     activeIcon: <FileFilled />,
