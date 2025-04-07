@@ -1377,7 +1377,7 @@ const ManuallyAdd = ({
               </Form.Item>
             </div>
 
-            <div className="col-12">
+            <div className="col-12 mb-3">
               {providerDetails.length > 0 && (
                 <div>
                   <div className={`${style.subHeader} border-bottom`}>
