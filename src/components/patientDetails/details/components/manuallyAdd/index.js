@@ -102,7 +102,7 @@ const ManuallyAdd = ({
   const [isEdit, setIsEdit] = useState(false);
   const [editSection, setEditSection] = useState();
   const [isBtnLoading, setIsBtnLoading] = useState(false);
-  const [options , setOptions] =useState([])
+  const [options, setOptions] = useState([]);
   const getPanelValue = (searchText) =>
     !searchText ? [] : [mockVal(searchText)];
   const dosList = patientDosResult?.data?.response?.map(
@@ -220,40 +220,44 @@ const ManuallyAdd = ({
       }
     }
   };
-const handleCodeVaildate = async (e) => {
-  const value = e.target.value.toUpperCase();
-  if (value.length > 0) {
-    try {
-      let res = await getValidate(value);
-      if (res?.status === "SUCCESS") {
-        const displayCodeOptions = res?.response?.map((item) => ({
-          value: item.code,
-          description: item.description,
-          label: (
-            <div className="d-flex gap-1">
-              <span>{item.code} - {item.description}</span>
-            </div>
-          ),
-        }));
-        setOptions(displayCodeOptions);
-        getVerify(value, res);
-      } else {
-        setValidCode("Invalid Code");
-      }
-    } catch (error) {
-    }
-  } else {
-    setValidCode("");
+  const handleCodeVaildate = async (e) => {
+    const value = e.toUpperCase();
+    setCode(value)
     setDescription("");
     form.setFieldsValue({ description: "" });
-  }
-};
+    if (value.length > 2) {
+      try {
+        let res = await getValidate(value);
+        if (res?.status === "SUCCESS") {
+          const displayCodeOptions = res?.response?.map((item) => ({
+            value: item.code,
+            description: item.description,
+            label: (
+              <div className="d-flex gap-1">
+                <span>
+                  {item.code} - {item.description}
+                </span>
+              </div>
+            ),
+          }));
+          setOptions(displayCodeOptions);
+          getVerify(value, res);
+        } else {
+          setValidCode("Invalid Code");
+        }
+      } catch (error) {}
+    } else {
+      setValidCode("");
+      setDescription("");
+      form.setFieldsValue({ description: "" });
+    }
+  };
 
-const onSelect = (value) => {
-  let des = options?.find((s) =>s.value ==value)?.description;
-  setDescription(des)
-  form.setFieldsValue({description:des})
-};
+  const onSelect = (value) => {
+    let des = options?.find((s) => s.value == value)?.description;
+    setDescription(des);
+    form.setFieldsValue({ description: des });
+  };
 
   const getVerify = async (value, res) => {
     setValidCode("Valid Code");
@@ -267,9 +271,8 @@ const onSelect = (value) => {
       setValidCode("Code Already Exist");
     } else if (isCodeCheck?.response == false) {
       setValidCode("Valid Code");
-      form.setFieldsValue({ description: description });
-      setDescription(value)
-      
+      // form.setFieldsValue({ description: description });
+      // setDescription(value);
     }
   };
   const handledSave = (form) => {
@@ -650,6 +653,7 @@ const onSelect = (value) => {
 
   const handleMeatSubmit = async () => {
     let data = {};
+
     const forms = form.getFieldsValue();
     if (isEditPage) {
       setIsBtnLoading(true);
@@ -1027,7 +1031,7 @@ const onSelect = (value) => {
           section,
           hyperlinks: [],
           count: [],
-          aspect:item?.aspect
+          aspect: item?.aspect,
         });
       }
 
@@ -1065,22 +1069,22 @@ const onSelect = (value) => {
       const sectionListM = filterData?.monitorHyperLink?.map((item) => ({
         section: item.header,
         hyperlinks: item,
-        aspect:filterData?.monitorAspect
+        aspect: filterData?.monitorAspect,
       }));
       const sectionListE = filterData?.evaluateHyperLink?.map((item) => ({
         section: item.header,
         hyperlinks: item,
-        aspect:filterData?.evaluateAspect
+        aspect: filterData?.evaluateAspect,
       }));
       const sectionListA = filterData?.assessmentHyperLink?.map((item) => ({
         section: item.header,
         hyperlinks: item,
-        aspect:filterData?.assessmentAspect
+        aspect: filterData?.assessmentAspect,
       }));
       const sectionListT = filterData?.treatmentHyperLink?.map((item) => ({
         section: item.header,
         hyperlinks: item,
-        aspect:filterData?.treatmentAspect
+        aspect: filterData?.treatmentAspect,
       }));
       handleSelectChange(isEditValue?.dateOfServices || year, "dos");
       setListOfSection(transformData(sectionList));
@@ -1089,7 +1093,7 @@ const onSelect = (value) => {
       setListOfSectionA(transformData(sectionListA));
       setListOfSectionT(transformData(sectionListT));
     }
-    handleSelectChange(isEditValue?.dateOfServices, "dos");    
+    handleSelectChange(isEditValue?.dateOfServices, "dos");
   }, [isEditPage, isEditValue, reset, meatFormDisplay]);
 
   useEffect(() => {
@@ -1155,7 +1159,6 @@ const onSelect = (value) => {
       resetForms({ reload: false });
     }
   }, [open]);
-
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
@@ -1199,7 +1202,7 @@ const onSelect = (value) => {
         >
           <div className="row">
             <div className="col-12">
-             <Form.Item
+              <Form.Item
                 label={
                   <label>
                     Code <span style={{ color: "red" }}>*</span>
@@ -1213,20 +1216,22 @@ const onSelect = (value) => {
                   },
                 ]}
               >
-                 <AutoComplete
-                options={options}
-                onSelect={onSelect}
-                onSearch={(text) => setOptions(getPanelValue(text))}
-                size="large"
-                value={description}
-              >
-                <Input
-                 name="diagnosisCode"
-                  value={code?.toUpperCase()}
+                <AutoComplete
+                  options={options}
+                  onSelect={onSelect}
+                  onSearch={(text) => setOptions(getPanelValue(text))}
+                  size="large"
+                  // value={description}
                   onChange={(e) => handleCodeVaildate(e)}
-                  maxLength={100}
-                />
-              </AutoComplete>
+                  value={code?.toUpperCase()}
+                >
+                  {/* <Input
+                    name="diagnosisCode"
+                    value={code?.toUpperCase()}
+                    onChange={(e) => handleCodeVaildate(e)}
+                    maxLength={100}
+                  /> */}
+                </AutoComplete>
                 {/* <Input
                   name="diagnosisCode"
                   onChange={(e) => handleCodeVaildate(e)}
@@ -1234,14 +1239,15 @@ const onSelect = (value) => {
                   className="text-uppercase"
                 /> */}
               </Form.Item>
-              {validCode.length > 0 &&
-                (validCode == "Valid Code" ? (
-                  <label className="text-success">Valid Code</label>
-                ) : (
-                  validCode != "" && (
-                    <label className="text-danger">{validCode}</label>
-                  )
-                ))}
+              {code.length > 0 &&
+              validCode.length > 0 &&
+              validCode == "Valid Code" ? (
+                <label className="text-success">Valid Code</label>
+              ) : (
+                validCode != "Valid Code" && (
+                  <label className="text-danger">{validCode}</label>
+                )
+              )}
             </div>
             <div className="col-12">
               <Form.Item
@@ -1312,7 +1318,7 @@ const onSelect = (value) => {
                     })}
                   </div>
                 </div>
-              )} 
+              )}
             </div>
             <div className="col-12">
               {listOfSection?.length > 0 && (
