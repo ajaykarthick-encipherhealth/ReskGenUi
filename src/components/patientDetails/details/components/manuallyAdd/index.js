@@ -298,13 +298,14 @@ const ManuallyAdd = ({
   const handledSave = (form) => {
     const res = sectionCount.map((item, i) => ({
       header: section,
-      dateOfService: form[
-        `encounterDate_${section?.replaceAll(" ", "-")}_${item}`
-      ]
-        ? moment(
-            form[`encounterDate_${section?.replaceAll(" ", "-")}_${item}`]
-          ).format("YYYY-MM-DD")
-        : "",
+      // dateOfService: form[
+      //   `encounterDate_${section?.replaceAll(" ", "-")}_${item}`
+      // ]
+      //   ? moment(
+      //       form[`encounterDate_${section?.replaceAll(" ", "-")}_${item}`]
+      //     ).format("YYYY-MM-DD")
+      //   : "",
+      dateOfService: getSelectedDos ? getSelectedDos : "",
       substring: form[`referance_${section?.replaceAll(" ", "-")}_${item}`],
       pageNumber: form[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
     }));
@@ -321,13 +322,14 @@ const ManuallyAdd = ({
     const forms = form.getFieldsValue();
     const res = sectionCount.map((item, i) => ({
       header: section,
-      dateOfService: forms[
-        `encounterDate_${section?.replaceAll(" ", "-")}_${item}`
-      ]
-        ? moment(
-            forms[`encounterDate_${section?.replaceAll(" ", "-")}_${item}`]
-          ).format("YYYY-MM-DD")
-        : "",
+      // dateOfService: forms[
+      //   `encounterDate_${section?.replaceAll(" ", "-")}_${item}`
+      // ]
+      //   ? moment(
+      //       forms[`encounterDate_${section?.replaceAll(" ", "-")}_${item}`]
+      //     ).format("YYYY-MM-DD")
+      //   : "",
+      dateOfService: getSelectedDos ? getSelectedDos : "",
       substring: forms[`referance_${section?.replaceAll(" ", "-")}_${item}`],
       pageNumber: forms[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
     }));
@@ -459,21 +461,22 @@ const ManuallyAdd = ({
 
     const res = selectedCount.map((item, i) => ({
       header: selectedSection,
-      dateOfService: form[
-        `encounterDate_${selectedSection?.replaceAll(
-          " ",
-          "-"
-        )}_${selectMeat}_${item}`
-      ]
-        ? moment(
-            form[
-              `encounterDate_${selectedSection?.replaceAll(
-                " ",
-                "-"
-              )}_${selectMeat}_${item}`
-            ]
-          ).format("YYYY-MM-DD")
-        : "",
+      // dateOfService: form[
+      //   `encounterDate_${selectedSection?.replaceAll(
+      //     " ",
+      //     "-"
+      //   )}_${selectMeat}_${item}`
+      // ]
+      //   ? moment(
+      //       form[
+      //         `encounterDate_${selectedSection?.replaceAll(
+      //           " ",
+      //           "-"
+      //         )}_${selectMeat}_${item}`
+      //       ]
+      //     ).format("YYYY-MM-DD")
+      //   : "",
+      dateOfService: getSelectedDos ? getSelectedDos : "",
       substring:
         form[
           `referance_${selectedSection?.replaceAll(
