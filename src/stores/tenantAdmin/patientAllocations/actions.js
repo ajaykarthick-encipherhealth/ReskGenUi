@@ -77,3 +77,8 @@ export const postMoveBack = createActionThunk(
   network.moveBack
 );
 
+export const getAllRoles = createActionThunk(
+  "GET_ROLES_ADMIN",
+  network.getRoles
+);
+

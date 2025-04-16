@@ -17,9 +17,9 @@ const PatientAllocation = ({
   getAllReviewerList,
   organizationList,
   getAllOrganizationList,
-  getAllSupervisorList,
-  getReviewerList,
+  getAllTabRoles,
   routedData,
+  allRoles,
 }) => {
   const commonFilterItems = [
     {
@@ -106,7 +106,8 @@ const PatientAllocation = ({
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [search, setSearch] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [samplingModal , setSamplingModal]= useState(false)
+  const [samplingModal, setSamplingModal] = useState(false);
+
   const showModal = () => {
     setSamplingModal(true);
   };
@@ -156,25 +157,11 @@ const PatientAllocation = ({
     });
   };
 
-  const getAllSupervisorAllocation = async () => {
-    const res = await getAllSupervisorList({
-      pageNo,
-      pageNumber,
-      selectedOption,
-      sort,
-      selectedDateRanges,
-      searchText,
-      search,
-    });
-  };
-
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
       if (activeTab == "1") {
         getAllReviewerALlocation();
-      } else {
-        getAllSupervisorAllocation();
       }
     }
   }, [
@@ -219,6 +206,10 @@ const PatientAllocation = ({
     }
   }, [routedData]);
 
+  useEffect(() => {
+    getAllTabRoles();
+  }, []);
+  console.log(allRoles, "allRoles");
   return (
     <div>
       <Header />
@@ -239,45 +230,46 @@ const PatientAllocation = ({
                         variant="tabs"
                         className="nav nav-tabs profile-tab"
                       >
-                        <Nav.Item as="li" className="nav-item profile-tab mt-4">
-                          <Nav.Link className="mt-4" eventKey="1">
-                            Coder 1
-                          </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item as="li" className="nav-item profile-tab mt-4">
-                          <Nav.Link className="mt-4" eventKey="2">
-                            Coder 2
-                          </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item as="li" className="nav-item profile-tab mt-4">
-                          <Nav.Link className="mt-4" eventKey="3">
-                            QA
-                          </Nav.Link>
-                        </Nav.Item>
+                        {allRoles?.allocationRoles?.map((role, index) => (
+                          <Nav.Item
+                            as="li"
+                            className="nav-item profile-tab mt-4"
+                            key={role}
+                          >
+                            <Nav.Link className="mt-4" eventKey={index + 1}>
+                              {role?.roleName
+                                ?.replace(/_/g, " ")
+                                ?.replace(/\b\w/g, (c) => c.toUpperCase())}
+                            </Nav.Link>
+                          </Nav.Item>
+                        ))}
                         <div
-                          className="d-flex align-items-end justify-content-end "
+                          className="d-flex align-items-end justify-content-end  "
                           style={{ width: "85%" }}
                         >
-                          <Nav.Item as="li" className="nav-item profile-tab ">
-                            <Tooltip
-                              title={
-                                selectedRowsId?.length === 0
-                                  ? "Select patients to Allocate"
-                                  : ""
-                              }
-                            >
-                              <Button
-                                data-testid="allocate-btn"
-                                name="allocate-btn"
-                                onClick={handleOpenModal}
-                                type="primary"
-                                className={` ${styles.allocate}`}
-                                disabled={selectedRowsId?.length === 0}
+                          {allRoles?.allocationEnabledForQa && (
+                            <Nav.Item as="li" className="nav-item profile-tab ">
+                              <Tooltip
+                                title={
+                                  selectedRowsId?.length === 0
+                                    ? "Select patients to Allocate"
+                                    : ""
+                                }
                               >
-                                Allocate
-                              </Button>
-                            </Tooltip>
-                          </Nav.Item>
+                                <Button
+                                  data-testid="allocate-btn"
+                                  name="allocate-btn"
+                                  onClick={handleOpenModal}
+                                  type="primary"
+                                  className={` ${styles.allocate}`}
+                                  disabled={selectedRowsId?.length === 0}
+                                >
+                                  Allocate
+                                </Button>
+                              </Tooltip>
+                            </Nav.Item>
+                          )}
+
                           {activeTab === "3" && (
                             <Nav.Item as="li" className="nav-item profile-tab ">
                               <Tooltip
@@ -383,12 +375,7 @@ const PatientAllocation = ({
         setBatchCount={setBatchCount}
       />
       <RandomSamplingModal
-        selectedUserName={selectedUserName}
-        setSelectedUserName={setSelectedUserName}
-        setBatchCount={setBatchCount}
         activeTab={activeTab}
-        setSelectedChart={setSelectedChart}
-        selectedChart={selectedChart}
         selectedRowsId={selectedRowsId}
         setSelectedRowsId={setSelectedRowsId}
         setSelectedRows={setSelectedRows}
@@ -412,15 +399,16 @@ const connector = connect(
     reviewerList:
       state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
+    allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
     getAllReviewerList: allActions.getAllReviewerList,
     getAllCheckedReviewers: allActions.getAllCheckedListForReviewer,
-    getAllSupervisorList: allActions.getAllSupervisorList,
     allocationList: allActions.getAllAllocationList,
     getReviewerList: allActions.getFilterOptions,
     getRoutedData: tinActions.getAllocationRoutedData,
+    getAllTabRoles: allActions.getAllRoles,
   }
 );
 

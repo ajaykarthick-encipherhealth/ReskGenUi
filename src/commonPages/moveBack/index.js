@@ -18,6 +18,8 @@ const MoveBack = ({
   getAllOrganizationList,
   getAllSupervisorList,
   routedData,
+  getAllTabRoles,
+  allRoles
 }) => {
   const commonFilterItems = [
     {
@@ -146,26 +148,13 @@ const MoveBack = ({
     });
   };
 
-  const getAllSupervisorAllocation = async () => {
-    const res = await getAllSupervisorList({
-      pageNo,
-      pageNumber,
-      selectedOption,
-      sort,
-      selectedDateRanges,
-      searchText,
-      search,
-    });
-  };
-
+  
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
       if (activeTab == "1") {
         getAllReviewerALlocation();
-      } else {
-        getAllSupervisorAllocation();
-      }
+      } 
     }
   }, [
     selectedOption,
@@ -219,6 +208,10 @@ const MoveBack = ({
     }
   }, [routedData]);
 
+    useEffect(() => {
+      getAllTabRoles();
+    }, []);
+
   return (
     <div>
       <Header />
@@ -239,22 +232,21 @@ const MoveBack = ({
                         variant="tabs"
                         className="nav nav-tabs profile-tab"
                       >
-                        <Nav.Item as="li" className="nav-item profile-tab">
-                          <Nav.Link className="mt-4" eventKey="1">
-                            {" "}
-                            Coder 1
-                          </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item as="li" className="nav-item profile-tab">
-                          <Nav.Link className="mt-4" eventKey="2">
-                            Coder 2
-                          </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item as="li" className="nav-item profile-tab">
-                          <Nav.Link className="mt-4" eventKey="3">
-                            QA
-                          </Nav.Link>
-                        </Nav.Item>
+                        {allRoles?.allocationRoles?.map(
+                          (role, index) => (
+                            <Nav.Item
+                              as="li"
+                              className="nav-item profile-tab mt-4"
+                              key={role}
+                            >
+                              <Nav.Link className="mt-4" eventKey={index + 1}>
+                                {role?.roleName
+                                  .replace(/_/g, " ")
+                                  .replace(/\b\w/g, (c) => c.toUpperCase())}
+                              </Nav.Link>
+                            </Nav.Item>
+                          )
+                        )}
                         <div
                           className="d-flex align-items-end justify-content-end"
                           style={{ width: "85%" }}
@@ -323,7 +315,6 @@ const MoveBack = ({
                             setPageNo={setPageNo}
                             paginationFirst={paginationFirst}
                             setPaginationFirst={setPaginationFirst}
-                            selectedUserName={selectedUserName}
                             setSort={setSort}
                             sort={sort}
                           />
@@ -363,15 +354,15 @@ const connector = connect(
     reviewerList:
       state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
+    allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
     getAllReviewerList: allActions.getAllReviewerList,
     getAllCheckedReviewers: allActions.getAllCheckedListForReviewer,
-    getAllSupervisorList: allActions.getAllSupervisorList,
-    allocationList: allActions.getAllAllocationList,
     getReviewerList: allActions.getFilterOptions,
     getRoutedData: tinActions.getAllocationRoutedData,
+    getAllTabRoles: allActions.getAllRoles,
   }
 );
 

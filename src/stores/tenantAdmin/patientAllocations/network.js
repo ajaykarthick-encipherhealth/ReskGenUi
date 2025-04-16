@@ -1,4 +1,3 @@
-// import { getStorage } from "@/utils/storages";
 import { requestPortal } from "../../../utils/network";
 import { getStorage } from "../../../utils/storages";
 
@@ -327,4 +326,15 @@ export async function moveBack(data) {
     options
   );
   return response;
+}
+
+export async function getRoles() {
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(
+    `dbservice/allocation/roles?roleId=5`,
+    options
+  );
+  return res;
 }

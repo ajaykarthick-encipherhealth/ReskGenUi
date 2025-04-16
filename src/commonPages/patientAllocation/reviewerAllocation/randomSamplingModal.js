@@ -28,17 +28,9 @@ const RandomSamplingModal = ({
   setOpen,
   selectedRowsId,
   setSelectedRowsId,
-  selectedChart,
-  setSelectedChart,
   getL1UsersList,
-  getAllocateUsers,
   setSelectedRows,
-  getAllReviewerALlocation,
-  selectedUserName,
-  setSelectedUserName,
   usersLoader,
-  setBatchCount,
-  id,
   activeTab,
   setIsModalOpen,
   isModalOpen,
@@ -60,7 +52,6 @@ const RandomSamplingModal = ({
     allocated: null,
   });
   const [statusCount, setStatusCount] = useState([]);
-  const [priority, setPriority] = useState([]);
   const getInitials = (firstName, lastName) => {
     const firstNameInitial = firstName?.charAt(0) || "";
     const secondNameInitial = lastName?.charAt(0) || "";
@@ -114,10 +105,8 @@ const RandomSamplingModal = ({
       setActiveCard("");
       setActiveEmail("");
       setSearch("");
-      setPriority([]);
       setSelectedRowsId([]);
       setSelectedRows([]);
-      setSelectedUserName([]);
       setBatchCount("");
       setSelectedUserIds([]);
     } else {
@@ -125,7 +114,6 @@ const RandomSamplingModal = ({
     }
   };
 
-  const setAllocate = async () => {};
   const handleUserSelect = (id, email) => {
     if (selectedUserIds.includes(id)) {
       setSelectedUserIds(selectedUserIds.filter((userId) => userId !== id));
@@ -149,9 +137,7 @@ const RandomSamplingModal = ({
   useEffect(() => {
     getUserList(search);
   }, [search]);
-  useEffect(() => {
-    setSelectedChart(selectedRowsId);
-  }, [selectedRowsId]);
+
 
   return (
     <div>
@@ -164,7 +150,6 @@ const RandomSamplingModal = ({
           setActiveEmail("");
           setSearch("");
           setAllocateDate("");
-          setPriority([]);
           setSelectedUserIds([]);
         }}
         title="Select User"
@@ -240,7 +225,6 @@ const RandomSamplingModal = ({
                         setActiveCard(item.id);
                         setActiveEmail(item.email);
                         setAllocateDate("");
-                        setPriority([]);
                       }
                     }}
                   >
@@ -290,12 +274,6 @@ const RandomSamplingModal = ({
                     <>
                       <div className="row px-3">
                         <div className={`col-5 ${modalStyle.activeRow1}`}>
-                          <span>
-                            Charts Selected:{" "}
-                            {selectedChart?.length > 0
-                              ? selectedChart?.length
-                              : 0}
-                          </span>
                           {statusCount
                             ?.filter((status) => status.id === item.id)
                             ?.map((status) => (
@@ -382,61 +360,6 @@ const RandomSamplingModal = ({
                                 </div>
                               </div>
                             ))}
-                        </div>
-                        <div className={`col-7 ${modalStyle.activeRow1}`}>
-                          <span className={`${modalStyle.title} text-danger`}>
-                            {selectedUserName?.length +
-                              chart?.hold +
-                              chart?.pending >
-                              100 && "Maximum upto 100 charts to pending"}
-                          </span>
-                          <div className="mb-3">Selected Charts</div>
-                          <ul className={`${modalStyle.selectChart}`}>
-                            {selectedUserName?.map((item, index) => (
-                              <li
-                                className={`${modalStyle.listing} ${modalStyle.listings}`}
-                                key={item.id}
-                                onClick={() => {
-                                  let remove = selectedUserName.filter(
-                                    (chart) => chart.patientId != item.patientId
-                                  );
-                                  setSelectedUserName(remove);
-                                }}
-                              >
-                                <span>{item.patientName}</span>
-                                <button
-                                  id={
-                                    id
-                                      ? createIdGen("delete " + tableId + index)
-                                      : createIdGen(
-                                          "delete " +
-                                            router.pathname.replaceAll(
-                                              "/",
-                                              " "
-                                            ) +
-                                            index
-                                        )
-                                  }
-                                  className="btn p-1"
-                                >
-                                  <Avatar
-                                    size={21}
-                                    shape="square"
-                                    style={{
-                                      backgroundColor: "#F99F9F",
-                                      color: "#F01010",
-                                    }}
-                                    icon={
-                                      <FontAwesomeIcon
-                                        className="fa fa-search"
-                                        icon={faXmark}
-                                      />
-                                    }
-                                  ></Avatar>
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
                         </div>
                       </div>
                     </>

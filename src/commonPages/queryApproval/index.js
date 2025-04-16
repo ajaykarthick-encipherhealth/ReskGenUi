@@ -10,13 +10,15 @@ import { actions as tinActions } from "../../stores/tenantAdmin/tin";
 import QueryTable from "./queryTable";
 import Header from "../../jsx/layouts/nav/Header";
 
+
 const QueryApproval = ({
   getAllReviewerList,
   organizationList,
   getAllOrganizationList,
   getAllSupervisorList,
-  getReviewerList,
+  getAllTabRoles,
   routedData,
+  allRoles
 }) => {
   const commonFilterItems = [
     {
@@ -204,7 +206,9 @@ const QueryApproval = ({
       setSelectedOption({});
     }
   }, [routedData]);
-
+  useEffect(() => {
+    getAllTabRoles();
+  }, []);
   return (
     <div>
       <Header />
@@ -221,15 +225,21 @@ const QueryApproval = ({
                       onSelect={handleTabChange}
                     >
                       <Nav variant="tabs" className="nav nav-tabs profile-tab">
-                        <Nav.Item className="nav-item profile-tab">
-                          <Nav.Link eventKey="1"> Coder 1</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item className="nav-item profile-tab">
-                          <Nav.Link eventKey="2">Coder 2</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item className="nav-item profile-tab">
-                          <Nav.Link eventKey="3">QA</Nav.Link>
-                        </Nav.Item>
+                      {allRoles?.allocationRoles?.map(
+                          (role, index) => (
+                            <Nav.Item
+                              as="li"
+                              className="nav-item profile-tab mt-4"
+                              key={role}
+                            >
+                              <Nav.Link className="mt-4" eventKey={index + 1}>
+                                {role?.roleName
+                                  ?.replace(/_/g, " ")
+                                  ?.replace(/\b\w/g, (c) => c.toUpperCase())}
+                              </Nav.Link>
+                            </Nav.Item>
+                          )
+                        )}
                       </Nav>
                       <div className="d-flex">
                         <div className="mt-4 w-100">
@@ -281,6 +291,7 @@ const connector = connect(
     reviewerList:
       state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
+    allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
@@ -290,6 +301,7 @@ const connector = connect(
     allocationList: allActions.getAllAllocationList,
     getReviewerList: allActions.getFilterOptions,
     getRoutedData: tinActions.getAllocationRoutedData,
+    getAllTabRoles: allActions.getAllRoles,
   }
 );
 
