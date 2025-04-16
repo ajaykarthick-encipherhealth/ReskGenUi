@@ -15,6 +15,7 @@ import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
  import { faCalendar, faCircleCheck ,faClockRotateLeft,faUsers} from "@fortawesome/free-solid-svg-icons";
 import { formatDateTime } from "../../../../utils/reusable";
 import moment from "moment";
+import { getStorage } from "../../../../utils/storages";
 
 const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
   const currentDate = dayjs();
@@ -33,11 +34,12 @@ const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
   const handleOpen = () => {
     setOpenPicker(!openPicker);
   };
+  const proxyRole = getStorage("proxyRole")
   const card1Data = [
     {
       id: 1,
       icon:<FontAwesomeIcon icon={faUsers} /> ,
-      title: "Coder 1 Allocated",
+      title: `${proxyRole} Allocated`,
       charts: worlFlowData?.data?.response?.allocated,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
@@ -47,7 +49,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
     {
       id: 2,
       icon:<FontAwesomeIcon icon={faCircleCheck} />,
-      title: "Coder 1 Completed",
+      title: `${proxyRole} Completed`,
       charts: worlFlowData?.data?.response?.completed,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
@@ -57,7 +59,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
     {
       id: 3,
       icon:  <FontAwesomeIcon icon={faClockRotateLeft} />,
-      title: "Coder 1 Pending",
+      title: `${proxyRole} Pending`,
       charts: worlFlowData?.data?.response?.pending,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
@@ -67,7 +69,7 @@ const WorkFlow = ({ worlFlowData ,DateRanges,workFlowLoader}) => {
     {
       id: 4,
       icon:  <FontAwesomeIcon icon={faClockRotateLeft} />,
-      title: "Coder 1 Declined",
+      title: `${proxyRole} Declined`,
       charts: worlFlowData?.data?.response?.declined,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3

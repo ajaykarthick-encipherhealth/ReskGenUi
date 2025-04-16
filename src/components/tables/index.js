@@ -5,6 +5,7 @@ import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   InfoCircleFilled,
+  InfoCircleOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
 import {
@@ -26,6 +27,7 @@ import {
   tableSkeleton,
   createIdGen,
   proxyStatusBodyTemplate,
+  getRoasterStatus,
 } from "../../utils/reusable";
 import { priorityOptions, priorityStatus } from "../headerFilters/functions";
 import Legends from "../legends";
@@ -34,8 +36,8 @@ import { auditBullets } from "../../pages/supervisor/auditing";
 import { CircularProgressbar } from "react-circular-progressbar";
 import EditButton from "../../images/adminUsers/EditButton";
 import EditButtonDisbled from "../../images/adminUsersDisabled/EditButtonDisabled";
-import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
-import { batchBullets } from "../../pages/tenantadmin/patients";
+import { faArrowsRotate, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { batchBullets } from "../../commonPages/patients";
 import { useRouter } from "next/router";
 import { Paginator } from "primereact/paginator";
 
@@ -90,122 +92,131 @@ const AppTable = ({
   first,
   totalRecords,
   row,
+  handleRoasterBtn,
+  isPagination=true
 }) => {
   const router = useRouter();
   const columnsArr = Array.from({ length: column?.length || 5 });
+
   return (
     <div className="customTable">
       <div
         id={
           tableId
             ? createIdGen("table " + tableId)
-            :createIdGen(
-              "row " + router.pathname.replaceAll("/", " ")
-            )
+            : createIdGen("row " + router.pathname.replaceAll("/", " "))
         }
         className={`${
           tableHeight ? Style.pageContainer1 : Style.pageContainer
         }`}
       >
         <div className={Style.pageContent}>
-          <table className={Style.classTable}>
-            <thead
-              className={`${Style.classThead} ${
-                isReportPage && Style.scrollIssue
-              }`}
+          <div style={{overflowX:"auto"}}>
+            <table
+              className={`  ${Style.classTable}`}
             >
-              <tr>
-                {column?.map((item, index) => (
-                  <TableHeadItem
-                    infoIcon={infoIcon}
-                    item={item}
-                    sort={sort}
-                    setSort={setSort}
-                  />
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {loader ? (
-                [...Array.from({ length: 15 })]?.map((_, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {columnsArr?.map((_, colIndex) => (
-                      <td  className="mx-1"  key={colIndex}>
-                        {tableSkeleton({ rows: 1, columns: 1 })}
-                      </td>
-                    ))}
-                  </tr>
-                ))
-              ) : data?.length > 0 ? (
-                data?.map((item, index) => (
-                  <TableRow
-                    colIndex={index}
-                    item={item}
-                    column={column}
-                    status={status}
-                    setAction={setAction}
-                    count={count}
-                    switchStates={switchStates}
-                    onSwitchToggle={onSwitchToggle}
-                    onRowClick={onRowClick}
-                    handleRowCheckboxChange={handleRowCheckboxChange}
-                    checkBoxLoader={checkBoxLoader}
-                    handleUpload={handleUpload}
-                    disableUser={disableUser}
-                    rowHighlight={rowHighlight}
-                    activeItem={activeItem}
-                    setActiveItem={setActiveItem}
-                    handleReportIcon={handleReportIcon}
-                    setTriggeredBatch={setTriggeredBatch}
-                    setOpenUpload={setOpenUpload}
-                    openUpload={openUpload}
-                    handleBatchTrigger={handleBatchTrigger}
-                    btnOnClick={(rowData) => handleAllocateClick(rowData)}
-                    triggeredId={triggeredId}
-                    isNullable={isNullable}
-                    setSelectedRows={setSelectedRows}
-                    selectedRows={selectedRows}
-                    handlePriorityChange={handlePriorityChange}
-                    setRowData={setRowData}
-                    setPopoverVisible={setPopoverVisible}
-                    setSelectedRoles={setSelectedRoles}
-                    optionsUser={optionsUser}
-                    setSelectedManager={setSelectedManager}
-                    getContent={getContent}
-                    popoverVisible={popoverVisible}
-                    isMultiple={isMultiple}
-                    actionBodyTemplate={actionBodyTemplate}
-                    statusBodyTemplate={statusBodyTemplate}
-                    getRetregger={getRetregger}
-                    infoIcon={infoIcon}
-                    tableId={tableId}
-                    renderFlagCell={renderFlagCell}
-                  />
-                ))
-              ) : (
+              <thead
+                className={`${Style.classThead} ${
+                  isReportPage && Style.scrollIssue
+                }`}
+              >
                 <tr>
-                  <td colSpan={columnsArr?.length}>
-                    <div className="d-flex align-items-center justify-content-center">
-                      <Empty />
-                    </div>
-                  </td>
+                  {column?.map((item, index) => (
+                    <TableHeadItem
+                      infoIcon={infoIcon}
+                      item={item}
+                      sort={sort}
+                      setSort={setSort}
+                    />
+                  ))}
                 </tr>
-              )}
-            </tbody>
-          </table>
-          <div className="pagination-container">
-            <Paginator
-              id="pagination"
-              name="pagination"
-              first={first}
-              rows={row ? row : 15}
-              totalRecords={totalRecords}
-              onPageChange={onPageChange}
-            />
-            <div className="total-pages">
-              Total count: {totalRecords ? totalRecords : "0"}
-            </div>
+              </thead>
+              <tbody>
+                {loader ? (
+                  [...Array.from({ length: 15 })]?.map((_, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {columnsArr?.map((_, colIndex) => (
+                        <td className="mx-1" key={colIndex}>
+                          {tableSkeleton({ rows: 1, columns: 1 })}
+                        </td>
+                      ))}
+                    </tr>
+                  ))
+                ) : data?.length > 0 ? (
+                  data?.map((item, index) => (
+                    <TableRow
+                      colIndex={index}
+                      item={item}
+                      column={column}
+                      status={status}
+                      setAction={setAction}
+                      count={count}
+                      switchStates={switchStates}
+                      onSwitchToggle={onSwitchToggle}
+                      onRowClick={onRowClick}
+                      handleRowCheckboxChange={handleRowCheckboxChange}
+                      checkBoxLoader={checkBoxLoader}
+                      handleUpload={handleUpload}
+                      disableUser={disableUser}
+                      rowHighlight={rowHighlight}
+                      activeItem={activeItem}
+                      setActiveItem={setActiveItem}
+                      handleReportIcon={handleReportIcon}
+                      setTriggeredBatch={setTriggeredBatch}
+                      setOpenUpload={setOpenUpload}
+                      openUpload={openUpload}
+                      handleBatchTrigger={handleBatchTrigger}
+                      btnOnClick={(rowData) => handleAllocateClick(rowData)}
+                      triggeredId={triggeredId}
+                      isNullable={isNullable}
+                      setSelectedRows={setSelectedRows}
+                      selectedRows={selectedRows}
+                      handlePriorityChange={handlePriorityChange}
+                      setRowData={setRowData}
+                      setPopoverVisible={setPopoverVisible}
+                      setSelectedRoles={setSelectedRoles}
+                      optionsUser={optionsUser}
+                      setSelectedManager={setSelectedManager}
+                      getContent={getContent}
+                      popoverVisible={popoverVisible}
+                      isMultiple={isMultiple}
+                      actionBodyTemplate={actionBodyTemplate}
+                      handleRoasterBtn={handleRoasterBtn}
+                      statusBodyTemplate={statusBodyTemplate}
+                      getRetregger={getRetregger}
+                      infoIcon={infoIcon}
+                      tableId={tableId}
+                      renderFlagCell={renderFlagCell}
+                    />
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={columnsArr?.length}>
+                      <div className="d-flex align-items-center justify-content-center">
+                        <Empty />
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
+
+          {isPagination && (
+            <div className="pagination-container">
+              <Paginator
+                id="pagination"
+                name="pagination"
+                first={first}
+                rows={row ? row : 15}
+                totalRecords={totalRecords}
+                onPageChange={onPageChange}
+              />
+              <div className="total-pages">
+                Total count: {totalRecords ? totalRecords : "0"}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -338,6 +349,7 @@ const TableRow = ({
   popoverVisible,
   isMultiple,
   actionBodyTemplate,
+  handleRoasterBtn,
   statusBodyTemplate,
   getRetregger,
   switchStates,
@@ -729,6 +741,37 @@ const TableRow = ({
                 }
                 className="d-flex justify-content-center"
               >
+                {processstatusBodyTemplate(
+                  item[`${columnItem.value}`],
+                  columnItem.isIcon
+                )}
+              </div>
+            </td>
+          );
+        }
+        if (columnItem.proxcystatus) {
+          return (
+            <td
+              className={`${
+                index == 0
+                  ? Style.firstTdBorder
+                  : column.length - 1 == index
+                  ? Style.lastBorder
+                  : Style.childBorder
+              } `}
+            >
+              <div
+                id={
+                  tableId
+                    ? createIdGen("processstatus " + tableId + colIndex)
+                    : createIdGen(
+                        "processstatus " +
+                          router.pathname.replaceAll("/", " ") +
+                          colIndex
+                      )
+                }
+                className="d-flex justify-content-center"
+              >
                 {proxyStatusBodyTemplate(
                   item[`${columnItem.value}`],
                   columnItem.isIcon
@@ -739,7 +782,7 @@ const TableRow = ({
         }
         if (columnItem.batchStatus) {
           return (
-            <td style={{ marginLeft: "10px" }} className={Style.childBorder}>
+            <td  className={` d-flex align-items-center justify-content-center ${Style.childBorder}`}>
               {statusBodyTemplate(item)}
             </td>
           );
@@ -768,6 +811,51 @@ const TableRow = ({
                     icon={faArrowsRotate}
                     style={{ fontSize: "large", color: "#df3a3a" }}
                   />
+                </div>
+              )}
+            </td>
+          );
+        }
+
+        if (columnItem.isUpload) {
+          return (
+            <td className={Style.lastBorder} style={{ textAlign: "center" }}>
+              {item?.status === "FAILED" && (
+                <div
+                  id={
+                    tableId
+                      ? createIdGen("isRoasterFailed " + tableId + colIndex)
+                      : createIdGen(
+                          "isRoasterFailed " +
+                            router.pathname.replaceAll("/", " ") +
+                            colIndex
+                        )
+                  }
+                  className="d-flex align-items-center"
+                >
+                  <div className="d-flex justify-content-center gap-2 ">
+                    <button
+                      id="click-upload"
+                      name="click-upload"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRoasterBtn(item);
+                      }}
+                      className="btn hegiht10  sharp me-1 action-btn"
+                      style={{ background: "#04306f" }}
+                    >
+                      <FontAwesomeIcon
+                        icon={faUpload}
+                        fontSize={11}
+                        style={{ color: "#ffff" }}
+                      />
+                    </button>
+                    <Popover title="Reason" content={item?.failedReason ? item?.failedReason : ""}>
+                      <InfoCircleOutlined
+                        style={{ fontSize: "20px", color: "#df3a3a" }}
+                      />
+                    </Popover>
+                  </div>
                 </div>
               )}
             </td>

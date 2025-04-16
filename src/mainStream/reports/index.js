@@ -589,7 +589,7 @@ const Reports = ({
       <Header />
       <div className="content-body">
         <div className="container-fluid">
-          <div className="row">
+          <div className="row mt-5">
             <div className="col-xl-12">
               <div>
                 <Tab
@@ -597,7 +597,7 @@ const Reports = ({
                   handleTabs={handleTabs}
                   tabs={tabs}
                 />
-                <div className="d-flex justify-content-between align-items-center mt-3">
+                <div className="d-flex justify-content-between align-items-center mt-4">
                   <div className="d-flex gap-4">
                     <div className="d-flex w-100">
                       <label className="labelStyle d-flex m-auto p-3">

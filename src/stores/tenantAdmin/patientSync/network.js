@@ -84,3 +84,93 @@ export async function triggerBatch({ obj }) {
   const data = await requestPortal(`management/ftp/trigger`, options);
   return data;
 }
+
+// roaster form
+
+export async function providerRoasterExcel({ obj }) {
+  const options = {
+    method: "POST",
+    body: obj,
+  };
+  const data = await requestPortalFiles(`dbservice/excel/convert/provider`, options);
+  return data;
+}
+export async function practiceRoasterExcel({ obj }) {
+  const options = {
+    method: "POST",
+    body: obj,
+  };
+  const data = await requestPortalFiles(`dbservice/excel/convert/practice`, options);
+  return data;
+}
+export async function patientRoasterExcel({ obj }) {
+  const options = {
+    method: "POST",
+    body: obj,
+  };
+  const data = await requestPortalFiles(`dbservice/excel/convert/patient`, options);
+  return data;
+}
+export async function tinRoasterExcel({ obj }) {
+  const options = {
+    method: "POST",
+    body: obj,
+  };
+  const data = await requestPortalFiles(`dbservice/excel/convert/tin`, options);
+  return data;
+}
+
+export async function providerRoaster({
+ projectId ="test",
+ pageNo
+}) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/roaster/provider?projectId=${projectId}&pageno=${pageNo}&pagesize=15`,options
+  );
+  return data;
+}
+
+export async function practiceRoaster({
+  projectId ="test",
+  pageNo
+ }) {
+   const options = {
+     method: "GET",
+   };
+   const data = await requestPortal(
+     `dbservice/roaster/practice?projectId=${projectId}&pageno=${pageNo}&pagesize=15`,
+     options
+   );
+   return data;
+ }
+
+ export async function patientRoaster({
+  projectId ="test",
+  pageNo
+ }) {
+   const options = {
+     method: "GET",
+   };
+   const data = await requestPortal(
+     `dbservice/roaster/patient?projectId=${projectId}&pageno=${pageNo}&pagesize=15`,
+     options
+   );
+   return data;
+ }
+
+ export async function tinRoaster({
+  projectId ="test",
+  pageNo
+ }) {
+   const options = {
+     method: "GET",
+   };
+   const data = await requestPortal(
+     `dbservice/roaster/tin?projectId=${projectId}&pageno=${pageNo}&pagesize=15`,
+     options
+   );
+   return data;
+ }

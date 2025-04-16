@@ -53,6 +53,8 @@ const ReusableFilters = ({
   id,
   search,
   setSearch,
+  columns,
+  commonFilterItems
 }) => {
   const pickerRefs = useRef({});
   const router = useRouter();
@@ -71,11 +73,12 @@ const ReusableFilters = ({
   };
   const handleClearFilters = () => {
     setSelectAll(false);
-    setActiveFilters((prevFilters) =>
+    setActiveFilters( 
+      (prevFilters) =>
       prevFilters.map((filter) =>
-        filter.type === "search"
-          ? { ...filter, active: true }
-          : { ...filter, active: false }
+        // filter.type === "search"
+        //   ? { ...filter, active: true }
+          ({ ...filter, active: true })
       )
     );
     setSelectedDateRanges({});
@@ -353,7 +356,7 @@ const ReusableFilters = ({
             selectAll={selectAll}
             setSelectAll={setSelectAll}
             activeFilters={activeFilters}
-            allFilters={FilterItems}
+            FilterItems={FilterItems}
             setActiveFilters={setActiveFilters}
             setClear={setClear}
             handleClearAllFilters={handleClearAllFilters}
@@ -363,6 +366,7 @@ const ReusableFilters = ({
             addUserForm={addUserForm}
             btnTitle={btnTitle}
             form={form}
+            columns={columns}
           />
         </div>
       )}

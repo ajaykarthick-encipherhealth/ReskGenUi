@@ -21,7 +21,7 @@ import HistoryCodes from "./coding/historyCodes";
 import DownCodes from "./coding/downCodes";
 import DirectConfirmCodes from "./coding/directConfirmCodes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileImport, faFireFlameCurved, faHospital, faSliders } from "@fortawesome/free-solid-svg-icons";
+import { faFileImport, faFireFlameCurved, faHospital, faSliders ,faFile} from "@fortawesome/free-solid-svg-icons";
 import QueryTemplateConfig from "./configuration/queryTemplateCofig";
 import DiagnosticReportConfig from "./coding/diagnosticReportConfig";
 import MeatConfig from "./coding/meatCofig";
@@ -33,6 +33,7 @@ import FTPSETPIntegration from "./coding/ftpSetpIntegration";
 import leftArrow from "../../../images/svg/leftArrow.svg";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Projects from "./projects";
 
 const { Sider } = Layout;
 
@@ -169,6 +170,19 @@ const menuList =(activePage)=> [
     ),
     label: `FTP-SFTP`,
   },
+  {
+    key: `Projects`,
+    icon: (
+      <span className="">
+        <FontAwesomeIcon icon={faFile}
+        style={{
+          color: activePage==="Projects"?"#fff":"#04306f",
+          fontSize:"20px"
+        }} />
+      </span>
+    ),
+    label: `Projects`,
+  },
 ];
 
 const Settings = () => {
@@ -258,6 +272,7 @@ const Settings = () => {
                 {activePage == "Down_Codes" && <DownCodes />}
                 {activePage == "Direct_Confirm_Codes" && <DirectConfirmCodes />}
                 {activePage == "EMR-FHIR" && <EmrFhir />}
+                {activePage == "Projects" && <Projects />}
               </div>
             </div>
           </div>

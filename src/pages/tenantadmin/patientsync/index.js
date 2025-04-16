@@ -25,6 +25,11 @@ import UploadModal from "./uploadfile/uploadModal";
 import { useRouter } from "next/router";
 import { disabledDate, formatDateForIndex } from "../../../utils/reusable";
 import { useRef } from "react";
+import PatientRoasterTable from "../../../components/table/tenantTable/patientRoasterTable";
+import ProviderRoasterTable from "../../../components/table/tenantTable/providerRoasterTable";
+import PracticeRoasterTable from "../../../components/table/tenantTable/practiceRoasterTable";
+import RoasterDrawer from "./modals/roasterDrawer";
+import TinRoasterTable from "../../../components/table/tenantTable/tinRoasterTable";
 
 const { RangePicker } = DatePicker;
 
@@ -304,7 +309,7 @@ const FHIRData = [
   },
 ];
 
-const Index = ({
+const PatientSync = ({
   getAllBatches,
   pdfTableData,
   pdfLoader,
@@ -312,8 +317,12 @@ const Index = ({
   reportActiveTab,
   routedData,
   webSocketData,
+  getProviderRoaster,
+  getPatientRoaster,
+  getPracticeRoaster,
+  getTinRoaster,
 }) => {
-    const pickerRef = useRef()
+  const pickerRef = useRef();
   const router = useRouter();
   const [filteredCOder, setFilteredCoder] = useState(null);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -336,8 +345,16 @@ const Index = ({
     status: false,
     data: null,
   });
-  const[socketData,setSocketData]=useState(null)
+  const [socketData, setSocketData] = useState(null);
   const [paramsFilter, setParamsFilter] = useState(null);
+  const [roasterDrawer, setRoasterDrawer] = useState(false);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pagination, setPagination] = useState(0);
+  const [drawerProps, setDrawerProps] = useState({
+    isDrawerOpen: false,
+    reUpload: null,
+  });
+
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
     setUploadType(e.target.name);
@@ -348,9 +365,38 @@ const Index = ({
     setUploadType(e.target.name);
     setSelectedBatch();
   };
+  // const handleRoasterBtn = () => {
+  //   setRoasterDrawer(!roasterDrawer);
+  // };
+  const handleRoasterBtn = (item) => {
+    setDrawerProps({
+      isDrawerOpen: true,
+      reUpload: item?.reUploadId || item?.id,
+    });
+  };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
+  };
+  const renderButton = () => {
+    switch (reportActiveTab) {
+      case "FHIR":
+        return <RegularButton name="Upload" onClick={handleFhirUpload} />;
+      case "PDF":
+        return (
+          <RegularButton
+            name="Create Batch"
+            onClick={handleUploadButtonClick}
+          />
+        );
+      case "Patient Roaster":
+      case "Practice Roaster":
+      case "Provider Roaster":
+      case "Tin Roaster":
+        return <RegularButton name="Add Roaster" onClick={handleRoasterBtn} />;
+      default:
+        return <RegularButton name="Upload" onClick={handleRoasterBtn} />;
+    }
   };
 
   const handleTabs = (name) => {
@@ -378,17 +424,8 @@ const Index = ({
     debouncedSearch(value, setSearchVal, field);
   };
   const handleRangePicker = (date, dateString, tabName) => {
-    // const formattedDates = dateString?.map((date, index) => {
-    //   const formattedDate =
-    //     index === 1
-    //       ? date &&
-    //         `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-    //       : date &&
-    //         `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
-    //   return formattedDate;
-    // });
     const formattedDates = dateString?.map((date, index) =>
-      formatDateForIndex({ date:date, index:index })
+      formatDateForIndex({ date: date, index: index })
     );
 
     setSelectedDates((prevOptions) => ({
@@ -445,7 +482,7 @@ const Index = ({
         if (item?.id === webSocketData?.id) {
           return {
             ...item,
-            batchUploadStatus: webSocketData?.batchUploadStatus||"PROCESSING",
+            batchUploadStatus: webSocketData?.batchUploadStatus || "PROCESSING",
           };
         }
         return item;
@@ -454,11 +491,24 @@ const Index = ({
         ...prevState,
         content: updatedTableData,
       }));
-    } 
+    }
     // else {
     //   setSocketData(pdfTableData);
     // }
-  }, [webSocketData,pdfTableData]);
+  }, [webSocketData, pdfTableData]);
+
+  useEffect(() => {
+    if (reportActiveTab === "Provider Roaster") {
+      getProviderRoaster({ pageNo: pageNumber });
+    } else if (reportActiveTab === "Practice Roaster") {
+      getPracticeRoaster({ pageNo: pageNumber });
+    } else if (reportActiveTab === "Patient Roaster") {
+      getPatientRoaster({ pageNo: pageNumber });
+    } else if (reportActiveTab === "Tin Roaster") {
+      getTinRoaster({ pageNo: pageNumber });
+    }
+  }, [reportActiveTab, pageNumber, pagination]);
+console.log(reportActiveTab,"reportActiveTab")
   return (
     <>
       <Header />
@@ -503,7 +553,11 @@ const Index = ({
                           <div className="d-flex flex-wrap col-10 ">
                             <div className="default-filter-size col-2 col-xl-2 col-md-4 mx-1">
                               <label>Search by Name or ID</label>
-                              <div id="searc-name" name="search-name" style={{ height: "45px" }}>
+                              <div
+                                id="searc-name"
+                                name="search-name"
+                                style={{ height: "45px" }}
+                              >
                                 <Input
                                   type="text"
                                   name="initialSearch"
@@ -534,9 +588,13 @@ const Index = ({
                             </div>
                             <div className="default-filter-size col-2 col-xl-2 col-md-3 mx-1">
                               <label>Date</label>
-                              <div id="picker-date" name="picker-date" class="form-group has-search">
+                              <div
+                                id="picker-date"
+                                name="picker-date"
+                                class="form-group has-search"
+                              >
                                 <RangePicker
-                                 ref={pickerRef}
+                                  ref={pickerRef}
                                   data-testid="select-date"
                                   name="select-date"
                                   format="MM-DD-YYYY"
@@ -547,7 +605,10 @@ const Index = ({
                                   }
                                   onChange={(dates, dateStrings) => {
                                     if (!dates || dates.length === 0) {
-                                      setTimeout(() => pickerRef.current?.focus(), 100);
+                                      setTimeout(
+                                        () => pickerRef.current?.focus(),
+                                        100
+                                      );
                                     }
                                     handleRangePicker(
                                       dates,
@@ -575,7 +636,11 @@ const Index = ({
                             </div>
                             <div className="default-filter-size col-2 col-xl-2 col-md-3 mx-1">
                               <label>Status</label>
-                              <div  id="status-select" name="status-select" className={`custom-react-select`}>
+                              <div
+                                id="status-select"
+                                name="status-select"
+                                className={`custom-react-select`}
+                              >
                                 <Select
                                   data-testid="select-status"
                                   name="select-status"
@@ -600,7 +665,11 @@ const Index = ({
                               (reportActiveTab === "FHIR" && (
                                 <div className=" default-filter-size col-xl-2 col-md-4 mx-1">
                                   <label>Initiated By</label>
-                                  <div ID="initiated" name="initiated" className={`custom-react-select`}>
+                                  <div
+                                    ID="initiated"
+                                    name="initiated"
+                                    className={`custom-react-select`}
+                                  >
                                     <Select
                                       data-testid="initiated-by"
                                       name="initiated-by"
@@ -618,44 +687,8 @@ const Index = ({
                                 </div>
                               ))}
                           </div>
-                          <div className="d-flex mx-1 col-2 justify-content-end">
-                            {!reportActiveTab || reportActiveTab === "FHIR" ? (
-                              <div
-                                className={styles.btnContainer}
-                                name="upload-btn"
-                                onClick={handleFhirUpload}
-                                id="upload-btn" 
-                              >
-                                <RegularButton
-                                  name={"Upload"}
-                                  width={"150px"}
-                                  type="outlined"
-                                  id="upload"
-                                />
-                              </div>
-                            ) : (
-                              <>
-                                {/* <div
-                                className={styles.btnContainer}
-                                name="upload trigger"
-                                onClick={handleUploadButtonClick}
-                              >
-                                <RegularButton
-                                  name={"Upload"}
-                                  width={"150px"}
-                                />
-                              </div> */}
-                                <div
-                                  className={
-                                    "w-100 d-flex justify-content-end align-items-end"
-                                  }
-                                  onClick={handleUploadButtonClick}
-                                  name="upload"
-                                >
-                                  <RegularButton name={"Create Batch"} />
-                                </div>
-                              </>
-                            )}
+                          <div className="w-100 d-flex justify-content-end align-items-end">
+                            {renderButton()}
                           </div>
                         </div>
 
@@ -706,6 +739,72 @@ const Index = ({
                                       PDF
                                     </Nav.Link>
                                   </Nav.Item>
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => {
+                                      handleTabs("Tin Roaster");
+                                    }}
+                                  >
+                                    <Nav.Link
+                                      id="tinRoaster"
+                                      name="tinRoaster"
+                                      to="#my-posts"
+                                      eventKey="tinRoaster"
+                                    >
+                                      Tin Roaster
+                                    </Nav.Link>
+                                  </Nav.Item>
+
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => {
+                                      handleTabs("Practice Roaster");
+                                    }}
+                                  >
+                                    <Nav.Link
+                                      id="practiceRoaster"
+                                      name="practiceRoaster"
+                                      to="#my-posts"
+                                      eventKey="practiceRoaster"
+                                    >
+                                      Practice 
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => {
+                                      handleTabs("Provider Roaster");
+                                    }}
+                                  >
+                                    <Nav.Link
+                                      id="providerRoaster"
+                                      name="providerRoaster"
+                                      to="#my-posts"
+                                      eventKey="providerRoaster"
+                                    >
+                                      Provider Roaster
+                                    </Nav.Link>
+                                  </Nav.Item>
+
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => {
+                                      handleTabs("Patient Roaster");
+                                    }}
+                                  >
+                                    <Nav.Link
+                                      id="patientRoaster"
+                                      name="patientRoaster"
+                                      to="#my-posts"
+                                      eventKey="patientRoaster"
+                                    >
+                                      Patient 
+                                    </Nav.Link>
+                                  </Nav.Item>
                                 </Nav>
                                 <Tab.Content>
                                   <Tab.Pane id="my-posts" eventKey="fhir">
@@ -737,6 +836,55 @@ const Index = ({
                                       pdfTableData={pdfTableData}
                                     />
                                   </Tab.Pane>
+                                  <Tab.Pane id="my-posts" eventKey="tinRoaster">
+                                    <TinRoasterTable
+                                      pageNumber={pageNumber}
+                                      setPageNumber={setPageNumber}
+                                      setPagination={setPagination}
+                                      pagination={pagination}
+                                      handleRoasterBtn={handleRoasterBtn}
+                                    />
+                                  </Tab.Pane>
+
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="patientRoaster"
+                                  >
+                                    <PatientRoasterTable
+                                      pageNumber={pageNumber}
+                                      setPageNumber={setPageNumber}
+                                      setPagination={setPagination}
+                                      pagination={pagination}
+                                      handleRoasterBtn={handleRoasterBtn}
+                                      
+                                    />
+                                  </Tab.Pane>
+
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="providerRoaster"
+                                  >
+                                    <ProviderRoasterTable
+                                      pageNumber={pageNumber}
+                                      setPageNumber={setPageNumber}
+                                      setPagination={setPagination}
+                                      pagination={pagination}
+                                      handleRoasterBtn={handleRoasterBtn}
+                                    />
+                                  </Tab.Pane>
+
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="practiceRoaster"
+                                  >
+                                    <PracticeRoasterTable
+                                      pageNumber={pageNumber}
+                                      setPageNumber={setPageNumber}
+                                      setPagination={setPagination}
+                                      pagination={pagination}
+                                      handleRoasterBtn={handleRoasterBtn}
+                                    />
+                                  </Tab.Pane>
                                 </Tab.Content>
                               </Tab.Container>
                             </div>
@@ -761,6 +909,18 @@ const Index = ({
                             uploadType={uploadType}
                             setUploadType={setUploadType}
                             selectedBatch={selectedBatch}
+                          />
+                          <RoasterDrawer
+                            isDrawerOpen={drawerProps.isDrawerOpen}
+                            setIsDrawerOpen={(val) =>
+                              setDrawerProps((prev) => ({
+                                ...prev,
+                                isDrawerOpen: val,
+                              }))
+                            }
+                            reportActiveTab={reportActiveTab}
+                            reUpload={drawerProps.reUpload}
+                            pageNumber={pageNumber}
                           />
                         </div>
                       </div>
@@ -787,6 +947,7 @@ const Index = ({
     </>
   );
 };
+
 const connector = connect(
   (state) => ({
     pdfTableData: state.tenantAdmin?.patientSync?.allBatches?.data?.response,
@@ -801,6 +962,10 @@ const connector = connect(
     getActiveTab: allReportActions.activeTab,
     uploadFiles: allActions.upoloadFiles,
     getRoutedData: patientSyncAction.getRoutedData,
+    getProviderRoaster: patientSyncAction.providerRoasterAction,
+    getPatientRoaster: patientSyncAction.patientRoasterAction,
+    getPracticeRoaster: patientSyncAction.praticeRoasterAction,
+    getTinRoaster: patientSyncAction.tinRoasterAction,
   }
 );
-export default connector(Index);
+export default connector(PatientSync);

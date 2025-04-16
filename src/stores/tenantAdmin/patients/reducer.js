@@ -5,7 +5,7 @@ import {
   getAllOrganizationAction,
   getAllPatientAction,
   getRetreggerPatient,
-  submitPatientId
+  submitPatientId,
 } from "./actions";
 
 
@@ -47,6 +47,7 @@ const getReportLoading = (type) =>
     },
     false
   );
+
 
 const adminPatientsReducer = combineReducers({
   allOrganization: createReducer(getAllOrganizationAction),

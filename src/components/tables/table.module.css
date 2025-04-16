@@ -13,8 +13,45 @@
 .classTable {
   border-collapse: separate !important;
   border-spacing: 0 3px !important;
+  /* width: 100%; */
+}
+
+.scrollContainer {
+  overflow-x: auto;
   width: 100%;
 }
+
+/* Optional: Improve scroll UX */
+.scrollContainer::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scrollContainer::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.stickyColumn {
+  position: sticky;
+  left: 0;
+  background-color: white; /* Or match your table background */
+  z-index: 2;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+/* You can use nth-child to assign multiple sticky columns */
+.thead th:nth-child(-n+10),
+.tbody td:nth-child(-n+10) {
+  position: sticky;
+  left: calc(var(--index) * 100px); /* Adjust based on your column width */
+  z-index: 2;
+  background: white;
+}
+
+.scrollableColumn {
+  white-space: nowrap;
+}
+
 .bodytable > td:first-child,
 .classThead > :first-child {
   border-radius: 10px 0 0 10px !important;
@@ -274,7 +311,7 @@
   }
   }
   .allocate {
-    width: 100px;
+    /* width: 100px; */
     height: 40px;
     color: #241571 !important;
     background: rgba(19, 61, 212, 0.15);
@@ -296,6 +333,14 @@
 .checkbox {
   width: 22px;
   height: 22px;
+}
+.scrollContainer {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.classTable {
+  min-width: 200px; 
 }
 
 

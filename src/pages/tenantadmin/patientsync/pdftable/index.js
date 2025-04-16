@@ -178,7 +178,7 @@ const DetailedViewPdfTable = ({
 
   const handleBack = () => {
     getActiveTab("PDF");
-    // removeStorage("patientSyncEncodedValue");
+    // removeStorage("patientSyn  cEncodedValue");
     // router.push("/tenantadmin/patientSync");
     setSelectedDates(params?.selectedDates);
     setSelecteddateRanges(params?.selectedDateRanges);

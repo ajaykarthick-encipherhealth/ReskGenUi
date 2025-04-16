@@ -9444,7 +9444,7 @@ button:focus {
 }
 
 .content-body .container-fluid {
-  padding-top: 80px;
+  padding-top: 60px;
   min-height: 100vh;
   height: auto;
   background-color: #f0f6fe;
@@ -16448,7 +16448,7 @@ input::-webkit-inner-spin-button {
   }
 }
 .default-filter-size {
-  width: 250px;
+  width: 240px;
   /* margin-top: 10px; */
 }
 
@@ -16581,4 +16581,9 @@ input::-webkit-inner-spin-button {
     font-size: 11px !important;
   }
 }
-
+.samplingSelect .ant-select-single {
+  height: 42px !important;
+}
+.samplingPicker .ant-picker{
+  border:1px solid #d9d9d9 !important
+}

@@ -410,7 +410,7 @@ const Patient = ({
       <div className="content-body">
         <div className="container-fluid">
           <div className="table-responsive active-projects task-table">
-            <div className="row ">
+            <div className="row p-3 ">
               <div className="col-10 ">
                 <ReusableFilters
                   showFilter={true}

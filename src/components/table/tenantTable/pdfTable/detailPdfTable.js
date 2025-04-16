@@ -89,7 +89,7 @@ const DetailedPdfTable = ({
       // const encodedValue = btoa(JSON.stringify(params));
       // setStorage("patientSyncEncodedValue", JSON.stringify(encodedValue));
       // setStorage("fromPatientSync", true);
-      setStorage("routeBackTo", "/tenantadmin/patientsync");
+      setStorage("routeBackTo", "/tenantadmin/project");
       getRoutedData(params);
       navigate.push("/tenantadmin/patientsync/batchfilesview");
     } else {

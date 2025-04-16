@@ -20,7 +20,7 @@
 .buttonContainer {
   border: 1px solid #04306f;
   border-radius: 10px;
-  width: 35%;
+  /* width: 50%; */
   height: 55px;
   margin: auto;
   display: flex;

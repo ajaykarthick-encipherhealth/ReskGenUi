@@ -152,3 +152,13 @@ export const fhirServicesAction = createActionThunk(
   network.fhirServices
 
 );
+export const createProjectAction = createActionThunk(
+  "CREATE_PROJECT",
+  network.createProject
+);
+export const getProjectAction = createActionThunk(
+  "GET_PROJECT",
+  network.getProjectDetails
+);
+
+

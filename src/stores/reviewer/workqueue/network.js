@@ -26,7 +26,7 @@ export const flagsList = async () => {
   return data;
 };
 export async function getAllReviewerPatients(
-{pageNo, pageSize, selectedOption, sort,selectedDateRanges,searchText,}
+{pageNo, pageSize, selectedOption, sort,selectedDateRanges,searchText, status}
 ) {
   const options = {
     method: "GET",
@@ -36,7 +36,7 @@ export async function getAllReviewerPatients(
    `dbservice/patient/filter?patientAllocated=${uId}&page=${
       pageNo ? pageNo : 0
     }&size=${pageSize ? pageSize : 15}&processedStatus=${
-      selectedOption?.Status ? selectedOption?.Status : ""
+      status ||  ""
     }&dueDateStart=${
       selectedDateRanges?.dueDate?.startDate
         ? selectedDateRanges?.dueDate?.startDate

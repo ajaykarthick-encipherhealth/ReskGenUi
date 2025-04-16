@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { actions as ReviewerAction } from "../../../../stores/reviewer/dashboard";
-import { setStorage } from "../../../../utils/storages";
+import { getStorage, setStorage } from "../../../../utils/storages";
 import { actions as ReviewerWorkQueueAction } from "../../../../stores/reviewer/workqueue";
 import { allFilters } from "../../patients/headerFilters";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
@@ -32,12 +32,7 @@ const DailyTask = ({
   const [currentDays, setCurrentDays] = useState([]);
   const [responseArray, setReponseArray] = useState([]);
   const [loading, setLoading] = useState(false);
-  const activeFilters = [
-    "Select Status",
-    "Select Priority",
-    "Due Date",
-    "Completed Date",
-  ];
+  const proxyRole = getStorage("proxyRole")
   const bullets = [
     {
       color: "#B4EFBA",
@@ -244,7 +239,7 @@ const DailyTask = ({
 
   return (
     <>
-      <HeadTitle header="Coder 1 Daily Task" />
+      <HeadTitle header="Daily Task" />
       <div className={styles.card2}>
         <Card borderRadius="28px" style={{ display: "flex" }}>
           {dailyTaskLoader || loading ? (
@@ -297,12 +292,11 @@ const DailyTask = ({
                                 },
                               },
                               activeFilters: commonFilterItems?.map((item) =>
-                                item.title === "dueDate" ||
-                                item?.title === "Search"
+                                item.title === "dueDate"
                                   ? { ...item, active: true }
                                   : item
                               ),
-                              // activeFilters: ["Due Date", "Search"],
+                              activeStatus:"PENDING",
                             };
                             getRoutedData(params);
                             router?.push("/reviewer/patients");
@@ -337,46 +331,41 @@ const DailyTask = ({
                                   <div className={`${styles.container}`}>
                                     <div
                                       style={{ display: "flex" }}
-                                      onClick={() => {
-                                        const params = {
-                                          selectedDates: {
-                                            dueDate: [
-                                              dayjs(data?.date),
-                                              dayjs(data?.date),
-                                            ],
-                                          },
-                                          selectedOption: {
-                                            Status: item?.name.toUpperCase(),
-                                          },
-                                          selectedDateRanges: {
-                                            dueDate: {
-                                              startDate: formatDateForIndex({
-                                                date: data?.date,
-                                                index: 0,
-                                              }),
-                                              endDate: formatDateForIndex({
-                                                date: data?.date,
-                                                index: 1,
-                                              }),
-                                            },
-                                          },
-                                          activeFilters: commonFilterItems?.map(
-                                            (item) =>
-                                              item.title === "dueDate" ||
-                                              item.title === "Status" ||
-                                              item?.title === "Search"
-                                                ? { ...item, active: true }
-                                                : item
-                                          ),
-                                          // activeFilters: [
-                                          //   "Due Date",
-                                          //   "Status",
-                                          //   "Search",
-                                          // ],
-                                        };
-                                        getRoutedData(params);
-                                        router?.push("/reviewer/patients");
-                                      }}
+                                      // onClick={() => {
+                                      //   const params = {
+                                      //     selectedDates: {
+                                      //       dueDate: [
+                                      //         dayjs(data?.date),
+                                      //         dayjs(data?.date),
+                                      //       ],
+                                      //     },
+                                      //     selectedOption: {
+                                      //       Status: item?.name.toUpperCase(),
+                                      //     },
+                                      //     selectedDateRanges: {
+                                      //       dueDate: {
+                                      //         startDate: formatDateForIndex({
+                                      //           date: data?.date,
+                                      //           index: 0,
+                                      //         }),
+                                      //         endDate: formatDateForIndex({
+                                      //           date: data?.date,
+                                      //           index: 1,
+                                      //         }),
+                                      //       },
+                                      //     },
+                                      //     activeFilters: commonFilterItems?.map(
+                                      //       (item) =>
+                                      //         item.title === "dueDate" ||
+                                      //         item.title === "Status" ||
+                                      //         item?.title === "Search"
+                                      //           ? { ...item, active: true }
+                                      //           : item
+                                      //     ),
+                                      //   };
+                                      //   getRoutedData(params);
+                                      //   router?.push("/reviewer/patients");
+                                      // }}
                                     >
                                       <div
                                         className={styles.bgColor}

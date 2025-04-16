@@ -258,7 +258,7 @@ const Notification = ({
     <>
       <div className={`menu-toggle`}>
         <Header />
-        <div class="content-body">
+        <div class="content-body p-3">
           <div className="container-fluid">
             <div
               style={{

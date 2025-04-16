@@ -1,0 +1,32 @@
+
+  .tabMainContainer {
+    width: 100%;
+    border-bottom: 1px solid #d9d9d9;
+    height: 75px;
+    background-color: #E1EDFD;
+  }
+  .headerTitle {
+    font-weight: 600;
+    font-size: 14px;
+    color: #221c1c;
+  }
+  .highPriority {
+    background-color: #ff3131;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .mediumPriority {
+    background-color: #ff9320;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .lowPriority {
+    background-color: #f7da00;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  
+ 

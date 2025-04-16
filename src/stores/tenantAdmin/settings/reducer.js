@@ -13,7 +13,7 @@ import {
   healthMetricAddAction,
   manualAddAction,
   fhirServicesAction,
-  updateSettingsAction, } from "./actions";
+  updateSettingsAction,createProjectAction ,getProjectAction} from "./actions";
 
 const initialState = {
   loading: true,
@@ -64,6 +64,9 @@ const tenantAminSettingsReducer = combineReducers({
   fhirConnectStatus: createReducer(fhirConnectAction),
   fhirList: createReducer(fhirListAction),
   fhirServicesList: createReducer(fhirServicesAction),
+  createProject:createReducer(createProjectAction),
+  getProject:createReducer(getProjectAction),
+  getProjectLoader:getReportLoading(getProjectAction)
   // manualAdd: createReducer(manualAddAction),
   // healthMetricAdd: createReducer(healthMetricAddAction),
 });

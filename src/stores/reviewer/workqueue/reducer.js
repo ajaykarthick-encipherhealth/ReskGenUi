@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { patientsAction,flagsAction ,getPatientDetails, reviewerFilterList,getReviewerPatients, getReassignPatients} from "./actions";
+import { patientsAction,flagsAction ,getPatientDetails, reviewerFilterList,getReviewerPatients, getReassignPatients,getStatusAction, getStatusActionReassign} from "./actions";
 
 const initialState = {
   loading: true,
@@ -46,13 +46,15 @@ const createReducer = (actionType) =>
     );
 const dashbaordReducer = combineReducers({
   patients: createReducer(patientsAction),
-  patientsLoading:getReportLoading(getReviewerPatients),
-  reassignLoading:getReportLoading(getReassignPatients),
-  flags:createReducer(flagsAction),
-  patientDetails:getPatientReviewerDetailsState(getPatientDetails),
+  patientsLoading: getReportLoading(getReviewerPatients),
+  reassignLoading: getReportLoading(getReassignPatients),
+  flags: createReducer(flagsAction),
+  patientDetails: getPatientReviewerDetailsState(getPatientDetails),
   reviewerPatientFilterList: getPatientReviewerDetailsState(reviewerFilterList),
-  getReviewerPatients:createReducer(getReviewerPatients),
-  getReassignPatients:createReducer(getReassignPatients)
+  getReviewerPatients: createReducer(getReviewerPatients),
+  getReassignPatients: createReducer(getReassignPatients),
+  getStatus: createReducer(getStatusAction),
+  getStatusReassign: createReducer(getStatusActionReassign),
 });
 
 export default dashbaordReducer;

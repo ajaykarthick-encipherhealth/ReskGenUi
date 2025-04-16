@@ -204,7 +204,7 @@ export const usersList = async ({ search }) => {
   return res;
 };
 export const allocateUsers = async ({ data }) => {
-  const url = `dbservice/patient/admin/assignPatients`;
+  const url = `management/allocation/manual`;
   const options = {
     method: "POST",
     body:JSON.stringify(data)

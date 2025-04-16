@@ -7,8 +7,8 @@ import { connect } from "react-redux";
 import { actions as invalidAction } from "../../../../stores/tenantAdmin/dashboard/invalid";
 import { useRouter } from "next/router";
 import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";
-import { commonFilterItems, flagOptions } from "../../patients";
 import dayjs from "dayjs";
+import { commonFilterItems, flagOptions } from "../../../../commonPages/patients";
 
 const InvalidChart = ({
   selectedValue,
@@ -141,7 +141,7 @@ const InvalidChart = ({
           };
 
           getRoutedData(params);
-          router.push("/tenantadmin/patients");
+          router.push("/tenantadmin/project");
         }}
       >
         <ReactECharts className="invalidChart cursor-pointer" option={graphOptions} />

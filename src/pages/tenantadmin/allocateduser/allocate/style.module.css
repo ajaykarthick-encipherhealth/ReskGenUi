@@ -82,7 +82,7 @@
   /* margin-top: 8px; */
 }
 .scroll{
-  height: 700px;
+  height: 500px;
   overflow: scroll;
   overflow-x: hidden;
 }

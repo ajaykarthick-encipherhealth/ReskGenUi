@@ -8,8 +8,15 @@ import {
   upoloadFiles,
   getCreateBatch,
   getRoutedData,
-  getSupervisorName
-  
+  getSupervisorName,
+  providerRoasterExcelAction,
+  practiceRoasterExcelAction,
+  patientRoasterExcelAction,
+  providerRoasterAction,
+  patientRoasterAction,
+  praticeRoasterAction,
+  tinRoasterExcelAction,
+  tinRoasterAction,
 } from "./actions";
 
 const initialState = {
@@ -62,20 +69,33 @@ const getSupervisorDetails = handleActions(
   },
   ""
 );
+
 const patientSyncReducer = combineReducers({
   allBatches: createReducer(getAllBatches),
-  getBatch:createReducer(getBatchInfo),
+  getBatch: createReducer(getBatchInfo),
   batchUpload: createReducer(batchUpload),
-  routedData:getStateDetails,
-  supervisorUserName:getSupervisorDetails,
- 
+  routedData: getStateDetails,
+  supervisorUserName: getSupervisorDetails,
+  providerRoasterExcelUpload: createReducer(providerRoasterExcelAction),
+  practiceRoasterExcelUpload: createReducer(practiceRoasterExcelAction),
+  patientRoasterExcelUpload: createReducer(patientRoasterExcelAction),
+  tinRoasterExcelUpload: createReducer(tinRoasterExcelAction),
+  providerRoaster: createReducer(providerRoasterAction),
+  practiceRoaster: createReducer(praticeRoasterAction),
+  patientRoaster: createReducer(patientRoasterAction),
+  tinRoaster: createReducer(tinRoasterAction),
+
 
   // loaders
-  getBatchLoader:getReportLoading(getBatchInfo),
+  getBatchLoader: getReportLoading(getBatchInfo),
   batchLoader: getReportLoading(getAllBatches),
   allBatchesLoader: getReportLoading(getAllBatches),
-  uploadFilesLoader:getReportLoading(upoloadFiles),
-  createBatchLoader:getReportLoading(getCreateBatch),
+  uploadFilesLoader: getReportLoading(upoloadFiles),
+  createBatchLoader: getReportLoading(getCreateBatch),
+  tinRoasterLoader: getReportLoading(tinRoasterAction),
+  practiceLoader: getReportLoading(praticeRoasterAction),
+  patientLoader: getReportLoading(patientRoasterAction),
+  providerLoader: getReportLoading(providerRoasterAction),
 });
 
 export default patientSyncReducer;

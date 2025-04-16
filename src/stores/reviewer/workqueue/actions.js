@@ -22,3 +22,11 @@ export const getReassignPatients = createActionThunk(
   "GET_REASSIGN_PATIENTS",
   network.getAllReassignPatients
 );
+export const getStatusAction = createActionThunk(
+  "GET_STATUS_ACTION",
+  network.getAllReviewerPatients
+);
+export const getStatusActionReassign = createActionThunk(
+  "GET_STATUS_ACTION_REASSIGN",
+  network.getAllReassignPatients
+);

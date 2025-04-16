@@ -8,21 +8,23 @@ import { useRouter } from "next/router";
 import { createIdGen } from "../../../../utils/reusable";
 const MoreFilter = ({
   setSelectAll,
-  allFilters,
+  FilterItems,
   setActiveFilters,
   activeFilters,
   handleClearFilters,
   handleClearAllFilters,
   id,
+  columns,
 }) => {
+  
   const router = useRouter();
   const [popoverVisible, setPopoverVisible] = useState(false);
 
   const handleHeaderCheckboxChange = (val) => {
     setSelectAll(val.target.checked);
     setActiveFilters((prev) => [
-      prev[0],
-      ...prev.slice(1).map((x) => ({
+  
+      ...prev.map((x) => ({
         ...x,
         active: val.target.checked,
       })),
@@ -50,7 +52,7 @@ const MoreFilter = ({
         <span style={{ margin: "0 5px" }}>Select All</span>
       </div>
       <Divider className="m-0 p-0" />
-      {activeFilters?.slice(1).map((filter, index) => (
+      {activeFilters?.map((filter, index) => (
         <div key={filter} style={{ margin: "10px 0px" }}>
           <input
             id={

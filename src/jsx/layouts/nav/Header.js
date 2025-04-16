@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import "react-chat-widget/lib/styles.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { Badge, Dropdown, Tooltip, Drawer, Modal, Button } from "antd";
+import { Badge, Dropdown, Tooltip, Drawer, Modal, Button, Select } from "antd";
 import {
   DownOutlined,
   SettingOutlined,
@@ -22,6 +22,7 @@ import {
   EHRMenuList,
   PhysicanMenu,
   Analyst,
+  QAMenuList,
 } from "./Menu";
 import Notification from "../../../components/notification/index";
 import ChatCommunication from "../../../components/chatCommunication/index";
@@ -228,6 +229,8 @@ const Header = ({
       case "physician":
         // return PhysicianMenuList;
         return PhysicanMenu;
+       case "qa":
+        return QAMenuList;
       default:
         return [];
     }
@@ -340,7 +343,7 @@ const Header = ({
     var loginCheck = getStorage("loginCheck");
     const userRoleLocal = getStorage("userRole");
     const userId = getStorage("userId");
-    const userRole = getStorage("userRole");
+    const userRole = getStorage("proxyRole");
     const tenentId = getStorage("tenantId");
     getCurrentUserInfo({ userId });
     setUserRole(userRoleLocal);
@@ -388,7 +391,9 @@ const Header = ({
       }
 
       return (
-        <li id={data.title} name={data.title}
+        <li
+          id={data.title}
+          name={data.title}
           className={`header-transition ${
             stateActive === data.to ||
             ((currentRole === "Admin" || currentRole === "Tenant Admin") &&
@@ -417,14 +422,22 @@ const Header = ({
             localStorage.removeItem("patientId");
           }}
         >
-          <div  id={data.title} name={data.title} className="d-flex cursor-pointer">
+          <div
+            id={data.title}
+            name={data.title}
+            className="d-flex cursor-pointer"
+          >
             <div
               className="menu-icon"
               style={{ paddingRight: "5px", color: "#04306f" }}
             >
               {stateActive === data.to ? data.activeIcon : data.iconStyle}
             </div>
-            <span id={data.title} name={data.title} className={`nav-text header-nav-text text-truncate`}>
+            <span
+              id={data.title}
+              name={data.title}
+              className={`nav-text header-nav-text text-truncate`}
+            >
               {data.title}
             </span>
             <span></span>
@@ -449,7 +462,8 @@ const Header = ({
           item?.to === window.location?.pathname ||
           item?.childRoute === window.location?.pathname ||
           item?.childRoute2 === window.location?.pathname ||
-          item?.childRoute3 === window.location?.pathname
+          item?.childRoute3 === window.location?.pathname ||
+          item?.childRoute4 === window.location?.pathname
       );
       if (
         currentPath &&
@@ -541,7 +555,7 @@ const Header = ({
     }
   };
 
-  const handleDeleteImg = async() => {
+  const handleDeleteImg = async () => {
     try {
       const userId = getStorage("userId");
       const res = await deleteProfile();
@@ -554,11 +568,10 @@ const Header = ({
       } else {
         getResponePopup(res);
       }
-      
     } catch (error) {
       console.error("error deleting profile", error);
     }
-  }
+  };
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -586,10 +599,38 @@ const Header = ({
                   />
                 </div>
               )}
+              <div className="d-flex gap-3">
+                <div className="mt-3">
+                  <Select
+                    placeholder="Client"
+                    style={{
+                      width: 200,
+                    }}
+                    // onChange={handleProject}
+                    // value={selectedOption}
+                    // options={options}
+                  />
+                </div>
+                <div className="mt-3">
+                  <Select
+                    placeholder="Sample Project"
+                    style={{
+                      width: 200,
+                    }}
+                    // onChange={handleProject}
+                    // value={selectedOption}
+                    // options={options}
+                  />
+                </div>
+              </div>
             </div>
             {stateActive != "/reviewer/home" ? (
               <div header-transition>
-                <ul className={`metismenu header-menu d-flex`} id="menuList" name="menuList">
+                <ul
+                  className={`metismenu header-menu d-flex`}
+                  id="menuList"
+                  name="menuList"
+                >
                   {nextMenuList && screenSize?.width <= 1527 && (
                     <div className="d-flex justify-content-center align-items-center">
                       <div
@@ -645,11 +686,16 @@ const Header = ({
                   <div className="header-profile2">
                     <div className="nav-link i-false " as="div">
                       <div className="header-info2 d-flex align-items-center">
-                        <div id="coderoot" name="coderoot" className={styles.codify}>
+                        <div
+                          id="coderoot"
+                          name="coderoot"
+                          className={styles.codify}
+                        >
                           {/* <div>{SVGICON.codify}</div> */}
                           <Tooltip placement="bottom" title={"CodeRoot"}>
                             <img
-                              id="codify" name="codify"
+                              id="codify"
+                              name="codify"
                               src={CodeRoot.src}
                               width={"35px"}
                               height={"27px"}
@@ -718,14 +764,14 @@ const Header = ({
                         )}
                         {userRole === "tenant_admin" && (
                           <div
-                          id="settingsIcon"
-                          name="settingsIcon"
+                            id="settingsIcon"
+                            name="settingsIcon"
                             className="chatheaderIcon cr-pointer"
                             onClick={handleSettingsClick}
                           >
                             <SettingOutlined
-                             data-testid="settings-icon"
-                             name="settings-icon"
+                              data-testid="settings-icon"
+                              name="settings-icon"
                               style={{
                                 width:
                                   stateActive === "/tenantadmin/settings"
@@ -768,19 +814,23 @@ const Header = ({
                             onClick={() => gotoChat()}
                           >
                             {/* <div style={{ color: "#04306F" }}> */}
-                              <div  id="chat-icon" name="chat-icon" style={{ color: "#04306F" }}>
-                                <FontAwesomeIcon
-                                  icon={faMessage}
-                                  className={styles.bellIcon}
-                                  style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    marginTop: "8px",
-                                    fontWeight: "700",
-                                    marginRight: "10px",
-                                    color: "#04306F",
-                                  }}
-                                />
+                            <div
+                              id="chat-icon"
+                              name="chat-icon"
+                              style={{ color: "#04306F" }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faMessage}
+                                className={styles.bellIcon}
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  marginTop: "8px",
+                                  fontWeight: "700",
+                                  marginRight: "10px",
+                                  color: "#04306F",
+                                }}
+                              />
                               {/* </div> */}
                             </div>
                           </div>
@@ -793,8 +843,17 @@ const Header = ({
                           id="notificationIcon"
                           name="notificationIcon"
                         >
-                          <Badge id="notification-badge" name="notification-badge" count={notificationCount} color="#04306F">
-                            <div id="notification-icon" name="notification-icon" style={{ color: "#04306F" }}>
+                          <Badge
+                            id="notification-badge"
+                            name="notification-badge"
+                            count={notificationCount}
+                            color="#04306F"
+                          >
+                            <div
+                              id="notification-icon"
+                              name="notification-icon"
+                              style={{ color: "#04306F" }}
+                            >
                               <FontAwesomeIcon
                                 icon={faBell}
                                 className={`fa-regular ${styles.bellIcon}`}
@@ -916,8 +975,8 @@ const Header = ({
               <Button
                 key="delete"
                 onClick={() => {
-                  handleDeleteImg()
-                 
+                  handleDeleteImg();
+
                   setOpenUploader(false);
                   setSelectedFile(null);
                   if (fileInputRef.current) {

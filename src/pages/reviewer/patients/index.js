@@ -2,33 +2,36 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { notification } from "antd";
-import { Paginator } from "primereact/paginator";
+import { notification, Table } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
 import { actions as workqueueActions } from "../../../stores/reviewer/workqueue";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 import { priorityOptions } from "../../../components/headerFilters/functions";
-import DailyTask from "./dailytask";
-import { setStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
+import RegularButton from "../../../components/button";
+import CustomizableDrawer from "../../../components/customizeDrawer";
+import { actions as allReportActions } from "../../../stores/admin/report";
+import { Tab, Nav } from "react-bootstrap";
 
+const role = getStorage("proxyRole");
 export const bullets = [
   {
     color: "#00BC13",
-    name: "CODER 1 COMPLETED",
+    name: `${role} COMPLETED`,
   },
   {
     color: "#5da9e4",
-    name: "CODER 1 PENDING",
+    name: `${role} PENDING`,
   },
   {
     color: "#EB5252",
-    name: "CODER 1 DECLINED",
+    name: `${role} DECLINED`,
   },
-  { color: "#3C0AD2", name: "CODER 1 HOLD" },
+  { color: "#3C0AD2", name: `${role} HOLD` },
 ];
 export const reviewedBullets = [
   {
@@ -57,15 +60,6 @@ export const commonFilterItems = [
     active: true,
   },
   {
-    id: "02",
-    title: "Status",
-    type: "select",
-    value: null,
-    placeholder: "Status",
-    options: null,
-    active: false,
-  },
-  {
     id: "03",
     title: "dueDate",
     type: "rangePicker",
@@ -90,7 +84,7 @@ export const commonFilterItems = [
     value: null,
     placeholder: "Allocated  Date",
     pickerType: "year",
-    active:false
+    active: true,
   },
   {
     id: "06",
@@ -99,7 +93,7 @@ export const commonFilterItems = [
     value: null,
     placeholder: "Priority",
     options: null,
-    active: false,
+    active: true,
   },
   {
     id: "07",
@@ -109,7 +103,7 @@ export const commonFilterItems = [
     placeholder: "Batch",
     showSearch: true,
     options: null,
-    active: false,
+    active: true,
   },
 ];
 const Patient = ({
@@ -121,41 +115,57 @@ const Patient = ({
   getRoutedData,
   getAllBatchList,
   batchList,
+  getActiveTab,
+  statusActiveTab,
+  status,
+  getStatus,
 }) => {
   const columns = [
     {
       name: "Patient Id",
       value: "patientId",
+      isShow: true,
+      filterKey: "Search",
     },
     {
       name: "Batch Name",
       value: "batchName",
+      isShow: true,
+      filterKey: "batch",
     },
     {
       name: "File Name",
       value: "fileName",
+      isShow: true,
     },
     {
       name: "HCC Count",
       value: "validDiseaseCount",
+      isShow: true,
     },
     {
       name: "Allocated Date",
       value: "allocatedOn",
       sortable: true,
       isDate: true,
+      isShow: true,
+      filterKey: "allocatedDate",
     },
     {
       name: "Due Date",
       value: "dueDate",
       sortable: true,
       isDate: true,
+      isShow: true,
+      filterKey: "dueDate",
     },
     {
       name: "Completed Date",
       value: "processedDate",
       sortable: true,
       isDate: true,
+      isShow: true,
+      filterKey: "completedDate",
     },
 
     {
@@ -167,12 +177,22 @@ const Patient = ({
         last: "allocatedBylastName",
         img: "allocatedByProfileImage",
       },
+      isShow: true,
     },
     {
       name: "Priority",
       value: "priority",
+      isShow: true,
+      filterKey: "Priority",
     },
-    { name: "STATUS", value: "statusProxy", status: true, infoIcon: true },
+    {
+      name: "Status",
+      value: "statusProxy",
+      proxcystatus: true,
+      infoIcon: true,
+      isShow: true,
+      filterKey: "Status",
+    },
   ];
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);
@@ -190,23 +210,22 @@ const Patient = ({
       sortField: "processedDate",
     },
   });
+
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
-  const [trackChart, setTrackChart] = useState({
-    COMPLETED: 0,
-    PENDING: 0,
-    DECLINED: 0,
-    HOLD: 0,
-  });
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState("");
   const [clear, setClear] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
+  const [selectedColumns, setSelectedColumns] = useState([]);
+  const [test, setTest] = useState(columns);
+  const [open, setOpen] = useState(false);
+  const [activeStatus, setActiveStatus] = useState("PENDING");
 
   const gotoPatientDetails = (data) => {
     patientDetails(data);
@@ -232,42 +251,12 @@ const Patient = ({
     setPageSize(e.rows);
   };
 
-  const params = {
-    pageNo,
-    selectedDates,
-    paginationFirst,
-    sort,
-    selectedDates,
-    activeFilters,
-    searchText,
-    selectedOption,
-    selectedDateRanges,
-    pageNumber,
+  const showDrawer = () => {
+    setOpen(true);
   };
-  useEffect(() => {
-    if (routedData) {
-      const {
-        pageNo,
-        selectedDates,
-        selectedDateRanges,
-        selectedOption,
-        searchText,
-        activeFilters,
-        pageNumber,
-        paginationFirst,
-        sort,
-      } = routedData;
-      setPageNo(pageNo ? pageNo : 0);
-      setSearchText(searchText);
-      setSelectedDateRanges(selectedDateRanges);
-      setSelectedOption(selectedOption);
-      setSelectedDates(selectedDates);
-      setActiveFilters(activeFilters);
-      setPageNumber(pageNumber);
-      setPaginationFirst(paginationFirst);
-      setSort(sort);
-    }
-  }, [routedData]);
+  const onClose = () => {
+    setOpen(false);
+  };
 
   const getReviewerApi = async () => {
     const res = await getFilteApi({
@@ -278,10 +267,10 @@ const Patient = ({
       sort: sort,
       selectedDateRanges,
       searchText: searchText,
+      status: activeStatus,
     });
     if (res?.status == "SUCCESS") {
       setTotalElements(res.response?.patientDTOList?.totalElements);
-      setTrackChart(res?.response?.processStatusCount);
     }
   };
   useEffect(() => {
@@ -298,11 +287,9 @@ const Patient = ({
     paramsFilter,
     sort,
     pageNumber,
+    activeStatus,
   ]);
 
-  useEffect(() => {
-    getAllBatchList();
-  }, []);
   const opt = {
     batch: batchList?.map((item) => ({
       value: item?.id,
@@ -311,13 +298,69 @@ const Patient = ({
     Status: statusOptions,
     Priority: priorityOptions,
   };
+  const handleTabs = (name) => {
+    getActiveTab(name);
+    setActiveStatus(name);
+  };
+
+  const handleInsert = () => {
+  }
+  useEffect(() => {
+    getAllBatchList();
+  }, []);
+  useEffect(() => {
+    getStatus({
+      pageNo,
+    });
+  }, [activeStatus, pageNo]);
+  const params = {
+    pageNo,
+    selectedDates,
+    paginationFirst,
+    sort,
+    selectedDates,
+    activeFilters,
+    searchText,
+    selectedOption,
+    selectedDateRanges,
+    pageNumber,
+    activeStatus,
+  };
+  useEffect(() => {
+    if (routedData) {
+      const {
+        pageNo,
+        selectedDates,
+        selectedDateRanges,
+        selectedOption,
+        searchText,
+        activeFilters,
+        pageNumber,
+        paginationFirst,
+        sort,
+        activeStatus,
+      } = routedData;
+      setPageNo(pageNo ? pageNo : 0);
+      setSearchText(searchText);
+      setSelectedDateRanges(selectedDateRanges);
+      setSelectedOption(selectedOption);
+      setSelectedDates(selectedDates);
+      setActiveFilters(activeFilters);
+      setPageNumber(pageNumber);
+      setPaginationFirst(paginationFirst);
+      setSort(sort);
+      setActiveStatus(activeStatus);
+    }
+  }, [routedData]);
+
+
   return (
     <div className={`show `}>
       <Header />
       <div className="content-body">
         <div className="container-fluid table-responsive active-projects task-table">
-          <div className="row">
-            <div className="col-10">
+          <div className="d-flex p-3">
+            <div style={{ width: "90%" }}>
               <ReusableFilters
                 showFilter={true}
                 setActiveFilters={setActiveFilters}
@@ -336,28 +379,126 @@ const Patient = ({
                 clear={clear}
                 setPageNo={setPageNo}
                 opt={opt}
+                columns={columns}
+                commonFilterItems={commonFilterItems}
               />
             </div>
-            <div className="col-2 mt-1 mb-1">
-              <DailyTask trackChart={trackChart} />
+            <div
+              id="addPatient-btn"
+              name="addPatient-btn"
+              className="d-flex justify-content-center align-items-center mt-3"
+              style={{ width: "10%" }}
+            >
+              <RegularButton name={"Table Customize"} onClick={showDrawer} />
             </div>
           </div>
-          <div className="mt-3">
-            <AppTable
-              data={patinetListAll?.content}
-              column={columns}
-              loader={loading}
-              onRowClick={gotoPatientDetails}
-              pagination={false}
-              setSort={setSort}
-              sort={sort}
-              first={pageNo === 0 ? 0 : paginationFirst}
-              totalRecords={totalElements}
-              row={15}
-              onPageChange={onPageChange}
-            />
-            <div>
+          <div className="profile-tab  mt-3">
+            <div className="custom-tab-1">
+              <Tab.Container
+                defaultActiveKey={
+                  routedData?.activeStatus
+                    ? routedData?.activeStatus
+                    : "PENDING"
+                }
+              >
+                <Nav as="ul" className="nav nav-tabs">
+                  <Nav.Item
+                    as="li"
+                    className="nav-item"
+                    onClick={() => {
+                      handleTabs("PENDING");
+                    }}
+                  >
+                    <Nav.Link
+                      id="pending"
+                      name="pending"
+                      to="#my-posts"
+                      eventKey="PENDING"
+                    >
+                      PENDING - {status?.PENDING || 0}
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item
+                    as="li"
+                    className="nav-item"
+                    onClick={() => {
+                      handleTabs("COMPLETED");
+                    }}
+                  >
+                    <Nav.Link
+                      id="completed"
+                      name="completed"
+                      to="#my-posts"
+                      eventKey="COMPLETED"
+                    >
+                      COMPLETED - {status?.COMPLETED || 0}
+                    </Nav.Link>
+                  </Nav.Item>{" "}
+                  <Nav.Item
+                    as="li"
+                    className="nav-item"
+                    onClick={() => {
+                      handleTabs("HOLD");
+                    }}
+                  >
+                    <Nav.Link
+                      id="hold"
+                      name="hold"
+                      to="#my-posts"
+                      eventKey="HOLD"
+                    >
+                      HOLD - {status?.HOLD || 0}
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item
+                    as="li"
+                    className="nav-item"
+                    onClick={() => {
+                      handleTabs("DECLINED");
+                    }}
+                  >
+                    <Nav.Link
+                      id="declined"
+                      name="declined"
+                      to="#my-posts"
+                      eventKey="DECLINED"
+                    >
+                      DECLINED - {status?.DECLINED || 0}
+                    </Nav.Link>
+                  </Nav.Item>
+                </Nav>
+                <Tab.Content>
+                  <Tab.Pane eventKey={activeStatus}>
+                    <div className="mt-3">
+                      <AppTable
+                        data={patinetListAll?.content}
+                        column={test.filter((item) => item.isShow)}
+                        loader={loading}
+                        onRowClick={gotoPatientDetails}
+                        pagination={false}
+                        setSort={setSort}
+                        sort={sort}
+                        first={pageNo === 0 ? 0 : paginationFirst}
+                        totalRecords={totalElements}
+                        row={15}
+                        onPageChange={onPageChange}
+                      />
+                    </div>
+                  </Tab.Pane>
+                </Tab.Content>
+              </Tab.Container>
             </div>
+          </div>
+          <div>
+            <CustomizableDrawer
+              open={open}
+              onClose={onClose}
+              options={columns}
+              selectedColumns={test}
+              setSelectedColumns={setTest}
+              handleInsert={handleInsert}
+              setActiveFilters={setActiveFilters}
+            />
           </div>
         </div>
       </div>
@@ -374,6 +515,9 @@ const enhancer = connect(
     patinetListAll:
       state?.reviewer?.workQueue?.getReviewerPatients?.data?.response
         ?.patientDTOList,
+    statusActiveTab: state.admin?.report?.activeTab,
+    status:
+      state?.reviewer?.workQueue?.getStatus?.data?.response?.processStatusCount,
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,
@@ -381,6 +525,8 @@ const enhancer = connect(
     getRoutedData: allPatientSyncAction.getRoutedData,
     getAllBatchList: tenantAdminAction.getAllBatchAction,
     getFilteApi: allActions.getReviewerPatients,
+    getActiveTab: allReportActions.activeTab,
+    getStatus: allActions.getStatusAction,
   }
 );
 export default enhancer(Patient);

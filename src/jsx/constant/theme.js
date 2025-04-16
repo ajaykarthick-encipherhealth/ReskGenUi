@@ -20,6 +20,9 @@ export const IMAGES = {
   loginPageLogo3: require("../../images/logo/CAICell.png"),
   aiChatIcon: require("../../images/chat/icons-chat.png"),
   aiCloseChat: require("../../images/chat/icons-close.png"),
+  queried:require("../../images/menu/query.svg"),
+  tin:require("../../images/menu/tin.svg"),
+  project:require("../../images/menu/project.svg")
 };
 export const SVGICON = {
   MainLogo: (

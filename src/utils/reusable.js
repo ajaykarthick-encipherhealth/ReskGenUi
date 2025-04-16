@@ -1,4 +1,4 @@
-import { notification, Popover, Skeleton, Tooltip } from "antd";
+import { Button, notification, Popover, Skeleton, Tooltip } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import Pending from "../../src/images/trackingImages/pending.webp";
@@ -15,6 +15,9 @@ import AuditPending from "../../src/images/trackingImages/auditpending.webp";
 import AuditeDeclineTrack from "../../src/images/trackingImages/auditdeclined.webp";
 import { renderUserPrfoileAvatar, renderUserPrfoileAvatarDisabled } from "../components/headerFilters/functions";
 import momentTimezone from "moment-timezone";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { getStorage } from "./storages";
 
 export const getResponePopup = (res) => {
   switch (res?.data?.status ? res?.data?.status : res?.status) {
@@ -347,6 +350,14 @@ export const processstatusBodyTemplate = (rowData) => {
           </div>
         </Popover>
       );
+      case "PROCESSING":
+      return (
+        <Popover placement="bottom" title="Status: PROCESSING">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+          <FontAwesomeIcon style={{ height: "30px", width: "30px" , color:"orange"}} icon={faSpinner} />
+          </div>
+        </Popover>
+      );
     case "HOLD":
       return (
         <Popover placement="bottom" title="Status: HOLD">
@@ -377,11 +388,12 @@ export const processstatusBodyTemplate = (rowData) => {
 
 export const proxyStatusBodyTemplate = (rowData) => {
   const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+  const proxyRole = getStorage("proxyRole")
 
   switch (rowData) {
     case "CODER_1_COMPLETED":
       return (
-        <Popover placement="bottom" title="Status: CODER 1 COMPLETED">
+        <Popover placement="bottom" title= {`${proxyRole} - COMPLETED`}>
           <div className="patient-status" style={{ textAlign: "center" }}>
             <Image src={Completed} style={{ height: "30px", width: "30px" }} />
           </div>
@@ -389,7 +401,7 @@ export const proxyStatusBodyTemplate = (rowData) => {
       );
         case "CODER_1_PENDING":
           return (
-            <Popover placement="bottom" title="Status: CODER 1 PENDING">
+            <Popover placement="bottom" title= {`${proxyRole} - PENDING`}>
               <div className="patient-status" style={{ textAlign: "center" }}>
                 <Image src={Pending} style={{ height: "30px", width: "30px" }} />
               </div>
@@ -401,14 +413,14 @@ export const proxyStatusBodyTemplate = (rowData) => {
           placement="bottom"
           title="Status: CODER 1 DECLINED"
         >
-          <div className="patient-status" style={{ textAlign: "center" }}>
+          <div className="patient-status" title= {`${proxyRole} - DECLINED`}>
             <Image src={Declined} style={{ height: "30px", width: "30px" }} />
           </div>
         </Popover>
       );
       case "CODER_1_HOLD":
       return (
-        <Popover placement="bottom" title="Status: CODER 1 HOLD">
+        <Popover placement="bottom" title= {`${proxyRole} - HOLD`}>
           <div className="patient-status" style={{ textAlign: "center" }}>
             <Image src={Hold} style={{ height: "30px", width: "30px" }} />
           </div>
@@ -416,7 +428,7 @@ export const proxyStatusBodyTemplate = (rowData) => {
       );
       case "COMPUTED":
         return (
-          <Popover placement="bottom" title="Status: CODER 1 PENDING">
+          <Popover placement="bottom" title= {`${proxyRole} - PENDING`}>
             <div className="patient-status" style={{ textAlign: "center" }}>
             <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
@@ -642,4 +654,53 @@ export const createIdGen = (key) => {
 
 };
 
+export const getRoasterStatus = (status) => {
+  switch (status) {
+    case "SUCCESS":
+      return <Button className={` px-3 py-1`}>SUCCESS</Button>;
 
+    case "FAILED":
+      return <Button className={` px-3 py-1`}>FAILED</Button>;
+
+    default:
+      return <div className={`px-3 py-1`}>FAILED</div>;
+  }
+};
+
+export const handleCopyTextInput = (info) => {
+  if (info) {
+    navigator.clipboard
+      .writeText(info)
+      .then(() => {
+        message.success("Text copied to clipboard");
+      })
+      .catch((err) => {
+        message.error("Failed to copy text: ", err);
+      });
+  }
+};
+export const priorityStatusRender = (status) => {
+  switch (status?.toLowerCase()) {
+    case "high":
+      return (
+        <div className="d-flex align-items-center">
+          <div className={`${tinStyles.highPriority}`}></div> &nbsp;{status}
+        </div>
+      );
+    case "medium":
+      return (
+        <div className="d-flex align-items-center">
+          <div className={`${tinStyles.mediumPriority}`}></div> &nbsp;{status}
+        </div>
+      );
+    case "low":
+      return (
+        <div className="d-flex align-items-center">
+          <div className={`${tinStyles.lowPriority}`}></div> &nbsp;{status}
+        </div>
+      );
+
+    default:
+      return "--";
+  }
+};

@@ -32,3 +32,4 @@ export const getRetreggerPatient = createActionThunk(
   "GET_RETREGGER_PATINET",
   network.getRetreggerPatient
 );
+

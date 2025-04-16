@@ -405,3 +405,25 @@ export async function fhirServices() {
   return data;
 }
 
+export async function createProject(data) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data)  
+  };
+  const res = await requestPortal(
+    `dbservice/project/create`,
+    options
+  );
+  return res;
+}
+
+export async function getProjectDetails() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`dbservice/project/get`, options);
+  return data;
+}
+
+
+

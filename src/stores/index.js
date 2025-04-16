@@ -57,6 +57,7 @@ import {reducer as notificationReducer} from './admin/notifications'
 import {reducer as comparisonReducer} from './physician/comparison'
 import { reducer as imageUploadReducer } from "./authflow/imageUpload";
 import { reducer as authReducer } from "./authFlows";
+import {reducer as tinReducer } from './tenantAdmin/tin'
 import { serverControl } from "../utils/config";
 const reducers = combineReducers({
   // old reducers
@@ -134,6 +135,7 @@ const reducers = combineReducers({
     settings: tenantAminSettingsReducer,
     fileProcessing: tenantFileProcessing,
     tenantAdmin: updatedTenantAdminReportReducer,
+    tin:tinReducer,
   }),
   tenatOnBoarding: tenantOnBoarding,
   chartService: chartReducer,

@@ -29,3 +29,39 @@ export const getTriggerBatch=createActionThunk(
 export const getRoutedData = createAction("GET_ROUTED_DATA");
 
 export const getSupervisorName =createAction("SELECTED_SUPERVISOR_USER");
+
+export const providerRoasterExcelAction=createActionThunk(
+  'PROVIDER_ROASTER_EXCEL',
+  network.providerRoasterExcel
+)
+export const practiceRoasterExcelAction=createActionThunk(
+  'PRACTICE_ROASTER_EXCEL',
+  network.practiceRoasterExcel
+)
+export const patientRoasterExcelAction=createActionThunk(
+  'PATIENT_ROASTER_EXCEL',
+  network.patientRoasterExcel
+)
+export const tinRoasterExcelAction=createActionThunk(
+  'TIN_ROASTER_EXCEL',
+  network.tinRoasterExcel
+)
+export const providerRoasterAction=createActionThunk(
+  'PROVIDER_ROASTER',
+  network.providerRoaster
+)
+
+export const praticeRoasterAction=createActionThunk(
+  'PRACTICE_ROASTER',
+  network.practiceRoaster
+)
+
+export const patientRoasterAction=createActionThunk(
+  'PATIENT_ROASTER',
+  network.patientRoaster
+)
+
+export const tinRoasterAction=createActionThunk(
+  'TIN_ROASTER',
+  network.tinRoaster
+)

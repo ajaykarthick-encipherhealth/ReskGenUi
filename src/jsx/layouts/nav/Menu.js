@@ -25,8 +25,9 @@ import {
   ContactsFilled,
 } from "@ant-design/icons";
 import { faUser as faUserReg } from "@fortawesome/free-regular-svg-icons";
-import { SVGICON } from "../../constant/theme";
+import { IMAGES, SVGICON } from "../../constant/theme";
 import styles from "../nav/styles.module.css";
+import Image from "next/image";
 
 export const MenuList = [
   {
@@ -66,12 +67,20 @@ export const PhysicanMenuList = [
     childRoute: "/reviewer/patients/details",
   },
   {
-    title: "Reassign",
+    title: "Queried",
+    iconStyle:  <Image src={IMAGES.queried} />,
+    activeIcon: <Image src={IMAGES.queried} />,
+    to: "/reviewer/queried",
+    childRoute: "/reviewer/queried/details",
+  },
+  {
+    title: "Reassigned",
     iconStyle: <ProfileOutlined />,
     activeIcon: <ProfileFilled />,
     to: "/reviewer/reassign",
     childRoute: "/reviewer/reassign/details",
   },
+ 
   {
     title: "Report",
     iconStyle: <FileOutlined />,
@@ -257,43 +266,60 @@ export const ProviderMenuList = [
     to: "/tenantadmin/user",
   },
   {
-    title: "Patients",
-    iconStyle: <FontAwesomeIcon icon={faHospital} className="hospitalIcon"/>,
-    activeIcon: <FontAwesomeIcon icon={faHospitalAlt} className="hospitalIcon"/>,
-    to: "/tenantadmin/patients",
-    childRoute: "/tenantadmin/patients/details",
+    title: "Tin",
+    iconStyle:<Image src={IMAGES.tin} />,
+    activeIcon: <Image src={IMAGES.tin} />,
+    to: "/tenantadmin/tin",
+    childRoute2: "/tenantadmin/tin/tindetails",
+    childRoute:"/tenantadmin/tin/details",
   },
+  {
+    title: "Project",
+    iconStyle: <Image src={IMAGES.project} />,
+    activeIcon:<Image src={IMAGES.project} />,
+    to: "/tenantadmin/project",
+    childRoute: "/tenantadmin/project/details",
+    childRoute2: "/tenantadmin/patientsync/batchfilesview",
+    childRoute3: "/tenantadmin/patientsync/pdftable",
+  },
+  // {
+  //   title: "Patients",
+  //   iconStyle: <FontAwesomeIcon icon={faHospital} className="hospitalIcon"/>,
+  //   activeIcon: <FontAwesomeIcon icon={faHospitalAlt} className="hospitalIcon"/>,
+  //   to: "/tenantadmin/patients",
+  //   childRoute: "/tenantadmin/patients/details",
+  // },
   // {
   //   title: "Query",
   //   iconStyle: SVGICON.dashboardIcon,
   //   to: "/tenantadmin/query",
   //   // childRoute: "/fhirTable/details",
   // },
-  {
-    title: "Patients Sync",
-    iconStyle: SVGICON.adminUser,
-    activeIcon:SVGICON.adminUser,
-    to: "/tenantadmin/patientsync",
-    // childRoute: "/fhirTable/details",
-    childRoute: "/tenantadmin/patientsync/details",
-    childRoute2: "/tenantadmin/patientsync/batchfilesview",
-    childRoute3: "/tenantadmin/patientsync/pdftable",
+  // {
+  //   title: "Sync",
+  //   iconStyle: SVGICON.adminUser,
+  //   activeIcon:SVGICON.adminUser,
+  //   to: "/tenantadmin/patientsync",
+  //   // childRoute: "/fhirTable/details",
+  //   childRoute: "/tenantadmin/patientsync/details",
+  //   childRoute2: "/tenantadmin/patientsync/batchfilesview",
+  //   childRoute3: "/tenantadmin/patientsync/pdftable",
 
     
-  },
-  {
-    title: "File Processing",
-    iconStyle: <FilePptOutlined />,
-    activeIcon: <FilePptFilled />,
-    to: "/tenantadmin/fileprocessing",
-  },
-  {
-    title: "Patient Allocation",
-    iconStyle: <ContactsOutlined />,
-    activeIcon: <ContactsFilled />,
-    to: "/tenantadmin/allocatedusers",
-    childRoute: "/tenantadmin/allocatedusers/supervisorlist",
-  },
+  // },
+    // {
+    //   title: "File Processing",
+    //   iconStyle: <FilePptOutlined />,
+    //   activeIcon: <FilePptFilled />,
+    //   to: "/tenantadmin/fileprocessing",
+    // },
+    // {
+    //   title: "Patient Allocation",
+    //   iconStyle: <ContactsOutlined />,
+    //   activeIcon: <ContactsFilled />,
+    //   to: "/tenantadmin/allocatedusers",
+    //   childRoute: "/tenantadmin/allocatedusers/supervisorlist",
+    // },
   {
     title: "Report",
     iconStyle: <FileTextOutlined />,
@@ -339,3 +365,31 @@ export const PhysicianMenuList = [
     childRoute: "/physician/comparison",
   },
 ];
+
+
+export const QAMenuList = [
+  {
+    title: "My Work Queue",
+    iconStyle: <ProfileOutlined />,
+    activeIcon: <ProfileFilled />,
+    to: "/qa/patients",
+    childRoute: "/qa/patients/details",
+  },
+  {
+    title: "Queried",
+    iconStyle: <ProfileOutlined />,
+    activeIcon: <ProfileFilled />,
+    to: "/qa/queried",
+    childRoute: "/qa/queried/details",
+  },
+  {
+    title: "Reassigned",
+    iconStyle: <ProfileOutlined />,
+    activeIcon: <ProfileFilled />,
+    to: "/qa/reassign",
+    childRoute: "/qa/reassign/details",
+  },
+ 
+];
+
+

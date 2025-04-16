@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import NavBar from "../../../jsx/layouts/nav/Header";
-import visitStyles from "../../../styles/visitdata.module.css";
-import TableStyle from "../../../components/table/table.module.css";
+import visitStyles from '../../../styles/visitdata.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FilterOutlined, UndoOutlined } from "@ant-design/icons";
 import {
@@ -572,7 +571,10 @@ const Details = ({
     const backRoute = getStorage("routeBackTo");
 
     getRoutedData(routedData);
-    navigate.push(backRoute);
+    // navigate.push(backRoute);
+    navigate.back(
+      
+    )
     setSelectDosValue("");
     getSelectedDosPageNumber(1);
     getPatientID(null);
