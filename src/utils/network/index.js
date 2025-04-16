@@ -107,7 +107,7 @@ export async function requestPortalRoleBased(url, options) {
     headers: {
       Authorization: `${"Bearer" + " " + token}`,
       "Content-Type": "application/json",
-      "X-RoleId":userRoleId
+      "X-Role-Id":userRoleId
     },
   };
   return fetch(actualUrl, actualOptions).then(checkStatus);
