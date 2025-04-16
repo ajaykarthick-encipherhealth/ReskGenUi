@@ -11,6 +11,8 @@ import {
 } from "../../utils/reusable";
 import ReusableMultiInput from "./reusableInput/multiple";
 import { useRouter } from "next/router";
+import CustomizableDrawer from "../customizeDrawer";
+import RegularButton from "../button";
 const { RangePicker } = DatePicker;
 
 const ReusableFilters = ({
@@ -54,7 +56,13 @@ const ReusableFilters = ({
   search,
   setSearch,
   columns,
-  commonFilterItems
+  open,
+  onClose,
+  selectedColumns,
+  setSelectedColumns,
+  handleInsert,
+  showCustomizeTable,
+  showDrawer,
 }) => {
   const pickerRefs = useRef({});
   const router = useRouter();
@@ -73,12 +81,11 @@ const ReusableFilters = ({
   };
   const handleClearFilters = () => {
     setSelectAll(false);
-    setActiveFilters( 
-      (prevFilters) =>
+    setActiveFilters((prevFilters) =>
       prevFilters.map((filter) =>
         // filter.type === "search"
         //   ? { ...filter, active: true }
-          ({ ...filter, active: true })
+        ({ ...filter, active: true })
       )
     );
     setSelectedDateRanges({});
@@ -369,6 +376,28 @@ const ReusableFilters = ({
             columns={columns}
           />
         </div>
+      )}
+      {showCustomizeTable && (
+        <>
+          <div
+            id="addPatient-btn"
+            name="addPatient-btn"
+            className="d-flex justify-content-center align-items-center mt-3"
+            style={{ width: "10%" }}
+          >
+            <RegularButton name={"Table Customize"} onClick={showDrawer} />
+          </div>
+          <div>
+            <CustomizableDrawer
+              open={open}
+              onClose={onClose}
+              selectedColumns={selectedColumns}
+              setSelectedColumns={setSelectedColumns}
+              handleInsert={handleInsert}
+              setActiveFilters={setActiveFilters}
+            />
+          </div>
+        </>
       )}
     </div>
   );

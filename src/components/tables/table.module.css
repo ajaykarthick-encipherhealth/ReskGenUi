@@ -18,8 +18,45 @@
 
 .scrollContainer {
   overflow-x: auto;
+  /* width: 100%; */
+}
+
+.scrollContainer {
+  overflow-x: auto;
   width: 100%;
 }
+
+/* Optional: Improve scroll UX */
+.scrollContainer::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scrollContainer::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.stickyColumn {
+  position: sticky;
+  left: 0;
+  background-color: white; /* Or match your table background */
+  z-index: 2;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+/* You can use nth-child to assign multiple sticky columns */
+.thead th:nth-child(-n+10),
+.tbody td:nth-child(-n+10) {
+  position: sticky;
+  left: calc(var(--index) * 100px); /* Adjust based on your column width */
+  z-index: 2;
+  background: white;
+}
+
+.scrollableColumn {
+  white-space: nowrap;
+}
+
 
 /* Optional: Improve scroll UX */
 .scrollContainer::-webkit-scrollbar {
@@ -312,6 +349,7 @@
   }
   .allocate {
     /* width: 100px; */
+    /* width: 100px; */
     height: 40px;
     color: #241571 !important;
     background: rgba(19, 61, 212, 0.15);
@@ -341,6 +379,23 @@
 
 .classTable {
   min-width: 200px; 
+}
+.triggerButton {
+  width: 30%;
+  border: 1px solid #4a249d;
+  background-color: #e0d6f5;
+  color: #4a249d;
+  border-radius: 3px;
+  height: 27px;
+}
+.uploadButton {
+  width: 30%;
+
+  border: 1px solid #0B3674;
+  background-color: #CEE1FC;
+  color: #0B3674;
+  border-radius: 3px;
+  height: 27px;
 }
 
 

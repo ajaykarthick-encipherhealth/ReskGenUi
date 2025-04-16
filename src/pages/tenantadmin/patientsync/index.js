@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { DatePicker, Form, Input, Modal, Select, Button } from "antd";
+import { DatePicker, Form, Input, Modal, Select, Button, Popover } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faSearch } from "@fortawesome/free-solid-svg-icons";
 import "react-circular-progressbar/dist/styles.css";
 import styles from "./fhir.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
@@ -30,6 +30,7 @@ import ProviderRoasterTable from "../../../components/table/tenantTable/provider
 import PracticeRoasterTable from "../../../components/table/tenantTable/practiceRoasterTable";
 import RoasterDrawer from "./modals/roasterDrawer";
 import TinRoasterTable from "../../../components/table/tenantTable/tinRoasterTable";
+import AppTable from "../../../components/tables";
 
 const { RangePicker } = DatePicker;
 
@@ -322,6 +323,69 @@ const PatientSync = ({
   getPracticeRoaster,
   getTinRoaster,
 }) => {
+  const columns = [
+    {
+      name: "BATCH ID",
+      value: "id",
+      isShow: true,
+      filterKey: "Search",
+    },
+    {
+      name: "BATCH Name",
+      value: "name",
+      isShow: true,
+      filterKey: "Search",
+    },
+    {
+      name: "COUNT",
+      value: "totalFileCount",
+      isShow: true,
+      filterKey: "batch",
+      countInfo: true,
+    },
+    {
+      name: "YEAR OF SERVICE",
+      value: "yearOfService",
+      isShow: true,
+      arrayDataFormat: true,
+    },
+    {
+      name: "EMR",
+      value: "emrType",
+      isShow: true,
+    },
+    {
+      name: "SOURCE",
+      value: "source",
+      sortable: true,
+
+      isShow: true,
+    },
+    {
+      name: "INITIATED BY",
+      value: "createdBy",
+      sortable: true,
+      isShow: true,
+    },
+    {
+      name: "INITIATED DATE",
+      value: "createdDate",
+      sortable: true,
+      isDate: true,
+      isShow: true,
+      filterKey: "completedDate",
+    },
+
+    {
+      name: "Status",
+      value: "statusProxy",
+
+      infoIcon: true,
+      isShow: true,
+      filterKey: "Status",
+      batchButtons: true,
+    },
+  ];
   const pickerRef = useRef();
   const router = useRouter();
   const [filteredCOder, setFilteredCoder] = useState(null);
@@ -350,6 +414,8 @@ const PatientSync = ({
   const [roasterDrawer, setRoasterDrawer] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
   const [pagination, setPagination] = useState(0);
+  const [test, setTest] = useState(columns);
+
   const [drawerProps, setDrawerProps] = useState({
     isDrawerOpen: false,
     reUpload: null,
@@ -378,6 +444,7 @@ const PatientSync = ({
     setPaginationFirst(e.first);
     setPageNo(e.page);
   };
+
   const renderButton = () => {
     switch (reportActiveTab) {
       case "FHIR":
@@ -397,6 +464,45 @@ const PatientSync = ({
       default:
         return <RegularButton name="Upload" onClick={handleRoasterBtn} />;
     }
+  };
+  const handleRowActionClick = (row) => {
+    getActiveTab("PDF");
+    if (row?.batchUploadStatus) {
+      setViewDetailedBatch({ status: true, data: row });
+    }
+  };
+
+  const renderCountDetailsPopover = (row) => {
+    if (!row) return null;
+
+    const success = row?.totalSuccessCount || 0;
+    const failed = row?.totalFailedCount || 0;
+    const processing = row?.totalProcessingCount || 0;
+
+    const color = processing > 0 ? "#FF7D2A" : failed > 0 ? "red" : "#04306f";
+
+    return (
+      <Popover
+        content={
+          <>
+            <span> Computed&nbsp; :</span>
+            <span>&nbsp;{success}</span>
+            <br />
+            <span> Failed&nbsp; :</span>
+            <span>&nbsp;{failed}</span>
+            <br />
+            <span> Processing&nbsp; :</span>
+            <span>&nbsp;{processing}</span>
+          </>
+        }
+      >
+        <FontAwesomeIcon
+          icon={faCircleInfo}
+          style={{ color }}
+          className="mx-1 d-flex justify-content-center align-items-center pt-1"
+        />
+      </Popover>
+    );
   };
 
   const handleTabs = (name) => {
@@ -445,6 +551,85 @@ const PatientSync = ({
       [nameString]: selectedOption,
     }));
   };
+  const dateFormateAlign = (dates) => (
+    <div className="d-flex justify-content-center align-items-center">
+      {dates?.map((res, index) => {
+        if (index < 1) {
+          // let sectionMapArr = <span>{dayjs(res).format("YYYY")}</span>;
+          return (
+            <div className="text-center">{`${res}${
+              (index + 1) / 2 == 0 ? "," : ""
+            }`}</div>
+          );
+        } else if (dates?.length - 1 == index) {
+          let sectionMapArr = (
+            <Popover
+              content={
+                <>
+                  {dates?.map((item, i) =>
+                    i > 0 ? (
+                      <div className="text-center">{`${item}${
+                        i / 2 == 0 ? "," : ""
+                      }`}</div>
+                    ) : null
+                  )}
+                </>
+              }
+              placement="bottom"
+            >
+              <span
+                id="popover-year"
+                name="popover-year"
+                style={{ width: "22px", height: "22px" }}
+                className={`border border-success-subtle rounded-circle text-center mx-1`}
+              >
+                {dates.length - 1}+
+              </span>
+            </Popover>
+          );
+          return sectionMapArr;
+        }
+      })}
+    </div>
+  );
+  const getStatusStyles = ({ status, isBorder }) => {
+    // const isProcessing = status === "PROCESSING";
+    return {
+      background:
+        status === "PROCESSING"
+          ? "#FFE0CB"
+          : status === "FAILED"
+          ? "red"
+          : "#CFE5FC",
+      color:
+        status === "PROCESSING"
+          ? "#FF7D2A"
+          : status === "FAILED"
+          ? "red"
+          : "#1B67B3",
+      border: isBorder
+        ? `1px solid ${
+            status === "PROCESSING"
+              ? "#FF7D2A"
+              : status === "FAILED"
+              ? "red"
+              : "#1B67B3"
+          }`
+        : "none",
+    };
+  };
+  const handleBatchTrigger = async (data) => {
+    const triggerData = {
+      batchId: data?.id,
+      ftpRequestFrom: "COGENT_AI",
+    };
+    const res = await getTriggerBatch({ obj: triggerData });
+    if (res.status === "SUCCESS") {
+      getResponePopup(res);
+      getAllBatches({ page: pageNo });
+    }
+  };
+
   useEffect(() => {
     if (routedData) {
       setParamsFilter("check");
@@ -508,7 +693,6 @@ const PatientSync = ({
       getTinRoaster({ pageNo: pageNumber });
     }
   }, [reportActiveTab, pageNumber, pagination]);
-console.log(reportActiveTab,"reportActiveTab")
   return (
     <>
       <Header />
@@ -769,7 +953,7 @@ console.log(reportActiveTab,"reportActiveTab")
                                       to="#my-posts"
                                       eventKey="practiceRoaster"
                                     >
-                                      Practice 
+                                      Practice
                                     </Nav.Link>
                                   </Nav.Item>
                                   <Nav.Item
@@ -802,7 +986,7 @@ console.log(reportActiveTab,"reportActiveTab")
                                       to="#my-posts"
                                       eventKey="patientRoaster"
                                     >
-                                      Patient 
+                                      Patient
                                     </Nav.Link>
                                   </Nav.Item>
                                 </Nav>
@@ -815,7 +999,7 @@ console.log(reportActiveTab,"reportActiveTab")
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="pdf">
-                                    <PdfTable
+                                    {/* <PdfTable
                                       paginationFirst={paginationFirst}
                                       setSelectedBatch={setSelectedBatch}
                                       onPageChange={onPageChange}
@@ -834,6 +1018,28 @@ console.log(reportActiveTab,"reportActiveTab")
                                       }
                                       viewDetailedBatch={viewDetailedBatch}
                                       pdfTableData={pdfTableData}
+                                    /> */}
+                                    <AppTable
+                                      data={
+                                        socketData?.content?.length > 0
+                                          ? socketData?.content
+                                          : pdfTableData?.content
+                                      }
+                                      column={test.filter(
+                                        (item) => item.isShow
+                                      )}
+                                      // loader={loading}
+                                      onRowClick={handleRowActionClick}
+                                      first={pageNo === 0 ? 0 : paginationFirst}
+                                      totalRecords={pdfTableData?.totalElements}
+                                      row={15}
+                                      onPageChange={onPageChange}
+                                      dateFormateAlign={dateFormateAlign}
+                                      getStatusStyles={getStatusStyles}
+                                      handleBatchTrigger={handleBatchTrigger}
+                                      renderCountDetailsPopover={
+                                        renderCountDetailsPopover
+                                      }
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="tinRoaster">
@@ -856,7 +1062,6 @@ console.log(reportActiveTab,"reportActiveTab")
                                       setPagination={setPagination}
                                       pagination={pagination}
                                       handleRoasterBtn={handleRoasterBtn}
-                                      
                                     />
                                   </Tab.Pane>
 
