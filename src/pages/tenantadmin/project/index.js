@@ -5,10 +5,11 @@ import { connect } from "react-redux";
 import Patientsync from '../patientsync'
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 import Patients from "../../../commonPages/patients";
+import { getAccessTabItems } from "../../../utils/reusable";
 
 const Project = ({ getProjectActiveTab, activeTabName }) => {
-  const tabs = ["Patients", "Sync"];
-  const activeTab = activeTabName || "Patients";
+  const tabs = getAccessTabItems({page:"Project",tabsMenu:"tabMenuList"});
+  const activeTab = activeTabName || tabs?.[0] || "Patients";
   const handleTabs = (name) => {
     getProjectActiveTab({
       projectActiveTab: name,

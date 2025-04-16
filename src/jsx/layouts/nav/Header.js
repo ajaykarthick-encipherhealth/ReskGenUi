@@ -213,15 +213,16 @@ const Header = ({
     }
   };
   const getMenuListByRole = (role) => {
+    const accessMenuList = JSON.parse(getStorage("accessMenuList"))
     switch (role?.replace(/_/g, " ")?.toLowerCase()) {
       case "admin":
         return AdminMenuList;
       case "reviewer":
-        return PhysicanMenuList;
+        return PhysicanMenuList(accessMenuList);
       case "supervisor":
         return L2AuditorMenuList;
       case "tenant admin":
-        return ProviderMenuList;
+        return ProviderMenuList(accessMenuList);
       case "ehr":
         return EHRMenuList;
       case "record analyst":
