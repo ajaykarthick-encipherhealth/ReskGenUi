@@ -187,7 +187,7 @@ const YearAndDosStatus = ({
             className="ant-badge"
             key="4"
             onClick={() => {
-              handleActionClick("COMPLETE");
+              handleActionClick("COMPLETED");
               setMenuIsOpen(false);
             }}
           >
@@ -256,7 +256,7 @@ const YearAndDosStatus = ({
             name="complete-menu-item2"
             key="4"
             onClick={() => {
-              handleActionClick("COMPLETE");
+              handleActionClick("COMPLETED");
               setMenuIsOpen(false);
             }}
           >
@@ -346,7 +346,7 @@ const YearAndDosStatus = ({
             name="complete-menu-item3"
             key="4"
             onClick={() => {
-              handleActionClick("COMPLETE");
+              handleActionClick("COMPLETED");
               setMenuIsOpen(false);
             }}
           >
@@ -388,7 +388,7 @@ const YearAndDosStatus = ({
       setConfirmNotesModal(true);
       setIsValidAction("pendingFunction");
     }
-    if (value == "COMPLETE") {
+    if (value == "COMPLETED") {
       setConfirmCompleteModal(true);
     }
   };
