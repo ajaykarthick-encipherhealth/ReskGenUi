@@ -293,3 +293,38 @@ export const reviewerCheckedList = async ({
   const res = await requestPortal(`${url}`, options);
   return res;
 };
+
+export async function randomSampling(data) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+  const response = await requestPortal(
+    `management/allocation/random-sampling`,
+    options
+  );
+  return response;
+}
+
+export async function getmoveBackLevel() {
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(
+    `dbservice/v1/move-back/get-role-status-details?roleAlias=QA`,
+    options
+  );
+  return res;
+}
+
+export async function moveBack(data) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+  const response = await requestPortal(
+    `dbservice/v1/move-back`,
+    options
+  );
+  return response;
+}

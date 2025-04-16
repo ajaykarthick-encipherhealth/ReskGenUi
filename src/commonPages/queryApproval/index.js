@@ -195,7 +195,6 @@ const QueryApproval = ({
     activeTab,
     search,
   };
-  console.log(activeTab, "activeTab");
   useEffect(() => {
     if (routedData) {
       setActiveTab(routedData?.activeTab);
@@ -256,7 +255,8 @@ const QueryApproval = ({
                       </div>
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>
-                          <QueryTable />
+                          <QueryTable 
+                          />
                         </Tab.Pane>
                       </Tab.Content>
                     </Tab.Container>

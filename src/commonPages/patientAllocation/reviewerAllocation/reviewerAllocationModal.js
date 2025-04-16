@@ -10,10 +10,7 @@ import {
   faUser,
   faCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  disablePastDate,
-  priorityOptions,
-} from '../../../components/headerFilters'
+
 import { actions as allActions } from '../../../stores/admin/patientAllocation'
 import { connect } from "react-redux";
 import {
@@ -25,6 +22,7 @@ import styles from '../../../components/tables/table.module.css'
 import { getStorage } from '../../../utils/storages'
 import TableSkeleton from "../../../components/skeleton/table";
 import RegularButton from "../../../components/button";
+import { disablePastDate, priorityOptions } from "../../../components/headerFilters/functions";
 
 const AllocateModal = ({
   open,

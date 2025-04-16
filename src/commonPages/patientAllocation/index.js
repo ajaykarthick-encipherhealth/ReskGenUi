@@ -106,8 +106,9 @@ const PatientAllocation = ({
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [search, setSearch] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [samplingModal , setSamplingModal]= useState(false)
   const showModal = () => {
-    setIsModalOpen(true);
+    setSamplingModal(true);
   };
 
   const handleTabChange = (key) => {
@@ -289,7 +290,7 @@ const PatientAllocation = ({
                                 <Button
                                   data-testid="random-sampling"
                                   name="random-sampling"
-                                  onClick={handleOpenModal}
+                                  onClick={showModal}
                                   type="primary"
                                   className={` ${styles.allocate}`}
                                 >
@@ -392,8 +393,8 @@ const PatientAllocation = ({
         setSelectedRowsId={setSelectedRowsId}
         setSelectedRows={setSelectedRows}
         selectedRows={selectedRows}
-        open={allocateModal}
-        setOpen={setAllocateModal}
+        open={samplingModal}
+        setOpen={setSamplingModal}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
       />

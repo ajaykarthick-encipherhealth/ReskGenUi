@@ -61,3 +61,23 @@ export const getAllCheckedListForReviewer = createActionThunk(
   "REVIEWER_CHECKED_LIST",
   network.reviewerCheckedList
 );
+
+export const randomSamplingAction = createActionThunk(
+  "RANDOM_SAMPLING",
+  network.randomSampling
+);
+
+export const getMoveBackLevel = createActionThunk(
+  "GET_MOVEBACK_LEVEL",
+  network.getmoveBackLevel
+);
+
+export const postMoveBack = createActionThunk(
+  "POST_MOVEBACK_LEVEL",
+  network.moveBack
+);
+
+
+
+
+

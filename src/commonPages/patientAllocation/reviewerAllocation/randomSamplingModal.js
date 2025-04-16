@@ -1,86 +1,3 @@
-// import { DatePicker, Form, Input, Modal, Select, Space } from "antd";
-// import React from "react";
-// import RegularButton from "../../../components/button";
-
-// const RandomSamplingModal = ({ setIsModalOpen, isModalOpen }) => {
-//   const [form] = Form.useForm();
-//   const handleOk = () => {
-//     setIsModalOpen(false);
-//   };
-//   const handleCancel = () => {
-//     setIsModalOpen(false);
-//     form.resetFields()
-//   };
-//   const onFinish = () => {};
-//   return (
-//     <div>
-//       <Modal
-//         title="Random Sampling"
-//         open={isModalOpen}
-//         onOk={handleOk}
-//         onCancel={handleCancel}
-//         footer={null}
-//       >
-//         <Form
-//           form={form}
-//           name="validateOnly"
-//           layout="vertical"
-//           autoComplete="off"
-//           onFinish={onFinish}
-//         >
-//           <Form.Item
-//             label="Select Tin"
-//             name="tin"
-//             rules={[
-//               {
-//                 required: true,
-//                 message: "Select the Tin!",
-//               },
-//             ]}
-//           >
-//             <div className="samplingSelect">
-//               <Select className="w-75" placeholder="Select Tin" />
-//             </div>
-//           </Form.Item>
-//           <Form.Item
-//             rules={[
-//               {
-//                 required: true,
-//                 message: "Enter Percentage!",
-//               },
-//             ]}
-//             label="Enter Percentage"
-//             name="percentage"
-//           >
-//             <Input className="w-75" placeholder="Enter Percentage" />
-//           </Form.Item>
-//           <Form.Item
-//             rules={[
-//               {
-//                 required: true,
-//                 message: "Enter Due Date",
-//               },
-//             ]}
-//             label="Due Date"
-//             name="duedate"
-//           >
-//             <div className="samplingPicker">
-//               <DatePicker className="w-75" placeholder="Due Date" />
-//             </div>
-//           </Form.Item>
-//           <Form.Item>
-//             <div className="d-flex align-items-center justify-content-center">
-//               <RegularButton type="submit" name="Save" width={100} />
-//             </div>
-//           </Form.Item>
-//         </Form>
-//       </Modal>
-//     </div>
-//   );
-// };
-
-// export default RandomSamplingModal;
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, DatePicker, Form, Input, Modal, Select } from "antd";
 import modalStyle from "../../../pages/tenantadmin/allocateduser/allocate/style.module.css";
@@ -104,6 +21,7 @@ import styles from "../../../components/tables/table.module.css";
 import { getStorage } from "../../../utils/storages";
 import TableSkeleton from "../../../components/skeleton/table";
 import RegularButton from "../../../components/button";
+import { actions as allAction } from "../../../stores/tenantAdmin/patientAllocations";
 
 const RandomSamplingModal = ({
   open,
@@ -124,6 +42,7 @@ const RandomSamplingModal = ({
   activeTab,
   setIsModalOpen,
   isModalOpen,
+  randomSampling,
 }) => {
   const router = useRouter();
   const userId = getStorage("userId");
@@ -154,6 +73,7 @@ const RandomSamplingModal = ({
   };
   const handleCancel = () => {
     setIsModalOpen(false);
+    setSelectedUserIds([]);
     form.resetFields();
   };
 
@@ -176,17 +96,15 @@ const RandomSamplingModal = ({
       setUserDetails(user);
     }
   };
-
-  const setAllocate = async () => {
-    const response = await getAllocateUsers({
-      data: {
+  const onFinish = async (values) => {
+    const response = await randomSampling({
+       
         roleId: activeTab,
         userIdList: activeEmail,
-        dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
+        dueDate: formatDateForIndex({ date: values.duedate, index: 1 }),
         allocatedBy: userId,
-        patientIds: selectedRowsId,
-        priority: priority,
-      },
+        percentage: values?.percentage,
+        tin:values?.tin,
     });
     if (response?.status == "SUCCESS") {
       getResponePopup(response);
@@ -206,6 +124,8 @@ const RandomSamplingModal = ({
       getResponePopup(response);
     }
   };
+
+  const setAllocate = async () => {};
   const handleUserSelect = (id, email) => {
     if (selectedUserIds.includes(id)) {
       setSelectedUserIds(selectedUserIds.filter((userId) => userId !== id));
@@ -232,7 +152,6 @@ const RandomSamplingModal = ({
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
-
 
   return (
     <div>
@@ -567,22 +486,32 @@ const RandomSamplingModal = ({
           name="validateOnly"
           layout="vertical"
           autoComplete="off"
-          // onFinish={onFinish}
+          onFinish={onFinish}
         >
-          <Form.Item
-            label="Select Tin"
-            name="tin"
-            rules={[
-              {
-                required: true,
-                message: "Select the Tin!",
-              },
-            ]}
-          >
-            <div className="samplingSelect">
-              <Select className="w-75" placeholder="Select Tin" />
-            </div>
-          </Form.Item>
+          <div className="mt-3 samplingSelect">
+            <Form.Item
+              label="Select Tin"
+              name="tin"
+              rules={[
+                {
+                  required: true,
+                  message: "Select the Tin!",
+                },
+              ]}
+            >
+              <Select
+                options={[
+                  { value: "jack", label: "Jack" },
+                  { value: "lucy", label: "Lucy" },
+                  { value: "Yiminghe", label: "yiminghe" },
+                  { value: "disabled", label: "Disabled", disabled: true },
+                ]}
+                className="w-75"
+                placeholder="Select Tin"
+              />
+            </Form.Item>
+          </div>
+
           <Form.Item
             rules={[
               {
@@ -595,20 +524,21 @@ const RandomSamplingModal = ({
           >
             <Input className="w-75" placeholder="Enter Percentage" />
           </Form.Item>
-          <Form.Item
-            rules={[
-              {
-                required: true,
-                message: "Enter Due Date",
-              },
-            ]}
-            label="Due Date"
-            name="duedate"
-          >
-            <div className="samplingPicker">
+          <div className="samplingPicker">
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: "Enter Due Date",
+                },
+              ]}
+              label="Due Date"
+              name="duedate"
+            >
               <DatePicker className="w-75" placeholder="Due Date" />
-            </div>
-          </Form.Item>
+            </Form.Item>
+          </div>
+
           <Form.Item>
             <div className="d-flex align-items-center justify-content-center">
               <RegularButton type="submit" name="Save" width={100} />
@@ -627,6 +557,7 @@ const connector = connect(
   {
     getL1UsersList: allActions.getL1UsersList,
     getAllocateUsers: allActions.getAllocateUsers,
+    randomSampling: allAction.randomSamplingAction,
   }
 );
 export default connector(RandomSamplingModal);

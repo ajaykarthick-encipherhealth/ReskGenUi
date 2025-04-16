@@ -274,7 +274,7 @@ const MoveBack = ({
                                 onClick={handleOpenModal}
                                 type="primary"
                                 className={` ${styles.allocate}`}
-                                // disabled={selectedRowsId?.length === 0}
+                                disabled={selectedRowsId?.length === 0}
                               >
                                 Move Back
                               </Button>
