@@ -12,6 +12,7 @@ import { actions as tinActions } from "../../stores/tenantAdmin/tin";
 import styles from "../../components/tables/table.module.css";
 import Header from "../../jsx/layouts/nav/Header";
 import RandomSamplingModal from "./reviewerAllocation/randomSamplingModal";
+import { actions as tableAction } from "../../stores/tableView";
 
 const PatientAllocation = ({
   getAllReviewerList,
@@ -20,6 +21,7 @@ const PatientAllocation = ({
   getAllSupervisorList,
   getReviewerList,
   routedData,
+  getTableData,
 }) => {
   const commonFilterItems = [
     {
@@ -99,6 +101,9 @@ const PatientAllocation = ({
   const [pageNumber, setPageNumber] = useState(0);
   const [batchCount, setBatchCount] = useState("");
   const [pageNo, setPageNo] = useState(0);
+    const [pageSize, setPageSize] = useState(15);
+    const [activeStatus, setActiveStatus] = useState("PENDING");
+  
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
@@ -106,6 +111,7 @@ const PatientAllocation = ({
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [search, setSearch] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pageId, setPageId] = useState("3a5feaba-7de6-4557-961b-ab973a688f81");
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -170,10 +176,13 @@ const PatientAllocation = ({
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
-      if (activeTab == "1") {
-        getAllReviewerALlocation();
-      } else {
-        getAllSupervisorAllocation();
+      // if (activeTab == "1") {
+      //   getAllReviewerALlocation();
+      // } else {
+      //   getAllSupervisorAllocation();
+      // }
+      if (window !== "undefined" && paramsFilter) {
+        getTableData({ pageId , pageNo, pageSize, activeStatus });
       }
     }
   }, [
@@ -207,7 +216,6 @@ const PatientAllocation = ({
     const filteredFilters = getFilterOption();
     setActiveFilters(filteredFilters);
   }, [activeTab]);
-
 
   useEffect(() => {
     if (routedData) {
@@ -245,12 +253,12 @@ const PatientAllocation = ({
                           </Nav.Link>
                         </Nav.Item>
                         <Nav.Item as="li" className="nav-item profile-tab mt-4">
-                          <Nav.Link  className="mt-4" eventKey="2">
+                          <Nav.Link className="mt-4" eventKey="2">
                             Coder 2
                           </Nav.Link>
                         </Nav.Item>
                         <Nav.Item as="li" className="nav-item profile-tab mt-4">
-                          <Nav.Link  className="mt-4" eventKey="3">
+                          <Nav.Link className="mt-4" eventKey="3">
                             QA
                           </Nav.Link>
                         </Nav.Item>
@@ -380,8 +388,11 @@ const PatientAllocation = ({
         setSelectedUserName={setSelectedUserName}
         getAllReviewerALlocation={getAllReviewerALlocation}
         setBatchCount={setBatchCount}
-      /> 
-      <RandomSamplingModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+      />
+      <RandomSamplingModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
     </div>
   );
 };
@@ -405,6 +416,8 @@ const connector = connect(
     allocationList: allActions.getAllAllocationList,
     getReviewerList: allActions.getFilterOptions,
     getRoutedData: tinActions.getAllocationRoutedData,
+    getTableData: tableAction.tableViewAction,
+    
   }
 );
 
