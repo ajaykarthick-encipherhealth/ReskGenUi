@@ -1,12 +1,12 @@
 import React from 'react'
-import Patients from '../patients';
+import CodersTable from '../../../commonPages/codersTable';
 
 const Queried =  () => {
   return (
     <div>
-      <Patients/>
+      <CodersTable pageId="test-quiried" />
     </div>
-  )
+  );
 }
 
 export default Queried;

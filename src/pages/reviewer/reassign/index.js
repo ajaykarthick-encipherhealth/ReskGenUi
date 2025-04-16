@@ -1,12 +1,12 @@
 import React from 'react'
-import Patients from '../patients';
+import CodersTable from '../../../commonPages/codersTable';
 
 const Reassign =  () => {
   return (
     <div>
-      <Patients pageId='test-reassgin'/>
+      <CodersTable pageId="test-reassgin" />
     </div>
-  )
+  );
 }
 
 export default Reassign;
