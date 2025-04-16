@@ -6,6 +6,7 @@ import { notification, Table } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
 import { actions as workqueueActions } from "../../../stores/reviewer/workqueue";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
+import { actions as tableAction } from "../../../stores/tableView";
 import { priorityOptions } from "../../../components/headerFilters/functions";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
@@ -119,6 +120,8 @@ const Patient = ({
   statusActiveTab,
   status,
   getStatus,
+  getTableData,
+  pageId="3a5feaba-7de6-4557-961b-ab973a688f81"
 }) => {
   const columns = [
     {
@@ -275,7 +278,7 @@ const Patient = ({
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
-      getReviewerApi();
+      getTableData({pageId,pageNo,pageSize,activeStatus});
     }
   }, [
     selectedOption,
@@ -316,11 +319,9 @@ const Patient = ({
     //   });
     // });
   }, []);
-  useEffect(() => {
-    getStatus({
-      pageNo,
-    });
-  }, [activeStatus, pageNo]);
+  // useEffect(() => {
+  //   getTableData({pageId,pageNo,pageSize,activeStatus});
+  // }, [activeStatus, pageNo]);
   const params = {
     pageNo,
     selectedDates,
@@ -535,6 +536,7 @@ const enhancer = connect(
     getFilteApi: allActions.getReviewerPatients,
     getActiveTab: allReportActions.activeTab,
     getStatus: allActions.getStatusAction,
+    getTableData: tableAction.tableViewAction,
   }
 );
 export default enhancer(Patient);

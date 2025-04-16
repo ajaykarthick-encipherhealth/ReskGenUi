@@ -4,7 +4,7 @@ import Patients from '../patients';
 const Reassign =  () => {
   return (
     <div>
-      <Patients/>
+      <Patients pageId='test-reassgin'/>
     </div>
   )
 }

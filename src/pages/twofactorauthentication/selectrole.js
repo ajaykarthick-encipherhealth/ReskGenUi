@@ -28,7 +28,7 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
   });
   const items = [...(rolesList?.length > 0 ? optionsList : [])];
  
- const onSubmitRole = async (e) => {
+ const onSubmitRole = async (e) => {  
    e.preventDefault();
    if (!selectedRole) {
      setRoleError(true);
@@ -48,6 +48,7 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
            " "
          );
          setStorage("proxyRole", formattedProxyRole);
+         setStorage("userRoleId", selectedProxyObj?.roleId);
        }
 
        loginSuccessCallBack();
