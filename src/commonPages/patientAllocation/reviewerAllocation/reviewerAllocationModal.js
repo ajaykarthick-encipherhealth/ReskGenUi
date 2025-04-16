@@ -150,7 +150,6 @@ const AllocateModal = ({
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
 
-  console.log(activeEmail, "activeEmail");
 
   return (
     <div>
@@ -222,7 +221,6 @@ const AllocateModal = ({
           <div className={modalStyle.scroll}>
             {userDetails?.map((item) => (
               <div className="mt-4 ">
-                {console.log(userDetails, "userDetails")}
                 <div
                   className={`form-control new-item-control my-2 p-0 ${
                     item.id == activeCard

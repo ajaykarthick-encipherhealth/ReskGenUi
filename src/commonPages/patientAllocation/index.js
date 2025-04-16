@@ -208,7 +208,6 @@ const PatientAllocation = ({
     setActiveFilters(filteredFilters);
   }, [activeTab]);
 
-
   useEffect(() => {
     if (routedData) {
       setActiveTab(routedData?.activeTab);
@@ -245,12 +244,12 @@ const PatientAllocation = ({
                           </Nav.Link>
                         </Nav.Item>
                         <Nav.Item as="li" className="nav-item profile-tab mt-4">
-                          <Nav.Link  className="mt-4" eventKey="2">
+                          <Nav.Link className="mt-4" eventKey="2">
                             Coder 2
                           </Nav.Link>
                         </Nav.Item>
                         <Nav.Item as="li" className="nav-item profile-tab mt-4">
-                          <Nav.Link  className="mt-4" eventKey="3">
+                          <Nav.Link className="mt-4" eventKey="3">
                             QA
                           </Nav.Link>
                         </Nav.Item>
@@ -278,26 +277,27 @@ const PatientAllocation = ({
                               </Button>
                             </Tooltip>
                           </Nav.Item>
-                          <Nav.Item as="li" className="nav-item profile-tab ">
-                            <Tooltip
-                              title={
-                                selectedRowsId?.length === 0
-                                  ? "Select patients to Random Sampling"
-                                  : ""
-                              }
-                            >
-                              <Button
-                                data-testid="random-sampling"
-                                name="random-sampling"
-                                onClick={showModal}
-                                type="primary"
-                                className={` ${styles.allocate}`}
-                                disabled={selectedRowsId?.length === 0}
+                          {activeTab === "3" && (
+                            <Nav.Item as="li" className="nav-item profile-tab ">
+                              <Tooltip
+                                title={
+                                  selectedRowsId?.length === 0
+                                    ? "Select patients to Random Sampling"
+                                    : ""
+                                }
                               >
-                                Random Sampling
-                              </Button>
-                            </Tooltip>
-                          </Nav.Item>
+                                <Button
+                                  data-testid="random-sampling"
+                                  name="random-sampling"
+                                  onClick={handleOpenModal}
+                                  type="primary"
+                                  className={` ${styles.allocate}`}
+                                >
+                                  Random Sampling
+                                </Button>
+                              </Tooltip>
+                            </Nav.Item>
+                          )}
                         </div>
                       </Nav>
                       <div className="d-flex">
@@ -380,8 +380,23 @@ const PatientAllocation = ({
         setSelectedUserName={setSelectedUserName}
         getAllReviewerALlocation={getAllReviewerALlocation}
         setBatchCount={setBatchCount}
-      /> 
-      <RandomSamplingModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+      />
+      <RandomSamplingModal
+        selectedUserName={selectedUserName}
+        setSelectedUserName={setSelectedUserName}
+        setBatchCount={setBatchCount}
+        activeTab={activeTab}
+        setSelectedChart={setSelectedChart}
+        selectedChart={selectedChart}
+        selectedRowsId={selectedRowsId}
+        setSelectedRowsId={setSelectedRowsId}
+        setSelectedRows={setSelectedRows}
+        selectedRows={selectedRows}
+        open={allocateModal}
+        setOpen={setAllocateModal}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
     </div>
   );
 };
