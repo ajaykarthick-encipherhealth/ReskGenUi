@@ -210,8 +210,7 @@ const PatientAllocation = ({
 
   useEffect(() => {
     getAllTabRoles();
-  }, []);
-  console.log(allRoles, "allRoles");
+  }, [activeTab]);
   return (
     <div>
       <Header />
@@ -252,7 +251,7 @@ const PatientAllocation = ({
                             className="d-flex align-items-end justify-content-end  "
                             style={{ width: "85%" }}
                           >
-                            {allRoles?.allocationEnabledForQa && (
+                            {allRoles?.allocationEnabledForQa  && (
                               <Nav.Item
                                 as="li"
                                 className="nav-item profile-tab "
