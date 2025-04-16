@@ -19,12 +19,6 @@ const MoveBackModal = ({
   const handleChange = (value) => {
     setSelectLevel(value);
   };
-  const formatLabel = (str) => {
-    return str
-      .replace(/_/g, " ")
-      .toLowerCase()
-      .replace(/\b\w/g, (c) => c.toUpperCase());
-  };
 
   const handleSubmit = async () => {
     try {
@@ -49,7 +43,7 @@ const MoveBackModal = ({
   useEffect(() => {
     moveBackLevel();
   }, []);
-  
+
   return (
     <div>
       <Modal
@@ -76,7 +70,7 @@ const MoveBackModal = ({
             >
               {levelOptions?.map((item) => (
                 <Option key={item} value={item}>
-                  {formatLabel(item)}
+                  {item}
                 </Option>
               ))}{" "}
             </Select>

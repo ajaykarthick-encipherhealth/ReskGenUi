@@ -74,6 +74,9 @@ const patientsAllocationReducer = combineReducers({
   postMoveBack:createReducer(postMoveBack),
   getRoles:createReducer(getAllRoles),
 
+  //loaders
+  rolesLoader:getReportLoading(getAllRoles),
+
 });
 
 export default patientsAllocationReducer;

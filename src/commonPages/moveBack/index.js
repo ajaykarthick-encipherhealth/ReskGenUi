@@ -11,15 +11,16 @@ import { actions as tinActions } from "../../stores/tenantAdmin/tin";
 import styles from "../../components/tables/table.module.css";
 import MoveBackModal from "./moveBackModal";
 import MoveBackTable from "./moveBackTable";
+import CardSkeleton from "../../components/skeleton/card";
 
 const MoveBack = ({
   getAllReviewerList,
   organizationList,
   getAllOrganizationList,
-  getAllSupervisorList,
+  rolesLoader,
   routedData,
   getAllTabRoles,
-  allRoles
+  allRoles,
 }) => {
   const commonFilterItems = [
     {
@@ -148,13 +149,12 @@ const MoveBack = ({
     });
   };
 
-  
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
       if (activeTab == "1") {
         getAllReviewerALlocation();
-      } 
+      }
     }
   }, [
     selectedOption,
@@ -208,10 +208,9 @@ const MoveBack = ({
     }
   }, [routedData]);
 
-    useEffect(() => {
-      getAllTabRoles();
-    }, []);
-
+  useEffect(() => {
+    getAllTabRoles();
+  }, []);
   return (
     <div>
       <Header />
@@ -227,13 +226,15 @@ const MoveBack = ({
                       activeKey={activeTab}
                       onSelect={handleTabChange}
                     >
-                      <Nav
-                        as="li"
-                        variant="tabs"
-                        className="nav nav-tabs profile-tab"
-                      >
-                        {allRoles?.allocationRoles?.map(
-                          (role, index) => (
+                      {rolesLoader ? (
+                        <CardSkeleton />
+                      ) : (
+                        <Nav
+                          as="li"
+                          variant="tabs"
+                          className="nav nav-tabs profile-tab"
+                        >
+                          {allRoles?.allocationRoles?.map((role, index) => (
                             <Nav.Item
                               as="li"
                               className="nav-item profile-tab mt-4"
@@ -245,34 +246,35 @@ const MoveBack = ({
                                   .replace(/\b\w/g, (c) => c.toUpperCase())}
                               </Nav.Link>
                             </Nav.Item>
-                          )
-                        )}
-                        <div
-                          className="d-flex align-items-end justify-content-end"
-                          style={{ width: "85%" }}
-                        >
-                          <Nav.Item as="li" className="nav-item profile-tab ">
-                            <Tooltip
-                              title={
-                                selectedRowsId?.length === 0
-                                  ? "Select patients to move back"
-                                  : ""
-                              }
-                            >
-                              <Button
-                                data-testid="allocate-btn"
-                                name="allocate-btn"
-                                onClick={handleOpenModal}
-                                type="primary"
-                                className={` ${styles.allocate}`}
-                                disabled={selectedRowsId?.length === 0}
+                          ))}
+                          <div
+                            className="d-flex align-items-end justify-content-end"
+                            style={{ width: "85%" }}
+                          >
+                            <Nav.Item as="li" className="nav-item profile-tab ">
+                              <Tooltip
+                                title={
+                                  selectedRowsId?.length === 0
+                                    ? "Select patients to move back"
+                                    : ""
+                                }
                               >
-                                Move Back
-                              </Button>
-                            </Tooltip>
-                          </Nav.Item>
-                        </div>
-                      </Nav>
+                                <Button
+                                  data-testid="allocate-btn"
+                                  name="allocate-btn"
+                                  onClick={handleOpenModal}
+                                  type="primary"
+                                  className={` ${styles.allocate}`}
+                                  disabled={selectedRowsId?.length === 0}
+                                >
+                                  Move Back
+                                </Button>
+                              </Tooltip>
+                            </Nav.Item>
+                          </div>
+                        </Nav>
+                      )}
+
                       <div className="d-flex">
                         <div
                           className={` d-flex gap-3 mt-4`}
@@ -355,6 +357,7 @@ const connector = connect(
       state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
+    rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,

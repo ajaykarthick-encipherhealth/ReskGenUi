@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
 import { Button, Input, Tooltip, Space } from "antd";
 import { connect } from "react-redux";
-import { actions as allActions } from  '../../stores/tenantAdmin/patientAllocations'
+import { actions as allActions } from "../../stores/tenantAdmin/patientAllocations";
 import ReusableFilters from "../../components/reusableFilters";
 import { priorityOptions } from "../../components/headerFilters/functions";
 import { actions as tenantAdminUsersAction } from "../../stores/tenantAdmin/users";
 import { actions as tinActions } from "../../stores/tenantAdmin/tin";
 import QueryTable from "./queryTable";
 import Header from "../../jsx/layouts/nav/Header";
-
+import CardSkeleton from "../../components/skeleton/card";
 
 const QueryApproval = ({
   getAllReviewerList,
@@ -18,7 +18,8 @@ const QueryApproval = ({
   getAllSupervisorList,
   getAllTabRoles,
   routedData,
-  allRoles
+  allRoles,
+  rolesLoader,
 }) => {
   const commonFilterItems = [
     {
@@ -91,12 +92,9 @@ const QueryApproval = ({
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [batchCount, setBatchCount] = useState("");
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [paramsFilter, setParamsFilter] = useState(null);
-  const [selectedUserName, setSelectedUserName] = useState([]);
   const [search, setSearch] = useState({});
 
   const handleTabChange = (key) => {
@@ -124,35 +122,20 @@ const QueryApproval = ({
   const getAllReviewerALlocation = async () => {
     const res = await getAllReviewerList({
       pageNo,
-      pageNumber,
       selectedOption,
       sort,
       selectedDateRanges,
       search: searchText,
-      batchCount: batchCount,
       searchList: search,
     });
   };
 
-  const getAllSupervisorAllocation = async () => {
-    const res = await getAllSupervisorList({
-      pageNo,
-      pageNumber,
-      selectedOption,
-      sort,
-      selectedDateRanges,
-      searchText,
-      search,
-    });
-  };
 
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
       if (activeTab == "1") {
         getAllReviewerALlocation();
-      } else {
-        getAllSupervisorAllocation();
       }
     }
   }, [
@@ -164,7 +147,6 @@ const QueryApproval = ({
     sort,
     paginationFirst,
     search,
-    batchCount,
   ]);
   const getFilterOption = () => {
     let filteredItems;
@@ -224,9 +206,14 @@ const QueryApproval = ({
                       activeKey={activeTab}
                       onSelect={handleTabChange}
                     >
-                      <Nav variant="tabs" className="nav nav-tabs profile-tab">
-                      {allRoles?.allocationRoles?.map(
-                          (role, index) => (
+                      {rolesLoader ? (
+                        <CardSkeleton />
+                      ) : (
+                        <Nav
+                          variant="tabs"
+                          className="nav nav-tabs profile-tab"
+                        >
+                          {allRoles?.allocationRoles?.map((role, index) => (
                             <Nav.Item
                               as="li"
                               className="nav-item profile-tab mt-4"
@@ -238,9 +225,10 @@ const QueryApproval = ({
                                   ?.replace(/\b\w/g, (c) => c.toUpperCase())}
                               </Nav.Link>
                             </Nav.Item>
-                          )
-                        )}
-                      </Nav>
+                          ))}
+                        </Nav>
+                      )}
+
                       <div className="d-flex">
                         <div className="mt-4 w-100">
                           <ReusableFilters
@@ -265,8 +253,7 @@ const QueryApproval = ({
                       </div>
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>
-                          <QueryTable 
-                          />
+                          <QueryTable />
                         </Tab.Pane>
                       </Tab.Content>
                     </Tab.Container>
@@ -292,12 +279,12 @@ const connector = connect(
       state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
+    rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
     getAllReviewerList: allActions.getAllReviewerList,
     getAllCheckedReviewers: allActions.getAllCheckedListForReviewer,
-    getAllSupervisorList: allActions.getAllSupervisorList,
     allocationList: allActions.getAllAllocationList,
     getReviewerList: allActions.getFilterOptions,
     getRoutedData: tinActions.getAllocationRoutedData,

@@ -12,6 +12,7 @@ import { actions as tinActions } from "../../stores/tenantAdmin/tin";
 import styles from "../../components/tables/table.module.css";
 import Header from "../../jsx/layouts/nav/Header";
 import RandomSamplingModal from "./reviewerAllocation/randomSamplingModal";
+import CardSkeleton from "../../components/skeleton/card";
 
 const PatientAllocation = ({
   getAllReviewerList,
@@ -20,6 +21,7 @@ const PatientAllocation = ({
   getAllTabRoles,
   routedData,
   allRoles,
+  rolesLoader,
 }) => {
   const commonFilterItems = [
     {
@@ -225,74 +227,85 @@ const PatientAllocation = ({
                       activeKey={activeTab}
                       onSelect={handleTabChange}
                     >
-                      <Nav
-                        as="li"
-                        variant="tabs"
-                        className="nav nav-tabs profile-tab"
-                      >
-                        {allRoles?.allocationRoles?.map((role, index) => (
-                          <Nav.Item
-                            as="li"
-                            className="nav-item profile-tab mt-4"
-                            key={role}
-                          >
-                            <Nav.Link className="mt-4" eventKey={index + 1}>
-                              {role?.roleName
-                                ?.replace(/_/g, " ")
-                                ?.replace(/\b\w/g, (c) => c.toUpperCase())}
-                            </Nav.Link>
-                          </Nav.Item>
-                        ))}
-                        <div
-                          className="d-flex align-items-end justify-content-end  "
-                          style={{ width: "85%" }}
+                      {rolesLoader ? (
+                        <CardSkeleton />
+                      ) : (
+                        <Nav
+                          as="li"
+                          variant="tabs"
+                          className="nav nav-tabs profile-tab"
                         >
-                          {allRoles?.allocationEnabledForQa && (
-                            <Nav.Item as="li" className="nav-item profile-tab ">
-                              <Tooltip
-                                title={
-                                  selectedRowsId?.length === 0
-                                    ? "Select patients to Allocate"
-                                    : ""
-                                }
-                              >
-                                <Button
-                                  data-testid="allocate-btn"
-                                  name="allocate-btn"
-                                  onClick={handleOpenModal}
-                                  type="primary"
-                                  className={` ${styles.allocate}`}
-                                  disabled={selectedRowsId?.length === 0}
-                                >
-                                  Allocate
-                                </Button>
-                              </Tooltip>
+                          {allRoles?.allocationRoles?.map((role, index) => (
+                            <Nav.Item
+                              as="li"
+                              className="nav-item profile-tab mt-4"
+                              key={role}
+                            >
+                              <Nav.Link className="mt-4" eventKey={index + 1}>
+                                {role?.roleName
+                                  ?.replace(/_/g, " ")
+                                  ?.replace(/\b\w/g, (c) => c.toUpperCase())}
+                              </Nav.Link>
                             </Nav.Item>
-                          )}
+                          ))}
+                          <div
+                            className="d-flex align-items-end justify-content-end  "
+                            style={{ width: "85%" }}
+                          >
+                            {allRoles?.allocationEnabledForQa && (
+                              <Nav.Item
+                                as="li"
+                                className="nav-item profile-tab "
+                              >
+                                <Tooltip
+                                  title={
+                                    selectedRowsId?.length === 0
+                                      ? "Select patients to Allocate"
+                                      : ""
+                                  }
+                                >
+                                  <Button
+                                    data-testid="allocate-btn"
+                                    name="allocate-btn"
+                                    onClick={handleOpenModal}
+                                    type="primary"
+                                    className={` ${styles.allocate}`}
+                                    disabled={selectedRowsId?.length === 0}
+                                  >
+                                    Allocate
+                                  </Button>
+                                </Tooltip>
+                              </Nav.Item>
+                            )}
 
-                          {activeTab === "3" && (
-                            <Nav.Item as="li" className="nav-item profile-tab ">
-                              <Tooltip
-                                title={
-                                  selectedRowsId?.length === 0
-                                    ? "Select patients to Random Sampling"
-                                    : ""
-                                }
+                            {activeTab === "3" && (
+                              <Nav.Item
+                                as="li"
+                                className="nav-item profile-tab "
                               >
-                                <Button
-                                  data-testid="random-sampling"
-                                  name="random-sampling"
-                                  onClick={showModal}
-                                  type="primary"
-                                  className={` ${styles.allocate}`}
+                                <Tooltip
+                                  title={
+                                    selectedRowsId?.length === 0
+                                      ? "Select patients to Random Sampling"
+                                      : ""
+                                  }
                                 >
-                                  Random Sampling
-                                </Button>
-                              </Tooltip>
-                            </Nav.Item>
-                          )}
-                        </div>
-                      </Nav>
+                                  <Button
+                                    data-testid="random-sampling"
+                                    name="random-sampling"
+                                    onClick={showModal}
+                                    type="primary"
+                                    className={` ${styles.allocate}`}
+                                  >
+                                    Random Sampling
+                                  </Button>
+                                </Tooltip>
+                              </Nav.Item>
+                            )}
+                          </div>
+                        </Nav>
+                      )}
+
                       <div className="d-flex">
                         <div
                           className={` d-flex gap-3 mt-4`}
@@ -400,6 +413,7 @@ const connector = connect(
       state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
+    rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
