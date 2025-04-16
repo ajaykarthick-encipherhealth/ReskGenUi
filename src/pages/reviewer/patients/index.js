@@ -16,7 +16,7 @@ import RegularButton from "../../../components/button";
 import CustomizableDrawer from "../../../components/customizeDrawer";
 import { actions as allReportActions } from "../../../stores/admin/report";
 import { Tab, Nav } from "react-bootstrap";
-
+import data from "../patients/data.json"
 const role = getStorage("proxyRole");
 export const bullets = [
   {
@@ -222,8 +222,7 @@ const Patient = ({
   const [totalElements, setTotalElements] = useState("");
   const [clear, setClear] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
-  const [selectedColumns, setSelectedColumns] = useState([]);
-  const [test, setTest] = useState(columns);
+  const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [open, setOpen] = useState(false);
   const [activeStatus, setActiveStatus] = useState("PENDING");
 
@@ -303,10 +302,19 @@ const Patient = ({
     setActiveStatus(name);
   };
 
-  const handleInsert = () => {
-  }
+  const handleInsert = () => {};
   useEffect(() => {
     getAllBatchList();
+    // setTest((prev) => {
+    //   let orderCounter = 1;
+    //   return prev.map((item) => {
+    //     if (item.active) {
+    //       return { ...item, order: orderCounter++ };
+    //     } else {
+    //       return { ...item, order: undefined };
+    //     }
+    //   });
+    // });
   }, []);
   useEffect(() => {
     getStatus({
@@ -353,7 +361,6 @@ const Patient = ({
     }
   }, [routedData]);
 
-
   return (
     <div className={`show `}>
       <Header />
@@ -380,16 +387,16 @@ const Patient = ({
                 setPageNo={setPageNo}
                 opt={opt}
                 columns={columns}
+                //customize table
+                open={open}
+                onClose={onClose}
+                selectedColumns={test}
+                setSelectedColumns={setTest}
+                handleInsert={handleInsert}
                 commonFilterItems={commonFilterItems}
+                showCustomizeTable={true}
+                showDrawer={showDrawer}
               />
-            </div>
-            <div
-              id="addPatient-btn"
-              name="addPatient-btn"
-              className="d-flex justify-content-center align-items-center mt-3"
-              style={{ width: "10%" }}
-            >
-              <RegularButton name={"Table Customize"} onClick={showDrawer} />
             </div>
           </div>
           <div className="profile-tab  mt-3">
@@ -471,8 +478,10 @@ const Patient = ({
                   <Tab.Pane eventKey={activeStatus}>
                     <div className="mt-3">
                       <AppTable
-                        data={patinetListAll?.content}
-                        column={test.filter((item) => item.isShow)}
+                        data={data?.response?.pageResponse?.content}
+                        column={data?.response?.metaDataDTO.filter(
+                          (item) => item.active
+                        )}
                         loader={loading}
                         onRowClick={gotoPatientDetails}
                         pagination={false}
@@ -489,17 +498,16 @@ const Patient = ({
               </Tab.Container>
             </div>
           </div>
-          <div>
+          {/* <div>
             <CustomizableDrawer
               open={open}
               onClose={onClose}
-              options={columns}
               selectedColumns={test}
               setSelectedColumns={setTest}
               handleInsert={handleInsert}
               setActiveFilters={setActiveFilters}
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

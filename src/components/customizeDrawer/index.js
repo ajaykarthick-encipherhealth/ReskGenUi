@@ -10,12 +10,35 @@ const CustomizableDrawer = ({
   setSelectedColumns,
   handleInsert,
   title = "Table Customize",
-  setActiveFilters
+  setActiveFilters,
 }) => {
+  const handleSubmit = () => {
+    const payload = {
+      pageId: "234560oihgvcfasra",
+      orderNumber: selectedColumns
+        .filter((col) => col.active)
+        .map((col) => col.actualField),
+    };
+
+    handleInsert(payload);
+  };
+  const handleReset = () => {
+    const resetColumns = selectedColumns.map((col) => ({
+      ...col,
+      active: false,
+    }));
+
+    setSelectedColumns(resetColumns);
+    setActiveFilters((prev) =>
+      prev.map((filter) => ({ ...filter, active: false }))
+    );
+  };
+
+
   return (
     <Drawer title={title} onClose={onClose} open={open}>
       <div className="mt-3 mx-3 d-flex flex-column gap-3">
-        {selectedColumns.map((option, index) => {
+        {selectedColumns?.map((option, index) => {
           return (
             <div
               style={{
@@ -28,24 +51,31 @@ const CustomizableDrawer = ({
               }}
             >
               <Checkbox
-                key={option.value}
-                checked={option?.isShow}
+                key={option.actualField}
+                checked={option?.active}
                 onChange={() => {
-                  if (option?.isShow) {
-                    setActiveFilters((prev)=>(
-                     prev?.map((val) =>
-                      val?.title === option?.filterKey
-                        ? { ...val, active: false }
-                        : val
-                    )
-                    ))
-                    setSelectedColumns((prev) =>
-                    {                      
-                     return prev.map((val) => val?.value == option.value ? {...val, isShow: false} : val)}
+                  if (option?.active) {
+                    setActiveFilters((prev) =>
+                      prev?.map((val) =>
+                        val?.title === option?.filterKey
+                          ? { ...val, active: false }
+                          : val
+                      )
                     );
+                    setSelectedColumns((prev) => {
+                      return prev.map((val) =>
+                        val?.actualField == option.actualField
+                          ? { ...val, active: false }
+                          : val
+                      );
+                    });
                   } else {
-                    setSelectedColumns((prev) => 
-                      prev.map((val) => val.value == option.value ? {...val, isShow: true} : val)
+                    setSelectedColumns((prev) =>
+                      prev.map((val) =>
+                        val.actualField == option.actualField
+                          ? { ...val, active: true }
+                          : val
+                      )
                     );
                   }
                 }}
@@ -53,9 +83,8 @@ const CustomizableDrawer = ({
                 <div
                   className="d-flex align-items-center gap-3 "
                 >
-                  {option.name}
-                  <div></div>
-                  
+                  {option?.headerName}
+                  {/* <div>{option?.orderValue}</div> */}
                 </div>
               </Checkbox>
             </div>
@@ -63,8 +92,9 @@ const CustomizableDrawer = ({
         })}
       </div>
       <div className="w-100">
-        <div className="mt-4  d-flex align-items-center justify-content-center">
-          <RegularButton name="Insert" onClick={handleInsert} />
+        <div className="mt-4 d-flex align-items-center justify-content-center gap-3">
+          <RegularButton name="Reset" onClick={handleReset} />
+          <RegularButton name="Insert" onClick={handleSubmit} />
         </div>
       </div>
     </Drawer>

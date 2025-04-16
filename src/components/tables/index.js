@@ -29,6 +29,8 @@ import {
   proxyStatusBodyTemplate,
   getRoasterStatus,
 } from "../../utils/reusable";
+import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
+
 import { priorityOptions, priorityStatus } from "../headerFilters/functions";
 import Legends from "../legends";
 import { bullets } from "../../pages/reviewer/patients";
@@ -93,11 +95,13 @@ const AppTable = ({
   totalRecords,
   row,
   handleRoasterBtn,
-  isPagination=true
+  isPagination = true,
+  dateFormateAlign,
+  getStatusStyles,
+  renderCountDetailsPopover,
 }) => {
   const router = useRouter();
   const columnsArr = Array.from({ length: column?.length || 5 });
-
   return (
     <div className="customTable">
       <div
@@ -111,10 +115,8 @@ const AppTable = ({
         }`}
       >
         <div className={Style.pageContent}>
-          <div style={{overflowX:"auto"}}>
-            <table
-              className={`  ${Style.classTable}`}
-            >
+          <div style={{ overflowX: "auto" }}>
+            <table className={`  ${Style.classTable}`}>
               <thead
                 className={`${Style.classThead} ${
                   isReportPage && Style.scrollIssue
@@ -187,6 +189,9 @@ const AppTable = ({
                       infoIcon={infoIcon}
                       tableId={tableId}
                       renderFlagCell={renderFlagCell}
+                      dateFormateAlign={dateFormateAlign}
+                      getStatusStyles={getStatusStyles}
+                      renderCountDetailsPopover={renderCountDetailsPopover}
                     />
                   ))
                 ) : (
@@ -227,7 +232,7 @@ const TableHeadItem = ({ item, sort, setSort }) => {
   if (item.sortable) {
     return (
       <th className="text-start text-truncate font2">
-        {item.name.toUpperCase()}{" "}
+        {item?.headerName?.toUpperCase()}{" "}
         {sort?.[item.value]?.sortDir === "ASC" ? (
           <ArrowUpOutlined
             onClick={() => {
@@ -267,7 +272,7 @@ const TableHeadItem = ({ item, sort, setSort }) => {
   if (item.status || item?.auditedStatus || item?.batchStatus) {
     return (
       <th className="text-center text-truncate  ">
-        {item.name.toUpperCase()}
+        {item?.headerName?.toUpperCase()}
         <>
           {item?.infoIcon ? (
             <Popover
@@ -298,7 +303,7 @@ const TableHeadItem = ({ item, sort, setSort }) => {
       </th>
     );
   }
-  if (item.isTooltip ) {
+  if (item.isTooltip) {
     return (
       <th className="text-center text-truncate cr-pointer">
         <Tooltip
@@ -318,7 +323,7 @@ const TableHeadItem = ({ item, sort, setSort }) => {
   }
   return (
     <th className="text-start text-truncate   font2">
-      {typeof item?.name === "string" ? item?.name?.toUpperCase() : item?.name}
+      {typeof item?.headerName === "string" ? item?.headerName?.toUpperCase() : item?.headerName}
     </th>
   );
 };
@@ -356,6 +361,9 @@ const TableRow = ({
   tableId,
   colIndex,
   renderFlagCell,
+  dateFormateAlign,
+  getStatusStyles,
+  renderCountDetailsPopover,
 }) => {
   const router = useRouter();
   return (
@@ -490,35 +498,60 @@ const TableRow = ({
           );
         }
 
-      if (columnItem.isComma) {
-        return (
-          <td
-            style={{
-              backgroundColor: item.accountStatus === false ? "#0000001a" : "",
-            }}
-            className={
-              index === 0
-                ? Style.firstTdBorder
-                : column.length - 1 === index
-                ? Style.lastBorder
-                : Style.childBorder
-            }
-            key={index}
-          >
-            <span
+        if (columnItem.isComma) {
+          return (
+            <td
               style={{
-                color: item.accountStatus === false ? "gray" : "",
+                backgroundColor:
+                  item.accountStatus === false ? "#0000001a" : "",
               }}
+              className={
+                index === 0
+                  ? Style.firstTdBorder
+                  : column.length - 1 === index
+                  ? Style.lastBorder
+                  : Style.childBorder
+              }
+              key={index}
             >
-              {item[columnItem.value]
-                ? item[columnItem.value]
-                    .map((val) => val.replace(/_/g, " "))
-                    .join(", ")
-                : "---"}
-            </span>
-          </td>
-        );
-      }
+              <span
+                style={{
+                  color: item.accountStatus === false ? "gray" : "",
+                }}
+              >
+                {item[columnItem.value]
+                  ? item[columnItem.value]
+                      .map((val) => val.replace(/_/g, " "))
+                      .join(", ")
+                  : "---"}
+              </span>
+            </td>
+          );
+        }
+        //   if (columnItem.isTwoRows){
+        //  {   console.log(item[columnItem.value1],"item")}
+        //       <td className={Style.childBorder}>
+        //         <span >
+        //           {item[columnItem.value] ? item[columnItem.value] : "---"}{" "}
+        //         </span>
+
+        //         <br />
+        //         <span >
+        //           {item[columnItem.value1] ? item[columnItem.value1] : "---"}
+        //         </span>
+        //       </td>;
+        //   }
+        if (columnItem.countInfo) {
+          return (
+            <td className={Style.childBorder}>
+              <div className="d-flex">
+                <div style={{ width: "25px" }}>{item[columnItem.value]}</div>
+                {renderCountDetailsPopover(item)}
+              </div>
+            </td>
+          );
+        
+        }
 
         if (columnItem.isBoolean) {
           return (
@@ -649,7 +682,10 @@ const TableRow = ({
           );
         }
 
-        if (columnItem.isDate || columnItem.isDateAndTime) {
+        if (
+          columnItem?.design?.includes("DATE") ||
+          columnItem?.design === "DATE_TIME"
+        ) {
           return (
             <td
               className={
@@ -667,13 +703,15 @@ const TableRow = ({
               <span
                 style={{ color: item.accountStatus === false ? "gray" : "" }}
               >
-                {item[`${columnItem.value}`] ? (
-                  columnItem.isDateAndTime ? (
-                    moment(item[`${columnItem.value}`]).format(
+                {item[`${columnItem.actualField}`] ? (
+                  columnItem.design === "DATE_TIME" ? (
+                    moment(item[`${columnItem.actualField}`]).format(
                       "MM-DD-YYYY hh:mm A"
                     )
                   ) : (
-                    moment(item[`${columnItem.value}`]).format("MM-DD-YYYY")
+                    moment(item[`${columnItem.actualField}`]).format(
+                      "MM-DD-YYYY"
+                    )
                   )
                 ) : (
                   <div className="d-flex px-4">---</div>
@@ -817,10 +855,10 @@ const TableRow = ({
           );
         }
 
-        if (columnItem.isUpload) {
+        if (columnItem.design === "UPLOAD") {
           return (
             <td className={Style.lastBorder} style={{ textAlign: "center" }}>
-              {item?.status === "FAILED" && (
+              {item?.processedStatus === "FAILED" && (
                 <div
                   id={
                     tableId
@@ -850,7 +888,10 @@ const TableRow = ({
                         style={{ color: "#ffff" }}
                       />
                     </button>
-                    <Popover title="Reason" content={item?.failedReason ? item?.failedReason : ""}>
+                    <Popover
+                      title="Reason"
+                      content={item?.failedReason ? item?.failedReason : ""}
+                    >
                       <InfoCircleOutlined
                         style={{ fontSize: "20px", color: "#df3a3a" }}
                       />
@@ -939,11 +980,15 @@ const TableRow = ({
                   ? moment(item[columnItem.value]).format("MM-DD-YYYY")
                   : "---"}
               </div> */}
-               {columnItem?.value && item[columnItem.value] ? (
-                 <div className="d-flex align-items-start justify-content-start mx-5">
+              {columnItem?.value && item[columnItem.value] ? (
+                <div className="d-flex align-items-start justify-content-start mx-5">
                   {moment(item[columnItem.value]).format("MM-DD-YYYY")}
-                 </div>
-               ) : <div className="d-flex align-items-center justify-content-center mx-5">---</div>}
+                </div>
+              ) : (
+                <div className="d-flex align-items-center justify-content-center mx-5">
+                  ---
+                </div>
+              )}
             </td>
           );
         }
@@ -1027,6 +1072,134 @@ const TableRow = ({
             </td>
           );
         }
+        if (columnItem?.arrayDataFormat) {
+          return (
+            <td
+              className={
+                index == 0
+                  ? Style.firstTdBorder
+                  : column.length - 1 == index
+                  ? Style.lastBorder
+                  : Style.childBorder
+              }
+              style={{
+                backgroundColor:
+                  item.accountStatus === false ? "#0000001a" : "",
+              }}
+            >
+              {dateFormateAlign(item?.yearOfService)}
+            </td>
+          );
+        }
+        if (columnItem?.batchButtons) {
+          return (
+            <td
+              className={
+                index == 0
+                  ? Style.firstTdBorder
+                  : column.length - 1 == index
+                  ? Style.lastBorder
+                  : Style.childBorder
+              }
+              style={{
+                backgroundColor:
+                  item.accountStatus === false ? "#0000001a" : "",
+              }}
+            >
+              <div>
+                <div
+                  style={{ width: "65%" }}
+                  // className="d-flex justify-content-center align-items-center"
+                >
+                  {item?.batchUploadStatus && (
+                    <div
+                      style={{
+                        width: "100%",
+                        ...getStatusStyles({
+                          status: item?.batchUploadStatus,
+                          isBorder: true,
+                        }),
+                      }}
+                      className="px-4 py-1 rounded-1 font-semibold d-flex justify-content-center align-items-center"
+                    >
+                      {item?.batchUploadStatus === "PROCESSING" ? (
+                        <Spin
+                          indicator={
+                            <LoadingOutlined
+                              className="ant-badge"
+                              style={{
+                                fontSize: 14,
+                              }}
+                              spin
+                            />
+                          }
+                          className="ant-badge mx-2"
+                          style={{
+                            color: "#FF7D2A",
+                          }}
+                        />
+                      ) : item?.batchUploadStatus === "FAILED" ? (
+                        <FontAwesomeIcon
+                          className="mx-1"
+                          icon={faCircleXmark}
+                          style={getStatusStyles({
+                            status: item?.batchUploadStatus,
+                          })}
+                        />
+                      ) : (
+                        <FontAwesomeIcon
+                          className="mx-1"
+                          icon={faCircleCheck}
+                          style={getStatusStyles({
+                            status: item?.batchUploadStatus,
+                          })}
+                        />
+                      )}
+
+                      {item?.batchUploadStatus.charAt(0).toUpperCase() +
+                        item?.batchUploadStatus.slice(1).toLowerCase()}
+                    </div>
+                  )}
+                  {!item?.batchUploadStatus && (
+                    <div className="w-100 d-flex justify-content-center align-items-center">
+                      <button
+                        id="status-btn"
+                        name="status-btn"
+                        className={`w-100 px-4 py-1  ${
+                          item?.source === "CogentUpload"
+                            ? Style.uploadButton
+                            : Style.triggerButton
+                        } d-flex justify-content-center align-items-center`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+
+                          setTriggeredBatch({
+                            status: true,
+                            id: item?.batchID,
+                          });
+                          if (item?.source === "CogentUpload") {
+                            setOpenUpload({
+                              status: !openUpload?.status,
+                              data: item,
+                            });
+                          }
+                          if (
+                            item?.batchUploadStatus == null &&
+                            item?.source !== "CogentUpload"
+                          ) {
+                            handleBatchTrigger(item);
+                          }
+                        }}
+                      >
+                        {item?.source === "CogentUpload" ? "Upload" : "Trigger"}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </td>
+          );
+        }
 
         return (
           <td
@@ -1050,10 +1223,10 @@ const TableRow = ({
                 <div className="d-flex px-4">
                   {item[columnItem.value] ? "True" : "False"}
                 </div>
-              ) : item[columnItem.value] || item[columnItem.value] === 0 ? (
+              ) : item[columnItem.actualField] || item[columnItem.actualField] === 0 ? (
                 <Tooltip title={item[columnItem.value]}>
                   {reusableEllipses({
-                    str: item[columnItem.value].toString(),
+                    str: item[columnItem.actualField].toString(),
                     count: count || 20,
                   })}
                 </Tooltip>
