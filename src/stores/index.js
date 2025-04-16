@@ -48,6 +48,7 @@ import { reducer as tenantAdminTrackingReducer } from "./tenantAdmin/tracking";
 import { reducer as tenantAminNotificationReducer } from "./tenantAdmin/notification";
 import { reducer as tenantAminSettingsReducer } from "./tenantAdmin/settings";
 import { reducer as tenantOnBoarding } from "./tenantOnBoarding";
+import { reducer as tableReducer } from "./tableView";
 import { reducer as adminUsersReducer } from "./admin/users";
 import { reducer as supervisorDashboardReducer } from "./supervisor/dashboard";
 import { reducer as reviewerDashboardReducer } from "./reviewer/dashboard";
@@ -138,6 +139,7 @@ const reducers = combineReducers({
     tin:tinReducer,
   }),
   tenatOnBoarding: tenantOnBoarding,
+  tableView:tableReducer,
   chartService: chartReducer,
   imageUploadReducer: imageUploadReducer,
 });
