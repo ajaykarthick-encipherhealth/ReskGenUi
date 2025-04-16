@@ -22,6 +22,7 @@ const PatientAllocation = ({
   getReviewerList,
   routedData,
   getTableData,
+  data,
 }) => {
   const commonFilterItems = [
     {
@@ -101,9 +102,9 @@ const PatientAllocation = ({
   const [pageNumber, setPageNumber] = useState(0);
   const [batchCount, setBatchCount] = useState("");
   const [pageNo, setPageNo] = useState(0);
-    const [pageSize, setPageSize] = useState(15);
-    const [activeStatus, setActiveStatus] = useState("PENDING");
-  
+  const [pageSize, setPageSize] = useState(15);
+  const [activeStatus, setActiveStatus] = useState("PENDING");
+  const [roleId, setroleId] = useState(1);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
@@ -115,7 +116,6 @@ const PatientAllocation = ({
   const showModal = () => {
     setIsModalOpen(true);
   };
-
   const handleTabChange = (key) => {
     setActiveTab(key);
     setSelectedRows([]);
@@ -182,7 +182,7 @@ const PatientAllocation = ({
       //   getAllSupervisorAllocation();
       // }
       if (window !== "undefined" && paramsFilter) {
-        getTableData({ pageId , pageNo, pageSize, activeStatus });
+        getTableData({ pageId, pageNo, pageSize, activeStatus, roleId });
       }
     }
   }, [
@@ -361,6 +361,7 @@ const PatientAllocation = ({
                             setSort={setSort}
                             sort={sort}
                             batchCount={batchCount}
+                            data={data}
                           />
                         </Tab.Pane>
                       </Tab.Content>
@@ -407,6 +408,7 @@ const connector = connect(
     reviewerList:
       state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
+    data: state?.tableView?.tableView?.data,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
@@ -417,7 +419,6 @@ const connector = connect(
     getReviewerList: allActions.getFilterOptions,
     getRoutedData: tinActions.getAllocationRoutedData,
     getTableData: tableAction.tableViewAction,
-    
   }
 );
 

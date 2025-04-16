@@ -352,53 +352,54 @@ const ReusableFilters = ({
           </div>
         )}
       </div>
-      {showFilter && (
-        <div
-          id="more-filters"
-          name="more-filters"
-          className="d-flex justify-content-center align-items-center mt-3"
-          style={{ width: "2%" }}
-        >
-          <MoreFilter
-            selectAll={selectAll}
-            setSelectAll={setSelectAll}
-            activeFilters={activeFilters}
-            FilterItems={FilterItems}
-            setActiveFilters={setActiveFilters}
-            setClear={setClear}
-            handleClearAllFilters={handleClearAllFilters}
-            handleClearFilters={handleClearFilters}
-            getRoutedData={getRoutedData}
-            addUser={addUser}
-            addUserForm={addUserForm}
-            btnTitle={btnTitle}
-            form={form}
-            columns={columns}
-          />
-        </div>
-      )}
-      {showCustomizeTable && (
-        <>
+      <div className="d-flex " style={{alignContent:"flex-end"}}>
+        {showFilter && (
           <div
-            id="addPatient-btn"
-            name="addPatient-btn"
-            className="d-flex justify-content-center align-items-center mt-3"
-            style={{ width: "10%" }}
-          >
-            <RegularButton name={"Table Customize"} onClick={showDrawer} />
-          </div>
-          <div>
-            <CustomizableDrawer
-              open={open}
-              onClose={onClose}
-              selectedColumns={selectedColumns}
-              setSelectedColumns={setSelectedColumns}
-              handleInsert={handleInsert}
+            id="more-filters"
+            name="more-filters"
+            className="d-flex justify-content-center align-items-center "
+            >
+            <MoreFilter
+              selectAll={selectAll}
+              setSelectAll={setSelectAll}
+              activeFilters={activeFilters}
+              FilterItems={FilterItems}
               setActiveFilters={setActiveFilters}
+              setClear={setClear}
+              handleClearAllFilters={handleClearAllFilters}
+              handleClearFilters={handleClearFilters}
+              getRoutedData={getRoutedData}
+              addUser={addUser}
+              addUserForm={addUserForm}
+              btnTitle={btnTitle}
+              form={form}
+              columns={columns}
             />
           </div>
-        </>
-      )}
+        )}
+        {showCustomizeTable && (
+          <>
+            <div
+              id="addPatient-btn"
+              name="addPatient-btn"
+              className="d-flex justify-content-center align-items-center  mt-4"
+              style={{ width: "auto" }}
+            >
+              <RegularButton name={"Table Customize"} onClick={showDrawer} />
+            </div>
+            <div>
+              <CustomizableDrawer
+                open={open}
+                onClose={onClose}
+                selectedColumns={selectedColumns}
+                setSelectedColumns={setSelectedColumns}
+                handleInsert={handleInsert}
+                setActiveFilters={setActiveFilters}
+              />
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 };

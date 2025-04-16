@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AppTable from "../../../components/tables";
 import RegularButton from "../../../components/button";
 
-const MoveBackTable = () => {
+const MoveBackTable = ({data}) => {
   const columns = [
     {
       name: "Tin",
@@ -90,8 +90,8 @@ const MoveBackTable = () => {
     <div className="mt-3">
       <div className="mt-3">
         <AppTable
-          data={[]}
-          column={columns}
+          data={data?.response?.pageResponse?.content}
+          column={data?.response?.metaDataDTO.filter((item) => item.active)}
           //   loader={loading}
           pagination={true}
           first={pageNo === 0 ? 0 : paginationFirst}

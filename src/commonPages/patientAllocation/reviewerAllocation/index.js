@@ -21,6 +21,7 @@ const ReviewerAllocation = ({
   sort,
   setSort,
   batchCount,
+  data
 }) => {
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [checkedLoader, setCheckedLoader] = useState(false);
@@ -144,8 +145,12 @@ const ReviewerAllocation = ({
   return (
     <div className="mt-2">
       <AppTable
-        data={reviewersData?.content}
-        column={columns}
+        // data={reviewersData?.content}
+        // column={columns}
+        data={data?.response?.pageResponse?.content}
+                                column={data?.response?.metaDataDTO.filter(
+                                  (item) => item.active
+                                )}
         loader={loader}
         handleRowCheckboxChange={handleRowCheckboxChange}
         checkBoxLoader={checkedLoader}

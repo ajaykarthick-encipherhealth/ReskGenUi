@@ -11,6 +11,7 @@ import { actions as tinActions } from "../../stores/tenantAdmin/tin";
 import styles from "../../components/tables/table.module.css";
 import MoveBackModal from "./moveBackModal";
 import MoveBackTable from "./moveBackTable";
+import { actions as tableAction } from "../../stores/tableView";
 
 const MoveBack = ({
   getAllReviewerList,
@@ -18,6 +19,8 @@ const MoveBack = ({
   getAllOrganizationList,
   getAllSupervisorList,
   routedData,
+  getTableData,
+  data
 }) => {
   const commonFilterItems = [
     {
@@ -102,7 +105,13 @@ const MoveBack = ({
   const [paramsFilter, setParamsFilter] = useState(null);
   const [selectedUserName, setSelectedUserName] = useState([]);
   const [search, setSearch] = useState({});
-
+  const [test, setTest] = useState(data?.response?.metaDataDTO);
+  const [open, setOpen] = useState(false);
+  const [pageId, setPageId] = useState("3a5feaba-7de6-4557-961b-ab973a688f81");
+    const [pageSize, setPageSize] = useState(15);
+    const [activeStatus, setActiveStatus] = useState("PENDING");
+    const [roleId, setroleId] = useState(1);
+  
   const handleTabChange = (key) => {
     setActiveTab(key);
     setSelectedSupervisor(null);
@@ -117,7 +126,9 @@ const MoveBack = ({
   const handleOpenModal = () => {
     setAllocateModal(true);
   };
-
+  const onClose = () => {
+    setOpen(false);
+  };
   useEffect(() => {
     setSelectedRowsId(selectedRows);
   }, [selectedRows, setSelectedRowsId]);
@@ -162,11 +173,14 @@ const MoveBack = ({
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
-      if (activeTab == "1") {
-        getAllReviewerALlocation();
-      } else {
-        getAllSupervisorAllocation();
-      }
+      // if (activeTab == "1") {
+      //   getAllReviewerALlocation();
+      // } else {
+      //   getAllSupervisorAllocation();
+      // }
+       if (window !== "undefined" && paramsFilter) {
+         getTableData({ pageId, pageNo, pageSize, activeStatus, roleId });
+       }
     }
   }, [
     selectedOption,
@@ -193,6 +207,10 @@ const MoveBack = ({
     }
 
     return filteredItems;
+  };
+  const handleInsert = () => {};
+  const showDrawer = () => {
+    setOpen(true);
   };
 
   useEffect(() => {
@@ -310,6 +328,15 @@ const MoveBack = ({
                             selectedRowsId={selectedRowsId}
                             setSearch={setSearch}
                             search={search}
+                            //customize table
+                            open={open}
+                            onClose={onClose}
+                            selectedColumns={test}
+                            setSelectedColumns={setTest}
+                            handleInsert={handleInsert}
+                            commonFilterItems={commonFilterItems}
+                            showCustomizeTable={true}
+                            showDrawer={showDrawer}
                           />
                         </div>
                       </div>
@@ -328,6 +355,7 @@ const MoveBack = ({
                             setSelectedUserName={setSelectedUserName}
                             setSort={setSort}
                             sort={sort}
+                            data = {data}
                           />
                         </Tab.Pane>
                       </Tab.Content>
@@ -365,6 +393,8 @@ const connector = connect(
     reviewerList:
       state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
+        data: state?.tableView?.tableView?.data,
+
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
@@ -374,6 +404,8 @@ const connector = connect(
     allocationList: allActions.getAllAllocationList,
     getReviewerList: allActions.getFilterOptions,
     getRoutedData: tinActions.getAllocationRoutedData,
+        getTableData: tableAction.tableViewAction,
+    
   }
 );
 
