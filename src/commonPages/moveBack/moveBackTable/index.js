@@ -16,7 +16,6 @@ const MoveBackTable = ({ reviewersData,
   setPageNo,
   paginationFirst,
   setPaginationFirst,
-  setSelectedUserName,
   sort,
   setSort,}) => {
 
@@ -42,22 +41,14 @@ const MoveBackTable = ({ reviewersData,
           }));
           setSelectedRows(result.map((patient) => patient.patientId));
           setSelectedRowsId(result);
-          setSelectedUserName(result);
         }
         setCheckedLoader(false);
       } else {
         setSelectedRows([]);
         setSelectedRowsId([]);
-        setSelectedUserName([]);
         setCheckedLoader(false);
       }
     } else {
-      setSelectedUserName((prev) => {
-        let updatedSelection = e.target.checked
-          ? [...prev, { patientId: row.patientId, patientName: row.patientName }]
-          : prev.filter((user) => user.patientId !== row.patientId);
-        return updatedSelection;
-      });
       setSelectedRows((prev) => {
         let updatedSelection = e.target.checked
           ? [...prev, row.patientId]

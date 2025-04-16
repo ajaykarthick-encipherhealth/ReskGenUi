@@ -100,7 +100,6 @@ const MoveBack = ({
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
-  const [selectedUserName, setSelectedUserName] = useState([]);
   const [search, setSearch] = useState({});
 
   const handleTabChange = (key) => {
@@ -325,7 +324,6 @@ const MoveBack = ({
                             paginationFirst={paginationFirst}
                             setPaginationFirst={setPaginationFirst}
                             selectedUserName={selectedUserName}
-                            setSelectedUserName={setSelectedUserName}
                             setSort={setSort}
                             sort={sort}
                           />
