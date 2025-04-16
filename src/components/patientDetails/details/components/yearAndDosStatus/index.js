@@ -36,6 +36,7 @@ const YearAndDosStatus = ({
   const [inputValue, setInputValue] = useState({
     notes: "",
   });
+  const [statusName, setStatusName] = useState('');
 
   const renderAuditMenu = (value) => {
     var value = (
@@ -374,6 +375,7 @@ const YearAndDosStatus = ({
     setActionItems3(menu3);
   };
   const handleActionClick = (value) => {
+    setStatusName(value);
     if (value == "HOLD") {
       setConfirmNotesModal(true);
       setIsValidAction("holdFunction");
@@ -427,6 +429,8 @@ const YearAndDosStatus = ({
       notes: inputValue.notes,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
+      roleId:getStorage("userRoleId"),
+      processedStatus:statusName
     };
     var apiURL = "";
     if (action == "declineFunction") {
