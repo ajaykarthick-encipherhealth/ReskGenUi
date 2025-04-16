@@ -28,32 +28,36 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
   });
   const items = [...(rolesList?.length > 0 ? optionsList : [])];
  
- const onSubmitRole = async (e) => {
-   e.preventDefault();
-   if (!selectedRole) {
-     setRoleError(true);
-   } else {
-     if (selectedRole.toLowerCase() === "admin") {
-       notification.warning({
-         message: "Unprivileged access!",
-         duration: 1,
-       });
-     } else {
-       const selectedProxyObj = proxyRoles?.find(
-         (item) => item.role?.toLowerCase() === selectedRole?.toLowerCase()
-       );
-       if (selectedProxyObj?.proxyRole) {
-         const formattedProxyRole = selectedProxyObj.proxyRole.replace(
-           /_/g,
-           " "
-         );
-         setStorage("proxyRole", formattedProxyRole);
-       }
-
-       loginSuccessCallBack();
-     }
-   }
- };
+  const onSubmitRole = async (e) => {
+    e.preventDefault();
+    if (!selectedRole) {
+      setRoleError(true);
+    } else {
+      if (selectedRole.toLowerCase() === "admin") {
+        notification.warning({
+          message: "Unprivileged access!",
+          duration: 1,
+        });
+      } else {
+        const selectedProxyObj = proxyRoles?.find(
+          (item) => item.role?.toLowerCase() === selectedRole?.toLowerCase()
+        );       
+        if (selectedProxyObj?.proxyRole) {
+          const formattedProxyRole = selectedProxyObj.proxyRole.replace(
+            /_/g,
+            " "
+          );
+          const accessList = proxyRoles?.find(
+           (item) => item.role?.toLowerCase() === selectedRole?.toLowerCase()
+         );      
+          setStorage("proxyRole", formattedProxyRole);
+          setStorage("accessMenuList", JSON.stringify(accessList));
+        }
+ 
+        loginSuccessCallBack();
+      }
+    }
+  };
 
 
 

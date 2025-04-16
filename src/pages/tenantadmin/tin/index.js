@@ -11,6 +11,7 @@ import AppTable from "../../../components/tables";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import { setStorage } from "../../../utils/storages";
 import { statusOptions } from "../../reviewer/patients";
+import { getAccessTabItems } from "../../../utils/reusable";
 
 const commonFilterItems = [
   {
@@ -114,8 +115,8 @@ const Tin = ({
   loading,
   routedData,
 }) => {
-  const tabs = ["Active", "InActive", "Providers"];
-  const activeTab = activeTabName || "Active";
+  const tabs = getAccessTabItems({page:"Tin",tabsMenu:"tabMenuList"})
+  const activeTab = activeTabName || tabs?.[0] || "Active";
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [sort, setSort] = useState({

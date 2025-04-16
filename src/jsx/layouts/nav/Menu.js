@@ -51,7 +51,59 @@ export const MenuList = [
     to: "/admin/file-view",
   },
 ];
-export const PhysicanMenuList = [
+
+export const PhysicanMenuList = (data) => {
+  let menus = [];
+  data?.accessList?.map((res) => {
+    if (res?.title == "Dashboard" && res?.active) {
+      menus.push({
+        title: "Dashboard",
+        iconStyle: <DashboardOutlined />,
+        activeIcon: <DashboardFilled />,
+        to: "/reviewer/dashboard",
+      });
+    }
+    if (res?.title == "My Work Queue" && res?.active) {
+      menus.push({
+        title: "My Work Queue",
+        iconStyle: <ProfileOutlined />,
+        activeIcon: <ProfileFilled />,
+        to: "/reviewer/patients",
+        childRoute: "/reviewer/patients/details",
+      });
+    }
+    if (res?.title == "Queried" && res?.active) {
+      menus.push({
+        title: "Queried",
+        iconStyle: <Image src={IMAGES.queried} />,
+        activeIcon: <Image src={IMAGES.queried} />,
+        to: "/reviewer/queried",
+        childRoute: "/reviewer/queried/details",
+      });
+    }
+    if (res?.title == "Reassigned" && res?.active) {
+      menus.push({
+        title: "Reassigned",
+        iconStyle: <ProfileOutlined />,
+        activeIcon: <ProfileFilled />,
+        to: "/reviewer/reassign",
+        childRoute: "/reviewer/reassign/details",
+      });
+    }
+    if (res?.title == "Report" && res?.active) {
+      menus.push({
+        title: "Report",
+        iconStyle: <FileOutlined />,
+        activeIcon: <FileFilled />,
+        to: "/reviewer/report",
+        childRoute: "/reviewer/report/individualreport",
+        childRoute2: "/reviewer/report/reportdetails",
+      });
+    }
+  });
+  return menus;
+};
+export const PhysicanMenuList2 = [
   {
     title: "Dashboard",
     iconStyle: <DashboardOutlined />,
@@ -251,7 +303,80 @@ export const L2AuditorMenuList = () => {
 //   to: "/supervisor/org",
 // },
 
-export const ProviderMenuList = [
+export const ProviderMenuList = (data) => {
+  let menus = [];
+  data?.accessList?.map((res) => {
+    if (res?.title == "Dashboard" && res?.active) {
+      menus.push({
+        title: "Dashboard",
+        iconStyle: <DashboardOutlined />,
+        activeIcon: <DashboardFilled />,
+        to: "/tenantadmin/dashboard",
+        // childRoute: "/fhirTable/details",
+      });
+    }
+    if (res?.title == "Users" && res?.active) {
+      menus.push({
+        title: "Users",
+        iconStyle: <UserOutlined />,
+        activeIcon: <FontAwesomeIcon icon={faUser} />,
+        to: "/tenantadmin/user",
+      });
+    }
+    if (res?.title == "Tin" && res?.active) {
+      menus.push({
+        title: "Tin",
+        iconStyle: <Image src={IMAGES.tin} />,
+        activeIcon: <Image src={IMAGES.tin} />,
+        to: "/tenantadmin/tin",
+        childRoute2: "/tenantadmin/tin/tindetails",
+        childRoute: "/tenantadmin/tin/tindetails/details",
+        childRoute3: "/tenantadmin/patients/details",
+      });
+    }
+    if (res?.title == "Project" && res?.active) {
+      menus.push({
+        title: "Project",
+        iconStyle: <Image src={IMAGES.project} />,
+        activeIcon: <Image src={IMAGES.project} />,
+        to: "/tenantadmin/project",
+        childRoute: "/tenantadmin/project/patients/details",
+        childRoute2: "/tenantadmin/patientsync/batchfilesview",
+        childRoute3: "/tenantadmin/patientsync/pdftable",
+      });
+    }
+    if (res?.title == "Report" && res?.active) {
+      menus.push({
+        title: "Report",
+        iconStyle: <FileTextOutlined />,
+        activeIcon: <FileTextFilled />,
+        to: "/tenantadmin/report",
+        childRoute: "/tenantadmin/report/individualreport",
+        childRoute2: "/tenantadmin/report/reportdetails",
+      });
+    }
+    if (res?.title == "Tracking" && res?.active) {
+      menus.push({
+        title: "Tracking",
+        iconStyle: <EnvironmentOutlined />,
+        activeIcon: <EnvironmentFilled />,
+        to: "/tenantadmin/tracking",
+        childRoute2: "/tenantadmin/tracking/details",
+      });
+    }
+    if (res?.title == "Notification" && res?.active) {
+      menus.push({
+        title: "Notification",
+        iconStyle: <BellOutlined />,
+        activeIcon: <BellFilled />,
+        to: "/tenantadmin/notification",
+      });
+    }
+  });
+  return menus;
+};
+
+export const ProviderMenuList2 = [
   {
     title: "Dashboard",
     iconStyle: <DashboardOutlined />,
