@@ -102,7 +102,8 @@ const RandomSamplingModal = ({
       getResponePopup(response);
       getAllAllocation();
       setOpen(false);
-      setAllocateDate("");
+      setIsModalOpen(false);
+      setAllocateDate(null);
       setActiveCard("");
       setActiveEmail("");
       setSearch("");
@@ -146,11 +147,10 @@ const RandomSamplingModal = ({
         open={open}
         onCancel={() => {
           setOpen(false);
-          setSelectedRowsId(selectedChart);
           setActiveCard("");
           setActiveEmail("");
           setSearch("");
-          setAllocateDate("");
+          setAllocateDate(null);
           setSelectedUserIds([]);
         }}
         title="Select User"

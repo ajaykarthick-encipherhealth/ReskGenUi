@@ -217,24 +217,24 @@ export const AdminMenuList = [
   //   to: "/coder/auditing",
   // },
 ];
-export const L2AuditMenuList = [
-  {
-    title: "Dashboard",
-    iconStyle: SVGICON.dashboardIcon,
-    to: "/coder/dashboard",
-  },
+// export const L2AuditMenuList = [
+//   {
+//     title: "Dashboard",
+//     iconStyle: SVGICON.dashboardIcon,
+//     to: "/coder/dashboard",
+//   },
 
-  {
-    title: "My Works",
-    iconStyle: SVGICON.patientListIcon,
-    to: "/coder/myworks",
-  },
-  {
-    title: "Auditing Window",
-    iconStyle: SVGICON.Usermanagement,
-    to: "/coder/auditing",
-  },
-];
+//   {
+//     title: "My Works",
+//     iconStyle: SVGICON.patientListIcon,
+//     to: "/coder/myworks",
+//   },
+//   {
+//     title: "Auditing Window",
+//     iconStyle: SVGICON.Usermanagement,
+//     to: "/coder/auditing",
+//   },
+// ];
 
 export const PhysicanMenu = [
   {

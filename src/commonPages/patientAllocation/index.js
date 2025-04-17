@@ -232,7 +232,6 @@ const PatientAllocation = ({
       const showDrawer = () => {
         setOpen(true);
       };
-  const handleInsert = () => {};
   useEffect(() => {
     const filteredFilters = getFilterOption();
     setActiveFilters(filteredFilters);
@@ -358,7 +357,6 @@ const PatientAllocation = ({
                         </Nav>
                       )}
 
-                      <div className="d-flex">
                         <div
                           className={` d-flex gap-3 mt-4`}
                           // style={{ width: "90%" }}
@@ -401,7 +399,6 @@ const PatientAllocation = ({
                             handleSubmit={handleSubmit}
                           />
                         </div>
-                      </div>
 
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>

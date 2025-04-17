@@ -34,7 +34,6 @@ const AllocateModal = ({
   getL1UsersList,
   getAllocateUsers,
   setSelectedRows,
-  getAllReviewerALlocation,
   selectedUserName,
   setSelectedUserName,
   usersLoader,
@@ -99,7 +98,7 @@ const AllocateModal = ({
         userIdList: activeEmail,
         dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
         allocatedBy:userId,
-        patientIds: selectedRowsId,
+        patientIdList: selectedRowsId,
         priority: priority,
       },
     });
@@ -117,6 +116,7 @@ const AllocateModal = ({
       setSelectedUserName([]);
       setBatchCount("");
       setSelectedUserIds([]);
+      setIsSecondModalOpen(false);
     } else {
       getResponePopup(response);
     }
@@ -131,7 +131,7 @@ const AllocateModal = ({
     }
   };
   
-
+console.log(allocateDate,"allocateDate")
   const handleSelectAll = () => {
     if (selectedUserIds.length === userDetails.length) {
       setSelectedUserIds([]);
@@ -159,7 +159,7 @@ const AllocateModal = ({
           setActiveCard("");
           setActiveEmail("");
           setSearch("");
-          setAllocateDate("");
+          setAllocateDate(null);
           setPriority([]);
           setSelectedUserIds([]);
         }}
@@ -475,6 +475,7 @@ const AllocateModal = ({
         onCancel={() => {
           setSelectedUserIds([]);
           setIsSecondModalOpen(false);
+          setAllocateDate(null)
         }}
         footer={null}
         width="35%"
@@ -483,7 +484,7 @@ const AllocateModal = ({
           <div className="row mt-5 px-3">
             <div className={`col-5 ${modalStyle.activeRow1}`}>
               <span>
-                Charts Selected:{" "}
+                Charts Selected:
                 {selectedChart?.length > 0 ? selectedChart.length : 0}
               </span>
 

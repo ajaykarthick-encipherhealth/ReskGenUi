@@ -132,7 +132,7 @@ const MoreFilter = ({
             <div
               id="addPatient-btn"
               name="addPatient-btn"
-              className="d-flex justify-content-center align-items-center  mt-3"
+              className="d-flex justify-content-center align-items-center  mt-4"
               style={{ width: "auto" }}
             >
               {/* <RegularButton name={"More Filters"} /> */}
