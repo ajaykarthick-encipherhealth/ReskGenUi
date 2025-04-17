@@ -14,6 +14,7 @@ import Header from "../../jsx/layouts/nav/Header";
 import RandomSamplingModal from "./reviewerAllocation/randomSamplingModal";
 import { actions as tableAction } from "../../stores/tableView";
 import CardSkeleton from "../../components/skeleton/card";
+import { getResponePopup } from "../../utils/reusable";
 
 const PatientAllocation = ({
   getAllReviewerList,
@@ -26,6 +27,7 @@ const PatientAllocation = ({
   allRoles,
   rolesLoader,
   tableLoader,
+  tableDynamicColumn,
 }) => {
   const commonFilterItems = [
     {
@@ -162,6 +164,25 @@ const PatientAllocation = ({
       roleId,
     });
   };
+   const handleSubmit = async () => {
+      const payload = {
+        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+        headerNames: test
+          .filter((col) => col.active)
+          .map((col) => col.actualField),
+      };
+  
+      try {
+        const response = await tableDynamicColumn({ payload });
+        if (response?.status === "SUCCESS") {
+          getAllAllocation();
+          onClose();
+          getResponePopup(response);
+        }
+      } catch (error) {
+        getResponePopup(error?.response);
+      }
+    };
   useEffect(() => {
     setParamsFilter("check");
     if (
@@ -237,7 +258,7 @@ const PatientAllocation = ({
     }
   }, [allRoles, activeTab]);
 
-  console.log(selectedRoleId, "selectedRoleId");
+  console.log(test, data,"testings");
   return (
     <div>
       <Header />
@@ -375,10 +396,10 @@ const PatientAllocation = ({
                             onClose={onClose}
                             selectedColumns={test}
                             setSelectedColumns={setTest}
-                            handleInsert={handleInsert}
                             commonFilterItems={commonFilterItems}
                             showCustomizeTable={true}
                             showDrawer={showDrawer}
+                            handleSubmit={handleSubmit}
                           />
                         </div>
                       </div>
@@ -472,6 +493,7 @@ const connector = connect(
     getRoutedData: tinActions.getAllocationRoutedData,
     getTableData: tableAction.tableViewAction,
     getAllTabRoles: allActions.getAllRoles,
+    tableDynamicColumn: tableAction.tableDynamicColumn,
   }
 );
 

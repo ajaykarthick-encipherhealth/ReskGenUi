@@ -11,6 +11,7 @@ import QueryTable from "./queryTable";
 import Header from "../../jsx/layouts/nav/Header";
 import CardSkeleton from "../../components/skeleton/card";
 import { actions as tableAction } from "../../stores/tableView";
+import { getResponePopup } from "../../utils/reusable";
 
 const QueryApproval = ({
   organizationList,
@@ -22,6 +23,7 @@ const QueryApproval = ({
   rolesLoader,
   tableLoader,
   data,
+  tableDynamicColumn,
 }) => {
   const commonFilterItems = [
     {
@@ -185,7 +187,26 @@ const QueryApproval = ({
   const onClose = () => {
     setOpen(false);
   };
-  const handleInsert = () => {};
+ 
+   const handleSubmit = async () => {
+     const payload = {
+       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
+       headerNames: test
+         .filter((col) => col.active)
+         .map((col) => col.actualField),
+     };
+ 
+     try {
+       const response = await tableDynamicColumn({ payload });
+       if (response?.status === "SUCCESS") {
+         getMoveBack();
+         onClose();
+         getResponePopup(response);
+       }
+     } catch (error) {
+       getResponePopup(error?.response);
+     }
+   };
 
   useEffect(() => {
     const filteredFilters = getFilterOption();
@@ -288,6 +309,7 @@ const QueryApproval = ({
                             commonFilterItems={commonFilterItems}
                             showCustomizeTable={true}
                             showDrawer={showDrawer}
+                            handleSubmit={handleSubmit}
                           />
                         </div>
                       </div>
@@ -337,6 +359,7 @@ const connector = connect(
     getRoutedData: tinActions.getAllocationRoutedData,
     getAllTabRoles: allActions.getAllRoles,
     getTableData: tableAction.tableViewAction,
+    tableDynamicColumn: tableAction.tableDynamicColumn,
   }
 );
 
