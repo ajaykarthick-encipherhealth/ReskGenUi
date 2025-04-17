@@ -149,7 +149,6 @@ const AllocateModal = ({
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
 
-
   return (
     <div>
       <Modal
