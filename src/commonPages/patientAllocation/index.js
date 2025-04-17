@@ -109,6 +109,7 @@ const PatientAllocation = ({
   const [search, setSearch] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [samplingModal, setSamplingModal] = useState(false);
+  const [selectedRoleId, setSelectedRoleId] = useState("");
 
   const showModal = () => {
     setSamplingModal(true);
@@ -211,6 +212,13 @@ const PatientAllocation = ({
   useEffect(() => {
     getAllTabRoles();
   }, [activeTab]);
+  useEffect(() => {
+    if (allRoles?.allocationRoles?.length > 0) {
+      setSelectedRoleId(allRoles.allocationRoles[0].roleId);
+    }
+  }, [allRoles,activeTab]);
+
+  console.log(selectedRoleId,"selectedRoleId")
   return (
     <div>
       <Header />
@@ -240,7 +248,7 @@ const PatientAllocation = ({
                               className="nav-item profile-tab mt-4"
                               key={role}
                             >
-                              <Nav.Link className="mt-4" eventKey={index + 1}>
+                              <Nav.Link className="mt-4" onClick={() => setSelectedRoleId(role.roleId)} eventKey={index + 1}>
                                 {role?.roleName
                                   ?.replace(/_/g, " ")
                                   ?.replace(/\b\w/g, (c) => c.toUpperCase())}
@@ -276,7 +284,6 @@ const PatientAllocation = ({
                                 </Tooltip>
                               </Nav.Item>
                             )}
-
                             {activeTab === "3" && (
                               <Nav.Item
                                 as="li"
@@ -385,6 +392,7 @@ const PatientAllocation = ({
         setSelectedUserName={setSelectedUserName}
         getAllReviewerALlocation={getAllReviewerALlocation}
         setBatchCount={setBatchCount}
+        selectedRoleId={selectedRoleId}
       />
       <RandomSamplingModal
         activeTab={activeTab}
@@ -396,6 +404,7 @@ const PatientAllocation = ({
         setOpen={setSamplingModal}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
+        selectedRoleId={selectedRoleId}
       />
     </div>
   );

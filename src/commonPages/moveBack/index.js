@@ -104,6 +104,7 @@ const MoveBack = ({
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [search, setSearch] = useState({});
+  const [selectedRole, setSelectedRole] = useState("");
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -211,6 +212,12 @@ const MoveBack = ({
   useEffect(() => {
     getAllTabRoles();
   }, []);
+    useEffect(() => {
+      if (allRoles?.allocationRoles?.length > 0) {
+        setSelectedRole(allRoles.allocationRoles[0].roleName);
+      }
+    }, [allRoles,activeTab]);
+  
   return (
     <div>
       <Header />
@@ -240,7 +247,7 @@ const MoveBack = ({
                               className="nav-item profile-tab mt-4"
                               key={role}
                             >
-                              <Nav.Link className="mt-4" eventKey={index + 1}>
+                              <Nav.Link onClick={() => setSelectedRole(role.roleName)} className="mt-4" eventKey={index + 1}>
                                 {role?.roleName
                                   .replace(/_/g, " ")
                                   .replace(/\b\w/g, (c) => c.toUpperCase())}
@@ -265,7 +272,7 @@ const MoveBack = ({
                                   onClick={handleOpenModal}
                                   type="primary"
                                   className={` ${styles.allocate}`}
-                                  disabled={selectedRowsId?.length === 0}
+                                  // disabled={selectedRowsId?.length === 0}
                                 >
                                   Move Back
                                 </Button>
@@ -341,6 +348,7 @@ const MoveBack = ({
         setSelectedRows={setSelectedRows}
         selectedRows={selectedRows}
         activeTab={activeTab}
+        selectedRole={selectedRole}
       />
     </div>
   );

@@ -355,7 +355,7 @@ const Tin = ({
     <div className={`show`}>
       <Header />
       <div className="d-flex" style={{ marginTop: "5%", width: "100%" }}>
-        <Tab icon activeTab={activeTab} handleTabs={handleTabs} tabs={tabs} />
+        <Tab activeTab={activeTab} handleTabs={handleTabs} tabs={tabs} />
         <div className="d-flex  align-items-center justify-content-center gap-4">
           <div>Total Tin : 45</div>
           <div> Active Tin : 45</div>
@@ -364,7 +364,7 @@ const Tin = ({
             width="200px"
             type="submit"
             name="Change to Inactive"
-            onClick={() => {}}
+         
           />
         </div>
       </div>

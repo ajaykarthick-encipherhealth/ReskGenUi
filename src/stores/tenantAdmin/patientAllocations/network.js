@@ -305,12 +305,12 @@ export async function randomSampling(data) {
   return response;
 }
 
-export async function getmoveBackLevel() {
+export async function getmoveBackLevel({roleName}) {
   const options = {
     method: "GET",
   };
   const res = await requestPortal(
-    `dbservice/v1/move-back/get-role-status-details?roleAlias=QA`,
+    `dbservice/v1/move-back/get-role-status-details?roleAlias=${roleName}`,
     options
   );
   return res;
@@ -332,8 +332,9 @@ export async function getRoles() {
   const options = {
     method: "GET",
   };
+  const roleId = getStorage("roleId")
   const res = await requestPortal(
-    `dbservice/allocation/roles?roleId=5`,
+    `dbservice/allocation/roles?roleId=${roleId}`,
     options
   );
   return res;

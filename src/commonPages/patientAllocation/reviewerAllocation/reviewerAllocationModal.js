@@ -41,6 +41,7 @@ const AllocateModal = ({
   setBatchCount,
   id,
   activeTab,
+  selectedRoleId
 }) => {
   const router = useRouter();
   const userId = getStorage("userId")
@@ -94,7 +95,7 @@ const AllocateModal = ({
   const setAllocate = async () => {
     const response = await getAllocateUsers({
       data: {
-        roleId:activeTab,
+        roleId:selectedRoleId,
         userIdList: activeEmail,
         dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
         allocatedBy:userId,

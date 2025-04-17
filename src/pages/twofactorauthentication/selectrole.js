@@ -41,7 +41,7 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
       } else {
         const selectedProxyObj = proxyRoles?.find(
           (item) => item.role?.toLowerCase() === selectedRole?.toLowerCase()
-        );       
+        );
         if (selectedProxyObj?.proxyRole) {
           const formattedProxyRole = selectedProxyObj.proxyRole.replace(
             /_/g,
@@ -49,15 +49,18 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
           );
           const accessList = proxyRoles?.find(
            (item) => item.role?.toLowerCase() === selectedRole?.toLowerCase()
-         );      
+         );
+         const roleId = selectedProxyObj?.roleId   
           setStorage("proxyRole", formattedProxyRole);
           setStorage("accessMenuList", JSON.stringify(accessList));
-        }
+          setStorage("roleId", roleId)
+      }
  
         loginSuccessCallBack();
       }
     }
   };
+
 
 
 

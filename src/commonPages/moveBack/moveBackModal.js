@@ -14,6 +14,8 @@ const MoveBackModal = ({
   moveBack,
   setSelectedRows,
   setSelectedRowsId,
+  selectedRole,
+  activeTab
 }) => {
   const [selectLevel, setSelectLevel] = useState([]);
   const handleChange = (value) => {
@@ -41,9 +43,10 @@ const MoveBackModal = ({
     }
   };
   useEffect(() => {
-    moveBackLevel();
-  }, []);
-
+    moveBackLevel({
+      roleName:selectedRole
+    });
+  }, [activeTab]);
   return (
     <div>
       <Modal

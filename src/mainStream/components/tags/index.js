@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../reports/report.module.css";
 
-const Tab = ({ activeTab, handleTabs, tabs , icon,width }) => {
+const Tab = ({ activeTab, handleTabs, tabs, width }) => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient || !tabs || tabs.length === 0) return null;
+
   return (
-    <div style={{width: width ?width:"30%"}} className={styles.buttonContainer}>
+    <div style={{ width: width || "30%" }} className={styles.buttonContainer}>
       <div
         id={`reportTab-${activeTab}`}
         name={`reportTab-${activeTab}`}
@@ -11,13 +19,13 @@ const Tab = ({ activeTab, handleTabs, tabs , icon,width }) => {
       >
         {tabs?.map((tab) => (
           <button
-            id={activeTab}
-            name={activeTab}
-            key={tab}
-            className={activeTab === tab ? `${styles.active}` : ""}
+            id={`tab-${tab}`}
+            name={`tab-${tab}`}
+            key={`tab-${tab}`}
+            className={activeTab === tab ? styles.active : ""}
             onClick={() => handleTabs(tab)}
           >
-           {icon} {tab}
+            {tab}
           </button>
         ))}
       </div>

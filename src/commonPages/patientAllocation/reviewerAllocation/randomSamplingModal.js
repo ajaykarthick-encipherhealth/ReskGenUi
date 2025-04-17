@@ -35,6 +35,7 @@ const RandomSamplingModal = ({
   setIsModalOpen,
   isModalOpen,
   randomSampling,
+  selectedRoleId,
 }) => {
   const router = useRouter();
   const userId = getStorage("userId");
@@ -90,7 +91,7 @@ const RandomSamplingModal = ({
   const onFinish = async (values) => {
     const response = await randomSampling({
        
-        roleId: activeTab,
+        roleId: selectedRoleId,
         userIdList: activeEmail,
         dueDate: formatDateForIndex({ date: values.duedate, index: 1 }),
         allocatedBy: userId,
