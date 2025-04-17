@@ -23,7 +23,11 @@ import { connect } from "react-redux";
 import { actions as patientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import UploadModal from "./uploadfile/uploadModal";
 import { useRouter } from "next/router";
-import { disabledDate, formatDateForIndex } from "../../../utils/reusable";
+import {
+  disabledDate,
+  formatDateForIndex,
+  getResponePopup,
+} from "../../../utils/reusable";
 import { useRef } from "react";
 import PatientRoasterTable from "../../../components/table/tenantTable/patientRoasterTable";
 import ProviderRoasterTable from "../../../components/table/tenantTable/providerRoasterTable";
@@ -628,6 +632,42 @@ const PatientSync = ({
         : "none",
     };
   };
+   const getAllProviderApi = async () => {
+    const response = await getTableData({
+      pageId: "42136c12-83df-46fc-8c8a-200d97f154be",
+      pageNo,
+      pageSize: 15,
+      roleId,
+      projectId: "test",
+    });
+  };
+  const getAllPracticeApi = async () => {
+    const response = await getTableData({
+      pageId: "e2785147-39dc-4bd3-828c-c0d5168acba7",
+      pageNo,
+      pageSize: 15,
+      roleId,
+      projectId: "test",
+    });
+  };
+  const getAllPatientApi = async () => {
+    const response = await getTableData({
+      pageId: "c60dec23-bcfa-48ce-966e-dbf1ce3d41b2",
+      pageNo,
+      pageSize: 15,
+      roleId,
+      projectId: "test",
+    });
+  };
+  const getTinApi = async () => {
+    const response = await getTableData({
+      pageId: "1ff437a0-18a8-47de-893d-41dc669e3cbd",
+      pageNo,
+      pageSize: 15,
+      roleId,
+      projectId: "test",
+    });
+  };
   const handleBatchTrigger = async (data) => {
     const triggerData = {
       batchId: data?.id,
@@ -642,7 +682,7 @@ const PatientSync = ({
 
   const handleSubmitInsert = async () => {
     const payload = {
-      pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
+      pageId: "1ff437a0-18a8-47de-893d-41dc669e3cbd",
       headerNames: test
         .filter((col) => col.active)
         .map((col) => col.actualField),
@@ -651,7 +691,7 @@ const PatientSync = ({
     try {
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
-        getPatients();
+        getTinApi();
         onClose();
         getResponePopup(response);
       }
@@ -718,40 +758,16 @@ const PatientSync = ({
     //   setSocketData(pdfTableData);
     // }
   }, [webSocketData, pdfTableData]);
-
+ 
   useEffect(() => {
     if (reportActiveTab === "Provider Roaster") {
-      getTableData({
-        pageId: "42136c12-83df-46fc-8c8a-200d97f154be",
-        pageNo,
-        pageSize: 15,
-        roleId,
-        projectId: "test",
-      });
+      getAllProviderApi();
     } else if (reportActiveTab === "Practice Roaster") {
-      getTableData({
-        pageId: "e2785147-39dc-4bd3-828c-c0d5168acba7",
-        pageNo,
-        pageSize: 15,
-        roleId,
-        projectId: "test",
-      });
+      getAllPracticeApi();
     } else if (reportActiveTab === "Patient Roaster") {
-      getTableData({
-        pageId: "c60dec23-bcfa-48ce-966e-dbf1ce3d41b2",
-        pageNo,
-        pageSize: 15,
-        roleId,
-        projectId: "test",
-      });
+      getAllPatientApi();
     } else if (reportActiveTab === "Tin Roaster") {
-      getTableData({
-        pageId: "1ff437a0-18a8-47de-893d-41dc669e3cbd",
-        pageNo,
-        pageSize: 15,
-        roleId,
-        projectId: "test",
-      });
+      getTinApi();
     }
   }, [reportActiveTab, pageNumber, pagination]);
   return (
