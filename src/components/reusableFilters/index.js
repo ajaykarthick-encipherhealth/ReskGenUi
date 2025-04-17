@@ -138,7 +138,7 @@ const ReusableFilters = ({
     getAllReviewerALlocation();
   };
   return (
-    <div className="d-flex">
+    <div className="d-flex gap-5">
       <div className="row" style={{ width: showFilter ? "98%" : "auto" }}>
         {FilterItems?.filter((item) => item?.active).map((item) => {
           switch (item?.type) {

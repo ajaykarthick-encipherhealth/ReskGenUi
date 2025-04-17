@@ -341,7 +341,7 @@ const PatientAllocation = ({
                       <div className="d-flex">
                         <div
                           className={` d-flex gap-3 mt-4`}
-                          style={{ width: "90%" }}
+                          // style={{ width: "90%" }}
                         >
                           <ReusableFilters
                             showFilter={false}
