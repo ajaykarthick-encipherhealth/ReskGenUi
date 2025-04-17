@@ -220,6 +220,7 @@ const Patient = ({
   route,
   getTableData,
   data,
+  tableDynamicColumn,
 }) => {
   const columns = [
     {
@@ -315,6 +316,8 @@ const Patient = ({
   const [selectedDates, setSelectedDates] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [statusUpdateWebSocket, setStatusUpdateWebSocket] = useState();
+  const [open, setOpen] = useState(false);
+  const [test, setTest] = useState(data?.response?.metaDataDTO);
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -332,6 +335,12 @@ const Patient = ({
 
   const onChangeFile = (e) => {
     setSelectFile(e[0]);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+  const showDrawer = () => {
+    setOpen(true);
   };
 
   const handleChange = async (e, name) => {
@@ -732,7 +741,14 @@ const Patient = ({
       setSort(sort);
     }
   }, [routedData]);
-
+  const getPatients = async () => {
+    const response = await getTableData({
+      pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
+      pageNo,
+      pageSize: 15,
+      roleId: "",
+    });
+  };
   useEffect(() => {
     setParamsFilter("check");
     let tenId = getStorage("tenantId");
@@ -742,12 +758,7 @@ const Patient = ({
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     if (paramsFilter === "check") {
-      getTableData({
-        pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
-        pageNo,
-        pageSize: 15,
-        roleId: "",
-      });
+      getPatients();
     }
   }, [
     pageNo,
@@ -786,6 +797,25 @@ const Patient = ({
     })),
     status: statusOptions,
     flag: flagPostList,
+  };
+  const handleSubmitInsert = async () => {
+    const payload = {
+      pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
+      headerNames: test
+        .filter((col) => col.active)
+        .map((col) => col.actualField),
+    };
+
+    try {
+      const response = await tableDynamicColumn({ payload });
+      if (response?.status === "SUCCESS") {
+        getPatients();
+        onClose();
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
   };
   useEffect(() => {
     if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
@@ -848,6 +878,16 @@ const Patient = ({
                 form={form}
                 setPageNo={setPageNo}
                 opt={opt}
+                //customize table
+
+                open={open}
+                onClose={onClose}
+                selectedColumns={test}
+                setSelectedColumns={setTest}
+                commonFilterItems={commonFilterItems}
+                showCustomizeTable={true}
+                showDrawer={showDrawer}
+                handleSubmit={handleSubmitInsert}
               />
             </div>
             <div
@@ -899,9 +939,7 @@ const Patient = ({
                 sort={sort}
                 setSort={setSort}
                 first={pageNo === 0 ? 0 : paginationFirst}
-                totalRecords={
-                  allPatientList?.data?.response?.patientDtoList?.totalElements
-                }
+                totalRecords={data?.response?.pageResponse?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
                 renderFlagCell={renderFlagCell}
@@ -968,6 +1006,8 @@ const enhancer = connect(
     getAllFlags: workflowActions.flagsAction,
     getTableData: tableAction.tableViewAction,
     getAllTabRoles: allActions.getAllRoles,
+        tableDynamicColumn: tableAction.tableDynamicColumn,
+    
   }
 );
 export default enhancer(Patient);

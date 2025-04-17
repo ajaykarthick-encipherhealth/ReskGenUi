@@ -18,6 +18,7 @@ import AppTable from "../../../components/tables";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { useRouter } from "next/router";
 import { actions as tableAction } from "../../../stores/tableView";
+import { getResponePopup } from "../../../utils/reusable";
 
 const statusOptions = [
   { label: "COMPLETED", value: "COMPLETED", status: 2 },
@@ -54,6 +55,7 @@ const Patient = ({
   routedData,
   getTableData,
   data,
+  tableDynamicColumn,
 }) => {
   const commonFilterItems = [
     {
@@ -281,12 +283,38 @@ const Patient = ({
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [test, setTest] = useState(data?.response?.metaDataDTO);
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
   };
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+  const handleSubmit = async () => {
+    const payload = {
+      pageId: "ea046971-08de-4ee2-bf47-10c62c0eaa18",
+      headerNames: test
+        .filter((col) => col.active)
+        .map((col) => col.actualField),
+    };
 
+    try {
+      const response = await tableDynamicColumn({ payload });
+      if (response?.status === "SUCCESS") {
+        getAllTracking();
+        onClose();
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
   useEffect(() => {
     var orgListArray = [];
     organizationList?.response?.map((res) => {
@@ -362,7 +390,14 @@ const Patient = ({
       setSort(sort);
     }
   }, [routedData]);
-
+  const getAllTracking = async () => {
+    const response = await getTableData({
+      pageId: "ea046971-08de-4ee2-bf47-10c62c0eaa18",
+      pageNo,
+      pageSize: 15,
+      roleId: "",
+    });
+  };
   useEffect(() => {
     setParamsFilter("check");
     if (paramsFilter === "check") {
@@ -374,12 +409,7 @@ const Patient = ({
       //   selectedDateRanges,
       //   searchText: searchText,
       // });
-      getTableData({
-        pageId: "ea046971-08de-4ee2-bf47-10c62c0eaa18",
-        pageNo,
-        pageSize : 15,
-        roleId: "",
-      });
+      getAllTracking();
     }
   }, [
     pageNo,
@@ -440,6 +470,15 @@ const Patient = ({
                   clear={clear}
                   setPageNo={setPageNo}
                   opt={opt}
+                  //customize table
+                  open={open}
+                  onClose={onClose}
+                  selectedColumns={test}
+                  setSelectedColumns={setTest}
+                  commonFilterItems={commonFilterItems}
+                  showCustomizeTable={true}
+                  showDrawer={showDrawer}
+                  handleSubmit={handleSubmit}
                 />
               </div>
               <div className="col-2 d-flex align-items-center justify-content-center">
@@ -498,8 +537,8 @@ const enhancer = connect(
     getAllocatedByList: allActions.getAllocatedByList,
     patientDetails: workFlowActions.getPatientDetails,
     getRoutedData: allPatientSyncAction.getRoutedData,
-        getTableData: tableAction.tableViewAction,
-    
+    getTableData: tableAction.tableViewAction,
+    tableDynamicColumn: tableAction.tableDynamicColumn,
   }
 );
 export default enhancer(Patient);
