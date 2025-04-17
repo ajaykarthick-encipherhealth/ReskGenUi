@@ -3,7 +3,7 @@ import AppTable from "../../../components/tables";
 import RegularButton from "../../../components/button";
 import { connect } from "react-redux";
 
-const QueryTable = ({ data ,active , setActive,setActiveStatus}) => {
+const QueryTable = ({ data ,active , setActive,setActiveStatus,tableLoader}) => {
   const buttons = ["Pending", "Approved", "Rejected"];
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -32,7 +32,7 @@ const QueryTable = ({ data ,active , setActive,setActiveStatus}) => {
         <AppTable
           data={data?.response?.pageResponse?.content}
           column={data?.response?.metaDataDTO.filter((item) => item.active)}
-          //   loader={loading}
+          loader={tableLoader}
           pagination={true}
           first={pageNo === 0 ? 0 : paginationFirst}
           totalRecords={data?.response?.pageResponse?.totalElements}

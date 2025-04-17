@@ -1,6 +1,7 @@
 .btnColor {
   background-color: #043069;
   color: #fff;
+  width:200px
 }
 
 .btnColor:disabled {

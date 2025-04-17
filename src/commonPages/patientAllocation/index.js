@@ -25,6 +25,7 @@ const PatientAllocation = ({
   data,
   allRoles,
   rolesLoader,
+  tableLoader
 }) => {
   const commonFilterItems = [
     {
@@ -378,6 +379,7 @@ const PatientAllocation = ({
                             sort={sort}
                             batchCount={batchCount}
                             data={data}
+                            tableLoader={tableLoader}
                           />
                         </Tab.Pane>
                       </Tab.Content>
@@ -437,6 +439,7 @@ const connector = connect(
     data: state?.tableView?.tableView?.data,
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
     rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
+    tableLoader:state?.tableView?.tableViewLoading,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,

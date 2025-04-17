@@ -15,7 +15,7 @@ import { actions as tableAction } from "../../stores/tableView";
 import CardSkeleton from "../../components/skeleton/card";
 
 const MoveBack = ({
-  getAllReviewerList,
+  tableLoader,
   organizationList,
   getAllOrganizationList,
   rolesLoader,
@@ -357,6 +357,7 @@ const MoveBack = ({
                             setSort={setSort}
                             sort={sort}
                             data={data}
+                            tableLoader={tableLoader}
                           />
                         </Tab.Pane>
                       </Tab.Content>
@@ -397,7 +398,7 @@ const connector = connect(
       state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
     data: state?.tableView?.tableView?.data,
-
+    tableLoader:state?.tableView?.tableViewLoading,
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
     rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
   }),

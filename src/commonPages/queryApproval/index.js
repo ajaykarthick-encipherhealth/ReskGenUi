@@ -20,6 +20,7 @@ const QueryApproval = ({
   routedData,
   allRoles,
   rolesLoader,
+  tableLoader
 }) => {
   const commonFilterItems = [
     {
@@ -266,7 +267,7 @@ const QueryApproval = ({
                       </div>
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>
-                          <QueryTable setActiveStatus={setActiveStatus} active={active} setActive={setActive} />
+                          <QueryTable tableLoader={tableLoader} setActiveStatus={setActiveStatus} active={active} setActive={setActive} />
                         </Tab.Pane>
                       </Tab.Content>
                     </Tab.Container>
@@ -293,6 +294,7 @@ const connector = connect(
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
     rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
+    tableLoader:state?.tableView?.tableViewLoading,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,

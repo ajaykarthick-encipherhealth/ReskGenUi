@@ -4,7 +4,7 @@ import CodersTable from '../../../commonPages/codersTable';
 const Reassign =  () => {
   return (
     <div>
-      <CodersTable pageId="test-reassgin" />
+      <CodersTable pageId="e76aaa6c-319e-44d3-b7ae-aadb17dfb664" />
     </div>
   );
 }

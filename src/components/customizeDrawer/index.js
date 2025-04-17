@@ -26,7 +26,10 @@ const CustomizableDrawer = ({
 
     try {
       const response = await tableDynamicColumn({payload});
-      getResponePopup(response);
+      if (response?.status === "SUCCESS"){
+        onClose()
+        getResponePopup(response);
+      }
     } catch (error) {
       getResponePopup(error?.response);
     }

@@ -7,7 +7,7 @@ import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
 const MoveBackTable = ({ reviewersData,
-  loader,
+  tableLoader,
   getAllCheckedReviewers,
   setSelectedRowsId,
   selectedRows,
@@ -135,7 +135,7 @@ const MoveBackTable = ({ reviewersData,
       <AppTable
         data={data?.response?.pageResponse?.content}
         column={data?.response?.metaDataDTO.filter((item) => item.active)}
-        loader={loader}
+        loader={tableLoader}
         handleRowCheckboxChange={handleRowCheckboxChange}
         checkBoxLoader={checkedLoader}
         selectedRows={selectedRows}

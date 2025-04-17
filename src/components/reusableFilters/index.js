@@ -83,8 +83,6 @@ const ReusableFilters = ({
     setSelectAll(false);
     setActiveFilters((prevFilters) =>
       prevFilters.map((filter) =>
-        // filter.type === "search"
-        //   ? { ...filter, active: true }
         ({ ...filter, active: true })
       )
     );

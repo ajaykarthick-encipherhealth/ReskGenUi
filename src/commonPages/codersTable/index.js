@@ -106,20 +106,16 @@ export const commonFilterItems = [
   },
 ];
 const CodersTable = ({
-  getFilteApi,
-  loading,
-  patinetListAll,
   patientDetails,
   routedData,
   getRoutedData,
   getAllBatchList,
   batchList,
   getActiveTab,
-  statusActiveTab,
   status,
-  getStatus,
+  tableLoader,
   getTableData,
-  pageId = "d1669e8f-278f-4389-b940-7c20dfe4c410",
+  pageId,
 }) => {
   const columns = [
     {
@@ -258,8 +254,8 @@ const CodersTable = ({
     setOpen(false);
   };
 
-  const getReviewerApi = async () => {
-    const res = await getFilteApi({
+  const getCodersApi = async () => {
+    const res = await getTableData({
       pageNo,
       pageNumber,
       pageSize,
@@ -267,7 +263,8 @@ const CodersTable = ({
       sort: sort,
       selectedDateRanges,
       searchText: searchText,
-      status: activeStatus,
+      activeStatus,
+      pageId,
     });
     if (res?.status == "SUCCESS") {
       setTotalElements(res.response?.patientDTOList?.totalElements);
@@ -276,7 +273,7 @@ const CodersTable = ({
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
-      getTableData({ pageId, pageNo, pageSize, activeStatus });
+      getCodersApi();
     }
   }, [
     selectedOption,
@@ -306,20 +303,10 @@ const CodersTable = ({
   const handleInsert = () => {};
   useEffect(() => {
     getAllBatchList();
-    // setTest((prev) => {
-    //   let orderCounter = 1;
-    //   return prev.map((item) => {
-    //     if (item.active) {
-    //       return { ...item, order: orderCounter++ };
-    //     } else {
-    //       return { ...item, order: undefined };
-    //     }
-    //   });
-    // });
+
+ 
   }, []);
-  // useEffect(() => {
-  //   getTableData({pageId,pageNo,pageSize,activeStatus});
-  // }, [activeStatus, pageNo]);
+
   const params = {
     pageNo,
     selectedDates,
@@ -366,7 +353,7 @@ const CodersTable = ({
       <div className="content-body">
         <div className="container-fluid table-responsive active-projects task-table">
           <div className="d-flex p-3">
-            <div style={{ width: "90%" }}>
+            <div style={{ width: "100%" }}>
               <ReusableFilters
                 showFilter={true}
                 setActiveFilters={setActiveFilters}
@@ -481,7 +468,7 @@ const CodersTable = ({
                         column={data?.response?.metaDataDTO.filter(
                           (item) => item.active
                         )}
-                        loader={loading}
+                        loader={tableLoader}
                         onRowClick={gotoPatientDetails}
                         pagination={false}
                         setSort={setSort}
@@ -497,16 +484,6 @@ const CodersTable = ({
               </Tab.Container>
             </div>
           </div>
-          {/* <div>
-            <CustomizableDrawer
-              open={open}
-              onClose={onClose}
-              selectedColumns={test}
-              setSelectedColumns={setTest}
-              handleInsert={handleInsert}
-              setActiveFilters={setActiveFilters}
-            />
-          </div> */}
         </div>
       </div>
     </div>
@@ -525,6 +502,7 @@ const enhancer = connect(
     statusActiveTab: state.admin?.report?.activeTab,
     status:
       state?.reviewer?.workQueue?.getStatus?.data?.response?.processStatusCount,
+      tableLoader:state?.tableView?.tableViewLoading,
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,
