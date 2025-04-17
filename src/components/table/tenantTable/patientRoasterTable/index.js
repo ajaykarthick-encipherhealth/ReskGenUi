@@ -14,6 +14,8 @@ const PatientRoasterTable = ({
   patientRoasterData,
   loading,
   handleRoasterBtn,
+  tableLoader,
+  data
 }) => {
   const onPageChange = (e) => {
     setPagination(e.first);
@@ -49,9 +51,11 @@ const PatientRoasterTable = ({
   return (
     <div>
       <AppTable
-        data={patientRoasterData?.content}
-        column={columns}
-        loader={loading}
+        // data={patientRoasterData?.content}
+        // column={columns}
+        data={data?.response?.pageResponse?.content}
+        column={data?.response?.metaDataDTO.filter((item) => item.active)}
+        loader={tableLoader}
         first={pageNumber === 0 ? 0 : pagination}
         totalRecords={patientRoasterData?.totalElements}
         row={15}

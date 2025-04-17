@@ -25,7 +25,7 @@ const PatientAllocation = ({
   data,
   allRoles,
   rolesLoader,
-  tableLoader
+  tableLoader,
 }) => {
   const commonFilterItems = [
     {
@@ -116,6 +116,8 @@ const PatientAllocation = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [samplingModal, setSamplingModal] = useState(false);
   const [selectedRoleId, setSelectedRoleId] = useState("");
+  const [open, setOpen] = useState(false);
+  const [test, setTest] = useState(data?.response?.metaDataDTO);
 
   const showModal = () => {
     setSamplingModal(true);
@@ -162,7 +164,11 @@ const PatientAllocation = ({
   };
   useEffect(() => {
     setParamsFilter("check");
-    if (window !== "undefined" && paramsFilter && allRoles?.allocationRoles?.length > 0) {
+    if (
+      window !== "undefined" &&
+      paramsFilter &&
+      allRoles?.allocationRoles?.length > 0
+    ) {
       getAllAllocation();
     }
   }, [
@@ -199,7 +205,13 @@ const PatientAllocation = ({
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
     }
   };
-
+    const onClose = () => {
+      setOpen(false);
+    };
+      const showDrawer = () => {
+        setOpen(true);
+      };
+  const handleInsert = () => {};
   useEffect(() => {
     const filteredFilters = getFilterOption();
     setActiveFilters(filteredFilters);
@@ -258,7 +270,7 @@ const PatientAllocation = ({
                               <Nav.Link
                                 className="mt-4"
                                 onClick={() => {
-                                  setSelectedRoleId(role.roleId)
+                                  setSelectedRoleId(role.roleId);
                                   setRoleId(role.roleId);
                                 }}
                                 eventKey={index + 1}
@@ -357,6 +369,16 @@ const PatientAllocation = ({
                             selectedRowsId={selectedRowsId}
                             setSearch={setSearch}
                             search={search}
+                            //customize table
+
+                            open={open}
+                            onClose={onClose}
+                            selectedColumns={test}
+                            setSelectedColumns={setTest}
+                            handleInsert={handleInsert}
+                            commonFilterItems={commonFilterItems}
+                            showCustomizeTable={true}
+                            showDrawer={showDrawer}
                           />
                         </div>
                       </div>
@@ -439,7 +461,7 @@ const connector = connect(
     data: state?.tableView?.tableView?.data,
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
     rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
-    tableLoader:state?.tableView?.tableViewLoading,
+    tableLoader: state?.tableView?.tableViewLoading,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,

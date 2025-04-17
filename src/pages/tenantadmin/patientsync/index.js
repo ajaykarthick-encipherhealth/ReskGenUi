@@ -31,6 +31,7 @@ import PracticeRoasterTable from "../../../components/table/tenantTable/practice
 import RoasterDrawer from "./modals/roasterDrawer";
 import TinRoasterTable from "../../../components/table/tenantTable/tinRoasterTable";
 import AppTable from "../../../components/tables";
+import { actions as tableAction } from "../../../stores/tableView";
 
 const { RangePicker } = DatePicker;
 
@@ -322,6 +323,8 @@ const PatientSync = ({
   getPatientRoaster,
   getPracticeRoaster,
   getTinRoaster,
+  getTableData,
+  data,
 }) => {
   const columns = [
     {
@@ -415,6 +418,7 @@ const PatientSync = ({
   const [pageNumber, setPageNumber] = useState(0);
   const [pagination, setPagination] = useState(0);
   const [test, setTest] = useState(columns);
+  const [roleId, setRoleId] = useState(null);
 
   const [drawerProps, setDrawerProps] = useState({
     isDrawerOpen: false,
@@ -684,13 +688,33 @@ const PatientSync = ({
 
   useEffect(() => {
     if (reportActiveTab === "Provider Roaster") {
-      getProviderRoaster({ pageNo: pageNumber });
+      getTableData({
+        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+        pageNo,
+        pageSize : 15,
+        roleId,
+      });
     } else if (reportActiveTab === "Practice Roaster") {
-      getPracticeRoaster({ pageNo: pageNumber });
+      getTableData({
+        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+        pageNo,
+        pageSize: 15,
+        roleId,
+      });
     } else if (reportActiveTab === "Patient Roaster") {
-      getPatientRoaster({ pageNo: pageNumber });
+      getTableData({
+        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+        pageNo,
+        pageSize:15,
+        roleId,
+      });
     } else if (reportActiveTab === "Tin Roaster") {
-      getTinRoaster({ pageNo: pageNumber });
+      getTableData({
+        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+        pageNo,
+        pageSize: 15,
+        roleId,
+      });
     }
   }, [reportActiveTab, pageNumber, pagination]);
   return (
@@ -1049,6 +1073,7 @@ const PatientSync = ({
                                       setPagination={setPagination}
                                       pagination={pagination}
                                       handleRoasterBtn={handleRoasterBtn}
+                                      data={data}
                                     />
                                   </Tab.Pane>
 
@@ -1062,6 +1087,7 @@ const PatientSync = ({
                                       setPagination={setPagination}
                                       pagination={pagination}
                                       handleRoasterBtn={handleRoasterBtn}
+                                      data={data}
                                     />
                                   </Tab.Pane>
 
@@ -1075,6 +1101,7 @@ const PatientSync = ({
                                       setPagination={setPagination}
                                       pagination={pagination}
                                       handleRoasterBtn={handleRoasterBtn}
+                                      data={data}
                                     />
                                   </Tab.Pane>
 
@@ -1088,6 +1115,7 @@ const PatientSync = ({
                                       setPagination={setPagination}
                                       pagination={pagination}
                                       handleRoasterBtn={handleRoasterBtn}
+                                      data={data}
                                     />
                                   </Tab.Pane>
                                 </Tab.Content>
@@ -1161,6 +1189,8 @@ const connector = connect(
     uploadFilesLoader: state?.tenantAdmin?.patientSync?.uploadFilesLoader,
     routedData: state.tenantAdmin?.patientSync?.routedData,
     webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
+    tableLoader: state?.tableView?.tableViewLoading,
+    data: state?.tableView?.tableView?.data,
   }),
   {
     getAllBatches: allActions.getAllBatches,
@@ -1171,6 +1201,7 @@ const connector = connect(
     getPatientRoaster: patientSyncAction.patientRoasterAction,
     getPracticeRoaster: patientSyncAction.praticeRoasterAction,
     getTinRoaster: patientSyncAction.tinRoasterAction,
+    getTableData: tableAction.tableViewAction,
   }
 );
 export default connector(PatientSync);
