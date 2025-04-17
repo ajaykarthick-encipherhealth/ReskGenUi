@@ -448,6 +448,7 @@ const PatientAllocation = ({
         setBatchCount={setBatchCount}
         selectedRoleId={selectedRoleId}
         getAllAllocation={getAllAllocation}
+        roleId={roleId}
       />
       <RandomSamplingModal
         activeTab={activeTab}

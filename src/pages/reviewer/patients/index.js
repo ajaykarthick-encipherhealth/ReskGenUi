@@ -1,10 +1,12 @@
 import React from 'react'
 import CodersTable from '../../../commonPages/codersTable';
+import { getStorage } from '../../../utils/storages';
 
 const Patients =  () => {
+  const userId = getStorage("userId")
   return (
     <div>
-   <CodersTable pageId={"e76aaa6c-319e-44d3-b7ae-aadb17dfb664"}/>
+   <CodersTable patientAllocated={userId} pageId={"e76aaa6c-319e-44d3-b7ae-aadb17dfb664"}/>
     </div>
   )
 }
