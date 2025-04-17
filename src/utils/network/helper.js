@@ -166,29 +166,29 @@ export async function checkStatus(response) {
       );
       break;
     }
-    case 500:
-      await showModal(
-        "Something went wrong on our end. Please try again later.",
-        "Back",
-        true,
-        false, 
-        false
-      );
-      break;
+    // case 500:
+    //   await showModal(
+    //     "Something went wrong on our end. Please try again later.",
+    //     "Back",
+    //     true,
+    //     false, 
+    //     false
+    //   );
+    //   break;
     case 403: {
       await showModal("You don't have permission to access this page.", "Back", true, false, false); 
       break;
     }
-    case 512: {
-      await showModal(
-        "An error occurred due to unhandled exceptions or unexpected conditions within the system. The admin will be notified by email.",
-        "Back",
-        true,
-        false,
-        true
-      );
-      break;
-    }
+    // case 512: {
+    //   await showModal(
+    //     "An error occurred due to unhandled exceptions or unexpected conditions within the system. The admin will be notified by email.",
+    //     "Back",
+    //     true,
+    //     false,
+    //     true
+    //   );
+    //   break;
+    // }
     default: {
       const data = isEncrypted === "true" ? await response.text() : await response.json();
       if (isEncrypted === "true") {

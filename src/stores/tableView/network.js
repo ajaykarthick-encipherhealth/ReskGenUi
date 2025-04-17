@@ -17,7 +17,7 @@ export async function getTableView({
   };
   const uId = getStorage("userId");
   const data = await requestPortalRoleBased(
-    `dbservice/table/view?pageId=${pageId}&pageNo=${pageNo}&pageSize=${pageSize}&status=${activeStatus}&roleId=${roleId}`,
+    `dbservice/table/view?pageId=${pageId}&pageNo=${pageNo}&pageSize=${pageSize}&status=${activeStatus?activeStatus:""}&roleId=${roleId}`,
     options
   );
   return data;

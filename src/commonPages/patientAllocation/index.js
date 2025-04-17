@@ -105,8 +105,7 @@ const PatientAllocation = ({
   const [batchCount, setBatchCount] = useState("");
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
-  const [activeStatus, setActiveStatus] = useState("PENDING");
-  const [roleId, setroleId] = useState(1);
+  const [roleId, setRoleId] = useState(null);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
@@ -114,7 +113,6 @@ const PatientAllocation = ({
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [search, setSearch] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [pageId, setPageId] = useState("3a5feaba-7de6-4557-961b-ab973a688f81");
   const [samplingModal, setSamplingModal] = useState(false);
   const [selectedRoleId, setSelectedRoleId] = useState("");
 
@@ -153,30 +151,18 @@ const PatientAllocation = ({
     priority: priorityOptions,
   };
 
-  const getAllReviewerALlocation = async () => {
-    const res = await getAllReviewerList({
+  const getAllAllocation = async () => {
+    const response = await getTableData({
+      pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
       pageNo,
-      pageNumber,
-      selectedOption,
-      sort,
-      selectedDateRanges,
-      search: searchText,
-      batchCount: batchCount,
-      searchList: search,
+      pageSize,
+      roleId,
     });
   };
-
   useEffect(() => {
     setParamsFilter("check");
-    if (window !== "undefined" && paramsFilter) {
-      // if (activeTab == "1") {
-      //   getAllReviewerALlocation();
-      // } else {
-      //   getAllSupervisorAllocation();
-      // }
-      if (window !== "undefined" && paramsFilter) {
-        getTableData({ pageId, pageNo, pageSize, activeStatus, roleId });
-      }
+    if (window !== "undefined" && paramsFilter && allRoles?.allocationRoles?.length > 0) {
+      getAllAllocation();
     }
   }, [
     selectedOption,
@@ -188,6 +174,7 @@ const PatientAllocation = ({
     paginationFirst,
     search,
     batchCount,
+    roleId,
   ]);
   const getFilterOption = () => {
     let filteredItems;
@@ -203,6 +190,13 @@ const PatientAllocation = ({
     }
 
     return filteredItems;
+  };
+
+  const getRolesList = async () => {
+    const res = await getAllTabRoles();
+    if (res.status === "SUCCESS") {
+      setRoleId(res?.response?.allocationRoles[0]?.roleId);
+    }
   };
 
   useEffect(() => {
@@ -221,15 +215,16 @@ const PatientAllocation = ({
   }, [routedData]);
 
   useEffect(() => {
-    getAllTabRoles();
-  }, [activeTab]);
+    getRolesList();
+  }, []);
+
   useEffect(() => {
     if (allRoles?.allocationRoles?.length > 0) {
       setSelectedRoleId(allRoles.allocationRoles[0].roleId);
     }
-  }, [allRoles,activeTab]);
+  }, [allRoles, activeTab]);
 
-  console.log(selectedRoleId,"selectedRoleId")
+  console.log(selectedRoleId, "selectedRoleId");
   return (
     <div>
       <Header />
@@ -259,7 +254,14 @@ const PatientAllocation = ({
                               className="nav-item profile-tab mt-4"
                               key={role}
                             >
-                              <Nav.Link className="mt-4" onClick={() => setSelectedRoleId(role.roleId)} eventKey={index + 1}>
+                              <Nav.Link
+                                className="mt-4"
+                                onClick={() => {
+                                  setSelectedRoleId(role.roleId)
+                                  setRoleId(role.roleId);
+                                }}
+                                eventKey={index + 1}
+                              >
                                 {role?.roleName
                                   ?.replace(/_/g, " ")
                                   ?.replace(/\b\w/g, (c) => c.toUpperCase())}
@@ -270,7 +272,7 @@ const PatientAllocation = ({
                             className="d-flex align-items-end justify-content-end  "
                             style={{ width: "85%" }}
                           >
-                            {allRoles?.allocationEnabledForQa  && (
+                            {allRoles?.allocationEnabledForQa && (
                               <Nav.Item
                                 as="li"
                                 className="nav-item profile-tab "
@@ -349,7 +351,6 @@ const PatientAllocation = ({
                             setFilterBatchCount={setFilterBatchCount}
                             setSelectAllChecked={setSelectAllChecked}
                             setSelectedRowsId={setSelectedRowsId}
-                            getAllReviewerALlocation={getAllReviewerALlocation}
                             setSelectedRows={setSelectedRows}
                             showBatchCount={true}
                             selectedRowsId={selectedRowsId}
@@ -402,9 +403,9 @@ const PatientAllocation = ({
         activeTab={activeTab}
         selectedUserName={selectedUserName}
         setSelectedUserName={setSelectedUserName}
-        getAllReviewerALlocation={getAllReviewerALlocation}
         setBatchCount={setBatchCount}
         selectedRoleId={selectedRoleId}
+        getAllAllocation={getAllAllocation}
       />
       <RandomSamplingModal
         activeTab={activeTab}
@@ -417,6 +418,7 @@ const PatientAllocation = ({
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         selectedRoleId={selectedRoleId}
+        getAllAllocation={getAllAllocation}
       />
     </div>
   );

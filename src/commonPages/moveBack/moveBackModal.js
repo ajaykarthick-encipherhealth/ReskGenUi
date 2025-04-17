@@ -15,7 +15,8 @@ const MoveBackModal = ({
   setSelectedRows,
   setSelectedRowsId,
   selectedRole,
-  activeTab
+  activeTab,
+  getMoveBack
 }) => {
   const [selectLevel, setSelectLevel] = useState([]);
   const handleChange = (value) => {
@@ -30,6 +31,7 @@ const MoveBackModal = ({
       });
 
       if (response?.status === "SUCCESS") {
+        getMoveBack()
         getResponePopup(response);
         setSelectedRowsId([]);
         setSelectedRows([]);

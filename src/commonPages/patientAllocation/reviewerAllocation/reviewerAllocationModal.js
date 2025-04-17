@@ -40,7 +40,7 @@ const AllocateModal = ({
   usersLoader,
   setBatchCount,
   id,
-  activeTab,
+  getAllAllocation,
   selectedRoleId
 }) => {
   const router = useRouter();
@@ -105,7 +105,7 @@ const AllocateModal = ({
     });
     if (response?.status == "SUCCESS") {
       getResponePopup(response);
-      getAllReviewerALlocation();
+      getAllAllocation();
       setOpen(false);
       setAllocateDate("");
       setActiveCard("");
