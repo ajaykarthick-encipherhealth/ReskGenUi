@@ -17,6 +17,8 @@ import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { useRouter } from "next/router";
+import { actions as tableAction } from "../../../stores/tableView";
+
 const statusOptions = [
   { label: "COMPLETED", value: "COMPLETED", status: 2 },
   { label: "PENDING", value: "PENDING", status: 0 },
@@ -50,6 +52,8 @@ const Patient = ({
   getAllocatedByList,
   getRoutedData,
   routedData,
+  getTableData,
+  data,
 }) => {
   const commonFilterItems = [
     {
@@ -362,13 +366,19 @@ const Patient = ({
   useEffect(() => {
     setParamsFilter("check");
     if (paramsFilter === "check") {
-      getAllTrackingList({
+      // getAllTrackingList({
+      //   pageNo,
+      //   pageNumber,
+      //   selectedOption,
+      //   sort: sort,
+      //   selectedDateRanges,
+      //   searchText: searchText,
+      // });
+      getTableData({
+        pageId: "ea046971-08de-4ee2-bf47-10c62c0eaa18",
         pageNo,
-        pageNumber,
-        selectedOption,
-        sort: sort,
-        selectedDateRanges,
-        searchText: searchText,
+        pageSize : 15,
+        roleId: "",
       });
     }
   }, [
@@ -442,8 +452,10 @@ const Patient = ({
             <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
               <div className="mt-3">
                 <AppTable
-                  data={trackingList?.patientDTOList?.content}
-                  column={columns}
+                  data={data?.response?.pageResponse?.content}
+                  column={data?.response?.metaDataDTO.filter(
+                    (item) => item.active
+                  )}
                   loader={loader}
                   onRowClick={gotoPatientDetails}
                   pagination={false}
@@ -451,7 +463,7 @@ const Patient = ({
                   sort={sort}
                   tableId="tracking_table"
                   first={pageNo === 0 ? 0 : paginationFirst}
-                  totalRecords={trackingList?.patientDTOList?.totalElements}
+                  totalRecords={data?.response?.pageResponse?.totalElements}
                   row={15}
                   onPageChange={onPageChange}
                 />
@@ -474,6 +486,8 @@ const enhancer = connect(
     auditAssignedFilters: state.admin.patientAllocate.auditAssignedFilters,
     allocatedByFilters: state.admin.patientAllocate.allocatedByFilters,
     routedData: state.tenantAdmin?.patientSync?.routedData,
+    data: state?.tableView?.tableView?.data,
+    tableLoader: state?.tableView?.tableViewLoading,
   }),
   {
     getAllOrganizationList: tenantUserAdminAction.getAllOrganizationAction,
@@ -484,6 +498,8 @@ const enhancer = connect(
     getAllocatedByList: allActions.getAllocatedByList,
     patientDetails: workFlowActions.getPatientDetails,
     getRoutedData: allPatientSyncAction.getRoutedData,
+        getTableData: tableAction.tableViewAction,
+    
   }
 );
 export default enhancer(Patient);

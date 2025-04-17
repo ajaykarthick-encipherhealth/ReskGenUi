@@ -689,31 +689,35 @@ const PatientSync = ({
   useEffect(() => {
     if (reportActiveTab === "Provider Roaster") {
       getTableData({
-        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+        pageId: "42136c12-83df-46fc-8c8a-200d97f154be",
         pageNo,
-        pageSize : 15,
+        pageSize: 15,
         roleId,
+        projectId:"test"
       });
     } else if (reportActiveTab === "Practice Roaster") {
       getTableData({
-        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+        pageId: "e2785147-39dc-4bd3-828c-c0d5168acba7",
         pageNo,
         pageSize: 15,
         roleId,
+        projectId: "test",
       });
     } else if (reportActiveTab === "Patient Roaster") {
       getTableData({
-        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
-        pageNo,
-        pageSize:15,
-        roleId,
-      });
-    } else if (reportActiveTab === "Tin Roaster") {
-      getTableData({
-        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+        pageId: "c60dec23-bcfa-48ce-966e-dbf1ce3d41b2",
         pageNo,
         pageSize: 15,
         roleId,
+        projectId:"test"
+      });
+    } else if (reportActiveTab === "Tin Roaster") {
+      getTableData({
+        pageId: "1ff437a0-18a8-47de-893d-41dc669e3cbd",
+        pageNo,
+        pageSize: 15,
+        roleId,
+        projectId: "test",
       });
     }
   }, [reportActiveTab, pageNumber, pagination]);
