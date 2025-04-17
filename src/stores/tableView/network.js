@@ -35,12 +35,22 @@ export async function dynamicColumn({ payload }) {
     },
     body: JSON.stringify(payload),
   };
-  console.log(payload, "test");
 
   const data = await requestPortal(`dbservice/table/column`, options);
   return data;
 }
+export async function dynamicColumnReset({ payload }) {
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  };
 
+  const data = await requestPortal(`dbservice/table/column`, options);
+  return data;
+}
 export async function getTableViewChecked({
   pageId,
   pageNo,

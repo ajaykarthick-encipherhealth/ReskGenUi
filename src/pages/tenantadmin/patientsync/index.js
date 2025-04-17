@@ -32,6 +32,7 @@ import RoasterDrawer from "./modals/roasterDrawer";
 import TinRoasterTable from "../../../components/table/tenantTable/tinRoasterTable";
 import AppTable from "../../../components/tables";
 import { actions as tableAction } from "../../../stores/tableView";
+import ReusableFilters from "../../../components/reusableFilters";
 
 const { RangePicker } = DatePicker;
 
@@ -325,7 +326,10 @@ const PatientSync = ({
   getTinRoaster,
   getTableData,
   data,
+  tableDynamicColumn,
 }) => {
+  console.log(reportActiveTab);
+
   const columns = [
     {
       name: "BATCH ID",
@@ -417,8 +421,10 @@ const PatientSync = ({
   const [roasterDrawer, setRoasterDrawer] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
   const [pagination, setPagination] = useState(0);
-  const [test, setTest] = useState(columns);
+  const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [roleId, setRoleId] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState([]);
 
   const [drawerProps, setDrawerProps] = useState({
     isDrawerOpen: false,
@@ -634,6 +640,33 @@ const PatientSync = ({
     }
   };
 
+  const handleSubmitInsert = async () => {
+    const payload = {
+      pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
+      headerNames: test
+        .filter((col) => col.active)
+        .map((col) => col.actualField),
+    };
+
+    try {
+      const response = await tableDynamicColumn({ payload });
+      if (response?.status === "SUCCESS") {
+        getPatients();
+        onClose();
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
   useEffect(() => {
     if (routedData) {
       setParamsFilter("check");
@@ -693,7 +726,7 @@ const PatientSync = ({
         pageNo,
         pageSize: 15,
         roleId,
-        projectId:"test"
+        projectId: "test",
       });
     } else if (reportActiveTab === "Practice Roaster") {
       getTableData({
@@ -709,7 +742,7 @@ const PatientSync = ({
         pageNo,
         pageSize: 15,
         roleId,
-        projectId:"test"
+        projectId: "test",
       });
     } else if (reportActiveTab === "Tin Roaster") {
       getTableData({
@@ -900,6 +933,21 @@ const PatientSync = ({
                               ))}
                           </div>
                           <div className="w-100 d-flex justify-content-end align-items-end">
+                            {reportActiveTab === "Tin Roaster" ||
+                            reportActiveTab === "Patient Roaster" ||
+                            reportActiveTab === "Practice Roaster" ||
+                            reportActiveTab === "Provider Roaster" ? (
+                              <ReusableFilters
+                                setActiveFilters={setActiveFilters}
+                                open={open}
+                                onClose={onClose}
+                                selectedColumns={test}
+                                setSelectedColumns={setTest}
+                                showCustomizeTable={true}
+                                showDrawer={showDrawer}
+                                handleSubmit={handleSubmitInsert}
+                              />
+                            ) : null}
                             {renderButton()}
                           </div>
                         </div>
@@ -1053,7 +1101,7 @@ const PatientSync = ({
                                           ? socketData?.content
                                           : pdfTableData?.content
                                       }
-                                      column={test.filter(
+                                      column={test?.filter(
                                         (item) => item.isShow
                                       )}
                                       // loader={loading}
@@ -1206,6 +1254,7 @@ const connector = connect(
     getPracticeRoaster: patientSyncAction.praticeRoasterAction,
     getTinRoaster: patientSyncAction.tinRoasterAction,
     getTableData: tableAction.tableViewAction,
+    tableDynamicColumn: tableAction.tableDynamicColumn,
   }
 );
 export default connector(PatientSync);

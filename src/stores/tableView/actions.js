@@ -14,5 +14,8 @@ export const tableDynamicChecked = createActionThunk(
   "TABLE_DYNAMIC_COLUMN_CHECKED",
   network.getTableViewChecked
 );
-
+export const tableDynamicColumnReset = createActionThunk(
+  "TABLE_DYNAMIC_COLUMN_RESET",
+  network.dynamicColumnReset
+);
 
