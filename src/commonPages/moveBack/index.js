@@ -109,11 +109,9 @@ const MoveBack = ({
   const [search, setSearch] = useState({});
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [open, setOpen] = useState(false);
-  const [pageId, setPageId] = useState("3a5feaba-7de6-4557-961b-ab973a688f81");
-    const [pageSize, setPageSize] = useState(15);
-    const [activeStatus, setActiveStatus] = useState("PENDING");
-    const [roleId, setroleId] = useState(1);
-    const [selectedRole, setSelectedRole] = useState("");
+  const [pageSize, setPageSize] = useState(15);
+  const [roleId, setRoleId] = useState(null);
+  const [selectedRole, setSelectedRole] = useState("");
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -149,41 +147,6 @@ const MoveBack = ({
     priority: priorityOptions,
   };
 
-  const getAllReviewerALlocation = async () => {
-    const res = await getAllReviewerList({
-      pageNo,
-      pageNumber,
-      selectedOption,
-      sort,
-      selectedDateRanges,
-      search: searchText,
-      searchList: search,
-    });
-  };
-
-  useEffect(() => {
-    setParamsFilter("check");
-    if (window !== "undefined" && paramsFilter) {
-      // if (activeTab == "1") {
-      //   getAllReviewerALlocation();
-      // } else {
-      //   getAllSupervisorAllocation();
-      // }
-       if (window !== "undefined" && paramsFilter) {
-         getTableData({ pageId, pageNo, pageSize, activeStatus, roleId });
-       }
-    }
-  }, [
-    selectedOption,
-    selectedDateRanges,
-    searchText,
-    pageNo,
-    paramsFilter,
-    sort,
-    paginationFirst,
-    selectedSupervisor,
-    search,
-  ]);
   const getFilterOption = () => {
     let filteredItems;
 
@@ -219,6 +182,13 @@ const MoveBack = ({
     activeTab,
     search,
   };
+
+  const getRolesList = async () => {
+    const res = await getAllTabRoles();
+    if (res.status === "SUCCESS") {
+      setRoleId(res?.response?.allocationRoles[0]?.roleId);
+    }
+  };
   useEffect(() => {
     if (routedData) {
       setActiveTab(routedData?.activeTab);
@@ -228,16 +198,41 @@ const MoveBack = ({
       setSelectedOption({});
     }
   }, [routedData]);
+  const getMoveBack = async () => {
+    const response = await getTableData({
+      pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
+      pageNo,
+      pageSize,
+      roleId,
+    });
+  };
+  useEffect(() => {
+    getRolesList();
+  }, []);
 
   useEffect(() => {
-    getAllTabRoles();
-  }, []);
-    useEffect(() => {
-      if (allRoles?.allocationRoles?.length > 0) {
-        setSelectedRole(allRoles.allocationRoles[0].roleName);
-      }
-    }, [allRoles,activeTab]);
-  
+    if (allRoles?.allocationRoles?.length > 0) {
+      setSelectedRole(allRoles.allocationRoles[0].aliasName);
+    }
+  }, [allRoles, activeTab]);
+
+  useEffect(() => {
+    setParamsFilter("check");
+    if (window !== "undefined" && paramsFilter &&  allRoles?.allocationRoles?.length > 0) {
+      getMoveBack()
+    }
+  }, [
+    selectedOption,
+    selectedDateRanges,
+    searchText,
+    pageNo,
+    paramsFilter,
+    sort,
+    paginationFirst,
+    selectedSupervisor,
+    search,
+    roleId,
+  ]);
   return (
     <div>
       <Header />
@@ -267,7 +262,14 @@ const MoveBack = ({
                               className="nav-item profile-tab mt-4"
                               key={role}
                             >
-                              <Nav.Link onClick={() => setSelectedRole(role.roleName)} className="mt-4" eventKey={index + 1}>
+                              <Nav.Link
+                                onClick={() => {
+                                  setSelectedRole(role.aliasName);
+                                  setRoleId(role.roleId);
+                                }}
+                                className="mt-4"
+                                eventKey={index + 1}
+                              >
                                 {role?.roleName
                                   .replace(/_/g, " ")
                                   .replace(/\b\w/g, (c) => c.toUpperCase())}
@@ -325,7 +327,6 @@ const MoveBack = ({
                             opt={opt}
                             setSelectAllChecked={setSelectAllChecked}
                             setSelectedRowsId={setSelectedRowsId}
-                            getAllReviewerALlocation={getAllReviewerALlocation}
                             setSelectedRows={setSelectedRows}
                             selectedRowsId={selectedRowsId}
                             setSearch={setSearch}
@@ -355,7 +356,7 @@ const MoveBack = ({
                             setPaginationFirst={setPaginationFirst}
                             setSort={setSort}
                             sort={sort}
-                            data = {data}
+                            data={data}
                           />
                         </Tab.Pane>
                       </Tab.Content>
@@ -379,6 +380,7 @@ const MoveBack = ({
         selectedRows={selectedRows}
         activeTab={activeTab}
         selectedRole={selectedRole}
+        getMoveBack={getMoveBack}
       />
     </div>
   );
@@ -394,7 +396,7 @@ const connector = connect(
     reviewerList:
       state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
-        data: state?.tableView?.tableView?.data,
+    data: state?.tableView?.tableView?.data,
 
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
     rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
@@ -405,8 +407,7 @@ const connector = connect(
     getAllCheckedReviewers: allActions.getAllCheckedListForReviewer,
     getReviewerList: allActions.getFilterOptions,
     getRoutedData: tinActions.getAllocationRoutedData,
-        getTableData: tableAction.tableViewAction,
-    
+    getTableData: tableAction.tableViewAction,
     getAllTabRoles: allActions.getAllRoles,
   }
 );

@@ -10,12 +10,12 @@ import { actions as tinActions } from "../../stores/tenantAdmin/tin";
 import QueryTable from "./queryTable";
 import Header from "../../jsx/layouts/nav/Header";
 import CardSkeleton from "../../components/skeleton/card";
+import {actions as tableAction} from '../../stores/tableView'
 
 const QueryApproval = ({
-  getAllReviewerList,
   organizationList,
   getAllOrganizationList,
-  getAllSupervisorList,
+  getTableData,
   getAllTabRoles,
   routedData,
   allRoles,
@@ -93,9 +93,12 @@ const QueryApproval = ({
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
   const [pageNo, setPageNo] = useState(0);
+  const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [search, setSearch] = useState({});
+  const [roleId, setRoleId] = useState(null);
+  const [activeStatus , setActiveStatus] = useState("PENDING")
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -119,24 +122,21 @@ const QueryApproval = ({
     priority: priorityOptions,
   };
 
-  const getAllReviewerALlocation = async () => {
-    const res = await getAllReviewerList({
+  const getQueryApproval = async () => {
+    const response = await getTableData({
+      pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
       pageNo,
-      selectedOption,
-      sort,
-      selectedDateRanges,
-      search: searchText,
-      searchList: search,
+      pageSize,
+      roleId,
+      activeStatus,
     });
   };
 
 
   useEffect(() => {
     setParamsFilter("check");
-    if (window !== "undefined" && paramsFilter) {
-      if (activeTab == "1") {
-        getAllReviewerALlocation();
-      }
+    if (window !== "undefined" && paramsFilter && allRoles?.allocationRoles?.length > 0) {
+      getQueryApproval()
     }
   }, [
     selectedOption,
@@ -147,6 +147,8 @@ const QueryApproval = ({
     sort,
     paginationFirst,
     search,
+    activeStatus,
+    roleId,
   ]);
   const getFilterOption = () => {
     let filteredItems;
@@ -163,6 +165,12 @@ const QueryApproval = ({
 
     return filteredItems;
   };
+  const getRolesList = async () => {
+    const res = await getAllTabRoles();
+    if (res.status === "SUCCESS") {
+      setRoleId(res?.response?.allocationRoles[0]?.roleId);
+    }
+  };
 
   useEffect(() => {
     const filteredFilters = getFilterOption();
@@ -178,6 +186,7 @@ const QueryApproval = ({
     selectedOption,
     activeTab,
     search,
+    activeStatus,
   };
   useEffect(() => {
     if (routedData) {
@@ -189,7 +198,7 @@ const QueryApproval = ({
     }
   }, [routedData]);
   useEffect(() => {
-    getAllTabRoles();
+    getRolesList();
   }, []);
   return (
     <div>
@@ -219,7 +228,9 @@ const QueryApproval = ({
                               className="nav-item profile-tab mt-4"
                               key={role}
                             >
-                              <Nav.Link className="mt-4" eventKey={index + 1}>
+                              <Nav.Link                                 onClick={() => {
+                                  setRoleId(role.roleId);
+                                }} className="mt-4" eventKey={index + 1}>
                                 {role?.roleName
                                   ?.replace(/_/g, " ")
                                   ?.replace(/\b\w/g, (c) => c.toUpperCase())}
@@ -289,6 +300,7 @@ const connector = connect(
     getReviewerList: allActions.getFilterOptions,
     getRoutedData: tinActions.getAllocationRoutedData,
     getAllTabRoles: allActions.getAllRoles,
+    getTableData: tableAction.tableViewAction,
   }
 );
 

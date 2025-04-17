@@ -31,7 +31,7 @@ const RandomSamplingModal = ({
   getL1UsersList,
   setSelectedRows,
   usersLoader,
-  activeTab,
+  getAllAllocation,
   setIsModalOpen,
   isModalOpen,
   randomSampling,
@@ -100,7 +100,7 @@ const RandomSamplingModal = ({
     });
     if (response?.status == "SUCCESS") {
       getResponePopup(response);
-      getAllReviewerALlocation();
+      getAllAllocation();
       setOpen(false);
       setAllocateDate("");
       setActiveCard("");
