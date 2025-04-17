@@ -6,7 +6,18 @@ import styles from '../../../components/tables/table.module.css'
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
-const MoveBackTable = ({data}) => {
+const MoveBackTable = ({ reviewersData,
+  loader,
+  getAllCheckedReviewers,
+  setSelectedRowsId,
+  selectedRows,
+  setSelectedRows,
+  pageNo,
+  setPageNo,
+  paginationFirst,
+  setPaginationFirst,
+  sort,
+  setSort,data}) => {
 
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [checkedLoader, setCheckedLoader] = useState(false);
@@ -53,84 +64,89 @@ const MoveBackTable = ({data}) => {
     }
   };
   
-  const columns = [
-    { name: "PATIENT Id", value: "patientId" },
-    { name: "PATIENT NAME", value: "patientName" },
-    {
-      name: "COMPUTED DATE",
-      value: "computedDate",
-      isDate: true,
-      sortable: true,
-    },
-    { name: "PRIORITY", value: "priority" },
-    {
-      name: (
-        <div>
-          {reviewersData?.content?.length > 0 ? (
-            <div className="w-full d-flex justify-content-center">
-              {checkedLoader ? (
-                <Spin
-                  indicator={<LoadingOutlined className="text-white font2" />}
-                  className={`mx-4 ${styles.spinnerStyle}`}
-                />
-              ) : (
-                <input
-                  type="checkbox"
-                  onChange={(e) => {
-                    let checked = !selectAllChecked;
-                    setSelectAllChecked(checked);
-                    if (selectedRows?.length < reviewersData?.totalElements) {
-                      checked = true;
-                      setSelectAllChecked(true);
-                    }
-                    handleRowCheckboxChange({
-                      e,
-                      row: null,
-                      singleCheck: false,
-                      checked,
-                    });
-                  }}
-                  style={{
-                    width: "20px",
-                    height: "20px",
-                    flexShrink: "0",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
-                  checked={
-                    selectedRows?.length === reviewersData?.totalElements
-                  }
-                  className={`mx-4 ${styles.checkBox} ${
-                    selectedRows?.length === reviewersData?.totalElements
-                      ? styles.customChecked2
-                      : ""
-                  }`}
-                />
-              )}
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
-      ),
-      value: "patientId",
-      isCheckbox: true,
-    },
-  ];
+  // const columns = [
+  //   { name: "PATIENT Id", value: "patientId" },
+  //   { name: "PATIENT NAME", value: "patientName" },
+  //   {
+  //     name: "COMPUTED DATE",
+  //     value: "computedDate",
+  //     isDate: true,
+  //     sortable: true,
+  //   },
+  //   { name: "PRIORITY", value: "priority" },
+  //   {
+  //     name: (
+  //       <div>
+  //         {reviewersData?.content?.length > 0 ? (
+  //           <div className="w-full d-flex justify-content-center">
+  //             {checkedLoader ? (
+  //               <Spin
+  //                 indicator={<LoadingOutlined className="text-white font2" />}
+  //                 className={`mx-4 ${styles.spinnerStyle}`}
+  //               />
+  //             ) : (
+  //               <input
+  //                 type="checkbox"
+  //                 onChange={(e) => {
+  //                   let checked = !selectAllChecked;
+  //                   setSelectAllChecked(checked);
+  //                   if (selectedRows?.length < reviewersData?.totalElements) {
+  //                     checked = true;
+  //                     setSelectAllChecked(true);
+  //                   }
+  //                   handleRowCheckboxChange({
+  //                     e,
+  //                     row: null,
+  //                     singleCheck: false,
+  //                     checked,
+  //                   });
+  //                 }}
+  //                 style={{
+  //                   width: "20px",
+  //                   height: "20px",
+  //                   flexShrink: "0",
+  //                   borderRadius: "4px",
+  //                   cursor: "pointer",
+  //                 }}
+  //                 checked={
+  //                   selectedRows?.length === reviewersData?.totalElements
+  //                 }
+  //                 className={`mx-4 ${styles.checkBox} ${
+  //                   selectedRows?.length === reviewersData?.totalElements
+  //                     ? styles.customChecked2
+  //                     : ""
+  //                 }`}
+  //               />
+  //             )}
+  //           </div>
+  //         ) : (
+  //           ""
+  //         )}
+  //       </div>
+  //     ),
+  //     value: "patientId",
+  //     isCheckbox: true,
+  //   },
+  // ];
 
   return (
     <div className="mt-3">
       <div className="mt-3">
-        <AppTable
-          data={data?.response?.pageResponse?.content}
-          column={data?.response?.metaDataDTO.filter((item) => item.active)}
-          //   loader={loading}
-          pagination={true}
-          first={pageNo === 0 ? 0 : paginationFirst}
-          totalRecords={data?.response?.pageResponse?.totalElements}
-          row={15}
-          onPageChange={onPageChange}
-        />
+      <AppTable
+        data={data?.response?.pageResponse?.content}
+        column={data?.response?.metaDataDTO.filter((item) => item.active)}
+        loader={loader}
+        handleRowCheckboxChange={handleRowCheckboxChange}
+        checkBoxLoader={checkedLoader}
+        selectedRows={selectedRows}
+        setSort={setSort}
+        sort={sort}
+        tableId={"reviewer-Allocation-Table"}
+        first={pageNo === 0 ? 0 : paginationFirst}
+        totalRecords={data?.response?.pageResponse?.totalElements}
+        row={15}
+        onPageChange={onPageChange}
+      />
       </div>
     </div>
   );
@@ -142,6 +158,7 @@ const connector = connect(
       state.tenantAdmin?.patientsAllocation?.reviewersList?.data?.response
         ?.patientDtoList,
     loader: state.tenantAdmin?.patientsAllocation?.loader,
+    data: state?.tableView?.tableView?.data,
   }),
   {
     getAllCheckedReviewers: allActions.getAllCheckedListForReviewer,
