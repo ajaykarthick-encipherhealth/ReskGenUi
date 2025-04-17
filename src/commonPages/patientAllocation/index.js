@@ -258,7 +258,6 @@ const PatientAllocation = ({
     }
   }, [allRoles, activeTab]);
 
-  console.log(test, data,"testings");
   return (
     <div>
       <Header />
@@ -423,6 +422,7 @@ const PatientAllocation = ({
                             batchCount={batchCount}
                             data={data}
                             tableLoader={tableLoader}
+                            roleId={roleId}
                           />
                         </Tab.Pane>
                       </Tab.Content>
